@@ -1,0 +1,9 @@
+application/logs/important/
+application/logs/notice/
+application/logs/debug/
+application/cache
+application/config/database.php
+www/uploads
+www/assets
+.idea
+*.vim
