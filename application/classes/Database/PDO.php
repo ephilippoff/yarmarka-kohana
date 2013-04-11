@@ -9,15 +9,16 @@ class Database_PDO extends Kohana_Database_PDO {
 		if (is_string($like))
 		{
 			// Search for column names
-			$result = $this->query(Database::SELECT, 'SELECT * FROM information_schema.columns WHERE table_name LIKE '.$like, FALSE);
+			$result = $this->query(Database::SELECT, "SELECT * FROM information_schema.columns WHERE table_name LIKE {$like}
+					ORDER BY ordinal_position", FALSE);
 		}
 		else
 		{
 			// Find all column names
-			$result = $this->query(Database::SELECT, "SELECT * FROM information_schema.columns WHERE table_name = '{$table}'", FALSE);
+			$result = $this->query(Database::SELECT, "SELECT * FROM information_schema.columns WHERE table_name = '{$table}' 
+					ORDER BY ordinal_position", FALSE);
 		}
 
-		$count = 0;
 		$columns = array();
 		foreach ($result as $column)
 		{
@@ -29,8 +30,21 @@ class Database_PDO extends Kohana_Database_PDO {
 
 			$columns[$column['column_name']] = $column;
 		}
-		$columns = array_reverse($columns);
 
 		return $columns;
+	}
+
+	public function list_tables($like = NULL)
+	{
+		$this->_connection or $this->connect();
+
+		$sql = 'SELECT table_name FROM information_schema.tables WHERE table_schema = '.$this->quote($this->schema());
+
+		if (is_string($like))
+		{
+			$sql .= ' AND table_name LIKE '.$this->quote($like);
+		}
+
+		return $this->query(Database::SELECT, $sql, FALSE)->as_array(NULL, 'table_name');
 	}
 }
