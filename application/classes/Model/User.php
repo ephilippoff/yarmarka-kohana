@@ -82,14 +82,10 @@ class Model_User extends Model_Auth_User {
 	{
 		if ($this->_loaded)
 		{
-			// Update the number of logins
-			$this->logins = new Database_Expression('logins + 1');
-
-			// Set the last login date
-			$this->last_login = date('Y-m-d H:i:s');
-
-			// Save the user
-			$this->update();
+			$access = ORM::factory('Access');
+			$access->user_id	= $this->id;
+			$access->ip			= Request::$client_ip;
+			$access->save();
 		}
 	}
 } // End User Model
