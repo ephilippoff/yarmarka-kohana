@@ -26,6 +26,7 @@ abstract class Controller_Admin_Template extends Controller_Template {
 	{
 		$this->module_name = $this->module_name ? $this->module_name : $this->request->controller();
 
+
 		if ( ! Auth::instance()->logged_in() AND ! ($this->request->action() == 'login'))
 		{
 			$this->redirect('khbackend/users/login');

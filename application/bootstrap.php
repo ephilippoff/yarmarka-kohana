@@ -123,6 +123,7 @@ Kohana::modules(array(
 	// 'minion'     => MODPATH.'minion',     // CLI Tasks
 	'orm'        => MODPATH.'orm',        // Object Relationship Mapping
 	'assets'     => MODPATH.'asset-merger',        // js css assets manager
+	'pagination' => MODPATH.'pagination',        // kohana pagination module
 	// 'unittest'   => MODPATH.'unittest',   // Unit testing
 	// 'userguide'  => MODPATH.'userguide',  // User guide and API documentation
 	));
