@@ -31,10 +31,15 @@ abstract class Controller_Admin_Template extends Controller_Template {
 		{
 			$this->redirect('khbackend/users/login');
 		}
-		elseif (Auth::instance()->logged_in() AND ! Auth::instance()->have_access($this->module_name))
+		elseif (Auth::instance()->logged_in() AND ! Auth::instance()->have_access_to($this->module_name))
 		{
 			throw new HTTP_Exception_404;
 		}
 		parent::before();
+
+		if (is_object($this->template))
+		{
+			$this->template->set_global('module_name', $this->module_name);
+		}
 	}
 } // End Admin_Template

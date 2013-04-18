@@ -10,7 +10,7 @@ class Auth_ORM extends Kohana_Auth_ORM {
 		return sha1($str . md5($str . $this->_config['hash_key']));
 	}
 
-	public function have_access($module)
+	public function have_access_to($module)
 	{
 		// Get the user from the session
 		$user = $this->get_user();
