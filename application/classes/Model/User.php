@@ -2,7 +2,7 @@
 
 class Model_User extends Model_Auth_User {
 
-	protected $_table_name = 'user';
+	protected $_table_name = 'vw_user';
 
 	/**
 	 * A user has many tokens and roles
@@ -12,6 +12,8 @@ class Model_User extends Model_Auth_User {
 	protected $_has_many = array(
 		'user_tokens'	=> array('model' => 'User_Token'),
 		'objects'		=> array('foreign_key' => 'author'),
+		'access'		=> array('model' => 'Access'),
+		'invoices'		=> array(),
 	);
 
 	protected $_belongs_to = array(

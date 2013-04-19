@@ -34,6 +34,12 @@ class Controller_Admin_Users extends Controller_Admin_Template {
 			}
 		}
 
+		// invoices
+		if ($this->request->query('has_invoices'))
+		{
+			$users->where('invoices_cnt', '>', 0);
+		}
+
 		// user role
 		if ($role = intval($this->request->query('role')))
 		{
@@ -124,6 +130,64 @@ class Controller_Admin_Users extends Controller_Admin_Template {
 		$json['is_blocked'] = $user->is_blocked;
 
 		$this->response->body(json_encode($json));
+	}
+
+	public function action_user_info()
+	{
+		$this->layout = 'admin_popup';
+
+		$user = ORM::factory('User', $this->request->param('id'));
+		if ( ! $user->loaded())
+		{
+			throw new HTTP_Exception_404;
+		}
+
+		$this->template->user = $user;
+	}
+
+	public function action_ip_info()
+	{
+		$this->layout = 'admin_popup';
+
+		$ip = trim($this->request->param('ip'));
+		if ( ! Valid::ip($ip))
+		{
+			throw new HTTP_Exception_404;
+		}
+
+		$ipblock = ORM::factory('Ipblock')
+			->where('ip', '=', $ip)
+			->find();
+
+		if (HTTP_Request::POST === $this->request->method())
+		{
+			$period = $this->request->post('period');
+			if ( ! $ipblock->loaded())
+			{
+				$ipblock->ip	= $ip;
+				$ipblock->text 	= $this->request->post('reason');
+				$ipblock->expiration_date = $period 
+					? date('Y-m-d H:i:s', strtotime("+{$period} days"))
+					: NULL;
+			}
+			else
+			{
+				$ipblock->text 	= $this->request->post('reason');
+				$ipblock->expiration_date = $period 
+					? date('Y-m-d H:i:s', strtotime("+{$period} days", strtotime($ipblock->expiration_date)))
+					: NULL;
+			}
+			$ipblock->save();
+		}
+
+		$this->template->ip			= $ip;
+		$this->template->ipblock	= $ipblock;
+		$this->template->users		= ORM::factory('User')
+			->where('ip_addr', '=', $ip)
+			->find_all();
+		$this->template->objects	= ORM::factory('Object')
+			->where('ip_addr', '=', $ip)
+			->find_all();
 	}
 
 	public function action_delete()

@@ -55,9 +55,11 @@ function delete_user(obj) {
 		<span class="add-on"><i class="icon-envelope"></i></span>
 		<input class="span2" id="prependedInput" type="text" placeholder="User email" name="email" value="<?=Arr::get($_GET, 'email')?>">
     </div>
-	Reg date
-	<input type="text" class="input-small dp" name="regdate[from]" value="<?=Arr::get(@$_GET['regdate'], 'from', date('Y-m-d'))?>">
-	<input type="text" class="input-small dp" name="regdate[to]" value="<?=Arr::get(@$_GET['regdate'], 'to')?>">
+	<div class="input-prepend">
+		<span class="add-on">Regdate</i></span>
+		<input type="text" class="input-small dp" placeholder="date from" name="regdate[from]" value="<?=Arr::get(@$_GET['regdate'], 'from', date('Y-m-d'))?>">
+		<input type="text" class="input-small dp" placeholder="date to" name="regdate[to]" value="<?=Arr::get(@$_GET['regdate'], 'to')?>">
+	</div>
 	<?=Form::select('role', array('' => '--select role--')+$roles, Arr::get($_GET, 'role'), array('class' => 'span2'))?>
 	<label class="checkbox">
 		<?=Form::checkbox('has_invoices', 1, (bool) Arr::get($_GET, 'has_invoices'))?>Has paid invoices
@@ -100,16 +102,16 @@ function delete_user(obj) {
 	<?php else : ?>
 	<tr>
 	<?php endif; ?>
-		<td><?=$user->id?></td>
+		<td><a href="<?=Url::site('khbackend/users/user_info/'.$user->id)?>" onClick="return popup(this)"><?=$user->id?></a></td>
 		<td><?=$user->email?></td>
 		<td><?=$user->phone?></td>
 		<td><?=$user->city?></td>
 		<td><?=$user->fullname?></td>
 		<td><?=date('Y-m-d H:i:s', strtotime($user->regdate))?></td>
-		<td><?=$user->ip_addr?></td>
-		<td>0</td>
-		<td>0</td>
-		<td>0</td>
+		<td><a href="<?=URL::site('khbackend/users/ip_info/'.$user->ip_addr)?>" onClick="return popup(this);"><?=$user->ip_addr?></a></td>
+		<td><span class="badge"><?=$user->objects_cnt?></span></td>
+		<td><span class="badge"><?=$user->invoices_cnt?></span></td>
+		<td><span class="badge"><?=$user->msgs_cnt?></span></td>
 		<td>
 			<a href="<?=URL::site('khbackend/users/ban/'.$user->id)?>" title="Ban user" class="icon-lock" onClick="return ban(this);"></a>
 			<a href="<?=URL::site('khbackend/users/ban_and_unpublish/'.$user->id)?>" onClick="return ban(this);" title="Ban user and unpublish all ads" class="icon-ban-circle"></a>
