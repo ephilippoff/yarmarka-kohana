@@ -6,26 +6,137 @@ class Controller_Admin_Users extends Controller_Admin_Template {
 
 	public function action_index()
 	{
-		$limit  = 20;
+		$limit  = 50;
 		$page   = $this->request->query('page');
 		$offset = ($page AND $page != 1) ? ($page-1)*$limit : 0;
 
-		$users = ORM::factory('User')
-			->offset($offset)
-			->order_by('regdate', 'desc')
+		$users = ORM::factory('User');
+
+		/**
+		 * filters
+		 */
+		if ( ! $this->request->query('regdate')) // user regdate
+		{
+			// show users for today by default
+			$users->where(DB::expr('date(regdate)'), '=', DB::expr("date '".date('Y-m-d')."'"));
+		}
+		else
+		{
+			$regdate = $this->request->query('regdate');
+			if ($from_time = strtotime($regdate['from']))
+			{
+				$users->where(DB::expr('date(regdate)'), '>=', DB::expr("date '".date('Y-m-d', $from_time)."'"));
+			}
+
+			if ($to_time = strtotime($regdate['to']))
+			{
+				$users->where(DB::expr('date(regdate)'), '<=', DB::expr("date '".date('Y-m-d', $to_time)."'"));
+			}
+		}
+
+		// user role
+		if ($role = intval($this->request->query('role')))
+		{
+			$users->where('role', '=', $role);
+		}
+
+		// user email
+		if ($email = trim($this->request->query('email')))
+		{
+			$users->where('email', 'LIKE', '%'.$email.'%');
+		}
+
+		$clone_to_count = clone $users;
+		$count_all = $clone_to_count->count_all();
+
+		$users->offset($offset)
 			->limit($limit);
 
-		$this->template->users = $users->find_all();
-		$this->template->pagination = Pagination::factory(array(
+		if (trim($this->request->query('order')) == 'asc')
+		{
+			$users->order_by('regdate', 'asc');
+		}
+		else
+		{
+			$users->order_by('regdate', 'desc');
+		}
+
+		$this->template->users		= $users->find_all();
+		$this->template->roles		= ORM::factory('Role')
+			->find_all()
+			->as_array('id', 'name');
+		$this->template->pagination	= Pagination::factory(array(
 			'current_page'   => array('source' => 'query_string', 'key' => 'page'),
-			'total_items'    => $users->count_all(),
+			'total_items'    => $count_all,
 			'items_per_page' => $limit,
-			'auto_hide'      => FALSE,
+			'auto_hide'      => TRUE,
 			'view'           => 'pagination/bootstrap',
 		))->route_params(array(
 			'controller' => 'users',
 			'action'     => 'index',
 		));
+	}
+
+	public function action_ban()
+	{
+		$user = ORM::factory('User', $this->request->param('id'));
+		if ( ! $user->loaded())
+		{
+			throw new HTTP_Exception_404;
+		}
+
+		$json = array('code' => 200);
+
+		$user->is_blocked	= 1;
+		$user->block_reason	= trim($this->request->post('reason'));
+		$user->save();
+
+		$json['is_blocked'] = $user->is_blocked;
+
+		$this->response->body(json_encode($json));
+	}
+
+	public function action_ban_and_unpublish()
+	{
+		$user = ORM::factory('User', $this->request->param('id'));
+		if ( ! $user->loaded())
+		{
+			throw new HTTP_Exception_404;
+		}
+
+		// block user
+		$user->is_blocked	= 1;
+		$user->block_reason	= trim($this->request->post('reason'));
+		$user->save();
+
+		// disable user ads
+		$objects = $user->objects->find_all()->as_array(NULL, 'id');
+		if ($objects)
+		{
+			ORM::factory('Object')
+				->where('id', 'IN', $objects)
+				->set('is_published', 0)
+				->set('is_bad', 2)
+				->update_all();
+		}
+
+		$json = array('code' => 200);
+		$json['is_blocked'] = $user->is_blocked;
+
+		$this->response->body(json_encode($json));
+	}
+
+	public function action_delete()
+	{
+		$user = ORM::factory('User', $this->request->param('id'));
+		if ( ! $user->loaded())
+		{
+			throw new HTTP_Exception_404;
+		}
+
+		$user->delete();
+
+		$this->response->body(json_encode(array('code' => 200)));
 	}
 
 	public function action_login()

@@ -10,7 +10,8 @@ class Model_User extends Model_Auth_User {
 	 * @var array Relationhips
 	 */
 	protected $_has_many = array(
-		'user_tokens' => array('model' => 'User_Token'),
+		'user_tokens'	=> array('model' => 'User_Token'),
+		'objects'		=> array('foreign_key' => 'author'),
 	);
 
 	protected $_belongs_to = array(
@@ -36,7 +37,6 @@ class Model_User extends Model_Auth_User {
 				array('not_empty'),
 			),
 			'email' => array(
-				array('not_empty'),
 				array('email'),
 				array(array($this, 'unique'), array('email', ':value')),
 			),

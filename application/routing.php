@@ -8,7 +8,7 @@ Route::set('admin', '<controller>(/<action>)', array('controller' => '(admin_.*|
 Route::set('backend', 'khbackend(/<controller>(/<action>(/<id>)))')
 	->defaults(array(
 		'directory'  => 'Admin',
-		'controller' => 'Users',
+		'controller' => 'Welcome',
 		'action'     => 'index',
 	));
 /**

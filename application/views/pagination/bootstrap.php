@@ -56,6 +56,7 @@ for ($i = $n7; $i <= $n8; $i++)
 
 ?>
 <div class="pagination">
+	<p class="text-info">Total: <span class="badge"><?=$config['total_items']?></span></p>
 <ul>
 	<?php if ($first_page !== FALSE): ?>
 		<li><a href="<?php echo HTML::chars($page->url($first_page)) ?>" rel="first"><?php echo __('First') ?></a></li>
