@@ -90,4 +90,22 @@ class Model_User extends Model_Auth_User {
 			$access->save();
 		}
 	}
+
+	public function save(Validation $validation = NULL)
+	{
+		$this->_table_name = 'user';
+		parent::save($validation);
+	}
+
+	public function update(Validation $validation = NULL)
+	{
+		$this->_table_name = 'user';
+		parent::update($validation);
+	}
+
+	public function delete()
+	{
+		$this->_table_name = 'user';
+		parent::delete();
+	}
 } // End User Model
