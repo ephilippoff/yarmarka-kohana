@@ -35,7 +35,10 @@
 	</tr>
 	<?php foreach ($user->objects->order_by('date_created', 'desc')->find_all() as $object) : ?>
 	<tr>
-		<td><a href="<?=URL::site('detail/'.$object->id)?>" target="_blank">#<?=$object->id?> <?=$object->title?></a></td>
+		<td>
+			<small>#<b><?=$object->id?></b> <?=date('Y-m-d H:i', strtotime($object->real_date_created))?> </small>
+			<a href="<?=URL::site('detail/'.$object->id)?>" target="_blank"><?=$object->title?></a>
+		</td>
 	</tr>
 	<?php endforeach; ?>
 	</table>
