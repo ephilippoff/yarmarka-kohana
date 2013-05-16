@@ -51,6 +51,10 @@ abstract class Controller_Template extends Controller {
 	{
 		parent::before();
 
+		if ($this->request->url() == '/')
+		{
+			$this->redirect(CI::base('http'));
+		}
 		// check user auth cookie
 		if ($hash = Arr::get($_COOKIE, 'user_id'))
 		{
