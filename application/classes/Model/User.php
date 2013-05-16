@@ -108,4 +108,14 @@ class Model_User extends Model_Auth_User {
 		$this->_table_name = 'user';
 		parent::delete();
 	}
+
+	public function get_hash()
+	{
+		if ( ! $this->loaded())
+		{
+			return FALSE;
+		}
+
+		return sha1($this->login.$this->passw.'secret_##42');
+	}
 } // End User Model

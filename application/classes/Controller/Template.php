@@ -51,6 +51,17 @@ abstract class Controller_Template extends Controller {
 	{
 		parent::before();
 
+		// check user auth cookie
+		if ($hash = Arr::get($_COOKIE, 'user_id'))
+		{
+			list($user_id, $hash) = explode('_', $hash);
+			$user = ORM::factory('User', intval($user_id));
+			if ($user->loaded() AND $user->get_hash() === $hash)
+			{
+				Auth::instance()->force_login($user);
+			}
+		}
+
 		// create assets object
 		$this->assets = Assets::factory('all');
 
