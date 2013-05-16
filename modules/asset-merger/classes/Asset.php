@@ -50,6 +50,14 @@ class Asset {
 	protected $condition = NULL;
 
 	/**
+	 * options 
+	 * 
+	 * @var array
+	 * @access protected
+	 */
+	protected $options = array();
+
+	/**
 	 * @var  int  last modified time
 	 */
 	private $_last_modified = NULL;
@@ -109,6 +117,11 @@ class Asset {
 		// Set condition
 		$this->condition = Arr::get($options, 'condition');
 
+		unset($options['condition']);
+		unset($options['processor']);
+		$this->options = $options;
+
+
 		// Set type and file
 		$this->type = $type;
 		$this->file = $file;
@@ -159,6 +172,8 @@ class Asset {
 
 		// Extension index
 		$extension_index = array_search($this->type, $fileparts);
+		// @todo
+		$fileparts = array_diff($fileparts, array($this->type));
 
 		// Set engines
 		$this->engines = array_reverse(array_slice($fileparts, $extension_index + 1));
@@ -207,7 +222,7 @@ class Asset {
 			file_put_contents($this->destination_file, $this->compile($process));
 		}
 
-		return Asset::html($this->type, $this->destination_web, $this->last_modified());
+		return Asset::html($this->type, $this->destination_web, $this->last_modified(), $this->options);
 	}
 
 	/**
@@ -284,7 +299,7 @@ class Asset {
 	 * @param   integer  $last_modified
 	 * @return  string
 	 */
-	static function html($type, $file, $last_modified = NULL)
+	static function html($type, $file, $last_modified = NULL, $attributes = array())
 	{
 		if ($last_modified)
 		{
@@ -303,7 +318,7 @@ class Asset {
 			break;
 		}
 
-		return HTML::$type($file);
+		return HTML::$type($file, $attributes);
 	}
 
 	/**
