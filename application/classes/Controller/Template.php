@@ -66,7 +66,7 @@ abstract class Controller_Template extends Controller {
 				Auth::instance()->force_login($user);
 			}
 		}
-
+		
 		// create assets object
 		$this->assets = Assets::factory('all');
 
