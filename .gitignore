@@ -5,5 +5,9 @@ application/cache
 application/config/database.php
 www/uploads
 www/assets
+www/css
+www/js
+www/img
+www/images
 .idea
 *.vim
