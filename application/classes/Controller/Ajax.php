@@ -12,6 +12,8 @@
  */
 class Controller_Ajax extends Controller_Template
 {
+	protected $json = array();
+
 	public function before()
 	{
 		// only ajax request is allowed
@@ -22,5 +24,33 @@ class Controller_Ajax extends Controller_Template
 		// disable global layout for this controller
 		$this->use_layout = FALSE;
 		parent::before();
+
+		$this->json['code'] = 200; // code by default
+	}
+
+	public function action_save_user_data()
+	{
+		$data = $this->request->post();
+		$user = Auth::instance()->get_user();
+
+		if ( ! $data OR ! $user)
+		{
+			throw new HTTP_Exception_404;
+		}
+
+		$user->values($data)->update();
+
+		foreach ($data as $key => $value)
+		{
+			$data[$key] = $user->$key;
+		}
+
+		$this->json['data'] = $data;
+	}
+
+	public function after()
+	{
+		parent::after();
+		$this->response->body(json_encode($this->json));
 	}
 }
