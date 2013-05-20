@@ -13,6 +13,10 @@ class Model_City extends ORM {
 
 	protected $_table_name = 'city';
 
+	protected $_has_many = array(
+		'users'	=> array(),
+	);
+
 	protected $_belongs_to = array(
 		'region'	=> array(),
 	);

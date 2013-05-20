@@ -56,6 +56,10 @@ function delete_user(obj) {
 		<input class="span2" id="prependedInput" type="text" placeholder="User email" name="email" value="<?=Arr::get($_GET, 'email')?>">
     </div>
 	<div class="input-prepend">
+		<span class="add-on">Tel</span>
+		<input class="span2" id="prependedInput" type="text" placeholder="User phone" name="phone" value="<?=Arr::get($_GET, 'phone')?>">
+    </div>
+	<div class="input-prepend">
 		<span class="add-on">Regdate</i></span>
 		<input type="text" class="input-small dp" placeholder="date from" name="regdate[from]" value="<?=Arr::get(@$_GET['regdate'], 'from', date('Y-m-d'))?>">
 		<input type="text" class="input-small dp" placeholder="date to" name="regdate[to]" value="<?=Arr::get(@$_GET['regdate'], 'to')?>">

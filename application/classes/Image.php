@@ -434,7 +434,7 @@ class Image {
 		if (Kohana::$config->load('images.watermark'))
 		{
 
-			$stamp = imagecreatefrompng(base_url().'/images/'.$this->watermark);
+			$stamp = imagecreatefrompng($_SERVER['DOCUMENT_ROOT'].'/images/'.$this->watermark);
 			$sx = imagesx($stamp);
 			$sy = imagesy($stamp);
 

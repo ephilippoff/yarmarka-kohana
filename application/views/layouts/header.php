@@ -18,7 +18,9 @@
 				</div>
 				
 				<?=Request::factory('block/header_region')->execute()?>
-				<div class="who-are-yor"><span>d.lebedev@tmn.yarmarka.biz (у вас есть оплаченные <a href="">сервисы</a>)</span></div>	                    
+				<?php if ($user = Auth::instance()->get_user()) : ?>
+				<div class="who-are-yor"><span><?=$user->email?></span></div>	                    
+				<?php endif; ?>
 			</div>
 			<div class="logo"><img src="<?=URL::site('images/logo.png')?>" alt=""><span class="domen"><?=Kohana::$config->load('common.main_domain')?></span></div>
 			<div class="btn-red big add-advert"><span>Подать объявление</span></div>

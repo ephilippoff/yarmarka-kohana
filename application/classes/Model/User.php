@@ -17,7 +17,8 @@ class Model_User extends Model_Auth_User {
 	);
 
 	protected $_belongs_to = array(
-		'user_role' => array('model' => 'Role', 'foreign_key' => 'role')
+		'user_role' => array('model' => 'Role', 'foreign_key' => 'role'),
+		'user_city'	=> array('model' => 'City', 'foreign_key' => 'city_id'),
 	);
 
 	/**
@@ -117,5 +118,59 @@ class Model_User extends Model_Auth_User {
 		}
 
 		return sha1($this->login.$this->passw.'secret_##42');
+	}
+
+	public function get_contacts()
+	{
+		if ( ! $this->loaded())
+		{
+			return FALSE;
+		}
+
+		$object_contact = ORM::factory('Object_Contact');
+
+		return $object_contact->select('contact_type.name')
+			->join('contact_type')
+			->on('contact_type.id', '=', 'object_contact.contact_type_id')
+			->where('user_id', '=', $this->id)
+			->where('object_id', 'IS', DB::expr('NULL'))
+			->order_by('id')
+			->find_all();
+	}
+
+	public function add_contact($contact_type_id, $contact_str)
+	{
+		if ( ! $this->loaded())
+		{
+			return FALSE;
+		}
+
+		$contact = ORM::factory('Object_Contact');
+		$contact->contact_type_id	= intval($contact_type_id);
+		$contact->contact			= trim($contact_str);
+		$contact->user_id			= $this->id;
+		$contact->save();
+
+		return $contact;
+	}
+
+	public function delete_contact($contact_id)
+	{
+		if ( ! $this->loaded())
+		{
+			return FALSE;
+		}
+
+		$contact = ORM::factory('Object_Contact');
+		$contact->where('user_id', '=', $this->id)
+			->where('id', '=', intval($contact_id))
+			->find();
+		if ($contact->loaded())
+		{
+			$contact->delete();
+			return TRUE;
+		}
+
+		return FALSE;
 	}
 } // End User Model

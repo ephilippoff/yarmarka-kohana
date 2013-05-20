@@ -23,4 +23,16 @@ class Uploads
 
 		return trim(trim($path), '.');
 	}
+
+	public static function delete($filename)
+	{
+		$image = new Image();
+		return $image->deleteImage($filename);
+	}
+
+	public static function save(array $file)
+	{
+		$image = new Image();
+		return $image->makeThumbnail($file);
+	}
 }

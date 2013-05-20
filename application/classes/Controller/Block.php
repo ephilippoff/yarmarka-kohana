@@ -64,4 +64,15 @@ class Controller_Block extends Controller_Template
 			->cached(60)
 			->find_all();
 	}
+
+	public function action_user_profile_contacts()
+	{
+		if ( ! $user = Auth::instance()->get_user())
+		{
+			throw new HTTP_Exception_404;
+		}
+
+		$this->template->contact_types	= ORM::factory('Contact_Type')->find_all();
+		$this->template->user_contacts	= $user->get_contacts();
+	}
 }
