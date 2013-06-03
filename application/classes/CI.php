@@ -75,7 +75,7 @@ class CI extends Kohana_URL {
 			else
 			{
 				// Attempt to use HTTP_HOST and fallback to SERVER_NAME
-				$domain = Kohana::$config->load('common.main_domain');
+				$domain = Region::get_current_domain();
 			}
 
 			// Add the protocol and domain to the base URL

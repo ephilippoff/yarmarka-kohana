@@ -2,6 +2,8 @@
 
 class Region {
 
+	private static $_cache = array();
+
 	public static function get_current_region()
 	{
 		$region = ORM::factory('Region', intval(Arr::get($_COOKIE, 'location_region_id')));
@@ -23,14 +25,23 @@ class Region {
 
 	public static function get_current_domain()
 	{
+		if (isset(self::$_cache['current_domain']))
+		{
+			return self::$_cache['current_domain'];
+		}
+
 		$main_domain = Kohana::$config->load('common.main_domain');
 		if ($city = self::get_current_city() AND $city->seo_name)
 		{
-			return $city->seo_name.'.'.$main_domain;
+			$current_domain = $city->seo_name.'.'.$main_domain;
 		}
 		else
 		{
-			return $main_domain;
+			$current_domain = $main_domain;
 		}
+
+		self::$_cache['current_domain'] = $current_domain;
+
+		return $current_domain;
 	}
 }
