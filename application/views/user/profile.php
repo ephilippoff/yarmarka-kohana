@@ -117,13 +117,19 @@
 										<div class="select chzn-container chzn-container-single">
 											<a href="" class="chzn-single chzn-single-with-drop">
 												<div class="ico tel"></div>
-												<span class="text">Телефон</span>
+												<span class="text">Телефон (моб.)</span>
 												<div class="btn-select"><b></b></div>
 											</a>
 											<div class="select-cont chzn-drop">
 												<ul class="chzn-results">
 													<?php foreach ($contact_types as $ct) : ?>
-														<li data-id="<?=$ct->id?>" id="<?=$contact_classes[$ct->id]?>" class="active-result"><span class="ico <?=$contact_classes[$ct->id]?>"></span><?=$ct->name?></li>
+														<li data-id="<?=$ct->id?>" 
+															id="<?=$contact_classes[$ct->id]?>" 
+															data-format="<?=$ct->format?>"
+															class="active-result">
+															<span class="ico <?=$contact_classes[$ct->id]?>"></span>
+															<?=$ct->name?>
+														</li>
 													<?php endforeach; ?>
 												</ul>
 											</div>
@@ -136,8 +142,8 @@
 												<span class="cont-info">
 													<span class="ico tel findme"></span>
 													<div class="inp" id="new_contact">
-														<input type="hidden" name="contact_type" id="contact_type" value="2" />
-														<input class="" type="text" name="contact">
+														<input type="hidden" name="contact_type" id="contact_type" value="1" />
+														<input class="" type="text" name="contact" id="contact">
 													</div>
 													<span class="btn-act apply add_contact"></span>
 													<span class="inform"><span>Вы можете добавить несколько контактов для оперативной связи с вами</span></span>

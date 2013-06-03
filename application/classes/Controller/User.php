@@ -6,6 +6,7 @@ class Controller_User extends Controller_Template {
 	{
 		$this->layout = 'users';
 		$this->assets->js('ajaxfileupload.js')
+			->js('jquery.maskedinput-1.2.2.js')
 			->js('profile.js');
 
 		if ( ! $user = Auth::instance()->get_user())
@@ -18,13 +19,11 @@ class Controller_User extends Controller_Template {
 			: Kohana::$config->load('common.default_region_id');
 		$this->template->city_id	= $user->city_id;
 		$this->template->regions	= ORM::factory('Region')
-			->where('is_visible', '=', 1)
 			->order_by('title')
 			->find_all();
 		$this->template->cities		= $region_id 
 			? ORM::factory('City')
 				->where('region_id', '=', $region_id)
-				->where('is_visible', '=', 1)
 				->order_by('title')
 				->find_all()
 			: array();

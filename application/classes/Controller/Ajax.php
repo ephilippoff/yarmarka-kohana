@@ -100,7 +100,6 @@ class Controller_Ajax extends Controller_Template
 		}
 
 		$this->json['cities'] = $region->cities
-			->where('is_visible', '=', 1)
 			->order_by('title')
 			->find_all()
 			->as_array('id', 'title');
@@ -128,7 +127,19 @@ class Controller_Ajax extends Controller_Template
 
 		if ($contact AND $contact_type_id)
 		{
-			$contact = $user->add_contact($contact_type_id, $contact);
+			$exists_contact = ORM::factory('Object_Contact')
+				->where('contact_type_id', '=', $contact_type_id)
+				->where('contact', '=', $contact)
+				->find();
+			if ($exists_contact->loaded())
+			{
+				$this->json['code']	= 401;
+				$this->json['error']	= 'Такой контакт уже есть в системе';
+			}
+			else
+			{
+				$contact = $user->add_contact($contact_type_id, $contact);
+			}
 		}
 		else
 		{

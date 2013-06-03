@@ -136,6 +136,15 @@
 					</div>
 				</div>
 				<span class="btn-act apply city_save"></span>
+				<div class="input cf">
+					<div class="inp-cont-bl ">
+						<div class="inp-cont mystreet-bl">
+							<div class="inp"><input placeholder="Введите улицу" type="text" class="mystreet" /></div>
+							<span class="inform"><span>На ваш E-mail придет письмо с подтверждением регистрации</span></span>
+							<div class="alert-bl"><div class="cont"><div class="img"></div><div class="arr"></div><p class="text"><span>Важно заполнить поле e-mail правильно, иначе вы не сможете активировать свой аккаунт и пользоваться многими преимуществами зарегистрированных... &nbsp;  <a href="">>>></a></span></p></div></div>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 	</li>

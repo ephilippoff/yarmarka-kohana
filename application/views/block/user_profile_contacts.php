@@ -13,7 +13,7 @@
 			<div class="inp-cont">
 				<span class="cont-info">
 				<span class="cont"><span class="ico <?=$contact_classes[$contact->contact_type_id]?>"></span>
-					<a class="myhref contact-input" data-id="<?=$contact->id?>"><?=$contact->contact?></a>
+					<a class="usercontact contact-input" data-id="<?=$contact->id?>"><?=$contact->contact?></a>
 				</span><span class="remove delete_contact" data-id="<?=$contact->id?>"></span></span></div>
 		</div>
 	</div>
