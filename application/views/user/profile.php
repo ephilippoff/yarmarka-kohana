@@ -57,9 +57,13 @@
 							<li><a href=""><i class="ico "></i><span>Безопасность</span></a></li>
 						</ul>
 					</li>
-					<li><a href=""><i class="ico ico-profile"></i><span>Профиль</span></a>
+					<li><a href="" id="islide_profile"><i class="ico ico-profile"></i><span>Профиль</span></a>
 						<ul>
-							<li><a href=""><i class="ico "></i><span>Личные данные</span></a></li>
+							<li>
+								<i class="ico "></i><span>
+									Личные данные
+								</span>
+							</li>
 							<li><a href=""><i class="ico "></i><span>Счета</span></a></li>
 							<li><a href=""><i class="ico "></i><span>Безопасность</span></a></li>
 						</ul>
