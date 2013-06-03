@@ -28,7 +28,7 @@
 				</a>
 				<span class="domen"><?=Region::get_current_domain()?></span>
 			</div>
-			<div class="btn-red big add-advert"><span>Подать объявление</span></div>
+			<div class="btn-red big add-advert"><a href="<?=CI::site('add')?>"><span>Подать объявление</span></a></div>
 		</div>
 		<div class="active-bl z2"><div class="active-bl-bg">
 			<div class="m_menu  iLight ">
