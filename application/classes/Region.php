@@ -20,4 +20,17 @@ class Region {
 	{
 		return ORM::factory('Region', Kohana::$config->load('common.default_region_id'));
 	}
+
+	public static function get_current_domain()
+	{
+		$main_domain = Kohana::$config->load('common.main_domain');
+		if ($city = self::get_current_city() AND $city->seo_name)
+		{
+			return $city->seo_name.'.'.$main_domain;
+		}
+		else
+		{
+			return $main_domain;
+		}
+	}
 }

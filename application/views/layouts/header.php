@@ -22,7 +22,12 @@
 				<div class="who-are-yor"><span><?=$user->email?></span></div>	                    
 				<?php endif; ?>
 			</div>
-			<div class="logo"><img src="<?=URL::site('images/logo.png')?>" alt=""><span class="domen"><?=Kohana::$config->load('common.main_domain')?></span></div>
+			<div class="logo">
+				<a href="http://<?=Region::get_current_domain()?>">
+					<img src="<?=URL::site('images/logo.png')?>" alt="">
+				</a>
+				<span class="domen"><?=Region::get_current_domain()?></span>
+			</div>
 			<div class="btn-red big add-advert"><span>Подать объявление</span></div>
 		</div>
 		<div class="active-bl z2"><div class="active-bl-bg">
