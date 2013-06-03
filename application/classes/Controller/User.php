@@ -34,4 +34,15 @@ class Controller_User extends Controller_Template {
 
 	}
 
+	public function action_logout()
+	{
+		if (Auth::instance()->get_user())
+		{
+			setcookie('user_id', '', time()-1, '/', Region::get_cookie_domain());
+			Auth::instance()->logout();
+		}
+
+		$this->redirect('http://'.Region::get_current_domain());
+	}
+
 } // End Welcome

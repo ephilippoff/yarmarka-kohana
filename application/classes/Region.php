@@ -44,4 +44,9 @@ class Region {
 
 		return $current_domain;
 	}
+
+	public static function get_cookie_domain()
+	{
+		return '.'.Kohana::$config->load('main_domain');
+	}
 }
