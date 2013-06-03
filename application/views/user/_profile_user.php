@@ -3,43 +3,18 @@
 		<div class="input style2">
 			<label><span><i class="name">Фото:</i></span></label>
 			<div class="mylogo-bl">
-				<?php if ($user->filename) : ?>
-				<span class="avatar_view">
-				<?php else : ?>
-				<span class="avatar_view" style="display:none">
-				<?php endif; ?>
-					<?php if ($user->filename) : ?>
-					<a href="<?=Uploads::get_file_path($user->filename)?>" class="mylogo-href" target="_blank">
+				<form method="post" accept-charset="utf-8" enctype="multipart/form-data">
+					<label class="filebutton">
+						<?php if ($user->filename) : ?>
 						<img src="<?=Uploads::get_file_path($user->filename, '125x83')?>" id="avatar_img" />
-					<?php else : ?>
-					<a href="" class="mylogo-href">
-						<img src="" id="avatar_img" />
+						<?php else : ?>
+						<img src="<?=URL::site('images/mylogo.jpg')?>" id="avatar_img" />
 						<?php endif; ?>
-					</a>
-					<span class="mydel" id="delete_avatar"></span>
-					<div class="help-bl">
-						<div class="baloon">
-							<div class="alert-bl">
-								<div class="cont">
-									<div class="img"></div>
-									<div class="arr"></div>
-									<p class="text"><span>Важно заполнить поле e-mail правильно, иначе вы не сможете активировать свой аккаунт следовательно лишитесь всяких фишек и плющек, а еще... &nbsp;  <a href="">>>></a></span></p>
-								</div>
-							</div>
-						</div>
-						<span class="href fr mr12"><i class="ico"></i></span>
-					</div>
-				</span>
-				<?php if ($user->filename) : ?>
-				<span class="avatar_form" style="display:none">
-				<?php else : ?>
-				<span class="avatar_form">
-				<?php endif; ?>
-					<form method="post" accept-charset="utf-8" enctype="multipart/form-data">
-						<input type="file" name="avatar_input" id="avatar_input" />
-						<span class="btn-act apply" id="upload_avatar_btn"></span>
-					</form>
-				</span>
+						<input type="file" name="avatar_input" class="avatar" id="avatar_input" />
+					</label>
+				</form>
+
+				<span class="mydel" id="delete_avatar" <?php if ( ! $user->filename) echo "style='display:none;'" ?>></span>
 			</div>
 		</div>
 	</li>
