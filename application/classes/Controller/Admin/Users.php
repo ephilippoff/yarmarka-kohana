@@ -52,21 +52,30 @@ class Controller_Admin_Users extends Controller_Admin_Template {
 			$users->where('email', 'LIKE', '%'.$email.'%');
 		}
 
+		if ($phone = trim($this->request->query('phone')))
+		{
+			// @todo наверное это можно сделать на ORM как-то более изящно
+			$users->where('', 'EXISTS', DB::expr('(SELECT object.id FROM object 
+							LEFT JOIN object_contact AS oc ON oc.object_id=object.id 
+							WHERE object.author="user"."id" AND oc.contact_clear LIKE \'%'.$phone.'%\')'));
+		}
+
 		$clone_to_count = clone $users;
 		$count_all = $clone_to_count->count_all();
 
 		$users->offset($offset)
 			->limit($limit);
 
-		if (trim($this->request->query('order')) == 'asc')
-		{
-			$users->order_by('regdate', 'asc');
-		}
-		else
-		{
-			$users->order_by('regdate', 'desc');
-		}
+		$sort_by	= trim($this->request->query('sort_by'));
+		$direction	= trim($this->request->query('direction'));
 
+		$sort_by = $sort_by ? $sort_by : 'regdate';
+		$direction = $direction ? $direction : 'desc';
+
+		$users->order_by($sort_by, $direction);
+
+		$this->template->sort_by	= $sort_by;
+		$this->template->direction	= $direction;
 		$this->template->users		= $users->find_all();
 		$this->template->roles		= ORM::factory('Role')
 			->find_all()

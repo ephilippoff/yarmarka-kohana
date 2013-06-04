@@ -20,9 +20,10 @@ $(document).ready(function() {
 	// enable tooltips
 	$('a').tooltip();
 });
-function order(direction) {
+function order(sort_by, direction) {
 	var get = $.parseParams(window.location.search);
-	get['order'] = direction;
+	get['sort_by'] = sort_by;
+	get['direction'] = direction;
 	window.location.search = decodeURIComponent($.param(get));
 	return false;
 }
@@ -79,25 +80,77 @@ function delete_user(obj) {
 		<th>Phone</th>
 		<th>City</th>
 		<th>Name</th>
-		<?php if (Request::current()->query('order') == 'asc') : ?>
+
+		<?php if ($direction == 'asc') : ?>
 		<th class="dropup">
-			<a href="#" onClick="return order('desc');">
-			Registration date
-			<span class="caret"></span>
-			</a>
-		</th>
 		<?php else : ?>
 		<th class="dropdown">
-			<a href="#" onClick="return order('asc');">
+		<?php endif; ?>
+			<?php if ($direction == 'asc') : ?>
+			<a href="#" onClick="return order('regdate', 'desc');">
+			<?php else : ?>
+			<a href="#" onClick="return order('regdate', 'asc');">
+			<?php endif; ?>
 			Registration date
+			<?php if ($sort_by == 'regdate') : ?>
 			<span class="caret"></span>
+			<?php endif; ?>
 			</a>
 		</th>
-		<?php endif; ?>
+
 		<th>ip</th>
-		<th>Ads</th>
-		<th>Invoices</th>
-		<th>Msgs</th>
+
+		<?php if ($direction == 'asc') : ?>
+		<th class="dropup">
+		<?php else : ?>
+		<th class="dropdown">
+		<?php endif; ?>
+			<?php if ($direction == 'asc') : ?>
+			<a href="#" onClick="return order('objects_cnt', 'desc');">
+			<?php else : ?>
+			<a href="#" onClick="return order('objects_cnt', 'asc');">
+			<?php endif; ?>
+			Ads
+			<?php if ($sort_by == 'objects_cnt') : ?>
+			<span class="caret"></span>
+			<?php endif; ?>
+			</a>
+		</th>
+
+		<?php if ($direction == 'asc') : ?>
+		<th class="dropup">
+		<?php else : ?>
+		<th class="dropdown">
+		<?php endif; ?>
+			<?php if ($direction == 'asc') : ?>
+			<a href="#" onClick="return order('invoices_cnt', 'desc');">
+			<?php else : ?>
+			<a href="#" onClick="return order('invoices_cnt', 'asc');">
+			<?php endif; ?>
+			Invoices
+			<?php if ($sort_by == 'invoices_cnt') : ?>
+			<span class="caret"></span>
+			<?php endif; ?>
+			</a>
+		</th>
+
+		<?php if ($direction == 'asc') : ?>
+		<th class="dropup">
+		<?php else : ?>
+		<th class="dropdown">
+		<?php endif; ?>
+			<?php if ($direction == 'asc') : ?>
+			<a href="#" onClick="return order('msgs_cnt', 'desc');">
+			<?php else : ?>
+			<a href="#" onClick="return order('msgs_cnt', 'asc');">
+			<?php endif; ?>
+			Msgs
+			<?php if ($sort_by == 'msgs_cnt') : ?>
+			<span class="caret"></span>
+			<?php endif; ?>
+			</a>
+		</th>
+
 		<th></th>
 	</tr>
 	<?php foreach ($users as $user) : ?>

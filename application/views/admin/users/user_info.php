@@ -5,10 +5,12 @@
 	<div class="span6">
 	<table class="table table-hover table-condensed">
 	<?php foreach (array_keys($user->list_columns()) as $column_name) : ?>
+	<?php if ( ! in_array($column_name, array('passw', 'code'))) : ?>
 	<tr>
 		<td><?=$column_name?></td>
 		<td><?=$user->$column_name?></td>
 	</tr>
+	<?php endif; ?>
 	<?php endforeach; ?>
 	</table>
 	</div>
