@@ -39,7 +39,7 @@
 	<tr>
 		<td>
 			<small>#<b><?=$object->id?></b> <?=date('Y-m-d H:i', strtotime($object->real_date_created))?> </small>
-			<a href="<?=URL::site('detail/'.$object->id)?>" target="_blank"><?=$object->title?></a>
+			<a href="<?=CI::site('detail/'.$object->id)?>" target="_blank"><?=$object->title?></a>
 		</td>
 	</tr>
 	<?php endforeach; ?>
