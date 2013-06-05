@@ -1,24 +1,36 @@
 <ul>
-	<li>
+	<li id="org_type_edit" style="display:none">
 		<div class="input style2 user-type">
 			<label><span><i class="name">Тип пользователя:</i></span></label>
 			<div class="inp-cont-bl ">
-				<div class="inp-cont">					                    					
-					<select class="iselect " name="org_type" id="org_type">
-						<option value="1" <?=$user->org_type == 1 ? 'selected' : ''?>>Частное лицо</option>
-						<option value="2" <?=$user->org_type == 2 ? 'selected' : ''?>>Компания</option>
-					</select>
-					<span class="inform">
-						<span>Для частных лиц существуют ограничения на количество объявлений в рубрики: Легковые автомобили(5), Продажа квартир и комнат(3), Аренда квартир и комнат(5). Если Вам необходимо размещать больше объявлений, выберите "Компания"</span>
-					</span>
-				</div>
+				<select class="iselect " name="org_type" id="org_type">
+					<option value="1" <?=$user->org_type == 1 ? 'selected' : ''?>>Частное лицо</option>
+					<option value="2" <?=$user->org_type == 2 ? 'selected' : ''?>>Компания</option>
+				</select>
 			</div>
+			<span class="btn-act cansel org_type_cancel"></span>
 		</div>
 	</li>
-	<li>	
+	<li id="org_type_text">
 		<div class="input style2">
-			<label><span><i class="name">Логин:</i></span></label>
-			<p class="myinform"><?=$user->login?></p>
+
+			<label><span><i class="name">Тип пользователя:</i></span></label>					                    			
+			<p class="myinform">
+				<?php if ($user->org_type == 1) : ?>
+				<a href="" class="myhref org_type_edit">Частное лицо</a>
+				<?php else : ?>
+				<a href="" class="myhref org_type_edit">Компания</a> 
+				<?php endif; ?>
+			</p>
+			<?php if ($user->org_type == 2) : ?>
+			<span class="ico-company"></span>
+			<?php endif; ?>
+		</div>
+	</li>
+	<li>
+		<div class="input style2">
+			<label><span><i class="name">E-mail:</i></span></label>
+			<p class="myinform"><?=$user->email?></p>
 		</div>
 	</li>
 	<li>

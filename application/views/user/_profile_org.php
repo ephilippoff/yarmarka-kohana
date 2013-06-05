@@ -1,15 +1,30 @@
 <ul>
-	<li>
+	<li id="org_type_edit" style="display:none">
 		<div class="input style2 user-type">
 			<label><span><i class="name">Тип пользователя:</i></span></label>
 			<div class="inp-cont-bl ">
-				<div class="inp-cont">					                    					
-					<select class="iselect " name="org_type" id="org_type">
-						<option value="1" <?=$user->org_type == 1 ? 'selected' : ''?>>Частное лицо</option>
-						<option value="2" <?=$user->org_type == 2 ? 'selected' : ''?>>Компания</option>
-					</select>
-				</div>
+				<select class="iselect " name="org_type" id="org_type">
+					<option value="1" <?=$user->org_type == 1 ? 'selected' : ''?>>Частное лицо</option>
+					<option value="2" <?=$user->org_type == 2 ? 'selected' : ''?>>Компания</option>
+				</select>
 			</div>
+			<span class="btn-act cansel org_type_cancel"></span>
+		</div>
+	</li>
+	<li id="org_type_text">
+		<div class="input style2">
+
+			<label><span><i class="name">Тип пользователя:</i></span></label>					                    			
+			<p class="myinform">
+				<?php if ($user->org_type == 1) : ?>
+				<a href="" class="myhref org_type_edit">Частное лицо</a>
+				<?php else : ?>
+				<a href="" class="myhref org_type_edit">Компания</a> 
+				<?php endif; ?>
+			</p>
+			<?php if ($user->org_type == 2) : ?>
+			<span class="ico-company"></span>
+			<?php endif; ?>
 		</div>
 	</li>
 	<li>
@@ -39,10 +54,27 @@
 			</div>
 		</div>
 	</li>
-	<li>	
+	<li>
 		<div class="input style2">
-			<label><span><i class="name">Логин:</i></span></label>
-			<p class="myinform"><?=$user->login?></p>
+			<label><span><i class="name">E-mail:</i></span></label>
+			<p class="myinform"><?=$user->email?></p>
+		</div>
+	</li>
+	<li>
+		<div class="input style2">
+			<label><span><i class="name">Логин:</i></span></label>					                    			
+			<p class="myinform profile-input-wrapper">
+				<a href="" class="myhref profile-input" 
+					data-name="login"><?=$user->login?></a>
+			</p>
+
+			<div class="alert-bl profile-alert">
+				<div class="cont">
+					<div class="img"></div>
+					<div class="arr"></div>
+					<p class="text"><span></span></p>
+				</div>
+			</div>
 		</div>
 	</li>
 	<li>
@@ -74,7 +106,7 @@
 	<li>
 		<div class="input style2">
 			<label><span><i class="name">Адрес вашей страницы :</i></span></label>					                    			
-			<p class="myinform"><a href="" class="mylink" target="_blank"><?=CI::site('users/'.$user->login)?></a>
+			<p class="myinform"><a href="" class="mylink user_page" target="_blank"><?=CI::site('users/'.$user->login)?></a>
 				<div class="help-bl">
 					<div class="baloon">
 					</div>
@@ -106,7 +138,20 @@
 			</div>
 		</div>
 	</li>
-	<li>
+	<li id="address_text">
+		<div class="input style2">
+
+			<label><span><i class="name">Адрес вашей компании:</i></span></label>					                    			
+			<p class="myinform">
+				<?php if ( ! $user->user_city->loaded() AND ! $user->org_address) : ?>
+				<a href="" class="myhref address_edit">Не указано</a>
+				<?php else : ?>
+				<a href="" class="myhref address_edit"><?=$user->user_city->loaded() ? $user->user_city->title.',' : ''?> <?=$user->org_address?></a>
+				<?php endif; ?>
+			</p>
+		</div>
+	</li>
+	<li id="address_edit" style="display:none">
 		<div class="input style2 myadress">
 			<label><span><i class="name">Адрес вашей компании:</i></span></label>
 			<div class="mybox">					                    			

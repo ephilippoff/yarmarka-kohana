@@ -58,14 +58,32 @@ class Controller_Ajax extends Controller_Template
 		}
 		else
 		{
-			// update userdata
-			$user->values($data)
-				->update();
+			try
+			{
+				// update userdata
+				$user->values($data)
+					->update();
+			}
+			catch(ORM_Validation_Exception $e)
+			{
+				$this->json['code'] = 402;
+				$this->json['errors'] = join('<br />', $e->errors('validation'));
+			}
 
 			// return values back to client
 			foreach ($data as $key => $value)
 			{
 				$data[$key] = $user->$key;
+			}
+
+			if (isset($data['city_id']))
+			{
+				$data['city_title'] = $user->user_city->loaded() ? $user->user_city->title : '';
+			}
+
+			if (isset($data['login']))
+			{
+				$data['user_page'] = CI::site('users/'.$user->login);
 			}
 		}
 
