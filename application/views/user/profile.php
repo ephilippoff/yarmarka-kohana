@@ -7,6 +7,7 @@
 			theme : "simple",
 			language: "ru",
 			plugins : "paste",
+			width: "335px",
 			paste_text_sticky : true,
 			setup : function(ed) {
 				ed.onInit.add(function(ed) {
@@ -134,7 +135,6 @@
 												</ul>
 											</div>
 										</div>
-										
 									</label>
 									<div class="inp-cont z1">
 										<div class="contact-bl">		                    						
@@ -150,6 +150,15 @@
 												</span>		                    						
 										</div>
 									</div>
+
+									<div class="alert-bl contact-alert">
+										<div class="cont">
+											<div class="img"></div>
+											<div class="arr"></div>
+											<p class="text"><span></span></p>
+										</div>
+									</div>
+
 								</div>
 								<div class="inp-cont-bl mt8">
 									<div class="inp-cont">

@@ -44,14 +44,29 @@ class Controller_Ajax extends Controller_Template
 			$data['about'] = preg_replace("/&#?[a-z0-9]+;/i","", strip_tags($data['about'],'<em><strong><ol><ul><li><span><br><p>'));
 		}
 
-		// update userdata
-		$user->values($data)
-			->update();
-
-		// return values back to client
-		foreach ($data as $key => $value)
+		$validation = Validation::factory($data);
+		if (isset($data['org_name']))
 		{
-			$data[$key] = $user->$key;
+			$validation->rule('org_name', 'not_empty')
+				->label('org_name', 'Название компании');
+		}
+
+		if ( ! $validation->check())
+		{
+			$this->json['code']	= 401;
+			$this->json['errors'] = join("<br />", $validation->errors('validation'));
+		}
+		else
+		{
+			// update userdata
+			$user->values($data)
+				->update();
+
+			// return values back to client
+			foreach ($data as $key => $value)
+			{
+				$data[$key] = $user->$key;
+			}
 		}
 
 		$this->json['data'] = $data;
@@ -130,11 +145,12 @@ class Controller_Ajax extends Controller_Template
 			$exists_contact = ORM::factory('Object_Contact')
 				->where('contact_type_id', '=', $contact_type_id)
 				->where('contact', '=', $contact)
+				->where('user_id', '=', $user->id)
 				->find();
 			if ($exists_contact->loaded())
 			{
-				$this->json['code']	= 401;
-				$this->json['error']	= 'Такой контакт уже есть в системе';
+				$this->json['code']		= 401;
+				$this->json['error']	= 'Такой контакт уже есть';
 			}
 			else
 			{

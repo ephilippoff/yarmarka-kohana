@@ -1,5 +1,18 @@
 <ul>
 	<li>
+		<div class="input style2 user-type">
+			<label><span><i class="name">Тип пользователя:</i></span></label>
+			<div class="inp-cont-bl ">
+				<div class="inp-cont">					                    					
+					<select class="iselect " name="org_type" id="org_type">
+						<option value="1" <?=$user->org_type == 1 ? 'selected' : ''?>>Частное лицо</option>
+						<option value="2" <?=$user->org_type == 2 ? 'selected' : ''?>>Компания</option>
+					</select>
+				</div>
+			</div>
+		</div>
+	</li>
+	<li>
 		<div class="input style2">
 			<label><span><i class="name">Логотип компании:</i></span></label>
 			<div class="mylogo-bl">
@@ -17,6 +30,13 @@
 				<span class="mydel" id="delete_avatar" <?php if ( ! $user->filename) echo "style='display:none;'" ?>></span>
 			</div>
 
+			<div class="alert-bl profile-alert">
+				<div class="cont">
+					<div class="img"></div>
+					<div class="arr"></div>
+					<p class="text"><span></span></p>
+				</div>
+			</div>
 		</div>
 	</li>
 	<li>	
@@ -26,35 +46,20 @@
 		</div>
 	</li>
 	<li>
-		<div class="input style2 user-type">
-			<label><span><i class="name">Тип пользователя:</i></span></label>
-			<div class="inp-cont-bl ">
-				<div class="inp-cont">					                    					
-					<select class="iselect " name="org_type" id="org_type">
-						<option value="1" <?=$user->org_type == 1 ? 'selected' : ''?>>Частное лицо</option>
-						<option value="2" <?=$user->org_type == 2 ? 'selected' : ''?>>Компания</option>
-					</select>
-					<span class="inform">
-						<span>Для частных лиц существуют ограничения на количество объявлений в рубрики: Легковые автомобили(5), Продажа квартир и комнат(3), Аренда квартир и комнат(5). Если Вам необходимо размещать больше объявлений, выберите "Компания"</span>
-					</span>
-					<div class="alert-bl">
-						<div class="cont">
-							<div class="img"></div>
-							<div class="arr"></div>
-							<p class="text"><span>Важно заполнить поле e-mail правильно, иначе вы не сможете активировать свой аккаунт и пользоваться многими преимуществами зарегистрированных... &nbsp;  <a href="">>>></a></span></p>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</li>
-	<li>
 		<div class="input style2">
 			<label><span><i class="name">Название компании:</i></span></label>					                    			
 			<p class="myinform profile-input-wrapper">
 				<a href="" class="myhref profile-input" 
 					data-name="org_name"><?=$user->org_name ? $user->org_name : 'Не указано'?></a>
 			</p>
+
+			<div class="alert-bl profile-alert">
+				<div class="cont">
+					<div class="img"></div>
+					<div class="arr"></div>
+					<p class="text"><span></span></p>
+				</div>
+			</div>
 		</div>
 	</li>
 	<li>
@@ -72,25 +77,33 @@
 			<p class="myinform"><a href="" class="mylink" target="_blank"><?=CI::site('users/'.$user->login)?></a>
 				<div class="help-bl">
 					<div class="baloon">
-						<div class="alert-bl">
-							<div class="cont">
-								<div class="img"></div><div class="arr"></div>							                							
-								<p class="text"><span>Важно заполнить поле e-mail правильно, иначе вы не сможете активировать свой аккаунт следовательно лишитесь всяких фишек и плющек, а еще... &nbsp;  <a href="">>>></a></span></p>
-							</div>
-						</div>
 					</div>
 					<span class="href fr mr12"><i class="ico"></i></span>
 				</div>
 			</p>
 		</div>
 	</li>
-	<li>
+	<li id="about_edit" style="display:none">
 		<div class="input style2">
 			<label><span><i class="name">О компании:</i></span></label>					                    			
 			<p class="myinform">
 				<textarea id="about" name="about" cols="40" rows="8" class="tiny"><?=$user->about?></textarea>
-				<span class="btn-act apply about_save"></span>
 			</p>
+			<div class="profile-about-actions">
+				<span class="btn-act apply about_save"></span>
+				<span class="btn-act cansel about_cancel"></span>
+			</div>
+		</div>
+	</li>
+	<li id="about_text">
+		<div class="input style2">
+			<label><span><i class="name">О компании:</i></span></label>					                    			
+			<div class="profile-text">
+				<span class="about_text"><?=$user->about?></span>
+			</div>
+			<div class="profile-about-edit">
+				<span class="btn-edit about_edit"></span>
+			</div>
 		</div>
 	</li>
 	<li>
@@ -104,16 +117,6 @@
 							<option value="<?=$region->id?>" <?=$region_id == $region->id ? 'selected' : ''?>><?=$region->title?></option>
 						<?php endforeach; ?>
 						</select>
-						<span class="inform">
-							<span>Для частных лиц существуют ограничения на количество объявлений в рубрики: Легковые автомобили(5), Продажа квартир и комнат(3), Аренда квартир и комнат(5). Если Вам необходимо размещать больше объявлений, выберите "Компания"</span>
-						</span>
-						<div class="alert-bl">
-							<div class="cont">
-								<div class="img"></div>
-								<div class="arr"></div>
-								<p class="text"><span>Важно заполнить поле e-mail правильно, иначе вы не сможете активировать свой аккаунт и пользоваться многими преимуществами зарегистрированных... &nbsp;  <a href="">>>></a></span></p>
-							</div>
-						</div>
 					</div>
 				</div>
 				<div class="inp-cont-bl ">
@@ -123,25 +126,14 @@
 							<option value="<?=$city->id?>" <?=$city_id == $city->id ? 'selected' : ''?>><?=$city->title?></option>
 						<?php endforeach; ?>
 						</select>
-						<span class="inform">
-							<span>Для частных лиц существуют ограничения на количество объявлений в рубрики: Легковые автомобили(5), Продажа квартир и комнат(3), Аренда квартир и комнат(5). Если Вам необходимо размещать больше объявлений, выберите "Компания"</span>
-						</span>
-						<div class="alert-bl">
-							<div class="cont">
-								<div class="img"></div>
-								<div class="arr"></div>
-								<p class="text"><span>Важно заполнить поле e-mail правильно, иначе вы не сможете активировать свой аккаунт и пользоваться многими преимуществами зарегистрированных... &nbsp;  <a href="">>>></a></span></p>
-							</div>
-						</div>
 					</div>
 				</div>
 				<span class="btn-act apply city_save"></span>
+				<span class="btn-act cansel city_cancel"></span>
 				<div class="input cf">
 					<div class="inp-cont-bl ">
 						<div class="inp-cont mystreet-bl">
-							<div class="inp"><input placeholder="Введите улицу" type="text" class="mystreet" /></div>
-							<span class="inform"><span>На ваш E-mail придет письмо с подтверждением регистрации</span></span>
-							<div class="alert-bl"><div class="cont"><div class="img"></div><div class="arr"></div><p class="text"><span>Важно заполнить поле e-mail правильно, иначе вы не сможете активировать свой аккаунт и пользоваться многими преимуществами зарегистрированных... &nbsp;  <a href="">>>></a></span></p></div></div>
+							<div class="inp"><input placeholder="Введите улицу" name="org_address" value="<?=$user->org_address?>" type="text" class="mystreet" /></div>
 						</div>
 					</div>
 				</div>
