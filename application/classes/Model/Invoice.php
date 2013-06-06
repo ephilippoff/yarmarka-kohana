@@ -19,6 +19,32 @@ class Model_Invoice extends ORM {
 		'user' => array(),
 	);
 
+	public function get_status_text()
+	{
+		if ( ! $this->loaded())
+		{
+			return FALSE;
+		}
+
+		switch ($this->state) 
+		{
+			case self::CREATED:
+				return 'Ожидает оплаты';
+			break;
+
+			case self::SUCCESS:
+				return 'Оплачен';
+			break;
+
+			case self::REFUSED:
+				return 'Отменен';
+			break;
+			
+			default:
+			break;
+		}
+	}
+
 	public function created()
 	{
 		return $this->where('state', '=', self::CREATED);

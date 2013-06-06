@@ -90,9 +90,23 @@ class Controller_User extends Controller_Template {
 			->find_all();
 	}
 
+	public function action_invoices()
+	{
+		$this->layout = 'users';
+		$this->assets->js('invoices.js');
+
+		$per_page = 20;
+
+		$this->template->invoices = ORM::factory('Invoice')
+			->where('user_id', '=', $this->user->id)
+			->order_by('created_on', 'desc')
+			->limit($per_page)
+			->find_all();
+	}
+
 	public function action_affiliates()
 	{
-		
+		// @todo
 	}
 
 	public function action_logout()
