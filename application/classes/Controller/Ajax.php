@@ -132,9 +132,15 @@ class Controller_Ajax extends Controller_Template
 			throw new HTTP_Exception_404;
 		}
 
-		$this->json['cities'] = $region->cities
-			->order_by('title')
-			->find_all()
+		 $cities = $region->cities
+			->order_by('title');
+
+		 if ($this->request->post('only_visible'))
+		 {
+			$cities->where('is_visible', '=', 1);
+		 }
+
+		$this->json['cities'] = $cities->find_all()
 			->as_array('id', 'title');
 	}
 
@@ -184,6 +190,20 @@ class Controller_Ajax extends Controller_Template
 	public function action_user_profile_contacts()
 	{
 		$this->response->body(Request::factory('block/user_profile_contacts')->execute());
+	}
+
+	public function action_remove_from_user_favorites()
+	{
+		$object = ORM::factory('Object', $this->request->param('id'));
+		if ( ! $user = Auth::instance()->get_user() OR ! $object->loaded())
+		{
+			throw new HTTP_Exception_404;
+		}
+
+		if ( !$object->remove_from_favorites())
+		{
+			$this->json['code'] = 500;
+		}
 	}
 
 	public function after()

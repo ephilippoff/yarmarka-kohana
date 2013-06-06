@@ -6,7 +6,7 @@
 <!--<meta content="width=device-width, initial-scale=1.0" name="viewport">-->
 <meta name="viewport" id="viewport" content="width=device-width">
 <title>SiteName</title>
-<?=$_assets->css('cssadm.css', array('media' => 'screen, projection'))
+<?=Assets::factory('main')->css('cssadm.css', array('media' => 'screen, projection'))
 	->css('iLight.css')
 	->css('jquery.jscrollpane.css')
 	->css('cusel.css')
@@ -23,6 +23,7 @@
 	->js('jquery.menu-aim.js')
 	->js('js.js')
 	->js('jquery.openxtag.min.js')
+	.$_assets
 ?>
 </head>
 <body class="adaptiveoff">
