@@ -28,7 +28,7 @@
 				</li>
 			</ul>
 		</li>
-		<li><a href=""><i class="ico ico-mysub"></i><span>Мои подписки</span></a></li>
+		<li><a href="" id="islide_subscriptions"><i class="ico ico-mysub"></i><span>Мои подписки</span></a></li>
 		<li><a href=""><i class="ico ico-myserv"></i><span>Сервисы</span></a>
 			<ul>
 				<li><a href=""><i class="ico "></i><span>Размещенные в нескольких городах</span></a></li>

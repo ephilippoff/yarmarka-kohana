@@ -206,6 +206,48 @@ class Controller_Ajax extends Controller_Template
 		}
 	}
 
+	public function action_unsubscribe()
+	{
+		if ( ! $user = Auth::instance()->get_user())
+		{
+			throw new HTTP_Exception_404;
+		}
+
+		$subscription = ORM::factory('Subscription')->where('id', '=', intval($this->request->param('id')))
+			->where('user_id', '=', $user->id)
+			->find();
+
+		if ( ! $subscription->loaded())
+		{
+			throw new HTTP_Exception_404;
+		}
+
+		$subscription->delete();
+	}
+
+	public function action_change_subscription_period()
+	{
+		if ( ! $user = Auth::instance()->get_user())
+		{
+			throw new HTTP_Exception_404;
+		}
+
+		$subscription = $user->subscriptions
+			->where('id', '=', intval($this->request->param('id')))
+			->find();
+		$period = (int) $this->request->post('period');
+
+		if ( ! $subscription->loaded() OR ! $period)
+		{
+			$this->json['code'] = 500;
+		}
+		else
+		{
+			$subscription->period = $period;
+			$subscription->save();
+		}
+	}
+
 	public function after()
 	{
 		parent::after();

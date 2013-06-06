@@ -77,6 +77,19 @@ class Controller_User extends Controller_Template {
 		$this->template->objects = $favorites->find_all();
 	}
 
+	public function action_subscriptions()
+	{
+		$this->layout = 'users';
+		$this->assets->js('subscriptions.js');
+
+		$per_page = 20;
+
+		$this->template->subscriptions = ORM::factory('Subscription')
+			->where('user_id', '=', $this->user->id)
+			->limit($per_page)
+			->find_all();
+	}
+
 	public function action_affiliates()
 	{
 		
