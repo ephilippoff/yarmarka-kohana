@@ -28,25 +28,29 @@
 				</li>
 			</ul>
 		</li>
-		<li><a href="" id="islide_subscriptions"><i class="ico ico-mysub"></i><span>Мои подписки</span></a></li>
-		<li><a href=""><i class="ico ico-myserv"></i><span>Сервисы</span></a>
+		<?php if (Request::current()->action() == 'subscriptions') : ?>
+		<li class="active">
+		<?php else : ?>
+		<li>
+		<?php endif; ?>
+			<a href="<?=URL::site('user/subscriptions')?>" id="islide_subscriptions" class="clickable"><i class="ico ico-mysub"></i><span>Мои подписки</span></a>
+		</li>
+		<li><a href="" id="islide_services"><i class="ico ico-myserv"></i><span>Сервисы</span></a>
 			<ul>
-				<li><a href=""><i class="ico "></i><span>Размещенные в нескольких городах</span></a></li>
-				<li><a href=""><i class="ico "></i><span>«Ярмарка +»</span></a></li>
-				<li><a href=""><i class="ico "></i><span>Безопасность</span></a></li>
-				<li><a href=""><i class="ico "></i><span>Счета</span></a></li>
-				<li><a href=""><i class="ico "></i><span>Безопасность</span></a></li>
+				<?php if (Request::current()->action() == 'invoices') : ?>
+				<li><i class="ico "></i><span><b>Счета</b></span></li>
+				<?php else : ?>
+				<li><a href="<?=URL::site('user/invoices')?>" class="clickable"><i class="ico "></i><span>Счета</span></a></li>
+				<?php endif; ?>
 			</ul>
 		</li>
 		<li><a href="" id="islide_profile"><i class="ico ico-profile"></i><span>Профиль</span></a>
 			<ul>
-				<li>
-					<i class="ico "></i><span>
-						Личные данные
-					</span>
-				</li>
-				<li><a href=""><i class="ico "></i><span>Счета</span></a></li>
-				<li><a href=""><i class="ico "></i><span>Безопасность</span></a></li>
+				<?php if (Request::current()->action() == 'profile') : ?>
+				<li><i class="ico "></i><span><b>Личные данные</b></span></li>
+				<?php else : ?>
+				<li><a href="<?=URL::site('user/profile')?>" class="clickable"><i class="ico "></i><span>Личные данные</span></a></li>
+				<?php endif; ?>
 			</ul>
 		</li>
 	</ul>
