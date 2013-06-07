@@ -86,10 +86,6 @@ abstract class Controller_Template extends Controller {
 				// Load the template
 				$this->template = View::factory($this->template);
 			}
-			else
-			{
-				$this->auto_render = FALSE;
-			}
 		}
 	}
 

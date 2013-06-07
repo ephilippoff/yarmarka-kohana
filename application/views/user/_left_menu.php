@@ -2,23 +2,16 @@
 	<ul class="islide-menu">
 		<li><a href="" id="islide_myads"><i class="ico ico-myadd"></i><span>Мои объявления</span></a>
 			<ul class="no_text-decoration">
-				<li class=""><a href=""><i class="ico "></i><span>Активные</span></a>
-					<ul>
-						<li><a href=""><i class="ico "></i><span>Знакомства</span></a></li>
-						<li><a href=""><i class="ico "></i><span>Автомобили</span></a></li>
-						<li><a href=""><i class="ico "></i><span>Домашние любимцы</span></a></li>
-					</ul>
-				</li>
-				<li><a href=""><i class="ico "></i><span>Неактивные</span></a>
-					<ul>
-						<li><a href=""><i class="ico "></i><span>Знакомства</span></a></li>
-						<li><a href=""><i class="ico "></i><span>Автомобили</span></a></li>
-						<li><a href=""><i class="ico "></i><span>Домашние любимцы</span></a></li>
-					</ul>
-				</li>
-				<li><a href=""><i class="ico "></i><span>На модерации</span></a></li>
-				<li><a href=""><i class="ico "></i><span>Черновики</span></a></li>
-				<li><a href=""><i class="ico "></i><span>Удаленные</span></a></li>
+				<?php if (Request::current()->action() == 'myads') : ?>
+				<li class=""><b><i class="ico "></i><span>Все</span></b></li>
+				<?php else : ?>
+				<li class=""><a href="<?=URL::site('user/myads')?>" class="clickable"><i class="ico "></i><span>Все</span></a></li>
+				<?php endif; ?>
+				<li class=""><a href="<?=URL::site('user/published')?>" class="clickable"><i class="ico "></i><span>Опубликованные</span></a></li>
+				<li class=""><a href="<?=URL::site('user/unpublished')?>" class="clickable"><i class="ico "></i><span>Снятые</span></a></li>
+				<li class=""><a href="<?=URL::site('user/in_archive')?>" class="clickable"><i class="ico "></i><span>В архиве</span></a></li>
+				<li class=""><a href="<?=URL::site('user/rejected')?>" class="clickable"><i class="ico "></i><span>Заблокированные до исправления</span></a></li>
+				<li class=""><a href="<?=URL::site('user/banned')?>" class="clickable"><i class="ico "></i><span>Заблокированные окончательно</span></a></li>
 				<li class="mt31">
 					<?php if (Request::current()->action() == 'favorites') : ?>
 					<b><i class="ico ico-favorites"></i><span>Избранные</span></b>

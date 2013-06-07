@@ -35,6 +35,19 @@
 							</div>
 						</div>
 					</div>
+					<div class="input style3">
+						<div class="inp-cont-bl ">
+							<div class="inp-cont">
+								<i class="imp320 imp">&nbsp; *</i>
+								<select class="iselect " name="category_id" id="category_id">
+									<option value="">--  категория --</option>
+									<?php foreach ($categories as $category) : ?>
+									<option value="<?=$category->id?>" <?=Arr::get($_GET, 'category_id') == $category->id ? 'selected' : ''?>><?=$category->title?> (<?=$category->count?>)</option>
+									<?php endforeach; ?>
+								</select>
+							</div>
+						</div>
+					</div>
 					<div class="input pseach">
 						<div class="inp-cont-bl ">
 							<div class="inp-cont">

@@ -104,17 +104,32 @@ class Controller_User extends Controller_Template {
 			->find_all();
 	}
 
-	public function action_myads()
+	public function myads($folder = 'myads')
 	{
+		$this->template = View::factory('user/myads');
 		$this->layout = 'users';
 		$this->assets->js('myads.js');
 
+		// pagination settings
 		$per_page	= 20;
 		$page		= (int) Arr::get($_GET, 'page', 1);
 
+		// get objects
 		$objects = ORM::factory('Object')
 			->where('author', '=', $this->user->id);
 
+		switch ($folder) 
+		{
+			case 'published':
+				$objects->published();
+			break;
+			
+			default:
+				// all user objects
+			break;
+		}
+
+		// region and city for filter
 		$region	= ORM::factory('Region', intval($this->request->query('region_id')));
 		$city	= ORM::factory('City', intval($this->request->query('city_id')));
 
@@ -128,18 +143,33 @@ class Controller_User extends Controller_Template {
 			$objects->where('city_id', '=', $city->id);
 		}
 
+		// filter by text
 		if ($text = trim($this->request->query('text')))
 		{
 			$objects->where(DB::expr('w_lower(full_text)'), 'LIKE', '%'.mb_strtolower($text, 'UTF-8').'%');
 		}
 
+		// count all user objects
 		$count = clone $objects;
 		$count = $count->count_all();
 
-		$objects->order_by('date_created', 'desc')
+		// get user objects
+		$objects = $objects->order_by('date_created', 'desc')
 			->limit($per_page)
-			->offset($per_page*($page-1));
+			->offset($per_page*($page-1))
+			->find_all();
 
+		// get user objects categories
+		$this->template->categories = DB::select(DB::expr('COUNT(object.id)'))
+			->select('category.id')
+			->select('category.title')
+			->from('object')
+			->join('category')->on('object.category', '=', 'category.id')
+			->where('object.id', 'IN', $objects->as_array(NULL, 'id'))
+			->group_by('category.id')
+			->order_by('category.title')
+			->as_object()
+			->execute();
 
 	 	$this->template->pagination = Pagination::factory( array(
 			'current_page' => array('source' => 'query_string', 'key' => 'page'),
@@ -153,7 +183,7 @@ class Controller_User extends Controller_Template {
 			'count_in' => 10
 		))->route_params(array(
 			'controller' => 'user',
-			'action' => 'myads',
+			'action' => $folder,
 		));
 		$this->template->regions = ORM::factory('Region')
 			->where('is_visible', '=', 1)
@@ -161,7 +191,17 @@ class Controller_User extends Controller_Template {
 		$this->template->cities = $region->loaded() 
 			? $region->cities->where('is_visible', '=', '1')->find_all()
 			: array();
-		$this->template->objects = $objects->find_all();
+		$this->template->objects = $objects;
+	}
+
+	public function action_myads()
+	{
+		$this->myads();
+	}
+
+	public function action_published()
+	{
+		$this->myads('published');
 	}
 
 	public function action_affiliates()
@@ -179,5 +219,4 @@ class Controller_User extends Controller_Template {
 
 		$this->redirect('http://'.Region::get_current_domain());
 	}
-
 } // End Welcome
