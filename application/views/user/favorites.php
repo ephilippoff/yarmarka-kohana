@@ -103,7 +103,7 @@
 									<?php endif; ?>
 								</div>
 								<div class="col3"><span class="date"><?=$object->get_real_date_created()?></span></div>
-								<div class="col31"><span class="city"><?=$object->city_obj->title?></span></div>
+								<div class="col31"><span class="city"><?=$object->city_obj->loaded() ? $object->city_obj->title : $object->city?></span></div>
 								<div class="col2">
 									<p class="title"><?=$object->title?></p>
 									<div class="hide-cont">

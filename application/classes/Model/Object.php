@@ -66,4 +66,9 @@ class Model_Object extends ORM {
 		return $this->is_bad > 0;
 	}
 
+	public function get_url()
+	{
+		// @todo
+	}
+
 } // End Access Model
