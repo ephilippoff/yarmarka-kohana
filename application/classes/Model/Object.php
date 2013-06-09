@@ -36,12 +36,6 @@ class Model_Object extends ORM {
 			->where('city.region_id', '=', intval($region_id));
 	}
 
-	public function published()
-	{
-		return $this->where('is_published', '=', 1)
-			->where('is_bad', '=', 0);
-	}
-
 	public function get_real_date_created($format = 'd.m.Y')
 	{
 		if ( ! $this->loaded())

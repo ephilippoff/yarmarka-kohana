@@ -121,7 +121,25 @@ class Controller_User extends Controller_Template {
 		switch ($folder) 
 		{
 			case 'published':
-				$objects->published();
+				$objects->where('is_published', '=', '1')
+					->where('is_bad', '=', '0');
+			break;
+
+			case 'unpublished':
+				$objects->where('is_published', '=', '0')
+					->where('is_bad', '=', '0');
+			break;
+
+			case 'in_archive':
+				$objects->where('in_archive', '=', '1');
+			break;
+
+			case 'rejected':
+				$objects->where('is_bad', '=', 1);
+			break;
+
+			case 'banned':
+				$objects->where('is_bad', '=', 2);
 			break;
 			
 			default:
@@ -160,16 +178,18 @@ class Controller_User extends Controller_Template {
 			->find_all();
 
 		// get user objects categories
-		$this->template->categories = DB::select(DB::expr('COUNT(object.id)'))
+		$this->template->categories = ($objects_ids = $objects->as_array(NULL, 'id')) 
+			? DB::select(DB::expr('COUNT(object.id)'))
 			->select('category.id')
 			->select('category.title')
 			->from('object')
 			->join('category')->on('object.category', '=', 'category.id')
-			->where('object.id', 'IN', $objects->as_array(NULL, 'id'))
+			->where('object.id', 'IN', $objects_ids)
 			->group_by('category.id')
 			->order_by('category.title')
 			->as_object()
-			->execute();
+			->execute()
+			: array();
 
 	 	$this->template->pagination = Pagination::factory( array(
 			'current_page' => array('source' => 'query_string', 'key' => 'page'),
@@ -202,6 +222,26 @@ class Controller_User extends Controller_Template {
 	public function action_published()
 	{
 		$this->myads('published');
+	}
+
+	public function action_unpublished()
+	{
+		$this->myads('unpublished');
+	}
+
+	public function action_in_archive()
+	{
+		$this->myads('in_archive');
+	}
+
+	public function action_rejected()
+	{
+		$this->myads('rejected');
+	}
+
+	public function action_banned()
+	{
+		$this->myads('banned');
 	}
 
 	public function action_affiliates()
