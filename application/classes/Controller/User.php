@@ -148,8 +148,9 @@ class Controller_User extends Controller_Template {
 		}
 
 		// region and city for filter
-		$region	= ORM::factory('Region', intval($this->request->query('region_id')));
-		$city	= ORM::factory('City', intval($this->request->query('city_id')));
+		$region		= ORM::factory('Region', intval($this->request->query('region_id')));
+		$city		= ORM::factory('City', intval($this->request->query('city_id')));
+		$category	= ORM::factory('Category', intval($this->request->query('category_id')));
 
 		if ($region->loaded())
 		{
@@ -159,6 +160,11 @@ class Controller_User extends Controller_Template {
 		if ($city->loaded())
 		{
 			$objects->where('city_id', '=', $city->id);
+		}
+
+		if ($category->loaded())
+		{
+			$objects->where('category', '=', $category->id);
 		}
 
 		// filter by text
