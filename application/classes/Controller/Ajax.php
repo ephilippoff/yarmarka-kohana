@@ -275,6 +275,67 @@ class Controller_Ajax extends Controller_Template
 		}
 	}
 
+	public function action_prolong_object()
+	{
+		$object = ORM::factory('Object', intval($this->request->param('id')));
+		$lifetime = $this->request->post('lifetime');
+		
+		if ( ! $object->loaded() OR ! $lifetime)
+		{
+			throw new HTTP_Exception_404;
+		}
+
+		if ($object->in_archive())
+		{
+			$date_expiration = null;
+
+			switch ($lifetime) {
+				case "1m":
+					$date_expiration = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . "+1 month"));
+					break;
+				case "2m":
+					$date_expiration = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . "+2 month"));
+					break;
+				case "3m":
+					$date_expiration = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . "+3 month"));
+					break;
+				default:
+					$date_expiration = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . "+14 days"));
+					break;
+			}
+			
+			$object->prolong($date_expiration);
+			
+			$this->json['date_expiration'] = date('d.m.y', strtotime($date_expiration));
+			$this->json['code'] = 200;
+		}
+		
+		if ($object->is_bad == 1 AND $object->in_archive())
+		{
+			$date_expiration = null;
+
+			switch ($lifetime) {
+				case "1m":
+					$date_expiration = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . "+1 month"));
+					break;
+				case "2m":
+					$date_expiration = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . "+2 month"));
+					break;
+				case "3m":
+					$date_expiration = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . "+3 month"));
+					break;
+				default:
+					$date_expiration = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . "+14 days"));
+					break;
+			}
+			
+			$object->prolong($date_expiration, TRUE, TRUE);
+			
+			$this->json['date_expiration'] = date('d.m.y', strtotime($date_expiration));
+			$this->json['code'] = 300;
+		}
+	}
+
 	public function after()
 	{
 		parent::after();

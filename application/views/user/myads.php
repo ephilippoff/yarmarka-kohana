@@ -115,7 +115,7 @@
                                 </div>
                                 <div class="col4">
                                     <ul>
-                                        <li class="show-cont"><a href="" class="btn-funcmenu"><i class="ico clock"></i><span>Действия</span></a></li>
+                                        <li class="show-cont"><a href="" class="btn-funcmenu toggle"><i class="ico clock"></i><span>Действия</span></a></li>
 
 
                                         <?php if (!$ad->is_bad) {
@@ -164,12 +164,6 @@
                                             <li class="hide-cont">
                                                 <a href="<?=$ad->get_url()?>" target="_blank" class="btn-funcmenu">
                                                     <i class="ico clock"></i><span>Просмотр</span>
-                                                </a>
-                                            </li>
-
-                                            <li class="hide-cont">
-                                                <a href="" class="btn-funcmenu noactive" onclick="return false;">
-                                                    <i class="ico clock"></i><span>Продлить</span>
                                                 </a>
                                             </li>
 

@@ -57,7 +57,7 @@ class Model_Object extends ORM {
 
 	public function in_archive()
 	{
-		return $this->in_archive AND $this->is_published() AND ! $this->is_banned();
+		return $this->in_archive AND ! $this->is_banned();
 	}
 
 	public function is_published()
@@ -97,6 +97,39 @@ class Model_Object extends ORM {
 		$this->date_created = DB::expr('NOW()');
 		$this->date_updated = DB::expr('NOW()');
 		return $this->update();
+	}
+
+	public function prolong($date_expiration, $to_forced_moderation = FALSE, $no_bad = FALSE)
+	{
+		if ( ! $this->loaded())
+		{
+			return FALSE;
+		}
+
+		$this->date_expiration	= $date_expiration;
+		$this->date_created		= DB::expr('NOW()');
+		$this->is_published		= 1;
+		$this->in_archive		= FALSE;
+
+		if ($to_forced_moderation)
+		{
+			$this->to_forced_moderation = TRUE;
+		}
+			
+		if ($no_bad)
+		{
+			$this->is_bad = 0;
+		}
+
+		// update object
+		$object = $this->update();
+
+		// add to log
+		DB::insert('object_archive_log', array('object_id', 'movedon', 'direction'))
+			->values(array($object->id, DB::expr('NOW()'), 2))
+			->execute();
+
+		return $object;
 	}
 
 } // End Access Model
