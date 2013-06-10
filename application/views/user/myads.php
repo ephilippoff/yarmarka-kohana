@@ -280,7 +280,7 @@
                                     </span>
                                 </div>
                                 <div class="col2">
-                                    <p class="title"><?=htmlspecialchars(mb_substr($ad->title, 0, 50))?> (<a href="<?=$ad->get_url()?>">Перейти</a>)</p>
+                                    <p class="title"><?=htmlspecialchars(mb_substr($ad->title, 0, 50))?> (<a href="<?=$ad->get_url()?>" target="_blank">Перейти</a>)</p>
                                     <div class="hide-cont">
                                         <p class="info"><?=$ad->category_obj->title?></p>
                                         <p class="info"><?=$ad->city_obj->loaded() ? $ad->city_obj->title : $ad->city?></p>

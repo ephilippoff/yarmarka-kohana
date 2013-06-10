@@ -68,7 +68,8 @@ class Model_Object extends ORM {
 
 	public function get_url()
 	{
-		// @todo
+		return CI::site('obyavlenie/'.$this->category_obj->get_seo_name(NULL, $this->city_id).'/'.($this->seo_name ? $this->seo_name.'-' : '').$this->id,
+				'http', TRUE, Region::get_domain_by_city($this->city_id));
 	}
 
 } // End Access Model

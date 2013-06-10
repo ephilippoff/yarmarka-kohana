@@ -23,7 +23,7 @@ class CI extends Kohana_URL {
 	 * @uses    Kohana::$index_file
 	 * @uses    Request::protocol()
 	 */
-	public static function base($protocol = NULL, $index = FALSE)
+	public static function base($protocol = NULL, $index = FALSE, $domain = NULL)
 	{
 		// Start with the configured base URL
 		$base_url = Kohana::$base_url;
@@ -67,15 +67,18 @@ class CI extends Kohana_URL {
 				$port = ':'.$port;
 			}
 
-			if ($domain = parse_url($base_url, PHP_URL_HOST))
+			if ( ! $domain)
 			{
-				// Remove everything but the path from the URL
-				$base_url = parse_url($base_url, PHP_URL_PATH);
-			}
-			else
-			{
-				// Attempt to use HTTP_HOST and fallback to SERVER_NAME
-				$domain = Region::get_current_domain();
+				if ($domain = parse_url($base_url, PHP_URL_HOST))
+				{
+					// Remove everything but the path from the URL
+					$base_url = parse_url($base_url, PHP_URL_PATH);
+				}
+				else
+				{
+					// Attempt to use HTTP_HOST and fallback to SERVER_NAME
+					$domain = Region::get_current_domain();
+				}
 			}
 
 			// Add the protocol and domain to the base URL
@@ -96,7 +99,7 @@ class CI extends Kohana_URL {
 	 * @return  string
 	 * @uses    URL::base
 	 */
-	public static function site($uri = '', $protocol = 'http', $index = TRUE)
+	public static function site($uri = '', $protocol = 'http', $index = TRUE, $domain = NULL)
 	{
 		// Chop off possible scheme, host, port, user and pass parts
 		$path = preg_replace('~^[-a-z0-9+.]++://[^/]++/?~', '', trim($uri, '/'));
@@ -108,6 +111,6 @@ class CI extends Kohana_URL {
 		}
 
 		// Concat the URL
-		return CI::base($protocol, $index).$path;
+		return CI::base($protocol, $index, $domain).$path;
 	}
 }

@@ -13,7 +13,12 @@ class Model_Category extends ORM {
 
 	protected $_table_name = 'category';
 
-	public function get_url($region_id = NULL, $city_id = NULL)
+	public function get_url($region_id = NULL, $city_id = NULL, $action_id = NULL)
+	{
+		return CI::site($this->get_seo_name($region_id = NULL, $city_id = NULL, $action_id = NULL));
+	}
+
+	public function get_seo_name($region_id = NULL, $city_id = NULL, $action_id = NULL)
 	{
 		if ( ! $this->loaded())
 		{
@@ -35,6 +40,37 @@ class Model_Category extends ORM {
 
 		$geo = ($city AND $city->loaded()) ? $city->seo_name : $region->seo_name;
 
-		return CI::site($geo.'/'.$this->seo_name);
+		$category_seo_names = array();
+		$parent_id = $this->parent_id;
+		while ($parent_id != 1)
+		{
+			$category = ORM::factory('Category')
+				->where('id', '=', $parent_id)
+				->cached()
+				->find();
+			if ($category->seo_name)
+			{
+				$category_seo_names[0] = $category->seo_name;
+			}
+			$parent_id = $category->parent_id;
+		}
+
+		$category_seo_names[] = $this->seo_name;
+
+		if ($action_id)
+		{
+			$action = ORM::factory('Action', intval($action_id));
+			if ($action->loaded() AND $action->seo_name)
+			{
+				$category_seo_names[] = $action->seo_name;
+			}
+		}
+
+		return $geo.'/'.join('/', $category_seo_names);
+	}
+
+	public function get_url_with_action($action_id)
+	{
+		return $this->get_url(NULL, NULL, $action_id);
 	}
 } // End Category Model

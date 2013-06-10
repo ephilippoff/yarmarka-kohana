@@ -49,4 +49,26 @@ class Region {
 	{
 		return '.'.Kohana::$config->load('main_domain');
 	}
+
+	public static function get_domain_by_city($city_id = NULL)
+	{
+		if ($city_id)
+		{
+			$city = ORM::factory('City', intval($city_id));
+		}
+
+		if ($city->loaded())
+		{
+			if ($city->seo_name)
+			{
+				return $city->seo_name.'.'.Kohana::$config->load('common.main_domain');
+			}
+			elseif ($city->region->loaded() AND $city->region->seo_name)
+			{
+				return $city->region->seo_name.'.'.Kohana::$config->load('common.main_domain');
+			}
+		}
+
+		return self::get_current_domain();
+	}
 }
