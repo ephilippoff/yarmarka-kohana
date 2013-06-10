@@ -116,7 +116,8 @@ class Controller_User extends Controller_Template {
 
 		// get objects
 		$objects = ORM::factory('Object')
-			->where('author', '=', $this->user->id);
+			->where('author', '=', $this->user->id)
+			->where('active', '=', 1);
 
 		switch ($folder) 
 		{

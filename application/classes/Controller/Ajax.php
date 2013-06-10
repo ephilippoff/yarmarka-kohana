@@ -371,6 +371,30 @@ class Controller_Ajax extends Controller_Template
 		}
 	}
 
+	public function action_delete_ads()
+	{
+		if ( ! Auth::instance()->get_user())
+		{
+			throw new HTTP_Exception_404;
+		}
+
+		$ids = $this->request->post('to_del');
+
+		if (is_array($ids) AND $ids)
+		{
+			// @todo надо дописать метод save_all для ORM
+			DB::update('object')->value('active', 0)
+				->value('is_published', 0)
+				->where('author', '=', Auth::instance()->get_user()->id)
+				->where('id', 'IN', $ids)
+				->execute();
+		}
+		else
+		{
+			$this->json['code'] = 400;
+		}
+	}
+
 	public function after()
 	{
 		parent::after();
