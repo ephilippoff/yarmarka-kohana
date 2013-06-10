@@ -144,8 +144,7 @@
 
 
                                             <?php // Получаем дату, когда можно поднять объявление
-                                            $date_service_up_available = strtotime($ad->date_created) + 86400 * Kohana::$config->load('common.days_count_between_service_up');
-                                            if ($date_service_up_available < time()) : ?>
+                                            if ($ad->get_service_up_timestamp() < time()) : ?>
                                                 <li class="hide-cont">
                                                     <a href="" class="btn-funcmenu" id="service-up-<?=$ad->id?>" onClick="service_up(<?=$ad->id?>); return false;">
                                                         <i class="ico clock"></i><span>Поднять</span>
@@ -153,8 +152,8 @@
                                                 </li>
                                             <?php else : ?>
                                                 <li class="hide-cont">
-                                                    <a href="" class="btn-funcmenu noactive" id="service-up-<?=$ad->id?>"
-                                                       title="Вы можете поднять это объявление не раньше <?=date("d.m Y в H:i", $date_service_up_available)?>"
+                                                    <a href="" class="btn-funcmenu noactive" id="service-up-<?=$ad->id?>" onClick="service_up(<?=$ad->id?>); return false;"
+                                                       title="Вы можете поднять это объявление не раньше <?=date("d.m Y в H:i", $ad->get_service_up_timestamp())?>"
                                                        onclick="return false;">
                                                         <i class="ico clock"></i><span>Поднять</span>
                                                     </a>
@@ -163,7 +162,7 @@
 
 
                                             <li class="hide-cont">
-                                                <a href="" class="btn-funcmenu" onclick="window.location='/detail/<?=$ad->id?>'; return false;">
+                                                <a href="<?=$ad->get_url()?>" target="_blank" class="btn-funcmenu">
                                                     <i class="ico clock"></i><span>Просмотр</span>
                                                 </a>
                                             </li>

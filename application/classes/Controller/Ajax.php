@@ -23,6 +23,7 @@ class Controller_Ajax extends Controller_Template
 		}
 		// disable global layout for this controller
 		$this->use_layout = FALSE;
+		$this->auto_render = FALSE;
 		parent::before();
 
 		$this->json['code'] = 200; // code by default
@@ -245,6 +246,32 @@ class Controller_Ajax extends Controller_Template
 		{
 			$subscription->period = $period;
 			$subscription->save();
+		}
+	}
+
+	public function action_service_up()
+	{
+		$ad = ORM::factory('Object', intval($this->request->param('id')));
+		if ( ! $ad->loaded())
+		{
+			throw new HTTP_Exception_404;
+		}
+
+		$validate_object = $ad->city_id > 0 AND ! empty($ad->title) AND ! empty($ad->user_text) AND $ad->contacts->count_all() > 0;
+
+		if ( ! $validate_object)
+		{
+			$this->json['code'] = 500;
+		}
+		elseif ($ad->get_service_up_timestamp() > time())
+		{
+			$this->json['code'] = 300;
+			$this->json['date_service_up_available'] = date("d.m Y в H:i", $ad->get_service_up_timestamp());
+		}
+		else
+		{
+			$ad->up();
+			$this->json['date_service_up_available'] = date("d.m Y в H:i", $ad->get_service_up_timestamp());
 		}
 	}
 

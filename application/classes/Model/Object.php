@@ -10,6 +10,10 @@ class Model_Object extends ORM {
 		'city_obj'		=> array('model' => 'City', 'foreign_key' => 'city_id'),
 	);
 
+	protected $_has_many = array(
+		'contacts'		=> array('model' => 'Object_Contact', 'foreign_key' => 'object_id'),
+	);
+
 	public function remove_from_favorites()
 	{
 		if ( ! $this->loaded())
@@ -70,6 +74,29 @@ class Model_Object extends ORM {
 	{
 		return CI::site('obyavlenie/'.$this->category_obj->get_seo_name(NULL, $this->city_id).'/'.($this->seo_name ? $this->seo_name.'-' : '').$this->id,
 				'http', TRUE, Region::get_domain_by_city($this->city_id));
+	}
+
+	/**
+	 * Дата когда можно поднять объявление
+	 * 
+	 * @access public
+	 * @return time
+	 */
+	public function get_service_up_timestamp()
+	{
+		return strtotime($this->date_created) + 86400 * Kohana::$config->load('common.days_count_between_service_up');
+	}
+
+	public function up()
+	{
+		if ( ! $this->loaded())
+		{
+			return FALSE;
+		}
+
+		$this->date_created = DB::expr('NOW()');
+		$this->date_updated = DB::expr('NOW()');
+		return $this->update();
 	}
 
 } // End Access Model
