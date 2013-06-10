@@ -132,4 +132,15 @@ class Model_Object extends ORM {
 		return $object;
 	}
 
+	public function toggle_published()
+	{
+		if ( ! $this->loaded())
+		{
+			return FALSE;
+		}
+
+		$this->is_published = (int) ! $this->is_published;
+		return $this->update();
+	}
+
 } // End Access Model

@@ -252,7 +252,7 @@ class Controller_Ajax extends Controller_Template
 	public function action_service_up()
 	{
 		$ad = ORM::factory('Object', intval($this->request->param('id')));
-		if ( ! $ad->loaded())
+		if ( ! $ad->loaded() OR ! Auth::instance()->get_user() OR $ad->author != Auth::instance()->get_user()->id)
 		{
 			throw new HTTP_Exception_404;
 		}
@@ -280,7 +280,10 @@ class Controller_Ajax extends Controller_Template
 		$object = ORM::factory('Object', intval($this->request->param('id')));
 		$lifetime = $this->request->post('lifetime');
 		
-		if ( ! $object->loaded() OR ! $lifetime)
+		if ( ! $object->loaded() 
+				OR ! $lifetime 
+				OR ! Auth::instance()->get_user() 
+				OR $object->author != Auth::instance()->get_user()->id)
 		{
 			throw new HTTP_Exception_404;
 		}
@@ -333,6 +336,38 @@ class Controller_Ajax extends Controller_Template
 			
 			$this->json['date_expiration'] = date('d.m.y', strtotime($date_expiration));
 			$this->json['code'] = 300;
+		}
+	}
+
+	public function action_pub_toggle()
+	{
+		$object = ORM::factory('Object', intval($this->request->param('id')));
+		if ( ! $object->loaded() 
+				OR ! $object->category_obj->loaded() 
+				OR ! Auth::instance()->get_user() 
+				OR Auth::instance()->get_user()->id != $object->author)
+		{
+			throw new HTTP_Exception_404;
+		}
+
+		$count_published_in_category = ORM::factory('Object')
+			->where('category', '=', $object->category)
+			->where('author', '=', $object->author)
+			->where('is_published', '=', '1')
+			->count_all();
+
+		if ($object->is_published == 0
+				AND Auth::instance()->get_user()->org_type == 1 
+				AND $object->category_obj->max_count_for_user 
+				AND $count_published_in_category >= $object->category_obj->max_count_for_user)
+		{
+			$json['code'] = 400;
+		}
+		else
+		{
+			$object->toggle_published();
+			$this->json['code'] = 200;
+			$this->json['is_published'] = $object->is_published;
 		}
 	}
 
