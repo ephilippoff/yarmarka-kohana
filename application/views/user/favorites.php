@@ -67,6 +67,7 @@
 						<div class="col1"><span>Номер</span></div>
 						<div class="col5"><span>Удалить</span></div>
 						<div class="col4"><span>Статус</span></div>
+						<div class="col31"><span>Функции</span></div>
 						<div class="col3"><span class="arr_down pointer">Дата</span></div>
 						<div class="col31"><span>Город</span></div>
 						<div class="col2"><span>Наименование</span></div>	
@@ -102,10 +103,16 @@
 									<p class="istatus idel"><span>Заблокировано</span></p>
 									<?php endif; ?>
 								</div>
+                                <div class="col31">
+									<a href="<?=$object->get_url()?>" target="_blank" class="btn-funcmenu">
+										<i class="ico info"></i><span>Просмотр</span>
+									</a>
+								</div>
 								<div class="col3"><span class="date"><?=$object->get_real_date_created()?></span></div>
 								<div class="col31"><span class="city"><?=$object->city_obj->loaded() ? $object->city_obj->title : $object->city?></span></div>
 								<div class="col2">
 									<p class="title"><?=$object->title?></p>
+									
 									<div class="hide-cont">
 										<p class="info"><?=$object->category_obj->title?></p>
 										<p class="info"><?=$object->city_obj->title?></p>
@@ -127,6 +134,11 @@
 
 					</div>
 				</div>
+
+				<?=$pagination?>
+				<div class="clear"></div>
+				<br />
+				
 			</section>
 		</div>	   
 		  

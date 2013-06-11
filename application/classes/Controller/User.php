@@ -46,6 +46,10 @@ class Controller_User extends Controller_Template {
 		$this->layout = 'users';
 		$this->assets->js('favorites.js');
 
+		// pagination settings
+		$per_page	= 20;
+		$page		= (int) Arr::get($_GET, 'page', 1);
+
 		$region	= ORM::factory('Region', intval($this->request->query('region_id')));
 		$city	= ORM::factory('City', intval($this->request->query('city_id')));
 
@@ -66,7 +70,12 @@ class Controller_User extends Controller_Template {
 			$favorites->where(DB::expr('w_lower(full_text)'), 'LIKE', '%'.mb_strtolower($text, 'UTF-8').'%');
 		}
 
-		$favorites->limit(20);
+		$count = clone $favorites;
+		$count = $count->count_all();
+
+		$favorites->limit($per_page)
+			->offset($per_page*($page-1))
+			->order_by('date_created', 'desc');
 
 		$this->template->regions = ORM::factory('Region')
 			->where('is_visible', '=', 1)
@@ -74,6 +83,19 @@ class Controller_User extends Controller_Template {
 		$this->template->cities = $region->loaded() 
 			? $region->cities->where('is_visible', '=', '1')->find_all()
 			: array();
+	 	$this->template->pagination = Pagination::factory( array(
+			'current_page' => array('source' => 'query_string', 'key' => 'page'),
+			'total_items' => $count,
+			'items_per_page' => $per_page,
+			'auto_hide' => TRUE,
+			'view' => 'pagination/floating',
+			'first_page_in_url' => TRUE,
+			'count_out'	=> 12,
+			'count_in' => 10
+		))->route_params(array(
+			'controller' => 'user',
+			'action' => 'favorites',
+		));
 		$this->template->objects = $favorites->find_all();
 	}
 
