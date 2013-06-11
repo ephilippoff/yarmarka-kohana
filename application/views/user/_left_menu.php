@@ -7,11 +7,37 @@
 				<?php else : ?>
 				<li class=""><a href="<?=URL::site('user/myads')?>" class="clickable"><i class="ico "></i><span>Все</span></a></li>
 				<?php endif; ?>
+
+				<?php if (Request::current()->action() == 'published') : ?>
+				<li class=""><b><i class="ico "></i><span>Опубликованные</span></b></li>
+				<?php else : ?>
 				<li class=""><a href="<?=URL::site('user/published')?>" class="clickable"><i class="ico "></i><span>Опубликованные</span></a></li>
+				<?php endif; ?>
+
+				<?php if (Request::current()->action() == 'unpublished') : ?>
+				<li class=""><b><i class="ico "></i><span>Снятые</span></b></li>
+				<?php else : ?>
 				<li class=""><a href="<?=URL::site('user/unpublished')?>" class="clickable"><i class="ico "></i><span>Снятые</span></a></li>
+				<?php endif; ?>
+
+				<?php if (Request::current()->action() == 'in_archive') : ?>
+				<li class=""><b><i class="ico "></i><span>В архиве</span></b></li>
+				<?php else : ?>
 				<li class=""><a href="<?=URL::site('user/in_archive')?>" class="clickable"><i class="ico "></i><span>В архиве</span></a></li>
+				<?php endif; ?>
+
+				<?php if (Request::current()->action() == 'rejected') : ?>
+				<li class=""><b><i class="ico "></i><span>Заблокированные до исправления</span></b></li>
+				<?php else : ?>
 				<li class=""><a href="<?=URL::site('user/rejected')?>" class="clickable"><i class="ico "></i><span>Заблокированные до исправления</span></a></li>
+				<?php endif; ?>
+
+				<?php if (Request::current()->action() == 'banned') : ?>
+				<li class=""><b><i class="ico "></i><span>Заблокированные окончательно</span></b></li>
+				<?php else : ?>
 				<li class=""><a href="<?=URL::site('user/banned')?>" class="clickable"><i class="ico "></i><span>Заблокированные окончательно</span></a></li>
+				<?php endif; ?>
+
 				<li class="mt31">
 					<?php if (Request::current()->action() == 'favorites') : ?>
 					<b><i class="ico ico-favorites"></i><span>Избранные</span></b>
