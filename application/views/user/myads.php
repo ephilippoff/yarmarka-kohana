@@ -115,8 +115,17 @@
                                 </div>
                                 <div class="col4">
                                     <ul>
-                                        <li class="show-cont"><a href="" class="btn-funcmenu toggle"><i class="ico clock"></i><span>Действия</span></a></li>
+										<li class="show-cont">
+											<a href="<?=$ad->get_url()?>" target="_blank" class="btn-funcmenu">
+												<i class="ico info"></i><span>Просмотр</span>
+											</a>
+										</li>
 
+										<li class="hide-cont">
+											<a href="<?=$ad->get_url()?>" target="_blank" class="btn-funcmenu">
+												<i class="ico info"></i><span>Просмотр</span>
+											</a>
+										</li>
 
                                         <?php if (!$ad->is_bad) {
                                         if ($ad->in_archive) //в архиве
@@ -146,43 +155,36 @@
                                             <?php // Получаем дату, когда можно поднять объявление
                                             if ($ad->get_service_up_timestamp() < time()) : ?>
                                                 <li class="hide-cont">
-                                                    <a href="" class="btn-funcmenu" id="service-up-<?=$ad->id?>" onClick="service_up(<?=$ad->id?>); return false;">
-                                                        <i class="ico clock"></i><span>Поднять</span>
+                                                    <a href="" class="btn-funcmenu" id="service-up-<?=$ad->id?>" onClick="service_up(<?=$ad->id?>, this); return false;">
+                                                        <i class="ico up"></i><span>Поднять</span>
                                                     </a>
                                                 </li>
                                             <?php else : ?>
                                                 <li class="hide-cont">
-                                                    <a href="" class="btn-funcmenu noactive" id="service-up-<?=$ad->id?>" onClick="service_up(<?=$ad->id?>); return false;"
+                                                    <a href="" class="btn-funcmenu noactive" id="service-up-<?=$ad->id?>" onClick="service_up(<?=$ad->id?>, this); return false;"
                                                        title="Вы можете поднять это объявление не раньше <?=date("d.m Y в H:i", $ad->get_service_up_timestamp())?>"
                                                        onclick="return false;">
-                                                        <i class="ico clock"></i><span>Поднять</span>
+                                                        <i class="ico up"></i><span>Поднять</span>
                                                     </a>
                                                 </li>
                                             <?php endif; ?>
 
-
                                             <li class="hide-cont">
-                                                <a href="<?=$ad->get_url()?>" target="_blank" class="btn-funcmenu">
-                                                    <i class="ico clock"></i><span>Просмотр</span>
-                                                </a>
-                                            </li>
-
-                                            <li class="hide-cont">
-                                                <a href="" class="btn-funcmenu" onclick="window.location='/user/edit_ad/<?=$ad->id?>'; return false;">
-                                                    <i class="ico clock"></i><span>Изменить</span>
+                                                <a href="<?=CI::site('user/edit_ad/'.$ad->id)?>" class="btn-funcmenu">
+                                                    <i class="ico change"></i><span>Изменить</span>
                                                 </a>
                                             </li>
 
                                             <?php if ($ad->is_published) : ?>
                                                 <li class="hide-cont">
-                                                    <a href="" class="btn-funcmenu" id="pub_toggle_link_<?=$ad->id?>" onclick="pub_toggle(<?=$ad->id?>); return false;">
-                                                        <i class="ico clock"></i><span>Снять</span>
+                                                    <a href="" class="btn-funcmenu" id="pub_toggle_link_<?=$ad->id?>" onclick="pub_toggle(<?=$ad->id?>, this); return false;">
+                                                        <i class="ico show"></i><span>Снять</span>
                                                     </a>
                                                 </li>
                                             <?php else : ?>
                                                 <li class="hide-cont">
-                                                    <a href="" class="btn-funcmenu" id="pub_toggle_link_<?=$ad->id?>" onclick="pub_toggle(<?=$ad->id?>); return false;">
-                                                        <i class="ico clock"></i><span>Разместить</span>
+                                                    <a href="" class="btn-funcmenu" id="pub_toggle_link_<?=$ad->id?>" onclick="pub_toggle(<?=$ad->id?>, this); return false;">
+                                                        <i class="ico show"></i><span>Разместить</span>
                                                     </a>
                                                 </li>
                                             <?php endif; ?>
@@ -190,7 +192,7 @@
 
                                             <li class="hide-cont">
                                                 <a href="" class="btn-funcmenu" onclick="delete_ad(<?php echo $ad->id ?>, this); return false;" class="btn btn-lc active">
-                                                    <i class="ico clock"></i><span>Удалить</span>
+                                                    <i class="ico del"></i><span>Удалить</span>
                                                 </a>
                                             </li>
 
@@ -213,7 +215,7 @@
 
                                                 <li class="hide-cont">
                                                     <a href="" class="btn-funcmenu" onclick="prolong(<?=$ad->id?>); return false;">
-                                                        <i class="ico clock"></i><span>Исправить и продлить</span>
+                                                        <i class="ico show"></i><span>Исправить и продлить</span>
                                                     </a>
                                                 </li>
 
@@ -221,7 +223,7 @@
 
                                                 <li class="hide-cont">
                                                     <a href="" class="btn-funcmenu" onclick="fix_ad(<?=$ad->id?>); return false;">
-                                                        <i class="ico clock"></i><span>Исправить</span>
+                                                        <i class="ico show"></i><span>Исправить</span>
                                                     </a>
                                                 </li>
 
@@ -273,7 +275,7 @@
                                     </span>
                                 </div>
                                 <div class="col2">
-                                    <p class="title"><?=htmlspecialchars(mb_substr($ad->title, 0, 50))?> (<a href="<?=$ad->get_url()?>" target="_blank">Перейти</a>)</p>
+                                    <p class="title"><?=htmlspecialchars(mb_substr($ad->title, 0, 50))?> </p>
                                     <div class="hide-cont">
                                         <p class="info"><?=$ad->category_obj->title?></p>
                                         <p class="info"><?=$ad->city_obj->loaded() ? $ad->city_obj->title : $ad->city?></p>
