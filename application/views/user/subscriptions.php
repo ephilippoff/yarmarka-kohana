@@ -42,7 +42,7 @@
 										</div>
 										<p class="date">@todo</p>
 									</div>				                    				
-									<div class="col3"><span class="city">Период рассылки: </span>
+									<div class="col3"><span class="city">Период: </span>
 										<div class="period iLight"><span class="iLight-nav"><?=$subscription->get_period()?></span>
 											<ul class="iLight-cont">
 												<li data-id="<?=$subscription->id?>" data-period="24">1 день</li>
@@ -70,6 +70,10 @@
 						<?php endforeach; ?>
 					</div>
 				</div>
+
+				<?=$pagination?>
+				<div class="clear"></div>
+				<br />
 				
 			</section>
 		</div>	   

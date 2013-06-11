@@ -90,8 +90,8 @@ class Controller_User extends Controller_Template {
 			'auto_hide' => TRUE,
 			'view' => 'pagination/floating',
 			'first_page_in_url' => TRUE,
-			'count_out'	=> 12,
-			'count_in' => 10
+			'count_out'	=> 5,
+			'count_in' => 5
 		))->route_params(array(
 			'controller' => 'user',
 			'action' => 'favorites',
@@ -104,12 +104,33 @@ class Controller_User extends Controller_Template {
 		$this->layout = 'users';
 		$this->assets->js('subscriptions.js');
 
-		$per_page = 20;
+		// pagination settings
+		$per_page	= 20;
+		$page		= (int) Arr::get($_GET, 'page', 1);
 
-		$this->template->subscriptions = ORM::factory('Subscription')
-			->where('user_id', '=', $this->user->id)
-			->limit($per_page)
-			->find_all();
+		$subscriptions = ORM::factory('Subscription')
+			->where('user_id', '=', $this->user->id);
+
+		$count = clone $subscriptions;
+		$count = $count->count_all();
+
+		$subscriptions->limit($per_page)
+			->offset($per_page*($page-1));
+
+		$this->template->subscriptions = $subscriptions->find_all();
+	 	$this->template->pagination = Pagination::factory( array(
+			'current_page' => array('source' => 'query_string', 'key' => 'page'),
+			'total_items' => $count,
+			'items_per_page' => $per_page,
+			'auto_hide' => TRUE,
+			'view' => 'pagination/floating',
+			'first_page_in_url' => TRUE,
+			'count_out'	=> 5,
+			'count_in' => 5
+		))->route_params(array(
+			'controller' => 'user',
+			'action' => 'subscriptions',
+		));
 	}
 
 	public function action_invoices()
@@ -157,8 +178,8 @@ class Controller_User extends Controller_Template {
 			'auto_hide' => TRUE,
 			'view' => 'pagination/floating',
 			'first_page_in_url' => TRUE,
-			'count_out'	=> 12,
-			'count_in' => 10
+			'count_out'	=> 5,
+			'count_in' => 5
 		))->route_params(array(
 			'controller' => 'user',
 			'action' => 'invoices',
@@ -271,8 +292,8 @@ class Controller_User extends Controller_Template {
 			'view' => 'pagination/floating',
 			'first_page_in_url' => TRUE,
 			//'uri_postfix' => '#reviews',
-			'count_out'	=> 12,
-			'count_in' => 10
+			'count_out'	=> 5,
+			'count_in' => 5
 		))->route_params(array(
 			'controller' => 'user',
 			'action' => $folder,
