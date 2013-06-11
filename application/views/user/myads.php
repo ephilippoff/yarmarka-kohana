@@ -68,11 +68,11 @@
                         <div class="inp-cont">
                             <div class="checkbox">
                                 <label>
-                                    <input type="checkbox" name="checkbox" value="checkbox"><span>Выделить все</span>
+                                    <input type="checkbox" name="checkbox" value="checkbox" id="select_all"><span>Выделить все</span>
                                 </label>
 
                                 <label class="no-box">
-                                    <input type="checkbox" name="checkbox" value="checkbox"><span>Удалить выделенное</span>
+                                    <input type="checkbox" name="checkbox" value="checkbox" id="delete_selected"><span>Удалить выделенное</span>
                                 </label>
                             </div>
                         </div>
@@ -189,7 +189,7 @@
 
 
                                             <li class="hide-cont">
-                                                <a href="" class="btn-funcmenu" onclick="delete_ad(<?php echo $ad->id ?>); return false;" class="btn btn-lc active">
+                                                <a href="" class="btn-funcmenu" onclick="delete_ad(<?php echo $ad->id ?>, this); return false;" class="btn btn-lc active">
                                                     <i class="ico clock"></i><span>Удалить</span>
                                                 </a>
                                             </li>
