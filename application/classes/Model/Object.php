@@ -40,6 +40,14 @@ class Model_Object extends ORM {
 			->where('city.region_id', '=', intval($region_id));
 	}
 
+	public function with_main_photo()
+	{
+		return $this->select(array('object_attachment.filename', 'main_image_filename'))
+			->select(array('object_attachment.title', 'main_image_title'))
+			->join('object_attachment', 'left')
+			->on('object.main_image_id', '=', 'object_attachment.id');
+	}
+
 	public function get_real_date_created($format = 'd.m.Y')
 	{
 		if ( ! $this->loaded())

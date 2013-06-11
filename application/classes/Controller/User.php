@@ -116,6 +116,7 @@ class Controller_User extends Controller_Template {
 
 		// get objects
 		$objects = ORM::factory('Object')
+			->with_main_photo()
 			->where('author', '=', $this->user->id)
 			->where('active', '=', 1);
 

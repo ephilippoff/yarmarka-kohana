@@ -104,8 +104,8 @@
                                         </div>
                                     </div>
                                     <div class="img hide-cont">
-                                        <?php if (FALSE) : ?>
-                                            <img src="" alt="photo" title="<?=$ad->imagetitle ?>">
+                                        <?php if ($ad->main_image_filename) : ?>
+                                            <img src="<?=Uploads::get_file_path($ad->main_image_filename, '125x83')?>" alt="photo" title="<?=$ad->main_image_title ?>">
                                         <?php else : ?>
                                             <img src="<?=URL::site('images/photo/no-photo.jpg')?>" width="80" height="80" alt="photo">
                                         <?php endif; ?>
