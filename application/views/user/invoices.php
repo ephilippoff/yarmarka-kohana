@@ -12,23 +12,14 @@
 							<div class="inp-cont-bl ">
 								<div class="inp-cont">
 									<i class="imp320 imp">&nbsp; *</i>
-									<select class="iselect " name="" id="s3">
-										<option value="1">Регион1</option>
-										<option value="2">Регион2</option>
-										<option value="3">Какой-то большой регион</option>
-										<option value="4">Регион1</option>
-										<option value="5">Регион2</option>
-										<option value="6">Какой-то большой регион</option>
-										<option value="7">Регион1</option>
-										<option value="8">Регион2</option>
-										<option value="9">Какой-то большой регион</option>
-										<option value="10">Регион1</option>
-										<option value="11">Регион2</option>
-										<option value="12">Какой-то большой регион</option>
-										<option value="13">Регион1</option>
-										<option value="14">Регион2</option>
-										<option value="15">Какой-то большой регион</option>
+									<form method="get" id="filter_form">
+									<select class="iselect " name="status" id="status">
+										<option value="">Все</option>
+										<option value="success" <?=Arr::get($_GET, 'status') == 'success' ? 'selected' : ''?>>Оплачен</option>
+										<option value="created" <?=Arr::get($_GET, 'status') == 'created' ? 'selected' : ''?>>В ожидании оплаты</option>
+										<option value="refused" <?=Arr::get($_GET, 'status') == 'refused' ? 'selected' : ''?>>Отменен</option>
 									</select>
+									</form>
 								</div>
 							</div>
 						</div>
@@ -62,7 +53,11 @@
 										</ul>
 									</div>		                    					
 								</div> 				                    				
-								<div class="col3"><span class="date"><?=date('d.m.Y', strtotime($invoice->payment_date))?></span></div>
+								<div class="col3"><span class="date">
+								<?php if ($invoice->payment_date) : ?>
+									<?=date('d.m.Y', strtotime($invoice->payment_date))?>
+								<?php endif; ?>
+								</span></div>
 								<div class="col4">
 									<p class="istatus "><span><?=$invoice->get_status_text()?></span></p>
 								</div>				                    				
@@ -74,14 +69,23 @@
 						<div class="hide-cont deteil-bl">
 							<div class="title ">Детализация счета:</div>
 							<ul>
-								<li><span class="sum"><?=Num::price($invoice->sum)?> р.</span><span class="text"><?=$invoice->description?></span></li>
+								<?php foreach ($invoice->services->find_all() as $service) : ?>
+								<li><span class="sum"><?=Num::price($service->sum)?> р.</span><span class="text"><?=$service->service_name?></span></li>
+								<?php endforeach; ?>
 							</ul>
+							<?php if (FALSE) : ?>
 							<a href="" class="btn-pmenu">Перезаказать</a><a href="" class="btn-funcmenu">Свернуть</a>
+							<?php endif; ?>
 						</div>
 					</div>
 					<?php endforeach; ?>
 					</div>
 				</div>
+
+				<?=$pagination?>
+				<div class="clear"></div>
+				<br />
+				
 			</section>
 		</div>	   
 		  

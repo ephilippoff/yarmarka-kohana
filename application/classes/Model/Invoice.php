@@ -19,6 +19,10 @@ class Model_Invoice extends ORM {
 		'user' => array(),
 	);
 
+	protected $_has_many = array(
+		'services' => array('model' => 'Service_Invoices', 'foreign_key' => 'invoice_id'),
+	);
+
 	public function get_status_text()
 	{
 		if ( ! $this->loaded())
