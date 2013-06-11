@@ -327,7 +327,9 @@
             </div>
             </div>
 
-            <p class="more"><?=$pagination?></p>
+            <?=$pagination?>
+			<div class="clear"></div>
+			<br />
 
             </section>
             </div>
