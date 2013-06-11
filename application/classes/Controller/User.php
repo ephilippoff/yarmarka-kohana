@@ -193,6 +193,7 @@ class Controller_User extends Controller_Template {
 			->join('category')->on('object.category', '=', 'category.id')
 			->where('object.id', 'IN', $objects_ids)
 			->group_by('category.id')
+			->group_by('category.title')
 			->order_by('category.title')
 			->as_object()
 			->execute()
