@@ -51,7 +51,7 @@ class Controller_Block extends Controller_Template
 	{
 		$this->template->categories = ORM::factory('Category')
 			->where('parent_id', '=', 1)
-			->order_by('title')
+			->order_by('weight')
 			->cached(60)
 			->find_all();
 	}
