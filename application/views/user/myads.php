@@ -222,7 +222,7 @@
                                                 <?php elseif ($ad->is_bad == 1 AND ! $ad->in_archive) : ?>
 
                                                 <li class="hide-cont">
-                                                    <a href="" class="btn-funcmenu" onclick="fix_ad(<?=$ad->id?>); return false;">
+                                                    <a href="" class="btn-funcmenu" data-url="<?=CI::site('user/edit_ad/'.$ad->id)?>" onclick="fix_ad(<?=$ad->id?>, this); return false;">
                                                         <i class="ico show"></i><span>Исправить</span>
                                                     </a>
                                                 </li>
