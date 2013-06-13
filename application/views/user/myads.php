@@ -279,9 +279,9 @@
                                     <div class="hide-cont">
                                         <p class="info"><?=$ad->category_obj->title?></p>
                                         <p class="info"><?=$ad->city_obj->loaded() ? $ad->city_obj->title : $ad->city?></p>
-                                        <p class="about"><?=$ad->user_text?></p>
                                         <p class="info">Количество просмотров: <?=(int)$ad->visits?></p>
-                                        <p class="date"><?=date('d.m.Y', strtotime($ad->date_created))?></p>
+                                        <p class="info"><?=date('d.m.Y', strtotime($ad->date_created))?></p>
+                                        <p class="about"><?=$ad->user_text?></p>
                                     </div>
                                 </div>
                             </div>
