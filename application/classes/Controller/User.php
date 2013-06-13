@@ -385,6 +385,6 @@ class Controller_User extends Controller_Template {
 			Auth::instance()->logout();
 		}
 
-		$this->redirect('http://'.Region::get_current_domain());
+		$this->redirect('http://'.Region::get_current_domain().'/user/logout');
 	}
 } // End Welcome

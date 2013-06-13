@@ -11,7 +11,7 @@
 								<li><a href="<?=URL::site('user/profile')?>"><div class="img"><img src="<?=URL::site('images/pr2.png')?>" alt="" /></div>Профиль</a></li>
 								<li><a href="<?=CI::site('user/favorites')?>"><div class="img"><img src="" alt="" /></div>Избранное</a></li>
 								<li><a href="<?=CI::site('user/services_history')?>"><div class="img"><img src="" alt="" /></div>Счета</a></li>
-								<li class="last"><a href="<?=URL::site('user/logout')?>"><div class="img"><img src="<?=URL::site('images/pr3.png')?>" alt="" /></div>Выход</a></li>
+								<li class="last"><a href="<?=CI::site('user/logout')?>"><div class="img"><img src="<?=URL::site('images/pr3.png')?>" alt="" /></div>Выход</a></li>
 							</ul>
 						
 					</div>
