@@ -395,6 +395,23 @@ class Controller_Ajax extends Controller_Template
 		}
 	}
 
+	public function action_load_moderator_comments()
+	{
+		$object = ORM::factory('Object', $this->request->param('id'));
+		if ( ! $object->loaded())
+		{
+			throw new HTTP_Exception_404;
+		}
+
+		$comments = $object->user_messages->from_moderator()
+			->order_by('createdOn')
+			->cached()
+			->find_all();
+		$this->json['html'] = View::factory('user/moderator_comments')
+			->set('comments', $comments)
+			->render();
+	}
+
 	public function after()
 	{
 		parent::after();

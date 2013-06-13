@@ -11,7 +11,8 @@ class Model_Object extends ORM {
 	);
 
 	protected $_has_many = array(
-		'contacts'		=> array('model' => 'Object_Contact', 'foreign_key' => 'object_id'),
+		'contacts'			=> array('model' => 'Object_Contact', 'foreign_key' => 'object_id'),
+		'user_messages'		=> array('model' => 'User_Messages', 'foreign_key' => 'object_id'),
 	);
 
 	public function remove_from_favorites()

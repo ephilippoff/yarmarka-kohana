@@ -75,4 +75,22 @@ class Controller_Block extends Controller_Template
 		$this->template->contact_types	= ORM::factory('Contact_Type')->find_all();
 		$this->template->user_contacts	= $user->get_contacts();
 	}
+
+	public function action_last_moderator_comment()
+	{
+		$object = ORM::factory('Object', $this->request->param('id'));
+		if ( ! $object->loaded())
+		{
+			throw new HTTP_Exception_404;
+		}
+		
+		$comments = $object->user_messages->from_moderator();
+
+		$count = clone $comments;
+
+		$this->template->count = $count->count_all();
+		$this->template->comment = $comments->order_by('createdOn')
+			->cached()
+			->find();
+	}
 }

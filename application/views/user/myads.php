@@ -286,7 +286,7 @@
                                 </div>
                             </div>
 
-                            <? // @todo show moderator comments ?>
+                            <?=Request::factory('block/last_moderator_comment/'.$ad->id)->execute()?>
 
                         </div>
 						<?php if (FALSE) : ?>
