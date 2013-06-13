@@ -61,6 +61,12 @@
 				<?php else : ?>
 				<li><a href="<?=URL::site('user/invoices')?>" class="clickable"><i class="ico "></i><span>Счета</span></a></li>
 				<?php endif; ?>
+
+				<?php if (Request::current()->action() == 'newspapers') : ?>
+				<li><i class="ico "></i><span><b>Газеты</b></span></li>
+				<?php else : ?>
+				<li><a href="<?=URL::site('user/newspapers')?>" class="clickable"><i class="ico "></i><span>Газеты</span></a></li>
+				<?php endif; ?>
 			</ul>
 		</li>
 		<li><a href="" id="islide_profile"><i class="ico ico-profile"></i><span>Профиль</span></a>

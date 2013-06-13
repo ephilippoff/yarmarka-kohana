@@ -412,6 +412,28 @@ class Controller_Ajax extends Controller_Template
 			->render();
 	}
 
+	public function action_delete_newspapers()
+	{
+		if ( ! Auth::instance()->get_user())
+		{
+			throw new HTTP_Exception_404;
+		}
+
+		$ids = $this->request->post('to_del');
+
+		if (is_array($ids) AND $ids)
+		{
+			DB::delete('service_outputs')
+				->where('user_id', '=', Auth::instance()->get_user()->id)
+				->where('id', 'IN', $ids)
+				->execute();
+		}
+		else
+		{
+			$this->json['code'] = 400;
+		}
+	}
+
 	public function after()
 	{
 		parent::after();
