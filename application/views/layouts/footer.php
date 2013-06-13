@@ -67,3 +67,9 @@
 		
 	</section><!--end footer winner-->
 </footer>
+<?php 
+if (Kohana::$profiling === TRUE) 
+{
+	echo View::factory('profiler/stats');
+}
+?>
