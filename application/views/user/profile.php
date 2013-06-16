@@ -96,8 +96,8 @@
 												<span class="cont-info">
 													<span class="ico tel findme"></span>
 													<div class="inp" id="new_contact">
-														<input type="hidden" name="contact_type" id="contact_type" value="1" />
-														<input class="" type="text" name="contact" id="contact">
+														<input type="hidden" name="contact_type" data-id="contact_type" id="contact_type" value="1" />
+														<input class="" type="text" name="contact" data-id="contact" id="contact">
 													</div>
 													<span class="btn-act apply add_contact"></span>
 													<span class="inform"><span>Вы можете добавить несколько контактов для оперативной связи с вами</span></span>

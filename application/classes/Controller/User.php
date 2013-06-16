@@ -374,7 +374,20 @@ class Controller_User extends Controller_Template {
 
 	public function action_affiliates()
 	{
-		// @todo
+		$this->layout = 'users';
+		$this->assets->js('affiliates.js')
+			->js('jquery.maskedinput-1.2.2.js');
+
+		$this->template->types = ORM::factory('User_Types')
+			->where('parent_id', '=', 2)
+			->find_all()
+			->as_array('id', 'name');
+		$this->template->regions = ORM::factory('Region')
+			->where('is_visible', '=', 1)
+			->order_by('title')
+			->find_all()
+			->as_array('id', 'title');
+		$this->template->contact_types	= ORM::factory('Contact_Type')->find_all();
 	}
 
 	public function action_logout()

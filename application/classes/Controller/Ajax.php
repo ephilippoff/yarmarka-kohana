@@ -141,7 +141,8 @@ class Controller_Ajax extends Controller_Template
 			$cities->where('is_visible', '=', 1);
 		 }
 
-		$this->json['cities'] = $cities->find_all()
+		$this->json['cities'] = $cities->order_by('title')
+			->find_all()
 			->as_array('id', 'title');
 	}
 
@@ -451,6 +452,44 @@ class Controller_Ajax extends Controller_Template
 		else
 		{
 			$this->json['code'] = 400;
+		}
+	}
+
+	public function action_add_affiliate()
+	{
+		if ( ! Auth::instance()->get_user())
+		{
+			throw new HTTP_Exception_404;
+		}
+
+		$_POST['name'] = trim($_POST['name']);
+		$validation = Validation::factory($_POST)
+			->rule('name', 'not_empty')
+			->rule('type', 'not_empty')
+			->rule('city_id', 'not_empty')
+			->label('name', 'Название')
+			->label('type', 'Тип')
+			->label('city_id', 'Город');
+
+		$user = ORM::factory('User')->values($_POST);
+		$user->parent_id 	= Auth::instance()->get_user()->id;
+		$user->passw		= Text::random();
+
+		try
+		{
+			$user->check($validation);
+			echo 'ok';
+		}
+		catch(ORM_Validation_Exception $e)
+		{
+			$errors = $e->errors('validation');
+			if (isset($errors['_external']))
+			{
+				$errors += $errors['_external'];
+				unset($errors['_external']);
+			}
+			$this->json['errors'] 	= $errors;
+			$this->json['code']		= 400;
 		}
 	}
 
