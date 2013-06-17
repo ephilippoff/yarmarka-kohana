@@ -91,26 +91,6 @@ class Controller_Ajax extends Controller_Template
 		$this->json['data'] = $data;
 	}
 
-	public function action_upload_user_avatar()
-	{
-		if ( ! $user = Auth::instance()->get_user())
-		{
-			throw new HTTP_Exception_404;
-		}
-
-		try
-		{
-			$user->filename = Uploads::save($_FILES['avatar_input']);
-			$this->json['filename'] = Uploads::get_file_path($user->filename, '125x83');
-			$user->save();
-		}
-		catch (Exception $e)
-		{
-			$this->json['error']	= $e->getMessage();
-			$this->json['code']		= $e->getCode();
-		}
-	}
-
 	public function action_delete_user_avatar()
 	{
 		if ( ! $user = Auth::instance()->get_user())

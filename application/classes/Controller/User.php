@@ -401,4 +401,30 @@ class Controller_User extends Controller_Template {
 
 		$this->redirect('http://'.Region::get_current_domain().'/user/logout');
 	}
+
+	public function action_upload_user_avatar()
+	{
+		$this->use_layout	= FALSE;
+		$this->auto_render	= FALSE;
+		$this->json = array('code' => 200);
+
+		if ( ! $user = Auth::instance()->get_user())
+		{
+			throw new HTTP_Exception_404;
+		}
+
+		try
+		{
+			$user->filename = Uploads::save($_FILES['avatar_input']);
+			$this->json['filename'] = Uploads::get_file_path($user->filename, '125x83');
+			$user->save();
+		}
+		catch (Exception $e)
+		{
+			$this->json['error']	= $e->getMessage();
+			$this->json['code']		= $e->getCode();
+		}
+
+		$this->response->body(json_encode($this->json));
+	}
 } // End Welcome
