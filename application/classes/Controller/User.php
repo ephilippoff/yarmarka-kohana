@@ -10,8 +10,7 @@ class Controller_User extends Controller_Template {
 
 		if ( ! $this->user = Auth::instance()->get_user())
 		{
-			/// @todo redirect to login form
-			throw new HTTP_Exception_404;
+			$this->redirect(CI::site('user/login?return=user/'.$this->request->action()));
 		}
 	}
 
