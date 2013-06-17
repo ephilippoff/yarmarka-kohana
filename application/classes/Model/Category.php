@@ -13,6 +13,14 @@ class Model_Category extends ORM {
 
 	protected $_table_name = 'category';
 
+	protected $_has_many = array(
+		'sub_categories' => array('model' => 'Category', 'foreign_key' => 'parent_id'),
+	);
+
+	protected $_belongs_to = array(
+		'category' => array('local_key' => 'parent_id'),
+	);
+
 	public function get_url($region_id = NULL, $city_id = NULL, $action_id = NULL)
 	{
 		return CI::site($this->get_seo_name($region_id = NULL, $city_id = NULL, $action_id = NULL));
@@ -72,5 +80,15 @@ class Model_Category extends ORM {
 	public function get_url_with_action($action_id)
 	{
 		return $this->get_url(NULL, NULL, $action_id);
+	}
+
+	public function get_small_icon()
+	{
+		return URL::site('images/min_'.$this->main_menu_icon);
+	}
+
+	public function get_icon()
+	{
+		return URL::site('images/'.$this->main_menu_icon);
 	}
 } // End Category Model

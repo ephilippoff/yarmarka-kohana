@@ -93,4 +93,17 @@ class Controller_Block extends Controller_Template
 			->cached()
 			->find();
 	}
+
+	public function action_error_404()
+	{
+		$this->assets->css('css.css');
+		$this->use_layout	= TRUE;
+		$this->template		= View::factory('errors/404');
+
+		$this->template->categories = ORM::factory('Category')
+			->where('parent_id', '=', 1)
+			->order_by('weight')
+			->cached(60)
+			->find_all();
+	}
 }
