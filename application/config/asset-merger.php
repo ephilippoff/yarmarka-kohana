@@ -1,7 +1,7 @@
 <?php defined('SYSPATH') OR die('No direct script access.');
 
 return array(
-	'merge'      => array(),
+	'merge'      => FALSE,
 	'folder'     => 'assets',
 	'load_paths' => array(
 		Assets::JAVASCRIPT => DOCROOT.'js'.DIRECTORY_SEPARATOR.'adaptive'.DIRECTORY_SEPARATOR,
