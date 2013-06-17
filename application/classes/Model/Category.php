@@ -50,7 +50,7 @@ class Model_Category extends ORM {
 
 		$category_seo_names = array();
 		$parent_id = $this->parent_id;
-		while ($parent_id != 1)
+		while ($parent_id != 1 AND $this->id != 1)
 		{
 			$category = ORM::factory('Category')
 				->where('id', '=', $parent_id)

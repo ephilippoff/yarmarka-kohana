@@ -53,8 +53,8 @@
                                         </div>
 
                                         <div class="col2">
-                                            <p class="title">
-                                                <a href="?source=<?=$user_paper->planningofnumber_id?>">
+                                            <p class="title clickable">
+                                                <a href="<?=$main_category_url?>?source=<?=$user_paper->planningofnumber_id?>" class="clickable">
                                                     <?=$user_paper->planningofnumber->edition->title?> №<?=$user_paper->planningofnumber->number?> от <?=date('d.m.Y', strtotime($user_paper->planningofnumber->date_to_show))?>
                                                 </a>
                                             </p>

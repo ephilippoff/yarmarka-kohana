@@ -40,7 +40,7 @@
 												</div>
 											</div>
 										</div>
-										<p class="date">@todo</p>
+										<p class="date"></p>
 									</div>				                    				
 									<div class="col3"><span class="city">Период: </span>
 										<div class="period iLight"><span class="iLight-nav"><?=$subscription->get_period()?></span>

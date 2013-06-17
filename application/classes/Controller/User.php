@@ -353,8 +353,10 @@ class Controller_User extends Controller_Template {
 
 		$user_papers->with('planningofnumber:edition')
 			->limit($per_page)
-			->offset($per_page*($page-1));
+			->offset($per_page*($page-1))
+			->order_by('date_to_show', 'desc');
 
+		$this->template->main_category_url = ORM::factory('Category', 1)->get_url();
 	 	$this->template->pagination = Pagination::factory( array(
 			'current_page' => array('source' => 'query_string', 'key' => 'page'),
 			'total_items' => $count,
