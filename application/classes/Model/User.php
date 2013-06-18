@@ -20,6 +20,7 @@ class Model_User extends Model_Auth_User {
 	protected $_belongs_to = array(
 		'user_role' => array('model' => 'Role', 'foreign_key' => 'role'),
 		'user_city'	=> array('model' => 'City', 'foreign_key' => 'city_id'),
+		'user_type'	=> array('model' => 'User_Types', 'foreign_key' => 'org_type'),
 	);
 
 	/**
@@ -43,6 +44,9 @@ class Model_User extends Model_Auth_User {
 			'email' => array(
 				array('email'),
 				array(array($this, 'unique'), array('email', ':value')),
+			),
+			'role' => array(
+				array('not_empty'),
 			),
 		);
 	}
@@ -80,7 +84,6 @@ class Model_User extends Model_Auth_User {
 	{
 		return Valid::email($value) ? 'email' : 'login';
 	}
-
 
 	public function complete_login()
 	{

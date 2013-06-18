@@ -290,7 +290,6 @@ class Controller_User extends Controller_Template {
 			'auto_hide' => TRUE,
 			'view' => 'pagination/floating',
 			'first_page_in_url' => TRUE,
-			//'uri_postfix' => '#reviews',
 			'count_out'	=> 5,
 			'count_in' => 5
 		))->route_params(array(
@@ -379,6 +378,67 @@ class Controller_User extends Controller_Template {
 		$this->assets->js('affiliates.js')
 			->js('jquery.maskedinput-1.2.2.js');
 
+		$this->template->errors = array();
+
+		if (HTTP_Request::POST === $this->request->method())
+		{
+			$_POST['fullname'] = trim($_POST['fullname']);
+			$validation = Validation::factory($_POST)
+				->rule('fullname', 'not_empty')
+				->rule('org_type', 'not_empty')
+				->rule('city_id', 'not_empty')
+				->label('fullname', 'Название')
+				->label('org_type', 'Тип')
+				->label('city_id', 'Город');
+
+			$user = ORM::factory('User')->values($_POST, array('fullname', 'org_type', 'city_id', 'address', 'url'));
+			$user->parent_id 	= Auth::instance()->get_user()->id;
+			$user->passw		= Text::random();
+			$user->role 		= 2; // default role
+			$user->code			= '';
+
+			try
+			{
+				$user->filename 	= Uploads::save($_FILES['avatar']);
+				Database::instance()->begin();
+
+				$user->save($validation);
+
+				if ($user_contacts = array_combine((array) $this->request->post('contact_type'), (array) $this->request->post('contact')))
+				{
+					foreach ($user_contacts as $type => $contact)
+					{
+						if (trim($contact))
+						{
+							$user->add_contact($type, $contact);
+						}
+					}
+				}
+				
+				//Database::instance()->commit();
+				Database::instance()->rollback();
+			}
+			catch(ORM_Validation_Exception $e)
+			{
+				// rollback transaction
+				Database::instance()->rollback();
+
+				// collect errors
+				$errors = $e->errors('validation');
+				if (isset($errors['_external']))
+				{
+					$errors += $errors['_external'];
+					unset($errors['_external']);
+				}
+
+				$this->template->errors = $errors;
+			}
+			catch (Exception $e) // file upload error
+			{
+				$this->template->errors['avatar'] = $e->getMessage();
+			}
+		}
+
 		$this->template->types = ORM::factory('User_Types')
 			->where('parent_id', '=', 2)
 			->find_all()
@@ -389,6 +449,9 @@ class Controller_User extends Controller_Template {
 			->find_all()
 			->as_array('id', 'title');
 		$this->template->contact_types	= ORM::factory('Contact_Type')->find_all();
+		$this->template->affiliates		= ORM::factory('User')
+			->where('parent_id', '=', $this->user->id)
+			->find_all();
 	}
 
 	public function action_logout()
