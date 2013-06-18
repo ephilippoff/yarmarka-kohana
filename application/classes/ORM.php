@@ -54,4 +54,56 @@ class ORM extends Kohana_ORM {
 
         return $this->clear();
     }
+
+	/**
+	 * Fix for COUNT(DISTINCT()) and count by column
+	 *
+	 * ->distinct(TRUE)->count_all('id')
+	 * genereate SELECT COUNT(DISTINCT(id))
+	 *
+	 * ->count_all('id')
+	 * genereate SELECT COUNT('id')
+	 * 
+	 * @param string $column
+	 * @access public
+	 * @return integer
+	 */
+	public function count_all($column = NULL)
+	{
+		$selects = array();
+
+		foreach ($this->_db_pending as $key => $method)
+		{
+			if ($method['name'] == 'select')
+			{
+				// Ignore any selected columns for now
+				$selects[] = $method;
+				unset($this->_db_pending[$key]);
+			}
+		}
+
+		if ( ! empty($this->_load_with))
+		{
+			foreach ($this->_load_with as $alias)
+			{
+				// Bind relationship
+				$this->with($alias);
+			}
+		}
+
+		$this->_build(Database::SELECT);
+
+		$records = $this->_db_builder->from(array($this->_table_name, $this->_object_name))
+			->select(array(DB::expr('COUNT('.( ( $column AND $this->_db_builder->_distinct ) ? 'DISTINCT ' : '' ).( $column ? '"'.$column.'"' : '*' ).')'), 'records_found'))
+			->execute($this->_db)
+			->get('records_found');
+
+		// Add back in selected columns
+		$this->_db_pending += $selects;
+
+		$this->reset();
+
+		// Return the total number of records in a table
+		return $records;
+	}
 }

@@ -47,4 +47,92 @@ class Database_PDO extends Kohana_Database_PDO {
 
 		return $this->query(Database::SELECT, $sql, FALSE)->as_array(NULL, 'table_name');
 	}
+
+	public function insert_id()
+	{
+		$query = 'SELECT LASTVAL() AS insert_id';
+
+		$query = 'SELECT LASTVAL() AS insert_id';
+		$query=    DB::query(Database::SELECT, $query, false)->execute();
+		$insert_id = $query->get('insert_id');
+
+		return $insert_id;
+	}
+
+	// FIX last_insert_id
+	public function query($type, $sql, $as_object = FALSE, array $params = NULL)
+	{
+		// Make sure the database is connected
+		$this->_connection or $this->connect();
+
+		if (Kohana::$profiling)
+		{
+			// Benchmark this query for the current instance
+			$benchmark = Profiler::start("Database ({$this->_instance})", $sql);
+		}
+
+		try
+		{
+			$result = $this->_connection->query($sql);
+		}
+		catch (Exception $e)
+		{
+			if (isset($benchmark))
+			{
+				// This benchmark is worthless
+				Profiler::delete($benchmark);
+			}
+
+			// Convert the exception in a database exception
+			throw new Database_Exception(':error [ :query ]',
+				array(
+					':error' => $e->getMessage(),
+					':query' => $sql
+				),
+				$e->getCode());
+		}
+
+		if (isset($benchmark))
+		{
+			Profiler::stop($benchmark);
+		}
+
+		// Set the last query
+		$this->last_query = $sql;
+
+		if ($type === Database::SELECT)
+		{
+			// Convert the result into an array, as PDOStatement::rowCount is not reliable
+			if ($as_object === FALSE)
+			{
+				$result->setFetchMode(PDO::FETCH_ASSOC);
+			}
+			elseif (is_string($as_object))
+			{
+				$result->setFetchMode(PDO::FETCH_CLASS, $as_object, $params);
+			}
+			else
+			{
+				$result->setFetchMode(PDO::FETCH_CLASS, 'stdClass');
+			}
+
+			$result = $result->fetchAll();
+
+			// Return an iterator of results
+			return new Database_Result_Cached($result, $sql, $as_object, $params);
+		}
+		elseif ($type === Database::INSERT)
+		{
+			// Return a list of insert id and rows created
+			return array(
+				$this->insert_id(),
+				$result->rowCount(),
+			);
+		}
+		else
+		{
+			// Return the number of rows affected
+			return $result->rowCount();
+		}
+	}
 }
