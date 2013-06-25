@@ -77,11 +77,13 @@
 				<li><a href="<?=URL::site('user/profile')?>" class="clickable"><i class="ico "></i><span>Личные данные</span></a></li>
 				<?php endif; ?>
 
-				<?php if (Auth::instance()->get_user()->org_type == 2) : ?>
-					<?php if (Request::current()->action() == 'affiliates') : ?>
-					<li><i class="ico "></i><span><b>Филиалы</b></span></li>
-					<?php else : ?>
-					<li><a href="<?=URL::site('user/affiliates')?>" class="clickable"><i class="ico "></i><span>Филиалы</span></a></li>
+				<?php if (FALSE) : ?>
+					<?php if (Auth::instance()->get_user()->org_type == 2) : ?>
+						<?php if (Request::current()->action() == 'affiliates') : ?>
+						<li><i class="ico "></i><span><b>Филиалы</b></span></li>
+						<?php else : ?>
+						<li><a href="<?=URL::site('user/affiliates')?>" class="clickable"><i class="ico "></i><span>Филиалы</span></a></li>
+						<?php endif; ?>
 					<?php endif; ?>
 				<?php endif; ?>
 			</ul>
