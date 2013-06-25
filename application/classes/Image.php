@@ -37,6 +37,20 @@ class Image {
 			'keep_aspect_ratio' => 1,
 			'crop' =>0
         ),
+        '120x90' => array(
+			'width' => 120,
+			'height' => 90,
+			'fit' => 1,
+			'keep_aspect_ratio' => 1,
+			'crop' =>0
+        ),
+        '272x203' => array(
+			'width' => 272,
+			'height' => 203,
+			'fit' => 1,
+			'keep_aspect_ratio' => 1,
+			'crop' =>0
+        ),
         '433x289' => array(
 			'width' => 433,
 			'height' => 289,

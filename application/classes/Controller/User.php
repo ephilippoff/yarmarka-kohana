@@ -479,7 +479,7 @@ class Controller_User extends Controller_Template {
 		try
 		{
 			$user->filename = Uploads::save($_FILES['avatar_input']);
-			$this->json['filename'] = Uploads::get_file_path($user->filename, '125x83');
+			$this->json['filename'] = Uploads::get_file_path($user->filename, '272x203');
 			$user->save();
 		}
 		catch (Exception $e)

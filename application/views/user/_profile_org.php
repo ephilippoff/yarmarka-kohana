@@ -12,6 +12,13 @@
 		</div>
 	</li>
 	<li id="org_type_text">
+
+		<div class="input style2">
+			<label><span><i class="name">Тип пользователя:</i></span></label>
+			<p class="myinform">Компания</p>
+		</div>
+
+		<?php if (FALSE) : ?>
 		<div class="input style2">
 
 			<label><span><i class="name">Тип пользователя:</i></span></label>					                    			
@@ -26,6 +33,7 @@
 			<span class="ico-company"></span>
 			<?php endif; ?>
 		</div>
+		<?php endif; ?>
 	</li>
 	<li>
 		<div class="input style2">
@@ -34,7 +42,7 @@
 				<form method="post" accept-charset="utf-8" enctype="multipart/form-data">
 					<label class="filebutton">
 						<?php if ($user->filename) : ?>
-						<img src="<?=Uploads::get_file_path($user->filename, '125x83')?>" id="avatar_img" />
+						<img src="<?=Uploads::get_file_path($user->filename, '273x203')?>" id="avatar_img" />
 						<?php else : ?>
 						<img src="<?=URL::site('images/mylogo.jpg')?>" id="avatar_img" />
 						<?php endif; ?>
