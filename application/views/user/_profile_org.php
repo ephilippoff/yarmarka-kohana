@@ -42,7 +42,7 @@
 				<form method="post" accept-charset="utf-8" enctype="multipart/form-data">
 					<label class="filebutton">
 						<?php if ($user->filename) : ?>
-						<img src="<?=Uploads::get_file_path($user->filename, '273x203')?>" id="avatar_img" />
+						<img src="<?=Uploads::get_file_path($user->filename, '272x203')?>" id="avatar_img" />
 						<?php else : ?>
 						<img src="<?=URL::site('images/mylogo.jpg')?>" id="avatar_img" />
 						<?php endif; ?>
