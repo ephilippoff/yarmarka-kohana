@@ -63,7 +63,10 @@ abstract class Controller_Template extends Controller {
 			$user = ORM::factory('User', intval($user_id));
 			if ($user->loaded() AND $user->get_hash() === $hash)
 			{
-				Auth::instance()->force_login($user);
+				if ( ! Auth::instance()->get_user() OR $user->id != Auth::instance()->get_user()->id)
+				{
+					Auth::instance()->force_login($user);
+				}
 			}
 		}
 		
