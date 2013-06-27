@@ -29,10 +29,11 @@
 					<div class="copy">«Ярмарка» © 2013 </div>
 				</div>
 				<div class="right-b">
-				<?php if (FALSE) : ?>
-					<div class="sosial-site"><img src="<?=URL::site('img/ss.png')?>" alt=""></div>
-					<div class="statistic"><img src="<?=URL::site('img/statistic.png')?>" alt=""></div>
-				<?php endif; ?>
+					<div class="sosial-site">
+						<!--<img src="<?=URL::site('img/ss.png')?>" alt=""></div>-->
+					<div class="statistic">
+					  <?=View::factory('layouts/counters')?>
+					</div>
 				</div>
 				<div class="center-b">
 				<?php if (FALSE) : ?>
