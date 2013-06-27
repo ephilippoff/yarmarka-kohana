@@ -104,6 +104,23 @@
 	</li>
 	<li>
 		<div class="input style2">
+			<label><span><i class="name">Контактное лицо/ФИО:</i></span></label>					                    			
+			<p class="myinform profile-input-wrapper">
+				<a href="" class="myhref profile-input" 
+					data-name="fullname"><?=$user->fullname ? $user->fullname : 'Не указано'?></a>
+			</p>
+
+			<div class="alert-bl profile-alert">
+				<div class="cont">
+					<div class="img"></div>
+					<div class="arr"></div>
+					<p class="text"><span></span></p>
+				</div>
+			</div>
+		</div>
+	</li>
+	<li>
+		<div class="input style2">
 			<label><span><i class="name">Адрес веб страницы:</i></span></label>					                    			
 			<p class="myinform profile-input-wrapper">
 				<a href="" class="myhref profile-input" 
