@@ -52,7 +52,8 @@ class Controller_User extends Controller_Template {
 		$region	= ORM::factory('Region', intval($this->request->query('region_id')));
 		$city	= ORM::factory('City', intval($this->request->query('city_id')));
 
-		$favorites = ORM::factory('Object')->user_favorites($this->user->id);
+		$favorites = ORM::factory('Object')->user_favorites($this->user->id)
+			->with_main_photo();
 
 		if ($region->loaded())
 		{

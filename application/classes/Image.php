@@ -9,34 +9,34 @@ class Image {
     const IMAGE_PATH = '/uploads';
 
 	private static $sizes = array(
-		'54x34' => array(
-			'width' => 54,
-			'height' => 34,
-			'fit' => 1,
-			'keep_aspect_ratio' => 1,
-			'crop' =>0
-        ),
-        '65x65' => array(
-			'width' => 65,
-			'height' => 65,
-			'fit' => 1,
-			'keep_aspect_ratio' => 1,
-			'crop' =>0
-        ),
-        '80x80' => array(
-			'width' => 80,
-			'height' => 80,
-			'fit' => 1,
-			'keep_aspect_ratio' => 1,
-			'crop' =>0
-        ),
-        '125x83' => array(
-			'width' => 125,
-			'height' => 83,
-			'fit' => 1,
-			'keep_aspect_ratio' => 1,
-			'crop' =>0
-        ),
+		//'54x34' => array(
+			//'width' => 54,
+			//'height' => 34,
+			//'fit' => 1,
+			//'keep_aspect_ratio' => 1,
+			//'crop' =>0
+        //),
+        //'65x65' => array(
+			//'width' => 65,
+			//'height' => 65,
+			//'fit' => 1,
+			//'keep_aspect_ratio' => 1,
+			//'crop' =>0
+        //),
+        //'80x80' => array(
+			//'width' => 80,
+			//'height' => 80,
+			//'fit' => 1,
+			//'keep_aspect_ratio' => 1,
+			//'crop' =>0
+        //),
+        //'125x83' => array(
+			//'width' => 125,
+			//'height' => 83,
+			//'fit' => 1,
+			//'keep_aspect_ratio' => 1,
+			//'crop' =>0
+        //),
         '120x90' => array(
 			'width' => 120,
 			'height' => 90,
@@ -51,13 +51,13 @@ class Image {
 			'keep_aspect_ratio' => 1,
 			'crop' =>0
         ),
-        '433x289' => array(
-			'width' => 433,
-			'height' => 289,
-			'fit' => 1,
-			'keep_aspect_ratio' => 1,
-			'crop' =>0
-        ),
+        //'433x289' => array(
+			//'width' => 433,
+			//'height' => 289,
+			//'fit' => 1,
+			//'keep_aspect_ratio' => 1,
+			//'crop' =>0
+        //),
 	);
 
 	const max_uploaded_image_size = 5242880; //8 MB

@@ -105,7 +105,10 @@
                                     </div>
                                     <div class="img hide-cont">
                                         <?php if ($ad->main_image_filename) : ?>
-                                            <img src="<?=Uploads::get_file_path($ad->main_image_filename, '125x83')?>" alt="photo" title="<?=$ad->main_image_title ?>">
+											<?php list($width, $height) = Uploads::get_optimized_file_sizes($ad->main_image_filename, '120x90', '106x106') ?>
+                                            <img src="<?=Uploads::get_file_path($ad->main_image_filename, '120x90')?>" 
+											width="<?=$width?>" height="<?=$height?>"
+											title="<?=$ad->main_image_title ?>">
                                         <?php else : ?>
                                             <img src="<?=URL::site('images/photo/no-photo.jpg')?>" width="80" height="80" alt="photo">
                                         <?php endif; ?>

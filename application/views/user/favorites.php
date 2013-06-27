@@ -90,6 +90,17 @@
 											</div>
 										</div>
 									</div>
+
+                                    <div class="img hide-cont">
+                                        <?php if ($object->main_image_filename) : ?>
+											<?php list($width, $height) = Uploads::get_optimized_file_sizes($object->main_image_filename, '120x90', '106x106') ?>
+                                            <img src="<?=Uploads::get_file_path($object->main_image_filename, '120x90')?>" 
+											width="<?=$width?>" height="<?=$height?>"
+											title="<?=$object->main_image_title ?>">
+                                        <?php else : ?>
+                                            <img src="<?=URL::site('images/photo/no-photo.jpg')?>" width="80" height="80" alt="photo">
+                                        <?php endif; ?>
+                                    </div>
 									<p class="number">#<?=$object->id?></p>
 								</div>			                    				
 								<div class="col4">
