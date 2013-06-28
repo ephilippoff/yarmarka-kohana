@@ -14,7 +14,7 @@
 	<li id="org_type_text">
 		<div class="input style2">
 			<label><span><i class="name">Тип пользователя:</i></span></label>
-			<p class="myinform">Компания</p>
+			<p class="myinform">Частное лицо</p>
 		</div>
 
 		<?php if (FALSE) : ?>
