@@ -4,9 +4,7 @@
 			<div class="m_poll">
 			<ul class="fl">
 				<li><a href="http://feedback.yarmarka.biz">Техподдержка</a></li>
-				<li><a href="<?=CI::site('contacts')?>">Контакты</a></li>
-				<li><a href="<?=CI::site('job')?>">Наши вакансии</a></li>
-				<li><a href="<?=CI::site('sitemap')?>">Карта сайта</a></li>
+				<li><a href="<?=CI::site('add/step/1/0')?>">Подать объявление</a></li>
 			</ul>
 			<ul class="fr">
 				<li><a href="<?=URL::site('user/profile')?>">Личный кабинет</a></li>
@@ -18,13 +16,14 @@
 			<div class="m_poll">
 				<div class="left-b">
 					<address>
-						<div>Телефон:<span class="tel">+7(3452)49-21-21</span></div>
-						<div class="e-mail">E-mail: info@tmn.yarmarka.biz </div>
+						<div>Телефон:<span class="tel">+7(3452)492-100</span></div>
+						<div class="e-mail">E-mail: info@yarmarka.biz </div>
 						<div class="adr">
 						   <span class="locality"></span>
-						   <span class="street-address">Адрес: ул. 50 лет ВЛКСМ,49, оф.302</span>
+						   <span class="street-address">Адрес: г. Тюмень, ул. 50 лет ВЛКСМ,49, оф.302</span>
 						</div>
-						<div><a href="<?=CI::site('contacts')?>" class="see-on-map">Как нас найти</a></div>
+						<div>
+						</div>
 					</address>
 					<div class="copy">«Ярмарка» © 2013 </div>
 				</div>
