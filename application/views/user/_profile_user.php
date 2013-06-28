@@ -13,12 +13,6 @@
 	</li>
 	<li id="org_type_text">
 		<div class="input style2">
-			<label><span><i class="name">Тип пользователя:</i></span></label>
-			<p class="myinform">Частное лицо</p>
-		</div>
-
-		<?php if (FALSE) : ?>
-		<div class="input style2">
 
 			<label><span><i class="name">Тип пользователя:</i></span></label>					                    			
 			<p class="myinform">
@@ -32,7 +26,6 @@
 			<span class="ico-company"></span>
 			<?php endif; ?>
 		</div>
-		<?php endif; ?>
 	</li>
 	<li>
 		<div class="input style2">
