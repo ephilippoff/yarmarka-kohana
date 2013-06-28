@@ -45,7 +45,7 @@
 			<label><span><i class="name">Контактное лицо/ФИО:</i></span></label>					                    			
 			<p class="myinform profile-input-wrapper">
 				<a href="" class="myhref profile-input" 
-					data-name="fullname"><?=$user->fullname ? $user->fullname : 'Не указано'?></a>
+					data-name="fullname"><?=trim($user->fullname) ? $user->fullname : 'Не указано'?></a>
 			</p>
 		</div>
 	</li>

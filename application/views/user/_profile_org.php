@@ -90,7 +90,7 @@
 			<label><span><i class="name">Название компании:</i></span></label>					                    			
 			<p class="myinform profile-input-wrapper">
 				<a href="" class="myhref profile-input" 
-					data-name="org_name"><?=$user->org_name ? $user->org_name : 'Не указано'?></a>
+					data-name="org_name"><?=trim($user->org_name) ? $user->org_name : 'Не указано'?></a>
 			</p>
 
 			<div class="alert-bl profile-alert">
@@ -107,7 +107,7 @@
 			<label><span><i class="name">Контактное лицо/ФИО:</i></span></label>					                    			
 			<p class="myinform profile-input-wrapper">
 				<a href="" class="myhref profile-input" 
-					data-name="fullname"><?=$user->fullname ? $user->fullname : 'Не указано'?></a>
+					data-name="fullname"><?=trim($user->fullname) ? $user->fullname : 'Не указано'?></a>
 			</p>
 
 			<div class="alert-bl profile-alert">
@@ -124,7 +124,7 @@
 			<label><span><i class="name">Адрес веб страницы:</i></span></label>					                    			
 			<p class="myinform profile-input-wrapper">
 				<a href="" class="myhref profile-input" 
-					data-name="url"><?=$user->url ? $user->url : 'Не указано'?></a>
+					data-name="url"><?=trim($user->url) ? $user->url : 'Не указано'?></a>
 			</p>
 		</div>
 	</li>
@@ -168,7 +168,7 @@
 
 			<label><span><i class="name">Адрес вашей компании:</i></span></label>					                    			
 			<p class="myinform">
-				<?php if ( ! $user->user_city->loaded() AND ! $user->org_address) : ?>
+				<?php if ( ! $user->user_city->loaded() AND ! trim($user->org_address)) : ?>
 				<a href="" class="myhref address_edit">Не указано</a>
 				<?php else : ?>
 				<a href="" class="myhref address_edit"><?=$user->user_city->loaded() ? $user->user_city->title.',' : ''?> <?=$user->org_address?></a>
