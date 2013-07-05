@@ -29,7 +29,14 @@
 								<li><a href="<?=Url::site('khbackend/users/index')?>">List</a></li>
 							</ul>
 						</li>
-						<li><a href="<?=Url::site('khbackend/users/logout')?>">Log Out</a></li>
+                        <li class="dropdown <?=($module_name == 'articles') ? 'active' : ''?>">
+                            <a href="#"  class="dropdown-toggle" data-toggle="dropdown">Articles <b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="<?=Url::site('khbackend/articles/index')?>">List</a></li>
+                                <li><a href="<?=Url::site('khbackend/articles/add')?>">Add</a></li>
+                            </ul>
+                        </li>
+						<li><a href="<?=Url::site('khbackend/articles/logout')?>">Log Out</a></li>
 					</ul>
 					<?php endif; ?>
 				</div>

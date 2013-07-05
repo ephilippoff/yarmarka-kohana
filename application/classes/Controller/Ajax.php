@@ -434,6 +434,13 @@ class Controller_Ajax extends Controller_Template
 		}
 	}
 
+	public function action_transliterate_str()
+	{
+		$str = $this->request->post('str');
+
+		$this->json['str'] = Url::title($str, '-', TRUE);
+	}
+
 	public function after()
 	{
 		parent::after();

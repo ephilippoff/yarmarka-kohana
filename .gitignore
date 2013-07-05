@@ -12,3 +12,5 @@ www/images
 www/font
 .idea
 *.vim
+*.sublime-project
+*.sublime-workspace

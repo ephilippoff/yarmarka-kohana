@@ -201,6 +201,7 @@ class Controller_Admin_Users extends Controller_Admin_Template {
 
 	public function action_delete()
 	{
+		$this->auto_render = FALSE;
 		$user = ORM::factory('User', $this->request->param('id'));
 		if ( ! $user->loaded())
 		{
