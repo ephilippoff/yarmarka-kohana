@@ -59,7 +59,15 @@
 								<?php endif; ?>
 								</span></div>
 								<div class="col4">
-									<p class="istatus "><span><?=$invoice->get_status_text()?></span></p>
+									<?php if ($invoice->is_refused()) : ?>
+									<p class="istatus idel">
+									<?php elseif ($invoice->is_success()) : ?>
+									<p class="istatus act">
+									<?php else : ?>
+									<p class="istatus archive">
+									<?php endif; ?>
+										<span><?=$invoice->get_status_text()?></span>
+									</p>
 								</div>				                    				
 								<div class="col2">
 									<p class="title"><?=$invoice->description?></p>

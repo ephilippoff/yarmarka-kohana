@@ -64,4 +64,19 @@ class Model_Invoice extends ORM {
 		return $this->where('state', '=', self::REFUSED);
 	}
 
+	public function is_created()
+	{
+		return $this->state == self::CREATED;
+	}
+
+	public function is_success()
+	{
+		return $this->state == self::SUCCESS;
+	}
+
+	public function is_refused()
+	{
+		return $this->state == self::REFUSED;
+	}
+
 } // End Invoice Model
