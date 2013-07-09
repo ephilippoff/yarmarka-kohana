@@ -1,6 +1,8 @@
 <?php defined('SYSPATH') OR die('No direct access allowed.');
 
 class Model_Article extends ORM {
+	public $level;
+
 	protected $_created_column  = array('column' => 'created', 'format' => 'Y-m-d H:i:s');
 	protected $_updated_column  = array('column' => 'updated', 'format' => 'Y-m-d H:i:s');
 
@@ -76,8 +78,8 @@ class Model_Article extends ORM {
 
 		foreach ($articles as $article)
 		{
-			$article_row_array = $article->as_array();
-			$article_row_array['level'] = $level;
+			$article_row_array = $article;
+			$article_row_array->level = $level;
 
 			$result[$article->id] = $article_row_array;
 			if ($article->articles->find_all()->count() > 0)

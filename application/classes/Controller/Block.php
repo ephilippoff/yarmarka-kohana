@@ -106,4 +106,36 @@ class Controller_Block extends Controller_Template
 			->cached(60)
 			->find_all();
 	}
+
+	public function action_articles_menu()
+	{
+		$this->template->articles = ORM::factory('Article')->where('parent_id', '=', 0)->find_all();
+	}
+
+	public function action_articles_breadcrumbs()
+	{
+		$article = ORM::factory('Article', $this->request->param('id'));
+		if ( ! $article->loaded())
+		{
+			throw new HTTP_Exception_404;
+		}
+
+		$breadcrumbs = array();
+		while ($article->loaded())
+		{
+			$breadcrumbs[] = array(
+				'url' => Route::get('article')->uri(array('seo_name' => $article->seo_name)),
+				'anchor' => $article->title,
+			);
+			
+			$article = ORM::factory('Article', $article->parent_id);
+		}
+
+		$breadcrumbs[] = array(
+			'url' => '/',
+			'anchor' => 'Ярмарка',
+		);
+
+		$this->template->breadcrumbs = array_reverse($breadcrumbs);
+	}
 }
