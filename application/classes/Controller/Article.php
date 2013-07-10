@@ -17,6 +17,8 @@ class Controller_Article extends Controller_Template {
 			throw new HTTP_Exception_404;
 		}
 
+		Seo::set_title($article->title.Seo::get_postfix());
+
 		$this->template->article = $article;
 	}
 }
