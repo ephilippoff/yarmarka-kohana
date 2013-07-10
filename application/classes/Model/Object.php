@@ -105,7 +105,12 @@ class Model_Object extends ORM {
 
 		$this->date_created = DB::expr('NOW()');
 		$this->date_updated = DB::expr('NOW()');
-		return $this->update();
+		
+		$result = $this->update();
+
+		$this->reload();
+
+		return $result;
 	}
 
 	public function prolong($date_expiration, $to_forced_moderation = FALSE, $no_bad = FALSE)
