@@ -1,23 +1,20 @@
-<script type="text/javascript" src="/js/adaptive/tiny_mce/tiny_mce.js"></script>
+<script type="text/javascript" src="/bootstrap/tinymce/tinymce.min.js"></script>
 <script type="text/javascript" charset="utf-8">
-  // wisiwyg
-  tinyMCE.init({
-  	mode : "textareas",
-  	editor_selector : "tiny",
-	// theme : "simple",
-	language: "ru",
-	plugins : "paste",
-	width: "100%",
-	paste_text_sticky : true,
-	setup : function(ed) {
-	ed.onInit.add(function(ed) {
-		ed.pasteAsPlainText = true;
-	});
-
-	//ed.onKeyUp.add(function(ed, e) {
-	  //var text = tinyMCE.activeEditor.getContent({format : 'raw'});
-	//});
-}
+tinymce.init({
+    selector: "textarea",
+    theme: "modern",
+    plugins: [
+        "advlist autolink lists link image charmap print preview hr anchor pagebreak",
+        "searchreplace wordcount visualblocks visualchars code fullscreen",
+        "insertdatetime media nonbreaking save table contextmenu directionality",
+        "emoticons template paste textcolor"
+    ],
+    toolbar1: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
+    toolbar2: "print preview media | forecolor backcolor emoticons",
+    image_advtab: true,
+    width: '100%',
+    height: '600px',
+   	verify_html : false
 });
 
 $(document).ready(function() {
