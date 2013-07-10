@@ -115,7 +115,7 @@ class Model_Article extends ORM {
 			return FALSE;
 		}
 
-		return Text::limit_chars(trim(htmlspecialchars(strip_tags($this->description))), 500, NULL, TRUE);
+		return str_replace("\n", ' ', Text::limit_chars(trim(htmlspecialchars(strip_tags($this->description))), 500, NULL, TRUE));
 	}
 }
 
