@@ -27,7 +27,7 @@
 	.$_assets
 ?>
 </head>
-<body class="adaptive">
+<body class="adaptiveoff">
 	<?=View::factory('layouts/google_analytics')?>
 	<div class="wrapfix">
 			<?=View::factory('layouts/header')?>
