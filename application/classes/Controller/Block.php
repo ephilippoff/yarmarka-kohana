@@ -109,7 +109,7 @@ class Controller_Block extends Controller_Template
 
 	public function action_articles_menu()
 	{
-		$this->template->articles = ORM::factory('Article')->where('parent_id', '=', 0)->find_all();
+		$this->template->top_parent = ORM::factory('Article', $this->request->param('id'))->get_top_parent();
 	}
 
 	public function action_articles_breadcrumbs()

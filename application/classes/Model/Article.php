@@ -90,6 +90,23 @@ class Model_Article extends ORM {
 
 		return $result;
 	}
+
+	public function get_top_parent()
+	{
+		if ( ! $this->loaded())
+		{
+			return FALSE;
+		}
+
+		$article = clone $this;
+
+		while($article->parent_id != 0)
+		{
+			$article = ORM::factory('Article', $article->parent_id);
+		}
+
+		return $article;
+	}
 }
 
 /* End of file Article.php */

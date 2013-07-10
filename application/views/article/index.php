@@ -6,7 +6,7 @@
 			</div>
 			<div class="shadow-top fl100 pt7"></div>
 			<aside class="w200 innerPage-leftAside">
-				<?=Request::factory('block/articles_menu')->execute()?>
+				<?=Request::factory('block/articles_menu/'.$article->id)->execute()?>
 			</aside><!--end main-cont aside-->
 			
 			<section class="main-section iPage-leftPading">	                			
