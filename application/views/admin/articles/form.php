@@ -75,7 +75,7 @@ $(document).ready(function() {
 		</div>
 	</div>
 
-	<div class="control-group" id="text">
+	<div class="control-group" id="text" <?php if (@$article->is_category) : ?>style="display:none"<?php endif; ?>>
 		<label class="control-label" for="inputPassword">Text</label>
 		<div class="controls">
 			<textarea name="text" class="tiny input-block-level"><?=Arr::get($_POST, 'text', @$article->text)?></textarea>
