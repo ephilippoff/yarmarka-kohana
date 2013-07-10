@@ -13,7 +13,6 @@ tinymce.init({
     toolbar2: "print preview media | forecolor backcolor emoticons",
     image_advtab: true,
     width: '100%',
-    height: '600px',
    	verify_html : false
 });
 
@@ -75,12 +74,22 @@ $(document).ready(function() {
 		</div>
 	</div>
 
-	<div class="control-group" id="text" <?php if (@$article->is_category) : ?>style="display:none"<?php endif; ?>>
-		<label class="control-label" for="inputPassword">Text</label>
+	<span id="text" <?php if (@$article->is_category) : ?>style="display:none"<?php endif; ?>>
+
+	<div class="control-group">
+		<label class="control-label">Description</label>
 		<div class="controls">
-			<textarea name="text" class="tiny input-block-level"><?=Arr::get($_POST, 'text', @$article->text)?></textarea>
+			<textarea style="height:300px" name="description" class="tiny input-block-level"><?=Arr::get($_POST, 'description', @$article->description)?></textarea>
 		</div>
 	</div>
+
+	<div class="control-group">
+		<label class="control-label">Text</label>
+		<div class="controls">
+			<textarea name="text" style="height:600px" class="tiny input-block-level"><?=Arr::get($_POST, 'text', @$article->text)?></textarea>
+		</div>
+	</div>
+	</span>
 
 	<div class="control-group">
 		<div class="controls">

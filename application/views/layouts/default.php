@@ -6,6 +6,7 @@
 <!--<meta name="viewport" id="viewport" content="width=device-width,minimum-  scale=1.0,maximum-scale=10.0,initial-scale=1.0" />-->
 <!--<meta content="width=device-width, initial-scale=1.0" name="viewport">-->
 <meta name="viewport" id="viewport" content="width=device-width">
+<meta name="description" content="<?=Seo::get_description()?>">
 <title><?=Seo::get_title()?></title>
 <?=Assets::factory('main')->css('css.css', array('media' => 'screen, projection'))
 	->css('iLight.css')

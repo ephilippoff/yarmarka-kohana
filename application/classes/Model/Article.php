@@ -107,6 +107,16 @@ class Model_Article extends ORM {
 
 		return $article;
 	}
+
+	public function get_meta_description()
+	{
+		if ( ! $this->loaded())
+		{
+			return FALSE;
+		}
+
+		return Text::limit_chars(trim(htmlspecialchars(strip_tags($this->description))), 500, NULL, TRUE);
+	}
 }
 
 /* End of file Article.php */
