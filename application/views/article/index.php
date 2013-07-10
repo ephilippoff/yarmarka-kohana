@@ -11,6 +11,7 @@
 			
 			<section class="main-section iPage-leftPading">	                			
 				<div class="innerPage">
+					<?php if (FALSE) : ?>
 					<aside class="iPage-rightAside">
 						<h2>Полезные ссылки</h2>
 						<br/>
@@ -22,8 +23,19 @@
 							<li><a href="">Мы любим индууууур</a></li>
 						</ul>
 					</aside>
+					<?php endif; ?>
 					<div class="innerPage-cont iPage-rightPadding">
-						<?=$article->text?>
+						<?php if ($article->is_category) : ?>
+							<h2 class="big" style="text-align: center;"><?=$article->title?></h2>
+	
+							<ul class="iPage-ul">
+							<?php foreach ($article->articles->find_all() as $article) : ?>
+								<li><a href="<?=URL::site(Route::get('article')->uri(array('seo_name' => $article->seo_name)))?>"><?=$article->title?></a></li>
+							<?php endforeach; ?>
+							</ul>
+						<?php else : ?>
+							<?=$article->text?>
+						<?php endif; ?>
 					</div>
 					
 				</div>
