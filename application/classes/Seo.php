@@ -108,4 +108,9 @@ class Seo extends ORM
 		
 		return in_array($route_name, $noindex_routes);
 	}
+
+	public static function get_postfix()
+	{
+		return Kohana::$config->load('seo.title_postfix');
+	}
 }
