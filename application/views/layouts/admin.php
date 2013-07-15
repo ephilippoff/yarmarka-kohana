@@ -29,6 +29,7 @@
 								<li><a href="<?=Url::site('khbackend/users/index')?>">List</a></li>
 							</ul>
 						</li>
+
                         <li class="dropdown <?=($module_name == 'articles') ? 'active' : ''?>">
                             <a href="#"  class="dropdown-toggle" data-toggle="dropdown">Articles <b class="caret"></b></a>
                             <ul class="dropdown-menu">
@@ -36,7 +37,15 @@
                                 <li><a href="<?=Url::site('khbackend/articles/add')?>">Add</a></li>
                             </ul>
                         </li>
-						<li><a href="<?=Url::site('khbackend/articles/logout')?>">Log Out</a></li>
+
+                        <li class="dropdown <?=($module_name == 'object') ? 'active' : ''?>">
+                            <a href="#"  class="dropdown-toggle" data-toggle="dropdown">Objects <b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="<?=Url::site('khbackend/objects/index')?>">List</a></li>
+                            </ul>
+                        </li>
+
+						<li><a href="<?=Url::site('khbackend/logout')?>">Log Out</a></li>
 					</ul>
 					<?php endif; ?>
 				</div>
@@ -50,5 +59,12 @@
 	</div>
 	<?=$_content?>
 </div>
+
+<?php 
+if (Kohana::$profiling === TRUE) 
+{
+	echo View::factory('profiler/stats');
+}
+?>
 </body>
 </html>

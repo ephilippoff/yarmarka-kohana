@@ -20,13 +20,6 @@ $(document).ready(function() {
 	// enable tooltips
 	$('a').tooltip();
 });
-function order(sort_by, direction) {
-	var get = $.parseParams(window.location.search);
-	get['sort_by'] = sort_by;
-	get['direction'] = direction;
-	window.location.search = decodeURIComponent($.param(get));
-	return false;
-}
 function ban(obj) {
 	var reason = prompt('Ban reason:');
 	if (reason != null) {
@@ -164,7 +157,7 @@ function delete_user(obj) {
 		<td><?=$user->phone?></td>
 		<td><?=$user->city?></td>
 		<td><?=$user->fullname?></td>
-		<td><?=date('Y-m-d H:i:s', strtotime($user->regdate))?></td>
+		<td><?=date('d.m.Y H:i', strtotime($user->regdate))?></td>
 		<td><a href="<?=URL::site('khbackend/users/ip_info/'.$user->ip_addr)?>" onClick="return popup(this);"><?=$user->ip_addr?></a></td>
 		<td><span class="badge"><?=$user->objects_cnt?></span></td>
 		<td><span class="badge"><?=$user->invoices_cnt?></span></td>

@@ -79,6 +79,11 @@ class Model_Object extends ORM {
 		return $this->is_bad > 0;
 	}
 
+	public function is_moderate()
+	{
+		return (bool) $this->moder_state;
+	}
+
 	public function get_url()
 	{
 		return CI::site('obyavlenie/'.$this->category_obj->get_seo_name(NULL, $this->city_id).'/'.($this->seo_name ? $this->seo_name.'-' : '').$this->id,
@@ -157,4 +162,97 @@ class Model_Object extends ORM {
 		return $this->update();
 	}
 
-} // End Access Model
+	public function get_contacts()
+	{
+		if ( ! $this->loaded())
+		{
+			return FALSE;
+		}
+
+		return $this->contacts->with('contact_type')->find_all();
+	}
+
+	public function get_attributes($object_id = NULL)
+	{
+		if (is_null($object_id))
+		{
+			$object_id = $this->id;
+		}
+
+		if ( ! $object_id = intval($object_id))
+		{
+			return FALSE;
+		}
+
+		$sql = "select ref.id as ref_id, ref.is_selectable, types,aid,atitle,seotitle,dlref as reference,min_value,max_value,idvalue,tvalue,boolvalue,ref.is_required,parent_other,unit,fe.group as fegroup,gr.title as grtitle  from (
+			  select 'list' as types,attr.id as aid,attr.title as atitle,attr.seo_name as seotitle,dl.reference as dlref,0 as min_value,0 as max_value,ae.id as idvalue,ae.title as tvalue,0 as boolvalue,ae.parent_other as parent_other,attr.unit   
+			  from data_list as dl left join attribute as attr on dl.attribute=attr.id left join attribute_element as ae on dl.value=ae.id
+			  where dl.object=:object_id
+			  union all
+			  select 'integer' as types,attr.id as aid,attr.title as atitle,attr.seo_name as seotitle,dl.reference as dlref,dl.value_min as min_value,dl.value_max as max_value,0 as idvalue,'' as tvalue,0 as boolvalue,0 as parent_other,attr.unit 
+			  from data_integer as dl left join attribute as attr on dl.attribute=attr.id
+			  where dl.object=:object_id
+			  union all
+			  select 'numeric' as types,attr.id as aid,attr.title as atitle,attr.seo_name as seotitle,dl.reference as dlref,dl.value_min as min_value,dl.value_max as max_value,0 as idvalue, '' as tvalue,0 as boolvalue,0 as parent_other,attr.unit 
+			  from data_numeric as dl left join attribute as attr on dl.attribute=attr.id
+			  where dl.object=:object_id
+			  union all
+			  select 'text' as types,attr.id as aid,attr.title as atitle,attr.seo_name as seotitle,dl.reference as dlref,0 as min_value,0 as max_value,0 as idvalue,dl.value as tvalue,0 as boolvalue,0 as parent_other,attr.unit 
+			  from data_text as dl left join attribute as attr on dl.attribute=attr.id
+			  where dl.object=:object_id
+			  union all
+			  select 'boolean' as types,attr.id as aid,attr.title as atitle,attr.seo_name as seotitle,dl.reference as dlref,0 as min_value,0 as max_value,0 as idvalue, '' as tvalue,dl.value as boolvalue,0 as parent_other,attr.unit 
+			  from data_boolean as dl left join attribute as attr on dl.attribute=attr.id
+			  where dl.object=:object_id) as allattrs
+			left join reference as ref on allattrs.dlref=ref.id
+			left join form_element as fe on fe.reference=ref.id and fe.type='add'
+			left join \"group\" as gr on gr.id = fe.group
+			order by ref.weight";
+
+		return DB::query(Database::SELECT, $sql)
+			->param(':object_id', $object_id)
+			->execute();
+	}
+
+	public function get_attributes_values($object_id = NULL)
+	{
+		$attrs = $this->get_attributes($object_id);
+		if ( ! $attrs)
+		{
+			return FALSE;
+		}
+
+		$result = array();
+		foreach ($attrs as $row) 
+		{
+			if ($row['tvalue'])
+			{
+				$value = $row['tvalue'];
+			}
+			elseif($row['min_value'])
+			{
+				$value = $row['min_value'];
+				if ($row['unit'])
+				{
+					$value .= ' '.$row['unit'];
+				}
+			}
+			elseif ($row['boolvalue']) 
+			{
+				$value = $row['atitle'];
+			}
+
+			if ($row['is_required'])
+			{
+				$value .= '*';
+			}
+
+			$result[] = $value;
+		}
+
+		return $result;
+	}
+}
+
+/* End of file Object.php */
+/* Location: ./application/classes/Model/Object.php */

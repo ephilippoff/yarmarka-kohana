@@ -441,6 +441,17 @@ class Controller_Ajax extends Controller_Template
 		$this->json['str'] = Url::title($str, '-', TRUE);
 	}
 
+	public function action_get_full_text()
+	{
+		$object = ORM::factory('Object', $this->request->param('id'));
+		if ( ! $object->loaded())
+		{
+			throw new HTTP_Exception_404;
+		}
+
+		$this->json['text'] = $object->full_text;
+	}
+
 	public function after()
 	{
 		parent::after();
