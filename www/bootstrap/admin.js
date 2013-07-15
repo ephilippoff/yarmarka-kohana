@@ -63,3 +63,15 @@ function order(sort_by, direction) {
 	window.location.search = decodeURIComponent($.param(get));
 	return false;
 }
+
+function set_query(query) {
+	window.location.search = query;
+	return false;
+}
+
+function add_to_query(varname, value) {
+	var get = $.parseParams(window.location.search);
+	get[varname] = value;
+	window.location.search = decodeURIComponent($.param(get));
+	return false;
+}

@@ -24,12 +24,29 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 		/**
 		 * Filters
 		 */
-		if ($email = trim($this->request->query('email')))
+		$filters_enable = TRUE;
+
+		if ($user_id = intval($this->request->query('user_id')))
 		{
-			$objects->where('email', 'LIKE', '%'.$email.'%');
+			$filters_enable = FALSE;
+			$this->template->author = ORM::factory('User', $user_id);
+			$objects->where('author', '=', $user_id);
 		}
 
-		if ($contact = trim($this->request->query('contact'))) 
+		if ($filters_enable AND $email = trim($this->request->query('email')))
+		{
+			if (is_numeric($email)) // can be email or object id
+			{
+				$filters_enable = FALSE;
+				$objects->where('object.id', '=', $email);
+			}
+			else
+			{
+				$objects->where('email', 'LIKE', '%'.$email.'%');
+			}
+		}
+
+		if ($filters_enable AND $contact = trim($this->request->query('contact'))) 
 		{
 			$objects
 				->where_open()
@@ -39,7 +56,7 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 				->where_close();
 		}
 
-		if ($date = $this->request->query('date'))
+		if ($filters_enable AND $date = $this->request->query('date'))
 		{
 			$field = $this->request->query('date_field');
 			if ($from_time = strtotime($date['from']))
@@ -53,12 +70,12 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 			}
 		}
 
-		if ($category_id = intval($this->request->query('category_id')))
+		if ($filters_enable AND $category_id = intval($this->request->query('category_id')))
 		{
 			$objects->where('object.category', '=', $category_id);
 		}
 
-		if ('' !== ($moder_state = trim($this->request->query('moder_state'))))
+		if ($filters_enable AND '' !== ($moder_state = trim($this->request->query('moder_state'))))
 		{
 			$objects->where('object.moder_state', '=', $moder_state);
 		}

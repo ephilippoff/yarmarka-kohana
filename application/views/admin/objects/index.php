@@ -120,6 +120,12 @@ function delete_object(obj) {
 	<input type="reset" name="" value="Clear" class="btn">
 </form>
 
+<?php if (isset($author) AND $author->loaded()) : ?>
+<div class="alert">
+	Объявления отфильтрованы по пользователю <strong><?=$author->fullname?></strong>
+	<a href="" onClick="return set_query('');">сбросить</a>
+</div>
+<?php endif; ?>
 
 <table class="table table-hover table-condensed" style="font-size:85%;">
 	<tr>
@@ -150,7 +156,7 @@ function delete_object(obj) {
 			<b><?=$object->contact?></b><br />
 			<?=join(', ', $object->get_contacts()->as_array(NULL, 'contact')) ?>
 			<br />
-			<a href=""><?=$object->user->email?></a>
+			<a href="" onClick="return set_query('user_id=<?=$object->user->id?>')"><?=$object->user->email?></a>
 		</td>
 		<td>
 			<b><a href="<?=CI::site('detail/'.$object->id)?>" target="_blank"><?=$object->title?></a></b><br />
