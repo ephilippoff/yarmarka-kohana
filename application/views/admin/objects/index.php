@@ -111,7 +111,7 @@ function reload_row(object_id, moder_state) {
 			</ul>
 		</div>		
 		<input type="hidden" name="date_field" value="<?=Arr::get($_GET, 'date_field', 'real_date_created')?>" />
-		<input type="text" class="input-small dp" placeholder="date from" name="date[from]" value="<?=Arr::get(@$_GET['date'], 'from')?>">
+		<input type="text" class="input-small dp" placeholder="date from" name="date[from]" value="<?=Arr::get(@$_GET['date'], 'from', date('Y-m-d', strtotime('-3 days')))?>">
 		<input type="text" class="input-small dp" placeholder="date to" name="date[to]" value="<?=Arr::get(@$_GET['date'], 'to')?>">
 	</div>
 	<?=Form::select('category_id', array('' => 'Все рубрики')+$categories, Arr::get($_GET, 'category_id'), array('class' => 'span2'))?>
@@ -154,9 +154,10 @@ function reload_row(object_id, moder_state) {
 </table>
 
 
+<?php if ($pagination->total_pages > 1) : ?>
 <div class="row">
-	<div class="span8"><?=$pagination?></div>
-	<div class="span4" style="padding-top: 55px;">
+	<div class="span10"><?=$pagination?></div>
+	<div class="span2" style="padding-top: 55px;">
 		<span class="text-info">Limit:</span>
 		<?php foreach (array(50, 100, 150) as $l) : ?>
 			<?php if ($l == $limit) : ?>
@@ -167,6 +168,7 @@ function reload_row(object_id, moder_state) {
 		<?php endforeach; ?>
 	</div>
 </div>
+<?php endif; ?>
 
 <!-- Modal -->
 <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

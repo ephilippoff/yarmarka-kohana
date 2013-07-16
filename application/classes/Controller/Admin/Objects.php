@@ -51,7 +51,7 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 			$objects
 				->where_open()
 					->where('', 'EXISTS', DB::expr('(SELECT oc.id FROM object_contact as oc 
-								WHERE oc.user_id=object.author AND oc.contact_clear LIKE \'%'.$contact.'%\')'))
+								WHERE oc.object_id=object.id AND oc.contact_clear LIKE \'%'.$contact.'%\')'))
 					->or_where('object.contact', 'LIKE', '%'.$contact.'%')
 				->where_close();
 		}
@@ -68,6 +68,10 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 			{
 				$objects->where(DB::expr("date($field)"), '<=', DB::expr("date '".date('Y-m-d', $to_time)."'"));
 			}
+		}
+		else
+		{
+			$objects->where(DB::expr('date(real_date_created)'), '>', DB::expr("date '".date('Y-m-d', strtotime('-3 days'))."'"));
 		}
 
 		if ($filters_enable AND $category_id = intval($this->request->query('category_id')))
