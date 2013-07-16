@@ -11,6 +11,7 @@
 				if (json.code == 200) {
 					$('.modal-body .alert-error').hide('slow');
 					$('#myModal').modal('hide');
+					reload_row(<?=$object->id?>, 1);
 				} else {
 					$('.modal-body .alert-error').html('Укажите причину').show('slow');
 				}
@@ -26,8 +27,10 @@
 	<h3 id="myModalLabel">
 		<?php if ($is_bad == 1) : ?>
 			Блокировать до исправления
-		<?php else : ?>
+		<?php elseif ($is_bad == 2) : ?>
 			Блокировать окончательно
+		<?php else : ?>
+			Удалить объявление
 		<?php endif; ?>
 	</h3>
 </div>

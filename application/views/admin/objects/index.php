@@ -45,7 +45,7 @@ $(document).ready(function() {
 		$('input[name=date_field]').val($(this).data('field'));
 	});
 
-	$('.show_full_text').click(function(e){
+	$(document).on('click', '.show_full_text', function(e){
 		e.preventDefault();
 
 		var obj = this;
@@ -54,25 +54,33 @@ $(document).ready(function() {
 		}, 'json');
 	});
 
-	$('.moder_state').click(function(e){
+	$(document).on('click', '.moder_state', function(e){
 		e.preventDefault();
 
 		var obj = this;
 		$.post('/khbackend/objects/ajax_change_moder_state/'+$(this).data('id'), {moder_state:$(obj).data('state')}, function(){
-			$(obj).parents('.btn-group').find('span.text').text($(obj).text());
-			$(obj).parents('.btn-group').find('.dropdown-toggle').attr('class', 'btn dropdown-toggle '+$(obj).data('class'));
+			reload_row($(obj).data('id'), $(obj).data('state'));
+			// $(obj).parents('.btn-group').find('span.text').text($(obj).text());
+			// $(obj).parents('.btn-group').find('.dropdown-toggle').attr('class', 'btn dropdown-toggle '+$(obj).data('class'));
 		});
 	});
 });
-function delete_object(obj) {
-	if (confirm('Delete object?')) {
-		$.post($(obj).attr('href'), {}, function(json){
-			if (json.code == 200) {
-				$(obj).parents('tr').remove();
-			}
-		}, 'json');
+function reload_row(object_id, moder_state) {
+	var current_moder_state = $('select[name=moder_state]').val();
+
+	if (current_moder_state && current_moder_state != moder_state) {
+		$('#'+object_id).remove();
+		if ($('table#objects tr').length == 1) {
+			console.log('test');
+			window.location.reload();
+		}
+	} else {
+		$.post('/khbackend/objects/object_row/'+object_id, {moder_state:moder_state}, function(html){
+			var old_row = $('#'+object_id);
+			old_row.after(html);
+			old_row.remove();
+		});
 	}
-	return false;
 }
 </script>
 
@@ -106,15 +114,14 @@ function delete_object(obj) {
 		<input type="text" class="input-small dp" placeholder="date from" name="date[from]" value="<?=Arr::get(@$_GET['date'], 'from')?>">
 		<input type="text" class="input-small dp" placeholder="date to" name="date[to]" value="<?=Arr::get(@$_GET['date'], 'to')?>">
 	</div>
-	<?=Form::select('category_id', array('' => '--category--')+$categories, Arr::get($_GET, 'category_id'), array('class' => 'span2'))?>
+	<?=Form::select('category_id', array('' => 'Все рубрики')+$categories, Arr::get($_GET, 'category_id'), array('class' => 'span2'))?>
 	<?=Form::select('moder_state', 
 		array(
-			'' => '--moderation--',
-			'0' => 'К модерации',
-			'1' => 'Предмодерация',
-			'2' => 'Прошло модерацию',
+			'' => 'Все объвления',
+			'0' => 'На модерации',
+			'1' => 'Прошло модерацию',
 		), 
-		Arr::get($_GET, 'moder_state'), array('class' => 'span2'))
+		Arr::get($_GET, 'moder_state', '0'), array('class' => 'span2'))
 	?>
 	<input type="submit" name="" value="Filter" class="btn btn-primary">
 	<input type="reset" name="" value="Clear" class="btn">
@@ -127,7 +134,7 @@ function delete_object(obj) {
 </div>
 <?php endif; ?>
 
-<table class="table table-hover table-condensed" style="font-size:85%;">
+<table class="table table-hover table-condensed" style="font-size:85%;" id="objects">
 	<tr>
 		<th>#</th>
 		<th>City/Category</th>
@@ -142,89 +149,24 @@ function delete_object(obj) {
 		<th></th>
 	</tr>
 	<?php foreach ($objects as $object) : ?>
-	<?php if ($object->is_banned()) : ?>
-	<tr class="error">
-	<?php else : ?>
-	<tr>
-	<?php endif; ?>
-		<td><?=$object->id?></td>
-		<td>
-			<?=$object->city_obj->title?><br />
-			<?=$object->category_obj->title?>
-		</td>
-		<td>
-			<b><?=$object->contact?></b><br />
-			<?=join(', ', $object->get_contacts()->as_array(NULL, 'contact')) ?>
-			<br />
-			<a href="" onClick="return set_query('user_id=<?=$object->user->id?>')"><?=$object->user->email?></a>
-		</td>
-		<td>
-			<b><a href="<?=CI::site('detail/'.$object->id)?>" target="_blank"><?=$object->title?></a></b><br />
-			<p>
-				<div id="gallery" data-toggle="modal-gallery" data-target="#modal-gallery">
-				<?php if ($object->main_image_filename) : ?>
-					<a href="<?=Uploads::get_file_path($object->main_image_filename, 'orig')?>" data-gallery="gallery">
-						<img align="right" style="margin-top: -20px;" src="<?=Uploads::get_file_path($object->main_image_filename, '120x90')?>" title="<?=$object->main_image_title ?>" />
-					</a>
-				<?php endif; ?>
-				</div>
-
-				<span class="object_text">
-					<?php if (mb_strlen($object->full_text) > 200) : ?>
-						<?=Text::limit_chars($object->full_text, 200, '...', TRUE)?>
-						<a href="#" class="show_full_text" data-id="<?=$object->id?>">show full text</a>
-					<?php else : ?>
-						<?=$object->full_text?>
-					<?php endif; ?>
-				</span>
-			</p>
-			<p class="text-error"><?=join(', ', $object->get_attributes_values()) ?></p>
-		</td>
-		<td>
-			<div class="btn-group">
-				<button class="btn dropdown-toggle
-					<?php if ($object->is_banned()) : ?>
-						btn-danger
-					<?php elseif ($object->is_moderate()) : ?>
-						btn-success
-					<?php else : ?>
-						btn-warning
-					<?php endif; ?>
-				" data-toggle="dropdown">
-					<span class="text">
-					<?php if ($object->is_banned()) : ?>
-						Заблокировано
-					<?php elseif ($object->is_moderate()) : ?>
-						Прошло модерацию
-					<?php else : ?>
-						На модерации
-					<?php endif; ?>
-					</span>
-					<span class="caret"></span>
-				</button>
-				<ul class="dropdown-menu">
-					<li><a href="<?=URL::site('khbackend/objects/ajax_decline/'.$object->id)?>" data-toggle="modal" data-target="#myModal" class="btn-danger">На исправление</a></li>
-					<li><a href="<?=URL::site('khbackend/objects/ajax_ban/'.$object->id)?>" data-toggle="modal" data-target="#myModal" class="btn-danger">Заблокировать</a></li>
-					<li><a href="#" data-id="<?=$object->id?>" data-state="0" data-class="btn-warning" class="moder_state btn-warning">На модерации</a></li>
-					<li><a href="#" data-id="<?=$object->id?>" data-state="1" data-class="btn-success" class="moder_state btn-success">Прошло модерацию</a></li>
-				</ul>
-			</div>	
-		</td>
-		<td>
-			<?=Date::formatted_time($object->real_date_created, 'd.m.Y H:i')?>
-			/
-			<?=Date::formatted_time($object->date_created, 'd.m.Y H:i')?>
-		</td>
-		<td>
-			<a href="<?=CI::site('detail/'.$object->id)?>" target="_blank" title="Open object in new windows" class="icon-eye-open"></a>
-			<a href="<?=URL::site('khbackend/objects/ban/'.$object->id)?>" title="Ban object" class="icon-lock" onClick="return ban(this);"></a>
-			<a href="<?=URL::site('khbackend/objects/delete/'.$object->id)?>" title="Delete object" onClick="return delete_object(this);" class="icon-trash"></a>
-		</td>
-	</tr>
+		<?=View::factory('admin/objects/object_row', array('object' => $object))?>
 	<?php endforeach; ?>
 </table>
 
-<?=$pagination?>
+
+<div class="row">
+	<div class="span8"><?=$pagination?></div>
+	<div class="span4" style="padding-top: 55px;">
+		<span class="text-info">Limit:</span>
+		<?php foreach (array(50, 100, 150) as $l) : ?>
+			<?php if ($l == $limit) : ?>
+				<span class="badge badge-info"><?=$l?></span>
+			<?php else : ?>
+				<a href="#" class="btn-mini" onClick="add_to_query('limit', <?=$l?>)"><?=$l?></a>
+			<?php endif; ?>
+		<?php endforeach; ?>
+	</div>
+</div>
 
 <!-- Modal -->
 <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

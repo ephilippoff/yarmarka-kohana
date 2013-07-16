@@ -38,7 +38,7 @@ $(document).ready(function() {
 	// });
 
 	// my implementation for twitter bootstrap modal, native script place content only in modal-body content
-	$('a[data-toggle=modal]').click(function(e){
+	$(document).on('click', 'a[data-toggle=modal]', function(e){
 		var url = $(this).attr('href');
 		var target = $(this).data('target');
 

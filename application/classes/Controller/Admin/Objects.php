@@ -8,7 +8,7 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 	{
 		// Kohana::$profiling = TRUE; // @todo
 
-		$limit  = 50;
+		$limit  = Arr::get($_GET, 'limit', 50);
 		$page   = $this->request->query('page');
 		$offset = ($page AND $page != 1) ? ($page-1)*$limit : 0;
 
@@ -18,8 +18,8 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 			->with('category_obj')
 			->with_main_photo()
 			->where('source_id', '=', 1)
+			->where('active', '=', 1)
 			->limit($limit);
-
 
 		/**
 		 * Filters
@@ -75,7 +75,7 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 			$objects->where('object.category', '=', $category_id);
 		}
 
-		if ($filters_enable AND '' !== ($moder_state = trim($this->request->query('moder_state'))))
+		if ($filters_enable AND '' !== ($moder_state = Arr::get($_GET, 'moder_state', '0')))
 		{
 			$objects->where('object.moder_state', '=', $moder_state);
 		}
@@ -98,6 +98,7 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 			->order_by('title')
 			->find_all()
 			->as_array('id', 'title');
+		$this->template->limit = $limit;
 		$this->template->pagination	= Pagination::factory(array(
 				'current_page'   => array('source' => 'query_string', 'key' => 'page'),
 				'total_items'    => $count_all,
@@ -147,6 +148,13 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 		$this->decline_form(2);
 	}
 
+	public function action_ajax_delete($value='')
+	{
+		$this->use_layout = FALSE;
+
+		$this->decline_form(0);
+	}
+
 	private function decline_form($is_bad)
 	{
 		$this->template = View::factory('admin/objects/decline_form');
@@ -180,12 +188,16 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 		{
 			$description = "Заблокировано до исправления по причине : $reason";
 		} 
-		else 
+		elseif ($is_bad == 2)
 		{
 			$description = "Заблокировано окончательно по причине : $reason";
 		}
+		else
+		{
+			$description = "Удалено по причине: $reason";
+		}
 
-		if ($reason AND $is_bad)
+		if ($reason)
 		{
 			$m_log = ORM::factory('Object_Moderation_Log');
 			$m_log->action_by 	= Auth::instance()->get_user()->id;
@@ -195,14 +207,43 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 			$m_log->object_id 	= $object->id;
 			$m_log->save();
 
-			$object->is_published = 0;
-			$object->is_bad = $is_bad;
-			$object->save();
-
+			if ($is_bad)
+			{
+				$object->is_published 	= 0;
+				$object->is_bad 		= $is_bad;
+				$object->moder_state 	= 1;
+				$object->save();
+			}
+			else
+			{
+				$object->active 		= 0;
+				$object->is_published 	= 0;
+				$object->moder_state 	= 1;
+				$object->save();
+			}
 			$json['code'] = 200;
 		}
 
 		$this->response->body(json_encode($json));
+	}
+
+	public function action_object_row()
+	{
+		$this->use_layout = FALSE;
+
+		$object = ORM::factory('Object')
+			->where('object.id', '=', $this->request->param('id'))
+			->with('user')
+			->with('city_obj')
+			->with('category_obj')
+			->with_main_photo()
+			->find();
+		if ( ! $object->loaded())
+		{
+			throw new HTTP_Exception_404;
+		}
+
+		$this->template->object = $object;
 	}
 }
 
