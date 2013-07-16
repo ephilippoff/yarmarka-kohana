@@ -81,7 +81,15 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 
 		if ($filters_enable AND '' !== ($moder_state = Arr::get($_GET, 'moder_state', '0')))
 		{
-			$objects->where('object.moder_state', '=', $moder_state);
+			if ($moder_state == 3)
+			{
+				$objects->where('', 'EXISTS', DB::expr('(SELECT cmpl.id FROM complaints as cmpl 
+					WHERE cmpl.object_id=object.id)'));
+			}
+			else
+			{
+				$objects->where('object.moder_state', '=', $moder_state);
+			}
 		}
 
 		// count all objects
@@ -291,6 +299,19 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 		}
 
 		$this->response->body(json_encode($json));
+	}
+
+	public function action_complaints()
+	{
+		$this->use_layout = FALSE;
+
+		$object = ORM::factory('Object', $this->request->param('id'));
+		if ( ! $object->loaded())
+		{
+			throw new HTTP_Exception_404;
+		}
+
+		$this->template->object = $object;
 	}
 }
 

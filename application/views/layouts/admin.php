@@ -45,7 +45,7 @@
                             </ul>
                         </li>
 
-						<li><a href="<?=Url::site('khbackend/logout')?>">Log Out</a></li>
+						<li><a href="<?=Url::site('khbackend/users/logout')?>">Log Out</a></li>
 					</ul>
 					<?php endif; ?>
 				</div>

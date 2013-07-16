@@ -122,6 +122,7 @@ function reload_row(object_id, moder_state) {
 			'' => 'Все объвления',
 			'0' => 'На модерации',
 			'1' => 'Прошло модерацию',
+			'3' => 'Есть жалобы',
 		), 
 		Arr::get($_GET, 'moder_state', '0'), array('class' => 'span2'))
 	?>

@@ -71,6 +71,11 @@
 					<li><a href="<?=URL::site('khbackend/objects/ajax_ban/'.$object->id)?>" data-toggle="modal" data-target="#myModal" class="btn-danger">Заблокировать</a></li>
 				</ul>
 			</div>	
+			<?php if ($object->complaints->count_all()) : ?>
+				<br />
+				<br />
+				<a href="<?=URL::site('khbackend/objects/complaints/'.$object->id)?>" class="btn btn-info" data-toggle="modal" data-target="#myModal">Посмотреть жалобы</a>
+			<?php endif; ?>
 		</td>
 		<td>
 			<?=Date::formatted_time($object->real_date_created, 'd.m.Y H:i')?>
