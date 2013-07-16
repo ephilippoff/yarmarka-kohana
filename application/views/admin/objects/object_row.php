@@ -12,7 +12,7 @@
 			<b><?=$object->contact?></b><br />
 			<?=join(', ', $object->get_contacts()->as_array(NULL, 'contact')) ?>
 			<br />
-			<a href="" onClick="return set_query('user_id=<?=$object->user->id?>')"><?=$object->user->email?></a>
+			<a href="" title="Показать только объявления этого пользователя" onClick="return set_query('user_id=<?=$object->user->id?>')"><?=$object->user->email?></a>
 		</td>
 		<td>
 			<b><a href="<?=CI::site('detail/'.$object->id)?>" target="_blank"><?=$object->title?></a></b><br />
@@ -77,6 +77,6 @@
 		</td>
 		<td>
 			<a href="<?=CI::site('detail/'.$object->id)?>" target="_blank" title="Open object in new windows" class="icon-eye-open"></a>
-			<a href="<?=URL::site('khbackend/objects/ajax_delete/'.$object->id)?>" data-toggle="modal" data-target="#myModal" class="icon-trash"></a>
+			<a href="<?=URL::site('khbackend/objects/ajax_delete/'.$object->id)?>" title="Delete object" data-toggle="modal" data-target="#myModal" class="icon-trash"></a>
 		</td>
 	</tr>
