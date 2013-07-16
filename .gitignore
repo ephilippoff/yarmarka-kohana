@@ -10,6 +10,7 @@ www/js
 www/img
 www/images
 www/font
+www/.htaccess
 .idea
 *.vim
 *.sublime-project
