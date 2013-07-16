@@ -25,6 +25,9 @@
 <?=HTML::script('bootstrap/image-gallery/js/bootstrap-image-gallery.js')?>
 <?=HTML::style('bootstrap/image-gallery/css/bootstrap-image-gallery.css')?>
 
+<script type="text/javascript" src="/bootstrap/tinymce/tinymce.min.js"></script>
+<script type="text/javascript" src="/bootstrap/tinymce/jquery.tinymce.min.js"></script>
+
 <script type="text/javascript" charset="utf-8">
 $(document).ready(function() {
 	// enable datepicker
@@ -50,7 +53,7 @@ $(document).ready(function() {
 
 		var obj = this;
 		$.post('/ajax/get_full_text/'+$(this).data('id'), function(json){
-			$(obj).parents('.object_text').html(json.text);
+			$(obj).parent().html(json.text);
 		}, 'json');
 	});
 
@@ -68,10 +71,9 @@ $(document).ready(function() {
 function reload_row(object_id, moder_state) {
 	var current_moder_state = $('select[name=moder_state]').val();
 
-	if (current_moder_state && current_moder_state != moder_state) {
+	if (typeof moder_state != 'undefined' && current_moder_state && current_moder_state != moder_state) {
 		$('#'+object_id).remove();
 		if ($('table#objects tr').length == 1) {
-			console.log('test');
 			window.location.reload();
 		}
 	} else {

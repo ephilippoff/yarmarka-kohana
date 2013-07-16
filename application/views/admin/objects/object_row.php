@@ -15,7 +15,9 @@
 			<a href="" title="Показать только объявления этого пользователя" onClick="return set_query('user_id=<?=$object->user->id?>')"><?=$object->user->email?></a>
 		</td>
 		<td>
-			<b><a href="<?=CI::site('detail/'.$object->id)?>" target="_blank"><?=$object->title?></a></b><br />
+			<b><a href="<?=CI::site('detail/'.$object->id)?>" target="_blank"><?=$object->title?></a></b>
+			<a href="<?=URL::site('khbackend/objects/edit/'.$object->id)?>" class="icon-pencil" style="margin-left: 15px;" title="Редактировать текст объявления" data-toggle="modal" data-target="#myModal"></a>
+			<br />
 			<p>
 				<div id="gallery" data-toggle="modal-gallery" data-target="#modal-gallery">
 				<?php if ($object->main_image_filename) : ?>
@@ -27,10 +29,10 @@
 
 				<span class="object_text">
 					<?php if (mb_strlen($object->full_text) > 200) : ?>
-						<?=Text::limit_chars($object->full_text, 200, '...', TRUE)?>
+						<?=Text::limit_chars($object->user_text, 200, '...', TRUE)?>
 						<a href="#" class="show_full_text" data-id="<?=$object->id?>">show full text</a>
 					<?php else : ?>
-						<?=$object->full_text?>
+						<?=$object->user_text?>
 					<?php endif; ?>
 				</span>
 			</p>
@@ -63,10 +65,10 @@
 					<span class="caret"></span>
 				</button>
 				<ul class="dropdown-menu">
+					<li><a href="#" data-id="<?=$object->id?>" data-state="1" data-class="btn-success" class="moder_state btn-success">Прошло модерацию</a></li>
+					<li><a href="#" data-id="<?=$object->id?>" data-state="0" data-class="btn-warning" class="moder_state btn-warning">На модерации</a></li>
 					<li><a href="<?=URL::site('khbackend/objects/ajax_decline/'.$object->id)?>" data-toggle="modal" data-target="#myModal" class="btn-danger">На исправление</a></li>
 					<li><a href="<?=URL::site('khbackend/objects/ajax_ban/'.$object->id)?>" data-toggle="modal" data-target="#myModal" class="btn-danger">Заблокировать</a></li>
-					<li><a href="#" data-id="<?=$object->id?>" data-state="0" data-class="btn-warning" class="moder_state btn-warning">На модерации</a></li>
-					<li><a href="#" data-id="<?=$object->id?>" data-state="1" data-class="btn-success" class="moder_state btn-success">Прошло модерацию</a></li>
 				</ul>
 			</div>	
 		</td>

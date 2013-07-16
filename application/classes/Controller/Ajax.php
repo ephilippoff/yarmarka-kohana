@@ -449,7 +449,7 @@ class Controller_Ajax extends Controller_Template
 			throw new HTTP_Exception_404;
 		}
 
-		$this->json['text'] = $object->full_text;
+		$this->json['text'] = $object->user_text;
 	}
 
 	public function after()

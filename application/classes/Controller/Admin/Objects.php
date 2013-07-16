@@ -249,6 +249,49 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 
 		$this->template->object = $object;
 	}
+
+	public function action_edit()
+	{
+		$this->use_layout = FALSE;
+
+		$object = ORM::factory('Object', $this->request->param('id'));
+		if ( ! $object->loaded())
+		{
+			throw new HTTP_Exception_404;
+		}
+
+		$this->template->object = $object;
+	}
+
+	public function action_save()
+	{
+		$this->auto_render = FALSE;
+		$json = array('code' => 400);
+
+		$object = ORM::factory('Object', $this->request->param('id'));
+		if ( ! $object->loaded())
+		{
+			throw new HTTP_Exception_404;
+		}
+
+		$title = $this->request->post('title');
+		$user_text = $this->request->post('user_text');
+
+		if ( ! $title OR ! $user_text)
+		{
+			$json['errors'] = 'Заполните все поля';
+		}
+		else
+		{
+			$object->title 		= trim($title);
+			$object->user_text 	= trim($user_text);
+			$object->save();
+
+			$json['code'] = 200;
+		}
+
+		$this->response->body(json_encode($json));
+	}
 }
 
 /* End of file Objects.php */

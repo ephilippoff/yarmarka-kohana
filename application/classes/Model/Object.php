@@ -15,6 +15,22 @@ class Model_Object extends ORM {
 		'user_messages'		=> array('model' => 'User_Messages', 'foreign_key' => 'object_id'),
 	);
 
+	public function filters()
+	{
+		return array(
+			'user_text' => array(
+				array(array($this, 'generate_full_text')),
+			),
+		);
+	}
+
+	public function generate_full_text($user_text)
+	{
+		$this->full_text = strip_tags($this->title).', '.strip_tags($user_text).', '.join(', ', $this->get_attributes_values(NULL, FALSE));
+
+		return $user_text;
+	}
+
 	public function remove_from_favorites()
 	{
 		if ( ! $this->loaded())
@@ -214,7 +230,7 @@ class Model_Object extends ORM {
 			->execute();
 	}
 
-	public function get_attributes_values($object_id = NULL)
+	public function get_attributes_values($object_id = NULL, $mark_required = TRUE)
 	{
 		$attrs = $this->get_attributes($object_id);
 		if ( ! $attrs)
@@ -242,7 +258,7 @@ class Model_Object extends ORM {
 				$value = $row['atitle'];
 			}
 
-			if ($row['is_required'])
+			if ($mark_required AND $row['is_required'])
 			{
 				$value .= '*';
 			}
