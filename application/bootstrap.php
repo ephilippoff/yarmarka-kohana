@@ -63,7 +63,7 @@ ini_set('unserialize_callback_func', 'spl_autoload_call');
  */
 I18n::lang('en-us');
 
-Kohana::$environment = ($_SERVER['HTTP_HOST'] === 'yarmarka.biz') ? Kohana::PRODUCTION : Kohana::DEVELOPMENT;
+Kohana::$environment = ($_SERVER['HTTP_HOST'] === 'c.yarmarka.biz') ? Kohana::PRODUCTION : Kohana::DEVELOPMENT;
 
 /**
  * Initialize Kohana, setting the default options.
