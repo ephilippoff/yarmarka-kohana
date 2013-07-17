@@ -5,7 +5,7 @@ return array(
 		'lifetime' => 60*60*24*30,
 	),
 	'cookie' => array(
-		'encrypted' => TRUE,
+		'encrypted' => FALSE,
 		'lifetime' => 60*60*24*30,
 	),
 );

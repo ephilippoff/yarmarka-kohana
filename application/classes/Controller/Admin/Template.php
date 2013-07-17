@@ -24,6 +24,7 @@ abstract class Controller_Admin_Template extends Controller_Template {
 
     public function before()
 	{
+		parent::before();
 		$this->module_name = $this->module_name ? $this->module_name : $this->request->controller();
 
 		if ( ! Auth::instance()->logged_in() AND ! ($this->request->action() == 'login'))
@@ -34,7 +35,6 @@ abstract class Controller_Admin_Template extends Controller_Template {
 		{
 			throw new HTTP_Exception_404;
 		}
-		parent::before();
 
 		if (is_object($this->template))
 		{

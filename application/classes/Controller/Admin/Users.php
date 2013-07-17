@@ -218,7 +218,8 @@ class Controller_Admin_Users extends Controller_Admin_Template {
 		if (HTTP_Request::POST == $this->request->method())
 		{
 			$auth = Auth::instance();
-			if ($auth->login($this->request->post('login'), $this->request->post('password'), $this->request->post('remember')))
+			$remember = (bool) $this->request->post('remember');
+			if ($auth->login($this->request->post('login'), $this->request->post('password'), $remember))
 			{
 				$this->redirect('khbackend');
 			}

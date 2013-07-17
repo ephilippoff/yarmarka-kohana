@@ -135,7 +135,5 @@ if ( ! Session::instance()->get('session_id'))
 	Session::instance()->set('session_id', uniqid('', TRUE));
 }
 
-// try to auth user by cookie
-Auth::instance()->auto_login();
 
 include 'routing.php';
