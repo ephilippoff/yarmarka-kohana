@@ -40,16 +40,23 @@
 		<input type="hidden" name="is_bad" value="<?=$is_bad?>" />
 
 		<div class="control-group">
-		<label class="control-label" for="inputEmail">Причина</label>
+		<label class="control-label">Причина</label>
 			<div class="controls">
 				<?=Form::select('reason_id', array('' => '-- выберите причину --')+$reasons, NULL, array('class' => 'input-xlarge'))?>
 			</div>
 		</div>
 
 		<div class="control-group">
-		<label class="control-label" for="inputEmail">Текст причины</label>
+		<label class="control-label">Текст причины</label>
 			<div class="controls">
 				<textarea name="reason" cols="35" rows="8" class="input-xlarge" required></textarea>
+			</div>
+		</div>
+
+		<div class="control-group">
+		<label class="control-label">Отправить письму автору</label>
+			<div class="controls">
+				<input type="checkbox" name="send_email" value="1" checked />
 			</div>
 		</div>
 </div>

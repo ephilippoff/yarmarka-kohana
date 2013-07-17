@@ -215,6 +215,7 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 
 		if ($reason)
 		{
+			// moderation log
 			$m_log = ORM::factory('Object_Moderation_Log');
 			$m_log->action_by 	= Auth::instance()->get_user()->id;
 			$m_log->user_id 	= $object->author;
@@ -223,13 +224,20 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 			$m_log->object_id 	= $object->id;
 			$m_log->save();
 
-			if ($object->user->loaded())
+			// msg to user
+			ORM::factory('User_Messages')->add_msg_to_object($object->id, $description);
+
+			if ($this->request->post('send_email') AND $object->user->loaded())
 			{
-				// $variables_message = array();
-				// $variables_message['UserName'] = ($author_user->fullname == null) ? $author_user->login : $author_user->fullname;
-				// $variables_message['actions'] = $actions;
-				// $this->send_email('emails/manage_object', $variables_message, $author_user->email, "Сообщение от модератора сайта");
-				// Email::send($object->user->email, );
+				$msg = View::factory('emails/manage_object', 
+					array(
+						'UserName' => $object->user->fullname ? $object->user->fullname : $object->user->login,
+						'actions' => array(
+							$description . ' ('.HTML::anchor($object->get_url(), $object->title).')',
+						),
+					)
+				)->render();
+				Email::send('mihail.makeev@gmail.com', Kohana::$config->load('email.default_from'), "Сообщение от модератора сайта", $msg);
 			}
 						
 
