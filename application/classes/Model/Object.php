@@ -246,7 +246,7 @@ class Model_Object extends ORM {
 			{
 				$value = $row['tvalue'];
 			}
-			elseif($row['min_value'])
+			elseif($row['min_value'] != '')
 			{
 				$value = $row['min_value'];
 				if ($row['unit'])

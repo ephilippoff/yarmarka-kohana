@@ -6,6 +6,8 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 
 	public function action_index()
 	{
+		set_time_limit(60);
+		ini_set('memory_limit', '512M');
 		// Kohana::$profiling = TRUE; // @todo
 
 		$limit  = Arr::get($_GET, 'limit', 50);
@@ -18,8 +20,7 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 			->with('category_obj')
 			->with_main_photo()
 			->where('source_id', '=', 1)
-			->where('active', '=', 1)
-			->limit($limit);
+			->where('active', '=', 1);
 
 		/**
 		 * Filters
@@ -95,6 +96,9 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 		// count all objects
 		$clone_to_count = clone $objects;
 		$count_all = $clone_to_count->count_all();
+
+		$objects->limit($limit)
+			->offset($offset);
 
 		// order
 		$sort_by	= trim($this->request->query('sort_by')) ? trim($this->request->query('sort_by')) : 'real_date_created';
