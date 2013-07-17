@@ -223,6 +223,16 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 			$m_log->object_id 	= $object->id;
 			$m_log->save();
 
+			if ($object->user->loaded())
+			{
+				// $variables_message = array();
+				// $variables_message['UserName'] = ($author_user->fullname == null) ? $author_user->login : $author_user->fullname;
+				// $variables_message['actions'] = $actions;
+				// $this->send_email('emails/manage_object', $variables_message, $author_user->email, "Сообщение от модератора сайта");
+				// Email::send($object->user->email, );
+			}
+						
+
 			if ($is_bad)
 			{
 				$object->is_published 	= 0;

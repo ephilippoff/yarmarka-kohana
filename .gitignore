@@ -13,6 +13,5 @@ www/font
 *.vim
 *.sublime-project
 *.sublime-workspace
-application/config/common.php
 application/config/development/*.php
 application/config/production/*.php
