@@ -104,14 +104,7 @@ if (Kohana::$environment !== Kohana::PRODUCTION)
  * Attach a file reader to config. Multiple readers are supported.
  */
 Kohana::$config->attach(new Config_File);
-if (Kohana::$environment == Kohana::PRODUCTION)
-{
-	Kohana::$config->attach(new Config_File('config/production'));
-}
-else
-{
-	Kohana::$config->attach(new Config_File('config/development'));
-}
+Kohana::$config->attach(new Config_File('config/local'));
 
 /**
  * Enable modules. Modules are referenced by a relative or absolute path.
