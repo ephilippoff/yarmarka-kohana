@@ -63,16 +63,7 @@ ini_set('unserialize_callback_func', 'spl_autoload_call');
  */
 I18n::lang('en-us');
 
-/**
- * Set Kohana::$environment if a 'KOHANA_ENV' environment variable has been supplied.
- *
- * Note: If you supply an invalid environment name, a PHP warning will be thrown
- * saying "Couldn't find constant Kohana::<INVALID_ENV_NAME>"
- */
-if (isset($_SERVER['KOHANA_ENV']))
-{
-	Kohana::$environment = constant('Kohana::'.strtoupper($_SERVER['KOHANA_ENV']));
-}
+Kohana::$environment = ($_SERVER['HTTP_HOST'] === 'yarmarka.biz') ? Kohana::PRODUCTION : Kohana::DEVELOPMENT;
 
 /**
  * Initialize Kohana, setting the default options.
@@ -113,6 +104,14 @@ if (Kohana::$environment !== Kohana::PRODUCTION)
  * Attach a file reader to config. Multiple readers are supported.
  */
 Kohana::$config->attach(new Config_File);
+if (Kohana::$environment == Kohana::PRODUCTION)
+{
+	Kohana::$config->attach(new Config_File('config/production'));
+}
+else
+{
+	Kohana::$config->attach(new Config_File('config/development'));
+}
 
 /**
  * Enable modules. Modules are referenced by a relative or absolute path.
@@ -142,5 +141,8 @@ if ( ! Session::instance()->get('session_id'))
 {
 	Session::instance()->set('session_id', uniqid('', TRUE));
 }
+
+// try to auth user by cookie
+Auth::instance()->auto_login();
 
 include 'routing.php';
