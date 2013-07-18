@@ -1,5 +1,7 @@
 	<?php if ($object->is_banned()) : ?>
 	<tr class="error" id="<?=$object->id?>">
+	<?php elseif($object->to_forced_moderation) : ?>
+	<tr class="warning" id="<?=$object->id?>">
 	<?php else : ?>
 	<tr id="<?=$object->id?>">
 	<?php endif; ?>

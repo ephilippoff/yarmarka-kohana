@@ -70,7 +70,7 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 				$objects->where(DB::expr("date($field)"), '<=', DB::expr("date '".date('Y-m-d', $to_time)."'"));
 			}
 		}
-		else
+		elseif ($filters_enable)
 		{
 			$objects->where(DB::expr('date(real_date_created)'), '>', DB::expr("date '".date('Y-m-d', strtotime('-3 days'))."'"));
 		}
@@ -104,6 +104,7 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 		$sort_by	= trim($this->request->query('sort_by')) ? trim($this->request->query('sort_by')) : 'real_date_created';
 		$direction	= trim($this->request->query('direction')) ? trim($this->request->query('direction')) : 'desc';
 
+		$objects->order_by('to_forced_moderation', 'desc');
 		$objects->order_by($sort_by, $direction);
 
 		$this->template->sort_by 	= $sort_by;
@@ -140,7 +141,7 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 		if (intval($this->request->post('moder_state')))
 		{
 			$object->moder_state 	= 1;
-			$object->is_published 	= 1;
+			// $object->is_published 	= 1;
 			$object->is_bad 		= 0;
 		}
 		else

@@ -414,26 +414,6 @@ class Controller_Ajax extends Controller_Template
 		}
 	}
 
-	public function action_fix_object()
-	{
-		$object = ORM::factory('Object', $this->request->param('id'));
-		if ( ! $object->loaded() OR ! $user = Auth::instance()->get_user())
-		{
-			throw new HTTP_Exception_404;
-		}
-
-		if ($user->id == $object->author)
-		{
-			$object->is_bad = 0;
-			$object->to_forced_moderation = TRUE;
-			$object->save();
-		}
-		else
-		{
-			$this->json['code'] = 400;
-		}
-	}
-
 	public function action_transliterate_str()
 	{
 		$str = $this->request->post('str');
