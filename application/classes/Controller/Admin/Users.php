@@ -225,10 +225,4 @@ class Controller_Admin_Users extends Controller_Admin_Template {
 			}
 		}
 	}
-
-	public function action_logout()
-	{
-		Auth::instance()->logout();
-		$this->redirect('khbackend');
-	}
 } // End Admin_Users

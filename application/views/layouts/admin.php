@@ -50,7 +50,9 @@
 						</li>
 						<?php endif; ?>
 
-						<li><a href="<?=Url::site('khbackend/users/logout')?>">Log Out</a></li>
+						<?php if (Auth::instance()->get_user()) : ?>
+							<li><a href="<?=Url::site('khbackend/welcome/logout')?>">Log Out</a></li>
+						<?php endif; ?>
 					</ul>
 				</div>
 			</div>
