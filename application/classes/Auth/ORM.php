@@ -71,7 +71,7 @@ class Auth_ORM extends Kohana_Auth_ORM {
 
 			// Load the user
 			$user = ORM::factory('User');
-			$user->where($user->unique_key($username), '=', $username)->find();
+			$user->where(DB::expr('w_lower('.$user->unique_key($username).')'), '=', DB::expr("w_lower('".$username."')"))->find();
 		}
 
 		if (is_string($password))

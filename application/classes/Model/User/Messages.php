@@ -31,7 +31,7 @@ class Model_User_Messages extends ORM {
 			$this->user_name	= $user->fullname ? $user->fullname : $user->email;
 			$this->user_id 		= $user->id;
 			$this->email 		= $user->email;
-			$this->email 		= $user->phone;
+			$this->phone 		= $user->phone;
 		}
 
 		return $this->save();
