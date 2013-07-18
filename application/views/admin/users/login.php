@@ -36,7 +36,7 @@
 	<input name="login" type="text" class="input-block-level" placeholder="Email address">
 	<input name="password" type="password" class="input-block-level" placeholder="Password">
 	<label class="checkbox">
-	<input type="checkbox" name="remember" value="remember-me"> Remember me
+	<input type="checkbox" name="remember" value="remember-me" checked> Remember me
 	</label>
 	<button class="btn btn-large btn-primary" type="submit">Sign in</button>
 </form>
