@@ -26,7 +26,12 @@ class Uploads
 
 	public static function get_optimized_file_sizes($filename, $size, $optimized_for)
 	{
-		list($width, $height) = getimagesize($_SERVER['DOCUMENT_ROOT'].self::get_file_path($filename, $size));
+		$filepath = $_SERVER['DOCUMENT_ROOT'].self::get_file_path($filename, $size);
+		if ( ! file_exists($filepath))
+		{
+			return FALSE;
+		}
+		list($width, $height) = getimagesize($filepath);
 		list($opt_width, $opt_height) = explode('x', $optimized_for);
 
 		if ($width > $height)
