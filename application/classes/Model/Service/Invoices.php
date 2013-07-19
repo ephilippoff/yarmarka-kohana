@@ -14,7 +14,8 @@ class Model_Service_Invoices extends ORM {
 	protected $_table_name = 'service_invoices';
 
 	protected $_belongs_to = array(
-		'invoice' => array(),
+		'invoice' 	=> array(),
+		'object'	=> array(),
 	);
 
 } // End Service_Invoices Model

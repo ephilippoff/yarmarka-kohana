@@ -78,7 +78,18 @@
 							<div class="title ">Детализация счета:</div>
 							<ul>
 								<?php foreach ($invoice->services->find_all() as $service) : ?>
-								<li><span class="sum"><?=Num::price($service->sum)?> р.</span><span class="text"><?=$service->service_name?></span></li>
+								<li>
+									<span class="sum"><?=Num::price($service->sum)?> р.</span>
+									(<?=$service->count?>)
+									<span class="read">
+									<?php if ($service->graph) : ?>
+											<a href="<?=CI::site(Search::get_url_to_main_category())?>?source_id=<?=intval($service->graph)?>" class="btn-pmenu">Читать</a>
+									<?php elseif ($service->object_id) : ?>
+											<a href="<?=$service->object->get_url()?>" class="btn-pmenu">Перейти</a>
+									<?php endif; ?>
+									</span>
+									<span class="text"><?=$service->service_name?></span>
+								</li>
 								<?php endforeach; ?>
 							</ul>
 							<?php if (FALSE) : ?>
