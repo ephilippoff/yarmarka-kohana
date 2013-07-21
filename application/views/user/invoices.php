@@ -85,7 +85,7 @@
 									<?php if ($service->graph) : ?>
 											<a href="<?=CI::site(Search::get_url_to_main_category())?>?source_id=<?=intval($service->graph)?>" class="btn-pmenu">Читать</a>
 									<?php elseif ($service->object_id) : ?>
-											<a href="<?=$service->object->get_url()?>" class="btn-pmenu">Перейти</a>
+											<a href="<?=$service->object->get_url()?>" class="btn-pmenu" target="_blank">Просмотр</a>
 									<?php endif; ?>
 									</span>
 									<span class="text"><?=$service->service_name?></span>
