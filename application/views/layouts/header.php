@@ -21,7 +21,7 @@
 				<?=Request::factory('block/header_region')->execute()?>
 				<?php if ($user = Auth::instance()->get_user()) : ?>
 				<div class="who-are-yor"><span>
-					<?=$user->fullname ? $user->fullname : $user->email?>
+					<?=($user->fullname ? $user->fullname : $user->email)?>
 				</span></div>
 				<?php endif; ?>
 			</div>
