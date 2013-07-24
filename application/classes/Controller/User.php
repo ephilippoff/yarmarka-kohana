@@ -356,7 +356,7 @@ class Controller_User extends Controller_Template {
 			->offset($per_page*($page-1))
 			->order_by('date_to_show', 'desc');
 
-		$this->template->main_category_url = ORM::factory('Category', 1)->get_url();
+		$this->template->main_category = ORM::factory('Category', 1);
 	 	$this->template->pagination = Pagination::factory( array(
 			'current_page' => array('source' => 'query_string', 'key' => 'page'),
 			'total_items' => $count,

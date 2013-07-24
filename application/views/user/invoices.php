@@ -82,10 +82,11 @@
 									<span class="sum"><?=Num::price($service->sum)?> р.</span>
 									(<?=$service->count?>)
 									<span class="read">
-									<?php if ($service->graph) : ?>
-											<a href="<?=CI::site(Search::get_url_to_main_category())?>?source_id=<?=intval($service->graph)?>" class="btn-pmenu">Читать</a>
+									<?php if (strpos($service->service->name, 'paper_ads') !== FALSE) : ?>
+										<?php $planningofnumber = ORM::factory('Planningofnumber', intval($service->graph)) ?>
+										<a href="<?=CI::site(Search::get_url_to_main_category($planningofnumber->edition->city_id))?>?source_id=<?=intval($service->graph)?>" class="btn-pmenu">Читать</a>
 									<?php elseif ($service->object_id) : ?>
-											<a href="<?=$service->object->get_url()?>" class="btn-pmenu" target="_blank">Просмотр</a>
+										<a href="<?=$service->object->get_url()?>" class="btn-pmenu" target="_blank">Просмотр</a>
 									<?php endif; ?>
 									</span>
 									<span class="text"><?=$service->service_name?></span>

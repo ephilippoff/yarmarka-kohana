@@ -1,7 +1,7 @@
 <?php defined('SYSPATH') OR die('No direct access allowed.');
 
 /**
- * Model_Edition 
+ * Model_Service 
  * 
  * @uses ORM
  * @package 
@@ -9,12 +9,10 @@
  * @author Mikhail Makeev <mihail.makeev@gmail.com> 
  * @version $id$
  */
-class Model_Edition extends ORM {
+class Model_Service extends ORM {
 
-	protected $_primary_key = 'code';
+	protected $_table_name = 'service';
+}
 
-	protected $_belongs_to = array(
-		'city' 	=> array(),
-	);
-
-} // End Model_Edition Model
+/* End of file Service.php */
+/* Location: ./application/classes/Model/Service.php */

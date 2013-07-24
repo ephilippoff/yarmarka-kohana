@@ -14,7 +14,7 @@ class Model_Planningofnumber extends ORM {
 	protected $_table_name = 'planningofnumber';
 
 	protected $_belongs_to = array(
-		'edition' 	=> array('model' => 'Edition', 'foreign_key' => 'edition_code', 'local_key' => 'code'),
+		'edition' 	=> array('model' => 'Edition', 'foreign_key' => 'edition_code'),
 	);
 
 } // End Model_Planningofnumber Model

@@ -23,7 +23,7 @@ class Model_Category extends ORM {
 
 	public function get_url($region_id = NULL, $city_id = NULL, $action_id = NULL)
 	{
-		return CI::site($this->get_seo_name($region_id = NULL, $city_id = NULL, $action_id = NULL));
+		return CI::site($this->get_seo_name($region_id, $city_id, $action_id));
 	}
 
 	public function get_seo_name($region_id = NULL, $city_id = NULL, $action_id = NULL)

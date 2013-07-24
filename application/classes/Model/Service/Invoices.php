@@ -16,6 +16,7 @@ class Model_Service_Invoices extends ORM {
 	protected $_belongs_to = array(
 		'invoice' 	=> array(),
 		'object'	=> array(),
+		'service'	=> array(),
 	);
 
 } // End Service_Invoices Model
