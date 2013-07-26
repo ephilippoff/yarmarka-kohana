@@ -184,6 +184,11 @@
                                                         <i class="ico show"></i><span>Снять</span>
                                                     </a>
                                                 </li>
+                                                <li class="hide-cont">
+                                                    <a href="<?=CI::site('billing/services_for_ads/'.$ad->id)?>" class="btn-funcmenu">
+                                                        <i class="ico yarmarka"></i><span>Выделить</span>
+                                                    </a>
+                                                </li>
                                             <?php else : ?>
                                                 <li class="hide-cont">
                                                     <a href="" class="btn-funcmenu" id="pub_toggle_link_<?=$ad->id?>" onclick="pub_toggle(<?=$ad->id?>, this); return false;">
