@@ -51,6 +51,13 @@ class Image {
 			'keep_aspect_ratio' => 1,
 			'crop' =>0
         ),
+        '1280x292' => array(
+			'width' => 1280,
+			'height' => 292,
+			'fit' => 1,
+			'keep_aspect_ratio' => 1,
+			'crop' =>1
+        ),
         //'433x289' => array(
 			//'width' => 433,
 			//'height' => 289,
@@ -625,6 +632,9 @@ class Image {
 	    
 	}
 	
-	
+	public function set_original_resize(Array $sizes)
+	{
+		$this->original_resize = $sizes;
+	}
 	
 }

@@ -2,6 +2,12 @@
 
 class Model_Contact_Type extends ORM {
 
+	const EMAIL		= 5;
+	const ICQ		= 4;
+	const SKYPE		= 3;
+	const PHONE		= 2;
+	const MOBILE	= 1;
+
 	protected $_table_name = 'contact_type';
 
 	protected $_has_many = array(

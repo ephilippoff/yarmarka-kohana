@@ -1,4 +1,4 @@
-<header class="m_header">
+<header class="m_header" <?php if ( ! empty($style)) echo "style='$style'" ?>>
 	<section class="winner">
 		<div class="m_poll z3">
 			<div class="top-line ">

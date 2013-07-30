@@ -30,13 +30,13 @@
 <body class="adaptiveoff">
 	<?=View::factory('layouts/google_analytics')?>
 	<div class="wrapfix">
-			<?=View::factory('layouts/header')?>
-			<div class="m_content">
+		<?=View::factory('layouts/header')?>
+		<div class="m_content">
 			<?=$_content?>
-	        </div>
-	  </div>
-      <div class="wrapfix footer-wrap">
-	  <?=View::factory('layouts/footer')?>
-      </div>
+		</div>
+	</div>
+	<div class="wrapfix footer-wrap">
+		<?=View::factory('layouts/footer')?>
+	</div>
 </body>  
 </html>

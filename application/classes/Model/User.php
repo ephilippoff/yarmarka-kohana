@@ -2,7 +2,7 @@
 
 class Model_User extends Model_Auth_User {
 
-	protected $_table_name = 'vw_user';
+	protected $_table_name = 'user';
 
 	/**
 	 * A user has many tokens and roles
@@ -124,7 +124,13 @@ class Model_User extends Model_Auth_User {
 		return sha1($this->login.$this->passw.'secret_##42');
 	}
 
-	public function get_contacts()
+	/**
+	 * User contacts
+	 *
+	 * @param  int/array $type
+	 * @return object Database_Result object
+	 */
+	public function get_contacts($type = NULL)
 	{
 		if ( ! $this->loaded())
 		{
@@ -133,13 +139,27 @@ class Model_User extends Model_Auth_User {
 
 		$object_contact = ORM::factory('Object_Contact');
 
-		return $object_contact->select('contact_type.name')
+		$query = $object_contact->select('contact_type.name')
 			->join('contact_type')
 			->on('contact_type.id', '=', 'object_contact.contact_type_id')
 			->where('user_id', '=', $this->id)
 			->where('object_id', 'IS', DB::expr('NULL'))
-			->order_by('id')
-			->find_all();
+			->order_by('id');
+
+		if ($type)
+		{
+			if (is_array($type))
+			{
+				$query->where('contact_type_id', 'IN', $type);
+			}
+			else
+			{
+				$query->where('contact_type_id', '=', intval($type));
+			}
+		}
+
+
+		return $query->find_all();
 	}
 
 	public function add_contact($contact_type_id, $contact_str)

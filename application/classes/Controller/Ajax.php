@@ -432,6 +432,24 @@ class Controller_Ajax extends Controller_Template
 		$this->json['text'] = $object->user_text;
 	}
 
+	public function action_save_userpage_image()
+	{
+		$user = Auth::instance()->get_user();
+		if ( ! $user)
+		{
+			throw new HTTP_Exception_404;
+		}
+
+		$filepath = 'images/userpage/'.$this->request->query('filename');
+		if (file_exists(DOCROOT.$filepath))
+		{
+			$user->userpage_banner = $filepath;
+			$user->save();
+		}
+
+		$this->json['filepath'] = URL::site($filepath);
+	}
+
 	public function after()
 	{
 		parent::after();

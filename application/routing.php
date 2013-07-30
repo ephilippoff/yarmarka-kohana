@@ -4,6 +4,11 @@
 Route::set('admin', '<controller>(/<action>)', array('controller' => '(admin_.*|Admin_.*)'))->filter(function($route, $params, $request){
 	throw new HTTP_Exception_404;
 });
+Route::set('userpage', 'users/<login>')
+	->defaults(array(
+		'controller' => 'User',
+		'action'     => 'userpage',
+	));
 Route::set('article', 'article/<seo_name>')
 	->defaults(array(
 		'controller' => 'Article',
@@ -15,7 +20,8 @@ Route::set('backend/ip_info', 'khbackend/users/ip_info/<ip>', array('ip' => '.*'
 		'controller' => 'Users',
 		'action'     => 'ip_info',
 	));
-// backend routing
+	
+// backend default routing
 Route::set('backend', 'khbackend(/<controller>(/<action>(/<id>)))')
 	->defaults(array(
 		'directory'  => 'Admin',

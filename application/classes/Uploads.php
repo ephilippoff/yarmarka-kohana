@@ -54,9 +54,13 @@ class Uploads
 		return $image->deleteImage($filename);
 	}
 
-	public static function save(array $file)
+	public static function save(array $file, $original_resize = array())
 	{
 		$image = new Image();
+		if ($original_resize)
+		{
+			$image->set_original_resize($original_resize);
+		}
 		return $image->makeThumbnail($file);
 	}
 }

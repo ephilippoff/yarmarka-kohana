@@ -455,15 +455,21 @@ class Controller_User extends Controller_Template {
 			->find_all();
 	}
 
-	public function action_logout()
+	public function action_userpage()
 	{
-		if (Auth::instance()->get_user())
+		$this->layout = 'userpage';
+		$this->assets->js('userpage.js')
+			->js('ajaxfileupload.js');
+		
+		$user = ORM::factory('User')->where('login', '=', $this->request->param('login'))->find();
+
+		if ( ! $user->loaded())
 		{
-			setcookie('user_id', '', time()-1, '/', Region::get_cookie_domain());
-			Auth::instance()->logout();
+			throw new HTTP_Exception_404;
 		}
 
-		$this->redirect('http://'.Region::get_current_domain().'/user/logout');
+		$this->template->is_owner = (Auth::instance()->get_user() AND Auth::instance()->get_user()->id === $user->id);
+		$this->template->user = $user;
 	}
 
 	public function action_upload_user_avatar()
@@ -491,4 +497,44 @@ class Controller_User extends Controller_Template {
 
 		$this->response->body(json_encode($this->json));
 	}
-} // End Welcome
+
+	public function action_upload_userpage_banner()
+	{
+		
+		$this->use_layout	= FALSE;
+		$this->auto_render	= FALSE;
+		$this->json = array('code' => 200);
+
+		if ( ! $user = Auth::instance()->get_user() OR $user->org_type != 2)
+		{
+			throw new HTTP_Exception_404;
+		}
+
+		try
+		{
+			$filename = Uploads::save($_FILES['banner_input'], array('width' => 1280, 'height' => 1024));
+			$user->userpage_banner = $this->json['filepath'] = Uploads::get_file_path($filename, '1280x292');
+			$user->save();
+		}
+		catch (Exception $e)
+		{
+			$this->json['error']	= $e->getMessage();
+			$this->json['code']		= $e->getCode();
+		}
+
+		$this->response->body(json_encode($this->json));
+	}
+
+	public function action_logout()
+	{
+		if (Auth::instance()->get_user())
+		{
+			setcookie('user_id', '', time()-1, '/', Region::get_cookie_domain());
+			Auth::instance()->logout();
+		}
+
+		$this->redirect('http://'.Region::get_current_domain().'/user/logout');
+	}
+}
+/* End of file User.php */
+/* Location: ./application/classes/Controller/User.php */
