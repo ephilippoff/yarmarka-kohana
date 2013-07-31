@@ -2,6 +2,12 @@
 
 class URL extends Kohana_URL {
 
+	/**
+	 * Adds http:// to url if not exists
+	 *
+	 * @param  string $str url
+	 * @return string
+	 */
 	public static function prep_url($str = '')
 	{
 		if ($str == 'http://' OR $str == '')

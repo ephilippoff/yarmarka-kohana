@@ -450,6 +450,18 @@ class Controller_Ajax extends Controller_Template
 		$this->json['filepath'] = URL::site($filepath);
 	}
 
+	public function action_delete_userpage_image()
+	{
+		$user = Auth::instance()->get_user();
+		if ( ! $user)
+		{
+			throw new HTTP_Exception_404;
+		}
+
+		$user->userpage_banner = NULL;
+		$user->save();
+	}
+
 	public function after()
 	{
 		parent::after();
