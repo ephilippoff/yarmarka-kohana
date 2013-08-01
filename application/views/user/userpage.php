@@ -136,7 +136,7 @@
 													<input type="hidden" name="coord" id="coord" value="" />
 												<?php endif ?>
 												<input type="hidden" name="org_address" id="org_address" value="<?=$user->user_city->title?>, <?=$user->org_address?>" />
-												<div class="map"><div id="ymaps-map-id" style="width: 372px; height: 236px;"></div>
+												<div class="map"><div id="ymaps-map-id" style="width: 372px; height: 372px;"></div>
 												<script type="text/javascript" src="//api-maps.yandex.ru/2.0-stable/?load=package.standard,package.geocode,package.geoQuery,package.clusters&coordorder=longlat&lang=ru-RU&onload=init_userpage_map"></script>
 												</div>
 											</div>

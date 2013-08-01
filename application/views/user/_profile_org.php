@@ -152,7 +152,7 @@
 		<div class="input style2">
 			<label><span><i class="name">О компании:</i></span></label>					                    			
 			<p class="myinform">
-				<textarea id="about" name="about" cols="40" rows="8" class="tiny"><?=$user->about?></textarea>
+				<textarea id="about" name="about" cols="40" rows="8" class="tiny" style="height: 450px;"><?=$user->about?></textarea>
 			</p>
 			<div class="profile-about-actions">
 				<span class="btn-act apply about_save"></span>
@@ -225,7 +225,8 @@
 				<?php endif ?>
 				<div class="map-bl">
 					<div class="map">
-					<div id="ymaps-map-id" style="width: 100%; height: 240px;"></div>
+						<div id="ymaps-map-id" style="width: 372px; height: 372px;"></div>
+					</div>
 				</div>
 			</div>
 		</div>
