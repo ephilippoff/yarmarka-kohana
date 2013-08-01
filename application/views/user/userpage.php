@@ -116,6 +116,7 @@
 										<span class="title">Контактное лицо/ФИО:</span>
 										<div class="cont"><?=$user->fullname?></div>
 									</li>
+									<?php if ($user->org_address) : ?>
 									<li class="article">
 										<span class="title">Адрес/Местоположение:</span>
 										<div class="cont">
@@ -129,20 +130,19 @@
 												<span class="">свернуть карту</span>
 											</span>
 											<div class="map-bl">
-												<div class="map"><div id="ymaps-map-id_1352895717894414938723" style="width: 372px; height: 236px;"></div>
-												<script src="//api-maps.yandex.ru/2.0.31/?load=package.standard,package.geocode,package.geoQuery,package.clusters&lang=ru-RU" type="text/javascript"></script>												<script type="text/javascript">
-													function init () {
-														var myMap = new ymaps.Map("ymaps-map-id_1352895717894414938723", {
-															center: [55.73, 37.75],
-															zoom: 10
-														});
-													}
-													ymaps.ready(init);
-												</script>  
+												<?php if ($user->location->loaded()) : ?>
+													<input type="hidden" name="coord" id="coord" value="<?=$user->location->lon?>,<?=$user->location->lat?>" />
+												<?php else : ?>
+													<input type="hidden" name="coord" id="coord" value="" />
+												<?php endif ?>
+												<input type="hidden" name="org_address" id="org_address" value="<?=$user->user_city->title?>, <?=$user->org_address?>" />
+												<div class="map"><div id="ymaps-map-id" style="width: 372px; height: 236px;"></div>
+												<script type="text/javascript" src="//api-maps.yandex.ru/2.0-stable/?load=package.standard,package.geocode,package.geoQuery,package.clusters&coordorder=longlat&lang=ru-RU&onload=init_userpage_map"></script>
 												</div>
 											</div>
 										</div>
 									</li>
+									<?php endif; ?>
 								</ul>
 							</li>
 

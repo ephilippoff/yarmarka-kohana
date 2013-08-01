@@ -462,6 +462,38 @@ class Controller_Ajax extends Controller_Template
 		$user->save();
 	}
 
+	public function action_save_user_location()
+	{
+		if ( ! $user = Auth::instance()->get_user())
+		{
+			throw new HTTP_Exception_404;
+		}
+
+		$lon = trim($this->request->post('lon'));
+		$lat = trim($this->request->post('lat'));
+		$address = trim($this->request->post('address'));
+
+		$location = ORM::factory('Location', array('lon' => $lon, 'lat' => $lat));
+		try
+		{
+			if ( ! $location->loaded())
+			{
+				$location->lon = $lon;
+				$location->lat = $lat;
+				$location->address = $address;
+				$location->save();
+			}
+
+			$user->location = $location;
+			$user->save();
+		}
+		catch (Exception $e)
+		{
+			$this->json['code'] = $e->getCode();
+			$this->json['message'] = $e->getMessage();
+		}
+	}
+
 	public function after()
 	{
 		parent::after();

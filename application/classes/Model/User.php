@@ -21,6 +21,7 @@ class Model_User extends Model_Auth_User {
 		'user_role' => array('model' => 'Role', 'foreign_key' => 'role'),
 		'user_city'	=> array('model' => 'City', 'foreign_key' => 'city_id'),
 		'user_type'	=> array('model' => 'User_Types', 'foreign_key' => 'org_type'),
+		'location' 	=> array(),
 	);
 
 	/**
@@ -197,4 +198,7 @@ class Model_User extends Model_Auth_User {
 
 		return FALSE;
 	}
-} // End User Model
+}
+
+/* End of file User.php */
+/* Location: ./application/classes/Model/User.php */

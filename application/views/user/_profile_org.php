@@ -1,3 +1,11 @@
+<script type="text/javascript" src="//api-maps.yandex.ru/2.0-stable/?load=package.standard,package.geocode,package.geoQuery,package.clusters&coordorder=longlat&lang=ru-RU&onload=init_user_profile_map"></script>
+<script>
+	jQuery(document).ready(function($) {
+		<?php if ( ! $user->location->loaded()) : ?>
+		setTimeout(detect_geoloc, 1000);
+		<?php endif; ?>
+	});
+</script>
 <ul>
 	<li id="org_type_edit" style="display:none">
 		<div class="input style2 user-type">
@@ -203,9 +211,21 @@
 				<div class="input cf">
 					<div class="inp-cont-bl ">
 						<div class="inp-cont mystreet-bl">
-							<div class="inp"><input placeholder="Введите улицу" name="org_address" value="<?=$user->org_address?>" type="text" class="mystreet" /></div>
+							<div class="inp">
+								<input placeholder="Введите улицу" name="org_address" value="<?=$user->org_address?>" type="text" class="mystreet" />
+							</div>
 						</div>
 					</div>
+				</div>
+
+				<?php if ($user->location->loaded()) : ?>
+					<input type="hidden" name="coord" id="coord" value="<?=$user->location->lon?>,<?=$user->location->lat?>" />
+				<?php else : ?>
+					<input type="hidden" name="coord" id="coord" value="" />
+				<?php endif ?>
+				<div class="map-bl">
+					<div class="map">
+					<div id="ymaps-map-id" style="width: 100%; height: 240px;"></div>
 				</div>
 			</div>
 		</div>

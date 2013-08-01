@@ -19,7 +19,8 @@ class Controller_User extends Controller_Template {
 		$this->layout = 'users';
 		$this->assets->js('ajaxfileupload.js')
 			->js('jquery.maskedinput-1.2.2.js')
-			->js('profile.js');
+			->js('profile.js')
+			->js('maps.js');
 
 		$this->template->region_id	= $region_id = $this->user->user_city->loaded() 
 			? $this->user->user_city->region_id 
@@ -459,7 +460,8 @@ class Controller_User extends Controller_Template {
 	{
 		$this->layout = 'userpage';
 		$this->assets->js('userpage.js')
-			->js('ajaxfileupload.js');
+			->js('ajaxfileupload.js')
+			->js('maps.js');
 		
 		$user = ORM::factory('User')->where('login', '=', $this->request->param('login'))->find();
 
@@ -512,7 +514,7 @@ class Controller_User extends Controller_Template {
 
 		try
 		{
-			$filename = Uploads::save($_FILES['banner_input'], array('width' => 1280, 'height' => 1024));
+			$filename = Uploads::save($_FILES['banner_input'], array('width' => 1202, 'height' => 1024));
 			$user->userpage_banner = $this->json['filepath'] = Uploads::get_file_path($filename, '1280x292');
 			$user->save();
 		}
