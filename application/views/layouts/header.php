@@ -6,7 +6,7 @@
 					<div class="proom-list iLight-cont">
 						
 							<ul>
-								<li><a href="<?=URL::site('user/myads')?>"><div class="img"><img src="<?=URL::site('images/pr1.png')?>" alt="" /></div>Мои объявления</a></li>
+								<li><a href="<?=URL::site('user/published')?>"><div class="img"><img src="<?=URL::site('images/pr1.png')?>" alt="" /></div>Мои объявления</a></li>
 								<li><a href="<?=URL::site('user/subscriptions')?>"><div class="img"><img src="" alt="" /></div>Мои подписки</a></li>
 								<li><a href="<?=URL::site('user/favorites')?>"><div class="img"><img src="" alt="" /></div>Мои избранные</a></li>
 								<li><a href="<?=URL::site('user/profile')?>"><div class="img"><img src="<?=URL::site('images/pr2.png')?>" alt="" /></div>Личные данные</a></li>
