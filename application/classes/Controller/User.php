@@ -268,7 +268,7 @@ class Controller_User extends Controller_Template {
 		$objects = $objects->order_by('date_created', 'desc')
 			->limit($per_page)
 			->offset($per_page*($page-1))
-			->find_all();
+			->find_all();				
 
 		// get user objects categories
 		$this->template->categories = ($objects_ids = $objects->as_array(NULL, 'id')) 

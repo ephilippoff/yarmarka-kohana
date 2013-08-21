@@ -15,6 +15,7 @@ class Model_User extends Model_Auth_User {
 		'access'		=> array('model' => 'Access'),
 		'invoices'		=> array(),
 		'subscriptions'	=> array(),
+		'user_messages' => array('model' => 'User_Messages', 'foreign_key' => 'user_id'),
 	);
 
 	protected $_belongs_to = array(

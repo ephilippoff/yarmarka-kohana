@@ -12,6 +12,7 @@ class Model_User_Messages extends ORM {
 
 	protected $_belongs_to = array(
 		'object'	=> array(),
+		'user' => array(),
 	);
 
 	public function from_moderator()

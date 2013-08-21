@@ -269,6 +269,22 @@ class Model_Object extends ORM {
 
 		return $result;
 	}
+	
+	//Взять для объявления значение integer-атрибута по его id
+	public function get_intattr_value_by_id($object_id = NULL, $attr_id = NULL)
+	{
+		$object_id = (int)$object_id; 
+		$attr_id   = (int)$attr_id;
+		
+		if (!$object_id or !$attr_id) return FALSE;		
+		
+		$query = DB::select('value_min')
+				->from('data_integer')
+				->where('object', '=', $object_id)
+				->where('attribute', '=', $attr_id)
+				->execute()->get('value_min', 0);
+		return $query;
+	}
 }
 
 /* End of file Object.php */
