@@ -170,16 +170,7 @@
 									</div>			                    				
 									<div class="col4">
 										<ul>
-<!--											<li class=""><a href="<?=$ad->get_url()?>" class="btn-funcmenu disable"><i class="ico clock"></i><span>Просмотреть</span></a></li>
-											<li class=""><a href="<?=CI::site('user/edit_ad/'.$ad->id)?>" class="btn-funcmenu disable"><i class="ico change"></i><span>Изменить</span></a></li>
-											<li class=""><a href="" onclick="delete_ad(<?php echo $ad->id ?>, this); return false;" class="btn-funcmenu disable"><i class="ico del"></i><span>Удалить</span></a></li>-->
-										
-                                        <li class="">
-											<a href="<?=$ad->get_url()?>" target="_blank" class="btn-funcmenu">
-												<i class="ico info"></i><span>Просмотр</span>
-											</a>
-										</li>
-										
+							
 										<?php if (!$ad->is_bad) {
                                         if ($ad->in_archive) //в архиве
                                         { ?>
@@ -194,7 +185,7 @@
                                             </li>
 
                                             <li class="">
-                                                <a href="" class="btn-funcmenu  " id="prolong-btn<?=$ad->id?>" onclick="prolong(<?=$ad->id?>); return false;">
+                                                <a title="Продлить объявление" href="" class="btn-funcmenu  " id="prolong-btn<?=$ad->id?>" onclick="prolong(<?=$ad->id?>); return false;">
                                                     <i class="ico clock"></i><span>Продлить</span>
                                                 </a>
                                             </li>
@@ -208,13 +199,13 @@
                                             <?php // Получаем дату, когда можно поднять объявление
                                             if ($ad->get_service_up_timestamp() < time()) : ?>
                                                 <li class="">
-                                                    <a href="" class="btn-funcmenu  " id="service-up-<?=$ad->id?>" onClick="service_up(<?=$ad->id?>, this); return false;">
+                                                    <a title="Поднять объявление в общем списке" href="" class="btn-funcmenu  " id="service-up-<?=$ad->id?>" onClick="service_up(<?=$ad->id?>, this); return false;">
                                                         <i class="ico up"></i><span>Поднять</span>
                                                     </a>
                                                 </li>
                                             <?php else : ?>
                                                 <li class="">
-                                                    <a href="" class="btn-funcmenu noactive  " id="service-up-<?=$ad->id?>" onClick="service_up(<?=$ad->id?>, this); return false;"
+                                                    <a href="" class="btn-funcmenu disable noactive  " id="service-up-<?=$ad->id?>" 
                                                        title="Вы можете поднять это объявление не раньше <?=date("d.m Y в H:i", $ad->get_service_up_timestamp())?>"
                                                        onclick="return false;">
                                                         <i class="ico up"></i><span>Поднять</span>
@@ -223,21 +214,21 @@
                                             <?php endif; ?>
 
                                             <li class="">
-                                                <a href="<?=CI::site('user/edit_ad/'.$ad->id)?>" class="btn-funcmenu  ">
+                                                <a title="Редактировать объявление" href="<?=CI::site('user/edit_ad/'.$ad->id)?>" class="btn-funcmenu  ">
                                                     <i class="ico change"></i><span>Изменить</span>
                                                 </a>
                                             </li>
 
                                             <?php if ($ad->is_published) : ?>
                                                 <li class="">
-                                                    <a href="" class="btn-funcmenu  " id="pub_toggle_link_<?=$ad->id?>" onclick="pub_toggle(<?=$ad->id?>, this); return false;">
-                                                        <i class="ico show"></i><span>Снять</span>
+                                                    <a title="Снять объявление с публикации" href="" class="btn-funcmenu  " id="pub_toggle_link_<?=$ad->id?>" onclick="pub_toggle(<?=$ad->id?>, this); return false;">
+                                                        <i class="ico hide"></i><span>Снять</span>
                                                     </a>
                                                 </li>
 
                                             <?php else : ?>
                                                 <li class="">
-                                                    <a href="" class="btn-funcmenu  " id="pub_toggle_link_<?=$ad->id?>" onclick="pub_toggle(<?=$ad->id?>, this); return false;">
+                                                    <a title="Разместить объявление в публикацию" href="" class="btn-funcmenu  " id="pub_toggle_link_<?=$ad->id?>" onclick="pub_toggle(<?=$ad->id?>, this); return false;">
                                                         <i class="ico show"></i><span>Разместить</span>
                                                     </a>
                                                 </li>
@@ -245,7 +236,7 @@
 
 
                                             <li class="">
-                                                <a href="" class="btn-funcmenu  " onclick="delete_ad(<?php echo $ad->id ?>, this); return false;" class="btn btn-lc active">
+                                                <a title="Удалить объявление" href="" class="btn-funcmenu  " onclick="delete_ad(<?php echo $ad->id ?>, this); return false;" class="btn btn-lc active">
                                                     <i class="ico del"></i><span>Удалить</span>
                                                 </a>
                                             </li>
@@ -268,7 +259,7 @@
                                                 </li>
 
                                                 <li class="">
-                                                    <a href="" class="btn-funcmenu  " onclick="prolong(<?=$ad->id?>); return false;">
+                                                    <a title="Исправить и продлить объявление" href="" class="btn-funcmenu  " onclick="prolong(<?=$ad->id?>); return false;">
                                                         <i class="ico show"></i><span>Исправить и продлить</span>
                                                     </a>
                                                 </li>
@@ -276,7 +267,7 @@
                                                 <?php elseif ($ad->is_bad == 1 AND ! $ad->in_archive) : ?>
 
                                                 <li class="">
-                                                    <a href="<?=CI::site('user/edit_ad/'.$ad->id)?>" class="btn-funcmenu ">
+                                                    <a title="Исправить объявление" href="<?=CI::site('user/edit_ad/'.$ad->id)?>" class="btn-funcmenu ">
                                                         <i class="ico show"></i><span>Исправить</span>
                                                     </a>
                                                 </li>
@@ -292,7 +283,7 @@
 									
 									
 									<div class="col3">
-										<div class="price-bl"><span class="price"><?php if (!$price) : ?> &mdash; <?php else : ?><?=$price?><?php endif; ?></span></div>
+										<div class="price-bl"><span class="price"><?php if (!$price) : ?> &mdash; <?php else : ?><?=$price?> р.<?php endif; ?></span></div>
 										<div title="Количество комментариев" class="mess-bl"><span class="mess"><?=count($user_messages)?></span></div>
 									    <div title="Количество просмотров" class="view-bl"><div class="iview"><?=$ad->visits?></div></div>
 									</div>
@@ -351,23 +342,23 @@
 							</div>
 			
 							<div class="right-bl col5">
-<!--								<div class="pmenu show-cont">
+								<div class="pmenu show-cont">
 									<ul>
 										<?php if (!$ad->is_bad and !$ad->in_archive and $ad->is_published) : ?>
-													<li><a href="<?=CI::site('billing/services_for_ads/'.$ad->id)?>" class="btn-pmenu "><i class="ico show"></i><span>Выделить</span></a></li>
+													<li><a title="Выделить объявление в общем списке" href="<?=CI::site('billing/services_for_ads/'.$ad->id)?>" class="btn-pmenu "><i class="ico show"></i><span>Выделить</span></a></li>
 										<?php endif; ?>
 									</ul>
-								</div>-->
+								</div>
 								<div class="hide-cont">
 									<div class="pmenu">
 										<ul>
 											<?php if (!$ad->is_bad and !$ad->in_archive and $ad->is_published) : ?>
-													<li><a href="<?=CI::site('billing/services_for_ads/'.$ad->id)?>" class="btn-pmenu "><i class="ico show"></i><span>Выделить</span></a></li>
+													<li><a title="Выделить объявление в общем списке" href="<?=CI::site('billing/services_for_ads/'.$ad->id)?>" class="btn-pmenu "><i class="ico show"></i><span>Выделить</span></a></li>
 											<?php endif; ?>
 										</ul>
 									</div>
 									<div class="hr"></div>
-									<a href="" class="complex"></a>
+									
 								</div>
 							</div>
 						</div>				
