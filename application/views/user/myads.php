@@ -1,6 +1,6 @@
-<div class="m_content myads">
+<div class="m_content ">
     <div class="winner">
-        <section class="main-cont">
+        <section class="main-cont myads cabinet">
         <div class="hheader persomal_room-header"><h1 class="ta-c">Личный кабинет &rarr; Мои объявления</h1></div>
         <div class="fl100 shadow-top z1 persomal_room">
 

@@ -1,5 +1,5 @@
 <div class="winner">
-	<section class="main-cont">
+	<section class="main-cont fovorites cabinet">
 		<div class="hheader persomal_room-header"><h1 class="ta-c">Личный кабинет</h1></div>
 		<div class="fl100 shadow-top z1 persomal_room">
 			<?=View::factory('user/_left_menu')?>
@@ -75,7 +75,9 @@
 					<div class="cont ">   
 
 					<?php foreach ($objects as $object) : ?>
-					<div class="li">
+							<?php $obj_is_active = ($object->is_bad == 0 AND ! $object->in_archive AND $object->is_published); //активность объявления  ?>
+						
+					<div class="li <?php if (!$obj_is_active) : ?> blocked <?php endif;?>">
 						<div class="left-bl">
 							<div class="top-bl">
 								<div class="col1">
@@ -115,14 +117,15 @@
 									<?php endif; ?>
 								</div>
                                 <div class="col31">
-									<a href="<?=$object->get_url()?>" target="_blank" class="btn-funcmenu">
+<!--									<a href="<?=$object->get_url()?>" target="_blank" class="btn-funcmenu">
 										<i class="ico info"></i><span>Просмотр</span>
-									</a>
+									</a>-->
+									<p class="panel-toggle"><span>Раскрыть</span></p>
 								</div>
 								<div class="col3"><span class="date"><?=$object->get_real_date_created()?></span></div>
 								<div class="col31"><span class="city"><?=$object->city_obj->loaded() ? $object->city_obj->title : $object->city?></span></div>
 								<div class="col2">
-									<p class="title"><?=$object->title?></p>
+									<p class="title" onclick="window.open('<?=$object->get_url()?>', '_blank')" ><?=$object->title?></p>
 									
 									<div class="hide-cont">
 										<p class="info"><?=$object->category_obj->title?></p>
