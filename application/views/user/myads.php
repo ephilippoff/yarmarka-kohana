@@ -185,7 +185,7 @@
                                             </li>
 
                                             <li class="">
-                                                <a title="Продлить объявление" href="" class="btn-funcmenu  " id="prolong-btn<?=$ad->id?>" onclick="prolong(<?=$ad->id?>); return false;">
+                                                <a title="Продлить объявление" href="" class="btn-funcmenu full-btn" id="prolong-btn<?=$ad->id?>" onclick="prolong(<?=$ad->id?>); return false;">
                                                     <i class="ico clock"></i><span>Продлить</span>
                                                 </a>
                                             </li>
@@ -259,7 +259,7 @@
                                                 </li>
 
                                                 <li class="">
-                                                    <a title="Исправить и продлить объявление" href="" class="btn-funcmenu  " onclick="prolong(<?=$ad->id?>); return false;">
+                                                    <a title="Исправить и продлить объявление" href="" class="btn-funcmenu full-btn" onclick="prolong(<?=$ad->id?>); return false;">
                                                         <i class="ico show"></i><span>Исправить и продлить</span>
                                                     </a>
                                                 </li>
@@ -357,7 +357,7 @@
 											<?php endif; ?>
 										</ul>
 									</div>
-									<div class="hr"></div>
+									
 									
 								</div>
 							</div>
