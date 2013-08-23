@@ -59,6 +59,25 @@ class Controller_Ajax extends Controller_Template
 		}
 		else
 		{
+			if (isset($data['city_kladr_id']))
+			{
+				$city = ORM::factory('City')
+					->where('kladr_id', '=', $data['city_kladr_id'])
+					->find();
+
+				if ($city->loaded())
+				{
+					$user->user_city = $city;
+					$user->save();
+				}
+				else
+				{
+					// @todo искать город в КЛАДР и добавлять в нашу базу
+				}
+
+				unset($data['city_kladr_id']);
+			}
+
 			try
 			{
 				// update userdata
@@ -77,9 +96,9 @@ class Controller_Ajax extends Controller_Template
 				$data[$key] = $user->$key;
 			}
 
-			if (isset($data['city_id']))
+			if ($city->loaded())
 			{
-				$data['city_title'] = $user->user_city->loaded() ? $user->user_city->title : '';
+				$data['city_title'] = $user->user_city->title;
 			}
 
 			if (isset($data['login']))
@@ -471,7 +490,11 @@ class Controller_Ajax extends Controller_Template
 
 		$lon = trim($this->request->post('lon'));
 		$lat = trim($this->request->post('lat'));
-		$address = trim($this->request->post('address'));
+
+		$address 		= trim($this->request->post('address'));
+
+		$kladr_city = Model::factory('Kladr')->get_city_by_id($this->request->post('city_kladr_id'));
+		$kladr_address = Model::factory('Kladr')->get_address_by_id($this->request->post('address_kladr_id'));
 
 		$location = ORM::factory('Location', array('lon' => $lon, 'lat' => $lat));
 		try
@@ -481,6 +504,18 @@ class Controller_Ajax extends Controller_Template
 				$location->lon = $lon;
 				$location->lat = $lat;
 				$location->address = $address;
+				if ($kladr_city)
+				{
+					$location->region = $kladr_city->region;
+					$location->city = $kladr_city->city;
+				}
+				if ($kladr_address)
+				{
+					$housenum = $kladr_address->housenum.($kladr_address->buidnum ? ', '.$kladr_address->buildnum : '');
+
+					$location->housenum = $housenum;
+					$location->street = $kladr_address->address;
+				}
 				$location->save();
 			}
 
@@ -491,6 +526,49 @@ class Controller_Ajax extends Controller_Template
 		{
 			$this->json['code'] = $e->getCode();
 			$this->json['message'] = $e->getMessage();
+		}
+	}
+
+	public function action_kladr_city_autocomplete()
+	{
+		$this->json = array();
+		$term = trim($this->request->query('term'));
+
+		$results = Model::factory('Kladr')->get_cities($term);
+		foreach ($results as $row) 
+		{
+			$data = array(
+				'id' 	=> $row->id,
+				'value'	=> $row->city,
+				'label'	=> '<span style="font-size:11px">'.$row->region.'</span>, '.Text::highlight_word($term, $row->city),
+				'city'	=> $row->city,
+				'region'=> $row->region,
+			);
+			$this->json[] = $data;
+		}
+	}
+
+	public function action_kladr_address_autocomplete()
+	{
+		$this->json = array();
+
+		$term 				= trim($this->request->query('term'));
+		$city_id 			= trim($this->request->query('parent_id'));
+		$housenum_required 	= (bool) $this->request->query('address_required');
+
+		$results = Model::factory('Kladr')->get_address($term, $city_id, $housenum_required);
+		foreach ($results as $row) 
+		{
+			$data = array(
+				'id' 		=> $row->id,
+				'value'		=> $row->address.', '.$row->housenum.($row->buildnum ? ', '.$row->buildnum : ''),
+				'label'		=> Text::highlight_word($term, $row->address.', '.$row->housenum.($row->buildnum ? ', '.$row->buildnum : '')),
+				'housenum'	=> $row->housenum,
+				'buildnum'	=> $row->buildnum,
+				'address'	=> $row->address,
+				'aolevel'	=> $row->aolevel,
+			);
+			$this->json[] = $data;
 		}
 	}
 

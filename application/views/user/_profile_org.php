@@ -190,20 +190,8 @@
 			<div class="mybox">					                    			
 				<div class="inp-cont-bl first">
 					<div class="inp-cont">					                    					
-						<select class="iselect " name="region_id" id="region_id">
-						<?php foreach ($regions as $region) : ?>
-							<option value="<?=$region->id?>" <?=$region_id == $region->id ? 'selected' : ''?>><?=$region->title?></option>
-						<?php endforeach; ?>
-						</select>
-					</div>
-				</div>
-				<div class="inp-cont-bl ">
-					<div class="inp-cont">					                    					
-						<select class="iselect " name="city_id" id="city_id">
-						<?php foreach ($cities as $city) : ?>
-							<option value="<?=$city->id?>" <?=$city_id == $city->id ? 'selected' : ''?>><?=$city->title?></option>
-						<?php endforeach; ?>
-						</select>
+						<input type="text" class="for_map" id="city_selector" name="city_name" value="<?=($user->user_city->loaded() ? $user->user_city->title : '')?>" placeholder="Введите город" />
+						<input type="hidden" name="city_kladr_id" id="city_kladr_id" value="<?=($user->user_city->loaded() ? $user->user_city->kladr_id : '')?>" />
 					</div>
 				</div>
 				<span class="btn-act apply city_save"></span>
@@ -212,7 +200,8 @@
 					<div class="inp-cont-bl ">
 						<div class="inp-cont mystreet-bl">
 							<div class="inp">
-								<input placeholder="Введите улицу" name="org_address" value="<?=$user->org_address?>" type="text" class="mystreet" />
+								<input type="text" class="for_map" name="address" id="address_selector" value="<?=($user->org_address ? $user->org_address : '')?>" placeholder="Введите улицу" />
+								<input type="hidden" id="address_kladr_id" name="address_kladr_id" />
 							</div>
 						</div>
 					</div>

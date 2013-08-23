@@ -19,6 +19,12 @@ class Controller_User extends Controller_Template {
 		$this->layout = 'users';
 		$this->assets->js('ajaxfileupload.js')
 			->js('jquery.maskedinput-1.2.2.js')
+			->js('jquery-ui/ui/minified/jquery.ui.core.min.js')
+			->js('jquery-ui/ui/minified/jquery.ui.widget.min.js')
+			->js('jquery-ui/ui/minified/jquery.ui.position.min.js')
+			->js('jquery-ui/ui/minified/jquery.ui.menu.min.js')
+			->js('jquery-ui/ui/minified/jquery.ui.autocomplete.min.js')
+			->css('jquery-ui/themes/base/minified/jquery-ui.min.css')
 			->js('profile.js')
 			->js('maps.js');
 

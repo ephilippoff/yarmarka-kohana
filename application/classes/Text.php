@@ -40,4 +40,10 @@ class Text extends Kohana_Text {
 			return mb_strtoupper(mb_substr($string, 0, 1, 'UTF-8'), 'UTF-8') . mb_substr($string, 1, mb_strlen($string), 'UTF-8');
 		}, explode($delimiter, $string)));
 	}
+
+
+	public static function highlight_word($word, $string, $start_tag = '<b>', $end_tag = '</b>')
+	{
+		return preg_replace('/('.$word.')/ui', $start_tag.'$1'.$end_tag, $string);
+	}
 }
