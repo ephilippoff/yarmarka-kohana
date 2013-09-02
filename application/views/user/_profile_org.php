@@ -2,7 +2,7 @@
 <script>
 	jQuery(document).ready(function($) {
 		<?php if ( ! $user->location->loaded()) : ?>
-		setTimeout(detect_geoloc, 1000);
+		//setTimeout(detect_geoloc, 1000);
 		<?php endif; ?>
 	});
 </script>
