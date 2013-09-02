@@ -73,8 +73,8 @@ class Controller_Ajax extends Controller_Template
 				else
 				{
 					// @todo искать город в КЛАДР и добавлять в нашу базу
-					$kladr_city = Model::factory('Kladr')->get_city_by_id($data['city_kladr_id']);
-					$new_city = ORM::factory();
+					// $kladr_city = Model::factory('Kladr')->get_city_by_id($data['city_kladr_id']);
+					// $new_city = ORM::factory();
 				}
 
 				unset($data['city_kladr_id']);
