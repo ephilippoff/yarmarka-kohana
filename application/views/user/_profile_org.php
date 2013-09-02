@@ -171,7 +171,7 @@
 			</div>
 		</div>
 	</li>
-	<li id="address_text">
+<!--	<li id="address_text">
 		<div class="input style2">
 
 			<label><span><i class="name">Адрес вашей компании:</i></span></label>					                    			
@@ -219,6 +219,6 @@
 				</div>
 			</div>
 		</div>
-	</li>
+	</li>-->
 </ul>
 
