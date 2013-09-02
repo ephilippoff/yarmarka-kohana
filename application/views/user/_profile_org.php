@@ -1,4 +1,4 @@
-<script type="text/javascript" src="//api-maps.yandex.ru/2.0-stable/?load=package.standard,package.geocode,package.geoQuery,package.clusters&coordorder=longlat&lang=ru-RU&onload=init_user_profile_map"></script>
+<!--<script type="text/javascript" src="//api-maps.yandex.ru/2.0-stable/?load=package.standard,package.geocode,package.geoQuery,package.clusters&coordorder=longlat&lang=ru-RU&onload=init_user_profile_map"></script>-->
 <script>
 	jQuery(document).ready(function($) {
 		<?php if ( ! $user->location->loaded()) : ?>

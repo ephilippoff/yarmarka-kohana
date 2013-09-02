@@ -25,8 +25,8 @@ class Controller_User extends Controller_Template {
 			->js('jquery-ui/ui/minified/jquery.ui.menu.min.js')
 			->js('jquery-ui/ui/minified/jquery.ui.autocomplete.min.js')
 			->css('jquery-ui/themes/base/minified/jquery-ui.min.css')
-			->js('profile.js')
-			->js('maps.js');
+			->js('profile.js');
+			//->js('maps.js');
 
 		$this->template->region_id	= $region_id = $this->user->user_city->loaded() 
 			? $this->user->user_city->region_id 
