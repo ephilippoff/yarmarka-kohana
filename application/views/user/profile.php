@@ -29,7 +29,7 @@ $(document).ready(function() {
 	})
 })		
 </script>
-<div class="winner">
+<div class="winner cabinet profile">
 	<section class="main-cont">
 		<div class="hheader persomal_room-header"><h1 class="ta-c">Личный кабинет</h1></div>
 		<div class="fl100 shadow-top z1 persomal_room">
