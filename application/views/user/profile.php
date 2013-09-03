@@ -19,6 +19,15 @@
 				//});
 			}
 	});
+	
+$(document).ready(function() {
+	//Всё для ие8
+	$('.filebutton img').click(function(e){
+		$('#avatar_input').click();
+		e.preventDefault();
+		e.stopPropagation();
+	})
+})		
 </script>
 <div class="winner">
 	<section class="main-cont">
