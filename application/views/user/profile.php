@@ -54,7 +54,7 @@
 							<li class="add-contact-li">
 								
 							<?php $contact_classes = array(
-								1 => 'tel',
+								1 => 'mobtel',
 								2 => 'tel',
 								3 => 'skype',
 								4 => 'icq',
