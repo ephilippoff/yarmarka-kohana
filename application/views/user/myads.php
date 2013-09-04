@@ -288,7 +288,7 @@
 									    <div title="Количество просмотров" class="view-bl"><div class="iview"><?=$ad->visits?></div></div>
 									</div>
 									<div class="col2">
-										<p onclick="window.open('<?=$ad->get_url()?>', '_blank')" class="title"><?=htmlspecialchars(mb_substr($ad->title, 0, 50))?></p>
+										<a href="<?=$ad->get_url()?>" target="_blank"><?=htmlspecialchars(mb_substr($ad->title, 0, 50))?></a>
 										<div class="ml5">
 											<p class="info"><?=$ad->category_obj->title?></p>
 											<p class="info"><?=$ad->city_obj->loaded() ? $ad->city_obj->title : $ad->city?></p>

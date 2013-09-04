@@ -125,7 +125,7 @@
 								<div class="col3"><span class="date"><?=$object->get_real_date_created()?></span></div>
 								<div class="col31"><span class="city"><?=$object->city_obj->loaded() ? $object->city_obj->title : $object->city?></span></div>
 								<div class="col2">
-									<p class="title" onclick="window.open('<?=$object->get_url()?>', '_blank')" ><?=$object->title?></p>
+									<a href="<?=$object->get_url()?>" target="_blank"><?=$object->title?></a>
 									
 									<div class="hide-cont">
 										<p class="info"><?=$object->category_obj->title?></p>
