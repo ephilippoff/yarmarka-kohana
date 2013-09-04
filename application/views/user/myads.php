@@ -345,7 +345,7 @@
 								<div class="pmenu show-cont">
 									<ul>
 										<?php if (!$ad->is_bad and !$ad->in_archive and $ad->is_published) : ?>
-													<li><a title="Выделить объявление в общем списке" href="<?=CI::site('billing/services_for_ads/'.$ad->id)?>" class="btn-pmenu "><i class="ico show"></i><span>Выделить</span></a></li>
+													<li><a title="Выделить объявление" href="<?=CI::site('billing/services_for_ads/'.$ad->id)?>" class="btn-pmenu "><i class="ico show"></i><span>Выделить</span></a></li>
 										<?php endif; ?>
 									</ul>
 								</div>
@@ -353,7 +353,7 @@
 									<div class="pmenu">
 										<ul>
 											<?php if (!$ad->is_bad and !$ad->in_archive and $ad->is_published) : ?>
-													<li><a title="Выделить объявление в общем списке" href="<?=CI::site('billing/services_for_ads/'.$ad->id)?>" class="btn-pmenu "><i class="ico show"></i><span>Выделить</span></a></li>
+													<li><a title="Выделить объявление" href="<?=CI::site('billing/services_for_ads/'.$ad->id)?>" class="btn-pmenu "><i class="ico show"></i><span>Выделить</span></a></li>
 											<?php endif; ?>
 										</ul>
 									</div>
