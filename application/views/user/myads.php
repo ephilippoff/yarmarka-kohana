@@ -342,24 +342,22 @@
 							</div>
 			
 							<div class="right-bl col5">
-								<div class="pmenu show-cont">
+								<div class="pmenu ">
 									<ul>
 										<?php if (!$ad->is_bad and !$ad->in_archive and $ad->is_published) : ?>
 													<li><a title="Выделить объявление" href="<?=CI::site('billing/services_for_ads/'.$ad->id)?>" class="btn-pmenu "><i class="ico show"></i><span>Выделить</span></a></li>
 										<?php endif; ?>
 									</ul>
 								</div>
-								<div class="hide-cont">
+<!--								<div class="">
 									<div class="pmenu">
 										<ul>
 											<?php if (!$ad->is_bad and !$ad->in_archive and $ad->is_published) : ?>
 													<li><a title="Выделить объявление" href="<?=CI::site('billing/services_for_ads/'.$ad->id)?>" class="btn-pmenu "><i class="ico show"></i><span>Выделить</span></a></li>
 											<?php endif; ?>
 										</ul>
-									</div>
-									
-									
-								</div>
+									</div>																		
+								</div>-->
 							</div>
 						</div>				
 								
