@@ -293,7 +293,7 @@
 											<p class="info"><?=$ad->category_obj->title?></p>
 											<p class="info"><?=$ad->city_obj->loaded() ? $ad->city_obj->title : $ad->city?></p>
 											<p class="about"><?=$ad->user_text?></p>
-											<p class="panel-toggle"><span>Раскрыть</span></p>
+											<?php if (count($user_messages) > 0) : ?><p class="panel-toggle"><span>Показать комментарии</span></p><?php endif; ?>
 										</div>
 									</div>
 								</div>
