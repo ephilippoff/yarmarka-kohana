@@ -18,6 +18,7 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 			->with('user')
 			->with('city_obj')
 			->with('category_obj')
+			->with('location_obj')
 			->with_main_photo()
 			->where('source_id', '=', 1)
 			->where('active', '=', 1);

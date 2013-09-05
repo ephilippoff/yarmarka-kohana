@@ -39,6 +39,14 @@
 				</span>
 			</p>
 			<p class="text-error"><?=join(', ', $object->get_attributes_values()) ?></p>
+			<?php if ($object->location_obj) : ?>
+				<address>
+					<?php if ($object->location_obj->kladr_id) : ?>
+						<a class="icon-ok" title="Адрес выбран из КЛАДР"></a>
+					<?php endif ?>
+					<?=$object->location_obj->region?>,<?=$object->location_obj->city?>,<?=$object->location_obj->address?>
+				</address>
+			<?php endif ?>
 		</td>
 		<td>
 			<div class="btn-group">
@@ -85,7 +93,7 @@
 			<?=Date::formatted_time($object->date_created, 'd.m.Y H:i')?>
 		</td>
 		<td>
-			<a href="<?=CI::site('detail/'.$object->id)?>" target="_blank" title="Open object in new windows" class="icon-eye-open"></a>
+			<a href="<?=CI::site('detail/'.$object->id)?>" target="_blank" title="Open object in new window" class="icon-eye-open"></a>
 			<a href="<?=URL::site('khbackend/objects/ajax_delete/'.$object->id)?>" title="Delete object" data-toggle="modal" data-target="#myModal" class="icon-trash"></a>
 		</td>
 	</tr>

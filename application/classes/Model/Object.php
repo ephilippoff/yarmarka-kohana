@@ -8,6 +8,7 @@ class Model_Object extends ORM {
 		'user'			=> array('model' => 'User', 'foreign_key' => 'author'),
 		'category_obj'	=> array('model' => 'Category', 'foreign_key' => 'category'),
 		'city_obj'		=> array('model' => 'City', 'foreign_key' => 'city_id'),
+		'location_obj'	=> array('model' => 'Location', 'foreign_key' => 'location_id'),
 	);
 
 	protected $_has_many = array(

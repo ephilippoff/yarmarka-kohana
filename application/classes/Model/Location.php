@@ -13,6 +13,7 @@ class Model_Location extends ORM {
 
 	protected $_has_many = array(
 		'users' 	=> array(),
+		'objects'	=> array(),
 	);
 
 	public function filters()
