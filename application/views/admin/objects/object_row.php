@@ -94,6 +94,7 @@
 		</td>
 		<td>
 			<a href="<?=CI::site('detail/'.$object->id)?>" target="_blank" title="Open object in new window" class="icon-eye-open"></a>
+			<a href="<?=CI::site('user/edit_ad/'.$object->id)?>" target="_blank" title="Edit object in new window" class="icon-pencil"></a>
 			<a href="<?=URL::site('khbackend/objects/ajax_delete/'.$object->id)?>" title="Delete object" data-toggle="modal" data-target="#myModal" class="icon-trash"></a>
 		</td>
 	</tr>
