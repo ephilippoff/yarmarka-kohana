@@ -317,7 +317,7 @@
 																		<a href=""><span class="date"><?=date('d.m.Y', strtotime($message->createdOn))?></span></a>
 																		<p class="autor"><?=$message->user_name?></p>
 																		<p><?=$message->text?>
-																			<a class="answer" href="">Ответить</a></p>
+																			<a class="answer" href="<?=$ad->get_url()?>#N<?=$message->id?>">Ответить</a></p>
 																	</article>										
 													<?php		endif; ?>
 													<?php endforeach; ?>										
@@ -335,7 +335,7 @@
 														<p>Ваше объявление заблокировано, вы можете его исправить, но осторожнее у вас осталась последняя попытка</p>
 													</article>-->
 
-													<p><a href="" class="more">посмотреть все</a></p>
+													<!--<p><a href="" class="more">посмотреть все</a></p>-->
 												</div>
 											</div>	   
 								<?php endif; ?>
