@@ -317,7 +317,7 @@
 																		<a href=""><span class="date"><?=date('d.m.Y', strtotime($message->createdOn))?></span></a>
 																		<p class="autor"><?=$message->user_name?></p>
 																		<p><?=$message->text?>
-																			<a class="answer" href="<?=$ad->get_url()?>#N<?=$message->id?>">Ответить</a></p>
+																			<a target="_blank" class="answer" href="<?=$ad->get_url()?>#N<?=$message->id?>">Ответить</a></p>
 																	</article>										
 													<?php		endif; ?>
 													<?php endforeach; ?>										
