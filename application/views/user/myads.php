@@ -288,12 +288,12 @@
 									    <div title="Количество просмотров" class="view-bl"><div class="iview"><?=$ad->visits?></div></div>
 									</div>
 									<div class="col2">
-										<p onclick="window.open('<?=$ad->get_url()?>', '_blank')" class="title"><?=htmlspecialchars(mb_substr($ad->title, 0, 50))?></p>
+										<a href="<?=$ad->get_url()?>" target="_blank"><?=htmlspecialchars(mb_substr($ad->title, 0, 50))?></a>
 										<div class="ml5">
 											<p class="info"><?=$ad->category_obj->title?></p>
 											<p class="info"><?=$ad->city_obj->loaded() ? $ad->city_obj->title : $ad->city?></p>
 											<p class="about"><?=$ad->user_text?></p>
-											<p class="panel-toggle"><span>Раскрыть</span></p>
+											<?php if (count($user_messages) > 0) : ?><p class="panel-toggle"><span>Показать комментарии</span></p><?php endif; ?>
 										</div>
 									</div>
 								</div>
@@ -317,7 +317,7 @@
 																		<a href=""><span class="date"><?=date('d.m.Y', strtotime($message->createdOn))?></span></a>
 																		<p class="autor"><?=$message->user_name?></p>
 																		<p><?=$message->text?>
-																			<a class="answer" href="">Ответить</a></p>
+																			<a target="_blank" class="answer" href="<?=$ad->get_url()?>#N<?=$message->id?>">Ответить</a></p>
 																	</article>										
 													<?php		endif; ?>
 													<?php endforeach; ?>										
@@ -335,31 +335,29 @@
 														<p>Ваше объявление заблокировано, вы можете его исправить, но осторожнее у вас осталась последняя попытка</p>
 													</article>-->
 
-													<p><a href="" class="more">посмотреть все</a></p>
+													<!--<p><a href="" class="more">посмотреть все</a></p>-->
 												</div>
 											</div>	   
 								<?php endif; ?>
 							</div>
 			
 							<div class="right-bl col5">
-								<div class="pmenu show-cont">
+								<div class="pmenu ">
 									<ul>
 										<?php if (!$ad->is_bad and !$ad->in_archive and $ad->is_published) : ?>
-													<li><a title="Выделить объявление в общем списке" href="<?=CI::site('billing/services_for_ads/'.$ad->id)?>" class="btn-pmenu "><i class="ico show"></i><span>Выделить</span></a></li>
+													<li><a title="Выделить объявление" href="<?=CI::site('billing/services_for_ads/'.$ad->id)?>" class="btn-pmenu "><i class="ico show"></i><span>Выделить</span></a></li>
 										<?php endif; ?>
 									</ul>
 								</div>
-								<div class="hide-cont">
+<!--								<div class="">
 									<div class="pmenu">
 										<ul>
 											<?php if (!$ad->is_bad and !$ad->in_archive and $ad->is_published) : ?>
-													<li><a title="Выделить объявление в общем списке" href="<?=CI::site('billing/services_for_ads/'.$ad->id)?>" class="btn-pmenu "><i class="ico show"></i><span>Выделить</span></a></li>
+													<li><a title="Выделить объявление" href="<?=CI::site('billing/services_for_ads/'.$ad->id)?>" class="btn-pmenu "><i class="ico show"></i><span>Выделить</span></a></li>
 											<?php endif; ?>
 										</ul>
-									</div>
-									
-									
-								</div>
+									</div>																		
+								</div>-->
 							</div>
 						</div>				
 								
