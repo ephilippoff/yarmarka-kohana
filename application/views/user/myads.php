@@ -291,7 +291,12 @@
 										<a href="<?=$ad->get_url()?>" target="_blank"><?=htmlspecialchars(mb_substr($ad->title, 0, 50))?></a>
 										<div class="ml5">
 											<p class="info"><?=$ad->category_obj->title?></p>
-											<p class="info"><?=$ad->city_obj->loaded() ? $ad->city_obj->title : $ad->city?></p>
+											<p class="info">
+												<?=$ad->city_obj->loaded() ? $ad->city_obj->title : $ad->city?>
+												<?php if ($ad->location_obj->loaded() AND $ad->location_obj->address) : ?>
+													,<?=$ad->location_obj->address?>
+												<?php endif ?>
+											</p>
 											<p class="about"><?=$ad->user_text?></p>
 											<?php if (count($user_messages) > 0) : ?><p class="panel-toggle"><span>Показать комментарии</span></p><?php endif; ?>
 										</div>
