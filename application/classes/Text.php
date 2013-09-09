@@ -46,4 +46,9 @@ class Text extends Kohana_Text {
 	{
 		return preg_replace('/('.$word.')/ui', $start_tag.'$1'.$end_tag, $string);
 	}
+
+	public static function clear_phone_number($contact)
+	{
+		return preg_replace('/[^0-9]*/', '', $contact);
+	}
 }

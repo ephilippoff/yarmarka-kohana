@@ -5,7 +5,53 @@ class Model_Object_Contact extends ORM {
 	protected $_table_name = 'object_contact';
 
 	protected $_belongs_to = array(
-		'contact_type' => array('model' => 'Contact_Type', 'foreign_key' => 'contact_type_id'),
+		'contact_type' 	=> array('model' => 'Contact_Type', 'foreign_key' => 'contact_type_id'),
+		'user'			=> array(),
+		'object'		=> array(),
 	);
 
-} // End Object_Contact Model
+	public function is_phone_unique($verified = FALSE)
+	{
+		if ( ! $this->loaded())
+		{
+			return FALSE;
+		}
+
+		$query = $this->where('contact_type_id', 'IN', array(Model_Contact_Type::MOBILE, Model_Contact_Type::PHONE))
+			->where('id', '!=', $this->id)
+			->where('contact_clear', '=', $this->contact_clear);
+
+		if ($verified)
+		{
+			$query->where('verified', '=', 1);
+		}
+
+		return ! (bool) $query->count_all();
+	}
+
+	public function get_not_unique_verified_numbers()
+	{
+		if ( ! $this->loaded())
+		{
+			return FALSE;
+		}
+
+		return ORM::factory('Object_Contact')->where('contact_type_id', 'IN', array(Model_Contact_Type::MOBILE, Model_Contact_Type::PHONE))
+			->where('id', '!=', $this->id)
+			->where('contact_clear', '=', $this->contact_clear)
+			->find_all();
+	}
+
+	public function is_phone()
+	{
+		if ( ! $this->loaded())
+		{
+			return FALSE;
+		}
+
+		return Model_Contact_Type::is_phone($this->contact_type_id);
+	}
+}
+
+/* End of file Contact.php */
+/* Location: ./application/classes/Model/Object/Contact.php */

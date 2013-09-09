@@ -25,7 +25,7 @@ abstract class Controller_Admin_Template extends Controller_Template {
     public function before()
 	{
 		parent::before();
-		$this->module_name = $this->module_name ? $this->module_name : $this->request->controller();
+		$this->module_name = $this->module_name ? $this->module_name : strtolower($this->request->controller());
 
 		if ( ! Auth::instance()->logged_in() AND ! ($this->request->action() == 'login'))
 		{

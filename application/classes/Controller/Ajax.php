@@ -169,11 +169,24 @@ class Controller_Ajax extends Controller_Template
 
 		if ($contact AND $contact_type_id)
 		{
-			$exists_contact = ORM::factory('Object_Contact')
-				->where('contact_type_id', '=', $contact_type_id)
-				->where('contact', '=', $contact)
-				->where('user_id', '=', $user->id)
-				->find();
+			// проверяем телефоны по contact_clear
+			if (Model_Contact_Type::is_phone($contact_type_id))
+			{
+				$exists_contact = ORM::factory('Object_Contact')
+					->where('contact_type_id', 'IN', array(1,2))
+					->where('contact_clear', '=', Text::clear_phone_number($contact))
+					->where('user_id', '=', $user->id)
+					->find();
+			}
+			else // другие типы контактов
+			{
+				$exists_contact = ORM::factory('Object_Contact')
+					->where('contact_type_id', '=', $contact_type_id)
+					->where('contact', '=', $contact)
+					->where('user_id', '=', $user->id)
+					->find();
+			}
+
 			if ($exists_contact->loaded())
 			{
 				$this->json['code']		= 401;
