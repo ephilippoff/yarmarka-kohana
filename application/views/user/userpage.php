@@ -4,8 +4,8 @@
 			<div class="tline">
 				<div class="left">
 					<div class="img">
-						<img src="/images/logo.png" alt="" class="ilogo" />
-						<a href="" class="nav toggle"></a>
+						<img src="/images/logo.png" alt="" class="ilogo navtoggle" />
+						<a href="" class="nav toggle navtoggle"></a>
 
 					</div>
 				</div>
@@ -37,9 +37,11 @@
 		<div class="fl100 shadow-top z1 persomal_room ie8mt-150fix filial-bl">
 			<aside class="p_room-menu float-content">
 				<ul class="islide-menu float-box w250">
-					<li><a href=""><i class="ico ico-iabout"></i><span>Описание</span></a>
+					<li class="active">
+						<span class="span_a"><i class="ico ico-iabout"></i><span>О компании</span></span>
 					</li>
-					<li ><a href=""><i class="ico ico-iadd"></i><span>Объявления</span></a>
+					
+					<li ><a href="<?=$filter_href?>"><i class="ico ico-iadd"></i><span>Объявления</span></a>
 					</li>
 					<li>
 						<div class="conpany_info w200">
