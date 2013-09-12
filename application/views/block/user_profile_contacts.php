@@ -15,6 +15,23 @@
 				<span class="cont"><span class="ico <?=$contact_classes[$contact->contact_type_id]?>"></span>
 					<a class="usercontact contact-input" data-id="<?=$contact->id?>"><?=$contact->contact?></a>
 				</span><span class="remove delete_contact" data-id="<?=$contact->id?>"></span></span></div>
+
+				<?php if ($contact->is_phone() AND ! $contact->is_phone_unique()) : ?>
+					<div class="alert-bl contact-error" style="display:block">
+						<div class="cont">
+							<div class="img"></div>
+							<div class="arr"></div>
+							<?php if ( ! $contact->is_phone_unique(TRUE)) : ?>
+								<p class="text"><span>
+									<?=Request::factory('block/not_unique_contact_msg/'.$contact->id)->execute()?>
+								</span></p>
+							<?php else : ?>
+								<p class="text"><span>Такой контакт уже есть у другого пользователя</span></p>
+								<a href="">валидация номера</a>
+							<?php endif ?>
+						</div>
+					</div>
+				<?php endif ?>
 		</div>
 	</div>
 <?php endforeach; ?>

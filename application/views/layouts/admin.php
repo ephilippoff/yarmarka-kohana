@@ -41,6 +41,15 @@
 							</li>
 						<?php endif; ?>
 
+						<?php if (Auth::instance()->have_access_to('phones')) : ?>
+							<li class="dropdown <?=($module_name == 'phones') ? 'active' : ''?>">
+								<a href="#"  class="dropdown-toggle" data-toggle="dropdown">Phones <b class="caret"></b></a>
+								<ul class="dropdown-menu">
+									<li><a href="<?=Url::site('khbackend/phones/index')?>">List</a></li>
+								</ul>
+							</li>
+						<?php endif; ?>
+
 						<?php if (Auth::instance()->have_access_to('object')) : ?>
 						<li class="dropdown <?=($module_name == 'object') ? 'active' : ''?>">
 							<a href="#"  class="dropdown-toggle" data-toggle="dropdown">Objects <b class="caret"></b></a>

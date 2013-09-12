@@ -138,4 +138,15 @@ class Controller_Block extends Controller_Template
 
 		$this->template->breadcrumbs = array_reverse($breadcrumbs);
 	}
+
+	public function action_not_unique_contact_msg()
+	{
+		$contact = ORM::factory('Object_Contact', $this->request->param('id'));
+		if ( ! $contact->loaded())
+		{
+			throw new HTTP_Exception_404;
+		}
+
+		$this->template->not_unique_numbers = $contact->get_not_unique_verified_numbers();
+	}
 }

@@ -13,4 +13,12 @@ class Model_Contact_Type extends ORM {
 	protected $_has_many = array(
 		'contacts' => array('model' => 'Object_Contact', 'foreign_key' => 'contact_type_id'),
 	);
-} // End Contact_Type Model
+
+	public static function is_phone($contact_type_id)
+	{
+		return in_array(intval($contact_type_id), array(self::PHONE, self::MOBILE), TRUE);
+	}
+}
+
+/* End of file Type.php */
+/* Location: ./application/classes/Model/Contact/Type.php */

@@ -171,10 +171,16 @@ class Model_User extends Model_Auth_User {
 			return FALSE;
 		}
 
+		$unique = ! (bool) ORM::factory('Object_Contact')
+			->where('contact_type_id', 'IN', array(Model_Contact_Type::MOBILE, Model_Contact_Type::PHONE))
+			->where('contact_clear', '=', Text::clear_phone_number($contact_str))
+			->count_all();
+
 		$contact = ORM::factory('Object_Contact');
 		$contact->contact_type_id	= intval($contact_type_id);
 		$contact->contact			= trim($contact_str);
 		$contact->user_id			= $this->id;
+		$contact->verified			= ($unique ? 0 : -1);
 		$contact->save();
 
 		return $contact;
@@ -198,6 +204,17 @@ class Model_User extends Model_Auth_User {
 		}
 
 		return FALSE;
+	}
+
+	public function get_user_name()
+	{
+		if ($this->fullname)
+			return $this->fullname;
+
+		if ($this->login)
+			return $this->login;
+
+		return $this->email;
 	}
 }
 
