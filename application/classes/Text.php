@@ -51,4 +51,14 @@ class Text extends Kohana_Text {
 	{
 		return preg_replace('/[^0-9]*/', '', $contact);
 	}
+
+	public static function create_cache_key($string_part, $for_serialize = NULL)
+	{
+		return $string_part.'::'.sha1(print_r($for_serialize, TRUE));
+	}
+
+	public function random_string_hash($str)
+	{
+		return sha1($str.microtime());
+	}
 }

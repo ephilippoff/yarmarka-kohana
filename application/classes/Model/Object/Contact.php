@@ -29,17 +29,10 @@ class Model_Object_Contact extends ORM {
 		return ! (bool) $query->count_all();
 	}
 
-	public function get_not_unique_verified_numbers()
+	public function get_by_phone_number($contact_clear)
 	{
-		if ( ! $this->loaded())
-		{
-			return FALSE;
-		}
-
-		return ORM::factory('Object_Contact')->where('contact_type_id', 'IN', array(Model_Contact_Type::MOBILE, Model_Contact_Type::PHONE))
-			->where('id', '!=', $this->id)
-			->where('contact_clear', '=', $this->contact_clear)
-			->find_all();
+		return $this->where('contact_type_id', 'IN', array(Model_Contact_Type::MOBILE, Model_Contact_Type::PHONE))
+			->where('contact_clear', '=', Text::clear_phone_number($contact_clear));
 	}
 
 	public function is_phone()

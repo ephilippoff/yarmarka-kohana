@@ -71,7 +71,9 @@ class Auth_ORM extends Kohana_Auth_ORM {
 
 			// Load the user
 			$user = ORM::factory('User');
-			$user->where(DB::expr('w_lower('.$user->unique_key($username).')'), '=', DB::expr("w_lower('".$username."')"))->find();
+			$user->where(DB::expr('w_lower('.$user->unique_key($username).')'), '=', DB::expr("w_lower('".$username."')"))
+				->where('is_blocked', '=', 0)
+				->find();
 		}
 
 		if (is_string($password))
@@ -83,7 +85,22 @@ class Auth_ORM extends Kohana_Auth_ORM {
 		// If the passwords match, perform a login
 		if ($user->passw === $password)
 		{
-			if ($remember === TRUE)
+			if ($user->is_blocked == 1)
+			{
+				if ($user->block_reason)
+				{
+					throw new Exception("Ваша учетная запись заблокирована. Причина: ".$user->block_reason,301);
+				}
+				else
+				{
+					throw new Exception("Ваша учетная запись заблокирована.",302);
+				}
+			}
+			elseif ($user->is_blocked == 2)
+			{
+				throw new Exception("Ваша учетная запись не активирована.", 300);
+			} 
+			elseif ($remember === TRUE)
 			{
 				// Token data
 				$data = array(
@@ -105,6 +122,10 @@ class Auth_ORM extends Kohana_Auth_ORM {
 			$this->complete_login($user);
 
 			return TRUE;
+		}
+		else
+		{
+			throw new Exception("Неверное сочетание логина и пароля.", 303);
 		}
 
 		// Login failed

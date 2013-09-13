@@ -39,6 +39,8 @@ class Model_User extends Model_Auth_User {
 			'login' => array(
 				array('max_length', array(':value', 32)),
 				array(array($this, 'unique'), array('login', ':value')),
+				array(array($this, 'check_ip')),
+				array(array($this, 'check_cookie')),
 			),
 			'passw' => array(
 				array('not_empty'),
@@ -46,6 +48,7 @@ class Model_User extends Model_Auth_User {
 			'email' => array(
 				array('email'),
 				array(array($this, 'unique'), array('email', ':value')),
+				array(array($this, 'check_domain'), array(':value')),
 			),
 			'role' => array(
 				array('not_empty'),
@@ -215,6 +218,56 @@ class Model_User extends Model_Auth_User {
 			return $this->login;
 
 		return $this->email;
+	}
+
+	public function can_edit_object($object_id)
+	{
+		$object = ORM::factory('Object', $object_id);
+		if ( ! $object->loaded() OR ! $this->loaded())
+		{
+			return FALSE;
+		}
+
+		$is_white_ip 	= ORM::factory('Ipwhite')->get_by_ip(Request::$client_ip)->loaded();
+		$is_author 		= ($this->id === $object->author);
+		$is_admin 		= (($this->role == 1 OR $this->role == 3) AND $is_white_ip);
+
+		return ($is_author OR $is_admin);
+	}
+
+	public function check_domain($email)
+	{
+		$disallowed_domains = Kohana::$config->load('common.disallowed_email_domains');
+		list($email_name, $domain) = explode('@', $email);
+
+		return ! in_array($domain, $disallowed_domains);
+	}
+
+	public function check_ip()
+	{
+		$user_by_ip 	= ORM::factory('User')->where('ip_addr', '=', Request::$client_ip)->find();
+		$is_white_ip 	= ORM::factory('Ipwhite')->get_by_ip(Request::$client_ip)->loaded();
+
+		if ($user_by_ip->loaded() AND ! $is_white_ip AND ceil((time() - strtotime($user_by_ip->regdate))/Date::HOUR) <= 12)
+		{
+			return FALSE;
+		}
+
+		return TRUE;
+	}
+
+	public function check_cookie()
+	{
+		if ($user_id = Cookie::get('r_user_id'))
+		{
+			$user = ORM::factory('User', $user_id);
+			if ($user->loaded())
+			{
+				return FALSE; // пользователь уже регистрирвоался с этого браузера
+			}
+		}
+
+		return TRUE;
 	}
 }
 

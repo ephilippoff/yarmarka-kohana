@@ -166,15 +166,17 @@ class Controller_Ajax extends Controller_Template
 
 		$contact_type_id	= intval($this->request->post('contact_type_id'));
 		$contact			= trim($this->request->post('contact'));
+		$contact_clear		= Text::clear_phone_number($contact);
 
 		if ($contact AND $contact_type_id)
 		{
+			$is_phone = Model_Contact_Type::is_phone($contact_type_id);
 			// проверяем телефоны по contact_clear
-			if (Model_Contact_Type::is_phone($contact_type_id))
+			if ($is_phone)
 			{
 				$exists_contact = ORM::factory('Object_Contact')
 					->where('contact_type_id', 'IN', array(1,2))
-					->where('contact_clear', '=', Text::clear_phone_number($contact))
+					->where('contact_clear', '=', $contact_clear)
 					->where('user_id', '=', $user->id)
 					->find();
 			}
@@ -190,7 +192,14 @@ class Controller_Ajax extends Controller_Template
 			if ($exists_contact->loaded())
 			{
 				$this->json['code']		= 401;
-				$this->json['error']	= 'Такой контакт уже есть';
+				if ($is_phone)
+				{
+					$this->json['error'] = Request::factory('block/not_unique_contact_msg/'.$contact_clear)->execute()->body();
+				}
+				else
+				{
+					$this->json['error'] = 'Такой контакт уже есть';
+				}
 			}
 			else
 			{

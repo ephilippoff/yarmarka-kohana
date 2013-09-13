@@ -21,14 +21,8 @@
 						<div class="cont">
 							<div class="img"></div>
 							<div class="arr"></div>
-							<?php if ( ! $contact->is_phone_unique(TRUE)) : ?>
-								<p class="text"><span>
-									<?=Request::factory('block/not_unique_contact_msg/'.$contact->id)->execute()?>
-								</span></p>
-							<?php else : ?>
-								<p class="text"><span>Такой контакт уже есть у другого пользователя</span></p>
-								<a href="">валидация номера</a>
-							<?php endif ?>
+							<p class="text"><span>Такой контакт уже есть у другого пользователя</span></p>
+							<a href="">валидация номера</a>
 						</div>
 					</div>
 				<?php endif ?>

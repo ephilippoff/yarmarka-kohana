@@ -4,6 +4,11 @@
 Route::set('admin', '<controller>(/<action>)', array('controller' => '(admin_.*|Admin_.*)'))->filter(function($route, $params, $request){
 	throw new HTTP_Exception_404;
 });
+Route::set('not_unique_contact_msg', 'block/not_unique_contact_msg/<number>')
+	->defaults(array(
+		'controller' => 'Block',
+		'action'     => 'not_unique_contact_msg',
+	));
 Route::set('userpage', 'users/<login>')
 	->defaults(array(
 		'controller' => 'User',

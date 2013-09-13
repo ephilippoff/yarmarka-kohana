@@ -91,4 +91,33 @@ class Model_Category extends ORM {
 	{
 		return URL::site('images/'.$this->main_menu_icon);
 	}
-} // End Category Model
+
+	public function check_max_user_objects($user, $object_id)
+	{
+		if ( ! $this->loaded())
+		{
+			return FALSE;
+		}
+
+		if ( ! is_object($user))
+		{
+			$user = ORM::factory('User', $user);
+		}
+
+		$objects = $user->objects;
+		if ($object_id)
+		{
+			$objects->where('id', '!=', $object_id);
+		}
+
+		if ($user->org_type == 1 AND $this->max_count_for_user AND $objects->count_all() >= $this->max_count_for_user)
+		{
+			return FALSE;
+		}
+
+		return TRUE;
+	}
+}
+
+/* End of file Category.php */
+/* Location: ./application/classes/Model/Category.php */
