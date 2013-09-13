@@ -477,6 +477,7 @@ class Controller_User extends Controller_Template {
 		}
 
 		$this->template->is_owner = (Auth::instance()->get_user() AND Auth::instance()->get_user()->id === $user->id);
+		$this->template->filter_href = ORM::factory('Category')->where('id', '=', 1)->find()->get_url().'?user_id='.$user->id;
 		$this->template->user = $user;
 	}
 

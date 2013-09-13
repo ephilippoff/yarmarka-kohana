@@ -24,14 +24,14 @@
 	->js('jquery.menu-aim.js')
 	->js('js.js')
 	->js('jquery.openxtag.min.js')
-	.$_assets
+	.$_assets;
 	?>
 <!--[if lte IE 8]>
 	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 	<script src="http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script>				
 	<![endif]-->
 </head>
-<body class="adaptiveoff">
+<body class="adaptiveoff page-about-user">
 	<div class="popup-layer"></div>
 	<div class="popup addphoto-popup" style="width: 615px">
 		<div class="popup-cont">
