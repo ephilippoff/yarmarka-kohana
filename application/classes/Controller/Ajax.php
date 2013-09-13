@@ -474,7 +474,7 @@ class Controller_Ajax extends Controller_Template
 			throw new HTTP_Exception_404;
 		}
 
-		$filepath = 'images/userpage/'.$this->request->query('filename');
+		$filepath = '/images/userpage/'.$this->request->query('filename');
 		if (file_exists(DOCROOT.$filepath))
 		{
 			$user->userpage_banner = $filepath;

@@ -41,7 +41,7 @@
 						<span class="span_a"><i class="ico ico-iabout"></i><span>О компании</span></span>
 					</li>
 					
-					<li ><a href="<?=$filter_href?>"><i class="ico ico-iadd"></i><span>Объявления</span></a>
+					<li class="no-li-slide"><a href="<?=$filter_href?>"><i class="ico ico-iadd"></i><span>Объявления</span></a>
 					</li>
 					<li>
 						<div class="conpany_info w200">
