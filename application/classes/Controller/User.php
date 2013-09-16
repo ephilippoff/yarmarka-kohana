@@ -10,7 +10,10 @@ class Controller_User extends Controller_Template {
 
 		if ( ! $this->user = Auth::instance()->get_user())
 		{
-			$this->redirect(CI::site('user/login?return=user/'.$this->request->action()));
+			if (Request::current()->action() != 'userpage')
+			{
+				$this->redirect(CI::site('user/login?return=user/'.$this->request->action()));
+			}
 		}
 	}
 
