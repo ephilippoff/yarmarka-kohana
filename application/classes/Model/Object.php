@@ -28,7 +28,10 @@ class Model_Object extends ORM {
 
 	public function generate_full_text($user_text)
 	{
-		$this->full_text = strip_tags($this->title).', '.strip_tags($user_text).', '.join(', ', $this->get_attributes_values(NULL, FALSE));
+		if ($this->loaded())
+		{
+			$this->full_text = strip_tags($this->title).', '.strip_tags($user_text).', '.join(', ', $this->get_attributes_values(NULL, FALSE));
+		}
 
 		return $user_text;
 	}
@@ -285,6 +288,90 @@ class Model_Object extends ORM {
 				->where('attribute', '=', $attr_id)
 				->execute()->get('value_min', 0);
 		return $query;
+	}
+
+	public function get_cities()
+	{
+		if ( ! $this->loaded())
+		{
+			return FALSE;
+		}
+
+		$str =trim(str_replace(array('{', '}'), '', $this->cities));
+		
+		if ($str)
+		{
+			return explode(',', $str);
+		}
+		else
+		{
+			return array();
+		}
+	}
+
+	public function save(Validation $validation = NULL)
+	{
+		if ($this->cities AND is_array($this->cities))
+		{
+			$this->cities = '{'.join(',', $this->cities).'}';
+		}
+
+		parent::save($validation);
+	}
+
+	public function disable_comments()
+	{
+		if ( ! $this->loaded())
+		{
+			return FALSE;
+		}
+
+		$block = ORM::factory('User_Messages_Blocks');
+		$block->object_id 	= $this->id;
+		$block->user_id 	= $this->author;
+		$block->save();
+
+		return TRUE;
+	}
+
+	public function to_forced_moderation()
+	{
+		if ( ! $this->loaded())
+		{
+			return FALSE;
+		}
+
+		$this->is_published			= 1;
+		$this->moder_state 			= 0;
+		$this->to_forced_moderation = TRUE;
+		$this->is_bad 				= 0;
+
+		return $this->save();
+	}
+
+	public function send_to_db_dns()
+	{
+		if ( ! $this->loaded())
+		{
+			return FALSE;
+		}
+
+		return Model::factory('Dbdns')->add_record($this->id);
+	}
+
+	public function send_to_terrasoft()
+	{
+		if ( ! $this->loaded())
+		{
+			return FALSE;
+		}
+
+		$temp_object = ORM::factory('Temp_Objects');
+		$temp_object->record_id = $this->id;
+		$temp_object->status 	= 0;
+		$temp_object->tablename = 'object';
+		
+		return $temp_object->save();
 	}
 }
 

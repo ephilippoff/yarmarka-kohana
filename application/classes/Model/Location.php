@@ -42,6 +42,22 @@ class Model_Location extends ORM {
 
 		parent::save($validation);
 	}
+
+	public function where_lat_lon($lat, $lon)
+	{
+		return $this->where('lat', '=', $this->prepare_coord($lat))
+			->where('lon', '=', $this->prepare_coord($lon));
+	}
+
+	public function get_lon_lat_str()
+	{
+		if ( ! $this->loaded())
+		{
+			return FALSE;
+		}
+
+		return $this->lon.','.$this->lat;
+	}
 }
 
 /* End of file Location.php */

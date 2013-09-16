@@ -19,6 +19,7 @@ class Model_City extends ORM {
 
 	protected $_belongs_to = array(
 		'region'	=> array(),
+		'location'	=> array(),
 	);
 
 	public function get_url()

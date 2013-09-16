@@ -44,4 +44,20 @@ return array
 		'caching'      => FALSE,
 		'profiling'    => TRUE,
 	),
+	'db_dns' => array
+	(
+		'type'       => 'mysql',
+		'connection' => array(
+			'hostname'	 => 'localhost',
+			'database'	 => 'db_dns',
+			'username'   => 'root',
+			'password'   => 'root',
+			'persistent' => FALSE,
+		),
+		'identifier'   => '"',
+		'table_prefix' => '',
+		'charset'      => 'utf8',
+		'caching'      => FALSE,
+		'profiling'    => TRUE,
+	),
 );

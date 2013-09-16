@@ -4,10 +4,9 @@ class Controller_Add extends Controller_Template {
 
 	public function action_save_object()
 	{
-		// @todo
-		$this->request->post('rubricid', 15);
-
 		$this->auto_render = FALSE;
+
+		$json = array();
 
 		$user = Auth::instance()->get_user();
 
@@ -16,12 +15,15 @@ class Controller_Add extends Controller_Template {
 			// throw new HTTP_Exception_404('only ajax requests allowed');
 		}
 
+		$is_edit = FALSE;
+
 		// смотрим редактирование это или публикация
 		if ($object_id = (int) $this->request->post('object_id'))
 		{
 			$object = ORM::factory('Object', $object_id);
 			if ($object->loaded())
 			{
+				$is_edit = TRUE;
 				if ( ! $user->can_edit_object($object->id))
 				{
 					throw new HTTP_Exception_404('user can\'t edit this ad');
@@ -31,6 +33,10 @@ class Controller_Add extends Controller_Template {
 			{
 				throw new HTTP_Exception_404('object not found');
 			}
+		}
+		else
+		{
+			$object = ORM::factory('Object');
 		}
 
 		$errors = array();
@@ -190,7 +196,7 @@ class Controller_Add extends Controller_Template {
 		// если пользователь не авторизован
 		if ( ! $user)
 		{
-			if ($this->input->post('new_email'))
+			if ($this->request->post('new_email'))
 			{
 				// регистрация нового пользователя
 				try
@@ -234,25 +240,131 @@ class Controller_Add extends Controller_Template {
 			$errors['contacts'] = Kohana::message('object_form', 'max_objects');
 		}
 
-		// время жизни объявления
-		switch ($this->request->post('lifetime')) 
+		if ( ! $errors)
 		{
-			case "1m":
-				$date_expiration = date('Y-m-d H:i:s', strtotime('+1 month'));
-			break;
-			case "2m":
-				$date_expiration = date('Y-m-d H:i:s', strtotime('+2 month'));
-			break;
-			case "3m":
-				$date_expiration = date('Y-m-d H:i:s', strtotime('+3 month'));
-			break;
-			default:
-				$date_expiration = date('Y-m-d H:i:s', strtotime('+14 days'));
-			break;
+			// время жизни объявления
+			switch ($this->request->post('lifetime')) 
+			{
+				case "1m":
+					$date_expiration = date('Y-m-d H:i:s', strtotime('+1 month'));
+				break;
+				case "2m":
+					$date_expiration = date('Y-m-d H:i:s', strtotime('+2 month'));
+				break;
+				case "3m":
+					$date_expiration = date('Y-m-d H:i:s', strtotime('+3 month'));
+				break;
+				default:
+					$date_expiration = date('Y-m-d H:i:s', strtotime('+14 days'));
+				break;
+			}
+
+			// сохраняем город если нет
+			$city = Kladr::save_city($this->request->post('city_kladr_id'), $this->request->post('city_name'));
+
+			// сохраняем адрес
+			$location = Kladr::save_address($this->request->post('address_kladr_id'), 
+				$this->request->post('object_coordinates'), 
+				$this->request->post('address_str')
+			);
+
+			// если не нашли адрес, то берем location города
+			if ( ! $location->loaded())
+			{
+				$location = $city->location;
+			}
+
+			if ($object->loaded())
+			{
+				// если изменился основной город, то меняем его и в списке доп городов
+				if ($city->id != $object->city_id)
+				{
+					if ( ! $cities = $object->get_cities())
+					{
+						$object->cities = array($city->id);
+					}
+					else
+					{
+						// меняем только основной город в списке
+						foreach ($cities as $key => $city_id)
+						{
+							if ($city_id == $object->city_id)
+							{
+								$cities[$key] = $city->id;
+							}
+						}
+
+						$object->cities = $cities;
+					}
+				}
+			}
+
+			$object->action 			= $this->request->post('default_action');
+			$object->category 			= $category->id;
+			$object->contact 			= $this->request->post('contact');
+			$object->city_id			= $city->id;
+			$object->author 			= $user->id;
+			$object->ip_addr 			= Request::$client_ip;
+			if ($is_edit) // если это редактирвоание, то is_published не трогаем
+			{
+				$object->is_published 		= $user->loaded() ? 1 : 0;
+			}
+			$object->title 				= $this->request->post('title_adv');
+			$object->user_text 			= $this->request->post('user_text_adv');
+			$object->date_expiration 	= $date_expiration;
+			$object->geo_loc 			= $location->get_lon_lat_str();
+			$object->city_id 			= $location->id;
+
+			// сохраняем объявление
+			$object = Object::save($object, $this->request);
+
+			if ($object->is_bad === 1)
+			{
+				// если объявление было на исправлении, то отправляем на модерацию
+				$object->to_forced_moderation();
+			}
+
+			// сохраняем запись для короткого урла *.ya24.biz
+			$object->send_to_db_dns();
+
+			if ( ! $is_edit) 
+			{
+				//пишем id объявления во временную таблицу для последующего обмена с terrasoft
+				$object->send_to_terrasoft();
+			}
+
+			// отправляем письмо пользователю, если была быстрая регистрация
+			if ( ! empty($random_password))
+			{
+				$msg = View::factory('emails/fast_register_success', 
+					array('ActivationCode' => $user->code, 'Password' => $random_password, 'ObjectId' => $object->id))
+					->render();
+
+				Email::send($user->email, Kohana::$config->load('email.default_from'), 'Подтверждение регистрации на “Ярмарка-онлайн”', $msg);
+			}
+
+			// @todo тут должно идти сохранение контактов
+
+			// отправляем уведомление о успешном редактировании/публикации
+			$subj = $is_edit 
+				? 'Вы изменили Ваше объявление. Теперь объявление выглядит так:' 
+				: 'Поздравляем Вас с успешным размещением объявления на «Ярмарка-онлайн»!';
+
+			$msg = View::factory('emails/add_notice',
+					array('h1' => $subj,'objectId' => $object->id, 'name' => $user->get_user_name(), 
+						'obj' => $object, 'city' => $city, 'category' => $category, 'subdomain' => Region::get_domain_by_city($city->id), 
+						'contacts' => $contacts, 'address' => $this->request->post('address_str')));
+
+			Email::send($user->email, Kohana::$config->load('email.default_from'), $subj, $msg);
+
+			$json['object_id'] = $object->id;
+		}
+		else
+		{
+			$json['error'] = $errors;
 		}
 
-
-		print_r($errors);
+		$this->response->body(json_encode($json));
 	}
 
 	/**

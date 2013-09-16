@@ -2,21 +2,14 @@
 
 class Kladr
 {
-	public static function save_address(Request $request)
+	public static function save_city($city_kladr_id, $city_name)
 	{
-		// @todo доабвить транзакцию
-
-		$city_kladr_id 		= trim($request->post('city_kladr_id'));
-		$address_kladr_id 	= trim($request->post('address_kladr_id'));
-
 		// ищем и сохраняем город и улицу по kladr_id
 		$object_city = ORM::factory('City')
 			->where('kladr_id', '=', $city_kladr_id)
 			->find();
-		$city_name = $request->post('city_name');
 
-
-		$city_kladr_row = ORM::factory('Kladr')->get_city_by_id($city_kladr_id);
+		$city_kladr_row = Model::factory('Kladr')->get_city_by_id($city_kladr_id);
 		$region = ORM::factory('Region')->where('kladr_id', '=', $city_kladr_row->region_id);
 		if ( ! $region)
 		{
@@ -27,14 +20,6 @@ class Kladr
 			$region->kladr_code = $city_kladr_row->region_code;
 			$region->is_visible = 0;
 			$region->save();
-
-			// @todo может быть нужен будет $region->reload()
-
-			$region_id = $region->id;
-		}
-		else
-		{
-			$region_id = $region->id;
 		}
 
 		// города нет в нашей базе или у города нет location
@@ -46,7 +31,6 @@ class Kladr
 			{
 				// добавляем координату города в locations
 				list($lon, $lat) = $coord;
-				$location_id = $this->Location_m->add($city_kladr_row->region, $city_kladr_row->city, NULL, NULL, $city_kladr_id, $lat, $lon);
 
 				$location = ORM::factory('Location');
 				$location->region 	= $city_kladr_row->region;
@@ -64,61 +48,82 @@ class Kladr
 				// сохраняем новый город с location_id
 				$object_city->title 		= $object_city->sinonim = $city_name;
 				$object_city->is_visible 	= 0;
-				$object_city->kladr_id 	= $city_kladr_id;
-				$object_city->region_id 	= $region_id;
+				$object_city->kladr_id 		= $city_kladr_id;
+				$object_city->region_id 	= $region->id;
 				$object_city->geo_loc 		= $coord;
 				$object_city->location_id 	= $location_id;
 				$object_city->save();
 			}
-			else 
+			elseif ($coord) // если нашли координаты
 			{
 				// обновляем location_id у старого
-				$object_city->location_id = $location_id;
+				$object_city->location = $location;
 				$object_city->save();
 			}
 		}
 
-		// @todo дальше еще надо доделать
-		$address_str = trim($this->input->post('address'));
+		return $object_city;
+	}
+
+	public static function save_address($address_kladr_id, $object_coordinates, $address_str)
+	{
+		$location = ORM::factory('Location');
+
 		// ищем location адреса по координатам
-		if ($geo_location AND $address_str)
+		if ($object_coordinates AND $address_str)
 		{
-			list($lat, $lon) = explode(',', $geo_location);
+			list($lat, $lon) = explode(',', $object_coordinates);
 			if ($lat AND $lon)
 			{
 				$location = $this->Location_m->get_by_coord_with_kladr_id($lat, $lon);
-				if ($location AND $location->address)
-				{
-					$location_id = $location->id;
-				}
-				else
+				$location = ORM::factory('Location')->where_lat_lon($lat, $lon)
+					->where('kladr_id', 'IS', DB::expr('NOT NULL'))
+					->find();
+				if ( ! $location->loaded() OR ! $location->address)
 				{
 					$level = $kladr_id = NULL;
 					if ($address_kladr_id)
 					{
 						// берем адрес из КЛАДР
-						$address_kladr_row = $this->kladr_m->get_by_id($this->input->post('address_kladr_id'));
-						$address_str = Kladr_helper::collect_address($address_kladr_row);
+						$address_kladr_row = ORM::factory('Kladr')->get_address_by_id($address_kladr_id);
+						$address_str = Kladr::collect_address($address_kladr_row);
 						$level = $address_kladr_row->aolevel;
 						$kladr_id = $address_kladr_row->id;
 					}
 
-					$location_id = $this->Location_m->add(
-						$city_kladr_row->region, 
-						$city_kladr_row->city, 
-						$address_str, 
-						$level,
-						$kladr_id,
-						$lat, 
-						$lon);
+					$location = ORM::factory('Location');
+					$location->region 	= $city_kladr_row->region;
+					$location->city 	= $city_kladr_row->city;
+					$location->address 	= $address;
+					$location->level 	= $level;
+					$location->kladr_id = $kladr_id;
+					$location->lat 		= $lat;
+					$location->lon 		= $lon;
+					$location->save();
 				}
 			}
 		}
-		else
+
+		return $location;
+	}
+
+	public static function collect_address($row)
+	{
+		$address_str = $row->address;
+		if ($row->housenum)
 		{
-			$geo_location 	= $object_city->geo_loc;
-			$location_id 	= $object_city->location_id;
+			$address_str .= ', д. '.$row->housenum;
 		}
+		if ($row->buildnum)
+		{
+			$address_str .= ', корп. '.$row->buildnum;
+		}
+		if ($row->strucnum)
+		{
+			$address_str .= ', стр. '.$row->strucnum;
+		}
+
+		return $address_str;
 	}
 }
 
