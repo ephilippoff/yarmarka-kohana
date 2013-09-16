@@ -161,7 +161,7 @@ class Object
 	public function get_form_elements_from_post($post)
 	{
 		$params = array();
-		foreach ($post() as $key => $value)
+		foreach ($post as $key => $value)
 		{
 			if (preg_match('/param_([0-9]*)[_]{0,1}(.*)/', $key, $matches))
 			{

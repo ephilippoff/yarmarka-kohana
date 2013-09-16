@@ -370,8 +370,9 @@ class Model_Object extends ORM {
 		$temp_object->record_id = $this->id;
 		$temp_object->status 	= 0;
 		$temp_object->tablename = 'object';
-		
-		return $temp_object->save();
+		$temp_object->save();
+
+		return TRUE;
 	}
 }
 
