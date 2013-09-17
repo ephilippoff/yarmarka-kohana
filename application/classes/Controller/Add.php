@@ -98,7 +98,7 @@ class Controller_Add extends Controller_Template {
 			throw new HTTP_Exception_404('undefined category');
 		}
 
-		if ($category->title_auto_fill)
+		if ( ! $category->title_auto_fill)
 		{
 			$validation->rules('title_adv', array(
 				array('not_empty'),
@@ -154,8 +154,8 @@ class Controller_Add extends Controller_Template {
 			{
 				case 'integer':
 					$rules[] = array('digit');
+					$rules[] = array('not_0');
 					$rules[] = array('max_length', array(':value', $reference->attribute_obj->solid_size));
-					// @todo check not zero validation
 				break;
 
 				case 'numeric':
@@ -265,7 +265,8 @@ class Controller_Add extends Controller_Template {
 			// сохраняем адрес
 			$location = Kladr::save_address($this->request->post('address_kladr_id'), 
 				$this->request->post('object_coordinates'), 
-				$this->request->post('address_str')
+				$this->request->post('address'),
+				$this->request->post('city_kladr_id')
 			);
 
 			// если не нашли адрес, то берем location города
@@ -307,13 +308,17 @@ class Controller_Add extends Controller_Template {
 			$object->ip_addr 			= Request::$client_ip;
 			if ($is_edit) // если это редактирвоание, то is_published не трогаем
 			{
-				$object->is_published 		= $user->loaded() ? 1 : 0;
+				$object->is_published 	= $user->loaded() ? 1 : 0;
 			}
-			$object->title 				= $this->request->post('title_adv');
+
+			if ( ! $category->title_auto_fill)
+			{
+				$object->title 			= $this->request->post('title_adv');
+			}
 			$object->user_text 			= $this->request->post('user_text_adv');
-			$object->date_expiration 	= $date_expiration;
+			$object->date_expiration	= $date_expiration;
 			$object->geo_loc 			= $location->get_lon_lat_str();
-			$object->city_id 			= $location->id;
+			$object->location_id		= $location->id;
 
 			// сохраняем объявление
 			$object = Object::save($object, $this->request);
@@ -337,7 +342,7 @@ class Controller_Add extends Controller_Template {
 			if ( ! empty($random_password))
 			{
 				$msg = View::factory('emails/fast_register_success', 
-					array('ActivationCode' => $user->code, 'Password' => $random_password, 'ObjectId' => $object->id))
+					array('activation_code' => $user->code, 'Password' => $random_password, 'object_id' => $object->id))
 					->render();
 
 				Email::send($user->email, Kohana::$config->load('email.default_from'), 'Подтверждение регистрации на “Ярмарка-онлайн”', $msg);
@@ -351,7 +356,7 @@ class Controller_Add extends Controller_Template {
 				: 'Поздравляем Вас с успешным размещением объявления на «Ярмарка-онлайн»!';
 
 			$msg = View::factory('emails/add_notice',
-					array('h1' => $subj,'objectId' => $object->id, 'name' => $user->get_user_name(), 
+					array('h1' => $subj,'object' => $object, 'name' => $user->get_user_name(), 
 						'obj' => $object, 'city' => $city, 'category' => $category, 'subdomain' => Region::get_domain_by_city($city->id), 
 						'contacts' => $contacts, 'address' => $this->request->post('address_str')));
 

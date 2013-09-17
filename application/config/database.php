@@ -46,7 +46,7 @@ return array
 	),
 	'db_dns' => array
 	(
-		'type'       => 'mysql',
+		'type'       => 'MySQL',
 		'connection' => array(
 			'hostname'	 => 'localhost',
 			'database'	 => 'db_dns',

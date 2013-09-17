@@ -6,12 +6,12 @@ class Model_Dbdns extends Model_Database
 
 	public function add_record($object_id)
 	{
-		if ( ! $object->id)
+		if ( ! $object_id)
 		{
 			return FALSE;
 		}
 		
-		$query = DB::insert('records', array('name'))->values($object_id.'ya24.biz');
+		$query = DB::insert('records', array('name'))->values(array($object_id.'ya24.biz'));
 
 		return $query->execute($this->_db);
 	}

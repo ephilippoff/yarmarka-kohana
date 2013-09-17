@@ -1,6 +1,6 @@
 <?php defined('SYSPATH') OR die('No direct script access.');
 
-class Model_Data_Numeric extends ORM
+class Model_Data_Numeric extends Data
 {
 	protected $_table_name = 'data_numeric';
 

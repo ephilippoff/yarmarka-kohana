@@ -4,10 +4,13 @@ class Object
 {
 	public static function save(Model_Object $object, Request $request)
 	{
-		Database::instance()->begin();
+		$db = Database::instance();
 
 		try
 		{
+			// start transaction
+			$db->begin();
+
 			// сохраняем object чтобы получить object_id
 			$object->save();
 
@@ -38,12 +41,12 @@ class Object
 						$object->main_image_id = $attachment->id;
 					}
 				}
-			}
 
-			// удаляем аттачи из временой таблицы
-			foreach ($userphotos as $file) 
-			{
-				ORM::factory('Tmp_Img')->where('name', '=', $file)->delete();
+				// удаляем аттачи из временой таблицы
+				foreach ($userphotos as $file) 
+				{
+					ORM::factory('Tmp_Img')->where('name', '=', $file)->delete();
+				}
 			}
 
 			// сохраняем видео
@@ -62,36 +65,37 @@ class Object
 				$object->disable_comments();
 			}
 
-			$params = self::get_form_elements_from_post($request->post());
+			$params = Object::get_form_elements_from_post($request->post());
 
 			$boolean_deleted = FALSE; // если меняются булевые параметры, то удаляем все что есть в базе
 			foreach ($params as $reference_id => $value)
 			{
-				$reference = ORM::factory('Reference')
-					->with('attribute_obj')
-					->where('id', '=', $reference_id)
+				$form_element = ORM::factory('Form_Element')
+					->with('reference_obj:attribute_obj')
+					->where('form_element.reference', '=', $reference_id)
+					->cached(Date::DAY)
 					->find();
 
-				if ( ! $reference->loaded())
+				if ( ! $form_element->loaded())
 				{
-					// неизвестный reference
+					// неизвестный элемент формы
 					continue;
 				}
 
-				if ($reference->type == 'boolean' AND ! $boolean_deleted)
+				if ($form_element->reference_obj->attribute_obj->type == 'boolean' AND ! $boolean_deleted)
 				{
-					ORM::factory('Data_Boolean')->where('object_id', '=', $object->id)->delete_all();
+					ORM::factory('Data_Boolean')->where('object', '=', $object->id)->delete_all();
 					$boolean_deleted = TRUE;
 				}
 
 				// удаляем старые значения
-				ORM::factory('Data_'.$reference->type)
-					->where('object_id', '=', $object->id)
-					->where('reference', '=', $reference->id)
+				ORM::factory('Data_'.Text::ucfirst($form_element->reference_obj->attribute_obj->type))
+					->where('object', '=', $object->id)
+					->where('reference', '=', $form_element->reference_obj->id)
 					->delete_all();
 
 				// проверяем есть ли значение
-				if ($reference->attribute_obj->is_range)
+				if ($form_element->is_range)
 				{
 					if (empty($value['min']) AND empty($value['max']))
 					{
@@ -107,7 +111,7 @@ class Object
 				}
 
 				// сохраняем цену для объявления
-				if ($reference->attribute_obj->is_price)
+				if ($form_element->reference_obj->attribute_obj->is_price)
 				{
 					if (is_array($value))
 					{
@@ -118,18 +122,25 @@ class Object
 						$object->price = $value;
 					}
 
-					$object->price_unit = $reference->attribute_obj->unit;
+					$object->price_unit = $form_element->reference_obj->attribute_obj->unit;
 				}
 
 				// сохраняем дата атрибут
-				$data = ORM::factory('Data_'.$reference->type);
-				$data->attribute 	= $reference->attribute;
+				$data = ORM::factory('Data_'.Text::ucfirst($form_element->reference_obj->attribute_obj->type));
+				$data->attribute 	= $form_element->reference_obj->attribute;
 				$data->object 		= $object->id;
-				$data->reference 	= $reference->id;
-				if ($reference->attribute_obj->is_range)
+				$data->reference 	= $form_element->reference_obj->id;
+				if ($data->is_range_value())
 				{
-					$data->value_min = $value['min'];
-					$data->value_max = $value['max'];
+					if (is_array($value))
+					{
+						$data->value_min = $value['min'];
+						$data->value_max = $value['max'];
+					}
+					else
+					{
+						$data->value_min = $value;
+					}
 				}
 				else
 				{
@@ -138,16 +149,24 @@ class Object
 				$data->save();
 			}
 
+			if ($object->category_obj->title_auto_fill)
+			{
+				$object->title = $object->generate_title();
+			}
+
 			$object->update();
+
+			$db->commit();
 		}
 		catch(Exception $e)
 		{
 			Kohana::$log->add(Log::ERROR, 'Ошибка при сохранении объявления:'.$e->getMessage());
 			Email::send(Kohana::$config->load('common.admin_emails'), Kohana::$config->load('email.default_from'), 'Ошибка при сохранении объявления', $e->getMessage());
-			Database::instance()->rollback();
-		}
 
-		Database::instance()->commit();
+			$db->rollback();
+
+			throw $e;
+		}
 
 		return $object;
 	}
@@ -158,7 +177,7 @@ class Object
 	 * @param  array $post
 	 * @return array
 	 */
-	public function get_form_elements_from_post($post)
+	public static function get_form_elements_from_post($post)
 	{
 		$params = array();
 		foreach ($post as $key => $value)

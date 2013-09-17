@@ -11,7 +11,7 @@ class Kladr
 
 		$city_kladr_row = Model::factory('Kladr')->get_city_by_id($city_kladr_id);
 		$region = ORM::factory('Region')->where('kladr_id', '=', $city_kladr_row->region_id);
-		if ( ! $region)
+		if ( ! $region->loaded())
 		{
 			// добавляем новый регион
 			$region = ORM::factory('Region');
@@ -43,7 +43,7 @@ class Kladr
 				$coord = join(',', $coord);
 			}
 
-			if ( ! $object_city)
+			if ( ! $object_city->loaded())
 			{
 				// сохраняем новый город с location_id
 				$object_city->title 		= $object_city->sinonim = $city_name;
@@ -51,7 +51,7 @@ class Kladr
 				$object_city->kladr_id 		= $city_kladr_id;
 				$object_city->region_id 	= $region->id;
 				$object_city->geo_loc 		= $coord;
-				$object_city->location_id 	= $location_id;
+				$object_city->location_id 	= $location->id;
 				$object_city->save();
 			}
 			elseif ($coord) // если нашли координаты
@@ -65,17 +65,18 @@ class Kladr
 		return $object_city;
 	}
 
-	public static function save_address($address_kladr_id, $object_coordinates, $address_str)
+	public static function save_address($address_kladr_id, $object_coordinates, $address_str, $city_kladr_id)
 	{
 		$location = ORM::factory('Location');
 
 		// ищем location адреса по координатам
 		if ($object_coordinates AND $address_str)
 		{
+			$city_kladr_row = Model::factory('Kladr')->get_city_by_id($city_kladr_id);
+			
 			list($lat, $lon) = explode(',', $object_coordinates);
 			if ($lat AND $lon)
 			{
-				$location = $this->Location_m->get_by_coord_with_kladr_id($lat, $lon);
 				$location = ORM::factory('Location')->where_lat_lon($lat, $lon)
 					->where('kladr_id', 'IS', DB::expr('NOT NULL'))
 					->find();
@@ -94,7 +95,7 @@ class Kladr
 					$location = ORM::factory('Location');
 					$location->region 	= $city_kladr_row->region;
 					$location->city 	= $city_kladr_row->city;
-					$location->address 	= $address;
+					$location->address 	= $address_str;
 					$location->level 	= $level;
 					$location->kladr_id = $kladr_id;
 					$location->lat 		= $lat;

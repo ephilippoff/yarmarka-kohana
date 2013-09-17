@@ -1,6 +1,6 @@
 <?php defined('SYSPATH') OR die('No direct script access.');
 
-class Model_Data_Boolean extends ORM
+class Model_Temp_Objects extends ORM
 {
 	protected $_table_name = 'temp_objects';
 

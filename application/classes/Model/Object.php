@@ -21,19 +21,112 @@ class Model_Object extends ORM {
 	{
 		return array(
 			'user_text' => array(
-				array(array($this, 'generate_full_text')),
+				array(array($this, 'filter_user_text')),
+			),
+			'title' => array(
+				array(array($this, 'filter_title')),
 			),
 		);
 	}
 
-	public function generate_full_text($user_text)
+	public function filter_user_text($user_text)
 	{
 		if ($this->loaded())
 		{
-			$this->full_text = strip_tags($this->title).', '.strip_tags($user_text).', '.join(', ', $this->get_attributes_values(NULL, FALSE));
+			$this->full_text = $this->generate_full_text($user_text);
 		}
 
 		return $user_text;
+	}
+
+	public function filter_title($title)
+	{
+		$this->seo_name = Url::title($title, '-', TRUE);
+
+		return $title;
+	}
+
+	public function generate_full_text($user_text = NULL)
+	{
+		if ( ! $this->loaded())
+		{
+			return FALSE;
+		}
+
+		if (is_null($user_text))
+		{
+			$user_text = $this->user_text;
+		}
+
+		return strip_tags($this->title).', '.strip_tags($user_text).', '.join(', ', $this->get_attributes_values(NULL, FALSE));
+	}
+
+	public function generate_title($template = NULL)
+	{
+		if (is_null($template))
+		{
+			$template = $this->category_obj->template;
+		}
+
+		if ( ! $this->loaded() OR ! $template)
+		{
+			return FALSE;
+		}
+
+		if ( ! preg_match_all('/{([^}]*)}/i', $template, $matches))
+		{
+			return $template;
+		}
+
+		$attrs = $this->get_attributes();
+		foreach ($attrs as $attr)
+		{
+			if (in_array($attr['seotitle'], $matches[1]))
+			{
+				$value = '';
+				switch ($attr['types'])
+				{
+					case 'integer':
+					case 'numeric':
+						if ( ! intval($attr['min_value']) AND intval($attr['max_value']))
+						{
+							$value = ' до '.$value_max;
+						} 
+						elseif (intval($attr['min_value']) AND ! intval($attr['max_value'])) 
+						{
+							$value = $value_min;
+						}
+						elseif (intval($attr['min_value']) AND intval($attr['max_value'])) 
+						{
+							$value = ' от '.$value_min.' до '.$value_max;
+						}
+					break;
+					case 'list':
+						if ($attr['parent_other'])
+						{
+							$value = '';
+						} 
+						else 
+						{
+							$value = $attr['tvalue'];
+						}
+					break;
+					default:
+						$value = $attr['tvalue'];
+					break;
+				}
+
+				$template = str_replace('{'.$attr['seotitle'].'}', $value, $template);
+			}
+		}
+
+		//зачищаем оставшиеся параметры из заголовка, которые не распарсились
+		foreach ($matches[0] as $match)
+		{
+			$template = str_replace($match, '', $template);
+		}
+
+		return $template;
 	}
 
 	public function remove_from_favorites()
@@ -205,6 +298,7 @@ class Model_Object extends ORM {
 			return FALSE;
 		}
 
+		// @todo переделать на ORM
 		$sql = "select ref.id as ref_id, ref.is_selectable, types,aid,atitle,seotitle,dlref as reference,min_value,max_value,idvalue,tvalue,boolvalue,ref.is_required,parent_other,unit,fe.group as fegroup,gr.title as grtitle  from (
 			  select 'list' as types,attr.id as aid,attr.title as atitle,attr.seo_name as seotitle,dl.reference as dlref,0 as min_value,0 as max_value,ae.id as idvalue,ae.title as tvalue,0 as boolvalue,ae.parent_other as parent_other,attr.unit   
 			  from data_list as dl left join attribute as attr on dl.attribute=attr.id left join attribute_element as ae on dl.value=ae.id
@@ -290,6 +384,11 @@ class Model_Object extends ORM {
 		return $query;
 	}
 
+	/**
+	 * Return column cities as array
+	 *
+	 * @return array
+	 */
 	public function get_cities()
 	{
 		if ( ! $this->loaded())
@@ -314,6 +413,15 @@ class Model_Object extends ORM {
 		if ($this->cities AND is_array($this->cities))
 		{
 			$this->cities = '{'.join(',', $this->cities).'}';
+		}
+		elseif ($this->city_id)
+		{
+			$this->cities = '{'.$this->city_id.'}';
+		}
+
+		if ( ! $this->date_expired)
+		{
+			$this->date_expired = DB::expr('NOW()');
 		}
 
 		parent::save($validation);

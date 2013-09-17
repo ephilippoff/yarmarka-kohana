@@ -1,6 +1,6 @@
 <?php defined('SYSPATH') OR die('No direct script access.');
 
-class Model_Messages_Blocks extends ORM
+class Model_User_Messages_Blocks extends ORM
 {
 	protected $_table_name = 'user_messages_blocks';
 
