@@ -55,6 +55,7 @@ class Controller_Add extends Controller_Template {
 					array('not_empty'),
 					array('email'),
 				))->rule('rules_confirmed', 'not_empty');
+				// @todo add captcha validation
 			}
 			else
 			{
@@ -194,6 +195,11 @@ class Controller_Add extends Controller_Template {
 		}
 
 		// если пользователь не авторизован
+		if ($user)
+		{
+			print('authorized');
+		}
+
 		if ( ! $user)
 		{
 			if ($this->request->post('new_email'))
@@ -215,8 +221,10 @@ class Controller_Add extends Controller_Template {
 				// авторизация пользователя
 				try 
 				{
-					Auth::instance()->login($this->request->post('email'), $this->request->post('password'));
-					$user = Auth::instance()->get_user();
+					// Auth::instance()->login($this->request->post('email'), $this->request->post('password'));
+					// $user = Auth::instance()->get_user();
+					$user = Auth::instance()->check_user($this->request->post('email'), $this->request->post('password'));
+					$json['user_token'] = Auth::instance()->create_token($user)->token;
 				}
 				catch(Exception $e)
 				{
