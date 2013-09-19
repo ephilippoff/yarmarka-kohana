@@ -12,7 +12,7 @@ class Controller_Add extends Controller_Template {
 
 		if ( ! Request::current()->is_ajax())
 		{
-			// throw new HTTP_Exception_404('only ajax requests allowed');
+			throw new HTTP_Exception_404('only ajax requests allowed');
 		}
 
 		$is_edit = FALSE;
@@ -72,8 +72,8 @@ class Controller_Add extends Controller_Template {
 			if (preg_match('/^contact_([0-9]*)_value/', $key, $matches))
 			{
 				$contacts[] = array(
-					'value' => $this->request->post('contact_'.$matches[1].'_value'),
-					'type' => $this->request->post('contact_'.$matches[1].'_type'),
+					'value' => $_POST['contact_'.$matches[1].'_value'],
+					'type' => $_POST['contact_'.$matches[1].'_type'],
 				);
 			}
 		});
