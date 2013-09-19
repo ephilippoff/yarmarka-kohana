@@ -408,6 +408,21 @@ class Model_Object extends ORM {
 		}
 	}
 
+	public function get_filename()
+	{
+		if ( ! $this->loaded() OR ! $this->main_image_id)
+		{
+			return FALSE;
+		}
+
+		$attachment = ORM::factory('Object_Attachment')
+			->where('id', '=', $this->main_image_id)
+			->cached(Date::MINUTE)
+			->find();
+
+		return $attachment->loaded() ? $attachment->filename : FALSE;
+	}
+
 	public function save(Validation $validation = NULL)
 	{
 		if ($this->cities AND is_array($this->cities))
