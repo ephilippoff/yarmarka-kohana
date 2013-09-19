@@ -90,15 +90,15 @@ class Model_Object extends ORM {
 					case 'numeric':
 						if ( ! intval($attr['min_value']) AND intval($attr['max_value']))
 						{
-							$value = ' до '.$value_max;
+							$value = ' до '.$attr['value_max'];
 						} 
 						elseif (intval($attr['min_value']) AND ! intval($attr['max_value'])) 
 						{
-							$value = $value_min;
+							$value = $attr['value_min'];
 						}
 						elseif (intval($attr['min_value']) AND intval($attr['max_value'])) 
 						{
-							$value = ' от '.$value_min.' до '.$value_max;
+							$value = ' от '.$attr['value_min'].' до '.$attr['value_max'];
 						}
 					break;
 					case 'list':
