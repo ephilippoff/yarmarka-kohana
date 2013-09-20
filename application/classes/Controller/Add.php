@@ -72,10 +72,14 @@ class Controller_Add extends Controller_Template {
 		array_walk($_POST, function($value, $key) use (&$contacts){
 			if (preg_match('/^contact_([0-9]*)_value/', $key, $matches))
 			{
-				$contacts[] = array(
-					'value' => $_POST['contact_'.$matches[1].'_value'],
-					'type' => $_POST['contact_'.$matches[1].'_type'],
-				);
+				$value = trim($_POST['contact_'.$matches[1].'_value']);
+				if ($value)
+				{
+					$contacts[] = array(
+						'value' => $value,
+						'type' => $_POST['contact_'.$matches[1].'_type'],
+					);
+				}
 			}
 		});
 
@@ -195,11 +199,6 @@ class Controller_Add extends Controller_Template {
 		}
 
 		// если пользователь не авторизован
-		if ($user)
-		{
-			print('authorized');
-		}
-
 		if ( ! $user)
 		{
 			if ($this->request->post('new_email'))
@@ -308,7 +307,10 @@ class Controller_Add extends Controller_Template {
 				}
 			}
 
-			$object->action 			= $this->request->post('default_action');
+			if ($this->request->post('default_action'))
+			{
+				$object->action 		= $this->request->post('default_action');
+			}
 			$object->category 			= $category->id;
 			$object->contact 			= $this->request->post('contact');
 			$object->city_id			= $city->id;

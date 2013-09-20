@@ -45,7 +45,7 @@ class Object
 				// удаляем аттачи из временой таблицы
 				foreach ($userphotos as $file) 
 				{
-					ORM::factory('Tmp_Img')->where('name', '=', $file)->delete();
+					ORM::factory('Tmp_Img')->delete_by_name($file);
 				}
 			}
 
@@ -97,7 +97,7 @@ class Object
 				// проверяем есть ли значение
 				if ($form_element->is_range)
 				{
-					if (empty($value['min']) AND empty($value['max']))
+					if (is_array($value) AND empty($value['min']) AND empty($value['max']))
 					{
 						continue;
 					}
