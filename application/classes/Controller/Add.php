@@ -192,7 +192,7 @@ class Controller_Add extends Controller_Template {
 			$errors['contacts'] = Kohana::message('object_form', 'empty_contacts');
 		}
 
-		// проверяем заблоки
+		// проверяем заблокированные контакты
 		if ($blocked_contacts)
 		{
 			$errors['contacts'] = strtr(Kohana::message('object_form', 'blocked_contacts'), array(':contacts' => implode(',', $blocked_contacts)));
@@ -332,6 +332,22 @@ class Controller_Add extends Controller_Template {
 
 			// сохраняем объявление
 			$object = Object::save($object, $this->request);
+
+			if ($is_edit)
+			{
+				$old_contacts = ORM::factory('Contact')
+					->where_object_id($object->id)
+					->find_all();
+				foreach ($old_contacts as $oc)
+				{
+					$oc->delete();
+				}
+			}
+			// сохраянем новые контакты
+			foreach ($contacts as $contact)
+			{
+				$object->add_contact($contact['type'], $contact['value']);
+			}
 
 			if ($object->is_bad === 1)
 			{

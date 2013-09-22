@@ -11,7 +11,7 @@ class Model_Contact_Type extends ORM {
 	protected $_table_name = 'contact_type';
 
 	protected $_has_many = array(
-		'contacts' => array('model' => 'Object_Contact', 'foreign_key' => 'contact_type_id'),
+		'contacts' => array('model' => 'Contact', 'foreign_key' => 'contact_type_id'),
 	);
 
 	public static function is_phone($contact_type_id)

@@ -52,8 +52,9 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 		{
 			$objects
 				->where_open()
-					->where('', 'EXISTS', DB::expr('(SELECT oc.id FROM object_contact as oc 
-								WHERE oc.object_id=object.id AND oc.contact_clear LIKE \'%'.$contact.'%\')'))
+					->where('', 'EXISTS', DB::expr('(SELECT oc.id FROM object_contacts as oc 
+								JOIN contacts as c ON c.id = oc.contact_id 
+								WHERE oc.object_id=object.id AND c.contact LIKE \'%'.$contact.'%\')'))
 					->or_where('object.contact', 'LIKE', '%'.$contact.'%')
 				->where_close();
 		}

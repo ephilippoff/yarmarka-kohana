@@ -56,8 +56,9 @@ class Controller_Admin_Users extends Controller_Admin_Template {
 		{
 			// @todo наверное это можно сделать на ORM как-то более изящно
 			$users->where('', 'EXISTS', DB::expr('(SELECT object.id FROM object 
-							LEFT JOIN object_contact AS oc ON oc.object_id=object.id 
-							WHERE object.author="user"."id" AND oc.contact_clear LIKE \'%'.$phone.'%\')'));
+							LEFT JOIN object_contacts AS oc ON oc.object_id=object.id 
+							JOIN contacts as c ON c.id = oc.contact_id 
+							WHERE object.author="user"."id" AND c.contact_clear LIKE \'%'.$phone.'%\')'));
 		}
 
 		$clone_to_count = clone $users;

@@ -9,6 +9,7 @@
 			toolbar_items_size: 'small',
 			plugins: ["visualblocks visualchars code fullscreen"],
 		});
+
 		$('#edit_form').submit(function(e){
 			e.preventDefault();
 
@@ -37,7 +38,7 @@
 
 		<input type="text" name="title" style="width:100%" value="<?=$object->title?>" required />
 		<br /><br />
-		<textarea name="user_text" cols="35" rows="8" class="tiny input-xlarge" required><?=$object->user_text?></textarea>
+		<textarea name="user_text" cols="35" rows="8" class="tiny input-xlarge"><?=$object->user_text?></textarea>
 </div>
 <div class="modal-footer">
 	<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>

@@ -8,7 +8,8 @@ class Controller_Admin_Phones extends Controller_Admin_Template {
 		$page   = $this->request->query('page');
 		$offset = ($page AND $page != 1) ? ($page-1)*$limit : 0;
 
-		$contacts = ORM::factory('Object_Contact')->where('contact_type_id', 'IN', array(Model_Contact_Type::MOBILE, Model_Contact_Type::PHONE));
+		$contacts = ORM::factory('Contact')
+			->where('contact_type_id', 'IN', array(Model_Contact_Type::MOBILE, Model_Contact_Type::PHONE));
 
 		$clone_to_count = clone $contacts;
 		$count_all = $clone_to_count->count_all();
@@ -38,7 +39,7 @@ class Controller_Admin_Phones extends Controller_Admin_Template {
 
 		$json = array('code' => 200);
 
-		$contact = ORM::factory('Object_Contact', $this->request->param('id'));
+		$contact = ORM::factory('Contact', $this->request->param('id'));
 		if ( ! $contact->loaded())
 		{
 			throw new HTTP_Exception_404;

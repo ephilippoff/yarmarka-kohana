@@ -142,13 +142,11 @@ class Model_User extends Model_Auth_User {
 			return FALSE;
 		}
 
-		$object_contact = ORM::factory('Object_Contact');
+		$object_contact = ORM::factory('Contact');
 
 		$query = $object_contact->select('contact_type.name')
-			->join('contact_type')
-			->on('contact_type.id', '=', 'object_contact.contact_type_id')
-			->where('user_id', '=', $this->id)
-			->where('object_id', 'IS', DB::expr('NULL'))
+			->with('contact_type')
+			->where_user_id($this->id)
 			->order_by('id');
 
 		if ($type)
@@ -174,17 +172,13 @@ class Model_User extends Model_Auth_User {
 			return FALSE;
 		}
 
-		$unique = ! (bool) ORM::factory('Object_Contact')
-			->where('contact_type_id', 'IN', array(Model_Contact_Type::MOBILE, Model_Contact_Type::PHONE))
-			->where('contact_clear', '=', Text::clear_phone_number($contact_str))
-			->count_all();
-
-		$contact = ORM::factory('Object_Contact');
+		$contact = ORM::factory('Contact');
 		$contact->contact_type_id	= intval($contact_type_id);
 		$contact->contact			= trim($contact_str);
-		$contact->user_id			= $this->id;
-		$contact->verified			= ($unique ? 0 : -1);
-		$contact->save();
+		$contact->show 				= 1;
+		$contact->create();
+
+		$contact->add('users', $this->id);
 
 		return $contact;
 	}
@@ -196,8 +190,8 @@ class Model_User extends Model_Auth_User {
 			return FALSE;
 		}
 
-		$contact = ORM::factory('Object_Contact');
-		$contact->where('user_id', '=', $this->id)
+		$contact = ORM::factory('Contact');
+		$contact->where_user_id($this->id)
 			->where('id', '=', intval($contact_id))
 			->find();
 		if ($contact->loaded())

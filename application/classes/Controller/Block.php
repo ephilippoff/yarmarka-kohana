@@ -141,7 +141,8 @@ class Controller_Block extends Controller_Template
 
 	public function action_not_unique_contact_msg()
 	{
-		$this->template->not_unique_numbers = ORM::factory('Object_Contact')->get_by_phone_number($this->request->param('number'))
+		$this->template->not_unique_numbers = ORM::factory('Contact')
+			->by_phone_number($this->request->param('number'))
 			->where('verified', '=', 1)
 			->find_all();
 	}

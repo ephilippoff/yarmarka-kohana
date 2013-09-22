@@ -31,7 +31,7 @@ abstract class Controller_Admin_Template extends Controller_Template {
 		{
 			$this->redirect('khbackend/users/login');
 		}
-		elseif (Auth::instance()->logged_in() AND $this->module_name != 'Welcome' AND ! Auth::instance()->have_access_to($this->module_name))
+		elseif (Auth::instance()->logged_in() AND $this->module_name != 'welcome' AND ! Auth::instance()->have_access_to($this->module_name))
 		{
 			throw new HTTP_Exception_404;
 		}

@@ -12,7 +12,7 @@ class Model_Object extends ORM {
 	);
 
 	protected $_has_many = array(
-		'contacts'			=> array('model' => 'Object_Contact', 'foreign_key' => 'object_id'),
+		'contacts'			=> array('model' => 'Contact', 'through' => 'object_contacts'),
 		'user_messages'		=> array('model' => 'User_Messages', 'foreign_key' => 'object_id'),
 		'complaints'		=> array('model' => 'Complaint', 'foreign_key' => 'object_id'),
 	);
@@ -496,6 +496,42 @@ class Model_Object extends ORM {
 		$temp_object->save();
 
 		return TRUE;
+	}
+
+	public function add_contact($contact_type_id, $contact_str)
+	{
+		if ( ! $this->loaded())
+		{
+			return FALSE;
+		}
+
+		// is contact exists at this object
+		$contact_exists = ORM::factory('Contact')
+			->where_object_id($this->id);
+		if (Model_Contact_Type::is_phone($contact_type_id))
+		{
+			$contact_exists->by_phone_number($contact_str)
+				->find();
+		}
+		else
+		{
+			$contact_exists->where('contact', '=', trim($contact_str))
+				->where('contact_type_id', '=', intval($contact_type_id))
+				->find();
+		}
+
+		$contact = ORM::factory('Contact');
+		if ( ! $contact_exists->loaded())
+		{
+			$contact->contact_type_id	= intval($contact_type_id);
+			$contact->contact			= trim($contact_str);
+			$contact->show 				= 1;
+			$contact->create();
+
+			$contact->add('objects', $this->id);
+		}
+
+		return $contact->loaded() ? $contact : $contact_exists;
 	}
 }
 

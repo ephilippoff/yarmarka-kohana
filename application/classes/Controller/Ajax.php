@@ -174,18 +174,18 @@ class Controller_Ajax extends Controller_Template
 			// проверяем телефоны по contact_clear
 			if ($is_phone)
 			{
-				$exists_contact = ORM::factory('Object_Contact')
+				$exists_contact = ORM::factory('Contact')
 					->where('contact_type_id', 'IN', array(1,2))
 					->where('contact_clear', '=', $contact_clear)
-					->where('user_id', '=', $user->id)
+					->where_user_id($user->id)
 					->find();
 			}
 			else // другие типы контактов
 			{
-				$exists_contact = ORM::factory('Object_Contact')
+				$exists_contact = ORM::factory('Contact')
 					->where('contact_type_id', '=', $contact_type_id)
 					->where('contact', '=', $contact)
-					->where('user_id', '=', $user->id)
+					->where_user_id($user->id)
 					->find();
 			}
 
