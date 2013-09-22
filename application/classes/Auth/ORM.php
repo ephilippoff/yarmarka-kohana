@@ -73,7 +73,7 @@ class Auth_ORM extends Kohana_Auth_ORM {
 
 		if ($remember === TRUE)
 		{
-			$token = $this->create_token();
+			$token = $this->create_token($user);
 
 			// Set the autologin cookie
 			Cookie::set('authautologin', $token->token, $this->_config['lifetime']);
