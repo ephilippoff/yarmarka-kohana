@@ -139,7 +139,7 @@
 	<li>
 		<div class="input style2">
 			<label><span><i class="name">Адрес вашей страницы :</i></span></label>					                    			
-			<p class="myinform"><a href="" class="mylink user_page" target="_blank"><?=CI::site('users/'.$user->login)?></a>
+			<p class="myinform"><a href="" class="mylink user_page" target="_blank"><?=  substr(URL::base('http'), 0, strlen(URL::base('http')) - 1).URL::site('users/'.$user->login)?></a>
 				<div class="help-bl">
 					<div class="baloon">
 					</div>
