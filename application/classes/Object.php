@@ -95,19 +95,13 @@ class Object
 					->delete_all();
 
 				// проверяем есть ли значение
-				if ($form_element->is_range)
+				if (is_array($value) AND empty($value['min']) AND empty($value['max']))
 				{
-					if (is_array($value) AND empty($value['min']) AND empty($value['max']))
-					{
-						continue;
-					}
+					continue;
 				}
-				else
+				elseif (empty($value))
 				{
-					if (empty($value))
-					{
-						continue;
-					}
+					continue;
 				}
 
 				// сохраняем цену для объявления

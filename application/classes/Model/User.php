@@ -16,6 +16,7 @@ class Model_User extends Model_Auth_User {
 		'invoices'		=> array(),
 		'subscriptions'	=> array(),
 		'user_messages' => array('model' => 'User_Messages', 'foreign_key' => 'user_id'),
+		'contacts'		=> array('model' => 'Contact', 'through' => 'user_contacts'),
 	);
 
 	protected $_belongs_to = array(
@@ -192,11 +193,11 @@ class Model_User extends Model_Auth_User {
 
 		$contact = ORM::factory('Contact');
 		$contact->where_user_id($this->id)
-			->where('id', '=', intval($contact_id))
+			->where('contact.id', '=', intval($contact_id))
 			->find();
 		if ($contact->loaded())
 		{
-			$contact->delete();
+			$this->remove('contacts', $contact);
 			return TRUE;
 		}
 
