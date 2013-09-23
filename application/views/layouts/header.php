@@ -13,7 +13,7 @@
 								<li><a href="<?=URL::site('user/invoices')?>"><div class="img"><img src="" alt="" /></div>История услуг</a></li>
 								<li><a href="<?=URL::site('user/newspapers')?>"><div class="img"><img src="" alt="" /></div>Купленные газеты</a></li>
 								<?php if (Request::current()->action() != 'userpage') : ?>
-									<li class="last"><a href="/users/<?=Auth::instance()->get_user()->login?>"><div class="img"><!--<img src="" alt="" />--></div>Моя карточка</a></li>									
+									<li class="last"><a class="green" href="/users/<?=Auth::instance()->get_user()->login?>"><div class="img"><!--<img src="" alt="" />--></div>Страница компании</a></li>									
 								<?php endif; ?>
 								<li class="last"><a href="<?=CI::site('user/logout')?>"><div class="img"><img src="<?=URL::site('images/pr3.png')?>" alt="" /></div>Выход</a></li>
 							</ul>
