@@ -7,6 +7,18 @@ class Model_Data_Integer extends Data
 	protected $_belongs_to = array(
 		'attribute_obj' => array('model' => 'Attribute', 'foreign_key' => 'attribute'),
 	);
+
+	public function filters()
+	{
+		return array(
+			'value_min' => array(
+				array('intval'),
+			),
+			'value_max' => array(
+				array('intval'),
+			),
+		);
+	}
 }
 
 /* End of file Integer.php */
