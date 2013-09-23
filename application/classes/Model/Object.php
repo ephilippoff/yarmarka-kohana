@@ -533,6 +533,20 @@ class Model_Object extends ORM {
 
 		return $contact->loaded() ? $contact : $contact_exists;
 	}
+	
+	public function delete_contacts()
+	{
+		if ( ! $this->loaded())
+		{
+			return FALSE;
+		}
+		
+		DB::delete('object_contacts')
+			->where('object_id', '=', $this->id)
+			->execute($this->_db);
+
+		return $this;
+	}
 }
 
 /* End of file Object.php */

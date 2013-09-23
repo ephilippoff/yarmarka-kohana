@@ -334,15 +334,11 @@ class Controller_Add extends Controller_Template {
 			$object = Object::save($object, $this->request);
 
 			if ($is_edit)
-			{
-				$old_contacts = ORM::factory('Contact')
-					->where_object_id($object->id)
-					->find_all();
-				foreach ($old_contacts as $oc)
-				{
-					$oc->delete();
-				}
+			{	
+				// удаляем связи на старые контакты
+				$object->delete_contacts();
 			}
+
 			// сохраянем новые контакты
 			foreach ($contacts as $contact)
 			{
