@@ -17,6 +17,7 @@ class Model_User extends Model_Auth_User {
 		'subscriptions'	=> array(),
 		'user_messages' => array('model' => 'User_Messages', 'foreign_key' => 'user_id'),
 		'contacts'		=> array('model' => 'Contact', 'through' => 'user_contacts'),
+		'users' 		=> array('model' => 'User', 'through' => 'user_links', 'foreign_key' => 'linked_user_id'),
 	);
 
 	protected $_belongs_to = array(

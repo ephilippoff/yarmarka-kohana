@@ -146,4 +146,12 @@ class Controller_Block extends Controller_Template
 			->where('verified', '=', 1)
 			->find_all();
 	}
+
+	public function action_linked_users_to_approve()
+	{
+		$this->template->links = ORM::factory('User_Link')
+			->where('user_id', '=', Auth::instance()->get_user()->id)
+			->where('approve', '=', 0)
+			->find_all();
+	}
 }

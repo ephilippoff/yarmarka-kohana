@@ -12,6 +12,9 @@
 								<li><a href="<?=URL::site('user/profile')?>"><div class="img"><img src="<?=URL::site('images/pr2.png')?>" alt="" /></div>Личные данные</a></li>
 								<li><a href="<?=URL::site('user/invoices')?>"><div class="img"><img src="" alt="" /></div>История услуг</a></li>
 								<li><a href="<?=URL::site('user/newspapers')?>"><div class="img"><img src="" alt="" /></div>Купленные газеты</a></li>
+								<?php if (Auth::instance()->get_user()) : ?>
+									<?=Request::factory('block/linked_users_to_approve')->execute()?>
+								<?php endif ?>
 								<li class="last"><a href="<?=CI::site('user/logout')?>"><div class="img"><img src="<?=URL::site('images/pr3.png')?>" alt="" /></div>Выход</a></li>
 							</ul>
 						

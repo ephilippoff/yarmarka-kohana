@@ -44,6 +44,34 @@ $(document).ready(function() {
 						<? include '_profile_user.php'?>
 					<?php endif; ?>
 					</article>
+
+					<article class="iinput-bl">
+						<ul>
+							<li>
+								<div class="input style2">
+									<label><span><i class="name">Привязать к компании:</i></span></label>
+									<div class="inp-cont-bl">
+										<div class="inp-profile">
+											<div class="inp">
+												<input type="text" name="link_to" id="link_to" value="" />
+											</div>
+										</div>
+									</div>
+									<span class="btn-act apply" id="link_to_company"></span>
+
+									<div class="alert-bl profile-alert">
+										<div class="cont">
+											<div class="img"></div>
+											<div class="arr"></div>
+											<p class="text"><span></span></p>
+										</div>
+									</div>
+								</div>
+
+							</li>
+						</ul>
+					</article>
+
 					<article class="iinput-bl shadow-top smallcont mb100">
 						<ul>
 							<li class="title">

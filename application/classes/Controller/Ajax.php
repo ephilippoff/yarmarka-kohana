@@ -596,6 +596,61 @@ class Controller_Ajax extends Controller_Template
 		}
 	}
 
+	public function action_link_to_user()
+	{
+		$user = ORM::factory('User')
+			->where('login', '=', $this->request->param('id'))
+			->find();
+
+		if ( ! Auth::instance()->get_user())
+		{
+			$this->json['code'] = 501;
+			$this->json['error'] = 'Ошибка при авторизации пользователя';
+		} 
+		elseif ( ! $user->loaded())
+		{
+			$this->json['code'] = 502;
+			$this->json['error'] = 'Пользователь с таким логином не найден';
+		}
+		elseif ($user->org_type != 2)
+		{
+			$this->json['code'] = 503;
+			$this->json['error'] = 'Вы можете отправить запрос на привязку только пользователю с типом компания';
+		}
+
+		if ($this->json['code'] === 200)
+		{
+			$user->add('users', Auth::instance()->get_user());
+		}
+	}
+
+	public function action_approve_user_link()
+	{
+		$link = ORM::factory('User_Link', $this->request->param('id'));
+		if ( ! $link->loaded())
+		{
+			$this->json['code'] = 500;
+		}
+		else
+		{
+			$link->approve = 1;
+			$link->save();
+		}
+	}
+
+	public function action_decline_user_link()
+	{
+		$link = ORM::factory('User_Link', $this->request->param('id'));
+		if ( ! $link->loaded())
+		{
+			$this->json['code'] = 500;
+		}
+		else
+		{
+			$link->delete();
+		}
+	}
+
 	public function after()
 	{
 		parent::after();
