@@ -383,6 +383,14 @@ class Controller_User extends Controller_Template {
 		$this->template->user_papers = $user_papers->find_all();
 	}
 
+	public function action_office()
+	{
+		$this->layout = 'users';
+		$this->assets->js('office.js');
+
+		$this->template->users = $this->user->users->find_all();
+	}
+
 	public function action_affiliates()
 	{
 		$this->layout = 'users';

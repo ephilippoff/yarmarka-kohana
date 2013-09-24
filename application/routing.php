@@ -9,6 +9,11 @@ Route::set('not_unique_contact_msg', 'block/not_unique_contact_msg/<number>')
 		'controller' => 'Block',
 		'action'     => 'not_unique_contact_msg',
 	));
+Route::set('ajax_link_to_company', 'ajax/link_user/<login>', array('login' => '.*'))
+	->defaults(array(
+		'controller' => 'Ajax',
+		'action'     => 'link_user',
+	));
 Route::set('userpage', 'users/<login>')
 	->defaults(array(
 		'controller' => 'User',

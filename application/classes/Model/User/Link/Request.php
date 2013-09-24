@@ -1,8 +1,8 @@
 <?php defined('SYSPATH') OR die('No direct access allowed.');
 
-class Model_User_Link extends ORM {
+class Model_User_Link_Request extends ORM {
 
-	protected $_table_name = 'user_links';
+	protected $_table_name = 'user_link_requests';
 
 	protected $_belongs_to = array(
 		'user' 			=> array(),

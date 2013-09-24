@@ -38,6 +38,9 @@ $(document).ready(function() {
 				<header><span class="title">Личные данные</span></header>
 				<div class="p_cont secure-bl myinfo">
 					<article class="iinput-bl">
+
+					<?=Request::factory('block/user_link_requests')->execute()?>
+
 					<?php if ($user->org_type == 2) : ?>
 						<? include '_profile_org.php'?>
 					<?php else : ?>
@@ -48,26 +51,17 @@ $(document).ready(function() {
 					<article class="iinput-bl">
 						<ul>
 							<li>
-								<div class="input style2">
-									<label><span><i class="name">Привязать к компании:</i></span></label>
-									<div class="inp-cont-bl">
-										<div class="inp-profile">
-											<div class="inp">
-												<input type="text" name="link_to" id="link_to" value="" />
-											</div>
+								<?php if ($user->linked_to->loaded()) : ?>
+								<span id="link_block">
+									<div class="input style2">
+										<label><span><i class="name">Привязан к компании:</i></span></label>
+										<div class="inp-cont-bl">
+											<a href="<?=URL::site('users/'.$user->linked_to->login)?>"><?=$user->linked_to->org_name?></a>
 										</div>
 									</div>
-									<span class="btn-act apply" id="link_to_company"></span>
-
-									<div class="alert-bl profile-alert">
-										<div class="cont">
-											<div class="img"></div>
-											<div class="arr"></div>
-											<p class="text"><span></span></p>
-										</div>
-									</div>
-								</div>
-
+									<span class="btn-act cansel" id="remove_link"></span>
+								</span>
+								<?php endif ?>
 							</li>
 						</ul>
 					</article>
