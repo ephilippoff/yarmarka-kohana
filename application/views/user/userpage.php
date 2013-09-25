@@ -11,7 +11,7 @@
 				</div>
 
 			</div>
-			<div class="info-block" style="height: 275px;">
+			<div class="info-block no-photo" style="height: 275px;">
 				<div class="title-add-photo" onClick="$('#banner_input').click()">Добавьте сюда<br/> свое рекламное предложение или фото</div>
 				<?php if ($is_owner) : ?>
 					<div class="bg-mbanner-redact">
@@ -33,7 +33,11 @@
 				</a>
 			</div>
 		</div>
-		<div class="hheader persomal_room-header"><h1 style="font-size: 20px" class="ta-c"><?=$user->org_name?></h1></div>
+		<div class="hheader persomal_room-header ta-c">
+			<h1 style="font-size: 20px" class="ta-c d-in"><?=$user->org_name?></h1>
+			<a class="bnt-go-back" href="/" rel='nofollow'><span class="text">На главную</span></a>
+			<?php if ($user->id == Auth::instance()->get_user()->id) : ?><a class="bnt-go-back" href="<?=URL::site('user/profile')?>" rel='nofollow'><span class="text">Редактировать</span></a><?php endif; ?>
+		</div>
 		<div class="fl100 shadow-top z1 persomal_room ie8mt-150fix filial-bl">
 			<aside class="p_room-menu float-content">
 				<ul class="islide-menu float-box w250">
