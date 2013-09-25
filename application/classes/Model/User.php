@@ -17,13 +17,16 @@ class Model_User extends Model_Auth_User {
 		'subscriptions'	=> array(),
 		'user_messages' => array('model' => 'User_Messages', 'foreign_key' => 'user_id'),
 		'contacts'		=> array('model' => 'Contact', 'through' => 'user_contacts'),
+		'link_requests' => array('model' => 'User_Link_Request', 'foreign_key' => 'linked_user_id'),
+		'users'			=> array('model' => 'User', 'foreign_key' => 'linked_to_user'),
 	);
 
 	protected $_belongs_to = array(
-		'user_role' => array('model' => 'Role', 'foreign_key' => 'role'),
-		'user_city'	=> array('model' => 'City', 'foreign_key' => 'city_id'),
-		'user_type'	=> array('model' => 'User_Types', 'foreign_key' => 'org_type'),
-		'location' 	=> array(),
+		'user_role' 	=> array('model' => 'Role', 'foreign_key' => 'role'),
+		'user_city'		=> array('model' => 'City', 'foreign_key' => 'city_id'),
+		'user_type'		=> array('model' => 'User_Types', 'foreign_key' => 'org_type'),
+		'location' 		=> array(),
+		'linked_to'		=> array('model' => 'User', 'foreign_key' => 'linked_to_user'),
 	);
 
 	/**

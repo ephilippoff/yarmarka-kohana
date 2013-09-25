@@ -7,6 +7,18 @@ class Model_Data_Numeric extends Data
 	protected $_belongs_to = array(
 		'attribute_obj' => array('model' => 'Attribute', 'foreign_key' => 'attribute'),
 	);
+
+	public function filters()
+	{
+		return array(
+			'value_min' => array(
+				array('floatval'),
+			),
+			'value_max' => array(
+				array('floatval'),
+			),
+		);
+	}
 }
 
 /* End of file Numeric.php */

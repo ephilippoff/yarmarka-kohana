@@ -596,6 +596,84 @@ class Controller_Ajax extends Controller_Template
 		}
 	}
 
+	public function action_link_user()
+	{
+		$user = ORM::factory('User');
+		$login = $this->request->param('login');
+		$user =	$user->where($user->unique_key($login), '=', $login)
+			->find();
+
+		if ( ! Auth::instance()->get_user())
+		{
+			$this->json['code'] = 501;
+			$this->json['error'] = 'Ошибка при авторизации пользователя';
+		} 
+		elseif ( ! $user->loaded())
+		{
+			$this->json['code'] = 502;
+			$this->json['error'] = 'Пользователь с таким логином не найден';
+		}
+/*		elseif ($user->org_type != 2)
+		{
+			$this->json['code'] = 503;
+			$this->json['error'] = 'Вы можете отправить запрос на привязку только пользователю с типом компания';
+		}
+*/		elseif ($user->id === Auth::instance()->get_user()->id)
+		{
+			$this->json['code'] = 504;
+			$this->json['error'] = 'Это ваш аккаунт';
+		}
+
+		if ($this->json['code'] === 200)
+		{
+			$link_request = ORM::factory('User_Link_Request');
+			$link_request->user_id = Auth::instance()->get_user()->id;
+			$link_request->linked_user_id = $user->id;
+			$link_request->save();
+		}
+	}
+
+	public function action_approve_user_link()
+	{
+		$link = ORM::factory('User_Link_Request', $this->request->param('id'));
+		if ( ! $link->loaded())
+		{
+			$this->json['code'] = 500;
+		}
+		else
+		{
+			$user = $link->linked_user;
+			$user->linked_to_user = $link->user;
+			$user->save();
+
+			$link->delete();
+		}
+	}
+
+	public function action_decline_user_link()
+	{
+		$link = ORM::factory('User_Link_Request', $this->request->param('id'));
+		if ( ! $link->loaded())
+		{
+			$this->json['code'] = 500;
+		}
+		else
+		{
+			$link->delete();
+		}
+	}
+
+	public function action_remove_link()
+	{
+		if ( ! $user = ORM::factory('User', $this->request->param('id')))
+		{
+			throw new HTTP_Exception_404;
+		}
+
+		$user->linked_to = DB::expr('NULL');
+		$user->save();
+	}
+
 	public function after()
 	{
 		parent::after();

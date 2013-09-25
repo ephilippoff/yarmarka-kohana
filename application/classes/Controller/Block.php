@@ -76,6 +76,17 @@ class Controller_Block extends Controller_Template
 		$this->template->user_contacts	= $user->get_contacts();
 	}
 
+	public function action_user_contacts()
+	{
+		if ( ! $user = ORM::factory('User', $this->request->param('id')))
+		{
+			throw new HTTP_Exception_404;
+		}
+
+		$this->template->contact_types	= ORM::factory('Contact_Type')->find_all();
+		$this->template->user_contacts	= $user->get_contacts();
+	}
+
 	public function action_last_moderator_comment()
 	{
 		$object = ORM::factory('Object', $this->request->param('id'));
@@ -145,5 +156,17 @@ class Controller_Block extends Controller_Template
 			->by_phone_number($this->request->param('number'))
 			->where('verified', '=', 1)
 			->find_all();
+	}
+
+	public function action_user_link_requests()
+	{
+		$user = Auth::instance()->get_user();
+		$links = array();
+		if ($user)
+		{
+			$links = $user->link_requests->find_all();
+		}
+
+		$this->template->links = $links;
 	}
 }
