@@ -244,9 +244,10 @@ class Controller_User extends Controller_Template {
 			break;
 
 			case 'from_employees':
-				$objects->where('author_company_id', '=', $this->user->id);
+				$objects->where('author_company_id', '=', $this->user->id)
+					->where('author', '=', $this->request->param('id'));
 			break;
-			
+
 			default:
 				// all user objects
 			break;

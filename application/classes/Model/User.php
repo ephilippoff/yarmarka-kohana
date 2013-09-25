@@ -10,15 +10,16 @@ class Model_User extends Model_Auth_User {
 	 * @var array Relationhips
 	 */
 	protected $_has_many = array(
-		'user_tokens'	=> array('model' => 'User_Token'),
-		'objects'		=> array('foreign_key' => 'author'),
-		'access'		=> array('model' => 'Access'),
-		'invoices'		=> array(),
-		'subscriptions'	=> array(),
-		'user_messages' => array('model' => 'User_Messages', 'foreign_key' => 'user_id'),
-		'contacts'		=> array('model' => 'Contact', 'through' => 'user_contacts'),
-		'link_requests' => array('model' => 'User_Link_Request', 'foreign_key' => 'linked_user_id'),
-		'users'			=> array('model' => 'User', 'foreign_key' => 'linked_to_user'),
+		'user_tokens'		=> array('model' => 'User_Token'),
+		'objects'			=> array('foreign_key' => 'author'),
+		'company_objects'	=> array('model' => 'Object', 'foreign_key' => 'author_company_id'),
+		'access'			=> array('model' => 'Access'),
+		'invoices'			=> array(),
+		'subscriptions'		=> array(),
+		'user_messages' 	=> array('model' => 'User_Messages', 'foreign_key' => 'user_id'),
+		'contacts'			=> array('model' => 'Contact', 'through' => 'user_contacts'),
+		'link_requests' 	=> array('model' => 'User_Link_Request', 'foreign_key' => 'linked_user_id'),
+		'users'				=> array('model' => 'User', 'foreign_key' => 'linked_to_user'),
 	);
 
 	protected $_belongs_to = array(
@@ -267,6 +268,12 @@ class Model_User extends Model_Auth_User {
 		}
 
 		return TRUE;
+	}
+
+	public function count_company_objects($company_id)
+	{
+		return $this->objects->where('author_company_id', '=', $company_id)
+			->count_all();
 	}
 }
 

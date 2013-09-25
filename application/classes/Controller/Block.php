@@ -174,4 +174,10 @@ class Controller_Block extends Controller_Template
 	{
 		$this->template->user = Auth::instance()->get_user();
 	}
+
+	public function action_user_from_employees_menu()
+	{
+		$this->template->users = Auth::instance()->get_user()->users
+			->find_all();
+	}
 }

@@ -6,6 +6,7 @@ class Model_Object extends ORM {
 
 	protected $_belongs_to = array(
 		'user'			=> array('model' => 'User', 'foreign_key' => 'author'),
+		'company'		=> array('model' => 'User', 'foreign_key' => 'author_company_id'),
 		'category_obj'	=> array('model' => 'Category', 'foreign_key' => 'category'),
 		'city_obj'		=> array('model' => 'City', 'foreign_key' => 'city_id'),
 		'location_obj'	=> array('model' => 'Location', 'foreign_key' => 'location_id'),
