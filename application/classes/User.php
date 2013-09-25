@@ -16,12 +16,15 @@ class User {
 		$user = ORM::factory('User');
 		$user->login 		= $login;
 		$user->email 		= $email;
-		$user->password 	= $password;
+		$user->passw 		= $password;
 		$user->role 		= 2;
 		$user->code 		= Text::random_string_hash($email);
 		$user->is_blocked 	= 2;
-		$user->ip 			= Request::$client_ip;
+		$user->ip_addr 		= Request::$client_ip;
 		$user->save();
+
+		// из-за триггеров last id возвращает не верный, поэтому перегружаем объект из базы по email
+		$user = ORM::factory('User')->where('email', '=', $user->email)->find();
 
 		return $user;
 	}
