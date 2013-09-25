@@ -623,13 +623,26 @@ class Controller_Ajax extends Controller_Template
 			$this->json['code'] = 504;
 			$this->json['error'] = 'Это ваш аккаунт';
 		}
+		elseif ($user->linked_to->loaded())
+		{
+			$this->json['code'] = 505;
+			$this->json['error'] = $user->linked_to->id == Auth::instance()->get_user()->id
+				? 'Пользователь уже является сотрудником Вашей компании'
+				: 'Пользователь уже является сотрудником другой компании';
+		}
 
 		if ($this->json['code'] === 200)
 		{
-			$link_request = ORM::factory('User_Link_Request');
-			$link_request->user_id = Auth::instance()->get_user()->id;
-			$link_request->linked_user_id = $user->id;
-			$link_request->save();
+			$link_request = ORM::factory('User_Link_Request')
+				->where('user_id', '=', Auth::instance()->get_user()->id)
+				->where('linked_user_id', '=', $user->id)
+				->find();
+			if ( ! $link_request->loaded())
+			{
+				$link_request->user_id = Auth::instance()->get_user()->id;
+				$link_request->linked_user_id = $user->id;
+				$link_request->save();
+			}
 		}
 	}
 
@@ -687,6 +700,18 @@ class Controller_Ajax extends Controller_Template
 
 		$user->linked_to = DB::expr('NULL');
 		$user->save();
+	}
+
+	public function action_delete_link()
+	{
+		$link = ORM::factory('User_Link_Request', $this->request->param('id'));
+		if ( ! $link->loaded() OR $link->user_id != Auth::instance()->get_user()->id)
+		{
+			throw new HTTP_Exception_404;
+		}
+
+		$link->delete();
+
 	}
 
 	public function after()

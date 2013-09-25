@@ -28,54 +28,104 @@
 							</article>
 
 							<?php foreach ($users as $user) : ?>
+								<article class="article">
+									<div class="visible-bl">
+										<?php if ($user->filename) : ?>
+											<div class="img">
+												<img src="<?=Uploads::get_file_path($user->filename, '272x203')?>" />
+												<div class="number">#<?=$user->id?></div>
+											</div>
+										<?php endif ?>
+										<div class="content">
+											<div class="right-b">
+												<div class="publish">
+													<a href="#" id="remove_link" data-user_id="<?=$user->id?>">
+														<span class="cont">Удалить</span>
+														<span class="remove"></span>
+													</a>
+												</div>
+											</div>
+											<p class="title"><?=$user->get_user_name()?>
+												<span class="inf"><!--(Cотрудник компании)--></span></p>
+												<p class="addr"><?=$user->address?></p>
+												<div class="map-bl">
+													<div class="map">
+														<div id="ymaps-map-id_1352895717894414938722" style="width: 372px; height: 236px;">
+														</div>
+													</div>
+												</div>
+												<p class="tags">
+													<a href="">Недвижимость,</a><a href="">ипотека,</a><a href="">ссуда,</a><a href="">ломбард</a>
+												</p>
+												<div class="contacts ">
+													<ul>
+														<li class="title">
+															<label><span><i class="name">Контакты:</i></span></label>
+														</li>
+														<li class="add-contact-li">
+
+
+															<span id="user_contacts">
+																<?=Request::factory('block/user_contacts/'.$user->id)->execute()?>
+															</span>
+														</li>
+													</ul>
+												</div>
+											</div>
+										</div>	
+									</article>
+								<?php endforeach ?>
+
+						<h2>Отправленные запросы:</h2>
+						<?php foreach ($links as $link) : ?>
 							<article class="article">
 								<div class="visible-bl">
-									<?php if ($user->filename) : ?>
-									<div class="img">
-										<img src="<?=Uploads::get_file_path($user->filename, '272x203')?>" />
-										<div class="number">#<?=$user->id?></div>
-									</div>
+									<?php if ($link->linked_user->filename) : ?>
+										<div class="img">
+											<img src="<?=Uploads::get_file_path($link->linked_user->filename, '272x203')?>" />
+											<div class="number">#<?=$user->id?></div>
+										</div>
 									<?php endif ?>
 									<div class="content">
 										<div class="right-b">
 											<div class="publish">
-												<a href="#" id="remove_link" data-user_id="<?=$user->id?>">
-													<span class="cont">Удалить</span>
+												<a href="#" id="cancel_link" data-id="<?=$link->id?>">
+													<span class="cont">Отменить</span>
 													<span class="remove"></span>
 												</a>
 											</div>
 										</div>
-										<p class="title"><?=$user->get_user_name()?>
-										<span class="inf"><!--(Cотрудник компании)--></span></p>
-										<p class="addr"><?=$user->address?></p>
-										<div class="map-bl">
-											<div class="map">
-											<div id="ymaps-map-id_1352895717894414938722" style="width: 372px; height: 236px;">
+										<p class="title"><?=$link->linked_user->get_user_name()?>
+											<span class="inf"><!--(Cотрудник компании)--></span></p>
+											<p class="addr"><?=$link->linked_user->address?></p>
+											<div class="map-bl">
+												<div class="map">
+													<div id="ymaps-map-id_1352895717894414938722" style="width: 372px; height: 236px;">
+													</div>
+												</div>
+											</div>
+											<p class="tags">
+												<a href="">Недвижимость,</a><a href="">ипотека,</a><a href="">ссуда,</a><a href="">ломбард</a>
+											</p>
+											<div class="contacts ">
+												<ul>
+													<li class="title">
+														<label><span><i class="name">Контакты:</i></span></label>
+													</li>
+													<li class="add-contact-li">
+
+
+														<span id="user_contacts">
+															<?=Request::factory('block/user_contacts/'.$link->linked_user->id)->execute()?>
+														</span>
+													</li>
+												</ul>
 											</div>
 										</div>
-									</div>
-									<p class="tags">
-										<a href="">Недвижимость,</a><a href="">ипотека,</a><a href="">ссуда,</a><a href="">ломбард</a>
-									</p>
-									<div class="contacts ">
-										<ul>
-											<li class="title">
-												<label><span><i class="name">Контакты:</i></span></label>
-											</li>
-											<li class="add-contact-li">
-												
-												
-												<span id="user_contacts">
-												<?=Request::factory('block/user_contacts/'.$user->id)->execute()?>
-												</span>
-											</li>
-										</ul>
-									</div>
-								</div>
-							</div>	
-						</article>
-						<?php endforeach ?>
-					</section>
+									</div>	
+								</article>
+							<?php endforeach ?>
+						</section>
 				</div>
 
 

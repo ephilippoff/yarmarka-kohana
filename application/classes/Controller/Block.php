@@ -169,4 +169,9 @@ class Controller_Block extends Controller_Template
 
 		$this->template->links = $links;
 	}
+
+	public function action_user_linked_to()
+	{
+		$this->template->user = Auth::instance()->get_user();
+	}
 }

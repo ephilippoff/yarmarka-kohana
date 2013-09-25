@@ -39,23 +39,14 @@ $(document).ready(function() {
 				<div class="p_cont secure-bl myinfo">
 					<article class="iinput-bl">
 
+					<span id="link_requests_block">
 					<?=Request::factory('block/user_link_requests')->execute()?>
+					</span>
+
+					<span id="linked_to_block">
+					<?=Request::factory('block/user_linked_to')->execute()?>
+					</span>
 					
-					<ul>
-						<li>
-							<?php if ($user->linked_to->loaded()) : ?>
-							<span id="link_block">
-								<div class="input style2">
-									<label><span><i class="name">Привязан к компании:</i></span></label>
-									<div class="inp-cont-bl">
-										<a href="<?=URL::site('users/'.$user->linked_to->login)?>"><?=$user->linked_to->org_name?></a>
-									</div>
-								</div>
-								<span class="btn-act cansel" id="remove_link"></span>
-							</span>
-							<?php endif ?>
-						</li>
-					</ul>
 
 					<?php if ($user->org_type == 2) : ?>
 						<? include '_profile_org.php'?>

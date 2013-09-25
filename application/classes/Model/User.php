@@ -229,8 +229,9 @@ class Model_User extends Model_Auth_User {
 		$is_white_ip 	= ORM::factory('Ipwhite')->get_by_ip(Request::$client_ip)->loaded();
 		$is_author 		= ($this->id === $object->author);
 		$is_admin 		= (($this->role == 1 OR $this->role == 3) AND $is_white_ip);
+		$is_company 	= ($this->id === $object->author_company_id);
 
-		return ($is_author OR $is_admin);
+		return ($is_author OR $is_admin OR $is_company);
 	}
 
 	public function check_domain($email)

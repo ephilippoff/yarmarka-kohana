@@ -314,8 +314,8 @@ class Controller_Add extends Controller_Template {
 			$object->category 			= $category->id;
 			$object->contact 			= $this->request->post('contact');
 			$object->city_id			= $city->id;
-			$object->author 			= $user->id;
 			$object->ip_addr 			= Request::$client_ip;
+			
 			if ($is_edit) // если это редактирвоание, то is_published не трогаем
 			{
 				$object->is_published 	= $user->loaded() ? 1 : 0;
@@ -325,6 +325,13 @@ class Controller_Add extends Controller_Template {
 			{
 				$object->title 			= $this->request->post('title_adv');
 			}
+
+			if ($this->request->post('from_company') AND $user->linked_to->loaded())
+			{
+				$object->author_company_id = $user->linked_to->id;
+			}
+
+			$object->author 			= $user->id;
 			$object->user_text 			= $this->request->post('user_text_adv');
 			$object->date_expiration	= $date_expiration;
 			$object->geo_loc 			= $location->get_lon_lat_str();

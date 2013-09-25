@@ -1,11 +1,10 @@
 <?php if (count($links)) : ?>
-<article class="iinput-bl">
 	<ul><li>
 	<div class="input style2">
 		<div class="inp-cont-bl">
 		<?php foreach ($links as $link) : ?>
 		<span>
-			Вас приглашают присоедениться к компании
+			Вас приглашают присоедениться к компании (вы можете быть присоеденены только к одной компании)
 			<?php if (trim($link->user->org_name)) : ?>
 				<a href="<?=URL::site('users/'.$link->user->login)?>" target="_blank"><?=$link->user->org_name?></a>
 			<?php else : ?>
@@ -19,5 +18,4 @@
 		</div>
 	</div>
 	</ul></li>
-</article>
 <?php endif ?>

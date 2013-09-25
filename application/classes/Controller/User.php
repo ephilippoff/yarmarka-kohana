@@ -212,31 +212,39 @@ class Controller_User extends Controller_Template {
 		// get objects
 		$objects = ORM::factory('Object')
 			->with_main_photo()
-			->where('author', '=', $this->user->id)
 			->where('active', '=', 1);
 
 		switch ($folder) 
 		{
 			case 'published':
-				$objects->where('is_published', '=', '1')
+				$objects->where('author', '=', $this->user->id)
+					->where('is_published', '=', '1')
 					->where('is_bad', '=', '0');
 			break;
 
 			case 'unpublished':
-				$objects->where('is_published', '=', '0')
+				$objects->where('author', '=', $this->user->id)
+					->where('is_published', '=', '0')
 					->where('is_bad', '=', '0');
 			break;
 
 			case 'in_archive':
-				$objects->where('in_archive', '=', '1');
+				$objects->where('author', '=', $this->user->id)
+					->where('in_archive', '=', '1');
 			break;
 
 			case 'rejected':
-				$objects->where('is_bad', '=', 1);
+				$objects->where('author', '=', $this->user->id)
+					->where('is_bad', '=', 1);
 			break;
 
 			case 'banned':
-				$objects->where('is_bad', '=', 2);
+				$objects->where('author', '=', $this->user->id)
+					->where('is_bad', '=', 2);
+			break;
+
+			case 'from_employees':
+				$objects->where('author_company_id', '=', $this->user->id);
 			break;
 			
 			default:
@@ -347,6 +355,11 @@ class Controller_User extends Controller_Template {
 		$this->myads('banned');
 	}
 
+	public function action_from_employees()
+	{
+		$this->myads('from_employees');
+	}
+
 	public function action_newspapers()
 	{
 		$this->layout = 'users';
@@ -390,6 +403,10 @@ class Controller_User extends Controller_Template {
 		$this->assets->js('office.js');
 
 		$this->template->users = $this->user->users->find_all();
+		$this->template->links = ORM::factory('User_Link_Request')
+			->where('user_id', '=', $this->user->id)
+			->order_by('created', 'desc')
+			->find_all();
 	}
 
 	public function action_affiliates()
