@@ -40,30 +40,28 @@ $(document).ready(function() {
 					<article class="iinput-bl">
 
 					<?=Request::factory('block/user_link_requests')->execute()?>
+					
+					<ul>
+						<li>
+							<?php if ($user->linked_to->loaded()) : ?>
+							<span id="link_block">
+								<div class="input style2">
+									<label><span><i class="name">Привязан к компании:</i></span></label>
+									<div class="inp-cont-bl">
+										<a href="<?=URL::site('users/'.$user->linked_to->login)?>"><?=$user->linked_to->org_name?></a>
+									</div>
+								</div>
+								<span class="btn-act cansel" id="remove_link"></span>
+							</span>
+							<?php endif ?>
+						</li>
+					</ul>
 
 					<?php if ($user->org_type == 2) : ?>
 						<? include '_profile_org.php'?>
 					<?php else : ?>
 						<? include '_profile_user.php'?>
 					<?php endif; ?>
-					</article>
-
-					<article class="iinput-bl">
-						<ul>
-							<li>
-								<?php if ($user->linked_to->loaded()) : ?>
-								<span id="link_block">
-									<div class="input style2">
-										<label><span><i class="name">Привязан к компании:</i></span></label>
-										<div class="inp-cont-bl">
-											<a href="<?=URL::site('users/'.$user->linked_to->login)?>"><?=$user->linked_to->org_name?></a>
-										</div>
-									</div>
-									<span class="btn-act cansel" id="remove_link"></span>
-								</span>
-								<?php endif ?>
-							</li>
-						</ul>
 					</article>
 
 					<article class="iinput-bl shadow-top smallcont mb100">

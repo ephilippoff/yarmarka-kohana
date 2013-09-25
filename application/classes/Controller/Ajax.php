@@ -665,7 +665,22 @@ class Controller_Ajax extends Controller_Template
 
 	public function action_remove_link()
 	{
-		if ( ! $user = ORM::factory('User', $this->request->param('id')))
+		$current_user = Auth::instance()->get_user();
+		if ($this->request->param('id'))
+		{
+			$user = ORM::factory('User', $this->request->param('id'));
+			// проверяем что открепляет пользователь данной компании
+			if ( ! $user->linked_to_user == $current_user->id)
+			{
+				$user = NULL;
+			}
+		}
+		else
+		{
+			$user = $current_user;
+		}
+
+		if ( ! $user OR ! $user->loaded())
 		{
 			throw new HTTP_Exception_404;
 		}
