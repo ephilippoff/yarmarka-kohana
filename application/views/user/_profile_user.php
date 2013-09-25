@@ -29,6 +29,33 @@
 	</li>
 	<li>
 		<div class="input style2">
+			<label><span><i class="name">Фото:</i></span></label>
+			<div class="mylogo-bl">
+				<form method="post" accept-charset="utf-8" enctype="multipart/form-data">
+					<label class="filebutton">
+						<?php if ($user->filename) : ?>
+						<img src="<?=Uploads::get_file_path($user->filename, '272x203')?>" id="avatar_img" />
+						<?php else : ?>
+						<img src="<?=URL::site('images/mylogo.png')?>" id="avatar_img" />
+						<?php endif; ?>
+						<input type="file" name="avatar_input" class="avatar" id="avatar_input" />
+					</label>
+				</form>
+
+				<span class="mydel" id="delete_avatar" <?php if ( ! $user->filename) echo "style='display:none;'" ?>></span>
+			</div>
+
+			<div class="alert-bl profile-alert">
+				<div class="cont">
+					<div class="img"></div>
+					<div class="arr"></div>
+					<p class="text"><span></span></p>
+				</div>
+			</div>
+		</div>
+	</li>
+	<li>
+		<div class="input style2">
 			<label><span><i class="name">E-mail:</i></span></label>
 			<p class="myinform"><?=$user->email?></p>
 		</div>
