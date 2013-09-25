@@ -48,6 +48,7 @@ class Controller_User extends Controller_Template {
 		$this->template->contact_types	= ORM::factory('Contact_Type')->find_all();
 		$this->template->user_contacts	= $this->user->get_contacts();
 		$this->template->user			= $this->user;
+		$this->template->user_page_url  = substr(URL::base('http'), 0, strlen(URL::base('http')) - 1).URL::site('users/'.$this->user->login);
 	}
 
 	public function action_favorites()
