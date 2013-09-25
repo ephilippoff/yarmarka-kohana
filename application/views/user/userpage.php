@@ -28,7 +28,7 @@
 					<?php if ($user->filename) : ?>
 						<img src="<?=URL::site(Uploads::get_file_path($user->filename, '272x203'))?>" alt="" />
 					<?php else : ?>
-						<img src="/images/mylogo.png" alt="" />
+						<img src="/images/nologo.png" alt="" />
 					<?php endif; ?>
 				</a>
 			</div>
