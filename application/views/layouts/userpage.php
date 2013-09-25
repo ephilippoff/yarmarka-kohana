@@ -44,12 +44,19 @@
 				
 				<table id="samples">
 					<tr>
-						<td><div class="img"><img src="/images/userpage/banner1_small.png" title="сэмпл 1" data-img="banner1.png" /></div></td>
-						<td><div class="img"><img src="/images/userpage/banner2_small.png" title="сэмпл 2" data-img="banner2.png" /></div></td>
-						<td><div class="img"><img src="/images/userpage/banner3_small.png" title="сэмпл 3" data-img="banner3.png" /></div></td>
-						<td><div class="img"><img src="/images/userpage/banner4_small.png" title="сэмпл 4" data-img="banner4.png" /></div></td>
-						<td><div class="img"><img src="/images/userpage/banner5_small.png" title="сэмпл 5" data-img="banner5.png" /></div></td>
+						<td><div class="img"><img src="/images/userpage/banner1_small.jpg" title="сэмпл 1" data-img="banner1.jpg" /></div></td>
+						<td><div class="img"><img src="/images/userpage/banner2_small.jpg" title="сэмпл 2" data-img="banner2.jpg" /></div></td>
+						<td><div class="img"><img src="/images/userpage/banner3_small.jpg" title="сэмпл 3" data-img="banner3.jpg" /></div></td>
+						<td><div class="img"><img src="/images/userpage/banner4_small.jpg" title="сэмпл 4" data-img="banner4.jpg" /></div></td>
+						<td><div class="img"><img src="/images/userpage/banner5_small.jpg" title="сэмпл 5" data-img="banner5.jpg" /></div></td>
 					</tr>
+					<tr>
+						<td><div class="img"><img src="/images/userpage/banner6_small.jpg" title="сэмпл 1" data-img="banner6.jpg" /></div></td>
+						<td><div class="img"><img src="/images/userpage/banner7_small.jpg" title="сэмпл 2" data-img="banner7.jpg" /></div></td>
+						<td><div class="img"><img src="/images/userpage/banner8_small.jpg" title="сэмпл 3" data-img="banner8.jpg" /></div></td>
+						<td><div class="img"><img src="/images/userpage/banner9_small.jpg" title="сэмпл 4" data-img="banner9.jpg" /></div></td>
+						<td><div class="img"><img src="/images/userpage/banner10_small.jpg" title="сэмпл 5" data-img="banner10.jpg" /></div></td>
+					</tr>					
 				</table>
 				<p>Загрузите свое  изображение</p>
 				<label for="banner_input">

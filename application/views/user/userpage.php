@@ -28,13 +28,19 @@
 					<?php if ($user->filename) : ?>
 						<img src="<?=URL::site(Uploads::get_file_path($user->filename, '272x203'))?>" alt="" />
 					<?php else : ?>
-						<img src="/images/mylogo.png" alt="" />
+						<img src="/images/nologo.png" alt="" />
 					<?php endif; ?>
 				</a>
 			</div>
 		</div>
 		<div class="hheader persomal_room-header ta-c">
-			<h1 style="font-size: 20px" class="ta-c d-in"><?=$user->org_name?></h1>
+			<h1 style="font-size: 20px" class="ta-c d-in">
+						<?php if (empty($user->org_name)) : ?>
+								Страница компании №<?=$user->id?>
+						<?php else : ?>
+								<?=$user->org_name?> 
+						<?php endif; ?>					
+			</h1>
 			<a class="bnt-go-back" href="/" rel='nofollow'><span class="text">На главную</span></a>
 			<?php if ($user->id == Auth::instance()->get_user()->id) : ?><a class="bnt-go-back" href="<?=URL::site('user/profile')?>" rel='nofollow'><span class="text">Редактировать</span></a><?php endif; ?>
 		</div>
