@@ -43,7 +43,7 @@ $(document).ready(function() {
 					<?=Request::factory('block/user_link_requests')->execute()?>
 					</span>
 
-					<span id="linked_to_block">
+					<span class="linked_to_block" id="linked_to_block">
 					<?=Request::factory('block/user_linked_to')->execute()?>
 					</span>
 					
