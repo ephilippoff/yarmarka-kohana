@@ -42,7 +42,7 @@
 						<?php endif; ?>					
 			</h1>
 			<a class="bnt-go-back" href="/" rel='nofollow'><span class="text">На главную</span></a>
-			<?php if ($user->id == Auth::instance()->get_user()->id) : ?><a class="bnt-go-back" href="<?=URL::site('user/profile')?>" rel='nofollow'><span class="text">Редактировать</span></a><?php endif; ?>
+			<?php if (Auth::instance()->get_user() AND $user->id == Auth::instance()->get_user()->id) : ?><a class="bnt-go-back" href="<?=URL::site('user/profile')?>" rel='nofollow'><span class="text">Редактировать</span></a><?php endif; ?>
 		</div>
 		<div class="fl100 shadow-top z1 persomal_room ie8mt-150fix filial-bl">
 			<aside class="p_room-menu float-content">
