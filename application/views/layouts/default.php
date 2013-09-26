@@ -17,7 +17,7 @@
 	->js('http://html5shiv.googlecode.com/svn/trunk/html5.js', array('condition' => 'lte IE 8'))
 	->js('http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js', array('condition' => 'lte IE 8'))
 	->js('PIE.js', array('condition' => 'lte IE 10'))
-	->js('jScrollPane.js')
+	->js('jscrollpane.js')
 	->js('jquery.mousewheel.js')
 	->js('cusel-min-2.5.js')
 	->js('jquery.carouFredSel-6.2.0.js')

@@ -249,7 +249,7 @@ class Controller_User extends Controller_Template {
 			break;
 
 			default:
-				$objects->where('author', '=', $this->request->param('id'));
+				$objects->where('author', '=', $this->user->id);
 			break;
 		}
 
