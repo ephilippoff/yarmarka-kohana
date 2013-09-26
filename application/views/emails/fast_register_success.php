@@ -23,8 +23,8 @@
 			<tr><td colspan="2" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;line-height: 15px;">Добро пожаловать на «Ярмарка-онлайн»!</td></tr>
 			<tr><td style="line-height: 0;" colspan="2">&nbsp;<img width="100%" height="12" title="" alt="" src="data:image/gif;base64,R0lGODlhAQABAJEAAAAAAP///////wAAACH5BAEAAAIALAAAAAABAAEAAAICVAEAOw%3D%3D"></td></tr>
 			<tr><td colspan="2" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;line-height: 15px;">Вы создали на сайте "Ярмарка-онлайн" объявление. Чтобы его увидели посетители сайта, необходимо пройти по этой ссылке:<br>
-		<a style="color: #4b759e;" href="<?=URL::site('account_verification/'.$activation_code, 'http')?>?oid=<?=$object_id; ?>">
-			<span class="s3"><?=URL::site('account_verification/'.$activation_code, 'http')?>?oid=<?=$object_id; ?></span>
+		<a style="color: #4b759e;" href="<?=CI::site('account_verification/'.$activation_code)?>?oid=<?=$object_id; ?>">
+			<span class="s3"><?=CI::site('account_verification/'.$activation_code, 'http')?>?oid=<?=$object_id; ?></span>
 		</a><br />
 			Если приведенная ссылка не открывается, скопируйте ее и вставьте в адресную строку браузера.</td></tr>
 			<tr><td style="line-height: 0;" colspan="2">&nbsp;<img width="100%" height="12" title="" alt="" src="data:image/gif;base64,R0lGODlhAQABAJEAAAAAAP///////wAAACH5BAEAAAIALAAAAAABAAEAAAICVAEAOw%3D%3D"></td></tr>
