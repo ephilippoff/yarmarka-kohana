@@ -204,7 +204,7 @@ class Controller_Add extends Controller_Template {
 		}
 
 		// если пользователь не авторизован
-		if ( ! $user)
+		if ( ! $user AND ! $errors)
 		{
 			if ($this->request->post('new_email'))
 			{
