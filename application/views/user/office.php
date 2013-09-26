@@ -87,12 +87,12 @@
 							<article class="article">
 								<div class="visible-bl">
 									<div class="img">
-										<?php if ($user->filename) : ?>
-											<img src="<?=Uploads::get_file_path($user->filename, '272x203')?>" />
+										<?php if ($link->linked_user->filename) : ?>
+											<img src="<?=Uploads::get_file_path($link->linked_user->filename, '272x203')?>" />
 										<?php else : ?>	
 											<img src="/images/nophoto2.png">
 										<?php endif ?>
-										<div class="number">#<?=$user->id?></div>
+										<div class="number">#<?=$link->linked_user->id?></div>			
 									</div>
 									<div class="content">
 										<div class="right-b">
