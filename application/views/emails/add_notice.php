@@ -50,7 +50,7 @@
 						</tr>
 						<tr><td><span style="color:#808080">Контактные данные: </span>
 							<?php foreach ($contacts as $contact) : ?>
-								<?=$contact['type_name']?>:<?=$contact['value']?>
+								<?=$contact['type_name']?>: <?=$contact['value']?>
 							<?php endforeach; ?>
 						</td></tr>
 						<tr><td><span style="color:#808080">Адрес: </span>
