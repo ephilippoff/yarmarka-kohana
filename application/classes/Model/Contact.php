@@ -89,6 +89,14 @@ class Model_Contact extends ORM {
 
 	public function create(Validation $validation = NULL)
 	{
+		$exists_contact = ORM::factory('Contact')->by_contact_and_type($this->contact, $this->contact_type_id)
+			->find();
+
+		if ($exists_contact->loaded())
+		{
+			return $exists_contact;
+		}
+		
 		if (Model_Contact_Type::is_phone($this->contact_type_id))
 		{
 			$this->contact_clear = Text::clear_phone_number($this->contact);
