@@ -6,7 +6,7 @@
 	5 => 'email',
 	) ?>
 
-	<div class="winner">
+	<div class="winner cabinet office">
 		<section class="main-cont">
 			<div class="hheader persomal_room-header"><h1 class="ta-c">Личный кабинет</h1></div>
 			<div class="fl100 shadow-top z1 persomal_room ie8mt-150fix filial-bl">
@@ -18,7 +18,9 @@
 					<div class="p_cont">
 						<section class="filials-bl reducting">
 							<article class="informator">
-								<p class="title"><span>Что это такое?</span><a href="" class="toggle"><span class="show">свернуть</span><span>развернуть</span></a></p>
+								<p class="title"><span>Что это такое?</span>
+									<!--<a href="" class="toggle"><span class="show">свернуть</span><span>развернуть</span></a>-->
+								</p>
 								<div class="cont">
 									<p style="text-align: justify">
 										А тут должно быть много текста,G чтобы вертска к херам не свернулась.
@@ -30,12 +32,16 @@
 							<?php foreach ($users as $user) : ?>
 								<article class="article">
 									<div class="visible-bl">
-										<?php if ($user->filename) : ?>
+										
 											<div class="img">
-												<img src="<?=Uploads::get_file_path($user->filename, '272x203')?>" />
+												<?php if ($user->filename) : ?>
+													<img src="<?=Uploads::get_file_path($user->filename, '272x203')?>" />
+												<?php else : ?>	
+													<img src="/images/nophoto2.png">
+												<?php endif ?>
 												<div class="number">#<?=$user->id?></div>
 											</div>
-										<?php endif ?>
+										
 										<div class="content">
 											<div class="right-b">
 												<div class="publish">
@@ -54,9 +60,9 @@
 														</div>
 													</div>
 												</div>
-												<p class="tags">
+<!--												<p class="tags">
 													<a href="">Недвижимость,</a><a href="">ипотека,</a><a href="">ссуда,</a><a href="">ломбард</a>
-												</p>
+												</p>-->
 												<div class="contacts ">
 													<ul>
 														<li class="title">
@@ -76,16 +82,18 @@
 									</article>
 								<?php endforeach ?>
 
-						<h2>Отправленные запросы:</h2>
+						<h2 class="mt10 mb10 ml20">Отправленные запросы:</h2>
 						<?php foreach ($links as $link) : ?>
 							<article class="article">
 								<div class="visible-bl">
-									<?php if ($link->linked_user->filename) : ?>
-										<div class="img">
-											<img src="<?=Uploads::get_file_path($link->linked_user->filename, '272x203')?>" />
-											<div class="number">#<?=$user->id?></div>
-										</div>
-									<?php endif ?>
+									<div class="img">
+										<?php if ($user->filename) : ?>
+											<img src="<?=Uploads::get_file_path($user->filename, '272x203')?>" />
+										<?php else : ?>	
+											<img src="/images/nophoto2.png">
+										<?php endif ?>
+										<div class="number">#<?=$user->id?></div>
+									</div>
 									<div class="content">
 										<div class="right-b">
 											<div class="publish">
@@ -104,9 +112,9 @@
 													</div>
 												</div>
 											</div>
-											<p class="tags">
+<!--											<p class="tags">
 												<a href="">Недвижимость,</a><a href="">ипотека,</a><a href="">ссуда,</a><a href="">ломбард</a>
-											</p>
+											</p>-->
 											<div class="contacts ">
 												<ul>
 													<li class="title">
@@ -133,13 +141,13 @@
 
 				<article class="iinput-bl">
 					<ul><li>
-						<div class="inp-cont-bl" style="display:block;" align="center">
+						<div class="inp-cont-bl">
 							<div class="inp-cont">
 								<div class="contact-bl">
 									<div class="inp">
 										<input type="text" name="link_to" id="link_to" placeholder="Логин или email" />
 									</div>
-									<span class="add-contact" id="link_to_company"><span class="href"><span class="ico"></span>
+									<span class="add-contact mt10" id="link_to_company"><span class="href"><span class="ico"></span>
 									<span class="text">добавить сотрудника</span></span></span>
 								</div>
 
