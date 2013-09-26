@@ -39,11 +39,7 @@
 				<?php endif; ?>
 
 				<li class="mt31">
-					<?php if (Request::current()->action() == 'from_employees') : ?>
-					<span class="noclickable"><b><i class="ico "></i><span>Объявления сотрудников</span></b></span>
-					<?php else : ?>
-					<a href="<?=URL::site('user/from_employees')?>" class="clickable"><i class="ico "></i><span>Объявления сотрудников</span></a>
-					<?php endif; ?>
+					<?=Request::factory('block/user_from_employees_menu')->execute()?>
 
 					<?php if (Request::current()->action() == 'favorites') : ?>
 					<span class="noclickable"><b><i class="ico ico-favorites"></i><span>Избранные</span></b></span>

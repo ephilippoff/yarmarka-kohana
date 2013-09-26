@@ -183,7 +183,7 @@ class Controller_Add extends Controller_Template {
 		// проверяем поля формы
 		if ( ! $validation->check())
 		{
-			$errors = $validation->errors('object_form');
+			$errors = $validation->errors('validation/object_form');
 		}
 
 		// указаны ли контакты
@@ -212,7 +212,13 @@ class Controller_Add extends Controller_Template {
 				}
 				catch(ORM_Validation_Exception $e)
 				{
-					$errors += $e->errors('user');
+					$user_errors = $e->errors('validation');
+					if (isset($user_errors['email']))
+					{
+						$user_errors['new_email'] = $user_errors['email'];
+						unset($user_errors['email']);
+					}
+					$errors += $user_errors;
 				}
 			}
 			else
