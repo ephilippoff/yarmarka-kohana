@@ -12,7 +12,7 @@
         <tbody style="color:#333333;font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;font-size: 12px;">
             
 			<tr style="color:#333333;font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;font-size: 12px;">
-				<td><img src="<?=URL::site('images/logo120x23.png')?>" alt="Ярмарка" align="left" /></td>
+				<td><img src="<?=URL::site('images/logo120x23.png', 'http')?>" alt="Ярмарка" align="left" /></td>
 				<td style="text-align: right;vertical-align: bottom;line-height: 2.6;color:#616161;font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;font-size: 12px;">Газета бесплатных объявлений «Ярмарка»</td>
 			</tr>
 			<tr><td style="border-top:8px solid #bbd0d5;line-height: 0;" colspan="2">&nbsp;<img width="100%" height="18" title="" alt="" src="data:image/gif;base64,R0lGODlhAQABAJEAAAAAAP///////wAAACH5BAEAAAIALAAAAAABAAEAAAICVAEAOw%3D%3D"></td></tr>
@@ -23,13 +23,13 @@
 			<tr><td colspan="2" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;line-height: 15px;">Добро пожаловать на «Ярмарка-онлайн»!</td></tr>
 			<tr><td style="line-height: 0;" colspan="2">&nbsp;<img width="100%" height="12" title="" alt="" src="data:image/gif;base64,R0lGODlhAQABAJEAAAAAAP///////wAAACH5BAEAAAIALAAAAAABAAEAAAICVAEAOw%3D%3D"></td></tr>
 			<tr><td colspan="2" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;line-height: 15px;">Вы создали на сайте "Ярмарка-онлайн" объявление. Чтобы его увидели посетители сайта, необходимо пройти по этой ссылке:<br>
-		<a style="color: #4b759e;" href="<?=URL::site('account_verification/'.$activation_code)?>?oid=<?=$object_id; ?>">
-			<span class="s3"><?=URL::site('account_verification/'.$activation_code)?>?oid=<?=$object_id; ?></span>
+		<a style="color: #4b759e;" href="<?=URL::site('account_verification/'.$activation_code, 'http')?>?oid=<?=$object_id; ?>">
+			<span class="s3"><?=URL::site('account_verification/'.$activation_code, 'http')?>?oid=<?=$object_id; ?></span>
 		</a><br />
 			Если приведенная ссылка не открывается, скопируйте ее и вставьте в адресную строку браузера.</td></tr>
 			<tr><td style="line-height: 0;" colspan="2">&nbsp;<img width="100%" height="12" title="" alt="" src="data:image/gif;base64,R0lGODlhAQABAJEAAAAAAP///////wAAACH5BAEAAAIALAAAAAABAAEAAAICVAEAOw%3D%3D"></td></tr>
 			<tr><td colspan="2" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;line-height: 15px;">Мы так же создали для Вас аккаунт на сайте "Ярмарка-онлайн".</td></tr>				
-			<tr><td colspan="2" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;line-height: 15px;">Ваш пароль: <b> <?=$Password; ?> </b>. Для безопасности рекомендуем сменить пароль в <a style="color: #4b759e;" href='<?=URL::site('user/profile')?>'> личном кабинете </a></td></tr>
+			<tr><td colspan="2" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;line-height: 15px;">Ваш пароль: <b> <?=$Password; ?> </b>. Для безопасности рекомендуем сменить пароль в <a style="color: #4b759e;" href='<?=URL::site('user/profile', 'http')?>'> личном кабинете </a></td></tr>
 			<tr><td colspan="2" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;line-height: 15px;">Если Вы не регистрировались на «Ярмарка-онлайн», ничего не делайте или просто удалите это письмо - аккаунт создан не будет.</td></tr>
 					
 			<tr><td colspan="2" style="line-height: 0;">&nbsp;<img src="data:image/gif;base64,R0lGODlhAQABAJEAAAAAAP///////wAAACH5BAEAAAIALAAAAAABAAEAAAICVAEAOw%3D%3D" width="100%" height="27" alt="" title=""/></td></tr>

@@ -70,7 +70,7 @@ class Model_User extends Model_Auth_User {
 	public function filters()
 	{
 		return array(
-			'password' => array(
+			'passw' => array(
 				array(array(Auth::instance(), 'hash'))
 			)
 		);
