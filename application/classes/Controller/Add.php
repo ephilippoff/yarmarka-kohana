@@ -75,10 +75,15 @@ class Controller_Add extends Controller_Template {
 				$value = trim($_POST['contact_'.$matches[1].'_value']);
 				if ($value)
 				{
-					$contacts[] = array(
-						'value' => $value,
-						'type' => $_POST['contact_'.$matches[1].'_type'],
-					);
+					$contact_type = ORM::factory('Contact_Type', $_POST['contact_'.$matches[1].'_type']);
+					if ($contact_type->loaded())
+					{
+						$contacts[] = array(
+							'value' => $value,
+							'type' => $contact_type->id,
+							'type_name' => $contact_type->name,
+						);
+					}
 				}
 			}
 		});

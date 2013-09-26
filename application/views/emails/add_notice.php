@@ -12,7 +12,7 @@
         <tbody style="color:#333333;font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;font-size: 12px;">
             
 			<tr style="color:#333333;font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;font-size: 12px;">
-				<td><img src="<?=URL::site('images/logo120x23.png')?>" alt="Ярмарка" align="left" /></td>
+				<td><img src="<?=URL::site('images/logo120x23.png', 'http')?>" alt="Ярмарка" align="left" /></td>
 				<td style="text-align: right;vertical-align: bottom;line-height: 2.6;color:#616161;font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;font-size: 12px;">Газета бесплатных объявлений «Ярмарка»</td>
 			</tr>
 			<tr><td style="line-height: 0;" colspan="2">&nbsp;<img width="100%" height="12" title="" alt="" src="data:image/gif;base64,R0lGODlhAQABAJEAAAAAAP///////wAAACH5BAEAAAIALAAAAAABAAEAAAICVAEAOw%3D%3D"></td></tr>	
@@ -50,7 +50,7 @@
 						</tr>
 						<tr><td><span style="color:#808080">Контактные данные: </span>
 							<?php foreach ($contacts as $contact) : ?>
-								<?=$contact['type']?>:<?=$contact['value']?>
+								<?=$contact['type_name']?>: <?=$contact['value']?>
 							<?php endforeach; ?>
 						</td></tr>
 						<tr><td><span style="color:#808080">Адрес: </span>
@@ -68,7 +68,7 @@
 			
 			<tr><td style="line-height: 0;" colspan="2">&nbsp;<img width="100%" height="12" title="" alt="" src="data:image/gif;base64,R0lGODlhAQABAJEAAAAAAP///////wAAACH5BAEAAAIALAAAAAABAAEAAAICVAEAOw%3D%3D"></td></tr>	
 			<tr><td colspan="2" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;line-height: 15px;">
-				Ваше объявление будет доступно для посетителей сайта до <?=date('d.m.Y', strtotime($object->date_expiration))?>. По окончании этого периода, Вы можете всегда возобновить публикацию объявления из  <a style="color: #4b759e;font-size: 12px" href="<?=URL::site('user/myads')?>">Личного Кабинета</a>.			
+				Ваше объявление будет доступно для посетителей сайта до <?=date('d.m.Y', strtotime($object->date_expiration))?>. По окончании этого периода, Вы можете всегда возобновить публикацию объявления из  <a style="color: #4b759e;font-size: 12px" href="<?=URL::site('user/myads', 'http')?>">Личного Кабинета</a>.			
 			</td></tr>
 			<tr><td style="line-height: 0;" colspan="2">&nbsp;<img width="100%" height="12" title="" alt="" src="data:image/gif;base64,R0lGODlhAQABAJEAAAAAAP///////wAAACH5BAEAAAIALAAAAAABAAEAAAICVAEAOw%3D%3D"></td></tr>	
 				
@@ -84,7 +84,7 @@
 			<tr><td colspan="2" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;"><a style="color: #4b759e;font-size: 10px;font-size: 10px;line-height: 10px;" href="<?=CI::site('user/edit_ad/'.$object->id)?>"><?=CI::site('user/edit_ad/'.$object->id)?></a></td></tr>
 			<tr><td colspan="2" style="line-height: 10px;">&nbsp;<img src="data:image/gif;base64,R0lGODlhAQABAJEAAAAAAP///////wAAACH5BAEAAAIALAAAAAABAAEAAAICVAEAOw%3D%3D" width="100%" height="10" alt="" title=""/></td></tr>			
 			<tr><td colspan="2" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;font-weight: bold;font-size: 10px;line-height: 10px;">Управлять всеми своими объявлениями из личного кабинета:</td></tr>
-			<tr><td colspan="2" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;"><a style="color: #4b759e;font-size: 10px;font-size: 10px;line-height: 10px;" href="<?=URL::site('user/myads')?>"><?=URL::site('user/myads')?></a></td></tr>
+			<tr><td colspan="2" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;"><a style="color: #4b759e;font-size: 10px;font-size: 10px;line-height: 10px;" href="<?=URL::site('user/myads', 'http')?>"><?=URL::site('user/myads', 'http')?></a></td></tr>
 			
 			<tr><td colspan="2" style="line-height: 0;"><img src="data:image/gif;base64,R0lGODlhAQABAJEAAAAAAP///////wAAACH5BAEAAAIALAAAAAABAAEAAAICVAEAOw%3D%3D" width="100%" height="9" alt="" title=""/></td></tr>
         	<tr><td colspan="2" style="font-size: 9px;color: #6c6c6c;font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;">Пожалуйста, не отвечайте на это письмо, т.к. указанный почтовый адрес используется только для рассылки уведомлений</td></tr>
