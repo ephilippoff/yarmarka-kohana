@@ -341,6 +341,10 @@ class Controller_Add extends Controller_Template {
 			{
 				$object->author_company_id = $user->linked_to->id;
 			}
+			else
+			{
+				$object->author_company_id = DB::expr('NULL');
+			}
 
 			$object->author 			= $user->id;
 			$object->user_text 			= $this->request->post('user_text_adv');
