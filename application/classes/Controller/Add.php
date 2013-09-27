@@ -194,7 +194,7 @@ class Controller_Add extends Controller_Template {
 		// указаны ли контакты
 		if ( ! count($contacts))
 		{
-			$errors['contacts'] = Kohana::message('object_form', 'empty_contacts');
+			$errors['contacts'] = Kohana::message('validation/object_form', 'empty_contacts');
 		}
 
 		// проверяем заблокированные контакты
