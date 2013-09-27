@@ -5,6 +5,34 @@ class Controller_Article extends Controller_Template {
 	public function before()
 	{
 		parent::before();
+		if ($client_email = trim($this->request->query('em_client_email')) 
+			AND $campaign_name = trim($this->request->query('em_campaign_name')))
+		{
+			$stat = ORM::factory('Email_Campaign_Statistic')
+				->where('client_email', '=', $client_email)
+				->where('campaign_name', '=', $campaign_name)
+				->find();
+			if ($stat->loaded())
+			{
+				$stat->visits += 1;
+				$stat->save();
+			}
+			else
+			{
+				$stat->url 				= URL::site($_SERVER['REQUEST_URI'], 'http');
+				$stat->client_email 	= $client_email;
+				$stat->campaign_name 	= $campaign_name;
+				if ($sended_on = $this->request->query('em_sendedon') AND strtotime($sended_on))
+				{
+					$stat->sended_on = date('Y-m-d H:i:s', strtotime($sended_on));
+				}
+				if ($campaign_id = $this->request->query('em_campaign_id') AND is_numeric($campaign_id))
+				{
+					$stat->campaign_id = intval($campaign_id);
+				}
+				$stat->save();
+			}
+		}
 	}
 
 	public function action_index()
