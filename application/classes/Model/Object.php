@@ -435,6 +435,12 @@ class Model_Object extends ORM {
 			$this->cities = '{'.$this->city_id.'}';
 		}
 
+		if ($this->geo_loc)		
+		{
+			list($lat, $lon) = explode(',', $this->geo_loc);
+			$this->location = DB::expr("PointFromText('POINT($lon $lat)',900913)");
+		}
+
 		if ( ! $this->date_expired)
 		{
 			$this->date_expired = DB::expr('NOW()');
