@@ -4,11 +4,12 @@
 		<span>
 			<div class="input style2">
 				<label><span><i class="name">Привязан к компании:</i></span></label>
-				<div class="inp-cont-bl">
+				<p class="myinform">
 					<a href="<?=URL::site('users/'.$user->linked_to->login)?>"><?=$user->linked_to->org_name?></a>
-				</div>
+					(<span class="red" id="remove_link">Удалить связь</span>)
+				</p>
 			</div>
-			<span class="btn-act cansel" id="remove_link"></span>
+			
 		</span>
 	</li>
 </ul>
