@@ -369,7 +369,12 @@ class Controller_Ajax extends Controller_Template
 		if ( ! $object->loaded() 
 				OR ! $object->category_obj->loaded() 
 				OR ! Auth::instance()->get_user() 
-				OR Auth::instance()->get_user()->id != $object->author)
+				OR 
+				(	Auth::instance()->get_user()->id != $object->author
+					AND 
+					Auth::instance()->get_user()->id != $object->author_company_id
+				)
+			)
 		{
 			throw new HTTP_Exception_404;
 		}
@@ -407,7 +412,10 @@ class Controller_Ajax extends Controller_Template
 		if (is_array($ids) AND $ids)
 		{
 			ORM::factory('Object')
-				->where('author', '=', Auth::instance()->get_user()->id)
+				->where_open()
+					->where('author', '=', Auth::instance()->get_user()->id)
+					->or_where('author_company_id', '=', Auth::instance()->get_user()->id)
+				->where_close()
 				->where('id', 'IN', $ids)
 				->set('active', 0)
 				->update_all();

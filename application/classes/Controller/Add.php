@@ -194,7 +194,7 @@ class Controller_Add extends Controller_Template {
 		// указаны ли контакты
 		if ( ! count($contacts))
 		{
-			$errors['contacts'] = Kohana::message('object_form', 'empty_contacts');
+			$errors['contacts'] = Kohana::message('validation/object_form', 'empty_contacts');
 		}
 
 		// проверяем заблокированные контакты
@@ -204,7 +204,7 @@ class Controller_Add extends Controller_Template {
 		}
 
 		// если пользователь не авторизован
-		if ( ! $user)
+		if ( ! $user AND ! $errors)
 		{
 			if ($this->request->post('new_email'))
 			{
@@ -340,6 +340,10 @@ class Controller_Add extends Controller_Template {
 			if ($this->request->post('from_company') AND $user->linked_to->loaded())
 			{
 				$object->author_company_id = $user->linked_to->id;
+			}
+			else
+			{
+				$object->author_company_id = DB::expr('NULL');
 			}
 
 			$object->author 			= $user->id;

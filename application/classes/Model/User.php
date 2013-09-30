@@ -70,7 +70,7 @@ class Model_User extends Model_Auth_User {
 	public function filters()
 	{
 		return array(
-			'password' => array(
+			'passw' => array(
 				array(array(Auth::instance(), 'hash'))
 			)
 		);
@@ -181,7 +181,7 @@ class Model_User extends Model_Auth_User {
 		$contact->contact_type_id	= intval($contact_type_id);
 		$contact->contact			= trim($contact_str);
 		$contact->show 				= 1;
-		$contact->create();
+		$contact = $contact->create();
 
 		$contact->add('users', $this->id);
 

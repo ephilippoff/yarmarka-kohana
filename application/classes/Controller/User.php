@@ -244,12 +244,13 @@ class Controller_User extends Controller_Template {
 			break;
 
 			case 'from_employees':
+				$this->template->linked_user = ORM::factory('User', $this->request->param('id'));
 				$objects->where('author_company_id', '=', $this->user->id)
 					->where('author', '=', $this->request->param('id'));
 			break;
 
 			default:
-				$objects->where('author', '=', $this->request->param('id'));
+				$objects->where('author', '=', $this->user->id);
 			break;
 		}
 

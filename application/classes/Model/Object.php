@@ -527,9 +527,11 @@ class Model_Object extends ORM {
 			$contact->contact_type_id	= intval($contact_type_id);
 			$contact->contact			= trim($contact_str);
 			$contact->show 				= 1;
-			$contact->create();
+			$contact = $contact->create();
+
 
 			$contact->add('objects', $this->id);
+			$contact->reload();
 		}
 
 		return $contact->loaded() ? $contact : $contact_exists;

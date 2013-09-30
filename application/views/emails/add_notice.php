@@ -39,7 +39,7 @@
 								<?php if (($object->get_filename())) : 
 									$paths = Image::getSitePaths($object->get_filename());								
 									$image_path	= substr($paths['120x90'], 1, strlen($paths['120x90'])); ?>										
-									<img width="96" src="<?=URL::site($image_path)?>">
+									<img width="96" src="<?=CI::site($image_path)?>">
 								<?php endif; ?>
 							</td>
 							<td rowspan="5" width="8" style="border-bottom: 12px solid #f1f4f7"></td>
