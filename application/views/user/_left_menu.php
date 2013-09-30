@@ -39,7 +39,9 @@
 				<?php endif; ?>
 
 				<li class="mt31">
+					<?php if (FALSE) : ?>
 					<?=Request::factory('block/user_from_employees_menu')->execute()?>
+					<?php endif ?>
 
 					<?php if (Request::current()->action() == 'favorites') : ?>
 					<span class="noclickable"><b><i class="ico ico-favorites"></i><span>Избранные</span></b></span>
