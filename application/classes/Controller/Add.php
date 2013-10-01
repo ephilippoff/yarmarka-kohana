@@ -200,7 +200,7 @@ class Controller_Add extends Controller_Template {
 		// проверяем заблокированные контакты
 		if ($blocked_contacts)
 		{
-			$errors['contacts'] = strtr(Kohana::message('object_form', 'blocked_contacts'), array(':contacts' => implode(',', $blocked_contacts)));
+			$errors['contacts'] = strtr(Kohana::message('validation/object_form', 'blocked_contacts'), array(':contacts' => implode(',', $blocked_contacts)));
 		}
 
 		// если пользователь не авторизован
@@ -255,7 +255,7 @@ class Controller_Add extends Controller_Template {
 		// проверяем количество уже поданных пользователем объявлений
 		if ( ! $category->check_max_user_objects($user, $object_id))
 		{
-			$errors['contacts'] = Kohana::message('object_form', 'max_objects');
+			$errors['contacts'] = Kohana::message('validation/object_form', 'max_objects');
 		}
 
 		if ( ! $errors)
