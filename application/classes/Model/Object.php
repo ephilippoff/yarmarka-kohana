@@ -79,6 +79,14 @@ class Model_Object extends ORM {
 			return $template;
 		}
 
+		if (in_array('adres-raion', $matches[1]))
+		{
+			if ($this->location_obj->loaded())
+			{
+				$template = str_replace('{adres-raion}', $this->location_obj->address, $template);
+			}
+		}
+
 		$attrs = $this->get_attributes();
 		foreach ($attrs as $attr)
 		{
