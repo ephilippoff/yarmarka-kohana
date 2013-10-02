@@ -506,9 +506,26 @@ class Controller_User extends Controller_Template {
 		{
 			throw new HTTP_Exception_404;
 		}
+		
+		$job_category_id = 36;//TODO: Костыль: Пропись id
 
+		$this->template->job_adverts_count = $job_adverts_count = ORM::factory('object')
+				->where('author', '=', $user)
+				->where('active', '=', 1)
+				->where('is_published', '=', 1)
+				->where('category', '=', $job_category_id)
+				->where('date_expired', '<=',  DB::expr('CURRENT_TIMESTAMP'))
+				->count_all();
+
+		
 		$this->template->is_owner = (Auth::instance()->get_user() AND Auth::instance()->get_user()->id === $user->id);
 		$this->template->filter_href = ORM::factory('Category')->where('id', '=', 1)->find()->get_url().'?user_id='.$user->id;
+		$this->template->job_category_href = ( $job_adverts_count > 0 )
+				? 
+				ORM::factory('Category')->where('id', '=', $job_category_id)->find()->get_url().'?user_id='.$user->id 
+				: 
+				'';
+		
 		$this->template->user = $user;
 	}
 

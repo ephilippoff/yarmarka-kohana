@@ -50,7 +50,9 @@
 					<li class="active">
 						<span class="span_a"><i class="ico ico-iabout"></i><span>О компании</span></span>
 					</li>
-					
+					<?php if ($job_adverts_count > 0) : ?>
+						<li class="no-li-slide"><a href="<?=$job_category_href?>"><i class="ico ico-iadd"></i><span>Вакансии&nbsp;<span>(<?=$job_adverts_count?>)</span></span></a></li>										
+					<?php endif;?>
 					<li class="no-li-slide"><a href="<?=$filter_href?>"><i class="ico ico-iadd"></i><span>Объявления</span></a>
 					</li>
 					<li>
