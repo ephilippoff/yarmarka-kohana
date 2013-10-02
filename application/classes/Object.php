@@ -148,7 +148,8 @@ class Object
 				$object->title = $object->generate_title();
 			}
 
-			$object->update();
+			$object->full_text = $object->generate_full_text();
+			$object->save();
 
 			$db->commit();
 		}
