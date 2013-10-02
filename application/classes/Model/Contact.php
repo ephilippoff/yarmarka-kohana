@@ -71,10 +71,11 @@ class Model_Contact extends ORM {
 		}
 		else
 		{
-			$this->where('contact', '=', $contact);
+			$this->where('contact_type_id', '=', $contact_type_id)
+				->where('contact', '=', $contact);
 		}
 
-		return $this->where('contact_type_id', '=', $contact_type_id);
+		return $this;
 	}
 
 	public function is_phone()
@@ -87,6 +88,12 @@ class Model_Contact extends ORM {
 		return Model_Contact_Type::is_phone($this->contact_type_id);
 	}
 
+	/**
+	 * Все контакты создаем через create, чтобы автоматически проверять на дубли
+	 * 
+	 * @param  object $validation
+	 * @return object
+	 */
 	public function create(Validation $validation = NULL)
 	{
 		$exists_contact = ORM::factory('Contact')->by_contact_and_type($this->contact, $this->contact_type_id)

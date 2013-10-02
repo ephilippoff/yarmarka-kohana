@@ -88,19 +88,6 @@ class Controller_Add extends Controller_Template {
 			}
 		});
 
-		// ищем заблокированные среди контактов
-		$blocked_contacts = array();
-		foreach ($contacts as $contact)
-		{
-			$blocked_contact = ORM::factory('Contact_Block_List')->where('contact_type_id', '=', $contact['type'])
-				->where('contact', '=', $contact['value'])
-				->find();
-			if ($blocked_contact->loaded())
-			{
-				$blocked_contacts[] = $blocked_contact->contact;
-			}
-		}
-		
 		// категория объявления
 		$category = ORM::factory('Category', $this->request->post('rubricid'));
 		if ( ! $category->loaded())
@@ -195,12 +182,6 @@ class Controller_Add extends Controller_Template {
 		if ( ! count($contacts))
 		{
 			$errors['contacts'] = Kohana::message('validation/object_form', 'empty_contacts');
-		}
-
-		// проверяем заблокированные контакты
-		if ($blocked_contacts)
-		{
-			$errors['contacts'] = strtr(Kohana::message('validation/object_form', 'blocked_contacts'), array(':contacts' => implode(',', $blocked_contacts)));
 		}
 
 		// если пользователь не авторизован
