@@ -509,7 +509,7 @@ class Controller_User extends Controller_Template {
 		
 		$job_category_id = 36;//TODO: Костыль: Пропись id
 
-		$this->template->job_adverts_count = $job_adverts_count = ORM::factory('object')
+		$this->template->job_adverts_count = $job_adverts_count = ORM::factory('Object')
 				->where('author', '=', $user)
 				->where('active', '=', 1)
 				->where('is_published', '=', 1)
