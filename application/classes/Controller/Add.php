@@ -324,7 +324,7 @@ class Controller_Add extends Controller_Template {
 			}
 			else
 			{
-				$object->author_company_id = DB::expr('NULL');
+				$object->author_company_id = $user->id; //DB::expr('NULL');
 			}
 
 			$object->author 			= $user->id;
