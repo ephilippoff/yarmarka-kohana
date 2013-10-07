@@ -510,7 +510,7 @@ class Controller_User extends Controller_Template {
 		$job_category_id = 36;//TODO: Костыль: Пропись id
 
 		$this->template->job_adverts_count = $job_adverts_count = ORM::factory('Object')
-				->where('author', '=', $user)
+				->where('author_company_id', '=', $user)
 				->where('active', '=', 1)
 				->where('is_published', '=', 1)
 				->where('category', '=', $job_category_id)
@@ -525,6 +525,9 @@ class Controller_User extends Controller_Template {
 				ORM::factory('Category')->where('id', '=', $job_category_id)->find()->get_url().'?user_id='.$user->id 
 				: 
 				'';
+		$title = (empty($user->org_name)) ? "Страница компании №".$user->id : htmlspecialchars($user->org_name);		
+		
+		Seo::set_title($title);
 		
 		$this->template->user = $user;
 	}
