@@ -438,7 +438,9 @@ class Model_Object extends ORM {
 		{
 			$this->cities = '{'.join(',', $this->cities).'}';
 		}
-		elseif ($this->city_id)
+		
+		// по дефолту заполняем cities только для новых объяв
+		if ($this->city_id AND ! $this->loaded())
 		{
 			$this->cities = '{'.$this->city_id.'}';
 		}
