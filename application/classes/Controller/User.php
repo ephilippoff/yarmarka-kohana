@@ -525,6 +525,9 @@ class Controller_User extends Controller_Template {
 				ORM::factory('Category')->where('id', '=', $job_category_id)->find()->get_url().'?user_id='.$user->id 
 				: 
 				'';
+		$title = (empty($user->org_name)) ? "Страница компании №".$user->id : htmlspecialchars($user->org_name);		
+		
+		Seo::set_title($title);
 		
 		$this->template->user = $user;
 	}

@@ -38,7 +38,7 @@
 						<?php if (empty($user->org_name)) : ?>
 								Страница компании №<?=$user->id?>
 						<?php else : ?>
-								<?=$user->org_name?> 
+								<?=htmlspecialchars($user->org_name)?> 
 						<?php endif; ?>					
 			</h1>
 			<a class="bnt-go-back" href="/" rel='nofollow'><span class="text">На главную</span></a>
