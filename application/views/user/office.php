@@ -17,17 +17,6 @@
 					<header><span class="title"></span></header>
 					<div class="p_cont">
 						<section class="filials-bl reducting">
-							<article class="informator">
-								<p class="title"><span>Что это такое?</span>
-									<!--<a href="" class="toggle"><span class="show">свернуть</span><span>развернуть</span></a>-->
-								</p>
-								<div class="cont">
-									<p style="text-align: justify">
-										А тут должно быть много текста,G чтобы вертска к херам не свернулась.
-										Ещееееее бооольше текста! Еще! Еще!Еще!Еще!Еще!Еще! Еще!Еще!Еще!Еще!Еще!Еще!Еще!Еще!Еще!Еще! И ни за что не нажимай на кнопку СВЕРНУТЬ!
-									</p>
-								</div>
-							</article>
 
 							<?php foreach ($users as $user) : ?>
 								<article class="article">
