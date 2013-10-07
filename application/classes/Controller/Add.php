@@ -67,16 +67,21 @@ class Controller_Add extends Controller_Template {
 			}
 		}
 
+		// идентификатор сессии в CI
+		$session_id = $this->request->post('session_id');
+
 		// собираем контакты
 		$contacts = array();
-		array_walk($_POST, function($value, $key) use (&$contacts){
+		array_walk($_POST, function($value, $key) use (&$contacts, $session_id){
 			if (preg_match('/^contact_([0-9]*)_value/', $key, $matches))
 			{
 				$value = trim($_POST['contact_'.$matches[1].'_value']);
 				if ($value)
 				{
-					$contact_type = ORM::factory('Contact_Type', $_POST['contact_'.$matches[1].'_type']);
-					if ($contact_type->loaded())
+					$contact_type 	= ORM::factory('Contact_Type', $_POST['contact_'.$matches[1].'_type']);
+					$contact 		= ORM::factory('Contact')->by_contact_and_type($value, $contact_type->id)
+						->find();
+					if ($contact_type->loaded() AND $contact->is_verified($session_id))
 					{
 						$contacts[] = array(
 							'value' => $value,

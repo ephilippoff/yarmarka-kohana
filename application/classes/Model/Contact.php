@@ -120,6 +120,25 @@ class Model_Contact extends ORM {
 
 		return parent::create($validation);
 	}
+
+	public function is_verified($session_id)
+	{
+		if ( ! $this->loaded())
+		{
+			return FALSE;
+		}
+
+		if ($this->verified AND $user = Auth::instance()->get_user())
+		{
+			return (bool) ORM::factory('User_Contact')->where('contact_id', '=', $this->id)
+				->where('user_id', '=', $user->id)
+				->count_all();
+		}
+
+		return (bool) ORM::factory('Verified_Contact')->where('contact_id', '=', $this->id)
+			->where('session_id', '=', $session_id)
+			->count_all();
+	}
 }
 
 /* End of file Contact.php */
