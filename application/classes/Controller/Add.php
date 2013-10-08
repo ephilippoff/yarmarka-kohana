@@ -67,35 +67,32 @@ class Controller_Add extends Controller_Template {
 			}
 		}
 
+		// идентификатор сессии в CI
+		$session_id = $this->request->post('session_id');
+
 		// собираем контакты
 		$contacts = array();
-		array_walk($_POST, function($value, $key) use (&$contacts){
+		array_walk($_POST, function($value, $key) use (&$contacts, $session_id){
 			if (preg_match('/^contact_([0-9]*)_value/', $key, $matches))
 			{
 				$value = trim($_POST['contact_'.$matches[1].'_value']);
 				if ($value)
 				{
-					$contacts[] = array(
-						'value' => $value,
-						'type' => $_POST['contact_'.$matches[1].'_type'],
-					);
+					$contact_type 	= ORM::factory('Contact_Type', $_POST['contact_'.$matches[1].'_type']);
+					$contact 		= ORM::factory('Contact')->by_contact_and_type($value, $contact_type->id)
+						->find();
+					if ($contact_type->loaded() AND $contact->is_verified($session_id))
+					{
+						$contacts[] = array(
+							'value' => $value,
+							'type' => $contact_type->id,
+							'type_name' => $contact_type->name,
+						);
+					}
 				}
 			}
 		});
 
-		// ищем заблокированные среди контактов
-		$blocked_contacts = array();
-		foreach ($contacts as $contact)
-		{
-			$blocked_contact = ORM::factory('Contact_Block_List')->where('contact_type_id', '=', $contact['type'])
-				->where('contact', '=', $contact['value'])
-				->find();
-			if ($blocked_contact->loaded())
-			{
-				$blocked_contacts[] = $blocked_contact->contact;
-			}
-		}
-		
 		// категория объявления
 		$category = ORM::factory('Category', $this->request->post('rubricid'));
 		if ( ! $category->loaded())
@@ -183,23 +180,17 @@ class Controller_Add extends Controller_Template {
 		// проверяем поля формы
 		if ( ! $validation->check())
 		{
-			$errors = $validation->errors('object_form');
+			$errors = $validation->errors('validation/object_form');
 		}
 
 		// указаны ли контакты
 		if ( ! count($contacts))
 		{
-			$errors['contacts'] = Kohana::message('object_form', 'empty_contacts');
-		}
-
-		// проверяем заблокированные контакты
-		if ($blocked_contacts)
-		{
-			$errors['contacts'] = strtr(Kohana::message('object_form', 'blocked_contacts'), array(':contacts' => implode(',', $blocked_contacts)));
+			$errors['contacts'] = Kohana::message('validation/object_form', 'empty_contacts');
 		}
 
 		// если пользователь не авторизован
-		if ( ! $user)
+		if ( ! $user AND ! $errors)
 		{
 			if ($this->request->post('new_email'))
 			{
@@ -212,7 +203,13 @@ class Controller_Add extends Controller_Template {
 				}
 				catch(ORM_Validation_Exception $e)
 				{
-					$errors += $e->errors('user');
+					$user_errors = $e->errors('validation');
+					if (isset($user_errors['email']))
+					{
+						$user_errors['new_email'] = $user_errors['email'];
+						unset($user_errors['email']);
+					}
+					$errors += $user_errors;
 				}
 			}
 			else
@@ -244,7 +241,7 @@ class Controller_Add extends Controller_Template {
 		// проверяем количество уже поданных пользователем объявлений
 		if ( ! $category->check_max_user_objects($user, $object_id))
 		{
-			$errors['contacts'] = Kohana::message('object_form', 'max_objects');
+			$errors['contacts'] = Kohana::message('validation/object_form', 'max_objects');
 		}
 
 		if ( ! $errors)
@@ -314,8 +311,8 @@ class Controller_Add extends Controller_Template {
 			$object->category 			= $category->id;
 			$object->contact 			= $this->request->post('contact');
 			$object->city_id			= $city->id;
-			$object->author 			= $user->id;
 			$object->ip_addr 			= Request::$client_ip;
+			
 			if ($is_edit) // если это редактирвоание, то is_published не трогаем
 			{
 				$object->is_published 	= $user->loaded() ? 1 : 0;
@@ -324,6 +321,21 @@ class Controller_Add extends Controller_Template {
 			if ( ! $category->title_auto_fill)
 			{
 				$object->title 			= $this->request->post('title_adv');
+			}
+
+			if ($this->request->post('from_company') AND $user->linked_to->loaded())
+			{
+				$object->author_company_id = $user->linked_to->id;
+			}
+			else
+			{
+				$object->author_company_id = $user->id; //DB::expr('NULL');
+			}
+
+			if ( ! $is_edit)
+			{
+				// при редактировании автора не меняем
+				$object->author 			= $user->id;
 			}
 			$object->user_text 			= $this->request->post('user_text_adv');
 			$object->date_expiration	= $date_expiration;

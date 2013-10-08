@@ -39,6 +39,10 @@
 				<?php endif; ?>
 
 				<li class="mt31">
+					<?php if (FALSE) : ?>
+					<?=Request::factory('block/user_from_employees_menu')->execute()?>
+					<?php endif ?>
+
 					<?php if (Request::current()->action() == 'favorites') : ?>
 					<span class="noclickable"><b><i class="ico ico-favorites"></i><span>Избранные</span></b></span>
 					<?php else : ?>
@@ -83,13 +87,11 @@
 				<li><a href="<?=URL::site('user/units')?>" class="clickable"><i class="ico "></i><span>Подразделения</span></a></li>
 				<?php endif; ?>				
 
-				<?php if (FALSE) : ?>
-					<?php if (Auth::instance()->get_user()->org_type == 2) : ?>
-						<?php if (Request::current()->action() == 'affiliates') : ?>
-						<li><i class="ico "></i><span><b>Филиалы</b></span></li>
-						<?php else : ?>
-						<li><a href="<?=URL::site('user/affiliates')?>" class="clickable"><i class="ico "></i><span>Филиалы</span></a></li>
-						<?php endif; ?>
+				<?php if (Auth::instance()->get_user()->org_type == 2 AND ! Auth::instance()->get_user()->linked_to->loaded()) : ?>
+					<?php if (Request::current()->action() == 'office') : ?>
+					<li><i class="ico "></i><span><b>Сотрудники</b></span></li>
+					<?php else : ?>
+					<li><a href="<?=URL::site('user/office')?>" class="clickable"><i class="ico "></i><span>Сотрудники</span></a></li>
 					<?php endif; ?>
 				<?php endif; ?>
 			</ul>

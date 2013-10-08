@@ -4,6 +4,16 @@
 Route::set('admin', '<controller>(/<action>)', array('controller' => '(admin_.*|Admin_.*)'))->filter(function($route, $params, $request){
 	throw new HTTP_Exception_404;
 });
+
+// @todo дикий костыль благодаря админам
+if (isset($_SERVER['HTTP_HOST']) AND $_SERVER['HTTP_HOST'] == 'c.yarmarka.biz')
+{
+	Route::set('master_save_object', 'add/master_save_object')
+		->defaults(array(
+			'controller' => 'Add',
+			'action'     => 'save_object',
+		));
+}
 Route::set('not_unique_contact_msg', 'block/not_unique_contact_msg/<number>')
 	->defaults(array(
 		'controller' => 'Block',

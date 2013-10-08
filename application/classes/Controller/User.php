@@ -294,35 +294,45 @@ class Controller_User extends Controller_Template {
 		// get objects
 		$objects = ORM::factory('Object')
 			->with_main_photo()
-			->where('author', '=', $this->user->id)
 			->where('active', '=', 1);
 
 		switch ($folder) 
 		{
 			case 'published':
-				$objects->where('is_published', '=', '1')
+				$objects->where('author', '=', $this->user->id)
+					->where('is_published', '=', '1')
 					->where('is_bad', '=', '0');
 			break;
 
 			case 'unpublished':
-				$objects->where('is_published', '=', '0')
+				$objects->where('author', '=', $this->user->id)
+					->where('is_published', '=', '0')
 					->where('is_bad', '=', '0');
 			break;
 
 			case 'in_archive':
-				$objects->where('in_archive', '=', '1');
+				$objects->where('author', '=', $this->user->id)
+					->where('in_archive', '=', '1');
 			break;
 
 			case 'rejected':
-				$objects->where('is_bad', '=', 1);
+				$objects->where('author', '=', $this->user->id)
+					->where('is_bad', '=', 1);
 			break;
 
 			case 'banned':
-				$objects->where('is_bad', '=', 2);
+				$objects->where('author', '=', $this->user->id)
+					->where('is_bad', '=', 2);
 			break;
-			
+
+			case 'from_employees':
+				$this->template->linked_user = ORM::factory('User', $this->request->param('id'));
+				$objects->where('author_company_id', '=', $this->user->id)
+					->where('author', '=', $this->request->param('id'));
+			break;
+
 			default:
-				// all user objects
+				$objects->where('author', '=', $this->user->id);
 			break;
 		}
 
@@ -429,6 +439,11 @@ class Controller_User extends Controller_Template {
 		$this->myads('banned');
 	}
 
+	public function action_from_employees()
+	{
+		$this->myads('from_employees');
+	}
+
 	public function action_newspapers()
 	{
 		$this->layout = 'users';
@@ -472,6 +487,10 @@ class Controller_User extends Controller_Template {
 		$this->assets->js('office.js');
 
 		$this->template->users = $this->user->users->find_all();
+		$this->template->links = ORM::factory('User_Link_Request')
+			->where('user_id', '=', $this->user->id)
+			->order_by('created', 'desc')
+			->find_all();
 	}
 
 	public function action_affiliates()
@@ -569,9 +588,29 @@ class Controller_User extends Controller_Template {
 		{
 			throw new HTTP_Exception_404;
 		}
+		
+		$job_category_id = 36;//TODO: Костыль: Пропись id
 
+		$this->template->job_adverts_count = $job_adverts_count = ORM::factory('Object')
+				->where('author_company_id', '=', $user)
+				->where('active', '=', 1)
+				->where('is_published', '=', 1)
+				->where('category', '=', $job_category_id)
+				->where('date_expired', '<=',  DB::expr('CURRENT_TIMESTAMP'))
+				->count_all();
+
+		
 		$this->template->is_owner = (Auth::instance()->get_user() AND Auth::instance()->get_user()->id === $user->id);
 		$this->template->filter_href = ORM::factory('Category')->where('id', '=', 1)->find()->get_url().'?user_id='.$user->id;
+		$this->template->job_category_href = ( $job_adverts_count > 0 )
+				? 
+				ORM::factory('Category')->where('id', '=', $job_category_id)->find()->get_url().'?user_id='.$user->id 
+				: 
+				'';
+		$title = (empty($user->org_name)) ? "Страница компании №".$user->id : htmlspecialchars($user->org_name);		
+		
+		Seo::set_title($title);
+		
 		$this->template->user = $user;
 	}
 

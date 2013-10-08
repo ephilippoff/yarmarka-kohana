@@ -99,40 +99,6 @@ function delete_user(obj) {
 		<th class="dropdown">
 		<?php endif; ?>
 			<?php if ($direction == 'asc') : ?>
-			<a href="#" onClick="return order('objects_cnt', 'desc');">
-			<?php else : ?>
-			<a href="#" onClick="return order('objects_cnt', 'asc');">
-			<?php endif; ?>
-			Ads
-			<?php if ($sort_by == 'objects_cnt') : ?>
-			<span class="caret"></span>
-			<?php endif; ?>
-			</a>
-		</th>
-
-		<?php if ($direction == 'asc') : ?>
-		<th class="dropup">
-		<?php else : ?>
-		<th class="dropdown">
-		<?php endif; ?>
-			<?php if ($direction == 'asc') : ?>
-			<a href="#" onClick="return order('invoices_cnt', 'desc');">
-			<?php else : ?>
-			<a href="#" onClick="return order('invoices_cnt', 'asc');">
-			<?php endif; ?>
-			Invoices
-			<?php if ($sort_by == 'invoices_cnt') : ?>
-			<span class="caret"></span>
-			<?php endif; ?>
-			</a>
-		</th>
-
-		<?php if ($direction == 'asc') : ?>
-		<th class="dropup">
-		<?php else : ?>
-		<th class="dropdown">
-		<?php endif; ?>
-			<?php if ($direction == 'asc') : ?>
 			<a href="#" onClick="return order('msgs_cnt', 'desc');">
 			<?php else : ?>
 			<a href="#" onClick="return order('msgs_cnt', 'asc');">
@@ -159,9 +125,6 @@ function delete_user(obj) {
 		<td><?=$user->fullname?></td>
 		<td><?=date('d.m.Y H:i', strtotime($user->regdate))?></td>
 		<td><a href="<?=URL::site('khbackend/users/ip_info/'.$user->ip_addr)?>" onClick="return popup(this);"><?=$user->ip_addr?></a></td>
-		<td><span class="badge"><?=$user->objects_cnt?></span></td>
-		<td><span class="badge"><?=$user->invoices_cnt?></span></td>
-		<td><span class="badge"><?=$user->msgs_cnt?></span></td>
 		<td>
 			<a href="<?=URL::site('khbackend/users/ban/'.$user->id)?>" title="Ban user" class="icon-lock" onClick="return ban(this);"></a>
 			<a href="<?=URL::site('khbackend/users/ban_and_unpublish/'.$user->id)?>" onClick="return ban(this);" title="Ban user and unpublish all ads" class="icon-ban-circle"></a>

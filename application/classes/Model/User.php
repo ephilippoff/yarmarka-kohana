@@ -9,7 +9,7 @@ class Model_User extends Model_Auth_User {
 	 *
 	 * @var array Relationhips
 	 */
-	protected $_has_many = array(
+	protected $_has_many = array(	
 		'user_tokens'	=> array('model' => 'User_Token'),
 		'objects'		=> array('foreign_key' => 'author'),
 		'access'		=> array('model' => 'Access'),
@@ -18,7 +18,7 @@ class Model_User extends Model_Auth_User {
 		'user_messages' => array('model' => 'User_Messages', 'foreign_key' => 'user_id'),
 		'contacts'		=> array('model' => 'Contact', 'through' => 'user_contacts'),
 		'link_requests' => array('model' => 'User_Link_Request', 'foreign_key' => 'linked_user_id'),
-		'users'			=> array('model' => 'User', 'foreign_key' => 'linked_to_user'),
+		'users'			=> array('model' => 'User', 'foreign_key' => 'linked_to_user'),		
 		'units' 		=> array('model' => 'User_Units', 'foreign_key' => 'user_id'),
 	);
 
@@ -70,7 +70,7 @@ class Model_User extends Model_Auth_User {
 	public function filters()
 	{
 		return array(
-			'password' => array(
+			'passw' => array(
 				array(array(Auth::instance(), 'hash'))
 			)
 		);
@@ -181,7 +181,7 @@ class Model_User extends Model_Auth_User {
 		$contact->contact_type_id	= intval($contact_type_id);
 		$contact->contact			= trim($contact_str);
 		$contact->show 				= 1;
-		$contact->create();
+		$contact = $contact->create();
 
 		$contact->add('users', $this->id);
 
@@ -230,8 +230,9 @@ class Model_User extends Model_Auth_User {
 		$is_white_ip 	= ORM::factory('Ipwhite')->get_by_ip(Request::$client_ip)->loaded();
 		$is_author 		= ($this->id === $object->author);
 		$is_admin 		= (($this->role == 1 OR $this->role == 3) AND $is_white_ip);
+		$is_company 	= ($this->id === $object->author_company_id);
 
-		return ($is_author OR $is_admin);
+		return ($is_author OR $is_admin OR $is_company);
 	}
 
 	public function check_domain($email)
@@ -272,6 +273,12 @@ class Model_User extends Model_Auth_User {
 	public function getAllUnits()
 	{
 		return $this->units->find_all()->as_array();
+	}
+
+	public function count_company_objects($company_id)
+	{
+		return $this->objects->where('author_company_id', '=', $company_id)
+			->count_all();
 	}
 }
 

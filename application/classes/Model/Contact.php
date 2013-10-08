@@ -71,10 +71,11 @@ class Model_Contact extends ORM {
 		}
 		else
 		{
-			$this->where('contact', '=', $contact);
+			$this->where('contact_type_id', '=', $contact_type_id)
+				->where('contact', '=', $contact);
 		}
 
-		return $this->where('contact_type_id', '=', $contact_type_id);
+		return $this;
 	}
 
 	public function is_phone()
@@ -87,8 +88,22 @@ class Model_Contact extends ORM {
 		return Model_Contact_Type::is_phone($this->contact_type_id);
 	}
 
+	/**
+	 * Все контакты создаем через create, чтобы автоматически проверять на дубли
+	 * 
+	 * @param  object $validation
+	 * @return object
+	 */
 	public function create(Validation $validation = NULL)
 	{
+		$exists_contact = ORM::factory('Contact')->by_contact_and_type($this->contact, $this->contact_type_id)
+			->find();
+
+		if ($exists_contact->loaded())
+		{
+			return $exists_contact;
+		}
+		
 		if (Model_Contact_Type::is_phone($this->contact_type_id))
 		{
 			$this->contact_clear = Text::clear_phone_number($this->contact);
@@ -104,6 +119,25 @@ class Model_Contact extends ORM {
 		}
 
 		return parent::create($validation);
+	}
+
+	public function is_verified($session_id)
+	{
+		if ( ! $this->loaded())
+		{
+			return FALSE;
+		}
+
+		if ($this->verified AND $user = Auth::instance()->get_user())
+		{
+			return (bool) ORM::factory('User_Contact')->where('contact_id', '=', $this->id)
+				->where('user_id', '=', $user->id)
+				->count_all();
+		}
+
+		return (bool) ORM::factory('Verified_Contact')->where('contact_id', '=', $this->id)
+			->where('session_id', '=', $session_id)
+			->count_all();
 	}
 }
 

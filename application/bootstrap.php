@@ -63,7 +63,7 @@ ini_set('unserialize_callback_func', 'spl_autoload_call');
  */
 I18n::lang('en-us');
 
-Kohana::$environment = ($_SERVER['HTTP_HOST'] === 'c.yarmarka.biz') ? Kohana::PRODUCTION : Kohana::DEVELOPMENT;
+Kohana::$environment = (@$_SERVER['HTTP_HOST'] === 'c.yarmarka.biz') ? Kohana::PRODUCTION : Kohana::DEVELOPMENT;
 
 /**
  * Initialize Kohana, setting the default options.
@@ -115,7 +115,7 @@ Kohana::modules(array(
 	'codebench'  => MODPATH.'codebench',  // Benchmarking tool
 	'database'   => MODPATH.'database',   // Database access
 	'image'      => MODPATH.'image',      // Image manipulation
-	// 'minion'     => MODPATH.'minion',     // CLI Tasks
+	'minion'     => MODPATH.'minion',     // CLI Tasks
 	'orm'        => MODPATH.'orm',        // Object Relationship Mapping
 	'assets'     => MODPATH.'asset-merger',        // js css assets manager
 	'pagination' => MODPATH.'pagination',        // kohana pagination module

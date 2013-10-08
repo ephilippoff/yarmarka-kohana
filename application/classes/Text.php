@@ -57,7 +57,7 @@ class Text extends Kohana_Text {
 		return $string_part.'::'.sha1(print_r($for_serialize, TRUE));
 	}
 
-	public function random_string_hash($str)
+	public static function random_string_hash($str)
 	{
 		return sha1($str.microtime());
 	}

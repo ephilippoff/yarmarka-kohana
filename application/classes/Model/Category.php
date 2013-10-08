@@ -104,7 +104,7 @@ class Model_Category extends ORM {
 			$user = ORM::factory('User', $user);
 		}
 
-		$objects = $user->objects;
+		$objects = $user->objects->where('category', '=', $this->id);
 		if ($object_id)
 		{
 			$objects->where('id', '!=', $object_id);

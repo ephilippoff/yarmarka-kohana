@@ -12,12 +12,8 @@
 								<li><a href="<?=URL::site('user/profile')?>"><div class="img"><img src="<?=URL::site('images/pr2.png')?>" alt="" /></div>Личные данные</a></li>
 								<li><a href="<?=URL::site('user/invoices')?>"><div class="img"><img src="" alt="" /></div>История услуг</a></li>
 								<li><a href="<?=URL::site('user/newspapers')?>"><div class="img"><img src="" alt="" /></div>Купленные газеты</a></li>
-								
-								<?php if (Auth::instance()->get_user()->org_type == 2) : ?>
-									<li><a href="<?=URL::site('user/office')?>"><div class="img"><!--<img src="" alt="" />--></div>Сотрудники</a></li>									
-								<?php endif ?>
 
-								<?php if (Request::current()->action() != 'userpage') : ?>
+								<?php if (Request::current()->action() != 'userpage' and Auth::instance()->get_user()->org_type == 2) : ?>
 									<li class="last"><a class="green" href="/users/<?=Auth::instance()->get_user()->login?>"><div class="img"><!--<img src="" alt="" />--></div>Страница компании</a></li>									
 								<?php endif; ?>
 

@@ -197,21 +197,23 @@
 
 
                                             <?php // Получаем дату, когда можно поднять объявление
-                                            if ($ad->get_service_up_timestamp() < time()) : ?>
-                                                <li class="">
-                                                    <a title="Поднять объявление в общем списке" href="" class="btn-funcmenu  " id="service-up-<?=$ad->id?>" onClick="service_up(<?=$ad->id?>, this); return false;">
-                                                        <i class="ico up"></i><span>Поднять</span>
-                                                    </a>
-                                                </li>
-                                            <?php else : ?>
-                                                <li class="">
-                                                    <a href="" class="btn-funcmenu disable noactive  " id="service-up-<?=$ad->id?>" 
-                                                       title="Вы можете поднять это объявление не раньше <?=date("d.m Y в H:i", $ad->get_service_up_timestamp())?>"
-                                                       onclick="return false;">
-                                                        <i class="ico up"></i><span>Поднять</span>
-                                                    </a>
-                                                </li>
-                                            <?php endif; ?>
+                                            if (empty($linked_user)) :
+	                                            if ($ad->get_service_up_timestamp() < time()) : ?>
+	                                                <li class="">
+	                                                    <a title="Поднять объявление в общем списке" href="" class="btn-funcmenu  " id="service-up-<?=$ad->id?>" onClick="service_up(<?=$ad->id?>, this); return false;">
+	                                                        <i class="ico up"></i><span>Поднять</span>
+	                                                    </a>
+	                                                </li>
+	                                            <?php else : ?>
+	                                                <li class="">
+	                                                    <a href="" class="btn-funcmenu disable noactive  " id="service-up-<?=$ad->id?>" 
+	                                                       title="Вы можете поднять это объявление не раньше <?=date("d.m Y в H:i", $ad->get_service_up_timestamp())?>"
+	                                                       onclick="return false;">
+	                                                        <i class="ico up"></i><span>Поднять</span>
+	                                                    </a>
+	                                                </li>
+	                                            <?php endif ?>
+                                            <?php endif?>
 
                                             <li class="">
                                                 <a title="Редактировать объявление" href="<?=CI::site('user/edit_ad/'.$ad->id)?>" class="btn-funcmenu  ">

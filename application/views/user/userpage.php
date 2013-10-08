@@ -28,15 +28,21 @@
 					<?php if ($user->filename) : ?>
 						<img src="<?=URL::site(Uploads::get_file_path($user->filename, '272x203'))?>" alt="" />
 					<?php else : ?>
-						<img src="/images/mylogo.png" alt="" />
+						<img src="/images/nologo.png" alt="" />
 					<?php endif; ?>
 				</a>
 			</div>
 		</div>
 		<div class="hheader persomal_room-header ta-c">
-			<h1 style="font-size: 20px" class="ta-c d-in"><?=$user->org_name?></h1>
+			<h1 style="font-size: 20px" class="ta-c d-in">
+						<?php if (empty($user->org_name)) : ?>
+								Страница компании №<?=$user->id?>
+						<?php else : ?>
+								<?=htmlspecialchars($user->org_name)?> 
+						<?php endif; ?>					
+			</h1>
 			<a class="bnt-go-back" href="/" rel='nofollow'><span class="text">На главную</span></a>
-			<?php if ($user->id == Auth::instance()->get_user()->id) : ?><a class="bnt-go-back" href="<?=URL::site('user/profile')?>" rel='nofollow'><span class="text">Редактировать</span></a><?php endif; ?>
+			<?php if (Auth::instance()->get_user() AND $user->id == Auth::instance()->get_user()->id) : ?><a class="bnt-go-back" href="<?=URL::site('user/profile')?>" rel='nofollow'><span class="text">Редактировать</span></a><?php endif; ?>
 		</div>
 		<div class="fl100 shadow-top z1 persomal_room ie8mt-150fix filial-bl">
 			<aside class="p_room-menu float-content">
@@ -44,7 +50,9 @@
 					<li class="active">
 						<span class="span_a"><i class="ico ico-iabout"></i><span>О компании</span></span>
 					</li>
-					
+					<?php if ($job_adverts_count > 0) : ?>
+						<li class="no-li-slide"><a href="<?=$job_category_href?>"><i class="ico ico-iadd"></i><span>Вакансии&nbsp;<span>(<?=$job_adverts_count?>)</span></span></a></li>										
+					<?php endif;?>
 					<li class="no-li-slide"><a href="<?=$filter_href?>"><i class="ico ico-iadd"></i><span>Объявления</span></a>
 					</li>
 					<li>

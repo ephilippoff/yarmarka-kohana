@@ -6,6 +6,7 @@ class Model_Object extends ORM {
 
 	protected $_belongs_to = array(
 		'user'			=> array('model' => 'User', 'foreign_key' => 'author'),
+		'company'		=> array('model' => 'User', 'foreign_key' => 'author_company_id'),
 		'category_obj'	=> array('model' => 'Category', 'foreign_key' => 'category'),
 		'city_obj'		=> array('model' => 'City', 'foreign_key' => 'city_id'),
 		'location_obj'	=> array('model' => 'Location', 'foreign_key' => 'location_id'),
@@ -76,6 +77,14 @@ class Model_Object extends ORM {
 		if ( ! preg_match_all('/{([^}]*)}/i', $template, $matches))
 		{
 			return $template;
+		}
+
+		if (in_array('adres-raion', $matches[1]))
+		{
+			if ($this->location_obj->loaded())
+			{
+				$template = str_replace('{adres-raion}', $this->location_obj->address, $template);
+			}
 		}
 
 		$attrs = $this->get_attributes();
@@ -429,9 +438,17 @@ class Model_Object extends ORM {
 		{
 			$this->cities = '{'.join(',', $this->cities).'}';
 		}
-		elseif ($this->city_id)
+		
+		// по дефолту заполняем cities только для новых объяв
+		if ($this->city_id AND ! $this->loaded())
 		{
 			$this->cities = '{'.$this->city_id.'}';
+		}
+
+		if ($this->geo_loc)		
+		{
+			list($lat, $lon) = explode(',', $this->geo_loc);
+			$this->location = DB::expr("PointFromText('POINT($lon $lat)',900913)");
 		}
 
 		if ( ! $this->date_expired)
@@ -526,9 +543,11 @@ class Model_Object extends ORM {
 			$contact->contact_type_id	= intval($contact_type_id);
 			$contact->contact			= trim($contact_str);
 			$contact->show 				= 1;
-			$contact->create();
+			$contact = $contact->create();
+
 
 			$contact->add('objects', $this->id);
+			$contact->reload();
 		}
 
 		return $contact->loaded() ? $contact : $contact_exists;
