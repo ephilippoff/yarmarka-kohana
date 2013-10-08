@@ -19,6 +19,7 @@ class Model_User extends Model_Auth_User {
 		'contacts'		=> array('model' => 'Contact', 'through' => 'user_contacts'),
 		'link_requests' => array('model' => 'User_Link_Request', 'foreign_key' => 'linked_user_id'),
 		'users'			=> array('model' => 'User', 'foreign_key' => 'linked_to_user'),
+		'units' 		=> array('model' => 'User_Units', 'foreign_key' => 'user_id'),
 	);
 
 	protected $_belongs_to = array(
@@ -266,6 +267,11 @@ class Model_User extends Model_Auth_User {
 		}
 
 		return TRUE;
+	}
+	
+	public function getAllUnits()
+	{
+		return $this->units->find_all()->as_array();
 	}
 }
 

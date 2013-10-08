@@ -76,6 +76,12 @@
 				<?php else : ?>
 				<li><a href="<?=URL::site('user/profile')?>" class="clickable"><i class="ico "></i><span>Личные данные</span></a></li>
 				<?php endif; ?>
+				
+				<?php if (Request::current()->action() == 'units') : ?>
+				<li><i class="ico "></i><span><b>Подразделения</b></span></li>
+				<?php else : ?>
+				<li><a href="<?=URL::site('user/units')?>" class="clickable"><i class="ico "></i><span>Подразделения</span></a></li>
+				<?php endif; ?>				
 
 				<?php if (FALSE) : ?>
 					<?php if (Auth::instance()->get_user()->org_type == 2) : ?>

@@ -156,7 +156,58 @@
 						<div style="" class="shadow-bottom fl100 pt7"></div>
 					</article>
 				</div>
+				<?php 
+					$units = $user->getAllUnits();
+					if(!empty($units )) {
+				?>
+				<section class="filials-bl mt15">
+	                    				<h3>Филиалы компании</h3>
+										<?php foreach($units as $unit) { ?>
+	                    				<article class="article">
+	                    					
+	                    					<div class="visible-bl">
+	                    						<div class="img">
+													<div class="img-container">
+														<img src="<?=!empty($unit->filename) ? Uploads::get_file_path($unit->filename, '136x136') : URL::site('images/mylogo_small.jpg')?>" alt="" />
+													</div>
+												
+												<div class="number">#<?=$unit->id?></div>
+												</div>
+	                    						<div class="content">
+	                    							
+	                    							<p class="title"><?=$unit->title ?><span class="inf">(<?=$unit->unit->title ?>)</span></p>
+	                    							
+													<?php
+													if(count($unit->get_address()) > 2) { ?><p class="addr"><?php echo $unit->get_address(); ?> <span class="show-map toggle"><span class="show">на карте</span><span>свернуть карту</span></span></p>
+	                    							<div class="map-bl">
+					                    				<div class="map"><div id="ymaps-map-id_1352895717894414938721" style="width: 372px; height: 236px;"></div>
+														<script type="text/javascript">
+															function fid_1352895717894414938722(ymaps) {var map = new ymaps.Map("ymaps-map-id_1352895717894414938721", {center: [158.62247349999987, 53.06156138183279], zoom: 10, type: "yandex#map"});map.controls.add("zoomControl").add("mapTools").add(new ymaps.control.TypeSelector(["yandex#map", "yandex#satellite", "yandex#hybrid", "yandex#publicMap"]));};
+														</script>  
+														<script type="text/javascript" src="http://api-maps.yandex.ru/2.0-stable/?lang=ru-RU&coordorder=longlat&load=package.full&wizard=constructor&onload=fid_1352895717894414938721"></script>
+		                                     			</div>
+					                    			</div><?php } ?>
+													<?php if(!empty($unit->description)) { ?><div>
+														<?=nl2br($unit->description);?>
+													</div><?php } ?>
+													<div class="contacts ">
+														<ul>
+															<li class="title">
+																<label><span><i class="name">Контакты:</i></span></label>
+															</li>
+															<li class="add-contact-li">											
+																<?php echo $unit->contacts ?>
+															</li>
+														</ul>
+													</div>
+	                    						</div>
+	                    					</div>
+	                    				</article>
+										<?php } ?>
+	                    			</section>
+							<? } ?>
 			</section>
+			
 		</div>	   
 
 	</section>

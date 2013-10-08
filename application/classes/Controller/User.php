@@ -3,6 +3,7 @@
 class Controller_User extends Controller_Template {
 
 	var $user; // current user
+        private $errors = array();
 
 	public function before()
 	{
@@ -51,7 +52,88 @@ class Controller_User extends Controller_Template {
 		$this->template->user_page_url  = substr(URL::base('http'), 0, strlen(URL::base('http')) - 1).URL::site('users/'.$this->user->login);
 	}
 
-	public function action_favorites()
+	public function action_units()
+	{
+		$this->layout = 'users';
+		$this->assets
+                        ->js('ajaxfileupload.js')
+			->js('jquery.maskedinput-1.2.2.js')
+			->js('jquery-ui/ui/minified/jquery.ui.core.min.js')
+			->js('jquery-ui/ui/minified/jquery.ui.widget.min.js')
+			->js('jquery-ui/ui/minified/jquery.ui.position.min.js')
+			->js('jquery-ui/ui/minified/jquery.ui.menu.min.js')
+			->js('jquery-ui/ui/minified/jquery.ui.autocomplete.min.js')
+			->css('jquery-ui/themes/base/minified/jquery-ui.min.css');
+			//->js('chosen.jquery.js')
+			//->js('profile.js');
+		$this->template->region_id	= $region_id = $this->user->user_city->loaded() 
+			? $this->user->user_city->region_id 
+			: Kohana::$config->load('common.default_region_id');
+			
+		$this->template->units		= ORM::factory('Unit')
+			->order_by('title')
+			->find_all();
+                
+                /*foreach ($this->template->units as $unit) {
+                    var_dump($unit->title);
+                }*/
+               
+		$this->template->regions	= ORM::factory('Region')
+			->order_by('title')
+			->find_all();
+		$this->template->cities		= $region_id 
+			? ORM::factory('City')
+				->where('region_id', '=', $region_id)
+				->order_by('title')
+				->find_all()
+			: array();			
+
+		$this->template->user_units		= $this->user->units->find_all();
+		$this->template->user			= $this->user;
+		$this->template->user_page_url  = substr(URL::base('http'), 0, strlen(URL::base('http')) - 1).URL::site('users/'.$this->user->login);
+	}
+        
+        public function action_addunit()
+        {
+
+            if (HTTP_Request::POST === $this->request->method())
+            {
+			//var_dump($_POST);
+                    try
+                    {
+                            $user_unit = ORM::factory('User_Units')
+                                    ->set('user_id', $this->user->id)
+                                    ->set('unit_id', $_POST['unit_id'])
+                                    ->set('title', $_POST['title'])
+                                    ->set('web', $_POST['web'])
+                                    ->set('contacts', $_POST['contacts'])
+                                    ->set('description', $_POST['description'])
+                                    ->set('filename', $_POST['unit_image_filename'])
+                                    ->save();
+                    }
+                    catch(ORM_Validation_Exception $e)
+                    {
+                            // collect errors
+                            $errors = $e->errors('validation');
+                            if (isset($errors['_external']))
+                            {
+                                    $errors += $errors['_external'];
+                                    unset($errors['_external']);
+                            }
+
+                            $this->errors = $errors;
+                    }
+                    catch (Exception $e) // file upload error
+                    {
+                            $this->errors['avatar'] = $e->getMessage();
+                    }
+                    
+                    $this->redirect('user/units');
+
+            }
+        }
+
+        public function action_favorites()
 	{
 		$this->layout = 'users';
 		$this->assets->js('favorites.js');
@@ -518,6 +600,33 @@ class Controller_User extends Controller_Template {
 
 		$this->response->body(json_encode($this->json));
 	}
+        
+	public function action_upload_unit_image()
+	{
+		$this->use_layout	= FALSE;
+		$this->auto_render	= FALSE;
+		$this->json = array('code' => 200);
+
+		if ( ! $user = Auth::instance()->get_user())
+		{
+			throw new HTTP_Exception_404;
+		}
+
+		try
+		{
+			$filename = Uploads::save($_FILES['unit_image_input']);
+			$this->json['filename_to_save'] = $filename;
+			$this->json['filename_big'] = Uploads::get_file_path($filename, '208x208');
+			$this->json['filename'] = Uploads::get_file_path($filename, '136x136');
+		}
+		catch (Exception $e)
+		{
+			$this->json['error']	= $e->getMessage();
+			$this->json['code']		= $e->getCode();
+		}
+
+		$this->response->body(json_encode($this->json));
+	}
 
 	public function action_upload_userpage_banner()
 	{
@@ -543,6 +652,56 @@ class Controller_User extends Controller_Template {
 			$this->json['code']		= $e->getCode();
 		}
 
+		$this->response->body(json_encode($this->json));
+	}
+	
+	public function action_remove_unit() {
+		$this->use_layout	= FALSE;
+		$this->auto_render	= FALSE;
+		$this->json = array();
+		
+		$id = $_POST['id'];
+		if(!empty($id)) {
+			$unit = ORM::factory('User_Units')->where('id', '=', $id)->find();
+			$unit->delete();
+			$this->json['success'] = true;
+		} else {
+			$this->json['success'] = false;
+		}
+		$this->response->body(json_encode($this->json));
+	}
+	
+	public function action_remove_image() {
+		$this->use_layout	= FALSE;
+		$this->auto_render	= FALSE;
+		$this->json = array();
+		
+		$id = $_POST['id'];
+		if(!empty($id)) {
+			$unit = ORM::factory('User_Units')->where('id', '=', $id)->find();
+			$unit->set('filename', null);
+			$unit->save();
+			$this->json['success'] = true;
+		} else {
+			$this->json['success'] = false;
+		}
+		$this->response->body(json_encode($this->json));
+	}
+	
+	public function action_edit_unit_image() {
+		$this->use_layout	= FALSE;
+		$this->auto_render	= FALSE;
+		$this->json = array();
+		
+		$id = $_POST['id'];
+		if(!empty($id)) {
+			$unit = ORM::factory('User_Units')->where('id', '=', $id)->find();
+			$unit->set('filename', $_POST['filename']);
+			$unit->save();
+			$this->json['success'] = true;
+		} else {
+			$this->json['success'] = false;
+		}
 		$this->response->body(json_encode($this->json));
 	}
 
