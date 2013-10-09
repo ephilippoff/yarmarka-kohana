@@ -58,6 +58,16 @@ class Model_Location extends ORM {
 
 		return $this->lon.','.$this->lat;
 	}
+
+	public function get_lat_lon_str()
+	{
+		if ( ! $this->loaded())
+		{
+			return FALSE;
+		}
+
+		return $this->lat.','.$this->lon;
+	}
 }
 
 /* End of file Location.php */

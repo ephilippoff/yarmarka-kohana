@@ -339,7 +339,7 @@ class Controller_Add extends Controller_Template {
 			}
 			$object->user_text 			= $this->request->post('user_text_adv');
 			$object->date_expiration	= $date_expiration;
-			$object->geo_loc 			= $location->get_lon_lat_str();
+			$object->geo_loc 			= $location->get_lat_lon_str();
 			$object->location_id		= $location->id;
 
 			// сохраняем объявление

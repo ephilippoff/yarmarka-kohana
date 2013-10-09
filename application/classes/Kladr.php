@@ -74,7 +74,7 @@ class Kladr
 		{
 			$city_kladr_row = Model::factory('Kladr')->get_city_by_id($city_kladr_id);
 			
-			list($lon, $lat) = explode(',', $object_coordinates);
+			list($lat, $lon) = explode(',', $object_coordinates);
 			if ($lat AND $lon)
 			{
 				$location = ORM::factory('Location')->where_lat_lon($lat, $lon)

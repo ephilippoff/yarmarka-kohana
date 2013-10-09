@@ -29,6 +29,7 @@ class Ymaps
 
 	/**
 	 * Get geo coord by name
+	 * return long lat
 	 * 
 	 * @param  string $name
 	 * @return array
