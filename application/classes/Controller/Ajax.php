@@ -312,7 +312,7 @@ class Controller_Ajax extends Controller_Template
 			throw new HTTP_Exception_404;
 		}
 
-		if ($object->is_bad == 0 && $object->in_archive == 't')
+		if ($object->is_bad == 0 AND $object->in_archive)
 		{
 			$date_expiration = null;
 
@@ -337,7 +337,7 @@ class Controller_Ajax extends Controller_Template
 			$this->json['code'] = 200;
 		}
 		
-		if ($object->is_bad == 1 && $object->in_archive == 't')
+		if ($object->is_bad == 1 AND $object->in_archive)
 		{
 			$date_expiration = null;
 
