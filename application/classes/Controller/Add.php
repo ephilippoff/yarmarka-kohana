@@ -332,7 +332,11 @@ class Controller_Add extends Controller_Template {
 				$object->author_company_id = $user->id; //DB::expr('NULL');
 			}
 
-			$object->author 			= $user->id;
+			if ( ! $is_edit)
+			{
+				// при редактировании автора не меняем
+				$object->author 			= $user->id;
+			}
 			$object->user_text 			= $this->request->post('user_text_adv');
 			$object->date_expiration	= $date_expiration;
 			$object->geo_loc 			= $location->get_lon_lat_str();
