@@ -46,27 +46,6 @@ class Controller_Add extends Controller_Template {
 			->rule('city_kladr_id', 'not_empty')
 			->rule('contact', 'not_empty');
 
-		// если пользователь не аворизован, то добавляем валидацию для его полей
-		if ( ! $user)
-		{
-			if ($this->request->post('new_email'))
-			{
-				$validation->rules('new_email', array(
-					array('not_empty'),
-					array('email'),
-				))->rule('rules_confirmed', 'not_empty');
-				// @todo add captcha validation
-			}
-			else
-			{
-				$validation->rules('email', array(
-					array('not_empty'),
-					array('email'),
-				));
-				$validation->rule('password', 'not_empty');
-			}
-		}
-
 		// идентификатор сессии в CI
 		$session_id = $this->request->post('session_id');
 
@@ -84,9 +63,10 @@ class Controller_Add extends Controller_Template {
 					if ($contact_type->loaded() AND $contact->is_verified($session_id))
 					{
 						$contacts[] = array(
-							'value' => $value,
-							'type' => $contact_type->id,
-							'type_name' => $contact_type->name,
+							'contact_obj' 	=> $contact,
+							'value' 		=> $value,
+							'type' 			=> $contact_type->id,
+							'type_name' 	=> $contact_type->name,
 						);
 					}
 				}
@@ -192,14 +172,37 @@ class Controller_Add extends Controller_Template {
 		// если пользователь не авторизован
 		if ( ! $user AND ! $errors)
 		{
-			if ($this->request->post('new_email'))
+			// берем первый верифицированный контакт и его пользователя
+			foreach ($contacts as $c_arr)
+			{
+				if ($c_arr['contact_obj']->verified_user->loaded())
+				{
+					$user = $c_arr['contact_obj']->verified_user;
+					break;
+				}
+			}
+
+			if ( ! $user)
 			{
 				// регистрация нового пользователя
 				try
 				{
-					$login = $email = $this->request->post('new_email');
-					$random_password = Text::random();
-					$user = User::register($login, $email, $random_password);
+					$login 				= NULL;
+					$random_password 	= Text::random();
+					$name 				= $this->request->post('contact');
+					$email 				= NULL;
+					// ищем email среди указанных контактов
+					foreach ($contacts as $c_arr)
+					{
+						if ($c_arr['contact_obj']->contact_type_id === Model_Contact_Type::EMAIL)
+						{
+							$email = $c_arr['contact_obj']->contact_clear;
+							break;
+						}
+					}
+					// регистрируем нового пользователя
+					$user = User::register($login, $email, $random_password, $name);
+					$json['user_token'] = Auth::instance()->create_token($user)->token;
 				}
 				catch(ORM_Validation_Exception $e)
 				{
@@ -217,9 +220,7 @@ class Controller_Add extends Controller_Template {
 				// авторизация пользователя
 				try 
 				{
-					// Auth::instance()->login($this->request->post('email'), $this->request->post('password'));
-					// $user = Auth::instance()->get_user();
-					$user = Auth::instance()->check_user($this->request->post('email'), $this->request->post('password'));
+					Auth::instance()->check_user($user);
 					$json['user_token'] = Auth::instance()->create_token($user)->token;
 				}
 				catch(Exception $e)
@@ -351,10 +352,13 @@ class Controller_Add extends Controller_Template {
 				$object->delete_contacts();
 			}
 
-			// сохраянем новые контакты
 			foreach ($contacts as $contact)
 			{
+				// сохраянем новые контакты для объявления
 				$object->add_contact($contact['type'], $contact['value']);
+
+				// сохраняем контакты для пользователя
+				$user->add_verified_contact($contact['type'], $contact['value']);
 			}
 
 			if ($object->is_bad === 1)
@@ -381,8 +385,6 @@ class Controller_Add extends Controller_Template {
 
 				Email::send($user->email, Kohana::$config->load('email.default_from'), 'Подтверждение регистрации на “Ярмарка-онлайн”', $msg);
 			}
-
-			// @todo тут должно идти сохранение контактов
 
 			// отправляем уведомление о успешном редактировании/публикации
 			$subj = $is_edit 

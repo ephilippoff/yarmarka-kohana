@@ -188,6 +188,35 @@ class Model_User extends Model_Auth_User {
 		return $contact;
 	}
 
+	public function add_verified_contact($contact_type_id, $contact_str)
+	{
+		if ( ! $this->loaded())
+		{
+			return FALSE;
+		}
+
+		if (Model_Contact_Type::is_phone($contact_type_id))
+		{
+			$contact_clear = Text::clear_phone_number($contact_str);
+		}
+		else
+		{
+			$contact_clear = trim($contact_str);
+		}
+
+		$contact = ORM::factory('Contact')->where('contact_clear', '=', $contact_clear)
+			->find();
+		if ( ! $contact)
+		{
+			$contact = $this->add_contact($contact_type_id, $contact_str);
+		}
+
+		$contact->verified_user_id = $this->id;
+		$contact->save();
+
+		return $contact;
+	}
+
 	public function delete_contact($contact_id)
 	{
 		if ( ! $this->loaded())
@@ -237,6 +266,11 @@ class Model_User extends Model_Auth_User {
 
 	public function check_domain($email)
 	{
+		if ( ! $email)
+		{
+			return TRUE;
+		}
+		
 		$disallowed_domains = Kohana::$config->load('common.disallowed_email_domains');
 		list($email_name, $domain) = explode('@', $email);
 
