@@ -204,13 +204,11 @@ class Model_User extends Model_Auth_User {
 			$contact_clear = trim($contact_str);
 		}
 
-		$contact = ORM::factory('Contact')->where('contact_clear', '=', $contact_clear)
-			->find();
-		if ( ! $contact)
-		{
-			$contact = $this->add_contact($contact_type_id, $contact_str);
-		}
-
+		// create contact if not exists
+		$contact = $this->add_contact($contact_type_id, $contact_str);
+		// remove contact from other users
+		$contact->remove('users');
+		// set contact verified for current user
 		$contact->verified_user_id = $this->id;
 		$contact->save();
 
