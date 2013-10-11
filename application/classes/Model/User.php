@@ -183,7 +183,10 @@ class Model_User extends Model_Auth_User {
 		$contact->show 				= 1;
 		$contact = $contact->create();
 
-		$contact->add('users', $this->id);
+		if ( ! $contact->has('users', $this->id))
+		{
+			$contact->add('users', $this->id);
+		}
 
 		return $contact;
 	}
@@ -207,7 +210,9 @@ class Model_User extends Model_Auth_User {
 		// create contact if not exists
 		$contact = $this->add_contact($contact_type_id, $contact_str);
 		// remove contact from other users
-		$contact->remove('users');
+		DB::delete('user_contacts')->where('contact_id', '=', $contact->id)
+			->where('user_id', '!=', $this->id)
+			->execute();
 		// set contact verified for current user
 		$contact->verified_user_id = $this->id;
 		$contact->save();
