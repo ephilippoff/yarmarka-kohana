@@ -377,7 +377,8 @@ class Controller_Add extends Controller_Template {
 			}
 
 			// отправляем письмо пользователю, если была быстрая регистрация
-			if ( ! empty($random_password))
+			// @todo что делать если email не указан?
+			if ($user->email AND ! empty($random_password))
 			{
 				$msg = View::factory('emails/fast_register_success', 
 					array('activation_code' => $user->code, 'Password' => $random_password, 'object_id' => $object->id))
@@ -386,17 +387,20 @@ class Controller_Add extends Controller_Template {
 				Email::send($user->email, Kohana::$config->load('email.default_from'), 'Подтверждение регистрации на “Ярмарка-онлайн”', $msg);
 			}
 
-			// отправляем уведомление о успешном редактировании/публикации
-			$subj = $is_edit 
-				? 'Вы изменили Ваше объявление. Теперь объявление выглядит так:' 
-				: 'Поздравляем Вас с успешным размещением объявления на «Ярмарка-онлайн»!';
+			if ($user->email)
+			{
+				// отправляем уведомление о успешном редактировании/публикации
+				$subj = $is_edit 
+					? 'Вы изменили Ваше объявление. Теперь объявление выглядит так:' 
+					: 'Поздравляем Вас с успешным размещением объявления на «Ярмарка-онлайн»!';
 
-			$msg = View::factory('emails/add_notice',
-					array('h1' => $subj,'object' => $object, 'name' => $user->get_user_name(), 
-						'obj' => $object, 'city' => $city, 'category' => $category, 'subdomain' => Region::get_domain_by_city($city->id), 
-						'contacts' => $contacts, 'address' => $this->request->post('address_str')));
+				$msg = View::factory('emails/add_notice',
+						array('h1' => $subj,'object' => $object, 'name' => $user->get_user_name(), 
+							'obj' => $object, 'city' => $city, 'category' => $category, 'subdomain' => Region::get_domain_by_city($city->id), 
+							'contacts' => $contacts, 'address' => $this->request->post('address_str')));
 
-			Email::send($user->email, Kohana::$config->load('email.default_from'), $subj, $msg);
+				Email::send($user->email, Kohana::$config->load('email.default_from'), $subj, $msg);
+			}
 
 			$json['object_id'] = $object->id;
 		}
