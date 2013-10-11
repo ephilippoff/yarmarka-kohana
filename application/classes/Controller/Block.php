@@ -154,7 +154,7 @@ class Controller_Block extends Controller_Template
 	{
 		$this->template->not_unique_numbers = ORM::factory('Contact')
 			->by_phone_number($this->request->param('number'))
-			->where('verified', '=', 1)
+			->where('verified_user_id', '!=', DB::expr('NULL'))
 			->find_all();
 	}
 

@@ -27,6 +27,9 @@ class Model_Object extends ORM {
 			'title' => array(
 				array(array($this, 'filter_title')),
 			),
+			'price' => array(
+				array('intval'),
+			),
 		);
 	}
 

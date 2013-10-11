@@ -183,7 +183,39 @@ class Model_User extends Model_Auth_User {
 		$contact->show 				= 1;
 		$contact = $contact->create();
 
-		$contact->add('users', $this->id);
+		if ( ! $contact->has('users', $this->id))
+		{
+			$contact->add('users', $this->id);
+		}
+
+		return $contact;
+	}
+
+	public function add_verified_contact($contact_type_id, $contact_str)
+	{
+		if ( ! $this->loaded())
+		{
+			return FALSE;
+		}
+
+		if (Model_Contact_Type::is_phone($contact_type_id))
+		{
+			$contact_clear = Text::clear_phone_number($contact_str);
+		}
+		else
+		{
+			$contact_clear = trim($contact_str);
+		}
+
+		// create contact if not exists
+		$contact = $this->add_contact($contact_type_id, $contact_str);
+		// remove contact from other users
+		DB::delete('user_contacts')->where('contact_id', '=', $contact->id)
+			->where('user_id', '!=', $this->id)
+			->execute();
+		// set contact verified for current user
+		$contact->verified_user_id = $this->id;
+		$contact->save();
 
 		return $contact;
 	}
@@ -237,6 +269,11 @@ class Model_User extends Model_Auth_User {
 
 	public function check_domain($email)
 	{
+		if ( ! $email)
+		{
+			return TRUE;
+		}
+		
 		$disallowed_domains = Kohana::$config->load('common.disallowed_email_domains');
 		list($email_name, $domain) = explode('@', $email);
 
