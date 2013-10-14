@@ -9,17 +9,17 @@ class Model_User extends Model_Auth_User {
 	 *
 	 * @var array Relationhips
 	 */
-	protected $_has_many = array(
-		'user_tokens'		=> array('model' => 'User_Token'),
-		'objects'			=> array('foreign_key' => 'author'),
-		'company_objects'	=> array('model' => 'Object', 'foreign_key' => 'author_company_id'),
-		'access'			=> array('model' => 'Access'),
-		'invoices'			=> array(),
-		'subscriptions'		=> array(),
-		'user_messages' 	=> array('model' => 'User_Messages', 'foreign_key' => 'user_id'),
-		'contacts'			=> array('model' => 'Contact', 'through' => 'user_contacts'),
-		'link_requests' 	=> array('model' => 'User_Link_Request', 'foreign_key' => 'linked_user_id'),
-		'users'				=> array('model' => 'User', 'foreign_key' => 'linked_to_user'),
+	protected $_has_many = array(	
+		'user_tokens'	=> array('model' => 'User_Token'),
+		'objects'		=> array('foreign_key' => 'author'),
+		'access'		=> array('model' => 'Access'),
+		'invoices'		=> array(),
+		'subscriptions'	=> array(),
+		'user_messages' => array('model' => 'User_Messages', 'foreign_key' => 'user_id'),
+		'contacts'		=> array('model' => 'Contact', 'through' => 'user_contacts'),
+		'link_requests' => array('model' => 'User_Link_Request', 'foreign_key' => 'linked_user_id'),
+		'users'			=> array('model' => 'User', 'foreign_key' => 'linked_to_user'),		
+		'units' 		=> array('model' => 'User_Units', 'foreign_key' => 'user_id'),
 	);
 
 	protected $_belongs_to = array(
@@ -304,6 +304,11 @@ class Model_User extends Model_Auth_User {
 		}
 
 		return TRUE;
+	}
+	
+	public function getAllUnits()
+	{
+		return $this->units->find_all()->as_array();
 	}
 
 	public function count_company_objects($company_id)
