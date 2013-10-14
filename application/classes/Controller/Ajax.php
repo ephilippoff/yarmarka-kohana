@@ -168,6 +168,28 @@ class Controller_Ajax extends Controller_Template
 		$user->remove('contacts', $contact);
 	}
 
+	public function action_link_objects_by_contact()
+	{
+		$contact 	= ORM::factory('Contact', $this->request->param('id'));
+		$user 		= Auth::instance()->get_user();
+		if ( ! $user OR ! $contact->loaded() OR $contact->verified_user_id !== $user->id)
+		{
+			throw new HTTP_Exception_404;
+		}
+
+		$this->json['affected_rows'] = 0;
+		foreach ($contact->objects->find_all() as $object)
+		{
+			if ($object->author != $user->id)
+			{
+				$object->author = $user->id;
+				$object->save();
+
+				$this->json['affected_rows']++;
+			}
+		}
+	}
+
 	public function action_add_user_contact()
 	{
 		if ( ! $user = Auth::instance()->get_user())
