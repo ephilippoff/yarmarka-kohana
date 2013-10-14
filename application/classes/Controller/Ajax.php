@@ -520,38 +520,9 @@ class Controller_Ajax extends Controller_Template
 			throw new HTTP_Exception_404;
 		}
 
-		$lon = trim($this->request->post('lon'));
-		$lat = trim($this->request->post('lat'));
-
-		$address 		= trim($this->request->post('address'));
-
-		$kladr_city = Model::factory('Kladr')->get_city_by_id($this->request->post('city_kladr_id'));
-		$kladr_address = Model::factory('Kladr')->get_address_by_id($this->request->post('address_kladr_id'));
-
-		$location = ORM::factory('Location', array('lon' => $lon, 'lat' => $lat));
 		try
 		{
-			if ( ! $location->loaded())
-			{
-				$location->lon = $lon;
-				$location->lat = $lat;
-				$location->address = $address;
-				if ($kladr_city)
-				{
-					$location->region = $kladr_city->region;
-					$location->city = $kladr_city->city;
-				}
-				if ($kladr_address)
-				{
-					$housenum = $kladr_address->housenum.($kladr_address->buidnum ? ', '.$kladr_address->buildnum : '');
-
-					$location->housenum = $housenum;
-					$location->street = $kladr_address->address;
-				}
-				$location->save();
-			}
-
-			$user->location = $location;
+			$user->location = Location::addLocationByPostParams();
 			$user->save();
 		}
 		catch (Exception $e)

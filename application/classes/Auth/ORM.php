@@ -65,7 +65,7 @@ class Auth_ORM extends Kohana_Auth_ORM {
 	 */
 	protected function _login($user, $password, $remember)
 	{
-		$user = $this->check_user($user, $password);
+		$user = $this->check_user_by_password($user, $password);
 		if ( ! $user)
 		{
 			return FALSE;
@@ -119,7 +119,7 @@ class Auth_ORM extends Kohana_Auth_ORM {
 
 	public function check_user($user)
 	{
-		if ( ! $user OR ! $user->loaded())
+		if ( ! $user || ! $user->loaded())
 		{
 			return FALSE;
 		}

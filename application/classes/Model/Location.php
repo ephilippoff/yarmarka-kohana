@@ -37,7 +37,7 @@ class Model_Location extends ORM {
 	{
 		if ($this->lat AND $this->lon)
 		{
-			$this->location = DB::expr("PointFromText('POINT({$this->lon} {$this->lat})',900913)");
+			//$this->location = DB::expr("PointFromText('POINT({$this->lon} {$this->lat})',900913)");
 		}
 
 		parent::save($validation);
