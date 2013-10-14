@@ -119,7 +119,7 @@ class Auth_ORM extends Kohana_Auth_ORM {
 
 	public function check_user($user)
 	{
-		if ( ! $user || ! $user->loaded())
+		if ( ! $user OR ! $user->loaded())
 		{
 			return FALSE;
 		}

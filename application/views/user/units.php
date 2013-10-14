@@ -10,22 +10,18 @@ label.filebutton{
 <script type="text/javascript" charset="utf-8">
 	// wisiwyg
 	tinyMCE.init({
-			mode : "textareas",
-			editor_selector : "tiny",
-			theme : "simple",
-			language: "ru",
-			plugins : "paste",
-			width: "335px",
-			paste_text_sticky : true,
-			setup : function(ed) {
-				ed.onInit.add(function(ed) {
-				  ed.pasteAsPlainText = true;
-				});
-
-				//ed.onKeyUp.add(function(ed, e) {
-					//var text = tinyMCE.activeEditor.getContent({format : 'raw'});
-				//});
-			}
+		mode : "textareas",
+		editor_selector : "tiny",
+		theme : "simple",
+		language: "ru",
+		plugins : "paste",
+		width: "335px",
+		paste_text_sticky : true,
+		setup : function(ed) {
+			ed.onInit.add(function(ed) {
+			  ed.pasteAsPlainText = true;
+			});
+		}
 	});
 	
 function ajaxUpload() {
@@ -35,23 +31,23 @@ function ajaxUpload() {
 			fileElementId:'unit_image_input',
 			dataType: 'json',
 			success: function (json, status) {
-					if (json.code == 200) {
-							$('#unit_image').attr('src', json.filename);
-							$('#unit_image_input').change(function(){
-								ajaxUpload();
-							});
-							$('#add_image_btn_text').text('Изменить фото');
-							$('.addPhoto').css('margin', '112px 0px 0px 6px');
-							$('#unit_image_filename').val(json.filename_to_save);
-					} else if (json.error) {
-							var div = $('#unit_image_input').parents('div.input');
-							div.addClass('error');
-							div.find('.alert-bl p.text span').html(json.error);
-							div.find('.alert-bl').show();
-					}
+				if (json.code == 200) {
+					$('#unit_image').attr('src', json.filename);
+					$('#unit_image_input').change(function(){
+						ajaxUpload();
+					});
+					$('#add_image_btn_text').text('Изменить фото');
+					$('.addPhoto').css('margin', '112px 0px 0px 6px');
+					$('#unit_image_filename').val(json.filename_to_save);
+				} else if (json.error) {
+					var div = $('#unit_image_input').parents('div.input');
+					div.addClass('error');
+					div.find('.alert-bl p.text span').html(json.error);
+					div.find('.alert-bl').show();
+				}
 			},
 			error: function (data, status, e) {
-					console.log(data.responseText);
+				console.log(data.responseText);
 			}
 	});
 }
@@ -63,26 +59,26 @@ function ajaxUploadAndChange(fileEl) {
 	var fileInputId = $(fileEl).attr('id');
 	
 	$.ajaxFileUpload({
-			url:'/user/upload_unit_image', 
-			secureuri:false,
-			fileElementId: fileInputId,
-			dataType: 'json',
-			success: function (json, status) {
-					if (json.code == 200) {
-							parent_el.find('.avatar_img').attr('src', json.filename_big);
-							parent_el.find('.mydel').show();
-							$('#'+fileInputId).change(function(){
-								ajaxUploadAndChange();
-							});
-							$.post( "/user/edit_unit_image", { id:parent_id, filename:json.filename_to_save }, function( data ) {
-								if(data.success) alert('Фото обновленно.');
-								else alert('Произошла ошибка!');
-							}, "json");
-					} else if (json.error) {}
-			},
-			error: function (data, status, e) {
-					console.log(data.responseText);
-			}
+		url:'/user/upload_unit_image', 
+		secureuri:false,
+		fileElementId: fileInputId,
+		dataType: 'json',
+		success: function (json, status) {
+			if (json.code == 200) {
+				parent_el.find('.avatar_img').attr('src', json.filename_big);
+				parent_el.find('.mydel').show();
+				$('#'+fileInputId).change(function(){
+					ajaxUploadAndChange();
+				});
+				$.post( "/user/edit_unit_image", { id:parent_id, filename:json.filename_to_save }, function( data ) {
+					if(data.success) alert('Фото обновленно.');
+					else alert('Произошла ошибка!');
+				}, "json");
+			} else if (json.error) {}
+		},
+		error: function (data, status, e) {
+			console.log(data.responseText);
+		}
 	});
 }
 
@@ -195,118 +191,118 @@ function render_autocomplete( ul, item ) {
 					</script>
 	                    <article class="article">
 							<div class="reduct-bl" style="display: none;">
-                                                                <form method="post" accept-charset="utf-8" enctype="multipart/form-data">
-                                                                    <label class="filebutton">
-                                                                    <div class="img">
-                                                                        <div class="img-container"><img src="" id="unit_image" /></div>
-                                                                        <span class="addPhoto">
-                                                                            <span><span id="add_image_btn_text">Добавить фото</span><input type="file" name="unit_image_input" class="avatar" id="unit_image_input" />
-                                                                            </span>
-                                                                        </span>
-                                                                        <?/*<div class="number">#325556474844878</div>*/?>
-                                                                    </div>
-                                                                    </label>
+	                            <form method="post" accept-charset="utf-8" enctype="multipart/form-data">
+	                                <label class="filebutton">
+	                                <div class="img">
+	                                    <div class="img-container"><img src="" id="unit_image" /></div>
+	                                    <span class="addPhoto">
+	                                        <span><span id="add_image_btn_text">Добавить фото</span><input type="file" name="unit_image_input" class="avatar" id="unit_image_input" />
+	                                        </span>
+	                                    </span>
+	                                    <?/*<div class="number">#325556474844878</div>*/?>
+	                                </div>
+	                                </label>
 								</form>
-                                                            <form id="create-init" action="<?=URL::base('http')?>user/addunit" method="POST">
+                                <form id="create-init" action="<?=URL::base('http')?>user/addunit" method="POST">
                                 
-								<input type="hidden" name="unit_image_filename" id="unit_image_filename" />
-								<input type="hidden" name="address_kladr_id" id="address_kladr_id" />
-								<input type="hidden" name="city_kladr_id" id="city_kladr_id" />
-								<ul class="main-ul">
-									<li>
-										<div class="input style2">
-											<label><span><i class="name">Название</i></span></label>
-											<div class="inp-cont-bl ">
-												<div class="inp-cont">
-													<div class="inp"><input type="text" class="" name="title"></div>
+									<input type="hidden" name="unit_image_filename" id="unit_image_filename" />
+									<input type="hidden" name="address_kladr_id" id="address_kladr_id" />
+									<input type="hidden" name="city_kladr_id" id="city_kladr_id" />
+									<ul class="main-ul">
+										<li>
+											<div class="input style2">
+												<label><span><i class="name">Название</i></span></label>
+												<div class="inp-cont-bl ">
+													<div class="inp-cont">
+														<div class="inp"><input type="text" class="" name="title"></div>
+													</div>
 												</div>
 											</div>
-										</div>
-									</li>
-									<li>
-										<div class="input style2">
-											<label><span><i class="name">Тип</i></span></label>
-											<div class="inp-cont-bl ">
-												<div class="inp-cont">
-													<select class="iselect " name="unit_id" id="unit_id">
-														<option value="">-- выберите тип --</option>
-                                                        <? foreach ($units as $unit):?>
-                                                            <option value="<?=$unit->id?>"><?=$unit->title?></option>
-                                                        <? endforeach;?>
-													</select>
+										</li>
+										<li>
+											<div class="input style2">
+												<label><span><i class="name">Тип</i></span></label>
+												<div class="inp-cont-bl ">
+													<div class="inp-cont">
+														<select class="iselect " name="unit_id" id="unit_id">
+															<option value="">-- выберите тип --</option>
+	                                                        <? foreach ($units as $unit):?>
+	                                                            <option value="<?=$unit->id?>"><?=$unit->title?></option>
+	                                                        <? endforeach;?>
+														</select>
+													</div>
 												</div>
 											</div>
-										</div>
-									</li>
-									<li>
-										<div class="input style2">
-											<label><span><i class="name">Город</i></span></label>
-											<div class="inp-cont-bl ">
-												<div class="inp-cont">
-													<div class="inp"><input type="text" class="city" name="city" /></div>				
+										</li>
+										<li>
+											<div class="input style2">
+												<label><span><i class="name">Город</i></span></label>
+												<div class="inp-cont-bl ">
+													<div class="inp-cont">
+														<div class="inp"><input type="text" class="city" name="city" /></div>				
+													</div>
 												</div>
 											</div>
-										</div>
-									</li>								
-									<li>
-										<div class="input style2">
-											<label><span><i class="name">Адресс</i></span></label>
-											<div class="inp-cont-bl ">
-												<div class="inp-cont">
-													<div class="inp"><input type="text" class="address" name="address" /></div>				
+										</li>								
+										<li>
+											<div class="input style2">
+												<label><span><i class="name">Адресс</i></span></label>
+												<div class="inp-cont-bl ">
+													<div class="inp-cont">
+														<div class="inp"><input type="text" class="address" name="address" /></div>				
+													</div>
 												</div>
 											</div>
-										</div>
-									</li>
-									<li>
-        								<div class="input style2">
-			                    			<label><span><i class="name">Сайт</i></span></label>
-			                    			<div class="inp-cont-bl ">
-			                    				<div class="inp-cont">
-			                    					<div class="inp"><input type="text" class="" name="web" /></div>
-			                    					<span class="inform">
-			                    						<span>На ваш E-mail придет письмо с подтверждением регистрации</span>
-			                    					</span>
-			                    					<div class="alert-bl">
-			                    						<div class="cont">
-			                    							<div class="img"></div>
-			                    							<div class="arr"></div>
-			                    							
-			                    							<p class="text"><span>Важно заполнить поле e-mail правильно, иначе вы не сможете активировать свой аккаунт и пользоваться многими преимуществами зарегистрированных... &nbsp;  <a href="">>>></a></span></p>
-			                    						</div>
-			                    					</div>
-			                    				</div>
-			                    			</div>
-			                    		</div>
-		                    		</li>
-					
-									<li>
-        								<div class="input style2">
-			                    			<label><span><i class="name">Контакты</i></span></label>
-			                    			<div class="inp-cont-bl ">
-			                    				<div class="inp-cont">
-			                    					<div class="inp"><input type="text" class="" name="contacts" /></div>
-			                    				</div>
-			                    			</div>
-			                    		</div>
-		                    		</li>	
-									<li>
-        								<div class="input style2">
-			                    			<label><span><i class="name">Описание</i></span></label>
-			                    			<div class="inp-cont-bl ">
-												<textarea name="description" class="textarea" style="width: 100%;"></textarea>
-			                    			</div>
-			                    		</div>
-		                    		</li>
-								</ul>
-								<div class="info-bl" style="height: 97%;">
-									<p>Добавьте свои места продаж и сотрудников, подавайте объявления от их имени</p><br><br><br>
-									<img src="images/01.png" alt=""><br><br><br><br>
-									<p>Больше мест — больше объявлений</p>
-									<a href="" class="btn-blue2 btn-save"><i class="ico ico-save"></i><span>Сохранить</span></a>
-								</div>
-								<img class="bottom-shadow" src="images/shadow5.png" alt="">
-                                                                </form>
+										</li>
+										<li>
+	        								<div class="input style2">
+				                    			<label><span><i class="name">Сайт</i></span></label>
+				                    			<div class="inp-cont-bl ">
+				                    				<div class="inp-cont">
+				                    					<div class="inp"><input type="text" class="" name="web" /></div>
+				                    					<span class="inform">
+				                    						<span>На ваш E-mail придет письмо с подтверждением регистрации</span>
+				                    					</span>
+				                    					<div class="alert-bl">
+				                    						<div class="cont">
+				                    							<div class="img"></div>
+				                    							<div class="arr"></div>
+				                    							
+				                    							<p class="text"><span>Важно заполнить поле e-mail правильно, иначе вы не сможете активировать свой аккаунт и пользоваться многими преимуществами зарегистрированных... &nbsp;  <a href="">>>></a></span></p>
+				                    						</div>
+				                    					</div>
+				                    				</div>
+				                    			</div>
+				                    		</div>
+			                    		</li>
+						
+										<li>
+	        								<div class="input style2">
+				                    			<label><span><i class="name">Контакты</i></span></label>
+				                    			<div class="inp-cont-bl ">
+				                    				<div class="inp-cont">
+				                    					<div class="inp"><input type="text" class="" name="contacts" /></div>
+				                    				</div>
+				                    			</div>
+				                    		</div>
+			                    		</li>	
+										<li>
+	        								<div class="input style2">
+				                    			<label><span><i class="name">Описание</i></span></label>
+				                    			<div class="inp-cont-bl ">
+													<textarea name="description" class="textarea" style="width: 100%;"></textarea>
+				                    			</div>
+				                    		</div>
+			                    		</li>
+									</ul>
+									<div class="info-bl" style="height: 97%;">
+										<p>Добавьте свои места продаж и сотрудников, подавайте объявления от их имени</p><br><br><br>
+										<img src="images/01.png" alt=""><br><br><br><br>
+										<p>Больше мест — больше объявлений</p>
+										<a href="" class="btn-blue2 btn-save"><i class="ico ico-save"></i><span>Сохранить</span></a>
+									</div>
+									<img class="bottom-shadow" src="images/shadow5.png" alt="">
+                                </form>
 							</div>
 						</article>
 						
@@ -329,15 +325,16 @@ function render_autocomplete( ul, item ) {
 
 									<span class="mydel" <?php if ( ! $unit->filename) echo "style='display:none;'" ?>></span>
 								</div>
-			
-			<!--					<div class="img"><img src="img/if_5.jpg" alt=""><a href="" class="addPhoto"><span>Добавить фото</span></a><div class="number">#325556474844878</div></div>-->
+								
 								<div class="content">
 									<div class="right-b">
 										<div class="publish"><span class="cont">Опубликовано</span><span class="remove"></span></div>
 									</div>
 									<p class="title"><?php echo $unit->title ?><span class="inf">(<?php echo $unit->unit->title; ?>)</span></p>
 									<?php
-									if($unit->location) { ?><p class="addr"><?php echo $unit->location->city.", ".$unit->location->address; ?> <span class="show-map toggle"><span class="show">на карте</span><span>свернуть карту</span></span></p>
+									if($unit->location)
+									{ 
+									?><p class="addr"><?php echo $unit->location->city.", ".$unit->location->address; ?> <span class="show-map toggle"><span class="show">на карте</span><span>свернуть карту</span></span></p>
 									<div class="map-bl">
 										<div class="map">
 											<div id="ymap_<?=$unit->id?>" style="width: 372px; height: 236px;"></div>
@@ -363,14 +360,21 @@ function render_autocomplete( ul, item ) {
 														}
 													); 
 											    });
-
-
 											</script>
 										</div>
-									</div><?php } ?>	
-									<?php if(!empty($unit->description)) { ?><div>
+									</div>
+									<?php
+									}
+									?>	
+									<?php
+									if( ! empty($unit->description))
+									{
+									?><div>
 										<?=nl2br($unit->description);?>
-									</div><?php } ?>
+									</div>
+									<?php
+									}
+									?>
 									<div class="contacts ">
 										<ul>
 											<li class="title">

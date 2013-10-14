@@ -2,7 +2,7 @@
 
 class Location
 {
-	public static function addLocation($lon, $lat, $address, $city_kladr_id, $address_kladr_id)
+	public static function add_location($lon, $lat, $address, $city_kladr_id, $address_kladr_id)
 	{
 		$kladr_city = Model::factory('Kladr')->get_city_by_id($city_kladr_id);
 		$kladr_address = Model::factory('Kladr')->get_address_by_id($address_kladr_id);
@@ -32,7 +32,7 @@ class Location
 		return $location;
 	}
 
-	public static function addLocationByPostParams()
+	public static function add_location_by_post_params()
 	{
 		$lon = Request::current()->post('lon');
 		$lat = Request::current()->post('lat');
@@ -40,7 +40,7 @@ class Location
 		$address_kladr_id = Request::current()->post('address_kladr_id');
 		$address = Request::current()->post('address');
 
-		return self::addLocation($lon, $lat, $address, $city_kladr_id, $address_kladr_id);
+		return self::add_location($lon, $lat, $address, $city_kladr_id, $address_kladr_id);
 	}
 }
 

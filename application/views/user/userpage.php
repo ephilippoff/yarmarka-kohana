@@ -149,7 +149,7 @@
 													<input type="hidden" name="coord" id="coord" value="<?=$user->location->lon?>,<?=$user->location->lat?>" />
 												<?php else : ?>
 													<input type="hidden" name="coord" id="coord" value="" />
-												<?php endif ?>
+												<?php endif; ?>
 												<input type="hidden" name="org_address" id="org_address" value="<?=$user->user_city->title?>, <?=$user->org_address?>" />
 												<div class="map"><div id="ymaps-map-id" style="width: 372px; height: 372px;"></div>
 
@@ -177,8 +177,10 @@
 
 																	<?php 
 																		$units = $user->getAllUnits();
-																		if(!empty($units )) {
-																			foreach($units as $unit) {
+																		if( ! empty($units ))
+																		{
+																			foreach($units as $unit)
+																			{
 																	?>
 
 
@@ -196,7 +198,6 @@
 																	<?php
 																			}
 																		}
-
 																	?>
 																}
 															); 
@@ -237,7 +238,7 @@
 	                    							<p class="title"><?=$unit->title ?><span class="inf">(<?=$unit->unit->title ?>)</span></p>
 	                    							
 													<?php
-													if($unit->location) { ?><p class="addr"><?php echo $unit->location->city.", ".$unit->location->address; ?> <span class="show-map toggle"><span class="show">на карте</span><span>свернуть карту</span></span></p>
+													if($unit->location) : ?><p class="addr"><?php echo $unit->location->city.", ".$unit->location->address; ?> <span class="show-map toggle"><span class="show">на карте</span><span>свернуть карту</span></span></p>
 	                    							<div class="map-bl">
 					                    				<div class="map"><div id="ymap_<?=$unit->id?>" style="width: 372px; height: 236px;"></div>
 															<script>
@@ -266,10 +267,10 @@
 
 															</script>
 		                                     			</div>
-					                    			</div><?php } ?>
-													<?php if(!empty($unit->description)) { ?><div>
+					                    			</div><?php endif; ?>
+													<?php if( ! empty($unit->description)) : ?><div>
 														<?=nl2br($unit->description);?>
-													</div><?php } ?>
+													</div><?php endif; ?>
 													<div class="contacts ">
 														<ul>
 															<li class="title">

@@ -549,7 +549,7 @@ class Controller_Ajax extends Controller_Template
 
 		try
 		{
-			$user->location = Location::addLocationByPostParams();
+			$user->location = Location::add_location_by_post_params();
 			$user->save();
 		}
 		catch (Exception $e)
