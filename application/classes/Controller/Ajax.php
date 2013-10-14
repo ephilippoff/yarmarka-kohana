@@ -149,12 +149,23 @@ class Controller_Ajax extends Controller_Template
 
 	public function action_delete_user_contact()
 	{
-		if ( ! $user = Auth::instance()->get_user())
+		$contact 	= ORM::factory('Contact', $this->request->post('contact_id'));
+		$user 		= Auth::instance()->get_user();
+		if ( ! $user OR ! $contact->loaded() OR $contact->verified_user_id !== $user->id)
 		{
 			throw new HTTP_Exception_404;
 		}
 
-		$user->delete_contact($this->request->post('contact_id'));
+		// снимаем все объявления с контактом
+		foreach ($contact->objects->find_all() as $object)
+		{
+			$object->is_published = 0;
+			$object->save();
+		}
+		// убираем привязку контакта к объявлениям
+		$contact->remove('objects');
+		// отвязываем контакт от пользователя
+		$user->remove('contacts', $contact);
 	}
 
 	public function action_add_user_contact()
