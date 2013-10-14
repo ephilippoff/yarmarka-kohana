@@ -44,7 +44,8 @@ class Controller_Add extends Controller_Template {
 		// объект валидации
 		$validation = Validation::factory($this->request->post())
 			->rule('city_kladr_id', 'not_empty')
-			->rule('contact', 'not_empty');
+			->rule('contact', 'not_empty')
+			->rule('email', 'email');
 
 		// идентификатор сессии в CI
 		$session_id = $this->request->post('session_id');
@@ -376,8 +377,11 @@ class Controller_Add extends Controller_Template {
 				$object->send_to_terrasoft();
 			}
 
+			if ( ! $user->email)
+			{
+				$user->email = $this->input->post('email');
+			}
 			// отправляем письмо пользователю, если была быстрая регистрация
-			// @todo что делать если email не указан?
 			if ($user->email AND ! empty($random_password))
 			{
 				$msg = View::factory('emails/fast_register_success', 

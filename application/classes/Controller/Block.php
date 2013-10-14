@@ -14,7 +14,7 @@ class Controller_Block extends Controller_Template
 {
 	public function before()
 	{
-		// only sub requests in allowed
+		// only sub requests is allowed
 		if ($this->request->is_initial() AND Kohana::$environment !== Kohana::DEVELOPMENT)
 		{
 			throw new HTTP_Exception_404;
@@ -72,8 +72,40 @@ class Controller_Block extends Controller_Template
 			throw new HTTP_Exception_404;
 		}
 
-		$this->template->contact_types	= ORM::factory('Contact_Type')->find_all();
-		$this->template->user_contacts	= $user->get_contacts();
+		$user_contacts = ORM::factory('Contact')
+			->select('contact_type.name')
+			->with('contact_type')
+			->where_user_id($user->id)
+			->where('verified_user_id', 'IS', DB::expr('NULL'))
+			->order_by('id')
+			->find_all();
+
+		$this->template->contact_types	= ORM::factory('Contact_Type')
+			->where('id', 'IN', array(Model_Contact_Type::MOBILE, Model_Contact_Type::EMAIL))
+			->find_all();
+		$this->template->user_contacts	= $user_contacts;
+	}
+
+	public function action_verified_profile_contacts()
+	{
+		if ( ! $user = Auth::instance()->get_user())
+		{
+			throw new HTTP_Exception_404;
+		}
+
+		$user_contacts = ORM::factory('Contact')
+			->select('contact_type.name')
+			->with('contact_type')
+			->where_user_id($user->id)
+			->where('verified_user_id', '=', $user->id)
+			->order_by('id')
+			->find_all();
+
+		$this->template->user 			= $user;
+		$this->template->contact_types	= ORM::factory('Contact_Type')
+			->where('id', 'IN', array(Model_Contact_Type::MOBILE, Model_Contact_Type::EMAIL))
+			->find_all();
+		$this->template->user_contacts	= $user_contacts;
 	}
 
 	public function action_user_contacts()
@@ -181,3 +213,6 @@ class Controller_Block extends Controller_Template
 			->find_all();
 	}
 }
+
+/* End of file Block.php */
+/* Location: ./application/classes/Controller/Block.php */

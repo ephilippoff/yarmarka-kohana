@@ -52,7 +52,7 @@ class Model_User extends Model_Auth_User {
 			),
 			'email' => array(
 				array('email'),
-				array(array($this, 'unique'), array('email', ':value')),
+				// array(array($this, 'unique'), array('email', ':value')),
 				array(array($this, 'check_domain'), array(':value')),
 			),
 			'role' => array(
@@ -180,7 +180,6 @@ class Model_User extends Model_Auth_User {
 		$contact = ORM::factory('Contact');
 		$contact->contact_type_id	= intval($contact_type_id);
 		$contact->contact			= trim($contact_str);
-		$contact->show 				= 1;
 		$contact = $contact->create();
 
 		if ( ! $contact->has('users', $this->id))

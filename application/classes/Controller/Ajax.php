@@ -149,12 +149,45 @@ class Controller_Ajax extends Controller_Template
 
 	public function action_delete_user_contact()
 	{
-		if ( ! $user = Auth::instance()->get_user())
+		$contact 	= ORM::factory('Contact', $this->request->post('contact_id'));
+		$user 		= Auth::instance()->get_user();
+		if ( ! $user OR ! $contact->loaded() OR $contact->verified_user_id !== $user->id)
 		{
 			throw new HTTP_Exception_404;
 		}
 
-		$user->delete_contact($this->request->post('contact_id'));
+		// снимаем все объявления с контактом
+		foreach ($contact->objects->find_all() as $object)
+		{
+			$object->is_published = 0;
+			$object->save();
+		}
+		// убираем привязку контакта к объявлениям
+		$contact->remove('objects');
+		// отвязываем контакт от пользователя
+		$user->remove('contacts', $contact);
+	}
+
+	public function action_link_objects_by_contact()
+	{
+		$contact 	= ORM::factory('Contact', $this->request->param('id'));
+		$user 		= Auth::instance()->get_user();
+		if ( ! $user OR ! $contact->loaded() OR $contact->verified_user_id !== $user->id)
+		{
+			throw new HTTP_Exception_404;
+		}
+
+		$this->json['affected_rows'] = 0;
+		foreach ($contact->objects->find_all() as $object)
+		{
+			if ($object->author != $user->id)
+			{
+				$object->author = $user->id;
+				$object->save();
+
+				$this->json['affected_rows']++;
+			}
+		}
 	}
 
 	public function action_add_user_contact()
@@ -189,17 +222,10 @@ class Controller_Ajax extends Controller_Template
 					->find();
 			}
 
-			if ($exists_contact->loaded())
+			if ($exists_contact->loaded() AND $exists_contact->verified_user_id === $user->id)
 			{
 				$this->json['code']		= 401;
-				if ($is_phone)
-				{
-					$this->json['error'] = Request::factory('block/not_unique_contact_msg/'.$contact_clear)->execute()->body();
-				}
-				else
-				{
-					$this->json['error'] = 'Такой контакт уже есть';
-				}
+				$this->json['error'] 	= 'Этот контакт уже привязан к вашей учетной записи';
 			}
 			else
 			{
@@ -281,8 +307,9 @@ class Controller_Ajax extends Controller_Template
 			throw new HTTP_Exception_404;
 		}
 
-		$validate_object = $ad->city_id > 0 AND ! empty($ad->title) AND ! empty($ad->user_text) AND $ad->contacts->count_all() > 0;
+		$this->json['edit_link'] = CI::site('user/edit_ad/'.$ad->id);
 
+		$validate_object = ($ad->city_id > 0 AND ! empty($ad->title) AND ! empty($ad->user_text) AND $ad->contacts->count_all() > 0);
 		if ( ! $validate_object)
 		{
 			$this->json['code'] = 500;
@@ -690,7 +717,30 @@ class Controller_Ajax extends Controller_Template
 		}
 
 		$link->delete();
+	}
 
+	public function action_set_as_main_email()
+	{
+		$contact 	= ORM::factory('Contact', $this->request->param('id'));
+		$user 		= Auth::instance()->get_user();
+
+		if ( ! $user OR ! $contact->loaded() OR $contact->verified_user_id !== $user->id OR $contact->contact_type_id !== Model_Contact_Type::EMAIL)
+		{
+			throw new HTTP_Exception_404;
+		}
+
+		try
+		{
+			$user->email = $contact->contact_clear;
+			$user->save();
+		}
+		catch (ORM_Validation_Exception $e)
+		{
+			$this->json['code'] = 500;
+			$this->json['errors'] = $e->errors();
+		}
+
+		$this->json['email'] = $user->email;
 	}
 
 	public function after()
