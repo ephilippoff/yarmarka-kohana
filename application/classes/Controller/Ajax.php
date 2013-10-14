@@ -307,8 +307,9 @@ class Controller_Ajax extends Controller_Template
 			throw new HTTP_Exception_404;
 		}
 
-		$validate_object = $ad->city_id > 0 AND ! empty($ad->title) AND ! empty($ad->user_text) AND $ad->contacts->count_all() > 0;
+		$this->json['edit_link'] = CI::site('user/edit_ad/'.$ad->id);
 
+		$validate_object = ($ad->city_id > 0 AND ! empty($ad->title) AND ! empty($ad->user_text) AND $ad->contacts->count_all() > 0);
 		if ( ! $validate_object)
 		{
 			$this->json['code'] = 500;
