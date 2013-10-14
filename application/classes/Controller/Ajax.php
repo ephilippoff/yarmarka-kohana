@@ -189,17 +189,10 @@ class Controller_Ajax extends Controller_Template
 					->find();
 			}
 
-			if ($exists_contact->loaded())
+			if ($exists_contact->loaded() AND $exists_contact->verified_user_id === $user->id)
 			{
 				$this->json['code']		= 401;
-				if ($is_phone)
-				{
-					$this->json['error'] = Request::factory('block/not_unique_contact_msg/'.$contact_clear)->execute()->body();
-				}
-				else
-				{
-					$this->json['error'] = 'Такой контакт уже есть';
-				}
+				$this->json['error'] 	= 'Этот контакт уже привязан к вашей учетной записи';
 			}
 			else
 			{
@@ -719,7 +712,30 @@ class Controller_Ajax extends Controller_Template
 		}
 
 		$link->delete();
+	}
 
+	public function action_set_as_main_email()
+	{
+		$contact 	= ORM::factory('Contact', $this->request->param('id'));
+		$user 		= Auth::instance()->get_user();
+
+		if ( ! $user OR ! $contact->loaded() OR $contact->verified_user_id !== $user->id OR $contact->contact_type_id !== Model_Contact_Type::EMAIL)
+		{
+			throw new HTTP_Exception_404;
+		}
+
+		try
+		{
+			$user->email = $contact->contact_clear;
+			$user->save();
+		}
+		catch (ORM_Validation_Exception $e)
+		{
+			$this->json['code'] = 500;
+			$this->json['errors'] = $e->errors();
+		}
+
+		$this->json['email'] = $user->email;
 	}
 
 	public function after()
