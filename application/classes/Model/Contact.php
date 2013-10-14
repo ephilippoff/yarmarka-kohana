@@ -129,6 +129,11 @@ class Model_Contact extends ORM {
 			->where('session_id', '=', $session_id)
 			->count_all();
 	}
+
+	public function get_contact_value()
+	{
+		return $this->is_phone() ? Text::format_phone($this->contact_clear) : trim($this->contact);
+	}
 }
 
 /* End of file Contact.php */

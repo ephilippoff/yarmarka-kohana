@@ -168,6 +168,19 @@ class Controller_Ajax extends Controller_Template
 		$user->remove('contacts', $contact);
 	}
 
+	public function action_unlink_user_contact()
+	{
+		$contact 	= ORM::factory('Contact', $this->request->post('contact_id'));
+		$user 		= Auth::instance()->get_user();
+		if ( ! $user OR ! $contact->loaded())
+		{
+			throw new HTTP_Exception_404;
+		}
+
+		// отвязываем контакт от пользователя
+		$user->remove('contacts', $contact);
+	}
+
 	public function action_link_objects_by_contact()
 	{
 		$contact 	= ORM::factory('Contact', $this->request->param('id'));
@@ -203,24 +216,9 @@ class Controller_Ajax extends Controller_Template
 
 		if ($contact AND $contact_type_id)
 		{
-			$is_phone = Model_Contact_Type::is_phone($contact_type_id);
-			// проверяем телефоны по contact_clear
-			if ($is_phone)
-			{
-				$exists_contact = ORM::factory('Contact')
-					->where('contact_type_id', 'IN', array(1,2))
-					->where('contact_clear', '=', $contact_clear)
-					->where_user_id($user->id)
-					->find();
-			}
-			else // другие типы контактов
-			{
-				$exists_contact = ORM::factory('Contact')
-					->where('contact_type_id', '=', $contact_type_id)
-					->where('contact', '=', $contact)
-					->where_user_id($user->id)
-					->find();
-			}
+			$exists_contact = ORM::factory('Contact')
+				->by_contact_and_type($contact, $contact_type_id)
+				->find();
 
 			if ($exists_contact->loaded() AND $exists_contact->verified_user_id === $user->id)
 			{
