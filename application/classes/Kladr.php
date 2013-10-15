@@ -10,7 +10,7 @@ class Kladr
 			->find();
 
 		$city_kladr_row = Model::factory('Kladr')->get_city_by_id($city_kladr_id);
-		$region = ORM::factory('Region')->where('kladr_id', '=', $city_kladr_row->region_id);
+		$region = ORM::factory('Region')->where('kladr_id', '=', $city_kladr_row->region_id)->find();
 		if ( ! $region->loaded())
 		{
 			// добавляем новый регион
