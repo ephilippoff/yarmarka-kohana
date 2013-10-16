@@ -408,7 +408,7 @@ class Model_Object extends ORM {
 			return FALSE;
 		}
 
-		$str =trim(str_replace(array('{', '}'), '', $this->cities));
+		$str = trim(str_replace(array('{', '}'), '', $this->cities));
 		
 		if ($str)
 		{

@@ -297,7 +297,10 @@ class Controller_Add extends Controller_Template {
 						{
 							if ($city_id == $object->city_id)
 							{
-								$cities[$key] = $city->id;
+								if ( ! in_array($city->id, $cities))
+								{
+									$cities[$key] = $city->id;
+								}
 							}
 						}
 
