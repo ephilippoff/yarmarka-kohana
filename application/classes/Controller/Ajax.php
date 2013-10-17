@@ -166,6 +166,8 @@ class Controller_Ajax extends Controller_Template
 		$contact->remove('objects');
 		// отвязываем контакт от пользователя
 		$user->remove('contacts', $contact);
+		$contact->verified_user_id = NULL;
+		$contact->save();
 	}
 
 	public function action_unlink_user_contact()
