@@ -569,6 +569,38 @@ class Model_Object extends ORM {
 
 		return $this;
 	}
+
+	public function is_valid()
+	{
+		if ( ! $this->loaded())
+		{
+			return FALSE;
+		}
+
+		$validate_object = (bool) ($this->city_id > 0 AND ! empty($this->title) AND ! empty($this->user_text));
+		if ( ! $validate_object)
+		{
+			return FALSE;
+		}
+
+		$has_valid_contacts = FALSE;
+		foreach ($this->contacts->find_all() as $contact)
+		{
+			if ($contact->verified_user_id)
+			{
+				$has_valid_contacts = TRUE;
+				break;
+			}
+		}
+
+		if ( ! $has_valid_contacts)
+		{
+			return FALSE;
+		}
+
+
+		return TRUE;
+	}
 }
 
 /* End of file Object.php */

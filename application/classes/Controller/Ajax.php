@@ -309,8 +309,7 @@ class Controller_Ajax extends Controller_Template
 
 		$this->json['edit_link'] = CI::site('user/edit_ad/'.$ad->id);
 
-		$validate_object = ($ad->city_id > 0 AND ! empty($ad->title) AND ! empty($ad->user_text) AND $ad->contacts->count_all() > 0);
-		if ( ! $validate_object)
+		if ( ! $ad->is_valid())
 		{
 			$this->json['code'] = 500;
 		}
