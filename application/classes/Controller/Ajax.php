@@ -197,7 +197,7 @@ class Controller_Ajax extends Controller_Template
 		{
 			if ($object->author != $user->id)
 			{
-				$object->author = $user->id;
+				$object->author = $ojbect->author_company_id = $user->id;
 				$object->save();
 
 				$this->json['affected_rows']++;
