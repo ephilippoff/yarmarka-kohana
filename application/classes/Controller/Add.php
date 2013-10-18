@@ -358,11 +358,10 @@ class Controller_Add extends Controller_Template {
 
 			foreach ($contacts as $contact)
 			{
-				// сохраянем новые контакты для объявления
-				$object->add_contact($contact['type'], $contact['value']);
-
 				// сохраняем контакты для пользователя
 				$user->add_verified_contact($contact['type'], $contact['value']);
+				// сохраянем новые контакты для объявления
+				$object->add_contact($contact['type'], $contact['value']);
 			}
 
 			if ($object->is_bad === 1)

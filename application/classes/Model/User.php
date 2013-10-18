@@ -53,7 +53,7 @@ class Model_User extends Model_Auth_User {
 			'email' => array(
 				array('email'),
 				// array(array($this, 'unique'), array('email', ':value')),
-				array(array($this, 'check_domain'), array(':value')),
+				// array(array($this, 'check_domain'), array(':value')),
 			),
 			'role' => array(
 				array('not_empty'),
@@ -72,7 +72,13 @@ class Model_User extends Model_Auth_User {
 		return array(
 			'passw' => array(
 				array(array(Auth::instance(), 'hash'))
-			)
+			),
+			'email' => array(
+				array(array($this, 'trigger_save_email'), array(':value')),
+			),
+			'phone' => array(
+				array(array($this, 'trigger_save_phone'), array(':value')),
+			),
 		);
 	}
 
@@ -209,9 +215,27 @@ class Model_User extends Model_Auth_User {
 		// create contact if not exists
 		$contact = $this->add_contact($contact_type_id, $contact_str);
 		// remove contact from other users
-		DB::delete('user_contacts')->where('contact_id', '=', $contact->id)
+		DB::delete('user_contacts')
+			->where('contact_id', '=', $contact->id)
 			->where('user_id', '!=', $this->id)
 			->execute();
+		// unpublish objects with that contact
+		if ($this->id != $contact->verified_user_id)
+		{
+			$objects = ORM::factory('Object')
+				->join('object_contacts')
+				->on('object.id', '=', 'object_contacts.object_id')
+				->where('contact_id', '=', $contact->id)
+				->find_all();
+
+			foreach ($objects as $object)
+			{
+				$object->is_published = 0;
+				$object->save();
+
+				$object->remove('contacts', $contact);
+			}
+		}
 		// set contact verified for current user
 		$contact->verified_user_id = $this->id;
 		$contact->save();
@@ -315,6 +339,32 @@ class Model_User extends Model_Auth_User {
 	{
 		return $this->objects->where('author_company_id', '=', $company_id)
 			->count_all();
+	}
+
+	public function trigger_save_email($email)
+	{
+		if ($email AND Valid::email($email))
+		{
+			$contact = ORM::factory('Contact');
+			$contact->contact 			= trim($email);
+			$contact->contact_type_id 	= Model_Contact_Type::EMAIL;
+			$contact->create();
+		}
+
+		return $email;
+	}
+
+	public function trigger_save_phone($phone)
+	{
+		if ($phone)
+		{
+			$contact = ORM::factory('Contact');
+			$contact->contact 			= trim($phone);
+			$contact->contact_type_id 	= Model_Contact_Type::MOBILE;
+			$contact->create();
+		}
+
+		return $phone;
 	}
 }
 

@@ -73,7 +73,7 @@ class Model_Contact extends ORM {
 		else
 		{
 			$this->where('contact_type_id', '=', $contact_type_id)
-				->where('contact', '=', $contact);
+				->where('contact_clear', '=', $contact);
 		}
 
 		return $this;
