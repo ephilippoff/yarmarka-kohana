@@ -27,12 +27,12 @@ class Kladr
 		{
 			// ищем координаты города
 			$coord = Ymaps::instance()->get_coord_by_name($city_kladr_row->city);
+			$location = ORM::factory('Location');
 			if ($coord)
 			{
 				// добавляем координату города в locations
 				list($lon, $lat) = $coord;
 
-				$location = ORM::factory('Location');
 				$location->region 	= $city_kladr_row->region;
 				$location->city 	= $city_kladr_row->city;
 				$location->kladr_id = $city_kladr_id;
