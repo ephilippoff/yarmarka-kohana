@@ -63,7 +63,8 @@ class Region {
 			{
 				return $city->seo_name.'.'.Kohana::$config->load('common.main_domain');
 			}
-			elseif ($city->region->loaded() AND $city->region->seo_name)
+			elseif ($city->region->loaded() AND $city->region->seo_name 
+				AND $city->region->seo_name == 73) // @fixit котсыль,т.к. кроме как для тюменской не созданы домены
 			{
 				return $city->region->seo_name.'.'.Kohana::$config->load('common.main_domain');
 			}
