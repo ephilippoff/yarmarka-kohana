@@ -48,6 +48,11 @@ class Model_Category extends ORM {
 
 		$geo = ($city AND $city->loaded()) ? $city->seo_name : $region->seo_name;
 
+		return $geo.'/'.$this->get_seo_without_geo($action_id);
+	}
+
+	public function get_seo_without_geo($action_id = NULL)
+	{
 		$category_seo_names = array();
 		$parent_id = $this->parent_id;
 		while ($parent_id != 1 AND $this->id != 1)
@@ -74,7 +79,7 @@ class Model_Category extends ORM {
 			}
 		}
 
-		return $geo.'/'.join('/', $category_seo_names);
+		return join('/', $category_seo_names);
 	}
 
 	public function get_url_with_action($action_id)

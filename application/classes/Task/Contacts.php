@@ -81,12 +81,10 @@ class Task_Contacts extends Minion_Task
 								$this->relink_contact($d->id, $contact->id);
 								$d->delete();
 							}
+							
+							$contact->update();
 						}
 
-						if ($contact->changed())
-						{
-							$contact->save();
-						}
 					break;
 
 					case Model_Contact_Type::EMAIL :

@@ -80,7 +80,11 @@ $(document).ready(function() {
 								4 => 'icq',
 								5 => 'email',
 							) ?>
-							
+								
+							<span id="verified_user_contacts">
+							<?=Request::factory('block/verified_profile_contacts')->execute()?>
+							</span>
+
 							<span id="user_contacts">
 							<?=Request::factory('block/user_profile_contacts')->execute()?>
 							</span>

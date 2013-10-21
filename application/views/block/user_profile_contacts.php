@@ -13,7 +13,7 @@
 			<div class="inp-cont">
 				<span class="cont-info">
 				<span class="cont"><span class="ico <?=$contact_classes[$contact->contact_type_id]?>"></span>
-					<a class="usercontact contact-input" data-id="<?=$contact->id?>"><?=$contact->contact?></a>
+					<a class="usercontact contact-input" data-id="<?=$contact->id?>"><?=$contact->get_contact_value()?></a>
 				</span><span class="remove delete_contact" data-id="<?=$contact->id?>"></span></span></div>
 
 				<?php if ($contact->is_phone() AND ! $contact->is_phone_unique()) : ?>

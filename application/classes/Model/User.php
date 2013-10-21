@@ -9,17 +9,17 @@ class Model_User extends Model_Auth_User {
 	 *
 	 * @var array Relationhips
 	 */
-	protected $_has_many = array(
-		'user_tokens'		=> array('model' => 'User_Token'),
-		'objects'			=> array('foreign_key' => 'author'),
-		'company_objects'	=> array('model' => 'Object', 'foreign_key' => 'author_company_id'),
-		'access'			=> array('model' => 'Access'),
-		'invoices'			=> array(),
-		'subscriptions'		=> array(),
-		'user_messages' 	=> array('model' => 'User_Messages', 'foreign_key' => 'user_id'),
-		'contacts'			=> array('model' => 'Contact', 'through' => 'user_contacts'),
-		'link_requests' 	=> array('model' => 'User_Link_Request', 'foreign_key' => 'linked_user_id'),
-		'users'				=> array('model' => 'User', 'foreign_key' => 'linked_to_user'),
+	protected $_has_many = array(	
+		'user_tokens'	=> array('model' => 'User_Token'),
+		'objects'		=> array('foreign_key' => 'author'),
+		'access'		=> array('model' => 'Access'),
+		'invoices'		=> array(),
+		'subscriptions'	=> array(),
+		'user_messages' => array('model' => 'User_Messages', 'foreign_key' => 'user_id'),
+		'contacts'		=> array('model' => 'Contact', 'through' => 'user_contacts'),
+		'link_requests' => array('model' => 'User_Link_Request', 'foreign_key' => 'linked_user_id'),
+		'users'			=> array('model' => 'User', 'foreign_key' => 'linked_to_user'),		
+		'units' 		=> array('model' => 'User_Units', 'foreign_key' => 'user_id'),
 	);
 
 	protected $_belongs_to = array(
@@ -52,8 +52,8 @@ class Model_User extends Model_Auth_User {
 			),
 			'email' => array(
 				array('email'),
-				array(array($this, 'unique'), array('email', ':value')),
-				array(array($this, 'check_domain'), array(':value')),
+				// array(array($this, 'unique'), array('email', ':value')),
+				// array(array($this, 'check_domain'), array(':value')),
 			),
 			'role' => array(
 				array('not_empty'),
@@ -72,7 +72,13 @@ class Model_User extends Model_Auth_User {
 		return array(
 			'passw' => array(
 				array(array(Auth::instance(), 'hash'))
-			)
+			),
+			'email' => array(
+				array(array($this, 'trigger_save_email'), array(':value')),
+			),
+			'phone' => array(
+				array(array($this, 'trigger_save_phone'), array(':value')),
+			),
 		);
 	}
 
@@ -180,10 +186,59 @@ class Model_User extends Model_Auth_User {
 		$contact = ORM::factory('Contact');
 		$contact->contact_type_id	= intval($contact_type_id);
 		$contact->contact			= trim($contact_str);
-		$contact->show 				= 1;
 		$contact = $contact->create();
 
-		$contact->add('users', $this->id);
+		if ( ! $contact->has('users', $this->id))
+		{
+			$contact->add('users', $this->id);
+		}
+
+		return $contact;
+	}
+
+	public function add_verified_contact($contact_type_id, $contact_str)
+	{
+		if ( ! $this->loaded())
+		{
+			return FALSE;
+		}
+
+		if (Model_Contact_Type::is_phone($contact_type_id))
+		{
+			$contact_clear = Text::clear_phone_number($contact_str);
+		}
+		else
+		{
+			$contact_clear = trim($contact_str);
+		}
+
+		// create contact if not exists
+		$contact = $this->add_contact($contact_type_id, $contact_str);
+		// remove contact from other users
+		DB::delete('user_contacts')
+			->where('contact_id', '=', $contact->id)
+			->where('user_id', '!=', $this->id)
+			->execute();
+		// unpublish objects with that contact
+		if ($this->id != $contact->verified_user_id)
+		{
+			$objects = ORM::factory('Object')
+				->join('object_contacts')
+				->on('object.id', '=', 'object_contacts.object_id')
+				->where('contact_id', '=', $contact->id)
+				->find_all();
+
+			foreach ($objects as $object)
+			{
+				$object->is_published = 0;
+				$object->save();
+
+				$object->remove('contacts', $contact);
+			}
+		}
+		// set contact verified for current user
+		$contact->verified_user_id = $this->id;
+		$contact->save();
 
 		return $contact;
 	}
@@ -237,6 +292,11 @@ class Model_User extends Model_Auth_User {
 
 	public function check_domain($email)
 	{
+		if ( ! $email)
+		{
+			return TRUE;
+		}
+		
 		$disallowed_domains = Kohana::$config->load('common.disallowed_email_domains');
 		list($email_name, $domain) = explode('@', $email);
 
@@ -269,11 +329,42 @@ class Model_User extends Model_Auth_User {
 
 		return TRUE;
 	}
+	
+	public function getAllUnits()
+	{
+		return $this->units->find_all()->as_array();
+	}
 
 	public function count_company_objects($company_id)
 	{
 		return $this->objects->where('author_company_id', '=', $company_id)
 			->count_all();
+	}
+
+	public function trigger_save_email($email)
+	{
+		if ($email AND Valid::email($email))
+		{
+			$contact = ORM::factory('Contact');
+			$contact->contact 			= trim($email);
+			$contact->contact_type_id 	= Model_Contact_Type::EMAIL;
+			$contact->create();
+		}
+
+		return $email;
+	}
+
+	public function trigger_save_phone($phone)
+	{
+		if ($phone)
+		{
+			$contact = ORM::factory('Contact');
+			$contact->contact 			= trim($phone);
+			$contact->contact_type_id 	= Model_Contact_Type::MOBILE;
+			$contact->create();
+		}
+
+		return $phone;
 	}
 }
 

@@ -57,7 +57,7 @@
 	<li>
 		<div class="input style2">
 			<label><span><i class="name">E-mail:</i></span></label>
-			<p class="myinform"><?=$user->email?></p>
+			<p class="myinform" id="email"><?=$user->email?></p>
 		</div>
 	</li>
 	<li>
