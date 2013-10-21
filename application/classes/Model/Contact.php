@@ -12,6 +12,18 @@ class Model_Contact extends ORM {
 		'objects' 	=> array('model' => 'Object', 'through' => 'object_contacts'),
 	);
 
+	public function filters()
+	{
+		return array(
+			'contact_clear' => array(
+				array('strtolower'),
+			),
+			'contact' => array(
+				array('strtolower'),
+			),
+		);
+	}
+
 	public function where_user_id($user_id)
 	{
 		return $this->join_user_contacts()
@@ -63,7 +75,7 @@ class Model_Contact extends ORM {
 
 	public function by_contact_and_type($contact, $contact_type_id)
 	{
-		$contact 			= trim($contact);
+		$contact 			= trim(strtolower($contact));
 		$contact_type_id 	= intval($contact_type_id);
 
 		if (Model_Contact_Type::is_phone($contact_type_id))

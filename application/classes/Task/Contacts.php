@@ -8,12 +8,16 @@ class Task_Contacts extends Minion_Task
 {
 	protected $_options = array(
 		'limit' => 1000,
+		'type'	=> NULL,
 	);
 
 	protected static $_deleted_rows = 0;
 
 	protected function _execute(array $params)
 	{
+		$offset = 0;
+		$limit 	= $params['limit'];
+		$type 	= $params['type'];
 
 		// удаляем старые типы контактов
 		Minion_CLI::write('Delete old contact types(skype, icq)');
@@ -23,11 +27,15 @@ class Task_Contacts extends Minion_Task
 		Minion_CLI::write('Affected rows:'.Minion_CLI::color($affected_rows, 'cyan'));
 		Minion_CLI::write(Minion_CLI::color('Done!', 'green'));
 
-		$total = ORM::factory('Contact')->count_all();
+		$total = ORM::factory('Contact');
+		if ( ! is_null($type))
+		{
+			$total->where('contact_type_id', '=', $type);
+		}
+		$total = $total->count_all();
+
 		Minion_CLI::write('Total contacts:'.Minion_CLI::color($total, 'cyan'));
 
-		$offset = 0;
-		$limit = $params['limit'];
 
 		Minion_CLI::write_replace(
 			'Processed:'.Minion_CLI::color($offset, 'cyan').
@@ -35,7 +43,7 @@ class Task_Contacts extends Minion_Task
 			' Deleted:'.Minion_CLI::color(self::$_deleted_rows, 'cyan')
 		);
 
-		while ($contacts = $this->get_contacts($offset))
+		while ($contacts = $this->get_contacts($offset, $type))
 		{
 			foreach ($contacts as $contact)
 			{
@@ -88,7 +96,7 @@ class Task_Contacts extends Minion_Task
 					break;
 
 					case Model_Contact_Type::EMAIL :
-						$email = trim($contact->contact);
+						$email = trim(strtolower($contact->contact));
 						// удаляем не валидные email
 						if ( ! Valid::email($email))
 						{
@@ -100,8 +108,8 @@ class Task_Contacts extends Minion_Task
 							$doubles = ORM::factory('Contact')
 								->where('id', '!=', $contact->id)
 								->where_open()
-									->where('contact', '=', $email)
-									->or_where('contact_clear', '=', $email)
+									->where(DB::expr('lower(contact)'), '=', $email)
+									->or_where(DB::expr('lower(contact_clear)'), '=', $email)
 								->where_close()
 								->find_all();
 
@@ -134,12 +142,18 @@ class Task_Contacts extends Minion_Task
 		Minion_CLI::write(Minion_CLI::color('Done!', 'green'));
 	}
 
-	public function get_contacts($offset = 0)
+	public function get_contacts($offset = 0, $type = NULL)
 	{
-		return ORM::factory('Contact')->limit(1000)
+		$query = ORM::factory('Contact')->limit(1000)
 			->offset($offset)
-			->order_by('id')
-			->find_all()
+			->order_by('id');
+
+		if ( ! is_null($type))
+		{
+			$query->where('contact_type_id', '=', $type);
+		}
+
+		return $query->find_all()
 			->as_array();
 	}
 
