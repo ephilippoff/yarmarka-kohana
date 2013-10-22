@@ -381,7 +381,7 @@ class Controller_Add extends Controller_Template {
 
 			if ( ! $user->email)
 			{
-				$user->email = $this->input->post('email');
+				$user->email = $this->request->post('email');
 			}
 			// отправляем письмо пользователю, если была быстрая регистрация
 			if ($user->email AND ! empty($random_password))
