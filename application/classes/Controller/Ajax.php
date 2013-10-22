@@ -307,7 +307,7 @@ class Controller_Ajax extends Controller_Template
 			throw new HTTP_Exception_404;
 		}
 
-		$this->json['edit_link'] = CI::site('user/edit_ad/'.$ad->id);
+		$this->json['edit_link'] = CI::site('user/edit_ad/'.$ad->id.'#contacts');
 
 		if ( ! $ad->is_valid())
 		{
@@ -338,7 +338,7 @@ class Controller_Ajax extends Controller_Template
 			throw new HTTP_Exception_404;
 		}
 
-		if ($object->is_bad == 0 AND $object->in_archive)
+		if ($object->is_bad == 0 && $object->in_archive AND $object->is_valid())
 		{
 			$date_expiration = null;
 
@@ -411,12 +411,19 @@ class Controller_Ajax extends Controller_Template
 			->where('is_published', '=', '1')
 			->count_all();
 
-		if ($object->is_published == 0
-				AND Auth::instance()->get_user()->org_type == 1 
-				AND $object->category_obj->max_count_for_user 
-				AND $count_published_in_category >= $object->category_obj->max_count_for_user)
+		if (
+			$object->is_published == 0
+			AND Auth::instance()->get_user()->org_type == 1 
+			AND $object->category_obj->max_count_for_user 
+			AND $count_published_in_category >= $object->category_obj->max_count_for_user
+		)
 		{
-			$json['code'] = 400;
+			$this->json['code'] = 400;
+		}
+		elseif ( ! $object->is_valid())
+		{
+			$this->json['code'] = 401;
+			$this->json['edit_link'] = CI::site('user/edit_ad/'.$object->id.'#contacts');
 		}
 		else
 		{

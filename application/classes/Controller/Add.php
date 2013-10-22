@@ -63,7 +63,7 @@ class Controller_Add extends Controller_Template {
 						->find();
 					if ($contact_type->loaded() AND $contact->is_verified($session_id))
 					{
-						$contacts[] = array(
+						$contacts[$contact->id] = array(
 							'contact_obj' 	=> $contact,
 							'value' 		=> $value,
 							'type' 			=> $contact_type->id,
