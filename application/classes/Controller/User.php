@@ -744,6 +744,33 @@ class Controller_User extends Controller_Template {
 		$this->response->body(json_encode($this->json));
 	}
 
+	public function action_password()
+	{
+		$error = NULL;
+
+		if (HTTP_Request::POST === $this->request->method())
+		{
+			$validation = Validation::factory($_POST)
+				->rule('password', 'not_empty')
+				->label('password', 'Пароль')
+				->rule('password', 'matches', array(':validation', 'password', 'password_repeat'));
+
+			if ($validation->check())
+			{
+				$this->user->passw = trim($this->request->post('password'));
+				$this->user->save();
+
+				Session::instance()->set('success', TRUE);
+			}
+			else
+			{
+				$error = join(',', $validation->errors('validation/password'));
+			}
+		}
+
+		$this->template->error = $error;
+	}
+
 	public function action_logout()
 	{
 		if (Auth::instance()->get_user())
