@@ -338,7 +338,7 @@ class Controller_Ajax extends Controller_Template
 			throw new HTTP_Exception_404;
 		}
 
-		if ($object->is_bad == 0 && $object->in_archive AND $object->is_valid())
+		if ($object->is_bad == 0 AND $object->in_archive AND $object->is_valid())
 		{
 			$date_expiration = null;
 
