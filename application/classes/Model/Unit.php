@@ -12,6 +12,10 @@ class Model_Unit extends ORM {
             
 	);
 
+	protected $_belongs_to = array(
+		'location'		=> array('model' => 'Location', 'foreign_key' => 'locations_id'),
+	);
+
 	public function rules()
 	{
 		return array(

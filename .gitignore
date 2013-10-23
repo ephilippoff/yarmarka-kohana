@@ -14,4 +14,6 @@ www/font
 *.sublime-project
 *.sublime-workspace
 application/config/local/*.php
+application/config/common.php
+application/config/database.php
 /nbproject

@@ -26,7 +26,7 @@ class Model_User extends Model_Auth_User {
 		'user_role' 	=> array('model' => 'Role', 'foreign_key' => 'role'),
 		'user_city'		=> array('model' => 'City', 'foreign_key' => 'city_id'),
 		'user_type'		=> array('model' => 'User_Types', 'foreign_key' => 'org_type'),
-		'location' 		=> array(),
+		'location' 		=> array('model' => 'Location', 'foreign_key' => 'location_id'),
 		'linked_to'		=> array('model' => 'User', 'foreign_key' => 'linked_to_user'),
 	);
 

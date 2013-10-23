@@ -93,47 +93,50 @@ class Controller_User extends Controller_Template {
 		$this->template->user_page_url  = substr(URL::base('http'), 0, strlen(URL::base('http')) - 1).URL::site('users/'.$this->user->login);
 	}
         
-        public function action_addunit()
+    public function action_addunit()
+    {
+		$this->use_layout	= FALSE;
+		$this->auto_render	= FALSE;
+
+        if (HTTP_Request::POST === $this->request->method())
         {
-
-            if (HTTP_Request::POST === $this->request->method())
+            try
             {
-			//var_dump($_POST);
-                    try
-                    {
-                            $user_unit = ORM::factory('User_Units')
-                                    ->set('user_id', $this->user->id)
-                                    ->set('unit_id', $_POST['unit_id'])
-                                    ->set('title', $_POST['title'])
-                                    ->set('web', $_POST['web'])
-                                    ->set('contacts', $_POST['contacts'])
-                                    ->set('description', $_POST['description'])
-                                    ->set('filename', $_POST['unit_image_filename'])
-                                    ->save();
-                    }
-                    catch(ORM_Validation_Exception $e)
-                    {
-                            // collect errors
-                            $errors = $e->errors('validation');
-                            if (isset($errors['_external']))
-                            {
-                                    $errors += $errors['_external'];
-                                    unset($errors['_external']);
-                            }
-
-                            $this->errors = $errors;
-                    }
-                    catch (Exception $e) // file upload error
-                    {
-                            $this->errors['avatar'] = $e->getMessage();
-                    }
-                    
-                    $this->redirect('user/units');
+            	$location = Location::add_location_by_post_params();
+                $user_unit = ORM::factory('User_Units')
+                    ->set('user_id', $this->user->id)
+                    ->set('unit_id', $_POST['unit_id'])
+                    ->set('title', $_POST['title'])
+                    ->set('web', $_POST['web'])
+                    ->set('contacts', $_POST['contacts'])
+                    ->set('description', $_POST['description'])
+                    ->set('filename', $_POST['unit_image_filename'])
+                    ->set('locations_id', $location->id)
+                    ->save();
 
             }
-        }
+            catch(ORM_Validation_Exception $e)
+            {
+                // collect errors
+                $errors = $e->errors('validation');
+                if (isset($errors['_external']))
+                {
+                    $errors += $errors['_external'];
+                    unset($errors['_external']);
+                }
 
-        public function action_favorites()
+                $this->errors = $errors;
+            }
+            catch (Exception $e) // file upload error
+            {
+                $this->errors['avatar'] = $e->getMessage();
+            }
+            
+            $this->redirect('user/units');
+        }
+    }
+
+    public function action_favorites()
 	{
 		$this->layout = 'users';
 		$this->assets->js('favorites.js');
