@@ -332,7 +332,7 @@ class Controller_Add extends Controller_Template {
 			{
 				$object->author_company_id = $user->linked_to->id;
 			}
-			else
+			elseif ( ! $is_edit)
 			{
 				$object->author_company_id = $user->id; //DB::expr('NULL');
 			}
