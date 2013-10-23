@@ -1,3 +1,9 @@
+<script>
+$(document).ready(function(){
+	$('#islide_profile').click();
+});
+</script>
+
 <form method="post" id="change_password">
 <div class="winner cabinet profile">
 	<section class="main-cont">
