@@ -37,7 +37,7 @@ function ajaxUpload() {
 						ajaxUpload();
 					});
 					$('#add_image_btn_text').text('Изменить фото');
-					$('.addPhoto').css('margin', '112px 0px 0px 6px');
+					$('.reduct-bl .addPhoto').css('margin', '112px 0px 0px 6px');
 					$('#unit_image_filename').val(json.filename_to_save);
 				} else if (json.error) {
 					var div = $('#unit_image_input').parents('div.input');
@@ -114,7 +114,7 @@ $(document).ready(function() {
 			var parent_id = parent_el.attr('data-id');
 			$.post( "/user/remove_image", { id:parent_id }, function( data ) {
 				if(data.success) {
-					parent_el.find('.avatar_img').attr('src', '<?=URL::site('images/mylogo.png')?>');
+					parent_el.find('.avatar_img').attr('src', '');
 					parent_el.find('.mydel').hide();
 				}
 				else alert('Произошла ошибка!');
@@ -170,18 +170,20 @@ function render_autocomplete( ul, item ) {
 				<header><span class="title">Подразделения</span></header>
 				<div class="p_cont secure-bl myinfo">
 					<section class="filials-bl reducting">
-						<article class="informator">
+<!--						<article class="informator">
 							<p class="title"><span style="display: block;">Что это такое?</span><a href="" class="toggle"><span class="show">свернуть</span><span>развернуть</span></a></p>
 							<div class="cont" style="display: block;">
 								<p style="text-align: justify">рыба рыбааьбыыр рыбабытр как рыбы бырабыр вув рыба рыбааьбыыр рыбабытр как рыбы бырабыр вув рыба рыбааьбыыр рыбабытр как рыбы бырабыр вув рыба рыбааьбыыр рыбабытр как рыбы бырабыр вув рыба рыбааьбыыр рыбабытр как рыбы бырабыр вув рыба рыбааьбыыр рыбабытр как рыбы бырабыр вув рыба рыбааьбыыр рыбабытр как рыбы бырабыр вув рыба рыбааьбыыр рыбабытр как рыбы бырабыр вув рыба рыбааьбыыр рыбабытр как рыбы бырабыр вув рыба рыбааьбыыр рыбабытр как рыбы бырабыр вув рыба рыбааьбыыр рыбабытр как рыбы бырабыр вув рыба рыбааьбыыр рыбабытр как рыбы бырабыр вув рыба рыбааьбыыр рыбабытр как рыбы бырабыр вув рыба рыбааьбыыр рыбабытр как рыбы бырабыр вув рыба рыбааьбыыр рыбабытр как рыбы бырабыр вув </p>
 							</div>
-						</article>
+						</article>-->
 						
-						<a href="" class="btn-blue2 btn-reduct"><span>Добавить</span></a>
+						<a href="" class="btn-blue2 btn-reduct ml10 mt10 mb10"><span>Добавить</span></a>
 					<script> 
 						$('.btn-reduct').click(function(e){
 							e.preventDefault();
 							$('.reduct-bl').toggle();
+							if ($('.reduct-bl').css('display') == 'none') $(this).children('span').text('Добавить')
+							else $(this).children('span').text('Отменить');
 							return false;
 						})
 						//select choosen
@@ -297,33 +299,37 @@ function render_autocomplete( ul, item ) {
 									</ul>
 									<div class="info-bl" style="height: 97%;">
 										<p>Добавьте свои места продаж и сотрудников, подавайте объявления от их имени</p><br><br><br>
-										<img src="images/01.png" alt=""><br><br><br><br>
+										<img src="/images/01.png" alt=""><br><br><br><br>
 										<p>Больше мест — больше объявлений</p>
 										<a href="" class="btn-blue2 btn-save"><i class="ico ico-save"></i><span>Сохранить</span></a>
 									</div>
-									<img class="bottom-shadow" src="images/shadow5.png" alt="">
+									<img class="bottom-shadow" src="/images/shadow5.png" alt="">
                                 </form>
 							</div>
 						</article>
 						
 						<?php if ($user_units) foreach($user_units as $unit): ?>
-						<article class="article" data-id="<?=$unit->id?>">
+						<article class="article filial" data-id="<?=$unit->id?>">
 							<div class="visible-bl" style="display: block;">
-								<div class="mylogo-bl">
+								<div class="mylogo-bl ml6">
 									<form method="post" accept-charset="utf-8" enctype="multipart/form-data">
 										<label class="filebutton">
 											<div class="img-container">
 											<?php if ($unit->filename) : ?>
-												<img src="<?=Uploads::get_file_path($unit->filename, '208x208')?>" class="avatar_img" />
+												<img src="<?=Uploads::get_file_path($unit->filename, '136x136')?>" class="avatar_img" />
 											<?php else : ?>
-												<img src="<?=URL::site('images/mylogo.png')?>" class="avatar_img" />
+												<img src="" class="avatar_img" />
 											<?php endif; ?>
 											</div>
 											<input type="file" name="unit_image_input" class="fileInput_edit" id="fileInput_<?=$unit->id?>" />
+											<span class="addPhoto">
+													<span><span id="add_image_btn_text">Кликните в область, чтобы сменить фото</span></span>
+											</span>												
 										</label>
 									</form>
 
 									<span class="mydel" <?php if ( ! $unit->filename) echo "style='display:none;'" ?>></span>
+								
 								</div>
 								
 								<div class="content">
@@ -369,9 +375,9 @@ function render_autocomplete( ul, item ) {
 									<?php
 									if( ! empty($unit->description))
 									{
-									?><div>
+									?><p class="pt10">
 										<?=nl2br($unit->description);?>
-									</div>
+									</p>
 									<?php
 									}
 									?>

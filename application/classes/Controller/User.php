@@ -658,7 +658,7 @@ class Controller_User extends Controller_Template {
 		{
 			$filename = Uploads::save($_FILES['unit_image_input']);
 			$this->json['filename_to_save'] = $filename;
-			$this->json['filename_big'] = Uploads::get_file_path($filename, '208x208');
+			$this->json['filename_big'] = Uploads::get_file_path($filename, '136x136');
 			$this->json['filename'] = Uploads::get_file_path($filename, '136x136');
 		}
 		catch (Exception $e)

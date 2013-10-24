@@ -83,7 +83,7 @@
 				
 				<?php if (Request::current()->action() == 'units') : ?>
 				<li><i class="ico "></i><span><b>Подразделения</b></span></li>
-				<?php else : ?>
+				<?php elseif (Auth::instance()->get_user()->org_type == 2) : ?>
 				<li><a href="<?=URL::site('user/units')?>" class="clickable"><i class="ico "></i><span>Подразделения</span></a></li>
 				<?php endif; ?>				
 
