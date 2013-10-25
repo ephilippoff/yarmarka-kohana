@@ -1,3 +1,4 @@
+<script src="http://api-maps.yandex.ru/2.0-stable/?load=package.standard&lang=ru-RU" type="text/javascript"></script>
 <div class="winner">
 	<section class="main-cont">
 		<div class="mbanner">
@@ -38,7 +39,7 @@
 						<?php if (empty($user->org_name)) : ?>
 								Страница компании №<?=$user->id?>
 						<?php else : ?>
-								<?=$user->org_name?> 
+								<?=htmlspecialchars($user->org_name)?> 
 						<?php endif; ?>					
 			</h1>
 			<a class="bnt-go-back" href="/" rel='nofollow'><span class="text">На главную</span></a>
@@ -50,7 +51,9 @@
 					<li class="active">
 						<span class="span_a"><i class="ico ico-iabout"></i><span>О компании</span></span>
 					</li>
-					
+					<?php if ($job_adverts_count > 0) : ?>
+						<li class="no-li-slide"><a href="<?=$job_category_href?>"><i class="ico ico-iadd"></i><span>Вакансии&nbsp;<span>(<?=$job_adverts_count?>)</span></span></a></li>										
+					<?php endif;?>
 					<li class="no-li-slide"><a href="<?=$filter_href?>"><i class="ico ico-iadd"></i><span>Объявления</span></a>
 					</li>
 					<li>
@@ -146,10 +149,62 @@
 													<input type="hidden" name="coord" id="coord" value="<?=$user->location->lon?>,<?=$user->location->lat?>" />
 												<?php else : ?>
 													<input type="hidden" name="coord" id="coord" value="" />
-												<?php endif ?>
+												<?php endif; ?>
 												<input type="hidden" name="org_address" id="org_address" value="<?=$user->user_city->title?>, <?=$user->org_address?>" />
 												<div class="map"><div id="ymaps-map-id" style="width: 372px; height: 372px;"></div>
-												<script type="text/javascript" src="//api-maps.yandex.ru/2.0-stable/?load=package.standard,package.geocode,package.geoQuery,package.clusters&coordorder=longlat&lang=ru-RU&onload=init_userpage_map"></script>
+
+													<script>
+													    var myMap_user;
+													    ymaps.ready(function(){
+													    	var myGeocoder = ymaps.geocode('<?=$user->location->city.", ".$user->location->address?>');
+															myGeocoder.then(
+															    function (res) {
+															        var coords = res.geoObjects.get(0).geometry.getCoordinates(); 
+															        myMap_user = new ymaps.Map ("ymaps-map-id", {
+															            center: coords,
+															            zoom: 12,
+															        });
+
+															        myMap_user.controls.add("zoomControl").add("mapTools").add(new ymaps.control.TypeSelector(["yandex#map", "yandex#satellite", "yandex#hybrid", "yandex#publicMap"]));
+
+
+															        myMap_user.geoObjects.add(new ymaps.Placemark(coords, { 
+															            hintContent: '<?=$user->fullname?>', 
+															            balloonContent: '<?=$user->fullname.", ".$user->location->city.", ".$user->location->address?>' 
+															        }));
+
+															        var myGeocoder2;
+
+																	<?php 
+																		$units = $user->getAllUnits();
+																		if( ! empty($units ))
+																		{
+																			foreach($units as $unit)
+																			{
+																	?>
+
+
+															    	myGeocoder2 = ymaps.geocode('<?=$unit->location->city.", ".$unit->location->address?>');
+																	myGeocoder2.then(
+																	    function (res2) {
+																	        coords = res2.geoObjects.get(0).geometry.getCoordinates(); 
+
+																	        myMap_user.geoObjects.add(new ymaps.Placemark(coords, { 
+																	            hintContent: '<?=$unit->title?>', 
+																	            balloonContent: '<?=$unit->title.", ".$unit->location->city.", ".$unit->location->address?>' 
+																	        }));
+																    });
+
+																	<?php
+																			}
+																		}
+																	?>
+																}
+															); 
+													    });
+
+
+													</script>
 												</div>
 											</div>
 										</div>
@@ -162,7 +217,78 @@
 						<div style="" class="shadow-bottom fl100 pt7"></div>
 					</article>
 				</div>
+				<?php 
+					if(!empty($units )) {
+				?>
+				<section class="filials-bl mt15">
+	                    				<h3>Филиалы компании</h3>
+										<?php foreach($units as $unit) { ?>
+	                    				<article class="article">
+	                    					
+	                    					<div class="visible-bl">
+	                    						<div class="img">
+													<div class="img-container">
+														<img src="<?=!empty($unit->filename) ? Uploads::get_file_path($unit->filename, '136x136') : URL::site('images/mylogo_small.jpg')?>" alt="" />
+													</div>
+												
+												<div class="number">#<?=$unit->id?></div>
+												</div>
+	                    						<div class="content">
+	                    							
+	                    							<p class="title"><?=$unit->title ?><span class="inf">(<?=$unit->unit->title ?>)</span></p>
+	                    							
+													<?php
+													if($unit->location) : ?><p class="addr"><?php echo $unit->location->city.", ".$unit->location->address; ?> <span class="show-map toggle"><span class="show">на карте</span><span>свернуть карту</span></span></p>
+	                    							<div class="map-bl">
+					                    				<div class="map"><div id="ymap_<?=$unit->id?>" style="width: 372px; height: 236px;"></div>
+															<script>
+															    var myMap_<?=$unit->id?>;
+															    ymaps.ready(function(){
+															    	var myGeocoder = ymaps.geocode('<?=$unit->location->city.", ".$unit->location->address?>');
+																	myGeocoder.then(
+																	    function (res) {
+																	        var coords = res.geoObjects.get(0).geometry.getCoordinates(); 
+																	        myMap_<?=$unit->id?> = new ymaps.Map ("ymap_<?=$unit->id?>", {
+																	            center: coords,
+																	            zoom: 15,
+																	        });
+
+																	        myMap_<?=$unit->id?>.controls.add("zoomControl").add("mapTools").add(new ymaps.control.TypeSelector(["yandex#map", "yandex#satellite", "yandex#hybrid", "yandex#publicMap"]));
+
+
+																	        myMap_<?=$unit->id?>.geoObjects.add(new ymaps.Placemark(coords, { 
+																	            hintContent: '<?=$unit->title?>', 
+																	            balloonContent: '<?=$unit->title.", ".$unit->location->city.", ".$unit->location->address?>' 
+																	        }));
+																		}
+																	); 
+															    });
+
+
+															</script>
+		                                     			</div>
+					                    			</div><?php endif; ?>
+													<?php if( ! empty($unit->description)) : ?><div>
+														<?=nl2br($unit->description);?>
+													</div><?php endif; ?>
+													<div class="contacts ">
+														<ul>
+															<li class="title">
+																<label><span><i class="name">Контакты:</i></span></label>
+															</li>
+															<li class="add-contact-li">											
+																<?php echo $unit->contacts ?>
+															</li>
+														</ul>
+													</div>
+	                    						</div>
+	                    					</div>
+	                    				</article>
+										<?php } ?>
+	                    			</section>
+							<? } ?>
 			</section>
+			
 		</div>	   
 
 	</section>

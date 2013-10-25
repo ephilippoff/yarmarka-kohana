@@ -149,12 +149,60 @@ class Controller_Ajax extends Controller_Template
 
 	public function action_delete_user_contact()
 	{
-		if ( ! $user = Auth::instance()->get_user())
+		$contact 	= ORM::factory('Contact', $this->request->post('contact_id'));
+		$user 		= Auth::instance()->get_user();
+		if ( ! $user OR ! $contact->loaded() OR $contact->verified_user_id !== $user->id)
 		{
 			throw new HTTP_Exception_404;
 		}
 
-		$user->delete_contact($this->request->post('contact_id'));
+		// снимаем все объявления с контактом
+		foreach ($contact->objects->find_all() as $object)
+		{
+			$object->is_published = 0;
+			$object->save();
+		}
+		// убираем привязку контакта к объявлениям
+		$contact->remove('objects');
+		// отвязываем контакт от пользователя
+		$user->remove('contacts', $contact);
+		$contact->verified_user_id = NULL;
+		$contact->save();
+	}
+
+	public function action_unlink_user_contact()
+	{
+		$contact 	= ORM::factory('Contact', $this->request->post('contact_id'));
+		$user 		= Auth::instance()->get_user();
+		if ( ! $user OR ! $contact->loaded())
+		{
+			throw new HTTP_Exception_404;
+		}
+
+		// отвязываем контакт от пользователя
+		$user->remove('contacts', $contact);
+	}
+
+	public function action_link_objects_by_contact()
+	{
+		$contact 	= ORM::factory('Contact', $this->request->param('id'));
+		$user 		= Auth::instance()->get_user();
+		if ( ! $user OR ! $contact->loaded() OR $contact->verified_user_id !== $user->id)
+		{
+			throw new HTTP_Exception_404;
+		}
+
+		$this->json['affected_rows'] = 0;
+		foreach ($contact->objects->find_all() as $object)
+		{
+			if ($object->author != $user->id)
+			{
+				$object->author = $ojbect->author_company_id = $user->id;
+				$object->save();
+
+				$this->json['affected_rows']++;
+			}
+		}
 	}
 
 	public function action_add_user_contact()
@@ -170,36 +218,14 @@ class Controller_Ajax extends Controller_Template
 
 		if ($contact AND $contact_type_id)
 		{
-			$is_phone = Model_Contact_Type::is_phone($contact_type_id);
-			// проверяем телефоны по contact_clear
-			if ($is_phone)
-			{
-				$exists_contact = ORM::factory('Contact')
-					->where('contact_type_id', 'IN', array(1,2))
-					->where('contact_clear', '=', $contact_clear)
-					->where_user_id($user->id)
-					->find();
-			}
-			else // другие типы контактов
-			{
-				$exists_contact = ORM::factory('Contact')
-					->where('contact_type_id', '=', $contact_type_id)
-					->where('contact', '=', $contact)
-					->where_user_id($user->id)
-					->find();
-			}
+			$exists_contact = ORM::factory('Contact')
+				->by_contact_and_type($contact, $contact_type_id)
+				->find();
 
-			if ($exists_contact->loaded())
+			if ($exists_contact->loaded() AND $exists_contact->verified_user_id === $user->id)
 			{
 				$this->json['code']		= 401;
-				if ($is_phone)
-				{
-					$this->json['error'] = Request::factory('block/not_unique_contact_msg/'.$contact_clear)->execute()->body();
-				}
-				else
-				{
-					$this->json['error'] = 'Такой контакт уже есть';
-				}
+				$this->json['error'] 	= 'Этот контакт уже привязан к вашей учетной записи';
 			}
 			else
 			{
@@ -281,9 +307,9 @@ class Controller_Ajax extends Controller_Template
 			throw new HTTP_Exception_404;
 		}
 
-		$validate_object = $ad->city_id > 0 AND ! empty($ad->title) AND ! empty($ad->user_text) AND $ad->contacts->count_all() > 0;
+		$this->json['edit_link'] = CI::site('user/edit_ad/'.$ad->id.'#contacts');
 
-		if ( ! $validate_object)
+		if ( ! $ad->is_valid())
 		{
 			$this->json['code'] = 500;
 		}
@@ -312,7 +338,7 @@ class Controller_Ajax extends Controller_Template
 			throw new HTTP_Exception_404;
 		}
 
-		if ($object->in_archive())
+		if ($object->is_bad == 0 AND $object->in_archive AND $object->is_valid())
 		{
 			$date_expiration = null;
 
@@ -337,7 +363,7 @@ class Controller_Ajax extends Controller_Template
 			$this->json['code'] = 200;
 		}
 		
-		if ($object->is_bad == 1 AND $object->in_archive())
+		if ($object->is_bad == 1 AND $object->in_archive)
 		{
 			$date_expiration = null;
 
@@ -385,12 +411,19 @@ class Controller_Ajax extends Controller_Template
 			->where('is_published', '=', '1')
 			->count_all();
 
-		if ($object->is_published == 0
-				AND Auth::instance()->get_user()->org_type == 1 
-				AND $object->category_obj->max_count_for_user 
-				AND $count_published_in_category >= $object->category_obj->max_count_for_user)
+		if (
+			$object->is_published == 0
+			AND Auth::instance()->get_user()->org_type == 1 
+			AND $object->category_obj->max_count_for_user 
+			AND $count_published_in_category >= $object->category_obj->max_count_for_user
+		)
 		{
-			$json['code'] = 400;
+			$this->json['code'] = 400;
+		}
+		elseif ( ! $object->is_valid())
+		{
+			$this->json['code'] = 401;
+			$this->json['edit_link'] = CI::site('user/edit_ad/'.$object->id.'#contacts');
 		}
 		else
 		{
@@ -520,38 +553,9 @@ class Controller_Ajax extends Controller_Template
 			throw new HTTP_Exception_404;
 		}
 
-		$lon = trim($this->request->post('lon'));
-		$lat = trim($this->request->post('lat'));
-
-		$address 		= trim($this->request->post('address'));
-
-		$kladr_city = Model::factory('Kladr')->get_city_by_id($this->request->post('city_kladr_id'));
-		$kladr_address = Model::factory('Kladr')->get_address_by_id($this->request->post('address_kladr_id'));
-
-		$location = ORM::factory('Location', array('lon' => $lon, 'lat' => $lat));
 		try
 		{
-			if ( ! $location->loaded())
-			{
-				$location->lon = $lon;
-				$location->lat = $lat;
-				$location->address = $address;
-				if ($kladr_city)
-				{
-					$location->region = $kladr_city->region;
-					$location->city = $kladr_city->city;
-				}
-				if ($kladr_address)
-				{
-					$housenum = $kladr_address->housenum.($kladr_address->buidnum ? ', '.$kladr_address->buildnum : '');
-
-					$location->housenum = $housenum;
-					$location->street = $kladr_address->address;
-				}
-				$location->save();
-			}
-
-			$user->location = $location;
+			$user->location = Location::add_location_by_post_params();
 			$user->save();
 		}
 		catch (Exception $e)
@@ -719,7 +723,30 @@ class Controller_Ajax extends Controller_Template
 		}
 
 		$link->delete();
+	}
 
+	public function action_set_as_main_email()
+	{
+		$contact 	= ORM::factory('Contact', $this->request->param('id'));
+		$user 		= Auth::instance()->get_user();
+
+		if ( ! $user OR ! $contact->loaded() OR $contact->verified_user_id !== $user->id OR $contact->contact_type_id !== Model_Contact_Type::EMAIL)
+		{
+			throw new HTTP_Exception_404;
+		}
+
+		try
+		{
+			$user->email = $contact->contact_clear;
+			$user->save();
+		}
+		catch (ORM_Validation_Exception $e)
+		{
+			$this->json['code'] = 500;
+			$this->json['errors'] = $e->errors();
+		}
+
+		$this->json['email'] = $user->email;
 	}
 
 	public function after()

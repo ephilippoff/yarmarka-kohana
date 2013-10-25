@@ -3,13 +3,26 @@
 class Model_Contact extends ORM {
 
 	protected $_belongs_to = array(
-		'contact_type' 	=> array('model' => 'Contact_Type', 'foreign_key' => 'contact_type_id'),
+		'contact_type' 		=> array('model' => 'Contact_Type', 'foreign_key' => 'contact_type_id'),
+		'verified_user' 	=> array('model' => 'User', 'foreign_key' => 'verified_user_id'),
 	);
 
 	protected $_has_many = array(
 		'users' 	=> array('model' => 'User', 'through' => 'user_contacts'),
 		'objects' 	=> array('model' => 'Object', 'through' => 'object_contacts'),
 	);
+
+	public function filters()
+	{
+		return array(
+			'contact_clear' => array(
+				array('strtolower'),
+			),
+			'contact' => array(
+				array('strtolower'),
+			),
+		);
+	}
 
 	public function where_user_id($user_id)
 	{
@@ -48,7 +61,7 @@ class Model_Contact extends ORM {
 
 		if ($verified)
 		{
-			$query->where('verified', '=', 1);
+			$query->where('verified_user_id', '!=', DB::expr('NULL'));
 		}
 
 		return ! (bool) $query->count_all();
@@ -62,7 +75,7 @@ class Model_Contact extends ORM {
 
 	public function by_contact_and_type($contact, $contact_type_id)
 	{
-		$contact 			= trim($contact);
+		$contact 			= trim(strtolower($contact));
 		$contact_type_id 	= intval($contact_type_id);
 
 		if (Model_Contact_Type::is_phone($contact_type_id))
@@ -72,7 +85,7 @@ class Model_Contact extends ORM {
 		else
 		{
 			$this->where('contact_type_id', '=', $contact_type_id)
-				->where('contact', '=', $contact);
+				->where('contact_clear', '=', $contact);
 		}
 
 		return $this;
@@ -107,18 +120,31 @@ class Model_Contact extends ORM {
 		if (Model_Contact_Type::is_phone($this->contact_type_id))
 		{
 			$this->contact_clear = Text::clear_phone_number($this->contact);
-			$unique = ! (bool) ORM::factory('Contact')
-				->where('contact_type_id', '=', $this->contact_type_id)
-				->where('contact_clear', '=', $this->contact_clear)
-				->count_all();
-
-			if ($unique)
-			{
-				$this->verified = 1;
-			}
 		}
 
 		return parent::create($validation);
+	}
+
+	public function is_verified($session_id)
+	{
+		if ( ! $this->loaded())
+		{
+			return FALSE;
+		}
+
+		if (Auth::instance()->get_user() AND $this->verified_user_id === Auth::instance()->get_user()->id)
+		{
+			return TRUE;
+		}
+
+		return (bool) ORM::factory('Verified_Contact')->where('contact_id', '=', $this->id)
+			->where('session_id', '=', $session_id)
+			->count_all();
+	}
+
+	public function get_contact_value()
+	{
+		return $this->is_phone() ? Text::format_phone($this->contact_clear) : trim($this->contact);
 	}
 }
 

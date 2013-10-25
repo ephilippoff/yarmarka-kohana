@@ -6,7 +6,7 @@ Route::set('admin', '<controller>(/<action>)', array('controller' => '(admin_.*|
 });
 
 // @todo дикий костыль благодаря админам
-if ($_SERVER['HTTP_HOST'] == 'c.yarmarka.biz')
+if (isset($_SERVER['HTTP_HOST']) AND $_SERVER['HTTP_HOST'] == 'c.yarmarka.biz')
 {
 	Route::set('master_save_object', 'add/master_save_object')
 		->defaults(array(

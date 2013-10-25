@@ -27,6 +27,9 @@ class Model_Object extends ORM {
 			'title' => array(
 				array(array($this, 'filter_title')),
 			),
+			'price' => array(
+				array('intval'),
+			),
 		);
 	}
 
@@ -209,7 +212,7 @@ class Model_Object extends ORM {
 
 	public function get_url()
 	{
-		return CI::site('obyavlenie/'.$this->category_obj->get_seo_name(NULL, $this->city_id).'/'.($this->seo_name ? $this->seo_name.'-' : '').$this->id,
+		return CI::site('obyavlenie/'.$this->category_obj->get_seo_without_geo().'/'.($this->seo_name ? $this->seo_name.'-' : '').$this->id,
 				'http', TRUE, Region::get_domain_by_city($this->city_id));
 	}
 
@@ -405,7 +408,7 @@ class Model_Object extends ORM {
 			return FALSE;
 		}
 
-		$str =trim(str_replace(array('{', '}'), '', $this->cities));
+		$str = trim(str_replace(array('{', '}'), '', $this->cities));
 		
 		if ($str)
 		{
@@ -438,7 +441,9 @@ class Model_Object extends ORM {
 		{
 			$this->cities = '{'.join(',', $this->cities).'}';
 		}
-		elseif ($this->city_id)
+		
+		// по дефолту заполняем cities только для новых объяв
+		if ($this->city_id AND ! $this->loaded())
 		{
 			$this->cities = '{'.$this->city_id.'}';
 		}
@@ -563,6 +568,38 @@ class Model_Object extends ORM {
 			->execute($this->_db);
 
 		return $this;
+	}
+
+	public function is_valid()
+	{
+		if ( ! $this->loaded())
+		{
+			return FALSE;
+		}
+
+		$validate_object = (bool) ($this->city_id > 0 AND ! empty($this->title) AND ! empty($this->user_text));
+		if ( ! $validate_object)
+		{
+			return FALSE;
+		}
+
+		$has_valid_contacts = FALSE;
+		foreach ($this->contacts->find_all() as $contact)
+		{
+			if ($contact->verified_user_id)
+			{
+				$has_valid_contacts = TRUE;
+				break;
+			}
+		}
+
+		if ( ! $has_valid_contacts)
+		{
+			return FALSE;
+		}
+
+
+		return TRUE;
 	}
 }
 

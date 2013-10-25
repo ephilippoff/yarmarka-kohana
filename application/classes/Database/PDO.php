@@ -50,10 +50,7 @@ class Database_PDO extends Kohana_Database_PDO {
 
 	public function insert_id()
 	{
-		$query = 'SELECT LASTVAL() AS insert_id';
-
-		$query = 'SELECT LASTVAL() AS insert_id';
-		$query=    DB::query(Database::SELECT, $query, false)->execute();
+		$query = DB::query(Database::SELECT, 'SELECT LASTVAL() AS insert_id', FALSE)->execute();
 		$insert_id = $query->get('insert_id');
 
 		return $insert_id;

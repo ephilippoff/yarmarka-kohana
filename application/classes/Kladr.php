@@ -10,7 +10,7 @@ class Kladr
 			->find();
 
 		$city_kladr_row = Model::factory('Kladr')->get_city_by_id($city_kladr_id);
-		$region = ORM::factory('Region')->where('kladr_id', '=', $city_kladr_row->region_id);
+		$region = ORM::factory('Region')->where('kladr_id', '=', $city_kladr_row->region_id)->find();
 		if ( ! $region->loaded())
 		{
 			// добавляем новый регион
@@ -27,12 +27,12 @@ class Kladr
 		{
 			// ищем координаты города
 			$coord = Ymaps::instance()->get_coord_by_name($city_kladr_row->city);
+			$location = ORM::factory('Location');
 			if ($coord)
 			{
 				// добавляем координату города в locations
 				list($lon, $lat) = $coord;
 
-				$location = ORM::factory('Location');
 				$location->region 	= $city_kladr_row->region;
 				$location->city 	= $city_kladr_row->city;
 				$location->kladr_id = $city_kladr_id;
@@ -74,7 +74,7 @@ class Kladr
 		{
 			$city_kladr_row = Model::factory('Kladr')->get_city_by_id($city_kladr_id);
 			
-			list($lon, $lat) = explode(',', $object_coordinates);
+			list($lat, $lon) = explode(',', $object_coordinates);
 			if ($lat AND $lon)
 			{
 				$location = ORM::factory('Location')->where_lat_lon($lat, $lon)

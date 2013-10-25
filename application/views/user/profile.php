@@ -30,6 +30,13 @@ $(document).ready(function() {
 })		
 </script>
 <div class="winner cabinet profile">
+	<?php $contact_classes = array(
+	1 => 'mobtel',
+	2 => 'tel',
+	3 => 'skype',
+	4 => 'icq',
+	5 => 'email',
+	) ?>
 	<section class="main-cont">
 		<div class="hheader persomal_room-header"><h1 class="ta-c">Личный кабинет</h1></div>
 		<div class="fl100 shadow-top z1 persomal_room">
@@ -55,8 +62,36 @@ $(document).ready(function() {
 					<?php endif; ?>
 					</article>
 
-					<article class="iinput-bl shadow-top smallcont mb100">
+					<article class="iinput-bl shadow-top smallcont">
 						<ul>
+							<li class="title">
+								<label><span><i class="name">Подтвержденные контакты:</i></span></label>
+								<div class="help-bl">
+									<div class="baloon">
+										<div class="alert-bl">
+											<div class="cont">
+												<div class="img"></div><div class="arr"></div>							                							
+												<p class="text"><span>Важно заполнить поле e-mail правильно, иначе вы не сможете активировать свой аккаунт следовательно лишитесь всяких фишек и плющек, а еще... &nbsp;  <a href="">>>></a></span></p>
+											</div>
+										</div>
+									</div>
+									<span class="href fr mr12"><i class="ico"></i></span>
+								</div>
+							</li>
+							
+								
+
+							
+							<li class="add-contact-li">
+								<span id="verified_user_contacts">
+								<?=Request::factory('block/verified_profile_contacts')->execute()?>
+								</span>
+							</li>							
+						</ul>
+					</article>
+					
+					<article class="iinput-bl shadow-top smallcont mb100">
+						<ul>												
 							<li class="title">
 								<label><span><i class="name">Контакты:</i></span></label>
 								<div class="help-bl">
@@ -70,21 +105,15 @@ $(document).ready(function() {
 									</div>
 									<span class="href fr mr12"><i class="ico"></i></span>
 								</div>
-							</li>
-							<li class="add-contact-li">
-								
-							<?php $contact_classes = array(
-								1 => 'mobtel',
-								2 => 'tel',
-								3 => 'skype',
-								4 => 'icq',
-								5 => 'email',
-							) ?>
+							</li>							
 							
-							<span id="user_contacts">
-							<?=Request::factory('block/user_profile_contacts')->execute()?>
-							</span>
-
+							<li class="add-contact-li">
+								<span id="user_contacts">
+								<?=Request::factory('block/user_profile_contacts')->execute()?>
+								</span>
+							</li>
+								
+								
 							<div class="input style2 inp-add-cont">
 																	
 								<div class="inp-cont-bl ">

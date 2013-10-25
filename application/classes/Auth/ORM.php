@@ -65,7 +65,7 @@ class Auth_ORM extends Kohana_Auth_ORM {
 	 */
 	protected function _login($user, $password, $remember)
 	{
-		$user = $this->check_user($user, $password);
+		$user = $this->check_user_by_password($user, $password);
 		if ( ! $user)
 		{
 			return FALSE;
@@ -85,7 +85,7 @@ class Auth_ORM extends Kohana_Auth_ORM {
 		return TRUE;
 	}
 
-	public function check_user($user, $password)
+	public function check_user_by_password($user, $password)
 	{
 		if ( ! is_object($user))
 		{
@@ -107,21 +107,7 @@ class Auth_ORM extends Kohana_Auth_ORM {
 		// If the passwords match, perform a login
 		if ($user->loaded() AND $user->passw === $password)
 		{
-			if ($user->is_blocked == 1)
-			{
-				if ($user->block_reason)
-				{
-					throw new Exception("Ваша учетная запись заблокирована. Причина: ".$user->block_reason,301);
-				}
-				else
-				{
-					throw new Exception("Ваша учетная запись заблокирована.",302);
-				}
-			}
-			elseif ($user->is_blocked == 2)
-			{
-				throw new Exception("Ваша учетная запись не активирована.", 300);
-			} 
+			$this->check_user($user);
 		}
 		else
 		{
@@ -129,6 +115,32 @@ class Auth_ORM extends Kohana_Auth_ORM {
 		}
 
 		return $user->loaded() ? $user : FALSE;
+	}
+
+	public function check_user($user)
+	{
+		if ( ! $user OR ! $user->loaded())
+		{
+			return FALSE;
+		}
+
+		if ($user->is_blocked == 1)
+		{
+			if ($user->block_reason)
+			{
+				throw new Exception("Ваша учетная запись заблокирована. Причина: ".$user->block_reason,301);
+			}
+			else
+			{
+				throw new Exception("Ваша учетная запись заблокирована.",302);
+			}
+		}
+		elseif ($user->is_blocked == 2)
+		{
+			throw new Exception("Ваша учетная запись не активирована.", 300);
+		} 
+
+		return TRUE;
 	}
 
 	public function create_token(Model_User $user)

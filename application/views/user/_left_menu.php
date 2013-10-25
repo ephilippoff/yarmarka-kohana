@@ -80,6 +80,18 @@
 				<?php else : ?>
 				<li><a href="<?=URL::site('user/profile')?>" class="clickable"><i class="ico "></i><span>Личные данные</span></a></li>
 				<?php endif; ?>
+				
+				<?php if (Request::current()->action() == 'units') : ?>
+				<li><i class="ico "></i><span><b>Подразделения</b></span></li>
+				<?php elseif (Auth::instance()->get_user()->org_type == 2) : ?>
+				<li><a href="<?=URL::site('user/units')?>" class="clickable"><i class="ico "></i><span>Подразделения</span></a></li>
+				<?php endif; ?>				
+
+				<?php if (Request::current()->action() == 'password') : ?>
+				<li><i class="ico "></i><span><b>Смена пароля</b></span></li>
+				<?php else : ?>
+				<li><a href="<?=URL::site('user/password')?>" class="clickable"><i class="ico "></i><span>Смена пароля</span></a></li>
+				<?php endif; ?>				
 
 				<?php if (Auth::instance()->get_user()->org_type == 2 AND ! Auth::instance()->get_user()->linked_to->loaded()) : ?>
 					<?php if (Request::current()->action() == 'office') : ?>
