@@ -228,17 +228,26 @@
 	                    					<div class="visible-bl">
 	                    						<div class="img">
 													<div class="img-container">
-														<img src="<?=!empty($unit->filename) ? Uploads::get_file_path($unit->filename, '136x136') : URL::site('images/mylogo_small.jpg')?>" alt="" />
+														<?php if (!empty($unit->filename)) : ?>
+															<img src="<?=Uploads::get_file_path($unit->filename, '136x136')?>" alt="" />
+														<?php else : ?>
+															<div class="ta-c">Фото отсутствует</div>
+														<?php endif ?>
 													</div>
 												
-												<div class="number">#<?=$unit->id?></div>
+
 												</div>
 	                    						<div class="content">
 	                    							
 	                    							<p class="title"><?=$unit->title ?><span class="inf">(<?=$unit->unit->title ?>)</span></p>
 	                    							
 													<?php
-													if($unit->location) : ?><p class="addr"><?php echo $unit->location->city.", ".$unit->location->address; ?> <span class="show-map toggle"><span class="show">на карте</span><span>свернуть карту</span></span></p>
+													if($unit->location) : ?>
+													<p class="addr"><?php echo $unit->location->city ?>
+														<?php if (trim($unit->location->address) != '') : ?>
+															, <?php echo $unit->location->address; ?> <span class="show-map toggle"><span class="show">на карте</span><span>свернуть карту</span></span>
+														<?php endif ?>
+													</p>
 	                    							<div class="map-bl">
 					                    				<div class="map"><div id="ymap_<?=$unit->id?>" style="width: 372px; height: 236px;"></div>
 															<script>
@@ -268,9 +277,9 @@
 															</script>
 		                                     			</div>
 					                    			</div><?php endif; ?>
-													<?php if( ! empty($unit->description)) : ?><div>
+													<?php if( ! empty($unit->description)) : ?><p class="pt10">
 														<?=nl2br($unit->description);?>
-													</div><?php endif; ?>
+													</p><?php endif; ?>
 													<div class="contacts ">
 														<ul>
 															<li class="title">
