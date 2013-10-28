@@ -197,7 +197,7 @@ class Controller_Ajax extends Controller_Template
 		{
 			if ($object->author != $user->id)
 			{
-				$object->author = $ojbect->author_company_id = $user->id;
+				$object->author = $object->author_company_id = $user->id;
 				$object->save();
 
 				$this->json['affected_rows']++;
@@ -420,7 +420,7 @@ class Controller_Ajax extends Controller_Template
 		{
 			$this->json['code'] = 400;
 		}
-		elseif ( ! $object->is_valid())
+		elseif ( ! $object->is_published() AND ! $object->is_valid())
 		{
 			$this->json['code'] = 401;
 			$this->json['edit_link'] = CI::site('user/edit_ad/'.$object->id.'#contacts');
