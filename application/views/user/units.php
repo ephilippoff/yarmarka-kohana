@@ -70,10 +70,7 @@ function ajaxUploadAndChange(fileEl) {
 				$('#'+fileInputId).change(function(){
 					ajaxUploadAndChange();
 				});
-				$.post( "/user/edit_unit_image", { id:parent_id, filename:json.filename_to_save }, function( data ) {
-					if(data.success) alert('Фото обновленно.');
-					else alert('Произошла ошибка!');
-				}, "json");
+				$.post( "/user/edit_unit_image", { id:parent_id, filename:json.filename_to_save }, function( data ) {}, "json");
 			} else if (json.error) {}
 		},
 		error: function (data, status, e) {
@@ -109,7 +106,7 @@ $(document).ready(function() {
 	});
 	
 	$('.mydel').click(function() {
-		if (confirm("Вы уверенны, что хотите удалить изображение?")) {
+		if (confirm("Вы уверены, что хотите удалить изображение?")) {
 			var parent_el = $(this).closest('article');
 			var parent_id = parent_el.attr('data-id');
 			$.post( "/user/remove_image", { id:parent_id }, function( data ) {
@@ -248,7 +245,7 @@ function render_autocomplete( ul, item ) {
 										</li>								
 										<li>
 											<div class="input style2">
-												<label><span><i class="name">Адресс</i></span></label>
+												<label><span><i class="name">Адрес</i></span></label>
 												<div class="inp-cont-bl ">
 													<div class="inp-cont">
 														<div class="inp"><input type="text" class="address" name="address" /></div>				
@@ -340,7 +337,13 @@ function render_autocomplete( ul, item ) {
 									<?php
 									if($unit->location)
 									{ 
-									?><p class="addr"><?php echo $unit->location->city.", ".$unit->location->address; ?> <span class="show-map toggle"><span class="show">на карте</span><span>свернуть карту</span></span></p>
+									?>
+									<p class="addr">
+											<?php echo $unit->location->city ?>
+											<?php if (trim($unit->location->address) != '') : ?>
+														, <?php echo $unit->location->address; ?> <span class="show-map toggle"><span class="show">на карте</span><span>свернуть карту</span></span>
+											<?php endif ?>
+									</p>
 									<div class="map-bl">
 										<div class="map">
 											<div id="ymap_<?=$unit->id?>" style="width: 372px; height: 236px;"></div>
