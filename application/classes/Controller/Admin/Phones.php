@@ -9,14 +9,15 @@ class Controller_Admin_Phones extends Controller_Admin_Template {
 		$offset = ($page AND $page != 1) ? ($page-1)*$limit : 0;
 
 		$contacts = ORM::factory('Contact')
-			->where('contact_type_id', 'IN', array(Model_Contact_Type::MOBILE, Model_Contact_Type::PHONE));
+			->where('contact_type_id', '=', Model_Contact_Type::PHONE)
+			->where('verified_user_id', 'IS', DB::expr('NOT NULL'))
+			->where('moderate', '=', 0);
 
 		$clone_to_count = clone $contacts;
 		$count_all = $clone_to_count->count_all();
 
 		$contacts->offset($offset)
 			->limit($limit)
-			->where('verified', '=', 0)
 			->order_by('id', 'desc');
 
 		$this->template->contacts	= $contacts->find_all();
@@ -32,7 +33,7 @@ class Controller_Admin_Phones extends Controller_Admin_Template {
 		));
 	}
 
-	public function action_moderate()
+	public function action_confirm()
 	{
 		$this->use_layout = FALSE;
 		$this->auto_render = FALSE;
@@ -45,10 +46,39 @@ class Controller_Admin_Phones extends Controller_Admin_Template {
 			throw new HTTP_Exception_404;
 		}
 
-		$verified = (int) $this->request->post('verified');
-
-		$contact->verified = ($verified ? 1 : -1);
+		$contact->moderate = 1;
 		$contact->save();
+
+		$this->response->body(json_encode($json));
+	}
+
+	public function action_decline()
+	{
+		$this->use_layout = FALSE;
+		$this->auto_render = FALSE;
+
+		$json = array('code' => 200);
+
+		$contact = ORM::factory('Contact', $this->request->param('id'));
+		if ( ! $contact->loaded())
+		{
+			throw new HTTP_Exception_404;
+		}
+
+		$contact->verified_user->delete_contact($contact->id);
+		$contact->verified_user_id = DB::expr('NULL');
+		$contact->save();
+
+		$objects = ORM::factory('Object')
+			->join('object_contacts')
+			->on('object.id', '=', 'object_contacts.object_id')
+			->where('contact_id', '=', $contact->id)
+			->find_all();
+		foreach ($objects as $object)
+		{
+			$object->is_published = 0;
+			$object->save();
+		}
 
 		$this->response->body(json_encode($json));
 	}
