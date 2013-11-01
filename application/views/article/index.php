@@ -6,7 +6,9 @@
 			</div>
 			<div class="shadow-top fl100 pt7"></div>
 			<aside class="w200 innerPage-leftAside">
-				<?=Request::factory('block/articles_menu/'.$article->id)->execute()?>
+				<h2 style="margin-top: 8px;">Все статьи</h2>
+				<br>
+				<?=HTML::render_menu($articles, $article->seo_name);?>
 			</aside><!--end main-cont aside-->
 			
 			<section class="main-section iPage-leftPading">	                			
@@ -25,17 +27,17 @@
 					</aside>
 					<?php endif; ?>
 					<div class="innerPage-cont iPage-rightPadding">
-						<?php if ($article->is_category) : ?>
-							<h2 class="big" style="text-align: center;"><?=$article->title?></h2>
-	
-							<ul class="iPage-ul">
-							<?php foreach ($article->articles->find_all() as $article) : ?>
-								<li><a href="<?=URL::site(Route::get('article')->uri(array('seo_name' => $article->seo_name)))?>"><?=$article->title?></a></li>
-							<?php endforeach; ?>
-							</ul>
-						<?php else : ?>
+						<article class="iPage-article">
+							<h1 class="big" style="text-align: center;"><?=$article->title?></h1>
 							<?=$article->text?>
-						<?php endif; ?>
+						</article>
+						<?php if ($article->is_category) : ?>
+							<ul class="iPage-ul">
+								<?php foreach ($article->articles->find_all() as $article) : ?>
+									<li><a href="<?=URL::site(Route::get('article')->uri(array('seo_name' => $article->seo_name)))?>"><?=$article->title?></a></li>
+								<?php endforeach; ?>
+							</ul>
+						<?php endif; ?>						
 					</div>
 					
 				</div>
