@@ -187,7 +187,15 @@ class Controller_Ajax extends Controller_Template
 	{
 		$contact 	= ORM::factory('Contact', $this->request->param('id'));
 		$user 		= Auth::instance()->get_user();
-		if ( ! $user OR ! $contact->loaded() OR $contact->verified_user_id !== $user->id)
+		if ( ! $user OR ! $contact->loaded() 
+			OR $contact->verified_user_id !== $user->id 
+			OR 
+			(
+				$contact->contact_type_id == Model_Contact_Type::PHONE 
+				AND
+				$contact->moderate == 0
+			)
+		)
 		{
 			throw new HTTP_Exception_404;
 		}
