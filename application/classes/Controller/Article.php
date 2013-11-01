@@ -41,7 +41,7 @@ class Controller_Article extends Controller_Template {
 		
 		$article = ORM::factory('Article')
 			->where('seo_name', '=', $this->request->param('seo_name'))
-//			->where('is_visible', '=', 1)
+			->where('is_visible', '=', 1)
 			->find();
 		
 		if ( ! $article->loaded())
@@ -53,7 +53,7 @@ class Controller_Article extends Controller_Template {
 		Seo::set_description($article->get_meta_description());
 
 		$this->template->articles = ORM::factory('Article')
-//				->where('is_visible', '=', 1)
+				->where('is_visible', '=', 1)
 				->find_all();
 
 		$this->template->article = $article;

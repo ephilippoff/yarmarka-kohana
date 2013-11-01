@@ -51,6 +51,12 @@ class Controller_Admin_Articles extends Controller_Admin_Template {
 				{
 					$_POST['is_category'] = 0;
 				}
+				
+				if (empty($_POST['is_visible']))
+				{
+					$_POST['is_visible'] = 0;
+				}		
+				
 				$article->values($_POST)
 				->save();
 

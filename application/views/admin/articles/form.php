@@ -62,6 +62,13 @@ $(document).ready(function() {
 			<input type="checkbox" name="is_category" value="1" id="is_category" <?php if (Arr::get($_POST, 'is_category', @$article->is_category)) echo 'checked' ?>>
 		</div>
 	</div>
+	
+	<div class="control-group">
+		<label class="control-label">Опубликовать</label>
+		<div class="controls">
+			<input type="checkbox" name="is_visible" value="1" id="is_visible" <?php if (Arr::get($_POST, 'is_visible', @$article->is_visible)) echo 'checked' ?>>
+		</div>
+	</div>	
 
 	<div class="control-group">
 		<label class="control-label">Parent</label>
