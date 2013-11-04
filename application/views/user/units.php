@@ -3,6 +3,7 @@ label.filebutton{
     overflow: visible;
 }
 </style>
+<script type="text/javascript" src="/js/adaptive/jquery.cookie.js"></script>
 
 <script src="http://api-maps.yandex.ru/2.0-stable/?load=package.standard&lang=ru-RU" type="text/javascript"></script>
 
@@ -174,7 +175,7 @@ function render_autocomplete( ul, item ) {
 							</div>
 						</article>-->
 						
-						<a href="" class="btn-blue2 btn-reduct ml10 mt10 mb10"><span>Добавить</span></a>
+						<li class="info-tooltip" data-controller-character="advert"><a href="" class="btn-blue2 btn-reduct ml10 mt10 mb10"><span>Добавить</span></a>
 					<script> 
 						$('.btn-reduct').click(function(e){
 							e.preventDefault();
@@ -225,9 +226,10 @@ function render_autocomplete( ul, item ) {
 													<div class="inp-cont">
 														<select class="iselect " name="unit_id" id="unit_id">
 															<option value="">-- выберите тип --</option>
-	                                                        <? foreach ($units as $unit):?>
+
+	                                                        <?php foreach ($units as $unit):?>
 	                                                            <option value="<?=$unit->id?>"><?=$unit->title?></option>
-	                                                        <? endforeach;?>
+	                                                        <?php endforeach; ?>
 														</select>
 													</div>
 												</div>
@@ -347,29 +349,23 @@ function render_autocomplete( ul, item ) {
 									<div class="map-bl">
 										<div class="map">
 											<div id="ymap_<?=$unit->id?>" style="width: 372px; height: 236px;"></div>
-											<script>
-											    var myMap_<?=$unit->id?>;
-											    ymaps.ready(function(){
-											    	var myGeocoder = ymaps.geocode('<?=$unit->location->city.", ".$unit->location->address?>');
-													myGeocoder.then(
-													    function (res) {
-													        var coords = res.geoObjects.get(0).geometry.getCoordinates(); 
-													        myMap_<?=$unit->id?> = new ymaps.Map ("ymap_<?=$unit->id?>", {
-													            center: coords,
-													            zoom: 15,
-													        });
 
-													        myMap_<?=$unit->id?>.controls.add("zoomControl").add("mapTools").add(new ymaps.control.TypeSelector(["yandex#map", "yandex#satellite", "yandex#hybrid", "yandex#publicMap"]));
+											<script type="text/javascript">
+										        ymaps.ready(init_<?=$unit->id?>);
+										 
+										        function init_<?=$unit->id?> () {
+										            var myGeocoder = [<?=$unit->location->lat.", ".$unit->location->lon?>];
+										            var myMap = new ymaps.Map('ymap_<?=$unit->id?>', {
+										                    center: myGeocoder, 
+										                    zoom: 13
+										                });
+													var myPlacemark = new ymaps.Placemark(
+														myGeocoder        
+													);
+													myMap.geoObjects.add(myPlacemark);
+										        }
+										    </script>
 
-
-													        myMap_<?=$unit->id?>.geoObjects.add(new ymaps.Placemark(coords, { 
-													            hintContent: '<?=$unit->title?>', 
-													            balloonContent: '<?=$unit->title.", ".$unit->location->city.", ".$unit->location->address?>' 
-													        }));
-														}
-													); 
-											    });
-											</script>
 										</div>
 									</div>
 									<?php
