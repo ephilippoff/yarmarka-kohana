@@ -23,6 +23,7 @@
 	->js('jquery.carouFredSel-6.2.0.js')
 	->js('chosen.jquery.js')
 	->js('jquery.menu-aim.js')
+	->js('libs.js')		
 	->js('js.js')
 	->js('jquery.openxtag.min.js')
 	.$_assets
