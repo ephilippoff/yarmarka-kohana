@@ -2,7 +2,7 @@
 
 class HTML extends Kohana_HTML {
 	
-	public static function render_menu($categories, $active_category_name, $parent_id = 0)
+	public static function render_menu($categories, $parent_id = 0)
 	{
 		$array = array();
 		
@@ -13,8 +13,7 @@ class HTML extends Kohana_HTML {
 			foreach ($array[$parent_id] as $value)
 			{
 				echo '<li>';
-				echo '<a href="/'.Route::get('article')->uri(array('seo_name' => $value['seo_name'])).'">';				
-				echo $value['title'];
+				echo '<a href="/'.Route::get('article')->uri(array('seo_name' => $value['seo_name'])).'">'.$value['title'].'</a>';				
 
 				if (isset($array[$value['id']]))
 				{
@@ -23,7 +22,7 @@ class HTML extends Kohana_HTML {
 					echo '</ul>';
 				}
 				
-				echo '</a></li>';                        
+				echo '</li>';                        
 			}
 
 		} 

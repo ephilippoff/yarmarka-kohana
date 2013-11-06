@@ -1,4 +1,4 @@
-<div class="winner">
+<div class="winner article">
 	<section class="main-cont ">
 		<div class="m_poll">
 			<div class="crumbs" style="margin: 4px 0 6px;">
@@ -8,7 +8,7 @@
 			<aside class="w200 innerPage-leftAside">
 				<h2 style="margin-top: 8px;">Все статьи</h2>
 				<br>
-				<?=HTML::render_menu($articles, $article->seo_name);?>
+				<?=HTML::render_menu($articles);?>
 			</aside><!--end main-cont aside-->
 			
 			<section class="main-section iPage-leftPading">	                			
