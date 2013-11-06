@@ -187,7 +187,15 @@ class Controller_Ajax extends Controller_Template
 	{
 		$contact 	= ORM::factory('Contact', $this->request->param('id'));
 		$user 		= Auth::instance()->get_user();
-		if ( ! $user OR ! $contact->loaded() OR $contact->verified_user_id !== $user->id)
+		if ( ! $user OR ! $contact->loaded() 
+			OR $contact->verified_user_id !== $user->id 
+			OR 
+			(
+				$contact->contact_type_id == Model_Contact_Type::PHONE 
+				AND
+				$contact->moderate == 0
+			)
+		)
 		{
 			throw new HTTP_Exception_404;
 		}
@@ -197,7 +205,7 @@ class Controller_Ajax extends Controller_Template
 		{
 			if ($object->author != $user->id)
 			{
-				$object->author = $ojbect->author_company_id = $user->id;
+				$object->author = $object->author_company_id = $user->id;
 				$object->save();
 
 				$this->json['affected_rows']++;
@@ -420,7 +428,7 @@ class Controller_Ajax extends Controller_Template
 		{
 			$this->json['code'] = 400;
 		}
-		elseif ( ! $object->is_valid())
+		elseif ( ! $object->is_published() AND ! $object->is_valid())
 		{
 			$this->json['code'] = 401;
 			$this->json['edit_link'] = CI::site('user/edit_ad/'.$object->id.'#contacts');

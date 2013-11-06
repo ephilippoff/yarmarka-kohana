@@ -11,13 +11,13 @@ $(document).ready(function() {
 
 	$('.moderate').on('click', function(){
 		var obj = this;
-		$.post($(this).attr('href'), {verified:$(this).data('verified')}, function(json){
+		$.getJSON($(this).attr('href'), function(json){
 			if (json.code == 200) {
 				console.log(obj);
 				console.log($(obj).parents('tr'));
 				$(obj).parents('tr').remove();
 			}
-		}, 'json');
+		});
 
 		return false;
 	});
@@ -28,29 +28,23 @@ $(document).ready(function() {
 	<tr>
 		<th>#</th>
 		<th>Contact</th>
-		<th>Contact clear</th>
-		<th>Object</th>
 		<th>User</th>
 		<th></th>
 	</tr>
 	<?php foreach ($contacts as $contact) : ?>
 	<tr>
 		<td><?=$contact->id?></td>
-		<td><?=$contact->contact?></td>
-		<td><?=$contact->contact_clear?></td>
+		<td><?=Text::format_phone($contact->contact)?></td>
 		<td>
-			<?php if ($contact->object->loaded()) : ?>
-				<?=$contact->object->title?>
+			<?php if ($contact->verified_user->loaded()) : ?>
+				<a href="<?=URL::site('khbackend/users/user_info/'.$contact->verified_user->id)?>" onClick="return popup(this);">
+					<?=$contact->verified_user->get_user_name()?>
+				</a>
 			<?php endif ?>
 		</td>
 		<td>
-			<?php if ($contact->user->loaded()) : ?>
-				<?=$contact->user->get_user_name()?>
-			<?php endif ?>
-		</td>
-		<td>
-			<a href="<?=URL::site('khbackend/phones/moderate/'.$contact->id)?>" data-verified="1" class="moderate btn btn-success">Прошел модерацию</a>
-			<a href="<?=URL::site('khbackend/phones/moderate/'.$contact->id)?>" data-verified="0" class="moderate btn btn-danger">Не прошел</a>
+			<a href="<?=URL::site('khbackend/phones/confirm/'.$contact->id)?>" class="moderate btn btn-success">Верифицировать</a>
+			<a href="<?=URL::site('khbackend/phones/decline/'.$contact->id)?>" class="moderate btn btn-danger">Отменить верификацию</a>
 		</td>
 	</tr>
 	<?php endforeach; ?>
