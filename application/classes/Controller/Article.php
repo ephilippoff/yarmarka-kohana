@@ -37,7 +37,7 @@ class Controller_Article extends Controller_Template {
 
 	public function action_index()
 	{
-		$this->assets->js('jquery.treeview.js');
+		//$this->assets->js('jquery.treeview.js');
 		
 		$article = ORM::factory('Article')
 			->where('seo_name', '=', $this->request->param('seo_name'))
