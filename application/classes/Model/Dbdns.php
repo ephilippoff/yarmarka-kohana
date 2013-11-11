@@ -11,7 +11,7 @@ class Model_Dbdns extends Model_Database
 			return FALSE;
 		}
 		
-		$query = DB::insert('records', array('name'))->values(array($object_id.'ya24.biz'));
+		$query = DB::insert('records', array('name'))->values(array($object_id.'.ya24.biz'));
 
 		return $query->execute($this->_db);
 	}
