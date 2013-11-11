@@ -5,6 +5,7 @@
 			<ul class="fl">
 				<li><a href="http://feedback.yarmarka.biz">Техподдержка</a></li>
 				<li><a href="<?=CI::site('add/step/1/0')?>">Подать объявление</a></li>
+				<li><a href="/<?php echo Route::get('article')->uri(array('seo_name' => 'reklamodatelyam'))?>">Рекламодателям</a></li>
 			</ul>
 			<ul class="fr">
 				<li><a href="<?=URL::site('user/profile')?>">Личный кабинет</a></li>
