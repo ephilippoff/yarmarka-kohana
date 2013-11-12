@@ -18,6 +18,13 @@ class Model_Contact_Type extends ORM {
 	{
 		return in_array(intval($contact_type_id), array(self::PHONE, self::MOBILE), TRUE);
 	}
+
+	public static function get_verifiyng_types()
+	{
+		return array(
+			self::EMAIL, self::PHONE, self::MOBILE
+		);
+	}
 }
 
 /* End of file Type.php */
