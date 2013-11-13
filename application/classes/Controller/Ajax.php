@@ -370,30 +370,10 @@ class Controller_Ajax extends Controller_Template
 			$this->json['date_expiration'] = date('d.m.y', strtotime($date_expiration));
 			$this->json['code'] = 200;
 		}
-		
-		if ($object->is_bad == 1 AND $object->in_archive)
+		else
 		{
-			$date_expiration = null;
-
-			switch ($lifetime) {
-				case "1m":
-					$date_expiration = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . "+1 month"));
-					break;
-				case "2m":
-					$date_expiration = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . "+2 month"));
-					break;
-				case "3m":
-					$date_expiration = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . "+3 month"));
-					break;
-				default:
-					$date_expiration = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . "+14 days"));
-					break;
-			}
-			
-			$object->prolong($date_expiration, TRUE, TRUE);
-			
-			$this->json['date_expiration'] = date('d.m.y', strtotime($date_expiration));
 			$this->json['code'] = 300;
+			$this->json['edit_link'] = CI::site('user/edit_ad/'.$object->id.'#contacts');
 		}
 	}
 
