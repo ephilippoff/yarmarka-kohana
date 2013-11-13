@@ -176,7 +176,7 @@ class Model_User extends Model_Auth_User {
 		return $query->find_all();
 	}
 
-	public function add_contact($contact_type_id, $contact_str)
+	public function add_contact($contact_type_id, $contact_str, $moderate = 0)
 	{
 		if ( ! $this->loaded())
 		{
@@ -186,6 +186,7 @@ class Model_User extends Model_Auth_User {
 		$contact = ORM::factory('Contact');
 		$contact->contact_type_id	= intval($contact_type_id);
 		$contact->contact			= trim($contact_str);
+		$contact->moderate 			= intval($moderate);
 		$contact = $contact->create();
 
 		if ( ! $contact->has('users', $this->id))
@@ -196,7 +197,7 @@ class Model_User extends Model_Auth_User {
 		return $contact;
 	}
 
-	public function add_verified_contact($contact_type_id, $contact_str)
+	public function add_verified_contact($contact_type_id, $contact_str, $moderate = 0)
 	{
 		if ( ! $this->loaded())
 		{
@@ -213,7 +214,7 @@ class Model_User extends Model_Auth_User {
 		}
 
 		// create contact if not exists
-		$contact = $this->add_contact($contact_type_id, $contact_str);
+		$contact = $this->add_contact($contact_type_id, $contact_str, $moderate);
 		// remove contact from other users
 		DB::delete('user_contacts')
 			->where('contact_id', '=', $contact->id)

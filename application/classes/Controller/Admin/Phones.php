@@ -9,7 +9,7 @@ class Controller_Admin_Phones extends Controller_Admin_Template {
 		$offset = ($page AND $page != 1) ? ($page-1)*$limit : 0;
 
 		$contacts = ORM::factory('Contact')
-			->where('contact_type_id', '=', Model_Contact_Type::PHONE)
+			->where('contact_type_id', 'IN', array(Model_Contact_Type::PHONE, Model_Contact_Type::MOBILE))
 			->where('verified_user_id', 'IS', DB::expr('NOT NULL'))
 			->where('moderate', '=', 0);
 

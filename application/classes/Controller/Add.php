@@ -318,7 +318,7 @@ class Controller_Add extends Controller_Template {
 			$object->city_id			= $city->id;
 			$object->ip_addr 			= Request::$client_ip;
 			
-			if ($is_edit) // если это редактирвоание, то is_published не трогаем
+			if ( ! $is_edit) // если это редактирвоание, то is_published не трогаем
 			{
 				$object->is_published 	= $user->loaded() ? 1 : 0;
 			}

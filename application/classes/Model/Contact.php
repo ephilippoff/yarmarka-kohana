@@ -127,6 +127,13 @@ class Model_Contact extends ORM {
 		return parent::create($validation);
 	}
 
+	public function is_verified_for_session($session_id)
+	{
+		return (bool) ORM::factory('Verified_Contact')->where('contact_id', '=', $this->id)
+			->where('session_id', '=', $session_id)
+			->count_all();
+	}
+
 	public function is_verified($session_id)
 	{
 		if ( ! $this->loaded())
@@ -139,9 +146,7 @@ class Model_Contact extends ORM {
 			return TRUE;
 		}
 
-		return (bool) ORM::factory('Verified_Contact')->where('contact_id', '=', $this->id)
-			->where('session_id', '=', $session_id)
-			->count_all();
+		return $this->is_verified_for_session($session_id);
 	}
 
 	public function get_contact_value()
