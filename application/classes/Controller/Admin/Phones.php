@@ -91,7 +91,7 @@ class Controller_Admin_Phones extends Controller_Admin_Template {
 				array(
 					'UserName' => $contact->verified_user->fullname ? $contact->verified_user->fullname : $contact->verified_user->login,
 					'phone'	=> $contact->contact,
-					'objects' => array_slice($objects, 0, 5),
+					'objects' => $objects,
 				)
 			)->render();
 			Email::send($contact->verified_user->email, Kohana::$config->load('email.default_from'), $subj, $msg);
