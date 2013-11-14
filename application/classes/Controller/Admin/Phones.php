@@ -84,6 +84,19 @@ class Controller_Admin_Phones extends Controller_Admin_Template {
 				->execute();
 		}
 
+		if ($contact->verified_user->email)
+		{
+			$subj = 'Сообщение от модератора сайта "Ярмарка - онлайн"';
+			$msg = View::factory('emails/decline_contact', 
+				array(
+					'UserName' => $contact->verified_user->fullname ? $contact->verified_user->fullname : $contact->verified_user->login,
+					'phone'	=> $contact->contact,
+					'objects' => array_slice($objects, 0, 5),
+				)
+			)->render();
+			Email::send($user->email, Kohana::$config->load('email.default_from'), $subj, $msg);
+		}
+
 		$contact->verified_user->delete_contact($contact->id);
 		$contact->verified_user_id = DB::expr('NULL');
 		$contact->save();
