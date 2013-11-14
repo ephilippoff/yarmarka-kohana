@@ -20,7 +20,7 @@
 						<?php if ($contact->contact_type_id == Model_Contact_Type::EMAIL AND $user->email != $contact->contact_clear) : ?>
 							<span class="like_link main_email" data-id="<?=$contact->id?>" style="cursor:pointer">Сделать основным</span><br>
 						<?php endif ?>
-						<?php if ( ! ($contact->contact_type_id === Model_Contact_Type::PHONE AND $contact->moderate == 0) ) : ?>
+						<?php if (FALSE AND ! ($contact->contact_type_id === Model_Contact_Type::PHONE AND $contact->moderate == 0) ) : ?>
 						<span class="like_link link_objects" data-id="<?=$contact->id?>">Привязать объявления к учетке</span>
 						<?php endif ?>
 					</span>	

@@ -65,24 +65,28 @@ class Controller_Admin_Phones extends Controller_Admin_Template {
 			throw new HTTP_Exception_404;
 		}
 
-		$contact->verified_user->delete_contact($contact->id);
-		$contact->verified_user_id = DB::expr('NULL');
-		$contact->save();
-
 		$objects = ORM::factory('Object')
 			->join('object_contacts')
 			->on('object.id', '=', 'object_contacts.object_id')
 			->where('contact_id', '=', $contact->id)
+			->where('author', '=', $contact->verified_user_id)
 			->find_all();
 
-		DB::delete('object_contacts')
-			->where('contact_id', '=', $contact->id)
-			->execute($this->_db);
+
 		foreach ($objects as $object)
 		{
 			$object->is_published = 0;
 			$object->save();
+
+			DB::delete('object_contacts')
+				->where('object_id', '=', $object->id)
+				->where('contact_id', '=', $contact->id)
+				->execute();
 		}
+
+		$contact->verified_user->delete_contact($contact->id);
+		$contact->verified_user_id = DB::expr('NULL');
+		$contact->save();
 
 		$this->response->body(json_encode($json));
 	}

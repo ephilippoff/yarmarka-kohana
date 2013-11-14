@@ -185,6 +185,8 @@ class Controller_Ajax extends Controller_Template
 
 	public function action_link_objects_by_contact()
 	{
+		throw new HTTP_Exception_404;
+		
 		$contact 	= ORM::factory('Contact', $this->request->param('id'));
 		$user 		= Auth::instance()->get_user();
 		if ( ! $user OR ! $contact->loaded() 
