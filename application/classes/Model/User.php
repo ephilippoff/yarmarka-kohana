@@ -266,10 +266,10 @@ class Model_User extends Model_Auth_User {
 
 	public function get_user_name()
 	{
-		if ($this->fullname)
+		if (trim($this->fullname))
 			return $this->fullname;
 
-		if ($this->login)
+		if (trim($this->login))
 			return $this->login;
 
 		return $this->email;
