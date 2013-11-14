@@ -94,7 +94,7 @@ class Controller_Admin_Phones extends Controller_Admin_Template {
 					'objects' => array_slice($objects, 0, 5),
 				)
 			)->render();
-			Email::send($user->email, Kohana::$config->load('email.default_from'), $subj, $msg);
+			Email::send($contact->verified_user->email, Kohana::$config->load('email.default_from'), $subj, $msg);
 		}
 
 		$contact->verified_user->delete_contact($contact->id);
