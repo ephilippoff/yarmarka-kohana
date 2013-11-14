@@ -10,5 +10,8 @@
 			</li>
 			<?php endforeach; ?>
 		</ul>
+		<ul class="bottom">
+			<li><a href="/article/soveti"><span class="name">Советы от Ярмарки</span></a></li>
+		</ul>		
 	</div> 
 </div>
