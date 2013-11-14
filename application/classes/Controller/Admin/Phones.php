@@ -78,6 +78,11 @@ class Controller_Admin_Phones extends Controller_Admin_Template {
 		{
 			$object->is_published = 0;
 			$object->save();
+
+			DB::delete('object_contacts')
+				->where('object_id', '=', $this->id)
+				->where('contact_id', '=', $contact->id)
+				->execute($this->_db);
 		}
 
 		$this->response->body(json_encode($json));

@@ -17,3 +17,4 @@ application/config/local/*.php
 application/config/common.php
 application/config/database.php
 /nbproject
+/.wakatime-project
