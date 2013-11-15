@@ -749,49 +749,49 @@ class Controller_Ajax extends Controller_Template
 	}
 
 //------------------------------------------------------------------
-	// public function action_get_hints_by_page()
-	// {
-	// 	$this->json = array();
+	 public function action_ajax_get_hints_by_page()
+	 {
+	 	$this->json = array();
 
-	// 	$controller = trim($this->request->post('controller'));
+	 	$controller = trim($this->request->post('controller'));
 
-	// 	$hints = Model::factory('Notice')->GetHintsByController($controller);
+	 	$hints = Model::factory('Notice')->GetHintsByController($controller);
 		
-	// 	foreach ($hints as $hint)
-	// 	{
-	// 		//var_dump($hint);
-	// 		$data = array(
-	// 			'identify'	=> $hint->identify,
-	// 			'left'	=> $hint->left,
-	// 			'tops'	=> $hint->top,
-	// 			'width'	=> $hint->width,
-	// 			'height' => $hint->height,
-	// 			'html' 	=> View::factory('block/hint')->bind('hint', $hint)->render()
-	// 		);
+	 	foreach ($hints as $hint)
+	 	{
+	 		//var_dump($hint);
+	 		$data = array(
+	 			'identify'	=> $hint->identify,
+	 			'left'	=> $hint->left,
+	 			'tops'	=> $hint->top,
+	 			'width'	=> $hint->width,
+	 			'height' => $hint->height,
+	 			'html' 	=> View::factory('block/hint')->bind('hint', $hint)->render()
+	 		);
 
-	// 		$this->json[] = $data;
+	 		$this->json[] = $data;
 
-	// 	}
-	// }
+	 	}
+	 }
 
-	public function  action_get_hints_by_page()
-	{
-		$controllerCharacter = trim($this->request->query('controller_character'));
-		
-		$hint = Model::factory('Notice')->getHintByCChar($controllerCharacter);
-		
-		if (!$hint) return;
-
-		$data = array(
-			'identify' => $hint->identify,
-			'left'	=> $hint->left,
-			'tops'	=> $hint->top,
-			'width'	=> $hint->width,
-			'height' => $hint->height,
-			'html' 	=> View::factory('block/hint')->bind('hint', $hint)->render()
-		);
-
-		$this->json['hint'] = $data;
-	}
+//	public function  action_get_hints_by_page()
+//	{
+//		$controllerCharacter = trim($this->request->query('controller_character'));
+//		
+//		$hint = Model::factory('Notice')->getHintByCChar($controllerCharacter);
+//		
+//		if (!$hint) return;
+//
+//		$data = array(
+//			'identify' => $hint->identify,
+//			'left'	=> $hint->left,
+//			'tops'	=> $hint->top,
+//			'width'	=> $hint->width,
+//			'height' => $hint->height,
+//			'html' 	=> View::factory('block/hint')->bind('hint', $hint)->render()
+//		);
+//
+//		$this->json['hint'] = $data;
+//	}
 //--------------------------------------------------------------
 }

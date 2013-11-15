@@ -1,6 +1,5 @@
 <p class="title" aling = "center"><b><?=$hint->title?></b></p>
 <div class="close-x" onclick="close_x(this)"></div>
-<hr>
 <div class="descr"><?=$hint->description?></div>
 <label>
     <input 

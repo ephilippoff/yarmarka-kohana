@@ -66,8 +66,8 @@ class Controller_User extends Controller_Template {
 			->js('jquery-ui/ui/minified/jquery.ui.position.min.js')
 			->js('jquery-ui/ui/minified/jquery.ui.menu.min.js')
 			->js('jquery-ui/ui/minified/jquery.ui.autocomplete.min.js')
-			->js('jquery.tooltipster.min.js')
-			->css('tooltipster.css')
+//			->js('jquery.tooltipster.min.js')
+//			->css('tooltipster.css')
 			->css('jquery-ui/themes/base/minified/jquery-ui.min.css');
 			//->js('chosen.jquery.js')
 			//->js('profile.js');
