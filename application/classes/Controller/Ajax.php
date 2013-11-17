@@ -757,6 +757,219 @@ class Controller_Ajax extends Controller_Template
 		$this->json['email'] = $user->email;
 	}
 
+	public function action_check_contact()
+	{
+		$session_id 		= Arr::get($_POST, 'session_id', session_id());
+		$current_user 		= Auth::instance()->get_user();
+		$contact 			= trim($this->request->post('contact'));
+		$contact_type_id 	= intval($this->request->post('contact_type_id'));
+
+		$real_contact_type_id = $contact_type_id;
+
+		// clear contact phone
+		if (Model_Contact_Type::is_phone($contact_type_id))
+		{
+			$contact = Text::clear_phone_number($contact);
+			$real_contact_type_id = Model_Contact_Type::detect_contact_type($contact);
+		}
+
+		if ( ! $contact)
+		{
+			$this->json['code'] = 500;
+		}
+		elseif ($real_contact_type_id != $contact_type_id)
+		{
+			$this->json['code'] = 401; // wrong contact type id
+		}
+		else
+		{
+			// lookig for contact
+			$exists_contact = ORM::factory('Contact')->where('contact_clear', '=', $contact)->find();
+			if ($exists_contact->loaded())
+			{
+				if ($current_user AND (int) $exists_contact->verified_user_id === (int) $current_user->id)
+				{
+					// contact already belongs to user
+					$this->json['code'] = 201;
+				}
+				elseif ($exists_contact->is_verified($session_id))
+				{
+					// contact verified for current session
+					$this->json['code'] = 201;
+				}
+				elseif ($exists_contact->verified_user_id AND $exists_contact->contact_type_id == 2)
+				{
+					// it is home phone and belongs to other user
+					$this->json['code'] = 400;
+				}
+			}
+		}
+	}
+
+	public function action_verify_home_phone()
+	{
+		$session_id 	= Arr::get($_POST, 'session_id', session_id());
+		$contact_clear 	= Text::clear_phone_number($this->request->post('contact'));
+		$contact 		= ORM::factory('Contact')->where('contact_clear', '=', $contact_clear)->find();
+
+		if ($contact->loaded() AND $contact->verified_user_id)
+		{
+			$this->json['code'] = 400;
+		}
+		elseif ($contact->loaded())
+		{
+			ORM::factory('Verified_Contact')->verify_for_session($session_id);
+
+			$contact->moderate = 0;
+			$contact->save();
+		}
+		elseif ( ! $contact->loaded())
+		{
+			$contact = ORM::factory('Contact')
+				->values(array('contact' => $contact_clear, 'contact_type_id' => Model_Contact_Type::PHONE))
+				->create();
+
+			$contact->verify_for_session($session_id);
+		}
+	}
+
+	public function action_check_contact_code()
+	{
+		$session_id = Arr::get($_POST, 'session_id', session_id());
+		$contact 	= ORM::factory('Contact', $this->request->param('id'));
+		if ( ! $contact->loaded())
+		{
+			throw new HTTP_Exception_404;
+		}
+
+		$code = trim($this->request->post('code'));
+		if (($code) AND ($contact->verification_code) AND ($code === trim($contact->verification_code)))
+		{
+			$this->json['code'] = 200;
+
+			// верифицируем контакт
+			$contact->verify_for_session($session_id);
+			// ставим как отмодерированный
+			$contact->moderate = 0;
+			$contact->save();
+		}
+		else
+		{
+			$this->json['code'] = 500;
+		}
+	}
+
+	public function action_sent_verification_code()
+	{
+		$session_id 		= Arr::get($_POST, 'session_id', session_id());
+		$current_user 		= Auth::instance()->get_user();
+		$contact_type_id 	= (int) $this->request->post('contact_type_id');
+		$real_contact_type_id = $contact_type_id;
+
+		$force = $this->json['force'] = (bool) $this->request->post('force');
+		switch ($contact_type_id) {
+			case 1:
+				$contact = trim($this->request->post('phone'));
+				break;
+			case 5:
+				$contact = trim($this->request->post('email'));
+				break;
+			
+			default:
+				$contact = $this->request->post('contact');
+				break;
+		}
+		$code 				= NULL;
+		$contact_id 		= NULL;
+
+		if (Model_Contact_Type::is_phone($contact_type_id))
+		{
+			$contact_clear = Text::clear_phone_number($contact);
+			$real_contact_type_id = Model_Contact_Type::detect_contact_type($contact_clear);
+		}
+		else
+		{
+			$contact_clear = trim($contact);
+		}
+
+		if ( ! $contact)
+		{
+			throw new HTTP_Exception_404;
+		}
+
+		if ($real_contact_type_id != $contact_type_id)
+		{
+			$this->json['code'] = 401;
+			return;
+		}
+
+		// lookig for contact
+		$exists_contact = ORM::factory('Contact')->where('contact_clear', '=', $contact_clear)->find();
+		if ($exists_contact->loaded())
+		{
+			$this->json['contact_id'] = $exists_contact->id;
+			if ($current_user AND (int) $exists_contact->verified_user_id === (int) $current_user->id)
+			{
+				$this->json['code'] = 301;
+				$this->json['msg'] = 'Контакт уже подтвержден';
+			}
+			elseif ($exists_contact->verified_user_id)
+			{
+				$this->json['code'] = 302;
+				$this->json['msg'] = 'Контакт принадлежит другому пользователю';
+			}
+			else
+			{
+				// контакт существует и еще не подтвержден ни одним пользователем
+				$code 		= Text::random('numeric', 5);
+			}
+		}
+		else
+		{
+			// сохраняем новый контакт
+			$code 		= Text::random('numeric', 5);
+			$exists_contact = ORM::factory('Contact')
+				->values(array('contact' => $contact, 'contact_type_id' => $contact_type_id))
+				->create();
+		}
+
+
+		if ($code AND $exists_contact->loaded())
+		{
+			$this->json['contact_id'] = $exists_contact->id;
+			if (ORM::factory('Sms')->cnt_by_phone($exists_contact->contact_clear, $session_id) AND ! $force)
+			{
+				$this->json['code'] = 303;
+				$this->json['msg'] = 'SMS уже отрпавлено на этот номер, смотрите код в телефоне';
+			}
+			elseif ($contact_type_id == Model_Contact_Type::MOBILE 
+				AND ORM::factory('Sms')->cnt_by_session_id($session_id) >= Kohana::$config->load('user.max_sms'))
+			{
+				$this->json['code'] = 304;
+				$this->json['msg'] = 'Вы исчерпали лимит SMS на сегодня';
+			}
+			else
+			{
+				$exists_contact->verification_code = $code;
+				$exists_contact->save();
+
+				if ($contact_type_id == Model_Contact_Type::MOBILE)
+				{
+					// высылаем код в смс
+					Sms::send($exists_contact->contact_clear, 'Ваш проверочный код '.$code, $session_id);
+				}
+				else
+				{
+					$msg = View::factory('emails/contact_verification_code', 
+						array('contact' => $exists_contact->contact, 'code' => $code))
+						->render();
+					$subj 	= 'Подтверждение email на “Ярмарка-онлайн”';
+					Email::send($exists_contact->contact, Kohana::$config->load('email.default_from'), $subj, $msg);
+				}
+			}
+		}
+	}
+
 	public function after()
 	{
 		parent::after();

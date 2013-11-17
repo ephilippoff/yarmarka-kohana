@@ -7,14 +7,14 @@
 ) ?>
 
 <?php foreach ($user_contacts as $contact) : ?>
-	<div class="input contact style2">	
+	<div class="input contact style2" id="unverified_contacts">	
 		<label><span><i class="name"><?=$contact->name?>:</i></span></label>		                    			
 		<div class="inp-cont-bl ">
 			<div class="inp-cont">
 				<span class="cont-info">
 					<span class="cont">
 						<span class="ico <?=$contact_classes[$contact->contact_type_id]?>"></span>
-						<a class="usercontact contact-input" data-id="<?=$contact->id?>"><?=$contact->get_contact_value()?></a>
+						<a class="usercontact contact-input fn-contact-value" data-id="<?=$contact->id?>"><?=$contact->get_contact_value()?></a>
 					</span>
 					<span class="cont">		
 						<span class="like_link remove delete_contact" data-id="<?=$contact->id?>">Удалить</span>
@@ -42,9 +42,7 @@
 
 <script>
 jQuery(document).ready(function($) {
-	$('.fn-contact-verify-button').click(function(){
-		var contactWindow = new verifyContactWindow({contact_type : 1, contact_value : '+7-917-714-5656'});
-	});
+	$('#unverified_contacts .inp-cont').profileContacts();
 });
 </script>
 
