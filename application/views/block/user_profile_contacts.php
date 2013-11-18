@@ -20,7 +20,7 @@
 						<span class="like_link remove delete_contact" data-id="<?=$contact->id?>">Удалить</span>
 						<br />
 						<?php if (in_array($contact->contact_type_id, Model_Contact_Type::get_verifiyng_types())) : ?>
-						<span class="like_link fn-contact-verify-button" data-id="<?=$contact->id?>">Верифицировать</span>
+						<span class="like_link fn-contact-verify-button" data-contact="<?=$contact->contact_clear?>" data-id="<?=$contact->id?>">Верифицировать</span>
 						<?php endif ?>
 					</span>	
 				</span>
@@ -39,12 +39,6 @@
 		</div>
 	</div>
 <?php endforeach; ?>
-
-<script>
-jQuery(document).ready(function($) {
-	$('#unverified_contacts .inp-cont').profileContacts();
-});
-</script>
 
 <script type="text/template" id="verify-contact-window">
 <div class="popup enter-popup fn-verify-contact-win" style="display: block;"><!-- TODO add class  fn-verify-contact-win-->

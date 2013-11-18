@@ -251,6 +251,11 @@ class Controller_Ajax extends Controller_Template
 		$this->response->body(Request::factory('block/user_profile_contacts')->execute());
 	}
 
+	public function action_verified_profile_contacts()
+	{
+		$this->response->body(Request::factory('block/verified_profile_contacts')->execute());
+	}
+
 	public function action_remove_from_user_favorites()
 	{
 		$object = ORM::factory('Object', $this->request->param('id'));
@@ -818,7 +823,7 @@ class Controller_Ajax extends Controller_Template
 		}
 		elseif ($contact->loaded())
 		{
-			ORM::factory('Verified_Contact')->verify_for_session($session_id);
+			$contact->verify_for_session($session_id);
 
 			$contact->moderate = 0;
 			$contact->save();
@@ -835,8 +840,10 @@ class Controller_Ajax extends Controller_Template
 
 	public function action_check_contact_code()
 	{
-		$session_id = Arr::get($_POST, 'session_id', session_id());
-		$contact 	= ORM::factory('Contact', $this->request->param('id'));
+		$session_id 	= Arr::get($_POST, 'session_id', session_id());
+		$contact 		= ORM::factory('Contact', $this->request->param('id'));
+		$link_to_user 	= (bool) $this->request->post('link_to_user');
+
 		if ( ! $contact->loaded())
 		{
 			throw new HTTP_Exception_404;
@@ -849,8 +856,14 @@ class Controller_Ajax extends Controller_Template
 
 			// верифицируем контакт
 			$contact->verify_for_session($session_id);
+
+			if ($link_to_user AND Auth::instance()->get_user())
+			{
+				$contact->verified_user = Auth::instance()->get_user();
+			}
+
 			// ставим как отмодерированный
-			$contact->moderate = 0;
+			$contact->moderate = 1;
 			$contact->save();
 		}
 		else

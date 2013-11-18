@@ -28,6 +28,8 @@ class Controller_User extends Controller_Template {
 			->js('jquery-ui/ui/minified/jquery.ui.position.min.js')
 			->js('jquery-ui/ui/minified/jquery.ui.menu.min.js')
 			->js('jquery-ui/ui/minified/jquery.ui.autocomplete.min.js')
+			->js('require.js')
+			->js('require.config.js')
 			->css('jquery-ui/themes/base/minified/jquery-ui.min.css')
 			->js('profile.js')
 			->js('http://yandex.st/underscore/1.5.2/underscore.js?v=1.0.101');
