@@ -50,10 +50,15 @@
 				<form method="post" accept-charset="utf-8" enctype="multipart/form-data">
 					<label class="filebutton">
 						<?php if ($user->filename) : ?>
-						<img src="<?=Uploads::get_file_path($user->filename, '272x203')?>" id="avatar_img" />
-						<?php else : ?>
-						<img src="<?=URL::site('images/mylogo.png')?>" id="avatar_img" />
+							<img src="<?=Uploads::get_file_path($user->filename, '272x203')?>" id="avatar_img" />
 						<?php endif; ?>
+							
+						<div <?php if ($user->filename) : ?> style="display:none" <?php endif; ?> id="pers-photo" class="photo-cap">
+							<div class="header">Ваш логотип</div>
+						</div>								
+							
+						<div class="descr"><div class="mt5 ta-c">Кликните в область, чтобы загрузить фото</div></div>							
+							
 						<input type="file" name="avatar_input" class="avatar" id="avatar_input" />
 					</label>
 				</form>
