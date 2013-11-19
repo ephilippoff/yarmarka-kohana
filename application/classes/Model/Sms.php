@@ -2,7 +2,37 @@
 
 class Model_Sms extends ORM {
 
+	const PENDING = 'PENDING';
+	const ERROR = 'ERROR';
+	const SUCCESS = 'SUCCESS';
+
 	protected $_table_name = 'sms';
+
+	public function set_success($response)
+	{
+		if ( ! $this->loaded())
+		{
+			return FALSE;
+		}
+
+		$this->response = $response;
+		$this->status = self::SUCCESS;
+
+		return $this->save();
+	}
+
+	public function set_error($response)
+	{
+		if ( ! $this->loaded())
+		{
+			return FALSE;
+		}
+
+		$this->response = $response;
+		$this->status = self::ERROR;
+
+		return $this->save();
+	}
 
 	public function cnt_by_phone($phone, $session_id = NULL)
 	{

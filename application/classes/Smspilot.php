@@ -99,12 +99,6 @@ class Smspilot {
 			$this->apikey = $apikey;
 		else if (defined('SMSPILOT_APIKEY'))
 			$this->apikey = SMSPILOT_APIKEY;
-		else {
-			// if ($CI->config->item('sms_api_key')) {
-			if (Kohana::$config->load('sms.api_key')) {
-				$this->apikey = Kohana::$config->load('sms.api_key');
-			}
-		}
 			
 		if ($charset)
 			$this->charset = $charset;
@@ -115,11 +109,6 @@ class Smspilot {
 			$this->from = $from;
 		else if (defined('SMSPILOT_FROM'))
 			$this->from = SMSPILOT_FROM;
-		else {
-			if (Kohana::$config->load('sms.from')) {
-				$this->from = Kohana::$config->load('sms.from');
-			}
-		}
 		
 		if (defined('SMSPILOT_API'))
 			$this->api = SMSPILOT_API;
