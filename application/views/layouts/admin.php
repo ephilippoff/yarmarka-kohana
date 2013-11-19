@@ -46,6 +46,7 @@
 								<a href="#"  class="dropdown-toggle" data-toggle="dropdown">Phones <b class="caret"></b></a>
 								<ul class="dropdown-menu">
 									<li><a href="<?=Url::site('khbackend/phones/index')?>">List</a></li>
+									<li><a href="<?=Url::site('khbackend/phones/moderation')?>">Moderation</a></li>
 								</ul>
 							</li>
 						<?php endif; ?>

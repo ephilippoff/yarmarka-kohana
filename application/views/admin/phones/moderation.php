@@ -9,15 +9,11 @@ $(document).ready(function() {
 	// enable tooltips
 	$('a').tooltip();
 
-	$(document.body).on('click', '.moderate', function(){
+	$('.moderate').on('click', function(){
 		var obj = this;
-		var contact_id = $(obj).data('id');
-		var row = $(obj).parents('td.buttons');
-
-		row.html('<a class="btn">Loading...</a>');
 		$.getJSON($(this).attr('href'), function(json){
 			if (json.code == 200) {
-				row.load('/khbackend/phones/buttons/'+contact_id);
+				$(obj).parents('tr').remove();
 			}
 		});
 
@@ -25,16 +21,6 @@ $(document).ready(function() {
 	});
 });
 </script>
-
-<form class="form-inline">
-	<div class="input-prepend">
-		<span class="add-on"><i class="icon-search"></i></span>
-		<input class="span2" id="prependedInput" type="text" placeholder="Phone" name="phone" value="<?=Arr::get($_GET, 'phone')?>">
-    </div>
-	<?=Form::select('status', array('' => '--select status--')+$statuses, Arr::get($_GET, 'status'), array('class' => 'span2'))?>
-	<input type="submit" name="" value="Filter" class="btn btn-primary">
-	<input type="reset" name="" value="Clear" class="btn">
-</form>
 
 <table class="table table-hover table-condensed" style="font-size:85%;" id="objects">
 	<tr>
