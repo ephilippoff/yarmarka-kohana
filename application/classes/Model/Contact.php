@@ -149,6 +149,23 @@ class Model_Contact extends ORM {
 		return $this->is_verified_for_session($session_id);
 	}
 
+	public function verify_for_session($session_id = NULL)
+	{
+		if ( ! $this->loaded())
+		{
+			return FALSE;
+		}
+
+		if (is_null($session_id))
+		{
+			$session_id = session_id();
+		}
+
+		ORM::factory('Verified_Contact')
+			->values(array('session_id' => $session_id, 'contact_id' => $this->id))
+			->create();
+	}
+
 	public function get_contact_value()
 	{
 		return $this->is_phone() ? Text::format_phone($this->contact_clear) : trim($this->contact);
