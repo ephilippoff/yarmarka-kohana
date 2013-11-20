@@ -146,15 +146,13 @@
 										<span class="title">Контактное лицо/ФИО:</span>
 										<div class="cont"><?=$user->fullname?></div>
 									</li>
-									<?php if ($user->org_address) : ?>
+									<?php 									
+									$units = $user->getAllUnits();
+									if( ! empty($units )) : ?>
 									<li class="article">
-										<span class="title">Адрес/Местоположение:</span>
-										<div class="cont">
-											<?php if ( ! $user->user_city->loaded() AND ! trim($user->org_address)) : ?>
-											<span>Не указано</span>
-											<?php else : ?>
-											<span><?=$user->user_city->loaded() ? $user->user_city->title.',' : ''?> <?=$user->org_address?></span>
-											<?php endif; ?>
+										<!--<span class="title">Адрес/Местоположение:</span>-->
+										<div>																															
+	
 											<span class="show-map toggle"><br/><br/>
 												<span class="show">На карте</span>
 												<span class="">свернуть карту</span>
@@ -166,7 +164,7 @@
 													<input type="hidden" name="coord" id="coord" value="" />
 												<?php endif; ?>
 												<input type="hidden" name="org_address" id="org_address" value="<?=$user->user_city->title?>, <?=$user->org_address?>" />
-												<div class="map"><div id="ymaps-map-id" style="width: 372px; height: 372px;"></div>
+												<div class="map"><div id="ymaps-map-id" style="width: 700px; height: 372px;"></div>
 
 
 
@@ -177,43 +175,36 @@
 															    function init_<?=$user->id?> () {
 															    	//[57.153522, 65.608924]
 															    	// '<?=$user->geo_loc?>'
-															    	var myGeocoder = '<?=$user->geo_loc?>';
+															    	var myGeocoder = [<?=$region->geo_loc?>];
 															        var coords = myGeocoder; 
 
 															        myMap_user = new ymaps.Map ("ymaps-map-id", {
 															            center: coords,
-															            zoom: 10,
+															            zoom: 3,
 															        });
 
 															        myMap_user.controls.add("zoomControl").add("mapTools").add(new ymaps.control.TypeSelector(["yandex#map", "yandex#satellite", "yandex#hybrid", "yandex#publicMap"]));
 
 
-															        myMap_user.geoObjects.add(new ymaps.Placemark(coords, { 
-															            hintContent: '<?=$user->fullname?>', 
-															            balloonContent: '<?=$user->fullname.", ".$user->location->city.", ".$user->location->address?>' 
-															        }));
+//															        myMap_user.geoObjects.add(new ymaps.Placemark(coords, { 
+//															            hintContent: '<?=$user->fullname?>', 
+//															            balloonContent: '<?=$user->fullname.", ".$user->location->city.", ".$user->location->address?>' 
+//															        }));
 
 															        var myGeocoder2;
 
 																	<?php 
-																		$units = $user->getAllUnits();
-																		if( ! empty($units ))
-																		{
-																			foreach($units as $unit)
-																			{
-																	?>
-															    	myGeocoder2 = [<?=$unit->location->lat.", ".$unit->location->lon?>];
+												
+																	foreach($units as $unit) : ?>
+																		myGeocoder2 = [<?=$unit->location->lat.", ".$unit->location->lon?>];
 																        coords = myGeocoder2; 
-
 
 																        myMap_user.geoObjects.add(new ymaps.Placemark(coords, { 
 																            hintContent: '<?=$unit->title?>', 
 																            balloonContent: '<?=$unit->title.", ".$unit->location->city.", ".$unit->location->address?>' 
 																        }));
-																	<?php
-																			}
-																		}
-																	?>
+																		
+																	<?php endforeach; ?>
 																}
 													</script>
 												</div>

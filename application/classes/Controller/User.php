@@ -592,6 +592,7 @@ class Controller_User extends Controller_Template {
 			->js('maps.js');
 		
 		$user = ORM::factory('User')->where('login', '=', $this->request->param('login'))->find();
+		$region = ORM::factory('Region')->where('id', '=', 73)->find();
 
 		if ( ! $user->loaded())
 		{
@@ -621,6 +622,7 @@ class Controller_User extends Controller_Template {
 		Seo::set_title($title);
 		
 		$this->template->user = $user;
+		$this->template->region = $region;
 	}
 
 	public function action_upload_user_avatar()

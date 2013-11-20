@@ -83,8 +83,10 @@ function ajaxUploadAndChange(fileEl) {
 var autocomplete_city_id;
 var address_input;
 
-$(document).ready(function() {
-    $(".btn-save").click(function(e){
+$(document).ready(function() {    
+	$('#islide_profile').click();
+		
+		$(".btn-save").click(function(e){
         e.preventDefault();
         $("#create-init").submit();
     });
@@ -165,7 +167,7 @@ function render_autocomplete( ul, item ) {
 			<?=View::factory('user/_left_menu')?>
 			<section class="p_room-inner">
                 <?/*<button id="temp">Temp</button>*/?>
-				<header><span class="title">Подразделения</span></header>
+				<header><span class="title">Адреса компании</span></header>
 				<div class="p_cont secure-bl myinfo">
 					<section class="filials-bl reducting">
 <!--						<article class="informator">
@@ -175,7 +177,15 @@ function render_autocomplete( ul, item ) {
 							</div>
 						</article>-->
 						
-						<li class="info-tooltip" data-controller-character="advert"><a href="" class="btn-blue2 btn-reduct ml10 mt10 mb10"><span>Добавить</span></a>
+							<a href="" class="btn-blue2 btn-reduct ml10 mt10 mb10">
+								<span>
+									<?php if (Arr::get($_GET, 'add', 'none') == 'none') : ?>
+										Добавить
+									<?php else :?>
+										Отменить
+									<?php endif;?>
+								</span>
+							</a>
 					<script> 
 						$('.btn-reduct').click(function(e){
 							e.preventDefault();
@@ -190,7 +200,7 @@ function render_autocomplete( ul, item ) {
 						});
 					</script>
 	                    <article class="article">
-							<div class="reduct-bl" style="display: none;">
+							<div class="reduct-bl" <?php if (Arr::get($_GET, 'add', 'none') == 'none') : ?> style="display: none;" <?php endif; ?> >
 	                            <form method="post" accept-charset="utf-8" enctype="multipart/form-data">
 	                                <label class="filebutton">
 	                                <div class="img">
