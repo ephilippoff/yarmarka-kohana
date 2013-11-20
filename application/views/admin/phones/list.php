@@ -13,13 +13,16 @@ $(document).ready(function() {
 		var obj = this;
 		var contact_id = $(obj).data('id');
 		var row = $(obj).parents('td.buttons');
+		var check = $(obj).data('confirm') ? confirm($(obj).data('confirm')) : true;
 
-		row.html('<a class="btn">Loading...</a>');
-		$.getJSON($(this).attr('href'), function(json){
-			if (json.code == 200) {
-				row.load('/khbackend/phones/buttons/'+contact_id);
-			}
-		});
+		if (check) {
+			row.html('<a class="btn">Loading...</a>');
+			$.getJSON($(this).attr('href'), function(json){
+				if (json.code == 200) {
+					row.load('/khbackend/phones/buttons/'+contact_id);
+				}
+			});
+		}
 
 		return false;
 	});

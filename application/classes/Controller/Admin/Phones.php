@@ -4,6 +4,11 @@ class Controller_Admin_Phones extends Controller_Admin_Template {
 
 	public function action_index()
 	{
+		$this->redirect('khbackend/phones/list');
+	}
+
+	public function action_list()
+	{
 		$limit  = 50;
 		$page   = $this->request->query('page');
 		$status = $this->request->query('status');
@@ -58,7 +63,7 @@ class Controller_Admin_Phones extends Controller_Admin_Template {
 			'view'           => 'pagination/bootstrap',
 		))->route_params(array(
 			'controller' => 'phones',
-			'action'     => 'index',
+			'action'     => 'list',
 		));
 	}
 
@@ -95,7 +100,7 @@ class Controller_Admin_Phones extends Controller_Admin_Template {
 			'view'           => 'pagination/bootstrap',
 		))->route_params(array(
 			'controller' => 'phones',
-			'action'     => 'index',
+			'action'     => 'moderation',
 		));
 	}
 
