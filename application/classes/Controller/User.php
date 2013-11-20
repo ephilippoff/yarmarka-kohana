@@ -55,14 +55,19 @@ class Controller_User extends Controller_Template {
 	public function action_units()
 	{
 		$this->layout = 'users';
+
+		// $this->assets->js('info-tooltip.js');
+
 		$this->assets
-                        ->js('ajaxfileupload.js')
+            ->js('ajaxfileupload.js')
 			->js('jquery.maskedinput-1.2.2.js')
 			->js('jquery-ui/ui/minified/jquery.ui.core.min.js')
 			->js('jquery-ui/ui/minified/jquery.ui.widget.min.js')
 			->js('jquery-ui/ui/minified/jquery.ui.position.min.js')
 			->js('jquery-ui/ui/minified/jquery.ui.menu.min.js')
 			->js('jquery-ui/ui/minified/jquery.ui.autocomplete.min.js')
+//			->js('jquery.tooltipster.min.js')
+//			->css('tooltipster.css')
 			->css('jquery-ui/themes/base/minified/jquery-ui.min.css');
 			//->js('chosen.jquery.js')
 			//->js('profile.js');
@@ -103,6 +108,7 @@ class Controller_User extends Controller_Template {
             try
             {
             	$location = Location::add_location_by_post_params();
+
                 $user_unit = ORM::factory('User_Units')
                     ->set('user_id', $this->user->id)
                     ->set('unit_id', $_POST['unit_id'])
@@ -586,6 +592,7 @@ class Controller_User extends Controller_Template {
 			->js('maps.js');
 		
 		$user = ORM::factory('User')->where('login', '=', $this->request->param('login'))->find();
+		$region = ORM::factory('Region')->where('id', '=', 73)->find();
 
 		if ( ! $user->loaded())
 		{
@@ -615,6 +622,7 @@ class Controller_User extends Controller_Template {
 		Seo::set_title($title);
 		
 		$this->template->user = $user;
+		$this->template->region = $region;
 	}
 
 	public function action_upload_user_avatar()

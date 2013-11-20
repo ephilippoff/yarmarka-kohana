@@ -37,7 +37,6 @@ class Ymaps
 	public function get_coord_by_name($name)
 	{
 		$coord = FALSE;
-		
 		$params = array(
 			'geocode' => trim($name),
 			'format'  => 'json',
@@ -54,6 +53,5 @@ class Ymaps
 		return $coord;
 	}
 }
-
 /* End of file Ymaps.php */
 /* Location: ./application/classes/Ymaps.php */

@@ -176,6 +176,12 @@
 			</div>
 		</div>
 	</li>
+	<li id="about_text">
+		<div class="input style2">
+			<label><span></span></label>					                    			
+			<span class="like_link" onclick="window.location='<?=URL::site('user/units').'?add'?>'">Добавить адрес</span>
+		</div>
+	</li>	
 <!--	<li id="address_text">
 		<div class="input style2">
 

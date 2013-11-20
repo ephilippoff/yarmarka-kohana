@@ -14,6 +14,7 @@ class Location
 			$location->lon = $lon;
 			$location->lat = $lat;
 			$location->address = $address;
+
 			if ($kladr_city)
 			{
 				$location->region = $kladr_city->region;
@@ -23,8 +24,8 @@ class Location
 			{
 				$housenum = $kladr_address->housenum.($kladr_address->buildnum ? ', '.$kladr_address->buildnum : '');
 
-				/*$location->housenum = $housenum;
-				$location->street = $kladr_address->address;*/
+				// $location->housenum = $housenum;
+				// $location->street = $kladr_address->address;
 			}
 			$location->save();
 		}
@@ -34,8 +35,15 @@ class Location
 
 	public static function add_location_by_post_params()
 	{
-		$lon = Request::current()->post('lon');
-		$lat = Request::current()->post('lat');
+
+		$city = Request::current()->post('city');
+		$address = Request::current()->post('address');
+		$address_full = ($city. ",". $address);
+
+		$coord = Ymaps::instance()->get_coord_by_name($address_full);
+
+		list($lon, $lat) = $coord;
+
 		$city_kladr_id = Request::current()->post('city_kladr_id');
 		$address_kladr_id = Request::current()->post('address_kladr_id');
 		$address = Request::current()->post('address');

@@ -268,6 +268,7 @@ class Controller_Add extends Controller_Template {
 			// сохраняем город если нет
 			$city = Kladr::save_city($this->request->post('city_kladr_id'), $this->request->post('city_name'));
 
+
 			// сохраняем адрес
 			$location = Kladr::save_address($this->request->post('address_kladr_id'), 
 				$this->request->post('object_coordinates'), 
