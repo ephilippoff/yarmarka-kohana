@@ -120,7 +120,7 @@ class Model_Contact extends ORM {
 		if (Model_Contact_Type::is_phone($this->contact_type_id))
 		{
 			$this->contact_clear = Text::clear_phone_number($this->contact);
-			$this->contact_type_id = (strpos($number, '79') === 0)
+			$this->contact_type_id = (strpos($this->contact_clear, '79') === 0)
 				? Model_Contact_Type::MOBILE : Model_Contact_Type::PHONE;
 		}
 
