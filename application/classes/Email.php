@@ -93,8 +93,12 @@ class Email {
 
 		if (is_string($to))
 		{
+			if ( ! trim($to))
+			{
+				return FALSE;
+			}
 			// Single recipient
-			$message->setTo(trim($to));
+			$message->setTo($to);
 		}
 		elseif (is_array($to))
 		{
