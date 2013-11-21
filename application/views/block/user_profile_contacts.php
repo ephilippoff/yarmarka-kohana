@@ -59,7 +59,7 @@
 						<div class="alert-bl big fn-error-block"  style="display: none;"><!-- TODO add class fn-error-block -->
     						<div class="cont">
     							<div class="img"></div><div class="arr"></div>
-    							<p class="text"><span class="fn-error-block-text"></span><span><div class='fn-btn-re-send'>Отправить еще раз</div></span></p> <!-- TODO add class  fn-error-block-text fn-btn-re-send-->
+    							<p class="text"><span class="fn-error-block-text"></span><span><div class='fn-btn-re-send'><span style="font-size:12px;">Отправить еще раз</span></div></span></p> <!-- TODO add class  fn-error-block-text fn-btn-re-send-->
     						</div>
     					</div>
 					</div>
