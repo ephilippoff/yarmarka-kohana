@@ -793,6 +793,7 @@ class Controller_Ajax extends Controller_Template
 		$session_id 	= Arr::get($_POST, 'session_id', session_id());
 		$contact_clear 	= Text::clear_phone_number($this->request->post('contact'));
 		$contact 		= ORM::factory('Contact')->where('contact_clear', '=', $contact_clear)->find();
+		$link_to_user 	= (bool) $this->request->post('link_to_user');
 
 		if ($contact->loaded() AND $contact->verified_user_id)
 		{
@@ -801,6 +802,11 @@ class Controller_Ajax extends Controller_Template
 		elseif ($contact->loaded())
 		{
 			$contact->verify_for_session($session_id);
+
+			if ($link_to_user AND Auth::instance()->get_user())
+			{
+				$contact->verified_user = Auth::instance()->get_user();
+			}
 
 			$contact->moderate = 0;
 			$contact->save();
