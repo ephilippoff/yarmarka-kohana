@@ -10,6 +10,13 @@ class Controller_Add extends Controller_Template {
 
 		$user = Auth::instance()->get_user();
 
+		// @todo костыл пока не заработает реги при подаче
+		if ( ! $user)
+		{
+			echo json_encode(array('code' => 303));
+			return;
+		}
+
 		if ( ! Request::current()->is_ajax())
 		{
 			throw new HTTP_Exception_404('only ajax requests allowed');
