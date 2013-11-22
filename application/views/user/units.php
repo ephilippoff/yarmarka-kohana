@@ -194,10 +194,6 @@ function render_autocomplete( ul, item ) {
 							else $(this).children('span').text('Отменить');
 							return false;
 						})
-						//select choosen
-						$(document).ready(function(){
-							$(".iselect").chosen();
-						});
 					</script>
 	                    <article class="article">
 							<div class="reduct-bl" <?php if (Arr::get($_GET, 'add', 'none') == 'none') : ?> style="display: none;" <?php endif; ?> >
@@ -234,7 +230,7 @@ function render_autocomplete( ul, item ) {
 												<label><span><i class="name">Тип</i></span></label>
 												<div class="inp-cont-bl ">
 													<div class="inp-cont">
-														<select class="iselect " name="unit_id" id="unit_id">
+														<select class="iselect-ns" name="unit_id" id="unit_id">
 															<option value="">-- выберите тип --</option>
 
 	                                                        <?php foreach ($units as $unit):?>
