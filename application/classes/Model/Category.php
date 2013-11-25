@@ -109,7 +109,7 @@ class Model_Category extends ORM {
 			$user = ORM::factory('User', $user);
 		}
 
-		$objects = $user->objects->where('category', '=', $this->id);
+		$objects = $user->objects->where('category', '=', $this->id)->where('is_published', '=', 1)->where('active', '=', 1);
 		if ($object_id)
 		{
 			$objects->where('id', '!=', $object_id);
