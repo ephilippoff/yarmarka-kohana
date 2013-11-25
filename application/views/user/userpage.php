@@ -154,7 +154,7 @@
 
 				<?php if ( !empty($units) ) : ?>
 					<section class="filials-bl mt15">
-        				<h3>Филиалы компании</h3>
+        				<h3>Адреса компании</h3>
 						
 						
 						
