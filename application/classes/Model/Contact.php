@@ -170,6 +170,11 @@ class Model_Contact extends ORM {
 	{
 		return $this->is_phone() ? Text::format_phone($this->contact_clear) : trim($this->contact);
 	}
+
+	public function is_blocked()
+	{
+		return (bool) intval($this->blocked);
+	}
 }
 
 /* End of file Contact.php */

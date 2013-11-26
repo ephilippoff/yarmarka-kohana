@@ -784,6 +784,10 @@ class Controller_Ajax extends Controller_Template
 					// it is home phone and belongs to other user
 					$this->json['code'] = 400;
 				}
+				elseif ($exists_contact->is_blocked())
+				{
+					$this->json['code'] = 305;
+				}
 			}
 		}
 	}
@@ -913,6 +917,11 @@ class Controller_Ajax extends Controller_Template
 			{
 				$this->json['code'] = 302;
 				$this->json['msg'] = 'Контакт принадлежит другому пользователю';
+			}
+			elseif ($exists_contact->is_blocked())
+			{
+				$this->json['code'] = 305;
+				$this->json['msg'] = 'Контакт в черном списке';
 			}
 			else
 			{
