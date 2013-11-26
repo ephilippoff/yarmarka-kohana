@@ -107,7 +107,13 @@ class Controller_User extends Controller_Template {
         {
             try
             {
-            	$location = Location::add_location_by_post_params();
+				$lat 				= $this->request->post('lat');
+				$lon 				= $this->request->post('lon');
+				$city_kladr_id 		= $this->request->post('city_kladr_id');
+				$address_kladr_id 	= $this->request->post('address_kladr_id');
+				$address 			= $this->request->post('address');
+
+				$location = Kladr::save_address($lat, $lon, $address, $city_kladr_id, $address_kladr_id);            	
 
                 $user_unit = ORM::factory('User_Units')
                     ->set('user_id', $this->user->id)

@@ -275,12 +275,14 @@ class Controller_Add extends Controller_Template {
 			// сохраняем город если нет
 			$city = Kladr::save_city($this->request->post('city_kladr_id'), $this->request->post('city_name'));
 
-
+			list($lat, $lon) = explode(',', $this->request->post('object_coordinates'));
+			
+			
 			// сохраняем адрес
-			$location = Kladr::save_address($this->request->post('address_kladr_id'), 
-				$this->request->post('object_coordinates'), 
+			$location = Kladr::save_address($lat, $lon,
 				$this->request->post('address'),
-				$this->request->post('city_kladr_id')
+				$this->request->post('city_kladr_id'),
+				$this->request->post('address_kladr_id')
 			);
 
 			// если не нашли адрес, то берем location города

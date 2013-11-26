@@ -65,43 +65,50 @@ class Kladr
 		return $object_city;
 	}
 
-	public static function save_address($address_kladr_id, $object_coordinates, $address_str, $city_kladr_id)
+public static function save_address($lat, $lon, $address_str, $city_kladr_id, $address_kladr_id)
 	{
 		$location = ORM::factory('Location');
 
+		$level = $kladr_id = NULL;
+		// если пришел kladr_id, то address_str собираем сами
+		if ($address_kladr_id)
+		{
+			// берем адрес из КЛАДР
+			$address_kladr_row 	= ORM::factory('Kladr')->get_address_by_id($address_kladr_id);
+			$address_str 		= Kladr::collect_address($address_kladr_row);
+			$level 				= $address_kladr_row->aolevel;
+			$kladr_id 			= $address_kladr_row->id;
+		}
+
+		if ( ! $lat OR ! $lon)
+		{
+			// если координаты не пришли, запрашиваем координаты по адресу
+			$coords = Ymaps::instance()->get_coord_by_name($address_str);
+			list($lon, $lat) = $coords;
+		}
+
 		// ищем location адреса по координатам
-		if ($object_coordinates AND $address_str)
+		if ($lat AND $lon AND $address_str)
 		{
 			$city_kladr_row = Model::factory('Kladr')->get_city_by_id($city_kladr_id);
 			
-			list($lat, $lon) = explode(',', $object_coordinates);
-			if ($lat AND $lon)
-			{
-				$location = ORM::factory('Location')->where_lat_lon($lat, $lon)
-					->where('kladr_id', 'IS', DB::expr('NOT NULL'))
-					->find();
-				if ( ! $location->loaded() OR ! $location->address)
-				{
-					$level = $kladr_id = NULL;
-					if ($address_kladr_id)
-					{
-						// берем адрес из КЛАДР
-						$address_kladr_row = ORM::factory('Kladr')->get_address_by_id($address_kladr_id);
-						$address_str = Kladr::collect_address($address_kladr_row);
-						$level = $address_kladr_row->aolevel;
-						$kladr_id = $address_kladr_row->id;
-					}
+			$location = ORM::factory('Location')->where_lat_lon($lat, $lon)
+				->where('kladr_id', 'IS', DB::expr('NOT NULL'))
+				->find();
 
-					$location = ORM::factory('Location');
-					$location->region 	= $city_kladr_row->region;
-					$location->city 	= $city_kladr_row->city;
-					$location->address 	= $address_str;
-					$location->level 	= $level;
-					$location->kladr_id = $kladr_id;
-					$location->lat 		= $lat;
-					$location->lon 		= $lon;
-					$location->save();
-				}
+			// если не нашли, то сохраняем
+			if ( ! $location->loaded() OR ! $location->address)
+			{
+
+				$location = ORM::factory('Location');
+				$location->region 	= $city_kladr_row->region;
+				$location->city 	= $city_kladr_row->city;
+				$location->address 	= $address_str;
+				$location->level 	= $level;
+				$location->kladr_id = $kladr_id;
+				$location->lat 		= $lat;
+				$location->lon 		= $lon;
+				$location->save();
 			}
 		}
 
