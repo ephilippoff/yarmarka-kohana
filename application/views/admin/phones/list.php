@@ -9,20 +9,35 @@ $(document).ready(function() {
 	// enable tooltips
 	$('a').tooltip();
 
-	$('.moderate').on('click', function(){
+	$(document.body).on('click', '.moderate', function(){
 		var obj = this;
-		$.getJSON($(this).attr('href'), function(json){
-			if (json.code == 200) {
-				console.log(obj);
-				console.log($(obj).parents('tr'));
-				$(obj).parents('tr').remove();
-			}
-		});
+		var contact_id = $(obj).data('id');
+		var row = $(obj).parents('td.buttons');
+		var check = $(obj).data('confirm') ? confirm($(obj).data('confirm')) : true;
+
+		if (check) {
+			row.html('<a class="btn">Loading...</a>');
+			$.getJSON($(this).attr('href'), function(json){
+				if (json.code == 200) {
+					row.load('/khbackend/phones/buttons/'+contact_id);
+				}
+			});
+		}
 
 		return false;
 	});
 });
 </script>
+
+<form class="form-inline">
+	<div class="input-prepend">
+		<span class="add-on"><i class="icon-search"></i></span>
+		<input class="span2" id="prependedInput" type="text" placeholder="Phone" name="phone" value="<?=Arr::get($_GET, 'phone')?>">
+    </div>
+	<?=Form::select('status', array('' => '--select status--')+$statuses, Arr::get($_GET, 'status'), array('class' => 'span2'))?>
+	<input type="submit" name="" value="Filter" class="btn btn-primary">
+	<input type="reset" name="" value="Clear" class="btn">
+</form>
 
 <table class="table table-hover table-condensed" style="font-size:85%;" id="objects">
 	<tr>
@@ -42,9 +57,8 @@ $(document).ready(function() {
 				</a>
 			<?php endif ?>
 		</td>
-		<td>
-			<a href="<?=URL::site('khbackend/phones/confirm/'.$contact->id)?>" class="moderate btn btn-success">Верифицировать</a>
-			<a href="<?=URL::site('khbackend/phones/decline/'.$contact->id)?>" class="moderate btn btn-danger">Отменить верификацию</a>
+		<td class="buttons">
+			<?=View::factory('admin/phones/buttons', array('contact' => $contact))?>
 		</td>
 	</tr>
 	<?php endforeach; ?>
