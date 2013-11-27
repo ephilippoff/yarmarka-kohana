@@ -166,7 +166,7 @@
 									<input type="hidden" name="coord" id="coord" value="" />
 								<?php endif; ?>
 								<input type="hidden" name="org_address" id="org_address" value="<?=$user->user_city->title?>, <?=$user->org_address?>" />
-								<div class="map"><div id="ymaps-map-id" style=" height: 372px;"></div>
+								<div class="map big"><div id="ymaps-map-id" style=" height: 372px;"></div>
 
 
 
