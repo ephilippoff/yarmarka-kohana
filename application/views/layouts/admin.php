@@ -60,6 +60,15 @@
 						</li>
 						<?php endif; ?>
 
+						<?php if (Auth::instance()->have_access_to('category')) : ?>
+						<li class="dropdown <?=($module_name == 'category') ? 'active' : ''?>">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">Categories <b class="caret"></b></a>
+							<ul class="dropdown-menu">
+								<li><a href="<?=Url::site('khbackend/category/index')?>">List</a></li>
+							</ul>
+						</li>
+						<?php endif; ?>
+
 						<?php if (Auth::instance()->get_user()) : ?>
 							<li><a href="<?=Url::site('khbackend/welcome/logout')?>">Log Out</a></li>
 						<?php endif; ?>

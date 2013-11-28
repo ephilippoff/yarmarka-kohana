@@ -20,6 +20,7 @@ class Model_User extends Model_Auth_User {
 		'link_requests' => array('model' => 'User_Link_Request', 'foreign_key' => 'linked_user_id'),
 		'users'			=> array('model' => 'User', 'foreign_key' => 'linked_to_user'),		
 		'units' 		=> array('model' => 'User_Units', 'foreign_key' => 'user_id'),
+		'business_types'=> array('model' => 'Business_Type', 'through' => 'user_business'),
 	);
 
 	protected $_belongs_to = array(

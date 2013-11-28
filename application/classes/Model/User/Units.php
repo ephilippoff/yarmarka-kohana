@@ -20,12 +20,30 @@ class Model_User_Units extends ORM {
 		);
 	}
 	
-	public function get_address(){
+	public function get_address()
+	{
 		$address = $this->location;
 		if ($address)
+		{
 			return $address->city.', '.$address->address;
+		}
+		
 		return 'нет адреса';
 	}
 
-} // End User_Messages Model
+	public function by_category($category_id)
+	{
+		return $this->distinct(TRUE)
+			->join('user')
+			->on('user.id', '=', 'user_units.user_id')
+			->join('user_business')
+			->on('user_business.user_id', '=', 'user.id')
+			->join('category_business')
+			->on('user_business.business_type_id', '=', 'category_business.business_type_id')
+			->where('category_business.category_id', '=', $category_id);
+	}
 
+}
+
+/* End of file Units.php */
+/* Location: ./application/classes/Model/User/Units.php */

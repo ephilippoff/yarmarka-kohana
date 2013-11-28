@@ -25,4 +25,5 @@ class Model_Unit extends ORM {
 			),
 		);
 	}
+
 }

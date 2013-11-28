@@ -138,6 +138,16 @@
 	</li>
 	<li>
 		<div class="input style2">
+			<label><span><i class="name">Сфера деятельности:</i></span></label>					                    			
+			<p class="myinform profile-input-wrapper">
+				<a href="" class="myhref profile-input-select" 
+					data-selected="<?=join(',', $user->business_types->find_all()->as_array(NULL, 'id'))?>"
+					><?=join(',', $user->business_types->find_all()->as_array(NULL, 'title'))?></a>
+			</p>
+		</div>
+	</li>
+	<li>
+		<div class="input style2">
 			<label><span><i class="name">Адрес вашей страницы :</i></span></label>					                    			
 			<p class="myinform"><a href="<?=$user_page_url?>" class="mylink user_page" target="_blank"><?=$user_page_url?></a>
 				<div class="help-bl">

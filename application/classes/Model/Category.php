@@ -15,6 +15,7 @@ class Model_Category extends ORM {
 
 	protected $_has_many = array(
 		'sub_categories' => array('model' => 'Category', 'foreign_key' => 'parent_id'),
+		'business_types' => array('model' => 'Business_Type', 'through' => 'category_business'),
 	);
 
 	protected $_belongs_to = array(

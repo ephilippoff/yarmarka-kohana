@@ -975,6 +975,44 @@ class Controller_Ajax extends Controller_Template
 		}
 	}
 
+	public function action_get_business_types()
+	{
+		$this->json['business_types'] = ORM::factory('Business_Type')->find_all()->as_array('id', 'title');
+	}
+
+	public function action_save_user_business_types()
+	{
+		if ( ! $user = Auth::instance()->get_user())
+		{
+			throw new HTTP_Exception_404;
+		}
+
+		$types = $this->request->post('types');
+		if ($types)
+		{
+			$user->remove('business_types');
+			$user->add('business_types', $types);
+		}
+
+		$this->json['business_types'] = $user->business_types->find_all()->as_array(NULL, 'title');
+	}
+
+	public function action_units_for_category()
+	{
+		if ( ! $category = ORM::factory('Category', $this->request->param('id')))
+		{
+			throw new HTTP_Exception_404;
+		}
+
+		$this->template = View::factory('ajax/units_for_category');
+		$this->template->units = ORM::factory('User_Units')
+			->by_category($category->id)
+			->limit(10)
+			->find_all();
+
+		$this->response->body($this->template->render());
+	}
+
 	public function after()
 	{
 		parent::after();
