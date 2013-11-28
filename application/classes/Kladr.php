@@ -68,6 +68,7 @@ class Kladr
 public static function save_address($lat, $lon, $address_str, $city_kladr_id, $address_kladr_id)
 	{
 		$location = ORM::factory('Location');
+		$city_kladr_row = Model::factory('Kladr')->get_city_by_id($city_kladr_id);
 
 		$level = $kladr_id = NULL;
 		// если пришел kladr_id, то address_str собираем сами
@@ -75,9 +76,13 @@ public static function save_address($lat, $lon, $address_str, $city_kladr_id, $a
 		{
 			// берем адрес из КЛАДР
 			$address_kladr_row 	= ORM::factory('Kladr')->get_address_by_id($address_kladr_id);
-			$address_str 		= Kladr::collect_address($address_kladr_row);
+			$address_str 		= $city_kladr_row->city.', '.Kladr::collect_address($address_kladr_row);
 			$level 				= $address_kladr_row->aolevel;
 			$kladr_id 			= $address_kladr_row->id;
+		}
+		else
+		{
+			$address_str = $city_kladr_row->city.', '.$address_str;
 		}
 
 		if ( ! $lat OR ! $lon)
