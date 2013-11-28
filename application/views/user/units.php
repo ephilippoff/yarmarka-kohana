@@ -386,7 +386,7 @@ function render_autocomplete( ul, item ) {
 									<?php
 									}
 									?>
-									<div class="contacts ">
+									<div class="contacts oh">
 										<ul>
 											<li class="title">
 												<label><span><i class="name">Контакты:</i></span></label>
@@ -396,6 +396,11 @@ function render_autocomplete( ul, item ) {
 											</li>
 										</ul>
 									</div>
+									<?php if (!empty($unit->web)) : ?>
+										<p class="site-link pt10">
+											<a target="_blank" rel="nofollow" href="<?=URL::prep_url($unit->web)?>"><?=URL::prep_url($unit->web)?></a>	
+										</p>
+									<?php endif;?>
 								</div>
 							</div>
 						</article>						

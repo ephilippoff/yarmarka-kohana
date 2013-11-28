@@ -100,12 +100,14 @@
 
 					<article class="person_info-bl">
 						<ul class="sistem-ul">
-							<li>
-								<span class="title ">О компании:</span>
-								<div class="cont">
-									<p style="color: #808080;text-align: justify"><?=$user->about?></p>
-								</div>
-							</li>
+							<?php if (!empty($user->about)) : ?>
+								<li>
+									<span class="title ">О компании:</span>
+									<div class="cont">
+										<p style="color: #808080;text-align: justify"><?=$user->about?></p>
+									</div>
+								</li>
+							<?php endif; ?>
 							<?php if (FALSE) : ?>
 							<li><span class="title">Видео:</span>
 								<div class="cont">
@@ -221,7 +223,7 @@
         					
         					<div class="visible-bl">
         						<div class="img">
-									<div class="img-container">
+									<div class="img-container ta-c">
 										<?php if (!empty($unit->filename)) : ?>
 											<img src="<?=Uploads::get_file_path($unit->filename, '136x136')?>" alt="" />
 										<?php else : ?>
@@ -268,7 +270,7 @@
 									<?php if( ! empty($unit->description)) : ?><p class="pt10">
 										<?=nl2br($unit->description);?>
 									</p><?php endif; ?>
-									<div class="contacts ">
+									<div class="contacts oh">
 										<ul>
 											<li class="title">
 												<label><span><i class="name">Контакты:</i></span></label>
@@ -278,6 +280,13 @@
 											</li>
 										</ul>
 									</div>
+									
+									<?php if (!empty($unit->web)) : ?>
+										<p class="site-link pt10">
+											<a target="_blank" rel="nofollow" href="<?=URL::prep_url($unit->web)?>"><?=URL::prep_url($unit->web)?></a>	
+										</p>
+									<?php endif;?>									
+									
         						</div>
         					</div>
         				</article>
