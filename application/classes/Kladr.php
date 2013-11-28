@@ -76,19 +76,15 @@ public static function save_address($lat, $lon, $address_str, $city_kladr_id, $a
 		{
 			// берем адрес из КЛАДР
 			$address_kladr_row 	= ORM::factory('Kladr')->get_address_by_id($address_kladr_id);
-			$address_str 		= $city_kladr_row->city.', '.Kladr::collect_address($address_kladr_row);
+			$address_str 		= Kladr::collect_address($address_kladr_row);
 			$level 				= $address_kladr_row->aolevel;
 			$kladr_id 			= $address_kladr_row->id;
-		}
-		else
-		{
-			$address_str = $city_kladr_row->city.', '.$address_str;
 		}
 
 		if ( ! $lat OR ! $lon)
 		{
 			// если координаты не пришли, запрашиваем координаты по адресу
-			$coords = Ymaps::instance()->get_coord_by_name($address_str);
+			$coords = Ymaps::instance()->get_coord_by_name($city_kladr_row->city.', '.$address_str);
 			list($lon, $lat) = $coords;
 		}
 
