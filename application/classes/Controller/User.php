@@ -118,10 +118,10 @@ class Controller_User extends Controller_Template {
                 $user_unit = ORM::factory('User_Units')
                     ->set('user_id', $this->user->id)
                     ->set('unit_id', $_POST['unit_id'])
-                    ->set('title', $_POST['title'])
-                    ->set('web', $_POST['web'])
-                    ->set('contacts', $_POST['contacts'])
-                    ->set('description', $_POST['description'])
+                    ->set('title', strip_tags($_POST['title']))
+                    ->set('web', strip_tags($_POST['web']))
+                    ->set('contacts', strip_tags($_POST['contacts']))
+                    ->set('description', strip_tags($_POST['description']))
                     ->set('filename', $_POST['unit_image_filename'])
                     ->set('locations_id', $location->id)
                     ->save();
@@ -599,7 +599,8 @@ class Controller_User extends Controller_Template {
 		
 		$user = ORM::factory('User')->where('login', '=', $this->request->param('login'))->find();
 		$region = ORM::factory('Region')->where('id', '=', 73)->find();
-
+		$city	= Region::get_current_city();
+		
 		if ( ! $user->loaded())
 		{
 			throw new HTTP_Exception_404;
@@ -607,14 +608,17 @@ class Controller_User extends Controller_Template {
 		
 		$job_category_id = 36;//TODO: Костыль: Пропись id
 
-		$this->template->job_adverts_count = $job_adverts_count = ORM::factory('Object')
+		$objects = ORM::factory('Object')
 				->where('author_company_id', '=', $user)
 				->where('active', '=', 1)
 				->where('is_published', '=', 1)
 				->where('category', '=', $job_category_id)
-				->where('date_expired', '<=',  DB::expr('CURRENT_TIMESTAMP'))
-				->count_all();
-
+				->where('date_expired', '<=',  DB::expr('CURRENT_TIMESTAMP'));
+		
+		if ($city) 
+			$objects->where('city_id', '=', $city->id);
+		
+		$this->template->job_adverts_count = $job_adverts_count = $objects->count_all();
 		
 		$this->template->is_owner = (Auth::instance()->get_user() AND Auth::instance()->get_user()->id === $user->id);
 		$this->template->filter_href = ORM::factory('Category')->where('id', '=', 1)->find()->get_url().'?user_id='.$user->id;
