@@ -977,7 +977,11 @@ class Controller_Ajax extends Controller_Template
 
 	public function action_get_business_types()
 	{
-		$this->json['business_types'] = ORM::factory('Business_Type')->find_all()->as_array('id', 'title');
+		$this->json['business_types'] 	= ORM::factory('Business_Type')->find_all()->as_array('id', 'title');
+		if ($user = Auth::instance()->get_user())
+		{
+			$this->json['selected'] 	= $user->business_types->find_all()->as_array('id', 'title');
+		}
 	}
 
 	public function action_save_user_business_types()
@@ -994,7 +998,7 @@ class Controller_Ajax extends Controller_Template
 			$user->add('business_types', $types);
 		}
 
-		$this->json['business_types'] = $user->business_types->find_all()->as_array(NULL, 'title');
+		$this->json['business_types'] = $user->business_types->find_all()->as_array('id', 'title');
 	}
 
 	public function action_units_for_category()

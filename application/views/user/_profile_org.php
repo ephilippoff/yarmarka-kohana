@@ -139,10 +139,11 @@
 	<li>
 		<div class="input style2">
 			<label><span><i class="name">Сфера деятельности:</i></span></label>					                    			
+			<?php $business_types = join(',', $user->business_types->find_all()->as_array(NULL, 'title')) ?>
 			<p class="myinform profile-input-wrapper">
 				<a href="" class="myhref profile-input-select" 
 					data-selected="<?=join(',', $user->business_types->find_all()->as_array(NULL, 'id'))?>"
-					><?=join(',', $user->business_types->find_all()->as_array(NULL, 'title'))?></a>
+					><?=$business_types ? $business_types : 'Не указано'?></a>
 			</p>
 		</div>
 	</li>
