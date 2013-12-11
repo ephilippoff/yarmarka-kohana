@@ -1012,6 +1012,65 @@ class Controller_Ajax extends Controller_Template
 
 		$this->response->body($this->template->render());
 	}
+	
+	public function action_get_unit()
+	{
+		$id = (int)$this->request->post('id');
+		
+		$unit = ORM::factory('User_Units')
+				->where('id', '=', $id)
+				->find();
+		
+		if (!($unit->loaded()))
+			$this->json['code'] = 404;		
+		else
+		{
+			$data = $unit->as_array();
+			
+			$job_category_id = 36;//TODO: Костыль: Пропись id
+
+			$job_adverts_count = ORM::factory('Object')
+					->where('author_company_id', '=', $unit->user->id)
+					->where('active', '=', 1)
+					->where('is_published', '=', 1)
+					->where('category', '=', $job_category_id)
+					->where('date_expired', '<=',  DB::expr('CURRENT_TIMESTAMP'))
+					->count_all();			
+
+			$data['kac_vacancies_link'] = ( $job_adverts_count > 0 )
+					? 
+					ORM::factory('Category')->where('id', '=', $job_category_id)->find()->get_url().'?user_id='.$unit->user->id
+					: 
+					null;			
+		
+			$data['kac_objects_link'] = ORM::factory('Category')->where('id', '=', 1)->find()->get_url().'?user_id='.$unit->user->id;
+			
+			$data['web'] = trim($data['web']) ? URL::prep_url(strip_tags($data['web'])) : null;
+			
+			$data['address'] = $unit->location->address;
+					
+			$data['userpage'] = Route::get('userpage')->uri(array('login' => $unit->user->login));
+			$data['title']		 = htmlspecialchars($data['title']);
+			$data['description'] = htmlspecialchars($data['description']);
+			$data['contacts']	 = htmlspecialchars($data['contacts']);
+			
+			$imageArr = Image::getSavePaths($data['filename']);
+			
+			if (isset($imageArr['136x136']) && (strlen($imageArr['136x136']) > 20))
+			{	
+				$image_path =  trim($imageArr['136x136'], '.');
+				$image_file = $_SERVER['DOCUMENT_ROOT'].$image_path; 
+
+				if( is_file($image_file))
+					$data['file'] = $image_path;	
+				else 
+					$data['file'] = null;
+				
+			}			
+			
+			$this->json['data'] = $data;
+		}
+	}	
 
 	public function after()
 	{
