@@ -151,6 +151,15 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 			$object->moder_state 	= 0;
 		}
 		$object->save();
+		
+		// moderation log
+		$m_log = ORM::factory('Object_Moderation_Log');
+		$m_log->action_by 	= Auth::instance()->get_user()->id;
+		$m_log->user_id 	= $object->author;
+		$m_log->description = $object->moder_state ? "Прошло модерацию" : "На модерации" ;
+		$m_log->reason 		= "STATUS".$object->moder_state;
+		$m_log->object_id 	= $object->id;
+		$m_log->save();		
 	}
 
 	public function action_ajax_decline()

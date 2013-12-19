@@ -59,6 +59,15 @@
 							</ul>
 						</li>
 						<?php endif; ?>
+						
+						<?php if (Auth::instance()->have_access_to('reports')) : ?>
+						<li class="dropdown <?=($module_name == 'reports') ? 'active' : ''?>">
+							<a href="#"  class="dropdown-toggle" data-toggle="dropdown">Reports <b class="caret"></b></a>
+							<ul class="dropdown-menu">
+								<li><a href="<?=Url::site('khbackend/reports/operstat')?>">Operators stat</a></li>
+							</ul>
+						</li>
+						<?php endif; ?>						
 
 						<?php if (Auth::instance()->have_access_to('category')) : ?>
 						<li class="dropdown <?=($module_name == 'category') ? 'active' : ''?>">

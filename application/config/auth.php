@@ -5,7 +5,7 @@ return array(
 	'driver'       => 'ORM',
 	'hash_method'  => 'sha256',
 	'hash_key'     => 'secret_salted_hash##!&&1',
-	'lifetime'     => 1209600,
+	'lifetime'     => Date::MONTH*6,
 	'session_type' => Session::$default,
 	'session_key'  => 'auth_user',
 

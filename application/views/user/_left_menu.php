@@ -1,6 +1,6 @@
 <aside class="p_room-menu">
 	<ul class="islide-menu">
-		<li><a href="" id="islide_myads"><i class="ico ico-myadd"></i><span>Мои объявления</span></a>
+		<li class="info-tooltip" data-controller-character="advert"><a href="" id="islide_myads"><i class="ico ico-myadd"></i><span>Мои объявления</span></a>
 			<ul class="no_text-decoration">
 				<?php if (Request::current()->action() == 'myads') : ?>
 				<li class=""><span class="noclickable"><b><i class="ico "></i><span>Все</span></b></span></li>
@@ -54,11 +54,11 @@
 		<?php if (Request::current()->action() == 'subscriptions') : ?>
 		<li class="active">
 		<?php else : ?>
-		<li>
+		<li class="info-tooltip" data-controller-character="index">
 		<?php endif; ?>
 			<a href="<?=URL::site('user/subscriptions')?>" id="islide_subscriptions" class="clickable"><i class="ico ico-mysub"></i><span>Мои подписки</span></a>
 		</li>
-		<li><a href="" id="islide_services"><i class="ico ico-myserv"></i><span>Сервисы</span></a>
+		<li class="info-tooltip" data-controller-character="index"><a href="" id="islide_services"><i class="ico ico-myserv"></i><span>Сервисы</span></a>
 			<ul>
 				<?php if (Request::current()->action() == 'invoices') : ?>
 				<li><span class="noclickable"><i class="ico "></i><span><b>Счета</b></span></span></li>
@@ -73,7 +73,7 @@
 				<?php endif; ?>
 			</ul>
 		</li>
-		<li><a href="" id="islide_profile"><i class="ico ico-profile"></i><span>Профиль</span></a>
+		<li class="info-tooltip" data-controller-character="index"><a href="" id="islide_profile"><i class="ico ico-profile"></i><span>Профиль</span></a>
 			<ul>
 				<?php if (Request::current()->action() == 'profile') : ?>
 				<li><i class="ico "></i><span><b>Личные данные</b></span></li>
@@ -82,9 +82,9 @@
 				<?php endif; ?>
 				
 				<?php if (Request::current()->action() == 'units') : ?>
-				<li><i class="ico "></i><span><b>Подразделения</b></span></li>
+				<li><i class="ico "></i><span><b>Адреса компании</b></span></li>
 				<?php elseif (Auth::instance()->get_user()->org_type == 2) : ?>
-				<li><a href="<?=URL::site('user/units')?>" class="clickable"><i class="ico "></i><span>Подразделения</span></a></li>
+				<li><a href="<?=URL::site('user/units')?>" class="clickable"><i class="ico "></i><span>Адреса компании</span></a></li>
 				<?php endif; ?>				
 
 				<?php if (Request::current()->action() == 'password') : ?>

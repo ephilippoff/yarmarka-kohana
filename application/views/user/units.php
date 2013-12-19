@@ -3,6 +3,7 @@ label.filebutton{
     overflow: visible;
 }
 </style>
+<script type="text/javascript" src="/js/adaptive/jquery.cookie.js"></script>
 
 <script src="http://api-maps.yandex.ru/2.0-stable/?load=package.standard&lang=ru-RU" type="text/javascript"></script>
 
@@ -82,8 +83,10 @@ function ajaxUploadAndChange(fileEl) {
 var autocomplete_city_id;
 var address_input;
 
-$(document).ready(function() {
-    $(".btn-save").click(function(e){
+$(document).ready(function() {    
+	$('#islide_profile').click();
+		
+		$(".btn-save").click(function(e){
         e.preventDefault();
         $("#create-init").submit();
     });
@@ -164,7 +167,7 @@ function render_autocomplete( ul, item ) {
 			<?=View::factory('user/_left_menu')?>
 			<section class="p_room-inner">
                 <?/*<button id="temp">Temp</button>*/?>
-				<header><span class="title">Подразделения</span></header>
+				<header><span class="title">Адреса компании</span></header>
 				<div class="p_cont secure-bl myinfo">
 					<section class="filials-bl reducting">
 <!--						<article class="informator">
@@ -174,7 +177,15 @@ function render_autocomplete( ul, item ) {
 							</div>
 						</article>-->
 						
-						<a href="" class="btn-blue2 btn-reduct ml10 mt10 mb10"><span>Добавить</span></a>
+							<a href="" class="btn-blue2 btn-reduct ml10 mt10 mb10">
+								<span>
+									<?php if (Arr::get($_GET, 'add', 'none') == 'none') : ?>
+										Добавить
+									<?php else :?>
+										Отменить
+									<?php endif;?>
+								</span>
+							</a>
 					<script> 
 						$('.btn-reduct').click(function(e){
 							e.preventDefault();
@@ -183,13 +194,9 @@ function render_autocomplete( ul, item ) {
 							else $(this).children('span').text('Отменить');
 							return false;
 						})
-						//select choosen
-						$(document).ready(function(){
-							$(".iselect").chosen();
-						});
 					</script>
 	                    <article class="article">
-							<div class="reduct-bl" style="display: none;">
+							<div class="reduct-bl" <?php if (Arr::get($_GET, 'add', 'none') == 'none') : ?> style="display: none;" <?php endif; ?> >
 	                            <form method="post" accept-charset="utf-8" enctype="multipart/form-data">
 	                                <label class="filebutton">
 	                                <div class="img">
@@ -223,11 +230,12 @@ function render_autocomplete( ul, item ) {
 												<label><span><i class="name">Тип</i></span></label>
 												<div class="inp-cont-bl ">
 													<div class="inp-cont">
-														<select class="iselect " name="unit_id" id="unit_id">
+														<select class="iselect-ns" name="unit_id" id="unit_id">
 															<option value="">-- выберите тип --</option>
-	                                                        <? foreach ($units as $unit):?>
+
+	                                                        <?php foreach ($units as $unit):?>
 	                                                            <option value="<?=$unit->id?>"><?=$unit->title?></option>
-	                                                        <? endforeach;?>
+	                                                        <?php endforeach; ?>
 														</select>
 													</div>
 												</div>
@@ -347,29 +355,23 @@ function render_autocomplete( ul, item ) {
 									<div class="map-bl">
 										<div class="map">
 											<div id="ymap_<?=$unit->id?>" style="width: 372px; height: 236px;"></div>
-											<script>
-											    var myMap_<?=$unit->id?>;
-											    ymaps.ready(function(){
-											    	var myGeocoder = ymaps.geocode('<?=$unit->location->city.", ".$unit->location->address?>');
-													myGeocoder.then(
-													    function (res) {
-													        var coords = res.geoObjects.get(0).geometry.getCoordinates(); 
-													        myMap_<?=$unit->id?> = new ymaps.Map ("ymap_<?=$unit->id?>", {
-													            center: coords,
-													            zoom: 15,
-													        });
 
-													        myMap_<?=$unit->id?>.controls.add("zoomControl").add("mapTools").add(new ymaps.control.TypeSelector(["yandex#map", "yandex#satellite", "yandex#hybrid", "yandex#publicMap"]));
+											<script type="text/javascript">
+										        ymaps.ready(init_<?=$unit->id?>);
+										 
+										        function init_<?=$unit->id?> () {
+										            var myGeocoder = [<?=$unit->location->lat.", ".$unit->location->lon?>];
+										            var myMap = new ymaps.Map('ymap_<?=$unit->id?>', {
+										                    center: myGeocoder, 
+										                    zoom: 13
+										                });
+													var myPlacemark = new ymaps.Placemark(
+														myGeocoder        
+													);
+													myMap.geoObjects.add(myPlacemark);
+										        }
+										    </script>
 
-
-													        myMap_<?=$unit->id?>.geoObjects.add(new ymaps.Placemark(coords, { 
-													            hintContent: '<?=$unit->title?>', 
-													            balloonContent: '<?=$unit->title.", ".$unit->location->city.", ".$unit->location->address?>' 
-													        }));
-														}
-													); 
-											    });
-											</script>
 										</div>
 									</div>
 									<?php
@@ -384,7 +386,7 @@ function render_autocomplete( ul, item ) {
 									<?php
 									}
 									?>
-									<div class="contacts ">
+									<div class="contacts oh">
 										<ul>
 											<li class="title">
 												<label><span><i class="name">Контакты:</i></span></label>
@@ -394,6 +396,11 @@ function render_autocomplete( ul, item ) {
 											</li>
 										</ul>
 									</div>
+									<?php if (!empty($unit->web)) : ?>
+										<p class="site-link pt10">
+											<a target="_blank" rel="nofollow" href="<?=URL::prep_url($unit->web)?>"><?=URL::prep_url($unit->web)?></a>	
+										</p>
+									<?php endif;?>
 								</div>
 							</div>
 						</article>						
