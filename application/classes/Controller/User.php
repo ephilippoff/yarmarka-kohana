@@ -81,6 +81,8 @@ class Controller_User extends Controller_Template {
 		$this->template->units		= ORM::factory('Unit')
 			->order_by('title')
 			->find_all();
+		
+		$this->template->business_types = ORM::factory('business_type')->find_all();
                 
                 /*foreach ($this->template->units as $unit) {
                     var_dump($unit->title);
@@ -127,6 +129,7 @@ class Controller_User extends Controller_Template {
                     ->set('description', strip_tags($_POST['description']))
                     ->set('filename', $_POST['unit_image_filename'])
                     ->set('locations_id', $location->id)
+					->set('business_type_id', $_POST['business_type_id'])
                     ->save();
 
             }

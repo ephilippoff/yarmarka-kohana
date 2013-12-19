@@ -243,6 +243,22 @@ function render_autocomplete( ul, item ) {
 										</li>
 										<li>
 											<div class="input style2">
+												<label><span><i class="name">Сфера деятельности</i></span></label>
+												<div class="inp-cont-bl ">
+													<div class="inp-cont">
+														<select class="iselect-ns" name="business_type_id" id="business_type_id">
+															<option value="">-- выберите категорию --</option>
+
+	                                                        <?php foreach ($business_types as $business_type):?>
+	                                                            <option value="<?=$business_type->id?>"><?=$business_type->title?></option>
+	                                                        <?php endforeach; ?>
+														</select>
+													</div>
+												</div>
+											</div>
+										</li>										
+										<li>
+											<div class="input style2">
 												<label><span><i class="name">Город</i></span></label>
 												<div class="inp-cont-bl ">
 													<div class="inp-cont">
