@@ -90,6 +90,13 @@ abstract class Controller_Template extends Controller {
 				$this->template = View::factory($this->template);
 			}
 		}
+		
+		//$this->template->user_message = Kohana::$config->load('user_message');
+		$user_message = Kohana::$config->load('user_message');	
+		View::bind_global('user_text', $user_message['user_message']['user_text']);
+		View::bind_global('user_text_enable', $user_message['user_message']['user_text_enable']);
+		
+		$this->assets->js('jquery.cookie.js');
 	}
 
 	public function after()
