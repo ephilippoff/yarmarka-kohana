@@ -1,5 +1,6 @@
 <header class="m_header header_image"  <?php if ( ! empty($style)) echo "style='$style'" ?>>
 	<section class="winner">
+		<?php echo View::factory('block/_user_message')?>
 		<div class="m_poll z3">
 			<div class="top-line ">
 				<?php if (Auth::instance()->get_user()) : ?>
