@@ -82,7 +82,7 @@ class Controller_User extends Controller_Template {
 			->order_by('title')
 			->find_all();
 		
-		$this->template->business_types = ORM::factory('business_type')->find_all();
+		$this->template->business_types = ORM::factory('Business_Type')->find_all();
                 
                 /*foreach ($this->template->units as $unit) {
                     var_dump($unit->title);
