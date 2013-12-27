@@ -381,7 +381,7 @@ class Controller_Add extends Controller_Template {
 			}
 
 			// сохраняем запись для короткого урла *.ya24.biz
-			$object->send_to_db_dns();
+			if (Kohana::$config->load('common.enable_write_short_url') === 1) $object->send_to_db_dns();
 
 			if ( ! $is_edit) 
 			{
