@@ -49,13 +49,24 @@ class Controller_Ajax extends Controller_Template
 		if (isset($data['org_name']))
 		{
 			$validation->rule('org_name', 'not_empty')
-				->label('org_name', 'Название компании');
+					->rule('org_name', 'max_length', array(':value', '150'));
+			
+			$validation->label('org_name', 'Название компании');
 		}
+		
+		if (isset($data['login']))
+		{
+			$validation->rule('login', 'not_empty')
+					->rule('login', 'alpha_numeric')
+					->rule('login', 'max_length', array(':value', '10'));
+			
+			$validation->label('login', 'Поле');						
+		}		
 
 		if ( ! $validation->check())
 		{
 			$this->json['code']	= 401;
-			$this->json['errors'] = join("<br />", $validation->errors('validation'));
+			$this->json['errors'] = join("<br />", $validation->errors('validation/profile'));
 		}
 		else
 		{

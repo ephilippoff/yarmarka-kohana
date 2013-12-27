@@ -103,7 +103,7 @@
 			<label><span><i class="name">Название компании:</i></span></label>					                    			
 			<p class="myinform profile-input-wrapper">
 				<a href="" class="myhref profile-input" 
-					data-name="org_name"><?=trim($user->org_name) ? $user->org_name : 'Не указано'?></a>
+				   data-name="org_name"><?=trim($user->org_name) ? htmlspecialchars($user->org_name) : 'Не указано'?></a>
 			</p>
 
 			<div class="alert-bl profile-alert">
