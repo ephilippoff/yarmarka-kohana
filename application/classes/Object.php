@@ -71,7 +71,7 @@ class Object
 			foreach ($params as $reference_id => $value)
 			{
 				if ((!is_array($value)) AND ($value>0)){
-					$action = ORM::factory('Attribute_action')
+					$action = ORM::factory('Attribute_Action')
 							->where('value_id','=',intval($value))
 							->cached(Date::DAY)
 							->find();
