@@ -70,6 +70,17 @@ class Object
 			$boolean_deleted = FALSE; // если меняются булевые параметры, то удаляем все что есть в базе
 			foreach ($params as $reference_id => $value)
 			{
+				if ((!is_array($value)) AND ($value>0)){
+					$action = ORM::factory('Attribute_action')
+							->where('value_id','=',intval($value))
+							->cached(Date::DAY)
+							->find();
+					if ( $action->loaded() )
+					{
+						$object->action = $action->action_id;
+					}
+				}
+
 				$form_element = ORM::factory('Form_Element')
 					->with('reference_obj:attribute_obj')
 					->where('form_element.reference', '=', $reference_id)
