@@ -586,7 +586,7 @@ class Model_Object extends ORM {
 		$has_valid_contacts = FALSE;
 		foreach ($this->contacts->find_all() as $contact)
 		{
-			if ($contact->verified_user_id)
+			if ($contact->verified_user_id == $this->author)
 			{
 				$has_valid_contacts = TRUE;
 				break;
