@@ -8,7 +8,7 @@
 							<div class="cont">
 								<div class="img"></div>
 								<p class="text">
-									Вас приглашают присоедениться к компании (вы можете быть присоеденены только к одной компании)
+									Вас приглашают присоединиться к компании (вы можете быть присоединены только к одной компании)
 									<?php if (trim($link->user->org_name)) : ?>
 										<a href="<?=URL::site('users/'.$link->user->login)?>" target="_blank"><?=$link->user->org_name?></a>
 									<?php else : ?>
