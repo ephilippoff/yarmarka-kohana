@@ -164,7 +164,9 @@ class Controller_Add extends Controller_Template {
 				$validation->rules($param, $rules);
 			}
 		}
-
+		
+		$validation->label('user_text_adv', 'Поле');
+		
 		// проверяем поля формы
 		if ( ! $validation->check())
 		{
