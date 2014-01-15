@@ -64,7 +64,8 @@
 						<li class="dropdown <?=($module_name == 'reports') ? 'active' : ''?>">
 							<a href="#"  class="dropdown-toggle" data-toggle="dropdown">Reports <b class="caret"></b></a>
 							<ul class="dropdown-menu">
-								<li><a href="<?=Url::site('khbackend/reports/operstat')?>">Operators stat</a></li>
+								<li><a href="<?=Url::site('khbackend/reports/operstat')?>">Количество модераций</a></li>
+								<li><a href="<?=Url::site('khbackend/reports/oper_objects_list')?>">Модерации</a></li>								
 							</ul>
 						</li>
 						<?php endif; ?>						
