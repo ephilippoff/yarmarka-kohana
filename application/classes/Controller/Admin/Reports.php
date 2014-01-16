@@ -38,8 +38,8 @@ class Controller_Admin_Reports extends Controller_Admin_Template {
 			$limit  = Arr::get($_GET, 'limit', 50);
 			$page   = $this->request->query('page');
 			$offset = ($page AND $page != 1) ? ($page-1)*$limit : 0;			
-			
-			$query = DB::select('object_id', 'object_moderation_log.id' , 'createdon', 'action_by', 'user_id', 'description', 'object.title', 'object.user_text', 'object.date_created', 'object.real_date_created', 'object.is_bad', 'object.is_published', array('op.email', 'op_email'), array('op.fullname', 'op_fullname'), array('author.email', 'author_email'))
+
+			$query = DB::select()
 					->from('object_moderation_log')
 					->join('object', 'LEFT')->on('object_moderation_log.object_id', '=', 'object.id')
 					->join(array('user', 'op'), 'LEFT')->on('object_moderation_log.action_by', '=', 'op.id')
@@ -47,33 +47,28 @@ class Controller_Admin_Reports extends Controller_Admin_Template {
 					->where(DB::expr('date(createdon)'), '>=', DB::expr("date '".date('Y-m-d', $from_time)."'"))
 					->where(DB::expr('date(createdon)'), '<=', DB::expr("date '".date('Y-m-d', $to_time)."'"))
 					->where('object.source_id', '=', 1)
-					->where('object.active', '=', 1)			
-					->order_by('createdon', 'DESC');
+					->where('object.active', '=', 1);			
 			
-			$query_total = DB::select(array(DB::expr('COUNT(*)'), 'logs_total'))
-					->from('object_moderation_log')
-					->join('object', 'LEFT')->on('object_moderation_log.object_id', '=', 'object.id')
-					->join(array('user', 'op'), 'LEFT')->on('object_moderation_log.action_by', '=', 'op.id')
-					->join(array('user', 'author'), 'LEFT')->on('object_moderation_log.user_id', '=', 'author.id')						
-					->where(DB::expr('date(createdon)'), '>=', DB::expr("date '".date('Y-m-d', $from_time)."'"))
-					->where(DB::expr('date(createdon)'), '<=', DB::expr("date '".date('Y-m-d', $to_time)."'"))
-					->where('object.source_id', '=', 1)
-					->where('object.active', '=', 1);
 			
 			if ($operator_id = intval($this->request->query('operator_id')))
 			{
 				$query->where('action_by', '=', $operator_id);
-				$query_total->where('action_by', '=', $operator_id);
 			}		
 			
 			if ($object_id = intval($this->request->query('object_id')))
 			{
 				$query->where('object_id', '=', $object_id);
-				$query_total->where('object_id', '=', $object_id);
-			}			
+			}
 			
+			$query_total = clone $query;												
+			
+			$query->select('object_id', 'object_moderation_log.id' , 'createdon', 'action_by', 'user_id', 'description', 'object.title', 'object.user_text', 'object.date_created', 'object.real_date_created', 'object.is_bad', 'object.is_published', array('op.email', 'op_email'), array('op.fullname', 'op_fullname'), array('author.email', 'author_email')			);
+			$query->order_by('createdon', 'DESC');
+			$logs = $query->limit($limit)->offset($offset)->execute();
+			
+			$query_total->select(array(DB::expr('COUNT(*)'), 'logs_total'));
 			$logs_total = $query_total->execute();
-			$logs = $query->limit($limit)->offset($offset)->execute();							
+										
 			
 			$this->template->logs = $logs;
 			$this->template->total = $logs_total[0]['logs_total'];
