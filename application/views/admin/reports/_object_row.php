@@ -21,7 +21,7 @@
 			/
 			<?=Date::formatted_time($log['date_created'], 'd.m.Y H:i')?>
 		</td>
-		<td>#<?=$log['user_id']?> <br/> <?=$log['author_email']?> <br/> <?=$log['op_fullname']?> </td>
-		<td>#<?=$log['action_by']?> <br> <?=$log['op_email']?></td>
+		<td>#<?=$log['user_id']?> <br/> <?=$log['author_email']?>  </td>
+		<td>#<?=$log['action_by']?> <br> <?=$log['op_email']?> <br/> <?=$log['op_fullname']?> </td>
 		<td><?=$log['is_bad']?></td>
 </tr>
