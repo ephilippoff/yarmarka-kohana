@@ -72,6 +72,7 @@ class Controller_Admin_Reports extends Controller_Admin_Template {
 					'object_moderation_log.description', 
 					'object.title', 
 					'object.user_text', 
+					'object.full_text', 
 					'object.date_created', 
 					'object.real_date_created', 
 					'object.is_bad', 

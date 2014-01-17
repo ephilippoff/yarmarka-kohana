@@ -5,11 +5,11 @@
 			<b><a href="<?=CI::site('detail/'.$log['object_id'])?>" target="_blank"><?=$log['title']?></a></b>
 			<p>
 				<span class="object_text">
-					<?php if (mb_strlen($log['user_text']) > 200) : ?>
-						<?=Text::limit_chars($log['user_text'], 200, '...', TRUE)?>
-					<?php else : ?>
-						<?=$log['user_text']?>
-					<?php endif; ?>
+					<?php //if (mb_strlen($log['full_text']) > 500) : ?>
+						<?//=Text::limit_chars($log['full_text'], 500, '...', TRUE)?>
+					<?php //else : ?>
+						<?=$log['full_text']?>
+					<?php //endif; ?>
 				</span>
 			</p>
 			<p><b>Статус: </b><?=$log['is_bad']?></p>
@@ -34,9 +34,13 @@
 					->execute()
 					->as_array(NULL, 'contact')) ?>		
 		</td>
-		<td>
-			<?php if ($log['object_main_photo']) : ?>
-				<img src="<?=Uploads::get_file_path($log['object_main_photo'], '120x90')?>" />
-			<?php endif;?>
+		<td>				
+			<div id="gallery" data-toggle="modal-gallery" data-target="#modal-gallery">
+				<?php if ($log['object_main_photo']) : ?>
+					<a href="<?=Uploads::get_file_path($log['object_main_photo'], 'orig')?>" data-gallery="gallery">
+						<img align="right" src="<?=Uploads::get_file_path($log['object_main_photo'], '120x90')?>" title="" />
+					</a>
+				<?php endif; ?>
+			</div>												
 		</td>
 </tr>
