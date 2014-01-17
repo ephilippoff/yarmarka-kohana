@@ -93,13 +93,14 @@ $(document).ready(function() {
 	<tr>
 		<th>#</th>
 		<th>Date moderation</th>
-		<th>Title</th>
-		<th>Text</th>
+		<th>Title/Text/Status</th>
 		<th>Description</th>		
 		<th>Real date/Up date</th>
 		<th>Author</th>
 		<th>Operator</th>
-		<th>Status</th>
+		<th>Category</th>
+		<th>Contacts</th>
+		<th>Photo</th>		
 
 		<?//=View::factory('admin/objects/sort_th',array('sort_by' => $sort_by, 'field_name' => 'real_date_created', 'direction' => $direction, 'name' => 'Real date/Up date'))?>
 
