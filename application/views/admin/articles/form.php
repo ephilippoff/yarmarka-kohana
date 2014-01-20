@@ -1,3 +1,5 @@
+<?=HTML::script('bootstrap/datepicker/js/bootstrap-datepicker.js')?>
+<?=HTML::style('bootstrap/datepicker/css/datepicker.css')?>
 <script type="text/javascript" src="/bootstrap/tinymce/tinymce.min.js"></script>
 <script type="text/javascript" charset="utf-8">
 tinymce.init({
@@ -34,11 +36,20 @@ $(document).ready(function() {
 			$('#text').show();
 		}
 	});
+	
+
+	// enable datepicker
+	$('.dp').datepicker({
+		format:	'yyyy-mm-dd'
+	}).on('changeDate', function(){
+		$(this).datepicker('hide');
+	});
+
 });
 </script>
 
 
-<form class="form-horizontal" method="post">
+<form class="form-horizontal" method="post" enctype="multipart/form-data">
 	<div class="control-group <?=Arr::get($errors, 'title') ? 'error' : ''?>">
 		<label class="control-label">Title</label>
 		<div class="controls">
@@ -64,11 +75,40 @@ $(document).ready(function() {
 	</div>
 	
 	<div class="control-group">
+		<label class="control-label">Type</label>
+		<div class="controls">
+			<input type="radio" name="text_type" value="1" class="text_type" <?php if (Arr::get($_POST, 'text_type') == 1) echo 'checked' ?>> Статья
+			<input type="radio" name="text_type" value="2" class="text_type" <?php if (Arr::get($_POST, 'text_type') == 2) echo 'checked' ?>> Новость
+		</div>
+	</div>	
+	
+	<div class="control-group">
 		<label class="control-label">Опубликовать</label>
 		<div class="controls">
 			<input type="checkbox" name="is_visible" value="1" id="is_visible" <?php if (Arr::get($_POST, 'is_visible', @$article->is_visible)) echo 'checked' ?>>
 		</div>
 	</div>	
+	
+	<div class="control-group">
+		<label class="control-label">Дата начала:</label>
+		<div class="controls">
+			<input type="text" class="input-small dp" placeholder="date from" name="start_date" value="<?=Arr::get(@$_GET['start_date'], 'start_date', date('Y-m-d'))?>">
+		</div>
+	</div>
+		
+	<div class="control-group">		
+		<label class="control-label">Дата окончания:</label>
+		<div class="controls">
+			<input type="text" class="input-small dp" placeholder="date to" name="end_date" value="<?=Arr::get(@$_GET['end_date'], 'end_date', date('Y-m-d', strtotime('+3 days')))?>">
+		</div>		
+	</div>		
+	
+	<div class="control-group">		
+		<label class="control-label">Фото:</label>
+		<div class="controls">
+			<input type="file" class="input-small" placeholder="photo" name="photo" >
+		</div>		
+	</div>
 
 	<div class="control-group">
 		<label class="control-label">Parent</label>

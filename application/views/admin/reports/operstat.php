@@ -36,7 +36,7 @@ $(document).ready(function() {
 	<div class="input-prepend">	
 		<!--<input type="hidden" name="date_field" value="<?=Arr::get($_GET, 'date_field', 'real_date_created')?>" />-->
 		<input type="text" class="input-small dp" placeholder="date from" name="date[from]" value="<?=Arr::get(@$_GET['date'], 'from', date('Y-m-d'))?>">
-		<input type="text" class="input-small dp" placeholder="date to" name="date[to]" value="<?=Arr::get(@$_GET['date'], 'to', date('Y-m-d'))?>">
+		<input type="text" class="input-small dp" placeholder="date to" name="date[to]" value="<?=Arr::get(@$_GET['date'], 'to', date('Y-m-d') + strtolower('+3 days'))?>">
 	</div>
 	
 	<input type="submit" name="" value="Filter" class="btn btn-primary">

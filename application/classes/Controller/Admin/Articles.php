@@ -19,8 +19,13 @@ class Controller_Admin_Articles extends Controller_Admin_Template {
 		{
 			try 
 			{
-				ORM::factory('Article')->values($_POST)
-				->save();
+				$filename = Uploads::save($_FILES['photo']);
+				
+				$post = $_POST;
+				$post['photo'] = $filename;
+				
+				ORM::factory('Article')->values($post)
+				->save();				
 
 				$this->redirect('khbackend/articles/index');
 			} 
