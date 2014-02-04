@@ -26,6 +26,7 @@
 						<div>
 						</div>
 					</address>
+					<div class="fl box-clean-cookie"><span class="fn-clean-cookie-s2 span-link">Удалить cookie. Шаг 2.</span></div>
 					<div class="copy">«Ярмарка» © 2013 </div>
 				</div>
 				<div class="right-b">
