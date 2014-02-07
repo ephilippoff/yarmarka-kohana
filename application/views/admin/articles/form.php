@@ -44,10 +44,29 @@ $(document).ready(function() {
 	}).on('changeDate', function(){
 		$(this).datepicker('hide');
 	});
+	
+	$('.fn-type-text').change(function(){		
+		if ($('.fn-type-text:checked').val() == 1)
+		{	
+			$('.only2').hide();
+			$('.only1').show();
+		}
+		else if ($('.fn-type-text:checked').val() == 2)
+		{	
+			$('.only2').show();
+			$('.only1').hide();
+		}
+	})
 
 });
 </script>
 
+<?php 
+	$text_type = (@$article->text_type == 2 or @$text_type_default == 2 or @$_POST['text_type'] == 2) ? 2 : 1;
+		
+	$start_date = isset($article->start_date) ? $article->start_date : Arr::get($_POST, 'start_date', date('Y-m-d'));	
+	$end_date   = isset($article->end_date)   ? $article->end_date   : Arr::get($_POST, 'end_date',   date('Y-m-d', strtotime('+3 days')));
+?>
 
 <form class="form-horizontal" method="post" enctype="multipart/form-data">
 	<div class="control-group <?=Arr::get($errors, 'title') ? 'error' : ''?>">
@@ -77,34 +96,34 @@ $(document).ready(function() {
 	<div class="control-group">
 		<label class="control-label">Type</label>
 		<div class="controls">			
-			<input type="radio" name="text_type" value="1" class="text_type" <?php if (@$article->text_type == 1) echo 'checked' ?> <?php if (Request::current()->action() == 'add') : ?>checked<?php endif;?> > Статья
-			<input type="radio" name="text_type" value="2" class="text_type" <?php if (@$article->text_type == 2) echo 'checked' ?>> Новость
+			<input type="radio" name="text_type" value="1" class="fn-type-text text_type" <?php if ($text_type == 1) echo 'checked' ?> > Статья
+			<input type="radio" name="text_type" value="2" class="fn-type-text text_type" <?php if ($text_type == 2) echo 'checked' ?> > Новость
 		</div>
 	</div>	
-	
+		
 	<div class="control-group">
 		<label class="control-label">Опубликовать</label>
 		<div class="controls">
 			<input type="checkbox" name="is_visible" value="1" id="is_visible" <?php if (Arr::get($_POST, 'is_visible', @$article->is_visible)) echo 'checked' ?>>
 		</div>
 	</div>	
-	
-	<div class="control-group">
+		
+	<div class="control-group only2 fn-start-date-box" <?php if ($text_type == 1) : ?>style="display: none"<?php endif; ?> >
 		<label class="control-label">Дата начала:</label>
 		<div class="controls">
-			<input type="text" class="input-small dp" placeholder="date from" name="start_date" value="<?=Arr::get($_POST, 'start_date', date('Y-m-d'))?>">
+			<input type="text" class="input-small dp" placeholder="date from" name="start_date" value="<?=$start_date?>">
 		</div>
 	</div>
-		
-	<div class="control-group">		
+
+	<div class="control-group only2 fn-end-date-box" <?php if ($text_type == 1) : ?>style="display: none"<?php endif; ?> >		
 		<label class="control-label">Дата окончания:</label>
 		<div class="controls">
-			<input type="text" class="input-small dp" placeholder="date to" name="end_date" value="<?=Arr::get($_POST, 'end_date', date('Y-m-d', strtotime('+3 days')))?>">
+			<input type="text" class="input-small dp" placeholder="date to" name="end_date" value="<?=$end_date?>">
 		</div>		
 	</div>		
-	
-	<?php if (trim(@$article->photo)) : ?>
-		<div class="control-group">		
+
+	<?php if ($text_type == 2 and trim(@$article->photo)) : ?>
+		<div class="control-group only2">		
 			<label class="control-label"></label>
 			<div class="controls">
 				<img src="<?=@Uploads::get_file_path($article->photo, '120x90')?>">
@@ -112,23 +131,34 @@ $(document).ready(function() {
 		</div>
 	<?php endif;?>
 	
-	<div class="control-group">		
+	<div class="control-group only2 fn-photo-add-box" <?php if ($text_type == 1) : ?>style="display: none"<?php endif; ?> >		
 		<label class="control-label">Фото:</label>
 		<div class="controls">
 			<input type="file" class="input-small" placeholder="photo" name="photo" >
 		</div>		
 	</div>
 
-	<div class="control-group">
-		<label class="control-label">Parent</label>
+	<div class="control-group only1 articles-rubrics-box" <?php if ($text_type == 2) : ?>style="display: none"<?php endif; ?> >
+		<label class="control-label">Рубрики статей:</label>
 		<div class="controls">
-			<?=Form::select('parent_id', 
+			<?=Form::select('article_parent_id', 
 						array('-- ROOT --')+$articles, 
 						Arr::get($_POST, 'parent_id', @$article->parent_id), 
 						array('size' => count($articles)+1, 'class' => 'input-block-level')
 			)?>
 		</div>
 	</div>
+	
+	<div class="control-group only2 news-rubrics-box" <?php if ($text_type == 1) : ?>style="display: none"<?php endif; ?> >
+		<label class="control-label">Рубрики новостей:</label>
+		<div class="controls">
+			<?=Form::select('news_parent_id', 
+						array('-- ROOT --')+$news, 
+						Arr::get($_POST, 'parent_id', @$article->parent_id), 
+						array('size' => count($news)+1, 'class' => 'input-block-level')
+			)?>
+		</div>
+	</div>	
 
 	<span id="text" <?php if (@$article->is_category) : ?>style="display:none"<?php endif; ?>>
 
@@ -150,6 +180,7 @@ $(document).ready(function() {
 	<div class="control-group">
 		<div class="controls">
 			<button type="submit" class="btn">Save</button>
+			<!--<button type="reset"  class="btn">Reset</button>-->
 		</div>
 	</div>
 </form>

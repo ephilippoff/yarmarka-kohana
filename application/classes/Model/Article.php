@@ -47,13 +47,14 @@ class Model_Article extends ORM {
 	 * @access public
 	 * @return array
 	 */
-	public function get_articles_flat_list($parent_id = 0, $level = 0)
+	public function get_articles_flat_list($parent_id = 0, $level = 0, $text_type = 1)
 	{
 		$result = array();
 		$delimeter = '&rarr;';
 
 		$articles = ORM::factory('Article')
 			->where('parent_id', '=', intval($parent_id))
+			->where('text_type', '=', intval($text_type))
 			->find_all();
 
 		foreach ($articles as $article)
@@ -61,7 +62,7 @@ class Model_Article extends ORM {
 			$result[$article->id] = str_repeat($delimeter, $level).$article->title;
 			if ($article->articles->find_all()->count() > 0)
 			{
-				$result = Arr::merge($result, $this->get_articles_flat_list($article->id, $level+1));
+				$result = Arr::merge($result, $this->get_articles_flat_list($article->id, $level+1, $text_type));
 			}
 		}
 

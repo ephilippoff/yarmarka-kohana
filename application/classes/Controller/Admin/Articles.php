@@ -15,7 +15,9 @@ class Controller_Admin_Articles extends Controller_Admin_Template {
 		$page   = $this->request->query('page');
 		$offset = ($page AND $page != 1) ? ($page-1)*$limit : 0;		
 		
-		$news = ORM::factory('Article')->where('text_type', '=', 2);
+		$news = ORM::factory('Article')
+				->where('text_type', '=', 2);
+//				->where('', 'NOT id IN', DB::expr('(select parent_id from articles)'));
 		
 		$clone_to_count = clone $news;
 		$count_all = $clone_to_count->count_all();
@@ -38,7 +40,11 @@ class Controller_Admin_Articles extends Controller_Admin_Template {
 	{
 		$this->template->errors = array();
 
-		$this->template->articles = ORM::factory('Article')->get_articles_flat_list();
+		$this->template->articles = ORM::factory('Article')->get_articles_flat_list(0, 0, 1);
+		$this->template->news	  = ORM::factory('Article')->get_articles_flat_list(0, 0, 2);
+		
+		//Умолчательный вариант типа текста: 1 - статья, 2 - новость
+		$this->template->text_type_default = 1;
 
 		if (HTTP_Request::POST === $this->request->method()) 
 		{
@@ -50,11 +56,15 @@ class Controller_Admin_Articles extends Controller_Admin_Template {
 				//Если новость
 				if ($this->request->post('text_type') == 2)
 				{
-					$post['parent_id'] = 0;
+					$post['parent_id'] = isset($post['news_parent_id']) ? $post['news_parent_id'] : 0;
 					$redirect_to = 'news';
-					if (!empty($post['photo'])) $post['photo'] = Uploads::save($_FILES['photo']);
-				}				
-				
+					if (!empty($_FILES['photo']['tmp_name'])) $post['photo'] = @Uploads::save($_FILES['photo']);				
+				}	
+				elseif ($this->request->post('text_type') == 1)
+				{
+					$post['parent_id'] = isset($post['article_parent_id']) ? $post['article_parent_id'] : 0;
+				}
+
 				ORM::factory('Article')->values($post)
 				->save();				
 
@@ -71,7 +81,8 @@ class Controller_Admin_Articles extends Controller_Admin_Template {
 	{
 		$this->template->errors = array();
 
-		$this->template->articles = ORM::factory('Article')->get_articles_flat_list();
+		$this->template->articles = ORM::factory('Article')->get_articles_flat_list(0, 0, 1);
+		$this->template->news	  = ORM::factory('Article')->get_articles_flat_list(0, 0, 2);		
 
 		$article = ORM::factory('Article', $this->request->param('id'));
 		if ( ! $article->loaded())
@@ -95,11 +106,17 @@ class Controller_Admin_Articles extends Controller_Admin_Template {
 				
 				$post = $_POST;
 				
+				$redirect_to = 'index';
+				
 				if ($article->text_type == 2)
 				{
-					$post['parent_id'] = 0;
+					$post['parent_id'] = isset($post['news_parent_id']) ? $post['news_parent_id'] : 0;
 					$redirect_to = 'news';
-					$post['photo'] = Uploads::save($_FILES['photo']);
+					if (isset($_FILES['photo'])) $post['photo'] = Uploads::save($_FILES['photo']);					
+				}	
+				elseif ($article->text_type == 1)
+				{
+					$post['parent_id'] = isset($post['article_parent_id']) ? $post['article_parent_id'] : 0;
 				}				
 				
 				$article->values($post)

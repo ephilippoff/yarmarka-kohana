@@ -29,12 +29,13 @@
 	<th></th>
 </tr>
 <?php foreach ($news as $news_one) : ?>
-<tr>
+<?php $future_show = (strtotime($news_one->start_date) > strtotime('now') and $news_one->is_category == 0) ? 'future-show' : '' ?>
+<tr class="<?php if ($news_one->is_category == 1) : ?>is_group<?php endif;?> <?=$future_show?>"  >
 	<td><?=$news_one->id?></td>
 	<td>
 		<a href="<?=URL::site(Route::get('news')->uri(array('id' => $news_one->id)))?>" target="_blank"><?=$news_one->seo_name?></a>
 	</td>
-	<td>
+	<td class="title">
 		<?=$news_one->title?>
 	</td>
 	<td><?=$news_one->created?></td>
