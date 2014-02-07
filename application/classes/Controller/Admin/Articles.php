@@ -8,6 +8,31 @@ class Controller_Admin_Articles extends Controller_Admin_Template {
 	{
 		$this->template->articles = ORM::factory('Article')->get_articles_tree();
 	}
+	
+	public function action_news()
+	{
+		$limit  = Arr::get($_GET, 'limit', 30);
+		$page   = $this->request->query('page');
+		$offset = ($page AND $page != 1) ? ($page-1)*$limit : 0;		
+		
+		$news = ORM::factory('Article')->where('text_type', '=', 2);
+		
+		$clone_to_count = clone $news;
+		$count_all = $clone_to_count->count_all();
+		
+		$this->template->news = $news->limit($limit)->offset($offset)->order_by('created', 'DESC')->find_all();
+		
+		$this->template->pagination	= Pagination::factory(array(
+				'current_page'   => array('source' => 'query_string', 'key' => 'page'),
+				'total_items'    => $count_all,
+				'items_per_page' => $limit,
+				'auto_hide'      => TRUE,
+				'view'           => 'pagination/bootstrap',
+			))->route_params(array(
+				'controller' => 'articles',
+				'action'     => 'news',
+			));		
+	}	
 
 	public function action_add()
 	{
@@ -18,16 +43,22 @@ class Controller_Admin_Articles extends Controller_Admin_Template {
 		if (HTTP_Request::POST === $this->request->method()) 
 		{
 			try 
-			{
-				$filename = Uploads::save($_FILES['photo']);
-				
+			{				
 				$post = $_POST;
-				$post['photo'] = $filename;
+				
+				$redirect_to = 'index';
+				//Если новость
+				if ($this->request->post('text_type') == 2)
+				{
+					$post['parent_id'] = 0;
+					$redirect_to = 'news';
+					if (!empty($post['photo'])) $post['photo'] = Uploads::save($_FILES['photo']);
+				}				
 				
 				ORM::factory('Article')->values($post)
 				->save();				
 
-				$this->redirect('khbackend/articles/index');
+				$this->redirect('khbackend/articles/'.$redirect_to);
 			} 
 			catch (ORM_Validation_Exception $e) 
 			{
@@ -60,12 +91,21 @@ class Controller_Admin_Articles extends Controller_Admin_Template {
 				if (empty($_POST['is_visible']))
 				{
 					$_POST['is_visible'] = 0;
-				}		
+				}	
 				
-				$article->values($_POST)
+				$post = $_POST;
+				
+				if ($article->text_type == 2)
+				{
+					$post['parent_id'] = 0;
+					$redirect_to = 'news';
+					$post['photo'] = Uploads::save($_FILES['photo']);
+				}				
+				
+				$article->values($post)
 				->save();
 
-				$this->redirect('khbackend/articles/index');
+				$this->redirect('khbackend/articles/'.$redirect_to);
 			}
 			catch(ORM_Validation_Exception $e)
 			{

@@ -34,6 +34,13 @@ Route::set('article', 'article/<seo_name>')
 		'controller' => 'Article',
 		'action'     => 'index',
 	));
+
+Route::set('news', 'news/<id>', array('id' => '\d+'))
+	->defaults(array(
+		'controller' => 'Article',
+		'action'     => 'news',
+	));
+
 Route::set('backend/ip_info', 'khbackend/users/ip_info/<ip>', array('ip' => '.*'))
 	->defaults(array(
 		'directory'  => 'Admin',

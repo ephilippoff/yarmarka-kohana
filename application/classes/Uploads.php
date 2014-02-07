@@ -56,6 +56,7 @@ class Uploads
 
 	public static function save(array $file, $original_resize = array())
 	{
+				error_reporting(-1);
 		$image = new Image();
 		if ($original_resize)
 		{

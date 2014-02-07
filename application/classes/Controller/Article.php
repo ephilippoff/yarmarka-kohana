@@ -42,6 +42,7 @@ class Controller_Article extends Controller_Template {
 		$article = ORM::factory('Article')
 			->where('seo_name', '=', $this->request->param('seo_name'))
 			->where('is_visible', '=', 1)
+			->where('text_type', '=', 1)	
 			->find();
 		
 		if ( ! $article->loaded())
@@ -54,6 +55,7 @@ class Controller_Article extends Controller_Template {
 
 		$this->template->articles = ORM::factory('Article')
 				->where('is_visible', '=', 1)
+				->where('text_type', '=', 1)
 				->find_all();
 
 		$this->template->article = $article;

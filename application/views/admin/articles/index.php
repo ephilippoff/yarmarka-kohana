@@ -18,7 +18,7 @@
 	});
 </script>
 
-<table class="table table-hover table-condensed">
+<table class="table table-hover table-condensed articles">
 <tr>
 	<th>Id</th>
 	<th>Seo name</th>

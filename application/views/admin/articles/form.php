@@ -76,9 +76,9 @@ $(document).ready(function() {
 	
 	<div class="control-group">
 		<label class="control-label">Type</label>
-		<div class="controls">
-			<input type="radio" name="text_type" value="1" class="text_type" <?php if (Arr::get($_POST, 'text_type') == 1) echo 'checked' ?>> Статья
-			<input type="radio" name="text_type" value="2" class="text_type" <?php if (Arr::get($_POST, 'text_type') == 2) echo 'checked' ?>> Новость
+		<div class="controls">			
+			<input type="radio" name="text_type" value="1" class="text_type" <?php if (@$article->text_type == 1) echo 'checked' ?> <?php if (Request::current()->action() == 'add') : ?>checked<?php endif;?> > Статья
+			<input type="radio" name="text_type" value="2" class="text_type" <?php if (@$article->text_type == 2) echo 'checked' ?>> Новость
 		</div>
 	</div>	
 	
@@ -92,16 +92,25 @@ $(document).ready(function() {
 	<div class="control-group">
 		<label class="control-label">Дата начала:</label>
 		<div class="controls">
-			<input type="text" class="input-small dp" placeholder="date from" name="start_date" value="<?=Arr::get(@$_GET['start_date'], 'start_date', date('Y-m-d'))?>">
+			<input type="text" class="input-small dp" placeholder="date from" name="start_date" value="<?=Arr::get($_POST, 'start_date', date('Y-m-d'))?>">
 		</div>
 	</div>
 		
 	<div class="control-group">		
 		<label class="control-label">Дата окончания:</label>
 		<div class="controls">
-			<input type="text" class="input-small dp" placeholder="date to" name="end_date" value="<?=Arr::get(@$_GET['end_date'], 'end_date', date('Y-m-d', strtotime('+3 days')))?>">
+			<input type="text" class="input-small dp" placeholder="date to" name="end_date" value="<?=Arr::get($_POST, 'end_date', date('Y-m-d', strtotime('+3 days')))?>">
 		</div>		
 	</div>		
+	
+	<?php if (trim(@$article->photo)) : ?>
+		<div class="control-group">		
+			<label class="control-label"></label>
+			<div class="controls">
+				<img src="<?=@Uploads::get_file_path($article->photo, '120x90')?>">
+			</div>		
+		</div>
+	<?php endif;?>
 	
 	<div class="control-group">		
 		<label class="control-label">Фото:</label>
