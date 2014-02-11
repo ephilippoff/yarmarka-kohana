@@ -22,7 +22,7 @@ class Controller_Admin_Articles extends Controller_Admin_Template {
 		$clone_to_count = clone $news;
 		$count_all = $clone_to_count->count_all();
 		
-		$this->template->news = $news->limit($limit)->offset($offset)->order_by('created', 'DESC')->find_all();
+		$this->template->news = $news->limit($limit)->offset($offset)->order_by('is_category', 'DESC')->order_by('created', 'DESC')->find_all();
 		
 		$this->template->pagination	= Pagination::factory(array(
 				'current_page'   => array('source' => 'query_string', 'key' => 'page'),
@@ -41,7 +41,7 @@ class Controller_Admin_Articles extends Controller_Admin_Template {
 		$this->template->errors = array();
 
 		$this->template->articles = ORM::factory('Article')->get_articles_flat_list(0, 0, 1);
-		$this->template->news	  = ORM::factory('Article')->get_articles_flat_list(0, 0, 2);
+		$this->template->news	  = ORM::factory('Article')->get_articles_flat_list(0, 0, 2, true);
 		
 		//Умолчательный вариант типа текста: 1 - статья, 2 - новость
 		$this->template->text_type_default = 1;
