@@ -112,7 +112,7 @@ class Controller_Admin_Articles extends Controller_Admin_Template {
 				{
 					$post['parent_id'] = isset($post['news_parent_id']) ? $post['news_parent_id'] : 0;
 					$redirect_to = 'news';
-					if (isset($_FILES['photo'])) $post['photo'] = Uploads::save($_FILES['photo']);					
+					if (!empty($_FILES['photo']['tmp_name'])) $post['photo'] = @Uploads::save($_FILES['photo']);					
 				}	
 				elseif ($article->text_type == 1)
 				{

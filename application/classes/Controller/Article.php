@@ -42,7 +42,7 @@ class Controller_Article extends Controller_Template {
 		$article = ORM::factory('Article')
 			->where('seo_name', '=', $this->request->param('seo_name'))
 			->where('is_visible', '=', 1)
-			->where('text_type', '=', 1)	
+//			->where('text_type', '=', 1)	
 			->find();
 		
 		if ( ! $article->loaded())
