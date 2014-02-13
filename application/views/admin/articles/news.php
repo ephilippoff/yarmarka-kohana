@@ -33,7 +33,7 @@
 <tr class="<?php if ($news_one->is_category == 1) : ?>is_group<?php endif;?> <?=$future_show?>"  >
 	<td><?=$news_one->id?></td>
 	<td>
-		<a href="<?=URL::site(Route::get('article')->uri(array('seo_name' => $news_one->seo_name)))?>" target="_blank"><?=$news_one->seo_name?></a>
+		<a href="<?=URL::site(Route::get('newsone')->uri(array('seo_name' => $news_one->seo_name)))?>" target="_blank"><?=$news_one->seo_name?></a>
 	</td>
 	<td class="title">
 		<?=$news_one->title?>

@@ -78,19 +78,24 @@ class Controller_Article extends Controller_Template {
 		Seo::set_title($newsone->title.Seo::get_postfix());
 		Seo::set_description($newsone->get_meta_description());		
 	
-		$this->template->other_news = ORM::factory('Article')
-				->where('text_type', '=', 2)
-				->where('is_category', '=', 0)
-				->where('is_visible', '=', 1)
-				->where('parent_id', '=', $newsone->parent_id)
-				->where('start_date', '<', DB::expr('now()'))
-				->where('end_date', '>', DB::expr('now()'))
-				->where('id', '<>', $newsone->id)
-				->order_by('created', 'desc')
-				->limit(6)
-				->find_all();
+		$photo = Image::getSavePaths($newsone->photo);												
+		$real_photo = is_file($_SERVER['DOCUMENT_ROOT'].$photo['512x384']) ? trim($photo['512x384'], '.') : ''; 		
+		
+		if ($newsone->is_category == 0)
+			$this->template->other_news = ORM::factory('Article')
+					->where('text_type', '=', 2)
+					->where('is_category', '=', 0)
+					->where('is_visible', '=', 1)
+					->where('parent_id', '=', $newsone->parent_id)
+					->where('start_date', '<', DB::expr('now()'))
+					->where('end_date', '>', DB::expr('now()'))
+					->where('id', '<>', $newsone->id)
+					->order_by('created', 'desc')
+					->limit(6)
+					->find_all();
 
-		$this->template->news_rubrics = ORM::factory('Article')->get_news_rubrics();			
+		$this->template->real_photo = $real_photo;
+		$this->template->news_rubrics = ORM::factory('Article')->get_final_news_rubrics();			
 		$this->template->newsone = $newsone;
 	}	
 	

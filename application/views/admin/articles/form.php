@@ -137,6 +137,13 @@ $(document).ready(function() {
 			<input type="file" class="input-small" placeholder="photo" name="photo" >
 		</div>		
 	</div>
+	
+	<div class="control-group only2 fn-photo-add-box" <?php if ($text_type == 1) : ?>style="display: none"<?php endif; ?> >		
+		<label class="control-label">Комментарий для фото:</label>
+		<div class="controls">
+			<textarea name="photo_comment" class="tiny input-block-level"><?=Arr::get($_POST, 'photo_comment', @$article->photo_comment)?></textarea>
+		</div>		
+	</div>	
 
 	<div class="control-group only1 articles-rubrics-box" <?php if ($text_type == 2) : ?>style="display: none"<?php endif; ?> >
 		<label class="control-label">Рубрики статей:</label>

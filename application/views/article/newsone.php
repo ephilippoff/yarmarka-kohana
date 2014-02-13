@@ -16,7 +16,7 @@
 			<section class="main-section iPage-leftPading">	                			
 				<div class="innerPage">
 					<?php if ($other_news->count()) : ?>
-					<aside class="iPage-rightAside">
+					<aside class="iPage-rightAside other-news">
 						<h2>Другие новости</h2>
 						<br/>
 						<ul>
@@ -29,7 +29,13 @@
 					<?php endif; ?>
 					<div class="innerPage-cont iPage-rightPadding">
 						<article class="iPage-article">
-							<h1 class="big" style="text-align: center;"><?=$newsone->title?></h1>
+							<h1 class="big" style="text-align: center;"><?=$newsone->title?></h1>							
+								<?php if (!empty($real_photo)) : ?>
+									<div class="photo-cont">							
+										<img class="news-photo" src="<?=$real_photo?>" alt="<?=strip_tags($newsone->photo_comment)?>" title="<?=strip_tags($newsone->photo_comment)?>" >
+										<div class="photo-comment"><?=strip_tags($newsone->photo_comment, '<p><br>')?></div>
+									</div>
+								<?php endif; ?>									
 							<?=$newsone->text?>
 						</article>
 						<?php if ($newsone->is_category) : ?>
