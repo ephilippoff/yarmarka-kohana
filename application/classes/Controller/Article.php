@@ -80,9 +80,10 @@ class Controller_Article extends Controller_Template {
 	
 		$photo = Image::getSavePaths($newsone->photo);												
 		$real_photo = is_file($_SERVER['DOCUMENT_ROOT'].$photo['512x384']) ? trim($photo['512x384'], '.') : ''; 		
+		$other_news = array();
 		
 		if ($newsone->is_category == 0)
-			$this->template->other_news = ORM::factory('Article')
+			$other_news = ORM::factory('Article')
 					->where('text_type', '=', 2)
 					->where('is_category', '=', 0)
 					->where('is_visible', '=', 1)
@@ -93,7 +94,9 @@ class Controller_Article extends Controller_Template {
 					->order_by('created', 'desc')
 					->limit(6)
 					->find_all();
-
+		
+		$this->template->other_news = $other_news;
+		$this->template->count_other_news = ($other_news) ? $other_news->count() : 0;
 		$this->template->real_photo = $real_photo;
 		$this->template->news_rubrics = ORM::factory('Article')->get_final_news_rubrics();			
 		$this->template->newsone = $newsone;

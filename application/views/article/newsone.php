@@ -15,7 +15,7 @@
 			
 			<section class="main-section iPage-leftPading">	                			
 				<div class="innerPage">
-					<?php if ($other_news->count()) : ?>
+					<?php if ($count_other_news) : ?>
 					<aside class="iPage-rightAside other-news">
 						<h2>Другие новости</h2>
 						<br/>
