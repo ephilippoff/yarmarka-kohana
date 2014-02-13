@@ -121,6 +121,33 @@ class Model_Article extends ORM {
 
 		return str_replace("\n", ' ', Text::limit_chars(trim(htmlspecialchars(strip_tags($this->description))), 500, NULL, TRUE));
 	}
+	
+	//Получить список рубрик новостей
+	function get_news_rubrics()
+	{				
+		$news_rubrics = ORM::factory('Article')
+				->where('is_category', '=', 1)
+				->where('text_type', '=', 2)
+				->where('is_visible', '=', 1)
+				->order_by('title')
+				->find_all();
+							
+		return $news_rubrics;;
+	}	
+	
+	//Получить список конечных(не имеющих дочерних групп) рубрик новостей
+	function get_final_news_rubrics()
+	{				
+		$news_rubrics = ORM::factory('Article')
+				->where('is_category', '=', 1)
+				->where('text_type', '=', 2)
+				->where('is_visible', '=', 1)
+				->where('', 'not exists', DB::expr('(select a2.id from articles as a2 where a2.is_category = 1 and a2.text_type = 2 and a2.parent_id = article.id)'))
+				->order_by('title')
+				->find_all();
+							
+		return $news_rubrics;;
+	}		
 }
 
 /* End of file Article.php */

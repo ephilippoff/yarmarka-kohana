@@ -60,6 +60,44 @@ class Controller_Article extends Controller_Template {
 
 		$this->template->article = $article;
 	}
+	
+	public function action_newsone()
+	{
+		//$this->assets->js('jquery.treeview.js');
+		$newsone = ORM::factory('Article')
+			->where('seo_name', '=', $this->request->param('seo_name'))
+			->where('is_visible', '=', 1)
+			->where('text_type', '=', 2)					
+			->find();
+	
+		if ( ! $newsone->loaded())
+		{
+			throw new HTTP_Exception_404;
+		}	
+				
+		Seo::set_title($newsone->title.Seo::get_postfix());
+		Seo::set_description($newsone->get_meta_description());		
+	
+		$this->template->other_news = ORM::factory('Article')
+				->where('text_type', '=', 2)
+				->where('is_category', '=', 0)
+				->where('is_visible', '=', 1)
+				->where('parent_id', '=', $newsone->parent_id)
+				->where('start_date', '<', DB::expr('now()'))
+				->where('end_date', '>', DB::expr('now()'))
+				->where('id', '<>', $newsone->id)
+				->order_by('created', 'desc')
+				->limit(6)
+				->find_all();
+
+		$this->template->news_rubrics = ORM::factory('Article')->get_news_rubrics();			
+		$this->template->newsone = $newsone;
+	}	
+	
+	public function action_news()
+	{	
+		$this->template->news_rubrics = ORM::factory('Article')->get_news_rubrics();
+	}
 }
 
 /* End of file Article.php */

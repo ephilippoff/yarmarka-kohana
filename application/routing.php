@@ -35,8 +35,21 @@ Route::set('article', 'article/<seo_name>')
 		'action'     => 'index',
 	));
 
-Route::set('news', 'articles/news')
+Route::set('newsone', 'news/<seo_name>')
 	->defaults(array(
+		'controller' => 'Article',
+		'action'     => 'newsone',
+	));
+
+Route::set('news', 'news')
+	->defaults(array(
+		'controller' => 'Article',
+		'action'     => 'news',
+	));
+
+Route::set('backend/news', 'articles/news')
+	->defaults(array(
+		'directory'  => 'Admin',
 		'controller' => 'Articles',
 		'action'     => 'news',
 	));
