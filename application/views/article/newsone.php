@@ -18,7 +18,7 @@
 						<br/>
 						<ul>
 							<?php foreach ($other_news as $key => $other) : ?>
-									<li><span><?=date('d.m', strtotime($other->created))?></span> <a href="<?=URL::site(Route::get('newsone')->uri(array('id' => $rubric->id, 'seo_name' => $other->seo_name)))?>"><?=$other->title?></a></li>
+									<li><span><?=date('d.m', strtotime($other->created))?></span> <a href="<?=URL::site(Route::get('newsone')->uri(array('id' => $other->id, 'seo_name' => $other->seo_name)))?>"><?=$other->title?></a></li>
 							<?php endforeach; ?>
 							
 						</ul>
