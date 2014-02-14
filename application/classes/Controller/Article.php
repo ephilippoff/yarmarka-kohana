@@ -79,7 +79,7 @@ class Controller_Article extends Controller_Template {
 		Seo::set_description($newsone->get_meta_description());		
 	
 		$photo = Image::getSavePaths($newsone->photo);												
-		$real_photo = is_file($_SERVER['DOCUMENT_ROOT'].$photo['512x384']) ? trim($photo['512x384'], '.') : ''; 		
+		$real_photo = is_file($_SERVER['DOCUMENT_ROOT'].$photo['341x256']) ? trim($photo['341x256'], '.') : ''; 		
 		$other_news = array();
 		
 		if ($newsone->is_category == 0)

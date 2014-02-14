@@ -65,9 +65,9 @@ class Image {
 			'keep_aspect_ratio' => 1,
 			'crop' =>0
         ),
-        '512x384' => array(
-			'width' => 512,
-			'height' => 384,
+        '341x256' => array(
+			'width' => 341,
+			'height' => 256,
 			'fit' => 1,
 			'keep_aspect_ratio' => 1,
 			'crop' =>0

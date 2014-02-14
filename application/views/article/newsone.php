@@ -6,7 +6,7 @@
 			</div>
 			<div class="shadow-top fl100 pt7"></div>
 			<aside class="w200 innerPage-leftAside">
-				<h2 style="margin-top: 8px;">Рубрики новостей</h2>
+				<h2 style="margin-top: 3px;">Рубрики новостей</h2>
 				<br>
 				<?php foreach ($news_rubrics as $key => $rubric) : ?>
 						<p><a href="<?=URL::site(Route::get('newsone')->uri(array('id' => $rubric->id, 'seo_name' => $rubric->seo_name)))?>"><?=$rubric->title?></a></p>
@@ -17,7 +17,7 @@
 				<div class="innerPage">
 					<?php if ($count_other_news) : ?>
 					<aside class="iPage-rightAside other-news">
-						<h2>Другие новости</h2>
+						<h2 style="margin-top:3px;">Другие новости</h2>
 						<br/>
 						<ul>
 							<?php foreach ($other_news as $key => $other) : ?>
@@ -29,19 +29,20 @@
 					<?php endif; ?>
 					<div class="innerPage-cont iPage-rightPadding">
 						<article class="iPage-article">
-							<h1 class="big" style="text-align: center;"><?=$newsone->title?></h1>							
+							<?php if ($newsone->is_category == 0) : ?><span class="news-created"><?=date('d.m.Y', strtotime($newsone->created))?></span><?php endif; ?>
+							<h1 class="big" style="text-align: left;"><?=$newsone->title?></h1>							
 								<?php if (!empty($real_photo)) : ?>
 									<div class="photo-cont">							
 										<img class="news-photo" src="<?=$real_photo?>" alt="<?=strip_tags($newsone->photo_comment)?>" title="<?=strip_tags($newsone->photo_comment)?>" >
 										<div class="photo-comment"><?=strip_tags($newsone->photo_comment, '<p><br>')?></div>
 									</div>
 								<?php endif; ?>									
-							<?=$newsone->text?>
+							<div class="text-cont"><?=$newsone->text?></div>
 						</article>
 						<?php if ($newsone->is_category) : ?>
-							<ul class="iPage-ul">
+							<ul class="iPage-ul news-list">
 								<?php foreach ($newsone->articles->order_by('is_category', 'desc')->order_by('created', 'desc')->find_all() as $article) : ?>
-									<li><a href="<?=URL::site(Route::get('newsone')->uri(array('id' => $rubric->id, 'seo_name' => $article->seo_name)))?>"><?=$article->title?></a></li>
+									<li><span><?=date('d.m', strtotime($article->created))?></span> <a href="<?=URL::site(Route::get('newsone')->uri(array('id' => $article->id, 'seo_name' => $article->seo_name)))?>"><?=$article->title?></a></li>
 								<?php endforeach; ?>
 							</ul>
 						<?php endif; ?>						
