@@ -194,7 +194,7 @@ class Controller_Block extends Controller_Template
 		while ($article->loaded())
 		{
 			$breadcrumbs[] = array(
-				'url' => Route::get('newsone')->uri(array('seo_name' => $article->seo_name)),
+				'url' => Route::get('newsone')->uri(array('id' => $article->id, 'seo_name' => $article->seo_name)),
 				'anchor' => $article->title,
 			);
 			

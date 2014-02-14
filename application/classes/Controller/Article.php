@@ -65,7 +65,7 @@ class Controller_Article extends Controller_Template {
 	{
 		//$this->assets->js('jquery.treeview.js');
 		$newsone = ORM::factory('Article')
-			->where('seo_name', '=', $this->request->param('seo_name'))
+			->where('id', '=', (int)$this->request->param('id'))
 			->where('is_visible', '=', 1)
 			->where('text_type', '=', 2)					
 			->find();

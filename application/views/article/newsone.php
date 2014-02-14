@@ -9,7 +9,7 @@
 				<h2 style="margin-top: 8px;">Рубрики новостей</h2>
 				<br>
 				<?php foreach ($news_rubrics as $key => $rubric) : ?>
-						<p><a href="<?=URL::site(Route::get('newsone')->uri(array('seo_name' => $rubric->seo_name)))?>"><?=$rubric->title?></a></p>
+						<p><a href="<?=URL::site(Route::get('newsone')->uri(array('id' => $rubric->id, 'seo_name' => $rubric->seo_name)))?>"><?=$rubric->title?></a></p>
 				<?php endforeach;?>
 			</aside><!--end main-cont aside-->
 			
@@ -21,7 +21,7 @@
 						<br/>
 						<ul>
 							<?php foreach ($other_news as $key => $other) : ?>
-									<li><span><?=date('d.m', strtotime($other->created))?></span> <a href="<?=URL::site(Route::get('newsone')->uri(array('seo_name' => $other->seo_name)))?>"><?=$other->title?></a></li>
+									<li><span><?=date('d.m', strtotime($other->created))?></span> <a href="<?=URL::site(Route::get('newsone')->uri(array('id' => $rubric->id, 'seo_name' => $other->seo_name)))?>"><?=$other->title?></a></li>
 							<?php endforeach; ?>
 							
 						</ul>
@@ -41,7 +41,7 @@
 						<?php if ($newsone->is_category) : ?>
 							<ul class="iPage-ul">
 								<?php foreach ($newsone->articles->order_by('is_category', 'desc')->order_by('created', 'desc')->find_all() as $article) : ?>
-									<li><a href="<?=URL::site(Route::get('newsone')->uri(array('seo_name' => $article->seo_name)))?>"><?=$article->title?></a></li>
+									<li><a href="<?=URL::site(Route::get('newsone')->uri(array('id' => $rubric->id, 'seo_name' => $article->seo_name)))?>"><?=$article->title?></a></li>
 								<?php endforeach; ?>
 							</ul>
 						<?php endif; ?>						
