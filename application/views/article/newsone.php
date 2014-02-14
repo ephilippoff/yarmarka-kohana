@@ -1,13 +1,10 @@
 <div class="winner article newsone">
 	<section class="main-cont ">
 		<div class="m_poll">
-			<div class="crumbs" style="margin: 4px 0 6px;">
+			<div class="crumbs" style="margin: 4px 0 15px;">
 				<?=Request::factory('block/newsone_breadcrumbs/'.$newsone->id)->execute()?>
 			</div>
-			<div class="shadow-top fl100 pt7"></div>
-			<aside class="w200 innerPage-leftAside">
-				<h2 style="margin-top: 3px;">Рубрики новостей</h2>
-				<br>
+			<aside class="w200 innerPage-leftAside news-rubrics">
 				<?php foreach ($news_rubrics as $key => $rubric) : ?>
 						<p><a href="<?=URL::site(Route::get('newsone')->uri(array('id' => $rubric->id, 'seo_name' => $rubric->seo_name)))?>"><?=$rubric->title?></a></p>
 				<?php endforeach;?>
@@ -42,7 +39,7 @@
 						<?php if ($newsone->is_category) : ?>
 							<ul class="iPage-ul news-list">
 								<?php foreach ($newsone->articles->order_by('is_category', 'desc')->order_by('created', 'desc')->find_all() as $article) : ?>
-									<li><span><?=date('d.m', strtotime($article->created))?></span> <a href="<?=URL::site(Route::get('newsone')->uri(array('id' => $article->id, 'seo_name' => $article->seo_name)))?>"><?=$article->title?></a></li>
+									<li><?php if ($article->is_category == 0) : ?><span><?=date('d.m', strtotime($article->created))?></span><?php endif; ?> <a href="<?=URL::site(Route::get('newsone')->uri(array('id' => $article->id, 'seo_name' => $article->seo_name)))?>"><?=$article->title?></a></li>
 								<?php endforeach; ?>
 							</ul>
 						<?php endif; ?>						
