@@ -95,6 +95,7 @@ class Controller_Article extends Controller_Template {
 					->limit(6)
 					->find_all();
 		
+		$this->template->set_global('is_news_page', 1);
 		$this->template->other_news = $other_news;
 		$this->template->count_other_news = ($other_news) ? $other_news->count() : 0;
 		$this->template->real_photo = $real_photo;

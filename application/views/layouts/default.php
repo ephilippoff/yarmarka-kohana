@@ -7,6 +7,9 @@
 <!--<meta content="width=device-width, initial-scale=1.0" name="viewport">-->
 <meta name="viewport" id="viewport" content="width=device-width">
 <meta name="description" content="<?=Seo::get_description()?>">
+<?php if (isset($is_news_page)) : ?>
+	<meta name="robots" content="noindex" />
+<?php endif;?>	
 <title><?=Seo::get_title()?></title>
 <?=Assets::factory('main')->css('css.css', array('media' => 'screen, projection'))
 	->css('iLight.css')
