@@ -69,10 +69,13 @@ class Object
 
 			$boolean_deleted = FALSE; // если меняются булевые параметры, то удаляем все что есть в базе
 			foreach ($params as $reference_id => $value)
-			{
-				if ((!is_array($value)) AND ($value>0)){
+			{	//В случае нескольких значений(is_multiple)
+				$value_detail = (is_array($value) and isset($value[0])) ? $value[0] : $value;
+
+				if ((!is_array($value_detail)) AND ($value_detail>0))
+				{
 					$action = ORM::factory('Attribute_Action')
-							->where('value_id','=',intval($value))
+							->where('value_id','=',intval($value_detail))
 							->cached(Date::DAY)
 							->find();
 					if ( $action->loaded() )
@@ -106,7 +109,7 @@ class Object
 					->delete_all();
 
 				// проверяем есть ли значение
-				if (is_array($value) AND empty($value['min']) AND empty($value['max']))
+				if (is_array($value) AND empty($value['min']) AND empty($value['max']) AND !isset($value[0]))
 				{
 					continue;
 				}
@@ -118,7 +121,7 @@ class Object
 				// сохраняем цену для объявления
 				if ($form_element->reference_obj->attribute_obj->is_price)
 				{
-					if (is_array($value))
+					if (is_array($value) and isset($value['min']))
 					{
 						$object->price = $value['min'];
 					}
@@ -151,7 +154,16 @@ class Object
 				{
 					$data->value = $value;
 				}
-				$data->save();
+				
+				if (is_array($value) and isset($value[0]))
+					foreach ($value as $value_detail) 
+					{
+						$data2 = clone $data;
+						$data2->value = $value_detail;
+						$data2->save();
+					}
+				else
+					$data->save();
 			}
 
 			if ($object->category_obj->title_auto_fill)
@@ -198,13 +210,17 @@ class Object
 					$params[$reference_id][$postfix] = trim($value);
 				}
 				else
-				{
-					$params[$reference_id] = trim($value);
+				{	//Если несколько значений(is_multiple)
+					if (is_array($value))
+						//Организовываем подмассив
+						foreach ($value as $one_value) 
+							$params[$reference_id][] = $one_value;					
+					else
+						$params[$reference_id] = trim($value);
 				}
 			}
-
 		}
-
+		
 		return $params;
 	}
 }
