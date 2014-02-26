@@ -402,7 +402,7 @@ class Controller_Add extends Controller_Template {
 					array('activation_code' => $user->code, 'Password' => $random_password, 'object_id' => $object->id))
 					->render();
 
-				Email::send($user->email, Kohana::$config->load('email.default_from'), 'Подтверждение регистрации на “Ярмарка-онлайн”', $msg);
+				Email::send(trim($user->email), Kohana::$config->load('email.default_from'), 'Подтверждение регистрации на “Ярмарка-онлайн”', $msg);
 			}
 
 			if ($user->email)
@@ -417,7 +417,7 @@ class Controller_Add extends Controller_Template {
 							'obj' => $object, 'city' => $city, 'category' => $category, 'subdomain' => Region::get_domain_by_city($city->id), 
 							'contacts' => $contacts, 'address' => $this->request->post('address_str')));
 
-				Email::send($user->email, Kohana::$config->load('email.default_from'), $subj, $msg);
+				Email::send(trim($user->email), Kohana::$config->load('email.default_from'), $subj, $msg);
 			}
 
 			$json['object_id'] = $object->id;

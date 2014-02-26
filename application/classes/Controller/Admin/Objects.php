@@ -249,7 +249,7 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 						),
 					)
 				)->render();
-				Email::send($object->user->email, Kohana::$config->load('email.default_from'), "Сообщение от модератора сайта", $msg);
+				Email::send(trim($object->user->email), Kohana::$config->load('email.default_from'), "Сообщение от модератора сайта", $msg);
 			}
 						
 
