@@ -156,6 +156,18 @@ class Controller_Add extends Controller_Template {
 				case 'text':
 					$rules[] = array('max_length', array(':value', $reference->attribute_obj->max_text_length));
 				break;
+			
+				case 'list':
+					$error_max_limit = '';
+					//Если есть лимит на кол-во значений и параметр имеет несколько значений
+					if ($reference->max > 0 and is_array($this->request->post('param_'.$reference->id)))
+						//Если есть превышение
+						if ($reference->max < count($this->request->post('param_'.$reference->id)))
+						{	//Фиксируем параметр и лимит
+							$error_max_limit = 'param_'.$reference->id;
+							$reference_max = $reference->max;
+						}
+				break;
 			}
 			// @todo check xss validation
 
@@ -171,6 +183,12 @@ class Controller_Add extends Controller_Template {
 		if ( ! $validation->check())
 		{
 			$errors = $validation->errors('validation/object_form');
+		}
+		
+		//Если есть параметр с ошибкой превышения лимита на кол-во значений
+		if ($error_max_limit)
+		{	//Фиксируем ошибку
+			$errors[$error_max_limit] = Kohana::message('validation/object_form', 'max_limit_values').$reference_max;
 		}
 
 		// указаны ли контакты
@@ -402,7 +420,7 @@ class Controller_Add extends Controller_Template {
 					array('activation_code' => $user->code, 'Password' => $random_password, 'object_id' => $object->id))
 					->render();
 
-				Email::send(trim($user->email), Kohana::$config->load('email.default_from'), 'Подтверждение регистрации на “Ярмарка-онлайн”', $msg);
+				//Email::send(trim($user->email), Kohana::$config->load('email.default_from'), 'Подтверждение регистрации на “Ярмарка-онлайн”', $msg);
 			}
 
 			if ($user->email)
@@ -417,7 +435,7 @@ class Controller_Add extends Controller_Template {
 							'obj' => $object, 'city' => $city, 'category' => $category, 'subdomain' => Region::get_domain_by_city($city->id), 
 							'contacts' => $contacts, 'address' => $this->request->post('address_str')));
 
-				Email::send(trim($user->email), Kohana::$config->load('email.default_from'), $subj, $msg);
+				//Email::send(trim($user->email), Kohana::$config->load('email.default_from'), $subj, $msg);
 			}
 
 			$json['object_id'] = $object->id;
