@@ -39,7 +39,18 @@
 						</article>
 						<?php if ($newsone->is_category) : ?>
 							<ul class="iPage-ul news-list">
-								<?php foreach ($newsone->articles->order_by('is_category', 'desc')->order_by('created', 'desc')->find_all() as $article) : ?>
+								<?php 
+								$news_list = ORM::factory('Article')
+												->where('text_type', '=', 2)
+												->where('is_category', '=', 0)
+												->where('is_visible', '=', 1)
+												->where('parent_id', '=', $newsone->id)
+												->where('start_date', '<', DB::expr('now()'))
+												->where('end_date', '>', DB::expr('now()'))
+												->order_by('created', 'desc')
+												->find_all();
+								?>
+								<?php foreach ($news_list as $article) : ?>
 									<?php $query_uri = '?em_client_email=noreply@yarmarka.biz&em_campaign_id=4&em_campaign_name=newsone_'.$article->id ?>
 									<li><?php if ($article->is_category == 0) : ?><span><?=date('d.m', strtotime($article->created))?></span><?php endif; ?> <a rel="nofollow" href="<?=URL::site(Route::get('newsone')->uri(array('id' => $article->id, 'seo_name' => $article->seo_name))).$query_uri?>"><?=$article->title?></a></li>
 								<?php endforeach; ?>
