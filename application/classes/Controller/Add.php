@@ -163,9 +163,8 @@ class Controller_Add extends Controller_Template {
 					if ($reference->max > 0 and is_array($this->request->post('param_'.$reference->id)))
 						//Если есть превышение
 						if ($reference->max < count($this->request->post('param_'.$reference->id)))
-						{	//Фиксируем параметр и лимит
+						{	//Фиксируем параметр
 							$error_max_limit = 'param_'.$reference->id;
-							$reference_max = $reference->max;
 						}
 				break;
 			}
@@ -188,7 +187,7 @@ class Controller_Add extends Controller_Template {
 		//Если есть параметр с ошибкой превышения лимита на кол-во значений
 		if ($error_max_limit)
 		{	//Фиксируем ошибку
-			$errors[$error_max_limit] = Kohana::message('validation/object_form', 'max_limit_values').$reference_max;
+			$errors[$error_max_limit] = Kohana::message('validation/object_form', 'max_limit_values');
 		}
 
 		// указаны ли контакты
