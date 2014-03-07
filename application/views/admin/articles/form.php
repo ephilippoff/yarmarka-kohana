@@ -121,6 +121,17 @@ $(document).ready(function() {
 			<input type="text" class="input-small dp" placeholder="date to" name="end_date" value="<?=$end_date?>">
 		</div>		
 	</div>		
+	
+	<div class="control-group only2 news-city fn-news-city" <?php if ($text_type == 1) : ?>style="display: none"<?php endif; ?> >
+		<label class="control-label">Город:</label>
+		<div class="controls">
+			<?=Form::select('city_id', 
+						array('Не выбран')+$cities, 
+						Arr::get($_POST, 'city_id', @$article->city_id), 
+						array('class' => 'news_city')
+			)?>
+		</div>
+	</div>	
 
 	<?php if ($text_type == 2 and trim(@$article->photo)) : ?>
 		<div class="control-group only2">		
