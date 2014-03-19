@@ -34,6 +34,7 @@
 						<a class="mr5 mb10 fl" href="https://vk.com/gazeta_yarmarka"><img src="/images/vkcom.png"></a>
 						<a class="mr5 mb10 fl" href="https://twitter.com/yarmarka_biz"><img src="/images/twitter.png"></a>
 						<a class="mr5 mb10 fl" href="https://www.facebook.com/Yarmarka.biz"><img src="/images/facebook.png"></a>
+					</div>
 					<div class="statistic">
 					  <?=View::factory('layouts/counters')?>
 					</div>
