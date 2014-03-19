@@ -353,7 +353,7 @@
 									<ul>
 										<?php if (!$ad->is_bad and !$ad->in_archive and $ad->is_published) : ?>
 													<li><a title="Воспользоваться услугами" href="<?=CI::site('billing/services_for_ads/'.$ad->id)?>" class="btn-pmenu "><i class="ico show"></i><span>Услуги</span></a></li>
-													<li><a title="Подать в газету" href="<?=CI::site('billing/pay_service/34/'.$ad->id)?>" class="btn-pmenu "><i class="ico show"></i><span>В газету</span></a></li>
+													<li><a title="Подать в газету" href="<?=CI::site('billing/pay_service/34/'.$ad->id)?>" class="btn-pmenu "><i class="ico yarmarka"></i><span>В газету</span></a></li>
 										<?php endif; ?>
 									</ul>
 								</div>
