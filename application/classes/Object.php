@@ -113,7 +113,7 @@ class Object
 				{
 					continue;
 				}
-				elseif (empty($value))
+				elseif (empty($value) or empty($value[0]))
 				{
 					continue;
 				}
@@ -154,12 +154,12 @@ class Object
 				{
 					$data->value = $value;
 				}
-				
+				//Значения для множественных атрибутов(с учетом того, что is_multiple могут быть только list)
 				if (is_array($value) and isset($value[0]))
 					foreach ($value as $value_detail) 
 					{
 						$data2 = clone $data;
-						$data2->value = $value_detail;
+						$data2->value = (int)$value_detail;
 						$data2->save();
 					}
 				else
