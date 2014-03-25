@@ -606,6 +606,8 @@ class Controller_User extends Controller_Template {
 		$user = ORM::factory('User')->where('login', '=', $this->request->param('login'))->find();
 		$region = ORM::factory('Region')->where('id', '=', 73)->find();
 		$city	= Region::get_current_city();
+		//Наличие объявлений у пользователя
+		$is_exist_objects = 0;
 		
 		if ( ! $user->loaded())
 		{
@@ -621,11 +623,27 @@ class Controller_User extends Controller_Template {
 				->where('category', '=', $job_category_id)
 				->where('date_expired', '<=',  DB::expr('CURRENT_TIMESTAMP'));
 		
+		
+		
 		if ($city) 
 			$objects->where('city_id', '=', $city->id);
 		
-		$this->template->job_adverts_count = $job_adverts_count = $objects->count_all();
+		$this->template->job_adverts_count = $is_exist_objects = $job_adverts_count = $objects->count_all();
+		//Если объявлений нет хотя бы в вакансиях, то смотрим наличие остальных
+		if (!$is_exist_objects)
+		{
+			$objects = ORM::factory('Object')
+				->where('author_company_id', '=', $user)
+				->where('active', '=', 1)
+				->where('is_published', '=', 1)
+				->where('date_expired', '<=',  DB::expr('CURRENT_TIMESTAMP'));		
 		
+			if ($city) 
+				$objects->where('city_id', '=', $city->id);
+			
+			$is_exist_objects = $objects->count_all();
+		}
+		$this->template->is_exist_objects = $is_exist_objects;
 		$this->template->is_owner = (Auth::instance()->get_user() AND Auth::instance()->get_user()->id === $user->id);
 		$this->template->filter_href = ORM::factory('Category')->where('id', '=', 1)->find()->get_url().'?user_id='.$user->id;
 		$this->template->job_category_href = ( $job_adverts_count > 0 )

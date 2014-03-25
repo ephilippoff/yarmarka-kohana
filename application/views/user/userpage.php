@@ -62,8 +62,11 @@
 					<?php if ($job_adverts_count > 0) : ?>
 						<li class="no-li-slide"><a href="<?=$job_category_href?>"><i class="ico ico-iadd"></i><span>Вакансии&nbsp;<span>(<?=$job_adverts_count?>)</span></span></a></li>										
 					<?php endif;?>
-					<li class="no-li-slide"><a href="<?=$filter_href?>"><i class="ico ico-iadd"></i><span>Объявления</span></a>
-					</li>
+						
+					<?php if ($is_exist_objects) : ?>						
+						<li class="no-li-slide"><a href="<?=$filter_href?>"><i class="ico ico-iadd"></i><span>Объявления</span></a></li>
+					<?php endif;?>	
+						
 					<li>
 						<div class="conpany_info w200">
 							<header><?=$user->org_name?></header>
