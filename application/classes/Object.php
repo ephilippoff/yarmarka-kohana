@@ -109,9 +109,10 @@ class Object
 					->delete_all();
 
 				// проверяем есть ли значение
-				if (is_array($value) AND empty($value['min']) AND empty($value['max']) AND !isset($value[0]))
-				{
-					continue;
+				if (is_array($value)) 
+				{		
+					if ((empty($value['min']) AND empty($value['max'])) AND !isset($value[0]))					 
+						continue;					
 				}
 				elseif (empty($value) or empty($value[0]))
 				{

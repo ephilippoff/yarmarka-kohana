@@ -418,7 +418,7 @@ class Controller_Add extends Controller_Template {
 				$msg = View::factory('emails/fast_register_success', 
 					array('activation_code' => $user->code, 'Password' => $random_password, 'object_id' => $object->id))
 					->render();
-				//if (Kohana::$environment == Kohana::PRODUCTION)
+//				if (Kohana::$environment == Kohana::PRODUCTION)
 					Email::send(trim($user->email), Kohana::$config->load('email.default_from'), 'Подтверждение регистрации на “Ярмарка-онлайн”', $msg);
 			}
 
@@ -433,7 +433,7 @@ class Controller_Add extends Controller_Template {
 						array('h1' => $subj,'object' => $object, 'name' => $user->get_user_name(), 
 							'obj' => $object, 'city' => $city, 'category' => $category, 'subdomain' => Region::get_domain_by_city($city->id), 
 							'contacts' => $contacts, 'address' => $this->request->post('address_str')));
-				//if (Kohana::$environment == Kohana::PRODUCTION)
+//				if (Kohana::$environment == Kohana::PRODUCTION)
 					Email::send(trim($user->email), Kohana::$config->load('email.default_from'), $subj, $msg);
 			}
 
