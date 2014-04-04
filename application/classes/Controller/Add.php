@@ -144,7 +144,15 @@ class Controller_Add extends Controller_Template {
 			{
 				case 'integer':
 					$rules[] = array('digit');
-					$rules[] = array('not_0');
+					//Для цены с is_required = 0 разрешаем указывать значение равным нулю
+					if ($reference->attribute_obj->is_price)
+					{	
+						if ($reference->is_required) 
+							$rules[] = array('not_0');
+					}
+					else 
+						$rules[] = array('not_0');
+					
 					$rules[] = array('max_length', array(':value', $reference->attribute_obj->solid_size));
 				break;
 

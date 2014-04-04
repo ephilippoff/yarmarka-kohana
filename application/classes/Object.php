@@ -116,7 +116,9 @@ class Object
 				}
 				elseif (empty($value) or empty($value[0]))
 				{
-					continue;
+					//Для цены допускаем ноль
+					if (!$form_element->reference_obj->attribute_obj->is_price)
+						continue;
 				}
 
 				// сохраняем цену для объявления
