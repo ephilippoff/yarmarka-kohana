@@ -577,7 +577,11 @@ class Model_Object extends ORM {
 			return FALSE;
 		}
 
-		$validate_object = (bool) ($this->city_id > 0 AND ! empty($this->title) AND ! empty($this->user_text));
+		$validate_object = (bool) ($this->city_id > 0 AND ! empty($this->title));
+		
+		if ($this->category_obj->text_required == 1) 
+			$validate_object = $validate_object AND ! empty($this->user_text);
+		
 		if ( ! $validate_object)
 		{
 			return FALSE;
@@ -592,7 +596,7 @@ class Model_Object extends ORM {
 				break;
 			}
 		}
-
+echo (int)$has_valid_contacts;
 		if ( ! $has_valid_contacts)
 		{
 			return FALSE;
