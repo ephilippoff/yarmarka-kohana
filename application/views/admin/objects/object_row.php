@@ -31,7 +31,7 @@
 
 				<span class="object_text">
 					<?php if (mb_strlen($object->full_text) > 200) : ?>
-						<?=Text::limit_chars($object->user_text, 200, '...', TRUE)?>
+						<?=Text::limit_chars(strip_tags($object->user_text), 200, '...', TRUE)?>
 						<a href="#" class="show_full_text" data-id="<?=$object->id?>">show full text</a>
 					<?php else : ?>
 						<?=$object->user_text?>
