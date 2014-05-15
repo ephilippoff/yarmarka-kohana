@@ -110,11 +110,17 @@ class Object
 
 				// проверяем есть ли значение
 				if (is_array($value)) 
-				{		
-					if ((empty($value['min']) AND empty($value['max'])) AND !isset($value[0]))					 
+				{					
+					//Условие №1 игнорирования дальнейшей обработки значения
+					$fail_cond1 = (empty($value['min']) AND empty($value['max']));					
+					//Условие №2 игнорирования дальнейшей обработки значения
+					$fail_cond2 = !isset($value[0]);
+					if (!$fail_cond2) $fail_cond2 = empty($value[0]);
+										
+					if ($fail_cond1 AND $fail_cond2) 
 						continue;					
 				}
-				elseif (empty($value) or empty($value[0]))
+				elseif (empty($value))
 				{
 					//Для цены допускаем ноль
 					if (!$form_element->reference_obj->attribute_obj->is_price)
