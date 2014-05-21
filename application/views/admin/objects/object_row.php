@@ -5,7 +5,7 @@
 	<?php else : ?>
 	<tr id="<?=$object->id?>">
 	<?php endif; ?>
-		<td><?=$object->id?></td>
+		<td><?=$object->id?> <?php if ($object->used_service) :?><span style="background-color: greenyellow;">Размещение в других городах</span><?php endif;?></td>
 		<td>
 			<?=$object->city_obj->title?><br />
 			<?=$object->category_obj->title?>
