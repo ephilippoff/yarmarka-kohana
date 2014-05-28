@@ -4,7 +4,7 @@
  * @author tenzor
  *
  */
-class Image {
+class Imageci {
 
     const IMAGE_PATH = '/uploads';
 

@@ -1069,7 +1069,7 @@ class Controller_Ajax extends Controller_Template
 			$data['description'] = htmlspecialchars($data['description']);
 			$data['contacts']	 = htmlspecialchars($data['contacts']);
 			
-			$imageArr = Image::getSavePaths($data['filename']);
+			$imageArr = Imageci::getSavePaths($data['filename']);
 			
 			if (isset($imageArr['136x136']) && (strlen($imageArr['136x136']) > 20))
 			{	

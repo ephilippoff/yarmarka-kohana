@@ -14,11 +14,11 @@ class Uploads
 	{
 		if ($type)
 		{
-			$path = Image::getThumbnailPath($filename, $type);
+			$path = Imageci::getThumbnailPath($filename, $type);
 		}
 		else
 		{
-			$path = Image::getOriginalSitePath($filename);
+			$path = Imageci::getOriginalSitePath($filename);
 		}
 
 		return trim(trim($path), '.');
@@ -50,14 +50,13 @@ class Uploads
 
 	public static function delete($filename)
 	{
-		$image = new Image();
+		$image = new Imageci();
 		return $image->deleteImage($filename);
 	}
 
 	public static function save(array $file, $original_resize = array())
 	{
-				error_reporting(-1);
-		$image = new Image();
+		$image = new Imageci();
 		if ($original_resize)
 		{
 			$image->set_original_resize($original_resize);

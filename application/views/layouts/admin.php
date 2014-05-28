@@ -79,7 +79,17 @@
 							</ul>
 						</li>
 						<?php endif; ?>
-
+						
+						<?php if (Auth::instance()->get_user()) : ?>
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">Reklama <b class="caret"></b></a>
+							<ul class="dropdown-menu">
+								<li><a href="<?=Url::site('khbackend/reklama/index')?>">List</a></li>
+								<li><a href="<?=Url::site('khbackend/reklama/add')?>">Add</a></li>
+							</ul>
+						</li>
+						<?php endif; ?>
+						
 						<?php if (Auth::instance()->get_user()) : ?>
 							<li><a href="<?=Url::site('khbackend/welcome/logout')?>">Log Out</a></li>
 						<?php endif; ?>
