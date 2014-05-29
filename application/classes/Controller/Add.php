@@ -198,8 +198,8 @@ class Controller_Add extends Controller_Template {
 			$errors[$error_max_limit] = Kohana::message('validation/object_form', 'max_limit_values');
 		}
 
-		// указаны ли контакты
-		if ( ! count($contacts))
+		// указаны ли контакты(не актуально для пользователя с ролью 9)
+		if ( ! count($contacts) and $user->role != 9)
 		{
 			$errors['contacts'] = Kohana::message('validation/object_form', 'empty_contacts');
 		}
@@ -383,6 +383,10 @@ class Controller_Add extends Controller_Template {
 			$object->date_expiration	= $date_expiration;
 			$object->geo_loc 			= $location->get_lat_lon_str();
 			$object->location_id		= $location->id;
+			
+			//Пользователь с ролью 9 создает объявления с типом 89
+			if ($user->role == 9)
+				$object->type_tr = 89;
 
 			// сохраняем объявление
 			$object = Object::save($object, $this->request);
