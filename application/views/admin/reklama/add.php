@@ -29,6 +29,20 @@
 		</div>	
 	</div>
 	
+	<div class="control-group <?=Arr::get($errors, 'class') ? 'error' : ''?>">
+		<label class="control-label">Cities:</label>
+		<div class="controls">
+			<?=Form::select('cities[]', array(1919 => 'Тюмень', 1947 => 'Нефтеюганск', 1948 => 'Нижневартовск', 1979 => 'Сургут'), null, array('multiple')) ?>
+		</div>	
+	</div>	
+
+	<div class="control-group <?=Arr::get($errors, 'class') ? 'error' : ''?>">
+		<label class="control-label">Groups:</label>
+		<div class="controls">
+			<?=Form::select('reklama_group[]', $reklama_group, null, array('multiple')) ?>
+		</div>	
+	</div>		
+	
 	<div class="control-group only2" >		
 		<label class="control-label">Banner:</label>
 		<div class="controls">

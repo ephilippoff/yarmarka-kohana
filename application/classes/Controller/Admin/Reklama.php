@@ -22,6 +22,23 @@ class Controller_Admin_Reklama extends Controller_Admin_Template {
 				if (isset($_FILES['image']))
 				{
 					$post['image'] = $this->_save_image($_FILES['image']);
+				}
+			
+				if (isset($post['cities']))
+				{
+					$post['cities'] = '{'.join(',', $post['cities']).'}';	
+				}
+				
+				//Указаны группы
+				if (isset($post['reklama_group']))
+				{	//По группам берем связанные с ними категории для записи в БД
+					$in = '('.join(',', $post['reklama_group']).')';
+					$categories = ORM::factory('Reklama_Group_Category')->where('group_id', 'in', DB::expr($in))->find_all()->as_array('id', 'category_id');
+					//Оставляем уникальные id категорий
+					$categories = array_unique($categories);
+					//Если есть категории
+					if (count($categories))
+						$post['categories'] = '{'.join(',', $categories).'}';									
 				}				
 				
 				ORM::factory('Reklama')->values($post)->save();				
@@ -33,6 +50,9 @@ class Controller_Admin_Reklama extends Controller_Admin_Template {
 				$this->template->errors = $e->errors('validation');
 			}
 		}
+				
+		$this->template->reklama_group = ORM::factory('Reklama_Group')->find_all()->as_array('id', 'name');
+			
 	}
 	
 	public function action_delete()
