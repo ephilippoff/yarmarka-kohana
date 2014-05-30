@@ -32,14 +32,14 @@
 	<div class="control-group <?=Arr::get($errors, 'class') ? 'error' : ''?>">
 		<label class="control-label">Cities:</label>
 		<div class="controls">
-			<?=Form::select('cities[]', array(1919 => 'Тюмень', 1947 => 'Нефтеюганск', 1948 => 'Нижневартовск', 1979 => 'Сургут'), null, array('multiple')) ?>
+			<?=Form::select('cities[]', array(1 => 'Тюменская область', 1919 => 'Тюмень', 1947 => 'Нефтеюганск', 1948 => 'Нижневартовск', 1979 => 'Сургут'), null, array('multiple', 'size' => 5)) ?>
 		</div>	
 	</div>	
 
 	<div class="control-group <?=Arr::get($errors, 'class') ? 'error' : ''?>">
 		<label class="control-label">Groups:</label>
 		<div class="controls">
-			<?=Form::select('reklama_group[]', $reklama_group, null, array('multiple')) ?>
+			<?=Form::select('reklama_group[]', $reklama_group, null, array('multiple', 'size' => 10)) ?>
 		</div>	
 	</div>		
 	
