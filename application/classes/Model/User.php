@@ -177,7 +177,7 @@ class Model_User extends Model_Auth_User {
 		return $query->find_all();
 	}
 
-	public function add_contact($contact_type_id, $contact_str, $moderate = 0)
+	public function add_contact($contact_type_id, $contact_str, $moderate = 0, $without_linking = 0)
 	{
 		if ( ! $this->loaded())
 		{
@@ -190,10 +190,12 @@ class Model_User extends Model_Auth_User {
 		$contact->moderate 			= intval($moderate);
 		$contact = $contact->create();
 
-		if ( ! $contact->has('users', $this->id))
-		{
-			$contact->add('users', $this->id);
-		}
+		//Привязывать контакт или нет
+		if ($without_linking)
+			if ( ! $contact->has('users', $this->id))
+			{
+				$contact->add('users', $this->id);
+			}
 
 		return $contact;
 	}

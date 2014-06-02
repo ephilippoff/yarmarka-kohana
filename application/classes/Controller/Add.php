@@ -56,30 +56,59 @@ class Controller_Add extends Controller_Template {
 
 		// идентификатор сессии в CI
 		$session_id = $this->request->post('session_id');
-
+			
 		// собираем контакты
 		$contacts = array();
-		array_walk($_POST, function($value, $key) use (&$contacts, $session_id){
-			if (preg_match('/^contact_([0-9]*)_value/', $key, $matches))
-			{
-				$value = trim($_POST['contact_'.$matches[1].'_value']);
-				if ($value)
+
+		//Пропускаем проверку is_verified для пользователей с ролью 9.
+		if ($user->role == 9 and $_POST['obj_type'] == 89)
+		{
+			array_walk($_POST, function($value, $key) use (&$contacts, $session_id){
+				if (preg_match('/^contact_([0-9]*)_value/', $key, $matches))
 				{
-					$contact_type 	= ORM::factory('Contact_Type', $_POST['contact_'.$matches[1].'_type']);
-					$contact 		= ORM::factory('Contact')->by_contact_and_type($value, $contact_type->id)
-						->find();
-					if ($contact_type->loaded() AND $contact->is_verified($session_id))
+					$value = trim($_POST['contact_'.$matches[1].'_value']);
+					if ($value)
 					{
-						$contacts[$contact->id] = array(
+						$contact_type 	= ORM::factory('Contact_Type', $_POST['contact_'.$matches[1].'_type']);
+//						$contact 		= ORM::factory('Contact')->by_contact_and_type($value, $contact_type->id)->find();
+
+						if ($contact_type->loaded())
+						{	
+							$contacts[] = array(
+//							'contact_obj' 	=> $contact,
+							'value' 		=> $value,
+							'type' 			=> $contact_type->id,
+							'type_name' 	=> $contact_type->name,
+							);
+						}
+					}
+				}
+			});		
+		}
+		else
+		{						
+			array_walk($_POST, function($value, $key) use (&$contacts, $session_id){
+				if (preg_match('/^contact_([0-9]*)_value/', $key, $matches))
+				{
+					$value = trim($_POST['contact_'.$matches[1].'_value']);
+					if ($value)
+					{
+						$contact_type 	= ORM::factory('Contact_Type', $_POST['contact_'.$matches[1].'_type']);
+						$contact 		= ORM::factory('Contact')->by_contact_and_type($value, $contact_type->id)
+							->find();
+						if ($contact_type->loaded() AND $contact->is_verified($session_id))
+						{
+							$contacts[$contact->id] = array(
 							'contact_obj' 	=> $contact,
 							'value' 		=> $value,
 							'type' 			=> $contact_type->id,
 							'type_name' 	=> $contact_type->name,
-						);
+							);
+						}
 					}
 				}
-			}
-		});
+			});
+		}		
 
 		// категория объявления
 		$category = ORM::factory('Category', $this->request->post('rubricid'));
@@ -199,7 +228,7 @@ class Controller_Add extends Controller_Template {
 		}
 
 		// указаны ли контакты(не актуально для пользователя с ролью 9)
-		if ( ! count($contacts) and $user->role != 9)
+		if ( ! count($contacts) and $user->role != 9 and $_POST['obj_type'] == 89)
 		{
 			$errors['contacts'] = Kohana::message('validation/object_form', 'empty_contacts');
 		}
@@ -384,9 +413,11 @@ class Controller_Add extends Controller_Template {
 			$object->geo_loc 			= $location->get_lat_lon_str();
 			$object->location_id		= $location->id;
 			
-			//Пользователь с ролью 9 создает объявления с типом 89
+			//Пользователь с ролью 9
 			if ($user->role == 9)
-				$object->type_tr = 89;
+			{
+				$object->type_tr = $this->request->post('obj_type');
+			}
 
 			// сохраняем объявление
 			$object = Object::save($object, $this->request);
@@ -398,12 +429,20 @@ class Controller_Add extends Controller_Template {
 			}
 
 			foreach ($contacts as $contact)
-			{
-				// сохраняем контакты для пользователя
-				$user->add_verified_contact($contact['type'], $contact['value']);
+			{	//Если пользователь с ролью 9
+				if ($user->role == 9 and $_POST['obj_type'] == 89)
+				{
+					// просто сохраняем контакт
+					$user->add_contact($contact['type'], $contact['value'], 0, 1);
+				}
+				else
+				{
+					// сохраняем контакты для пользователя
+					$user->add_verified_contact($contact['type'], $contact['value']);
+				}
 				// сохраянем новые контакты для объявления
 				$object->add_contact($contact['type'], $contact['value']);
-			}
+			}			
 
 			if ($object->is_bad === 1)
 			{
