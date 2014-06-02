@@ -61,7 +61,7 @@ class Controller_Add extends Controller_Template {
 		$contacts = array();
 
 		//Пропускаем проверку is_verified для пользователей с ролью 9.
-		if ($user->role == 9 and $_POST['obj_type'] == 89)
+		if ($user->role == 9)
 		{
 			array_walk($_POST, function($value, $key) use (&$contacts, $session_id){
 				if (preg_match('/^contact_([0-9]*)_value/', $key, $matches))
@@ -228,7 +228,7 @@ class Controller_Add extends Controller_Template {
 		}
 
 		// указаны ли контакты(не актуально для пользователя с ролью 9)
-		if ( ! count($contacts) and $user->role != 9 and $_POST['obj_type'] == 89)
+		if ( ! count($contacts) and $user->role != 9)
 		{
 			$errors['contacts'] = Kohana::message('validation/object_form', 'empty_contacts');
 		}
@@ -430,7 +430,7 @@ class Controller_Add extends Controller_Template {
 
 			foreach ($contacts as $contact)
 			{	//Если пользователь с ролью 9
-				if ($user->role == 9 and $_POST['obj_type'] == 89)
+				if ($user->role == 9)
 				{
 					// просто сохраняем контакт
 					$user->add_contact($contact['type'], $contact['value'], 0, 1);
