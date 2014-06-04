@@ -61,32 +61,30 @@ class Controller_Add extends Controller_Template {
 		$contacts = array();
 
 		//Пропускаем проверку is_verified для пользователей с ролью 9.
-		if ($user->role == 9)
-		{
-			array_walk($_POST, function($value, $key) use (&$contacts, $session_id){
-				if (preg_match('/^contact_([0-9]*)_value/', $key, $matches))
-				{
-					$value = trim($_POST['contact_'.$matches[1].'_value']);
-					if ($value)
-					{
-						$contact_type 	= ORM::factory('Contact_Type', $_POST['contact_'.$matches[1].'_type']);
-//						$contact 		= ORM::factory('Contact')->by_contact_and_type($value, $contact_type->id)->find();
-
-						if ($contact_type->loaded())
-						{	
-							$contacts[] = array(
-//							'contact_obj' 	=> $contact,
-							'value' 		=> $value,
-							'type' 			=> $contact_type->id,
-							'type_name' 	=> $contact_type->name,
-							);
-						}
-					}
-				}
-			});		
-		}
-		else
-		{						
+//		if ($user->role == 9)
+//		{
+//			array_walk($_POST, function($value, $key) use (&$contacts, $session_id){
+//				if (preg_match('/^contact_([0-9]*)_value/', $key, $matches))
+//				{
+//					$value = trim($_POST['contact_'.$matches[1].'_value']);
+//					if ($value)
+//					{
+//						$contact_type 	= ORM::factory('Contact_Type', $_POST['contact_'.$matches[1].'_type']);
+//
+//						if ($contact_type->loaded())
+//						{	
+//							$contacts[] = array(
+//							'value' 		=> $value,
+//							'type' 			=> $contact_type->id,
+//							'type_name' 	=> $contact_type->name,
+//							);
+//						}
+//					}
+//				}
+//			});		
+//		}
+//		else
+//		{						
 			array_walk($_POST, function($value, $key) use (&$contacts, $session_id){
 				if (preg_match('/^contact_([0-9]*)_value/', $key, $matches))
 				{
@@ -108,7 +106,7 @@ class Controller_Add extends Controller_Template {
 					}
 				}
 			});
-		}		
+//		}		
 
 		// категория объявления
 		$category = ORM::factory('Category', $this->request->post('rubricid'));
@@ -430,16 +428,16 @@ class Controller_Add extends Controller_Template {
 
 			foreach ($contacts as $contact)
 			{	//Если пользователь с ролью 9
-				if ($user->role == 9)
-				{
-					// просто сохраняем контакт
-					$user->add_contact($contact['type'], $contact['value'], 0, 1);
-				}
-				else
-				{
+//				if ($user->role == 9)
+//				{
+//					// просто сохраняем контакт
+//					$user->add_contact($contact['type'], $contact['value'], 0, 1);
+//				}
+//				else
+//				{
 					// сохраняем контакты для пользователя
 					$user->add_verified_contact($contact['type'], $contact['value']);
-				}
+//				}
 				// сохраянем новые контакты для объявления
 				$object->add_contact($contact['type'], $contact['value']);
 			}			
