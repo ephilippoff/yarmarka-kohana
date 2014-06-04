@@ -226,7 +226,7 @@ class Controller_Add extends Controller_Template {
 		}
 
 		// указаны ли контакты(не актуально для пользователя с ролью 9)
-		if ( ! count($contacts) and $user->role != 9)
+		if ( ! count($contacts) /*and $user->role != 9*/)
 		{
 			$errors['contacts'] = Kohana::message('validation/object_form', 'empty_contacts');
 		}
@@ -412,10 +412,10 @@ class Controller_Add extends Controller_Template {
 			$object->location_id		= $location->id;
 			
 			//Пользователь с ролью 9
-			if ($user->role == 9)
-			{
-				$object->type_tr = $this->request->post('obj_type');
-			}
+//			if ($user->role == 9)
+//			{
+//				$object->type_tr = $this->request->post('obj_type');
+//			}
 
 			// сохраняем объявление
 			$object = Object::save($object, $this->request);
