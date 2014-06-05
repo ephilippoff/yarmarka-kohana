@@ -22,7 +22,11 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 			->with_main_photo()
 			->with_used_service(41)
 			->where('source_id', '=', 1)
-			->where('active', '=', 1);
+			->where('active', '=', 1)
+			->where_open()
+				->where('type_tr', 'IS', NULL)
+				->or_where('type_tr', '=', 1)
+			->where_close();
 
 		/**
 		 * Filters
