@@ -132,7 +132,7 @@ class Controller_Add extends Controller_Template {
 		{
 			$validation->rules('user_text_adv', array(
 				array('not_empty'),
-				array('max_length', array(':value', 1500)),
+				array('max_length', array(':value', 15000)),
 			));
 		}
 
