@@ -301,12 +301,15 @@ class Controller_Add extends Controller_Template {
 			}
 		}
 
-		// проверяем количество уже поданных пользователем объявлений
-		if ( ! $category->check_max_user_objects($user, $object_id))
+		// проверяем количество уже поданных пользователем объявлений(кроме роли 9)
+		if ($user->role != 9)
 		{
-			$errors['contacts'] = Kohana::message('validation/object_form', 'max_objects');
+			if ( ! $category->check_max_user_objects($user, $object_id))
+			{
+				$errors['contacts'] = Kohana::message('validation/object_form', 'max_objects');
+			}
 		}
-
+		
 		if ( ! $errors)
 		{
 			// время жизни объявления
