@@ -23,7 +23,7 @@
 			<td><?=$ads_element->start_date?></td>
 			<td><?=$ads_element->end_date?></td>
 			<td>
-				<!--<a href="<?=Url::site('khbackend/reklama/edit/'.$ads_element->id)?>" class="icon-pencil"></a>-->
+				<a href="<?=Url::site('khbackend/reklama/edit/'.$ads_element->id)?>" class="icon-pencil"></a>
 				<a href="<?=Url::site('khbackend/reklama/delete/'.$ads_element->id)?>" class="icon-trash delete_article"></a>
 			</td>
 		</tr>

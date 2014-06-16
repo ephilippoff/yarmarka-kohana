@@ -30,8 +30,11 @@ class Controller_Admin_Reklama extends Controller_Admin_Template {
 				}
 				
 				//Указаны группы
-				if (isset($post['reklama_group']))
-				{	//По группам берем связанные с ними категории для записи в БД
+				if (isset($post['reklama_group']))					
+				{	
+					//Группы
+					$post['groups'] = '{'.join(',', $post['reklama_group']).'}';
+					//По группам берем связанные с ними категории для записи в БД
 					$in = '('.join(',', $post['reklama_group']).')';
 					$categories = ORM::factory('Reklama_Group_Category')->where('group_id', 'in', DB::expr($in))->find_all()->as_array('id', 'category_id');
 					//Оставляем уникальные id категорий
@@ -53,6 +56,65 @@ class Controller_Admin_Reklama extends Controller_Admin_Template {
 				
 		$this->template->reklama_group = ORM::factory('Reklama_Group')->find_all()->as_array('id', 'name');
 			
+	}
+	
+	public function action_edit()
+	{	
+		$this->template->errors = array();
+		
+		$ad_element = ORM::factory('Reklama', $this->request->param('id'));
+		if ( ! $ad_element->loaded())
+		{
+			throw new HTTP_Exception_404;
+		}			
+
+		if (HTTP_Request::POST === $this->request->method()) 
+		{
+			try 
+			{				
+				$post = $_POST;			
+
+				if (($_FILES['image']['name']))
+				{			
+					$post['image'] = $this->_save_image($_FILES['image']);
+				}
+				else
+				{
+					if (isset($post['delete_image']))
+						$post['image'] = null;
+				}
+			
+				if (isset($post['cities']))
+				{
+					$post['cities'] = '{'.join(',', $post['cities']).'}';	
+				}
+				
+				//Указаны группы
+				if (isset($post['reklama_group']))
+				{	
+					$post['groups'] = '{'.join(',', $post['reklama_group']).'}';
+					//По группам берем связанные с ними категории для записи в БД
+					$in = '('.join(',', $post['reklama_group']).')';
+					$categories = ORM::factory('Reklama_Group_Category')->where('group_id', 'in', DB::expr($in))->find_all()->as_array('id', 'category_id');
+					//Оставляем уникальные id категорий
+					$categories = array_unique($categories);
+					//Если есть категории
+					if (count($categories))
+						$post['categories'] = '{'.join(',', $categories).'}';									
+				}				
+				
+				$ad_element->values($post)->save();				
+
+				$this->redirect('khbackend/reklama/index');
+			} 
+			catch (ORM_Validation_Exception $e) 
+			{
+				$this->template->errors = $e->errors('validation');
+			}
+		}
+
+		$this->template->ad_element = $ad_element;		
+		$this->template->reklama_group = ORM::factory('Reklama_Group')->find_all()->as_array('id', 'name');
 	}
 	
 	public function action_delete()

@@ -601,7 +601,7 @@ class Model_Object extends ORM {
 				break;
 			}
 		}
-echo (int)$has_valid_contacts;
+
 		if ( ! $has_valid_contacts)
 		{
 			return FALSE;
