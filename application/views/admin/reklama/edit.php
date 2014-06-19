@@ -43,7 +43,7 @@ $(document).ready(function() {
 		<div class="controls">
 			<?=Form::select('cities[]', 
 							array(1 => 'Тюменская область', 1919 => 'Тюмень', 1947 => 'Нефтеюганск', 1948 => 'Нижневартовск', 1979 => 'Сургут'), 
-							Arr::get($_POST, 'cities', dbhelper::convert_pg_array(@$ad_element->cities)), 
+							Arr::get($_POST, 'cities', Dbhelper::convert_pg_array(@$ad_element->cities)), 
 							array('multiple', 'size' => 5)) ?>
 		</div>	
 	</div>	
