@@ -43,7 +43,8 @@
 
 			//Вытаскиваем названия городов
 			foreach (explode(',', trim($ads_element->cities,'{}')) as $code)
-				$cities .= $main_cities[$code].', ';		
+				if (isset($main_cities[$code])) 
+					$cities .= $main_cities[$code].', ';		
 			
 			//Определяем позиции ссылок во времени: просрочка, не более трех дней до просрочки
 			if (time() > strtotime($ads_element->end_date))
@@ -58,7 +59,7 @@
 			{	
 				preg_match('/\d+$/', $ads_element->link, $matches);	//Ищем id объявления			
 				if (isset($matches[0]) and (int)$matches[0]) //Если найден id
-					$visits = ORM::factory('object')->where('id', '=', (int)$matches[0])->find()->visits;
+					$visits = ORM::factory('Object')->where('id', '=', (int)$matches[0])->find()->visits;
 			}
 		?>
 	
