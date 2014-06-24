@@ -68,6 +68,13 @@ $(document).ready(function() {
 			<input type="text" class="input-small dp" placeholder="до" name="end_date" value="<?=Arr::get($_POST, 'end_date', date('Y-m-d', strtotime('+7 days')))?>">
 		</div>		
 	</div>
+	
+	<div class="control-group only2" >		
+		<label class="control-label">Комментарии:</label>
+		<div class="controls">
+			<textarea name="comments"></textarea>
+		</div>		
+	</div>	
 
 	<div class="control-group">
 		<div class="controls">

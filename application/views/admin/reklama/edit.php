@@ -76,6 +76,13 @@ $(document).ready(function() {
 			<input type="text" class="input-small dp" placeholder="до" name="end_date" value="<?=Arr::get($_POST, 'end_date', @$ad_element->end_date)?>">
 		</div>		
 	</div>
+	
+	<div class="control-group only2" >		
+		<label class="control-label">Комментарии:</label>
+		<div class="controls">
+			<textarea name="comments"><?=Arr::get($_POST, 'comments', @$ad_element->comments)?></textarea>
+		</div>		
+	</div>		
 
 	<div class="control-group">
 		<div class="controls">

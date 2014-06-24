@@ -6,7 +6,21 @@ class Controller_Admin_Reklama extends Controller_Admin_Template {
 
 	public function action_index()
 	{
-		$this->template->ads_list = ORM::factory('Reklama')->order_by('id')->find_all();		
+		//Возможные варианты сортировки
+		$sorting_types = array('asc', 'desc');
+		$sorting_fields   = array('start_date', 'end_date', 'id');
+		//Принимаем, сверяем параметры сортировки
+		$sort	 = in_array($this->request->query('sort'), $sorting_types) ? $this->request->query('sort') : '';
+		$sort_by = in_array($this->request->query('sort_by'), $sorting_fields) ? $this->request->query('sort_by') : '';		
+			
+		$reklama_list = ORM::factory('Reklama');		
+		
+		if ($sort_by and $sort)
+			$reklama_list->order_by($sort_by, $sort);
+
+		$this->template->ads_list = $reklama_list->find_all();
+		$this->template->sort = $sort;
+		$this->template->sort_by = $sort_by;
 	}
 	
 	public function action_add()
