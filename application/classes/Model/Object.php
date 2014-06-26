@@ -229,7 +229,9 @@ class Model_Object extends ORM {
 	 */
 	public function get_service_up_timestamp()
 	{
-		return strtotime($this->date_created) + 86400 * Kohana::$config->load('common.days_count_between_service_up');
+		$interval = Kohana::$config->load('common.days_count_between_service_up_by_cat');
+		$interval = (isset($interval[$this->category])) ? $interval[$this->category] : Kohana::$config->load('common.days_count_between_service_up');
+		return strtotime($this->date_created) + 86400 * $interval;
 	}
 
 	public function up()
