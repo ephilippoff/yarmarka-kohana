@@ -124,7 +124,7 @@ class Lib_PlacementAds_AddEdit {
 		return $this;
 	}
 
-	function init_contacts($need_verified)
+	function init_contacts()
 	{
 		$contacts = &$this->contacts;
 		foreach((array) $this->params as $key=>$value){
@@ -137,7 +137,7 @@ class Lib_PlacementAds_AddEdit {
 					$contact_type 	= ORM::factory('Contact_Type', $type );
 					$contact 		= ORM::factory('Contact')->by_contact_and_type($value, $contact_type->id)
 						->find();
-					if ($contact_type->loaded() AND $contact->is_verified($this->params->session_id))//TODO
+					if ($contact_type->loaded() AND $contact->is_verified($this->params->session_id))
 					{
 						$contacts[$contact->id] = array(
 							'contact_obj' 	=> $contact,
@@ -227,14 +227,12 @@ class Lib_PlacementAds_AddEdit {
 			$errors['contacts'] = Kohana::message('validation/object_form', 'empty_contacts');
 		}
 
-		if ($user->role != 9)
-  		{
-			// проверяем количество уже поданных пользователем объявлений
-			if ( ! $this->category->check_max_user_objects($user, $this->params->object_id))//TODO
-			{
-				$errors['contacts'] = Kohana::message('validation/object_form', 'max_objects');
-			}
+		// проверяем количество уже поданных пользователем объявлений
+		if ( ! $this->category->check_max_user_objects($user, $this->params->object_id))
+		{
+			$errors['contacts'] = Kohana::message('validation/object_form', 'max_objects');
 		}
+
 		return $this;
 	}
 
@@ -604,7 +602,7 @@ class Lib_PlacementAds_AddEdit {
 		return $this;
 	}
 
-	function save_contacts($save_for_user = TRUE)
+	function save_contacts()
 	{
 		$object = &$this->object;
 		$user = &$this->user;
@@ -617,11 +615,10 @@ class Lib_PlacementAds_AddEdit {
 
 		foreach ($contacts as $contact)
 		{
-			if ($save_for_user)
-			{
-				// сохраняем контакты для пользователя
-				$user->add_verified_contact($contact['type'], $contact['value']);
-			}
+
+			// сохраняем контакты для пользователя
+			$user->add_verified_contact($contact['type'], $contact['value']);
+
 			// сохраянем новые контакты для объявления
 			$object->add_contact($contact['type'], $contact['value']);
 		}
