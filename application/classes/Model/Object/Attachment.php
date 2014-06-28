@@ -30,10 +30,8 @@ class Model_Object_Attachment extends ORM
 	{	
 
 
-		if ($this->signature AND is_array($this->signature))
+		if ($this->signature)
 		{
-			$this->signature = '{'.join(',', $this->signature).'}';
-		} /*else {
 			$filepath = Uploads::get_full_path($this->filename);
 
 			if ( ! file_exists($filepath))
@@ -44,7 +42,7 @@ class Model_Object_Attachment extends ORM
 			$image_diff = new Image_Diff;
 			$array =  $image_diff->generate_array($filepath);
 			$this->signature = "{".join(',', $array)."}";		
-		}*/
+		}
 
 		parent::save($validation);
 	}
@@ -62,6 +60,10 @@ class Model_Object_Attachment extends ORM
 		$array_str = "'{".join(',', $array)."}'::int[]";
 		$query = DB::select(DB::expr("MAX(smlar($array_str, signature)) AS sm"))
 			->from($this->_table_name)
+			->join('object', 'left')
+			->on('object.id', '=', 'object_id')
+			->where('object.active', '=', 1)
+			->where('object.is_published', '=', 1)
 			->where('signature', 'IS', DB::expr('NOT NULL'));
 
 		return (float) $query->execute()->get('sm');

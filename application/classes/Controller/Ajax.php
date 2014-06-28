@@ -1098,10 +1098,15 @@ class Controller_Ajax extends Controller_Template
 
 			$filename = Uploads::make_thumbnail($_FILES['userfile1']);
 
-			$similarity = ORM::factory('Object_Attachment')->get_similarity(Uploads::get_full_path($filename));
-			if ($similarity > Kohana::$config->load('common.max_image_similarity'))
+			$enable_image_similarity = Kohana::$config->load('common.enable_image_similarity');
+
+			if ($enable_image_similarity)
 			{
-				throw new Exception('Картинка дубликат');
+				$similarity = ORM::factory('Object_Attachment')->get_similarity(Uploads::get_full_path($filename));
+				if ($similarity > Kohana::$config->load('common.max_image_similarity'))
+				{
+					throw new Exception('Картинка дубликат');
+				}
 			}
 
 			$this->json['filename'] = $filename;
