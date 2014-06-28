@@ -13,14 +13,17 @@ class Controller_Add extends Controller_Template {
 			throw new HTTP_Exception_404('only ajax requests allowed');
 		}
 
-		if (Kohana::$environment == Kohana::DEVELOPMENT)
+		//если в локале работаем с подачей, ставим 1
+		$local = 0;
+
+		if ($local == 1)
 		{
 			//подставляется дефолтный город 1947 не из кладра, чтоб кладр на локале не разворачивать
 			//не сохраняется короткий урл
 			$json = Object::PlacementAds_Local($this->request->post());
 
 		} else {
-			if ($user->role == 9 OR $user->role == 1) 
+			if ($user->role == 9) 
 			{
 				//убрана проверка контактов
 				//убрана проверка на максимальное количество объяв в рубрику
