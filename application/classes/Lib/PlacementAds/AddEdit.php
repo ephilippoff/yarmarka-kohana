@@ -246,13 +246,13 @@ class Lib_PlacementAds_AddEdit {
 		// сохраняем город если нет такого города в базе
 		$city = Kladr::save_city($params->city_kladr_id, $params->city_name);
 
-		// сохраняем адрес
-		$location = Kladr::save_address(
-			$params->address_kladr_id, 
-			$params->object_coordinates, 
-			$params->address,
-			$params->city_kladr_id
-		);
+		@list($lat, $lon) = explode(',', $params->object_coordinates);
+
+		$location = Kladr::save_address($lat, $lon,
+ 				$params->address,
+ 				$params->city_kladr_id,
+ 				$params->address_kladr_id
+ 			);
 
 		// если не нашли адрес, то берем location города
 		if ( ! $location->loaded())
