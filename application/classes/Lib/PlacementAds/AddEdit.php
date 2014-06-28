@@ -374,6 +374,7 @@ class Lib_PlacementAds_AddEdit {
 				$attachment = ORM::factory('Object_Attachment');
 				$attachment->filename 	= $file;
 				$attachment->object_id 	= $object->id;
+				$attachment->signature 	= $attachment->generate_signature();
 				$attachment->save();
 
 				if ($file == $main_photo)

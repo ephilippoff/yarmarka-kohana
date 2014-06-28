@@ -33,7 +33,7 @@ class Model_Object_Attachment extends ORM
 		if ($this->signature AND is_array($this->signature))
 		{
 			$this->signature = '{'.join(',', $this->signature).'}';
-		} else {
+		} /*else {
 			$filepath = Uploads::get_full_path($this->filename);
 
 			if ( ! file_exists($filepath))
@@ -44,7 +44,7 @@ class Model_Object_Attachment extends ORM
 			$image_diff = new Image_Diff;
 			$array =  $image_diff->generate_array($filepath);
 			$this->signature = "{".join(',', $array)."}";		
-		}
+		}*/
 
 		parent::save($validation);
 	}
