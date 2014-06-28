@@ -5,7 +5,7 @@
 			<ul class="fl">
 				<li><a href="http://feedback.yarmarka.biz">Техподдержка</a></li>
 				<li><a href="<?=CI::site('add/step/1/0')?>">Подать объявление</a></li>
-				<li><a href="http://job.yarmarka.biz/">Рекламодателям</a></li>
+				<li><a href="http://job.yarmarka.biz/">Вакансии</a></li>
 			</ul>
 			<ul class="fr">
 				<li><a href="<?=URL::site('user/profile')?>">Личный кабинет</a></li>

@@ -27,7 +27,7 @@
 					<?php endif; ?>
 					<div class="innerPage-cont iPage-rightPadding">
 						<article class="iPage-article">
-							<?php if ($newsone->is_category == 0) : ?><span class="news-created"><?=date('d.m.Y', strtotime($newsone->created))?></span><?php endif; ?>
+							<?php if ($newsone->is_category == 0) : ?><span class="news-created"><?php if ($newsone->created) : ?><?=date('d.m.Y', strtotime($newsone->created))?><?php endif; ?></span><?php endif; ?>
 							<h1 class="big" style="text-align: left;"><?=$newsone->title?></h1>							
 								<?php if (!empty($real_photo)) : ?>
 									<div class="photo-cont">							

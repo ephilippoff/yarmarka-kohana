@@ -10,7 +10,7 @@ class Controller_Add extends Controller_Template {
 
 		if ( ! Request::current()->is_ajax())
 		{
-			//throw new HTTP_Exception_404('only ajax requests allowed');
+			throw new HTTP_Exception_404('only ajax requests allowed');
 		}
 
 		if (Kohana::$environment == Kohana::DEVELOPMENT)

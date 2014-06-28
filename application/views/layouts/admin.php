@@ -5,6 +5,7 @@
 	<title>Admin</title>
 	<?=HTML::style('bootstrap/css/bootstrap.min.css')?>
 	<?=HTML::style('bootstrap/css/bootstrap-responsive.min.css')?>
+	<?=HTML::style('bootstrap/css/admin.css')?>
 	<style>
 		body {
 			padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
