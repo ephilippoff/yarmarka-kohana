@@ -1105,7 +1105,7 @@ class Controller_Ajax extends Controller_Template
 				$similarity = ORM::factory('Object_Attachment')->get_similarity(Uploads::get_full_path($filename));
 				if ($similarity > Kohana::$config->load('common.max_image_similarity'))
 				{
-					throw new Exception('Картинка дубликат');
+					throw new Exception('Фотография не уникальная, уже есть активное объявление с такой фотографией либо у вас , либо у другого пользователя');
 				}
 			}
 
