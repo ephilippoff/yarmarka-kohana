@@ -2,6 +2,27 @@
 
 class Controller_Add extends Controller_Template {
 
+	public function action_index()
+	{
+		$this->assets->css('css.css');
+
+		$params = array(
+			'category_id'	=> (int)$this->request->param('category_id'),
+			'object_id'		=> (int)$this->request->param('object_id'),
+			'city_id'		=> (int)$this->request->param('city_id')
+		);
+
+		$form_data = new Lib_PlacementAds_Form($params);
+		$form_data	->Category()
+				 	->City()
+				 	->Subject()
+				 	->Text();
+
+		$this->template->params = $params;
+		$this->template->form_data = $form_data->_data;
+
+	}
+
 	public function action_save_object()
 	{
 		$this->auto_render = FALSE;
