@@ -71,7 +71,7 @@ class Uploads
 
  	public static function make_thumbnail($file)
  	{
- 		$image = new Imageci();
+ 		$image = new Image;
  
  		return $image->makeThumbnail($file);
  	}
