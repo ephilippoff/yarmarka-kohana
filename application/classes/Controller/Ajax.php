@@ -1121,6 +1121,25 @@ class Controller_Ajax extends Controller_Template
 
 	 	}
 	 }
+	 
+	 public function action_ajax_get_obj_stat()
+	 {
+	 	$obj_id = (int)($this->request->post('obj_id'));
+
+		$this->json = array();
+		
+	 	$stat = Model::factory('Objectstat')
+				->where('object_id', '=', $obj_id)
+				->and_where('date', '>=', DB::expr("CURRENT_DATE - interval '14 days'"))
+				->and_where('date', '<', DB::expr("CURRENT_DATE"))
+				->order_by('date', 'asc')
+				->find_all();
+		
+		foreach ($stat as $value) 
+		{
+			$this->json[] = array('date' => strtotime($value->date.' UTC') * 1000,	'visits' => $value->visits, 'contacts_show_count' => $value->contacts_show_count);
+		}	
+	 }	 
 
 //	public function  action_get_hints_by_page()
 //	{

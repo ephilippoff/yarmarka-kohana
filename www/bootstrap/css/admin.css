@@ -2,3 +2,7 @@
 .color2{background-color: #66CCFF;}
 table.promo td{border-color: #000;}
 table.promo .sort{font-size: 10px;}
+
+.stat-container{width: 300px;height: 200px;background-color: #F6F6F7;position: absolute;z-index: 5;padding: 20px;display: none;border: 1px solid gray;box-shadow: 0 0 10px 0 gray;}
+.stat-container .inner{height: 100%;width: 100%;}
+.stat-container .close{background: url("/images/popclose.png") no-repeat;cursor: pointer;display: block;height: 16px;position: absolute;right: 5px;top: 5px;width: 16px;}

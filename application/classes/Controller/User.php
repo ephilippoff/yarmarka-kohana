@@ -305,8 +305,10 @@ class Controller_User extends Controller_Template {
 	public function myads($folder = 'myads')
 	{
 		$this->template = View::factory('user/myads');
-		$this->layout = 'users';
+		$this->layout = 'myads';
 		$this->assets->js('myads.js');
+		$this->assets->js('jquery.flot.min.js');
+		$this->assets->js('jquery.flot.time.min.js');
 
 		// pagination settings
 		$per_page	= 20;

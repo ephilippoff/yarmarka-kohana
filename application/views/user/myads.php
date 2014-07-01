@@ -1,4 +1,3 @@
-<div class="m_content ">
     <div class="winner">
         <section class="main-cont myads cabinet">
         <div class="hheader persomal_room-header"><h1 class="ta-c">Личный кабинет &rarr; Мои объявления</h1></div>
@@ -287,7 +286,7 @@
 									<div class="col3">
 										<div class="price-bl"><span class="price"><?php if (!$price) : ?> &mdash; <?php else : ?><?=$price?> р.<?php endif; ?></span></div>
 										<div title="Количество комментариев" class="mess-bl"><span class="mess"><?=count($user_messages)?></span></div>
-									    <div title="Количество просмотров" class="view-bl"><div class="iview"><?=$ad->visits?></div></div>
+									    <div title="Количество просмотров" class="view-bl fn-stat" data-id="<?=$ad->id?>"><div class="iview"><?=$ad->visits?></div></div>
 									</div>
 									<div class="col2">
 										<a href="<?=$ad->get_url()?>" target="_blank"><?=htmlspecialchars(mb_substr($ad->title, 0, 50))?></a>
@@ -394,6 +393,9 @@
             </section>
             </div>
 
+			
+		
         </section>
     </div><!--end content winner-->
-</div>
+
+
