@@ -1,38 +1,43 @@
 <?php defined('SYSPATH') OR die('No direct script access.');
 
-class ImageDiff {
+class Image_Diff {
 
   // not bigger 20
 	private $matrix = 15;
 
-	public function getImageInfo($image_path)
+	public function __construct()
+	{
+		$this->matrix = Kohana::$config->load('images.diff_matrix');
+	}
+
+	public function get_image_info($image_path)
 	{
 		list($width, $height, $type, $attr) = getimagesize($image_path);
 		$image_type = '';
 		switch ($type) 
 		{
 			case IMAGETYPE_JPEG:
-			$image_type = 'jpeg';
+				$image_type = 'jpeg';
 			break;
 			case IMAGETYPE_GIF:
-			$image_type = 'gif';
+				$image_type = 'gif';
 			break;
 			case IMAGETYPE_PNG:
-			$image_type = 'png';
+				$image_type = 'png';
 			break;
 			case IMAGETYPE_BMP:
-			$image_type = 'bmp';
+				$image_type = 'bmp';
 			break;
 			default:
-			$image_type = '';
+				$image_type = '';
 		}
 
 		return array('width' => $width, 'height' => $height, 'type' => $image_type);
 	}
 
-	public function generateArray($image_path)
+	public function generate_array($image_path)
 	{
-		$image_info = $this->getImageInfo($image_path);
+		$image_info = $this->get_image_info($image_path);
 		$func = 'imagecreatefrom'.$image_info['type'];
 		if (function_exists($func))
 		{
@@ -87,10 +92,10 @@ class ImageDiff {
 		}
 	}
 
-	public function diffImages($image_path1, $image_path2)
+	public function diff_images($image_path1, $image_path2)
 	{
-		$array1 = $this->generateArray($image_path1);
-		$array2 = $this->generateArray($image_path2);
+		$array1 = $this->generate_array($image_path1);
+		$array2 = $this->generate_array($image_path2);
 		$result = 0;
 		$result = count( array_intersect($array1, $array2) );
 		return round($result / ( $this->matrix * $this->matrix ), 6);

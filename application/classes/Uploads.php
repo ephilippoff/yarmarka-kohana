@@ -63,4 +63,16 @@ class Uploads
 		}
 		return $image->makeThumbnail($file);
 	}
+
+	public static function get_full_path($filename, $type = NULL)
+ 	{
+ 		return DOCROOT.trim(self::get_file_path($filename, $type), '/');
+ 	}
+
+ 	public static function make_thumbnail($file)
+ 	{
+ 		$image = new Image;
+ 
+ 		return $image->makeThumbnail($file);
+ 	}
 }

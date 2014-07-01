@@ -19,7 +19,7 @@ class Controller_Ajax extends Controller_Template
 		// only ajax request is allowed
 		if ( ! $this->request->is_ajax() AND Kohana::$environment !== Kohana::DEVELOPMENT)
 		{
-			//throw new HTTP_Exception_404;
+			throw new HTTP_Exception_404;
 		}
 		// disable global layout for this controller
 		$this->use_layout = FALSE;
@@ -1086,6 +1086,41 @@ class Controller_Ajax extends Controller_Template
 			$this->json['data'] = $data;
 		}
 	}	
+
+		public function action_object_upload_file()
+		{
+			try
+			{
+				if (empty($_FILES['userfile1']))
+			{
+				throw new Exception('Не загружен файл');
+			}
+
+			$filename = Uploads::make_thumbnail($_FILES['userfile1']);
+
+			$enable_image_similarity = Kohana::$config->load('common.enable_image_similarity');
+
+			if ($enable_image_similarity)
+			{
+				$similarity = ORM::factory('Object_Attachment')->get_similarity(Uploads::get_full_path($filename));
+				if ($similarity > Kohana::$config->load('common.max_image_similarity'))
+				{
+					throw new Exception('Фотография не уникальная, уже есть активное объявление с такой фотографией либо у вас , либо у другого пользователя');
+				}
+			}
+
+			$this->json['filename'] = $filename;
+			$this->json['filepaths'] = Image::getSitePaths($filename);
+
+			$tmp_img = ORM::factory('Tmp_Img');
+			$tmp_img->name = $filename;
+			$tmp_img->save();
+			}
+				catch(Exception $e)
+			{
+				$this->json['error'] = $e->getMessage();
+			}
+		}
 
 	public function after()
 	{

@@ -123,6 +123,11 @@ class Model_Category extends ORM {
 
 		return TRUE;
 	}
+
+	public function get_count_childs($category_id)
+ 	{
+ 		return $this->where("parent_id","=",$category_id)->count_all();
+ 	}
 }
 
 /* End of file Category.php */
