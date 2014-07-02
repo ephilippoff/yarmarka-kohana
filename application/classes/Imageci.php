@@ -369,13 +369,9 @@ class Imageci {
 				throw new Exception("Не верный формат файла. Возможно это не картинка.", 5);
 		}
 
-        $filename = $file["name"];
-		$i = strrpos($filename, ".");
-		if ( $i !== false ) {
-			$ext = strtolower(substr($filename, $i));
-		}
+        $ext = File::ext_by_mime($file['type']);
 
-        if ( empty($ext) || ($ext != ".gif" && $ext != ".jpg" && $ext != ".jpeg" && $ext != ".png" && $ext != "jpe") ) {
+        if ( empty($ext) || ($ext != "gif" && $ext != "jpg" && $ext != "jpeg" && $ext != "png" && $ext != "jpe") ) {
             if ( $this->filetype == 'jpeg' ) {
                 $this->ext = 'jpg';
             } else {
@@ -385,7 +381,7 @@ class Imageci {
             throw new Exception("Не верное расширение файла. Поддерживаются форматы gif, jpg, png.",3);
         }
 
-        $this->ext = $ext;
+        $this->ext = '.'.$ext;
 	}
 
 
