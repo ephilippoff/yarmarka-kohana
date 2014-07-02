@@ -7,6 +7,7 @@ class Model_Contact_Type extends ORM {
 	const SKYPE		= 3;
 	const PHONE		= 2;
 	const MOBILE	= 1;
+	const OTHER		= 0;
 
 	protected $_table_name = 'contact_type';
 
@@ -29,6 +30,19 @@ class Model_Contact_Type extends ORM {
 			return self::EMAIL;
 
 		return self::PHONE;
+	}
+
+	public static function detect_contact_type_massload($contact)
+	{
+		if (strpos($contact, '9') === 0)
+			return self::MOBILE;
+		elseif (gettype((int)substr($contact, 0,1)) == "integer" AND (int)substr($contact, 0,1) > 0)
+			return self::PHONE;
+
+		if (Valid::email($contact))
+			return self::EMAIL;
+
+		return self::OTHER;
 	}
 
 	public static function get_verifiyng_types()

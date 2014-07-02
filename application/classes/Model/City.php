@@ -18,7 +18,7 @@ class Model_City extends ORM {
 	);
 
 	protected $_belongs_to = array(
-		'region'	=> array(),
+		'region'	=> array('model' => 'Region', 'foreign_key' => 'region_id'),
 		'location'	=> array(),
 	);
 
@@ -30,6 +30,13 @@ class Model_City extends ORM {
 		}
 
 		return 'http://'.$this->seo_name.'.'.Kohana::$config->load('common.main_domain');
+	}
+
+	public function by_title($title)
+	{
+		return $this->where("title","=",$title)
+					->where("is_visible",">",0)
+					->find();
 	}
 
 } // End City Model

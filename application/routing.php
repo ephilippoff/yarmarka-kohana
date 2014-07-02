@@ -14,6 +14,11 @@ if (isset($_SERVER['HTTP_HOST']) AND $_SERVER['HTTP_HOST'] == 'c.yarmarka.biz')
 			'action'     => 'save_object',
 		));
 }
+Route::set('add', 'add')
+	->defaults(array(
+		'controller' => 'Add',
+		'action'     => 'massload',
+	));
 Route::set('not_unique_contact_msg', 'block/not_unique_contact_msg/<number>')
 	->defaults(array(
 		'controller' => 'Block',
@@ -23,6 +28,11 @@ Route::set('ajax_link_to_company', 'ajax/link_user/<login>', array('login' => '.
 	->defaults(array(
 		'controller' => 'Ajax',
 		'action'     => 'link_user',
+	));
+Route::set('ajax_massload', 'ajax/massload/<action>')
+	->defaults(array(
+		'controller' => 'Ajax_Massload',
+		'action'     => 'index',
 	));
 Route::set('userpage', 'users/<login>')
 	->defaults(array(

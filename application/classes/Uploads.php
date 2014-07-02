@@ -75,4 +75,11 @@ class Uploads
  
  		return $image->makeThumbnail($file);
  	}
+
+ 	public static function save_file($_file)
+ 	{
+ 		$file = new FileUtils();
+ 
+ 		return $file->save($_file);
+ 	}
 }

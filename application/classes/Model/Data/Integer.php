@@ -19,6 +19,16 @@ class Model_Data_Integer extends Data
 			),
 		);
 	}
+
+	public function by_value_and_attribute($value, $seo_name)
+	{
+		return $this->join('attribute')
+					->on('attribute.id', '=', 'data_integer.attribute')
+					->where("data_integer.value_min","=",$value)
+					//->where("data_integer.value_max","=",$value)
+					->where("attribute.seo_name","=",$seo_name)
+					->find();
+	}
 }
 
 /* End of file Integer.php */

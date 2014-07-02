@@ -332,7 +332,7 @@ class Imageci {
 	private function checkFile( $file ) {
 
 		if ( $this->is_uploaded_file && !is_uploaded_file($file['tmp_name']) ) {
-			throw new Exception("Нет загруженного файла", 400);
+			//throw new Exception("Нет загруженного файла", 400);
 		}
 
 		if ( !isset($file) || $file["size"] < 1 ) {

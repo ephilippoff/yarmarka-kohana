@@ -12,6 +12,15 @@ class Model_Reference extends ORM {
 		'category_obj' 	=> array('model' => 'Category', 'foreign_key' => 'category'),
 		'attribute_obj'	=> array('model' => 'Attribute', 'foreign_key' => 'attribute'),
 	);
+
+	public function by_category_and_attribute($category_id, $seo_name)
+	{
+		return $this->join('attribute', 'left')
+					->on('reference.attribute', '=', 'attribute.id')
+					->where("category","=",$category_id)
+					->where("attribute.seo_name","=",$seo_name)
+					->find();
+	}
 }
 
 /* End of file Reference.php */
