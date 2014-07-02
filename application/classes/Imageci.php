@@ -406,8 +406,10 @@ class Imageci {
 		//Записываем имя
 		$this->image_filename = $filename . $this->ext;
 
-		//Создаем директории для оригинала
-		mkdir(dirname($tgtfile), 0777, true);
+		if ( !file_exists(dirname($tgtfile)) ) {
+			//Создаем директории для оригинала
+			mkdir(dirname($tgtfile), 0777, true);
+		}
 
 		//Перемещаем оригинал
 //		if ( $this->is_uploaded_file ) {
@@ -565,9 +567,10 @@ class Imageci {
 
 		$tgtfile = self::getThumbnailPath( $this->image_filename, $type );
 
-		//Создаем директории
-		@mkdir(dirname($tgtfile), 0777, true);
-
+		if ( !file_exists(dirname($tgtfile)) ) {
+			//Создаем директории
+			@mkdir(dirname($tgtfile), 0777, true);
+		}
 		$Image = "Image" . $this->filetype;
 		$Image($this->thumbnail, $tgtfile );
 		ImageDestroy($this->thumbnail);
