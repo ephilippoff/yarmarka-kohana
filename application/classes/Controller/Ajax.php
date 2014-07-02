@@ -1110,7 +1110,7 @@ class Controller_Ajax extends Controller_Template
 			}
 
 			$this->json['filename'] = $filename;
-			$this->json['filepaths'] = Image::getSitePaths($filename);
+			$this->json['filepaths'] = Imageci::getSitePaths($filename);
 
 			$tmp_img = ORM::factory('Tmp_Img');
 			$tmp_img->name = $filename;

@@ -375,7 +375,7 @@ class Imageci {
 			$ext = strtolower(substr($filename, $i));
 		}
 
-        if ( empty($ext) || ($ext != ".gif" && $ext != ".jpg" && $ext != ".jpeg" && $ext != ".png") ) {
+        if ( empty($ext) || ($ext != ".gif" && $ext != ".jpg" && $ext != ".jpeg" && $ext != ".png" && $ext != "jpe") ) {
             if ( $this->filetype == 'jpeg' ) {
                 $this->ext = 'jpg';
             } else {
