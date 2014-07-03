@@ -25,7 +25,19 @@ class Controller_Ajax_Massload extends Controller_Template {
 		$ignore_errors 	= (int) $this->request->post("ignore_errors");
 
 		$user = Auth::instance()->get_user();
-		$file = $_FILES['file'];
+		try {
+			$file = $_FILES['file'];
+		} catch (Exception $e) {
+			$this->json['critError'] = "Ошибка файла : ".$e->getMessage();
+			return;
+		}
+
+		$ext = File::ext_by_mime($file['type']);
+		if ( empty($ext) OR ($ext <> "csv" AND $ext <> "zip")){
+			$this->json['critError'] = "Не правильный формат файла ".$ext.". Допустимые: csv, zip";
+			return;
+		}
+		
 		$critError = NULL;
 
 		if (empty($user)) {
