@@ -14,6 +14,8 @@
 				
 				<div class="btn-red big add-advert"><a href="<?=CI::site('add')?>"><span>Подать объявление</span></a></div>				
 												
+				<!--noindex-->
+				
 				<div class="menu-cont">
 					<!--<a class="lk menu iLight-nav" href="#">Личный кабинет</a>-->
 
@@ -49,7 +51,10 @@
 					<span onclick="window.location='/article/pravila-razmeshcheniya-obyavlenii'" class="menu g1 cur_p">Правила</span>
 
 					<!--<a class="favorites menu" href="#">Избранное (0)</a>-->
-				</div>				
+				</div>	
+				
+				<!--/noindex-->
+				
 					</div>		
 			</div>
 
