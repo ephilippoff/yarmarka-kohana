@@ -21,16 +21,27 @@ class Controller_Ajax_Massload extends Controller_Template {
 
 	public function action_checkfile()
 	{
-		
+		$category_id 	= (int) $this->request->post("category_id");
+		$ignore_errors 	= (int) $this->request->post("ignore_errors");
+
 		$user = Auth::instance()->get_user();
-		if (empty($user))
-			throw new Exception('Пользователь не определен');
-		if (empty($_FILES['file']))
-			throw new Exception('Не загружен файл');
-
 		$file = $_FILES['file'];
+		$critError = NULL;
 
-		$ml = new Massload($file, 3, $user);
+		if (empty($user)) {
+			$this->json['critError'] = 'Пользователь не определен';
+			return;
+		}
+		if (empty($file)) {
+			$this->json['critError'] = 'Не загружен файл';
+			return;
+		}
+		if (!$category_id){
+			$this->json['critError'] = 'Не указана категория';
+			return;
+		}
+
+		$ml = new Massload($file, $category_id, $user);
 		$ml ->save_input_file()
 			->get_input_file_path_by_ext()
 			->file_open()
@@ -48,8 +59,8 @@ class Controller_Ajax_Massload extends Controller_Template {
 
 			if ( count($item) <> count($ml->config) )
 			{
-				throw new Exception('Файл не соответсвует требованиям, количество полей отличается (см. инструкцию по загрузке)');
-				fclose($file);	
+				//$ml->log_error($str_pos, $field, $value, $comment)
+				$critError = 'Файл не соответсвует требованиям, количество полей отличается (см. инструкцию по загрузке)';
 				break;
 			}
 
@@ -59,7 +70,9 @@ class Controller_Ajax_Massload extends Controller_Template {
 			{
 				
 				$field = $ml->get_by_key($ml->config, $number);
-				$errors = $ml->check($field, $value, $str_pos);
+				$error = $ml->check($field, $value, $str_pos);
+				if (count($error) >0)
+					$errors[] = $error;
 				
 			}
 			
@@ -68,11 +81,13 @@ class Controller_Ajax_Massload extends Controller_Template {
 
 		$ml->file_close();
 
-		if (count($errors) >0)
-			$this->json['data'] = $errors;
-		else {
+		if (count($errors) >0 OR $critError) {
+			$this->json['errors'] = $errors;
+			$this->json['critError'] = $critError;
+		} else {
 			$this->json['pathtofile'] = $ml->pathtofile;
 			$this->json['pathtoimage'] = $ml->pathtoimage;
+			$this->json['count'] = $str_pos;
 			$this->json['data'] = 'ok';
 		}
 
@@ -81,15 +96,20 @@ class Controller_Ajax_Massload extends Controller_Template {
 
 	public function action_load_next_strings()
 	{
-		$pathtofile 	= (string) $this->response->post('pathtofile');
-		$pathtoimage 	= (string) $this->response->post('pathtoimage');
-		$from 			= (int) $this->response->post('from');
-		$to 			= (int) $this->response->post('to');
+		$pathtofile 	= (string) $this->request->post('pathtofile');
+		$pathtoimage 	= (string) $this->request->post('pathtoimage');
+		$step 			= (int) $this->request->post('step');
+		$iteration 		= (int) $this->request->post('iteration');
+		$category_id 	= (int) $this->request->post('category_id');
+		$this->json['category_id'] = $category_id;
+		if (!$category_id)
+			return;
 
-		$user = Auth::instance()->get_user();
 		$this->json['data'] = Array();
 
-		$ml = new Massload(NULL, 3, $user);
+		$user = Auth::instance()->get_user();
+
+		$ml = new Massload(NULL, $category_id, $user);
 		$ml ->pathtofile  = $pathtofile;
 		$ml ->pathtoimage = $pathtoimage;
 		$ml ->file_open()
@@ -97,24 +117,25 @@ class Controller_Ajax_Massload extends Controller_Template {
 
 		$file = $ml->fileForLoop;
 
-		$i = 0;
-		while ( !feof($file) )
-		{
-			if ($i < $from AND $i > $to)
-				continue;
+		for ($i = 0; $i<$iteration*$step; $i++)
+			fgetcsv($file, ',');
 
+
+		while ($i<$iteration*$step+$step)
+		{
+			$i++;
+
+			$record = Array();			
 			$item = fgetcsv($file, ',');
 
-			$record = Array();
+			if (count($item) <= 1) 
+				continue;
 
 			foreach ($item as $number=>$value) 
-			{
-				
+			{				
 				$field = $ml->get_by_key($ml->config, $number);
-
 				if ($value <> "")
-					$record[$field['name']] = $value;
-				
+					$record[$field['name']] = $value;				
 			}
 			
 			$record = $ml->to_post_format($record, $ml->config);
@@ -123,10 +144,10 @@ class Controller_Ajax_Massload extends Controller_Template {
 
 			$this->json['data'][] = Object::PlacementAds_ByMassLoad($record);
 
-			$i++;
-		}
 			
+		}
 
+		$ml->file_close();
 	}
 
 

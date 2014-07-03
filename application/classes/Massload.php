@@ -2,6 +2,8 @@
 
 class Massload 
 {
+	const  CSVSEPARATOR = ',';
+
 	public $inputfile;
 	public $fileForLoop;
 	public $ext;
@@ -15,11 +17,6 @@ class Massload
 		$this->inputfile 	 	= $inputfile;
 		$this->category_id 		= $category_id;
 		$this->user 			= $user;
-	}
-
-	function check_file()
-	{
-
 	}
 
 	function save_input_file()
@@ -89,25 +86,25 @@ class Massload
 
 	function check($field, $value, $str_pos)
 	{
-		$errors = Array();
+		$error = NULL;
 
 		if ( ! $this->check_required($field, $value)  )
-			$errors[] = $this->log_error( $str_pos, $field, $value, "Не заполнено обязательное поле");
+			$error = $this->log_error( $str_pos, $field, $value, "Не заполнено обязательное поле");
 
 		if ( ! $this->check_exist_values($field, $value)  )
-			$errors[] = $this->log_error( $str_pos, $field, $value, "Значение справочника не существует");
+			$error = $this->log_error( $str_pos, $field, $value, "Значение справочника не существует");
 
 		if ($field["name"] == 'contact_0_value' OR $field["name"] == 'contact_1_value')
 			if ( $value <> ""  AND $this->check_contact_type($value) == 0)
-				$errors[] = $this->log_error($str_pos, $field, $value, "Контакт имеет неизвестный формат");
+				$error = $this->log_error($str_pos, $field, $value, "Контакт имеет неизвестный формат");
 
-		return $errors;
+		return $error;
 	}
 
 	function check_exist_values($field, $value)
 	{
 		$return = TRUE;
-
+		
 		if ($field["type"] == 'city')
 			$return = ORM::factory('City')->by_title($value)->id;
 		elseif ($field["type"] == 'dict')

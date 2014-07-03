@@ -154,6 +154,16 @@ class Controller_User extends Controller_Template {
         }
     }
 
+    public function action_massload()
+    {
+    	$this->layout = 'users';    	
+    	$this->assets->js('http://yandex.st/underscore/1.6.0/underscore-min.js');
+    	$this->assets->js('http://yandex.st/backbone/1.1.2/backbone-min.js');
+    	$this->assets->js('ajaxupload.js');
+    	$this->assets->js('massload.js');
+
+    }
+
     public function action_favorites()
 	{
 		$this->layout = 'users';
