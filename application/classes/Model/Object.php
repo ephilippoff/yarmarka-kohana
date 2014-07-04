@@ -612,6 +612,13 @@ class Model_Object extends ORM {
 
 		return TRUE;
 	}
+
+	public function generate_signature()
+	{
+		if ( ! $this->loaded())
+			return TRUE;
+		return Object_Utils::generate_signature($this->full_text);
+	}
 }
 
 /* End of file Object.php */

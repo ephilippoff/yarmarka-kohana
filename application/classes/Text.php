@@ -77,4 +77,9 @@ class Text extends Kohana_Text {
 			return '+'.$phone[0].'('.substr($phone, 1, 4).')'.substr($phone, 5, 2).'-'.substr($phone, 7, 2).'-'.substr($phone, 9);
 		}
 	}
+
+	public static function remove_symbols($str)
+	{
+		return str_replace(array('!','#','$','%','&','\\','*','+','-','/','=','?','^','_','`','{','|','}','~','@','.','[',']',')','(',',', '"', "'"), '', $str);
+	}
 }

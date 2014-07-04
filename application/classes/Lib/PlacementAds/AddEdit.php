@@ -8,6 +8,7 @@ class Lib_PlacementAds_AddEdit {
 	public $contacts;
 	public $city;
 	public $location;
+	public $signature = NULL;
 
 	function Lib_PlacementAds_AddEdit()
 	{
@@ -151,6 +152,29 @@ class Lib_PlacementAds_AddEdit {
 		}
 		return $this;
 				
+	}
+
+	function check_signature()
+	{
+		$params = &$this->params;
+		$errors = &$this->errors;
+		$user = &$this->user;
+
+		$values = (array) Object_Utils::get_values_from_form_elements($params);
+		$text 			 = Object_Utils::generate_text_for_signature($params->title_adv, $params->user_text_adv, $values);
+		$this->signature = Object_Utils::generate_signature($text);
+
+		if (Kohana::$config->load('common.check_object_similarity'))
+		{
+
+			$max_similarity = Kohana::$config->load('common.max_object_similarity')*100;
+			$similarity 	= ORM::factory('Object_Signature')->get_similarity($this->signature, $user->id)*100;
+			if ($similarity >$max_similarity){
+				$errors['signature'] = "Такое объявление у вас уже есть, дубли запрещены правилами сайта.";	
+			}
+		}
+
+		return $this;
 	}
 
 	function init_validation_rules_for_attributes()
@@ -407,6 +431,21 @@ class Lib_PlacementAds_AddEdit {
 		return $this;
 	}
 
+	function save_signature()
+	{
+		$object = &$this->object;
+		if ($this->signature)
+		{
+			$object_signature = ORM::factory('Object_Signature')
+						->where('object_id', '=', $object->id)
+						->find();
+			$object_signature->object_id  = $object->id;
+			$object_signature->signature = $this->signature;
+			$object_signature->save();
+		}
+		return $this;
+	}
+
 	function save_other_options()
 	{
 		$params = &$this->params;
@@ -424,7 +463,7 @@ class Lib_PlacementAds_AddEdit {
 		$params = &$this->params;
 		$object = &$this->object;
 
-		$attributes = $this->get_form_elements_from_params((array) $params);
+		$attributes = Object_Utils::get_form_elements_from_params((array) $params);
 
 		$boolean_deleted = FALSE; // если меняются булевые параметры, то удаляем все что есть в базе
 		foreach ($attributes as $reference_id => $value)
@@ -702,34 +741,4 @@ class Lib_PlacementAds_AddEdit {
 			}
 		return $date_expiration;
 	}
-
-	private function get_form_elements_from_params($params)
-	{
-		$result = array();
-		foreach ($params as $key => $value)
-		{
-			if (preg_match('/param_([0-9]*)[_]{0,1}(.*)/', $key, $matches))
-			{
-				$reference_id = $matches[1];
-				$postfix = $matches[2]; // max/min
-
-				if ($postfix)
-				{
-					$result[$reference_id][$postfix] = trim($value);
-				}
-				else
-				{	//Если несколько значений(is_multiple)
-					if (is_array($value))
-						//Организовываем подмассив
-						foreach ($value as $one_value) 
-							$result[$reference_id][] = $one_value;					
-					else
-						$result[$reference_id] = trim($value);
-				}
-			}
-		}
-		
-		return $result;
-	}
-
 }
