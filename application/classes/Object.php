@@ -275,6 +275,56 @@ class Object
 		return $add->object->id;
 
 	}
+
+	static function PlacementAds_JustRunTriggers($input_params)
+	{		
+		$json = array();
+
+		$add = new Lib_PlacementAds_AddEdit();
+		$add->init_input_params($input_params)
+			->init_instances()
+			->init_object_and_mode()
+			->check_signature()
+			->check_signature_for_union();
+
+		if ( ! $add->errors)
+		{
+			$add->save_parentid_object();
+
+			$db = Database::instance();
+
+			try
+			{
+				// start transaction
+				$db->begin();
+
+				$add->save_object()
+					->save_signature()
+					->save_union();
+
+				$db->commit();
+			}
+			catch(Exception $e)
+			{
+				Kohana::$log->add(Log::ERROR, 'Ошибка при сохранении объявления:'.$e->getMessage());
+				Email::send(Kohana::$config->load('common.admin_emails'), Kohana::$config->load('email.default_from'), 'Ошибка при сохранении объявления', $e->getMessage());
+
+				$db->rollback();
+
+				throw $e;
+			}
+
+			$json['object_id'] = $add->object->id;
+			$json['parent_id'] = $add->parent_id;
+			$json['error'] = $add->errors;
+		}
+		else
+		{
+			$json['error'] = $add->errors;
+		}
+
+		return $json;
+	}
 }
 
 /* End of file Object.php */

@@ -14,6 +14,13 @@ class Controller_Add extends Controller_Template {
 			//throw new HTTP_Exception_404('only ajax requests allowed');
 		}
 
+		if ($this->request->post("only_run_triggers") == 1)
+		{
+			$json = Object::PlacementAds_JustRunTriggers($this->request->post());
+			$this->response->body(json_encode($json));
+			return;
+		}
+
 		//если в локале работаем с подачей, ставим 1
 		$local = 1;
 

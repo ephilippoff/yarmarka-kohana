@@ -193,9 +193,15 @@ class Lib_PlacementAds_AddEdit {
 	{
 		$params = &$this->params;
 		$errors = &$this->errors;
+		$object = &$this->object;
 		$user = &$this->user;
 
-		$values = (array) Object_Utils::get_values_from_form_elements($params);
+		if (property_exists($params, 'only_run_triggers') AND $params->only_run_triggers == 1)
+			$values = (array) Object_Utils::get_all_values_of_object(NULL, $object->id);
+		else 
+			$values = (array) Object_Utils::get_all_values_of_object($params, NULL);
+
+
 
 		if (Kohana::$config->load('common.union_objects_by_similarity'))
 			$text = Object_Utils::generate_text_for_signature("", "", $values);
