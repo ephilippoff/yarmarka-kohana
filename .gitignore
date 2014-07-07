@@ -14,8 +14,8 @@ www/font
 *.sublime-project
 *.sublime-workspace
 application/config/local/*.php
-application/config/common.php
 application/config/database.php
 /nbproject
 /.wakatime-project
 /application/config/user_message.php
+.gitignore

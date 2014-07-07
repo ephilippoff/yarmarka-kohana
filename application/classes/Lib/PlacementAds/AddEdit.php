@@ -2,6 +2,8 @@
 
 class Lib_PlacementAds_AddEdit {
 	public $user;
+	public $user_id;
+	public $category;
 	public $errors;
 	public $params;
 	public $validation;
@@ -9,6 +11,12 @@ class Lib_PlacementAds_AddEdit {
 	public $city;
 	public $location;
 	public $signature = NULL;
+	public $original_params;
+
+	public $parent_id;
+	public $create_union = FALSE;
+	public $edit_union = FALSE;
+	public $object_without_parent_id = NULL;
 
 	function Lib_PlacementAds_AddEdit()
 	{
@@ -17,6 +25,8 @@ class Lib_PlacementAds_AddEdit {
 
 	function init_input_params($params)
 	{
+		$this->original_params = $params;
+
 		if (is_array($params))
 		{
 			foreach($params as $key=>$value)
@@ -30,33 +40,58 @@ class Lib_PlacementAds_AddEdit {
 	function check_neccesaries()
 	{
 		$params = &$this->params;
-		if ($this->is_edit != TRUE)
-		{
-			if (! $params->rubricid){
-				$this->raise_error('undefined category');
-			}
-		}
+		
 		return $this;
 	}
 
 	function init_instances()
 	{
-		$params = &$this->params;
+		$params 	= &$this->params;
+		$object 	= &$this->object;
+		$user 		= &$this->user;
+		$user_id 	= &$this->user_id;
+		$category 	= &$this->category;
 
-		$this->user = Auth::instance()->get_user();	
+		$object_id 		= (int) $params->object_id;
+		$category_id 	= (int) $params->rubricid;
+		$user 			= Auth::instance()->get_user();
+		$user_id 	    = $user->id;
 
-		if ($params->rubricid) 
+		if ($object_id > 0)
 		{
-			$this->category = ORM::factory('Category', $params->rubricid);
-
-			if ( ! $this->category->loaded() )
+			$object = ORM::factory('Object', $object_id);
+			if ($object->loaded())
 			{
-				$this->raise_error('undefined category');
+				$category_id 	= (int) $object->category;
+				$user_id 		= (int) $object->author;
+			} else {
+				$this->raise_error('object not found');
 			}
+		}
+
+		if ( $category_id > 0) 
+		{ 
+			$category = ORM::factory('Category', $category_id);
+			if ( ! $category->loaded() )
+				$this->raise_error('category not finded');
 		} 
 		else 
 		{
-			$this->raise_error('undefined category');	
+			$this->raise_error('undefined category2');	
+		}
+
+		if ($user_id > 0)
+		{
+			$user = ORM::factory('User', $user_id);
+			if ( ! $user->loaded() )
+				$this->raise_error('user not finded');
+		} 
+		elseif ($user->role == 1 OR $user->role == 3)
+		{
+
+		} else 
+		{
+			$this->raise_error('user dont have permissions to edit this object');
 		}
 
 		$this->form_references = Forms::get_by_category_and_type($this->category->id, 'add');
@@ -161,20 +196,102 @@ class Lib_PlacementAds_AddEdit {
 		$user = &$this->user;
 
 		$values = (array) Object_Utils::get_values_from_form_elements($params);
-		$text 			 = Object_Utils::generate_text_for_signature($params->title_adv, $params->user_text_adv, $values);
+
+		if (Kohana::$config->load('common.union_objects_by_similarity'))
+			$text = Object_Utils::generate_text_for_signature("", "", $values);
+		else 
+			$text = Object_Utils::generate_text_for_signature($params->title_adv, $params->user_text_adv, $values);
+
 		$this->signature = Object_Utils::generate_signature($text);
 
 		if (Kohana::$config->load('common.check_object_similarity'))
 		{
 
 			$max_similarity = Kohana::$config->load('common.max_object_similarity')*100;
-			$similarity 	= ORM::factory('Object_Signature')->get_similarity($this->signature, $user->id)*100;
-			if ($similarity >$max_similarity){
+			$similarity 	= ORM::factory('Object_Signature')->get_similarity($this->signature, 425780/*$user->id*/);
+			if ($similarity["sm"]*100 > $max_similarity){
 				$errors['signature'] = "Такое объявление у вас уже есть, дубли запрещены правилами сайта.";	
 			}
 		}
 
 		return $this;
+	}
+
+	function check_signature_for_union()
+	{
+		$params = &$this->params;
+		$errors = &$this->errors;
+		$category = &$this->category;
+		$user = &$this->user;
+
+
+		if (Kohana::$config->load('common.union_objects_by_similarity') 
+				AND (in_array($category->id, Kohana::$config->load('common.union_objects_by_similarity_by_cat'))) )
+		{
+			$max_similarity = Kohana::$config->load('common.max_object_similarity')*100;
+			$similarity 	= ORM::factory('Object_Signature')->get_similarity($this->signature);
+			if ($similarity["sm"]*100 > $max_similarity){
+
+				$parent_id = (int) ORM::factory('Object', $similarity["object_id"])->parent_id;
+				if ($parent_id == 0)
+				{
+					$this->create_union = TRUE;
+					$this->object_without_parent_id = $similarity["object_id"];
+				} else {
+					$this->edit_union = TRUE;
+					$this->parent_id = $parent_id;
+				}				
+			}
+		}
+
+		return $this;
+	}
+
+	function save_union()
+	{
+		$params = &$this->params;
+		$object = &$this->object;
+		$errors = &$this->errors;
+		$category = &$this->category;
+		$user = &$this->user;
+
+		if (Kohana::$config->load('common.union_objects_by_similarity') 
+				AND (in_array($category->id, Kohana::$config->load('common.union_objects_by_similarity_by_cat'))) )
+		{ 
+			$parent_id = 0;
+
+			if ($this->create_union OR $this->edit_union)
+			{
+				try {
+					$this->original_params["object_id"] = $this->parent_id;
+					$parent_id = (int) Object::PlacementAds_Union($this->original_params, $object->id, $this->edit_union);
+				}
+				catch (Exception $e) {
+				 	$errors['union_error'] = $e->getMessage();
+				}
+
+			} 
+
+			if ($parent_id >0 )
+			{
+				if (!empty($this->object_without_parent_id))
+				{
+					$obj = ORM::factory('Object', $this->object_without_parent_id);	
+					$obj->parent_id = $parent_id;
+					$obj->update();
+				}
+
+				$obj = ORM::factory('Object', $object->id);	
+				$obj->parent_id = $parent_id;
+				$obj->update();
+
+				$this->parent_id = $parent_id;
+			}
+
+		}		
+
+		return $this;
+
 	}
 
 	function init_validation_rules_for_attributes()
@@ -364,6 +481,22 @@ class Lib_PlacementAds_AddEdit {
 		return $this;
 	}
 
+	function save_parentid_object()
+	{
+		$params 	= &$this->params;
+		$object 	= &$this->object;
+		$category 	= &$this->category;
+
+		if (Kohana::$config->load('common.union_objects_by_similarity') 
+				AND (in_array($category->id, Kohana::$config->load('common.union_objects_by_similarity_by_cat'))) )
+		{
+			if (!empty($this->parent_id))
+			{
+				$object->parent_id = $this->parent_id;
+			}
+		}
+	}
+
 	function save_object()
 	{
 		$object = &$this->object;
@@ -378,9 +511,12 @@ class Lib_PlacementAds_AddEdit {
 		$params = &$this->params;
 		$object = &$this->object;
 
-		// удаляем старые аттачи
-		// @todo по сути не надо заного прикреплять те же фотки при редактировании объявления
-		ORM::factory('Object_Attachment')->where('object_id', '=', $object->id)->delete_all();
+		if (count($params->userfile) > 0)
+		{
+			// удаляем старые аттачи
+			// @todo по сути не надо заного прикреплять те же фотки при редактировании объявления
+			ORM::factory('Object_Attachment')->where('object_id', '=', $object->id)->delete_all();
+		}
 
 		// собираем аттачи
 		if ($userphotos = $params->userfile AND is_array($userphotos))
@@ -434,13 +570,34 @@ class Lib_PlacementAds_AddEdit {
 	function save_signature()
 	{
 		$object = &$this->object;
+
+		$required_values = Array();
+
 		if ($this->signature)
 		{
+			$required_values[] = $object->city_id;
+			$required_values[] = $object->category;
+			$required_values[] = $object->action;
+
+			$config = $this->getUnionConfig($object->category);
+
+			if ( is_array($config) ) 
+			{			
+				$values = ORM::factory('Data_list')->where("object","=",$object->id)->find_all();
+				foreach ($values as $item)
+				{
+					if (in_array($item->attribute, $config['options_exlusive_union']))
+					{
+						$required_values[] = $item->value;
+					}
+				}
+			}
 			$object_signature = ORM::factory('Object_Signature')
 						->where('object_id', '=', $object->id)
 						->find();
-			$object_signature->object_id  = $object->id;
-			$object_signature->signature = $this->signature;
+			$object_signature->object_id  		= $object->id;
+			$object_signature->signature  		= $this->signature;
+			$object_signature->options_exlusive_union  = "{".join(',', $required_values)."}";
 			$object_signature->save();
 		}
 		return $this;
@@ -666,7 +823,7 @@ class Lib_PlacementAds_AddEdit {
 		return $this;
 	}
 
-	private function init_defaults()
+	function init_defaults()
 	{
 		$this->params = new stdClass();
 		$this->params->object_id = NULL;
@@ -689,6 +846,7 @@ class Lib_PlacementAds_AddEdit {
 		$this->params->video = NULL;
 		$this->params->video_type = NULL;
 		$this->params->block_comments = NULL;		
+		$this->params->parent_id = NULL;
 
 		$this->contacts = array();
 	}
@@ -740,5 +898,20 @@ class Lib_PlacementAds_AddEdit {
 				break;
 			}
 		return $date_expiration;
+	}
+
+	private function getUnionConfig($category = 0)
+	{
+		$config = NULL;
+		if ($category >0)
+		{
+			try {
+				$config = Kohana::$config->load('union.'.$category);
+			} catch (Exception $e)
+			{
+				$config = NULL;
+			}
+		}
+		return $config;
 	}
 }

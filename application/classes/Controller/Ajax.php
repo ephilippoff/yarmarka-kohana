@@ -1098,9 +1098,9 @@ class Controller_Ajax extends Controller_Template
 
 			$filename = Uploads::make_thumbnail($_FILES['userfile1']);
 
-			$enable_image_similarity = Kohana::$config->load('common.enable_image_similarity');
+			$check_image_similarity = Kohana::$config->load('common.check_image_similarity');
 
-			if ($enable_image_similarity)
+			if ($check_image_similarity)
 			{
 				$similarity = ORM::factory('Object_Attachment')->get_similarity(Uploads::get_full_path($filename));
 				if ($similarity > Kohana::$config->load('common.max_image_similarity'))

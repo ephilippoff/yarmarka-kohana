@@ -7,5 +7,9 @@ return array(
 	'disallowed_email_domains' => array('yopmail.com', 'asdasd.com'),
 	'admin_emails' => array('mihail.makeev@gmail.com', 'a.vagapov@yarmarka.biz'),
 	'max_image_similarity' 		=> 0.97,
-	'enable_image_similarity' => TRUE
+	'check_image_similarity' => FALSE,
+	'check_object_similarity' 	=> TRUE,
+	'max_object_similarity'		=> 0.9,
+	'union_objects_by_similarity' => TRUE,
+	'union_objects_by_similarity_by_cat' => array(3),
 );

@@ -29,6 +29,17 @@ class Model_Data_Integer extends Data
 					->where("attribute.seo_name","=",$seo_name)
 					->find();
 	}
+
+	public function get_min_max_price($object_id)
+	{
+		$query = DB::select(DB::expr("MIN(value_min) as min, MAX(value_min) AS max"))
+					->from($this->_table_name)
+					->where("object", "=", $object_id)
+					->where("attribute", "=", 44);
+		$result = $query->execute();
+
+		return Array (  (int) $result->get('min'),  (int) $result->get('max') );
+	}
 }
 
 /* End of file Integer.php */

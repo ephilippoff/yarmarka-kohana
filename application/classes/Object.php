@@ -194,12 +194,14 @@ class Object
 			//->init_validation_rules_for_attributes()
 			->init_contacts(TRUE)
 			->exec_validation()
-			->check_signature();
+			->check_signature()
+			->check_signature_for_union();
 
 		if ( ! $add->errors)
 		{
 			$add->save_city_and_addrress()
-				->prepare_object();
+				->prepare_object()
+				->save_parentid_object();
 
 			$db = Database::instance();
 
@@ -215,7 +217,8 @@ class Object
 					->save_attributes()
 					->save_generated()
 					->save_contacts()
-					->save_signature();
+					->save_signature()
+					->save_union();
 
 				$db->commit();
 			}
@@ -234,6 +237,8 @@ class Object
 				->send_message();
 
 			$json['object_id'] = $add->object->id;
+			$json['parent_id'] = $add->parent_id;
+			$json['error'] = $add->errors;
 		}
 		else
 		{
@@ -241,6 +246,34 @@ class Object
 		}
 
 		return $json;
+	}
+
+	static function PlacementAds_Union($input_params, $source_object_id, $edit = FALSE)
+	{
+		$json = array();
+		
+		$add = new Lib_PlacementAds_AddUnion($source_object_id);
+		$add->init_input_params($input_params)
+			->init_instances()
+			->init_object_and_mode()
+			->check_neccesaries();
+
+		if (!$edit) {
+			$add->save_city_and_addrress()
+				->prepare_object();
+
+			$add->save_object();
+		}
+
+		$add->copy_photo()
+			->copy_attributes();
+
+		$add->save_aditional_info();
+
+		
+
+		return $add->object->id;
+
 	}
 }
 
