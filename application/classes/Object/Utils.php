@@ -95,7 +95,6 @@ class Object_Utils
 			$data[$item->weight] = Array( "type" => "list", "id" => $item->reference, "value" => $item->value);
 
 		ksort($data);
-		echo var_dump($data);
 
 		foreach ($data as $item => $value)
 		{

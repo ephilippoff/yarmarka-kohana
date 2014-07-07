@@ -25,7 +25,13 @@ class Model_Object_Signature extends ORM
 		$array_str = "'{".join(',', $array)."}'::character varying[]";
 		$query = DB::select(DB::expr("object_id, MAX(smlar($array_str, signature)) AS sm"))
 		->from($this->_table_name)
+		->join('object')
+		->on('object.id', '=', 'object_signature.object_id')
 		->where('signature', 'IS', DB::expr('NOT NULL'))
+		->where('object.active', '=', 1)
+		->where('object.is_published', '=', 1)
+		->where('object.source_id', '=', 1)
+		->where('object.is_union', 'IS', DB::expr('NULL'))
 		->group_by('object_id')
 		->order_by('sm', 'desc')
 		->order_by('object_id', 'asc')
@@ -33,9 +39,7 @@ class Model_Object_Signature extends ORM
 
 		if ($user_id)
 		{
-			$query->join('object')
-				->on('object.id', '=', 'object_signature.object_id')
-				->where('object.author', '=', $user_id);
+			$query->where('object.author', '=', $user_id);
 
 		}
 

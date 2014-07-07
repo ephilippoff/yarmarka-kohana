@@ -9,7 +9,7 @@ class Controller_Ajax_Massload extends Controller_Template {
 		// only ajax request is allowed
 		if ( ! $this->request->is_ajax() AND Kohana::$environment !== Kohana::DEVELOPMENT)
 		{
-			throw new HTTP_Exception_404;
+			//throw new HTTP_Exception_404;
 		}
 		// disable global layout for this controller
 		$this->use_layout = FALSE;
@@ -17,6 +17,25 @@ class Controller_Ajax_Massload extends Controller_Template {
 		parent::before();
 
 		$this->json['code'] = 200; // code by default
+	}
+
+	public function action_massedit()
+	{
+		$limit = (int) $this->request->query("limit");
+		$objects = ORM::factory('Object')->where("category","=",3)
+								->where("active","=",1)
+								->where("is_published","=",1)
+								->where("parent_id","", DB::expr('IS NULL'))
+								->order_by("date_created", "desc")
+								->limit($limit)
+								->find_all();
+		$json = Array();
+		foreach ($objects as $item)
+		{
+			$json[] = Object::PlacementAds_JustRunTriggers(Array("object_id" => $item->id, "only_run_triggers" => 1));
+		}
+
+		$this->json['data'] = $json;
 	}
 
 	public function action_checkfile()

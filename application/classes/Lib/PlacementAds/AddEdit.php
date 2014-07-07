@@ -64,6 +64,7 @@ class Lib_PlacementAds_AddEdit {
 			{
 				$category_id 	= (int) $object->category;
 				$user_id 		= (int) $object->author;
+				
 			} else {
 				$this->raise_error('object not found');
 			}
@@ -270,6 +271,8 @@ class Lib_PlacementAds_AddEdit {
 			{
 				try {
 					$this->original_params["object_id"] = $this->parent_id;
+					$this->original_params["rubricid"] = $category->id;
+					$this->original_params["city_id"] = $object->city_id;
 					$parent_id = (int) Object::PlacementAds_Union($this->original_params, $object->id, $this->edit_union);
 				}
 				catch (Exception $e) {
@@ -583,7 +586,6 @@ class Lib_PlacementAds_AddEdit {
 		{
 			$required_values[] = $object->city_id;
 			$required_values[] = $object->category;
-			$required_values[] = $object->action;
 
 			$config = $this->getUnionConfig($object->category);
 

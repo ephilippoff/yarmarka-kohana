@@ -250,6 +250,7 @@ class Object
 
 	static function PlacementAds_Union($input_params, $source_object_id, $edit = FALSE)
 	{
+		
 		$json = array();
 		
 		$add = new Lib_PlacementAds_AddUnion($source_object_id);
