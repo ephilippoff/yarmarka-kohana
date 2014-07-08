@@ -92,12 +92,12 @@ class Lib_PlacementAds_AddUnion extends Lib_PlacementAds_AddEdit {
 				$this->save_union_data($object->id, $this->object_source_id, 'Data_List', $data->id );
 			}
 		}
+		
 
 		$exist_values = Array();
 		$data = ORM::factory('Data_Integer')->where('object', '=', $object->id)->find_all();
 		foreach ($data as $item)
-			$exist_values[] = Array($item->reference ,$item->value_min, $item->value_max);
-		
+			$exist_values[] = Array($item->reference ,$item->value_min, $item->value_max);		
 
 		$data = ORM::factory('Data_Integer')->where('object', '=', $this->object_source_id)->find_all();
 		foreach ($data as $item)
@@ -116,12 +116,11 @@ class Lib_PlacementAds_AddUnion extends Lib_PlacementAds_AddEdit {
 			}
 		}
 
+
 		$exist_values = Array();
 		$data = ORM::factory('Data_Numeric')->where('object', '=', $object->id)->find_all();
 		foreach ($data as $item)
-			$exist_values[] = Array($item->reference, $item->value_min);
-		
-		
+			$exist_values[] = Array($item->reference, $item->value_min);		
 
 		$data = ORM::factory('Data_Numeric')->where('object', '=', $this->object_source_id)->find_all();
 		foreach ($data as $item)

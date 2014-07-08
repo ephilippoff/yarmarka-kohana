@@ -30,8 +30,6 @@ class Model_Object_Signature extends ORM
 		->where('signature', 'IS', DB::expr('NOT NULL'))
 		->where('object.active', '=', 1)
 		->where('object.is_published', '=', 1)
-		->where('object.source_id', '=', 1)
-		->where('object.is_union', 'IS', DB::expr('NULL'))
 		->group_by('object_id')
 		->order_by('sm', 'desc')
 		->order_by('object_id', 'asc')

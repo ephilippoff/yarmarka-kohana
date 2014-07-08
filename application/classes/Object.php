@@ -13,7 +13,7 @@ class Object
 			->check_neccesaries()
 			->init_validation_rules()
 			->init_validation_rules_for_attributes()
-			->init_contacts(TRUE)
+			->init_contacts()
 			->exec_validation();
 
 		if ( ! $add->errors)
@@ -40,8 +40,8 @@ class Object
 			}
 			catch(Exception $e)
 			{
-				Kohana::$log->add(Log::ERROR, 'Ошибка при сохранении объявления:'.$e->getMessage());
-				Email::send(Kohana::$config->load('common.admin_emails'), Kohana::$config->load('email.default_from'), 'Ошибка при сохранении объявления', $e->getMessage());
+				Kohana::$log->add(Log::ERROR, 'Default Ошибка при сохранении объявления:'.$e->getMessage());
+				Email::send(Kohana::$config->load('common.admin_emails'), Kohana::$config->load('email.default_from'), 'Default Ошибка при сохранении объявления', $e->getMessage());
 
 				$db->rollback();
 
@@ -73,7 +73,7 @@ class Object
 			->check_neccesaries()
 			->init_validation_rules()
 			//->init_validation_rules_for_attributes()
-			->init_contacts(TRUE)
+			->init_contacts()
 			->exec_validation();
 
 		if ( ! $add->errors)
@@ -100,8 +100,8 @@ class Object
 			}
 			catch(Exception $e)
 			{
-				Kohana::$log->add(Log::ERROR, 'Ошибка при сохранении объявления:'.$e->getMessage());
-				Email::send(Kohana::$config->load('common.admin_emails'), Kohana::$config->load('email.default_from'), 'Ошибка при сохранении объявления', $e->getMessage());
+				Kohana::$log->add(Log::ERROR, 'Local Ошибка при сохранении объявления:'.$e->getMessage());
+				Email::send(Kohana::$config->load('common.admin_emails'), Kohana::$config->load('email.default_from'), 'Local Ошибка при сохранении объявления', $e->getMessage());
 
 				$db->rollback();
 
@@ -161,8 +161,8 @@ class Object
 			}
 			catch(Exception $e)
 			{
-				Kohana::$log->add(Log::ERROR, 'Ошибка при сохранении объявления:'.$e->getMessage());
-				Email::send(Kohana::$config->load('common.admin_emails'), Kohana::$config->load('email.default_from'), 'Ошибка при сохранении объявления', $e->getMessage());
+				Kohana::$log->add(Log::ERROR, 'ByModerator Ошибка при сохранении объявления:'.$e->getMessage());
+				Email::send(Kohana::$config->load('common.admin_emails'), Kohana::$config->load('email.default_from'), 'ByModerator Ошибка при сохранении объявления', $e->getMessage());
 
 				$db->rollback();
 
@@ -192,7 +192,7 @@ class Object
 			->check_neccesaries()
 			->init_validation_rules()
 			//->init_validation_rules_for_attributes()
-			->init_contacts(TRUE)
+			->init_contacts()
 			->exec_validation()
 			->check_signature()
 			->check_signature_for_union();
@@ -224,8 +224,8 @@ class Object
 			}
 			catch(Exception $e)
 			{
-				Kohana::$log->add(Log::ERROR, 'Ошибка при сохранении объявления:'.$e->getMessage());
-				Email::send(Kohana::$config->load('common.admin_emails'), Kohana::$config->load('email.default_from'), 'Ошибка при сохранении объявления', $e->getMessage());
+				Kohana::$log->add(Log::ERROR, 'MassLoad Ошибка при сохранении объявления:'.$e->getMessage());
+				Email::send(Kohana::$config->load('common.admin_emails'), Kohana::$config->load('email.default_from'), 'MassLoad Ошибка при сохранении объявления', $e->getMessage());
 
 				$db->rollback();
 
@@ -307,8 +307,8 @@ class Object
 			}
 			catch(Exception $e)
 			{
-				Kohana::$log->add(Log::ERROR, 'Ошибка при сохранении объявления:'.$e->getMessage());
-				Email::send(Kohana::$config->load('common.admin_emails'), Kohana::$config->load('email.default_from'), 'Ошибка при сохранении объявления', $e->getMessage());
+				Kohana::$log->add(Log::ERROR, 'JustRunTriggers Ошибка при сохранении объявления:'.$e->getMessage());
+				Email::send(Kohana::$config->load('common.admin_emails'), Kohana::$config->load('email.default_from'), 'JustRunTriggers Ошибка при сохранении объявления', $e->getMessage());
 
 				$db->rollback();
 
