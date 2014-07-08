@@ -215,7 +215,7 @@ class Lib_PlacementAds_AddEdit {
 		if ($this->is_similarity_enabled())
 		{
 			$max_similarity = Kohana::$config->load('common.max_object_similarity')*100;
-			$similarity 	= ORM::factory('Object_Signature')->get_similarity($this->signature, $this->options_exlusive_union, 425780/*$user->id*/);
+			$similarity 	= ORM::factory('Object_Signature')->get_similarity($this->signature, $this->options_exlusive_union, $params->object_id, 425780/*$user->id*/);
 			if ($similarity["sm"]*100 > $max_similarity){
 				$errors['signature'] = "Такое объявление у вас уже есть, дубли запрещены правилами сайта.";	
 			}
@@ -231,12 +231,11 @@ class Lib_PlacementAds_AddEdit {
 		$category = &$this->category;
 		$user = &$this->user;
 
-		if (Kohana::$config->load('common.union_objects_by_similarity') 
-				AND (in_array($category->id, Kohana::$config->load('common.union_objects_by_similarity_by_cat'))) )
+		if ($this->is_union_enabled() AND $this->is_union_enabled_by_category($category->id))
 		{
 			$max_similarity = Kohana::$config->load('common.max_object_similarity')*100;
-			$similarity 	= ORM::factory('Object_Signature')->get_similarity($this->signature, $this->options_exlusive_union);
-			echo ($similarity["sm"]*100)."|";
+			$similarity 	= ORM::factory('Object_Signature')->get_similarity($this->signature, $this->options_exlusive_union, $params->object_id);
+
 			if ($similarity["sm"]*100 > $max_similarity){
 
 				$parent_id = (int) ORM::factory('Object', $similarity["object_id"])->parent_id;
@@ -262,8 +261,7 @@ class Lib_PlacementAds_AddEdit {
 		$category = &$this->category;
 		$user = &$this->user;
 
-		if (Kohana::$config->load('common.union_objects_by_similarity') 
-				AND (in_array($category->id, Kohana::$config->load('common.union_objects_by_similarity_by_cat'))) )
+		if ($this->is_union_enabled() AND $this->is_union_enabled_by_category($category->id))
 		{ 
 			$parent_id = 0;
 
@@ -488,8 +486,7 @@ class Lib_PlacementAds_AddEdit {
 		$object 	= &$this->object;
 		$category 	= &$this->category;
 
-		if (Kohana::$config->load('common.union_objects_by_similarity') 
-				AND (in_array($category->id, Kohana::$config->load('common.union_objects_by_similarity_by_cat'))) )
+		if ($this->is_union_enabled() AND $this->is_union_enabled_by_category($category->id))
 		{
 			if (!empty($this->parent_id))
 			{
@@ -929,6 +926,11 @@ class Lib_PlacementAds_AddEdit {
 	private static function is_union_enabled()
 	{
 		return Kohana::$config->load('common.union_objects_by_similarity');
+	}
+
+	private static function is_union_enabled_by_category($category_id)
+	{
+		return (in_array($category_id, Kohana::$config->load('common.union_objects_by_similarity_by_cat')));
 	}
 
 	private static function is_similarity_enabled()
