@@ -912,6 +912,8 @@ class Lib_PlacementAds_AddEdit {
 			}
 		}
 
+		asort($return);
+
 		return "{".join(',', $return)."}";
 	}
 

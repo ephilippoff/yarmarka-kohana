@@ -53,13 +53,14 @@ class Lib_PlacementAds_AddUnion extends Lib_PlacementAds_AddEdit {
 	{
 		$params = &$this->params;
 		$object = &$this->object;
+		$objects_for_union = &$this->objects_for_union;
 
 		$exist_photo = Array();
 		$data = ORM::factory('Object_Attachment')->where('object_id', '=', $object->id)->find_all();
 		foreach ($data as $item)
 			$exist_photo[] = $item->signature;
 
-		$oa = ORM::factory('Object_Attachment')->where('object_id', '=', $this->object_source_id)->find_all();
+		$oa = ORM::factory('Object_Attachment')->where('object_id', 'IN', array_values($objects_for_union))->find_all();
 		// собираем аттачи
 		foreach ($oa as $item)
 		{
@@ -75,6 +76,7 @@ class Lib_PlacementAds_AddUnion extends Lib_PlacementAds_AddEdit {
 				$attachment->signature 	= $item->signature;
 				$attachment->save();
 
+				$exist_photo[] 		= $item->signature;
 				$this->save_union_data($object->id, $this->object_source_id, 'Object_Attachment', $attachment->id );
 			}
 		}
@@ -214,11 +216,25 @@ class Lib_PlacementAds_AddUnion extends Lib_PlacementAds_AddEdit {
 		elseif 
 			($min_price <> $max_price AND $min_price <> 0)
 				$price_info = $count." предложений по цене от ".$min_price." до ".$max_price." р.";
+
+
+		$main_image_id = NULL;
+		$attachments = ORM::factory('Object_Attachment')
+							->where('object_id', '=', $object->id)
+							->order_by( DB::expr('random()') )
+							->find_all();
+		foreach($attachments as $item)
+		{			
+			$main_image_id = $item->id;
+			break;
+		}
+
 		
 		$data = ORM::factory('Object', $object->id);
-		$data->is_union  = $count;
-		$data->title 	 = $object_source->title;
-		$data->user_text = $price_info;
+		$data->is_union  		= $count;
+		$data->title 	 		= $object_source->title;
+		$data->user_text 		= $price_info;
+		$data->main_image_id 	= $main_image_id;
 		$data->update();
 
 		return $this;
