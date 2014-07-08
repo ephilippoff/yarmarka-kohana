@@ -66,6 +66,7 @@ class Lib_PlacementAds_AddEdit {
 				$user_id 		= (int) $object->author;
 				
 				$params->city_id = $object->city_id;
+
 			} else {
 				$this->raise_error('object not found');
 			}

@@ -287,6 +287,9 @@ class Object
 			->check_signature()
 			->check_signature_for_union();
 
+		if ((int) $add->$object->is_union >0)
+			return $json;
+
 		if ( ! $add->errors)
 		{
 			$add->save_parentid_object();
