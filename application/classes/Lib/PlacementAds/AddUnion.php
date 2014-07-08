@@ -2,34 +2,48 @@
 
 class Lib_PlacementAds_AddUnion extends Lib_PlacementAds_AddEdit {
 
-	function Lib_PlacementAds_AddUnion($id){
+	function Lib_PlacementAds_AddUnion($objects_for_union){
 		$this->init_defaults();
-		$this->object_source_id = $id;
+		$this->objects_for_union = $objects_for_union;
+		$this->object_source_id  = $objects_for_union["current_object_source"];
 	}
 
-	function save_city_and_addrress()
+	function init_instances()
 	{
-		$params = &$this->params;
-		$city = &$this->city;
-		$location = &$this->location;
-		$object = &$this->object;
+		parent::init_instances();
 
-		$city = ORM::factory('City', $params->city_id);
+		if ($this->object_source_id) {
+			$this->object_source = ORM::factory('Object', $this->object_source_id);
+			if (!$this->object_source->loaded())
+			{
+				$this->raise_error('object_source_id not finded 1');
+			}
+		} else
+			$this->raise_error('object_source_id not finded 2');
 
-		$fulladdress = $city->region->title.', '.$city->title.', '.$params->address;
+		return $this;
+	}
 
-		@list($lon, $lat) = Ymaps::instance()->get_coord_by_name($fulladdress);
+	function prepare_object()
+	{
+		$object = 	&$this->object;
+		$params = 	&$this->params;
+		$city = 	&$this->city;
+		$category = &$this->category;
+		$object_source = &$this->object_source;
 
-		$location = Address::save_address($lat, $lon,
- 				$city->region->title,
- 				$city->title,
- 				$params->address
- 			);
-
-		// если не нашли адрес, то берем location города
-		if ( ! $location->loaded())
+		$object->category 			= $category->id;
+		
+		$object->ip_addr 			= Request::$client_ip;
+		$object->active 			= 1;
+		$object->is_published 		= 1;
+		$object->author 			= NULL;
+		$object->geo_loc 			= NULL;
+		
+		if ($object_source->location_id)
 		{
-			$location = $city->location;
+			$object->location_id = $object_source->location_id;
+			$object->city_id	 = $object_source->city_id;
 		}
 
 		return $this;
@@ -71,13 +85,14 @@ class Lib_PlacementAds_AddUnion extends Lib_PlacementAds_AddEdit {
 	{
 		$params = &$this->params;
 		$object = &$this->object;
+		$objects_for_union = &$this->objects_for_union;
 
 		$exist_values = Array();
 		$data = ORM::factory('Data_List')->where('object', '=', $object->id)->find_all();
 		foreach ($data as $item)
 			$exist_values[] = $item->value;
 
-		$data = ORM::factory('Data_List')->where('object', '=', $this->object_source_id)->find_all();
+		$data = ORM::factory('Data_List')->where('object', 'IN', array_values($objects_for_union))->find_all();
 		foreach ($data as $item)
 		{
 			if ( !in_array($item->value, $exist_values) )
@@ -89,17 +104,19 @@ class Lib_PlacementAds_AddUnion extends Lib_PlacementAds_AddEdit {
 				$data->attribute	= $item->attribute; 
 				$data->save();
 
+				$exist_values[] = $item->value;
+
 				$this->save_union_data($object->id, $this->object_source_id, 'Data_List', $data->id );
 			}
 		}
-		
+
 
 		$exist_values = Array();
 		$data = ORM::factory('Data_Integer')->where('object', '=', $object->id)->find_all();
 		foreach ($data as $item)
 			$exist_values[] = Array($item->reference ,$item->value_min, $item->value_max);		
 
-		$data = ORM::factory('Data_Integer')->where('object', '=', $this->object_source_id)->find_all();
+		$data = ORM::factory('Data_Integer')->where('object', 'IN', array_values($objects_for_union))->find_all();
 		foreach ($data as $item)
 		{
 			if ( !in_array(Array($item->reference, $item->value_min, $item->value_max), $exist_values) )
@@ -112,6 +129,8 @@ class Lib_PlacementAds_AddUnion extends Lib_PlacementAds_AddEdit {
 				$data->attribute	= $item->attribute; 
 				$data->save();
 
+				$exist_values[] = Array($item->reference ,$item->value_min, $item->value_max);
+
 				$this->save_union_data($object->id, $this->object_source_id, 'Data_Integer', $data->id );
 			}
 		}
@@ -122,7 +141,7 @@ class Lib_PlacementAds_AddUnion extends Lib_PlacementAds_AddEdit {
 		foreach ($data as $item)
 			$exist_values[] = Array($item->reference, $item->value_min);		
 
-		$data = ORM::factory('Data_Numeric')->where('object', '=', $this->object_source_id)->find_all();
+		$data = ORM::factory('Data_Numeric')->where('object', 'IN', array_values($objects_for_union))->find_all();
 		foreach ($data as $item)
 		{
 			if ( !in_array(Array($item->reference, $item->value_min), $exist_values) )
@@ -134,6 +153,9 @@ class Lib_PlacementAds_AddUnion extends Lib_PlacementAds_AddEdit {
 				$data->value_max 	= $item->value_max;
 				$data->attribute	= $item->attribute; 
 				$data->save();
+
+				$exist_values[] = Array($item->reference, $item->value_min);
+
 				$this->save_union_data($object->id, $this->object_source_id, 'Data_Numeric', $data->id );
 			}
 		}
@@ -154,14 +176,31 @@ class Lib_PlacementAds_AddUnion extends Lib_PlacementAds_AddEdit {
 		return $this;
 	}
 
+	function update_union_objects()
+	{
+		$object 		= &$this->object;
+		$objects_for_union = &$this->objects_for_union;
+
+		foreach (array_values($objects_for_union) as $item)
+		{
+			if ($item)
+			{
+				$obj = ORM::factory('Object', $item);	
+				$obj->parent_id = $object->id;
+				$obj->update();
+			}
+		}
+
+		return $this;
+	}
+
 	function save_aditional_info()
 	{
-		$object = &$this->object;
-
-		$source_object = ORM::factory('Object', $this->object_source_id);
+		$object 		= &$this->object;
+		$object_source  = &$this->object_source;
 
 		@list($min_price, $max_price) = ORM::factory('Data_Integer')
-											->get_min_max_price($this->object_source_id);
+											->get_min_max_price($object->id);
 
 		$count = ORM::factory('Object')
 					->where("parent_id","=",$object->id)
@@ -175,20 +214,22 @@ class Lib_PlacementAds_AddUnion extends Lib_PlacementAds_AddEdit {
 		elseif 
 			($min_price <> $max_price AND $min_price <> 0)
 				$price_info = $count." предложений по цене от ".$min_price." до ".$max_price." р.";
-
+		
 		$data = ORM::factory('Object', $object->id);
 		$data->is_union  = $count;
-		$data->title 	 = $source_object->title;
+		$data->title 	 = $object_source->title;
 		$data->user_text = $price_info;
 		$data->update();
+
+		return $this;
 	}
 
 
-	static function save_union_data($object_id, $source_object_id, $tablename, $data_id)
+	static function save_union_data($object_id, $object_source_id, $tablename, $data_id)
 	{
 		$ounion = ORM::factory('Object_Union');
 		$ounion->object_union_id = $object_id;
-		$ounion->object_id 		 = $source_object_id;		
+		$ounion->object_id 		 = $object_source_id;		
 		$ounion->table 			 = $tablename;
 		$ounion->data_id 		 = $data_id;
 		$ounion->save();	

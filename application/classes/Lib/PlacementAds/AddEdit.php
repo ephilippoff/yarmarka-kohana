@@ -65,6 +65,7 @@ class Lib_PlacementAds_AddEdit {
 				$category_id 	= (int) $object->category;
 				$user_id 		= (int) $object->author;
 				
+				$params->city_id = $object->city_id;
 			} else {
 				$this->raise_error('object not found');
 			}
@@ -195,27 +196,26 @@ class Lib_PlacementAds_AddEdit {
 		$params = &$this->params;
 		$errors = &$this->errors;
 		$object = &$this->object;
+		$category = &$this->category;
 		$user = &$this->user;
 
-		if (property_exists($params, 'only_run_triggers') AND $params->only_run_triggers == 1)
-			$values = (array) Object_Utils::get_all_values_of_object(NULL, $object->id);
+		
+
+		if ($this->is_just_triggers($params))
+			@list($values, $list_ids) = (array) Object_Utils::get_parsed_parameters(NULL, $object->id, TRUE);
 		else 
-			$values = (array) Object_Utils::get_all_values_of_object($params, NULL);
+			@list($values, $list_ids) = (array) Object_Utils::get_parsed_parameters($params, NULL, TRUE);
 
+		$this->signature 				= ($this->is_union_enabled()) ?
+													$this->generate_signature("", "",$values) : 
+														$this->generate_signature($params->title_adv, $params->user_text_adv, $values);
 
+		$this->options_exlusive_union 	= $this->get_options_exlusive_union($params->city_id, $category->id, $list_ids);
 
-		if (Kohana::$config->load('common.union_objects_by_similarity'))
-			$text = Object_Utils::generate_text_for_signature("", "", $values);
-		else 
-			$text = Object_Utils::generate_text_for_signature($params->title_adv, $params->user_text_adv, $values);
-
-		$this->signature = Object_Utils::generate_signature($text);
-
-		if (Kohana::$config->load('common.check_object_similarity'))
+		if ($this->is_similarity_enabled())
 		{
-
 			$max_similarity = Kohana::$config->load('common.max_object_similarity')*100;
-			$similarity 	= ORM::factory('Object_Signature')->get_similarity($this->signature, 425780/*$user->id*/);
+			$similarity 	= ORM::factory('Object_Signature')->get_similarity($this->signature, $this->options_exlusive_union, 425780/*$user->id*/);
 			if ($similarity["sm"]*100 > $max_similarity){
 				$errors['signature'] = "Такое объявление у вас уже есть, дубли запрещены правилами сайта.";	
 			}
@@ -231,12 +231,12 @@ class Lib_PlacementAds_AddEdit {
 		$category = &$this->category;
 		$user = &$this->user;
 
-
 		if (Kohana::$config->load('common.union_objects_by_similarity') 
 				AND (in_array($category->id, Kohana::$config->load('common.union_objects_by_similarity_by_cat'))) )
 		{
 			$max_similarity = Kohana::$config->load('common.max_object_similarity')*100;
-			$similarity 	= ORM::factory('Object_Signature')->get_similarity($this->signature);
+			$similarity 	= ORM::factory('Object_Signature')->get_similarity($this->signature, $this->options_exlusive_union);
+			echo ($similarity["sm"]*100)."|";
 			if ($similarity["sm"]*100 > $max_similarity){
 
 				$parent_id = (int) ORM::factory('Object', $similarity["object_id"])->parent_id;
@@ -269,33 +269,25 @@ class Lib_PlacementAds_AddEdit {
 
 			if ($this->create_union OR $this->edit_union)
 			{
-				try {
+				//ry {
 					$this->original_params["object_id"] = $this->parent_id;
-					$this->original_params["rubricid"] = $category->id;
-					$this->original_params["city_id"] = $object->city_id;
-					$parent_id = (int) Object::PlacementAds_Union($this->original_params, $object->id, $this->edit_union);
-				}
-				catch (Exception $e) {
-				 	$errors['union_error'] = $e->getMessage();
-				}
+					$this->original_params["rubricid"]  = $category->id;
+					$this->original_params["city_id"]   = $object->city_id;
 
+					$objects_for_union = Array(
+							"initial_object" 		 => $this->object_without_parent_id,
+							"current_object_source"  => $object->id
+						);
+
+					$parent_id = (int) Object::PlacementAds_Union($this->original_params, $objects_for_union, $this->edit_union);
+				//}
+				//catch (Exception $e) {
+				// 	$errors['union_error'] = $e->getMessage();
+				//}
 			} 
 
-			if ($parent_id >0 )
-			{
-				if (!empty($this->object_without_parent_id))
-				{
-					$obj = ORM::factory('Object', $this->object_without_parent_id);	
-					$obj->parent_id = $parent_id;
-					$obj->update();
-				}
-
-				$obj = ORM::factory('Object', $object->id);	
-				$obj->parent_id = $parent_id;
-				$obj->update();
-
+			if ($parent_id >0 )	
 				$this->parent_id = $parent_id;
-			}
 
 		}		
 
@@ -520,12 +512,10 @@ class Lib_PlacementAds_AddEdit {
 		$params = &$this->params;
 		$object = &$this->object;
 
-		if (count($params->userfile) > 0)
-		{
-			// удаляем старые аттачи
-			// @todo по сути не надо заного прикреплять те же фотки при редактировании объявления
-			ORM::factory('Object_Attachment')->where('object_id', '=', $object->id)->delete_all();
-		}
+
+		// удаляем старые аттачи
+		// @todo по сути не надо заного прикреплять те же фотки при редактировании объявления
+		ORM::factory('Object_Attachment')->where('object_id', '=', $object->id)->delete_all();
 
 		// собираем аттачи
 		if ($userphotos = $params->userfile AND is_array($userphotos))
@@ -580,32 +570,15 @@ class Lib_PlacementAds_AddEdit {
 	{
 		$object = &$this->object;
 
-		$required_values = Array();
-
 		if ($this->signature)
 		{
-			$required_values[] = $object->city_id;
-			$required_values[] = $object->category;
-
-			$config = $this->getUnionConfig($object->category);
-
-			if ( is_array($config) ) 
-			{			
-				$values = ORM::factory('Data_list')->where("object","=",$object->id)->find_all();
-				foreach ($values as $item)
-				{
-					if (in_array($item->attribute, $config['options_exlusive_union']))
-					{
-						$required_values[] = $item->value;
-					}
-				}
-			}
+			
 			$object_signature = ORM::factory('Object_Signature')
 						->where('object_id', '=', $object->id)
 						->find();
-			$object_signature->object_id  		= $object->id;
-			$object_signature->signature  		= $this->signature;
-			$object_signature->options_exlusive_union  = "{".join(',', $required_values)."}";
+			$object_signature->object_id  				= $object->id;
+			$object_signature->signature  				= $this->signature;
+			$object_signature->options_exlusive_union   = $this->options_exlusive_union;
 			$object_signature->save();
 		}
 		return $this;
@@ -628,7 +601,7 @@ class Lib_PlacementAds_AddEdit {
 		$params = &$this->params;
 		$object = &$this->object;
 
-		$attributes = Object_Utils::get_form_elements_from_params((array) $params);
+		$attributes = Object_Utils::prepare_form_elements((array) $params);
 
 		$boolean_deleted = FALSE; // если меняются булевые параметры, то удаляем все что есть в базе
 		foreach ($attributes as $reference_id => $value)
@@ -859,11 +832,11 @@ class Lib_PlacementAds_AddEdit {
 		$this->contacts = array();
 	}
 
-	private function raise_error($text){
+	private static function raise_error($text){
 		throw new HTTP_Exception_404($text);		
 	}
 
-	private function is_shown($conditions, $reference_id)
+	private static function is_shown($conditions, $reference_id)
 	{
 		$shown = FALSE;
 
@@ -888,7 +861,7 @@ class Lib_PlacementAds_AddEdit {
 		return $shown;
 	}
 
-	private function lifetime_to_date($lifetime)
+	private static function lifetime_to_date($lifetime)
 	{
 		switch ($lifetime) 
 			{
@@ -908,7 +881,7 @@ class Lib_PlacementAds_AddEdit {
 		return $date_expiration;
 	}
 
-	private function getUnionConfig($category = 0)
+	private static function get_union_config($category = 0)
 	{
 		$config = NULL;
 		if ($category >0)
@@ -921,5 +894,50 @@ class Lib_PlacementAds_AddEdit {
 			}
 		}
 		return $config;
+	}
+
+	private static function get_options_exlusive_union($city_id, $category_id, $list_ids = Array())
+	{
+		$return = Array();
+		$return[] = $city_id;
+		$return[] = $category_id;
+
+		$config = self::get_union_config($category_id);
+
+		if ( is_array($config) ) 
+		{			
+			foreach ($list_ids as $key=>$item)
+			{
+				if (in_array($key, $config['options_exlusive_union']))
+				{
+					$return[] = $item;
+				}
+			}
+		}
+
+		return "{".join(',', $return)."}";
+	}
+
+	private static function generate_signature($title = "", $text = "", $values = Array())
+	{
+		$values[] = strip_tags($title);
+		$values[] = strip_tags($text);
+
+		return Object_Utils::generate_signature( join(", ", $values) );
+	}
+
+	private static function is_union_enabled()
+	{
+		return Kohana::$config->load('common.union_objects_by_similarity');
+	}
+
+	private static function is_similarity_enabled()
+	{
+		return Kohana::$config->load('common.check_object_similarity');
+	}
+
+	private static function is_just_triggers($params)
+	{
+		return (property_exists($params, 'only_run_triggers') AND $params->only_run_triggers == 1);
 	}
 }

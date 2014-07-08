@@ -248,28 +248,27 @@ class Object
 		return $json;
 	}
 
-	static function PlacementAds_Union($input_params, $source_object_id, $edit = FALSE)
+	static function PlacementAds_Union($input_params, $objects_for_union, $edit = FALSE)
 	{
-		
+
 		$json = array();
 		
-		$add = new Lib_PlacementAds_AddUnion($source_object_id);
+		$add = new Lib_PlacementAds_AddUnion($objects_for_union);
 		$add->init_input_params($input_params)
 			->init_instances()
 			->init_object_and_mode()
 			->check_neccesaries();
 
 		if (!$edit) {
-			$add->save_city_and_addrress()
-				->prepare_object();
-
+			$add->prepare_object();
 			$add->save_object();
 		}
 
 		$add->copy_photo()
 			->copy_attributes();
 
-		$add->save_aditional_info();
+		$add->update_union_objects()
+			->save_aditional_info();
 
 		
 

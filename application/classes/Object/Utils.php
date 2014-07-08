@@ -2,11 +2,7 @@
 
 class Object_Utils
 {
-
-	public static function generate_text_for_signature($subject, $text, $params = Array())
-	{
-		return strip_tags($subject).', '.strip_tags($text).', '.join(', ', $params);
-	}
+	const ATTRIBUTE_PRICE_ID = 44;
 
 	public static function generate_signature($text)
 	{
@@ -23,37 +19,36 @@ class Object_Utils
 		return $result;
 	}
 
-	public static function get_all_values_of_object($params = Array(), $object_id = 0)
+	public static function get_parsed_parameters($params = Array(), $object_id = 0, $ignore_price = FALSE)
 	{
-		$return = Array();
-
-
+		$values 		= Array();
+		$list_ids 		= Array();
 
 		if ($object_id > 0)
 		{
 			$object = ORM::factory('Object', $object_id);
-			$params = Object_Utils::get_values_from_object((int) $object_id);
-			$attributes = Object_Utils::get_form_elements_from_params((array) $params);
-		} else {
-			$attributes = Object_Utils::get_form_elements_from_params((array) $params);
-		}
+			$params = self::generate_form_element_by_object((int) $object_id);			
+		} 
 
-		$return = Object_Utils::get_values_from_form_elements((array) $attributes);
+		$attributes = self::prepare_form_elements((array) $params);
+		
+		@list($values, $list_ids) 
+					= self::parse_form_elements((array) $attributes, $ignore_price);
 
 		if ($object_id > 0)
 		{
-			$return[] = ORM::factory('Location', $object->location_id)->address;
-			$return[] = ORM::factory('City', 	 $object->city_id)->title;
+			$values[] = ORM::factory('Location', $object->location_id)->address;
+			$values[] = ORM::factory('City', 	 $object->city_id)->title;
 		} else {
-			$return[] = $params->address;
-			$return[] = ORM::factory('City', $params->city_id)->title;
+			$values[] = $params->address;
+			$values[] = ORM::factory('City', $params->city_id)->title;
 		}
 		
 
-		return $return;
+		return Array($values, $list_ids);
 	}
 
-	public static function get_values_from_object($object_id)
+	public static function generate_form_element_by_object($object_id)
 	{
 		$data = Array();
 		$return = Array();
@@ -107,18 +102,31 @@ class Object_Utils
 		return $return;
 	}
 
-	public static function get_values_from_form_elements($attributes = Array())
+	/*
+	*	$form_elements like ( param_<reference> => <value>, param_<reference>_min => <value_min>, param_<reference>_max => <value_max> ... etc)
+	*	$ignore_price for generate signature without price
+	*
+	*	return Array
+	*
+	*/
+	public static function parse_form_elements($form_elements = Array(), $ignore_price = FALSE)
 	{
-		$return = Array();
-		foreach ($attributes as $reference_id => $value)
+		$values 		= Array();
+		$list_ids 		= Array();
+
+		foreach ($form_elements as $reference_id => $value)
 		{
 			$ref = ORM::factory('Reference')
-						->select("attribute.type")
+						->select("attribute.type", Array("attribute.id", "aid"))
 						->join('attribute', 'left')
 						->on('reference.attribute', '=', 'attribute.id')
 						->where('reference.id','=',$reference_id)
 						->cached(Date::DAY)
 						->find();
+			
+			//не включаем цену в подпись
+			if ($ignore_price AND $ref->aid == self::ATTRIBUTE_PRICE_ID)
+				continue;
 
 			$type = $ref->type;
 
@@ -132,26 +140,34 @@ class Object_Utils
 						foreach ($el as $item)
 							$eltitles[] = $item->title;
 
-						$return[] = join(", ", $eltitles);
+						foreach ($el as $item)
+							$list_ids[] = $item->id;
+
+						foreach ($el as $item)
+							$attribute_ids[] = $item->attribute;
+
+						$values[] = join(", ", $eltitles);
 					} else {
-						$return[] = ORM::factory('Attribute_Element', $value)->title;
+						$ae = ORM::factory('Attribute_Element', $value);
+						$values[] 		 			= $ae->title;
+						$list_ids[$ae->attribute] 	 = $ae->id;
 					}
 				break;
 				default:
 					if (is_array($value))
-						$return[] =$value["min"]."-".$value["max"];
+						$values[] =$value["min"]."-".$value["max"];
 					else
-						$return[] = $value;
+						$values[] = $value;
 
 				break;
 			}
 		}
 
 
-		return $return;
+		return Array ($values, $list_ids);
 	}
 
-	public static function get_form_elements_from_params($params)
+	public static function prepare_form_elements($params)
 	{
 		$result = array();
 		foreach ($params as $key => $value)
@@ -181,5 +197,5 @@ class Object_Utils
 	}
 }
 
-/* End of file Object.php */
-/* Location: ./application/classes/Object.php */
+/* End of file Utils.php */
+/* Location: ./application/classes/Object/Utils.php */

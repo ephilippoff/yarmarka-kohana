@@ -18,7 +18,7 @@ class Model_Object_Signature extends ORM
 		parent::save($validation);
 	}
 
-	public function get_similarity($array, $user_id = NULL)
+	public function get_similarity($array, $options_exlusive_union, $user_id = NULL)
 	{
 		$user_id 	= (int) $user_id;
 
@@ -30,6 +30,7 @@ class Model_Object_Signature extends ORM
 		->where('signature', 'IS', DB::expr('NOT NULL'))
 		->where('object.active', '=', 1)
 		->where('object.is_published', '=', 1)
+		->where('options_exlusive_union', '=', $options_exlusive_union)
 		->group_by('object_id')
 		->order_by('sm', 'desc')
 		->order_by('object_id', 'asc')
