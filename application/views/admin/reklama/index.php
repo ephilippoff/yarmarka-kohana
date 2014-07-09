@@ -92,6 +92,22 @@
 	<?php endforeach; ?>
 </table>
 
+<?php if ($pagination->total_pages > 1) : ?>
+<div class="row">
+	<div class="span10"><?=$pagination?></div>
+	<div class="span2" style="padding-top: 55px;">
+		<span class="text-info">Limit:</span>
+		<?php foreach (array(50, 100, 150) as $l) : ?>
+			<?php if ($l == $limit) : ?>
+				<span class="badge badge-info"><?=$l?></span>
+			<?php else : ?>
+				<a href="#" class="btn-mini" onClick="add_to_query('limit', <?=$l?>)"><?=$l?></a>
+			<?php endif; ?>
+		<?php endforeach; ?>
+	</div>
+</div>
+<?php endif; ?>
+
 <div style="display: none;" class="fn-stat-container fn-window stat-container"><span class="fn-close close"></span><div class="fn-inner inner"></div></div>
 
 
