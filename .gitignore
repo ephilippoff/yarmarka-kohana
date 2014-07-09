@@ -18,4 +18,5 @@ application/config/database.php
 /nbproject
 /.wakatime-project
 /application/config/user_message.php
+/application/config/robokassa.php
 .gitignore
