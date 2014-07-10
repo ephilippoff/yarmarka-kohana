@@ -3,15 +3,35 @@
 
 <?php
 	$main_cities = array(1 => 'Тюменская область', 1919 => 'Тюмень', 1947 => 'Нефтеюганск', 1948 => 'Нижневартовск', 1979 => 'Сургут');
+	
+	//Параметры для uri сортировок и параметры для uri фильтра
+	$params = $params_for_filter = array();
+	//Запоминаем сортировку для фильтра
+	if (!empty($sort_by) and !empty($sort))
+	{
+		$params_for_filter['sort_by'] = $sort_by; 
+		$params_for_filter['sort'] = $sort;		
+	}
+		
+	if (!$only_active) $params_for_filter['only_active'] = '';
+	else $params['only_active'] = '';		
 ?>
+
+<div class="control-group only2" >		
+	<label for="only_active" class="control-label">
+		<input id="only_active" type="checkbox" class="input-small" placeholder="" name="only_active" <?php if ($only_active) : ?> checked <?php endif; ?> onclick=" window.location='/<?=Request::current()->uri().URL::query($params_for_filter, false)?>' ">
+		Только активные	
+	</label>					
+</div>	
+
 <table class="table table-hover table-condensed promo">
 	<tr>
 		<th>
 			Id<br>
 			<?php if ($sort_by == 'id' and $sort == 'desc') : ?>
-				<a class="sort" href="/<?=Request::current()->uri()?>?sort_by=id&sort=asc">(по возр.)</a>
+				<a class="sort" href="/<?=Request::current()->uri().URL::query(array_merge($params, array('sort_by' => 'id', 'sort' => 'asc')), false) ?>">(по возр.)</a>
 			<?php else : ?>
-				<a class="sort" href="/<?=Request::current()->uri()?>?sort_by=id&sort=desc">(по убыв.)</a>
+				<a class="sort" href="/<?=Request::current()->uri().URL::query(array_merge($params, array('sort_by' => 'id', 'sort' => 'desc')), false) ?>">(по убыв.)</a>
 			<?php endif;?>
 		</th>
 		<th>Заголовок</th>
@@ -20,19 +40,20 @@
 		<th>
 			Дата старта<br>
 			<?php if ($sort_by == 'start_date' and $sort == 'desc') : ?>
-				<a class="sort" href="/<?=Request::current()->uri()?>?sort_by=start_date&sort=asc">(по возр.)</a>
+				<a class="sort" href="/<?=Request::current()->uri().URL::query(array_merge($params, array('sort_by' => 'start_date', 'sort' => 'asc')), false) ?>">(по возр.)</a>
 			<?php else : ?>
-				<a class="sort" href="/<?=Request::current()->uri()?>?sort_by=start_date&sort=desc">(по убыв.)</a>
+				<a class="sort" href="/<?=Request::current()->uri().URL::query(array_merge($params, array('sort_by' => 'start_date', 'sort' => 'desc')), false) ?>">(по убыв.)</a>
 			<?php endif;?>			
 		</th>
 		<th>
 			Дата окончания<br>
 			<?php if ($sort_by == 'end_date' and $sort == 'desc') : ?>
-				<a class="sort" href="/<?=Request::current()->uri()?>?sort_by=end_date&sort=asc">(по возр.)</a>
+				<a class="sort" href="/<?=Request::current()->uri().URL::query(array_merge($params, array('sort_by' => 'end_date', 'sort' => 'asc')), false) ?>">(по возр.)</a>
 			<?php else : ?>
-				<a class="sort" href="/<?=Request::current()->uri()?>?sort_by=end_date&sort=desc">(по убыв.)</a>
+				<a class="sort" href="/<?=Request::current()->uri().URL::query(array_merge($params, array('sort_by' => 'end_date', 'sort' => 'desc')), false) ?>">(по убыв.)</a>
 			<?php endif;?>				
 		</th>
+		<th>Активность</th>
 		<th>Просмотры</th>
 		<th>Города</th>
 		<th>Группы</th>
@@ -79,6 +100,7 @@
 			<td><?=$ads_element->class?></td>
 			<td><?=$ads_element->start_date?></td>
 			<td><?=$ads_element->end_date?></td>
+			<td><?php if ($ads_element->active == 1) : ?> Активна <?php else :?> Неактивна <?php endif;?></td>
 			<td><?=$visits?></td>
 			<td><?=trim($cities,', ')?></td>
 			<td><?=trim($ads_element->groups,'{}')?></td>

@@ -8,7 +8,7 @@ class Controller_Admin_Reklama extends Controller_Admin_Template {
 	{
 		$limit  = Arr::get($_GET, 'limit', 50);
 		$page   = $this->request->query('page');
-		$offset = ($page AND $page != 1) ? ($page-1)*$limit : 0;		
+		$offset = ($page AND $page != 1) ? ($page-1) * $limit : 0;		
 
 		//Возможные варианты сортировки
 		$sorting_types = array('asc', 'desc');
@@ -16,8 +16,12 @@ class Controller_Admin_Reklama extends Controller_Admin_Template {
 		//Принимаем, сверяем параметры сортировки
 		$sort	 = in_array($this->request->query('sort'), $sorting_types) ? $this->request->query('sort') : '';
 		$sort_by = in_array($this->request->query('sort_by'), $sorting_fields) ? $this->request->query('sort_by') : '';		
+		//Фильтр показа только активных, либо всех
+		$only_active = isset($_GET['only_active']) ? 1 : 0;
 			
-		$reklama_list = ORM::factory('Reklama');		
+		$reklama_list = ORM::factory('Reklama');
+		//Фильтр по active = 1
+		if ($only_active) $reklama_list->where('active', '=', 1);
 				
 		// количество общее
 		$clone_to_count = clone $reklama_list;
@@ -35,6 +39,7 @@ class Controller_Admin_Reklama extends Controller_Admin_Template {
 		$this->template->ads_list = $reklama_list->find_all();
 		$this->template->sort	  = $sort;
 		$this->template->sort_by  = $sort_by;
+		$this->template->only_active = $only_active;
 		
 		$this->template->limit	  = $limit;
 		$this->template->pagination	= Pagination::factory(array(
@@ -68,6 +73,8 @@ class Controller_Admin_Reklama extends Controller_Admin_Template {
 				{
 					$post['cities'] = '{'.join(',', $post['cities']).'}';	
 				}
+				
+				$post['active'] = isset($post['active']) ? 1 : 0;			
 				
 				//Указаны группы
 				if (isset($post['reklama_group']))					
@@ -128,6 +135,8 @@ class Controller_Admin_Reklama extends Controller_Admin_Template {
 				{
 					$post['cities'] = '{'.join(',', $post['cities']).'}';	
 				}
+				
+				$post['active'] = isset($post['active']) ? 1 : 0;
 				
 				//Указаны группы
 				if (isset($post['reklama_group']))
