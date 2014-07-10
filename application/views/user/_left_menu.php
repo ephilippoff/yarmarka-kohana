@@ -71,6 +71,18 @@
 				<?php else : ?>
 				<li><a href="<?=URL::site('user/newspapers')?>" class="clickable"><i class="ico "></i><span>Газеты</span></a></li>
 				<?php endif; ?>
+
+				<?php if (Request::current()->action() == 'massload') : ?>
+				<li><span class="noclickable"><i class="ico "></i><span><b>Массовая загрузка</b></span></span></li>
+				<?php else : ?>
+				<li><a href="<?=URL::site('user/massload')?>" class="clickable"><i class="ico "></i><span>Массовая загрузка</span></a></li>
+				<?php endif; ?>
+
+				<?php if (Request::current()->action() == 'plan') : ?>
+				<li><span class="noclickable"><i class="ico "></i><span><b>Тарифные планы</b></span></span></li>
+				<?php else : ?>
+				<li><a href="<?=URL::site('user/plan')?>" class="clickable"><i class="ico "></i><span>Тарифные планы</span></a></li>
+				<?php endif; ?>
 			</ul>
 		</li>
 		<li class="info-tooltip" data-controller-character="index"><a href="" id="islide_profile"><i class="ico ico-profile"></i><span>Профиль</span></a>

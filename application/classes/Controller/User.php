@@ -164,6 +164,22 @@ class Controller_User extends Controller_Template {
 
     }
 
+    public function action_plan()
+    {
+    	$this->layout = 'users'; 
+    	$services = Array();  
+    	$plans = ORM::factory('Plan')->find_all(); 	
+    	foreach($plans as $plan)
+    	{
+    		$services[] = ORM::factory('Service')->where("name","=",$plan->name."_".$plan->number)->find();
+    	}
+
+    	$this->template->user_plans = ORM::factory('User_Plan')
+				    					->where("user_id","=",$this->user->id)
+				    					->find_all(); 	
+    	$this->template->services = $services;
+    }
+
     public function action_favorites()
 	{
 		$this->layout = 'users';
