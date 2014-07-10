@@ -39,7 +39,26 @@ class Lib_PlacementAds_AddEdit {
 
 	function check_neccesaries()
 	{
-		$params = &$this->params;
+		$errors = &$this->errors;
+		$category 	= &$this->category;
+		$user_id 	= &$this->user_id;
+
+		if (!$this->is_edit)
+		{
+			$count = (int) ORM::factory("Object")
+								->where("author","=",$user_id)
+								->where("category","=",$category->id)
+								->where("is_published","=",1)
+								->where("active","=",1)
+								->count_all();
+			$plan_id = Plan::check_plan_limit_for_user($user_id, $category->plan_name, $count+1);
+			if ($plan_id > 0) 
+			{
+				$errors['plan'] 			= "Вы достигли лимита по количеству объявлений, согласно своего тарифного плана";
+				$errors['plan_description'] = Plan::get_plan_error_description($plan_id);
+			}
+		}
+		
 		
 		return $this;
 	}
