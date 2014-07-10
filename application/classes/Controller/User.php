@@ -176,6 +176,7 @@ class Controller_User extends Controller_Template {
 
     	$this->template->user_plans = ORM::factory('User_Plan')
 				    					->where("user_id","=",$this->user->id)
+				    					->where("date_expiration",">",'NOW()')
 				    					->find_all(); 	
     	$this->template->services = $services;
     }
