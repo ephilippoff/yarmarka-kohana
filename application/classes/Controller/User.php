@@ -171,7 +171,7 @@ class Controller_User extends Controller_Template {
     	$plans = ORM::factory('Plan')->find_all(); 	
     	foreach($plans as $plan)
     	{
-    		$services[] = ORM::factory('Service')->where("name","=",$plan->name."_".$plan->number)->find();
+    		$services[] = ORM::factory('Service')->where("options","=",$plan->name."_".$plan->number)->find();
     	}
 
     	$this->template->user_plans = ORM::factory('User_Plan')
