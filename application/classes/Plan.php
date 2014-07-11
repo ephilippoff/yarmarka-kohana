@@ -13,7 +13,7 @@ class Plan {
 	public static function check_plan_limit_for_user($user_id, $plan_name = NULL, $count = 0)
 	{
 		$return = 0;
-		$user_plan = ORM::factory('User_Plan')->select("plan.count", array("plan.id","plan_id"))
+		$user_plan = ORM::factory('User_Plan')->select("plan.title", "plan.count", array("plan.id","plan_id"))
 							->join("plan")
 							->on("plan.id","=","user_plan.plan_id")
 							->where("plan.name","=",$plan_name)
@@ -23,7 +23,7 @@ class Plan {
 		if ($user_plan->loaded())
 		{
 			if ($count >= $user_plan->count)
-				$return = $user_plan->plan_id;
+				$return = $user_plan;
 		} else {
 
 			$user_plan = ORM::factory('Plan')
@@ -33,7 +33,7 @@ class Plan {
 			if ($user_plan->loaded())
 			{
 				if ($count >= $user_plan->count)
-					$return = $user_plan->id;
+					$return = $user_plan;
 			}
 		}
 
@@ -46,11 +46,11 @@ class Plan {
 	 * @param  integer 	$user_id
 	 * @param  integer 	$category_id
 	 * @param  integer 	$add_to_count  1/0 учитывать ли добавившееся объвление, или только текущие
-	 * @return boolean
+	 * @return array
 	 */
 	public static function check_plan_limit_for_user_and_category($user_id, $category_id, $add_to_count = 1)
 	{
-		$category = (int) ORM::factory("Category", $category_id);
+		$category = ORM::factory("Category", $category_id);
 		
 		$count = (int) ORM::factory("Object")
 							->where("author","=",$user_id)
@@ -59,7 +59,8 @@ class Plan {
 							->where("active","=",1)
 							->count_all();
 
-		return self::check_plan_limit_for_user($user_id, $category->plan, $count + $add_to_count);
+		return Array( self::check_plan_limit_for_user($user_id, $category->plan_name, $count + $add_to_count), 
+						$count);
 	}
 
 

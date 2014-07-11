@@ -15,12 +15,7 @@
 						<? endforeach;?>
 						</div>
 
-						<div>
-						Ваши текущие тарифные планы:<br/>
-						<? foreach($user_plans as $plan):?>
-							<?=$plan->plan->title?> на <?=$plan->plan->count?> объявлений, до <?=$plan->date_expiration?></br>
-						<? endforeach;?>
-						</div>
+						<?=Request::factory('block/_plan_info')->execute()?>
 					</div>
 				</div>
 				<div class="clear"></div>
