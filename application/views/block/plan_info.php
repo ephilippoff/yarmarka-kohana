@@ -1,4 +1,4 @@
-<? if (count($user_plans) == 0) return; ?>
+<? if (count($user_plans) > 0): ?>
 <div>
 Ваши текущие тарифные планы:<br/>
 <? foreach($user_plans as $plan):?>
@@ -14,6 +14,7 @@
 	<?=$plan->plan->title?> на <?=$plan->plan->count?> объявлений, истекает <span><?=$interval_str?></span></br>
 <? endforeach;?>
 </div>
+<? endif; ?>
 </br>
 </br>
 <div>
