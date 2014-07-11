@@ -55,7 +55,7 @@ class Lib_PlacementAds_AddEdit {
 			if (!empty($plan)) 
 			{
 				$errors['plan'] 			= "Вы достигли лимита по количеству объявлений, согласно своего тарифного плана";
-				$errors['plan_description'] = Plan::get_plan_error_description($plan_id);
+				$errors['plan_description'] = Plan::get_plan_error_description($plan->id);
 			}
 		}
 		
