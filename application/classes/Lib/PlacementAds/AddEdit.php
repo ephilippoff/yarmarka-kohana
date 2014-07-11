@@ -51,8 +51,8 @@ class Lib_PlacementAds_AddEdit {
 								->where("is_published","=",1)
 								->where("active","=",1)
 								->count_all();
-			$plan_id = Plan::check_plan_limit_for_user($user_id, $category->plan_name, $count+1);
-			if ($plan_id > 0) 
+			$plan = Plan::check_plan_limit_for_user($user_id, $category->plan_name, $count+1);
+			if ($plan <> 0) 
 			{
 				$errors['plan'] 			= "Вы достигли лимита по количеству объявлений, согласно своего тарифного плана";
 				$errors['plan_description'] = Plan::get_plan_error_description($plan_id);
