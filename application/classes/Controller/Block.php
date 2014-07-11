@@ -257,7 +257,7 @@ class Controller_Block extends Controller_Template
 			->find_all();
 	}
 
-	public function action__plan_info()
+	public function action_plan_info()
 	{
 		$this->assets->js('http://yandex.st/underscore/1.6.0/underscore-min.js');
 		$user = Auth::instance()->get_user();
@@ -268,6 +268,7 @@ class Controller_Block extends Controller_Template
 		    					->where("user_id","=",$user->id)
 		    					->where("date_expiration",">",'NOW()')
 		    					->find_all();
+
 		$this->template->user_plans = $user_plan;
 
 		$not_yet_payment = Array();

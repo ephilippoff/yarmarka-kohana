@@ -57,7 +57,7 @@
 				
 					</div>		
 			</div>
-			<?=Request::factory('block/_plan_info')->execute()?>
+			<?=Request::factory('block/plan_info')->execute()?>
 
 		</div>
 		
