@@ -12,7 +12,7 @@ class Plan {
 	 */
 	public static function check_plan_limit_for_user($user_id, $plan_name = NULL, $count = 0)
 	{
-		$return = 0;
+		$return = NULL;
 		$user_plan = ORM::factory('User_Plan')->select("plan.title", "plan.count", array("plan.id","plan_id"))
 							->join("plan")
 							->on("plan.id","=","user_plan.plan_id")
