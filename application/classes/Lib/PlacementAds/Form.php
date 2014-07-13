@@ -53,7 +53,7 @@ class Lib_PlacementAds_Form  {
 		$category_id 	= $this->_category_id;
 		$city_id 		= $this->_city_id;
 		$object_id 		= $this->_object_id;
-		$user_id 		= Auth::instance()->get_user();
+		$user_id 		= Auth::instance()->get_user()->id;
 
 		$this->object 	= ORM::factory('Object');
 		$this->category = ORM::factory('Category');

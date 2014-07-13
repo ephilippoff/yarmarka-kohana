@@ -13,7 +13,7 @@
 			<div id="add-menu">    
 			<div class="steps">
 			
-				<form>
+				<form method="POST" action="15">
 
 
 					<? if ( property_exists($form_data, 'city') ): ?>
@@ -61,7 +61,7 @@
 					<? endif; ?>
 
 					
-
+					<input type="submit" value="Далее"/>
 				</form>
 			</div>
 			</div>

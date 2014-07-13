@@ -14,6 +14,11 @@ if (isset($_SERVER['HTTP_HOST']) AND $_SERVER['HTTP_HOST'] == 'c.yarmarka.biz')
 			'action'     => 'save_object',
 		));
 }
+Route::set('save_object', 'add/save_object')
+	->defaults(array(
+		'controller' => 'Add',
+		'action'     => 'save_object',
+	));
 Route::set('add', 'add/<category_id>')
 	->defaults(array(
 		'controller' => 'Add',
