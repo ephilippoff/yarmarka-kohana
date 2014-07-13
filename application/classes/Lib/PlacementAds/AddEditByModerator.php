@@ -84,4 +84,14 @@ class Lib_PlacementAds_AddEditByModerator extends Lib_PlacementAds_AddEdit {
 		return $this;
 	}
 
+	function save_typetr_object()
+	{
+		$params = &$this->params;
+		$object = &$this->object;
+		
+		$object->type_tr = $params ->obj_type;
+
+		return $this;
+	}
+
 }

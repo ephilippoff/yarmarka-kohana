@@ -70,6 +70,13 @@ $(document).ready(function() {
 	</div>
 	
 	<div class="control-group only2" >		
+		<label class="control-label">Активна:</label>
+		<div class="controls">			
+			<input type="checkbox" class="input-small" placeholder="Показывать" name="active" <?php if (Arr::get($_POST, 'active')) echo 'checked' ?> >
+		</div>		
+	</div>	
+	
+	<div class="control-group only2" >		
 		<label class="control-label">Комментарии:</label>
 		<div class="controls">
 			<textarea name="comments"></textarea>

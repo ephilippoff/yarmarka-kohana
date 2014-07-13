@@ -139,7 +139,8 @@ class Object
 		if ( ! $add->errors)
 		{
 			$add->save_city_and_addrress()
-				->prepare_object();
+				->prepare_object()
+				->save_typetr_object();
 
 			$db = Database::instance();
 
