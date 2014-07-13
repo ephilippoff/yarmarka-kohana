@@ -29,9 +29,9 @@
 	.$_assets
 ?>
 </head>
-<body class="adaptiveoff">
+<body class="adaptive page-add">
 	<?=View::factory('layouts/google_analytics')?>
-	<div class="wrapfix">
+	<div class="wrapfix add">
 			<?=View::factory('layouts/header')?>
 			<div class="m_content">
 			<?=$_content?>

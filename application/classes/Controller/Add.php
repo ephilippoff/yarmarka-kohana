@@ -4,11 +4,11 @@ class Controller_Add extends Controller_Template {
 
 	public function action_index()
 	{
-		$this->assets->css('css.css');
+		//$this->assets->css('css.css');
 
 		$params = array(
 			'category_id'	=> (int)$this->request->param('category_id'),
-			'object_id'		=> (int)$this->request->param('object_id'),
+			'object_id'		=> (int)$this->request->query('object_id'),
 			'city_id'		=> (int)$this->request->param('city_id')
 		);
 
@@ -16,10 +16,14 @@ class Controller_Add extends Controller_Template {
 		$form_data	->Category()
 				 	->City()
 				 	->Subject()
-				 	->Text();
+				 	->Text()
+				 	->Photo()
+				 	->Params()
+				 	->Map()
+				 	->Contacts();
 
-		$this->template->params = $params;
-		$this->template->form_data = $form_data->_data;
+		$this->template->params 	= $params;
+		$this->template->form_data 	= $form_data->_data;
 
 	}
 
