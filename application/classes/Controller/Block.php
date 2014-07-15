@@ -262,27 +262,25 @@ class Controller_Block extends Controller_Template
 		$this->assets->js('http://yandex.st/underscore/1.6.0/underscore-min.js');
 		$user = Auth::instance()->get_user();
 
-		$user_plan = ORM::factory('User_Plan')->select("plan.name")
-								->join("plan")
-								->on("plan.id","=","user_plan.plan_id")
-		    					->where("user_id","=",$user->id)
-		    					->where("date_expiration",">",'NOW()')
-		    					->find_all();
+		$user_plan = ORM::factory('User_Plan')->get_plans($user->id)->find_all();
 
 		$this->template->user_plans = $user_plan;
 
 		$not_yet_payment = Array();
-		$category = ORM::factory('Category')->where("plan_name","IS NOT", NULL)->find_all();
+		$category = ORM::factory('Category')->is_not_null("plan_name")->find_all();
+
 		foreach ($category as $cat)
 		{
-			@list($check, $count) = Plan::check_plan_limit_for_user_and_category($user->id, $cat->id);
-			if ($check->loaded())
-				$not_yet_payment[] = Array(
+			$check = Plan::get_plan_for_user_by_category($user->id, $cat->id);
+			$count = (int) ORM::factory("Object")->get_active_by_user_and_category($user->id, $cat->id)->count_all();
+
+			if (Plan::check_count($check, $count))
+				$not_yet_payment[] = new Obj(Array(
 										"title" 				=> $cat->title,
 										"count" 				=> $count,
 										"current_plan" 			=> $check->title,
 										"current_plan_count" 	=> $check->count
-									);
+									 ));
 		}
 		$this->template->not_yet_payment = $not_yet_payment;
 		

@@ -2,136 +2,138 @@
 
 class Massload 
 {
-	const  CSVSEPARATOR = ',';
 
-	public $inputfile;
-	public $fileForLoop;
-	public $ext;
-	public $filename;
-	public $pathtofile;
-	public $pathtoimage;
-	public $config;
-	public $user;
+	public function checkFile($file, $category_id, $user_id)
+	{
+		$errors = Array();
 
-	public function __construct($inputfile, $category_id, $user) {
-		$this->inputfile 	 	= $inputfile;
-		$this->category_id 		= $category_id;
-		$this->user 			= $user;
+		$f = new Massload_File();
+
+		@list($filepath, $imagepath) = $f->init($file, $user_id);
+
+		$config = self::get_config($category_id);
+
+		$count = 0;
+
+		$f->forEachRow($filepath, function($row, $i) use ($imagepath, &$errors, $config, &$count){
+
+			$row = Massload::to_assoc_object($row, $config);
+
+			if ($row->count() == 1) return "continue";
+
+			if ($row->count() <> count($config) )
+			{
+				$errors[] = 'Файл не соответсвует требованиям, количество полей отличается (см. инструкцию по загрузке)';
+				return "break";
+			}
+
+			$validation = Massload::init_validation($row, $i, $config);
+
+			if ( ! $validation->check())
+				$errors = array_merge($errors, array_values($validation->errors('validation/massload'))) ;
+
+			$count++;
+
+		});
+
+		return Array($filepath, $imagepath, $errors, $count);
 	}
 
-	function save_input_file()
+	public function saveStrings($pathtofile, $pathtoimage, $category_id, $step, $iteration)
 	{
-		$inputfile = $this->inputfile;
-		$filename = Uploads::save_file($inputfile);
+		$f = new Massload_File();
 
-		$ext = FileUtils::getExt($inputfile);
+		$objects = Array();
+		$config = self::get_config($category_id);
 
-		if ($ext <>'.zip')
-			$type = 1;
-				else 
-					$type = 2;
+		$f->forRow($pathtofile, $step, $iteration, function($row, $i) use ($pathtoimage, $config, $category_id, &$objects){
 
-		$this->ext = $ext;
-		$this->filename = $filename;
+			$row = Massload::to_assoc_object($row, $config);
 
-		$attachment = ORM::factory('User_Attachment');
-		$attachment->filename 	= $filename;
-		$attachment->user_id 	= $this->user->id;
-		$attachment->title 		= $inputfile['name'];
-		$attachment->type 		= $type;
-		$attachment->save();
+			$validation = Massload::init_validation($row, $i, $config);
+			if ($row->count() == 1 OR !$validation->check()) return "continue";	
+			
 
-		return $this;
+			$record = Array();
+
+			foreach ($row as $name=>$value) 
+			{				
+				if ($value <> "")
+					$record[$name] = $value;				
+			}	
+
+			$record = Massload::to_post_format($record, $category_id, $pathtoimage, $config);
+
+			$record['rubricid'] = $category_id;
+
+			$objects[] = Object::PlacementAds_ByMassLoad($record);
+
+		});
+
+		return $objects;
 	}
 
-	function get_input_file_path_by_ext()
+	private static function get_config($category_id)
 	{
-		$ext 		= $this->ext;
-		$filename 	= $this->filename;
+		return Kohana::$config->load('massload/bycategory.'.ORM::factory('Category',$category_id)->seo_name);
+	}
 
-		if ($ext =='.zip')
-		{
-			$path = FileUtils::getPath($filename);
-			$pathtounzip =  str_replace('.zip','', $path).'/';
-			exec('unzip -o '.$path.' -d '.$pathtounzip);
-
-			$this->pathtofile	= $pathtounzip.'load.csv';
-			$this->pathtoimage 	= $pathtounzip;
-		} else {
-			$this->pathtofile 	= FileUtils::getPath($filename);
-			$this->pathtoimage	= "";
+	public static function to_assoc_object($row, $config)
+	{
+		$return = new Obj();
+		foreach((array) $row as $key=>$value)
+		{	$config_field = self::get_by_key($config, $key);
+			$return->{$config_field["name"]} = $value;
 		}
-
-		return $this;
-	}
-
-	function file_open()
-	{
-		$this->fileForLoop = fopen($this->pathtofile, "r");
-		return $this;
-	}
-
-	function file_close()
-	{
-		fclose($this->fileForLoop);
-		return $this;
-	}
-
-	function get_config()
-	{
-		$category = ORM::factory('Category',$this->category_id);
-		$this->config  = Kohana::$config->load('massload/bycategory.'.$category->seo_name);
-		return $this;
-	}
-
-	function check($field, $value, $str_pos)
-	{
-		$error = NULL;
-
-		if ( ! $this->check_required($field, $value)  )
-			$error = $this->log_error( $str_pos, $field, $value, "Не заполнено обязательное поле");
-
-		if ( ! $this->check_exist_values($field, $value)  )
-			$error = $this->log_error( $str_pos, $field, $value, "Значение справочника не существует");
-
-		if ($field["name"] == 'contact_0_value' OR $field["name"] == 'contact_1_value')
-			if ( $value <> ""  AND $this->check_contact_type($value) == 0)
-				$error = $this->log_error($str_pos, $field, $value, "Контакт имеет неизвестный формат");
-
-		return $error;
-	}
-
-	function check_exist_values($field, $value)
-	{
-		$return = TRUE;
-		
-		if ($field["type"] == 'city')
-			$return = ORM::factory('City')->by_title($value)->id;
-		elseif ($field["type"] == 'dict')
-			$return = ORM::factory('Attribute_Element')->by_value_and_attribute($value, $field['name'])->id;
-
 		return $return;
 	}
 
-	function check_required($field, $value)
+	private static function get_by_key($array, $key)
 	{
-		if ($field['required'] AND $value == '') 
-			return FALSE; 
-				else return TRUE;
+		$values = array_values($array); 
+		return $values[$key];
 	}
 
-	function check_contact_type($value)
+	public static function init_validation($row, $i, $config)
 	{
-		return ORM::factory('Contact_Type')->detect_contact_type_massload(Text::clear_phone_number($value));
+		$validation = Validation::factory((array) $row);
+
+		$rules = Array();
+		foreach ($row as $key=>$value)
+		{
+			$valid_info 		= array(':value', $config[$key]['translate'], $i, $value);
+			$valid_info_dict 	= array(':value', $config[$key]['name'], $config[$key]['translate'], $i, $value);
+
+			if ($config[$key]["required"]) 
+				$validation->rule($key, 'not_empty', $valid_info);
+
+			if ($config[$key]["type"] == "city")
+				$validation->rule($key, 'check_city_value', $valid_info);
+
+			if ($config[$key]["type"] == "dict")
+				$validation->rule($key, 'check_dictionary_value', $valid_info_dict);
+
+			if ($config[$key]["type"] == "contact")
+				$validation->rule($key, 'check_contact', $valid_info);
+
+			if ($config[$key]["type"] == "integer")
+			{
+				$validation->rule($key, 'not_0', $valid_info);
+				$validation->rule($key, 'digit', $valid_info);
+			}
+
+			if ($config[$key]["type"] == "numeric")
+				$validation->rule($key, 'numeric', $valid_info);
+
+		}
+
+		return $validation;	
 	}
 
-	function to_post_format($params, $config)
+	public static function to_post_format($record_fields, $category_id, $pathtoimage, $config)
 	{
-		$category_id = $this->category_id;
-		$pathtoimage = $this->pathtoimage;
-
 		$return = Array();
-		foreach($params as $key=>$value)
+		foreach($record_fields as $key=>$value)
 		{
 			$type = $config[$key]['type'];
 			switch ($type) {
@@ -157,7 +159,7 @@ class Massload
 					switch ($type) {
 						case 'file':						
 							$key = "userfile";					
-							$value = Array( $this->save_photo($filename, $value));
+							$value = Array( self::save_photo($filename, $value));
 						break;
 						
 						case 'dir':
@@ -165,7 +167,7 @@ class Massload
 							$key = "userfile";
 							$value = Array();
 							foreach($files as $file) {								
-								$value[] = $this->save_photo($file, $file);
+								$value[] = self::save_photo($file, $file);
 							}
 						break;
 					}
@@ -184,38 +186,15 @@ class Massload
 		return $return;
 	}
 
-	function save_photo($filename, $value)
+	private static function save_photo($filepath, $value)
 	{
-		$file = fopen($filename, "r");
+		$file = fopen($filepath, "r");
 		$_file = Array(
-				'tmp_name' => $filename,
-				'size' => filesize($filename),
+				'tmp_name' => $filepath,
+				'size' => filesize($filepath),
 				'name' => $value,
-				'type' => mime_content_type($filename),
+				'type' => mime_content_type($filepath),
 			);
 		return Uploads::save($_file);
-	}
-
-	function log_error($str_pos, $field, $value, $comment)
-	{
-		$error = array(
-				'str_pos'=> $str_pos, 
-				'field'	 =>$field['translate'], 
-				'value'	 =>$value,
-				'comment'=>$comment,
-				);
-
-		return $error;
-	}
-
-	public static function to_object($array)
-	{
-		return $this;
-	}
-
-	public static function get_by_key($array, $key)
-	{
-		$values = array_values($array); 
-		return $values[$key];
 	}
 }

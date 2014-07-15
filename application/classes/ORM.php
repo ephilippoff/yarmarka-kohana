@@ -106,4 +106,24 @@ class ORM extends Kohana_ORM {
 		// Return the total number of records in a table
 		return $records;
 	}
+
+	public function is_null($column)
+	{
+		return $this->where($column,"IS", NULL);
+	}
+
+	public function is_not_null($column)
+	{
+		return $this->where($column,"IS NOT", NULL);
+	}
+
+	public function more_than_now($column)
+	{
+		return $this->where($column,">",DB::expr('NOW()'));
+	}
+
+	public function more_or_equal_than_now($column)
+	{
+		return $this->where($column,">=",DB::expr('NOW()'));
+	}
 }

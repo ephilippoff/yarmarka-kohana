@@ -43,7 +43,7 @@ class Lib_PlacementAds_AddEdit {
 		$category 	= &$this->category;
 		$user_id 	= &$this->user_id;
 
-		if (!$this->is_edit)
+		/*if (!$this->is_edit)
 		{
 			$count = (int) ORM::factory("Object")
 								->where("author","=",$user_id)
@@ -57,7 +57,7 @@ class Lib_PlacementAds_AddEdit {
 				$errors['plan'] 			= "Вы достигли лимита по количеству объявлений, согласно своего тарифного плана";
 				$errors['plan_description'] = Plan::get_plan_error_description($plan->id);
 			}
-		}
+		}*/
 		
 		
 		return $this;

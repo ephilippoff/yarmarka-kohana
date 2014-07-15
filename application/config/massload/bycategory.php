@@ -14,7 +14,7 @@ return array(
 		'user_text_adv' => array('name' => 'user_text_adv','required' => FALSE,'type' => 'textadv', 'translate' => 'Текст объявления'),
 		'contact_0_value'=> array('name' => 'contact_0_value',	'required' => TRUE, 'type' => 'contact','translate' => 'Телефон №1'),
 		'contact_1_value'=> array('name' => 'contact_1_value',	'required' => FALSE, 'type' => 'contact','translate' => 'Телефон №2'),
-		'contact'		=> array('name' => 'contact',	'required' => TRUE, 'type' => 'contact', 	'translate' => 'ФИО'),
+		'contact'		=> array('name' => 'contact',	'required' => TRUE, 'type' => 'contact_name', 	'translate' => 'ФИО'),
 		'image' 		=> array('name' => 'image',		'required' => FALSE,'type' => 'photo', 		'translate' => 'Фото')
 	)
 

@@ -7,37 +7,24 @@ class Plan {
 	 * 
 	 * @param  integer 	$user_id
 	 * @param  string 	$plan_name
-	 * @param  integer 	$count
-	 * @return int  текущий план
+	 * @return obj  текущий план
 	 */
-	public static function check_plan_limit_for_user($user_id, $plan_name = NULL, $count = 0)
+	public static function get_plan_for_user($user_id, $plan_name = NULL)
 	{
-		$return = NULL;
-		$user_plan = ORM::factory('User_Plan')->select("plan.title", "plan.count", array("plan.id","plan_id"))
-							->join("plan")
-							->on("plan.id","=","user_plan.plan_id")
-							->where("plan.name","=",$plan_name)
-							->where("user_id","=",$user_id)
-							->where("date_expiration",">=",DB::expr('NOW()'))
-							->find();
-		if ($user_plan->loaded())
-		{
-			if ($count >= $user_plan->count)
-				$return = $user_plan;
-		} else {
-
-			$user_plan = ORM::factory('Plan')
-							->where("name","=",$plan_name)
-							->where("number","=",0)
-							->find();
-			if ($user_plan->loaded())
-			{
-				if ($count >= $user_plan->count)
-					$return = $user_plan;
-			}
+		$user_plan = ORM::factory('User_Plan')->get_plan($user_id, $plan_name)->find();
+		if (!$user_plan->loaded())
+		{			
+			$user_plan = ORM::factory('Plan')->get_default_plan($plan_name)->find();
 		}
+		return $user_plan;
+	}
 
-		return $return;
+	public static function check_count($user_plan, $count = 0)
+	{
+		if ($user_plan->loaded())
+			return ($count >= $user_plan->count) ? FALSE : TRUE;
+		else 
+			return FALSE;
 	}
 
 	/**
@@ -45,22 +32,11 @@ class Plan {
 	 * 
 	 * @param  integer 	$user_id
 	 * @param  integer 	$category_id
-	 * @param  integer 	$add_to_count  1/0 учитывать ли добавившееся объвление, или только текущие
-	 * @return array
+	 * @return obj
 	 */
-	public static function check_plan_limit_for_user_and_category($user_id, $category_id, $add_to_count = 1)
-	{
-		$category = ORM::factory("Category", $category_id);
-		
-		$count = (int) ORM::factory("Object")
-							->where("author","=",$user_id)
-							->where("category","=",$category->id)
-							->where("is_published","=",1)
-							->where("active","=",1)
-							->count_all();
-
-		return Array( self::check_plan_limit_for_user($user_id, $category->plan_name, $count + $add_to_count), 
-						$count);
+	public static function get_plan_for_user_by_category($user_id, $category_id)
+	{		
+		return self::get_plan_for_user($user_id, ORM::factory("Category", $category_id)->plan_name);
 	}
 
 
@@ -70,12 +46,8 @@ class Plan {
 		$plan = ORM::factory("Plan", $plan_id);
 		$return .= "Ваш текущий тарифный план: '".$plan->title."'' с ограничением в ".$plan->count." объявлений. ";
 
-		$plan_next = ORM::factory("Plan")
-							->where("name","=",$plan->name)
-							->where("number",">",$plan->number)
-							->order_by("number")
-							->limit(1)
-							->find();
+		$plan_next = ORM::factory("Plan")->get_next_plan($plan->name, $plan->number)->find();
+
 		if ($plan_next->loaded())
 			$return .= "Вы можете приобрести следующий тарифный план : '".$plan_next->title."'' с ограничением в ".$plan_next->count." объявлений. ";
 		else 

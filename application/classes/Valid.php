@@ -10,4 +10,24 @@ class Valid extends Kohana_Valid {
 	{
 		return intval($value) !== 0;
 	}
+
+	public static function check_city_value($value)
+	{
+		$value = (int) ORM::factory('City')->by_title($value)->id;
+		return intval($value) > 0;
+	}
+
+	public static function check_dictionary_value($value, $name)
+	{
+		$value = (int) ORM::factory('Attribute_Element')->by_value_and_attribute($value, $name)->id;
+		return intval($value) > 0;
+	}
+
+	public static function check_contact($value)
+	{
+		$value = (int) ORM::factory('Contact_Type')->detect_contact_type_massload(Text::clear_phone_number($value));
+		return intval($value) > 0;
+	}
+
+	
 }

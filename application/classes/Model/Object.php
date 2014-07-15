@@ -619,6 +619,14 @@ class Model_Object extends ORM {
 			return TRUE;
 		return Object_Utils::generate_signature($this->full_text);
 	}
+
+	public function get_active_by_user_and_category($user_id, $category_id)
+	{
+		return $this->where("author","=",$user_id)
+				->where("category","=",$category_id)
+				->where("is_published","=",1)
+				->where("active","=",1);
+	}
 }
 
 /* End of file Object.php */
