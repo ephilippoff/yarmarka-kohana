@@ -34,7 +34,7 @@ $(document).ready(function() {
 	<div class="control-group <?=Arr::get($errors, 'class') ? 'error' : ''?>">
 		<label class="control-label">Цвет ссылки:</label>
 		<div class="controls">
-			<?=Form::select('class', array('black' => 'Черный', 'red' => 'Красный', 'green' => 'Зеленый'), Arr::get($_POST, 'class', @$ad_element->class)) ?>
+			<?=Form::select('class', array('black' => 'Черный', 'red' => 'Красный', 'green' => 'Зеленый', 'white' => 'Белый'), Arr::get($_POST, 'class', @$ad_element->class)) ?>
 		</div>	
 	</div>
 	
@@ -76,6 +76,13 @@ $(document).ready(function() {
 			<input type="text" class="input-small dp" placeholder="до" name="end_date" value="<?=Arr::get($_POST, 'end_date', @$ad_element->end_date)?>">
 		</div>		
 	</div>
+	
+	<div class="control-group <?=Arr::get($errors, 'class') ? 'error' : ''?>">
+		<label class="control-label">Тип ссылки:</label>
+		<div class="controls">
+			<?=Form::select('type', array(1 => 'Текст(1)', 2 => 'Баннер(2)', 3 => 'Текст/графика(3)'), Arr::get($_POST, 'type', @$ad_element->type)) ?>
+		</div>	
+	</div>		
 	
 	<div class="control-group only2" >		
 		<label class="control-label">Активна:</label>
