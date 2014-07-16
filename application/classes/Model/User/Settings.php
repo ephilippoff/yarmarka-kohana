@@ -4,7 +4,7 @@ class Model_User_Settings extends ORM {
 
 	protected $_table_name = 'user_settings';
 
-	public function get($user_id)
+	public function sget($user_id)
 	{
 		$return = Array();
 		$s = $this->where('user_id', '=', $user_id)->find_all();
@@ -16,9 +16,8 @@ class Model_User_Settings extends ORM {
 
 	public function get_by_name($user_id, $name)
 	{
-		$s = $this->where('user_id', '=', $user_id)
-					->where('name', '=', $name)->find();
-		return $s->value;			
+		return $this->where('user_id', '=', $user_id)
+					->where('name', '=', $name);			
 	}
 
 } // End User_Settings Model

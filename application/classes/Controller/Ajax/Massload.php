@@ -41,7 +41,7 @@ class Controller_Ajax_Massload extends Controller_Template {
 
 	public function action_checkfile()
 	{
-		$category_id 	= (int) $this->request->post("category_id");
+		$category_id 	= $this->request->post("category_id");
 		$ignore_errors 	= (int) $this->request->post("ignore_errors");
 
 		$user = Auth::instance()->get_user();
@@ -62,14 +62,17 @@ class Controller_Ajax_Massload extends Controller_Template {
 		try {
 			@list($filepath, $imagepath, $errors, $count) = $ml->checkFile($file, $category_id, $user->id);
 		} catch (Exception $e) {
-			$this->json['critError'] = $e->getMessage();
+			$this->json['count'] 		= "?";
+			$this->json['errorcount'] 	= "?";
+			$this->json['errors'] = Array($e->getMessage());
 			return;
 		} 
 
 		if ($ignore_errors == 0 AND count($errors)>0)
 		{
+			$this->json['count'] 		= $count;
+			$this->json['errorcount'] 	= count($errors);
 			$this->json['errors'] 		= $errors;
-			$this->json['critError'] = $errors;
 			return;
 		}
 
@@ -77,6 +80,7 @@ class Controller_Ajax_Massload extends Controller_Template {
 	    $this->json['pathtofile'] 	= $filepath;
 		$this->json['pathtoimage']  = $imagepath;
 		$this->json['count'] 		= $count;
+		$this->json['errorcount'] 	= count($errors);
 		$this->json['errors'] 		= $errors;
 		$this->json['data'] = 'ok';
 	}
@@ -87,8 +91,7 @@ class Controller_Ajax_Massload extends Controller_Template {
 		$pathtoimage 	= (string) $this->request->post('pathtoimage');
 		$step 			= (int) $this->request->post('step');
 		$iteration 		= (int) $this->request->post('iteration');
-		$category_id 	= (int) $this->request->post('category_id');
-		$ignore_errors 	= (int) $this->request->post("ignore_errors");
+		$category_id 	= $this->request->post('category_id');
 
 		$this->json['category_id'] = $category_id;
 

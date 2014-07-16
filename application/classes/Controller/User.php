@@ -162,6 +162,20 @@ class Controller_User extends Controller_Template {
     	$this->assets->js('ajaxupload.js');
     	$this->assets->js('massload.js');
 
+    	
+    	$avail_categories = ORM::factory('User_Settings')->get_by_name($this->user->id, "massload_category")->find_all();
+    	
+    	$categories = Array();								
+    	foreach($avail_categories as $category)
+    	{
+    		try 
+    		{ 
+    			$cfg = Kohana::$config->load('massload/bycategory.'.$category->value);
+    			$categories[$category->value] = $cfg["name"];
+    		} catch(Exception $e){}
+    	}
+    	$this->template->categories = $categories;
+
     }
 
     public function action_plan()

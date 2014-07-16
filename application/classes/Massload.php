@@ -2,8 +2,9 @@
 
 class Massload 
 {
+	const MAX_COUNT_ERRORS = 10;
 
-	public function checkFile($file, $category_id, $user_id)
+	public function checkFile($file, $category, $user_id)
 	{
 		$errors = Array();
 
@@ -11,7 +12,7 @@ class Massload
 
 		@list($filepath, $imagepath) = $f->init($file, $user_id);
 
-		$config = self::get_config($category_id);
+		$config = self::get_config($category);
 
 		$count = 0;
 
@@ -19,12 +20,10 @@ class Massload
 
 			$row = Massload::to_assoc_object($row, $config);
 
-			if ($row->count() == 1) return "continue";
-
 			if ($row->count() <> count($config["fields"]) )
 			{
-				$errors[] = 'Файл не соответсвует требованиям, количество полей отличается (см. инструкцию по загрузке)';
-				return "break";
+				$errors[] = '(Ошибка стр. '.$i.') Количество полей в строке не соответсвует требованиям для загрузки';
+				return "continue";
 			}
 
 			$validation = Massload::init_validation($row, $i, $config);
@@ -34,24 +33,36 @@ class Massload
 
 			$count++;
 
+			if ($count>Massload::MAX_COUNT_ERRORS)
+			{
+				$errors[] = '(Ошибка) Найдено более '.Massload::MAX_COUNT_ERRORS.' ошибок. Проверка файла остановлена.';
+				return "break";
+			}
+
 		});
 
 		return Array($filepath, $imagepath, $errors, $count);
 	}
 
-	public function saveStrings($pathtofile, $pathtoimage, $category_id, $step, $iteration)
+	public function saveStrings($pathtofile, $pathtoimage, $category, $step, $iteration)
 	{
 		$f = new Massload_File();
 
 		$objects = Array();
-		$config = self::get_config($category_id);
+		$config = self::get_config($category);
+		$category_id = $config["id"];
 
 		$f->forRow($pathtofile, $step, $iteration, function($row, $i) use ($pathtoimage, $config, $category_id, &$objects){
 
 			$row = Massload::to_assoc_object($row, $config);
 
+			if ($row->count() <> count($config["fields"]) )
+			{
+				return "continue";
+			}
+
 			$validation = Massload::init_validation($row, $i, $config);
-			if ($row->count() == 1 OR !$validation->check()) return "continue";	
+			if (!$validation->check()) return "continue";	
 			
 
 			$record = Array();
@@ -73,9 +84,9 @@ class Massload
 		return $objects;
 	}
 
-	private static function get_config($category_id)
+	private static function get_config($category)
 	{
-		return Kohana::$config->load('massload/bycategory.'.ORM::factory('Category',$category_id)->seo_name);
+		return Kohana::$config->load('massload/bycategory.'.$category);
 	}
 
 	public static function to_assoc_object($row, $config)
@@ -152,8 +163,9 @@ class Massload
 				break;
 				case 'photo':			
 					$filename = $pathtoimage.$value;
-					
-					if (is_dir($filename."/"))
+					if (filter_var($filename, FILTER_VALIDATE_URL))
+						$type = 'url';
+					elseif (is_dir($filename."/"))
 						$type = 'dir';
 					elseif ( file_exists($filename) )
 						$type = 'file';
@@ -168,8 +180,19 @@ class Massload
 							$files = glob($filename.'/*.{jpg,png,gif,bmp}', GLOB_BRACE);
 							$key = "userfile";
 							$value = Array();
-							foreach($files as $file) {								
-								$value[] = self::save_photo($file, $file);
+							foreach($files as $file) {	
+								try {							
+									$value[] = self::save_photo($file, $file);
+								} catch (Exception $e) {}
+							}
+						break;
+
+						case 'url':		
+							$tmp = tempnam("/tmp", "imgurl");
+							if (copy($value, $tmp))
+							{				
+								$key = "userfile";					
+								$value = Array( self::save_photo($tmp, $tmp));
 							}
 						break;
 					}

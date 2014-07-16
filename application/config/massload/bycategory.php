@@ -1,9 +1,11 @@
 <?php defined('SYSPATH') OR die('No direct access allowed.');
 return array(
-	'kvartiry-i-komnaty'		=> array( 
+	'flat_resale'		=> array( 
+			'id'    => 3,
+			'name'	=> 'Продажа квартир и комнат (вторичное жилье)',
 			'fields'=>array
 					(
-						'id' 			=> array('name' => 'id',		'required' => TRUE, 'type' => 'text', 		'translate' => 'ID'),
+						'external_id' 	=> array('name' => 'external_id','required' => TRUE, 'type' => 'text', 		'translate' => 'ID'),
 						'city' 			=> array('name' => 'city',		'required' => TRUE, 'type' => 'city', 		'translate' => 'Город'),
 						'address'		=> array('name' => 'address',	'required' => TRUE, 'type' => 'address', 	'translate' => 'Адрес'),
 						'tip-sdelki5' 	=> array('name' => 'tip-sdelki5','required' => TRUE,'type' => 'dict', 		'translate' => 'Тип сделки'), 
@@ -22,6 +24,9 @@ return array(
 						'rubricid' => 3, //категория квартиры и комнаты
 						'param_441' => 3196, //вторичное жилье
 					)
-	)
+	),
+	'flat_new'		=> array( 
+			'name'	=> 'Продажа квартир и комнат (новостройки)'
+			)
 
 );

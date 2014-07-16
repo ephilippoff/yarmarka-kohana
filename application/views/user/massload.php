@@ -6,35 +6,24 @@
 			<section class="p_room-inner">
 				<header><span class="title">Массовая загрузка объявлений</span></header>
 				<div class="p_cont myadd mysub">
-					<div class="nav">
-						<div class="input style2">			                    			
-							<div class="inp-cont-bl ">
-								<div class="inp-cont">
-									<div class="checkbox">
-										<label>
-											<input type="checkbox" name="checkbox" value="checkbox"><span>Выделить все</span>
-										</label>	                    						
-									
-										<label class="no-box">
-											<input type="checkbox" name="checkbox" value="checkbox"><span>Удалить выделенное</span>
-										</label>
-									</div>
-								</div>
-							</div>
+					<? if (count($categories)>0): ?>
+						<div id="fn-main-cont" class="cont">
+							<select id="fn-category">
+								<option value>--</option>
+								<? foreach($categories as $key=>$value): ?>
+									<option value="<?=$key?>"><?=$value?></option>
+								<? endforeach; ?>
+							</select>
+							<input type="checkbox" id="fn-ignore_errors"/>Игнорировать ошибки
+							<br/>
+							<input id="fn-userfile-upload" type="button" name="button" value="Загрузить"/>
+							
+							<br/>
+							<textarea id="fn-log-area" style="border:1px solid black;width:500px; height:300px;" readonly="readonly"></textarea>
 						</div>
-					</div>
-					<div id="fn-main-cont" class="cont">
-						<select id="fn-category">
-							<option>--</option>
-							<option value="3" selected>Недвижимость</option>
-							<option value="15">Легковые автомобили</option>
-						</select>
-						<br/>
-						<input id="fn-userfile-upload" type="button" name="button" value="Загрузить"/>
-						
-						<br/>
-						<textarea id="fn-log-area" style="border:1px solid black;width:500px; height:300px;" readonly="readonly"></textarea>
-					</div>
+					<? else: ?>
+						Услуга массовой загрузки не подключена.
+					<? endif; ?>
 				</div>
 				<div class="clear"></div>
 				<br />
