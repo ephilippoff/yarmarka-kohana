@@ -230,12 +230,14 @@ class Lib_PlacementAds_AddEdit {
 													$this->generate_signature("", "",$values) : 
 														$this->generate_signature($params->title_adv, $params->user_text_adv, $values);
 
+		$this->signature_full = $this->generate_signature($params->title_adv, $params->user_text_adv, $values);														
+
 		$this->options_exlusive_union 	= $this->get_options_exlusive_union($params->city_id, $category->id, $list_ids);
 
 		if ($this->is_similarity_enabled())
 		{
 			$max_similarity = Kohana::$config->load('common.max_object_similarity')*100;
-			$similarity 	= ORM::factory('Object_Signature')->get_similarity($this->signature, $this->options_exlusive_union, $params->object_id, 425780/*$user->id*/);
+			$similarity 	= ORM::factory('Object_Signature')->get_similarity($this->signature_full, NULL, $params->object_id, $user->id, "_full");
 			if ($similarity["sm"]*100 > $max_similarity){
 				$errors['signature'] = "Такое объявление у вас уже есть, дубли запрещены правилами сайта.";	
 			}
@@ -589,12 +591,12 @@ class Lib_PlacementAds_AddEdit {
 
 		if ($this->signature)
 		{
-			
 			$object_signature = ORM::factory('Object_Signature')
 						->where('object_id', '=', $object->id)
 						->find();
 			$object_signature->object_id  				= $object->id;
 			$object_signature->signature  				= $this->signature;
+			$object_signature->signature_full  			= $this->signature_full;
 			$object_signature->options_exlusive_union   = $this->options_exlusive_union;
 			$object_signature->save();
 		}
