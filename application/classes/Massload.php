@@ -21,7 +21,7 @@ class Massload
 
 			if ($row->count() == 1) return "continue";
 
-			if ($row->count() <> count($config) )
+			if ($row->count() <> count($config["fields"]) )
 			{
 				$errors[] = 'Файл не соответсвует требованиям, количество полей отличается (см. инструкцию по загрузке)';
 				return "break";
@@ -64,7 +64,7 @@ class Massload
 
 			$record = Massload::to_post_format($record, $category_id, $pathtoimage, $config);
 
-			$record['rubricid'] = $category_id;
+			$record = array_merge($record, $config["autofill"]);
 
 			$objects[] = Object::PlacementAds_ByMassLoad($record);
 
@@ -82,15 +82,15 @@ class Massload
 	{
 		$return = new Obj();
 		foreach((array) $row as $key=>$value)
-		{	$config_field = self::get_by_key($config, $key);
+		{	$config_field = self::get_field_by_key($config, $key);
 			$return->{$config_field["name"]} = $value;
 		}
 		return $return;
 	}
 
-	private static function get_by_key($array, $key)
+	private static function get_field_by_key($array, $key)
 	{
-		$values = array_values($array); 
+		$values = array_values($array["fields"]); 
 		return $values[$key];
 	}
 
@@ -101,28 +101,30 @@ class Massload
 		$rules = Array();
 		foreach ($row as $key=>$value)
 		{
-			$valid_info 		= array(':value', $config[$key]['translate'], $i, $value);
-			$valid_info_dict 	= array(':value', $config[$key]['name'], $config[$key]['translate'], $i, $value);
+			$config_key = new Obj($config["fields"][$key]);
 
-			if ($config[$key]["required"]) 
+			$valid_info 		= array(':value', $config_key->translate, $i, $value);
+			$valid_info_dict 	= array(':value', $config_key->name, $config_key->translate, $i, $value);
+
+			if ($config_key->required) 
 				$validation->rule($key, 'not_empty', $valid_info);
 
-			if ($config[$key]["type"] == "city")
+			if ($config_key->type == "city")
 				$validation->rule($key, 'check_city_value', $valid_info);
 
-			if ($config[$key]["type"] == "dict")
+			if ($config_key->type == "dict")
 				$validation->rule($key, 'check_dictionary_value', $valid_info_dict);
 
-			if ($config[$key]["type"] == "contact")
+			if ($config_key->type == "contact")
 				$validation->rule($key, 'check_contact', $valid_info);
 
-			if ($config[$key]["type"] == "integer")
+			if ($config_key->type == "integer")
 			{
 				$validation->rule($key, 'not_0', $valid_info);
 				$validation->rule($key, 'digit', $valid_info);
 			}
 
-			if ($config[$key]["type"] == "numeric")
+			if ($config_key->type == "numeric")
 				$validation->rule($key, 'numeric', $valid_info);
 
 		}
@@ -135,7 +137,7 @@ class Massload
 		$return = Array();
 		foreach($record_fields as $key=>$value)
 		{
-			$type = $config[$key]['type'];
+			$type = $config["fields"][$key]['type'];
 			switch ($type) {
 				case 'city':
 					$key = "city_id";
