@@ -117,6 +117,7 @@ class Massload
 			$config_key = new Obj($config["fields"][$key]);
 
 			$valid_info 		= array(':value', $dictionary, $config_key->translate, $i, $value);
+			$valid_info_contact = array(':value', 10 ,$dictionary, $config_key->translate, $i, $value);
 			$valid_info_dict 	= array(':value', $config_key->name, $dictionary, $config_key->translate, $i, $value);
 
 			if ($config_key->required) 
@@ -129,7 +130,9 @@ class Massload
 				$validation->rule($key, 'check_dictionary_value', $valid_info_dict);
 
 			if ($config_key->type == "contact")
+			{
 				$validation->rule($key, 'check_contact', $valid_info);
+			}
 
 			if ($config_key->type == "integer")
 			{
@@ -139,6 +142,8 @@ class Massload
 
 			if ($config_key->type == "numeric")
 				$validation->rule($key, 'numeric', $valid_info);
+
+			
 
 		}
 
@@ -193,11 +198,13 @@ class Massload
 
 						case 'url':		
 							$tmp = tempnam("/tmp", "imgurl");
-							if (copy($value, $tmp))
-							{				
-								$key = "userfile";					
-								$value = Array( self::save_photo($tmp, $tmp));
-							}
+							try {
+								if (copy($value, $tmp))
+								{				
+									$key = "userfile";					
+									$value = Array( self::save_photo($tmp, $tmp));
+								}
+							} catch (Exception $e){}
 						break;
 					}
 
