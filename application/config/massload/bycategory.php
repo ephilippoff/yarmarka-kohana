@@ -3,6 +3,7 @@ return array(
 	'flat_resale'		=> array( 
 			'id'    => 3,
 			'name'	=> 'Продажа квартир и комнат (вторичное жилье)',
+			'category' =>'flat_resale',
 			'fields'=>array
 					(
 						'external_id' 	=> array('name' => 'external_id','required' => TRUE, 'type' => 'text', 		'translate' => 'ID'),
@@ -26,7 +27,11 @@ return array(
 					)
 	),
 	'flat_new'		=> array( 
-			'name'	=> 'Продажа квартир и комнат (новостройки)'
-			)
+			'id'    => 3,
+			'name'	=> 'Продажа квартир и комнат (новостройки)',
+			'category' =>'flat_new',
+			'fields'=>array(),
+			'autofill'=>array()					
+					)
 
 );

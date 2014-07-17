@@ -102,7 +102,39 @@ class Controller_Ajax_Massload extends Controller_Template {
 
 		$ml = new Massload();
 
-		$this->json['data'] = $ml->saveStrings($pathtofile, $pathtoimage, $category_id, $step, $iteration);
+		$this->json['data'] = $ml->saveStrings($pathtofile, $pathtoimage, $category_id, $step, $iteration, $user->id);
+	}
+
+	public function action_conformity()
+	{
+		$user = Auth::instance()->get_user();
+		$response = json_decode($this->request->body());
+		if (trim($response->conformity) == ""){
+			
+			$cf = ORM::factory('User_Conformities')->delete_conformity($user->id, $response->massload, $response->type, $response->value);
+			$this->json['data'] ="ok";
+		} else {
+			$cf = ORM::factory('User_Conformities')
+						->where('type', '=', $response->type)
+						->where('value', '=', $response->value)
+						->find();
+			$cf->user_id  	= $user->id;
+			$cf->massload  	= $response->massload;
+			$cf->type  		= $response->type;
+			$cf->value  	= $response->value;
+			$cf->conformity = $response->conformity;
+			$cf->save();
+
+			if ($cf->id >0)
+				$this->json['data'] ="ok";
+			else 
+				$this->json['data'] ="Не удалось сохранить";
+		}
+
+
+		
+
+		
 	}
 
 	public function after()

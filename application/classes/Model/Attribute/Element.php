@@ -16,8 +16,14 @@ class Model_Attribute_Element extends ORM
 		return $this->join('attribute')
 					->on('attribute.id', '=', 'attribute_element.attribute')
 					->where("attribute_element.title","=",$value)
-					->where("attribute.seo_name","=",$seo_name)
-					->find();
+					->where("attribute.seo_name","=",$seo_name);
+	}
+
+	public function by_attribute_seoname($seo_name)
+	{
+		return $this->join('attribute')
+					->on('attribute.id', '=', 'attribute_element.attribute')
+					->where("attribute.seo_name","=",$seo_name);
 	}
 }
 

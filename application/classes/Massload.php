@@ -13,10 +13,11 @@ class Massload
 		@list($filepath, $imagepath) = $f->init($file, $user_id);
 
 		$config = self::get_config($category);
+		@list($dictionary, $form_dictionary) = self::get_dictionary($config, $user_id, $config["category"]);
 
 		$count = 0;
 
-		$f->forEachRow($filepath, function($row, $i) use ($imagepath, &$errors, $config, &$count){
+		$f->forEachRow($filepath, function($row, $i) use ($imagepath, &$errors, $config, &$count, $dictionary){
 
 			$row = Massload::to_assoc_object($row, $config);
 
@@ -26,7 +27,7 @@ class Massload
 				return "continue";
 			}
 
-			$validation = Massload::init_validation($row, $i, $config);
+			$validation = Massload::init_validation($row, $i, $config, $dictionary);
 
 			if ( ! $validation->check())
 				$errors = array_merge($errors, array_values($validation->errors('validation/massload'))) ;
@@ -44,15 +45,16 @@ class Massload
 		return Array($filepath, $imagepath, $errors, $count);
 	}
 
-	public function saveStrings($pathtofile, $pathtoimage, $category, $step, $iteration)
+	public function saveStrings($pathtofile, $pathtoimage, $category, $step, $iteration, $user_id)
 	{
 		$f = new Massload_File();
 
 		$objects = Array();
 		$config = self::get_config($category);
+		@list($dictionary, $form_dictionary) = self::get_dictionary($config, $user_id, $config["category"]);
 		$category_id = $config["id"];
 
-		$f->forRow($pathtofile, $step, $iteration, function($row, $i) use ($pathtoimage, $config, $category_id, &$objects){
+		$f->forRow($pathtofile, $step, $iteration, function($row, $i) use ($pathtoimage, $config, $category_id, &$objects, $dictionary){
 
 			$row = Massload::to_assoc_object($row, $config);
 
@@ -61,7 +63,7 @@ class Massload
 				return "continue";
 			}
 
-			$validation = Massload::init_validation($row, $i, $config);
+			$validation = Massload::init_validation($row, $i, $config, $dictionary);
 			if (!$validation->check()) return "continue";	
 			
 
@@ -73,7 +75,7 @@ class Massload
 					$record[$name] = $value;				
 			}	
 
-			$record = Massload::to_post_format($record, $category_id, $pathtoimage, $config);
+			$record = Massload::to_post_format($record, $category_id, $pathtoimage, $config, $dictionary);
 
 			$record = array_merge($record, $config["autofill"]);
 
@@ -105,7 +107,7 @@ class Massload
 		return $values[$key];
 	}
 
-	public static function init_validation($row, $i, $config)
+	public static function init_validation($row, $i, $config, $dictionary)
 	{
 		$validation = Validation::factory((array) $row);
 
@@ -114,8 +116,8 @@ class Massload
 		{
 			$config_key = new Obj($config["fields"][$key]);
 
-			$valid_info 		= array(':value', $config_key->translate, $i, $value);
-			$valid_info_dict 	= array(':value', $config_key->name, $config_key->translate, $i, $value);
+			$valid_info 		= array(':value', $dictionary, $config_key->translate, $i, $value);
+			$valid_info_dict 	= array(':value', $config_key->name, $dictionary, $config_key->translate, $i, $value);
 
 			if ($config_key->required) 
 				$validation->rule($key, 'not_empty', $valid_info);
@@ -143,8 +145,9 @@ class Massload
 		return $validation;	
 	}
 
-	public static function to_post_format($record_fields, $category_id, $pathtoimage, $config)
+	public static function to_post_format($record_fields, $category_id, $pathtoimage, $config, $dictionary)
 	{
+		//echo var_dump($dictionary);
 		$return = Array();
 		foreach($record_fields as $key=>$value)
 		{
@@ -152,10 +155,11 @@ class Massload
 			switch ($type) {
 				case 'city':
 					$key = "city_id";
-					$value = ORM::factory('City')->by_title($value)->id;				
+					$value = $dictionary[$type."_".$value];//ORM::factory('City')->by_title($value)->id;
+								
 				break;
 				case 'dict':
-					$value = ORM::factory('Attribute_Element')->by_value_and_attribute($value, $key)->id;
+					$value = $dictionary[$key."_".$value];					
 					$key = "param_".ORM::factory('Reference')->by_category_and_attribute($category_id, $key);					
 				break;
 				case 'integer':
@@ -221,5 +225,63 @@ class Massload
 				'type' => mime_content_type($filepath),
 			);
 		return Uploads::save($_file);
+	}
+
+	public static function get_dictionary($config, $user_id, $massload_id)
+	{
+		$fields = $config["fields"];
+		$dictionary 		= Array();
+		$form_dictionary 	= Array();
+		foreach ($fields as $field)
+		{
+			$type = $field["type"];
+			$name = $field["name"];
+			switch ($type) {
+				case 'city':
+					$form_dictionary[$type][0] = array("name"=>"Город");
+
+					$cities = ORM::factory('City')->where("is_visible","=",1)->order_by("title")->find_all();
+					foreach ($cities as $city) {
+						$dictionary[$type."_".$city->title] = $city->id;
+						$form_dictionary[$type][$city->title] = NULL;
+						$user_conform = ORM::factory('User_Conformities')
+	    							->where("user_id","=",$user_id)
+	    							->where("massload","=",$massload_id)
+	    							->where("type","=",$type)
+	    							->where("value","=",$city->title)
+	    							->find();
+	    				if ($user_conform->loaded()){
+	    						$dictionary[$type."_".$user_conform->conformity] = $city->id;
+	    						$form_dictionary[$type][$city->title] = $user_conform->conformity;
+	    				}
+					}
+
+					
+				break;
+				case 'dict':
+					$attribute = ORM::factory('Attribute')->where("seo_name","=",$name)->find();
+					$form_dictionary[$name][0] = array("name"=>$attribute->title);
+
+					$elements = ORM::factory('Attribute_Element')->by_attribute_seoname($name)->order_by("title")->find_all();
+					foreach ($elements as $element) {
+						$dictionary[$name."_".$element->title] = $element->id;
+						$form_dictionary[$name][$element->title] = NULL;
+
+						$user_conform = ORM::factory('User_Conformities')
+	    							->where("user_id","=",$user_id)
+	    							->where("massload","=",$massload_id)
+	    							->where("type","=",$name)
+	    							->where("value","=",$element->title)
+	    							->find();
+	    				if ($user_conform->loaded()){
+	    						$dictionary[$name."_".$user_conform->conformity] = $element->id;
+	    						$form_dictionary[$name][$element->title] = $user_conform->conformity;
+	    				}
+					}
+				break;				
+			}
+		}
+
+		return array($dictionary, $form_dictionary);
 	}
 }

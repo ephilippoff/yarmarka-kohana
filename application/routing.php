@@ -39,6 +39,11 @@ Route::set('userpage', 'users/<login>')
 		'controller' => 'User',
 		'action'     => 'userpage',
 	));
+Route::set('massload_conformities', 'user/massload_conformities/<category>')
+	->defaults(array(
+		'controller' => 'User',
+		'action'     => 'massload_conformities',
+	));
 Route::set('article', 'article/<seo_name>')
 	->defaults(array(
 		'controller' => 'Article',

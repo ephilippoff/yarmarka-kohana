@@ -178,6 +178,43 @@ class Controller_User extends Controller_Template {
 
     }
 
+    public function action_massload_conformities()
+    {
+    	$this->layout = 'users';    	
+    	$this->assets->js('http://yandex.st/underscore/1.6.0/underscore-min.js');
+    	$this->assets->js('http://yandex.st/backbone/1.1.2/backbone-min.js');
+    	$this->assets->js('massload_set.js');
+
+    	$categories = Array();
+    	$category = $this->request->param('category');
+    	if(!$category)
+    		throw new HTTP_Exception_404;
+
+    	try 
+		{ 
+			$cfg = Kohana::$config->load('massload/bycategory.'.$category);
+			$categories[$category] = $cfg["name"];
+		} catch(Exception $e){
+			throw new HTTP_Exception_404;
+		}
+    	$this->template->categories = $categories;
+
+    	$conformities = Array();
+    	$dictionaries = Array();
+    	$forms = Array();
+    	foreach ($categories as $key=>$value)
+    	{
+    		$cfg = Kohana::$config->load('massload/bycategory.'.$key);
+    		@list($dictionary, $form) = Massload::get_dictionary($cfg, $this->user->id, $key);
+    		$dictionaries[$key] = $dictionary;
+    		$forms[$key] = $form; 
+	    }
+	    $this->template->dictionaries 	= $dictionaries;
+	    $this->template->forms 			= $forms;
+    	$this->template->conformities 	= $conformities;
+
+    }
+
     public function action_plan()
     {
     	$this->layout = 'users'; 
