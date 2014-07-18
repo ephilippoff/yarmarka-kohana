@@ -22,7 +22,7 @@ class Controller_Add extends Controller_Template {
 		}
 
 		//если в локале работаем с подачей, ставим 1
-		$local = 1;
+		$local = Kohana::$config->load('common.is_local');
 
 		if ($local == 1)
 		{

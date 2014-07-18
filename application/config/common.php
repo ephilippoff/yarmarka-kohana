@@ -1,6 +1,7 @@
 <?php defined('SYSPATH') OR die('No direct access allowed.');
 return array(
-	'main_domain'		=> 'yarmarka.biz',
+	'main_domain'							=> 'yarmarka.biz',
+	'is_local' 								=> 0,
 	'default_region_id'						=> 73,
 	'days_count_between_service_up' 		=> 3,
 	'days_count_between_service_up_by_cat'  => array(36 => 1),
