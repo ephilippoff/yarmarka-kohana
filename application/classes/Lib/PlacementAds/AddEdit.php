@@ -18,6 +18,8 @@ class Lib_PlacementAds_AddEdit {
 	public $edit_union = FALSE;
 	public $object_without_parent_id = NULL;
 
+	public $union_cancel = FALSE;
+
 	function Lib_PlacementAds_AddEdit()
 	{
 		$this->init_defaults();
@@ -239,7 +241,15 @@ class Lib_PlacementAds_AddEdit {
 			$max_similarity = Kohana::$config->load('common.max_object_similarity')*100;
 			$similarity 	= ORM::factory('Object_Signature')->get_similarity($this->signature_full, NULL, $params->object_id, $user->id, "_full");
 			if ($similarity["sm"]*100 > $max_similarity){
-				$errors['signature'] = "Такое объявление у вас уже есть, дубли запрещены правилами сайта.";	
+				
+				if ( $this->is_edit ){
+					$object->is_published = 0;	
+					$object->is_bad = 2;	
+					$object->date_updated = date('Y-m-d H:i:s');
+					$this->union_cancel = TRUE;
+				} else {
+					$errors['signature'] = "Такое объявление у вас уже есть, дубли запрещены правилами сайта.";	
+				}
 			}
 		}
 
@@ -253,7 +263,7 @@ class Lib_PlacementAds_AddEdit {
 		$category = &$this->category;
 		$user = &$this->user;
 
-		if ($this->is_union_enabled() AND $this->is_union_enabled_by_category($category->id))
+		if ($this->is_union_enabled() AND $this->is_union_enabled_by_category($category->id) AND !$this->union_cancel)
 		{
 			$max_similarity = Kohana::$config->load('common.max_object_similarity')*100;
 			$similarity 	= ORM::factory('Object_Signature')->get_similarity($this->signature, $this->options_exlusive_union, $params->object_id);

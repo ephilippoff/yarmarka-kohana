@@ -45,7 +45,7 @@ class Model_Object extends ORM {
 
 	public function filter_title($title)
 	{
-		$this->seo_name = Url::title($title, '-', TRUE);
+		$this->seo_name = URL::title($title, '-', TRUE);
 
 		return $title;
 	}

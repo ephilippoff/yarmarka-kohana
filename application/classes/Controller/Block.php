@@ -274,7 +274,7 @@ class Controller_Block extends Controller_Template
 			$check = Plan::get_plan_for_user_by_category($user->id, $cat->id);
 			$count = (int) ORM::factory("Object")->get_active_by_user_and_category($user->id, $cat->id)->count_all();
 
-			if (!Plan::check_count($check, $count))
+			//if (!Plan::check_count($check, $count))
 				$not_yet_payment[] = new Obj(Array(
 										"title" 				=> $cat->title,
 										"count" 				=> $count,
