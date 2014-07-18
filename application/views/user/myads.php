@@ -171,85 +171,86 @@
 									<div class="col4">
 										<ul>
 							
-										<?php if (!$ad->is_bad) {
-                                        if ($ad->in_archive) //в архиве
-                                        { ?>
+										<? if (!$ad->is_bad): ?>
 
-                                            <li class="">
-                                                <select class="plolong-slc" id="prolong_<?=$ad->id ?>">
-                                                    <option value="2w">на 2 недели</option>
-                                                    <option selected value="1m">на 1 месяц</option>
-                                                    <option value="2m">на 2 месяца</option>
-                                                    <option value="3m">на 3 месяца</option>
-                                                </select>
-                                            </li>
+	                                        <? if ($ad->in_archive): //в архиве ?>
 
-                                            <li class="">
-                                                <a title="Продлить объявление" href="" class="btn-funcmenu full-btn" id="prolong-btn<?=$ad->id?>" onclick="prolong(<?=$ad->id?>); return false;">
-                                                    <i class="ico clock"></i><span>Продлить</span>
-                                                </a>
-                                            </li>
+	                                            <li class="">
+	                                                <select class="plolong-slc" id="prolong_<?=$ad->id ?>">
+	                                                    <option value="2w">на 2 недели</option>
+	                                                    <option selected value="1m">на 1 месяц</option>
+	                                                    <option value="2m">на 2 месяца</option>
+	                                                    <option value="3m">на 3 месяца</option>
+	                                                </select>
+	                                            </li>
 
-                                            <?  }
-                                        else //не в архиве
-                                        {
-                                            ?>
+	                                            <li class="">
+	                                                <a title="Продлить объявление" href="" class="btn-funcmenu full-btn" id="prolong-btn<?=$ad->id?>" onclick="prolong(<?=$ad->id?>); return false;">
+	                                                    <i class="ico clock"></i><span>Продлить</span>
+	                                                </a>
+	                                            </li>
+
+	                                            <li class="">
+	                                                <a title="Редактировать объявление" href="<?=CI::site('user/edit_ad/'.$ad->id)?>" class="btn-funcmenu  ">
+	                                                    <i class="ico change"></i><span>Изменить</span>
+	                                                </a>
+	                                            </li>
+
+	                                        <? else : //не в архиве ?>
 
 
-                                            <?php // Получаем дату, когда можно поднять объявление
-                                            if (empty($linked_user)) :
-	                                            if ($ad->get_service_up_timestamp() < time()) : ?>
+	                                            <?php // Получаем дату, когда можно поднять объявление
+	                                            if (empty($linked_user)) :
+		                                            if ($ad->get_service_up_timestamp() < time()) : ?>
+		                                                <li class="">
+		                                                    <a title="Поднять объявление в общем списке" href="" class="btn-funcmenu  " id="service-up-<?=$ad->id?>" onClick="service_up(<?=$ad->id?>, this); return false;">
+		                                                        <i class="ico up"></i><span>Поднять</span>
+		                                                    </a>
+		                                                </li>
+		                                            <?php else : ?>
+		                                                <li class="">
+		                                                    <a href="" class="btn-funcmenu disable noactive  " id="service-up-<?=$ad->id?>" 
+		                                                       title="Вы можете поднять это объявление не раньше <?=date("d.m Y в H:i", $ad->get_service_up_timestamp())?>"
+		                                                       onclick="return false;">
+		                                                        <i class="ico up"></i><span>Поднять</span>
+		                                                    </a>
+		                                                </li>
+		                                            <?php endif ?>
+	                                            <?php endif?>
+
+	                                            <li class="">
+	                                                <a title="Редактировать объявление" href="<?=CI::site('user/edit_ad/'.$ad->id)?>" class="btn-funcmenu  ">
+	                                                    <i class="ico change"></i><span>Изменить</span>
+	                                                </a>
+	                                            </li>
+
+	                                            <?php if ($ad->is_published) : ?>
 	                                                <li class="">
-	                                                    <a title="Поднять объявление в общем списке" href="" class="btn-funcmenu  " id="service-up-<?=$ad->id?>" onClick="service_up(<?=$ad->id?>, this); return false;">
-	                                                        <i class="ico up"></i><span>Поднять</span>
+	                                                    <a title="Снять объявление с публикации" href="" class="btn-funcmenu  " id="pub_toggle_link_<?=$ad->id?>" onclick="pub_toggle(<?=$ad->id?>, this); return false;">
+	                                                        <i class="ico hide"></i><span>Снять</span>
 	                                                    </a>
 	                                                </li>
+
 	                                            <?php else : ?>
 	                                                <li class="">
-	                                                    <a href="" class="btn-funcmenu disable noactive  " id="service-up-<?=$ad->id?>" 
-	                                                       title="Вы можете поднять это объявление не раньше <?=date("d.m Y в H:i", $ad->get_service_up_timestamp())?>"
-	                                                       onclick="return false;">
-	                                                        <i class="ico up"></i><span>Поднять</span>
+	                                                    <a title="Разместить объявление в публикацию" href="" class="btn-funcmenu  " id="pub_toggle_link_<?=$ad->id?>" onclick="pub_toggle(<?=$ad->id?>, this); return false;">
+	                                                        <i class="ico show"></i><span>Разместить</span>
 	                                                    </a>
 	                                                </li>
-	                                            <?php endif ?>
-                                            <?php endif?>
-
-                                            <li class="">
-                                                <a title="Редактировать объявление" href="<?=CI::site('user/edit_ad/'.$ad->id)?>" class="btn-funcmenu  ">
-                                                    <i class="ico change"></i><span>Изменить</span>
-                                                </a>
-                                            </li>
-
-                                            <?php if ($ad->is_published) : ?>
-                                                <li class="">
-                                                    <a title="Снять объявление с публикации" href="" class="btn-funcmenu  " id="pub_toggle_link_<?=$ad->id?>" onclick="pub_toggle(<?=$ad->id?>, this); return false;">
-                                                        <i class="ico hide"></i><span>Снять</span>
-                                                    </a>
-                                                </li>
-
-                                            <?php else : ?>
-                                                <li class="">
-                                                    <a title="Разместить объявление в публикацию" href="" class="btn-funcmenu  " id="pub_toggle_link_<?=$ad->id?>" onclick="pub_toggle(<?=$ad->id?>, this); return false;">
-                                                        <i class="ico show"></i><span>Разместить</span>
-                                                    </a>
-                                                </li>
-                                            <?php endif; ?>
+	                                            <?php endif; ?>
 
 
-                                            <li class="">
-                                                <a title="Удалить объявление" href="" class="btn-funcmenu  " onclick="delete_ad(<?php echo $ad->id ?>, this); return false;" class="btn btn-lc active">
-                                                    <i class="ico del"></i><span>Удалить</span>
-                                                </a>
-                                            </li>
+	                                            <li class="">
+	                                                <a title="Удалить объявление" href="" class="btn-funcmenu  " onclick="delete_ad(<?php echo $ad->id ?>, this); return false;" class="btn btn-lc active">
+	                                                    <i class="ico del"></i><span>Удалить</span>
+	                                                </a>
+	                                            </li>
 
 
-                                            <? }
-                                            }
-                                            else //есть блок
-                                            {  ?>
+                                       		<? endif; ?>
+                                        <? else:  ?>
 
-                                                <?php if ($ad->is_bad == 1 AND $ad->in_archive) : //блок1 и архив ?>
+                                                <? if ($ad->is_bad == 1 AND $ad->in_archive) : //блок1 и архив ?>
 
                                                 <li class="">
                                                     <select class="plolong-slc" id="prolong_<?=$ad->id?>">
@@ -261,12 +262,18 @@
                                                 </li>
 
                                                 <li class="">
-                                                    <a title="Исправить и продлить объявление" href="" class="btn-funcmenu full-btn" onclick="prolong(<?=$ad->id?>); return false;">
-                                                        <i class="ico show"></i><span>Исправить и продлить</span>
+	                                                <a title="Продлить объявление" href="" class="btn-funcmenu full-btn" id="prolong-btn<?=$ad->id?>" onclick="prolong(<?=$ad->id?>); return false;">
+	                                                    <i class="ico clock"></i><span>Продлить</span>
+	                                                </a>
+	                                            </li>
+
+	                                            <li class="">
+                                                    <a title="Исправить объявление" href="<?=CI::site('user/edit_ad/'.$ad->id)?>" class="btn-funcmenu ">
+                                                        <i class="ico show"></i><span>Исправить</span>
                                                     </a>
                                                 </li>
 
-                                                <?php elseif ($ad->is_bad == 1 AND ! $ad->in_archive) : ?>
+                                                <? elseif ($ad->is_bad == 1 AND ! $ad->in_archive) : ?>
 
                                                 <li class="">
                                                     <a title="Исправить объявление" href="<?=CI::site('user/edit_ad/'.$ad->id)?>" class="btn-funcmenu ">
@@ -276,7 +283,7 @@
 
                                                 <?php endif; ?>
 
-                                                <? } ?>										
+                                        <? endif; ?>										
 										
 										
 										</ul>

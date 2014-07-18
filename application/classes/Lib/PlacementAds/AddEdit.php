@@ -31,10 +31,10 @@ class Lib_PlacementAds_AddEdit {
 
 		if (is_array($params))
 		{
-			foreach($params as $key=>$value)
-			{
-				$this->params->{$key} = $value;	
-			}
+			//foreach($params as $key=>$value)
+			//{
+				$this->params = new Obj($params);//->{$key} = $value;	
+			//}
 		}
 		return $this;
 	}
@@ -65,6 +65,42 @@ class Lib_PlacementAds_AddEdit {
 		return $this;
 	}
 
+	function parse_object($object, &$params)
+	{
+		if (! $object->loaded()) return;
+		$params->user_text_adv  = $object->user_text;
+		$params->title_adv		= $object->title;
+		$params->contact  		= $object->contact;
+
+		$location = ORM::factory('Location', $object->location_id);
+		if ($location->loaded() && ! $params->address)
+			$params->address = $location->address;
+
+		$dl = ORM::factory('Data_List')->where('object', '=', $object->id)->find_all();
+		foreach ($dl as $item)
+			$params->{"param_".$item->reference} = $item->value;
+
+		$di = ORM::factory('Data_Integer')->where('object', '=', $object->id)->find_all();
+		foreach ($di as $item)
+			$params->{"param_".$item->reference} = $item->value_min;
+
+		$dn = ORM::factory('Data_Numeric')->where('object', '=', $object->id)->find_all();
+		foreach ($dn as $item)
+			$params->{"param_".$item->reference} = $item->value_min;
+
+		$dt = ORM::factory('Data_Text')->where('object', '=', $object->id)->find_all();
+		foreach ($dt as $item)
+			$params->{"param_".$item->reference} = $item->value;
+
+		$oc = ORM::factory('Object_Contact')->where('object_id', '=', $object->id)->find_all();
+		$i = 0;
+		foreach ($oc as $item){
+			$params->{"contact_".$i."_value"} = $item->contact_obj->contact;
+			$params->{"contact_".$i."_type"} = $item->contact_obj->contact_type_id;
+			$i++;
+		}
+	}
+
 	function init_instances()
 	{
 		$params 	= &$this->params;
@@ -85,8 +121,11 @@ class Lib_PlacementAds_AddEdit {
 			{
 				$category_id 	= (int) $object->category;
 				$user_id 		= (int) $object->author;
-				
 				$params->city_id = $object->city_id;
+
+				if ($params->just_check){
+					$this->parse_object($object, $params);
+				}
 
 			} else {
 				$this->raise_error('object not found');
@@ -119,6 +158,7 @@ class Lib_PlacementAds_AddEdit {
 		}
 
 		$this->form_references = Forms::get_by_category_and_type($this->category->id, 'add');
+
 		$this->conditions = Forms::get_category_conditions($this->category->id);
 
 		return $this;
@@ -158,26 +198,26 @@ class Lib_PlacementAds_AddEdit {
 
 		$validation = Validation::factory((array) $this->params)
 			//->rule('city_kladr_id', 'not_empty')
-			->rule('contact', 'not_empty')
+			->rule('contact', 'not_empty', array(':value', "Контактное лицо"))
 			->rule('email', 'email');	
 
 		if ( ! $category->title_auto_fill)
 		{
 			$validation->rules('title_adv', array(
-				array('not_empty'),
+				array('not_empty', array(':value', "Заголовок")),
 				array('min_length', array(':value', 15)),
 			));
 		}
 
 		if ($category->address_required)
 		{
-			$validation->rule('address', 'not_empty');
+			$validation->rule('address', 'not_empty', array(':value', "Адрес"));
 		}
 
 		if ($category->text_required)
 		{
 			$validation->rules('user_text_adv', array(
-				array('not_empty'),
+				array('not_empty', array(':value', "Текст объявления")),
 				array('max_length', array(':value', 15000)),
 			));
 		}
@@ -353,7 +393,7 @@ class Lib_PlacementAds_AddEdit {
 
 			if ($reference->is_required)
 			{
-				$rules[] = array('not_empty');
+				$rules[] = array('not_empty', array(':value', $reference->attribute_obj->title));
 			}
 
 			switch ($reference->attribute_obj->type)
@@ -835,7 +875,7 @@ class Lib_PlacementAds_AddEdit {
 
 	function init_defaults()
 	{
-		$this->params = new stdClass();
+		/*$this->params = new stdClass();
 		$this->params->object_id = NULL;
 		$this->params->rubricid = NULL;
 		$this->params->session_id = NULL;
@@ -856,7 +896,7 @@ class Lib_PlacementAds_AddEdit {
 		$this->params->video = NULL;
 		$this->params->video_type = NULL;
 		$this->params->block_comments = NULL;		
-		$this->params->parent_id = NULL;
+		$this->params->parent_id = NULL;*/
 
 		$this->contacts = array();
 	}
@@ -865,7 +905,7 @@ class Lib_PlacementAds_AddEdit {
 		throw new HTTP_Exception_404($text);		
 	}
 
-	private static function is_shown($conditions, $reference_id)
+	private function is_shown($conditions, $reference_id)
 	{
 		$shown = FALSE;
 

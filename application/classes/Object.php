@@ -328,6 +328,60 @@ class Object
 
 		return $json;
 	}
+
+	static function PlacementAds_Validate($input_params, $return_object = FALSE)
+	{		
+		$json = array();
+
+		$input_params["just_check"] = 1;
+
+		$add = new Lib_PlacementAds_AddEdit();
+		$add->init_input_params($input_params)
+			->init_instances()
+			->init_object_and_mode()
+			->check_neccesaries()
+			->init_validation_rules()
+			->init_validation_rules_for_attributes()
+			->init_contacts()
+			->exec_validation();
+
+		if ( ! $add->errors){
+			$json['error'] = null;
+			if ($return_object)
+				$json['add_obj'] = $add;
+		} else 
+		{
+			$json['error'] = $add->errors;
+		}
+
+		return $json;
+	}
+
+	static function canEdit($input_params)
+	{
+		$check = self::PlacementAds_Validate($input_params, TRUE);
+		$error = $check["error"];
+		if ($error)
+		{
+			$errors = array_values($error);
+			return Array("code" => "error",
+						 "errors" => join(", ", $errors)
+				);
+		} else {
+			$input_params['just_check'] = 1;//todo два раза генерятся параметры для объявы, не айс
+			$trigger = self::PlacementAds_JustRunTriggers($input_params);
+			$error = $trigger["error"];
+			if (!array_key_exists("object_id", $trigger))
+			{
+				$errors = array_values($error);
+				return Array("code" => "error",
+						 	"errors" => join(", ", $errors)
+						 );
+			} else {
+				return Array("code" => "ok", "parent_id" =>$trigger["parent_id"]);
+			}
+		}
+	}
 }
 
 /* End of file Object.php */

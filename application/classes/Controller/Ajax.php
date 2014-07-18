@@ -328,11 +328,12 @@ class Controller_Ajax extends Controller_Template
 			throw new HTTP_Exception_404;
 		}
 
-		$this->json['edit_link'] = CI::site('user/edit_ad/'.$ad->id.'#contacts');
+		$info = Object::canEdit(Array("object_id" => $object->id));
 
-		if ( ! $ad->is_valid())
+		if ( $info["code"] == "error" )
 		{
-			$this->json['code'] = 500;
+			$this->json['code'] = $info["code"];
+			$this->json['errors'] = $info["errors"];
 		}
 		elseif ($ad->get_service_up_timestamp() > time())
 		{
@@ -352,6 +353,7 @@ class Controller_Ajax extends Controller_Template
 		$lifetime = $this->request->post('lifetime');
 		
 		if ( ! $object->loaded() 
+				OR $object->is_bad == 2
 				OR ! $lifetime 
 				OR ! Auth::instance()->get_user() 
 				OR $object->author != Auth::instance()->get_user()->id)
@@ -359,7 +361,9 @@ class Controller_Ajax extends Controller_Template
 			throw new HTTP_Exception_404;
 		}
 
-		if ($object->is_bad == 0 AND $object->in_archive AND $object->is_valid())
+		$info = Object::canEdit(Array("object_id" => $object->id));
+
+		if (!$info["code"] == "ok")
 		{
 			$date_expiration = null;
 
@@ -385,8 +389,8 @@ class Controller_Ajax extends Controller_Template
 		}
 		else
 		{
-			$this->json['code'] = 300;
-			$this->json['edit_link'] = CI::site('user/edit_ad/'.$object->id.'#contacts');
+			$this->json['code'] = $info["code"];
+			$this->json['errors'] = $info["errors"];
 		}
 	}
 
@@ -406,31 +410,23 @@ class Controller_Ajax extends Controller_Template
 			throw new HTTP_Exception_404;
 		}
 
-		$count_published_in_category = ORM::factory('Object')
-			->where('category', '=', $object->category)
-			->where('author', '=', $object->author)
-			->where('is_published', '=', '1')
-			->count_all();
+		$info = Object::canEdit(Array("object_id" => $object->id));
 
-		if (
-			$object->is_published == 0
-			AND Auth::instance()->get_user()->org_type == 1 
-			AND $object->category_obj->max_count_for_user 
-			AND $count_published_in_category >= $object->category_obj->max_count_for_user
-		)
-		{
-			$this->json['code'] = 400;
-		}
-		elseif ( ! $object->is_published() AND ! $object->is_valid())
-		{
-			$this->json['code'] = 401;
-			$this->json['edit_link'] = CI::site('user/edit_ad/'.$object->id.'#contacts');
-		}
-		else
+		if ($object->is_published <> 0)
 		{
 			$object->toggle_published();
 			$this->json['code'] = 200;
 			$this->json['is_published'] = $object->is_published;
+		} else {
+			if ($info["code"] == "error")
+			{
+				$this->json['code'] = $info["code"];
+				$this->json['errors'] = $info["errors"];
+			} else {
+				$object->toggle_published();
+				$this->json['code'] = 200;
+				$this->json['is_published'] = $object->is_published;
+			}
 		}
 	}
 
