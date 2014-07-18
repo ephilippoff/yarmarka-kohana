@@ -60,6 +60,28 @@ class Lib_PlacementAds_AddEditByMassLoad extends Lib_PlacementAds_AddEdit {
 				
 	}
 
+	function save_contacts()
+	{
+		$object = &$this->object;
+		$user = &$this->user;
+		$contacts = &$this->contacts;
+		if ($this->is_edit)
+		{	
+			// удаляем связи на старые контакты
+			$object->delete_contacts();
+		}
+
+		foreach ($contacts as $contact)
+		{
+			// сохраняем контакты для модератора но не привязываем к учетке
+			$user->add_contact($contact['type'], $contact['value'], 0, 1);
+			// сохраянем новые контакты для объявления
+			$object->add_contact($contact['type'], $contact['value']);
+		}
+
+		return $this;
+	}
+
 
 
 }
