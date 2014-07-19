@@ -32,18 +32,20 @@ class Lib_PlacementAds_Form  {
 		'contacts' 	=> 'add/block/contacts',
 	);
 
-	function Lib_PlacementAds_Form($params)
+	function Lib_PlacementAds_Form($params, $is_post = FALSE)
 	{
 		$this->_data = new stdClass();
+		$this->is_post = $is_post;
+		$this->params = $params;
 
-		if (in_array("category_id", $params)) 
-			$this->_category_id = $params['category_id'];
+		if (array_key_exists("rubricid", $params)) 
+			$this->_category_id = (int) $params['rubricid'];
 
-		if (in_array("object_id", $params)) 
-			$this->_object_id 	= $params['object_id'];
+		if (array_key_exists("object_id", $params)) 
+			$this->_object_id 	= (int) $params['object_id'];
 
-		if (in_array("city_id", $params)) 
-			$this->_city_id 	= $params['city_id'];
+		if (array_key_exists("city_id", $params)) 
+			$this->_city_id 	= (int) $params['city_id'];
 
 		$this -> Get_Instances();
 	}
@@ -78,6 +80,7 @@ class Lib_PlacementAds_Form  {
 
 		if ($category_id > 0)
 		{
+
 			$this->category = ORM::factory('Category', $category_id);
 			if ($this->category->loaded())
 			{
@@ -167,6 +170,7 @@ class Lib_PlacementAds_Form  {
 	{
 		$category_id 	= $this->category_id;
 		$object_id 		= $this->object_id;
+		$object 		= $this->object;
 
 		if (empty($category_id))
 			return $this;
@@ -174,31 +178,23 @@ class Lib_PlacementAds_Form  {
 		$ar = ORM::factory('Attribute_Relation', $category_id);
 		$params = Array();
 
-		if ($object_id>0)
+		if ($object->loaded() AND !$this->is_post)
 		{
-			$values = ORM::factory('Data_List')->where("object","=",$object_id)->find_all();
-			foreach($values as $list_item)
-			{
-				$params[$list_item->reference] = "_".$list_item->value;
-			}
+			$params = self::parse_object_params($object_id);
 
-			$values = ORM::factory('Data_Integer')->where("object","=",$object_id)->find_all();
-			foreach($values as $integer_item)
+		} elseif ($this->is_post)
+		{
+			self::parse_post_params($this->params,  function($ref_id, $value, $minmax) use (&$params){
+				$params[$ref_id] = $value;
+			});
+			/*foreach($this->params as $key=>$value)
 			{
-				$params[$integer_item->reference] = $integer_item->value_min;
-			}
-
-			$values = ORM::factory('Data_Numeric')->where("object","=",$object_id)->find_all();
-			foreach($values as $numeric_item)
-			{
-				$params[$numeric_item->reference] = $numeric_item->value_min;
-			}
-
-			$values = ORM::factory('Data_Text')->where("object","=",$object_id)->find_all();
-			foreach($values as $text_item)
-			{
-				$params[$text_item->reference] = $text_item->value;
-			}
+				$param = explode("_",$key);
+				if (count($param) == 2)
+				{
+					$params[$param[1]] = $value;
+				}
+			}*/
 		}
 
 		$data = Attribute::getData($category_id);
@@ -247,8 +243,10 @@ class Lib_PlacementAds_Form  {
 		$title_auto_fill 	=  FALSE;
 		$value 				= '';
 
-		if ($object->loaded())
+		if ($object->loaded() AND !$this->is_post)
 			$value = $object->title;
+		elseif ($this->is_post AND array_key_exists("title_adv", $this->params))
+			$value = $this->params['title_adv'];
 
 		if ($category->loaded())
 			$title_auto_fill = $category->title_auto_fill;
@@ -266,8 +264,10 @@ class Lib_PlacementAds_Form  {
 		$object 	= $this->object;
 
 		$value = '';
-		if ($object->loaded())
+		if ($object->loaded() AND !$this->is_post)
 			$value = $object->user_text;
+		elseif ($this->is_post)
+			$value = $this->params['user_text_adv'];
 
 		$this->_data->text = View::factory($this->templates['text'],
 									array( 'value' => $value ))->render();
@@ -282,7 +282,8 @@ class Lib_PlacementAds_Form  {
 		$main_image_id = NULL;
 
 		$files = Array();
-		if ($object_id >0)
+
+		if ($object->loaded() AND !$this->is_post)
 		{
 			$oa = ORM::factory('Object_Attachment')->where("object_id","=",$object_id)->find_all();
 			foreach($oa as $photo)
@@ -297,6 +298,8 @@ class Lib_PlacementAds_Form  {
 			}
 
 			$main_image_id = $object->main_image_id;
+		} elseif ($this->is_post){
+			
 		}
 
 		$this->_data->photo = View::factory($this->templates['photo'],
@@ -316,26 +319,108 @@ class Lib_PlacementAds_Form  {
 		$object_id  = $this->object_id;
 		$object 	= $this->object;
 		$contact_person = "";
-		$oc = Array();
-		$ct = ORM::factory('Contact_Type')->find_all();
+		$contacts = Array();
+		$contact_types = ORM::factory('Contact_Type')->find_all();
 
-		if ($object_id >0)
-		{
-			$oc = ORM::factory('Object_Contacts')->where("object_id","=",$object_id)->find_all();
+		if ($object->loaded() AND !$this->is_post)
+		{	
+			self::parse_object_contact($object_id, function($value, $type) use (&$contacts){
+				$contacts[] = Array("type"  => $type,"value" => $value);
+			});
 			$contact_person = $object->contact;
+		}
+		elseif ($this->is_post)
+		{			
+			self::parse_post_contact($this->params, function($value, $type) use (&$contacts){
+				$contacts[] = Array("type"  => $type,"value" => $value);
+			});
+			$contact_person = $this->params["contact"];
 		}
 
 		$this->_data->contacts = View::factory($this->templates['contacts'],
-									array(	"contacts" 			=> $oc, 
-											"contact_types" 	=> $ct, 
+									array(	"contacts" 			=> $contacts , 
+											"contact_types" 	=> $contact_types, 
 											"max_count_contacts"=> self::MAX_COUNT_CONTACTS,
 											"contact_person" 	=> $contact_person)
 									)->render();
 		return $this;
 	}
+	
 
 	function Options(){
 
 		return $this;
+	}
+
+	static private function parse_object_params($object_id, $callback){
+		$values = ORM::factory('Data_List')->where("object","=",$object_id)->find_all();
+		$params = Array();
+		foreach($values as $list_item)
+		{
+			$params[$list_item->reference] = "_".$list_item->value;
+		}
+
+		$values = ORM::factory('Data_Integer')->where("object","=",$object_id)->find_all();
+		foreach($values as $integer_item)
+		{
+			$params[$integer_item->reference] = $integer_item->value_min;
+		}
+
+		$values = ORM::factory('Data_Numeric')->where("object","=",$object_id)->find_all();
+		foreach($values as $numeric_item)
+		{
+			$params[$numeric_item->reference] = $numeric_item->value_min;
+		}
+
+		$values = ORM::factory('Data_Text')->where("object","=",$object_id)->find_all();
+		foreach($values as $text_item)
+		{
+			$params[$text_item->reference] = $text_item->value;
+		}
+
+		return $params;
+	}
+
+	static private function parse_post_params($params, $callback)
+	{
+		foreach((array) $params as $key=>$value)
+		{
+			if (preg_match('/^param_([0-9]*)/', $key, $matches))
+			{
+				@list($tmp, $ref_id) = explode("_",$key);
+				$callback($ref_id, $value, NULL);
+			}
+			if (preg_match('/^param_([0-9]*)_min/', $key, $matches))
+			{
+				@list($tmp, $ref_id, $tmp2) = explode("_",$key);
+				$callback($ref_id, $value, $tmp2);
+			}			
+			if (preg_match('/^param_([0-9]*)_max/', $key, $matches))
+			{
+				@list($tmp, $ref_id, $tmp2) = explode("_",$key);
+				$callback($ref_id, $value, $tmp2);
+			}
+		}
+	}
+
+	static private function parse_object_contact($object_id, $callback)
+	{
+		$oc = ORM::factory('Object_Contacts')->where("object_id","=",$object_id)->find_all();
+		foreach($oc as $contact)
+		{
+			$callback($contact->contact->contact, $contact->contact->contact_type_id);
+		}
+	}
+
+	static private function parse_post_contact($params, $callback){
+		foreach((array) $params as $key=>$value){
+			if (preg_match('/^contact_([0-9]*)_value/', $key, $matches))
+			{
+				$value = trim($params['contact_'.$matches[1].'_value']);
+				$type = $params['contact_'.$matches[1].'_type'];
+
+				$callback($value, $type);
+			}
+		}
 	}
 }

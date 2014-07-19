@@ -130,7 +130,7 @@ class Attribute {
 		if ( $value_exist)
 			$value = $params[ $ref_id ];
 
-		if( $value_exist AND $info["type"] == "ilist")
+		if( $value_exist AND $info["type"] == "ilist" AND  substr($value, 0, 1) <> "_")
 			$value = "_".$value;
 		
 
