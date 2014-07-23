@@ -373,6 +373,8 @@
 													<? if ($serviceup == 'premium'): ?>
 														<li><a title="Премиум" href="<?=CI::site('billing/pay_service/111/'.$ad->id)?>" class="btn-pmenu "><i class="ico premium"></i><span>Премиум</span></a></li>
 													<? endif ?>
+													<li><a title="Текстовая ссылка" href="<?=CI::site('billing/pay_service/'.$service_promo_link->id.'/'.$ad->id)?>" class="btn-pmenu "><i class="ico pl"></i><span>Текст. ссылка</span></a></li>
+													<li><a title="Графическая ссылка" href="<?=CI::site('billing/pay_service/'.$service_promo_link_bg->id.'/'.$ad->id)?>" class="btn-pmenu "><i class="ico plg"></i><span>Графич. ссылка</span></a></li>													
 										<?php endif; ?>
 									</ul>
 								</div>

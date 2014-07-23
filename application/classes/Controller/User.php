@@ -508,6 +508,8 @@ class Controller_User extends Controller_Template {
 			? $region->cities->where('is_visible', '=', '1')->find_all()
 			: array();
 		$this->template->objects = $objects;
+		$this->template->service_promo_link = ORM::factory('Service')->where('name', '=', 'promo_link')->find();
+		$this->template->service_promo_link_bg = ORM::factory('Service')->where('name', '=', 'promo_link_bg')->find();
 	}
 
 	public function action_myads()

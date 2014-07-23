@@ -53,6 +53,7 @@
 				<a class="sort" href="/<?=Request::current()->uri().URL::query(array_merge($params, array('sort_by' => 'end_date', 'sort' => 'desc')), false) ?>">(по убыв.)</a>
 			<?php endif;?>				
 		</th>
+		<th>Тип</th>
 		<th>Активность</th>
 		<th>Просмотры</th>
 		<th>Города</th>
@@ -89,18 +90,22 @@
 			}
 		?>
 	
-		<tr class="<?=$class?>">			
+		<tr class="<?=$class?> type<?=$ads_element->type?>">			
 			<td><?=$ads_element->id?></td>
 			<td><a target="_blank" href="<?=$ads_element->link?>"><?=$ads_element->title?></a></td>
-			<td>
-				<?php if (is_file(DOCROOT.'uploads/banners/'.$ads_element->image)) : ?>
-						<img src="<?='/uploads/banners/'.$ads_element->image?>" />
-				<?php endif;?>
+			<td class="td-banner">
+				<div style="position: relative;">
+					<?php if (is_file(DOCROOT.'uploads/banners/'.$ads_element->image)) : ?>
+							<img src="<?='/uploads/banners/'.$ads_element->image?>" />
+							<?php if ($ads_element->type == 3) : ?> <div class="wrapper"><span class="title <?=$ads_element->class?>"><?=htmlspecialchars($ads_element->title)?></span></div> <?php endif; ?>
+					<?php endif;?>
+				</div>
 			</td>
 			<td><?=$ads_element->class?></td>
 			<td><?=$ads_element->start_date?></td>
 			<td><?=$ads_element->end_date?></td>
-			<td><?php if ($ads_element->active == 1) : ?> Активна <?php else :?> Неактивна <?php endif;?></td>
+			<td><?=$ads_element->type?></td>
+			<td><?php if ($ads_element->active == 1) : ?> Активна <?php else :?> <span class="red"><b>Неактивна</b></span> <?php endif;?></td>
 			<td><?=$visits?></td>
 			<td><?=trim($cities,', ')?></td>
 			<td><?=trim($ads_element->groups,'{}')?></td>
