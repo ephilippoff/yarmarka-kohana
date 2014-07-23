@@ -14,7 +14,9 @@ class Object
 			->init_validation_rules()
 			->init_validation_rules_for_attributes()
 			->init_contacts()
-			->exec_validation();
+			->exec_validation()
+			->check_signature()
+			->check_signature_for_union();
 
 		if ( ! $add->errors)
 		{
@@ -34,7 +36,9 @@ class Object
 					->save_other_options()
 					->save_attributes()
 					->save_generated()
-					->save_contacts();
+					->save_contacts()
+					->save_signature()
+					->save_union();
 
 				$db->commit();
 			}
