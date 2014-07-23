@@ -278,9 +278,9 @@ class Lib_PlacementAds_AddEdit {
 
 		if ($this->is_similarity_enabled())
 		{
-			$max_similarity = Kohana::$config->load('common.max_object_similarity')*100;
-			$similarity 	= ORM::factory('Object_Signature')->get_similarity($this->signature_full, NULL, $params->object_id, $user->id, "_full");
-			if ($similarity["sm"]*100 > $max_similarity){
+			$max_similarity = Kohana::$config->load('common.max_object_similarity');
+			$similarity 	= ORM::factory('Object_Signature')->get_similarity($max_similarity,$this->signature_full, NULL, $params->object_id, $user->id, "_full");
+			if ($similarity["sm"] > $max_similarity){
 				
 				if ( $this->is_edit ){
 					$object->is_published = 0;	
@@ -305,10 +305,10 @@ class Lib_PlacementAds_AddEdit {
 
 		if ($this->is_union_enabled() AND $this->is_union_enabled_by_category($category->id) AND !$this->union_cancel)
 		{
-			$max_similarity = Kohana::$config->load('common.max_object_similarity')*100;
-			$similarity 	= ORM::factory('Object_Signature')->get_similarity($this->signature, $this->options_exlusive_union, $params->object_id);
+			$max_similarity = Kohana::$config->load('common.max_object_similarity');
+			$similarity 	= ORM::factory('Object_Signature')->get_similarity($max_similarity, $this->signature, $this->options_exlusive_union, $params->object_id);
 
-			if ($similarity["sm"]*100 > $max_similarity){
+			if ($similarity["sm"] > $max_similarity){
 
 				$parent_id = (int) ORM::factory('Object', $similarity["object_id"])->parent_id;
 				if ($parent_id == 0)
