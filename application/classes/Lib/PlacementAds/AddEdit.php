@@ -179,7 +179,7 @@ class Lib_PlacementAds_AddEdit {
 			if ($object->loaded())
 			{
 				$this->is_edit = TRUE;
-				if ( ! $user->can_edit_object($object->id))
+				if ( ! $user->can_edit_object($object->id) AND !$object->is_union)
 				{
 					$this->raise_error('user can\'t edit this ad');
 				}
