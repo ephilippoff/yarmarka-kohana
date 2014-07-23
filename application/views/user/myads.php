@@ -100,9 +100,19 @@
 							$price = ORM::factory('Object')->get_intattr_value_by_id($ad->id, 71);
 						?>
 				
-					                    				
+					    <?
+					    	$serviceup = 'default';
+					    	$true_categories 		= Kohana::$config->load('billing.premium_ads_categories');
+					    	$premium_ads_price 		= Kohana::$config->load('billing.premium_ads_price');
+
+					    	if (count($true_categories) > 0 AND in_array($ad->category, $true_categories)){
+					    		$serviceup = 'premium';
+
+					    	} else if(in_array($ad->category, $true_categories)){
+					    		$serviceup = 'premium';
+					    	}
 		
-				
+						?>
 				
 						<div class="li <?php if (!$obj_is_active) : ?> blocked <?php endif;?>">
 							<div class="left-bl">
@@ -199,23 +209,22 @@
 	                                        <? else : //не в архиве ?>
 
 
-	                                            <?php // Получаем дату, когда можно поднять объявление
-	                                            if (empty($linked_user)) :
-		                                            if ($ad->get_service_up_timestamp() < time()) : ?>
-		                                                <li class="">
-		                                                    <a title="Поднять объявление в общем списке" href="" class="btn-funcmenu  " id="service-up-<?=$ad->id?>" onClick="service_up(<?=$ad->id?>, this); return false;">
-		                                                        <i class="ico up"></i><span>Поднять</span>
-		                                                    </a>
-		                                                </li>
-		                                            <?php else : ?>
-		                                                <li class="">
-		                                                    <a href="" class="btn-funcmenu disable noactive  " id="service-up-<?=$ad->id?>" 
-		                                                       title="Вы можете поднять это объявление не раньше <?=date("d.m Y в H:i", $ad->get_service_up_timestamp())?>"
-		                                                       onclick="return false;">
-		                                                        <i class="ico up"></i><span>Поднять</span>
-		                                                    </a>
-		                                                </li>
-		                                            <?php endif ?>
+	                                            <?php if (empty($linked_user) AND $serviceup == 'default') : ?>
+			                                            <?php if ($ad->get_service_up_timestamp() < time()) : // Получаем дату, когда можно поднять объявление?>
+			                                                <li class="">
+			                                                    <a title="Поднять объявление в общем списке" href="" class="btn-funcmenu  " id="service-up-<?=$ad->id?>" onClick="service_up(<?=$ad->id?>, this); return false;">
+			                                                        <i class="ico up"></i><span>Поднять</span>
+			                                                    </a>
+			                                                </li>
+			                                            <?php else : ?>
+			                                                <li class="">
+			                                                    <a href="" class="btn-funcmenu disable noactive  " id="service-up-<?=$ad->id?>" 
+			                                                       title="Вы можете поднять это объявление не раньше <?=date("d.m Y в H:i", $ad->get_service_up_timestamp())?>"
+			                                                       onclick="return false;">
+			                                                        <i class="ico up"></i><span>Поднять</span>
+			                                                    </a>
+			                                                </li>
+			                                            <?php endif ?>
 	                                            <?php endif?>
 
 	                                            <li class="">
@@ -361,6 +370,9 @@
 										<?php if (!$ad->is_bad and !$ad->in_archive and $ad->is_published) : ?>
 													<li><a title="Воспользоваться услугами" href="<?=CI::site('billing/services_for_ads/'.$ad->id)?>" class="btn-pmenu "><i class="ico services"></i><span>Услуги</span></a></li>
 													<li><a title="Подать в газету" href="<?=CI::site('billing/pay_service/34/'.$ad->id)?>" class="btn-pmenu "><i class="ico yarmarka"></i><span>В газету</span></a></li>
+													<? if ($serviceup == 'premium'): ?>
+														<li><a title="Премиум" href="<?=CI::site('billing/pay_service/111/'.$ad->id)?>" class="btn-pmenu "><i class="ico premium"></i><span>Премиум</span></a></li>
+													<? endif ?>
 										<?php endif; ?>
 									</ul>
 								</div>
