@@ -290,7 +290,7 @@ class Lib_PlacementAds_AddEdit {
 					if ($params->just_check){
 						$errors['signature'] = "Такое объявление у вас уже есть, дубли запрещены правилами сайта.";	
 					}
-					//$object->is_published = 0;	
+					$object->is_published = 0;	
 					//$object->is_bad = 2;	
 					//$object->date_updated = date('Y-m-d H:i:s');
 					$this->union_cancel = TRUE;
