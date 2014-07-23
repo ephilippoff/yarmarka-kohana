@@ -156,10 +156,10 @@ class Lib_PlacementAds_AddEdit {
 		elseif ($user->role == 1 OR $user->role == 3)
 		{
 
-		} else 
+		} /*else 
 		{
 			$this->raise_error('user dont have permissions to edit this object');
-		}
+		}*/
 
 		$this->form_references = Forms::get_by_category_and_type($this->category->id, 'add');
 
@@ -975,8 +975,10 @@ class Lib_PlacementAds_AddEdit {
 	private static function get_options_exlusive_union($city_id, $category_id, $list_ids = Array())
 	{
 		$return = Array();
-		$return[] = $city_id;
-		$return[] = $category_id;
+		if ($city_id)
+			$return[] = $city_id;
+		if ($category_id)
+			$return[] = $category_id;
 
 		$config = self::get_union_config($category_id);
 
