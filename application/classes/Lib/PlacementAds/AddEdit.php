@@ -287,6 +287,9 @@ class Lib_PlacementAds_AddEdit {
 			if ($similarity["sm"] > $max_similarity){
 				
 				if ( $this->is_edit ){
+					if ($params->just_check){
+						$errors['signature'] = "Такое объявление у вас уже есть, дубли запрещены правилами сайта.";	
+					}
 					//$object->is_published = 0;	
 					//$object->is_bad = 2;	
 					//$object->date_updated = date('Y-m-d H:i:s');
