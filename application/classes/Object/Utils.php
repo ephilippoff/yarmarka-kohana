@@ -116,6 +116,7 @@ class Object_Utils
 
 		foreach ($form_elements as $reference_id => $value)
 		{
+			if (!$value) continue;
 			$ref = ORM::factory('Reference')
 						->select("attribute.type", Array("attribute.id", "aid"))
 						->join('attribute', 'left')

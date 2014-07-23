@@ -114,6 +114,10 @@ class Lib_PlacementAds_AddEdit {
 		$user 			= Auth::instance()->get_user();
 		$user_id 	    = $user->id;
 
+		//затычка на основной форме подачи, пока город берется из кладра
+		if (!$params->city_id AND $params->city_kladr_id)
+			$params->city_id = ORM::factory('City')->where("kladr_id","=",$params->city_kladr_id)->find()->id;
+
 		if ($object_id > 0)
 		{
 			$object = ORM::factory('Object', $object_id);
@@ -283,9 +287,9 @@ class Lib_PlacementAds_AddEdit {
 			if ($similarity["sm"] > $max_similarity){
 				
 				if ( $this->is_edit ){
-					$object->is_published = 0;	
-					$object->is_bad = 2;	
-					$object->date_updated = date('Y-m-d H:i:s');
+					//$object->is_published = 0;	
+					//$object->is_bad = 2;	
+					//$object->date_updated = date('Y-m-d H:i:s');
 					$this->union_cancel = TRUE;
 				} else {
 					$errors['signature'] = "Такое объявление у вас уже есть, дубли запрещены правилами сайта.";	
