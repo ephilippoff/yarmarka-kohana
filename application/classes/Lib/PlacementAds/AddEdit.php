@@ -404,7 +404,7 @@ class Lib_PlacementAds_AddEdit {
 			{
 				case 'integer':
 					$rules[] = array('digit');
-					$rules[] = array('not_0');
+					$rules[] = array('not_0', array(':value', $reference->attribute_obj->title));
 					$rules[] = array('max_length', array(':value', $reference->attribute_obj->solid_size));
 				break;
 
