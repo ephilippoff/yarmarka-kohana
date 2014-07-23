@@ -328,7 +328,7 @@ class Controller_Ajax extends Controller_Template
 			throw new HTTP_Exception_404;
 		}
 
-		$info = Object::canEdit(Array("object_id" => $object->id));
+		$info = Object::canEdit(Array("object_id" => $ad->id));
 
 		if ( $info["code"] == "error" )
 		{

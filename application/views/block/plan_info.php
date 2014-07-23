@@ -15,7 +15,7 @@
 													  "about" => $interval_str) ); ?>
 	<? endforeach;?>
 	</div>
-<? endif; ?>
+
 </br>
 </br>
 <div>
@@ -32,3 +32,4 @@
 
 <? endforeach;?>
 </div>
+<? endif; ?>

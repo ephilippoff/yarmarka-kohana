@@ -104,13 +104,16 @@
 					    	$serviceup = 'default';
 					    	$true_categories 		= Kohana::$config->load('billing.premium_ads_categories');
 					    	$premium_ads_price 		= Kohana::$config->load('billing.premium_ads_price');
+					    	$premium_enabled 		= Kohana::$config->load('billing.premium_enabled');
 
-					    	if (count($true_categories) > 0 AND in_array($ad->category, $true_categories)){
-					    		$serviceup = 'premium';
+					    	if ($premium_enabled) {
+						    	if (count($true_categories) > 0 AND in_array($ad->category, $true_categories)){
+						    		$serviceup = 'premium';
 
-					    	} else if(in_array($ad->category, $true_categories)){
-					    		$serviceup = 'premium';
-					    	}
+						    	} else if(in_array($ad->category, $true_categories)){
+						    		$serviceup = 'premium';
+						    	}
+						    }
 		
 						?>
 				
