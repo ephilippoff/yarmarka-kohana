@@ -9,6 +9,12 @@ class Controller_Add extends Controller_Template {
 		$json = array();
 		$user = Auth::instance()->get_user();
 
+		if (!$user){
+			$json['error'] = 'Ошибка авторизации. Необходимо очистить `cookie` (куки) браузера.';
+			$this->response->body(json_encode($json));
+			return;
+		}
+
 		if ( ! Request::current()->is_ajax())
 		{
 			//throw new HTTP_Exception_404('only ajax requests allowed');
