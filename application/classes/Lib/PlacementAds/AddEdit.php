@@ -117,6 +117,8 @@ class Lib_PlacementAds_AddEdit {
 		//затычка на основной форме подачи, пока город берется из кладра
 		if (!$params->city_id AND $params->city_kladr_id)
 			$params->city_id = ORM::factory('City')->where("kladr_id","=",$params->city_kladr_id)->find()->id;
+		if ($params->city_id AND !$params->city_kladr_id)
+			$params->city_kladr_id = ORM::factory('City',$params->city_id)->kladr_id;
 
 		if ($object_id > 0)
 		{
@@ -201,7 +203,7 @@ class Lib_PlacementAds_AddEdit {
 		$validation = &$this->validation;
 
 		$validation = Validation::factory((array) $this->params)
-			//->rule('city_kladr_id', 'not_empty')
+			->rule('city_kladr_id', 'not_empty', array(':value', "Город"))
 			->rule('contact', 'not_empty', array(':value', "Контактное лицо"))
 			->rule('email', 'email');	
 
