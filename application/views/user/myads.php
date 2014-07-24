@@ -212,7 +212,7 @@
 	                                        <? else : //не в архиве ?>
 
 
-	                                            <?php if (empty($linked_user) AND $serviceup == 'default') : ?>
+	                                            <?php if (empty($linked_user)) : ?>
 			                                            <?php if ($ad->get_service_up_timestamp() < time()) : // Получаем дату, когда можно поднять объявление?>
 			                                                <li class="">
 			                                                    <a title="Поднять объявление в общем списке" href="" class="btn-funcmenu  " id="service-up-<?=$ad->id?>" onClick="service_up(<?=$ad->id?>, this); return false;">
@@ -373,9 +373,9 @@
 										<?php if (!$ad->is_bad and !$ad->in_archive and $ad->is_published) : ?>
 													<li><a title="Воспользоваться услугами" href="<?=CI::site('billing/services_for_ads/'.$ad->id)?>" class="btn-pmenu "><i class="ico services"></i><span>Услуги</span></a></li>
 													<li><a title="Подать в газету" href="<?=CI::site('billing/pay_service/34/'.$ad->id)?>" class="btn-pmenu "><i class="ico yarmarka"></i><span>В газету</span></a></li>
-													<? if ($serviceup == 'premium'): ?>
+													<? //if ($serviceup == 'premium'): ?>
 														<li><a title="Премиум" href="<?=CI::site('billing/pay_service/'.$service_premium->id.'/'.$ad->id)?>" class="btn-pmenu "><i class="ico premium"></i><span>Премиум</span></a></li>
-													<? endif ?>
+													<? //endif ?>
 													<li><a title="Текстовая ссылка" href="<?=CI::site('billing/pay_service/'.$service_promo_link->id.'/'.$ad->id)?>" class="btn-pmenu "><i class="ico pl"></i><span>Текст. ссылка</span></a></li>
 													<li><a title="Графическая ссылка" href="<?=CI::site('billing/pay_service/'.$service_promo_link_bg->id.'/'.$ad->id)?>" class="btn-pmenu "><i class="ico plg"></i><span>Графич. ссылка</span></a></li>													
 										<?php endif; ?>
