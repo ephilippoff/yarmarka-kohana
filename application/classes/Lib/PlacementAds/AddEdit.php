@@ -115,12 +115,6 @@ class Lib_PlacementAds_AddEdit {
 		$user 			= Auth::instance()->get_user();
 		$user_id 	    = $user->id;
 
-		//затычка на основной форме подачи, пока город берется из кладра
-		if (!$params->city_id AND $params->city_kladr_id)
-			$params->city_id = ORM::factory('City')->where("kladr_id","=",$params->city_kladr_id)->find()->id;
-		if ($params->city_id AND !$params->city_kladr_id)
-			$params->city_kladr_id = ORM::factory('City',$params->city_id)->kladr_id;
-
 		if ($object_id > 0)
 		{
 			$object = ORM::factory('Object', $object_id);
@@ -138,6 +132,12 @@ class Lib_PlacementAds_AddEdit {
 				$this->raise_error('object not found');
 			}
 		}
+
+		//затычка на основной форме подачи, пока город берется из кладра
+		if (!$params->city_id AND $params->city_kladr_id)
+			$params->city_id = ORM::factory('City')->where("kladr_id","=",$params->city_kladr_id)->find()->id;
+		if ($params->city_id AND !$params->city_kladr_id)
+			$params->city_kladr_id = ORM::factory('City',$params->city_id)->kladr_id;
 
 		if ( $category_id > 0) 
 		{ 
