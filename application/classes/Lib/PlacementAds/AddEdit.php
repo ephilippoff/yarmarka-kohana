@@ -555,7 +555,10 @@ class Lib_PlacementAds_AddEdit {
 			$object->author 			= $user->id;
 		}
 		$object->user_text 			= $params->user_text_adv;
-		$object->date_expiration	= $this->lifetime_to_date($params->lifetime);
+		if ( ! $this->is_edit)
+		{
+			$object->date_expiration	= $this->lifetime_to_date($params->lifetime);
+		}
 		$object->geo_loc 			= $location->get_lat_lon_str();
 		$object->location_id		= $location->id;
 
