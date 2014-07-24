@@ -61,6 +61,8 @@ class Object
 		else
 		{
 			$json['error'] = $add->errors;
+			$json['adid']  = $add->object_id;
+			Log::instance()->add(Log::NOTICE, "object: ".$json['adid']." | ".var_dump($json['error']));
 		}
 
 		return $json;

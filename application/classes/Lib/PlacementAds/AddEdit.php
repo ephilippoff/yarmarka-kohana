@@ -12,6 +12,7 @@ class Lib_PlacementAds_AddEdit {
 	public $location;
 	public $signature = NULL;
 	public $original_params;
+	public $is_edit = NULL;
 
 	public $parent_id;
 	public $create_union = FALSE;
