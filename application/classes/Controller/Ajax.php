@@ -363,7 +363,7 @@ class Controller_Ajax extends Controller_Template
 
 		$info = Object::canEdit(Array("object_id" => $object->id));
 
-		if (!$info["code"] == "ok")
+		if ($info["code"] == "ok")
 		{
 			$date_expiration = null;
 
