@@ -163,7 +163,7 @@ class Controller_User extends Controller_Template {
     	$this->assets->js('massload.js');
 
     	
-    	$avail_categories = ORM::factory('User_Settings')->get_by_name($this->user->id, "massload_category")->find_all();
+    	$avail_categories = ORM::factory('User_Settings')->get_by_name($this->user->id, "massload")->find_all();
     	
     	$categories = Array();								
     	foreach($avail_categories as $category)

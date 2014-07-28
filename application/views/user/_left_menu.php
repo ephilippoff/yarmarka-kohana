@@ -72,7 +72,7 @@
 				<li><a href="<?=URL::site('user/newspapers')?>" class="clickable"><i class="ico "></i><span>Газеты</span></a></li>
 				<?php endif; ?>
 
-				<? /* ?>
+				
 
 				<?php if (Request::current()->action() == 'massload') : ?>
 				<li><span class="noclickable"><i class="ico "></i><span><b>Массовая загрузка</b></span></span></li>
@@ -81,6 +81,8 @@
 				<?php endif; ?>
 
 				<?=Request::factory('block/massload_categories')->execute()?>
+
+				<? /* ?>
 
 				<?php if (Request::current()->action() == 'plan') : ?>
 				<li><span class="noclickable"><i class="ico "></i><span><b>Тарифные планы</b></span></span></li>

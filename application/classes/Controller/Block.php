@@ -291,7 +291,7 @@ class Controller_Block extends Controller_Template
 	public function action_massload_categories()
 	{
 		$user = Auth::instance()->get_user();
-		$avail_categories = ORM::factory('User_Settings')->get_by_name($user->id, "massload_category")->find_all();
+		$avail_categories = ORM::factory('User_Settings')->get_by_name($user->id, "massload")->find_all();
     	
     	$categories = Array();								
     	foreach($avail_categories as $category)

@@ -5,21 +5,47 @@
 			<?=View::factory('user/_left_menu')?>
 			<section class="p_room-inner">
 				<header><span class="title">Массовая загрузка объявлений</span></header>
-				<div class="p_cont myadd mysub">
+				<div class="p_cont massload">
 					<? if (count($categories)>0): ?>
 						<div id="fn-main-cont" class="cont">
-							<select id="fn-category">
-								<option value>--</option>
-								<? foreach($categories as $key=>$value): ?>
-									<option value="<?=$key?>"><?=$value?></option>
-								<? endforeach; ?>
-							</select>
-							<input type="checkbox" id="fn-ignore_errors"/>Игнорировать ошибки
-							<br/>
-							<input id="fn-userfile-upload" type="button" name="button" value="Загрузить"/>
-							
-							<br/>
-							<textarea id="fn-log-area" style="border:1px solid black;width:500px; height:300px;" readonly="readonly"></textarea>
+							<div class="massload-controlsrow">
+								<div class="massload-category">
+									<select id="fn-category">
+										<option value>--</option>
+										<? foreach($categories as $key=>$value): ?>
+											<option value="<?=$key?>"><?=$value?></option>
+										<? endforeach; ?>
+									</select>
+
+								</div>
+								<div class=" massload-button-load" id="fn-userfile-upload">
+									<div class="button blue">
+										<span>Загрузить</span>
+									</div>
+									
+								</div>								
+							</div>
+							<div class="massload-controlsrow">
+								<div class="massload-hint">
+									Формат загружаемых файлов: *.csv, *.zip;</br>
+									При включенном флаге "Игнорировать ошибки" сохранятся все объявления, в которых не обнаружены ошибки, остальные будут проигнорирвоаны.</br>
+									Подробнее : <a href="#">Помощь по массовой загрузке объявлений</a>
+								</div>
+							</div>
+							<div class="massload-controlsrow massload-checkbox-ingnore-errors">
+								<input type="checkbox" id="fn-ignore_errors"/>
+								<label for="fn-ignore_errors">Игнорировать ошибки
+								</label>
+							</div>
+							<? /*<input id="fn-userfile-upload" type="button" name="button" value="Загрузить"/> */?>
+							<div class="massload-controlsrow massload-textarea">
+								<textarea id="fn-log-area" readonly="readonly"></textarea>
+							</div>	
+							<div class="massload-controlsrow massload-conformities">
+								<ul>
+									<?=Request::factory('block/massload_categories')->execute()?>
+								</ul>
+							</div>						
 						</div>
 					<? else: ?>
 						Услуга массовой загрузки не подключена.

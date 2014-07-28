@@ -93,6 +93,67 @@ class Controller_Admin_Users extends Controller_Admin_Template {
 		));
 	}
 
+	public function action_add_settings()
+	{
+		$this->template->errors = array();
+		$cfg_categories = Kohana::$config->load('massload/bycategory');
+		$categories = Array();
+
+		foreach ($cfg_categories as $name=>$item)
+			$categories[$name] = $item["name"];
+		$this->template->categories = $categories;
+
+		$user_settings = ORM::factory('User_Settings')->order_by("id", "desc")->find_all();
+		$this->template->user_settings =$user_settings;
+
+		if (HTTP_Request::POST === $this->request->method()) 
+		{
+			try 
+			{				
+				$post = $_POST;
+				$post['user_id'] = isset($post['user_id']) ? $post['user_id'] : 0;
+
+				$post['category'] = isset($post['category']) ? $post['category'] : 0;
+
+				$user = ORM::factory('User',(int) $post["user_id"]);
+				if (!$user->loaded())
+				{	
+					$this->template->errors["user_id"] =  "Не верный user_id";
+				} else {
+					ORM::factory('User_Settings')->values($post)
+					->save();	
+					$this->redirect('khbackend/users/add_settings');
+				}
+				
+			} 
+			catch (ORM_Validation_Exception $e) 
+			{
+				$this->template->errors = $e->errors('validation');
+			}
+
+		}
+
+	}
+
+	public function action_delete_settings()
+	{
+		$this->auto_render = FALSE;
+
+		$us = ORM::factory('User_Settings', $this->request->param('id'));
+
+		if ( ! $us->loaded())
+		{
+			throw new HTTP_Exception_404;
+		}
+
+		$us->delete();
+				
+		$this->redirect('khbackend/users/add_settings');
+
+		//$this->response->body(json_encode(array('code' => 200)));
+	
+	}
+
 	public function action_ban()
 	{
 		$user = ORM::factory('User', $this->request->param('id'));

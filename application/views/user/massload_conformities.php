@@ -5,32 +5,43 @@
 			<?=View::factory('user/_left_menu')->set('categories', $categories);?>
 			<section class="p_room-inner">
 				<header><span class="title">Настройка соответствий для массовой загрузки объявлений</span></header>
-				<div class="p_cont myadd mysub">
+				<div class="p_cont massload">
+					
 					<? if (count($categories)>0): ?>
 						<? foreach($forms as $category=>$items): ?>
-									<?=$categories[$category]?></br>
-									<? foreach($forms[$category] as $type=>$values): ?>
-										<?=$values[0]["name"]?></div></br>
-										<table>
-										<? foreach($values as $value=>$conformity): ?>
-											<? if ($value === 0) continue;?>
-											<tr class="fn-row">
-												<td align=right><?=$value?>  = </td>
-												<td>
-													<input class="fn-conformity" type="text" value="<?=$conformity?>" data-ml="<?=$category?>" data-value="<?=$value?>" data-type="<?=$type?>" style="border:1px solid;"/>
-												</td>
-												<td>	
+								<div class="massload-controlsrow massload-head">
+									<b><?=$categories[$category]?></b>
+								</div>
+								<? foreach($forms[$category] as $type=>$values): ?>
+									<div class="massload-controlsrow massload-subhead">
+										<b>Аттрибут:</b> <?=$values[0]["name"]?> (<?=$type?>)
+									</div>
+									<div class="massload-controlsrow massload-table">
+									<table>
+									<? foreach($values as $value=>$conformity): ?>
+										<? if ($value === 0) continue;?>
+										<tr class="fn-row">
+											<td align=right class="massload-td-left"><?=$value?>  = </td>
+											<td>
+												<input class="fn-conformity" type="text" value="<?=$conformity?>" data-ml="<?=$category?>" data-value="<?=$value?>" data-type="<?=$type?>"/>
+											</td>
+											<td>
+												<div class="button blue">	
 													<span class="fn-save">Сохранить</span>
-												</td>
-												<td>	
+												</div>
+											</td>
+											<td>	
+												<div class="button red">
 													<span class="fn-delete">Удалить</span>
-												</td>
-											</tr>
-										<? endforeach; ?>
-										</table>
-										</br></br>
+												</div>
+											</td>
+										</tr>
 									<? endforeach; ?>
+									</table>
+									</div>
+								<? endforeach; ?>
 						<? endforeach; ?>
+
 					<? else: ?>
 						Услуга массовой загрузки не подключена.
 					<? endif; ?>

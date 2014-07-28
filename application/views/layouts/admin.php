@@ -28,6 +28,7 @@
 								<a href="#"  class="dropdown-toggle" data-toggle="dropdown">Users <b class="caret"></b></a>
 								<ul class="dropdown-menu">
 									<li><a href="<?=Url::site('khbackend/users/index')?>">List</a></li>
+									<li><a href="<?=Url::site('khbackend/users/add_settings')?>">Добавить настройку</a></li>
 								</ul>
 							</li>
 						<?php endif; ?>

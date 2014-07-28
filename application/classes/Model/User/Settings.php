@@ -4,6 +4,24 @@ class Model_User_Settings extends ORM {
 
 	protected $_table_name = 'user_settings';
 
+	protected $_belongs_to = array(
+		'user'	=> array('model' => 'User', 'foreign_key' => 'user_id'),
+	);
+
+	public function rules()
+	{
+		return array(
+			'user_id' => array(
+				array('not_empty'),
+			),
+			'name' => array(
+				array('not_empty'),
+			),
+			'value' => array(
+				array('not_empty'),
+			),
+		);
+	}
 	public function sget($user_id)
 	{
 		$return = Array();
