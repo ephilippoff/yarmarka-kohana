@@ -14,7 +14,11 @@
 								</div>
 								<? foreach($forms[$category] as $type=>$values): ?>
 									<div class="massload-controlsrow massload-subhead">
-										<b>Аттрибут:</b> <?=$values[0]["name"]?> (<?=$type?>)
+										<b>Поле:</b> <?=$values[0]["name"]?> 
+											(имя : <?=$type?>; 
+												макс. размер : <?=$cfg["fields"][$type]["maxlength"]?>;
+													обязательное : <?=($cfg["fields"][$type]["required"] ? 'Да' : 'Нет')?>)
+										
 									</div>
 									<div class="massload-controlsrow massload-table">
 									<table>

@@ -205,6 +205,7 @@ class Object
 		{
 			$add->save_city_and_addrress()
 				->prepare_object()
+				->save_external_id()
 				->save_parentid_object();
 
 			$db = Database::instance();

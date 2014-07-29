@@ -3,6 +3,8 @@
 class Massload 
 {
 	const MAX_COUNT_ERRORS = 10;
+	const CONTACT_LENGTH = 10;
+
 	const MARK_ERROR_TAG_OPEN = '&lt;span class="background-gray" &gt;&lt;b&gt;';
 	const MARK_ERROR_TAG_CLOSE = "&lt;/b&gt;&lt;/span&gt;";
 
@@ -144,32 +146,54 @@ class Massload
 			$config_key = new Obj($config["fields"][$key]);
 
 			$valid_info 		= array(':value', $dictionary, $config_key->translate, $i, $value);
-			$valid_info_contact = array(':value', 10 ,$dictionary, $config_key->translate, $i, $value);
+			$valid_info_contact = array(':value', $config_key->maxlength, $dictionary, $config_key->translate, $i, $value);
 			$valid_info_dict 	= array(':value', $config_key->name, $dictionary, $config_key->translate, $i, $value);
 			$valid_info_photo 	= array(':value', $pathtoimage, $config_key->translate, $i, $value);
+			$valid_info_maxlength = array(':value', $config_key->maxlength, $dictionary, $config_key->translate, $i, $value);
 
 			if ($config_key->required) 
 				$validation->rule($key, 'not_empty', $valid_info);
 
-			if ($config_key->type == "city")
+			if ($config_key->type == "city"){
 				$validation->rule($key, 'check_city_value', $valid_info);
+				$validation->rule($key, 'max_length', $valid_info_maxlength);
+			}
 
-			if ($config_key->type == "dict")
+			if ($config_key->type == "dict"){
 				$validation->rule($key, 'check_dictionary_value', $valid_info_dict);
+				$validation->rule($key, 'max_length', $valid_info_maxlength);
+			}
 
 			if ($config_key->type == "contact")
 			{
 				$validation->rule($key, 'check_contact', $valid_info);
+				$validation->rule($key, 'max_length', $valid_info_maxlength);
 			}
 
 			if ($config_key->type == "integer")
 			{
 				$validation->rule($key, 'not_0', $valid_info);
 				$validation->rule($key, 'digit', $valid_info);
+				$validation->rule($key, 'max_length', $valid_info_maxlength);
+			}
+
+			if ($config_key->type == "external_id")
+			{
+				$validation->rule($key, 'not_0', $valid_info);
+				$validation->rule($key, 'digit', $valid_info);
+				$validation->rule($key, 'max_length', $valid_info_maxlength);
+			}
+
+			if ($config_key->type == "textadv")
+			{
+				$validation->rule($key, 'max_length', $valid_info_maxlength);
 			}
 
 			if ($config_key->type == "numeric")
+			{
 				$validation->rule($key, 'numeric', $valid_info);
+				$validation->rule($key, 'max_length', $valid_info_maxlength);
+			}
 
 			if ($config_key->type == "photo")
 				$validation->rule($key, 'check_photo', $valid_info_photo);
@@ -237,14 +261,10 @@ class Massload
 								}
 							} catch (Exception $e){}
 						break;
-					}
-
-					
+					}					
 				break;
-
-				
 				default:
-				# code...
+				
 				break;
 			}
 			$return[$key] = $value;
@@ -316,7 +336,10 @@ class Massload
 	    						$form_dictionary[$name][$element->title] = $user_conform->conformity;
 	    				}
 					}
-				break;				
+				break;	
+				default:
+					$form_dictionary[$name][0] = array("name"=>$fields[$name]["translate"]);
+				break;			
 			}
 		}
 

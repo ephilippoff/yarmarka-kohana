@@ -212,6 +212,7 @@ class Controller_User extends Controller_Template {
 	    $this->template->dictionaries 	= $dictionaries;
 	    $this->template->forms 			= $forms;
     	$this->template->conformities 	= $conformities;
+    	$this->template->cfg 			= $cfg;
 
     }
 

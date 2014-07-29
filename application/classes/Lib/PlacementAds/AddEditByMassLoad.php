@@ -82,6 +82,12 @@ class Lib_PlacementAds_AddEditByMassLoad extends Lib_PlacementAds_AddEdit {
 		return $this;
 	}
 
-
+	function save_external_id()
+	{
+		$object = &$this->object;
+		$params = &$this->params;
+		$object->number = $params->external_id;
+		return $this;
+	}
 
 }
