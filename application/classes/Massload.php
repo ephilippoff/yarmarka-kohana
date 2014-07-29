@@ -3,6 +3,11 @@
 class Massload 
 {
 	const MAX_COUNT_ERRORS = 10;
+	const MARK_ERROR_TAG_OPEN = '&lt;span class="background-gray" &gt;&lt;b&gt;';
+	const MARK_ERROR_TAG_CLOSE = "&lt;/b&gt;&lt;/span&gt;";
+
+	const ROW_ERROR_TAG_OPEN = '&lt;span class="error1" &gt;';
+	const ROW_ERROR_TAG_CLOSE = "&lt;/span&gt;";
 
 	public function checkFile($file, $category, $user_id)
 	{
@@ -19,24 +24,38 @@ class Massload
 
 		$f->forEachRow($filepath, function($row, $i) use ($imagepath, &$errors, $config, &$count, $dictionary){
 
+			$string = join(",", array_values($row));
+
 			$row = Massload::to_assoc_object($row, $config);
+			$row = Massload::clear_row($row);
 
 			if ($row->count() <> count($config["fields"]) )
 			{
 				$errors[] = '(Ошибка стр. '.$i.') Количество полей в строке не соответсвует требованиям для загрузки';
+				$errors[] = $string;
 				return "continue";
 			}
 
 			$validation = Massload::init_validation($row, $i, $config, $dictionary);
 
-			if ( ! $validation->check())
-				$errors = array_merge($errors, array_values($validation->errors('validation/massload'))) ;
+			if ( ! $validation->check()){
+				$errors[] = "</br>======";
+				$validation_errors = $validation->errors('validation/massload');
+				$errors = array_merge($errors, array_values($validation_errors));
+
+				$row_errors = (array) $row;
+				foreach ($validation_errors as $key_err=>$err)
+					$row_errors[$key_err] = Massload::MARK_ERROR_TAG_OPEN.((string) $row->{$key_err}).Massload::MARK_ERROR_TAG_CLOSE;
+
+				$errors[] = join("|", array_values($row_errors));
+			}
 
 			$count++;
 
 			if ($count>Massload::MAX_COUNT_ERRORS)
 			{
-				$errors[] = '(Ошибка) Найдено более '.Massload::MAX_COUNT_ERRORS.' ошибок. Проверка файла остановлена.';
+				$errors[] = "</br>======";
+				$errors[] = 'Найдено более '.Massload::MAX_COUNT_ERRORS.' ошибок. Проверка файла остановлена.';
 				return "break";
 			}
 
@@ -57,6 +76,7 @@ class Massload
 		$f->forRow($pathtofile, $step, $iteration, function($row, $i) use ($pathtoimage, $config, $category_id, &$objects, $dictionary){
 
 			$row = Massload::to_assoc_object($row, $config);
+			$row = Massload::clear_row($row);
 
 			if ($row->count() <> count($config["fields"]) )
 			{
@@ -99,6 +119,13 @@ class Massload
 			$return->{$config_field["name"]} = $value;
 		}
 		return $return;
+	}
+
+	public static function clear_row($row)
+	{
+		foreach ($row as $key=>$value)
+			$row->{$key} = strip_tags($value);
+		return $row;
 	}
 
 	private static function get_field_by_key($array, $key)

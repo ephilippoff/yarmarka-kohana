@@ -39,7 +39,7 @@
 							</div>
 							<? /*<input id="fn-userfile-upload" type="button" name="button" value="Загрузить"/> */?>
 							<div class="massload-controlsrow massload-textarea">
-								<textarea id="fn-log-area" readonly="readonly"></textarea>
+								<p id="fn-log-area"></p>
 							</div>	
 							<div class="massload-controlsrow massload-conformities">
 								<ul>
