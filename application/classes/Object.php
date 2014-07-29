@@ -238,16 +238,19 @@ class Object
 			}
 
 			$add//->send_external_integrations()
-				->send_to_forced_moderation()
-				->send_message();
+				->send_to_forced_moderation();
+				//->send_message();
 
 			$json['object_id'] = $add->object->id;
+			$json['external_id'] = $input_params['external_id'];
 			$json['parent_id'] = $add->parent_id;
+			$json['is_edit'] = $add->is_edit;
 			$json['error'] = $add->errors;
 		}
 		else
 		{
 			$json['error'] = $add->errors;
+			$json['external_id'] = $input_params['external_id'];
 		}
 
 		return $json;

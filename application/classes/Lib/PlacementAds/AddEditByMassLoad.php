@@ -2,6 +2,25 @@
 
 class Lib_PlacementAds_AddEditByMassLoad extends Lib_PlacementAds_AddEdit {
 
+	function init_object_and_mode()
+	{
+		$params = &$this->params;
+		$object = &$this->object;
+		$user = &$this->user;
+		if ($params->external_id)
+		{
+			$object = ORM::factory('Object')
+						->where("author","=",$user->id)
+						->where("number","=",$params->external_id)
+						->find();
+			if ($object->loaded())
+			{
+				$this->is_edit = TRUE;
+			}
+		}
+		return $this;
+	}
+
 	function save_city_and_addrress()
 	{
 		$params = &$this->params;

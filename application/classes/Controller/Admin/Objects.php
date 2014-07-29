@@ -23,6 +23,7 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 			->with_used_service(41)
 			->where('source_id', '=', 1)
 			->where('active', '=', 1)
+			->where('is_union','IS', NULL)
 			->where_open()
 				->where('type_tr', 'IS', NULL)
 				->or_where('type_tr', '=', 1)
