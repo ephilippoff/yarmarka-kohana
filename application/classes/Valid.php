@@ -41,5 +41,20 @@ class Valid extends Kohana_Valid {
 		return intval($return) > 0;
 	}
 
+	public static function check_photo($link, $path)
+	{
+		$type = NULL;
+		if (filter_var($link, FILTER_VALIDATE_URL))
+			$type = 'url';
+		elseif (is_dir($path.$link."/"))
+			$type = 'dir';
+		elseif ( file_exists($path.$link) )
+			$type = 'file';
+		elseif ( $link == "0" OR $link == "" )
+			$type = 'null';
+
+		return isset($type);
+	}
+
 	
 }

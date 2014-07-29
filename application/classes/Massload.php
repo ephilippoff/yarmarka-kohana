@@ -36,7 +36,7 @@ class Massload
 				return "continue";
 			}
 
-			$validation = Massload::init_validation($row, $i, $config, $dictionary);
+			$validation = Massload::init_validation($row, $i, $config, $dictionary, $imagepath);
 
 			if ( ! $validation->check()){
 				$errors[] = "</br>======";
@@ -83,7 +83,7 @@ class Massload
 				return "continue";
 			}
 
-			$validation = Massload::init_validation($row, $i, $config, $dictionary);
+			$validation = Massload::init_validation($row, $i, $config, $dictionary, $pathtoimage);
 			if (!$validation->check()) return "continue";	
 			
 
@@ -134,7 +134,7 @@ class Massload
 		return $values[$key];
 	}
 
-	public static function init_validation($row, $i, $config, $dictionary)
+	public static function init_validation($row, $i, $config, $dictionary, $pathtoimage)
 	{
 		$validation = Validation::factory((array) $row);
 
@@ -146,6 +146,7 @@ class Massload
 			$valid_info 		= array(':value', $dictionary, $config_key->translate, $i, $value);
 			$valid_info_contact = array(':value', 10 ,$dictionary, $config_key->translate, $i, $value);
 			$valid_info_dict 	= array(':value', $config_key->name, $dictionary, $config_key->translate, $i, $value);
+			$valid_info_photo 	= array(':value', $pathtoimage, $config_key->translate, $i, $value);
 
 			if ($config_key->required) 
 				$validation->rule($key, 'not_empty', $valid_info);
@@ -169,6 +170,9 @@ class Massload
 
 			if ($config_key->type == "numeric")
 				$validation->rule($key, 'numeric', $valid_info);
+
+			if ($config_key->type == "photo")
+				$validation->rule($key, 'check_photo', $valid_info_photo);
 
 			
 
