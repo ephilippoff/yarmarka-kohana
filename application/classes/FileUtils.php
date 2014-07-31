@@ -3,7 +3,7 @@
 class FileUtils
 {
 	const FILE_PATH = '/uploads';
-	const max_uploaded_size = 5242880;
+	const max_uploaded_size = 25242880;
 
 	public function save(array $_file)
 	{

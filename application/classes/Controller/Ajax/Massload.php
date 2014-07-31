@@ -41,6 +41,13 @@ class Controller_Ajax_Massload extends Controller_Template {
 
 	public function action_checkfile()
 	{
+
+		/*pathtofile = '/home/avagapov/WEB/yarmarka/yarmarka/uploads/111.xml';
+		
+
+		$avito = new Massload_Avito;
+		$avito->convert_avito_file($pathtofile);*/
+
 		$category_id 	= $this->request->post("category_id");
 		$ignore_errors 	= (int) $this->request->post("ignore_errors");
 
@@ -56,7 +63,7 @@ class Controller_Ajax_Massload extends Controller_Template {
 			$this->json['critError'] = 'Не указана категория';
 			return;
 		}
-
+		
 		$ml = new Massload();
 
 		try {

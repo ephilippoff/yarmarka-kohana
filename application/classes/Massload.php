@@ -24,19 +24,16 @@ class Massload
 
 		$count = 0;
 
-		$f->forEachRow($filepath, function($row, $i) use ($imagepath, &$errors, $config, &$count, $dictionary){
+		$f->forEachRow($config, $filepath, function($row, $i) use ($imagepath, &$errors, $config, &$count, $dictionary){
 
-			$string = join(",", array_values($row));
+			//$string = join(",", array_values($row));
 
-			$row = Massload::to_assoc_object($row, $config);
-			$row = Massload::clear_row($row);
-
-			if ($row->count() <> count($config["fields"]) )
+			/*if ($row->count() <> count($config["fields"]) )
 			{
 				$errors[] = '(Ошибка стр. '.$i.') Количество полей в строке не соответсвует требованиям для загрузки';
-				$errors[] = $string;
+				//$errors[] = $string;
 				return "continue";
-			}
+			}*/
 
 			$validation = Massload::init_validation($row, $i, $config, $dictionary, $imagepath);
 
@@ -50,11 +47,11 @@ class Massload
 					$row_errors[$key_err] = Massload::MARK_ERROR_TAG_OPEN.((string) $row->{$key_err}).Massload::MARK_ERROR_TAG_CLOSE;
 
 				$errors[] = join("|", array_values($row_errors));
+				
 			}
-
 			$count++;
 
-			if ($count>Massload::MAX_COUNT_ERRORS)
+			if (count($errors)>Massload::MAX_COUNT_ERRORS)
 			{
 				$errors[] = "</br>======";
 				$errors[] = 'Найдено более '.Massload::MAX_COUNT_ERRORS.' ошибок. Проверка файла остановлена.';
@@ -75,15 +72,12 @@ class Massload
 		@list($dictionary, $form_dictionary) = self::get_dictionary($config, $user_id, $config["category"]);
 		$category_id = $config["id"];
 
-		$f->forRow($pathtofile, $step, $iteration, function($row, $i) use ($pathtoimage, $config, $category_id, &$objects, $dictionary){
+		$f->forRow($config, $pathtofile, $step, $iteration, function($row, $i) use ($pathtoimage, $config, $category_id, &$objects, $dictionary){
 
-			$row = Massload::to_assoc_object($row, $config);
-			$row = Massload::clear_row($row);
-
-			if ($row->count() <> count($config["fields"]) )
+			/*if ($row->count() <> count($config["fields"]) )
 			{
 				return "continue";
-			}
+			}*/
 
 			$validation = Massload::init_validation($row, $i, $config, $dictionary, $pathtoimage);
 			if (!$validation->check()) return "continue";	
@@ -113,29 +107,6 @@ class Massload
 		return Kohana::$config->load('massload/bycategory.'.$category);
 	}
 
-	public static function to_assoc_object($row, $config)
-	{
-		$return = new Obj();
-		foreach((array) $row as $key=>$value)
-		{	$config_field = self::get_field_by_key($config, $key);
-			$return->{$config_field["name"]} = $value;
-		}
-		return $return;
-	}
-
-	public static function clear_row($row)
-	{
-		foreach ($row as $key=>$value)
-			$row->{$key} = strip_tags($value);
-		return $row;
-	}
-
-	private static function get_field_by_key($array, $key)
-	{
-		$values = array_values($array["fields"]); 
-		return $values[$key];
-	}
-
 	public static function init_validation($row, $i, $config, $dictionary, $pathtoimage)
 	{
 		$validation = Validation::factory((array) $row);
@@ -143,6 +114,8 @@ class Massload
 		$rules = Array();
 		foreach ($row as $key=>$value)
 		{
+			if (!array_key_exists($key, $config["fields"])) continue;
+
 			$config_key = new Obj($config["fields"][$key]);
 
 			$valid_info 		= array(':value', $dictionary, $config_key->translate, $i, $value);
@@ -173,7 +146,7 @@ class Massload
 			if ($config_key->type == "integer")
 			{
 				$validation->rule($key, 'not_0', $valid_info);
-				$validation->rule($key, 'digit', $valid_info);
+				//$validation->rule($key, 'digit', $valid_info);
 				$validation->rule($key, 'max_length', $valid_info_maxlength);
 			}
 
@@ -211,6 +184,7 @@ class Massload
 		$return = Array();
 		foreach($record_fields as $key=>$value)
 		{
+			if (!array_key_exists($key, $config["fields"])) continue;
 			$type = $config["fields"][$key]['type'];
 			switch ($type) {
 				case 'city':
@@ -225,43 +199,49 @@ class Massload
 				case 'integer':
 					$key = "param_".ORM::factory('Reference')->by_category_and_attribute($category_id, $key);					
 				break;
-				case 'photo':			
-					$filename = $pathtoimage.$value;
-					if (filter_var($filename, FILTER_VALIDATE_URL))
-						$type = 'url';
-					elseif (is_dir($filename."/"))
-						$type = 'dir';
-					elseif ( file_exists($filename) )
-						$type = 'file';
+				case 'photo':	
+					$files = explode(";", $value);	
+					$key = "userfile";
+					$values = Array();
+					foreach($files as $value){	
+						$filename = $pathtoimage.$value;
+						if (filter_var($filename, FILTER_VALIDATE_URL))
+							$type = 'url';
+						elseif (is_dir($filename."/"))
+							$type = 'dir';
+						elseif ( file_exists($filename) )
+							$type = 'file';
 
-					switch ($type) {
-						case 'file':						
-							$key = "userfile";					
-							$value = Array( self::save_photo($filename, $value));
-						break;
-						
-						case 'dir':
-							$files = glob($filename.'/*.{jpg,png,gif,bmp}', GLOB_BRACE);
-							$key = "userfile";
-							$value = Array();
-							foreach($files as $file) {	
-								try {							
-									$value[] = self::save_photo($file, $file);
-								} catch (Exception $e) {}
-							}
-						break;
-
-						case 'url':		
-							$tmp = tempnam("/tmp", "imgurl");
-							try {
-								if (copy($value, $tmp))
-								{				
-									$key = "userfile";					
-									$value = Array( self::save_photo($tmp, $tmp));
+						switch ($type) {
+							case 'file':						
+								$key = "userfile";					
+								$values[] = self::save_photo($filename, $value);
+							break;
+							
+							case 'dir':
+								$files = glob($filename.'/*.{jpg,png,gif,bmp}', GLOB_BRACE);
+								$key = "userfile";
+								//$value = Array();
+								foreach($files as $file) {	
+									try {							
+										$values[] = self::save_photo($file, $file);
+									} catch (Exception $e) {}
 								}
-							} catch (Exception $e){}
-						break;
-					}					
+							break;
+
+							case 'url':		
+								$tmp = tempnam("/tmp", "imgurl");
+								try {
+									if (copy($value, $tmp))
+									{				
+										$key = "userfile";					
+										$values[] = self::save_photo($tmp, $tmp);
+									}
+								} catch (Exception $e){}
+							break;
+						}	
+					}	
+					$value = $values;			
 				break;
 				default:
 				

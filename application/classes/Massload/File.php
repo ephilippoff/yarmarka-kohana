@@ -6,7 +6,7 @@ class Massload_File
 	const ZIP = "zip";
 	const CSVSEPARATOR = ",";
 
-	private static $valid_extension = Array("csv", "zip");
+	private static $valid_extension = Array("csv", "zip", "xml");
 
 	public function init($file, $user_id)
 	{	
@@ -71,14 +71,23 @@ class Massload_File
 		return fclose($file_instance);
 	}
 
-	public static function forEachRow($pathtofile, $callback)
+	public static function forEachRow($config, $pathtofile, $callback)
 	{
+		$ext = File::ext_by_mime(mime_content_type($pathtofile));
+		if ($ext == "xml"){
+			Massload_FileXml::forEachRow($config, $pathtofile, $callback);
+			return;
+		}
+
 		$file = self::openFile($pathtofile);
+
 		$i = 0;
 		while ( !feof($file) )
 		{
-
-			$return = $callback(fgetcsv($file, self::CSVSEPARATOR), $i);
+			$row = fgetcsv($file, self::CSVSEPARATOR);
+			$row = self::to_assoc_object($row, $config);
+			$row = self::clear_row($row);
+			$return = $callback($row, $i);
 			if ($return == 'break') break;
 			if ($return == 'continue') continue;
 			
@@ -87,8 +96,14 @@ class Massload_File
 		self::closeFile($file);
 	}
 
-	public static function forRow($pathtofile, $step, $iteration, $callback)
+	public static function forRow($config, $pathtofile, $step, $iteration, $callback)
 	{
+		$ext = File::ext_by_mime(mime_content_type($pathtofile));
+		if ($ext == "xml"){
+			Massload_FileXml::forRow($config, $pathtofile, $step, $iteration, $callback);
+			return;
+		}
+
 		$file = self::openFile($pathtofile);
 
 		for ($i = 0; $i<$iteration*$step; $i++)
@@ -97,13 +112,38 @@ class Massload_File
 		while ($i<$iteration*$step+$step)
 		{
 			$i++;
-
-			$return = $callback(fgetcsv($file, self::CSVSEPARATOR), $i);
+			$row = fgetcsv($file, self::CSVSEPARATOR);
+			$row = self::to_assoc_object($row, $config);
+			$row = self::clear_row($row);
+			$return = $callback($row, $i);
 			if ($return == 'break') break;
 			if ($return == 'continue') continue;
 			
 			
 		}
 		self::closeFile($file);
+	}
+
+	public static function to_assoc_object($row, $config)
+	{
+		$return = new Obj();
+		foreach((array) $row as $key=>$value)
+		{	$config_field = self::get_field_by_key($config, $key);
+			$return->{$config_field["name"]} = $value;
+		}
+		return $return;
+	}
+
+	public static function clear_row($row)
+	{
+		foreach ($row as $key=>$value)
+			$row->{$key} = strip_tags($value);
+		return $row;
+	}
+
+	private static function get_field_by_key($array, $key)
+	{
+		$values = array_values($array["fields"]); 
+		return $values[$key];
 	}
 }
