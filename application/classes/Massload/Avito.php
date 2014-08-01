@@ -58,11 +58,11 @@ class Massload_Avito
 		foreach($files as $key=>$value)
 		{
 			$dirname = pathinfo($filepath, PATHINFO_DIRNAME);
-			$extension = pathinfo($filepath, PATHINFO_EXTENSION);
+			$extension = (pathinfo($filepath, PATHINFO_EXTENSION)) ? ".".pathinfo($filepath, PATHINFO_EXTENSION):"";
 			$filename = pathinfo($filepath, PATHINFO_FILENAME);
 
 			$new_filename = $key."_".$filename;
-			$new_file_path = $dirname."/".$new_filename.".".$extension;
+			$new_file_path = $dirname."/".$new_filename.$extension;
 			$save = $value->save($new_file_path);		
 			if ($save)
 				$return[$key] = $new_file_path;

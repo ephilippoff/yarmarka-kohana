@@ -42,7 +42,7 @@ class Task_Object_MassloadAvito extends Minion_Task
 			@list($new_filepath, $imagepath, $errors, $count) = $ml->checkFile($_file, $category, $user->id);
 
 			Minion_CLI::write('File after check. Count Errors :'.Minion_CLI::color(count($errors), 'cyan'));
-			Minion_CLI::write('File after check. Errors :'.Minion_CLI::color(Debug::vars($errors), 'red'));
+			//Minion_CLI::write('File after check. Errors :'.Minion_CLI::color(Debug::vars($errors), 'red'));
 			Minion_CLI::write('File after check. Count Adverts :'.Minion_CLI::color($count, 'cyan'));
 
 			$iteration = round($count/self::STEP);
