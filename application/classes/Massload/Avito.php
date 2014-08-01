@@ -29,21 +29,25 @@ class Massload_Avito
 				$root = $dom->documentElement;
 			}
 
+
 			$images = Array();
-			foreach ($row->images->Image as $image)
-			{
-				$attributes = $image->attributes();
-				$images[] = (string) $attributes["url"][0];
+			if (property_exists($row, "Images")){
+				foreach ($row->Images->Image as $image)
+				{
+					$attributes = $image->attributes();
+					$images[] = (string) $attributes["url"][0];
+				}
 			}
 
 			$row = new Obj((array) $row);
-			$row->images = $images;
-
+			unset($row->Images);
+			$row->Images = $images;
 			$converted_row = Massload_Avito::convert_avito_row($category, $row);
 
 			$converted_row = Massload_Avito::format_values($converted_row);
 
 			$item = Massload_Avito::generate_valid_xml_from_array($converted_row, "Ad", "Image");
+
 
 			$tpl = new DOMDocument;
 			$tpl->loadXml($item);
@@ -58,8 +62,10 @@ class Massload_Avito
 			$filename = pathinfo($filepath, PATHINFO_FILENAME);
 
 			$new_filename = $key."_".$filename;
-			$new_file_path = $return[] = $dirname."/".$new_filename.".".$extension;
-			$value->save($new_file_path);		
+			$new_file_path = $dirname."/".$new_filename.".".$extension;
+			$save = $value->save($new_file_path);		
+			if ($save)
+				$return[$key] = $new_file_path;
 		}
 		return $return;
 	}
@@ -141,7 +147,7 @@ class Massload_Avito
 	{
 		foreach ($row as $key=>$value)
 		{ 
-			if (!is_array($value))
+			if ($key <> "images")
 				$row->{$key} = strip_tags($value);
 		}
 		return $row;
@@ -154,6 +160,12 @@ class Massload_Avito
 
 		if (substr($row->contact_1_value, 0,1) == "8"  and !Valid::email($row->contact_1_value))
 			$row->contact_1_value =  substr($row->contact_1_value, 1);
+
+		if (substr($row->contact_0_value, 0,2) == "+7" and !Valid::email($row->contact_0_value))
+			$row->contact_0_value =  substr($row->contact_0_value, 2);
+
+		if (substr($row->contact_1_value, 0,2) == "+7"  and !Valid::email($row->contact_1_value))
+			$row->contact_1_value =  substr($row->contact_1_value, 2);
 		return $row;
 	}
 

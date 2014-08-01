@@ -51,12 +51,12 @@ class Massload
 			}
 			$count++;
 
-			if (count($errors)>Massload::MAX_COUNT_ERRORS)
+			/*if (count($errors)>Massload::MAX_COUNT_ERRORS)
 			{
 				$errors[] = "</br>======";
 				$errors[] = 'Найдено более '.Massload::MAX_COUNT_ERRORS.' ошибок. Проверка файла остановлена.';
 				return "break";
-			}
+			}*/
 
 		});
 
@@ -203,16 +203,17 @@ class Massload
 					$files = explode(";", $value);	
 					$key = "userfile";
 					$values = Array();
+					$type_file = "";
 					foreach($files as $value){	
 						$filename = $pathtoimage.$value;
-						if (filter_var($filename, FILTER_VALIDATE_URL))
-							$type = 'url';
+						if (filter_var($value, FILTER_VALIDATE_URL))
+							$type_file = 'url';
 						elseif (is_dir($filename."/"))
-							$type = 'dir';
+							$type_file = 'dir';
 						elseif ( file_exists($filename) )
-							$type = 'file';
+							$type_file = 'file';
 
-						switch ($type) {
+						switch ($type_file) {
 							case 'file':						
 								$key = "userfile";					
 								$values[] = self::save_photo($filename, $value);
@@ -229,18 +230,27 @@ class Massload
 								}
 							break;
 
-							case 'url':		
+							case 'url':	
+									
 								$tmp = tempnam("/tmp", "imgurl");
 								try {
 									if (copy($value, $tmp))
-									{				
+									{
+
 										$key = "userfile";					
 										$values[] = self::save_photo($tmp, $tmp);
+
 									}
-								} catch (Exception $e){}
+									
+
+								} catch (Exception $e){
+									Log::instance()->add(Log::NOTICE, "error:".$e->getMessage());	
+								}
+								//Log::instance()->add(Log::NOTICE, "filesize:".filesize($tmp));		
 							break;
 						}	
 					}	
+
 					$value = $values;			
 				break;
 				default:
@@ -255,7 +265,6 @@ class Massload
 
 	private static function save_photo($filepath, $value)
 	{
-		$file = fopen($filepath, "r");
 		$_file = Array(
 				'tmp_name' => $filepath,
 				'size' => filesize($filepath),
