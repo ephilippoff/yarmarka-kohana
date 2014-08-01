@@ -54,9 +54,12 @@ class Task_Object_MassloadAvito extends Minion_Task
 				Minion_CLI::write("Loading...");
 				$data =  $ml->saveStrings($new_filepath, $imagepath, $category, self::STEP, $i, $user->id);
 				foreach ($data as $advert){
-					$object_id = ' object_id:'.Minion_CLI::color($advert["object_id"], 'cyan');
-					$parent_id = ' parent_id:'.Minion_CLI::color($advert["parent_id"], 'cyan');
-					$is_edit = ' is_edit:'.Minion_CLI::color($advert["is_edit"], 'cyan');
+					$object_id = $parent_id = $is_edit = "";
+					if (array_key_exists("object_id", $advert)){
+						$object_id = ' object_id:'.Minion_CLI::color($advert["object_id"], 'cyan');
+						$parent_id = ' parent_id:'.Minion_CLI::color($advert["parent_id"], 'cyan');
+						$is_edit = ' is_edit:'.Minion_CLI::color($advert["is_edit"], 'cyan');
+					}
 					$error = ' error:'.Minion_CLI::color($advert["error"], 'cyan');
 					Minion_CLI::write($object_id.$parent_id.$is_edit.$error);
 				}
