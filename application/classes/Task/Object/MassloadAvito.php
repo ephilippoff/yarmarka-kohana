@@ -60,7 +60,7 @@ class Task_Object_MassloadAvito extends Minion_Task
 						$parent_id = ' parent_id:'.Minion_CLI::color($advert["parent_id"], 'cyan');
 						$is_edit = ' is_edit:'.Minion_CLI::color($advert["is_edit"], 'cyan');
 					}
-					$error = ' error:'.Minion_CLI::color($advert["error"], 'cyan');
+					$error = ' error:'.Minion_CLI::color(var_dump($advert["error"]), 'cyan');
 					Minion_CLI::write($object_id.$parent_id.$is_edit.$error);
 				}
 			}
