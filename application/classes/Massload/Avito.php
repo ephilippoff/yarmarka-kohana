@@ -169,7 +169,7 @@ class Massload_Avito
 			$row->contact_1_value =  substr($row->contact_1_value, 2);
 
 		if (!$row->contact_0_value)
-			$row->contact_0_value = "79221111111";
+			$row->contact_0_value = "9221111111";
 
 		if (!$row->contact)
 			$row->contact = "ФИО";
