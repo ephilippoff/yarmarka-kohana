@@ -155,6 +155,7 @@ class Massload_Avito
 
 	public static function format_contacts($row)
 	{
+
 		if (substr($row->contact_0_value, 0,1) == "8" and !Valid::email($row->contact_0_value))
 			$row->contact_0_value =  substr($row->contact_0_value, 1);
 
@@ -166,6 +167,13 @@ class Massload_Avito
 
 		if (substr($row->contact_1_value, 0,2) == "+7"  and !Valid::email($row->contact_1_value))
 			$row->contact_1_value =  substr($row->contact_1_value, 2);
+
+		if (!$row->contact_0_value)
+			$row->contact_0_value = "79221111111";
+
+		if (!$row->contact)
+			$row->contact = "ФИО";
+
 		return $row;
 	}
 
