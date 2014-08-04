@@ -165,11 +165,13 @@ class Massload_Avito
 		if (!$row->contact_0_value) {
 			$i = 0;
 			foreach($contacts as $contact){
-				$row->{"contact_".$i."_value"} = $contact->contact->contact_clear;
-				$i++;
+				if ($contact->contact->contact_clear){
+					$row->{"contact_".$i."_value"} = $contact->contact->contact_clear;
+					$i++;
+				}
 			}
 		}
-
+	Log::instance()->add(Log::NOTICE, Debug::vars($contacts));
 		$num_prefixes = array("+7","8");
 
 		if (in_array(substr($row->contact_0_value, 0,1), $num_prefixes) and !Valid::email($row->contact_0_value))
