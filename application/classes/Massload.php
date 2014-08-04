@@ -82,14 +82,17 @@ class Massload
 			}
 		});
 
-		$sub = DB::select('object_id')->from('object_massload')
+		$sub = DB::select('external_id')->from('object_massload')
 						->join("massload", "left")
 							->on("massload.id","=","massload_id")
 						->where("path","=",$filepath)
 						->where("user_id","=",$user_id);
 
 		ORM::factory('Object')
-				->where('id', 'NOT IN', $sub)
+				->where_open()
+				->where('ext', 'NOT IN', $sub)
+					->or_where('number', 'IS', NULL)
+				->where_close()
 				->where('author', '=', $user_id)
 				->where('category','=', $config["id"])
 				->set('is_published', 0)
