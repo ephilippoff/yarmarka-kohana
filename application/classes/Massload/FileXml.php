@@ -48,11 +48,13 @@ class Massload_FileXml extends Massload_File
 			$row = new Obj((array) $file->Ad->{$i});
 
 			$images = Array();
-			foreach ($file->Ad->{$i}->images->Image as $image)
-			{
-				$attributes = $image->attributes();
-				$images[] = (string) $attributes["url"][0];
-			}	
+			if (property_exists($file->Ad->{$i}, "images")){
+				foreach ($file->Ad->{$i}->images->Image as $image)
+				{
+					$attributes = $image->attributes();
+					$images[] = (string) $attributes["url"][0];
+				}	
+			}
 			$row = self::clear_row($row);
 			$row->images = join(";", $images);
 			$return = $callback($row, $i);

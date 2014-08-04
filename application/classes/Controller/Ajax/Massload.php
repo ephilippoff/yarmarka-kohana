@@ -124,6 +124,8 @@ class Controller_Ajax_Massload extends Controller_Template {
 			$cf = ORM::factory('User_Conformities')
 						->where('type', '=', $response->type)
 						->where('value', '=', $response->value)
+						->where('massload', '=', $response->massload)
+						->where('user_id', '=', $user->id)
 						->find();
 			$cf->user_id  	= $user->id;
 			$cf->massload  	= $response->massload;
