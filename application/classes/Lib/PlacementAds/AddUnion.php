@@ -189,7 +189,6 @@ class Lib_PlacementAds_AddUnion extends Lib_PlacementAds_AddEdit {
 			{
 				$obj = ORM::factory('Object', $item);	
 				$obj->parent_id = $object->id;
-				$obj->action 	= $object->action;
 				$obj->update();
 			}
 		}
@@ -234,6 +233,7 @@ class Lib_PlacementAds_AddUnion extends Lib_PlacementAds_AddEdit {
 		$data = ORM::factory('Object', $object->id);
 		$data->is_union  		= $count;
 		$data->title 	 		= $object_source->title;
+		$data->action 	 		= $object_source->action;
 		$data->user_text 		= $price_info;
 		$data->main_image_id 	= $main_image_id;
 		$data->update();
