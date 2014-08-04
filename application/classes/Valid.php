@@ -41,7 +41,7 @@ class Valid extends Kohana_Valid {
 			$return = (int) ORM::factory('Contact_Type')->detect_contact_type_massload(Text::clear_phone_number($number));
 		}
 		if ($return == 1 OR $return == 2){
-			if (strlen(Text::clear_phone_number($number)) <> 10)
+			if (strlen(Text::clear_phone_number($number)) <> 11)
 				$return = 0;
 		}
 		return intval($return) > 0;

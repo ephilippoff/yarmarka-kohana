@@ -155,24 +155,30 @@ class Massload_Avito
 
 	public static function format_contacts($row)
 	{
+		$user = Auth::instance()->get_user();
+		$contacts = ORM::factory('User_Contact')
+						->where("user_id","=", $user->id)
+						->limit(2)
+						->cached(Date::HOUR)
+						->find_all();
 
-		if (substr($row->contact_0_value, 0,1) == "8" and !Valid::email($row->contact_0_value))
-			$row->contact_0_value =  substr($row->contact_0_value, 1);
+		if (!$row->contact_0_value) {
+			$i = 0;
+			foreach($contacts as $contact){
+				$row->{"contact_".$i."_value"} = $contact->contact->contact_clear;
+				$i++;
+			}
+		}
 
-		if (substr($row->contact_1_value, 0,1) == "8"  and !Valid::email($row->contact_1_value))
-			$row->contact_1_value =  substr($row->contact_1_value, 1);
+		if (in_array(substr($row->contact_0_value, 0,1), array("+7","8")) and !Valid::email($row->contact_0_value))
+			$row->contact_0_value =  substr_replace($row->contact_0_value, "7", 0, 1);
 
-		if (substr($row->contact_0_value, 0,2) == "+7" and !Valid::email($row->contact_0_value))
-			$row->contact_0_value =  substr($row->contact_0_value, 2);
-
-		if (substr($row->contact_1_value, 0,2) == "+7"  and !Valid::email($row->contact_1_value))
-			$row->contact_1_value =  substr($row->contact_1_value, 2);
-
-		if (!$row->contact_0_value)
-			$row->contact_0_value = "9221111111";
+		if (in_array(substr($row->contact_1_value, 0,1), array("+7","8")) and !Valid::email($row->contact_1_value))
+			$row->contact_1_value =  substr_replace($row->contact_1_value, "7", 0, 1);
+	
 
 		if (!$row->contact)
-			$row->contact = "ФИО";
+			$row->contact = $user->org_name;
 
 		return $row;
 	}

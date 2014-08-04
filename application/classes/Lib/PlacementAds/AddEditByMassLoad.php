@@ -57,8 +57,10 @@ class Lib_PlacementAds_AddEditByMassLoad extends Lib_PlacementAds_AddEdit {
 			{
 				$contact_type 	= ORM::factory('Contact_Type');
 				$value = trim($this->params->{'contact_'.$matches[1].'_value'});
-				$value = "7".$value;
-				$type = $contact_type->detect_contact_type( Text::clear_phone_number($value) );
+				if (Valid::email($value))
+					$type = 5;
+				else
+					$type = $contact_type->detect_contact_type( Text::clear_phone_number($value) );
 
 				if ($value)
 				{
