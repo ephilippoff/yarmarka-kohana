@@ -185,6 +185,7 @@ class Massload
 		foreach($record_fields as $key=>$value)
 		{
 			if (!array_key_exists($key, $config["fields"])) continue;
+			$urls   = Array();
 			$type = $config["fields"][$key]['type'];
 			switch ($type) {
 				case 'city':
@@ -231,7 +232,21 @@ class Massload
 							break;
 
 							case 'url':	
-									
+								$urls[] = array("title"=>$record_fields["external_id"], "url"=>$value);
+								if (array_key_exists("external_id", $record_fields))
+								{
+									$oa = ORM::factory('Object_Attachment')
+										->where("title","=",$record_fields["external_id"])
+										->where("url","=",$value)
+										->find();
+									if ($oa->loaded())
+									{
+										$key = "userfile";					
+										$values[] = $oa->filename;
+										break;
+									}
+
+								}
 								$tmp = tempnam("/tmp", "imgurl");
 								try {
 									if (copy($value, $tmp))
@@ -258,6 +273,9 @@ class Massload
 				break;
 			}
 			$return[$key] = $value;
+			if (count($urls)>0){
+				$return["userfile_urls"] = $urls;	
+			}
 		}
 
 		return $return;

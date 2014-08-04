@@ -111,4 +111,52 @@ class Lib_PlacementAds_AddEditByMassLoad extends Lib_PlacementAds_AddEdit {
 		return $this;
 	}
 
+	function save_photo()
+	{
+		$params = &$this->params;
+		$object = &$this->object;
+
+		$urls = $params->userfile_urls;
+
+		// удаляем старые аттачи
+		// @todo по сути не надо заного прикреплять те же фотки при редактировании объявления
+		ORM::factory('Object_Attachment')->where('object_id', '=', $object->id)->delete_all();
+
+		// собираем аттачи
+		if ($userphotos = $params->userfile AND is_array($userphotos))
+		{
+			// @todo вынести максимальное количество фотографий в конфиг
+			$userphotos = array_slice($userphotos, 0, 8);
+			$main_photo = $params->active_userfile;
+			if ( ! $main_photo AND isset($userphotos[0]))
+			{
+				$main_photo = $userphotos[0];
+			}
+
+			foreach ($userphotos as $file)
+			{
+				$url = array_shift($urls);
+				$attachment = ORM::factory('Object_Attachment');
+				$attachment->filename 	= $file;
+				$attachment->object_id 	= $object->id;
+				$attachment->signature 	= TRUE;
+				$attachment->url = $url["url"];
+				$attachment->title = $url["title"];
+				$attachment->save();
+
+				if ($file == $main_photo)
+				{
+					$object->main_image_id = $attachment->id;
+				}
+			}
+
+			// удаляем аттачи из временой таблицы
+			foreach ($userphotos as $file) 
+			{
+				ORM::factory('Tmp_Img')->delete_by_name($file);
+			}
+		}
+		return $this;
+	}
+
 }
