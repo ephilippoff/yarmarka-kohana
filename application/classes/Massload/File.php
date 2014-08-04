@@ -33,6 +33,20 @@ class Massload_File
 		return $file;
 	}
 
+	public function createMassload($path, $user_id, $category)
+	{
+		$massload = ORM::factory('Massload')
+						->where('path', '=', $path)
+						->where('user_id', '=', $user_id)
+						->find();
+		$massload->path  	= $path;
+		$massload->user_id  = $user_id;
+		$massload->category  = $category;
+		$massload->save();
+
+		return $massload->id;
+	}
+
 	private static function saveFile($file, $user_id){
 		$filepath 	= Uploads::save_file($file);
 		$ext 		= FileUtils::getExtension($file);

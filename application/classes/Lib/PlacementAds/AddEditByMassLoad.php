@@ -49,6 +49,21 @@ class Lib_PlacementAds_AddEditByMassLoad extends Lib_PlacementAds_AddEdit {
 		return $this;
 	}
 
+	function save_massload_info($massload_id)
+	{
+		$params = &$this->params;
+		$object = &$this->object;
+
+		$om = ORM::factory('Object_Massload')
+					->where("massload_id", "=", $massload_id)
+					->where("external_id", "=", $params->external_id)
+					->find();
+		$om->object_id 		= $object->id;
+		$om->massload_id 	= $massload_id;
+		$om->is_edit 		= ($this->is_edit) ? 1 : 0;
+		$om->save();
+	}
+
 	function init_contacts()
 	{
 		$contacts = &$this->contacts;
@@ -103,11 +118,13 @@ class Lib_PlacementAds_AddEditByMassLoad extends Lib_PlacementAds_AddEdit {
 		return $this;
 	}
 
-	function save_external_id()
+	function save_external_info()
 	{
 		$object = &$this->object;
 		$params = &$this->params;
 		$object->number = $params->external_id;
+		$object->is_published = 1;
+
 		return $this;
 	}
 

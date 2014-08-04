@@ -47,7 +47,7 @@ class Task_Object_MassloadAvito extends Minion_Task
 
 			$iteration = round($count/self::STEP);
 
-			
+			$ml->preProccess($new_filepath, $category, $user->id);
 
 			for ($i = 0; $i<$iteration; $i++)
 			{

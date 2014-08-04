@@ -63,16 +63,51 @@ class Massload
 		return Array($filepath, $imagepath, $errors, $count);
 	}
 
+	public function preProccess($filepath, $category, $user_id)
+	{
+		$ids = array();
+		$f = new Massload_FileXml();
+
+		$config = self::get_config($category);
+
+		$massload_id = $f->createMassload($filepath, $user_id, $category);
+
+
+		$f->forAll($filepath, function ($row, $i) use (&$ids, $massload_id){
+			if ($row->external_id){
+				$om = ORM::factory('Object_Massload');
+				$om->external_id = $row->external_id;
+				$om->massload_id = $massload_id;
+				$om->save();
+			}
+		});
+
+		$sub = DB::select('object_id')->from('object_massload')
+						->join("massload", "left")
+							->on("massload.id","=","massload_id")
+						->where("path","=",$filepath)
+						->where("user_id","=",$user_id);
+
+		ORM::factory('Object')
+				->where('id', 'NOT IN', $sub)
+				->where('author', '=', $user_id)
+				->where('category','=', $config["id"])
+				->set('is_published', 0)
+				->update_all();
+	}
+
 	public function saveStrings($pathtofile, $pathtoimage, $category, $step, $iteration, $user_id)
 	{
 		$f = new Massload_File();
+
+		$massload_id = $f->createMassload($pathtofile, $user_id, $category);
 
 		$objects = Array();
 		$config = self::get_config($category);
 		@list($dictionary, $form_dictionary) = self::get_dictionary($config, $user_id, $config["category"]);
 		$category_id = $config["id"];
 
-		$f->forRow($config, $pathtofile, $step, $iteration, function($row, $i) use ($pathtoimage, $config, $category_id, &$objects, $dictionary){
+		$f->forRow($config, $pathtofile, $step, $iteration, function($row, $i) use ($massload_id, $pathtoimage, $config, $category_id, &$objects, $dictionary){
 
 			/*if ($row->count() <> count($config["fields"]) )
 			{
@@ -95,7 +130,7 @@ class Massload
 
 			$record = array_merge($record, $config["autofill"]);
 
-			$objects[] = Object::PlacementAds_ByMassLoad($record);
+			$objects[] = Object::PlacementAds_ByMassLoad($record, $massload_id);
 
 		});
 
