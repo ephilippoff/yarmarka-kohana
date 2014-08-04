@@ -189,6 +189,7 @@ class Lib_PlacementAds_AddUnion extends Lib_PlacementAds_AddEdit {
 			{
 				$obj = ORM::factory('Object', $item);	
 				$obj->parent_id = $object->id;
+				$obj->action 	= $object->action;
 				$obj->update();
 			}
 		}
@@ -212,10 +213,10 @@ class Lib_PlacementAds_AddUnion extends Lib_PlacementAds_AddEdit {
 
 		$price_info	= '';
 		if ($min_price == $max_price AND $min_price <> 0)
-				$price_info = $count." предложений по цене от ".$min_price." р.";
+				$price_info = $count." ".Num::rus_suffix("предложение", $count)." по цене от ".$min_price." р.";
 		elseif 
 			($min_price <> $max_price AND $min_price <> 0)
-				$price_info = $count." предложений по цене от ".$min_price." до ".$max_price." р.";
+				$price_info = $count." ".Num::rus_suffix("предложение", $count)." по цене от ".$min_price." до ".$max_price." р.";
 
 
 		$main_image_id = NULL;
