@@ -90,7 +90,7 @@ class Massload
 
 		ORM::factory('Object')
 				->where_open()
-				->where('ext', 'NOT IN', $sub)
+				->where('number', 'NOT IN', $sub)
 					->or_where('number', 'IS', NULL)
 				->where_close()
 				->where('author', '=', $user_id)
