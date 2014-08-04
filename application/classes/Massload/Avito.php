@@ -170,10 +170,12 @@ class Massload_Avito
 			}
 		}
 
-		if (in_array(substr($row->contact_0_value, 0,1), array("+7","8")) and !Valid::email($row->contact_0_value))
+		$num_prefixes = array("+7","8");
+
+		if (in_array(substr($row->contact_0_value, 0,1), $num_prefixes) and !Valid::email($row->contact_0_value))
 			$row->contact_0_value =  substr_replace($row->contact_0_value, "7", 0, 1);
 
-		if (in_array(substr($row->contact_1_value, 0,1), array("+7","8")) and !Valid::email($row->contact_1_value))
+		if (in_array(substr($row->contact_1_value, 0,1), $num_prefixes) and !Valid::email($row->contact_1_value))
 			$row->contact_1_value =  substr_replace($row->contact_1_value, "7", 0, 1);
 	
 
