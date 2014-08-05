@@ -95,6 +95,9 @@ class Massload
 				->where_close()
 				->where('author', '=', $user_id)
 				->where('category','=', $config["id"])
+				->where('is_published','=', 1)
+				->where('active','=', 1)
+				->where('is_union','IS', NULL)
 				->set('is_published', 0)
 				->update_all();
 	}
