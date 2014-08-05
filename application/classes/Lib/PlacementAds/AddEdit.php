@@ -983,7 +983,7 @@ class Lib_PlacementAds_AddEdit {
 		$return = Array();
 		if ($address){
 			$address_signature = Object_Utils::generate_signature( $address );
-			array_merge($return, $address_signature);
+			$return = array_merge($return, $address_signature);
 		}
 		if ($city_id)
 			$return[] = $city_id;

@@ -158,8 +158,7 @@ class Object_Utils
 					if (is_array($value))
 					{
 						$values[] =$value["min"]."-".$value["max"];
-						$list_ids[$ref->aid] = $value["min"];
-						$list_ids[$ref->aid] = $value["max"];
+						$list_ids[$ref->aid] = $value["min"]."-".$value["max"];
 					}
 					else 
 					{
