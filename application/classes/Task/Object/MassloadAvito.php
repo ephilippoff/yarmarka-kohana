@@ -6,13 +6,15 @@ class Task_Object_MassloadAvito extends Minion_Task
 
 	protected $_options = array(
 		'link'	=> NULL,
-		'user'  => 327190
+		'user'  => 327190,
+		'category'	=> FALSE,
 	);
 
 	protected function _execute(array $params)
 	{
-		$link 		= $params['link'];
-		$user_id 	= $params['user'];
+		$link 				= $params['link'];
+		$user_id 			= $params['user'];
+		$direct_category 	= $params['category'];
 		$user 		=  ORM::factory('User', $user_id);
 		Minion_CLI::write('user role: '.$user->role);
 		Auth::instance()->force_login($user);
@@ -29,6 +31,12 @@ class Task_Object_MassloadAvito extends Minion_Task
 
 		foreach ($files as $category=>$filepath)
 			Minion_CLI::write('Next file converted:'.Minion_CLI::color($filepath, 'cyan'));
+
+		if ($direct_category)
+		{
+			Minion_CLI::write('Next category would be loaded:'.Minion_CLI::color($direct_category, 'green'));
+			$files = Array( $direct_category => $files[$direct_category]);
+		}
 
 		foreach ($files as $category=>$filepath){
 
