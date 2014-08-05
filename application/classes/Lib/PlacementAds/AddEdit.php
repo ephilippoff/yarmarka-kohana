@@ -281,7 +281,7 @@ class Lib_PlacementAds_AddEdit {
 
 		$this->signature_full = $this->generate_signature($params->title_adv, $params->user_text_adv, $values);														
 
-		$this->options_exlusive_union 	= $this->get_options_exlusive_union($params->city_id, $category->id, $list_ids);
+		$this->options_exlusive_union 	= $this->get_options_exlusive_union($params->address, $params->city_id, $category->id, $list_ids);
 
 		if ($this->is_similarity_enabled())
 		{
@@ -978,9 +978,13 @@ class Lib_PlacementAds_AddEdit {
 		return $config;
 	}
 
-	private static function get_options_exlusive_union($city_id, $category_id, $list_ids = Array())
+	private static function get_options_exlusive_union($address, $city_id, $category_id, $list_ids = Array())
 	{
 		$return = Array();
+		if ($address){
+			$address_signature = Object_Utils::generate_signature( $address );
+			array_merge($return, $address_signature);
+		}
 		if ($city_id)
 			$return[] = $city_id;
 		if ($category_id)

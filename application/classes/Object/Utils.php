@@ -156,9 +156,16 @@ class Object_Utils
 				break;
 				default:
 					if (is_array($value))
+					{
 						$values[] =$value["min"]."-".$value["max"];
-					else
+						$list_ids[$ae->attribute] = $value["min"];
+						$list_ids[$ae->attribute] = $value["max"];
+					}
+					else 
+					{
 						$values[] = $value;
+						$list_ids[$ae->attribute] = $value;
+					}
 
 				break;
 			}
