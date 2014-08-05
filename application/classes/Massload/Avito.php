@@ -171,7 +171,7 @@ class Massload_Avito
 				}
 			}
 		}
-	Log::instance()->add(Log::NOTICE, Debug::vars($contacts));
+
 		$num_prefixes = array("+7","8");
 
 		if (in_array(substr($row->contact_0_value, 0,1), $num_prefixes) and !Valid::email($row->contact_0_value))
