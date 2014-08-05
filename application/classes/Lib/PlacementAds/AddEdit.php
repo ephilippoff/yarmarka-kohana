@@ -998,13 +998,15 @@ class Lib_PlacementAds_AddEdit {
 			{
 				if (in_array($key, $config['options_exlusive_union']))
 				{
-					$return[] = $item;
+					if ((int) $item > 0) {
+						$return[] = $item;
+					}
 				}
 			}
 		}
 
 		asort($return);
-
+	Log::instance()->add(Log::NOTICE, Debug::vars($return));
 		return "{".join(',', $return)."}";
 	}
 
