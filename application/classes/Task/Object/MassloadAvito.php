@@ -42,7 +42,7 @@ class Task_Object_MassloadAvito extends Minion_Task
 			@list($new_filepath, $imagepath, $errors, $count) = $ml->checkFile($_file, $category, $user->id);
 
 			Minion_CLI::write('File after check. Count Errors :'.Minion_CLI::color(count($errors), 'cyan'));
-			Minion_CLI::write('File after check. Errors :'.Minion_CLI::color(Debug::vars($errors), 'red'));
+			Minion_CLI::write('File after check. Errors :'.Minion_CLI::color(Debug::vars($errors), 'yellow'));
 			Minion_CLI::write('File after check. Count Adverts :'.Minion_CLI::color($count, 'cyan'));
 
 			$iteration = round($count/self::STEP);
@@ -60,7 +60,7 @@ class Task_Object_MassloadAvito extends Minion_Task
 						$parent_id = ' parent_id:'.Minion_CLI::color($advert["parent_id"], 'cyan');
 						$is_edit = ' is_edit:'.Minion_CLI::color($advert["is_edit"], 'cyan');
 					}
-					$error = ' error:'.Minion_CLI::color(Debug::vars( $advert["error"]), 'red');
+					$error = ' error:'.Minion_CLI::color(Debug::vars( $advert["error"]), 'yellow');
 					$external_id = ' external_id:'.Minion_CLI::color($advert["external_id"], 'cyan');
 					Minion_CLI::write($object_id.$parent_id.$is_edit.$error.$external_id);
 				}
