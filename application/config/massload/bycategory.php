@@ -40,7 +40,7 @@ return array(
 			'fields'=>array(
 						'external_id' 	=> array('name' => 'external_id','required' => TRUE, 'type' => 'external_id', 'translate' => 'ID', 'maxlength' => 30),
 						'city' 			=> array('name' => 'city',		'required' => TRUE, 'type' => 'city', 		'translate' => 'Город', 'maxlength' => 30),
-						'address'		=> array('name' => 'address',	'required' => TRUE, 'type' => 'address', 	'translate' => 'Адрес', 'maxlength' => 50),
+						'address'		=> array('name' => 'address',	'required' => FALSE, 'type' => 'address', 	'translate' => 'Адрес', 'maxlength' => 50),
 						'tip-sdelki3' 	=> array('name' => 'tip-sdelki3','required' => TRUE,'type' => 'dict', 		'translate' => 'Тип сделки', 'maxlength' => 30), 
 						'dacha-chastnyi-dom' 	=> array('name' => 'dacha-chastnyi-dom','required' => TRUE, 'type' => 'dict', 'translate' => 'Вид объекта', 'maxlength' => 30),
 						'ploshchad-doma' 		=> array('name' => 'ploshchad-doma',	'required' => TRUE, 	'type' => 'integer', 	'translate' => 'Площадь дома', 'maxlength' => 3),	
@@ -63,7 +63,7 @@ return array(
 			'fields'=>array(
 						'external_id' 	=> array('name' => 'external_id','required' => TRUE, 'type' => 'external_id', 'translate' => 'ID', 'maxlength' => 30),
 						'city' 			=> array('name' => 'city',		'required' => TRUE, 'type' => 'city', 		'translate' => 'Город', 'maxlength' => 30),
-						'address'		=> array('name' => 'address',	'required' => TRUE, 'type' => 'address', 	'translate' => 'Адрес', 'maxlength' => 50),
+						'address'		=> array('name' => 'address',	'required' => FALSE, 'type' => 'address', 	'translate' => 'Адрес', 'maxlength' => 50),
 						'tip-sdelki3' 	=> array('name' => 'tip-sdelki3','required' => TRUE,'type' => 'dict', 		'translate' => 'Тип сделки', 'maxlength' => 30), 
 						'kategoriya-zemli' 	=> array('name' => 'kategoriya-zemli','required' => TRUE, 'type' => 'dict', 'translate' => 'Категория земли', 'maxlength' => 30),
 						'ploshchad-uchastka-v-sotkakh' 		=> array('name' => 'ploshchad-uchastka-v-sotkakh',	'required' => TRUE, 	'type' => 'integer', 	'translate' => 'Площадь участка', 'maxlength' => 3),	
