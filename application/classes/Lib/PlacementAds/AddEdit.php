@@ -999,7 +999,7 @@ class Lib_PlacementAds_AddEdit {
 				if (in_array($key, $config['options_exlusive_union']))
 				{
 					if ((int) $item > 0) {
-						$return[] = $item;
+						$return[] = (int) $item;
 					}
 				}
 			}
