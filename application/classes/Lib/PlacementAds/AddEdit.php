@@ -1006,7 +1006,7 @@ class Lib_PlacementAds_AddEdit {
 		}
 
 		asort($return);
-	Log::instance()->add(Log::NOTICE, Debug::vars($return));
+
 		return "{".join(',', $return)."}";
 	}
 
