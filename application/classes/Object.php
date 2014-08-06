@@ -47,8 +47,7 @@ class Object
 				$exception_message  = 'Default Ошибка при сохранении объявления: </br>';
 				$exception_message .= 'message: '.($e->getMessage()).'</br>';
 				$exception_message .= 'input_params: '.Debug::vars($input_params).'</br>';
-				$exception_message .= 'ip: '.$_SERVER['REMOTE_ADDR'].'</br>';
-				$exception_message .= 'stack: '.debug_print_backtrace().'</br>';
+				$exception_message .= 'stack: '.($e->getTraceAsString()).'</br>';
 				
 				Kohana::$log->add(Log::ERROR, $exception_message);
 				Email::send(Kohana::$config->load('common.admin_emails'), Kohana::$config->load('email.default_from'), 'Default Ошибка при сохранении объявления', $exception_message);
@@ -174,8 +173,7 @@ class Object
 				$exception_message  = 'ByModerator Ошибка при сохранении объявления: </br>';
 				$exception_message .= 'message: '.($e->getMessage()).'</br>';
 				$exception_message .= 'input_params: '.Debug::vars($input_params).'</br>';
-				$exception_message .= 'ip: '.$_SERVER['REMOTE_ADDR'].'</br>';
-				$exception_message .= 'stack: '.debug_print_backtrace().'</br>';
+				$exception_message .= 'stack: '.($e->getTraceAsString()).'</br>';
 
 				Kohana::$log->add(Log::ERROR, $exception_message);
 				Email::send(Kohana::$config->load('common.admin_emails'), Kohana::$config->load('email.default_from'), 'ByModerator Ошибка при сохранении объявления', $exception_message);
@@ -247,8 +245,7 @@ class Object
 				$exception_message  = 'MassLoad Ошибка при сохранении объявления: </br>';
 				$exception_message .= 'message: '.($e->getMessage()).'</br>';
 				$exception_message .= 'input_params: '.Debug::vars($input_params).'</br>';
-				$exception_message .= 'ip: '.$_SERVER['REMOTE_ADDR'].'</br>';
-				$exception_message .= 'stack: '.debug_print_backtrace().'</br>';
+				$exception_message .= 'stack: '.($e->getTraceAsString()).'</br>';
 
 				Kohana::$log->add(Log::ERROR, $exception_message);
 				Email::send(Kohana::$config->load('common.admin_emails'), Kohana::$config->load('email.default_from'), 'MassLoad Ошибка при сохранении объявления', $exception_message);
@@ -341,8 +338,7 @@ class Object
 				$exception_message  = 'JustRunTriggers Ошибка при сохранении объявления: </br>';
 				$exception_message .= 'message: '.($e->getMessage()).'</br>';
 				$exception_message .= 'input_params: '.Debug::vars($input_params).'</br>';
-				$exception_message .= 'ip: '.$_SERVER['REMOTE_ADDR'].'</br>';
-				$exception_message .= 'stack: '.debug_print_backtrace().'</br>';
+				$exception_message .= 'stack: '.($e->getTraceAsString()).'</br>';
 
 				Kohana::$log->add(Log::ERROR, $exception_message);
 				Email::send(Kohana::$config->load('common.admin_emails'), Kohana::$config->load('email.default_from'), 'JustRunTriggers Ошибка при сохранении объявления', $exception_message);

@@ -19,6 +19,7 @@ class Model_Reference extends ORM {
 					->on('reference.attribute', '=', 'attribute.id')
 					->where("category","=",$category_id)
 					->where("attribute.seo_name","=",$seo_name)
+					->cached(Date::DAY)
 					->find();
 	}
 }

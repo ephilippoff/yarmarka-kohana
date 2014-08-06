@@ -3,6 +3,7 @@ return array(
 	'main_domain'							=> 'yarmarka.biz',
 	'is_local' 								=> 0,
 	'default_region_id'						=> 73,
+	'max_count_photo'						=> 10,
 	'days_count_between_service_up' 		=> 3,
 	'days_count_between_service_up_by_cat'  => array(36 => 1),
 	'disallowed_email_domains' 				=> array('yopmail.com', 'asdasd.com'),

@@ -287,7 +287,7 @@ class Lib_PlacementAds_AddEdit {
 		{
 			$max_similarity = Kohana::$config->load('common.max_object_similarity');
 			$similarity 	= ORM::factory('Object_Signature')->get_similarity($max_similarity,$this->signature_full, NULL, $params->object_id, $user->id, "_full", $params->itis_massload);
-			if ( $this->is_edit AND $params->itis_massload){
+			if ( $this->is_edit AND $params->itis_massload AND 1==0){
 				$sign_existed = ORM::factory('Object_Signature')->where('object_id','=',$object->id)->find();
 				if ($sign_existed->loaded())
 				{
@@ -614,8 +614,8 @@ class Lib_PlacementAds_AddEdit {
 		// собираем аттачи
 		if ($userphotos = $params->userfile AND is_array($userphotos))
 		{
-			// @todo вынести максимальное количество фотографий в конфиг
-			$userphotos = array_slice($userphotos, 0, 8);
+			$max_count_photo = Kohana::$config->load('common.max_count_photo');
+			$userphotos = array_slice($userphotos, 0, $max_count_photo);
 			$main_photo = $params->active_userfile;
 			if ( ! $main_photo AND isset($userphotos[0]))
 			{

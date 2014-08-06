@@ -142,8 +142,6 @@ class Lib_PlacementAds_AddEditByMassLoad extends Lib_PlacementAds_AddEdit {
 		// собираем аттачи
 		if ($userphotos = $params->userfile AND is_array($userphotos))
 		{
-			// @todo вынести максимальное количество фотографий в конфиг
-			$userphotos = array_slice($userphotos, 0, 8);
 			$main_photo = $params->active_userfile;
 			if ( ! $main_photo AND isset($userphotos[0]))
 			{
