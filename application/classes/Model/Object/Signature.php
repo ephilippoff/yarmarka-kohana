@@ -52,7 +52,7 @@ class Model_Object_Signature extends ORM
 		if ($user_id)
 			$query->where('object.author', '=', $user_id);
 
-		if ($object_id)
+		if ($object_id AND $full<>'')
 			$query->where('object.id', '<>', $object_id);
 
 		$result = $query->execute();

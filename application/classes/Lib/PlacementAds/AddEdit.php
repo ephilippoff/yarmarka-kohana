@@ -287,6 +287,18 @@ class Lib_PlacementAds_AddEdit {
 		{
 			$max_similarity = Kohana::$config->load('common.max_object_similarity');
 			$similarity 	= ORM::factory('Object_Signature')->get_similarity($max_similarity,$this->signature_full, NULL, $params->object_id, $user->id, "_full");
+			if ( $this->is_edit AND $params->itis_massload){
+				$sign_existed = ORM::factory('Object_Signature')->where('object_id','=',$object->id)->find();
+				if ($sign_existed->loaded())
+				{
+					$signature_full = '{'.join(',', $this->signature_full).'}';
+					if ($signature_full == $sign_existed->signature_full)
+					{
+						$errors['signature'] = "Объявление не требует обновления.";	
+						$this->union_cancel = TRUE;
+					}
+				}
+			}
 			if ($similarity["sm"] > $max_similarity){
 				
 				if ( $this->is_edit ){

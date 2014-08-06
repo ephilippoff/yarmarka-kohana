@@ -44,8 +44,14 @@ class Object
 			}
 			catch(Exception $e)
 			{
-				Kohana::$log->add(Log::ERROR, 'Default Ошибка при сохранении объявления:'.$e->getMessage());
-				Email::send(Kohana::$config->load('common.admin_emails'), Kohana::$config->load('email.default_from'), 'Default Ошибка при сохранении объявления', $e->getMessage());
+				$exception_message  = 'Default Ошибка при сохранении объявления: </br>';
+				$exception_message .= 'message: '.($e->getMessage()).'</br>';
+				$exception_message .= 'input_params: '.Debug::vars($input_params).'</br>';
+				$exception_message .= 'ip: '.$_SERVER['REMOTE_ADDR'].'</br>';
+				$exception_message .= 'stack: '.debug_print_backtrace().'</br>';
+				
+				Kohana::$log->add(Log::ERROR, $exception_message);
+				Email::send(Kohana::$config->load('common.admin_emails'), Kohana::$config->load('email.default_from'), 'Default Ошибка при сохранении объявления', $exception_message);
 
 				$db->rollback();
 
@@ -165,8 +171,14 @@ class Object
 			}
 			catch(Exception $e)
 			{
-				Kohana::$log->add(Log::ERROR, 'ByModerator Ошибка при сохранении объявления:'.$e->getMessage());
-				Email::send(Kohana::$config->load('common.admin_emails'), Kohana::$config->load('email.default_from'), 'ByModerator Ошибка при сохранении объявления', $e->getMessage());
+				$exception_message  = 'ByModerator Ошибка при сохранении объявления: </br>';
+				$exception_message .= 'message: '.($e->getMessage()).'</br>';
+				$exception_message .= 'input_params: '.Debug::vars($input_params).'</br>';
+				$exception_message .= 'ip: '.$_SERVER['REMOTE_ADDR'].'</br>';
+				$exception_message .= 'stack: '.debug_print_backtrace().'</br>';
+
+				Kohana::$log->add(Log::ERROR, $exception_message);
+				Email::send(Kohana::$config->load('common.admin_emails'), Kohana::$config->load('email.default_from'), 'ByModerator Ошибка при сохранении объявления', $exception_message);
 
 				$db->rollback();
 
@@ -188,6 +200,8 @@ class Object
 	static function PlacementAds_ByMassLoad($input_params, $massload_id)
 	{
 		$json = array();
+
+		$input_params["itis_massload"] = 1;
 		
 		$add = new Lib_PlacementAds_AddEditByMassLoad();
 		$add->init_input_params($input_params)
@@ -230,8 +244,14 @@ class Object
 			}
 			catch(Exception $e)
 			{
-				Kohana::$log->add(Log::ERROR, 'MassLoad Ошибка при сохранении объявления:'.$e->getMessage());
-				Email::send(Kohana::$config->load('common.admin_emails'), Kohana::$config->load('email.default_from'), 'MassLoad Ошибка при сохранении объявления', $e->getMessage());
+				$exception_message  = 'MassLoad Ошибка при сохранении объявления: </br>';
+				$exception_message .= 'message: '.($e->getMessage()).'</br>';
+				$exception_message .= 'input_params: '.Debug::vars($input_params).'</br>';
+				$exception_message .= 'ip: '.$_SERVER['REMOTE_ADDR'].'</br>';
+				$exception_message .= 'stack: '.debug_print_backtrace().'</br>';
+
+				Kohana::$log->add(Log::ERROR, $exception_message);
+				Email::send(Kohana::$config->load('common.admin_emails'), Kohana::$config->load('email.default_from'), 'MassLoad Ошибка при сохранении объявления', $exception_message);
 
 				$db->rollback();
 
@@ -318,8 +338,14 @@ class Object
 			}
 			catch(Exception $e)
 			{
-				Kohana::$log->add(Log::ERROR, 'JustRunTriggers Ошибка при сохранении объявления:'.$e->getMessage());
-				Email::send(Kohana::$config->load('common.admin_emails'), Kohana::$config->load('email.default_from'), 'JustRunTriggers Ошибка при сохранении объявления', $e->getMessage());
+				$exception_message  = 'JustRunTriggers Ошибка при сохранении объявления: </br>';
+				$exception_message .= 'message: '.($e->getMessage()).'</br>';
+				$exception_message .= 'input_params: '.Debug::vars($input_params).'</br>';
+				$exception_message .= 'ip: '.$_SERVER['REMOTE_ADDR'].'</br>';
+				$exception_message .= 'stack: '.debug_print_backtrace().'</br>';
+
+				Kohana::$log->add(Log::ERROR, $exception_message);
+				Email::send(Kohana::$config->load('common.admin_emails'), Kohana::$config->load('email.default_from'), 'JustRunTriggers Ошибка при сохранении объявления', $exception_message);
 
 				$db->rollback();
 
