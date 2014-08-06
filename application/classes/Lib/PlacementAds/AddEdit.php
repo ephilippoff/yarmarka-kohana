@@ -202,13 +202,14 @@ class Lib_PlacementAds_AddEdit {
 	{
 		$category = &$this->category;
 		$validation = &$this->validation;
+		$params = &$this->params;
 
 		$validation = Validation::factory((array) $this->params)
 			->rule('city_kladr_id', 'not_empty', array(':value', "Город"))
 			->rule('contact', 'not_empty', array(':value', "Контактное лицо"))
 			->rule('email', 'email');	
 
-		if ( ! $category->title_auto_fill)
+		if ( ! $category->title_auto_fill AND !$params->itis_massload)
 		{
 			$validation->rules('title_adv', array(
 				array('not_empty', array(':value', "Заголовок")),
@@ -810,8 +811,9 @@ class Lib_PlacementAds_AddEdit {
 	function save_generated()
 	{
 		$object = &$this->object;
+		$params = &$this->params;
 
-		if ($object->category_obj->title_auto_fill)
+		if ($object->category_obj->title_auto_fill OR $params->itis_massload)
 		{
 			$object->title = $object->generate_title();
 		}

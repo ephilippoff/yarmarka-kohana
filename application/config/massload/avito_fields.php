@@ -44,5 +44,19 @@ return array(
 									"ContactPhone"  => "contact_1_value",
 									"Street" 		=> "address",
 									"Images" 		=> "images"
+								),
+	'commercial'		=> array( 
+									"Id" 			=> "external_id",
+									"OperationType" => "tip-sdelki3", 
+									"City" 			=> "city", 
+									"ObjectType" 	=> "object-tip",
+									"Square" 		=> "ploshchad",
+									"Description" 	=> "user_text_adv",
+									"ManagerName" 	=> "contact",
+									"Price" 		=> "tsena",
+									"EMail" 		=> "contact_0_value",
+									"ContactPhone"  => "contact_1_value",
+									"Street" 		=> "address",
+									"Images" 		=> "images"
 								)
 );

@@ -127,6 +127,7 @@ class Task_Object_MassloadAvito extends Minion_Task
 				$exception_message .= 'input_params: '.Debug::vars($setting).'</br>';
 				$exception_message .= 'stack: '.($e->getTraceAsString()).'</br>';
 				Email::send(Kohana::$config->load('common.admin_emails'), Kohana::$config->load('email.default_from'), 'Ошибки при массовой загрузке', $exception_message);
+				Minion_CLI::write('critical error: '.Minion_CLI::color($e->getMessage(), 'cyan'));
 			}
 
 			
