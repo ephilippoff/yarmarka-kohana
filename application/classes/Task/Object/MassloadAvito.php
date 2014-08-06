@@ -103,18 +103,18 @@ class Task_Object_MassloadAvito extends Minion_Task
 							Minion_CLI::write($object_id.$parent_id.$is_edit.$error.$external_id);
 						}
 					}
+					$config = Kohana::$config->load('massload/bycategory.'.$category);
+					$mail_message = 'Отчет по загрузке файла для компании : '.$user->org_name.' ('.$user->id.' '.$user->email.')</br>';
+					$mail_message .= 'Ссылка на файл : '.$link.' </br>';
+					$mail_message .= 'Категория : '.$config["name"].' </br>';
+					$mail_message .= 'Результат : </br>';
+					$mail_message .= '- всего обработано объявлений : '.$object_count.'</br>';
+					$mail_message .= '- обновлено объявлений : '.$edited_count.'</br>';
+					$mail_message .= '- объявлений с ошибками (не были загружены) : '.$error_count.'</br>';				
+					//Email::send(array($user->email), Kohana::$config->load('email.default_from'), 'Отчет по загрузке объявлений на сайт "Ярмарка-онлайн"', $mail_message);
+					$mail_message .= '- ID объявлений с ошибками : '.join(', ',$error_adverts).'</br>';
+					Email::send(Kohana::$config->load('common.admin_emails'), Kohana::$config->load('email.default_from'), 'Отчет по загрузке объявлений', $mail_message);
 				} //end foreach by category
-
-				$mail_message = 'Отчет по загрузке файла для компании : '.$user->org_name.' ('.$user->id.' '.$user->email.')</br>';
-				$mail_message .= 'Ссылка на файл : '.$link.' </br>';
-				$mail_message .= 'Результат : </br>';
-				$mail_message .= '- всего обработано объявлений : '.$object_count.'</br>';
-				$mail_message .= '- обновлено объявлений : '.$edited_count.'</br>';
-				$mail_message .= '- объявлений с ошибками (не были загружены) : '.$error_count.'</br>';				
-				//Email::send(array($user->email), Kohana::$config->load('email.default_from'), 'Отчет по загрузке объявлений на сайт "Ярмарка-онлайн"', $mail_message);
-				$mail_message .= '- ID объявлений с ошибками : '.join(', ',$error_adverts).'</br>';
-				Email::send(Kohana::$config->load('common.admin_emails'), Kohana::$config->load('email.default_from'), 'Отчет по загрузке объявлений', $mail_message);
-
 			} 
 				catch(Exception $e)
 			{
