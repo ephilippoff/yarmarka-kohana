@@ -18,7 +18,8 @@
 	<div class="control-group only1 articles-rubrics-box">
 		<label class="control-label">Категория:</label>
 		<div class="controls">
-			<?=Form::select('value', Array("--Выберите категорию--")+$categories, Arr::get($_POST, 'category'), array('style' => 'width:500px;')) ?>
+			<input type="text" class="input-block-level" name="value" id="value"/>
+			<?//Form::select('value', Array("--Выберите категорию--")+$categories, Arr::get($_POST, 'category'), array('style' => 'width:500px;')) ?>
 		</div>
 	</div>
 
