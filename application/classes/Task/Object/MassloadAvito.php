@@ -9,6 +9,7 @@ class Task_Object_MassloadAvito extends Minion_Task
 		'link'	=> FALSE,
 		'user'  => FALSE,
 		'category'	=> FALSE,
+		'send_email'=> FALSE
 	);
 
 	protected function _execute(array $params)
@@ -16,6 +17,7 @@ class Task_Object_MassloadAvito extends Minion_Task
 		$link 				= $params['link'];
 		$user_id 			= $params['user'];
 		$direct_category 	= $params['category'];
+		$send_email 	= $params['send_email'];
 
 		$settings = Array();
 		if ($link AND $user_id)
@@ -110,8 +112,10 @@ class Task_Object_MassloadAvito extends Minion_Task
 					$mail_message .= 'Результат : </br>';
 					$mail_message .= '- всего обработано объявлений : '.$object_count.'</br>';
 					$mail_message .= '- обновлено объявлений : '.$edited_count.'</br>';
-					$mail_message .= '- объявлений с ошибками (не были загружены) : '.$error_count.'</br>';				
-					//Email::send(array($user->email), Kohana::$config->load('email.default_from'), 'Отчет по загрузке объявлений на сайт "Ярмарка-онлайн"', $mail_message);
+					$mail_message .= '- объявлений с ошибками (не были загружены) : '.$error_count.'</br>';	
+					if ($send_email) {
+						Email::send(array($user->email), Kohana::$config->load('email.default_from'), 'Отчет по загрузке объявлений на сайт "Ярмарка-онлайн"', $mail_message);
+					}
 					$mail_message .= '- ID объявлений с ошибками : '.join(', ',$error_adverts).'</br>';
 					Email::send(Kohana::$config->load('common.admin_emails'), Kohana::$config->load('email.default_from'), 'Отчет по загрузке объявлений', $mail_message);
 				} //end foreach by category
