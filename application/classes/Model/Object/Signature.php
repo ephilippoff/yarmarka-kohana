@@ -23,7 +23,7 @@ class Model_Object_Signature extends ORM
 		parent::save($validation);
 	}
 
-	public function get_similarity($max_similarity, $array, $options_exlusive_union, $object_id = NULL,$user_id = NULL, $full = '')
+	public function get_similarity($max_similarity, $array, $options_exlusive_union, $object_id = NULL,$user_id = NULL, $full = '', $itis_massload = FALSE)
 	{
 		$user_id 	= (int) $user_id;
 
@@ -52,7 +52,7 @@ class Model_Object_Signature extends ORM
 		if ($user_id)
 			$query->where('object.author', '=', $user_id);
 
-		if ($object_id AND $full<>'')
+		if ($object_id AND !$itis_massload)
 			$query->where('object.id', '<>', $object_id);
 
 		$result = $query->execute();
