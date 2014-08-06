@@ -3,6 +3,7 @@
 class Task_Object_MassloadAvito extends Minion_Task
 {
 	const STEP = 1;
+	const SETTING_NAME = "massload_link";
 
 	protected $_options = array(
 		'link'	=> FALSE,
@@ -21,7 +22,7 @@ class Task_Object_MassloadAvito extends Minion_Task
 		{
 			$settings[] = array("user_id"=>$user_id, "link"=>$link);
 		} else {
-			$user_settings = ORM::factory('User_Settings')->where("name","=","massload_link")->order_by("id","desc")->find_all();
+			$user_settings = ORM::factory('User_Settings')->where("name","=",self::SETTING_NAME)->order_by("id","desc")->find_all();
 			foreach ($user_settings as $setting)
 				$settings[] = array("user_id"=>$setting->user_id, "link"=>$setting->value);
 		}
