@@ -412,7 +412,7 @@ class Lib_PlacementAds_AddEdit {
 							"current_object_source"  => $object->id
 						);
 
-					$parent_id = (int) Object::PlacementAds_Union($this->original_params, $objects_for_union, $this->edit_union);
+					$parent_id = (int) Object::PlacementAds_Union($this->original_params, $objects_for_union, $this->edit_union, $this->destroy_union);
 				//}
 				//catch (Exception $e) {
 				// 	$errors['union_error'] = $e->getMessage();

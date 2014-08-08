@@ -241,6 +241,22 @@ class Lib_PlacementAds_AddUnion extends Lib_PlacementAds_AddEdit {
 		return $this;
 	}
 
+	function delete_union_data()
+	{
+		$object 		= &$this->object;
+		$object_source  = &$this->object_source;
+
+		$ounion = ORM::factory('Object_Union')
+						->where("object_union_id","=",$object->id)
+						->where("object_id","=",$object_source->id)
+						->find_all();
+		foreach ($ounion as $union_param) {			
+			DB::delete(strtolower($union_param->table))->where("object","=",$union_param->data_id)->execute();	
+		}	
+
+		return $this;
+	}
+
 
 	static function save_union_data($object_id, $object_source_id, $tablename, $data_id)
 	{
