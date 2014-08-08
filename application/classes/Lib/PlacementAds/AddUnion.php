@@ -226,7 +226,7 @@ class Lib_PlacementAds_AddUnion extends Lib_PlacementAds_AddEdit {
 		$object_source  = &$this->object_source;
 
 		@list($min_price, $max_price) = ORM::factory('Data_Integer')
-											>join('object', 'left')
+											->join('object', 'left')
 													->on('object.id', '=', 'object')
 												->where("object.active","=",1)
 												->where("object.is_published","=",1)
