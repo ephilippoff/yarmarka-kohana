@@ -17,6 +17,7 @@ class Lib_PlacementAds_AddEdit {
 	public $parent_id;
 	public $create_union = FALSE;
 	public $edit_union = FALSE;
+	public $destroy_union = FALSE;
 	public $object_without_parent_id = NULL;
 
 	public $union_cancel = FALSE;
