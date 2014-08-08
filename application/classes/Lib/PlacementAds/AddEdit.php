@@ -422,6 +422,9 @@ class Lib_PlacementAds_AddEdit {
 			
 			if ($parent_id >0 )	
 				$this->parent_id = $parent_id;
+
+			if ($this->destroy_union)	
+				$this->parent_id = NULL;
 			
 
 		}		
