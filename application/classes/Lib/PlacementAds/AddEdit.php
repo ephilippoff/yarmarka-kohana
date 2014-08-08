@@ -291,7 +291,7 @@ class Lib_PlacementAds_AddEdit {
 		{
 			$max_similarity = Kohana::$config->load('common.max_object_similarity');
 			$similarity 	= ORM::factory('Object_Signature')->get_similarity($max_similarity,$this->signature_full, NULL, $params->object_id, $user->id, "_full", $params->itis_massload);
-			if ( $this->is_edit AND $params->itis_massload AND 1==0){
+			if ( $this->is_edit AND $params->itis_massload ){
 				$sign_existed = ORM::factory('Object_Signature')->where('object_id','=',$object->id)->find();
 				if ($sign_existed->loaded())
 				{
