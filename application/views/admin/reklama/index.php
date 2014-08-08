@@ -56,6 +56,7 @@
 		<th>Тип</th>
 		<th>Активность</th>
 		<th>Просмотры</th>
+		<th>Клики</th>
 		<th>Города</th>
 		<th>Группы</th>
 		<th>Комментарий</th>
@@ -107,6 +108,7 @@
 			<td><?=$ads_element->type?></td>
 			<td><?php if ($ads_element->active == 1) : ?> Активна <?php else :?> <span class="red"><b>Неактивна</b></span> <?php endif;?></td>
 			<td><?=$visits?></td>
+			<td><?=$ads_element->clicks_count?></td>
 			<td><?=trim($cities,', ')?></td>
 			<td><?=trim($ads_element->groups,'{}')?></td>
 			<td><?=$ads_element->comments?></td>
