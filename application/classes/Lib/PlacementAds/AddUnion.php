@@ -56,6 +56,7 @@ class Lib_PlacementAds_AddUnion extends Lib_PlacementAds_AddEdit {
 		$objects_for_union = &$this->objects_for_union;
 
 		$exist_photo = Array();
+		DB::delete("object_attachment")->where('object_id', 'IN', array_values($objects_for_union))->execute();
 		$data = ORM::factory('Object_Attachment')->where('object_id', '=', $object->id)->find_all();
 		foreach ($data as $item)
 			$exist_photo[] = $item->signature;
@@ -95,10 +96,11 @@ class Lib_PlacementAds_AddUnion extends Lib_PlacementAds_AddEdit {
 		$objects_for_union = &$this->objects_for_union;
 
 		$exist_values = Array();
+		DB::delete("data_list")->where('object', 'IN', array_values($objects_for_union))->execute();
 		$data = ORM::factory('Data_List')->where('object', '=', $object->id)->find_all();
 		foreach ($data as $item)
 			$exist_values[] = $item->value;
-
+		
 		$data = ORM::factory('Data_List')
 					->join('object', 'left')
 						->on('object.id', '=', 'object')
@@ -124,10 +126,11 @@ class Lib_PlacementAds_AddUnion extends Lib_PlacementAds_AddEdit {
 
 
 		$exist_values = Array();
+		DB::delete("data_integer")->where('object', 'IN', array_values($objects_for_union))->execute();
 		$data = ORM::factory('Data_Integer')->where('object', '=', $object->id)->find_all();
 		foreach ($data as $item)
 			$exist_values[] = Array($item->reference ,$item->value_min, $item->value_max);		
-
+		
 		$data = ORM::factory('Data_Integer')
 						->join('object', 'left')
 							->on('object.id', '=', 'object')
@@ -154,10 +157,11 @@ class Lib_PlacementAds_AddUnion extends Lib_PlacementAds_AddEdit {
 
 
 		$exist_values = Array();
+		DB::delete("data_numeric")->where('object', 'IN', array_values($objects_for_union))->execute();
 		$data = ORM::factory('Data_Numeric')->where('object', '=', $object->id)->find_all();
 		foreach ($data as $item)
 			$exist_values[] = Array($item->reference, $item->value_min);		
-
+		
 		$data = ORM::factory('Data_Numeric')
 						->join('object', 'left')
 							->on('object.id', '=', 'object')
@@ -222,6 +226,10 @@ class Lib_PlacementAds_AddUnion extends Lib_PlacementAds_AddEdit {
 		$object_source  = &$this->object_source;
 
 		@list($min_price, $max_price) = ORM::factory('Data_Integer')
+											>join('object', 'left')
+													->on('object.id', '=', 'object')
+												->where("object.active","=",1)
+												->where("object.is_published","=",1)
 											->get_min_max_price($object->id);
 
 		$count = ORM::factory('Object')
