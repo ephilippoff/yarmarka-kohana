@@ -385,12 +385,18 @@ class Lib_PlacementAds_AddEdit {
 					{
 						ORM::factory('Object')
 							->where('parent_id','=', $union_object->id)
-							->set('parent_id', NULL)
+							->set('parent_id',  DB::expr('NULL'))
 							->update_all();
 						DB::delete('object')->where("id","=",$union_object->id)->execute();						
 					}
-					else 
-						$this->edit_union = TRUE;					
+					else if ($union_object->is_union > 2)
+					{
+						ORM::factory('Object')
+							->where('id','=', $object->id)
+							->set('parent_id',  DB::expr('NULL'))
+							->update_all();
+						$this->edit_union = TRUE;		
+					}
 				}
 			}
 
@@ -411,11 +417,11 @@ class Lib_PlacementAds_AddEdit {
 				//catch (Exception $e) {
 				// 	$errors['union_error'] = $e->getMessage();
 				//}
-					if ($parent_id >0 )	
-							$this->parent_id = $parent_id;
+					
 			}
 			
-
+			if ($parent_id >0 )	
+				$this->parent_id = $parent_id;
 			
 
 		}		
