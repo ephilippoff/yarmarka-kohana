@@ -410,6 +410,13 @@ class Controller_Ajax extends Controller_Template
 			throw new HTTP_Exception_404;
 		}
 
+		if ($object->is_published <> 0)
+		{
+			$obj = ORM::factory('Object', $object->id);	
+			$obj->parent_id = NULL;		
+			$obj->update();
+		}
+
 		$info = Object::canEdit(Array("object_id" => $object->id));
 
 		if ($object->is_published <> 0)
