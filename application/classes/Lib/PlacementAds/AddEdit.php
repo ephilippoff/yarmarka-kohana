@@ -381,7 +381,13 @@ class Lib_PlacementAds_AddEdit {
 				{
 					$this->parent_id = $union_object->id;
 					if ($union_object->is_union <= 2)
-						DB::delete('Object')->where("id","=",$union_object->id)->execute();
+					{
+						ORM::factory('Object')
+							->where('parent_id','=', $union_object->id)
+							->set('parent_id', NULL)
+							->update_all();
+						DB::delete('object')->where("id","=",$union_object->id)->execute();						
+					}
 					else 
 						$this->edit_union = TRUE;					
 				}
