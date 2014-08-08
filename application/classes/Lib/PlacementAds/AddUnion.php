@@ -250,10 +250,13 @@ class Lib_PlacementAds_AddUnion extends Lib_PlacementAds_AddEdit {
 						->where("object_union_id","=",$object->id)
 						->where("object_id","=",$object_source->id)
 						->find_all();
-		foreach ($ounion as $union_param) {			
-			DB::delete(strtolower($union_param->table))->where("object","=",$union_param->data_id)->execute();	
+							Log::instance()->add(Log::NOTICE, "union ".$object->id." obj ".$object_source->id);
+		foreach ($ounion as $union_param) {		
+			Log::instance()->add(Log::NOTICE, "union_table ".$union_param->table." data_id ".$union_param->data_id);	
+			DB::delete(strtolower($union_param->table))->where("id","=",$union_param->data_id)->execute();	
 		}	
-
+		DB::delete("object_union")->where("object_union_id","=",$object->id)
+						->where("object_id","=",$object_source->id)->execute();
 		return $this;
 	}
 
