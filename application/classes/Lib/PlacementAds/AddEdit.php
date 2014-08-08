@@ -324,6 +324,7 @@ class Lib_PlacementAds_AddEdit {
 	function check_signature_for_union()
 	{
 		$params = &$this->params;
+		$object = &$this->object;
 		$errors = &$this->errors;
 		$category = &$this->category;
 		$user = &$this->user;
@@ -337,7 +338,10 @@ class Lib_PlacementAds_AddEdit {
 
 				$valid = $this->validate_between_parameters($category->id, $this->list_ids, $similarity["object_id"]);
 				if (!$valid)
+				{
+					$this->destroy_union = TRUE;
 					return $this;
+				}
 
 				$parent_id = (int) ORM::factory('Object', $similarity["object_id"])->parent_id;
 				if ($parent_id == 0)
@@ -348,6 +352,10 @@ class Lib_PlacementAds_AddEdit {
 					$this->edit_union = TRUE;
 					$this->parent_id = $parent_id;
 				}				
+			} 
+				else if ($this->is_edit AND $object->parent_id)
+			{
+				$this->destroy_union = TRUE;
 			}
 		}
 
@@ -366,6 +374,19 @@ class Lib_PlacementAds_AddEdit {
 		{ 
 			$parent_id = 0;
 
+			if ($this->destroy_union)
+			{
+				$union_object = ORM::factory('Object', $object->parent_id);
+				if ($union_object->loaded())
+				{
+					$this->parent_id = $union_object->id;
+					if ($union_object->is_union <= 2)
+						DB::delete('Object')->where("id","=",$union_object->id)->execute();
+					else 
+						$this->edit_union = TRUE;					
+				}
+			}
+
 			if ($this->create_union OR $this->edit_union)
 			{
 				//ry {
@@ -383,10 +404,12 @@ class Lib_PlacementAds_AddEdit {
 				//catch (Exception $e) {
 				// 	$errors['union_error'] = $e->getMessage();
 				//}
-			} 
+					if ($parent_id >0 )	
+							$this->parent_id = $parent_id;
+			}
+			
 
-			if ($parent_id >0 )	
-				$this->parent_id = $parent_id;
+			
 
 		}		
 
@@ -592,10 +615,10 @@ class Lib_PlacementAds_AddEdit {
 
 		if ($this->is_union_enabled() AND $this->is_union_enabled_by_category($category->id))
 		{
-			if (!empty($this->parent_id))
-			{
-				$object->parent_id = $this->parent_id;
-			}
+			//if (!empty($this->parent_id))
+			//{
+				$object->parent_id = ($this->parent_id == 0) ? NULL : $this->parent_id;
+			//}
 		}
 	}
 
