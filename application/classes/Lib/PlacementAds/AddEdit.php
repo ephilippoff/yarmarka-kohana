@@ -333,7 +333,7 @@ class Lib_PlacementAds_AddEdit {
 			$max_similarity = Kohana::$config->load('common.max_object_similarity');
 			$similarity 	= ORM::factory('Object_Signature')->get_similarity($max_similarity, $this->signature, $this->options_exlusive_union, $params->object_id);
 
-			if ($similarity["sm"] > $max_similarity){
+			if ($similarity["sm"] >= $max_similarity){
 
 				$valid = $this->validate_between_parameters($category->id, $this->list_ids, $similarity["object_id"]);
 				if (!$valid)
