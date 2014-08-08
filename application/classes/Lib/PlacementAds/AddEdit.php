@@ -284,6 +284,8 @@ class Lib_PlacementAds_AddEdit {
 
 		$this->options_exlusive_union 	= $this->get_options_exlusive_union($params->address, $params->city_id, $category->id, $list_ids);
 
+		$this->list_ids = $list_ids;
+
 		if ($this->is_similarity_enabled())
 		{
 			$max_similarity = Kohana::$config->load('common.max_object_similarity');
@@ -332,6 +334,10 @@ class Lib_PlacementAds_AddEdit {
 			$similarity 	= ORM::factory('Object_Signature')->get_similarity($max_similarity, $this->signature, $this->options_exlusive_union, $params->object_id);
 
 			if ($similarity["sm"] > $max_similarity){
+
+				$valid = $this->validate_between_parameters($category->id, $this->list_ids, $similarity["object_id"]);
+				if (!$valid)
+					return $this;
 
 				$parent_id = (int) ORM::factory('Object', $similarity["object_id"])->parent_id;
 				if ($parent_id == 0)
@@ -990,6 +996,56 @@ class Lib_PlacementAds_AddEdit {
 			}
 		}
 		return $config;
+	}
+
+	public static function validate_between_parameters($category_id, $list_ids = Array(), $similar_object_id)
+	{
+		$result = TRUE;
+		$config = self::get_union_config($category_id);
+		if ($config)
+		{
+			foreach ($config["between_params"] as $attribute_id=>$procent)
+			{
+				$attribute = ORM::factory('Attribute')
+								->where("id","=",$attribute_id)
+								->cached(Date::DAY)
+								->find();
+				if ($attribute->loaded())
+				{
+					if ($attribute->type == "integer")
+					{
+								$di = ORM::factory('Data_Integer')
+									->where("object","=",$similar_object_id)
+									->where("attribute","=",$attribute->id)
+									->find();
+
+					} else
+					if ($attribute->type == "numeric")
+					{
+							$di = ORM::factory('Data_Numeric')
+								->where("object","=",$similar_object_id)
+								->where("attribute","=",$attribute->id)
+								->find();
+					}
+
+					$similar_value = $di->value_min;
+					$odds = ($similar_value/100)*$procent;
+					$input_value   = $list_ids[$attribute_id];
+					//throw new Exception("val ".$similar_value." odds ".$odds." inp ".$input_value, 1);
+					
+					if ($input_value <= $similar_value-$odds
+						OR $input_value >= $similar_value+$odds)
+					{
+						$result = FALSE;
+						break;
+					}
+					
+				}
+
+			}
+
+		}
+		return $result;
 	}
 
 	private static function get_options_exlusive_union($address, $city_id, $category_id, $list_ids = Array())
