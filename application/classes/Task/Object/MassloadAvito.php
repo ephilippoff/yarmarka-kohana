@@ -117,7 +117,9 @@ class Task_Object_MassloadAvito extends Minion_Task
 						Email::send(array($user->email), Kohana::$config->load('email.default_from'), 'Отчет по загрузке объявлений на сайт "Ярмарка-онлайн"', $mail_message);
 					}
 					//$mail_message .= '- ID объявлений с ошибками : '.join(', ',$error_adverts).'</br>';
-					Email::send(Kohana::$config->load('common.admin_emails'), Kohana::$config->load('email.default_from'), 'Отчет по загрузке объявлений', $mail_message);
+					try {
+						Email::send(Kohana::$config->load('common.admin_emails'), Kohana::$config->load('email.default_from'), 'Отчет по загрузке объявлений', $mail_message);
+					} catch(Exception $ee){}
 				} //end foreach by category
 			} 
 				catch(Exception $e)
@@ -126,7 +128,9 @@ class Task_Object_MassloadAvito extends Minion_Task
 				$exception_message .= 'message: '.($e->getMessage()).'</br>';
 				$exception_message .= 'input_params: '.Debug::vars($setting).'</br>';
 				$exception_message .= 'stack: '.($e->getTraceAsString()).'</br>';
+				try {
 				Email::send(Kohana::$config->load('common.admin_emails'), Kohana::$config->load('email.default_from'), 'Ошибки при массовой загрузке', $exception_message);
+				} catch(Exception $eee){}
 				Minion_CLI::write('critical error: '.Minion_CLI::color($e->getMessage(), 'cyan'));
 			}
 
