@@ -42,16 +42,16 @@ class Controller_Ajax_Massload extends Controller_Template {
 	public function action_checkfile()
 	{
 
-		/*pathtofile = '/home/avagapov/WEB/yarmarka/yarmarka/uploads/111.xml';
-		
-
-		$avito = new Massload_Avito;
-		$avito->convert_avito_file($pathtofile);*/
-
 		$category_id 	= $this->request->post("category_id");
+		$user_id 		= $this->request->post("user_id");
 		$ignore_errors 	= (int) $this->request->post("ignore_errors");
 
 		$user = Auth::instance()->get_user();
+		if ($user->role == 1 AND $user_id)
+		{
+			$user = ORM::factory('User', $user_id);
+		}
+
 		$file = $_FILES["file"];
 		if (empty($user)) {
 			$this->json['critError'] = 'Пользователь не определен';
@@ -83,7 +83,7 @@ class Controller_Ajax_Massload extends Controller_Template {
 			return;
 		}
 
-		    
+		$this->json['user_id'] 		= $user->id;   
 	    $this->json['pathtofile'] 	= $filepath;
 		$this->json['pathtoimage']  = $imagepath;
 		$this->json['count'] 		= $count;
@@ -99,6 +99,7 @@ class Controller_Ajax_Massload extends Controller_Template {
 		$step 			= (int) $this->request->post('step');
 		$iteration 		= (int) $this->request->post('iteration');
 		$category_id 	= $this->request->post('category_id');
+		$user_id 		= $this->request->post("user_id");
 
 		$this->json['category_id'] = $category_id;
 
@@ -106,6 +107,10 @@ class Controller_Ajax_Massload extends Controller_Template {
 			return;
 
 		$user = Auth::instance()->get_user();
+		if ($user->role == 1 AND $user_id)
+		{
+			$user = ORM::factory('User', $user_id);
+		}
 
 		$ml = new Massload();
 
@@ -114,8 +119,13 @@ class Controller_Ajax_Massload extends Controller_Template {
 
 	public function action_conformity()
 	{
-		$user = Auth::instance()->get_user();
 		$response = json_decode($this->request->body());
+		$user = Auth::instance()->get_user();
+		if ($user->role == 1 AND $response->user_id)
+		{
+			$user = ORM::factory('User', $response->user_id);
+		}
+		
 		if (trim($response->conformity) == ""){
 			
 			$cf = ORM::factory('User_Conformities')->delete_conformity($user->id, $response->massload, $response->type, $response->value);

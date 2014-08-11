@@ -37,6 +37,16 @@
 								<label for="fn-ignore_errors">Игнорировать ошибки
 								</label>
 							</div>
+							<? 
+								$user = Auth::instance()->get_user();
+								if ($user->role == 1):
+							?>
+								<div class="massload-controlsrow massload-checkbox-ingnore-errors">
+									<input type="text" id="fn-user"/>
+									<label for="fn-ignore_errors">ID пользователя
+									</label>
+								</div>
+							<? endif; ?>
 							<? /*<input id="fn-userfile-upload" type="button" name="button" value="Загрузить"/> */?>
 							<div class="massload-controlsrow massload-textarea">
 								<p id="fn-log-area"></p>

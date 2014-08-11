@@ -6,7 +6,16 @@
 			<section class="p_room-inner">
 				<header><span class="title">Настройка соответствий для массовой загрузки объявлений</span></header>
 				<div class="p_cont massload">
-					
+					<? 
+								$user = Auth::instance()->get_user();
+								if ($user->role == 1):
+							?>
+								<div class="massload-controlsrow massload-checkbox-ingnore-errors">
+									<input type="text" id="fn-user" value="<?=$end_user_id?>" disabled/>
+									<label for="fn-ignore_errors">ID пользователя
+									</label>
+								</div>
+							<? endif; ?>
 					<? if (count($categories)>0): ?>
 						<? foreach($forms as $category=>$items): ?>
 								<div class="massload-controlsrow massload-head">

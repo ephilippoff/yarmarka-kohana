@@ -190,6 +190,13 @@ class Controller_User extends Controller_Template {
     	if(!$category)
     		throw new HTTP_Exception_404;
 
+    	$user = $this->user;
+    	$user_id = $this->request->param('user_id');
+    	$this->template->end_user_id = $user_id;
+    	
+    	if ($this->user->role == 1 AND $user_id)
+    		$user = ORM::factory('User', $user_id);
+
     	try 
 		{ 
 			$cfg = Kohana::$config->load('massload/bycategory.'.$category);
@@ -205,7 +212,7 @@ class Controller_User extends Controller_Template {
     	foreach ($categories as $key=>$value)
     	{
     		$cfg = Kohana::$config->load('massload/bycategory.'.$key);
-    		@list($dictionary, $form) = Massload::get_dictionary($cfg, $this->user->id, $key);
+    		@list($dictionary, $form) = Massload::get_dictionary($cfg, $user->id, $key);
     		$dictionaries[$key] = $dictionary;
     		$forms[$key] = $form; 
 	    }
