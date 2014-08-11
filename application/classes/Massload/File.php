@@ -6,7 +6,7 @@ class Massload_File
 	const ZIP = "zip";
 	const CSVSEPARATOR = ",";
 
-	private static $valid_extension = Array("csv", "zip", "xml");
+	private static $valid_extension = Array("csv", "zip", "xml", "xlsx", "xls");
 
 	public function init($file, $user_id)
 	{	
@@ -91,7 +91,12 @@ class Massload_File
 		if ($ext == "xml"){
 			Massload_FileXml::forEachRow($config, $pathtofile, $callback);
 			return;
+		} else 
+		if ($ext == "xls" OR $ext == "xlsx"){
+			Massload_FileXls::forEachRow($config, $pathtofile, $callback);
+			return;
 		}
+		
 
 		$file = self::openFile($pathtofile);
 
@@ -99,7 +104,7 @@ class Massload_File
 		while ( !feof($file) )
 		{
 			$row = fgetcsv($file, self::CSVSEPARATOR);
-			$row = self::to_assoc_object($row, $config);
+			//$row = self::to_assoc_object($row, $config);
 			$row = self::clear_row($row);
 			$return = $callback($row, $i);
 			if ($return == 'break') break;
@@ -115,6 +120,10 @@ class Massload_File
 		$ext = File::ext_by_mime(mime_content_type($pathtofile));
 		if ($ext == "xml"){
 			Massload_FileXml::forRow($config, $pathtofile, $step, $iteration, $callback);
+			return;
+		} else 
+		if ($ext == "xls" OR $ext == "xlsx"){
+			Massload_FileXls::forRow($config, $pathtofile, $step, $iteration, $callback);
 			return;
 		}
 

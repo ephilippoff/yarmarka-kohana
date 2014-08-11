@@ -1,0 +1,3 @@
+[submodule "modules/phpexcel"]
+	path = modules/phpexcel
+	url = git://github.com/yuankai/kohana-phpexcel.git

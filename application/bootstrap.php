@@ -119,6 +119,7 @@ Kohana::modules(array(
 	'orm'        => MODPATH.'orm',        // Object Relationship Mapping
 	'assets'     => MODPATH.'asset-merger',        // js css assets manager
 	'pagination' => MODPATH.'pagination',        // kohana pagination module
+	'phpexcel'   => MODPATH.'phpexcel',
 	// 'unittest'   => MODPATH.'unittest',   // Unit testing
 	// 'userguide'  => MODPATH.'userguide',  // User guide and API documentation
 	));
