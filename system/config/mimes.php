@@ -208,7 +208,7 @@ return array
 	'xcf'   => array('image/xcf'),
 	'xhtml' => array('application/xhtml+xml'),
 	'xht'   => array('application/xhtml+xml'),
-	'xls'   => array('application/excel', 'application/vnd.ms-excel', 'application/vnd.ms-office'),
+	'xls'   => array('application/excel', 'application/vnd.ms-excel', 'application/vnd.ms-office', 'application/msworddoc'),
 	'xlsx'  => array('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'),
 	'xl'    => array('application/excel', 'application/vnd.ms-excel'),
 	'xla'   => array('application/excel', 'application/vnd.ms-excel'),
