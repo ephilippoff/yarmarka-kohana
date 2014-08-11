@@ -114,12 +114,20 @@ class Task_Object_MassloadAvito extends Minion_Task
 					$mail_message .= '- обновлено объявлений : '.$edited_count.'</br>';
 					$mail_message .= '- объявлений с ошибками (не были загружены) : '.$error_count.'</br>';	
 					if ($send_email) {
-						Email::send(array($user->email), Kohana::$config->load('email.default_from'), 'Отчет по загрузке объявлений на сайт "Ярмарка-онлайн"', $mail_message);
+						try {
+							Email::send(array($user->email), Kohana::$config->load('email.default_from'), 'Отчет по загрузке объявлений на сайт "Ярмарка-онлайн"', $mail_message);
+						} catch(Exception $ee){
+							Kohana::$log->add(Log::ERROR, $mail_message);
+							Kohana::$log->add(Log::ERROR, $ee->getMessage());
+						}
 					}
 					//$mail_message .= '- ID объявлений с ошибками : '.join(', ',$error_adverts).'</br>';
-					try {
+					try {						
 						Email::send(Kohana::$config->load('common.admin_emails'), Kohana::$config->load('email.default_from'), 'Отчет по загрузке объявлений', $mail_message);
-					} catch(Exception $ee){}
+					} catch(Exception $ee){
+						Kohana::$log->add(Log::ERROR, $mail_message);
+						Kohana::$log->add(Log::ERROR, $ee->getMessage());
+					}
 				} //end foreach by category
 			} 
 				catch(Exception $e)
@@ -129,8 +137,11 @@ class Task_Object_MassloadAvito extends Minion_Task
 				$exception_message .= 'input_params: '.Debug::vars($setting).'</br>';
 				$exception_message .= 'stack: '.($e->getTraceAsString()).'</br>';
 				try {
-				Email::send(Kohana::$config->load('common.admin_emails'), Kohana::$config->load('email.default_from'), 'Ошибки при массовой загрузке', $exception_message);
-				} catch(Exception $eee){}
+					Email::send(Kohana::$config->load('common.admin_emails'), Kohana::$config->load('email.default_from'), 'Ошибки при массовой загрузке', $exception_message);
+				} catch(Exception $eee){
+					Kohana::$log->add(Log::ERROR, $exception_message);
+					Kohana::$log->add(Log::ERROR, $eee->getMessage());
+				}
 				Minion_CLI::write('critical error: '.Minion_CLI::color($e->getMessage(), 'cyan'));
 			}
 
