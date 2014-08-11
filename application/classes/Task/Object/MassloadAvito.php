@@ -112,7 +112,7 @@ class Task_Object_MassloadAvito extends Minion_Task
 					$mail_message .= 'Результат : </br>';
 					$mail_message .= '- всего обработано объявлений : '.$object_count.'</br>';
 					$mail_message .= '- обновлено объявлений : '.$edited_count.'</br>';
-					$mail_message .= '- объявлений с ошибками (не были загружены) : '.$error_count.'</br>';	
+					//$mail_message .= '- объявлений с ошибками (не были загружены) : '.$error_count.'</br>';	
 					if ($send_email) {
 						Email::send(array($user->email), Kohana::$config->load('email.default_from'), 'Отчет по загрузке объявлений на сайт "Ярмарка-онлайн"', $mail_message);
 					}
