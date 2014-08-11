@@ -295,8 +295,12 @@ class Lib_PlacementAds_AddEdit {
 				$sign_existed = ORM::factory('Object_Signature')->where('object_id','=',$object->id)->find();
 				if ($sign_existed->loaded())
 				{
+					$attachments_count = ORM::factory('Object_Attachment')->where("object_id","=",$object->id)->count_all();
+					$input_attachament_count = count($params->userfile);
+
 					$signature_full = '{'.join(',', $this->signature_full).'}';
-					if ($signature_full == $sign_existed->signature_full)
+					if ($signature_full == $sign_existed->signature_full 
+							AND $attachments_count == $input_attachament_count)
 					{
 						$errors['signature'] = "Объявление не требует обновления.";	
 						$this->union_cancel = TRUE;

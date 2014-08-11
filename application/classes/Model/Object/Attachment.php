@@ -68,6 +68,16 @@ class Model_Object_Attachment extends ORM
 
 		return (float) $query->execute()->get('sm');
 	}
+
+	public function generate_filenames_signature($object_id)
+	{
+		$result = array();
+		$attachments = $this->where("object_id","=",$object_id)->order_by("id","asc");
+		foreach ($attachments as $attachment) {
+			$result[] = $attachment->filename;
+		}
+		return join(",", $result);
+	}
 	/*
 		install smlar
 		
