@@ -7,6 +7,10 @@ class Lib_PlacementAds_AddEditByMassLoad extends Lib_PlacementAds_AddEdit {
 		$params = &$this->params;
 		$object = &$this->object;
 		$user = &$this->user;
+		if ($params->end_user_id)
+		{
+			$user = ORM::factory('User', $params->end_user_id);
+		}
 		if ($params->external_id)
 		{
 			$object = ORM::factory('Object')

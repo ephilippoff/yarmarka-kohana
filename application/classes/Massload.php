@@ -113,7 +113,7 @@ class Massload
 		@list($dictionary, $form_dictionary) = self::get_dictionary($config, $user_id, $config["category"]);
 		$category_id = $config["id"];
 
-		$f->forRow($config, $pathtofile, $step, $iteration, function($row, $i) use ($massload_id, $pathtoimage, $config, $category_id, &$objects, $dictionary){
+		$f->forRow($config, $pathtofile, $step, $iteration, function($row, $i) use ($massload_id, $pathtoimage, $config, $category_id, &$objects, $dictionary, $user_id){
 
 			/*if ($row->count() <> count($config["fields"]) )
 			{
@@ -136,7 +136,7 @@ class Massload
 
 			$record = array_merge($record, $config["autofill"]);
 
-			$objects[] = Object::PlacementAds_ByMassLoad($record, $massload_id);
+			$objects[] = Object::PlacementAds_ByMassLoad($record, $massload_id, $user_id);
 
 		});
 

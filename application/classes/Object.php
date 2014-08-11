@@ -195,11 +195,12 @@ class Object
 		return $json;
 	}
 
-	static function PlacementAds_ByMassLoad($input_params, $massload_id)
+	static function PlacementAds_ByMassLoad($input_params, $massload_id, $user_id)
 	{
 		$json = array();
 
 		$input_params["itis_massload"] = 1;
+		$input_params["end_user_id"] = $user_id;
 		
 		$add = new Lib_PlacementAds_AddEditByMassLoad();
 		$add->init_input_params($input_params)
