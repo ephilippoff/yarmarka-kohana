@@ -18,7 +18,7 @@
 						<?  else: ?>
 							Активация тарифного плана не доступна.
 						<? endif; ?>
-						<?=Request::factory('block/plan_info')->execute()?>
+						<? //Request::factory('block/plan_info')->execute()?>
 					</div>
 				</div>
 				<div class="clear"></div>
