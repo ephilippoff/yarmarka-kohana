@@ -7,6 +7,9 @@ class Service_Premium
 
 	static function apply_prepayed($object_id, $city_id = NULL, $user = NULL)
 	{
+		if (Service_Premium::get_balance($user)<=0)
+			return FALSE;
+		
 		Service_Premium::apply_service($object_id, $city_id);
 		return Service_Premium::decrease_balance($user);
 	}
