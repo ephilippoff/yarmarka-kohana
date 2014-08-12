@@ -78,6 +78,9 @@
                     </div>
                 </div>
 				<div class="input style2 notice">Теперь Вы можете чаще поднимать свои объявления в общем списке абсолютно бесплатно! Интервал поднятия в рубрике "Вакансии" - 1 раз/сут., все остальные рубрики - 1 раз/3 сут.</div>
+				<? if ($premium_balance>0):?>
+					<div class="input style2 notice">Ваш лимит Премиум объявлений - <span id="fn-premium-balance"><?=$premium_balance?><span></div>
+				<? endif;?>
             </div>		
 			<header>
 				<div class="col1"><span>Фото/номер</span></div>
@@ -373,9 +376,29 @@
 										<?php if (!$ad->is_bad and !$ad->in_archive and $ad->is_published) : ?>
 													<li><a title="Воспользоваться услугами" href="<?=CI::site('billing/services_for_ads/'.$ad->id)?>" class="btn-pmenu "><i class="ico services"></i><span>Услуги</span></a></li>
 													<li><a title="Подать в газету" href="<?=CI::site('billing/pay_service/34/'.$ad->id)?>" class="btn-pmenu "><i class="ico yarmarka"></i><span>В газету</span></a></li>
-													<? //if ($serviceup == 'premium'): ?>
-														<li><a title="Премиум" href="<?=CI::site('billing/pay_service/'.$service_premium->id.'/'.$ad->id)?>" class="btn-pmenu "><i class="ico premium"></i><span>Премиум</span></a></li>
-													<? //endif ?>
+													<? if (array_key_exists($ad->id, $already_buyed)) 
+															$is_premium = TRUE; 
+														else 
+															$is_premium = FALSE; ?>
+													<? if ($premium_balance > 0): ?>
+														<li>
+															<a title="Премиум" href="" class="btn-pmenu " id="premium-btn<?=$ad->id?>" 
+																		onclick="premium(<?=$ad->id?>, this); return false;"
+																			data-url="<?=CI::site('billing/pay_service/'.$service_premium->id.'/'.$ad->id)?>">
+																			<i class="ico premium"></i><span>Премиум (free)</span>
+																			<?if ($is_premium):?>
+																				<span>***</span>
+																			<? endif;?>
+															</a>
+														</li>
+													<? else: ?>
+														<li><a title="Премиум" href="<?=CI::site('billing/pay_service/'.$service_premium->id.'/'.$ad->id)?>" class="btn-pmenu ">
+															<i class="ico premium"></i><span>Премиум</span>
+															<?if ($is_premium):?>
+																<span>***</span>
+															<? endif;?>
+														</a></li>
+													<? endif; ?>
 													<li><a title="Текстовая ссылка" href="<?=CI::site('billing/pay_service/'.$service_promo_link->id.'/'.$ad->id)?>" class="btn-pmenu "><i class="ico pl"></i><span>Текст. ссылка</span></a></li>
 													<li><a title="Графическая ссылка" href="<?=CI::site('billing/pay_service/'.$service_promo_link_bg->id.'/'.$ad->id)?>" class="btn-pmenu "><i class="ico plg"></i><span>Графич. ссылка</span></a></li>													
 										<?php endif; ?>

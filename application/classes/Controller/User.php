@@ -479,7 +479,15 @@ class Controller_User extends Controller_Template {
 		$objects = $objects->order_by('date_created', 'desc')
 			->limit($per_page)
 			->offset($per_page*($page-1))
-			->find_all();				
+			->find_all();
+
+		//get balance for premium ads				
+		
+		$premium_balance = (int) Service_Premium::get_balance($this->user);
+		$this->template->premium_balance = $premium_balance;
+
+		$already_buyed = Service_Premium::get_already_buyed($this->user);
+		$this->template->already_buyed = $already_buyed;
 
 		// get user objects categories
 		$this->template->categories = ($objects_ids = $objects->as_array(NULL, 'id')) 

@@ -402,6 +402,27 @@ class Controller_Ajax extends Controller_Template
 		}
 	}
 
+	public function action_premium_object()
+	{
+		$object = ORM::factory('Object', intval($this->request->param('id')));
+
+		if ( ! $object->loaded() )
+		{
+			throw new HTTP_Exception_404;
+		}
+
+		$info = Service_Premium::apply_prepayed($object->id);
+
+		if ($info)
+		{
+			$this->json['count'] = $info;
+		} else 
+		{			
+			$this->json['code'] = 300;
+			$this->json['errors'] = "Лимит Премиум услуг израсходован";
+		}
+	}	
+
 	public function action_pub_toggle()
 	{
 		$object = ORM::factory('Object', intval($this->request->param('id')));
