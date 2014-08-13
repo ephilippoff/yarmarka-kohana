@@ -207,8 +207,8 @@ class Massload
 				$validation->rule($key, 'max_length', $valid_info_maxlength);
 			}
 
-			if ($config_key->type == "photo")
-				$validation->rule($key, 'check_photo', $valid_info_photo);
+			//if ($config_key->type == "photo")
+			//	$validation->rule($key, 'check_photo', $valid_info_photo);
 
 			
 
