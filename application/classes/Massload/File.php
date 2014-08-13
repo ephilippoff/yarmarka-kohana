@@ -10,9 +10,14 @@ class Massload_File
 
 	public function init($file, $user_id)
 	{	
-		$file = self::loadFile($file);
+		$file = FileUtils::checkFile($file);
 
 		@list($filename, $ext) = self::saveFile($file, $user_id);
+
+		if (!FileUtils::checkValidExtension(FileUtils::getPath($filename), self::$valid_extension))
+		{
+			throw new Exception("Не правильный формат файла. Допустимые: ".join(", ",self::$valid_extension));
+		};
 
 		if ($ext == self::ZIP)
 			@list($filepath, $imagepath) = self::unzipFile($filename);
@@ -20,17 +25,6 @@ class Massload_File
 			@list($filepath, $imagepath) = Array( FileUtils::getPath($filename), "" );
 
 		return Array($filepath, $imagepath);
-	}
-
-	private static function loadFile($file)
-	{
-		FileUtils::checkFile($file);
-		
-		if (!FileUtils::checkValidExtension($file, self::$valid_extension))
-		{
-			throw new Exception("Не правильный формат файла. Допустимые: ".join(", ",self::$valid_extension));
-		};
-		return $file;
 	}
 
 	public function createMassload($path, $user_id, $category)

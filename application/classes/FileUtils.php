@@ -57,9 +57,21 @@ class FileUtils
 		return File::ext_by_mime($file['type']);
 	}
 
-	public static function checkValidExtension($file, $valid_extensions = Array())
+	public static function getFileMimeInfo($filepath)
 	{
-		return (in_array( self::getExtension($file), $valid_extensions)) ? TRUE : FALSE;
+		$finfo = finfo_open(FILEINFO_MIME_TYPE);
+		return finfo_file($finfo, $filepath);
+	}
+
+	public static function getExtensionByLocalMime($filepath)
+	{
+		$mime = self::getFileMimeInfo($filepath);
+		return File::ext_by_mime($mime);
+	}
+
+	public static function checkValidExtension($filepath, $valid_extensions = Array())
+	{
+		return (in_array( self::getExtensionByLocalMime($filepath), $valid_extensions)) ? TRUE : FALSE;
 	}
 
 	public static function getPath($filename) {
