@@ -217,7 +217,6 @@ class Lib_PlacementAds_Form  {
 				unset($elements[$key]);
 			}			
 		}
-		echo Debug::vars($elements);
 
 		$this->_data->params = View::factory($this->templates['params'],
 									array('elements' => $elements, 'customs' => $customs))
