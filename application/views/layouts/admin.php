@@ -78,6 +78,7 @@
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">Categories <b class="caret"></b></a>
 							<ul class="dropdown-menu">
 								<li><a href="<?=Url::site('khbackend/category/index')?>">List</a></li>
+								<li><a href="<?=Url::site('khbackend/category/relations')?>">Настройка атрибутов</a></li>
 							</ul>
 						</li>
 						<?php endif; ?>

@@ -1,0 +1,1 @@
+<?=$title?><input class="<?=$class?>" type="text" name="<?=$name?>" value="<?=$value?>"/>

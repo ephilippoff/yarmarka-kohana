@@ -49,6 +49,59 @@ class Controller_Admin_Category extends Controller_Admin_Template {
 			->as_array('id', 'title');
 		$this->template->selected 		= $selected;
 	}
+
+	public function action_relations()
+	{
+		$this->template->categories = ORM::factory('Category')
+			->order_by('id')
+			->find_all();
+	}
+
+	public function action_relation_edit()
+	{
+		$this->use_layout = FALSE;
+		$category_id =  $this->request->param('id');
+		$this->template->category_id = $category_id;
+
+		$references = Array();
+		$references[""] = "-- Выбери атрибут --";
+		$reference =  ORM::factory('Reference')
+							->where('category', '=', $category_id)
+							->order_by("weight")
+							->find_all();
+		foreach ($reference as $ref)
+			$references[$ref->id] = $ref->attribute_obj->title;
+		$this->template->references = $references;
+
+		$relations = Array();
+		$relations[""] = "-- Выбери родителя --";
+		$relation =  ORM::factory('Attribute_Relation')
+							->where('category_id', '=', $category_id)
+							->find_all();
+		foreach ($relation as $rel)
+			$relations[$rel->id] = $rel->reference_obj->attribute_obj->title." (".$rel->id.")";
+		$this->template->relations = $relations;
+	}
+
+	public function action_parent_element()
+	{
+		$this->use_layout = FALSE;
+
+		$relation_id =  $this->request->param('id');
+		$relation =  ORM::factory('Attribute_Relation', $relation_id);
+
+		$elements = array();
+		$elements[""] = "-- Выбери роодительский элемент --";
+		$aes = ORM::factory('Attribute_Element')
+						->where("attribute","=",$relation->reference_obj->attribute)
+						->find_all();
+		foreach($aes as $ae)
+			$elements[$ae->id] = $ae->title;
+
+		$this->template->parent_element = Form::select("parent_element", $elements, NULL, 
+											array('id' => 'parent_element'));
+	}
+
 }
 
 /* End of file Category.php */
