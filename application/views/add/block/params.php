@@ -1,6 +1,7 @@
 <? foreach($elements as $element): ?>
 	
 	<? $parameters = array(	
+							'id' 	=> $element["name"],
 							'name' 	=> $element["name"],
 							'title' => $element["title"],
 							'class' => "",
@@ -31,6 +32,7 @@
 <? foreach($customs as $custom): ?>
 	
 	<? $parameters = array(	
+							'id' 	=> $element["name"],
 							'name' 	=> $custom["name"],
 							'title' => $custom["title"],
 							'class' => "",

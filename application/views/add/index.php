@@ -78,3 +78,4 @@
 		  
 	  
       <div class="clear-float"></div><!-- Сброс обтекания -->
+<?=HTML::script('js/adaptive/addapp.js')?>

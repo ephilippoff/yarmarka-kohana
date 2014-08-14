@@ -352,7 +352,7 @@ class Lib_PlacementAds_Form  {
 		return $this;
 	}
 
-	static private function parse_object_params($object_id, $callback){
+	static private function parse_object_params($object_id){
 		$values = ORM::factory('Data_List')->where("object","=",$object_id)->find_all();
 		$params = Array();
 		foreach($values as $list_item)
