@@ -23,6 +23,7 @@ class Massload_FileXls extends Massload_File
 		$i = 0;
 		foreach ($file as $item)
 		{
+			if ($i == 0) {$i++;continue;}
 			$values = array_values($item);
 			$row = new Obj((array) $values);
 			$row = self::to_assoc_object($row, $config);				
@@ -42,7 +43,7 @@ class Massload_FileXls extends Massload_File
 	{
 		$file = self::openFile($pathtofile);
 		if ($iteration == 0) $iteration = 1;
-		for ($i = $iteration*$step; $i<$iteration*$step+$step; $i++)
+		for ($i = $iteration*$step; $i<=$iteration*$step+$step; $i++)
 		{
 			$values = array_values($file[$i]);
 			$row = new Obj((array) $values);
