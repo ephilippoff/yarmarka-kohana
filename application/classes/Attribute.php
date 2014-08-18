@@ -104,11 +104,12 @@ class Attribute {
 			}
 
 			$data[$rel_id] = Array(0 => Array ( 
-													"title" => $relation->atitle,  
-													"type" =>  $type, 
-													"ref_id" => $relation->reference_id, 
-													"custom" => $relation->custom
-													)
+												"id" => "param_".$relation->reference_id,
+												"title" => $relation->atitle,  
+												"type" =>  $type, 
+												"ref_id" => $relation->reference_id, 
+												"custom" => $relation->custom
+											)
 										);
 			$data[$rel_id] = array_merge($data[$rel_id], $elements);
 			

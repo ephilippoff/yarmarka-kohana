@@ -27,9 +27,11 @@
 				 		<?=$form_data->category;?>
 					<? endif; ?>
 					<br/>
-				 	<? if ( property_exists($form_data, 'params') ): ?>
-				 		<?=$form_data->params;?>
-					<? endif; ?>
+					<div class="fn-parameters">
+					 	<? if ( property_exists($form_data, 'params') ): ?>
+					 		<?=$form_data->params;?>
+						<? endif; ?>
+					</div>
 					<br/>
 					<? if ( property_exists($form_data, 'map') ): ?>
 				 		<?=$form_data->map;?>
@@ -75,7 +77,23 @@
 	</div>
 	  
 
-		  
+	<script id="template-integer" type="text/template">
+		<%=title%><input  id="<%=id%>" name="<%=id%>" class="<%=classes%>" type="text" value="<%=value%>"/>
+	</script>
+
+	<script id="template-numeric" type="text/template">
+		<%=title%><input  id="<%=id%>" name="<%=id%>" class="<%=classes%>" type="text" value="<%=value%>"/>
+	</script>
+
+	<script id="template-text" type="text/template">
+		<%=title%><input  id="<%=id%>" name="<%=id%>" class="<%=classes%>" type="text" value="<%=value%>"/>
+	</script>	
+
+	<script id="template-list" type="text/template">
+		<select id="<%=id%>" name="<%=id%>" class="<%=classes%>">
+	  		<option>--<%=title%>--</option>
+	  	</select> 
+	</script>		  
 	  
       <div class="clear-float"></div><!-- Сброс обтекания -->
 <?=HTML::script('js/adaptive/addapp.js')?>

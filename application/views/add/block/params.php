@@ -4,7 +4,7 @@
 							'id' 	=> $element["name"],
 							'name' 	=> $element["name"],
 							'title' => $element["title"],
-							'class' => "",
+							'class' => "fn-param",
 							'values'=> $element['values'],
 							'value' => $element['value']
 						); ?>
