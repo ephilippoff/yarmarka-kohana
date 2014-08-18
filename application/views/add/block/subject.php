@@ -1,6 +1,5 @@
-<label for="title_adv">Заголовок</label>	
-<? if ($edit): ?>
-	<?=$value?>
+<? if ($data->edit): ?>
+	<?=$data->value?>
 <? else: ?>
-	<input type="text" maxlength="75" id="title_adv" name="title_adv" value="<?=$value?>"/>	
+	<input type="text" maxlength="75"  name="<?=$name?>" id="<?=$id?>" class="<?=$_class?>" value="<?=$data->value?>"/>	
 <? endif; ?>			

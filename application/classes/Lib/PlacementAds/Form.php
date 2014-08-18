@@ -127,14 +127,13 @@ class Lib_PlacementAds_Form  {
 
 		$value = $category->title;
 		
-		$this->_data->category = View::factory($this->templates['category'],
-									array(	
-											'category_list' => $category_list, 
-											'category_id' 	=> $category_id,
-											'value' 		=> $value,
-											'edit'			=> $edit
-										))
-									->render();
+		$this->_data->category = array(	
+										'category_list' => $category_list, 
+										'category_id' 	=> $category_id,
+										'value' 		=> $value,
+										'edit'			=> $edit
+									);
+
 		return $this;
 	}
 
@@ -151,12 +150,10 @@ class Lib_PlacementAds_Form  {
 
 		$value = $city->title;
 		
-		$this->_data->city = View::factory($this->templates['city'],
-									array(	'city_list' => $city_list, 
+		$this->_data->city = array(	'city_list' => $city_list, 
 											'city_id' => $city_id,
 											'value' => $value, 
-											'edit' => $edit))
-									->render();
+											'edit' => $edit);
 		return $this;
 	}
 
@@ -218,9 +215,7 @@ class Lib_PlacementAds_Form  {
 			}			
 		}
 
-		$this->_data->params = View::factory($this->templates['params'],
-									array('elements' => $elements, 'customs' => $customs))
-									->render();
+		$this->_data->params = array('elements' => $elements, 'customs' => $customs);
 		
 		return $this;
 	}
@@ -253,9 +248,9 @@ class Lib_PlacementAds_Form  {
 
 
 		if (!$title_auto_fill OR ($title_auto_fill AND $edit))
-			$this->_data->subject = View::factory($this->templates['subject'],
-									array( 'value' => $value, 
-											'edit' => $edit))->render();
+			$this->_data->subject = array( 'value' => $value, 
+											'edit' => $edit)
+										;
 
 		return $this;
 	}
@@ -269,8 +264,7 @@ class Lib_PlacementAds_Form  {
 		elseif ($this->is_post)
 			$value = $this->params['user_text_adv'];
 
-		$this->_data->text = View::factory($this->templates['text'],
-									array( 'value' => $value ))->render();
+		$this->_data->text = array( 'value' => $value );
 
 		return $this;
 	}
@@ -302,10 +296,9 @@ class Lib_PlacementAds_Form  {
 			
 		}
 
-		$this->_data->photo = View::factory($this->templates['photo'],
-									array( 'files' => $files,  
+		$this->_data->photo = array( 'files' => $files,  
 											'main_image_id' => $main_image_id
-											))->render();
+											);
 
 		return $this;
 	}
@@ -337,12 +330,10 @@ class Lib_PlacementAds_Form  {
 			$contact_person = $this->params["contact"];
 		}
 
-		$this->_data->contacts = View::factory($this->templates['contacts'],
-									array(	"contacts" 			=> $contacts , 
+		$this->_data->contacts = array(	"contacts" 			=> $contacts , 
 											"contact_types" 	=> $contact_types, 
 											"max_count_contacts"=> self::MAX_COUNT_CONTACTS,
-											"contact_person" 	=> $contact_person)
-									)->render();
+											"contact_person" 	=> $contact_person);
 		return $this;
 	}
 	

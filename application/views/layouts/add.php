@@ -29,7 +29,7 @@
 	.$_assets
 ?>
 </head>
-<body class="adaptive page-add">
+<body class="adaptive page-addobj">
 	<?=View::factory('layouts/google_analytics')?>
 	<div class="wrapfix add">
 			<?=View::factory('layouts/header')?>

@@ -1,11 +1,10 @@
-<label for="rubricid">Раздел</label>	
-<? if ($edit): ?>
-	<?=$value?>
+<? if ($data->edit): ?>
+	<?=$data->value?>
 <? else: ?>		
-	<select name="rubricid" id="fn-category">
+	<select name="<?=$name?>" id="<?=$id?>" class=<?=$_class?>>
 		<option value>---</option>
-		<? foreach($category_list as $item) : ?>
-			<option value="<?=$item->id?>" <?if ($item->id == $category_id) { echo "selected"; } ?>><?=$item->title?></option>
-		<?php endforeach; ?>
+		<? foreach($data->category_list as $item) : ?>
+			<option value="<?=$item->id?>" <?if ($item->id == $data->category_id) { echo "selected"; } ?>><?=$item->title?></option>
+		<? endforeach; ?>
 	</select>
 <? endif; ?>

@@ -1,56 +1,52 @@
-<div id="contacts" data-max="<?=$max_count_contacts?>">
-	<div class="add_form_info">
-		<div class="text">Контактное лицо&nbsp;<span class="red">*</span></div>
-		<div class="values">
-			<input type="text" name="contact" value="<?=$contact_person?>" />
-			<div id="error_contact" class="error" style="display:none;color: red;"></div>
-		</div>
-	</div>
-</div>
-<div id="contacts2">
-	<? $i = 0; ?>
-	<?	foreach ($contacts as $contact):	?>
-	
-	<div class="add_form_info contact_type_select_info" id="contact_item_<?=$i?>" data-item-id="<?=$i?>">
-		<div class="text">
-			<select data-placeholder="Выберите тип контакта..." id="contact_type_select_<?=$i?>"  name="contact_<?=$i?>_type">
-				<? foreach ($contact_types as $contact_type)
-				{?>
-				<option value='<?=$contact_type->id?>' data-validation-type="<?=$contact_type->validation_type?>" data-format="<?=$contact_type->format?>" <?php if ($contact["type"]==$contact_type->id){echo 'selected';}?>><?=$contact_type->name?></option>
-				<?
-				}?>
+
+<? $i = 0; ?>
+<?	foreach ($data->contacts as $contact):	?>
+
+	<div class="contact-cont">
+		<div class="cont-left">
+			<select id="contact_type_select_<?=$i?>"  name="contact_<?=$i?>_type" class="sl-contact-type fn-contact-type">
+				<? foreach ($data->contact_types as $contact_type):?>
+					<option value='<?=$contact_type->id?>' data-validation-type="<?=$contact_type->validation_type?>" data-format="<?=$contact_type->format?>" <?php if ($contact["type"]==$contact_type->id){echo 'selected';}?>><?=$contact_type->name?></option>
+				<? endforeach; ?>
 			</select>
+			<input id="contact_value_input_<?=$i?>" class='inp_contact fn-contact-value' type="text" value="<?=$contact["value"]?>" name="contact_<?=$i?>_value"/>
+			<span class="inform"><span class="fn-contact-inform"><?/* inform*/?></span></span>
 		</div>
-		<div class="values with_right">
-			<input id="contact_value_input_<?=$i?>" class='inputs_contact' type="text" value="<?=$contact["value"]?>" name="contact_<?=$i?>_value"/>
-			<span onclick="DeleteContact(<?=$i?>)" title="Удалить"  class='like_link'>Удалить</span>
-		</div>
+		<div class="cont-right">
+			<span title="Верифицировать" class="button apply fn-contact-verify-button">Подтвердить контакт</span>
+			<span class="cansel like-link fn-contact-delete-button" title="Удалить">Удалить</span>
+		</div><!--contact-right-->
+
+		<div id="error_contacts" class="alert-bl fn-alert-overlay hidden">
+			<div class="cont"><? /* error message*/?></div>
+			<div class="arr"></div>
+		</div>						
+	</div><!--contact-cont-->
+<? $i++; ?>
+<? if ($i == $data->max_count_contacts) break;?>
+<? endforeach; ?>
+
+<? if ($i<$data->max_count_contacts) :?>
+	<div id="contacts2" class="contacts-cont fn-contacts-container">			
+		<div class="contact-cont">
+			<div class="cont-left">
+				<select id="contact_type_select_1"  name="contact_1_type" class="sl-contact-type fn-contact-type">
+					<option value='1'>Мобильный тел.</option>
+					<option value='2'>Городской тел.</option>
+					<option value='5'>Email</option>
+				</select>
+				<input id="contact_value_input_1" class="inp_contact fn-contact-value" type="text" value="" name="contact_1_value" />
+				<span class="inform"><span class="fn-contact-inform">Пр прпвап ваппвап вапвапвпвап вапвапвапвар вапвапв</span></span>
+			</div>
+			<div class="cont-right">
+				<span title="Верифицировать" class="button apply fn-contact-verify-button">Подтвердить контакт</span>
+				<span class="cansel like-link fn-contact-delete-button" title="Удалить">Удалить</span>
+			</div><!--contact-right-->
+
+			<div id="error_contacts" class="alert-bl fn-alert-overlay hidden">
+				<div class="cont"><? /* error message*/?></div>
+				<div class="arr"></div>
+			</div>						
+		</div><!--contact-cont-->
 	</div>
-	<? $i++; ?>
-	<? if ($i == $max_count_contacts) break;?>
-	<? endforeach; ?>
-	<? if ($i<$max_count_contacts) :?>
-	<div class="add_form_info contact_type_select_info" id="contact_item_<?=$i?>" data-item-id="0">
-		<div class="text">
-			<select data-placeholder="Выберите тип контакта..." id="contact_type_select_<?=$i?>" name="contact_<?=$i?>_type">
-				<? foreach ($contact_types as $contact_type)
-				{?>
-				<option value='<?=$contact_type->id?>' data-comment="<?=$contact_type->comment?>" data-validation-type="<?=$contact_type->validation_type?>" data-format="<?=$contact_type->format?>"><?=$contact_type->name?></option>
-				<?
-				}?>
-			</select>
-		</div>
-		<div class="values with_right">
-			<input id="contact_value_input_<?=$i?>" class='inputs_contact' type="text" value="" name="contact_<?=$i?>_value"/>
-			<span onclick="DeleteContact(<?=$i?>)" title="Удалить"  class='like_link'>Удалить</span>
-		</div>
-	</div>
-	<? endif; ?>
-</div>
-<div class="add_form_info" id='add_form_informer' count-load-contacts='<?=$i?>'>
-	<div class="text">&nbsp; </div>
-	<div class="values" id="miniform_show_button"  <? if($i >= $max_count_contacts) echo 'style="display:none"'; ?>>
-		<span onclick="AddFieldContact()" title="Добавить контакт"  class='like_link'>Добавить еще телефон или email</span>
-		
-	</div>
-</div>
+<? endif; ?>
