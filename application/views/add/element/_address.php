@@ -18,10 +18,10 @@
 </div>
 
 <div class="smallcont">
-	<div class="labelcont"></div>
+	<div class="labelcont">Укажите местоположение объекта на карте</div>
 	<div class="fieldscont">
 		<div id="map_block_div" class="map_block_div add_form_info inp-cont-long">
-			<div class="map" id="map_block" style="height:360px;width:100%;">		
+			<div class="map" id="map_block" style="height:250px;width:100%;">		
 			карта
 				<input type="hidden" id="object_coordinates" name="object_coordinates" value=""/>
 			</div>				

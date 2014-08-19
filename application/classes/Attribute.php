@@ -38,7 +38,8 @@ class Attribute {
 		$ar = $attribute_relation->select(	'attribute.type',
 											'attribute.seo_name',
 											 array('attribute.id', 'aid'), 
-											 array('attribute.title', 'atitle')
+											 array('attribute.title', 'atitle'),
+											 'reference.weight'
 										)
 								->join('reference', 'left')
 									->on('attribute_relation.reference_id', '=', 'reference.id')
@@ -108,7 +109,8 @@ class Attribute {
 												"title" => $relation->atitle,  
 												"type" =>  $type, 
 												"ref_id" => $relation->reference_id, 
-												"custom" => $relation->custom
+												"custom" => $relation->custom,
+												"weight" => $relation->weight
 											)
 										);
 			$data[$rel_id] = array_merge($data[$rel_id], $elements);

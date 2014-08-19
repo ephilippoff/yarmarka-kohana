@@ -223,6 +223,44 @@
 				</div>
 			<? endif; ?>
 
+			<div class="fl100">	                    					
+					<div class="smallcont">
+						<div class="labelcont">
+							<label><span>Срок жизни объявления:</span></label>
+						</div>	
+						<div class="fieldscont">
+							<div class="inp-cont-short">
+								<div class="inp-cont">
+									<div data-placeholder="Выберите жизни объявления<..." class="values">
+										 <select id="lifetime" name="lifetime">
+											<option value="2w">2 недели</option>
+											<option value="1m">1 месяц</option>
+											<option value="2m" selected>2 месяца</option>
+											<option value="3m">3 месяца</option>
+										</select>
+									</div>					
+
+								</div>						
+							</div>
+						</div><!--fieldscont-->
+					</div><!--smallcont-->														
+
+					<div class="smallcont inp-add-cont">
+						<div class="labelcont"></div>					
+						<div class="fieldscont mb15">		                    				                    			
+							<div class="inp-cont-long ">
+									<div class="checkbox">
+										<label>
+											<input type="checkbox" name="block_comments" id="block_comments" value="1" ></input>
+											<span for="block_comments" class="">Отключить возможность задавать вопросы на странице объявления</span>
+										</label>	
+									</div>
+							</div>
+						</div>
+					</div><!--smallcont inp-add-cont-->
+
+			</div>
+
 			<? if (count($errors)>0) :?>
 			<div class="fl100 form-errors-cont">
 				<div class="smallcont">
