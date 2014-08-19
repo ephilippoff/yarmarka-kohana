@@ -37,11 +37,11 @@ class Object_Utils
 
 		if ($object_id > 0)
 		{
-			$values[] = ORM::factory('Location', $object->location_id)->address;
-			$values[] = ORM::factory('City', 	 $object->city_id)->title;
+			$values[] = ORM::factory('Location', (int) $object->location_id)->address;
+			$values[] = ORM::factory('City', (int) $object->city_id)->title;
 		} else {
 			$values[] = $params->address;
-			$values[] = ORM::factory('City', $params->city_id)->title;
+			$values[] = ORM::factory('City', (int) $params->city_id)->title;
 		}
 		
 
@@ -149,6 +149,8 @@ class Object_Utils
 
 						$values[] = join(", ", $eltitles);
 					} else {
+						$value = (int) $value;
+						if (!$value) continue;
 						$ae = ORM::factory('Attribute_Element', $value);
 						$values[] 		 			= $ae->title;
 						$list_ids[$ae->attribute] 	 = $ae->id;

@@ -32,11 +32,18 @@ class Lib_PlacementAds_Form  {
 		'contacts' 	=> 'add/block/contacts',
 	);
 
-	function Lib_PlacementAds_Form($params, $is_post = FALSE)
+	function Lib_PlacementAds_Form($params, $is_post = FALSE, $errors = NULL)
 	{
-		$this->_data = new stdClass();
+		$this->_data = new Obj();
 		$this->is_post = $is_post;
-		$this->params = $params;
+		$this->params  = $params;
+		$this->error   = $errors;
+
+		if ($errors)
+		{
+			$this->errors = new Obj($errors);
+		}
+		
 
 		if (array_key_exists("rubricid", $params)) 
 			$this->_category_id = (int) $params['rubricid'];
@@ -121,6 +128,7 @@ class Lib_PlacementAds_Form  {
 		$category 		= $this->category;
 		$category_id 	= $this->category_id;
 		$edit 			= $this->_edit;
+		$errors 		= $this->errors;
 
 		$category_list = ORM::factory('Category')
 								->find_all();
@@ -131,7 +139,8 @@ class Lib_PlacementAds_Form  {
 										'category_list' => $category_list, 
 										'category_id' 	=> $category_id,
 										'value' 		=> $value,
-										'edit'			=> $edit
+										'edit'			=> $edit,
+										'category_error' => $errors->rubricid
 									);
 
 		return $this;
@@ -142,7 +151,8 @@ class Lib_PlacementAds_Form  {
 		$object 		= $this->object;
 		$city 			= $this->city;
 		$city_id 		= $this->city_id;
-		$edit 		= $this->_edit;
+		$edit 			= $this->_edit;
+		$errors 		= $this->errors;
 
 		$city_list = ORM::factory('City')
 							->where('is_visible','>',0)
@@ -151,9 +161,11 @@ class Lib_PlacementAds_Form  {
 		$value = $city->title;
 		
 		$this->_data->city = array(	'city_list' => $city_list, 
-											'city_id' => $city_id,
-											'value' => $value, 
-											'edit' => $edit);
+									'city_id' => $city_id,
+									'value' => $value, 
+									'edit' => $edit,
+									'city_error' => $errors->city_kladr_id
+									);
 		return $this;
 	}
 
@@ -168,6 +180,7 @@ class Lib_PlacementAds_Form  {
 		$category_id 	= $this->category_id;
 		$object_id 		= $this->object_id;
 		$object 		= $this->object;
+		$errors 		= $this->errors;
 
 		if (empty($category_id))
 			return $this;
@@ -215,7 +228,9 @@ class Lib_PlacementAds_Form  {
 			}			
 		}
 
-		$this->_data->params = array('elements' => $elements, 'customs' => $customs);
+		$this->_data->params = array('elements' => $elements, 
+										'customs' => $customs, 
+											'errors' => $errors );
 		
 		return $this;
 	}
@@ -234,6 +249,7 @@ class Lib_PlacementAds_Form  {
 		$category 	= $this->category;
 		$object 	= $this->object;
 		$edit 		= $this->_edit;
+		$errors 		= $this->errors;
 
 		$title_auto_fill 	=  FALSE;
 		$value 				= '';
@@ -249,14 +265,15 @@ class Lib_PlacementAds_Form  {
 
 		if (!$title_auto_fill OR ($title_auto_fill AND $edit))
 			$this->_data->subject = array( 'value' => $value, 
-											'edit' => $edit)
-										;
+											'edit' => $edit,
+											'subject_error' => $errors->title_adv);
 
 		return $this;
 	}
 
 	function Text(){
 		$object 	= $this->object;
+		$errors 		= $this->errors;
 
 		$value = '';
 		if ($object->loaded() AND !$this->is_post)
@@ -264,7 +281,8 @@ class Lib_PlacementAds_Form  {
 		elseif ($this->is_post)
 			$value = $this->params['user_text_adv'];
 
-		$this->_data->text = array( 'value' => $value );
+		$this->_data->text = array( 'value' => $value,
+									'text_error' => $errors->user_text_adv);
 
 		return $this;
 	}
@@ -311,6 +329,7 @@ class Lib_PlacementAds_Form  {
 	function Contacts(){
 		$object_id  = $this->object_id;
 		$object 	= $this->object;
+		$errors		= $this->errors;
 		$contact_person = "";
 		$contacts = Array();
 		$contact_types = ORM::factory('Contact_Type')->find_all();
@@ -331,9 +350,11 @@ class Lib_PlacementAds_Form  {
 		}
 
 		$this->_data->contacts = array(	"contacts" 			=> $contacts , 
-											"contact_types" 	=> $contact_types, 
-											"max_count_contacts"=> self::MAX_COUNT_CONTACTS,
-											"contact_person" 	=> $contact_person);
+										"contact_types" 	=> $contact_types, 
+										"max_count_contacts"=> self::MAX_COUNT_CONTACTS,
+										"contact_person" 	=> $contact_person,
+										"contact_error" 	=> $errors->contact,
+										"contacts_error" 	=> $errors->contacts);
 		return $this;
 	}
 	

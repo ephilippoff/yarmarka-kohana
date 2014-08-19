@@ -15,7 +15,7 @@
 						</div>	
 						<div class="fieldscont">
 							<div class="inp-cont-short ">
-								<div class="inp-cont">
+								<div class="inp-cont <?if ($form_data->city["city_error"]) echo "error";?>">
 									<span class="required-label">*</span>
 									<?=View::factory('add/block/city',
 											array( "data" 		=> new Obj($form_data->city),
@@ -24,10 +24,11 @@
 												   "id" 		=> "",
 												   "attributes" => ""
 											));?>	
-									<span class="inform" style="display: none;">
-										<span><?/*inform message */?>
+									<? if ($form_data->city AND $form_data->city["city_error"]): ?>
+										<span class="inform">
+											<span><?=$form_data->city["city_error"]?></span>
 										</span>
-									</span>
+									<? endif; ?>
 								</div>
 							</div><!--inp-cont-short-->
 						</div><!--fieldscont-->
@@ -43,7 +44,7 @@
 						</div>
 						<div class="fieldscont">				 						
 							<div class="inp-cont-short">
-								<div class="inp-cont">
+								<div class="inp-cont <?if ($form_data->category["category_error"]) echo "error";?>">
 									<span class="required-label">*</span>
 
 									<?=View::factory('add/block/category',
@@ -54,10 +55,11 @@
 												   "attributes" => ""
 											));?>		
 
-									<span class="inform" style="display: none;">
-										<span><?/*inform message */?>
+									<? if ($form_data->category AND $form_data->category["category_error"]): ?>
+										<span class="inform">
+											<span><?=$form_data->category["category_error"]?></span>
 										</span>
-									</span>
+									<? endif; ?>
 								</div> <!--inp-cont -->
 							</div> <!-- inp-cont-short -->
 
@@ -116,7 +118,8 @@
 					</div>
 					<div class="fieldscont">
 						<div class="inp-cont-long">
-							<div class="inp-cont"><span class="required-label">*</span>																		
+							<div class="inp-cont <?if ($form_data->subject["subject_error"]) echo "error";?>">
+								<span class="required-label">*</span>																		
 								<?=View::factory('add/block/subject',
 											array( "data" 		=> new Obj($form_data->subject),
 												   "_class" 	=> "",
@@ -124,10 +127,11 @@
 												   "id" 		=> "title_adv",
 												   "attributes" => ""
 											));?>							
-								<span class="inform" style="display: none;">
-									<span><?/*inform message */?>
+								<? if ($form_data->subject AND $form_data->subject["subject_error"]): ?>
+									<span class="inform">
+										<span><?=$form_data->subject["subject_error"]?></span>
 									</span>
-								</span>
+								<? endif; ?>
 							</div>							
 						</div>
 					</div><!--fieldscont-->
@@ -141,7 +145,7 @@
 					</div>		
 					<div class="fieldscont user-text mb15">
 						<div class="inp-cont-long ">
-							<div class="inp-cont star">
+							<div class="inp-cont <?if ($form_data->text["text_error"]) echo "error";?>">
 								<span class="required-label">*</span>
 								<div class="textarea user_text_adv_wrp">
 									<?=View::factory('add/block/text',
@@ -152,13 +156,11 @@
 												   "attributes" => ""
 											));?>	
 								</div>
-								<span class="inform">
-									<span id="charleft_user_text_adv" class="charleft"></span>
-								</span>
-								<span class="inform" style="display: none;">
-									<span><?/*inform message */?>
+								<? if ($form_data->text AND $form_data->text["text_error"]): ?>
+									<span class="inform">
+										<span><?=$form_data->text["text_error"]?></span>
 									</span>
-								</span>
+								<? endif; ?>
 							</div>
 						</div>
 					</div>
@@ -206,15 +208,15 @@
 								<label><span>Контакты:</span></label>
 							</div>	
 							<div class="fieldscont">
-
 								<div id="contacts" class="inp-cont-short">	                  			
-									<div class="inp-cont star">
+									<div class="inp-cont <?if ($form_data->contacts["contact_error"]) echo "error";?>">
 										<span class="required-label">*</span>						
-										<input type="text" name="contact" placeholder="Контактное лицо" />						
-										<span class="inform" style="display: none;">
-											<span><?/*inform message */?>
+										<input type="text" name="contact" placeholder="Контактное лицо" value="<?=$form_data->contacts["contact_person"]?>"/>						
+										<? if ($form_data->contacts AND $form_data->contacts["contact_error"]): ?>
+											<span class="inform">
+												<span><?=$form_data->contacts["contact_error"]?></span>
 											</span>
-										</span>
+										<? endif; ?>
 									</div>
 								</div>
 
@@ -228,10 +230,25 @@
 											));?>
 								</div>
 
-
+								<span title="Добавить контакт"  class="add-contact like-link fn-add-contact-button-text">Добавить еще телефон или email</span>						
+								
 							</div>
 						</div>
 				</div>
+			<? endif; ?>
+
+			<? if (count($errors)>0) :?>
+			<div class="fl100 form-errors-cont">
+				<div class="smallcont">
+					<div class="labelcont"></div>
+					<div class="fieldscont">
+						<p class="error-msg">Исправьте ошибки в форме, чтобы продолжить:</p>
+						<? foreach (array_values($errors) as $error):?>
+							<p class="error-msg"><?=$error?></p>
+						<? endforeach;?>
+					</div>
+				</div>
+			</div>	
 			<? endif; ?>
 
 			<div class="fl100 form-next-cont">
@@ -242,6 +259,8 @@
 					</div><!--fieldscont-->
 				</div><!--smallcont-->	
 			</div>
+
+			
 
 		</form>
 

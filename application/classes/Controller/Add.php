@@ -9,11 +9,12 @@ class Controller_Add extends Controller_Template {
 		$this->assets->js('http://yandex.st/backbone/1.1.2/backbone-min.js');
 		$this->assets->js('http://yarmarka-kh.dev/static');
 
-		
+		$errors = new Obj();
 
 		$is_post = ($_SERVER['REQUEST_METHOD']=='POST');
 		if ($is_post) {  
-			//echo var_dump(self::action_native_save_object());
+			$errors = new Obj(self::action_native_save_object());
+			$errors = new Obj($errors->error);
 			$params = $this->request->post();
 		} 
 		else
@@ -27,7 +28,7 @@ class Controller_Add extends Controller_Template {
 
 		
 
-		$form_data = new Lib_PlacementAds_Form($params, $is_post);
+		$form_data = new Lib_PlacementAds_Form($params, $is_post, $errors);
 		$form_data	->Category()
 				 	->City()
 				 	->Subject()
@@ -39,6 +40,7 @@ class Controller_Add extends Controller_Template {
 
 		$this->template->params 	= $params;
 		$this->template->form_data 	= $form_data->_data;
+		$this->template->errors = (array) $errors;
 
 	}
 

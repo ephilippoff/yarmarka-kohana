@@ -1,6 +1,6 @@
 <? foreach($data->elements as $element): ?>
 	<div class="inp-cont-short" data-condition="">
-		<div class="inp-cont error">
+		<div class="inp-cont <? if ($data->errors->{$element["name"]}) echo "error";?>">
 		<span class="required-label">*</span>
 		<? $parameters = array(	
 								'id' 	=> $element["name"],
@@ -12,26 +12,28 @@
 							); ?>
 
 		<? if ($element["custom"]): ?>
-			<?= View::factory( "add/element/_".$element["custom"], $parameters)->render(); ?>
+			<?= View::factory( "add/element/_".$element["custom"], $parameters); ?>
 		<? else: ?>
 			<? if ($element["type"] == "list" OR ($element["type"] == "ilist")): ?>
-				<?= View::factory( "add/element/_select", $parameters)->render(); ?>
+				<?= View::factory( "add/element/_select", $parameters); ?>
 			
 			<? elseif ($element["type"] == "integer"): ?>
-				<?= View::factory( "add/element/_integer", $parameters)->render(); ?>
+				<?= View::factory( "add/element/_integer", $parameters); ?>
 
 			<? elseif ($element["type"] == "numeric"): ?>
-				<?= View::factory( "add/element/_numeric", $parameters)->render(); ?>
+				<?= View::factory( "add/element/_numeric", $parameters); ?>
 
 			<? elseif ($element["type"] == "text"): ?>
-				<?= View::factory( "add/element/_text", $parameters)->render(); ?>
+				<?= View::factory( "add/element/_text", $parameters); ?>
 
 			<? endif; ?>
 		<? endif; ?>
-		<span class="inform" >
-			<span>sdf<?/*inform message */?>
+		
+		<? if ($data->errors->{$element["name"]}): ?>
+			<span class="inform">
+				<span><?=$data->errors->{$element["name"]}?></span>
 			</span>
-		</span>
+		<? endif; ?>
 		</div>
 	</div>
 
@@ -48,6 +50,6 @@
 							'value' => $custom['value']
 						); ?>
 
-	<?= View::factory( "add/element/_".$custom["custom"], $parameters)->render(); ?>
+	<?= View::factory( "add/element/_".$custom["custom"], $parameters); ?>
 
 <? endforeach; ?>	

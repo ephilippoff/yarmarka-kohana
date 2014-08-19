@@ -370,6 +370,32 @@ class Model_User extends Model_Auth_User {
 
 		return $phone;
 	}
+
+	public function check_max_user_objects($user, $category, $object_id)
+	{
+		if ( ! is_object($user))
+		{
+			$user = ORM::factory('User', $user);
+		}
+
+		if ( ! is_object($category))
+		{
+			$category = ORM::factory('Category', $category);
+		}
+
+		$objects = $user->objects->where('category', '=', $category_id)->where('is_published', '=', 1)->where('active', '=', 1);
+		if ($object_id)
+		{
+			$objects->where('id', '!=', $object_id);
+		}
+
+		if ($user->org_type == 1 AND $category->max_count_for_user AND $objects->count_all() >= $category->max_count_for_user)
+		{
+			return FALSE;
+		}
+
+		return TRUE;
+	}
 }
 
 /* End of file User.php */

@@ -2,7 +2,7 @@
 <? $i = 0; ?>
 <?	foreach ($data->contacts as $contact):	?>
 
-	<div class="contact-cont">
+	<div class="contact-cont <? if ($data->contacts_error) echo "noverified"; ?>">
 		<div class="cont-left">
 			<select id="contact_type_select_<?=$i?>"  name="contact_<?=$i?>_type" class="sl-contact-type fn-contact-type">
 				<? foreach ($data->contact_types as $contact_type):?>
@@ -15,12 +15,7 @@
 		<div class="cont-right">
 			<span title="Верифицировать" class="button apply fn-contact-verify-button">Подтвердить контакт</span>
 			<span class="cansel like-link fn-contact-delete-button" title="Удалить">Удалить</span>
-		</div><!--contact-right-->
-
-		<div id="error_contacts" class="alert-bl fn-alert-overlay hidden">
-			<div class="cont"><? /* error message*/?></div>
-			<div class="arr"></div>
-		</div>						
+		</div><!--contact-right-->			
 	</div><!--contact-cont-->
 <? $i++; ?>
 <? if ($i == $data->max_count_contacts) break;?>
@@ -41,12 +36,7 @@
 			<div class="cont-right">
 				<span title="Верифицировать" class="button apply fn-contact-verify-button">Подтвердить контакт</span>
 				<span class="cansel like-link fn-contact-delete-button" title="Удалить">Удалить</span>
-			</div><!--contact-right-->
-
-			<div id="error_contacts" class="alert-bl fn-alert-overlay hidden">
-				<div class="cont"><? /* error message*/?></div>
-				<div class="arr"></div>
-			</div>						
+			</div><!--contact-right-->					
 		</div><!--contact-cont-->
 	</div>
 <? endif; ?>

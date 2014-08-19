@@ -62,5 +62,16 @@ class Valid extends Kohana_Valid {
 		return isset($type);
 	}
 
+	public static function empty_contacts($contacts)
+	{
+		return FALSE;
+		//return (count($this->contacts)>0) ? TRUE : FALSE;
+	}
+
+	public static function limit_object_for_user($user, $category, $object_id)
+	{
+		return ORM::factory('Category')->check_max_user_objects($user, $category, $object_id);
+	}
+
 	
 }

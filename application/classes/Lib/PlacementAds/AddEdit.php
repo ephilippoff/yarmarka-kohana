@@ -9,6 +9,7 @@ class Lib_PlacementAds_AddEdit {
 	public $validation;
 	public $contacts;
 	public $city;
+	public $city_id;
 	public $location;
 	public $signature = NULL;
 	public $original_params;
@@ -113,6 +114,7 @@ class Lib_PlacementAds_AddEdit {
 
 		$object_id 		= (int) $params->object_id;
 		$category_id 	= (int) $params->rubricid;
+		$city_id 		= (int) $params->city_id;
 		$user 			= Auth::instance()->get_user();
 		$user_id 	    = $user->id;
 
@@ -123,7 +125,7 @@ class Lib_PlacementAds_AddEdit {
 			{
 				$category_id 	= (int) $object->category;
 				$user_id 		= (int) $object->author;
-				$params->city_id = $object->city_id;
+				$city_id 		= (int) $object->city_id;
 
 				if ($params->just_check){
 					$this->parse_object($object, $params);
@@ -135,10 +137,15 @@ class Lib_PlacementAds_AddEdit {
 		}
 
 		//затычка на основной форме подачи, пока город берется из кладра
-		if (!$params->city_id AND $params->city_kladr_id)
-			$params->city_id = ORM::factory('City')->where("kladr_id","=",$params->city_kladr_id)->find()->id;
-		if ($params->city_id AND !$params->city_kladr_id)
-			$params->city_kladr_id = ORM::factory('City',$params->city_id)->kladr_id;
+		if (!$city_id AND $params->city_kladr_id)
+			$city_id = ORM::factory('City')->where("kladr_id","=",$params->city_kladr_id)->find()->id;
+		if ($city_id AND !$params->city_kladr_id)
+			$params->city_kladr_id = ORM::factory('City',$city_id)->kladr_id;
+
+		if ($city_id > 0)
+		{
+			$params->city_id = $city_id;
+		} 
 
 		if ( $category_id > 0) 
 		{ 
@@ -148,7 +155,7 @@ class Lib_PlacementAds_AddEdit {
 		} 
 		else 
 		{
-			$this->raise_error('undefined category2');	
+			//$this->raise_error('undefined category2');	
 		}
 
 		if ($user_id > 0)
@@ -165,9 +172,10 @@ class Lib_PlacementAds_AddEdit {
 			$this->raise_error('user dont have permissions to edit this object');
 		}*/
 
-		$this->form_references = Forms::get_by_category_and_type($this->category->id, 'add');
-
-		$this->conditions = Forms::get_category_conditions($this->category->id);
+		if ($this->category){
+			$this->form_references = Forms::get_by_category_and_type($this->category->id, 'add');
+			$this->conditions = Forms::get_category_conditions($this->category->id);
+		}
 
 		return $this;
 	}
@@ -207,10 +215,14 @@ class Lib_PlacementAds_AddEdit {
 
 		$validation = Validation::factory((array) $this->params)
 			->rule('city_kladr_id', 'not_empty', array(':value', "Город"))
-			->rule('contact', 'not_empty', array(':value', "Контактное лицо"))
-			->rule('email', 'email');	
+			->rule('rubricid', 'not_empty', array(':value', "Раздел"));
 
-		if ( ! $category->title_auto_fill AND !$params->itis_massload)
+		if ($category)
+		{
+			$validation->rule('contact', 'not_empty', array(':value', "Контактное лицо"));
+		}
+
+		if ($category AND !$category->title_auto_fill AND !$params->itis_massload)
 		{
 			$validation->rules('title_adv', array(
 				array('not_empty', array(':value', "Заголовок")),
@@ -218,12 +230,12 @@ class Lib_PlacementAds_AddEdit {
 			));
 		}
 
-		if ($category->address_required)
+		if ($category AND $category->address_required)
 		{
 			$validation->rule('address', 'not_empty', array(':value', "Адрес"));
 		}
 
-		if ($category->text_required)
+		if ($category AND $category->text_required)
 		{
 			$validation->rules('user_text_adv', array(
 				array('not_empty', array(':value', "Текст объявления")),
@@ -236,6 +248,10 @@ class Lib_PlacementAds_AddEdit {
 	function init_contacts()
 	{
 		$contacts = &$this->contacts;
+		$category = &$this->category;
+
+		if (!$category) return $this;
+
 		foreach((array) $this->params as $key=>$value){
 			if (preg_match('/^contact_([0-9]*)_value/', $key, $matches))
 			{
@@ -270,7 +286,7 @@ class Lib_PlacementAds_AddEdit {
 		$category = &$this->category;
 		$user = &$this->user;
 
-		
+		if (!$category) return $this;
 
 		if ($this->is_just_triggers($params))
 			@list($values, $list_ids) = (array) Object_Utils::get_parsed_parameters(NULL, $object->id, TRUE);
@@ -334,6 +350,8 @@ class Lib_PlacementAds_AddEdit {
 		$category = &$this->category;
 		$user = &$this->user;
 
+		if (!$category) return $this;
+
 		if ($this->is_union_enabled() AND $this->is_union_enabled_by_category($category->id) AND !$this->union_cancel)
 		{
 			$max_similarity = Kohana::$config->load('common.max_object_similarity');
@@ -374,6 +392,8 @@ class Lib_PlacementAds_AddEdit {
 		$errors = &$this->errors;
 		$category = &$this->category;
 		$user = &$this->user;
+
+		if (!$category) return $this;
 
 		if ($this->is_union_enabled() AND $this->is_union_enabled_by_category($category->id))
 		{ 
@@ -440,7 +460,11 @@ class Lib_PlacementAds_AddEdit {
 	function init_validation_rules_for_attributes()
 	{
 		$form_references = &$this->form_references;
-		$conditions = &$this->conditions;
+		$conditions 	 = &$this->conditions;
+		$category 		 = &$this->category;
+
+		if (!$category) return $this;
+
 		foreach ($form_references as $reference)
 		{
 			if (in_array($reference->id, $conditions->as_array('id', 'for_reference')) AND ! $this->is_shown($conditions, $reference->id))
@@ -497,24 +521,26 @@ class Lib_PlacementAds_AddEdit {
 
 	function exec_validation()
 	{
-		$errors = &$this->errors;
-		$user = &$this->user;
+		$errors 		 = &$this->errors;
+		$user 			 = &$this->user;
+		$category 		 = &$this->category;
+
 		//заполнены ли обязательные параметры
-		if ( ! $this->validation->check())
+		if ( !$this->validation->check())
 		{
 			$errors = $this->validation->errors('validation/object_form');
 		}
 
 		// указаны ли контакты
-		if ( ! count($this->contacts))
+		if ( !count($this->contacts))
 		{
 			$errors['contacts'] = Kohana::message('validation/object_form', 'empty_contacts');
 		}
 
 		// проверяем количество уже поданных пользователем объявлений
-		if ( ! $this->category->check_max_user_objects($user, $this->params->object_id))
+		if ( $category AND !$this->category->check_max_user_objects($user, $this->params->object_id))
 		{
-			$errors['contacts'] = Kohana::message('validation/object_form', 'max_objects');
+			$errors['max_objects_for_user'] = Kohana::message('validation/object_form', 'max_objects');
 		}
 
 		return $this;
