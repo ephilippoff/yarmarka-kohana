@@ -70,45 +70,31 @@
 			<? endif; ?>
 
 			<? if ( property_exists($form_data, 'params') ): ?>
-				<div class="smallcont">
-					<div class="labelcont">
-						<label><span>Параметры:</span></label>
-					</div>
-					<div class="fieldscont group fn-parameters">
-						<?=View::factory('add/block/params',
-							array( "data" 		=> new Obj($form_data->params),
-								   "_class" 	=> "",
-								   "name" 		=> "",
-								   "id" 		=> "",
-								   "attributes" => ""
-							));?>					
-					</div>									
-				</div><!--smallcont-->
-			<? endif; ?>
 
-			<? if ( property_exists($form_data, 'map') ): ?>
-
-				<div class="smallcont">
-					<div class="labelcont">
-							<label><span>Адрес:</span></label>
-					</div>
-					<div class="fieldscont">
-						<div class="inp-cont-long">
-							<div class="inp-cont"><span class="required-label">*</span>
-																		
-								<input type="text" class="for_map" name="address" id="address_selector" value=""/>
-							
-								<span class="inform" style="display: none;">
-									<span><?/*inform message */?>
-									</span>
-								</span>							
-							</div>							
+				<? if (count($form_data->params['elements'])>0):?>
+					<div class="smallcont">
+						<div class="labelcont">
+							<label><span>Параметры:</span></label>
 						</div>
-					</div><!--fieldscont-->
-				</div><!--smallcont-->	
+						<div class="fieldscont group fn-parameters">
+							<?=View::factory('add/block/params',
+								array( "data" 		=> new Obj($form_data->params),
+									   "_class" 	=> "",
+									   "name" 		=> "",
+									   "id" 		=> "",
+									   "attributes" => ""
+								));?>					
+						</div>									
+					</div><!--smallcont-->
+				<? endif;?>
 
-			
-		 		<?=$form_data->map;?>
+				<?=View::factory('add/block/row_params',
+					array( "data" 		=> new Obj($form_data->params),
+						   "_class" 	=> "",
+						   "name" 		=> "",
+						   "id" 		=> "",
+						   "attributes" => ""
+					));?>	
 			<? endif; ?>
 
 			<? if ( property_exists($form_data, 'subject') ): ?>
@@ -231,7 +217,7 @@
 								</div>
 
 								<span title="Добавить контакт"  class="add-contact like-link fn-add-contact-button-text">Добавить еще телефон или email</span>						
-								
+
 							</div>
 						</div>
 				</div>

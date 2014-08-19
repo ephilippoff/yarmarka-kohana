@@ -21,17 +21,6 @@ class Lib_PlacementAds_Form  {
 
 	const MAX_COUNT_CONTACTS = 3;
 
-	public $templates = array(
-		'category' 	=> 'add/block/category',
-		'city' 		=> 'add/block/city',
-		'subject' 	=> 'add/block/subject',
-		'text' 		=> 'add/block/text',
-		'photo' 	=> 'add/block/photo',
-		'params' 	=> 'add/block/params',
-		'map' 		=> 'add/block/map',
-		'contacts' 	=> 'add/block/contacts',
-	);
-
 	function Lib_PlacementAds_Form($params, $is_post = FALSE, $errors = NULL)
 	{
 		$this->_data = new Obj();
@@ -42,8 +31,7 @@ class Lib_PlacementAds_Form  {
 		if ($errors)
 		{
 			$this->errors = new Obj($errors);
-		}
-		
+		}		
 
 		if (array_key_exists("rubricid", $params)) 
 			$this->_category_id = (int) $params['rubricid'];
@@ -216,6 +204,8 @@ class Lib_PlacementAds_Form  {
 
 		$elements = Attribute::parseAttributeLevel($data[$category_id], $params);
 
+		$lists = Array();
+		$rows = Array();
 		$customs = Array();
 		foreach($elements as $key => $element)
 		{			
@@ -225,12 +215,25 @@ class Lib_PlacementAds_Form  {
 			if ($element["custom"] and substr($element["custom"], 0, 2) <> "i_") {
 				$customs[] = $element;
 				unset($elements[$key]);
-			}			
+			}	
+
+			if (!$element["custom"] AND
+					($element["type"] == "list" OR $element["type"] == "ilist"))
+			{
+				$lists[] = $element;
+			}
+
+			if (!$element["custom"] AND
+					$element["type"] <> "list" AND $element["type"] <> "ilist")
+			{
+				$rows[] = $element;
+			}		
 		}
 
-		$this->_data->params = array('elements' => $elements, 
-										'customs' => $customs, 
-											'errors' => $errors );
+		$this->_data->params = array('elements' => $lists, 
+										'rows'  => $rows,
+											'customs' => $customs, 
+												'errors' => $errors );
 		
 		return $this;
 	}
@@ -238,9 +241,7 @@ class Lib_PlacementAds_Form  {
 	function Map()
 	{
 		if ($this->map)
-			$this->_data->map = View::factory($this->templates['map'],
-									array())
-									->render();
+			$this->_data->map = array();
 		return $this;
 	}
 

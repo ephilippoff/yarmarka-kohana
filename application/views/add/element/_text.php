@@ -1,1 +1,1 @@
-<?=$title?><input class="<?=$class?>" type="text" name="<?=$name?>" value="<?=$value?>"/>
+<textarea class="<?=$class?>" name="<?=$name?>"><?=$value?></textarea>
