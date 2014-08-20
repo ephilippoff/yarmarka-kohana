@@ -37,7 +37,7 @@
 			<tr>
 				<td colspan="2" valign="middle" class="td3">
 					<p class="p3"> </p>
-					<p class="p4">Здравствуйте, <?=$UserName; ?>!</p>
+					<p class="p4">Здравствуйте!</p>
 					<p class="p3">На <a href="<?php echo CI::base('http') ?>">Ярмарка-Онлайн</a> произошли следующие действия с вашими объявлениями:</p>
 					<? foreach($actions as $action) {?>
 					<p class="p3"><?=$action; ?></p>
