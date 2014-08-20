@@ -70,13 +70,13 @@
 			<? endif; ?>
 
 			<? if ( property_exists($form_data, 'params') ): ?>
-
+				<div class="fn-parameters">
 				<? if (count($form_data->params['elements'])>0):?>
 					<div class="smallcont">
 						<div class="labelcont">
 							<label><span>Параметры:</span></label>
 						</div>
-						<div class="fieldscont group fn-parameters">
+						<div class="fieldscont group">
 							<?=View::factory('add/block/params',
 								array( "data" 		=> new Obj($form_data->params),
 									   "_class" 	=> "",
@@ -95,7 +95,21 @@
 						   "id" 		=> "",
 						   "attributes" => ""
 					));?>	
+				</div>
 			<? endif; ?>
+
+
+			<div class="smallcont hidden" id="map">
+				<div class="labelcont">Укажите местоположение объекта на карте</div>
+				<div class="fieldscont">
+					<div id="map_block_div" class="map_block_div add_form_info inp-cont-long">
+						<div class="map" id="map_block" style="height:250px;width:100%;">		
+							<input type="hidden" id="object_coordinates" name="object_coordinates" value=""/>
+						</div>				
+					</div><!--#map_block_div-->
+				</div><!--fieldscont-->
+			</div><!--smallcont-->
+
 
 			<? if ( property_exists($form_data, 'subject') ): ?>
 				<div class="smallcont">
@@ -375,38 +389,83 @@
 */?>
 
 <script id="template-integer" type="text/template">
-	<div class="inp-cont-short" data-condition="">
-		<div class="inp-cont">
-			<input  id="<%=id%>" name="<%=id%>" class="<%=classes%>" type="text" value="<%=value%>" placeholder="<%=title%>"/>
-		</div>
+	<div class="smallcont" id="div_<%=id%>">
+			<div class="labelcont">
+				<label><span><%=title%></span></label>
+			</div>
+			<div class="fieldscont">
+				<div class="inp-cont-short" data-condition="">
+					<div class="inp-cont">
+						<span class="required-label">*</span>
+						<input  id="<%=id%>" name="<%=id%>" class="<%=classes%>" type="text" value="<%=value%>"/>
+					</div>
+				</div>
+			</div>
 	</div>
 </script>
 
 <script id="template-numeric" type="text/template">
-	<div class="inp-cont-short" data-condition="">
-		<div class="inp-cont">
-			<input  id="<%=id%>" name="<%=id%>" class="<%=classes%>" type="text" value="<%=value%>" placeholder="<%=title%>"/>
-		</div>
+		<div class="smallcont" id="div_<%=id%>">
+			<div class="labelcont">
+				<label><span><%=title%></span></label>
+			</div>
+			<div class="fieldscont">
+				<div class="inp-cont-short" data-condition="">
+					<div class="inp-cont">
+						<span class="required-label">*</span>
+						<input  id="<%=id%>" name="<%=id%>" class="<%=classes%>" type="text" value="<%=value%>"/>
+
+					</div>
+				</div>
+			</div>
 	</div>
 </script>
 
 <script id="template-text" type="text/template">
-	<div class="inp-cont-short" data-condition="">
-		<div class="inp-cont">
-		<span class="required-label">*</span>
-			<input  id="<%=id%>" name="<%=id%>" class="<%=classes%>" type="text" value="<%=value%>"  placeholder="<%=title%>"/>
-		</div>
+	<div class="smallcont" id="div_<%=id%>">
+			<div class="labelcont">
+				<label><span><%=title%></span></label>
+			</div>
+			<div class="fieldscont">
+				<div class="inp-cont-short" data-condition="">
+					<div class="inp-cont">
+						<span class="required-label">*</span>
+						<input  id="<%=id%>" name="<%=id%>" class="<%=classes%>" type="text" value="<%=value%>"/>
+					</div>
+				</div>
+			</div>
 	</div>
 </script>	
 
 <script id="template-list" type="text/template">
-	<div class="inp-cont-short" data-condition="">
+	<div class="inp-cont-short" id="div_<%=id%>">
 		<div class="inp-cont">
 		<span class="required-label">*</span>
 			<select id="<%=id%>" name="<%=id%>" class="<%=classes%>">
 		  		<option>--<%=title%>--</option>
 		  	</select> 
   		</div>
+	</div>
+</script>
+
+<script id="template-custom-address" type="text/template">
+	<div class="smallcont" id="div_<%=id%>">
+				<div class="labelcont">
+					<label><span><%=title%></span></label>
+				</div>
+				<div class="fieldscont">
+					<div class="inp-cont">
+						<div class="inp-cont-long">
+							<span class="required-label">*</span>
+							
+							<input id="<%=id%>" type="text" name="<%=name%>" value="<%=value%>"/>
+
+								<span class="inform">
+									<span>Пример заполнения адреса</span>
+								</span>
+						</div>
+				</div>
+			</div>									
 	</div>
 </script>		  
 

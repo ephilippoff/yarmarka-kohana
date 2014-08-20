@@ -1,5 +1,6 @@
+<div class="fn-list-parameters">
 <? foreach($data->elements as $element): ?>
-	<div class="inp-cont-short" data-condition="">
+	<div class="inp-cont-short" id="div_<?=$element["name"]?>">
 		<div class="inp-cont <? if ($data->errors->{$element["name"]}) echo "error";?>">
 		<span class="required-label">*</span>
 		<? $parameters = array(	
@@ -24,3 +25,4 @@
 	</div>
 
 <? endforeach; ?>	
+</div>

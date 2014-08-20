@@ -152,6 +152,7 @@ class Attribute {
 				"title" 	=> $info["title"],
 				"type" 		=> $info["type"],
 				"custom" 	=> $info["custom"],
+				"weight" 	=> $info["weight"],
 				"name" 		=> "param_".$ref_id,
 				"values"	=> $values,
 				"value" 	=> $value

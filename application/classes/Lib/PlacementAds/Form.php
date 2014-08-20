@@ -213,8 +213,7 @@ class Lib_PlacementAds_Form  {
 				$this->map = TRUE;
 
 			if ($element["custom"] and substr($element["custom"], 0, 2) <> "i_") {
-				$customs[] = $element;
-				unset($elements[$key]);
+				$rows[] = $element;
 			}	
 
 			if (!$element["custom"] AND
@@ -229,6 +228,9 @@ class Lib_PlacementAds_Form  {
 				$rows[] = $element;
 			}		
 		}
+
+		$lists = self::sort_params($lists);
+		$rows  = self::sort_params($rows);
 
 		$this->_data->params = array('elements' => $lists, 
 										'rows'  => $rows,
@@ -425,7 +427,8 @@ class Lib_PlacementAds_Form  {
 		}
 	}
 
-	static private function parse_post_contact($params, $callback){
+	static private function parse_post_contact($params, $callback)
+	{
 		foreach((array) $params as $key=>$value){
 			if (preg_match('/^contact_([0-9]*)_value/', $key, $matches))
 			{
@@ -435,5 +438,17 @@ class Lib_PlacementAds_Form  {
 				$callback($value, $type);
 			}
 		}
+	}
+
+	static private function sort_params($list)
+	{
+		uasort($list, function ($a, $b){
+			if ($a == $b) {
+		        return 0;
+		    }
+		    return ($a["weight"] < $b["weight"]) ? -1 : 1;
+		});
+
+		return $list;
 	}
 }

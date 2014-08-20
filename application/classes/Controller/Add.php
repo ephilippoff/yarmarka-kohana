@@ -7,6 +7,7 @@ class Controller_Add extends Controller_Template {
 		$this->layout = 'add';
 		$this->assets->js('http://yandex.st/underscore/1.6.0/underscore-min.js');
 		$this->assets->js('http://yandex.st/backbone/1.1.2/backbone-min.js');
+		$this->assets->js('http://api-maps.yandex.ru/2.0/?load=package.full&lang=ru-RU');
 		$this->assets->js('http://yarmarka-kh.dev/static');
 
 		$errors = new Obj();
