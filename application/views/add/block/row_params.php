@@ -7,7 +7,8 @@
 								'title' => $element["title"],
 								'class' => "fn-param",
 								'values'=> $element['values'],
-								'value' => $element['value']
+								'value' => $element['value'],
+								'is_required' => $element['is_required']
 							); ?>
 		<? if ($element["custom"]): ?>	
 			<? $parameters["errors"] =  $data->errors->{$element["name"]}; ?>						
@@ -20,8 +21,10 @@
 				<div class="fieldscont">
 					<div class="inp-cont-short" data-condition="">
 						<div class="inp-cont <? if ($data->errors->{$element["name"]}) echo "error";?>">
+							<? if ($element["is_required"]):?>
 							<span class="required-label">*</span>
-
+							<? endif; ?>
+							
 								<? if ($element["type"] == "integer"): ?>
 									<?= View::factory( "add/element/_integer", $parameters); ?>
 

@@ -403,7 +403,9 @@
 			<div class="fieldscont">
 				<div class="inp-cont-short" data-condition="">
 					<div class="inp-cont">
-						<span class="required-label">*</span>
+						<% if (is_required) { %>
+							<span class="required-label">*</span>
+						<% } %>
 						<input  id="<%=id%>" name="<%=id%>" class="<%=classes%>" type="text" value="<%=value%>"/>
 					</div>
 				</div>
@@ -419,7 +421,9 @@
 			<div class="fieldscont">
 				<div class="inp-cont-short" data-condition="">
 					<div class="inp-cont">
-						<span class="required-label">*</span>
+						<% if (is_required) { %>
+							<span class="required-label">*</span>
+						<% } %>
 						<input  id="<%=id%>" name="<%=id%>" class="<%=classes%>" type="text" value="<%=value%>"/>
 
 					</div>
@@ -436,7 +440,9 @@
 			<div class="fieldscont">
 				<div class="inp-cont-long" data-condition="">
 					<div class="inp-cont">
-						<span class="required-label">*</span>
+						<% if (is_required) { %>
+							<span class="required-label">*</span>
+						<% } %>
 						<input id="<%=id%>" type="text" name="<%=name%>" value="<%=value%>"/>
 					</div>
 				</div>
@@ -452,7 +458,9 @@
 			<div class="fieldscont">
 				<div class="inp-cont-long" data-condition="">
 					<div class="inp-cont">
-						<span class="required-label">*</span>
+						<% if (is_required) { %>
+							<span class="required-label">*</span>
+						<% } %>
 						<textarea id="<%=id%>" name="<%=id%>" class="<%=classes%>"><%=value%></textarea>
 					</div>
 				</div>
@@ -463,7 +471,9 @@
 <script id="template-list" type="text/template">
 	<div class="inp-cont-short" id="div_<%=id%>">
 		<div class="inp-cont">
-		<span class="required-label">*</span>
+		<% if (is_required) { %>
+			<span class="required-label">*</span>
+		<% } %>
 			<select id="<%=id%>" name="<%=id%>" class="<%=classes%>">
 		  		<option value="">--<%=title%>--</option>
 		  		<% _.each(data, function(item, key){ %>
@@ -486,7 +496,9 @@
 				<div class="fieldscont">
 					<div class="inp-cont">
 						<div class="inp-cont-long">
-							<span class="required-label">*</span>
+							<% if (is_required) { %>
+								<span class="required-label">*</span>
+							<% } %>
 							
 							<input id="<%=id%>" type="text" name="<%=id%>" value="<%=value%>"/>
 

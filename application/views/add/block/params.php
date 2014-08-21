@@ -2,7 +2,9 @@
 <? foreach($data->elements as $element): ?>
 	<div class="inp-cont-short" id="div_<?=$element["name"]?>">
 		<div class="inp-cont <? if ($data->errors->{$element["name"]}) echo "error";?>">
-		<span class="required-label">*</span>
+		<? if ($element["is_required"]):?>
+			<span class="required-label">*</span>
+		<? endif; ?>
 		<? $parameters = array(	
 								'id' 	=> $element["name"],
 								'name' 	=> $element["name"],
