@@ -8,7 +8,7 @@
 		<form method="POST"  id="element_list">
 
 			<? if ( property_exists($form_data, 'city') ): ?>
-			<div class="fl100  pt16 pb15">
+			<div class="fl100  pt16 pb15"  id="div_city">
 					<div class="smallcont">
 						<div class="labelcont">
 							<label><span>Город:</span></label>
@@ -36,8 +36,9 @@
 			</div>
 			<? endif; ?>
 
+			<div id="div_category">
 			<? if ( property_exists($form_data, 'category') ): ?>
-				<div class="fl100">
+				<div class="fl100" id="div_category">
 					<div class="smallcont">
 						<div class="labelcont">
 							<label><span>Раздел:</span></label>
@@ -68,7 +69,9 @@
 					</div>	 <!-- smallcont --> 
 				</div>  <!-- fl100 -->
 			<? endif; ?>
+			</div>
 
+			<div id="div_params">
 			<? if ( property_exists($form_data, 'params') ): ?>
 				<div class="fn-parameters">
 				<? if (count($form_data->params['elements'])>0):?>
@@ -97,22 +100,23 @@
 					));?>	
 				</div>
 			<? endif; ?>
+			</div>
 
 
-			<div class="smallcont hidden" id="map">
+			<div class="smallcont hidden" id="div_map">
 				<div class="labelcont">Укажите местоположение объекта на карте</div>
 				<div class="fieldscont">
 					<div id="map_block_div" class="map_block_div add_form_info inp-cont-long">
 						<div class="map" id="map_block" style="height:250px;width:100%;">		
-							<input type="hidden" id="object_coordinates" name="object_coordinates" value=""/>
+							<input type="hidden" id="object_coordinates" name="object_coordinates" value="<? if ($params->object_coordinates) echo $params->object_coordinates;?>"/>
 						</div>				
 					</div><!--#map_block_div-->
 				</div><!--fieldscont-->
 			</div><!--smallcont-->
 
-
+			<div id="div_subject">
 			<? if ( property_exists($form_data, 'subject') ): ?>
-				<div class="smallcont">
+				<div class="smallcont" id="div_subject">
 					<div class="labelcont">
 							<label><span>Заголовок:</span></label>
 					</div>
@@ -137,7 +141,9 @@
 					</div><!--fieldscont-->
 				</div><!--smallcont-->	
 			<? endif; ?>
+			</div>
 
+			<div id="div_textadv">
 			<? if ( property_exists($form_data, 'text') ): ?>
 				<div class="smallcont">
 					<div class="labelcont">
@@ -166,6 +172,7 @@
 					</div>
 				</div>
 			<? endif; ?>
+			</div>
 
 			<? if ( property_exists($form_data, 'photo') ): ?>					
 				<div class="smallcont add-photo">
@@ -427,10 +434,26 @@
 				<label><span><%=title%></span></label>
 			</div>
 			<div class="fieldscont">
-				<div class="inp-cont-short" data-condition="">
+				<div class="inp-cont-long" data-condition="">
 					<div class="inp-cont">
 						<span class="required-label">*</span>
-						<input  id="<%=id%>" name="<%=id%>" class="<%=classes%>" type="text" value="<%=value%>"/>
+						<input id="<%=id%>" type="text" name="<%=name%>" value="<%=value%>"/>
+					</div>
+				</div>
+			</div>
+	</div>
+</script>
+
+<script id="template-textarea" type="text/template">
+	<div class="smallcont" id="div_<%=id%>">
+			<div class="labelcont">
+				<label><span><%=title%></span></label>
+			</div>
+			<div class="fieldscont">
+				<div class="inp-cont-long" data-condition="">
+					<div class="inp-cont">
+						<span class="required-label">*</span>
+						<textarea id="<%=id%>" name="<%=id%>" class="<%=classes%>"><%=value%></textarea>
 					</div>
 				</div>
 			</div>
@@ -443,6 +466,13 @@
 		<span class="required-label">*</span>
 			<select id="<%=id%>" name="<%=id%>" class="<%=classes%>">
 		  		<option>--<%=title%>--</option>
+		  		<% _.each(data, function(item, key){ %>
+		  			<% if (key == 0) return; %>
+		  			<%  if (typeof item == "object") item = item[0].title %>
+
+
+		  			<option value="<%=key%>"><%=item%></option>
+		  		<% }); %>
 		  	</select> 
   		</div>
 	</div>
@@ -458,7 +488,7 @@
 						<div class="inp-cont-long">
 							<span class="required-label">*</span>
 							
-							<input id="<%=id%>" type="text" name="<%=name%>" value="<%=value%>"/>
+							<input id="<%=id%>" type="text" name="<%=id%>" value="<%=value%>"/>
 
 								<span class="inform">
 									<span>Пример заполнения адреса</span>
@@ -467,7 +497,56 @@
 				</div>
 			</div>									
 	</div>
-</script>		  
+</script>
 
+
+<script id="template-parameters" type="text/template">
+	<div class="fn-parameters">
+		<div class="smallcont">
+			<div class="labelcont">
+				<label><span>Параметры:</span></label>
+			</div>
+			<div class="fieldscont group">
+				<div class="fn-list-parameters"></div>
+									
+			</div>									
+		</div><!--smallcont-->
+		<div class="fn-rows-parameters"></div>
+	</div>
+</script>	
+
+<script id="template-subject" type="text/template">
+	<div class="smallcont" id="div_subject">
+		<div class="labelcont">
+				<label><span>Заголовок:</span></label>
+		</div>
+		<div class="fieldscont">
+			<div class="inp-cont-long">
+				<div class="inp-cont">
+					<span class="required-label">*</span>																		
+					<input type="text" maxlength="75"  id="title_adv" name="title_adv" value="<%=value%>"/>	
+				</div>							
+			</div>
+		</div><!--fieldscont-->
+	</div><!--smallcont-->		  
+</script>
+
+<script id="template-textadv" type="text/template">
+	<div class="smallcont" id="div_text">
+		<div class="labelcont">
+			<label><span>Текст объявления:</span></label>
+		</div>		
+		<div class="fieldscont user-text mb15">
+			<div class="inp-cont-long ">
+				<div class="inp-cont">
+					<span class="required-label">*</span>
+					<div class="textarea user_text_adv_wrp">
+					<textarea name="user_text_adv" id="user_text_adv"><%=value%></textarea>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>  
+</script>
 
 <?=HTML::script('js/adaptive/addapp.js')?>

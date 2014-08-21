@@ -21,7 +21,10 @@ class Attribute {
 			{
 				$data[$row->id] =  $row->title;	
 			} else {
-				$data[$row->id] = array ( 0 => $row->title );
+				$data[$row->id] = array ( 0 => array (
+													"title" => $row->title, 
+													"title_auto" => $row->title_auto_fill,
+													"text_required" =>  $row->text_required) );
 
 				$data[$row->id] = array_merge($data[$row->id],  self::getElements((int) $row->id));
 			}
@@ -37,6 +40,7 @@ class Attribute {
 		
 		$ar = $attribute_relation->select(	'attribute.type',
 											'attribute.seo_name',
+											'attribute.is_textarea',
 											 array('attribute.id', 'aid'), 
 											 array('attribute.title', 'atitle'),
 											 'reference.weight'
@@ -110,7 +114,8 @@ class Attribute {
 												"type" =>  $type, 
 												"ref_id" => $relation->reference_id, 
 												"custom" => $relation->custom,
-												"weight" => $relation->weight
+												"weight" => $relation->weight,
+												"is_textarea" => $relation->is_textarea
 											)
 										);
 			$data[$rel_id] = array_merge($data[$rel_id], $elements);

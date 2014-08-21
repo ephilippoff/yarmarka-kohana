@@ -1,5 +1,6 @@
 <? if ($data->edit): ?>
 	<?=$data->value?>
+	<input type="hidden" name="<?=$name?>" id="<?=$id?>" value="<?=$data->category_id?>"/>
 <? else: ?>		
 	<select name="<?=$name?>" id="<?=$id?>" class=<?=$_class?>>
 		<option value>---</option>

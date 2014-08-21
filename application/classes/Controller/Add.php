@@ -7,7 +7,9 @@ class Controller_Add extends Controller_Template {
 		$this->layout = 'add';
 		$this->assets->js('http://yandex.st/underscore/1.6.0/underscore-min.js');
 		$this->assets->js('http://yandex.st/backbone/1.1.2/backbone-min.js');
-		$this->assets->js('http://api-maps.yandex.ru/2.0/?load=package.full&lang=ru-RU');
+		$this->assets->js('http://api-maps.yandex.ru/2.0/?load=package.full&lang=ru-RU');		
+		/*$this->assets->js('jquery-ui/ui/minified/jquery.ui.widget.min.js');		
+		$this->assets->js('jquery-ui/ui/minified/jquery.ui.autocomplete.min.js');*/
 		$this->assets->js('http://yarmarka-kh.dev/static');
 
 		$errors = new Obj();
@@ -39,7 +41,7 @@ class Controller_Add extends Controller_Template {
 				 	->Map()
 				 	->Contacts();
 
-		$this->template->params 	= $params;
+		$this->template->params 	= new Obj($params);
 		$this->template->form_data 	= $form_data->_data;
 		$this->template->errors = (array) $errors;
 
