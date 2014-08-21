@@ -122,12 +122,15 @@ class Lib_PlacementAds_Form  {
 								->find_all();
 
 		$value = $category->title;
+
+		$default_action = ORM::factory('Category')->get_default_action($category_id);
 		
 		$this->_data->category = array(	
 										'category_list' => $category_list, 
 										'category_id' 	=> $category_id,
 										'value' 		=> $value,
 										'edit'			=> $edit,
+										'default_action'=> $default_action,
 										'category_error' => $errors->rubricid
 									);
 
@@ -266,9 +269,10 @@ class Lib_PlacementAds_Form  {
 			$title_auto_fill = $category->title_auto_fill;
 
 
-		if (!$title_auto_fill OR ($title_auto_fill AND $edit))
+		if ((!$title_auto_fill AND !$edit) OR (!$title_auto_fill AND $edit))
 			$this->_data->subject = array( 'value' => $value, 
 											'edit' => $edit,
+											'title_auto_fill' => $title_auto_fill,
 											'subject_error' => $errors->title_adv);
 
 		return $this;

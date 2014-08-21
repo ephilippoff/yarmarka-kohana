@@ -88,11 +88,15 @@ class Attribute {
 
 					$elements = Array();
 					$ae = ORM::factory('Attribute_Element')
-								->where("attribute","=",$relation->aid)
-								->where("parent_element","=",$parent_element_id)
-								->order_by("weight")
+								->where("attribute","=",$relation->aid);
+					
+					if ($relation->options == "subelements")
+						$ae = $ae->where("parent_element","=",$parent_element_id);
+					
+					$ae = $ae->order_by("weight")
 								->order_by("title")
 								->find_all();
+
 					foreach ($ae as $element)
 					{		
 						$el_id = "_".$element->id;

@@ -1,3 +1,4 @@
+<input type="hidden" name="default_action" id="default_action" value="<?=$data->default_action?>">
 <? if ($data->edit): ?>
 	<?=$data->value?>
 	<input type="hidden" name="<?=$name?>" id="<?=$id?>" value="<?=$data->category_id?>"/>

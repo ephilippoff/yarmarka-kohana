@@ -128,6 +128,18 @@ class Model_Category extends ORM {
  	{
  		return $this->where("parent_id","=",$category_id)->count_all();
  	}
+
+ 	public function get_default_action($category_id)
+ 	{
+ 		$ac = ORM::factory('Action_Category')
+						->where("category_id","=",$category_id)
+						->where("is_default","IS NOT", NULL)
+						->find();
+		if ($ac->action_id)
+			return $ac->action_id;
+		else 
+			return null;
+ 	}
 }
 
 /* End of file Category.php */
