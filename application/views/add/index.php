@@ -465,7 +465,7 @@
 		<div class="inp-cont">
 		<span class="required-label">*</span>
 			<select id="<%=id%>" name="<%=id%>" class="<%=classes%>">
-		  		<option>--<%=title%>--</option>
+		  		<option value="">--<%=title%>--</option>
 		  		<% _.each(data, function(item, key){ %>
 		  			<% if (key == 0) return; %>
 		  			<%  if (typeof item == "object") item = item[0].title %>
