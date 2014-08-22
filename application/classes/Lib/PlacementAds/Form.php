@@ -289,6 +289,7 @@ class Lib_PlacementAds_Form  {
 		elseif ($this->is_post AND array_key_exists("user_text_adv", $this->params))
 			$value = $this->params['user_text_adv'];
 
+		$text_required = 1;
 		if ($category->loaded())
 			$text_required = $category->text_required;
 
