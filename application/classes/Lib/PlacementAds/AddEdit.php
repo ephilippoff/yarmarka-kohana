@@ -467,12 +467,6 @@ class Lib_PlacementAds_AddEdit {
 
 		foreach ($form_references as $reference)
 		{
-			if (in_array($reference->id, $conditions->as_array('id', 'for_reference')) AND ! $this->is_shown($conditions, $reference->id))
-			{
-				// если атрибут есть в уловиях, но не показывается - пропускаем
-				continue;
-			}
-
 			$rules = array();
 
 			if ($reference->is_range)
@@ -489,6 +483,7 @@ class Lib_PlacementAds_AddEdit {
 
 			if ($reference->is_required)
 			{
+
 				$rules[] = array('not_empty', array(':value', $reference->attribute_obj->title));
 			}
 
@@ -497,16 +492,16 @@ class Lib_PlacementAds_AddEdit {
 				case 'integer':
 					$rules[] = array('digit');
 					$rules[] = array('not_0', array(':value', $reference->attribute_obj->title));
-					$rules[] = array('max_length', array(':value', $reference->attribute_obj->solid_size));
+					$rules[] = array('max_length', array(':value', $reference->attribute_obj->solid_size, $reference->attribute_obj->title));
 				break;
 
 				case 'numeric':
 					$rules[] = array('numeric');
-					$rules[] = array('max_length', array(':value', $reference->attribute_obj->solid_size+$reference->attribute_obj->frac_size+1));
+					$rules[] = array('max_length', array(':value', $reference->attribute_obj->solid_size+$reference->attribute_obj->frac_size+1, $reference->attribute_obj->title));
 				break;
 
 				case 'text':
-					$rules[] = array('max_length', array(':value', $reference->attribute_obj->max_text_length));
+					$rules[] = array('max_length', array(':value', $reference->attribute_obj->max_text_length, $reference->attribute_obj->title));
 				break;
 			}
 			// @todo check xss validation
@@ -977,59 +972,11 @@ class Lib_PlacementAds_AddEdit {
 
 	function init_defaults()
 	{
-		/*$this->params = new stdClass();
-		$this->params->object_id = NULL;
-		$this->params->rubricid = NULL;
-		$this->params->session_id = NULL;
-		$this->params->title_adv = NULL;
-		$this->params->user_text_adv = NULL;
-		$this->params->default_action = NULL;
-		$this->params->contact = NULL;
-		$this->params->lifetime = NULL;
-		$this->params->from_company = NULL;
-		$this->params->address_kladr_id = NULL;
-		$this->params->object_coordinates = NULL; 
-		$this->params->address = NULL;
-		$this->params->city_kladr_id = NULL;
-		$this->params->city_name = NULL;
-		$this->params->address_str = NULL;
-		$this->params->userfile = NULL;
-		$this->params->active_userfile = NULL;
-		$this->params->video = NULL;
-		$this->params->video_type = NULL;
-		$this->params->block_comments = NULL;		
-		$this->params->parent_id = NULL;*/
-
 		$this->contacts = array();
 	}
 
 	private static function raise_error($text){
 		throw new HTTP_Exception_404($text);		
-	}
-
-	private function is_shown($conditions, $reference_id)
-	{
-		$shown = FALSE;
-
-		foreach ($conditions as $condition)
-		{
-			if ($reference_id == $condition->for_reference)
-			{
-				if (property_exists($this->params, 'param_'.$condition->reference)) 
-				{
-					$params = explode(',', $this->params->{'param_'.$condition->reference});
-					foreach ($params as $param)
-					{
-						if ($param == $condition->value_list OR $param == $condition->value_boolean)
-						{
-							$shown = TRUE;
-						}
-					}
-				}
-			}
-		}
-		
-		return $shown;
 	}
 
 	private static function lifetime_to_date($lifetime)

@@ -144,8 +144,10 @@ class Attribute {
 		if ( $value_exist)
 			$value = $params[ $ref_id ];
 
-		if( $value_exist AND $info["type"] == "ilist" AND  substr($value, 0, 1) <> "_")
-			$value = "_".$value;
+		if( $value_exist AND $info["type"] == "ilist" AND  substr($value, 0, 1) <> "_"){
+			//if ($value)
+			//	$value = "_".$value;
+		}
 		
 
 		foreach($data as $key => $element)
@@ -208,7 +210,7 @@ class Attribute {
 		$return = Array();
 		for ($i = $options["min"]; $i<= $options["max"]; $i = $i + $options["step"])
 		{
-			$return["_".$i] = $i;
+			$return["0".$i] = $i;
 		}
 		return $return;
 	}
