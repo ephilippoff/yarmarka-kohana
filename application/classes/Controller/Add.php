@@ -10,6 +10,7 @@ class Controller_Add extends Controller_Template {
 		$this->assets->js('http://api-maps.yandex.ru/2.0/?load=package.full&lang=ru-RU');		
 		/*$this->assets->js('jquery-ui/ui/minified/jquery.ui.widget.min.js');		
 		$this->assets->js('jquery-ui/ui/minified/jquery.ui.autocomplete.min.js');*/
+		$this->assets->js('ajaxupload.js');
 		$this->assets->js('http://yarmarka-kh.dev/static');
 
 		$errors = new Obj();

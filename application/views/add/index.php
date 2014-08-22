@@ -179,6 +179,7 @@
 			<? endif; ?>
 			</div>
 
+			<div id="div_photo">
 			<? if ( property_exists($form_data, 'photo') ): ?>					
 				<div class="smallcont add-photo">
 					<div class="labelcont">
@@ -188,7 +189,7 @@
 					<div class="fieldscont">
 						<div class="inp-cont-long">
 							<div class="inp-cont">
-								<div id="add-block" class="add-block" data-max="8">
+								<div id="add-block" class="add-block fn-photo-list" data-max="8">
 									<?=View::factory('add/block/photo',
 										array( "data" 		=> new Obj($form_data->photo),
 											   "_class" 	=> "",
@@ -196,22 +197,21 @@
 											   "id" 		=> "",
 											   "attributes" => ""
 										));?>
-									<? /*
+									
 									<div id="addbtn" class="addbtn"><span class="add">Нажмите <span id="userfile_upload" class="span">сюда</span><br/> чтобы добавить новые фото</span></div>
-									*/?>
-									<input type="hidden" name="active_userfile" value="" />
 								</div>
 								
 								<span class="inform">
 									<span>Главным по умолчанию является первое фото, щелкните по любому фото, чтобы сделать его главным</span>
 								</span>
-								<input class="mb10" type="file" value="" id="btn-photo-load" name="photo" class="btn-photo-load">
+								<? /*<input class="mb10" type="file" value="" id="btn-photo-load" name="photo" class="btn-photo-load">*/ ?>
 								<div class="mb10 red" id="error_userfile1"></div>
 							</div>
 						</div>
 					</div>
 				</div>
 			<? endif; ?>
+			</div>
 
 			<? if ( property_exists($form_data, 'contacts') ): ?>
 				<div class="fl100 add-coord-cont">	                    		
@@ -220,17 +220,6 @@
 								<label><span>Контакты:</span></label>
 							</div>	
 							<div class="fieldscont">
-								<div id="contacts" class="inp-cont-short">	                  			
-									<div class="inp-cont <?if ($form_data->contacts["contact_error"]) echo "error";?>">
-										<span class="required-label">*</span>						
-										<input type="text" name="contact" value="<?=$form_data->contacts["contact_person"]?>"/>						
-										<? if ($form_data->contacts AND $form_data->contacts["contact_error"]): ?>
-											<span class="inform">
-												<span><?=$form_data->contacts["contact_error"]?></span>
-											</span>
-										<? endif; ?>
-									</div>
-								</div>
 
 								<div id="contacts2" class="contacts-cont fn-contacts-container">
 									<?=View::factory('add/block/contacts',
@@ -246,6 +235,28 @@
 
 							</div>
 						</div>
+				</div>
+
+				<div class="fl100 add-coord-cont">	     
+					<div class="smallcont">
+								<div class="labelcont">
+									<label><span>Контактное лицо:</span></label>
+								</div>	
+								<div class="fieldscont">
+									<div id="contacts" class="inp-cont-short">	                  			
+										<div class="inp-cont <?if ($form_data->contacts["contact_error"]) echo "error";?>">
+											<span class="required-label">*</span>						
+											<input type="text" name="contact" value="<?=$form_data->contacts["contact_person"]?>"/>						
+											<? if ($form_data->contacts AND $form_data->contacts["contact_error"]): ?>
+												<span class="inform">
+													<span><?=$form_data->contacts["contact_error"]?></span>
+												</span>
+											<? endif; ?>
+										</div>
+									</div>
+
+								</div>
+					</div>
 				</div>
 			<? endif; ?>
 
@@ -566,6 +577,12 @@
 			</div>
 		</div>
 	</div>  
+</script>
+
+<script id="template-photo" type="text/template">
+		<div class="img <%=((active)?'active':'')%>"><img src="<%=filepath%>"/></div> 
+		<div class="href-bl"><span href="" class="remove fn-remove">Удалить</span></div>
+		<input type="hidden" name="userfile[]" value="<%=filename%>"/>
 </script>
 
 <?=HTML::script('js/adaptive/addapp.js')?>
