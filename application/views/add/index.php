@@ -155,7 +155,9 @@
 					<div class="fieldscont user-text mb15">
 						<div class="inp-cont-long ">
 							<div class="inp-cont <?if ($form_data->text["text_error"]) echo "error";?>">
-								<span class="required-label">*</span>
+								<? if ($form_data->text_required): ?>
+									<span class="required-label">*</span>
+								<? endif; ?>
 								<div class="textarea user_text_adv_wrp">
 									<?=View::factory('add/block/text',
 											array( "data" 		=> new Obj($form_data->text),
@@ -221,7 +223,7 @@
 								<div id="contacts" class="inp-cont-short">	                  			
 									<div class="inp-cont <?if ($form_data->contacts["contact_error"]) echo "error";?>">
 										<span class="required-label">*</span>						
-										<input type="text" name="contact" placeholder="Контактное лицо" value="<?=$form_data->contacts["contact_person"]?>"/>						
+										<input type="text" name="contact" value="<?=$form_data->contacts["contact_person"]?>"/>						
 										<? if ($form_data->contacts AND $form_data->contacts["contact_error"]): ?>
 											<span class="inform">
 												<span><?=$form_data->contacts["contact_error"]?></span>
@@ -255,7 +257,7 @@
 						<div class="fieldscont">
 							<div class="inp-cont-short">
 								<div class="inp-cont">
-									<div data-placeholder="Выберите жизни объявления<..." class="values">
+									<div data-placeholder="Выберите срок жизни объявления..." class="values">
 										 <select id="lifetime" name="lifetime">
 											<option value="2w">2 недели</option>
 											<option value="1m">1 месяц</option>
@@ -554,7 +556,9 @@
 		<div class="fieldscont user-text mb15">
 			<div class="inp-cont-long ">
 				<div class="inp-cont">
-					<span class="required-label">*</span>
+					<% if (text_required) { %>
+						<span class="required-label">*</span>
+					<% } %>
 					<div class="textarea user_text_adv_wrp">
 					<textarea name="user_text_adv" id="user_text_adv"><%=value%></textarea>
 					</div>

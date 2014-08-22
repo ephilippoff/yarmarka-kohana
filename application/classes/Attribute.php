@@ -165,6 +165,7 @@ class Attribute {
 				"custom" 	=> $info["custom"],
 				"weight" 	=> $info["weight"],
 				"is_required"=> $info["is_required"],
+				"is_textarea"=> $info["is_textarea"],
 				"name" 		=> "param_".$ref_id,
 				"values"	=> $values,
 				"value" 	=> $value

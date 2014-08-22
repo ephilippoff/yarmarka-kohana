@@ -255,7 +255,7 @@ class Lib_PlacementAds_Form  {
 		$category 	= $this->category;
 		$object 	= $this->object;
 		$edit 		= $this->_edit;
-		$errors 		= $this->errors;
+		$errors 	= $this->errors;
 
 		$title_auto_fill 	=  FALSE;
 		$value 				= '';
@@ -279,17 +279,23 @@ class Lib_PlacementAds_Form  {
 	}
 
 	function Text(){
+		$category 	= $this->category;
 		$object 	= $this->object;
-		$errors 		= $this->errors;
+		$errors 	= $this->errors;
 
 		$value = '';
 		if ($object->loaded() AND !$this->is_post)
 			$value = $object->user_text;
-		elseif ($this->is_post)
+		elseif ($this->is_post AND array_key_exists("user_text_adv", $this->params))
 			$value = $this->params['user_text_adv'];
 
-		$this->_data->text = array( 'value' => $value,
-									'text_error' => $errors->user_text_adv);
+		if ($category->loaded())
+			$text_required = $category->text_required;
+
+		
+		$this->_data->text = array( 'value' 		=> $value,
+									'text_required' => $text_required,
+									'text_error' 	=> $errors->user_text_adv );
 
 		return $this;
 	}

@@ -19,7 +19,11 @@
 					<label><span><?=$element["title"]?></span></label>
 				</div>
 				<div class="fieldscont">
-					<div class="inp-cont-short" data-condition="">
+					<? $shortlong_class = "inp-cont-short"; 
+						if ($element["type"] == "text")
+							$shortlong_class = "inp-cont-long";
+					?>
+					<div class="<?=$shortlong_class?>">
 						<div class="inp-cont <? if ($data->errors->{$element["name"]}) echo "error";?>">
 							<? if ($element["is_required"]):?>
 							<span class="required-label">*</span>
@@ -31,7 +35,10 @@
 								<? elseif ($element["type"] == "numeric"): ?>
 									<?= View::factory( "add/element/_numeric", $parameters); ?>
 
-								<? elseif ($element["type"] == "text"): ?>
+								<? elseif ($element["type"] == "text" AND $element["is_textarea"]): ?>
+									<?= View::factory( "add/element/_textarea", $parameters); ?>
+
+								<? elseif ($element["type"] == "text" AND !$element["is_textarea"]): ?>
 									<?= View::factory( "add/element/_text", $parameters); ?>
 
 								<? endif; ?>
