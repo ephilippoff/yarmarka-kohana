@@ -65,7 +65,7 @@ class Controller_Add extends Controller_Template {
 		$user = Auth::instance()->get_user();
 
 		//если в локале работаем с подачей, ставим 1
-		$local = 1;
+		$local = 0;
 
 		if ($local == 1)
 		{
