@@ -200,7 +200,7 @@
 									
 									<div id="addbtn" class="addbtn"><span class="add">Нажмите <span id="userfile_upload" class="span">сюда</span><br/> чтобы добавить новые фото</span></div>
 								</div>
-								
+								<input type="hidden" id="active_userfile" name="active_userfile" value="<?=$params->active_userfile?>" />
 								<span class="inform">
 									<span>Главным по умолчанию является первое фото, щелкните по любому фото, чтобы сделать его главным</span>
 								</span>
@@ -214,7 +214,7 @@
 			</div>
 
 			<? if ( property_exists($form_data, 'contacts') ): ?>
-				<div class="fl100 add-coord-cont">	                    		
+				<div class="fl100 add-coord-cont" id="div_contacts">	                    		
 						<div class="smallcont">
 							<div class="labelcont">
 								<label><span>Контакты:</span></label>
@@ -583,6 +583,33 @@
 		<div class="img <%=((active)?'active':'')%>"><img src="<%=filepath%>"/></div> 
 		<div class="href-bl"><span href="" class="remove fn-remove">Удалить</span></div>
 		<input type="hidden" name="userfile[]" value="<%=filename%>"/>
+</script>
+
+<script id="template-contact" type="text/template">
+	<div class="cont-left">
+		<select class="sl-contact-type fn-contact-type" name="contact_<%=_id%>_type">
+			<option value="1" data-comment="Введите номер" data-validation-type="phone" data-format="+7(999)999-99-99" selected>Мобильный тел.</option>
+			<option value="2" data-comment="Введите номер" data-validation-type="phone" data-format="+7(9999)99-99-99">Городской тел.</option>
+			<option value="5" data-comment="Введите ваш почтовый ящик" data-validation-type="email" data-format="">Email</option>
+		</select>
+		<input class='inp_contact fn-contact-value' type="text" value=""  name="contact_<%=_id%>_value">
+		<span class="inform"><span class="fn-contact-inform"><?/* inform*/?></span></span>
+	</div>
+	<div class="cont-right">
+		<span title="Верифицировать" class="button apply fn-contact-verify-button">Подтвердить контакт</span>
+		<span class="cansel like-link fn-contact-delete-button" title="Удалить">Удалить</span>
+	</div><!--contact-right-->			
+</script>
+
+<script type="text/template" id="template-verify-contact-window">
+	<div class="popup-cont cont">
+		<span class="close fn-verify-contact-win-close"></span>
+		<p class="title pb10">Проверка контакта <%=value%></p>										
+		<input class="inp-confirm-code fn-input-code" type="text" placeholder="Введите код" />
+		<p class="msg pt5 pb25 fn-error-block"></p>
+		<? /*<div class='fn-btn-re-send'><span style="font-size:12px;">Отправить еще раз</span></div> */?>
+		<div class="ta-r"><div class="button blue  fn-verify-contact-win-submit">Готово</div></div>
+	</div>
 </script>
 
 <?=HTML::script('js/adaptive/addapp.js')?>

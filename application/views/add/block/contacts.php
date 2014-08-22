@@ -1,8 +1,7 @@
 
 <? $i = 0; ?>
 <?	foreach ($data->contacts as $contact):	?>
-
-	<div class="contact-cont <? if ($data->contacts_error) echo "noverified"; ?>">
+	<div class="contact-cont fn-contact <? if ($data->contacts_error) echo "noverified"; ?>" id="contact_item_<?=$i?>" data-item-id="<?=$i?>">
 		<div class="cont-left">
 			<select id="contact_type_select_<?=$i?>"  name="contact_<?=$i?>_type" class="sl-contact-type fn-contact-type">
 				<? foreach ($data->contact_types as $contact_type):?>
@@ -20,23 +19,3 @@
 <? $i++; ?>
 <? if ($i == $data->max_count_contacts) break;?>
 <? endforeach; ?>
-
-<? if ($i<$data->max_count_contacts) :?>
-	<div id="contacts2" class="contacts-cont fn-contacts-container">			
-		<div class="contact-cont">
-			<div class="cont-left">
-				<select id="contact_type_select_1"  name="contact_1_type" class="sl-contact-type fn-contact-type">
-					<option value='1'>Мобильный тел.</option>
-					<option value='2'>Городской тел.</option>
-					<option value='5'>Email</option>
-				</select>
-				<input id="contact_value_input_1" class="inp_contact fn-contact-value" type="text" value="" name="contact_1_value" />
-				<span class="inform"><span class="fn-contact-inform">Пр прпвап ваппвап вапвапвпвап вапвапвапвар вапвапв</span></span>
-			</div>
-			<div class="cont-right">
-				<span title="Верифицировать" class="button apply fn-contact-verify-button">Подтвердить контакт</span>
-				<span class="cansel like-link fn-contact-delete-button" title="Удалить">Удалить</span>
-			</div><!--contact-right-->					
-		</div><!--contact-cont-->
-	</div>
-<? endif; ?>

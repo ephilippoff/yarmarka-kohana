@@ -30,6 +30,7 @@
 ?>
 </head>
 <body class="adaptive page-addobj">
+	<div class="popup-layer"></div>
 	<?=View::factory('layouts/google_analytics')?>
 	<div class="wrapfix add">
 			<?=View::factory('layouts/header')?>

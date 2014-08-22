@@ -11,14 +11,23 @@ class Controller_Add extends Controller_Template {
 		/*$this->assets->js('jquery-ui/ui/minified/jquery.ui.widget.min.js');		
 		$this->assets->js('jquery-ui/ui/minified/jquery.ui.autocomplete.min.js');*/
 		$this->assets->js('ajaxupload.js');
+		$this->assets->js('jquery.inputmask.js');
+		/*$this->assets->js('require.js');
+		$this->assets->js('require.config.js');*/
 		$this->assets->js('http://yarmarka-kh.dev/static');
 
 		$errors = new Obj();
+		$object_id = NULL;
 
 		$is_post = ($_SERVER['REQUEST_METHOD']=='POST');
+
 		if ($is_post) {  
 			$errors = new Obj(self::action_native_save_object());
-			$errors = new Obj($errors->error);
+			if ($errors->error)
+				$errors = new Obj($errors->error);
+			else 
+				$object_id = $errors->object_id;
+
 			$params = $this->request->post();
 		} 
 		else
@@ -30,6 +39,8 @@ class Controller_Add extends Controller_Template {
 			);
 		}
 
+		if ($object_id)
+			$this->redirect('http://'.Region::get_current_domain().'/billing/services_for_ads/'.$object_id);
 		
 
 		$form_data = new Lib_PlacementAds_Form($params, $is_post, $errors);
@@ -54,7 +65,7 @@ class Controller_Add extends Controller_Template {
 		$user = Auth::instance()->get_user();
 
 		//если в локале работаем с подачей, ставим 1
-		$local = 0;
+		$local = 1;
 
 		if ($local == 1)
 		{
