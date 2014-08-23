@@ -34,10 +34,16 @@ class Lib_PlacementAds_AddEdit {
 
 		if (is_array($params))
 		{
-			//foreach($params as $key=>$value)
-			//{
-				$this->params = new Obj($params);//->{$key} = $value;	
-			//}
+
+			$this->params = new Obj($params);
+
+			foreach((array) $this->params as $key=>$value){
+				if (preg_match('/^param_([0-9]*)/', $key, $matches))
+				{
+					$this->params->{$key} = str_replace("_", "", $this->params->{$key});
+				}
+			}
+
 		}
 		return $this;
 	}
@@ -174,7 +180,6 @@ class Lib_PlacementAds_AddEdit {
 
 		if ($this->category){
 			$this->form_references = Forms::get_by_category_and_type($this->category->id, 'add');
-			$this->conditions = Forms::get_category_conditions($this->category->id);
 		}
 
 		return $this;
@@ -460,13 +465,18 @@ class Lib_PlacementAds_AddEdit {
 	function init_validation_rules_for_attributes()
 	{
 		$form_references = &$this->form_references;
-		$conditions 	 = &$this->conditions;
 		$category 		 = &$this->category;
+		$postparams 	 = &$this->params;
 
 		if (!$category) return $this;
 
 		foreach ($form_references as $reference)
 		{
+
+			
+			if ($reference->is_required AND !self::is_nessesary_to_check($category->id, $reference->id, $postparams))
+				continue;			
+
 			$rules = array();
 
 			if ($reference->is_range)
@@ -973,6 +983,30 @@ class Lib_PlacementAds_AddEdit {
 	function init_defaults()
 	{
 		$this->contacts = array();
+
+	}
+
+	private static function is_nessesary_to_check($category_id, $reference_id, $postparams)
+	{
+		$return = TRUE;
+
+		$ar = ORM::factory('Attribute_Relation')
+						->where("attribute_relation.category_id","=", $category_id)
+						->where("attribute_relation.reference_id","=", $reference_id)
+						->where("attribute_relation.parent_id","IS NOT", NULL)
+						->cached(Date::DAY)
+						->find_all();
+
+		$relation_parent_elements = Array();
+		foreach ($ar as $item)
+			$relation_parent_elements[] = $item->parent_element_id;
+		
+
+		if (count($relation_parent_elements) AND
+				count($relation_parent_elements) == count(array_diff($relation_parent_elements, array_values((array) $postparams))))
+			$return = FALSE;
+
+		return $return;
 	}
 
 	private static function raise_error($text){
