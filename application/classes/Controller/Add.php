@@ -14,7 +14,7 @@ class Controller_Add extends Controller_Template {
 		$this->assets->js('jquery.inputmask.js');
 		/*$this->assets->js('require.js');
 		$this->assets->js('require.config.js');*/
-		$this->assets->js('http://yarmarka-kh.dev/static');
+		$this->assets->js('http://c.yarmarka.dev/static');
 
 		$errors = new Obj();
 		$object_id = NULL;

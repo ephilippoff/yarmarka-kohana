@@ -20,7 +20,7 @@
 							<div class="inp-cont <? if ($form_data->login["login_error"]) echo "error";?>">
 								<span class="required-label">*</span>
 								
-								<input type="text" name="login"/>
+								<input type="text" name="login" value="<? if ($params->login) echo $params->login;?>"/>
 									
 								<? if ($form_data->login["login_error"]): ?>
 								<span class="inform">
@@ -41,7 +41,7 @@
 							<div class="inp-cont <? if ($form_data->login["pass_error"]) echo "error";?>">
 								<span class="required-label">*</span>
 								
-								<input type="password" name="pass"/>
+								<input type="password" name="pass" value="<? if ($params->pass) echo $params->pass;?>"/>
 									
 								<? if ($form_data->login["pass_error"]): ?>
 								<span class="inform">

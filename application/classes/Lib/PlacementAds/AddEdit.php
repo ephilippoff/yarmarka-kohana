@@ -36,16 +36,40 @@ class Lib_PlacementAds_AddEdit {
 		{
 
 			$this->params = new Obj($params);
-
+			$data_params = array();
 			foreach((array) $this->params as $key=>$value){
 				if (preg_match('/^param_([0-9]*)/', $key, $matches))
 				{
 					$this->params->{$key} = str_replace("_", "", $this->params->{$key});
+					$data_params[] = explode("_", $key);
 				}
 			}
 
+			$this->params->address = $this->parse_address_from_params((array) $this->params);
+
+			
+
 		}
 		return $this;
+	}
+
+	function parse_address_from_params($params)
+	{
+		$address = "";
+		$param_keys = array_keys($params);
+		$address_attribute_ids = Kohana::$config->load('common.address_attribute_ids');
+		$refs = array();
+		$ref = ORM::factory('Reference')
+
+					->where("attribute","IN", $address_attribute_ids)
+					->cached(Date::DAY)
+					->find_all();
+		foreach($ref as $item){
+			if (in_array("param_".$item->id, $param_keys))
+					$address = $params["param_".$item->id];
+		}
+
+		return $address;
 	}
 
 	function login()
@@ -250,10 +274,10 @@ class Lib_PlacementAds_AddEdit {
 			));
 		}
 
-		if ($category AND $category->address_required)
+		/*if ($category AND $category->address_required)
 		{
 			$validation->rule('address', 'not_empty', array(':value', "Адрес"));
-		}
+		}*/ //теперь настраивается через обязательность атрибута
 
 		if ($category AND $category->text_required)
 		{
