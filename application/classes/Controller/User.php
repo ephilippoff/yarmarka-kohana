@@ -909,11 +909,15 @@ class Controller_User extends Controller_Template {
 
 	public function action_logout()
 	{
+		$this->use_layout	= FALSE;
+		$this->auto_render	= FALSE;
 		if (Auth::instance()->get_user())
 		{
 			setcookie('user_id', '', time()-1, '/', Region::get_cookie_domain());
 			Auth::instance()->logout();
+			CI::logout();
 		}
+
 
 		$this->redirect('http://'.Region::get_current_domain().'/user/logout');
 	}

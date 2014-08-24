@@ -113,4 +113,15 @@ class CI extends Kohana_URL {
 		// Concat the URL
 		return CI::base($protocol, $index, $domain).$path;
 	}
+
+	public static function login($login, $pass)
+	{
+		
+	}
+
+	public static function logout()
+	{
+		
+	}
+
 }

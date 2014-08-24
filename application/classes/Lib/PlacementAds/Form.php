@@ -9,7 +9,6 @@ class Lib_PlacementAds_Form  {
 	public $category_id = 0;
 	public $object_id = 0;
 	public $city_id = 0;
-	public $user_id = 0;
 
 	public $_edit = FALSE;
 	public $_data;
@@ -50,12 +49,10 @@ class Lib_PlacementAds_Form  {
 		$category_id 	= $this->_category_id;
 		$city_id 		= $this->_city_id;
 		$object_id 		= $this->_object_id;
-		$user_id 		= Auth::instance()->get_user()->id;
 
 		$this->object 	= ORM::factory('Object');
 		$this->category = ORM::factory('Category');
 		$this->city 	= ORM::factory('City');
-		$this->user 	= ORM::factory('User');
 
 		if ($object_id > 0) 
 		{
@@ -65,7 +62,6 @@ class Lib_PlacementAds_Form  {
 			{				
 				$category_id 		= $this->object->category;
 				$city_id 	 		= $this->object->city_id;				
-				$user_id		  	= $this->object->author;
 
 				$this->_edit 		= TRUE;
 				$this->object_id  	= $object_id;
@@ -96,16 +92,15 @@ class Lib_PlacementAds_Form  {
 			}
 		}
 
-		if ($user_id > 0)
-		{
-			$this->user = ORM::factory('User', $user_id);
-			if ($this->user->loaded())
-			{
-				$this->user_id = $user_id;
-			} else {
-				throw new Exception("Пользователя не существует");
-			}
-		}
+		return $this;
+	}
+
+	function Login()
+	{
+		$errors 		= $this->errors;
+
+		$this->_data->login = array("login_error" => $errors->not_autorized,
+										"pass_error" => $errors->pass_error);
 
 		return $this;
 	}

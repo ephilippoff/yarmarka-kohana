@@ -5,10 +5,15 @@ class Object
 	static function PlacementAds_Default($input_params)
 	{
 		$json = array();
+		$user = Auth::instance()->get_user();
 		
 		$add = new Lib_PlacementAds_AddEdit();
-		$add->init_input_params($input_params)
-			->init_instances()
+		$add->init_input_params($input_params);
+
+		if (!$user)
+			$add->login();		
+
+		$add->init_instances()
 			->init_object_and_mode()
 			->check_neccesaries()
 			->init_validation_rules()
@@ -134,10 +139,15 @@ class Object
 	static function PlacementAds_ByModerator($input_params)
 	{
 		$json = array();
+		$user = Auth::instance()->get_user();
 		
 		$add = new Lib_PlacementAds_AddEditByModerator();
-		$add->init_input_params($input_params)
-			->init_instances()
+		$add->init_input_params($input_params);
+
+		if (!$user)
+			$add->login();		
+
+		$add->init_instances()
 			->init_object_and_mode()
 			->check_neccesaries()
 			->init_validation_rules()

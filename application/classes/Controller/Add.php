@@ -20,6 +20,7 @@ class Controller_Add extends Controller_Template {
 		$object_id = NULL;
 
 		$is_post = ($_SERVER['REQUEST_METHOD']=='POST');
+		
 
 		if ($is_post) {  
 			$errors = new Obj(self::action_native_save_object());
@@ -44,6 +45,11 @@ class Controller_Add extends Controller_Template {
 		
 
 		$form_data = new Lib_PlacementAds_Form($params, $is_post, $errors);
+
+		$user = Auth::instance()->get_user();
+		if (!$user)
+			$form_data->Login();
+
 		$form_data	->Category()
 				 	->City()
 				 	->Subject()
@@ -74,7 +80,7 @@ class Controller_Add extends Controller_Template {
 			$json = Object::PlacementAds_Local($this->request->post());
 
 		} else {
-			if ($user->role == 9) 
+			if ($user AND $user->role == 9) 
 			{
 				//убрана проверка контактов
 				//убрана проверка на максимальное количество объяв в рубрику

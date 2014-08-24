@@ -48,6 +48,26 @@ class Lib_PlacementAds_AddEdit {
 		return $this;
 	}
 
+	function login()
+	{
+		$params 	= &$this->params;
+		$errors 	= &$this->errors;
+
+		$auth = Auth::instance();
+
+
+		try {
+			$auth->login($params->login, $params->pass, TRUE);
+			//echo CI::login($params->login, $params->pass);
+		} 
+			catch (Exception $e)
+		{
+			$errors["pass_error"] = $e->getMessage();
+
+		} 
+		return $this;
+	}
+
 	function check_neccesaries()
 	{
 		$errors = &$this->errors;
@@ -122,7 +142,9 @@ class Lib_PlacementAds_AddEdit {
 		$category_id 	= (int) $params->rubricid;
 		$city_id 		= (int) $params->city_id;
 		$user 			= Auth::instance()->get_user();
-		$user_id 	    = $user->id;
+
+		if ($user)
+			$user_id = $user->id;
 
 		if ($object_id > 0)
 		{
@@ -170,13 +192,6 @@ class Lib_PlacementAds_AddEdit {
 			if ( ! $user->loaded() )
 				$this->raise_error('user not finded');
 		} 
-		elseif ($user->role == 1 OR $user->role == 3)
-		{
-
-		} /*else 
-		{
-			$this->raise_error('user dont have permissions to edit this object');
-		}*/
 
 		if ($this->category){
 			$this->form_references = Forms::get_by_category_and_type($this->category->id, 'add');
@@ -254,8 +269,9 @@ class Lib_PlacementAds_AddEdit {
 	{
 		$contacts = &$this->contacts;
 		$category = &$this->category;
+		$user     = &$this->user;
 
-		if (!$category) return $this;
+		if (!$category OR !$user) return $this;
 
 		foreach((array) $this->params as $key=>$value){
 			if (preg_match('/^contact_([0-9]*)_value/', $key, $matches))
@@ -289,9 +305,9 @@ class Lib_PlacementAds_AddEdit {
 		$errors = &$this->errors;
 		$object = &$this->object;
 		$category = &$this->category;
-		$user = &$this->user;
+		$user     = &$this->user;
 
-		if (!$category) return $this;
+		if (!$category OR !$user) return $this;
 
 		if ($this->is_just_triggers($params))
 			@list($values, $list_ids) = (array) Object_Utils::get_parsed_parameters(NULL, $object->id, TRUE);
@@ -353,9 +369,9 @@ class Lib_PlacementAds_AddEdit {
 		$object = &$this->object;
 		$errors = &$this->errors;
 		$category = &$this->category;
-		$user = &$this->user;
+		$user     = &$this->user;
 
-		if (!$category) return $this;
+		if (!$category OR !$user) return $this;
 
 		if ($this->is_union_enabled() AND $this->is_union_enabled_by_category($category->id) AND !$this->union_cancel)
 		{
@@ -396,9 +412,9 @@ class Lib_PlacementAds_AddEdit {
 		$object = &$this->object;
 		$errors = &$this->errors;
 		$category = &$this->category;
-		$user = &$this->user;
+		$user     = &$this->user;
 
-		if (!$category) return $this;
+		if (!$category OR !$user) return $this;
 
 		if ($this->is_union_enabled() AND $this->is_union_enabled_by_category($category->id))
 		{ 
@@ -467,6 +483,7 @@ class Lib_PlacementAds_AddEdit {
 		$form_references = &$this->form_references;
 		$category 		 = &$this->category;
 		$postparams 	 = &$this->params;
+		$user     		 = &$this->user;
 
 		if (!$category) return $this;
 
@@ -533,7 +550,15 @@ class Lib_PlacementAds_AddEdit {
 		//заполнены ли обязательные параметры
 		if ( !$this->validation->check())
 		{
-			$errors = $this->validation->errors('validation/object_form');
+			if (!$errors)
+				$errors = array();
+
+			$errors = array_merge($errors, $this->validation->errors('validation/object_form'));
+		}
+
+		if (!$user)
+		{
+			$errors['not_autorized'] =  Kohana::message('validation/object_form', 'not_autorized');
 		}
 
 		// указаны ли контакты

@@ -9,6 +9,52 @@
   			<input type="hidden" name="object_id" id="object_id" value="<?=$params->object_id?>">
   			<input type="hidden" name="session_id" value="<?=session_id()?>">
 
+  			<? if ( property_exists($form_data, 'login') ): ?>
+			<div class="fl100  pt16 pb15"  id="div_city">
+				<div class="smallcont">
+					<div class="labelcont">
+						<label><span>Логин</span></label>
+					</div>
+					<div class="fieldscont">
+						<div class="inp-cont-short">
+							<div class="inp-cont <? if ($form_data->login["login_error"]) echo "error";?>">
+								<span class="required-label">*</span>
+								
+								<input type="text" name="login"/>
+									
+								<? if ($form_data->login["login_error"]): ?>
+								<span class="inform">
+									<span><?=$form_data->login["login_error"]?></span>
+								</span>
+								<? endif; ?>
+							</div>
+						</div>
+					</div>									
+				</div>
+
+				<div class="smallcont">
+					<div class="labelcont">
+						<label><span>Пароль</span></label>
+					</div>
+					<div class="fieldscont">
+						<div class="inp-cont-short">
+							<div class="inp-cont <? if ($form_data->login["pass_error"]) echo "error";?>">
+								<span class="required-label">*</span>
+								
+								<input type="password" name="pass"/>
+									
+								<? if ($form_data->login["pass_error"]): ?>
+								<span class="inform">
+									<span><?=$form_data->login["pass_error"]?></span>
+								</span>
+								<? endif; ?>
+							</div>
+						</div>
+					</div>									
+				</div>
+			</div>
+			<? endif; ?>
+
 			<? if ( property_exists($form_data, 'city') ): ?>
 			<div class="fl100  pt16 pb15"  id="div_city">
 					<div class="smallcont">
