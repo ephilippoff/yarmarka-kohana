@@ -1,7 +1,13 @@
 <div class="winner">
 	<section class="main-cont">
 		<div class="hheader">
-			<h1 class="ta-c"><span><strong>Новое объявление</strong></span></h1>
+			<h1 class="ta-c"><span><strong>
+			<? if ($form_data->_edit):?>
+				Редактирование объявления
+			<? else:?>
+				Новое объявление
+			<? endif;?>
+			</strong></span></h1>
 		</div><!--hheader-->
 
 

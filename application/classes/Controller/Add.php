@@ -17,34 +17,31 @@ class Controller_Add extends Controller_Template {
 		$this->assets->js(Url::base(TRUE).'static');
 
 		$errors = new Obj();
-		$object_id = NULL;
 
 		$is_post = ($_SERVER['REQUEST_METHOD']=='POST');
-		
+		$post_data = $this->request->post();
 
 		if ($is_post) {  
-			$errors = new Obj(self::action_native_save_object());
+			$errors = new Obj(self::action_native_save_object($post_data));
 			if ($errors->error)
 				$errors = new Obj($errors->error);
-			else 
+			else {
 				$object_id = $errors->object_id;
+				$this->redirect('http://'.Region::get_current_domain().'/billing/services_for_ads/'.$object_id);
+			}
 
-			$params = $this->request->post();
+			$params = $post_data;
 		} 
 		else
 		{
 			$params = array(
 				'rubricid'		=> (int)$this->request->param('rubricid'),
-				'object_id'		=> (int)$this->request->query('object_id'),
+				//'object_id'		=> (int)$this->request->query('object_id'),
 				'city_id'		=> (int)$this->request->param('city_id')
 			);
 		}
 
-		if ($object_id)
-			$this->redirect('http://'.Region::get_current_domain().'/billing/services_for_ads/'.$object_id);
-		
-
-		$form_data = new Lib_PlacementAds_Form($params, $is_post, $errors);
+		$form_data = new Form_Add($params, $is_post, $errors);
 
 		$user = Auth::instance()->get_user();
 		if (!$user)
@@ -65,32 +62,11 @@ class Controller_Add extends Controller_Template {
 
 	}
 
-	public function action_native_save_object()
+	public function action_native_save_object($params = NULL)
 	{
-		$json = array();
-		$user = Auth::instance()->get_user();
-
-		//если в локале работаем с подачей, ставим 1
-		$local = 0;
-
-		if ($local == 1)
-		{
-			//подставляется дефолтный город 1947 не из кладра, чтоб кладр на локале не разворачивать
-			//не сохраняется короткий урл
-			$json = Object::PlacementAds_Local($this->request->post());
-
-		} else {
-			if ($user AND $user->role == 9) 
-			{
-				//убрана проверка контактов
-				//убрана проверка на максимальное количество объяв в рубрику
-				$json = Object::PlacementAds_ByModerator($this->request->post());
-			} else {
-				$json = Object::PlacementAds_Default($this->request->post());
-			}
-		}
-
-		return $json;
+		if (!$params)
+			$params = $this->request->post();
+		return Object::default_save_object($params);
 	}
 
 	public function action_save_object()
