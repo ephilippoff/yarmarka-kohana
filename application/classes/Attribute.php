@@ -53,7 +53,7 @@ class Attribute {
 								->where("reference.category","=",$category_id)
 								->where("attribute_relation.parent_id","=",$parent_id)
 								->where("attribute_relation.parent_element_id","=",$element_id)
-								->order_by("weight")
+								->order_by("attribute_relation.weight")
 								->find_all();
 
 		foreach ($ar as $relation)
