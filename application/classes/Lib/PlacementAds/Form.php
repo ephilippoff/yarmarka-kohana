@@ -306,7 +306,10 @@ class Lib_PlacementAds_Form  {
 
 		if ($object->loaded() AND !$this->is_post)
 		{
-			$oa = ORM::factory('Object_Attachment')->where("object_id","=",$object_id)->find_all();
+			$oa = ORM::factory('Object_Attachment')
+					->where("object_id","=",$object_id)
+					->order_by("id")
+					->find_all();
 			foreach($oa as $photo)
 			{
 				$filename = $photo->filename;
@@ -314,13 +317,29 @@ class Lib_PlacementAds_Form  {
 				$files[] = Array(
 						'id' 		=> $photo->id,
 						'filename'  => $filename,
-						'filepath'  => $filepath["120x90"] 
+						'filepath'  => $filepath["120x90"],
+						'active'	=> ($object->main_image_id == $photo->id) ? TRUE : FALSE
 					);
 			}
 
 			$main_image_id = $object->main_image_id;
-		} elseif ($this->is_post){
-			
+		} elseif ($this->is_post AND array_key_exists("userfile", $this->params)
+						AND count($this->params["userfile"]) > 0){
+			$i = 0;
+			foreach ($this->params["userfile"] as $photo)
+			{
+				$filename = $photo;
+				$filepath = Imageci::getSitePaths($filename);
+				$files[] = Array(
+						'id' 		=> $i,
+						'filename'  => $filename,
+						'filepath'  => $filepath["120x90"],
+						'active'	=> ($this->params["active_userfile"] == $filename) ? TRUE : FALSE
+					);
+				$i++;
+			}
+			if (array_key_exists("active_userfile", $this->params))
+				$main_image_id = $this->params["active_userfile"];
 		}
 
 		$this->_data->photo = array( 'files' => $files,  
