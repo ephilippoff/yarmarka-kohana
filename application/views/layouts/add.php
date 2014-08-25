@@ -33,12 +33,12 @@
 	<div class="popup-layer"></div>
 	<?=View::factory('layouts/google_analytics')?>
 	<div class="wrapfix add">
-			<?=View::factory('layouts/header')?>
+			<?=View::factory('layouts/header1')?>
 			<div class="m_content">
 			<?=$_content?>
 	        </div>
 	  </div>
-      <div class="wrapfix footer-wrap">
+      <div class="wrapfix footer-wrap add">
 	  <?=View::factory('layouts/footer')?>
       </div>
 </body>  

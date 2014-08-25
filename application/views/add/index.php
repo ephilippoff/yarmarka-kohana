@@ -152,9 +152,9 @@
 
 
 			<div class="smallcont hidden" id="div_map">
-				<div class="labelcont">Укажите местоположение объекта на карте</div>
+				<div class="labelcont"><span class="label-geo">Укажите местоположение объекта на карте</span></div>
 				<div class="fieldscont">
-					<div id="map_block_div" class="map_block_div add_form_info inp-cont-long">
+					<div id="map_block_div" class="map_block_div add_form_info inp-cont-long mb20">
 						<div class="map" id="map_block" style="height:250px;width:100%;">		
 							<input type="hidden" id="object_coordinates" name="object_coordinates" value="<? if ($params->object_coordinates) echo $params->object_coordinates;?>"/>
 						</div>				
