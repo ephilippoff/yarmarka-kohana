@@ -9,9 +9,13 @@
 							<span class="required-label">*</span>
 						<? endif; ?>
 						<input id="<?=$id?>" type="text" name="<?=$name?>" value="<?=$value?>"/>
-
+						<? if ($errors): ?>
+							<span class="inform fn-error">
+								<span><?=$error?></span>
+							</span>
+						<? endif; ?>
 						<span class="inform">
-							<span>Пример заполнения адреса</span>
+							<span>Например: ул. Мельникайте, д. 44, корп. 2</span>
 						</span>
 					</div>
 			</div>

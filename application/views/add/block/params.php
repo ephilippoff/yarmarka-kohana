@@ -19,7 +19,7 @@
 			<? endif; ?>
 		
 		<? if ($data->errors->{$element["name"]}): ?>
-			<span class="inform">
+			<span class="inform fn-error">
 				<span><?=$data->errors->{$element["name"]}?></span>
 			</span>
 		<? endif; ?>

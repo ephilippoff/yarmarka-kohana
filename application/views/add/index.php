@@ -23,7 +23,7 @@
 								<input type="text" name="login" value="<? if ($params->login) echo $params->login;?>"/>
 									
 								<? if ($form_data->login["login_error"]): ?>
-								<span class="inform">
+								<span class="inform fn-error">
 									<span><?=$form_data->login["login_error"]?></span>
 								</span>
 								<? endif; ?>
@@ -44,7 +44,7 @@
 								<input type="password" name="pass" value="<? if ($params->pass) echo $params->pass;?>"/>
 									
 								<? if ($form_data->login["pass_error"]): ?>
-								<span class="inform">
+								<span class="inform fn-error">
 									<span><?=$form_data->login["pass_error"]?></span>
 								</span>
 								<? endif; ?>
@@ -73,7 +73,7 @@
 												   "attributes" => ""
 											));?>	
 									<? if ($form_data->city AND $form_data->city["city_error"]): ?>
-										<span class="inform">
+										<span class="inform fn-error">
 											<span><?=$form_data->city["city_error"]?></span>
 										</span>
 									<? endif; ?>
@@ -105,7 +105,7 @@
 											));?>		
 
 									<? if ($form_data->category AND $form_data->category["category_error"]): ?>
-										<span class="inform">
+										<span class="inform fn-error">
 											<span><?=$form_data->category["category_error"]?></span>
 										</span>
 									<? endif; ?>
@@ -374,88 +374,7 @@
 	</section><!--main-cont add-ad-->
 </div><!--end content winner-->
 
-<?/*
-
-<?//$this->carabiner->display('validate') ?>
-    <div id="container">
-		<div id="container2">
-			
-					
-			
-			<div id="add-center">
-		<table><tr><td id="center-column" class="main-right2">
-		  
-
-			<div id="rubric-menu">
-			<div id="add-menu">    
-			<div class="steps">
-			
-				<form method="POST">
-
-					
-
-					<? if ( property_exists($form_data, 'city') ): ?>
-				 		<?=$form_data->city;?>
-					<? endif; ?>
-					<br/>
-					<? if ( property_exists($form_data, 'other_cities') ): ?>
-				 		<?=$form_data->other_cities;?>
-					<? endif; ?>
-					<br/>
-				 	<? if ( property_exists($form_data, 'category') ): ?>
-				 		<?=$form_data->category;?>
-					<? endif; ?>
-					<br/>
-					<div class="fn-parameters">
-					 	<? if ( property_exists($form_data, 'params') ): ?>
-					 		<?=$form_data->params;?>
-						<? endif; ?>
-					</div>
-					<br/>
-					<? if ( property_exists($form_data, 'map') ): ?>
-				 		<?=$form_data->map;?>
-					<? endif; ?>
-					<br/>
-					<? if ( property_exists($form_data, 'subject') ): ?>
-				 		<?=$form_data->subject;?>
-					<? endif; ?>
-					<br/>
-					<? if ( property_exists($form_data, 'text') ): ?>
-				 		<?=$form_data->text;?>
-					<? endif; ?>
-					<br/>
-					<? if ( property_exists($form_data, 'photo') ): ?>
-				 		<?=$form_data->photo;?>
-					<? endif; ?>
-					<br/>
-					<? if ( property_exists($form_data, 'video') ): ?>
-				 		<?=$form_data->video;?>
-					<? endif; ?>
-					<br/>
-					<? if ( property_exists($form_data, 'contacts') ): ?>
-				 		<?=$form_data->contacts;?>
-					<? endif; ?>
-					<br/>
-					<? if ( property_exists($form_data, 'options') ): ?>
-				 		<?=$form_data->contacts;?>
-					<? endif; ?>
-
-					
-					<input type="submit" value="Далее"/>
-				</form>
-			</div>
-			</div>
-			</div><!-- /rubric-body -->
-
-		  </td>
-		   </tr>
-		 </table>
-			</div>
-		</div>
-
-	</div>
-	  
-*/?>
+<!--javascript templates-->
 
 <script id="template-integer" type="text/template">
 	<div class="smallcont" id="div_<%=id%>">
@@ -564,9 +483,9 @@
 							
 							<input id="<%=id%>" type="text" name="<%=id%>" value="<%=value%>"/>
 
-								<span class="inform">
-									<span>Пример заполнения адреса</span>
-								</span>
+							<span class="inform">
+								<span>Например: ул. Мельникайте, д. 44, корп. 2</span>
+							</span>
 						</div>
 				</div>
 			</div>									

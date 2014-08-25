@@ -43,9 +43,9 @@
 
 								<? endif; ?>
 							<? if ($data->errors->{$element["name"]}): ?>
-							<span class="inform">
-								<span><?=$data->errors->{$element["name"]}?></span>
-							</span>
+								<span class="inform fn-error">
+									<span><?=$data->errors->{$element["name"]}?></span>
+								</span>
 							<? endif; ?>
 						</div>
 					</div>
