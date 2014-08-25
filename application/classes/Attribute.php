@@ -43,8 +43,8 @@ class Attribute {
 											'attribute.is_textarea',
 											 array('attribute.id', 'aid'), 
 											 array('attribute.title', 'atitle'),
-											 'reference.weight',
-											 'reference.is_required'
+											 'attribute_relation.weight',
+											 'attribute_relation.is_required'
 										)
 								->join('reference', 'left')
 									->on('attribute_relation.reference_id', '=', 'reference.id')

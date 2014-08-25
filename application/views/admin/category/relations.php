@@ -9,6 +9,10 @@ div.row {
 div.row:hover {
 	background-color: #f5f5f5;
 }
+
+td{
+	min-width:100px;
+}
 </style>
 <script>
 $(document).ready(function() {
@@ -58,6 +62,8 @@ function save(context)
 			category_id : category,
 			options : $(container).find("#options").val(),
 			custom : $(container).find("#custom").val(),
+			weight :$(container).find("#weight").val(),
+			is_required : $(container).find("#is_required").val(),
 	}
 	console.log(params);
 	$.post('/ajax/admin/relation_save', params, function(code) {
@@ -90,29 +96,96 @@ console.log(id);
 		<a href="" class="icon-pencil" onclick="add(this); return false;" data-category="<?=$category->id?>"></a>
 	</div>	
 </div>
+	<table style="border-left: 1px solid black; margin-left: 60px;">
 		<? 
 		$relations = ORM::factory('Attribute_Relation')
 			->join('reference')
 					->on('reference.id', '=', 'reference_id')
 			->where("category_id","=",$category->id)
-			->order_by("reference.weight")
+			->order_by("attribute_relation.weight")
 			->order_by("attribute_relation.parent_id")
 			->order_by("attribute_relation.parent_element_id")
-			->find_all();
+			->find_all();?>
+		<? if (count($relations)>0): ?>
+			<th>
+			<td>
+				#
+			</td>
+			<td>
+				Атрибут
+			</td>
+			<td>
+				Родитель
+			</td>
+			<td>
+				Родительский элемент
+			</td>
+			<td>
+				Options
+			</td>
+			<td>
+				Custom
+			</td>
+			<td>
+				Required
+			</td>
+			<td>
+				Вес
+			</td>
+			<td>
+				-		
+			</td>
+			</th>
+		<? endif; ?>
+		<?
 		foreach ($relations as $relation):
 		?>
-				<div class="row relation_<?=$relation->id?>" style="border-left: 1px solid black; margin-left: 60px;" data-id="<?=$relation->id?>">
+		<tr class="row relation_<?=$relation->id?>" data-id="<?=$relation->id?>">
+		<td>
+			<?=$relation->id?>
+		</td>
+		<td>
+			<?=$relation->reference_obj->attribute_obj->title?>
+		</td>
+		<td>
+			<?=$relation->parent_obj->reference_obj->attribute_obj->title?> (<?=$relation->parent_id?>)
+		</td>
+		<td>
+			<?=$relation->attribute_element_obj->title?>
+		</td>
+		<td>
+			<?=$relation->options?>
+		</td>
+		<td>
+			<?=$relation->custom?>
+		</td>
+		<td>
+			<?=$relation->is_required?>
+		</td>
+		<td>
+			<?=$relation->weight?>
+		</td>
+		<td>
+			<a href="" class="icon-pencil"></a>
+			<a href="" class="icon-trash" onclick="delete_rel(this); return false;"></a>
+					
+		</td>
+		</tr>
+				<?/*<div class="row relation_<?=$relation->id?>" style="border-left: 1px solid black; margin-left: 60px;" data-id="<?=$relation->id?>">
 					<div class="span1"><?=$relation->id?></div>
 					<div class="span2"><?=$relation->reference_obj->attribute_obj->title?></div>
 					<div class="span2">&nbsp;<?=$relation->parent_obj->reference_obj->attribute_obj->title?> (<?=$relation->parent_id?>)</div>
 					<div class="span2">&nbsp;<?=$relation->attribute_element_obj->title?></div>
-					<div class="span2"><?=$relation->options?></div>
-					<div class="span2"><?=$relation->custom?></div>
+					<div class="span2">Options:<?=$relation->options?></div>
+					<div class="span2">Custom:<?=$relation->custom?></div>
+					<div class="span2">Required:<?=$relation->is_required?></div>
+					<div class="span2">Вес:<?=$relation->weight?></div>
 					<div class="span1">
 						<a href="" class="icon-pencil"></a>
 						<a href="" class="icon-trash" onclick="delete_rel(this); return false;"></a>
 					</div>
-				</div>
+				</div> */?>
 		<? endforeach; ?>
+	</table>
 <?php endforeach; ?>
 </div>
