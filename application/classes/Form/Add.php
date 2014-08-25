@@ -64,6 +64,7 @@ class Form_Add  {
 				$city_id 	 		= $this->object->city_id;				
 
 				$this->_edit 		= TRUE;
+				$this->_data->_edit = $this->_edit;
 				$this->object_id  	= $object_id;
 			}
 						
