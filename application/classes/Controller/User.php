@@ -921,6 +921,70 @@ class Controller_User extends Controller_Template {
 
 		$this->redirect('http://'.Region::get_current_domain().'/user/logout');
 	}
+
+	public function action_edit_ad()
+	{
+		$this->layout = 'add';
+		$this->assets->js('http://yandex.st/underscore/1.6.0/underscore-min.js');
+		$this->assets->js('http://yandex.st/backbone/1.1.2/backbone-min.js');
+		$this->assets->js('http://api-maps.yandex.ru/2.0/?load=package.full&lang=ru-RU');		
+		$this->assets->js('ajaxupload.js');
+		$this->assets->js('jquery.inputmask.js');
+		$this->assets->js(Url::base(TRUE).'static');
+
+		$errors = new Obj();
+		$object_id = (int)$this->request->param('object_id');
+		$object = ORM::factory('Object', $object_id);
+		if (!$object_id OR !$object->loaded())
+    		throw new HTTP_Exception_404;
+
+    	if ($object->author <> $this->user->id AND !in_array($this->user->role, array(1,9,3)))
+    		throw new HTTP_Exception_404;
+
+		$is_post = ($_SERVER['REQUEST_METHOD']=='POST');
+		$post_data = $this->request->post();
+
+		if ($is_post) {  
+			$errors = new Obj(Object::default_save_object($post_data));
+			if ($errors->error){
+				$errors = new Obj($errors->error);
+			}
+			else 
+			{
+				$return_object_id = $errors->object_id;
+				$this->redirect('http://'.Region::get_current_domain().'/detail/'.$return_object_id);
+			}	
+		
+			$params = $post_data;
+		} 
+		else
+		{
+			$params = array(
+				'object_id'		=> $object_id
+			);
+		}
+
+		$form_data = new Form_Add($params, $is_post, $errors);
+
+		$user = Auth::instance()->get_user();
+		if (!$user)
+			$form_data->Login();
+
+		$form_data	->Category()
+				 	->City()
+				 	->Subject()
+				 	->Text()
+				 	->Photo()
+				 	->Params()
+				 	->Map()
+				 	->Contacts();
+
+		$this->template->params 	= new Obj($params);
+		$this->template->form_data 	= $form_data->_data;
+		$this->template->errors = (array) $errors;
+
+	
+	}
 }
 /* End of file User.php */
 /* Location: ./application/classes/Controller/User.php */

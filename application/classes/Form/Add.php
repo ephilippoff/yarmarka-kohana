@@ -1,6 +1,6 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 
-class Lib_PlacementAds_Form  {
+class Form_Add  {
 
 	public $_category_id = 0;
 	public $_object_id = 0;
@@ -20,7 +20,7 @@ class Lib_PlacementAds_Form  {
 
 	const MAX_COUNT_CONTACTS = 3;
 
-	function Lib_PlacementAds_Form($params, $is_post = FALSE, $errors = NULL)
+	function Form_Add($params, $is_post = FALSE, $errors = NULL)
 	{
 		$this->_data = new Obj();
 		$this->is_post = $is_post;
