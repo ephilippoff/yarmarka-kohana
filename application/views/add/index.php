@@ -16,7 +16,7 @@
   			<input type="hidden" name="session_id" value="<?=session_id()?>">
 
   			<? if ( property_exists($form_data, 'login') ): ?>
-			<div class="fl100  pt16 pb15"  id="div_city">
+			<div class="fl100  pt16 pb15">
 				<div class="smallcont">
 					<div class="labelcont">
 						<label><span>Логин</span></label>

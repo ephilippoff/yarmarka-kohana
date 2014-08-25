@@ -11,9 +11,9 @@ class Controller_User extends Controller_Template {
 
 		if ( ! $this->user = Auth::instance()->get_user())
 		{
-			if (Request::current()->action() != 'userpage')
+			if (!in_array(Request::current()->action(), array('userpage','login')))
 			{
-				$this->redirect(CI::site('user/login?return=user/'.$this->request->action()));
+				$this->redirect(Url::site('user/login?return=user/'.$this->request->action()));
 			}
 		}
 	}
@@ -905,6 +905,47 @@ class Controller_User extends Controller_Template {
 		}
 
 		$this->template->error = $error;
+	}
+
+	public function action_login()
+	{
+		$this->layout = 'add';
+		$is_post = ($_SERVER['REQUEST_METHOD']=='POST');
+		$post_data = new Obj($this->request->post());
+
+		$return_page = Arr::get($_GET, 'return', NULL);
+		$domain = Arr::get($_GET, 'domain', NULL);
+		if (!$domain)
+			$domain = Url::base('http');
+
+		
+
+		$error = NULL;
+		$success = NULL;
+		if ($is_post){
+			$auth = Auth::instance();
+			try {
+				$auth->login($post_data->login, $post_data->pass, TRUE);
+				
+			} 
+				catch (Exception $e)
+			{
+				$error = $e->getMessage();
+
+			} 
+
+			if (!$error AND $return_page)
+					$this->redirect($return_page);
+				
+		} else {
+			if ($this->user AND $return_page)
+				$this->redirect($domain.$return_page);
+		}
+
+		$this->template->user = $this->user; 
+		$this->template->params = $post_data;
+		$this->template->error = $error;
+
 	}
 
 	public function action_logout()
