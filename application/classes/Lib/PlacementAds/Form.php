@@ -113,15 +113,41 @@ class Lib_PlacementAds_Form  {
 		$edit 			= $this->_edit;
 		$errors 		= $this->errors;
 
+		$category_array = array();
 		$category_list = ORM::factory('Category')
+								->where("is_ready", "=", 1)
+								->order_by("through_weight")
 								->find_all();
+		foreach ($category_list as $item) {
+			
+			$childs = ORM::factory('Category')
+				->where("parent_id","=",$item->id)
+				->where("is_ready", "=", 1)
+				->order_by("weight")
+				->find_all();
+			if (count($childs)>0 AND $item->id <> 1)
+			{
+				$childs_array = array();
+				foreach ($childs as $child) {
+					if (!ORM::factory('Category')
+							->where("parent_id","=",$child->id)
+							->where("is_ready", "=", 1)
+							->count_all())
+					{
+						$childs_array[$child->id] = $child->title;
+					}
+				}
+
+				$category_array[$item->title] = $childs_array;
+			}
+		}
 
 		$value = $category->title;
 
 		$default_action = ORM::factory('Category')->get_default_action($category_id);
 		
 		$this->_data->category = array(	
-										'category_list' => $category_list, 
+										'category_list' => $category_array, 
 										'category_id' 	=> $category_id,
 										'value' 		=> $value,
 										'edit'			=> $edit,
@@ -140,13 +166,26 @@ class Lib_PlacementAds_Form  {
 		$edit 			= $this->_edit;
 		$errors 		= $this->errors;
 
+		$city_array = array();
+		$main_cities = array();
+		$other_cities = array();
 		$city_list = ORM::factory('City')
 							->where('is_visible','>',0)
 							->find_all();
+		foreach ($city_list as $city_item)
+		{
+			if (in_array($city_item->id, array(1979,1919,1948,1947)))
+				$main_cities[$city_item->id] = $city_item->title;
+			else 
+				$other_cities[$city_item->id] = $city_item->title;
+		}
+
+		$city_array["Города"] 		 = $main_cities;
+		$city_array["Другие"] = $other_cities;
 
 		$value = $city->title;
 		
-		$this->_data->city = array(	'city_list' => $city_list, 
+		$this->_data->city = array(	'city_list' => $city_array, 
 									'city_id' => $city_id,
 									'value' => $value, 
 									'edit' => $edit,

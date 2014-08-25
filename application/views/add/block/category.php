@@ -5,8 +5,12 @@
 <? else: ?>		
 	<select name="<?=$name?>" id="<?=$id?>" class=<?=$_class?>>
 		<option value>---</option>
-		<? foreach($data->category_list as $item) : ?>
-			<option value="<?=$item->id?>" <?if ($item->id == $data->category_id) { echo "selected"; } ?>><?=$item->title?></option>
+		<? foreach($data->category_list as $key=> $item) : ?>
+			<optgroup label="<?=$key?>">
+			<? foreach($item as $id=>$title) : ?>
+			<option value="<?=$id?>" <?if ($id == $data->category_id) { echo "selected"; } ?>><?=$title?></option>
+			<? endforeach; ?>
+			</optgroup>
 		<? endforeach; ?>
 	</select>
 <? endif; ?>

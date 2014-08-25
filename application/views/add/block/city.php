@@ -4,9 +4,12 @@
 <? else: ?>
 	<select  name="<?=$name?>" id="<?=$id?>" class=<?=$_class?>>
 		<option value>---</option>
-		<? foreach($data->city_list as $item) : ?>
-			<option value="<?=$item->id?>" <?if ($item->id == $data->city_id) { echo "selected"; } ?>><?=$item->title?></option>
-		<?php endforeach; ?>
-		<option>Другой город...</option>
+		<? foreach($data->city_list as $key=> $item) : ?>
+			<optgroup label="<?=$key?>">
+			<? foreach($item as $id=>$title) : ?>
+			<option value="<?=$id?>" <?if ($id == $data->city_id) { echo "selected"; } ?>><?=$title?></option>
+			<? endforeach; ?>
+			</optgroup>
+		<? endforeach; ?>
 	</select>
 <? endif; ?>	
