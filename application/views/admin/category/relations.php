@@ -46,15 +46,16 @@ function changeParent(context)
 {
 	var relation_id = $(context).val();
 	$.get('/khbackend/category/parent_element/'+relation_id, {}, function(html) {
-		console.log(html);
-		$(context).parent().next().html(html);
+		$(context).parent().parent().next().find("select").parent().html(html);
 	});
 }
 
 function save(context)
 {
-	var container = $(context).parent().parent();
-	var category = $(container).data("category");
+	var container = $(context).parent().parent().parent().parent();
+
+	var category = $(context).data("category");
+	console.log(context, category);
 	var params = {
 			reference_id : $(container).find("#reference").val(),
 			parent_id : $(container).find("#parent_relation").val(),
@@ -63,7 +64,7 @@ function save(context)
 			options : $(container).find("#options").val(),
 			custom : $(container).find("#custom").val(),
 			weight :$(container).find("#weight").val(),
-			is_required : $(container).find("#is_required").val(),
+			is_required : $(container).find("#is_required").is(':checked'),
 	}
 	console.log(params);
 	$.post('/ajax/admin/relation_save', params, function(code) {
@@ -96,7 +97,7 @@ console.log(id);
 		<a href="" class="icon-pencil" onclick="add(this); return false;" data-category="<?=$category->id?>"></a>
 	</div>	
 </div>
-	<table style="border-left: 1px solid black; margin-left: 60px;">
+	<table style="border-left: 1px solid black; margin-left: 60px;"  data-category="<?=$category->id?>">
 		<? 
 		$relations = ORM::factory('Attribute_Relation')
 			->join('reference')

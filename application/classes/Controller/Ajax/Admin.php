@@ -18,7 +18,7 @@ echo Debug::vars($data);
 		if ($data["custom"])
 			$ar->custom 				= $data["custom"];
 		if ($data["is_required"])
-			$ar->is_required 				= ($data["is_required"] == "on") ? 1:0;
+			$ar->is_required 				= ($data["is_required"] == "true") ? 1:0;
 		if ($data["weight"])
 			$ar->weight 				= $data["weight"];
 		$ar->save();

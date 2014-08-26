@@ -25,7 +25,7 @@
 		<input type="numeric" id="weight" value="0">
 </tr></td>
 <tr><td>Сохранить</td><td>
-		<a href="" class="icon-pencil" onclick="save(this); return false;"></a>
+		<a href="" class="icon-pencil" onclick="save(this); return false;" data-category="<?=$category_id?>"></a>
 </tr></td>
 </table>
 </div>
