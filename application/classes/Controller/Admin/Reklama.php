@@ -229,7 +229,7 @@ class Controller_Admin_Reklama extends Controller_Admin_Template {
 		//Фильтр показа только активных, либо всех
 //		$only_active = isset($_GET['only_active']) ? 1 : 0;
 			
-		$tickets_list = ORM::factory('Object_service_ticket');
+		$tickets_list = ORM::factory('Object_Service_Ticket');
 				
 		// количество общее
 		$clone_to_count = clone $tickets_list;
