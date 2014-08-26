@@ -1,3 +1,4 @@
+<script type="text/javascript" src="/js/adaptive/tiny_mce/tiny_mce.js"></script>
 <div class="winner">
 	<section class="main-cont">
 		<div class="hheader">
@@ -213,7 +214,7 @@
 								<div class="textarea user_text_adv_wrp">
 									<?=View::factory('add/block/text',
 											array( "data" 		=> new Obj($form_data->text),
-												   "_class" 	=> "",
+												   "_class" 	=> "user_text_adv",
 												   "name" 		=> "user_text_adv",
 												   "id" 		=> "user_text_adv",
 												   "attributes" => ""
@@ -321,11 +322,23 @@
 							<div class="inp-cont-short">
 								<div class="inp-cont">
 									<div data-placeholder="Выберите срок жизни объявления..." class="values">
-										 <select id="lifetime" name="lifetime">
-											<option value="2w">2 недели</option>
-											<option value="1m">1 месяц</option>
-											<option value="2m" selected>2 месяца</option>
-											<option value="3m">3 месяца</option>
+										<?
+										 	$periods = array(	"2w" => "14 дней",
+										 						"1m" => "30 дней",
+										 						"2m" => "60 дней",
+										 						"3m" => "90 дней");
+										 	$default_period = "2m";
+										 	if ($params->lifetime)
+										 		$default_period = $params->lifetime;
+										?>
+										<? if ($form_data->_edit):?>
+											до <?=$object->date_expiration?>
+										<? else: ?>
+											 <select id="lifetime" name="lifetime">
+											 <? foreach ($periods as $key => $value): ?>
+											 		<option value="<?=$key?>" <? if ($default_period == $key) echo "selected";?>><?=$value?></option>
+											 <? endforeach; ?>
+										<? endif; ?>
 										</select>
 									</div>					
 
@@ -340,7 +353,7 @@
 							<div class="inp-cont-long ">
 									<div class="checkbox">
 										<label>
-											<input type="checkbox" name="block_comments" id="block_comments" value="1" ></input>
+											<input type="checkbox" name="block_comments" id="block_comments" value="1" <? if ($params->block_comments) echo "checked"; ?>></input>
 											<span for="block_comments" class="">Отключить возможность задавать вопросы на странице объявления</span>
 										</label>	
 									</div>
@@ -542,7 +555,7 @@
 						<span class="required-label">*</span>
 					<% } %>
 					<div class="textarea user_text_adv_wrp">
-					<textarea name="user_text_adv" id="user_text_adv"><%=value%></textarea>
+					<textarea name="user_text_adv" id="user_text_adv" class="user_text_adv"><%=value%></textarea>
 					</div>
 				</div>
 			</div>

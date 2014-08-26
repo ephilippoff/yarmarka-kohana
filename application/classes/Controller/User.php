@@ -936,7 +936,7 @@ class Controller_User extends Controller_Template {
 
 			if (!$error AND $return_page)
 					$this->redirect($return_page);
-				
+
 		} else {
 			if ($this->user AND $return_page)
 				$this->redirect($domain.$return_page);
@@ -966,11 +966,6 @@ class Controller_User extends Controller_Template {
 	public function action_edit_ad()
 	{
 		$this->layout = 'add';
-		$this->assets->js('http://yandex.st/underscore/1.6.0/underscore-min.js');
-		$this->assets->js('http://yandex.st/backbone/1.1.2/backbone-min.js');
-		$this->assets->js('http://api-maps.yandex.ru/2.0/?load=package.full&lang=ru-RU');		
-		$this->assets->js('ajaxupload.js');
-		$this->assets->js('jquery.inputmask.js');
 		$this->assets->js(Url::base(TRUE).'static');
 
 		$errors = new Obj();
@@ -1020,6 +1015,7 @@ class Controller_User extends Controller_Template {
 				 	->Map()
 				 	->Contacts();
 
+		$this->template->object  = $object;
 		$this->template->params 	= new Obj($params);
 		$this->template->form_data 	= $form_data->_data;
 		$this->template->errors = (array) $errors;

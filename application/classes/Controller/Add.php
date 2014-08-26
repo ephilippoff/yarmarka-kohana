@@ -5,15 +5,6 @@ class Controller_Add extends Controller_Template {
 	public function action_index()
 	{
 		$this->layout = 'add';
-		$this->assets->js('http://yandex.st/underscore/1.6.0/underscore-min.js');
-		$this->assets->js('http://yandex.st/backbone/1.1.2/backbone-min.js');
-		$this->assets->js('http://api-maps.yandex.ru/2.0/?load=package.full&lang=ru-RU');		
-		/*$this->assets->js('jquery-ui/ui/minified/jquery.ui.widget.min.js');		
-		$this->assets->js('jquery-ui/ui/minified/jquery.ui.autocomplete.min.js');*/
-		$this->assets->js('ajaxupload.js');
-		$this->assets->js('jquery.inputmask.js');
-		/*$this->assets->js('require.js');
-		$this->assets->js('require.config.js');*/
 		$this->assets->js(Url::base(TRUE).'static');
 
 		$errors = new Obj();
