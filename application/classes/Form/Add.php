@@ -303,7 +303,7 @@ class Form_Add  {
 		if ($category->loaded())
 			$title_auto_fill = $category->title_auto_fill;
 
-echo Debug::vars($edit,$title_auto_fill);
+
 		if ((!$title_auto_fill AND !$edit) OR (!$title_auto_fill AND $edit))
 			$this->_data->subject = array( 'value' => $value, 
 											'edit' => $edit,
