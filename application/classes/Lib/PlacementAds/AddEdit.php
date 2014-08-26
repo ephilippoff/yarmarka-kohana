@@ -541,13 +541,13 @@ class Lib_PlacementAds_AddEdit {
 			switch ($reference->attribute_obj->type)
 			{
 				case 'integer':
-					$rules[] = array('digit');
+					$rules[] = array('digit', array(':value', $reference->attribute_obj->title));
 					$rules[] = array('not_0', array(':value', $reference->attribute_obj->title));
 					$rules[] = array('max_length', array(':value', $reference->attribute_obj->solid_size, $reference->attribute_obj->title));
 				break;
 
 				case 'numeric':
-					$rules[] = array('numeric');
+					$rules[] = array('numeric', array(':value', $reference->attribute_obj->title));
 					$rules[] = array('max_length', array(':value', $reference->attribute_obj->solid_size+$reference->attribute_obj->frac_size+1, $reference->attribute_obj->title));
 				break;
 
