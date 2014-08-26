@@ -11,7 +11,7 @@
 						<input id="<?=$id?>" type="text" name="<?=$name?>" value="<?=$value?>"/>
 						<? if ($errors): ?>
 							<span class="inform fn-error">
-								<span><?=$error?></span>
+								<span><?=$errors?></span>
 							</span>
 						<? endif; ?>
 						<span class="inform">

@@ -13,7 +13,7 @@ class Controller_User extends Controller_Template {
 		{
 			if (!in_array(Request::current()->action(), array('userpage','login')))
 			{
-				$this->redirect(Url::site('user/login?return=user/'.$this->request->action()));
+				$this->redirect(Url::site('user/login?return='.$this->request->uri()));
 			}
 		}
 	}

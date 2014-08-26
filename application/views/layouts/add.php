@@ -6,13 +6,14 @@
 <!--<meta name="viewport" id="viewport" content="width=device-width,minimum-  scale=1.0,maximum-scale=10.0,initial-scale=1.0" />-->
 <!--<meta content="width=device-width, initial-scale=1.0" name="viewport">-->
 <meta name="viewport" id="viewport" content="width=device-width">
-<title>SiteName</title>
+<title>Подача объявления</title>
 <?=Assets::factory('main')->css('css.css', array('media' => 'screen, projection'))
 	->css('iLight.css')
 	->js('jquery.min.js')
 	->js('http://html5shiv.googlecode.com/svn/trunk/html5.js', array('condition' => 'lte IE 8'))
 	->js('http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js', array('condition' => 'lte IE 8'))
 	->js('PIE.js', array('condition' => 'lte IE 10'))
+	->js('header.js')
 	->js('minified/underscore-min.js')
 	->js('minified/backbone-min.js')
 	->js('http://api-maps.yandex.ru/2.0/?load=package.full&lang=ru-RU')
