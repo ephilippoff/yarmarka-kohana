@@ -100,6 +100,22 @@ class Massload
 				->where('is_union','IS', NULL)
 				->set('is_published', 0)
 				->update_all();
+
+		return $massload_id;
+	}
+
+	public function afterProcess($massload_id)
+	{
+		$sub = DB::select('external_id')->from('object_massload')
+						->where("massload_id","=",$massload_id);
+
+		$date_expiration = date('Y-m-d H:i:s', strtotime('+14 days'));
+
+		ORM::factory('Object')
+			->where('number', 'IN', $sub)
+			->set('date_expiration', $date_expiration)
+			->update_all();
+
 	}
 
 	public function saveStrings($pathtofile, $pathtoimage, $category, $step, $iteration, $user_id)
