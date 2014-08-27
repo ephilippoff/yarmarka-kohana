@@ -114,6 +114,10 @@ class Massload
 		ORM::factory('Object')
 			->where('number', 'IN', $sub)
 			->set('date_expiration', $date_expiration)
+			->set('in_archive', 'f')
+			->set('active', 1)
+			->set('is_published', 1)
+			->set('is_bad', 0)
 			->update_all();
 
 	}
