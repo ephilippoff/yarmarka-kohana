@@ -377,13 +377,15 @@
 			</div>	
 			<? endif; ?>
 
-			<div class="fl100 form-next-cont">
-				<div class="smallcont">
-					<div class="labelcont"></div>	
-					<div class="fieldscont ta-r mb15">						
-						<div onclick="$('#element_list').submit()" class="button blue icon-arrow-r btn-next"><span>Далее</span></div>							
-					</div><!--fieldscont-->
-				</div><!--smallcont-->	
+			<div id="div_submit">
+				<div class="fl100 form-next-cont">
+					<div class="smallcont">
+						<div class="labelcont"></div>	
+						<div class="fieldscont ta-r mb15">						
+							<div id="submit_button" class="button blue icon-arrow-r btn-next"><span>Далее</span></div>							
+						</div><!--fieldscont-->
+					</div><!--smallcont-->	
+				</div>
 			</div>
 
 			
