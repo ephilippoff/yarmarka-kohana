@@ -7,7 +7,7 @@
 		</div><!--hheader-->
 
 		<?if ($user):?>
-			<div class="fl100  pt16 pb15">
+			<div class="fl100 ta-c pt16 pb15">
 			Вы уже авторизованы
 			</div>
 		<? else: ?>

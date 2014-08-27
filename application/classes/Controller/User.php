@@ -909,7 +909,7 @@ class Controller_User extends Controller_Template {
 
 	public function action_login()
 	{
-		$this->layout = 'add';
+		$this->layout = 'auth';
 		$is_post = ($_SERVER['REQUEST_METHOD']=='POST');
 		$post_data = new Obj($this->request->post());
 

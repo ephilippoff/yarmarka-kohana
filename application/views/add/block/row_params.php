@@ -23,7 +23,7 @@
 						if ($element["type"] == "text")
 							$shortlong_class = "inp-cont-long";
 					?>
-					<div class="<?=$shortlong_class?>">
+					<div class="<?=$shortlong_class?> <?=$element["type"]?> is_textarea<?=$element["is_textarea"]?>">
 						<div class="inp-cont <? if ($data->errors->{$element["name"]}) echo "error";?>">
 							<? if ($element["is_required"]):?>
 							<span class="required-label">*</span>

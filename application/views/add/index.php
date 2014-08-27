@@ -59,6 +59,29 @@
 						</div>
 					</div>									
 				</div>
+				
+				<div class="smallcont">
+					<div class="labelcont">
+						<label></label>
+					</div>
+					<div class="fieldscont">
+						<div class="inp-cont-short">
+							<a target="_blank" href="/user/registration">Зарегистрироваться</a>
+						</div>
+					</div>
+				</div>	
+				
+				<div class="smallcont">
+					<div class="labelcont">
+						<label></label>
+					</div>
+					<div class="fieldscont">
+						<div class="inp-cont-short mt10">
+							<a target="_blank" href="">Напомнить пароль</a>
+						</div>
+					</div>
+				</div>				
+				
 			</div>
 			<? endif; ?>
 
@@ -251,7 +274,7 @@
 											   "attributes" => ""
 										));?>
 									
-									<div id="addbtn" class="addbtn"><span class="add">Нажмите <span id="userfile_upload" class="span">сюда</span><br/> чтобы добавить новые фото</span></div>
+									<div id="addbtn" class="addbtn"><span class="add"><img src="/images/plus_icon.png" /><span id="userfile_upload" class="span">Загрузите фото</span></span></div>
 								</div>
 								<input type="hidden" id="active_userfile" name="active_userfile" value="<?=$params->active_userfile?>" />
 								<span class="inform">
@@ -592,7 +615,7 @@
 </script>
 
 <script type="text/template" id="template-verify-contact-window">
-	<div class="popup-cont cont">
+	<div class="popup-cont confirm-contact-win">
 		<span class="close fn-verify-contact-win-close"></span>
 		<p class="title pb10">Проверка контакта <%=value%></p>										
 		<input class="inp-confirm-code fn-input-code" type="text" placeholder="Введите код" />
