@@ -5,7 +5,11 @@ class Controller_Add extends Controller_Template {
 	public function action_index()
 	{
 		$this->layout = 'add';
-		$this->assets->js(Url::base(TRUE).'static');
+		//$this->assets->js(Url::base(TRUE).'static');
+		
+		
+		$staticfile = new StaticFile("attributes", 'static_attributes.js');
+		$this->assets->js($staticfile->jspath);
 
 		$errors = new Obj();
 
