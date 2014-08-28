@@ -118,8 +118,13 @@
 						    }
 		
 						?>
+
+						<? if (array_key_exists($ad->id, $already_buyed)) 
+							$is_premium = TRUE; 
+						else 
+							$is_premium = FALSE; ?>
 				
-						<div class="li <?php if (!$obj_is_active) : ?> blocked <?php endif;?>">
+						<div class="li <? if (!$obj_is_active) : ?> blocked <? elseif ($is_premium):?> premium <? else: ?> active <? endif;?>">
 							<div class="left-bl">
 								<div class="top-bl">
 									<div class="col1">
@@ -375,27 +380,18 @@
 										<?php if (!$ad->is_bad and !$ad->in_archive and $ad->is_published) : ?>
 													<li><a title="Воспользоваться услугами" href="<?=CI::site('billing/services_for_ads/'.$ad->id)?>" class="btn-pmenu "><i class="ico services"></i><span>Услуги</span></a></li>
 													<li><a title="Подать в газету" href="<?=CI::site('billing/pay_service/34/'.$ad->id)?>" class="btn-pmenu "><i class="ico yarmarka"></i><span>В газету</span></a></li>
-													<? if (array_key_exists($ad->id, $already_buyed)) 
-															$is_premium = TRUE; 
-														else 
-															$is_premium = FALSE; ?>
+													
 													<? if ($premium_balance > 0): ?>
 														<li>
 															<a title="Премиум" href="" class="btn-pmenu " id="premium-btn<?=$ad->id?>" 
 																		onclick="premium(<?=$ad->id?>, this); return false;"
 																			data-url="<?=CI::site('billing/pay_service/'.$service_premium->id.'/'.$ad->id)?>">
 																			<i class="ico premium"></i><span>Премиум (free)</span>
-																			<?if ($is_premium):?>
-																				<span>***</span>
-																			<? endif;?>
 															</a>
 														</li>
 													<? else: ?>
 														<li><a title="Премиум" href="<?=CI::site('billing/pay_service/'.$service_premium->id.'/'.$ad->id)?>" class="btn-pmenu ">
 															<i class="ico premium"></i><span>Премиум</span>
-															<?if ($is_premium):?>
-																<span>***</span>
-															<? endif;?>
 														</a></li>
 													<? endif; ?>
 													<li><a title="Текстовая ссылка" href="<?=CI::site('billing/pay_service/'.$service_promo_link->id.'/'.$ad->id)?>" class="btn-pmenu "><i class="ico pl"></i><span>Текст. ссылка</span></a></li>
