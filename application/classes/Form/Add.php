@@ -73,7 +73,7 @@ class Form_Add  {
 		if ($category_id > 0)
 		{
 
-			$this->category = ORM::factory('Category', $category_id);
+			$this->category = ORM::factory('Category', $category_id)->cached(DATE::WEEK);
 			if ($this->category->loaded())
 			{
 				$this->category_id = $category_id;
@@ -118,6 +118,7 @@ class Form_Add  {
 		$category_list = ORM::factory('Category')
 								->where("is_ready", "=", 1)
 								->order_by("through_weight")
+								->cached(DATE::WEEK)
 								->find_all();
 		foreach ($category_list as $item) {
 			
@@ -125,6 +126,7 @@ class Form_Add  {
 				->where("parent_id","=",$item->id)
 				->where("is_ready", "=", 1)
 				->order_by("weight")
+				->cached(DATE::WEEK)
 				->find_all();
 			if (count($childs)>0 AND $item->id <> 1)
 			{
@@ -133,6 +135,7 @@ class Form_Add  {
 					if (!ORM::factory('Category')
 							->where("parent_id","=",$child->id)
 							->where("is_ready", "=", 1)
+							->cached(DATE::WEEK)
 							->count_all())
 					{
 						$childs_array[$child->id] = $child->title;
@@ -172,6 +175,7 @@ class Form_Add  {
 		$other_cities = array();
 		$city_list = ORM::factory('City')
 							->where('is_visible','>',0)
+							->cached(DATE::WEEK)
 							->find_all();
 		foreach ($city_list as $city_item)
 		{
@@ -211,7 +215,7 @@ class Form_Add  {
 		if (empty($category_id))
 			return $this;
 
-		$ar = ORM::factory('Attribute_Relation', $category_id);
+		$ar = ORM::factory('Attribute_Relation', $category_id)->cached(DATE::WEEK);
 		$params = Array();
 
 		if ($object->loaded() AND !$this->is_post)
@@ -400,7 +404,7 @@ class Form_Add  {
 		$errors		= $this->errors;
 		$contact_person = "";
 		$contacts = Array();
-		$contact_types = ORM::factory('Contact_Type')->find_all();
+		$contact_types = ORM::factory('Contact_Type')->cached(DATE::WEEK)->find_all();
 
 		$user_id = NULL;
 		if ($user = Auth::instance()->get_user())
