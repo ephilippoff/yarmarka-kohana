@@ -76,8 +76,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
-				<div class="input style2 notice">Теперь Вы можете чаще поднимать свои объявления в общем списке абсолютно бесплатно! Интервал поднятия в рубрике "Вакансии" - 1 раз/сут., все остальные рубрики - 1 раз/3 сут.</div>
+                </div>				
 				<? if ($premium_balance>0):?>
 					<div class="input style2 notice">Ваш лимит Премиум объявлений - <span id="fn-premium-balance"><?=$premium_balance?><span></div>
 				<? endif;?>
