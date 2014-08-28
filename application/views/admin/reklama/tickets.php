@@ -86,7 +86,8 @@
 		<th>Дата заявки</th>
 		<th>Дата окончания</th>
 		<th>Активность</th>
-		<th>Оплата</th>
+		<th>№ счета / Сумма</th>
+		<th>Кол. слов</th>
 	</tr>
 	<?php foreach ($tickets_list as $ads_element) : ?>		
 		<?php 			
@@ -111,10 +112,8 @@
 			<td><?=$ads_element->date_created?></td>
 			<td class="fn-td-de<?=$ads_element->id?>"><?=$ads_element->date_expiration?></td>
 			<td class="fn-status<?=$ads_element->id?>"><?php if ($ads_element->active == 1) : ?> Активна <?php else :?> <a href=""  class="red fn-start" data-id="<?=$ads_element->id?>">Запустить</a> <?php endif;?></td>
-			<td><?php if ($ads_element->is_paid == 1) : ?> Оплачена <?php else :?> <span class="red"><b>Не оплачена</b></span> <?php endif;?></td>
-			<td>
-				<a href="<?=Url::site('khbackend/reklama/delete/'.$ads_element->id)?>" class="icon-trash delete_article"></a>
-			</td>
+			<td><?=$ads_element->invoice_id ?> / <?=(float)$ads_element->invoice_obj->total_sum ?></td>
+			<td><?=$ads_element->words_count ?></td>
 		</tr>
 	<?php endforeach; ?>
 </table>
