@@ -37,7 +37,7 @@
 			<tr>
 				<td colspan="2" valign="middle" class="td3">
 					<p class="p3"> </p>
-					<p class="p4">Здравствуйте, <?=$UserName; ?>!</p>
+					<p class="p4">Здравствуйте!</p>
 					<p class="p3">Объявления были сняты с публикации, т.к. телефон <?=$phone?> не прошел проверку:</p>
 					<?php foreach ($objects as $object) : ?>
 					<p class="p3"><a href="<?=$object->get_url()?>"><?=$object->title?></a></p>

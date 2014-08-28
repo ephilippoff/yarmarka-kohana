@@ -1209,6 +1209,34 @@ class Controller_Ajax extends Controller_Template
 			$this->json[] = array('date' => strtotime($value->date.' UTC') * 1000,	'visits' => $value->visits, 'contacts_show_count' => $value->contacts_show_count);
 		}	
 	 }	 
+	 
+	 public function action_update_rl()
+	 {
+		$id	= (int)($this->request->post('id'));
+		$words = trim(($this->request->post('words')));
+		$active = (int)$this->request->post('active');
+		 
+		$this->json = array();
+		 
+		$row = Model::factory('Object_Service_Ticket')->where('id' ,'=', $id)->find();
+		 
+		if ($row->loaded())
+		{
+			if ($words) $row->words = $words;
+			if ($active)
+			{
+				$row->active = 1;
+				$time = (int)Kohana::$config->load('common.time_to_running_line');
+				$row->date_expiration = DB::expr("NOW() + INTERVAL '{$time} days'");
+			}
+			
+			$row->update();			
+		}
+		$row = Model::factory('Object_Service_Ticket')->where('id' ,'=', $id)->find();
+		$this->json = array('words' => $row->words, 'date_expiration' => $row->date_expiration, 'active' => $row->active);
+	 }
+	 
+	  
 
 //	public function  action_get_hints_by_page()
 //	{

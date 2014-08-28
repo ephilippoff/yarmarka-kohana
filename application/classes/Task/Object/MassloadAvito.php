@@ -75,7 +75,7 @@ class Task_Object_MassloadAvito extends Minion_Task
 
 					$iteration = round($count/self::STEP);
 
-					$ml->preProccess($new_filepath, $category, $user->id);
+					$massload_id = $ml->preProccess($new_filepath, $category, $user->id);
 
 					$object_count = 0;
 					$edited_count = 0;
@@ -105,6 +105,9 @@ class Task_Object_MassloadAvito extends Minion_Task
 							Minion_CLI::write($object_id.$parent_id.$is_edit.$error.$external_id);
 						}
 					}
+
+					$ml->afterProcess($massload_id); 
+					
 					$config = Kohana::$config->load('massload/bycategory.'.$category);
 					$mail_message = 'Отчет по загрузке файла для компании : '.$user->org_name.' ('.$user->id.' '.$user->email.')</br>';
 					$mail_message .= 'Ссылка на файл : '.$link.' </br>';
