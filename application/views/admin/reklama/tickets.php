@@ -86,7 +86,7 @@
 		<th>Дата заявки</th>
 		<th>Дата окончания</th>
 		<th>Активность</th>
-		<th>№ счета / Сумма</th>
+		<th>Оплата</th>
 		<th>Кол. слов</th>
 	</tr>
 	<?php foreach ($tickets_list as $ads_element) : ?>		
@@ -112,7 +112,7 @@
 			<td><?=$ads_element->date_created?></td>
 			<td class="fn-td-de<?=$ads_element->id?>"><?=$ads_element->date_expiration?></td>
 			<td class="fn-status<?=$ads_element->id?>"><?php if ($ads_element->active == 1) : ?> Активна <?php else :?> <a href=""  class="red fn-start" data-id="<?=$ads_element->id?>">Запустить</a> <?php endif;?></td>
-			<td><?=$ads_element->invoice_id ?> / <?=(float)$ads_element->invoice_obj->total_sum ?></td>
+			<td><?php if ($ads_element->invoice_id >= 1) : ?> Оплачена <?php else :?> Не оплачена <?php endif;?></td>
 			<td><?=$ads_element->words_count ?></td>
 		</tr>
 	<?php endforeach; ?>
