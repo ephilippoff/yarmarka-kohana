@@ -39,19 +39,16 @@ class Massload_FileXls extends Massload_File
 		unset($file);
 	}
 
-	public static function forRow($config, $pathtofile, $step, $iteration, $callback)
+	public static function forRow($config, $pathtofile, $row_num, $callback)
 	{
 		$file = self::openFile($pathtofile);
-		for ($i = $iteration*$step; $i<=$iteration*$step+$step; $i++)
-		{
-			$values = array_values($file[$i+1]);
-			$row = new Obj((array) $values);
-			$row = self::to_assoc_object($row, $config);	
-			$row = self::clear_row($row);
-			$return = $callback($row, $i);
-			if ($return == 'break') break;
-			if ($return == 'continue') continue;
-		}
+
+		$values = array_values($file[$row_num]);
+		$row = new Obj((array) $values);
+		$row = self::to_assoc_object($row, $config);	
+		$row = self::clear_row($row);
+		$return = $callback($row, $row_num);
+
 		unset($file);
 	}
 

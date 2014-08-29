@@ -122,7 +122,7 @@ class Massload
 
 	}
 
-	public function saveStrings($pathtofile, $pathtoimage, $category, $step, $iteration, $user_id)
+	public function saveStrings($pathtofile, $pathtoimage, $category, $row_num, $user_id)
 	{
 		$f = new Massload_File();
 
@@ -133,7 +133,7 @@ class Massload
 		@list($dictionary, $form_dictionary) = self::get_dictionary($config, $user_id, $config["category"]);
 		$category_id = $config["id"];
 
-		$f->forRow($config, $pathtofile, $step, $iteration, function($row, $i) use ($massload_id, $pathtoimage, $config, $category_id, &$objects, $dictionary, $user_id){
+		$f->forRow($config, $pathtofile, $row_num, function($row, $i) use ($massload_id, $pathtoimage, $config, $category_id, &$objects, $dictionary, $user_id){
 
 			/*if ($row->count() <> count($config["fields"]) )
 			{

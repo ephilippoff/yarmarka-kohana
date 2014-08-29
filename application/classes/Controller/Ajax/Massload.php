@@ -96,8 +96,7 @@ class Controller_Ajax_Massload extends Controller_Template {
 	{
 		$pathtofile 	= (string) $this->request->post('pathtofile');
 		$pathtoimage 	= (string) $this->request->post('pathtoimage');
-		$step 			= (int) $this->request->post('step');
-		$iteration 		= (int) $this->request->post('iteration');
+		$row_num 		= (int) $this->request->post('row_num');
 		$category_id 	= $this->request->post('category_id');
 		$user_id 		= $this->request->post("user_id");
 
@@ -114,7 +113,7 @@ class Controller_Ajax_Massload extends Controller_Template {
 
 		$ml = new Massload();
 
-		$this->json['data'] = $ml->saveStrings($pathtofile, $pathtoimage, $category_id, $step, $iteration, $user->id);
+		$this->json['data'] = $ml->saveStrings($pathtofile, $pathtoimage, $category_id, $row_num, $user->id);
 	}
 
 	public function action_conformity()
