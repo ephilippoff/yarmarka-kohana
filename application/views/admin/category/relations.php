@@ -72,6 +72,29 @@ function save(context)
 	});
 }
 
+function update(context)
+{
+
+	var container = $(context).closest('tr.row');
+console.log(container);
+	var id = $(context).data('id');
+
+	var params = {
+			id: id,
+			reference_id : $(container).find("#reference").val(),
+			parent_id : $(container).find("#parent_relation").val(),
+			parent_element_id : $(container).find("#parent_element").val(),
+			options : $(container).find("#options").val(),
+			custom : $(container).find("#custom").val(),
+			weight :$(container).find("#weight").val(),
+			is_required : $(container).find("#is_required").is(':checked'),
+	}
+
+	$.post('/ajax/admin/relation_update', params, function(code) {
+		$(container).remove();
+	});
+}
+
 function delete_rel(context)
 {
 	var container = $(context).parent().parent();
@@ -80,6 +103,16 @@ console.log(id);
 	$.post('/ajax/admin/relation_delete', {id : id}, function(code) {
 		$(container).remove();
 	});
+}
+
+function edit_rel(context)
+{
+	var id = $(context).data("id");
+	
+	$.get('/khbackend/category/arelation_edit/'+id, {}, function(html) {
+		$(html).insertAfter($(context).parent().parent());
+	});	
+	
 }
 </script>
 
@@ -167,7 +200,7 @@ console.log(id);
 			<?=$relation->weight?>
 		</td>
 		<td>
-			<a href="" class="icon-pencil"></a>
+			<a data-id="<?=$relation->id?>" onclick="edit_rel(this); return false;" href="" class="icon-pencil"></a>
 			<a href="" class="icon-trash" onclick="delete_rel(this); return false;"></a>
 					
 		</td>

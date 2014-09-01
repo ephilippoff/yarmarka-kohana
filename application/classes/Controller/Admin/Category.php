@@ -82,6 +82,40 @@ class Controller_Admin_Category extends Controller_Admin_Template {
 			$relations[$rel->id] = $rel->reference_obj->attribute_obj->title." (".$rel->id.")";
 		$this->template->relations = $relations;
 	}
+	
+	public function action_arelation_edit()
+	{
+		$this->use_layout = FALSE;
+		$arel_id =  $this->request->param('id');
+		
+		$arel = ORM::factory('Attribute_Relation', $arel_id);
+		
+		$this->template->arel = $arel;
+
+		$references = Array();
+		
+		$references[""] = "-- Выбери атрибут --";
+		$reference =  ORM::factory('Reference')
+							->where('category', '=', $arel->category_id)
+							->order_by("weight")
+							->find_all();
+		
+		foreach ($reference as $ref)
+			$references[$ref->id] = $ref->attribute_obj->title;
+		
+		$this->template->references = $references;
+
+		$relations = Array();
+		$relations[""] = "-- Выбери родителя --";
+		$relation =  ORM::factory('Attribute_Relation')
+							->where('category_id', '=', $arel->category_id)
+							->find_all();
+		
+		foreach ($relation as $rel)
+			$relations[$rel->id] = $rel->reference_obj->attribute_obj->title." (".$rel->id.")";
+		
+		$this->template->relations = $relations;
+	}
 
 	public function action_parent_element()
 	{
