@@ -16,7 +16,7 @@
 		<? else: ?>
 			<div class="smallcont" id="div_<?=$element["name"]?>">
 				<div class="labelcont">
-					<label><span><?=$element["title"]?></span></label>
+					<label><span><?=$element["title"]?><?=($element["unit"]?", ".$element["unit"].":":":")?></span></label>
 				</div>
 				<div class="fieldscont">
 					<? $shortlong_class = "inp-cont-short"; 

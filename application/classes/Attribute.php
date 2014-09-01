@@ -44,7 +44,8 @@ class Attribute {
 											 array('attribute.id', 'aid'), 
 											 array('attribute.title', 'atitle'),
 											 'attribute_relation.weight',
-											 'attribute_relation.is_required'
+											 'attribute_relation.is_required',
+											 'attribute.unit'
 										)
 								->join('reference', 'left')
 									->on('attribute_relation.reference_id', '=', 'reference.id')
@@ -121,7 +122,8 @@ class Attribute {
 												"custom" => $relation->custom,
 												"weight" => $relation->weight,
 												"is_textarea" => $relation->is_textarea,
-												"is_required" => $relation->is_required
+												"is_required" => $relation->is_required,
+												"unit"		  => $relation->unit
 											)
 										);
 			$data[$rel_id] = array_merge($data[$rel_id], $elements);
@@ -168,6 +170,7 @@ class Attribute {
 				"weight" 	=> $info["weight"],
 				"is_required"=> $info["is_required"],
 				"is_textarea"=> $info["is_textarea"],
+				"unit"		=> $info["unit"],
 				"name" 		=> "param_".$ref_id,
 				"values"	=> $values,
 				"value" 	=> $value
