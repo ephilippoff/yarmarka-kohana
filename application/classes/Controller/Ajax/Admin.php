@@ -23,6 +23,28 @@ echo Debug::vars($data);
 			$ar->weight 				= $data["weight"];
 		$ar->save();
 	}
+	
+	public function action_relation_update()
+	{
+		$data = $this->request->post();
+
+		$ar = ORM::factory('Attribute_Relation', $data['id']);
+
+		$ar->reference_id 			= $data["reference_id"];
+		if ($data["parent_id"])
+			$ar->parent_id 				= $data["parent_id"];
+		if ($data["parent_element_id"])
+			$ar->parent_element_id 		= $data["parent_element_id"];
+		if ($data["options"])
+			$ar->options 			= $data["options"];
+		if ($data["custom"])
+			$ar->custom 				= $data["custom"];
+		if ($data["is_required"])
+			$ar->is_required 				= ($data["is_required"] == "true") ? 1:0;
+		if ($data["weight"])
+			$ar->weight 				= $data["weight"];
+		$ar->update();
+	}	
 
 	function action_relation_delete()
 	{

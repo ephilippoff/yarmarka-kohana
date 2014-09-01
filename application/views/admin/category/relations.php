@@ -13,6 +13,8 @@ div.row:hover {
 td{
 	min-width:100px;
 }
+.icon.reference-up{background: url("/images/reference-up.gif") no-repeat #FFCC99; display: inline-block; width: 15px; cursor: pointer;height: 15px;}
+.icon.reference-down{background: url("/images/reference-down.gif") no-repeat #FFCC99; display: inline-block; width: 15px; cursor: pointer;height: 15px;}
 </style>
 <script>
 $(document).ready(function() {
@@ -72,6 +74,29 @@ function save(context)
 	});
 }
 
+function update(context)
+{
+
+	var container = $(context).closest('tr.row');
+
+	var id = $(context).data('id');
+
+	var params = {
+			id: id,
+			reference_id : $(container).find("#reference").val(),
+			parent_id : $(container).find("#parent_relation").val(),
+			parent_element_id : $(container).find("#parent_element").val(),
+			options : $(container).find("#options").val(),
+			custom : $(container).find("#custom").val(),
+			weight :$(container).find("#weight").val(),
+			is_required : $(container).find("#is_required").is(':checked'),
+	}
+
+	$.post('/ajax/admin/relation_update', params, function(code) {
+		$(container).remove();
+	});
+}
+
 function delete_rel(context)
 {
 	var container = $(context).parent().parent();
@@ -80,6 +105,42 @@ console.log(id);
 	$.post('/ajax/admin/relation_delete', {id : id}, function(code) {
 		$(container).remove();
 	});
+}
+
+function edit_rel(context)
+{
+	var id = $(context).data("id");
+	
+	$.get('/khbackend/category/arelation_edit/'+id, {}, function(html) {
+		$(html).insertAfter($(context).parent().parent());
+	});	
+	
+}
+
+function move_sort(id, direction)
+{
+	$.post('/khbackend/category/move_sort_relation', {id : id, direction : direction}, function(weight) {
+		var relation = $('.fn-r'+id);
+		var relation_prev = relation.prev();
+		var relation_next = relation.next();
+		
+		relation.find('.fn-weight').html(weight);
+		relation.data('weight', weight);
+		relation.find('td').animate({opacity: "hide"}, 300).animate({opacity: "show"}, 300);
+		
+		//если вверх
+		if (direction == -1)
+		{
+			if ( relation_prev.count != 0 && relation_prev.hasClass('fn-row') && relation.data('weight') < relation_prev.data('weight') )  			
+				relation.insertBefore(relation_prev);			
+		}	
+		else //иначе вниз
+		{
+			if ( relation_next.count != 0 && relation_next.hasClass('fn-row') && relation.data('weight') > relation_next.data('weight'))  			
+				relation.insertAfter(relation_next);		
+		}
+		
+	}, 'json');
 }
 </script>
 
@@ -136,12 +197,15 @@ console.log(id);
 			<td>
 				-		
 			</td>
+			<td>
+				-		
+			</td>			
 			</th>
 		<? endif; ?>
 		<?
 		foreach ($relations as $relation):
 		?>
-		<tr class="row relation_<?=$relation->id?>" data-id="<?=$relation->id?>">
+		<tr class="fn-r<?=$relation->id?> row fn-row relation_<?=$relation->id?>" data-id="<?=$relation->id?>" data-weight="<?=$relation->weight ?>" >
 		<td>
 			<?=$relation->id?>
 		</td>
@@ -163,13 +227,17 @@ console.log(id);
 		<td>
 			<?=$relation->is_required?>
 		</td>
-		<td>
+		<td class="fn-weight">
 			<?=$relation->weight?>
 		</td>
 		<td>
-			<a href="" class="icon-pencil"></a>
+			<a data-id="<?=$relation->id?>" onclick="edit_rel(this); return false;" href="" class="icon-pencil"></a>
 			<a href="" class="icon-trash" onclick="delete_rel(this); return false;"></a>
 					
+		</td>
+		<td>
+			<div title="Вверх" onclick="move_sort(<?=$relation->id?>, -1);" class="icon reference-up">&nbsp;</div>
+			<div title="Вниз" onclick="move_sort(<?=$relation->id?>, 1);" class="icon reference-down">&nbsp;</div>
 		</td>
 		</tr>
 				<?/*<div class="row relation_<?=$relation->id?>" style="border-left: 1px solid black; margin-left: 60px;" data-id="<?=$relation->id?>">
