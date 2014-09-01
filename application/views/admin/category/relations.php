@@ -13,8 +13,8 @@ div.row:hover {
 td{
 	min-width:100px;
 }
-.icon.reference-up{background: url("/images/reference-up.gif") no-repeat; display: inline-block; width: 15px; cursor: pointer;}
-.icon.reference-down{background: url("/images/reference-down.gif") no-repeat; display: inline-block; width: 15px; cursor: pointer;}
+.icon.reference-up{background: url("/images/reference-up.gif") no-repeat #FFCC99; display: inline-block; width: 15px; cursor: pointer;height: 15px;}
+.icon.reference-down{background: url("/images/reference-down.gif") no-repeat #FFCC99; display: inline-block; width: 15px; cursor: pointer;height: 15px;}
 </style>
 <script>
 $(document).ready(function() {
@@ -236,8 +236,8 @@ function move_sort(id, direction)
 					
 		</td>
 		<td>
-			<div onclick="move_sort(<?=$relation->id?>, -1);" class="icon reference-up">&nbsp;</div>
-			<div onclick="move_sort(<?=$relation->id?>, 1);" class="icon reference-down">&nbsp;</div>
+			<div title="Вверх" onclick="move_sort(<?=$relation->id?>, -1);" class="icon reference-up">&nbsp;</div>
+			<div title="Вниз" onclick="move_sort(<?=$relation->id?>, 1);" class="icon reference-down">&nbsp;</div>
 		</td>
 		</tr>
 				<?/*<div class="row relation_<?=$relation->id?>" style="border-left: 1px solid black; margin-left: 60px;" data-id="<?=$relation->id?>">
