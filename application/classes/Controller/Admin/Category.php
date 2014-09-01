@@ -135,6 +135,25 @@ class Controller_Admin_Category extends Controller_Admin_Template {
 		$this->template->parent_element = Form::select("parent_element", $elements, NULL, 
 											array('id' => 'parent_element'));
 	}
+	
+	public function action_move_sort_relation()
+	{
+		$this->use_layout = FALSE;
+		$this->auto_render = FALSE;
+		
+		$relation_id =  (int)$this->request->post('id');
+		$direction = (int)$this->request->post('direction');
+		
+		$relation =  ORM::factory('Attribute_Relation', $relation_id);
+		
+		//if ($relation->weight > 0) 
+		{
+			$relation->weight = $relation->weight + $direction;
+			$relation->update();
+		}
+
+		$this->response->body(json_encode($relation->weight));
+	}
 
 }
 

@@ -13,6 +13,8 @@ div.row:hover {
 td{
 	min-width:100px;
 }
+.icon.reference-up{background: url("/images/reference-up.gif") no-repeat; display: inline-block; width: 15px; cursor: pointer;}
+.icon.reference-down{background: url("/images/reference-down.gif") no-repeat; display: inline-block; width: 15px; cursor: pointer;}
 </style>
 <script>
 $(document).ready(function() {
@@ -76,7 +78,7 @@ function update(context)
 {
 
 	var container = $(context).closest('tr.row');
-console.log(container);
+
 	var id = $(context).data('id');
 
 	var params = {
@@ -113,6 +115,32 @@ function edit_rel(context)
 		$(html).insertAfter($(context).parent().parent());
 	});	
 	
+}
+
+function move_sort(id, direction)
+{
+	$.post('/khbackend/category/move_sort_relation', {id : id, direction : direction}, function(weight) {
+		var relation = $('.fn-r'+id);
+		var relation_prev = relation.prev();
+		var relation_next = relation.next();
+		
+		relation.find('.fn-weight').html(weight);
+		relation.data('weight', weight);
+		relation.find('td').animate({opacity: "hide"}, 300).animate({opacity: "show"}, 300);
+		
+		//если вверх
+		if (direction == -1)
+		{
+			if ( relation_prev.count != 0 && relation_prev.hasClass('fn-row') && relation.data('weight') < relation_prev.data('weight') )  			
+				relation.insertBefore(relation_prev);			
+		}	
+		else //иначе вниз
+		{
+			if ( relation_next.count != 0 && relation_next.hasClass('fn-row') && relation.data('weight') > relation_next.data('weight'))  			
+				relation.insertAfter(relation_next);		
+		}
+		
+	}, 'json');
 }
 </script>
 
@@ -169,12 +197,15 @@ function edit_rel(context)
 			<td>
 				-		
 			</td>
+			<td>
+				-		
+			</td>			
 			</th>
 		<? endif; ?>
 		<?
 		foreach ($relations as $relation):
 		?>
-		<tr class="row relation_<?=$relation->id?>" data-id="<?=$relation->id?>">
+		<tr class="fn-r<?=$relation->id?> row fn-row relation_<?=$relation->id?>" data-id="<?=$relation->id?>" data-weight="<?=$relation->weight ?>" >
 		<td>
 			<?=$relation->id?>
 		</td>
@@ -196,13 +227,17 @@ function edit_rel(context)
 		<td>
 			<?=$relation->is_required?>
 		</td>
-		<td>
+		<td class="fn-weight">
 			<?=$relation->weight?>
 		</td>
 		<td>
 			<a data-id="<?=$relation->id?>" onclick="edit_rel(this); return false;" href="" class="icon-pencil"></a>
 			<a href="" class="icon-trash" onclick="delete_rel(this); return false;"></a>
 					
+		</td>
+		<td>
+			<div onclick="move_sort(<?=$relation->id?>, -1);" class="icon reference-up">&nbsp;</div>
+			<div onclick="move_sort(<?=$relation->id?>, 1);" class="icon reference-down">&nbsp;</div>
 		</td>
 		</tr>
 				<?/*<div class="row relation_<?=$relation->id?>" style="border-left: 1px solid black; margin-left: 60px;" data-id="<?=$relation->id?>">
