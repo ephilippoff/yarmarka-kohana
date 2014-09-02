@@ -109,35 +109,29 @@ class Massload_File
 		self::closeFile($file);
 	}
 
-	public static function forRow($config, $pathtofile, $step, $iteration, $callback)
+	public static function forRow($config, $pathtofile, $row_num, $callback)
 	{
 		$ext = File::ext_by_mime(mime_content_type($pathtofile));
 		if ($ext == "xml"){
-			Massload_FileXml::forRow($config, $pathtofile, $step, $iteration, $callback);
+			Massload_FileXml::forRow($config, $pathtofile, $row_num, $callback);
 			return;
 		} else 
 		if ($ext == "xls" OR $ext == "xlsx"){
-			Massload_FileXls::forRow($config, $pathtofile, $step, $iteration, $callback);
+			Massload_FileXls::forRow($config, $pathtofile, $row_num, $callback);
 			return;
 		}
 
 		$file = self::openFile($pathtofile);
 
-		for ($i = 0; $i<$iteration*$step; $i++)
+		for ($i = 0; $i<$row_num; $i++)
 			fgetcsv($file, ',');
 
-		while ($i<$iteration*$step+$step)
-		{
-			$i++;
-			$row = fgetcsv($file, self::CSVSEPARATOR);
-			$row = self::to_assoc_object($row, $config);
-			$row = self::clear_row($row);
-			$return = $callback($row, $i);
-			if ($return == 'break') break;
-			if ($return == 'continue') continue;
-			
-			
-		}
+
+		$row = fgetcsv($file, self::CSVSEPARATOR);
+		$row = self::to_assoc_object($row, $config);
+		$row = self::clear_row($row);
+		$return = $callback($row, $i);
+
 		self::closeFile($file);
 	}
 
