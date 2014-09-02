@@ -526,6 +526,7 @@ class Controller_User extends Controller_Template {
 		$this->template->objects = $objects;
 		$this->template->service_promo_link = ORM::factory('Service')->where('name', '=', 'promo_link')->find();
 		$this->template->service_promo_link_bg = ORM::factory('Service')->where('name', '=', 'promo_link_bg')->find();
+		$this->template->running_line_site_s = ORM::factory('Service')->where('name', '=', 'running_line_site_s')->find();
 		$this->template->service_premium 		= ORM::factory('Service')->where('name', '=', 'premium_ads')->find();
 	}
 

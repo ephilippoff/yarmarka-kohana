@@ -83,7 +83,7 @@
             </div>		
 			<header>
 				<div class="col1"><span>Фото/номер</span></div>
-				<div class="col5"><span>Премиум</span></div>
+				<div class="col5"><span>Услуги</span></div>
 				<div class="col4"><span>Функции</span></div>
 				<div class="col3"><span>Цена</span></div>
 				<div class="col2"><span>Название</span></div>	
@@ -378,9 +378,6 @@
 								<div class="pmenu ">
 									<ul>
 										<?php if (!$ad->is_bad and !$ad->in_archive and $ad->is_published) : ?>
-													<li><a title="Воспользоваться услугами" href="<?=CI::site('billing/services_for_ads/'.$ad->id)?>" class="btn-pmenu "><i class="ico services"></i><span>Услуги</span></a></li>
-													<li><a title="Подать в газету" href="<?=CI::site('billing/pay_service/34/'.$ad->id)?>" class="btn-pmenu "><i class="ico yarmarka"></i><span>В газету</span></a></li>
-													
 													<? if ($premium_balance > 0): ?>
 														<li>
 															<a title="Премиум" href="" class="btn-pmenu " id="premium-btn<?=$ad->id?>" 
@@ -394,8 +391,11 @@
 															<i class="ico premium"></i><span>Премиум</span>
 														</a></li>
 													<? endif; ?>
+													<li><a title="Бегущая строка на сайте" href="<?=CI::site('billing/pay_service/'.$running_line_site_s->id.'/'.$ad->id)?>" class="btn-pmenu "><i class="ico rs"></i><span>Бегущая строка</span></a></li>																																		
 													<li><a title="Текстовая ссылка" href="<?=CI::site('billing/pay_service/'.$service_promo_link->id.'/'.$ad->id)?>" class="btn-pmenu "><i class="ico pl"></i><span>Текст. ссылка</span></a></li>
 													<li><a title="Графическая ссылка" href="<?=CI::site('billing/pay_service/'.$service_promo_link_bg->id.'/'.$ad->id)?>" class="btn-pmenu "><i class="ico plg"></i><span>Графич. ссылка</span></a></li>													
+													<li><a title="Подать в газету" href="<?=CI::site('billing/pay_service/34/'.$ad->id)?>" class="btn-pmenu "><i class="ico yarmarka"></i><span>В газету</span></a></li>		
+													<li><a title="Воспользоваться услугами" href="<?=CI::site('billing/services_for_ads/'.$ad->id)?>" class="btn-pmenu "><i class="ico services"></i><span>Пакет услуг</span></a></li>													
 										<?php endif; ?>
 									</ul>
 								</div>
