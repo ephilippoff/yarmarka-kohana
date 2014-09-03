@@ -1,5 +1,9 @@
-<?=HTML::script('bootstrap/datepicker/js/bootstrap-datepicker.js')?>
-<?=HTML::style('bootstrap/datepicker/css/datepicker.css')?>
+<?//=HTML::script('bootstrap/datepicker/js/bootstrap-datepicker.js')?>
+<?//=HTML::style('bootstrap/datepicker/css/datepicker.css')?>
+
+<?=HTML::script('bootstrap/datetimepicker/jquery.datetimepicker.js')?>
+<?=HTML::style('bootstrap/datetimepicker/jquery.datetimepicker.css')?>
+
 <script type="text/javascript" src="/bootstrap/tinymce/tinymce.min.js"></script>
 <script type="text/javascript" charset="utf-8">
 tinymce.init({
@@ -37,13 +41,14 @@ $(document).ready(function() {
 		}
 	});
 	
+	jQuery('.dp').datetimepicker({format:'Y-m-d H:i', lang:'ru'});
 
 	// enable datepicker
-	$('.dp').datepicker({
-		format:	'yyyy-mm-dd'
-	}).on('changeDate', function(){
-		$(this).datepicker('hide');
-	});
+//	$('.dp').datepicker({
+//		format:	'yyyy-mm-dd '
+//	}).on('changeDate', function(){
+//		$(this).datepicker('hide');
+//	});
 	
 	$('.fn-type-text').change(function(){		
 		if ($('.fn-type-text:checked').val() == 1)
@@ -111,14 +116,14 @@ $(document).ready(function() {
 	<div class="control-group only2 fn-start-date-box" <?php if ($text_type == 1) : ?>style="display: none"<?php endif; ?> >
 		<label class="control-label">Дата начала:</label>
 		<div class="controls">
-			<input type="text" class="input-small dp" placeholder="date from" name="start_date" value="<?=$start_date?>">
+			<input style="width: 200px;" type="text" class="input-small dp" placeholder="date from" name="start_date" value="<?=$start_date?>">
 		</div>
 	</div>
 
 	<div class="control-group only2 fn-end-date-box" <?php if ($text_type == 1) : ?>style="display: none"<?php endif; ?> >		
 		<label class="control-label">Дата окончания:</label>
 		<div class="controls">
-			<input type="text" class="input-small dp" placeholder="date to" name="end_date" value="<?=$end_date?>">
+			<input style="width: 200px;" type="text" class="input-small dp" placeholder="date to" name="end_date" value="<?=$end_date?>">
 		</div>		
 	</div>		
 	
