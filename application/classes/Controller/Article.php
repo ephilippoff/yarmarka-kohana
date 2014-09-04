@@ -98,7 +98,7 @@ class Controller_Article extends Controller_Template {
 					->limit(6);
 			
 			if ($city_id)
-				$other_news->where ('city_id', '=', $city_id);
+				$other_news->where (DB::expr($city_id), '=', DB::expr('ANY(cities)'));
 		
 			$other_news = $other_news->find_all(); 
 		}

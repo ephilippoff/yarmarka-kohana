@@ -69,7 +69,12 @@ class Controller_Admin_Articles extends Controller_Admin_Template {
 				{
 					$post['parent_id'] = isset($post['article_parent_id']) ? $post['article_parent_id'] : 0;
 				}
-
+				
+				if ($this->request->post('cities'))
+				{
+					$post['cities'] = '{'.join(',', $post['cities']).'}';	
+				}
+				
 				ORM::factory('Article')->values($post)
 				->save();				
 
@@ -127,7 +132,12 @@ class Controller_Admin_Articles extends Controller_Admin_Template {
 				elseif ($article->text_type == 1)
 				{
 					$post['parent_id'] = isset($post['article_parent_id']) ? $post['article_parent_id'] : 0;
-				}				
+				}
+				
+				if ($this->request->post('cities'))
+				{
+					$post['cities'] = '{'.join(',', $post['cities']).'}';	
+				}	
 				
 				$article->values($post)
 				->save();

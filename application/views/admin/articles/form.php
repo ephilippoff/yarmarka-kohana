@@ -43,13 +43,6 @@ $(document).ready(function() {
 	
 	jQuery('.dp').datetimepicker({format:'Y-m-d H:i', lang:'ru'});
 
-	// enable datepicker
-//	$('.dp').datepicker({
-//		format:	'yyyy-mm-dd '
-//	}).on('changeDate', function(){
-//		$(this).datepicker('hide');
-//	});
-	
 	$('.fn-type-text').change(function(){		
 		if ($('.fn-type-text:checked').val() == 1)
 		{	
@@ -130,10 +123,10 @@ $(document).ready(function() {
 	<div class="control-group only2 news-city fn-news-city" <?php if ($text_type == 1) : ?>style="display: none"<?php endif; ?> >
 		<label class="control-label">Город:</label>
 		<div class="controls">
-			<?=Form::select('city_id', 
+			<?=Form::select('cities[]', 
 						array('Не выбран')+$cities, 
-						Arr::get($_POST, 'city_id', @$article->city_id), 
-						array('class' => 'news_city')
+						Arr::get($_POST, 'cities', Dbhelper::convert_pg_array(@$article->cities)), 
+						array('class' => 'news_city', 'multiple', 'size' => 15) 
 			)?>
 		</div>
 	</div>	
