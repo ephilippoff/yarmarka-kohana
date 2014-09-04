@@ -423,7 +423,7 @@
 <script id="template-integer" type="text/template">
 	<div class="smallcont" id="div_<%=id%>">
 			<div class="labelcont">
-				<label><span><%=title%></span></label>
+				<label><span><%=title%><%=(unit)?", "+unit+":":":"%></span></label>
 			</div>
 			<div class="fieldscont">
 				<div class="inp-cont-short" data-condition="">
@@ -441,7 +441,7 @@
 <script id="template-numeric" type="text/template">
 		<div class="smallcont" id="div_<%=id%>">
 			<div class="labelcont">
-				<label><span><%=title%></span></label>
+				<label><span><%=title%><%=(unit)?", "+unit+":":":"%></span></label>
 			</div>
 			<div class="fieldscont">
 				<div class="inp-cont-short" data-condition="">
@@ -460,7 +460,7 @@
 <script id="template-text" type="text/template">
 	<div class="smallcont" id="div_<%=id%>">
 			<div class="labelcont">
-				<label><span><%=title%></span></label>
+				<label><span><%=title%><%=(unit)?", "+unit+":":":"%></span></label>
 			</div>
 			<div class="fieldscont">
 				<div class="inp-cont-long" data-condition="">
@@ -500,7 +500,7 @@
 			<span class="required-label">*</span>
 		<% } %>
 			<select id="<%=id%>" name="<%=id%>" class="<%=classes%>">
-		  		<option value="">--<%=title%>--</option>
+		  		<option value="">--<%=title%><%=(unit)?", "+unit:""%>--</option>
 		  		<% _.each(data, function(item, key){ %>
 		  			<% if (key == 0) return; %>
 		  			<%  if (typeof item == "object") item = item[0].title %>
@@ -516,7 +516,7 @@
 <script id="template-custom-address" type="text/template">
 	<div class="smallcont" id="div_<%=id%>">
 				<div class="labelcont">
-					<label><span><%=title%></span></label>
+					<label><span><%=title%><%=(unit)?", "+unit+":":":"%></span></label>
 				</div>
 				<div class="fieldscont">
 					<div class="inp-cont">
