@@ -12,6 +12,7 @@ div.row:hover {
 
 td{
 	min-width:100px;
+	padding: 5px 3px;
 }
 .icon.reference-up{background: url("/images/reference-up.gif") no-repeat #FFCC99; display: inline-block; width: 15px; cursor: pointer;height: 15px;}
 .icon.reference-down{background: url("/images/reference-down.gif") no-repeat #FFCC99; display: inline-block; width: 15px; cursor: pointer;height: 15px;}
@@ -158,7 +159,7 @@ function move_sort(id, direction)
 		<a href="" class="icon-pencil" onclick="add(this); return false;" data-category="<?=$category->id?>"></a>
 	</div>	
 </div>
-	<table style="border-left: 1px solid black; margin-left: 60px;"  data-category="<?=$category->id?>">
+	<table class="tbl-relations" style="border-left: 1px solid black; margin-left: 60px;font-size: 12px;"  data-category="<?=$category->id?>">
 		<? 
 		$relations = ORM::factory('Attribute_Relation')
 			->join('reference')
@@ -210,13 +211,13 @@ function move_sort(id, direction)
 			<?=$relation->id?>
 		</td>
 		<td>
-			<?=$relation->reference_obj->attribute_obj->title?>
+			<?=$relation->reference_obj->attribute_obj->title?> (<?=$relation->reference_obj->attribute_obj->id?>)
 		</td>
 		<td>
-			<?=$relation->parent_obj->reference_obj->attribute_obj->title?> (<?=$relation->parent_id?>)
+			<?=$relation->parent_obj->reference_obj->attribute_obj->title?> (<?=$relation->parent_id?>) (<?=$relation->parent_obj->reference_obj->attribute_obj->id?>)
 		</td>
 		<td>
-			<?=$relation->attribute_element_obj->title?>
+			<?=$relation->attribute_element_obj->title?> (<?=$relation->attribute_element_obj->id?>)
 		</td>
 		<td>
 			<?=$relation->options?>
