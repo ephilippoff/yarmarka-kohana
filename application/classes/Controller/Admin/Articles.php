@@ -14,19 +14,23 @@ class Controller_Admin_Articles extends Controller_Admin_Template {
 		$limit  = Arr::get($_GET, 'limit', 30);
 		$page   = $this->request->query('page');
 		$offset = ($page AND $page != 1) ? ($page-1)*$limit : 0;		
-		
-		$news = ORM::factory('Article')
+			
+		$news = DB::select()
+				->from('articles')
+				->join('email_campaign_statistic', 'LEFT')
+				->on(DB::expr('(\'newsone_\' || articles.id)'), '=', 'email_campaign_statistic.campaign_name')
 				->where('text_type', '=', 2);
-//				->where('', 'NOT id IN', DB::expr('(select parent_id from articles)'));
 		
 		$clone_to_count = clone $news;
-		$count_all = $clone_to_count->count_all();
-		
-		$this->template->news = $news->limit($limit)->offset($offset)->order_by('is_category', 'DESC')->order_by('created', 'DESC')->find_all();
+		$count_all = $clone_to_count->select(array(DB::expr('COUNT(*)'), 'total'))->execute();
+	
+		$news->select('articles.*', 'email_campaign_statistic.visits')->limit($limit)->offset($offset)->order_by('is_category', 'DESC')->order_by('created', 'DESC');		
+	
+		$this->template->news = $news->execute();
 		
 		$this->template->pagination	= Pagination::factory(array(
 				'current_page'   => array('source' => 'query_string', 'key' => 'page'),
-				'total_items'    => $count_all,
+				'total_items'    => $count_all[0]['total'],
 				'items_per_page' => $limit,
 				'auto_hide'      => TRUE,
 				'view'           => 'pagination/bootstrap',
