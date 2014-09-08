@@ -71,6 +71,7 @@
 						</td></tr>
 						<tr><td><span style="color:#808080">Рубрика: </span><?=$category->title?></td></tr>
 						<tr><td><span style="color:#808080">&nbsp;</span></td></tr>
+						<tr><td colspan="5" style="border-bottom: 1px solid #C6C6C6;"><span style="color:#808080">&nbsp;</span></td></tr>
 					</table>
 				
 				</td></tr>
@@ -93,13 +94,13 @@
 			<tr><td colspan="2" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;line-height: 15px;">Мы советуем Вам сохранить это письмо, потому что сcылки, приведенные ниже, помогут Вам будущем легко управлять Вашим объявлением.</td></tr>
 			
 			<tr><td colspan="2" style="line-height: 15px;">&nbsp;<img src="data:image/gif;base64,R0lGODlhAQABAJEAAAAAAP///////wAAACH5BAEAAAIALAAAAAABAAEAAAICVAEAOw%3D%3D" width="100%" height="15" alt="" title=""/></td></tr>
-			<tr><td colspan="2" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;font-weight: bold;font-size: 14px;line-height: 10px;">Смотреть объявление</td></tr>
+			<tr><td colspan="2" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;font-size: 14px;line-height: 10px;"><ul style="margin:0px; padding-left: 15px;list-style: disc;"><li>Смотреть объявление</li></ul></td></tr>
 			<tr><td colspan="2" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;"><a style="color: #d44234;font-size: 10px;font-size: 10px;" href="<?=$object->get_url()?>"><?=$object->get_url()?></a></td></tr>
 			<tr><td colspan="2" style="line-height: 10px;">&nbsp;<img src="data:image/gif;base64,R0lGODlhAQABAJEAAAAAAP///////wAAACH5BAEAAAIALAAAAAABAAEAAAICVAEAOw%3D%3D" width="100%" height="10" alt="" title=""/></td></tr>
-			<tr><td colspan="2" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;font-weight: bold;font-size: 14px;line-height: 10px;">Редактировать объявление</td></tr>
+			<tr><td colspan="2" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;font-size: 14px;line-height: 10px;"><ul style="margin:0px; padding-left: 15px;list-style: disc;"><li>Редактировать объявление</li></ul></td></tr>
 			<tr><td colspan="2" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;"><a style="color: #d44234;font-size: 10px;font-size: 10px;" href="<?=CI::site('user/edit_ad/'.$object->id)?>"><?=CI::site('user/edit_ad/'.$object->id)?></a></td></tr>
 			<tr><td colspan="2" style="line-height: 10px;">&nbsp;<img src="data:image/gif;base64,R0lGODlhAQABAJEAAAAAAP///////wAAACH5BAEAAAIALAAAAAABAAEAAAICVAEAOw%3D%3D" width="100%" height="10" alt="" title=""/></td></tr>			
-			<tr><td colspan="2" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;font-weight: bold;font-size: 14px;line-height: 10px;">Управлять всеми своими объявлениями из личного кабинета:</td></tr>
+			<tr><td colspan="2" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;font-size: 14px;line-height: 10px;"><ul style="margin:0px; padding-left: 15px;list-style: disc;"><li>Управлять всеми своими объявлениями из личного кабинета:</li></ul></td></tr>
 			<tr><td colspan="2" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;"><a style="color: #d44234;font-size: 10px;font-size: 10px;" href="<?=URL::site('user/myads', 'http')?>"><?=URL::site('user/myads', 'http')?></a></td></tr>
 			
 			<tr><td style="line-height: 0;" colspan="2">&nbsp;<img width="100%" height="12" title="" alt="" src="data:image/gif;base64,R0lGODlhAQABAJEAAAAAAP///////wAAACH5BAEAAAIALAAAAAABAAEAAAICVAEAOw%3D%3D"></td></tr>	
