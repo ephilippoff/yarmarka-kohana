@@ -199,6 +199,30 @@ class Form_Add  {
 		return $this;
 	}
 
+	function AdvertType()
+	{	
+		$object 		= $this->object;
+		/*<option <?php if ($type_tr == 88) : ?> selected <?php endif;?> value="88">Модульная реклама (88)</option>
+										<option <?php if ($type_tr == 89) : ?> selected <?php endif;?> value="89">Рекламное объявление (89)</option>
+										<option <?php if ($type_tr == 90) : ?> selected <?php endif;?> value="90">Рекламное объявление с фоном (90)</option>	
+										*/
+		$type = array(
+				0 => "---",
+				88 => "Модульная реклама (88)",
+				89 => "Рекламное объявление (89)",
+				90 => "Рекламное объявление с фоном (90)"
+			);
+
+		$value = $object->type_tr;
+		if ( array_key_exists("obj_type", $this->params))
+			$value = $this->params['obj_type'];
+
+		$this->_data->advert_type = array(
+											'type_list' => $type,
+											'value'		=> $value
+										);
+	}
+
 	function Other_Cities()
 	{
 

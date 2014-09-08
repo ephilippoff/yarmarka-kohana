@@ -51,6 +51,9 @@ class Controller_Add extends Controller_Template {
 				 	->Map()
 				 	->Contacts();
 
+		if ($user AND $user->role == 9)
+			$form_data ->AdvertType();
+
 		$this->template->params 	= new Obj($params);
 		$this->template->form_data 	= $form_data->_data;
 		$this->template->errors = (array) $errors;
