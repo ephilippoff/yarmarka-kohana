@@ -239,7 +239,7 @@ class Massload
 
 	public static function to_post_format($record_fields, $category_id, $pathtoimage, $config, $dictionary)
 	{
-		//echo var_dump($dictionary);
+
 		$return = Array();
 		foreach($record_fields as $key=>$value)
 		{

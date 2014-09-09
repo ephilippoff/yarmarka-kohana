@@ -31,7 +31,7 @@ class Task_Object_MassloadAvito extends Minion_Task
 
 		foreach ($settings as $setting)
 		{
-			try {
+			//try {
 
 				$link 		= $setting["link"];
 				$user_id 	= $setting["user_id"];
@@ -132,7 +132,7 @@ class Task_Object_MassloadAvito extends Minion_Task
 						Kohana::$log->add(Log::ERROR, $ee->getMessage());
 					}
 				} //end foreach by category
-			} 
+			/*} 
 				catch(Exception $e)
 			{
 				$exception_message  = 'Ошибки при массовой загрузке: </br>';
@@ -146,7 +146,7 @@ class Task_Object_MassloadAvito extends Minion_Task
 					Kohana::$log->add(Log::ERROR, $eee->getMessage());
 				}
 				Minion_CLI::write('critical error: '.Minion_CLI::color($e->getMessage(), 'cyan'));
-			}
+			}*/
 
 			
 		} //end foreach by $links
