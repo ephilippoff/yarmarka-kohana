@@ -278,20 +278,29 @@ class Form_Add  {
 			if ($element["custom"] == "address")
 				$this->map = TRUE;
 
+			if ($element["custom"] == 'multiple')
+			{
+				$rows[] = $element;
+				continue;
+			}
+
 			if ($element["custom"] and substr($element["custom"], 0, 2) <> "i_") {
 				$rows[] = $element;
+				continue;
 			}	
 
 			if (!$element["custom"] AND
 					($element["type"] == "list" OR $element["type"] == "ilist"))
 			{
 				$lists[] = $element;
+				continue;
 			}
 
 			if (!$element["custom"] AND
 					$element["type"] <> "list" AND $element["type"] <> "ilist")
 			{
 				$rows[] = $element;
+				continue;
 			}		
 		}
 

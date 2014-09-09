@@ -120,6 +120,7 @@ class Attribute {
 												"type" =>  $type, 
 												"ref_id" => $relation->reference_id, 
 												"custom" => $relation->custom,
+												"options" => $relation->options,
 												"weight" => $relation->weight,
 												"is_textarea" => $relation->is_textarea,
 												"is_required" => $relation->is_required,
