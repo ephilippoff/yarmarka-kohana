@@ -13,7 +13,12 @@
 								<option value="">--нет--</option>
 							<? endif; ?>
 							<? foreach($values as $key=>$item): ?>
-									<option value='<?=$key?>' <? if ($value AND in_array($key, $value)) { echo "selected";}?> ><?=$item?></option>
+									<option value='<?=$key?>' 
+
+									<? if ($value AND is_array($value) AND in_array($key, $value)) { echo "selected";} 
+										elseif ($value == $key) { echo "selected";} ?> 
+
+									><?=$item?></option>
 							<? endforeach; ?>	
 						</select>
 						<? if ($errors): ?>
