@@ -8,8 +8,8 @@
 //		$params_for_filter['sort'] = $sort;		
 //	}
 //		
-//	if (!$only_active) $params_for_filter['only_active'] = '';
-//	else $params['only_active'] = '';		
+	if (!$only_active) $params_for_filter['only_active'] = '';
+	else $params['only_active'] = '';		
 ?>
 
 <script type="text/javascript" charset="utf-8">
@@ -76,6 +76,13 @@
 	})
 	
 </script>
+
+<div class="control-group only2" >		
+	<label for="only_active" class="control-label">
+		<input id="only_active" type="checkbox" class="input-small" placeholder="" name="only_active" <?php if ($only_active) : ?> checked <?php endif; ?> onclick=" window.location='/<?=Request::current()->uri().URL::query($params_for_filter, false)?>' ">
+		Только оплаченные	
+	</label>					
+</div>	
 
 <table class="table table-hover table-condensed promo">
 	<tr>
