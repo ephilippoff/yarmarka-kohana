@@ -152,13 +152,13 @@ class Attribute {
 			//	$value = "_".$value;
 		}
 		
-
+		$data_elements = Array();
 		foreach($data as $key => $element)
 		{
 			if (is_array($element))
 			{
 				$values[$key] = $element[0]["title"];
-				if ($value == $key) { $data = $element; }
+				if ($value == $key OR (is_array($value) AND in_array($key, $value))) { $data_elements[] = $element; }
 			} else {
 				$values[$key] = $element;
 			}
@@ -177,16 +177,20 @@ class Attribute {
 				"value" 	=> $value
 		);
 
-		if ($value_exist AND array_key_exists(0, $data)) 
-			self::parseAttributeLevel($data, $params, $list); 
+		if ($value_exist)
+			foreach ($data_elements as $data)
+				if (array_key_exists(0, $data)) 
+					self::parseAttributeLevel($data, $params, $list); 
+			
 	}
 
 	static function parseAttributeLevel($data, $params = NULL, &$list = Array()){
 		$info = $data[0];
 		unset($data[0]);
 
-		foreach($data as $key => $element)
+		foreach($data as $key => $element){	
 			self::parseElementLevel($element, $params, $list);
+		}
 
 		return $list;
 	}

@@ -489,9 +489,13 @@ class Form_Add  {
 	static private function parse_object_params($object_id){
 		$values = ORM::factory('Data_List')->where("object","=",$object_id)->find_all();
 		$params = Array();
+		$list_array = Array();
 		foreach($values as $list_item)
 		{
-			$params[$list_item->reference] = "_".$list_item->value;
+			if (!array_key_exists($list_item->reference, $params))
+				$params[$list_item->reference] = array();
+
+			$params[$list_item->reference][] = "_".$list_item->value;
 		}
 
 		$values = ORM::factory('Data_Integer')->where("object","=",$object_id)->find_all();
