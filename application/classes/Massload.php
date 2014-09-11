@@ -85,7 +85,7 @@ class Massload
 		$sub = DB::select('external_id')->from('object_massload')
 						->join("massload", "left")
 							->on("massload.id","=","massload_id")
-						->where("path","=",$filepath)
+						->where("massload.created_on",">=",date('Y-m-d H:i:s', strtotime('-8 hours')))
 						->where("user_id","=",$user_id);
 
 		ORM::factory('Object')
