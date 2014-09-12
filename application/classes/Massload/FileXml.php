@@ -47,8 +47,8 @@ class Massload_FileXml extends Massload_File
 			$row = new Obj((array) $file->Ad->{$row_num});
 
 			$images = Array();
-			if (property_exists($file->Ad->{$row_num}, "Images")){
-				foreach ($file->Ad->{$row_num}->Images->Image as $image)
+			if (property_exists($file->Ad->{$row_num}, "images")){
+				foreach ($file->Ad->{$row_num}->images->Image as $image)
 				{
 					$attributes = $image->attributes();
 					$images[] = (string) $attributes["url"][0];
@@ -56,11 +56,13 @@ class Massload_FileXml extends Massload_File
 			}
 
 			$row = new Obj((array) $row);
-			unset($row->Images);
-			$row->Images = join(";", $images);
+			unset($row->images);
+			$row->images = join(";", $images);
 
-			$row = Massload_Avito::convert_avito_row($config['category'], $row);
-			$row = Massload_Avito::format_values($row);
+			if (!Massload_Avito::is_own_format($row)) {
+				$row = Massload_Avito::convert_avito_row($config['category'], $row);
+				$row = Massload_Avito::format_values($row);
+			}
 
 			$return = $callback($row, $row_num);
 

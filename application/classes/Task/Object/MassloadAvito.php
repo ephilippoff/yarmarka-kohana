@@ -82,10 +82,10 @@ class Task_Object_MassloadAvito extends Minion_Task
 					$error_count  = 0;
 					$error_adverts = Array();
 
-					for ($i = 0; $i<$iteration; $i++)
+					for ($i = 0; $i<$count; $i++)
 					{
 						Minion_CLI::write("Loading...");
-						$data =  $ml->saveStrings($new_filepath, $imagepath, $category, self::STEP, $i, $user->id);
+						$data =  $ml->saveStrings($new_filepath, $imagepath, $category, $i, $user->id);
 						foreach ($data as $advert){
 							$object_id = $parent_id = $is_edit = "";
 							if (array_key_exists("object_id", $advert)){

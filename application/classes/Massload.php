@@ -141,7 +141,9 @@ class Massload
 			}*/
 
 			$validation = Massload::init_validation($row, $i, $config, $dictionary, $pathtoimage);
-			if (!$validation->check()) return "continue";	
+			if (!$validation->check()) {			
+				return "continue";	
+			}
 			
 
 			$record = Array();
