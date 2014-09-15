@@ -16,6 +16,21 @@ return array(
 									"Street" 		=> "address",
 									"Images" 		=> "images"
 								),
+	'flat_rooms'		=> array( 
+									"Id" 			=> "external_id",
+									"OperationType" => "tip-sdelki5", 
+									"City" 			=> "city", 
+									"Floor" 		=> "etazh", 
+									"Floors" 		=> "etazhnost",
+									"Square"		=> "ploshchad",
+									"Description" 	=> "user_text_adv",
+									"ManagerName" 	=> "contact",
+									"Price" 		=> "tsena",
+									"EMail" 		=> "contact_0_value",
+									"ContactPhone"  => "contact_1_value",
+									"Street" 		=> "address",
+									"Images" 		=> "images"
+								),
 	'flat_new'			=> array( 
 									"Id" 			=> "external_id",
 									"OperationType" => "tip-sdelki5", 
