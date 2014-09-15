@@ -9,7 +9,8 @@ class Task_Object_MassloadAvito extends Minion_Task
 		'link'	=> FALSE,
 		'user'  => FALSE,
 		'category'	=> FALSE,
-		'send_email'=> FALSE
+		'send_email'=> FALSE,
+		'disable_preafterprocess'=> FALSE
 	);
 
 	protected function _execute(array $params)
@@ -17,7 +18,8 @@ class Task_Object_MassloadAvito extends Minion_Task
 		$link 				= $params['link'];
 		$user_id 			= $params['user'];
 		$direct_category 	= $params['category'];
-		$send_email 	= $params['send_email'];
+		$send_email 		= $params['send_email'];
+		$disable_preafterprocess = $params['disable_preafterprocess'];
 
 		$settings = Array();
 		if ($link AND $user_id)
@@ -75,7 +77,8 @@ class Task_Object_MassloadAvito extends Minion_Task
 
 					$iteration = round($count/self::STEP);
 
-					$massload_id = $ml->preProccess($new_filepath, $category, $user->id);
+					if (!$disable_preafterprocess)
+						$massload_id = $ml->preProccess($new_filepath, $category, $user->id);
 
 					$object_count = 0;
 					$edited_count = 0;
@@ -106,7 +109,8 @@ class Task_Object_MassloadAvito extends Minion_Task
 						}
 					}
 
-					$ml->afterProcess($massload_id); 
+					if (!$disable_preafterprocess)
+						$ml->afterProcess($massload_id); 
 					
 					$config = Kohana::$config->load('massload/bycategory.'.$category);
 					$mail_message = 'Отчет по загрузке файла для компании : '.$user->org_name.' ('.$user->id.' '.$user->email.')</br>';
