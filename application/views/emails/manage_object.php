@@ -25,7 +25,7 @@
 			<tr><td colspan="2" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;line-height: 15px;font-size:26px;">Здравствуйте!</td></tr>
 			<tr><td style="line-height: 0;" colspan="2">&nbsp;<img width="100%" height="20" title="" alt="" src="data:image/gif;base64,R0lGODlhAQABAJEAAAAAAP///////wAAACH5BAEAAAIALAAAAAABAAEAAAICVAEAOw%3D%3D"></td></tr>										
 									
-			<tr><td colspan="2" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;line-height: 15px;">На <a href="<?php echo CI::base('http') ?>">Ярмарка-Онлайн</a> произошли следующие действия с вашими объявлениями:</td></tr>
+			<tr><td colspan="2" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;line-height: 15px;">На <a style="color: #d44234;" href="<?php echo CI::base('http') ?>">Ярмарка-Онлайн</a> произошли следующие действия с вашими объявлениями:</td></tr>
 			<tr>
 				<td colspan="2" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;line-height: 15px;">
 					<? foreach($actions as $action) {?>

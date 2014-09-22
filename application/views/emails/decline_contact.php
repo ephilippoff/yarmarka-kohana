@@ -29,7 +29,7 @@
 			<tr>
 				<td colspan="2" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;line-height: 15px;">
 					<?php foreach ($objects as $object) : ?>
-						<p class="p3"><a href="<?=$object->get_url()?>"><?=$object->title?></a></p>
+						<p class="p3"><a style="color: #d44234;" href="<?=$object->get_url()?>"><?=$object->title?></a></p>
 					<?php endforeach ?>			
 				</td>
 			</tr>
