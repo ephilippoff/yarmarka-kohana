@@ -93,6 +93,14 @@ class Massload_Avito
 		return $return;
 	}
 
+	public static function is_own_format($row)
+	{
+		if (property_exists($row, "external_id"))
+			return TRUE;
+		else
+			return FALSE;
+	}
+
 	public static function convert_avito_row($category, $row)
 	{
 		$new_row = new Obj();

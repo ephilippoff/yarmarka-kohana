@@ -85,7 +85,7 @@ class Massload
 		$sub = DB::select('external_id')->from('object_massload')
 						->join("massload", "left")
 							->on("massload.id","=","massload_id")
-						->where("path","=",$filepath)
+						->where("massload.created_on",">=",date('Y-m-d H:i:s', strtotime('-8 hours')))
 						->where("user_id","=",$user_id);
 
 		ORM::factory('Object')
@@ -141,7 +141,9 @@ class Massload
 			}*/
 
 			$validation = Massload::init_validation($row, $i, $config, $dictionary, $pathtoimage);
-			if (!$validation->check()) return "continue";	
+			if (!$validation->check()) {			
+				return "continue";	
+			}
 			
 
 			$record = Array();
@@ -239,7 +241,7 @@ class Massload
 
 	public static function to_post_format($record_fields, $category_id, $pathtoimage, $config, $dictionary)
 	{
-		//echo var_dump($dictionary);
+
 		$return = Array();
 		foreach($record_fields as $key=>$value)
 		{

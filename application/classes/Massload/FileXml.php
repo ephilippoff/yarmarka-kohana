@@ -54,8 +54,16 @@ class Massload_FileXml extends Massload_File
 					$images[] = (string) $attributes["url"][0];
 				}	
 			}
-			$row = self::clear_row($row);
+
+			$row = new Obj((array) $row);
+			unset($row->images);
 			$row->images = join(";", $images);
+
+			if (!Massload_Avito::is_own_format($row)) {
+				$row = Massload_Avito::convert_avito_row($config['category'], $row);
+				$row = Massload_Avito::format_values($row);
+			}
+
 			$return = $callback($row, $row_num);
 
 		unset($file);

@@ -227,9 +227,11 @@ class Controller_Admin_Reklama extends Controller_Admin_Template {
 //		$sort	 = in_array($this->request->query('sort'), $sorting_types) ? $this->request->query('sort') : '';
 //		$sort_by = in_array($this->request->query('sort_by'), $sorting_fields) ? $this->request->query('sort_by') : '';		
 		//Фильтр показа только активных, либо всех
-//		$only_active = isset($_GET['only_active']) ? 1 : 0;
+		$only_active = isset($_GET['only_active']) ? 1 : 0;
 			
 		$tickets_list = ORM::factory('Object_Service_Ticket');
+		
+		if ($only_active) $tickets_list->where('invoice_id', '>', 0);		
 				
 		// количество общее
 		$clone_to_count = clone $tickets_list;
@@ -247,7 +249,7 @@ class Controller_Admin_Reklama extends Controller_Admin_Template {
 		$this->template->tickets_list = $tickets_list->find_all();
 //		$this->template->sort	  = $sort;
 //		$this->template->sort_by  = $sort_by;
-//		$this->template->only_active = $only_active;
+		$this->template->only_active = $only_active;
 		
 		$this->template->limit	  = $limit;
 		$this->template->pagination	= Pagination::factory(array(

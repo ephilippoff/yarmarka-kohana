@@ -40,7 +40,7 @@
 											<div id="hypercomments_widget"></div>
 											<script type="text/javascript">
 											_hcwp = window._hcwp || [];
-											_hcwp.push({widget:"Stream", widget_id:16227});
+											_hcwp.push({widget:"Stream", widget_id:16227, callback: function(app, init){$('#hypercomments_widget .hc_count_user_online').remove();} });
 											(function() {
 											if("HC_LOAD_INIT" in window)return;
 											HC_LOAD_INIT = true;
