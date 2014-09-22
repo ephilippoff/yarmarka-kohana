@@ -140,7 +140,8 @@ class Massload_File
 		$return = new Obj();
 		foreach((array) $row as $key=>$value)
 		{	$config_field = self::get_field_by_key($config, $key);
-			$return->{$config_field["name"]} = $value;
+			if ($config_field["name"])
+				$return->{$config_field["name"]} = $value;
 		}
 		return $return;
 	}
@@ -155,6 +156,9 @@ class Massload_File
 	private static function get_field_by_key($array, $key)
 	{
 		$values = array_values($array["fields"]); 
-		return $values[$key];
+		if (array_key_exists($key, $values))
+			return $values[$key];
+		else 
+			return NULL;
 	}
 }
