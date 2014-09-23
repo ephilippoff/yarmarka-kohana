@@ -18,7 +18,7 @@ return array
 			 *
 			 * Ports and sockets may be appended to the hostname.
 			 */
-			'dsn'		 => 'pgsql:dbname=yarmarka_new;host=127.0.0.1',
+			'dsn'		 => 'pgsql:dbname=yarmarka_new;host=127.0.0.1;port=6432;',
 			'username'   => 'postgres',
 			'password'   => 'root',
 			'persistent' => FALSE,
