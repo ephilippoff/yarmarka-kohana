@@ -79,7 +79,7 @@
 			
 			<tr><td style="line-height: 0;" colspan="2">&nbsp;<img width="100%" height="12" title="" alt="" src="data:image/gif;base64,R0lGODlhAQABAJEAAAAAAP///////wAAACH5BAEAAAIALAAAAAABAAEAAAICVAEAOw%3D%3D"></td></tr>	
 			<tr><td colspan="2" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;line-height: 15px;">
-				Сообщаем, что Ваше объявление будет доступно для посетителей сайта до <?=date('d.m.Y', strtotime($object->date_expiration))?>. По окончании этого периода, Вы можете всегда возобновить публикацию объявления из  <a style="color: #d44234;font-size: 12px" href="<?=URL::site('user/myads', 'http')?>">Личного Кабинета</a>.			
+				Сообщаем, что Ваше объявление будет доступно для посетителей сайта до <?=date('d.m.Y', strtotime($object->date_expiration))?>. По окончании этого периода, Вы можете всегда возобновить публикацию объявления из  <a style="color: #d44234;" href="<?=URL::site('user/myads', 'http')?>">Личного Кабинета</a>.			
 			</td></tr>
 			<tr><td style="line-height: 0;" colspan="2">&nbsp;<img width="100%" height="12" title="" alt="" src="data:image/gif;base64,R0lGODlhAQABAJEAAAAAAP///////wAAACH5BAEAAAIALAAAAAABAAEAAAICVAEAOw%3D%3D"></td></tr>	
 				
@@ -87,7 +87,7 @@
 			<tr><td style="line-height: 0;" colspan="2">&nbsp;<img width="100%" height="12" title="" alt="" src="data:image/gif;base64,R0lGODlhAQABAJEAAAAAAP///////wAAACH5BAEAAAIALAAAAAABAAEAAAICVAEAOw%3D%3D"></td></tr>						
 			
 			<?php if (!$is_edit) : ?>					
-				<tr><td colspan="2" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;line-height: 15px;">Управляйте объявлением в своем <a style="color: #d44234;font-size: 12px" href="<?=URL::site('user/myads', 'http')?>">Личном Кабинете</a>!</td></tr>				
+				<tr><td colspan="2" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;line-height: 15px;">Управляйте объявлением в своем <a style="color: #d44234;" href="<?=URL::site('user/myads', 'http')?>">Личном Кабинете</a>!</td></tr>				
 				<tr><td style="line-height: 0;" colspan="2">&nbsp;<img width="100%" height="12" title="" alt="" src="data:image/gif;base64,R0lGODlhAQABAJEAAAAAAP///////wAAACH5BAEAAAIALAAAAAABAAEAAAICVAEAOw%3D%3D"></td></tr>	
 			<?php endif;?>
 			
@@ -95,13 +95,13 @@
 			
 			<tr><td colspan="2" style="line-height: 15px;">&nbsp;<img src="data:image/gif;base64,R0lGODlhAQABAJEAAAAAAP///////wAAACH5BAEAAAIALAAAAAABAAEAAAICVAEAOw%3D%3D" width="100%" height="15" alt="" title=""/></td></tr>
 			<tr><td colspan="2" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;font-size: 14px;line-height: 10px;"><ul style="margin:0px; padding-left: 15px;list-style: disc;"><li>Смотреть объявление</li></ul></td></tr>
-			<tr><td colspan="2" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;"><a style="color: #d44234;font-size: 10px;font-size: 10px;" href="<?=$object->get_url()?>"><?=$object->get_url()?></a></td></tr>
+			<tr><td colspan="2" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;"><a style="color: #d44234;" href="<?=$object->get_url()?>"><?=$object->get_url()?></a></td></tr>
 			<tr><td colspan="2" style="line-height: 10px;">&nbsp;<img src="data:image/gif;base64,R0lGODlhAQABAJEAAAAAAP///////wAAACH5BAEAAAIALAAAAAABAAEAAAICVAEAOw%3D%3D" width="100%" height="10" alt="" title=""/></td></tr>
 			<tr><td colspan="2" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;font-size: 14px;line-height: 10px;"><ul style="margin:0px; padding-left: 15px;list-style: disc;"><li>Редактировать объявление</li></ul></td></tr>
-			<tr><td colspan="2" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;"><a style="color: #d44234;font-size: 10px;font-size: 10px;" href="<?=CI::site('user/edit_ad/'.$object->id)?>"><?=CI::site('user/edit_ad/'.$object->id)?></a></td></tr>
+			<tr><td colspan="2" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;"><a style="color: #d44234;" href="<?=CI::site('user/edit_ad/'.$object->id)?>"><?=CI::site('user/edit_ad/'.$object->id)?></a></td></tr>
 			<tr><td colspan="2" style="line-height: 10px;">&nbsp;<img src="data:image/gif;base64,R0lGODlhAQABAJEAAAAAAP///////wAAACH5BAEAAAIALAAAAAABAAEAAAICVAEAOw%3D%3D" width="100%" height="10" alt="" title=""/></td></tr>			
 			<tr><td colspan="2" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;font-size: 14px;line-height: 10px;"><ul style="margin:0px; padding-left: 15px;list-style: disc;"><li>Управлять всеми своими объявлениями из личного кабинета:</li></ul></td></tr>
-			<tr><td colspan="2" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;"><a style="color: #d44234;font-size: 10px;font-size: 10px;" href="<?=URL::site('user/myads', 'http')?>"><?=URL::site('user/myads', 'http')?></a></td></tr>
+			<tr><td colspan="2" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;"><a style="color: #d44234;" href="<?=URL::site('user/myads', 'http')?>"><?=URL::site('user/myads', 'http')?></a></td></tr>
 			
 			<tr><td style="line-height: 0;" colspan="2">&nbsp;<img width="100%" height="12" title="" alt="" src="data:image/gif;base64,R0lGODlhAQABAJEAAAAAAP///////wAAACH5BAEAAAIALAAAAAABAAEAAAICVAEAOw%3D%3D"></td></tr>	
 			<tr><td colspan="2" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;line-height: 15px;">Спасибо, что воспользовались нашим сервисом!</td></tr>			
