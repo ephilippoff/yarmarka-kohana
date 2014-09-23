@@ -128,7 +128,8 @@ class Objectload
 
 		$of = ORM::factory('Objectload_Files');
 
-		$of = $of->where("objectload_id","=",$object_load_id);
+		$of = $of->where("objectload_id","=",$object_load_id)
+				  ->where("table_name","IS NOT",NULL);
 
 		if ($filters->category)
 			  $of = $of->where("category","=",$filters->category);

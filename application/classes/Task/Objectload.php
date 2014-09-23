@@ -3,22 +3,42 @@
 
 class Task_Objectload extends Minion_Task
 {
+	const SETTING_NAME = "massload_enable";
+
 	protected $_options = array(
-		"category" => NULL,
-		"link"	   => NULL,
 		"user_id"  => NULL,
 		"objectload_id"  => NULL,
 		"filter"  => NULL
 	);
+
+	protected function _execute(array $params)
+	{
+		$user_id 			= $params['user_id'];
+
+		if ($user_id)
+		{
+			$this->load($params);
+		} 
+			else 
+		{
+			$user_settings = ORM::factory('User_Settings')
+									->where("name","=",self::SETTING_NAME)
+									->order_by("id","desc")->find_all();
+			foreach ($user_settings as $setting)
+			{
+				$params["user_id"] = $setting->user_id;
+				$this->load($params);
+			}
+		}
+	}
 
 	/*
 		objectload_id = <id> - loading objectload by id, if "last" - loading last objectload
 		filter = notloaded=1,witherror=1,category=flat_resale
 
 	*/
-	protected function _execute(array $params)
+	function load(array $params)
 	{
-		$link 				= $params['link'];
 		$user_id 			= $params['user_id'];
 		$filter 			= $params['filter'];
 		$objectload_id 		= $params['objectload_id'];
@@ -37,6 +57,7 @@ class Task_Objectload extends Minion_Task
 		}
 
 		$user 		=  ORM::factory('User', $user_id);
+		Minion_CLI::write("User :".$user->org_name." ".$user->email." (".$user_id.")");
 		Auth::instance()->force_login($user);
 		$db = Database::instance();
 
@@ -63,7 +84,8 @@ class Task_Objectload extends Minion_Task
 			$db->commit();
 		}
 
-		Minion_CLI::write("Starting save Objects ...");
+		Minion_CLI::write("Start...");
+
 		$ol->forEachRecord($filters, function($row, $category, $cc) use ($ol){
 
 			$prefix_log = Minion_CLI::color('['.$category."|".$cc->common."-".$cc->counter."/".$cc->count.']: ','yellow');
@@ -72,7 +94,7 @@ class Task_Objectload extends Minion_Task
 			$dictionary = &$ol->_settings["dict_".$category];
 
 			$validation = Massload::init_validation($row, $row->external_id, $config, $dictionary);
-			
+
 			if (!$validation->check()) {	
 				$validation_errors = $validation->errors('validation/massload');
 				Minion_CLI::write($prefix_log."Error :".join("|", array_values($validation_errors)));
@@ -100,7 +122,7 @@ class Task_Objectload extends Minion_Task
 		});
 		
 
-		Minion_CLI::write('success');
+		Minion_CLI::write('End');
 
 		//Temptable::delete_table($name);
 	}

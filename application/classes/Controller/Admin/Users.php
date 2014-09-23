@@ -103,7 +103,10 @@ class Controller_Admin_Users extends Controller_Admin_Template {
 			$categories[$name] = $item["name"];
 		$this->template->categories = $categories;
 
-		$user_settings = ORM::factory('User_Settings')->order_by("id", "desc")->find_all();
+		$user_settings = ORM::factory('User_Settings')
+								->order_by("user_id", "desc")
+								->order_by("name", "asc")
+								->find_all();
 		$this->template->user_settings =$user_settings;
 
 		if (HTTP_Request::POST === $this->request->method()) 
