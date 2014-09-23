@@ -170,7 +170,7 @@ class Massload
 		return Kohana::$config->load('massload/bycategory.'.$category);
 	}
 
-	public static function init_validation($row, $i, $config, $dictionary, $pathtoimage)
+	public static function init_validation($row, $i, $config, $dictionary, $pathtoimage = FALSE)
 	{
 		$validation = Validation::factory((array) $row);
 
@@ -184,7 +184,6 @@ class Massload
 			$valid_info 		= array(':value', $dictionary, $config_key->translate, $i, $value);
 			$valid_info_contact = array(':value', $config_key->maxlength, $dictionary, $config_key->translate, $i, $value);
 			$valid_info_dict 	= array(':value', $config_key->name, $dictionary, $config_key->translate, $i, $value);
-			$valid_info_photo 	= array(':value', $pathtoimage, $config_key->translate, $i, $value);
 			$valid_info_maxlength = array(':value', $config_key->maxlength, $dictionary, $config_key->translate, $i, $value);
 
 			if ($config_key->required) 

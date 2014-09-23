@@ -126,4 +126,39 @@ class ORM extends Kohana_ORM {
 	{
 		return $this->where($column,">=",DB::expr('NOW()'));
 	}
+
+	public function temp_find_all()
+	{
+		if ( ! empty($this->_load_with))
+		{
+			foreach ($this->_load_with as $alias)
+			{
+				// Bind auto relationships
+				$this->with($alias);
+			}
+		}
+
+		$this->_build(Database::SELECT);
+		$this->_db_builder->from(array($this->_table_name, $this->_object_name));
+		$this->_db_builder->select_array($this->_build_select());
+
+		if ( ! isset($this->_db_applied['order_by']) AND ! empty($this->_sorting))
+		{
+			foreach ($this->_sorting as $column => $direction)
+			{
+				if (strpos($column, '.') === FALSE)
+				{
+					// Sorting column for use in JOINs
+					$column = $this->_object_name.'.'.$column;
+				}
+
+				$this->_db_builder->order_by($column, $direction);
+			}
+		}
+		$result = $this->_db_builder->from(array($this->_table_name, $this->_object_name))->as_object('Obj')->execute($this->_db);
+
+		$this->reset();
+
+		return $result;
+	}
 }

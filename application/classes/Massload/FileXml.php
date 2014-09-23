@@ -28,6 +28,10 @@ class Massload_FileXml extends Massload_File
 			}			
 			$row = self::clear_row($row);
 			$row->images = join(";", $images);
+			if (!Massload_Avito::is_own_format($row)) {
+				$row = Massload_Avito::convert_avito_row($config['category'], $row);
+				$row = Massload_Avito::format_values($row);
+			}
 			$return = $callback($row, $i);
 			$i++;
 
