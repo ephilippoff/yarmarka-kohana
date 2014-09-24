@@ -29,6 +29,7 @@
 								<ul class="dropdown-menu">
 									<li><a href="<?=Url::site('khbackend/users/index')?>">List</a></li>
 									<li><a href="<?=Url::site('khbackend/users/add_settings')?>">Добавить настройку</a></li>
+									<li><a href="<?=Url::site('khbackend/users/objectload')?>">Загрузки</a></li>
 								</ul>
 							</li>
 						<?php endif; ?>

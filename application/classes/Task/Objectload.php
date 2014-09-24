@@ -15,21 +15,35 @@ class Task_Objectload extends Minion_Task
 	{
 		$user_id 			= $params['user_id'];
 
-		if ($user_id)
-		{
-			$this->load($params);
-		} 
-			else 
-		{
-			$user_settings = ORM::factory('User_Settings')
-									->where("name","=",self::SETTING_NAME)
-									->order_by("id","desc")->find_all();
-			foreach ($user_settings as $setting)
+		$ct = ORM::factory('Crontask')->begin("Objectload", $params);
+
+		try {
+			if ($user_id)
 			{
-				$params["user_id"] = $setting->user_id;
-				$this->load($params);
+				$this->load($params, $ct);
+			} 
+				else 
+			{
+				$user_settings = ORM::factory('User_Settings')
+										->where("name","=",self::SETTING_NAME)
+										->order_by("id","desc")->find_all();
+				foreach ($user_settings as $setting)
+				{
+					$ct->_update();
+					if (!$ct->_check($ct->id))
+						break;
+
+					$params["user_id"] = $setting->user_id;
+					$this->load($params, $ct);
+				}
 			}
+		} catch (Exception $e)
+		{
+			$ct->error($e->getMessage());
+			Minion_CLI::write($e->getMessage());
+			return;
 		}
+		$ct->end();
 	}
 
 	/*
@@ -37,17 +51,20 @@ class Task_Objectload extends Minion_Task
 		filter = notloaded=1,witherror=1,category=flat_resale
 
 	*/
-	function load(array $params)
+	function load(array $params, &$ct)
 	{
 		$user_id 			= $params['user_id'];
 		$filter 			= $params['filter'];
 		$objectload_id 		= $params['objectload_id'];
 
 		$filters = new Obj();
-		foreach (explode(",", $filter) as $f)
+		if ($filter)
 		{
-			@list($key,$value) = explode("=", $f);
-			$filters->{$key} = $value;
+			foreach (explode(",", $filter) as $f)
+			{
+				@list($key,$value) = explode("=", $f);
+				$filters->{$key} = $value;
+			}
 		}
 
 		if (!$user_id)
@@ -86,7 +103,11 @@ class Task_Objectload extends Minion_Task
 
 		Minion_CLI::write("Start...");
 
-		$ol->forEachRecord($filters, function($row, $category, $cc) use ($ol){
+		$ol->forEachRecord($filters, function($row, $category, $cc) use ($ol, $ct){
+
+			$ct->_update();
+				if (!$ct->_check($ct->id))
+				return 'break';
 
 			$prefix_log = Minion_CLI::color('['.$category."|".$cc->common."-".$cc->counter."/".$cc->count.']: ','yellow');
 			

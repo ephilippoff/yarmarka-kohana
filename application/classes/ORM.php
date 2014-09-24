@@ -161,4 +161,10 @@ class ORM extends Kohana_ORM {
 
 		return $result;
 	}
+
+	public function get_row_as_obj()
+	{
+		$o = unserialize($this->serialize());
+		return new Obj($o["_object"]);
+	}
 }

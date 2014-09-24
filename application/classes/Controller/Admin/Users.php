@@ -157,6 +157,64 @@ class Controller_Admin_Users extends Controller_Admin_Template {
 	
 	}
 
+	public function action_objectload()
+	{
+		$this->template->crontasks = ORM::factory('Crontask')
+											->where("state","<>",5)
+											->order_by("updated_on", "desc")
+											->order_by("created_on", "desc")
+											->find_all();
+
+		$objloads = array();
+		$oloads = ORM::factory('Objectload')
+				->order_by("created_on", "desc")
+				->limit(50)
+				->find_all();
+		foreach ($oloads as $load)
+		{
+			$rec_load = $load->get_row_as_obj();
+			$rec_load->email = $load->user->email;
+
+			$objfiles = array();
+			$ofiles = ORM::factory('Objectload_Files')
+					->where("objectload_id","=",$load->id)
+					->find_all();
+			foreach ($ofiles as $file)
+			{
+				$objfiles[] = new Obj($file->get_row_as_obj());
+			}
+			
+			$rec_load->objfiles = $objfiles;
+
+			$objloads[] = $rec_load;
+		}
+
+		$this->template->objectloads = $objloads;
+	}
+
+	public function action_objectload_shell()
+	{
+		$this->layout = 'shell';
+	}
+
+	public function action_crontask_to_archive()
+	{
+		$this->auto_render = FALSE;
+		$post = $_POST;
+		$ct = ORM::factory('Crontask', $post["id"]);
+
+		if ( ! $ct->loaded())
+		{
+			throw new HTTP_Exception_404;
+		}
+
+		$ct->state = 5;
+		$ct->update();
+
+		$json = array('code' => 200);
+		$this->response->body(json_encode($json));
+	}
+
 	public function action_ban()
 	{
 		$user = ORM::factory('User', $this->request->param('id'));
