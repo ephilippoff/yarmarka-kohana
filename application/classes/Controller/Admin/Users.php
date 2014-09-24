@@ -159,6 +159,17 @@ class Controller_Admin_Users extends Controller_Admin_Template {
 
 	public function action_objectload()
 	{
+		$states = array(
+				0 => "В очереди",
+				1 => "Выполняется",
+				2 => "Завершена",
+				3 => "Ошибка",
+				4 => "Остановлена",
+				5 => "В архиве"
+			);
+
+		$this->template->states = $states;
+
 		$this->template->crontasks = ORM::factory('Crontask')
 											->where("state","<>",5)
 											->order_by("updated_on", "desc")
@@ -212,6 +223,44 @@ class Controller_Admin_Users extends Controller_Admin_Template {
 		$ct->update();
 
 		$json = array('code' => 200);
+		$this->response->body(json_encode($json));
+	}
+
+	public function action_objectload_refresh_statistic()
+	{
+		$this->auto_render = FALSE;
+		$post = $_POST;
+		$ol = ORM::factory('Objectload', $post["id"]);
+
+		if ( ! $ol->loaded())
+		{
+			throw new HTTP_Exception_404;
+		}
+		$json = array('code' => 200);
+
+		$ol->update_statistic();
+
+		$ol = ORM::factory('Objectload', $post["id"]);
+		
+		$statistic = new Obj(unserialize($ol->statistic));
+		$new = $statistic->loaded - $statistic->edited;
+		$json["common"] = $new." / ".$statistic->edited." / ".$statistic->all." err:".$statistic->error;
+
+		$of = ORM::factory('Objectload_Files')
+					->where("objectload_id","=",$post["id"])
+					->find_all();
+		$files_stat = array();
+		foreach ($of as $file) {
+			$statistic = new Obj(unserialize($file->statistic));
+			$new = $statistic->loaded - $statistic->edited;
+			$flagend ='';
+			if ($statistic->loaded + $statistic->error <> $statistic->all)
+				$flagend = '<span style="color:red;">notended</span>';
+			$files_stat[$file->id."_".$file->category] = $new." / ".$statistic->edited." / ".$statistic->all." err:".$statistic->error." ".$flagend;
+		}
+
+		$json["sub"] = $files_stat;
+		
 		$this->response->body(json_encode($json));
 	}
 

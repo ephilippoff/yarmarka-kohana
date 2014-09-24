@@ -109,7 +109,7 @@ class Task_Objectload extends Minion_Task
 				if (!$ct->_check($ct->id))
 				return 'break';
 
-			$prefix_log = Minion_CLI::color('['.$category."|".$cc->common."-".$cc->counter."/".$cc->count.']: ','yellow');
+			$prefix_log = '['.$category."|".$cc->common."-".$cc->counter."/".$cc->count.']: ';
 			
 			$config = &$ol->_settings["configs"][$category];
 			$dictionary = &$ol->_settings["dict_".$category];
@@ -142,6 +142,8 @@ class Task_Objectload extends Minion_Task
 
 		});
 		
+		ORM::factory('Objectload', $ol->_objectload_id)
+			->update_statistic();
 
 		Minion_CLI::write('End');
 

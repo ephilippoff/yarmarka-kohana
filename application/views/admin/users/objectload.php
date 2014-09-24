@@ -1,3 +1,4 @@
+ <?=HTML::script('http://yastatic.net/underscore/1.6.0/underscore-min.js')?>
  <script type="text/javascript">
  	var source = null;
     function exec() {
@@ -28,7 +29,6 @@
  <script type="text/javascript">
     function to_archive(id) {
     	$.post( "/khbackend/users/crontask_to_archive", {id:id}, function( data ) {
-		  	console.log(data);
 		  	$('#ct_'+id).hide();
 		});
     }
@@ -49,6 +49,8 @@
 			$color = '';
 			if ($item->state == 1)
 				$color = 'color:green';
+			elseif ($item->state == 2)
+				$color = 'color:gray';
 			elseif ($item->state == 3)
 				$color = 'color:red';
 			elseif ($item->state == 5)
@@ -59,16 +61,71 @@
 			<td><?=$item->name?></td>
 			<td><?=$item->command?></td>
 			<td><?=$item->comment?></td>
-			<td><?=$item->state?></td>
+			<td><?=$states[$item->state]?></td>
 			<td><?=$item->created_on?></td>
 			<td><?=$item->updated_on?></td>	
 			<td>
-				<span href="" class="icon-trash delete_article" onclick="to_archive(<?=$item->id?>);"></span>
+				<span href="" class="icon-trash" onclick="to_archive(<?=$item->id?>);"></span>
 			</td>		
 		</tr>
 	<?php endforeach; ?>
 </table>
 </p>
+
+ <script type="text/javascript">
+    function set_command_line(objectload_id, user_id, category, notloaded, witherror) {
+    	var filter = "";
+    	var filters = [];
+    	if (category)
+    		filters.push('category='+category);
+
+    	if (notloaded)
+    		filters.push('notloaded=1');
+
+    	if (witherror)
+    		filters.push('witherror=1');
+
+    	if (filters.length>0)
+    		filter = ' --filter='+filters.join(",");
+
+    	var _params = "";
+    	var params = [];
+    	if (objectload_id)
+    		params.push("--objectload_id="+objectload_id);
+
+    	if (user_id)
+    		params.push("--user_id="+user_id);
+
+    	if (params.length>0)
+    		_params = params.join(" ");
+
+    	$('#command').val(_params+" "+filter);
+    	$('#command').css("background","lightgreen");
+    	window.scrollTo(0, 0);
+    	return 
+    }
+
+    function refresh_statistic(objectload_id){
+    	if (!objectload_id)
+    		return;
+
+    	$.post( "/khbackend/users/objectload_refresh_statistic", {id:objectload_id}, function( data ) {
+		  	console.log(data);
+		  	if (data.common){
+		  		$('#stat_'+objectload_id).html(data.common);
+		  		_.each($('.buttons_'+objectload_id), function(item){
+		  			$(item).html("");
+		  		});
+		  	}
+		  	if (data.sub)
+		  		_.each(data.sub, function(item, key){
+		  			$('#stat_'+key).html(item);
+		  			console.log(key);
+		  		});
+		},"json");
+    }
+
+    </script>
 <p><h2>Загрузки</h2>
 <table class="table table-hover table-condensed">
 	<tr>
@@ -77,36 +134,66 @@
 		<th>Email</th>
 		<th>Created</th>
 		<th>Category</th>
-		<th>Loaded</th>
-		<th>Edited</th>
-		<th>Errors</th>
+		<th>Stat</th>
 		<th></th>
 	</tr>
 	<?php foreach ($objectloads as $item) : ?>
+		<?
+			$statstr = '';
+			if ($item->statistic) {
+				$statistic = new Obj(unserialize($item->statistic));
+				$new = $statistic->loaded - $statistic->edited;
+				$statstr = $new." / ".$statistic->edited." / ".$statistic->all." err:".$statistic->error;
+			}
+		?>
 		<tr>			
 			<td><?=$item->id?></td>
 			<td><?=$item->user_id?></td>
 			<td><?=$item->email?></td>
 			<td><?=$item->created_on?></td>
 			<td></td>	
-			<td></td>
-			<td></td>
-			<td></td>
+			<td id="stat_<?=$item->id?>"><?=$statstr?></td>
 			<td>
-				<span href="" class="icon-trash delete_article" onclick="to_archive(<?=$item->id?>);"></span>
+				<span href="" class="icon-refresh" onclick="refresh_statistic(<?=$item->id?>)"></span>
+				<span href="" class="icon-retweet" onclick="set_command_line(<?=$item->id?>, <?=$item->user_id?>, null)"></span>
+				<span href="" class="icon-trash" ></span>
 			</td>		
 		</tr>
 		<?php foreach ($item->objfiles as $file) : ?>
+			<?
+				$statstr = '';
+				$notloaded_button = FALSE;
+				$witherror_button = FALSE;
+				if ($file->statistic) {
+					$statistic = new Obj(unserialize($file->statistic));
+					$new = $statistic->loaded - $statistic->edited;
+					$flagend ='';
+					if ($statistic->loaded + $statistic->error <> $statistic->all)
+					{
+						$flagend = '<span style="color:red;">notended</span>';
+						$notloaded_button = TRUE;
+					}
+					if($statistic->error>0)
+						$witherror_button = TRUE;
+					$statstr = $new." / ".$statistic->edited." / ".$statistic->all." err:".$statistic->error." ".$flagend;
+				}
+			?>
 			<tr style="border:0px;">			
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 				<td><?=$file->category?></td>	
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>		
+				<td id="stat_<?=$file->id?>_<?=$file->category?>"><?=$statstr?></td>
+				<td class="buttons_<?=$item->id?>">
+					<span href="" class="icon-retweet" onclick="set_command_line(<?=$item->id?>, <?=$item->user_id?>, '<?=$file->category?>')"></span>
+					<? if ($notloaded_button): ?>
+						<span href="" class="icon-forward" onclick="set_command_line(<?=$item->id?>, <?=$item->user_id?>, '<?=$file->category?>',1)"></span>
+					<? endif;?>
+					<? if ($witherror_button): ?>
+						<span href="" class="icon-remove-sign" onclick="set_command_line(<?=$item->id?>, <?=$item->user_id?>, '<?=$file->category?>',null,1)"></span>
+					<? endif;?>
+				</td>		
 			</tr>
 		<?php endforeach; ?>
 	<?php endforeach; ?>
