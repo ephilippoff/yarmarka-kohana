@@ -215,6 +215,7 @@ class Controller_Admin_Users extends Controller_Admin_Template {
 		if (!$of->loaded())
 			throw new HTTP_Exception_404;
 
+		$this->template->config = Kohana::$config->load('massload/bycategory.'.$of->category);
 		$temp =  DB::select()->from("_temp_".$of->table_name);
 
 		if ($this->request->query('errors'))
@@ -222,7 +223,7 @@ class Controller_Admin_Users extends Controller_Admin_Template {
 
 		$this->template->fields = array_keys(ORM_Temp::factory($of->table_name)->list_columns());
 
-		$this->template->items =  $temp->order_by("id","desc")->as_object()->execute();
+		$this->template->items =  $temp->order_by("id","asc")->as_object()->execute();
 		
 
 	}
