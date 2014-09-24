@@ -134,8 +134,9 @@
 		<th>Email</th>
 		<th>Created</th>
 		<th>Category</th>
-		<th>Stat</th>
-		<th></th>
+		<th>Stat (нов./ред./все)</th>
+		<th>Log</th>
+		<th>Control</th>
 	</tr>
 	<?php foreach ($objectloads as $item) : ?>
 		<?
@@ -153,6 +154,7 @@
 			<td><?=$item->created_on?></td>
 			<td></td>	
 			<td id="stat_<?=$item->id?>"><?=$statstr?></td>
+			<td></td>
 			<td>
 				<span href="" class="icon-refresh" onclick="refresh_statistic(<?=$item->id?>)"></span>
 				<span href="" class="icon-retweet" onclick="set_command_line(<?=$item->id?>, <?=$item->user_id?>, null)"></span>
@@ -184,7 +186,16 @@
 				<td></td>
 				<td></td>
 				<td><?=$file->category?></td>	
-				<td id="stat_<?=$file->id?>_<?=$file->category?>"><?=$statstr?></td>
+				<td id="stat_<?=$file->id?>_<?=$file->category?>">
+					<?=$statstr?>
+					
+				</td>
+				<td>
+					<? if ($witherror_button):?>
+						<a href="/khbackend/users/objectload_file_list/<?=$file->id?>?errors=1" target="_blank">ошибки</a>
+					<? endif;?>
+						<a href="/khbackend/users/objectload_file_list/<?=$file->id?>" target="_blank">все</a>
+				</td>
 				<td class="buttons_<?=$item->id?>">
 					<span href="" class="icon-retweet" onclick="set_command_line(<?=$item->id?>, <?=$item->user_id?>, '<?=$file->category?>')"></span>
 					<? if ($notloaded_button): ?>
