@@ -67,6 +67,19 @@ class Objectload
 
 	}
 
+	public function saveStaticFile($_FILE, $category, $user_id = NULL)
+	{
+		if ($user_id)
+			$user_id = $this->_user_id;
+
+		$config = $this->getConfig($category);
+
+		$f = new Massload_File();
+		@list($filepath, $imagepath) = $f->init($_FILE, $user_id);
+
+		return $this->saveObjectLoadFileRecord($category, $filepath);
+	}
+
 	public function saveObjectLoadFileRecord($category, $filepath)
 	{
 		$of = ORM::factory('Objectload_Files');
@@ -150,7 +163,7 @@ class Objectload
 	        elseif ($filters->witherror == 1)
 	        	$t_object = $t_object->where("error", "IS NOT", NULL);
 
-	        $records = $t_object->as_object()->execute();
+	        $records = $t_object->order_by("id","asc")->as_object()->execute();
 	        $count   = $records->count();
 			
 

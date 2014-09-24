@@ -1,4 +1,5 @@
  <?=HTML::script('http://yastatic.net/underscore/1.6.0/underscore-min.js')?>
+  <?=HTML::script('js/adaptive/ajaxupload.js')?>
  <script type="text/javascript">
  	var source = null;
     function exec() {
@@ -25,6 +26,56 @@
 <p>Command:<input id="command" type="text" style="width: 80%;" value="--filter=category=house"/></p>
 <p>Output:<br/><textarea id="output" style="width: 80%; height: 25em;"></textarea></p>
 <p><button type="button" onclick="exec();">start</button><button type="button" onclick="stop();">stop</button></p>
+
+ <script type="text/javascript">
+ 	$(document).ready(function() {
+	 	var self = this;
+	    new AjaxUpload('fn-userfile-upload', {
+	            action: '/ajax/massload/save_staticfile',
+	            name: 'file',
+	            data : {context :self},
+	            autoSubmit: true,
+	            onSubmit: function(filename, response){
+	            	var self = this._settings.data.context;
+			        self.category_id = $("#fn-category").val();
+			        self.user_id = $("#fn-user").val();
+			        this.setData({ context : self, category : self.category_id, user_id : self.user_id});
+	            },
+	            onComplete: function(filename, response){
+	            	$(".staticfile_error").html("");
+	            	$(".staticfile_success").html("");
+	            	var data = null;
+       				var self = this._settings.data.context; 
+       				if (response) 
+            			data = $.parseJSON(response);
+            		if (data.error)
+            			$(".staticfile_error").html(data.error);
+            		if (data.objectload_id)
+            			$(".staticfile_success").html("Файл сохранен:" + data.objectload_id);
+            		console.log(data);
+	            }
+	       });
+	});
+   </script>
+
+<p><h2>Статичный файл</h2>
+		<select id="fn-category">
+			<option value>--</option>
+			<? foreach($categories as $key=>$value): ?>
+				<option value="<?=$key?>"><?=$value["name"]?></option>
+			<? endforeach; ?>
+		</select>
+		<input id="fn-user" type="text" value="327190"/>
+		<button id="fn-userfile-upload">
+			<div class="button blue">
+				<span>Загрузить</span>
+			</div>
+			
+		</button>	
+		<div class="staticfile_error" style="color:red;"></div>
+		<div class="staticfile_success" style="color:green;"></div>
+</p>
+
 
  <script type="text/javascript">
     function to_archive(id) {
@@ -185,16 +236,16 @@
 				<td></td>
 				<td></td>
 				<td></td>
-				<td><?=$file->category?></td>	
+				<td><a target="_blank" href="/user/massload_conformities/<?=$file->category?>/<?=$item->user_id?>"><?=$file->category?></a></td>	
 				<td id="stat_<?=$file->id?>_<?=$file->category?>">
-					<?=$statstr?>
-					
+					<?=$statstr?>					
 				</td>
 				<td>
+					<a href="/khbackend/users/objectload_file_list/<?=$file->id?>" target="_blank">все</a>, 
 					<? if ($witherror_button):?>
-						<a href="/khbackend/users/objectload_file_list/<?=$file->id?>?errors=1" target="_blank">ошибки</a>
+						<a href="/khbackend/users/objectload_file_list/<?=$file->id?>?errors=1" target="_blank">только ошибки</a>
 					<? endif;?>
-						<a href="/khbackend/users/objectload_file_list/<?=$file->id?>" target="_blank">все</a>
+						
 				</td>
 				<td class="buttons_<?=$item->id?>">
 					<span href="" class="icon-retweet" onclick="set_command_line(<?=$item->id?>, <?=$item->user_id?>, '<?=$file->category?>')"></span>

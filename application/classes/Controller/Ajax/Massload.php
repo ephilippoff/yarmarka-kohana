@@ -148,11 +148,33 @@ class Controller_Ajax_Massload extends Controller_Template {
 			else 
 				$this->json['data'] ="Не удалось сохранить";
 		}
-
-
 		
+	}
 
-		
+	public function action_save_staticfile()
+	{
+		$category 		= $this->request->post("category");
+		$user_id 		= $this->request->post("user_id");
+		$file = $_FILES["file"];
+
+		if (!$category)
+			return;
+
+		$ol = new Objectload($user_id);
+		$ol->loadSettings($user_id);
+		try {
+			$ol->saveStaticFile($file, $category, $user_id);		
+			$ol->saveTempRecordsByLoadedFiles();
+		} catch(Exception $e)
+		{
+			$this->json['data'] ="error";
+			$this->json['error'] = $e->getMessage();
+			ORM::factory("Objectload", $ol->_objectload_id)->delete();
+			return;
+		}
+
+		$this->json['data'] = "ok";
+		$this->json['objectload_id'] = $ol->_objectload_id;
 	}
 
 	public function after()

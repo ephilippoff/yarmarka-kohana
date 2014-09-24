@@ -201,6 +201,8 @@ class Controller_Admin_Users extends Controller_Admin_Template {
 		}
 
 		$this->template->objectloads = $objloads;
+
+		$this->template->categories = Kohana::$config->load('massload/bycategory');
 	}
 
 	public function action_objectload_shell()
