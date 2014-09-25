@@ -156,17 +156,25 @@ class Controller_Ajax_Massload extends Controller_Template {
 		$category 		= $this->request->post("category");
 		$user_id 		= $this->request->post("user_id");
 		$file = $_FILES["file"];
-
+		$db = Database::instance();
 		if (!$category)
 			return;
 
 		$ol = new Objectload($user_id);
 		$ol->loadSettings($user_id);
 		try {
-			$ol->saveStaticFile($file, $category, $user_id);		
+
+			$ol->saveStaticFile($file, $category, $user_id);
+			
+			$db->begin();	
+
 			$ol->saveTempRecordsByLoadedFiles();
+
+			$db->commit();
+
 		} catch(Exception $e)
 		{
+			$db->rollback();
 			$this->json['data'] ="error";
 			$this->json['error'] = $e->getMessage();
 			ORM::factory("Objectload", $ol->_objectload_id)->delete();

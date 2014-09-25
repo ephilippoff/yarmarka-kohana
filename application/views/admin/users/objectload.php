@@ -83,6 +83,13 @@
 		  	$('#ct_'+id).hide();
 		});
     }
+    function to_stop(id) {
+    	$.post( "/khbackend/users/crontask_to_stop", {id:id}, function( data ) {
+		  	$('#ct_'+id).css("color","red");
+		  	$('#ct_state_'+id).html("Остановлена");
+		  	$('#ct_buttons_'+id).html("");
+		});
+    }
     </script>
 <p><h2>Задачи</h2>
 <table class="table table-hover table-condensed">
@@ -112,11 +119,15 @@
 			<td><?=$item->name?></td>
 			<td><?=$item->command?></td>
 			<td><?=$item->comment?></td>
-			<td><?=$states[$item->state]?></td>
+			<td id="ct_state_<?=$item->id?>"><?=$states[$item->state]?></td>
 			<td><?=$item->created_on?></td>
 			<td><?=$item->updated_on?></td>	
-			<td>
-				<span href="" class="icon-trash" onclick="to_archive(<?=$item->id?>);"></span>
+			<td id="ct_buttons_<?=$item->id?>">
+				<? if ($item->state == 1):?>
+					<span href="" class="icon-stop" onclick="to_stop(<?=$item->id?>);"></span>
+				<? else: ?>
+					<span href="" class="icon-trash" onclick="to_archive(<?=$item->id?>);"></span>
+				<? endif; ?>
 			</td>		
 		</tr>
 	<?php endforeach; ?>

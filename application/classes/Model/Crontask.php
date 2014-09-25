@@ -40,9 +40,14 @@ class Model_Crontask extends ORM {
 	{
 		if (!$this->loaded())
 			return;
-		$this->state = 3;
-		$this->comment = $errorText;
-		$this->update();
+
+		$ct = ORM::factory('Crontask', $this->id);
+		if (!$ct->loaded())
+			return;
+
+		$ct->state = 3;
+		$ct->comment = $errorText;
+		$ct->update();
 
 		return $this;
 	}
@@ -51,8 +56,13 @@ class Model_Crontask extends ORM {
 	{
 		if (!$this->loaded())
 			return;
-		$this->updated_on = 'NOW()';
-		$this->update();
+
+		$ct = ORM::factory('Crontask', $this->id);
+		if (!$ct->loaded())
+			return;
+
+		$ct->updated_on = 'NOW()';
+		$ct->update();
 
 		return $this;
 	}
@@ -61,9 +71,14 @@ class Model_Crontask extends ORM {
 	{
 		if (!$this->loaded())
 			return;
-		if ($this->state <2) {
-			$this->state = 2;
-			$this->update();
+
+		$ct = ORM::factory('Crontask', $this->id);
+		if (!$ct->loaded())
+			return;
+		
+		if ($ct->state < 2) {
+			$ct->state = 2;
+			$ct->update();
 		}
 
 		$this->to_archive();

@@ -249,6 +249,24 @@ class Controller_Admin_Users extends Controller_Admin_Template {
 		$this->response->body(json_encode($json));
 	}
 
+	public function action_crontask_to_stop()
+	{
+		$this->auto_render = FALSE;
+		$post = $_POST;
+		$ct = ORM::factory('Crontask', $post["id"]);
+
+		if ( ! $ct->loaded())
+		{
+			throw new HTTP_Exception_404;
+		}
+
+		$ct->state = 4;
+		$ct->update();
+
+		$json = array('code' => 200);
+		$this->response->body(json_encode($json));
+	}
+
 	public function action_objectload_refresh_statistic()
 	{
 		$this->auto_render = FALSE;

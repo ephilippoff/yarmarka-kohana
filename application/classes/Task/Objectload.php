@@ -93,12 +93,21 @@ class Task_Objectload extends Minion_Task
 			$ol->downloadLinks();
 			Minion_CLI::write("Links loaded");
 
-			$db->begin();
+			try {
 
-			$ol->saveTempRecordsByLoadedFiles();
-			Minion_CLI::write("Records saved");
+				$db->begin();
+				Minion_CLI::write("Saving to temp tables ...");
+				$ol->saveTempRecordsByLoadedFiles();
+				Minion_CLI::write("Records saved");
 
-			$db->commit();
+				$db->commit();
+			} catch (Exception $e)
+			{
+				$db->rollback();
+				throw $e;
+			}
+
+			
 		}
 
 		Minion_CLI::write("Start...");
@@ -106,7 +115,7 @@ class Task_Objectload extends Minion_Task
 		$ol->forEachRecord($filters, function($row, $category, $cc) use ($ol, $ct){
 
 			$ct->_update();
-				if (!$ct->_check($ct->id))
+			if (!$ct->_check($ct->id))
 				return 'break';
 
 			$prefix_log = '['.$category."|".$cc->common."-".$cc->counter."/".$cc->count.']: ';
