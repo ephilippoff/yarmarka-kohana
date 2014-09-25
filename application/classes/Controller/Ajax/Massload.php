@@ -218,8 +218,6 @@ class Controller_Ajax_Massload extends Controller_Template {
 			return;
 		}
 
-		$ol->setState(1);
-		
 		try {
 			
 			$db->begin();	
@@ -238,6 +236,26 @@ class Controller_Ajax_Massload extends Controller_Template {
 		}
 
 		$ol->testFile();
+
+		$stat = $ol->getStatistic();
+
+		$ol->setState(1);
+
+		if ($stat["all"] > 0)
+		{
+			$allow_percent = Kohana::$config->load('massload.allow_error_percent');
+			$percent = ($stat["error"]/$stat["all"])*100;
+			if ($percent < $allow_percent)
+				$ol->setState(1);
+			else
+				$ol->setState(99, "Для продолжения загрузки, процент ошибочных объявлений должен быть меньше ".$allow_percent."%. Возможно вы не настроили соответствия для справочников");
+		} 
+			else
+		{
+			$ol->setState(99, "Не обнаружено ни одной строки");
+		}
+
+		
 
 		$this->json['data'] = "ok";
 		$this->json['objectload_id'] = $ol->_objectload_id;

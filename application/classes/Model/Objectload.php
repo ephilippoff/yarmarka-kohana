@@ -27,6 +27,14 @@ class Model_Objectload extends ORM {
 		$this->update();
 	}
 
+	function get_statistic()
+	{
+		if (!$this->loaded())
+			return;
+
+		return unserialize($this->statistic);
+	}
+
 
 	function update_statistic()
 	{

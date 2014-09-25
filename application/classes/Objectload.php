@@ -233,6 +233,12 @@ class Objectload
 		pclose($proc);
 	}
 
+	public function getStatistic()
+	{
+		return $ol = ORM::factory('Objectload', $this->_objectload_id)
+					->get_statistic();
+	}
+
 	private function setRecordLoaded($table_name, $id, $edit = FALSE)
 	{
 		$record = ORM_Temp::factory($table_name, $id);

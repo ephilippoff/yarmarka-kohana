@@ -40,6 +40,10 @@
 										            }
 										       });
 										});
+
+										function show_message(message){
+											alert(message);
+										}
 									   </script>
 									<select id="fn-category">
 										<option value>--</option>
@@ -71,7 +75,7 @@
 									<th>#</th>
 									<th>Дата</th>
 									<th>Категория</th>
-									<th>Статистика (нов./ред./все)</th>
+									<th>Статистика <br/>(нов./ред./все/ош.(%))</th>
 									<th>Просмотр</th>
 									<th>Состояние</th>
 								</tr>
@@ -84,7 +88,17 @@
 											$new = $statistic->loaded - $statistic->edited;
 											if($statistic->error>0)
 											{
-												$errorstr = "Ошибок:".$statistic->error;
+												$percent = 0;
+												if ($statistic->all<>0)
+													$percent = round(($statistic->error/$statistic->all)*100);
+
+												$allow_percent = Kohana::$config->load('massload.allow_error_percent');
+												
+												$color = "red";
+												if ($percent < $allow_percent)
+													$color = "green";
+
+												$errorstr = "/ <span style='color:$color;'>".$statistic->error." (".$percent."%)</span>";
 											}
 											$statstr = $new." / ".$statistic->edited." / ".$statistic->all." ".$errorstr;
 										}
@@ -99,7 +113,7 @@
 											<?if ($item->state <> 99 AND $item->state <> 3): ?>
 												<?=$states[$item->state]?>
 											<?else:?>
-												<a href='' onlclick="alert($item->comment);"><?=$states[$item->state]?></a>
+												<a href='#' onclick="show_message('<?=$item->comment?>');return false;"><?=$states[$item->state]?></a>
 											<?endif;?>
 										</td>		
 									</tr>
@@ -129,7 +143,7 @@
 										<tr style="border:0px;">			
 											<td></td>
 											<td></td>
-											<td><a target="_blank" href="/user/massload_conformities/<?=$file->category?>/<?=$item->user_id?>"><?=$config[$file->category]['name']?></a></td>	
+											<td><a target="_blank" href="/user/massload_conformities/<?=$file->category?>"><?=$config[$file->category]['name']?></a></td>	
 											<td id="stat_<?=$file->id?>_<?=$file->category?>">
 												<?=$statstr?>					
 											</td>
