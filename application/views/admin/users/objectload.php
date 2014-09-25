@@ -252,9 +252,9 @@
 					<?=$statstr?>					
 				</td>
 				<td>
-					<a href="/khbackend/users/objectload_file_list/<?=$file->id?>" target="_blank">все</a>, 
+					<a href="/user/objectload_file_list/<?=$file->id?>" target="_blank">все</a>, 
 					<? if ($witherror_button):?>
-						<a href="/khbackend/users/objectload_file_list/<?=$file->id?>?errors=1" target="_blank">только ошибки</a>
+						<a href="/user/objectload_file_list/<?=$file->id?>?errors=1" target="_blank">только ошибки</a>
 					<? endif;?>
 						
 				</td>

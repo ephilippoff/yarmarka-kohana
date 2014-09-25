@@ -217,6 +217,22 @@ class Objectload
 
 	}
 
+	public function setState($state = 0, $comment = NULL)
+	{
+		$ol = ORM::factory('Objectload', $this->_objectload_id)
+					->set_state($state, $comment);
+	}
+
+	public function testFile()
+	{
+		$id 	 = $this->_objectload_id;
+		$user_id = $this->_user_id;
+
+		$cmd = "php index.php --task=Objectload --test=1 --user_id=".$user_id." --objectload_id=".$id;
+		$proc = popen($cmd, 'r');
+		pclose($proc);
+	}
+
 	private function setRecordLoaded($table_name, $id, $edit = FALSE)
 	{
 		$record = ORM_Temp::factory($table_name, $id);

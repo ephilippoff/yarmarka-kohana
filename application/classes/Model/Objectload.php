@@ -9,6 +9,24 @@ class Model_Objectload extends ORM {
 		'user'			=> array('model' => 'User', 'foreign_key' => 'user_id'),
 	);
 
+	/*
+		0 - defaul - endpoint
+		1 - on_moderation
+		2 - true_moderation
+		3 - false_moderation - endpoint
+		4 - in order 
+		5 - finished - endpoint;
+	*/
+	function set_state($state = 0, $comment = NULL)
+	{
+		if (!$this->loaded())
+			return;
+
+		$this->state = $state;
+		$this->comment = $comment;
+		$this->update();
+	}
+
 
 	function update_statistic()
 	{

@@ -185,6 +185,65 @@ class Controller_Ajax_Massload extends Controller_Template {
 		$this->json['objectload_id'] = $ol->_objectload_id;
 	}
 
+	public function action_save_userstaticfile()
+	{
+		$category 		= $this->request->post("category");
+		$user = Auth::instance()->get_user();
+		if (!$user->loaded())
+		{
+			$this->json['error'] = 'Пользователь не определен';
+			return;
+		}
+		$user_id = $user->id;
+
+		$file = $_FILES["file"];
+		$db = Database::instance();
+		if (!$category)
+		{
+			$this->json['error'] = 'Категория не указана';
+			return;
+		}
+
+		$ol = new Objectload($user_id);
+		$ol->loadSettings($user_id);
+		
+
+		try {
+			$ol->saveStaticFile($file, $category, $user_id);
+		} catch(Exception $e)
+		{
+			$this->json['data'] ="error";
+			$this->json['error'] = $e->getMessage();
+			ORM::factory("Objectload", $ol->_objectload_id)->delete();
+			return;
+		}
+
+		$ol->setState(1);
+		
+		try {
+			
+			$db->begin();	
+
+			$ol->saveTempRecordsByLoadedFiles();
+
+			$db->commit();
+
+		} catch(Exception $e)
+		{
+			$db->rollback();
+			$this->json['data'] ="error";
+			$this->json['error'] = $e->getMessage();
+			ORM::factory("Objectload", $ol->_objectload_id)->delete();
+			return;
+		}
+
+		$ol->testFile();
+
+		$this->json['data'] = "ok";
+		$this->json['objectload_id'] = $ol->_objectload_id;
+	}
+
+
 	public function after()
 	{
 		parent::after();

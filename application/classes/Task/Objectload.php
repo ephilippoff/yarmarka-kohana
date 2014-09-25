@@ -8,7 +8,8 @@ class Task_Objectload extends Minion_Task
 	protected $_options = array(
 		"user_id"  => NULL,
 		"objectload_id"  => NULL,
-		"filter"  => NULL
+		"filter"  => NULL,
+		"test"  => FALSE //проверка на ошибки, без сохранения объявлений
 	);
 
 	protected function _execute(array $params)
@@ -56,6 +57,7 @@ class Task_Objectload extends Minion_Task
 		$user_id 			= $params['user_id'];
 		$filter 			= $params['filter'];
 		$objectload_id 		= $params['objectload_id'];
+		$test 				= $params['test'];
 
 		$filters = new Obj();
 		if ($filter)
@@ -112,7 +114,7 @@ class Task_Objectload extends Minion_Task
 
 		Minion_CLI::write("Start...");
 
-		$ol->forEachRecord($filters, function($row, $category, $cc) use ($ol, $ct){
+		$ol->forEachRecord($filters, function($row, $category, $cc) use ($ol, $ct, $test){
 
 			$ct->_update();
 			if (!$ct->_check($ct->id))
@@ -134,6 +136,9 @@ class Task_Objectload extends Minion_Task
 					);	
 			}
 
+			if ($test)
+				return 'continue';
+
 			$object = new Obj( $ol->saveRowAsObject($row, $config, $dictionary) );
 
 			Minion_CLI::write($prefix_log.Debug::vars($object));
@@ -141,7 +146,7 @@ class Task_Objectload extends Minion_Task
 			if ($object->error)
 				return array(
 						"status" 	=> "error",
-						"text_error" => "Строка external_id: ".join("|", array_values($object->error))
+						"text_error" => "(Ошибка стр.".$object->external_id.") ".join("|", array_values($object->error))
 					);
 			else
 				return array(

@@ -80,6 +80,12 @@
 				<li><a href="<?=URL::site('user/massload')?>" class="clickable"><i class="ico "></i><span>Массовая загрузка</span></a></li>
 				<?php endif; ?>
 
+				<?php if (Request::current()->action() == 'objectload') : ?>
+				<li><span class="noclickable"><i class="ico "></i><span><b>Массовая загрузка 2</b></span></span></li>
+				<?php else : ?>
+				<li><a href="<?=URL::site('user/objectload')?>" class="clickable"><i class="ico "></i><span>Массовая загрузка 2</span></a></li>
+				<?php endif; ?>
+
 				<?=Request::factory('block/massload_categories')->execute()?>
 
 				<? /* ?>

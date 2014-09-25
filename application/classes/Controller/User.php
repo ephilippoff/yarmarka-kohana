@@ -154,6 +154,100 @@ class Controller_User extends Controller_Template {
         }
     }
 
+    public function action_objectload()
+    {
+    	$this->layout = 'users';    	
+    	$this->assets->js('http://yandex.st/underscore/1.6.0/underscore-min.js');
+    	$this->assets->js('http://yandex.st/backbone/1.1.2/backbone-min.js');
+    	$this->assets->css('http://yastatic.net/bootstrap/3.1.1/css/bootstrap.min.css');
+    	//$this->assets->js('http://yastatic.net/bootstrap/3.1.1/js/bootstrap.min.js');    	
+    	$this->assets->js('ajaxupload.js');
+
+    	$states = array(
+    			0 => "",
+    			1 => "на модерации",
+    			2 => "одобрено",
+    			3 => "отклонено",
+    			4 => "в очереди",
+    			5 => "выполнено",
+    			99 => "ошибка"
+    		);
+    	$this->template->states = $states;
+
+    	$avail_categories = ORM::factory('User_Settings')->get_by_name($this->user->id, "massload")->find_all();
+    	
+    	$categories = Array();								
+    	foreach($avail_categories as $category)
+    	{
+    		try 
+    		{ 
+    			$cfg = Kohana::$config->load('massload/bycategory.'.$category->value);
+    			$categories[$category->value] = $cfg["name"];
+    		} catch(Exception $e){}
+    	}
+    	$this->template->categories = $categories;
+    	$this->template->config = Kohana::$config->load('massload/bycategory');
+
+
+    	$objloads = array();
+		$oloads = ORM::factory('Objectload')				
+				->where("user_id","=",$this->user->id)
+				->order_by("created_on", "desc")
+				->limit(5)
+				->find_all();
+		foreach ($oloads as $load)
+		{
+			$rec_load = $load->get_row_as_obj();
+			$rec_load->email = $load->user->email;
+
+			$objfiles = array();
+			$ofiles = ORM::factory('Objectload_Files')
+					->where("objectload_id","=",$load->id)
+					->order_by("category")
+					->find_all();
+			foreach ($ofiles as $file)
+			{
+				$objfiles[] = new Obj($file->get_row_as_obj());
+			}
+			
+			$rec_load->objfiles = $objfiles;
+
+			$objloads[] = $rec_load;
+		}
+
+		$this->template->objectloads = $objloads;
+
+    }
+
+    public function action_objectload_file_list()
+	{
+		$this->layout = 'admin_popup';
+		
+		if ($this->user->role == 1 OR $this->user->role == 9)
+			$of = ORM::factory('Objectload_Files', $this->request->param('id'));
+		else
+			$of = ORM::factory('Objectload_Files')
+						->join("objectload")
+							->on("object_load.id","=","objectload.id")
+						->where("user_id","=",$this->user->id)
+						->where("id","=",$this->request->param('id'));
+						
+		if (!$of->loaded())
+			throw new HTTP_Exception_404;
+
+		$this->template->config = Kohana::$config->load('massload/bycategory.'.$of->category);
+		$temp =  DB::select()->from("_temp_".$of->table_name);
+
+		if ($this->request->query('errors'))
+			$temp = $temp->where("error","=",1);
+
+		$this->template->fields = array_keys(ORM_Temp::factory($of->table_name)->list_columns());
+
+		$this->template->items =  $temp->order_by("id","asc")->as_object()->execute();
+		
+
+	}
+
     public function action_massload()
     {
     	$this->layout = 'users';    	

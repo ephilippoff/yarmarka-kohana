@@ -211,26 +211,6 @@ class Controller_Admin_Users extends Controller_Admin_Template {
 		$this->layout = 'shell';
 	}
 
-	public function action_objectload_file_list()
-	{
-		$this->layout = 'admin_popup';
-		$of = ORM::factory('Objectload_Files', $this->request->param('id'));
-		if (!$of->loaded())
-			throw new HTTP_Exception_404;
-
-		$this->template->config = Kohana::$config->load('massload/bycategory.'.$of->category);
-		$temp =  DB::select()->from("_temp_".$of->table_name);
-
-		if ($this->request->query('errors'))
-			$temp = $temp->where("error","=",1);
-
-		$this->template->fields = array_keys(ORM_Temp::factory($of->table_name)->list_columns());
-
-		$this->template->items =  $temp->order_by("id","asc")->as_object()->execute();
-		
-
-	}
-
 	public function action_crontask_to_archive()
 	{
 		$this->auto_render = FALSE;
