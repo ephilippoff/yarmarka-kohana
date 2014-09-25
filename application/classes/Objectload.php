@@ -221,6 +221,7 @@ class Objectload
 	{
 		$ol = ORM::factory('Objectload', $this->_objectload_id)
 					->set_state($state, $comment);
+		return $state;
 	}
 
 	public function testFile()

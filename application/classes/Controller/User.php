@@ -158,9 +158,7 @@ class Controller_User extends Controller_Template {
     {
     	$this->layout = 'users';    	
     	$this->assets->js('http://yandex.st/underscore/1.6.0/underscore-min.js');
-    	$this->assets->js('http://yandex.st/backbone/1.1.2/backbone-min.js');
-    	$this->assets->css('http://yastatic.net/bootstrap/3.1.1/css/bootstrap.min.css');
-    	//$this->assets->js('http://yastatic.net/bootstrap/3.1.1/js/bootstrap.min.js');    	
+    	$this->assets->js('http://yandex.st/backbone/1.1.2/backbone-min.js');  	
     	$this->assets->js('ajaxupload.js');
 
     	$states = array(

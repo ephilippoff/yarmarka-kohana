@@ -79,4 +79,29 @@ class Model_Objectload extends ORM {
 		$this->statistic = serialize($common_statistic);
 		$this->update();
 	}
+
+	function _delete()
+	{
+		if (!$this->loaded())
+			return FALSE;
+
+		$of = ORM::factory('Objectload_Files')
+				->where("objectload_id", "=", $this->id)
+				->where("table_name","IS NOT",NULL)
+				->find_all();
+		foreach($of as $file)
+		{
+			try {
+				Temptable::delete_table($file->table_name);
+				$of_update = ORM::factory('Objectload_Files', $file->id);
+				$of_update->table_name = NULL;
+				$of_update->update();
+			} catch (Exception $e)
+			{
+
+			}
+		}
+
+		$this->delete();
+	}
 } 

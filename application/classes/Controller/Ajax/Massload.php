@@ -196,6 +196,18 @@ class Controller_Ajax_Massload extends Controller_Template {
 		}
 		$user_id = $user->id;
 
+		$active_ol_count = ORM::factory("Objectload")
+							->where("user_id","=", $user_id)
+							->where("state","<>", 5)
+							->where("state","<>", 0)
+							->count_all();
+
+		if ($active_ol_count>0)
+		{
+			$this->json['error'] = "У вас уже есть активные загрузки. Либо завершите загрузку, либо удалите ее.";
+			return;
+		}
+
 		$file = $_FILES["file"];
 		$db = Database::instance();
 		if (!$category)
@@ -214,7 +226,7 @@ class Controller_Ajax_Massload extends Controller_Template {
 		{
 			$this->json['data'] ="error";
 			$this->json['error'] = $e->getMessage();
-			ORM::factory("Objectload", $ol->_objectload_id)->delete();
+			ORM::factory("Objectload", $ol->_objectload_id)->_delete();
 			return;
 		}
 
@@ -231,15 +243,13 @@ class Controller_Ajax_Massload extends Controller_Template {
 			$db->rollback();
 			$this->json['data'] ="error";
 			$this->json['error'] = $e->getMessage();
-			ORM::factory("Objectload", $ol->_objectload_id)->delete();
+			ORM::factory("Objectload", $ol->_objectload_id)->_delete();
 			return;
 		}
 
 		$ol->testFile();
 
 		$stat = $ol->getStatistic();
-
-		$ol->setState(1);
 
 		if ($stat["all"] > 0)
 		{
@@ -258,6 +268,77 @@ class Controller_Ajax_Massload extends Controller_Template {
 		
 
 		$this->json['data'] = "ok";
+		$this->json['objectload_id'] = $ol->_objectload_id;
+	}
+
+	public function action_objectload_delete()
+	{
+		$this->auto_render = FALSE;
+		$user = Auth::instance()->get_user();
+		if (!$user->loaded())
+		{
+			throw new HTTP_Exception_404;
+			return;
+		}
+
+		$post = $_POST;
+		if (!$post["id"])
+		{
+			throw new HTTP_Exception_404;
+			return;
+		}
+
+		$ct = ORM::factory('Objectload')
+						->where("user_id","=",$user->id)
+						->where("id","=",$post["id"])
+						->where("state","IN",array(99,0,1,2,3))
+						->find();
+
+		if ( ! $ct->loaded() )
+			throw new HTTP_Exception_404;
+
+		$ct->_delete();
+
+		$this->json['data'] = "ok";
+	}
+
+	public function action_objectload_retest()
+	{
+		$this->auto_render = FALSE;
+		$user = Auth::instance()->get_user();
+		if (!$user->loaded())
+		{
+			throw new HTTP_Exception_404;
+			return;
+		}
+		$post = $_POST;
+		if (!$post["id"])
+		{
+			throw new HTTP_Exception_404;
+			return;
+		}
+
+		$ol = new Objectload($user->id, $post["id"]);
+		$ol->testFile();
+		$stat = $ol->getStatistic();
+
+		$state = 0;
+
+		if ($stat["all"] > 0)
+		{
+			$allow_percent = Kohana::$config->load('massload.allow_error_percent');
+			$percent = ($stat["error"]/$stat["all"])*100;
+			if ($percent < $allow_percent)
+				$state = $ol->setState(1);
+			else
+				$state = $ol->setState(99, "Для продолжения загрузки, процент ошибочных объявлений должен быть меньше ".$allow_percent."%. Возможно вы не настроили соответствия для справочников");
+		} 
+			else
+		{
+			$state = $ol->setState(99, "Не обнаружено ни одной строки");
+		}
+		$this->json['data'] = "ok";
+		$this->json['state'] = $state;
 		$this->json['objectload_id'] = $ol->_objectload_id;
 	}
 
