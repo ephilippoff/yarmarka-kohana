@@ -189,6 +189,7 @@ class Controller_Admin_Users extends Controller_Admin_Template {
 			$objfiles = array();
 			$ofiles = ORM::factory('Objectload_Files')
 					->where("objectload_id","=",$load->id)
+					->order_by("category")
 					->find_all();
 			foreach ($ofiles as $file)
 			{
