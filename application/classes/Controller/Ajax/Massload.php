@@ -251,6 +251,15 @@ class Controller_Ajax_Massload extends Controller_Template {
 
 		$stat = $ol->getStatistic();
 
+		$free_limit = Kohana::$config->load('massload.free_limit');
+		if ($stat["all"] > $free_limit)
+		{
+			$this->json['data'] ="error";
+			$this->json['error'] = "Бесплатная загрузка ограничена. Максумум ".$free_limit." объявлений. Свяжитесь с нами, чтобы увеличить лимит.";
+			ORM::factory("Objectload", $ol->_objectload_id)->_delete();
+			return;
+		}
+
 		if ($stat["all"] > 0)
 		{
 			$allow_percent = Kohana::$config->load('massload.allow_error_percent');
