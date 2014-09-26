@@ -161,18 +161,55 @@ class Controller_User extends Controller_Template {
     	$this->assets->js('http://yandex.st/backbone/1.1.2/backbone-min.js');  	
     	$this->assets->js('ajaxupload.js');
 
-    	$avail_categories = ORM::factory('User_Settings')
-    							->get_by_name($this->user->id, "massload")
-    							->find_all();
+    	$already_agree = FALSE;
+    	$us = ORM::factory('User_Settings')
+						->where("user_id", "=", $this->user->id)
+						->where("name", "=", "massload_agreed")
+						->find();
+		$already_agree = $us->loaded();
+
+		$hidehelp = FALSE;
+    	$us = ORM::factory('User_Settings')
+						->where("user_id", "=", $this->user->id)
+						->where("name", "=", "massload_hidehelp")
+						->find();
+		$hidehelp = !$us->loaded();
+
+    	if (HTTP_Request::POST === $this->request->method())
+		{
+			$post = new Obj($_POST);
+			if ($post->i_agree AND !$already_agree)
+			{
+				$us->user_id = $this->user->id;
+				$us->name 	 = "massload_agreed";
+				$us->value   = 1;
+				$us->save();				
+			}
+
+			if ($post->hidehelp AND $hidehelp)
+			{
+				$us->user_id = $this->user->id;
+				$us->name 	 = "massload_hidehelp";
+				$us->value   = 1;
+				$us->save();				
+			}
+
+			if (!$post->hidehelp AND !$hidehelp)
+				$us->delete();				
+
+			header("Refresh:0");
+		}
+
+		$this->template->already_agree  = $already_agree;
+		$this->template->hidehelp 		= $hidehelp;
+
+    	$avail_categories = Kohana::$config->load('massload.frontend_load_category');
     	
     	$categories = Array();								
     	foreach($avail_categories as $category)
     	{
-    		try 
-    		{ 
-    			$cfg = Kohana::$config->load('massload/bycategory.'.$category->value);
-    			$categories[$category->value] = $cfg["name"];
-    		} catch(Exception $e){}
+    			$cfg = Kohana::$config->load('massload/bycategory.'.$category);
+    			$categories[$category] = $cfg["name"];
     	}
     	$this->template->categories = $categories;
     	$this->template->config = Kohana::$config->load('massload/bycategory');

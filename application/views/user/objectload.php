@@ -6,20 +6,70 @@
 		<div class="hheader persomal_room-header"><h1 class="ta-c">Личный кабинет</h1></div>
 		<div class="fl100 shadow-top z1 persomal_room">
 			<?=View::factory('user/_left_menu')?>
-			<section class="p_room-inner">
-				<header><span class="title">Массовая загрузка объявлений</span></header>
+			<section class="p_room-inner">				
+				<header><span class="title">
+						Массовая загрузка объявлений
+				</span>
+					<? if ($already_agree): ?>
+					<form method="post">
+						<input type="hidden" name="hidehelp" value="<?=$hidehelp?>">
+						<? if ($hidehelp):?>
+							<input type="submit" class="btn" value="Скрыть пошаговую инструкцию">
+						<? else:?>
+							<input type="submit" class="btn" value="Показать пошаговую инструкцию">
+						<? endif;?>
+					</form>
+					<? endif;?>
+				</header>
 				<div class="p_cont massload">
 					<? if (count($categories)>0): ?>
 						<div id="fn-main-cont" class="cont">
-							<p><h2>Шаг 1. Настройте соответствия справочников</h2>
-							<div class="massload-controlsrow">
-								<div class="massload-hint">
-									В зависимости от того в какую рубрику будете загружать объявления, настройте соответствия.</br>
-									Например, если в вашем файле однокомнатные квартиры обозначаются как "1", поставьте это значение напротив 1-комн.кв.</br>
-								</div>		
-							</div>
-							</p>
-							<p><h2>Шаг 2. Загрузите файл</h2>
+							<? if (!$already_agree): ?>
+								<p><h2>Подтвердите, что вы согласны с условиями прежде чем начать</h2>
+									<form method="POST">
+									<ul>
+										<li>Объявления поданные через массовую загрузку, модерируются по тем же правилам что и поданные вручную</li>
+										<li>Мы в праве отказать в загрузке. В любом случае остается вариант размещения вручную</li>
+										<li>Если вы не солгасны хоть с одним из пунктов, не нажимайте на кнопку "Я согласен"</li>
+										<li><input type="submit" class="btn" value="Я согласен"></li>
+									</ul>
+									<input type="hidden" name="i_agree" value="1">
+									</form>
+								</p>	
+								</br>
+							<? endif; ?>
+							<? if ($already_agree): ?>
+								<? if ($hidehelp):?>
+									<p>
+										<h2>Шаг 1. Скачайте и заполните шаблон</h2>
+										<div class="massload-controlsrow">
+											<ul>
+												<? foreach($categories as $key=>$value): ?>
+													<li key="<?=$key?>"><a href="#"><?=$value?>.xls</a></li>
+												<? endforeach; ?>
+											</ul>
+											<div class="massload-hint">									
+												В файле должны остаться только, заголовочная строка и строки с объявлениями</br>
+												Порядок и количество столбцов менять нельзя</br>
+												Значения полей должны быть единообразны. Т.е. если "Пансионат" то везде "Пансионат", а не "Панс.", "п" и проч.</br>
+											</div>		
+										</div>
+									</p>
+									<p><h2>Шаг 2. Настройте соответствия справочников, для рубрик в которые планируется загрузка</h2>
+										<div class="massload-controlsrow">
+											<ul>
+												<? foreach($categories as $key=>$value): ?>
+													<li key="<?=$key?>"><a href="/user/massload_conformities/<?=$key?>"><?=$value?></a></li>
+												<? endforeach; ?>
+											</ul>
+											<div class="massload-hint">									
+												В зависимости от того в какую рубрику будете загружать объявления, настройте соответствия.</br>
+												Например, если в вашем файле город обозначается как "Тюмень" то поставьте это значение напротив "г. Тюмень"</br>
+											</div>		
+										</div>
+									</p>
+								<? endif; ?>
+							<p><h2><? if ($hidehelp):?> Шаг 3. <? endif; ?> Загрузите файл</h2>
 							<div class="massload-controlsrow">
 								<div class="massload-category">
 									 <script type="text/javascript">
@@ -112,6 +162,7 @@
 
 							</div>
 							</p>
+							<? endif; ?>
 							<p><h2>Ваши загрузки</h2>
 							<table class="table table-hover table-condensed" style="width:100%">
 								<tr>
@@ -168,7 +219,31 @@
 									<?php endforeach; ?>
 								<?php endforeach; ?>
 							</table>
+
+							<? if (!$hidehelp):?>
+								<p><h2>Настройка соответствий</h2>
+									<div class="massload-controlsrow">
+										<ul>
+											<? foreach($categories as $key=>$value): ?>
+												<li key="<?=$key?>"><a href="/user/massload_conformities/<?=$key?>"><?=$value?></a></li>
+											<? endforeach; ?>
+										</ul>	
+									</div>
+								</p>
+								<p>
+									<h2>Шаблоны</h2>
+									<div class="massload-controlsrow">
+										<ul>
+											<? foreach($categories as $key=>$value): ?>
+												<li key="<?=$key?>"><a href="#"><?=$value?>.xls</a></li>
+											<? endforeach; ?>
+										</ul>	
+									</div>
+								</p>
+							<? endif;?>
 						</div>
+
+
 					<? else: ?>
 						Услуга массовой загрузки не подключена.
 					<? endif; ?>

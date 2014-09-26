@@ -86,7 +86,7 @@
 				<li><a href="<?=URL::site('user/objectload')?>" class="clickable"><i class="ico "></i><span>Массовая загрузка</span></a></li>
 				<?php endif; ?>
 
-				<?=Request::factory('block/massload_categories')->execute()?>
+				<?/*Request::factory('block/massload_categories')->execute()*/?>
 
 				<? /* ?>
 
