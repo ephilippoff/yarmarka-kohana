@@ -302,7 +302,7 @@ class Lib_PlacementAds_AddEdit {
 					if ($signature_full == $sign_existed->signature_full 
 							AND $attachments_count == $input_attachament_count)
 					{
-						$errors['signature'] = "Объявление не требует обновления.";	
+						$errors['nochange'] = "Объявление не требует обновления.";	
 						$this->union_cancel = TRUE;
 					}
 				}

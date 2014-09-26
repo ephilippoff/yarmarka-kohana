@@ -189,6 +189,10 @@ class Objectload
 					break;
 				elseif ($return == 'continue') 
 					continue;
+				elseif (is_array($return)  AND $return["status"] == 'nochange'){
+					$this->setRecordNochange($file->table_name, $row->id);
+					continue;
+				}
 				elseif (is_array($return)  AND $return["status"] == 'success')
 					$this->setRecordLoaded($file->table_name, $row->id, $return["edit"]);
 				elseif (is_array($return)  AND $return["status"] == 'error'){
@@ -248,6 +252,7 @@ class Objectload
 			$record->edited = 1;
 		$record->error 		= NULL;
 		$record->text_error = NULL;
+		$record->nochange 	= NULL;
 		$record->save();
 	}
 
@@ -259,10 +264,25 @@ class Objectload
 		$record->save();
 	}
 
+	private function setRecordNochange($table_name, $id)
+	{
+		$record = ORM_Temp::factory($table_name, $id);
+		$record->loaded = NULL;
+		$record->edited = NULL;
+		$record->error 		= NULL;
+		$record->text_error = NULL;
+		$record->nochange 	= 1;
+		$record->save();
+	}
+
 	private function getServiceFields()
 	{
 
 		return array(
+				array(
+					"name" => "nochange",
+					"type" => "int",
+				),
 				array(
 					"name" => "loaded",
 					"type" => "int",

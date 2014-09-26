@@ -141,9 +141,13 @@ class Task_Objectload extends Minion_Task
 
 			$object = new Obj( $ol->saveRowAsObject($row, $config, $dictionary) );
 
-			Minion_CLI::write($prefix_log.Debug::vars($object));
+			Minion_CLI::write($prefix_log.$object->get_normal_string());
 
-			if ($object->error)
+			if ($object->error AND array_key_exists("nochange", $object->error))
+				return array(
+						"status" 	=> "nochange"
+					);
+			elseif ($object->error)
 				return array(
 						"status" 	=> "error",
 						"text_error" => "(Ошибка стр.".$object->external_id.") ".join("|", array_values($object->error))

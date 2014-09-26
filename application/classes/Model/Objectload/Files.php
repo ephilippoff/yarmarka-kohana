@@ -21,9 +21,9 @@ class Model_Objectload_Files extends ORM {
 
 		$errorstr ='';
 		if($statistic->error>0)
-			$errorstr = "Ошибок:".$statistic->error;
+			$errorstr = "<span style='color:red;'> ".$statistic->error."</span>";
 
-		$statstr = $new." / ".$statistic->edited." / ".$statistic->all." ".$errorstr." ".$flagend;
+		$statstr = $new." / ".$statistic->edited." / ".$statistic->nochange." / ".$errorstr." = ".$statistic->all." ".$flagend;
 
 		return $statstr;
 	}

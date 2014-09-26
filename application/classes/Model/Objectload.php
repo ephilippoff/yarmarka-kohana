@@ -93,9 +93,9 @@ class Model_Objectload extends ORM {
 				if ($percent < $allow_percent)
 					$color = "green";
 
-				$errorstr = "/ <span style='color:$color;'>".$statistic->error." (".$percent."%)</span>";
+				$errorstr = "<span style='color:$color;'>".$statistic->error." (".$percent."%)</span>";
 			}
-			$statstr = $new." / ".$statistic->edited." / ".$statistic->all." ".$errorstr;
+			$statstr = $new." / ".$statistic->edited." / ".$statistic->nochange." / ".$errorstr." = ".$statistic->all;
 
 		}
 		return $statstr;
@@ -110,7 +110,8 @@ class Model_Objectload extends ORM {
 				"all" => 0,
 				"loaded" => 0,
 				"error"  => 0,
-				"edited" => 0
+				"edited" => 0,
+				"nochange" => 0
 			);
 
 		$of = ORM::factory('Objectload_Files')
@@ -133,6 +134,10 @@ class Model_Objectload extends ORM {
 
 			$common_statistic["edited"] += $statistic["edited"] = ORM_Temp::factory($file->table_name)
 																	->where("edited","=",1)
+																	->count_all();
+
+			$common_statistic["nochange"] += $statistic["nochange"] = ORM_Temp::factory($file->table_name)
+																	->where("nochange","=",1)
 																	->count_all();
 
 			ORM::factory('Objectload_Files')

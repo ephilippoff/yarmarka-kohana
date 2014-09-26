@@ -230,7 +230,7 @@
 		<th>Created</th>
 		<th>Category</th>
 		<th>State</th>
-		<th>Stat (нов./ред./все/ош.)</th>
+		<th>Stat (нов/изм/неизм/ош=все)</th>
 		<th>Log</th>
 		<th>Control</th>
 	</tr>
