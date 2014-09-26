@@ -103,11 +103,12 @@
 							<table class="table table-hover table-condensed" style="width:100%">
 								<tr>
 									<th>#</th>
-									<th>Дата</th>
-									<th>Категория</th>
+									<th style="width:100px;">Дата</th>
+									<th style="width:150px;">Категория</th>
 									<th>Статистика <br/>(нов/изм/неизм/ош(%)=все)</th>
 									<th>Просмотр</th>
 									<th>Состояние</th>
+									<th></th>
 								</tr>
 								<?php foreach ($objectloads as $item) : ?>
 									<tr id="ol_<?=$item->id?>" class="ol_<?=$item->id?>">			
@@ -133,7 +134,7 @@
 										</td>		
 									</tr>
 									<?php foreach ($item->objfiles as $file) : ?>
-										<tr style="border:0px;" class="ol_<?=$item->id?>">			
+										<tr style="" class="ol_<?=$item->id?>">			
 											<td></td>
 											<td></td>
 											<td><a target="_blank" href="/user/massload_conformities/<?=$file->category?>"><?=$config[$file->category]['name']?></a></td>	
@@ -144,9 +145,9 @@
 												<a href="/user/objectload_file_list/<?=$file->id?>" target="_blank">все</a>, 
 												<? if ($file->error_exists):?>
 													<a href="/user/objectload_file_list/<?=$file->id?>?errors=1" target="_blank">только ошибки</a>
-												<? endif;?>
-													
+												<? endif;?>													
 											</td>
+											<td></td>
 											<td class="buttons_<?=$item->id?>">
 												
 											</td>		
