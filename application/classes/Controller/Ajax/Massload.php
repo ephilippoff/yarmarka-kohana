@@ -251,11 +251,21 @@ class Controller_Ajax_Massload extends Controller_Template {
 
 		$stat = $ol->getStatistic();
 
-		$free_limit = Kohana::$config->load('massload.free_limit');
-		if ($stat["all"] > $free_limit)
+		$free_limit = $limit = Kohana::$config->load('massload.free_limit');
+
+		$setting_limit = ORM::factory('User_Settings')
+    							->get_by_name($user_id, "massload_limit")
+    							->find();
+    	if ($setting_limit->loaded())
+    		$limit = (int) $setting_limit->value;
+
+		if ($stat["all"] > $limit)
 		{
 			$this->json['data'] ="error";
-			$this->json['error'] = "Бесплатная загрузка ограничена. Максумум ".$free_limit." объявлений. Свяжитесь с нами, чтобы увеличить лимит.";
+			if ($setting_limit->loaded())
+				$this->json['error'] = "Количество объявлений в файле превышает оплаченный лимит. Максумум ".$limit." объявлений. Свяжитесь с нами, чтобы увеличить лимит.";
+			else
+				$this->json['error'] = "Бесплатная загрузка ограничена. Максумум ".$free_limit." объявлений. Свяжитесь с нами, чтобы увеличить лимит.";
 			ORM::factory("Objectload", $ol->_objectload_id)->_delete();
 			return;
 		}
