@@ -6,6 +6,8 @@
         var ta = document.getElementById('output');
         ta.value = "";
         var command =  document.getElementById('command').value;
+        if (!command)
+        	return;
         source = new EventSource('/khbackend/users/objectload_shell?command='+command);
         source.addEventListener('message', function(e) {
         	console.log(e);
@@ -23,9 +25,9 @@
     	source.close();
     }
     </script>
-<p>Command:<input id="command" type="text" style="width: 80%;" value="--filter=category=house"/></p>
+<p>Command:<input id="command" type="text" style="width: 80%;" value=""/></p>
 <p>Output:<br/><textarea id="output" style="width: 80%; height: 25em;"></textarea></p>
-<p><button type="button" onclick="exec();">start</button><button type="button" onclick="stop();">stop</button></p>
+<p><button type="button" onclick="exec();">start</button></p>
 
  <script type="text/javascript">
  	$(document).ready(function() {
@@ -79,11 +81,17 @@
 
  <script type="text/javascript">
     function to_archive(id) {
+    	if (!confirm("В архив?")) {
+			return;
+		}
     	$.post( "/khbackend/users/crontask_to_archive", {id:id}, function( data ) {
 		  	$('#ct_'+id).hide();
 		});
     }
     function to_stop(id) {
+    	if (!confirm("Остановить?")) {
+			return;
+		}
     	$.post( "/khbackend/users/crontask_to_stop", {id:id}, function( data ) {
 		  	$('#ct_'+id).css("color","red");
 		  	$('#ct_state_'+id).html("Остановлена");
@@ -92,6 +100,7 @@
     }
     </script>
 <p><h2>Задачи</h2>
+<a name="tasks"></a>
 <table class="table table-hover table-condensed">
 	<tr>
 		<th>Id</th>
@@ -187,8 +196,32 @@
 		},"json");
     }
 
+    function delete_ol(id)
+    {
+    	if (!confirm("Удалить?")) {
+			return;
+		}
+    	$.post( "/ajax/massload/objectload_delete", {id:id}, function( data ) {
+		  	$('.ol_'+id).hide();
+		});
+
+    }
+
     </script>
-<p><h2>Загрузки</h2>
+<p>
+<h2>
+	Загрузки
+	<? if ($qstate):?>
+		(отфильтрвоано по '<?=$states_ol[$qstate]?>')
+	<? endif;?>
+</h2>
+<p>
+	<a href="/khbackend/users/objectload#objectloads">все</a> /
+	<a href="/khbackend/users/objectload?state=1#objectloads">на модерации</a> /
+	<a href="/khbackend/users/objectload?state=99#objectloads">ошибка</a> /
+	<a href="/khbackend/users/objectload?state=5#objectloads">выполнено</a>
+</p>
+<a name="objectloads"></a>
 <table class="table table-hover table-condensed">
 	<tr>
 		<th>Id</th>
@@ -196,74 +229,51 @@
 		<th>Email</th>
 		<th>Created</th>
 		<th>Category</th>
-		<th>Stat (нов./ред./все)</th>
+		<th>State</th>
+		<th>Stat (нов./ред./все/ош.)</th>
 		<th>Log</th>
 		<th>Control</th>
 	</tr>
 	<?php foreach ($objectloads as $item) : ?>
-		<?
-			$statstr = '';
-			if ($item->statistic) {
-				$statistic = new Obj(unserialize($item->statistic));
-				$new = $statistic->loaded - $statistic->edited;
-				$statstr = $new." / ".$statistic->edited." / ".$statistic->all." err:".$statistic->error;
-			}
-		?>
-		<tr>			
+		<tr class="ol_<?=$item->id?>">			
 			<td><?=$item->id?></td>
 			<td><?=$item->user_id?></td>
 			<td><?=$item->email?></td>
 			<td><?=$item->created_on?></td>
-			<td></td>	
-			<td id="stat_<?=$item->id?>"><?=$statstr?></td>
+			<td></td>
+			<td><?=$states_ol[$item->state]?></td>	
+			<td id="stat_<?=$item->id?>"><?=$item->statistic_str?></td>
 			<td></td>
 			<td>
 				<span href="" class="icon-refresh" onclick="refresh_statistic(<?=$item->id?>)"></span>
 				<span href="" class="icon-retweet" onclick="set_command_line(<?=$item->id?>, <?=$item->user_id?>, null)"></span>
-				<span href="" class="icon-trash" ></span>
+				<span href="" class="icon-trash" onclick="delete_ol(<?=$item->id?>);"></span>
 			</td>		
 		</tr>
 		<?php foreach ($item->objfiles as $file) : ?>
-			<?
-				$statstr = '';
-				$notloaded_button = FALSE;
-				$witherror_button = FALSE;
-				if ($file->statistic) {
-					$statistic = new Obj(unserialize($file->statistic));
-					$new = $statistic->loaded - $statistic->edited;
-					$flagend ='';
-					if ($statistic->loaded + $statistic->error <> $statistic->all)
-					{
-						$flagend = '<span style="color:red;">notended</span>';
-						$notloaded_button = TRUE;
-					}
-					if($statistic->error>0)
-						$witherror_button = TRUE;
-					$statstr = $new." / ".$statistic->edited." / ".$statistic->all." err:".$statistic->error." ".$flagend;
-				}
-			?>
-			<tr style="border:0px;">			
+			<tr style="border:0px;"  class="ol_<?=$item->id?>">			
 				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
 				<td><a target="_blank" href="/user/massload_conformities/<?=$file->category?>/<?=$item->user_id?>"><?=$file->category?></a></td>	
+				<td></td>
 				<td id="stat_<?=$file->id?>_<?=$file->category?>">
-					<?=$statstr?>					
+					<?=$file->statistic_str?>					
 				</td>
 				<td>
 					<a href="/user/objectload_file_list/<?=$file->id?>" target="_blank">все</a>, 
-					<? if ($witherror_button):?>
+					<? if ($file->error_exists):?>
 						<a href="/user/objectload_file_list/<?=$file->id?>?errors=1" target="_blank">только ошибки</a>
 					<? endif;?>
 						
 				</td>
 				<td class="buttons_<?=$item->id?>">
 					<span href="" class="icon-retweet" onclick="set_command_line(<?=$item->id?>, <?=$item->user_id?>, '<?=$file->category?>')"></span>
-					<? if ($notloaded_button): ?>
+					<? if ($file->notloaded_records_exists): ?>
 						<span href="" class="icon-forward" onclick="set_command_line(<?=$item->id?>, <?=$item->user_id?>, '<?=$file->category?>',1)"></span>
 					<? endif;?>
-					<? if ($witherror_button): ?>
+					<? if ($file->error_exists): ?>
 						<span href="" class="icon-remove-sign" onclick="set_command_line(<?=$item->id?>, <?=$item->user_id?>, '<?=$file->category?>',null,1)"></span>
 					<? endif;?>
 				</td>		

@@ -159,51 +159,29 @@ class Controller_Admin_Users extends Controller_Admin_Template {
 
 	public function action_objectload()
 	{
-		$states = array(
-				0 => "В очереди",
-				1 => "Выполняется",
-				2 => "Завершена",
-				3 => "Ошибка",
-				4 => "Остановлена",
-				5 => "В архиве"
-			);
+		$crontask 			= ORM::factory('Crontask');
 
-		$this->template->states = $states;
-
-		$this->template->crontasks = ORM::factory('Crontask')
-											->where("state","<>",5)
+		$this->template->states    = $crontask->get_states();
+		$this->template->crontasks = $crontask->where("state","<>",5)
 											->order_by("updated_on", "desc")
 											->order_by("created_on", "desc")
 											->find_all();
 
-		$objloads = array();
-		$oloads = ORM::factory('Objectload')
-				->order_by("created_on", "desc")
+		$this->template->qstate = $qstate = $this->request->query('state');
+
+		$objectload 		= ORM::factory('Objectload');
+    	$objectload_files   = ORM::factory('Objectload_Files'); 
+
+		if ($qstate)
+			$oloads = $objectload->where("state","=",$qstate);
+		
+		$oloads	= $objectload->order_by("created_on", "desc")
 				->limit(50)
 				->find_all();
-		foreach ($oloads as $load)
-		{
-			$rec_load = $load->get_row_as_obj();
-			$rec_load->email = $load->user->email;
-
-			$objfiles = array();
-			$ofiles = ORM::factory('Objectload_Files')
-					->where("objectload_id","=",$load->id)
-					->order_by("category")
-					->find_all();
-			foreach ($ofiles as $file)
-			{
-				$objfiles[] = new Obj($file->get_row_as_obj());
-			}
-			
-			$rec_load->objfiles = $objfiles;
-
-			$objloads[] = $rec_load;
-		}
-
-		$this->template->objectloads = $objloads;
-
-		$this->template->categories = Kohana::$config->load('massload/bycategory');
+				
+		$this->template->objectloads = $objectload->get_objectload_list($oloads);
+		$this->template->states_ol   = $objectload->get_states();
+		$this->template->categories  = Kohana::$config->load('massload/bycategory');
 	}
 
 	public function action_objectload_shell()

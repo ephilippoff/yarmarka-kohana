@@ -10,12 +10,15 @@ class Model_Objectload extends ORM {
 	);
 
 	/*
-		0 - defaul - endpoint
-		1 - on_moderation
-		2 - true_moderation
-		3 - false_moderation - endpoint
-		4 - in order 
-		5 - finished - endpoint;
+		state may be:
+
+		0 - default
+		1 - on_moderation (active)
+		2 - true_moderation (active)
+		3 - false_moderation (active, end state) 
+		4 - in order/in proccess (active)
+		5 - finished (end state)
+		99 - error (active)
 	*/
 	function set_state($state = 0, $comment = NULL)
 	{
@@ -27,6 +30,39 @@ class Model_Objectload extends ORM {
 		$this->update();
 	}
 
+	function get_states()
+	{
+		return array(
+    			0 => "у оператора",
+    			1 => "на модерации",
+    			2 => "одобрено",
+    			3 => "отклонено",
+    			4 => "в обработке",
+    			5 => "выполнено",
+    			99 => "ошибка"
+    		);
+	}
+
+	function get_active_states()
+	{
+		return array(1,2,3,4,99);
+	}
+
+	function get_foruserdelete_states()
+	{
+		return array(1,2,3,99);
+	}
+
+	function get_refresh_states()
+	{
+		return array(1,2,99);
+	}
+
+	function get_withcomment_states()
+	{
+		return array(3,99);
+	}
+
 	function get_statistic()
 	{
 		if (!$this->loaded())
@@ -35,6 +71,35 @@ class Model_Objectload extends ORM {
 		return unserialize($this->statistic);
 	}
 
+	function get_statistic_row($item)
+	{
+		if (!$item)
+			return 
+
+		$statstr = '';
+		$errorstr ='';
+		if ($item->statistic) {
+			$statistic = new Obj(unserialize($item->statistic));
+			$new = $statistic->loaded - $statistic->edited;
+			if($statistic->error>0)
+			{
+				$percent = 0;
+				if ($statistic->all<>0)
+					$percent = round(($statistic->error/$statistic->all)*100);
+
+				$allow_percent = Kohana::$config->load('massload.allow_error_percent');
+				
+				$color = "red";
+				if ($percent < $allow_percent)
+					$color = "green";
+
+				$errorstr = "/ <span style='color:$color;'>".$statistic->error." (".$percent."%)</span>";
+			}
+			$statstr = $new." / ".$statistic->edited." / ".$statistic->all." ".$errorstr;
+
+		}
+		return $statstr;
+	}
 
 	function update_statistic()
 	{
@@ -103,5 +168,33 @@ class Model_Objectload extends ORM {
 		}
 
 		$this->delete();
+	}
+
+	function get_objectload_list($orm_objectloads)
+	{
+		if (!$orm_objectloads)
+			return;
+
+		$objectload_files   = ORM::factory('Objectload_Files');
+		$objectloads = array();
+
+
+		foreach ($orm_objectloads as $load)
+		{
+			$rec_load = $load->get_row_as_obj();
+			
+			$rec_load->objfiles 		  = $objectload_files->get_objectload_files_list($load->id);
+			$rec_load->email 			  = $load->user->email;
+			$rec_load->access_userdelete  = in_array( $rec_load->state, $this->get_foruserdelete_states() );
+			$rec_load->access_refresh     = in_array( $rec_load->state, $this->get_refresh_states() );
+			$rec_load->is_active     	  = in_array( $rec_load->state, $this->get_active_states() );
+			$rec_load->withcomment_state  = in_array( $rec_load->state, $this->get_withcomment_states() );
+			$rec_load->statistic_str	  = $this->get_statistic_row($rec_load);
+
+			$objectloads[] = $rec_load;
+		}
+
+		return $objectloads;
+
 	}
 } 

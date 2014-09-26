@@ -5,6 +5,17 @@ class Model_Crontask extends ORM {
 
 	protected $_table_name = 'crontask';
 
+	function get_states()
+	{
+		return array(
+				0 => "В очереди",
+				1 => "Выполняется",
+				2 => "Завершена",
+				3 => "Ошибка",
+				4 => "Остановлена",
+				5 => "В архиве"
+			);
+	}
 
 	function get_command($name, $params = array(), $aps = FALSE)
 	{

@@ -110,84 +110,39 @@
 									<th>Состояние</th>
 								</tr>
 								<?php foreach ($objectloads as $item) : ?>
-									<?
-										$statstr = '';
-										$errorstr ='';
-										if ($item->statistic) {
-											$statistic = new Obj(unserialize($item->statistic));
-											$new = $statistic->loaded - $statistic->edited;
-											if($statistic->error>0)
-											{
-												$percent = 0;
-												if ($statistic->all<>0)
-													$percent = round(($statistic->error/$statistic->all)*100);
-
-												$allow_percent = Kohana::$config->load('massload.allow_error_percent');
-												
-												$color = "red";
-												if ($percent < $allow_percent)
-													$color = "green";
-
-												$errorstr = "/ <span style='color:$color;'>".$statistic->error." (".$percent."%)</span>";
-											}
-											$statstr = $new." / ".$statistic->edited." / ".$statistic->all." ".$errorstr;
-										}
-									?>
 									<tr id="ol_<?=$item->id?>" class="ol_<?=$item->id?>">			
 										<td><?=$item->id?></td>
 										<td><?=$item->created_on?></td>
 										<td></td>	
-										<td id="stat_<?=$item->id?>"><?=$statstr?></td>
+										<td id="stat_<?=$item->id?>"><?=$item->statistic_str?></td>
 										<td></td>
 										<td id="ol_state_<?=$item->id?>">
-											<?if ($item->state <> 99 AND $item->state <> 3): ?>
+											<?if (!$item->withcomment_state): ?>
 												<?=$states[$item->state]?>
 											<?else:?>
 												<a style='color:red !important;' href='#' onclick="show_message('<?=$item->comment?>');return false;"><?=$states[$item->state]?></a>
 											<?endif;?>
 										</td>
 										<td id="ol_button_<?=$item->id?>">
-											<? if ($item->state == 1 OR $item->state == 2 OR $item->state == 99): ?>
+											<? if ($item->access_refresh): ?>
 												<span class="icon-refresh" onclick="retest_ol(<?=$item->id?>);return false;" style="cursor:pointer;"></span>
 											<? endif;?>
-											<? if (in_array($item->state, array(99,0,1,2,3))): ?>
+											<? if ($item->access_userdelete): ?>
 												<span class="icon-trash" onclick="delete_ol(<?=$item->id?>);return false;" style="cursor:pointer;"></span>
 											<? endif;?>
 										</td>		
 									</tr>
 									<?php foreach ($item->objfiles as $file) : ?>
-										<?
-											$statstr = '';
-											$notloaded_button = FALSE;
-											$witherror_button = FALSE;
-											if ($file->statistic) {
-												$statistic = new Obj(unserialize($file->statistic));
-												$new = $statistic->loaded - $statistic->edited;
-												$flagend ='';
-												if ($statistic->loaded + $statistic->error <> $statistic->all)
-												{
-													$flagend = '<span style="color:red ;">(!)</span>';
-													$notloaded_button = TRUE;
-												}
-												$errorstr ='';
-												if($statistic->error>0)
-												{
-													$witherror_button = TRUE;
-													$errorstr = "Ошибок:".$statistic->error;
-												}
-												$statstr = $new." / ".$statistic->edited." / ".$statistic->all." ".$errorstr." ".$flagend;
-											}
-										?>
 										<tr style="border:0px;" class="ol_<?=$item->id?>">			
 											<td></td>
 											<td></td>
 											<td><a target="_blank" href="/user/massload_conformities/<?=$file->category?>"><?=$config[$file->category]['name']?></a></td>	
 											<td id="stat_<?=$file->id?>_<?=$file->category?>">
-												<?=$statstr?>					
+												<?=$file->statistic_str?>					
 											</td>
 											<td>
 												<a href="/user/objectload_file_list/<?=$file->id?>" target="_blank">все</a>, 
-												<? if ($witherror_button):?>
+												<? if ($file->error_exists):?>
 													<a href="/user/objectload_file_list/<?=$file->id?>?errors=1" target="_blank">только ошибки</a>
 												<? endif;?>
 													

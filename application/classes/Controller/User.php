@@ -161,18 +161,9 @@ class Controller_User extends Controller_Template {
     	$this->assets->js('http://yandex.st/backbone/1.1.2/backbone-min.js');  	
     	$this->assets->js('ajaxupload.js');
 
-    	$states = array(
-    			0 => "",
-    			1 => "на модерации",
-    			2 => "одобрено",
-    			3 => "отклонено",
-    			4 => "в очереди",
-    			5 => "выполнено",
-    			99 => "ошибка"
-    		);
-    	$this->template->states = $states;
-
-    	$avail_categories = ORM::factory('User_Settings')->get_by_name($this->user->id, "massload")->find_all();
+    	$avail_categories = ORM::factory('User_Settings')
+    							->get_by_name($this->user->id, "massload")
+    							->find_all();
     	
     	$categories = Array();								
     	foreach($avail_categories as $category)
@@ -186,34 +177,16 @@ class Controller_User extends Controller_Template {
     	$this->template->categories = $categories;
     	$this->template->config = Kohana::$config->load('massload/bycategory');
 
+    	$objectload 		= ORM::factory('Objectload');
+    	$objectload_files   = ORM::factory('Objectload_Files');    	
 
-    	$objloads = array();
-		$oloads = ORM::factory('Objectload')				
-				->where("user_id","=",$this->user->id)
-				->order_by("created_on", "desc")
-				->limit(5)
-				->find_all();
-		foreach ($oloads as $load)
-		{
-			$rec_load = $load->get_row_as_obj();
-			$rec_load->email = $load->user->email;
+		$oloads = $objectload->where("user_id","=",$this->user->id)
+								->order_by("created_on", "desc")
+								->limit(5)
+								->find_all();		
 
-			$objfiles = array();
-			$ofiles = ORM::factory('Objectload_Files')
-					->where("objectload_id","=",$load->id)
-					->order_by("category")
-					->find_all();
-			foreach ($ofiles as $file)
-			{
-				$objfiles[] = new Obj($file->get_row_as_obj());
-			}
-			
-			$rec_load->objfiles = $objfiles;
-
-			$objloads[] = $rec_load;
-		}
-
-		$this->template->objectloads = $objloads;
+		$this->template->objectloads = $objectload->get_objectload_list($oloads);
+		$this->template->states 	 = $objectload->get_states();
 
     }
 

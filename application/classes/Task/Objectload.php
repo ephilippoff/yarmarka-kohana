@@ -81,7 +81,7 @@ class Task_Objectload extends Minion_Task
 		$db = Database::instance();
 
 		$ol = new Objectload($user_id, $objectload_id);
-		
+		$ol->setState(4);
 		$ol->loadSettings($user_id);
 
 		if ($filters->category AND !array_key_exists($filters->category, $ol->_settings["configs"]))
@@ -155,6 +155,8 @@ class Task_Objectload extends Minion_Task
 						);
 
 		});
+
+		$ol->setState(5);
 		
 		ORM::factory('Objectload', $ol->_objectload_id)
 			->update_statistic();

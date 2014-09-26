@@ -288,7 +288,12 @@ class Controller_Ajax_Massload extends Controller_Template {
 			return;
 		}
 
-		$ct = ORM::factory('Objectload')
+		if ($user->role ==1 OR $user->role ==9)
+			$ct = ORM::factory('Objectload')
+						->where("id","=",$post["id"])
+						->find();
+		else
+			$ct = ORM::factory('Objectload')
 						->where("user_id","=",$user->id)
 						->where("id","=",$post["id"])
 						->where("state","IN",array(99,0,1,2,3))
