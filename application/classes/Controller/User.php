@@ -176,6 +176,7 @@ class Controller_User extends Controller_Template {
     	}
     	$this->template->categories = $categories;
     	$this->template->config = Kohana::$config->load('massload/bycategory');
+    	$this->template->free_limit = Kohana::$config->load('massload.free_limit');
 
     	$objectload 		= ORM::factory('Objectload');
     	$objectload_files   = ORM::factory('Objectload_Files');    	

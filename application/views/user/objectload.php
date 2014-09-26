@@ -11,6 +11,15 @@
 				<div class="p_cont massload">
 					<? if (count($categories)>0): ?>
 						<div id="fn-main-cont" class="cont">
+							<p><h2>Шаг 1. Настройте соответствия справочников</h2>
+							<div class="massload-controlsrow">
+								<div class="massload-hint">
+									В зависимости от того в какую рубрику будете загружать объявления, настройте соответствия.</br>
+									Например, если в вашем файле однокомнатные квартиры обозначаются как "1", поставьте это значение напротив 1-комн.кв.</br>
+								</div>		
+							</div>
+							</p>
+							<p><h2>Шаг 2. Загрузите файл</h2>
 							<div class="massload-controlsrow">
 								<div class="massload-category">
 									 <script type="text/javascript">
@@ -93,13 +102,17 @@
 								</div>
 								<div class="massload-hint">
 									Формат загружаемых файлов: *.xls, *.xlsx;</br>
+									Бесплатно вы можете загружать не более <?=$free_limit?> объявлений в одном файле, в одну рубрику</br>
+									Объявления которые поданы вручную, после загрузки в этой же категории будут сняты. Нужно выбрать либо будете размещать вручную , либо через загрузки</br>
+									Если нет категории в которую вы хотели бы массово загружать объявления, напишите в тхеподдержку, указав рубрику и примеры объявлений. Добавим</br>
 									Подробнее : <a href="#">Помощь по массовой загрузке объявлений</a>
 								</div>
 								<div class="staticfile_error" style="color:red;"></div>
 								<div class="staticfile_success" style="color:green;"></div>
 
 							</div>
-							<p><h2>Загрузки</h2>
+							</p>
+							<p><h2>Ваши загрузки</h2>
 							<table class="table table-hover table-condensed" style="width:100%">
 								<tr>
 									<th>#</th>
