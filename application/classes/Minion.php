@@ -4,7 +4,9 @@ class Minion extends Kohana_Minion_CLI {
 
 	public static function write($pre = '', $text = '')
 	{
-		parent::write(Minion::prefix_log($pre).$text);
+		$string = Minion::prefix_log($pre).$text;
+		parent::write($string);
+		Log::instance()->add(Log::INFO, $string);
 	}
 
 	public static function prefix_log($txt)
