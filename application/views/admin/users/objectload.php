@@ -309,6 +309,7 @@
 		 	if (data.code == 200){
 		 		$("#comment_container").attr("data-objectload-id", false);
 				$("#comment_container").hide();
+				location.reload();
 		 	}
 		});
 
