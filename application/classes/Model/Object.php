@@ -667,6 +667,36 @@ class Model_Object extends ORM {
 
 		return $count;		
 	}
+
+	public function publish_and_prolonge_objectload($objectload_id, $user_id)
+	{
+		$objects = ORM::factory('Objectload_files')
+				->get_union_subquery_by_category($objectload_id);
+
+		$count = 0;
+		if ($objects)
+		{
+			$count = ORM::factory('Object')
+					->where('number', 'IN', $objects)
+					->where('author','=', $user_id)
+					->count_all();
+
+			$date_expiration = date('Y-m-d H:i:s', strtotime('+14 days'));
+
+			$f = ORM::factory('Object')
+				->where('number', 'IN', $objects)
+				->where('author','=', $user_id)
+				->set('date_expiration', $date_expiration)
+				->set('in_archive', 'f')
+				->set('active', 1)
+				->set('is_published', 1)
+				->set('is_bad', 0)
+				->update_all();
+			Log::instance()->add(Log::INFO, Debug::vars($f));
+		}
+
+		return $count;	
+	}
 }
 
 /* End of file Object.php */

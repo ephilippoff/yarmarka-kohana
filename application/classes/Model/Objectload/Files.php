@@ -80,7 +80,7 @@ class Model_Objectload_Files extends ORM {
 		return $objectload_files;
 	}
 
-	function get_union_subquery_by_category($objectload_id, $category_names)
+	function get_union_subquery_by_category($objectload_id, $category_names = NULL)
 	{
 		$ol = ORM::factory('Objectload', $objectload_id);
 
@@ -90,9 +90,13 @@ class Model_Objectload_Files extends ORM {
 		$query = NULL;
 
 		$of = ORM::factory('Objectload_Files')
-					->where("objectload_id","=",$objectload_id)
-					->where("category","IN",$category_names)
-					->find_all();
+					->where("objectload_id","=",$objectload_id);
+
+		if ($category_names)
+			$of = $of->where("category","IN",$category_names);
+		
+		$of = $of->find_all();
+
 		foreach ($of as $file) {
 			if (!$query)
 				$query = DB::select('external_id')

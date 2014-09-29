@@ -163,7 +163,12 @@ class Task_Objectload extends Minion_Task
 
 		ORM::factory('Objectload', $ol->_objectload_id)
 			->unpublish_expired(function ($comment, $category){
-				Minion::write($category,'Unpublish expired in '.$category.' '.$comment);
+				Minion::write($category,'Снимаем закончившиейся объявления '.$category.' '.$comment);
+			});
+
+		ORM::factory('Objectload', $ol->_objectload_id)
+			->publish_and_prolonge(function ($comment, $category){
+				Minion::write($category,'Продляем и включаем активные объявления '.$category.' '.$comment);
 			});
 
 		$ol->setState(5);

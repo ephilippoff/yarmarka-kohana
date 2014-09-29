@@ -205,39 +205,61 @@ class Model_Objectload extends ORM {
 
 	}
 
-	function unpublish_expired($callback)
+	public function get_categories_flatarray($objectload_id)
 	{
-		if (!$this->loaded())
-			return;
-
 		$of = DB::select("category")
 					->from('objectload_files')
-					->where("objectload_id","=",$this->id)
+					->where("objectload_id","=",$objectload_id)
 					->group_by("category")
 					->as_object()
 					->execute();
 
 		$category_ids = array();
 		foreach ($of as $file) {
-			try{
-				$config = Kohana::$config->load('massload/bycategory.'.$file->category);
-			} catch(Expection $e){
-				return;
-			}
+			
+			$config = Kohana::$config->load('massload/bycategory.'.$file->category);
+
 			if (array_key_exists($config["id"], $category_ids))
 				array_push($category_ids[$config["id"]], $config["category"]);
 			else
 				$category_ids[$config["id"]] = array($config["category"]);
+
 		}
 
-		$config = Kohana::$config->load('massload/bycategory');
+		return $category_ids;
+	}
 
-		foreach ($category_ids as $category_id => $category_names) {
-			$callback("Start", join(",", $category_names));
-			$count = ORM::factory('Object')
-					->unpublish_expired_in_objectload_category($this->id, $this->user_id, $category_id, $category_names);
-			$callback("End. ".$count." adverts affected",  join(",", $category_names));
-		}
+	function unpublish_expired($callback)
+	{
+		if (!$this->loaded())
+			return;
+		
+		$flatcategories =  $this->get_categories_flatarray($this->id);
+
+		if ($flatcategories)
+			foreach ($flatcategories as $category_id => $category_names) {
+				$callback("Start", join(",", $category_names));
+				$count = ORM::factory('Object')
+						->unpublish_expired_in_objectload_category($this->id, $this->user_id, $category_id, $category_names);
+				$callback("End. ".$count." adverts affected",  join(",", $category_names));
+			}
+	}
+
+	function publish_and_prolonge($callback)
+	{
+		if (!$this->loaded())
+			return;
+
+		$flatcategories =  $this->get_categories_flatarray($this->id);
+
+		if ($flatcategories)
+			foreach ($flatcategories as $category_id => $category_names) {
+				$callback("Start", join(",", $category_names));
+				$count = ORM::factory('Object')
+						->publish_and_prolonge_objectload($this->id, $this->user_id);
+				$callback("End. ".$count." adverts affected",  join(",", $category_names));
+			}
+
 	}
 
 } 
