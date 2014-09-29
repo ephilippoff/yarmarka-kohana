@@ -207,6 +207,14 @@
 
     }
 
+    function set_comment(id)
+    {
+    	$("#comment_container").attr("data-objectload-id", id);
+    	$("#comment_container").show();
+    	$("#comment_text").val("");
+
+    }
+
     </script>
 <p>
 <h2>
@@ -241,7 +249,13 @@
 			<td><?=$item->email?></td>
 			<td><?=$item->created_on?></td>
 			<td></td>
-			<td><?=$states_ol[$item->state]?></td>	
+			<td>
+				<? if ($item->state <> 1): ?>
+					<?=$states_ol[$item->state]?>
+				<? else: ?>
+					<a href="#comment" onclick="set_comment(<?=$item->id?>);" style="color:red">На мод. -> отклонить<span href="" class="icon-trash"></span></a>
+				<? endif; ?>
+			</td>	
 			<td id="stat_<?=$item->id?>"><?=$item->statistic_str?></td>
 			<td></td>
 			<td>
@@ -281,4 +295,28 @@
 		<?php endforeach; ?>
 	<?php endforeach; ?>
 </table>
+<script type="text/javascript">
+	function false_moderate() {
+		console.log("sdfsd");
+		var olid = $("#comment_container").data("objectload-id");
+		var text = $("#comment").val();
+		console.log(olid, text);
+		if (!olid || !text)
+			return;
+
+    	$.post( "/khbackend/users/objectload_false_moderation", {id:olid, text:text}, function( data ) {
+    		console
+		 	if (data.code == 200){
+		 		$("#comment_container").attr("data-objectload-id", false);
+				$("#comment_container").hide();
+		 	}
+		});
+
+		
+    }
+</script>
+<div id="comment_container" style="display:none;">
+<p>Причина отклонения загрузки:<br/><textarea id="comment" style="width: 80%; height: 15em;"></textarea></p>
+<button type="button" onclick="false_moderate();">Отклонить загрузку</button>
+</div>
 </p>

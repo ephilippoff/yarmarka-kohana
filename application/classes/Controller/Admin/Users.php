@@ -263,6 +263,24 @@ class Controller_Admin_Users extends Controller_Admin_Template {
 		$this->response->body(json_encode($json));
 	}
 
+	public function action_objectload_false_moderation()
+	{
+		$this->auto_render = FALSE;
+		$post = $_POST;
+		$ol = ORM::factory('Objectload', $post["id"]);
+
+		if ( ! $ol->loaded())
+		{
+			throw new HTTP_Exception_404;
+		}
+		$json = array('code' => 200);
+
+		$ol->comment = $post["text"];
+		$ol->state = 3;
+		$ol->update();
+		$this->response->body(json_encode($json));
+	}
+
 	public function action_ban()
 	{
 		$user = ORM::factory('User', $this->request->param('id'));

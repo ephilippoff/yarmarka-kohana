@@ -185,7 +185,7 @@
 											<?if (!$item->withcomment_state): ?>
 												<?=$states[$item->state]?>
 											<?else:?>
-												<a style='color:red !important;' href='#' onclick="show_message('<?=$item->comment?>');return false;"><?=$states[$item->state]?></a>
+												<a style='color:red !important;' href='#' onclick="show_message('<?=$item->comment?>');return false;"><?=$states[$item->state]?> (?)</a>
 											<?endif;?>
 										</td>
 										<td id="ol_button_<?=$item->id?>">
