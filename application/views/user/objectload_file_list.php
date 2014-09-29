@@ -16,15 +16,15 @@
 
 				if (!$field_visible AND !$statexist)
 				{
-					$field_name = 'Сост.';
+					$field_name = 'Состояние';
 					$statexist =  TRUE;
 					$field_visible = TRUE;
 				}				
 
 				if ($field_name == 'text_error')
-					$field_name = "текст ош.";
+					$field_name = "Ошибка";
 				elseif ($field_name == 'object_id')
-					$field_name = "ссылка на объявл.";
+					$field_name = "Ссылка";
 
 				if (!$field_visible)
 					continue;
@@ -80,7 +80,7 @@
 					$statexist =  TRUE;
 					$field_visible = TRUE;
 
-					if (!$item->{"edited"} AND !$item->{"nochange"} AND !$item->{"error"})
+					if (!$item->{"edited"} AND !$item->{"nochange"} AND !$item->{"error"} AND $item->{"loaded"})
 						$value = "Создано новое";
 					elseif ($item->{"edited"})
 						$value = "Обновлено";
@@ -88,6 +88,8 @@
 						$value = "Без изменений";
 					elseif ($item->{"error"})
 						$value = "Ошибка";
+					else 
+						$value = "-";
 				}	
 
 				if (!$field_visible)
