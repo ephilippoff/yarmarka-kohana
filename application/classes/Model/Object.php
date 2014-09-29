@@ -635,7 +635,21 @@ class Model_Object extends ORM {
 		$objects = ORM::factory('Objectload_files')
 				->get_union_subquery_by_category($objectload_id, $category_names);
 
+		$count = 0;
 		if ($objects)
+		{
+			$count = ORM::factory('Object')
+					->where_open()
+					->where('number', 'NOT IN', $objects)
+						->or_where('number', 'IS', NULL)
+					->where_close()
+					->where('author', '=', $user_id)
+					->where('category','=', $category_id)
+					->where('is_published','=', 1)
+					->where('active','=', 1)
+					->where('is_union','IS', NULL)
+					->count_all();
+
 			$f = ORM::factory('Object')
 					->where_open()
 					->where('number', 'NOT IN', $objects)
@@ -649,7 +663,9 @@ class Model_Object extends ORM {
 					->set('is_published', 0)
 					->set('parent_id', NULL)
 					->update_all();
-		
+		}
+
+		return $count;		
 	}
 }
 

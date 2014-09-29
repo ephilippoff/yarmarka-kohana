@@ -234,9 +234,9 @@ class Model_Objectload extends ORM {
 
 		foreach ($category_ids as $category_id => $category_names) {
 			$callback("Start", join(",", $category_names));
-				ORM::factory('Object')
+			$count = ORM::factory('Object')
 					->unpublish_expired_in_objectload_category($this->id, $this->user_id, $category_id, $category_names);
-			$callback("End",  join(",", $category_names));
+			$callback("End. ".$count." adverts affected",  join(",", $category_names));
 		}
 	}
 
