@@ -225,7 +225,8 @@ class Controller_Ajax_Massload extends Controller_Template {
 		} catch(Exception $e)
 		{
 			$this->json['data'] ="error";
-			$this->json['error'] = $e->getMessage();
+			$this->json['error'] = "Непредвиденная ошибка при загрузке. Возможно файл содержит некорректные строки"
+			Log::instance()->add(Log::NOTICE, $this->json['error'] = $e->getMessage());
 			ORM::factory("Objectload", $ol->_objectload_id)->_delete();
 			return;
 		}
