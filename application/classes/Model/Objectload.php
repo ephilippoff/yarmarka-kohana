@@ -217,11 +217,26 @@ class Model_Objectload extends ORM {
 					->as_object()
 					->execute();
 
+		$category_ids = array();
 		foreach ($of as $file) {
-			$callback("Start", $file->category);
+			try{
+				$config = Kohana::$config->load('massload/bycategory.'.$file->category);
+			} catch(Expection $e){
+				return;
+			}
+			if (array_key_exists($config["id"], $category_ids))
+				array_push($category_ids[$config["id"]], $config["category"]);
+			else
+				$category_ids[$config["id"]] = array($config["category"]);
+		}
+
+		$config = Kohana::$config->load('massload/bycategory');
+
+		foreach ($category_ids as $category_id => $category_names) {
+			$callback("Start", join(",", $category_names));
 				ORM::factory('Object')
-					->unpublish_expired_in_objectload_category($this->id, $this->user_id, $file->category);
-			$callback("End", $file->category);
+					->unpublish_expired_in_objectload_category($this->id, $this->user_id, $category_id, $category_names);
+			$callback("End",  join(",", $category_names));
 		}
 	}
 
