@@ -627,6 +627,35 @@ class Model_Object extends ORM {
 				->where("is_published","=",1)
 				->where("active","=",1);
 	}
+
+	public function unpublish_expired_in_objectload_category($objectload_id, $user_id, $category)
+	{
+
+		try{
+			$config = Kohana::$config->load('massload/bycategory.'.$category);
+		} catch(Expection $e){
+			return;
+		}
+
+		$objects = ORM::factory('Objectload_files')
+				->get_union_subquery_by_category($objectload_id, $category);
+
+		if ($objects)
+			ORM::factory('Object')
+					->where_open()
+					->where('number', 'NOT IN', $objects)
+						->or_where('number', 'IS', NULL)
+					->where_close()
+					->where('author', '=', $user_id)
+					->where('category','=', $config["id"])
+					->where('is_published','=', 1)
+					->where('active','=', 1)
+					->where('is_union','IS', NULL)
+					->set('is_published', 0)
+					->set('parent_id', NULL)
+					->update_all();
+		
+	}
 }
 
 /* End of file Object.php */

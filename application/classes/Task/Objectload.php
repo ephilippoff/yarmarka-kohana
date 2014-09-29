@@ -41,7 +41,7 @@ class Task_Objectload extends Minion_Task
 		} catch (Exception $e)
 		{
 			$ct->error($e->getMessage());
-			Minion_CLI::write($e->getMessage());
+			Minion_CLI::write(prefix_log("Error").$e->getMessage());
 			return;
 		}
 		$ct->end();
@@ -71,12 +71,12 @@ class Task_Objectload extends Minion_Task
 
 		if (!$user_id)
 		{
-			Minion_CLI::write("User is not defined");
+			Minion_CLI::write(prefix_log("Error")."User is not defined");
 			return;
 		}
 
 		$user 		=  ORM::factory('User', $user_id);
-		Minion_CLI::write("User :".$user->org_name." ".$user->email." (".$user_id.")");
+		Minion_CLI::write(prefix_log("Success")."User :".$user->org_name." ".$user->email." (".$user_id.")");
 		Auth::instance()->force_login($user);
 		$db = Database::instance();
 
@@ -86,33 +86,34 @@ class Task_Objectload extends Minion_Task
 
 		if ($filters->category AND !array_key_exists($filters->category, $ol->_settings["configs"]))
 		{
-			Minion_CLI::write("This category is not defined");
+			Minion_CLI::write(prefix_log("Error")."This category is not defined");
 			return;
 		}
 
 		if (!$objectload_id)
 		{
 			$ol->downloadLinks();
-			Minion_CLI::write("Links loaded");
+			Minion_CLI::write(prefix_log("Success")."Links loaded");
 
 			try {
 
 				$db->begin();
-				Minion_CLI::write("Saving to temp tables ...");
+				Minion_CLI::write(prefix_log("Success")."Saving to temp tables ...");
 				$ol->saveTempRecordsByLoadedFiles();
-				Minion_CLI::write("Records saved");
+				Minion_CLI::write(prefix_log("Success")."Records saved");
 
 				$db->commit();
 			} catch (Exception $e)
 			{
 				$db->rollback();
+				Minion_CLI::write(prefix_log("Error")."Filed saveTempRecordsByLoadedFiles");
 				throw $e;
 			}
 
 			
 		}
 
-		Minion_CLI::write("Start...");
+		Minion_CLI::write(prefix_log("Success")."Start...");
 
 		$ol->forEachRecord($filters, function($row, $category, $cc) use ($ol, $ct, $test){
 
@@ -120,8 +121,8 @@ class Task_Objectload extends Minion_Task
 			if (!$ct->_check($ct->id))
 				return 'break';
 
-			$prefix_log = '['.$category."|".$cc->common."-".$cc->counter."/".$cc->count.']: ';
 			
+			$prefix_log = prefix_log($category."|".$cc->common."-".$cc->counter."/".$cc->count);
 			$config = &$ol->_settings["configs"][$category];
 			$dictionary = &$ol->_settings["dict_".$category];
 
@@ -160,14 +161,29 @@ class Task_Objectload extends Minion_Task
 
 		});
 
+		ORM::factory('Objectload', $ol->_objectload_id)
+			->unpublish_expired(function ($comment, $category){
+
+				Minion_CLI::write(prefix_log($category).'Unpublish expired in '.$category.' '.$comment);
+
+			});
+
 		$ol->setState(5);
 		
 		ORM::factory('Objectload', $ol->_objectload_id)
 			->update_statistic();
 
-		Minion_CLI::write('End');
+		
+
+		Minion_CLI::write(prefix_log("Success").'End');
 
 		//Temptable::delete_table($name);
 	}
 
+	
+}
+
+function prefix_log($txt)
+{
+	return '['.date("d-m-Y H:i:s").' '.$txt.']: ';
 }

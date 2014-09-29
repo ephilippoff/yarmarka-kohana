@@ -148,6 +148,8 @@ class Model_Objectload extends ORM {
 
 		$this->statistic = serialize($common_statistic);
 		$this->update();
+
+		return $this;
 	}
 
 	function _delete()
@@ -202,4 +204,25 @@ class Model_Objectload extends ORM {
 		return $objectloads;
 
 	}
+
+	function unpublish_expired($callback)
+	{
+		if (!$this->loaded())
+			return;
+
+		$of = DB::select("category")
+					->from('objectload_files')
+					->where("objectload_id","=",$this->id)
+					->group_by("category")
+					->as_object()
+					->execute();
+
+		foreach ($of as $file) {
+			$callback("Start", $file->category);
+				ORM::factory('Object')
+					->unpublish_expired_in_objectload_category($this->id, $this->user_id, $file->category);
+			$callback("End", $file->category);
+		}
+	}
+
 } 

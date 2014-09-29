@@ -244,6 +244,12 @@ class Objectload
 					->get_statistic();
 	}
 
+	public function unpublishExpired()
+	{
+		ORM::factory('Objectload_Files')
+			->get_union_subquery_by_category($this->_objectload_id);
+	}
+
 	private function setRecordLoaded($table_name, $id, $edit = FALSE)
 	{
 		$record = ORM_Temp::factory($table_name, $id);
