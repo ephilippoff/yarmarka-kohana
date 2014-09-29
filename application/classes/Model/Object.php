@@ -681,7 +681,7 @@ class Model_Object extends ORM {
 					->where('author','=', $user_id)
 					->count_all();
 
-			$date_expiration = date('Y-m-d H:i:s', strtotime('+14 days'));
+			$date_expiration = date('Y-m-d H:i:s', strtotime('+60 days'));
 
 			$f = ORM::factory('Object')
 				->where('number', 'IN', $objects)
