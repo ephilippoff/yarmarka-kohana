@@ -262,7 +262,10 @@ class Controller_User extends Controller_Template {
 
 		$this->template->items =  $temp->order_by("id","asc")->as_object()->execute();
 		
-
+		$service_fields = Objectload::getServiceFields();
+		unset($service_fields["object_id"]);
+		unset($service_fields["text_error"]);
+		$this->template->service_fields = array_keys( $service_fields );
 	}
 
     public function action_massload()

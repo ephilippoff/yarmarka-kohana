@@ -156,7 +156,8 @@ class Task_Objectload extends Minion_Task
 			else
 				return array(
 							"status" => "success",
-							"edit" 	 => $object->is_edit
+							"edit" 	 => $object->is_edit,
+							"object_id" => $object->object_id
 						);
 
 		});

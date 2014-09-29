@@ -114,7 +114,7 @@ class Objectload
 		$path 		= $of->path;
 
 		$config 	= $this->getConfig($category);
-		$fields 	= array_merge($config["fields"], $this->getServiceFields());
+		$fields 	= array_merge($config["fields"], Objectload::getServiceFields());
 		$table_name = Temptable::get_name(array($category, $this->_user_id));
 		
 		Temptable::create_table($table_name, $fields);
@@ -194,7 +194,7 @@ class Objectload
 					continue;
 				}
 				elseif (is_array($return)  AND $return["status"] == 'success')
-					$this->setRecordLoaded($file->table_name, $row->id, $return["edit"]);
+					$this->setRecordLoaded($file->table_name, $row->id, $return["edit"], $return["object_id"]);
 				elseif (is_array($return)  AND $return["status"] == 'error'){
 					$this->setRecordError($file->table_name, $row->id, $return["text_error"]);
 					continue;
@@ -250,7 +250,7 @@ class Objectload
 			->get_union_subquery_by_category($this->_objectload_id);
 	}
 
-	private function setRecordLoaded($table_name, $id, $edit = FALSE)
+	private function setRecordLoaded($table_name, $id, $edit = FALSE, $object_id = NULL)
 	{
 		$record = ORM_Temp::factory($table_name, $id);
 		$record->loaded = 1;
@@ -259,6 +259,7 @@ class Objectload
 		$record->error 		= NULL;
 		$record->text_error = NULL;
 		$record->nochange 	= NULL;
+		$record->object_id 	= $object_id;
 		$record->save();
 	}
 
@@ -281,29 +282,33 @@ class Objectload
 		$record->save();
 	}
 
-	private function getServiceFields()
+	public static function getServiceFields()
 	{
 
 		return array(
-				array(
+				"nochange" => array(
 					"name" => "nochange",
 					"type" => "int",
 				),
-				array(
+				"loaded"   => array(
 					"name" => "loaded",
 					"type" => "int",
 				),
-				array(
+				"edited"   => array(
 					"name" => "edited",
 					"type" => "int",
 				),
-				array(
+				"error"    => array(
 					"name" => "error",
 					"type" => "int",
 				),
-				array(
+				"text_error" => array(
 					"name" => "text_error",
 					"type" => "text",
+				),
+				"object_id" => array(
+					"name" => "object_id",
+					"type" => "int",
 				)
 			);
 	}

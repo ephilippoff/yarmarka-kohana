@@ -96,7 +96,9 @@ class Model_Objectload extends ORM {
 				$errorstr = "<span style='color:$color;'>".$statistic->error." (".$percent."%)</span>";
 			}
 			$statstr = $new." / ".$statistic->edited." / ".$statistic->nochange." / ".$errorstr." = ".$statistic->all;
-
+	
+		} else {
+			$statstr = '';
 		}
 		return $statstr;
 	}
