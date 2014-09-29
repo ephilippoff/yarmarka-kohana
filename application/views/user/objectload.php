@@ -45,7 +45,7 @@
 										<div class="massload-controlsrow">
 											<ul>
 												<? foreach($categories as $key=>$value): ?>
-													<li key="<?=$key?>"><a href="#"><?=$value?>.xls</a></li>
+													<li key="<?=$key?>"><a href="<?=$categories_templates[$key]?>" target="_blank"><?=$value?>.xls</a></li>
 												<? endforeach; ?>
 											</ul>
 											<div class="massload-hint">									
@@ -235,7 +235,7 @@
 									<div class="massload-controlsrow">
 										<ul>
 											<? foreach($categories as $key=>$value): ?>
-												<li key="<?=$key?>"><a href="#"><?=$value?>.xls</a></li>
+												<li key="<?=$key?>"><a href="<?=$categories_templates[$key]?>" target="_blank"><?=$value?>.xls</a></li>
 											<? endforeach; ?>
 										</ul>	
 									</div>

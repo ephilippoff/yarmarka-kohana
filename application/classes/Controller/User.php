@@ -163,15 +163,13 @@ class Controller_User extends Controller_Template {
 
     	$already_agree = FALSE;
     	$us = ORM::factory('User_Settings')
-						->where("user_id", "=", $this->user->id)
-						->where("name", "=", "massload_agreed")
+    					->get_by_name($this->user->id, "massload_agreed")
 						->find();
 		$already_agree = $us->loaded();
 
 		$hidehelp = FALSE;
     	$us = ORM::factory('User_Settings')
-						->where("user_id", "=", $this->user->id)
-						->where("name", "=", "massload_hidehelp")
+    					->get_by_name($this->user->id, "massload_hidehelp")
 						->find();
 		$hidehelp = !$us->loaded();
 
@@ -198,6 +196,7 @@ class Controller_User extends Controller_Template {
 				$us->delete();				
 
 			header("Refresh:0");
+			exit;
 		}
 
 		$this->template->already_agree  = $already_agree;
@@ -206,12 +205,21 @@ class Controller_User extends Controller_Template {
     	$avail_categories = Kohana::$config->load('massload.frontend_load_category');
     	
     	$categories = Array();								
+    	$categories_templatelink = Array();
     	foreach($avail_categories as $category)
     	{
     			$cfg = Kohana::$config->load('massload/bycategory.'.$category);
     			$categories[$category] = $cfg["name"];
+
+    			$us = ORM::factory('User_Settings')
+    					->get_by_name(13, $category)
+    					->cached()
+						->find();
+
+				$categories_templatelink[$category] = ($us->value) ? $us->value : "#";
     	}
     	$this->template->categories = $categories;
+    	$this->template->categories_templates = $categories_templatelink;
     	$this->template->config = Kohana::$config->load('massload/bycategory');
     	$this->template->free_limit = Kohana::$config->load('massload.free_limit');
 
