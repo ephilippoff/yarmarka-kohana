@@ -226,7 +226,7 @@ class Controller_Ajax_Massload extends Controller_Template {
 		{
 			$this->json['data'] ="error";
 			$this->json['error'] = "Непредвиденная ошибка при загрузке (saveStaticFile). Возможно файл содержит некорректные строки";
-			Log::instance()->add(Log::NOTICE, $this->json['error'] = $e->getMessage());
+			Log::instance()->add(Log::NOTICE, $e->getMessage());
 			ORM::factory("Objectload", $ol->_objectload_id)->_delete();
 			return;
 		}
@@ -244,7 +244,7 @@ class Controller_Ajax_Massload extends Controller_Template {
 			$db->rollback();
 			$this->json['data'] ="error";
 			$this->json['error'] = "Непредвиденная ошибка при загрузке (saveTempRecordsByLoadedFiles). Возможно файл содержит некорректные строки";
-			Log::instance()->add(Log::NOTICE, $this->json['error'] = $e->getMessage());
+			Log::instance()->add(Log::NOTICE, $e->getMessage());
 			ORM::factory("Objectload", $ol->_objectload_id)->_delete();
 			return;
 		}
