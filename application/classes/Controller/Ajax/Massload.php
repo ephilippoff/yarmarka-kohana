@@ -148,12 +148,226 @@ class Controller_Ajax_Massload extends Controller_Template {
 			else 
 				$this->json['data'] ="Не удалось сохранить";
 		}
-
-
-		
-
 		
 	}
+
+	public function action_save_staticfile()
+	{
+		$category 		= $this->request->post("category");
+		$user_id 		= $this->request->post("user_id");
+		$file = $_FILES["file"];
+		$db = Database::instance();
+		if (!$category)
+			return;
+
+		$ol = new Objectload($user_id);
+		$ol->loadSettings($user_id);
+		try {
+
+			$ol->saveStaticFile($file, $category, $user_id);
+			
+			$db->begin();	
+
+			$ol->saveTempRecordsByLoadedFiles();
+
+			$db->commit();
+
+		} catch(Exception $e)
+		{
+			$db->rollback();
+			$this->json['data'] ="error";
+			$this->json['error'] = $e->getMessage();
+			ORM::factory("Objectload", $ol->_objectload_id)->delete();
+			return;
+		}
+
+		$this->json['data'] = "ok";
+		$this->json['objectload_id'] = $ol->_objectload_id;
+	}
+
+	public function action_save_userstaticfile()
+	{
+		$category 		= $this->request->post("category");
+		$user = Auth::instance()->get_user();
+		if (!$user->loaded())
+		{
+			$this->json['error'] = 'Пользователь не определен';
+			return;
+		}
+		$user_id = $user->id;
+
+		$active_ol_count = ORM::factory("Objectload")
+							->where("user_id","=", $user_id)
+							->where("state","<>", 5)
+							->where("state","<>", 0)
+							->count_all();
+
+		if ($active_ol_count>0)
+		{
+			$this->json['error'] = "У вас уже есть активные загрузки. Либо завершите загрузку, либо удалите ее.";
+			return;
+		}
+
+		$file = $_FILES["file"];
+		$db = Database::instance();
+		if (!$category)
+		{
+			$this->json['error'] = 'Категория не указана';
+			return;
+		}
+
+		$ol = new Objectload($user_id);
+		$ol->loadSettings($user_id);
+		
+
+		try {
+			$ol->saveStaticFile($file, $category, $user_id);
+		} catch(Exception $e)
+		{
+			$this->json['data'] ="error";
+			$this->json['error'] = "Непредвиденная ошибка при загрузке (saveStaticFile). Возможно файл содержит некорректные строки";
+			Log::instance()->add(Log::NOTICE, $e->getMessage());
+			ORM::factory("Objectload", $ol->_objectload_id)->_delete();
+			return;
+		}
+
+		try {
+			
+			$db->begin();	
+
+			$ol->saveTempRecordsByLoadedFiles();
+
+			$db->commit();
+
+		} catch(Exception $e)
+		{
+			$db->rollback();
+			$this->json['data'] ="error";
+			$this->json['error'] = "Непредвиденная ошибка при загрузке (saveTempRecordsByLoadedFiles). Возможно файл содержит некорректные строки";
+			Log::instance()->add(Log::NOTICE, $e->getMessage());
+			ORM::factory("Objectload", $ol->_objectload_id)->_delete();
+			return;
+		}
+
+		$ol->testFile();
+
+		$stat = $ol->getStatistic();
+
+		$free_limit = $limit = Kohana::$config->load('massload.free_limit');
+
+		$setting_limit = ORM::factory('User_Settings')
+    							->get_by_name($user_id, "massload_limit")
+    							->find();
+    	if ($setting_limit->loaded())
+    		$limit = (int) $setting_limit->value;
+
+		if ($stat["all"] > $limit)
+		{
+			$this->json['data'] ="error";
+			if ($setting_limit->loaded())
+				$this->json['error'] = "Количество объявлений в файле превышает оплаченный лимит. Максумум ".$limit." объявлений. Свяжитесь с нами, чтобы увеличить лимит.";
+			else
+				$this->json['error'] = "Бесплатная загрузка ограничена. Максумум ".$free_limit." объявлений. Свяжитесь с нами, чтобы увеличить лимит.";
+			ORM::factory("Objectload", $ol->_objectload_id)->_delete();
+			return;
+		}
+
+		if ($stat["all"] > 0)
+		{
+			$allow_percent = Kohana::$config->load('massload.allow_error_percent');
+			$percent = ($stat["error"]/$stat["all"])*100;
+			if ($percent < $allow_percent)
+				$ol->setState(1);
+			else
+				$ol->setState(99, "Для продолжения загрузки, процент ошибочных объявлений должен быть меньше ".$allow_percent."%. Возможно вы не настроили соответствия для справочников");
+		} 
+			else
+		{
+			$ol->setState(99, "Не обнаружено ни одной строки");
+		}
+
+		
+
+		$this->json['data'] = "ok";
+		$this->json['objectload_id'] = $ol->_objectload_id;
+	}
+
+	public function action_objectload_delete()
+	{
+		$this->auto_render = FALSE;
+		$user = Auth::instance()->get_user();
+		if (!$user->loaded())
+		{
+			throw new HTTP_Exception_404;
+			return;
+		}
+
+		$post = $_POST;
+		if (!$post["id"])
+		{
+			throw new HTTP_Exception_404;
+			return;
+		}
+
+		if ($user->role ==1 OR $user->role ==9)
+			$ct = ORM::factory('Objectload')
+						->where("id","=",$post["id"])
+						->find();
+		else
+			$ct = ORM::factory('Objectload')
+						->where("user_id","=",$user->id)
+						->where("id","=",$post["id"])
+						->where("state","IN",array(99,0,1,2,3))
+						->find();
+
+		if ( ! $ct->loaded() )
+			throw new HTTP_Exception_404;
+
+		$ct->_delete();
+
+		$this->json['data'] = "ok";
+	}
+
+	public function action_objectload_retest()
+	{
+		$this->auto_render = FALSE;
+		$user = Auth::instance()->get_user();
+		if (!$user->loaded())
+		{
+			throw new HTTP_Exception_404;
+			return;
+		}
+		$post = $_POST;
+		if (!$post["id"])
+		{
+			throw new HTTP_Exception_404;
+			return;
+		}
+
+		$ol = new Objectload($user->id, $post["id"]);
+		$ol->testFile();
+		$stat = $ol->getStatistic();
+
+		$state = 0;
+
+		if ($stat["all"] > 0)
+		{
+			$allow_percent = Kohana::$config->load('massload.allow_error_percent');
+			$percent = ($stat["error"]/$stat["all"])*100;
+			if ($percent < $allow_percent)
+				$state = $ol->setState(1);
+			else
+				$state = $ol->setState(99, "Для продолжения загрузки, процент ошибочных объявлений должен быть меньше ".$allow_percent."%. Возможно вы не настроили соответствия для справочников");
+		} 
+			else
+		{
+			$state = $ol->setState(99, "Не обнаружено ни одной строки");
+		}
+		$this->json['data'] = "ok";
+		$this->json['state'] = $state;
+		$this->json['objectload_id'] = $ol->_objectload_id;
+	}
+
 
 	public function after()
 	{

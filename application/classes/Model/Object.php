@@ -627,6 +627,76 @@ class Model_Object extends ORM {
 				->where("is_published","=",1)
 				->where("active","=",1);
 	}
+
+	public function unpublish_expired_in_objectload_category($objectload_id, $user_id, $category_id, $category_names)
+	{
+
+
+		$objects = ORM::factory('Objectload_files')
+				->get_union_subquery_by_category($objectload_id, $category_names);
+
+		$count = 0;
+		if ($objects)
+		{
+			$count = ORM::factory('Object')
+					->where_open()
+					->where('number', 'NOT IN', $objects)
+						->or_where('number', 'IS', NULL)
+					->where_close()
+					->where('author', '=', $user_id)
+					->where('category','=', $category_id)
+					->where('is_published','=', 1)
+					->where('active','=', 1)
+					->where('is_union','IS', NULL)
+					->count_all();
+
+			$f = ORM::factory('Object')
+					->where_open()
+					->where('number', 'NOT IN', $objects)
+						->or_where('number', 'IS', NULL)
+					->where_close()
+					->where('author', '=', $user_id)
+					->where('category','=', $category_id)
+					->where('is_published','=', 1)
+					->where('active','=', 1)
+					->where('is_union','IS', NULL)
+					->set('is_published', 0)
+					->set('parent_id', NULL)
+					->update_all();
+		}
+
+		return $count;		
+	}
+
+	public function publish_and_prolonge_objectload($objectload_id, $user_id)
+	{
+		$objects = ORM::factory('Objectload_files')
+				->get_union_subquery_by_category($objectload_id);
+
+		$count = 0;
+		if ($objects)
+		{
+			$count = ORM::factory('Object')
+					->where('number', 'IN', $objects)
+					->where('author','=', $user_id)
+					->count_all();
+
+			$date_expiration = date('Y-m-d H:i:s', strtotime('+60 days'));
+
+			$f = ORM::factory('Object')
+				->where('number', 'IN', $objects)
+				->where('author','=', $user_id)
+				->set('date_expiration', $date_expiration)
+				->set('in_archive', 'f')
+				->set('active', 1)
+				->set('is_published', 1)
+				->set('is_bad', 0)
+				->update_all();
+			Log::instance()->add(Log::INFO, Debug::vars($f));
+		}
+
+		return $count;	
+	}
 }
 
 /* End of file Object.php */

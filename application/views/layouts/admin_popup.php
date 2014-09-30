@@ -13,7 +13,7 @@
 </head>
 <body>
 <?=View::factory('layouts/admin_head')?>
-<div class="container">
+<div <? /*class="container" */?>>
 	<div id="loading" style="position:absolute; z-index:99999; background-color:red; color: white; top: 10; left: 5; display:none">
 	  Loading...
 	</div>
