@@ -1,5 +1,6 @@
 <?=HTML::script('bootstrap/js/bootstrap.min.js')?>
-<?=HTML::style('bootstrap/css/bootstrap.min.css')?>
+<?//=HTML::style('bootstrap/css/bootstrap.min.css')?>
+<?=HTML::style('bootstrap/css/customize.bootstrap.css')?>
 <?=HTML::style('bootstrap/css/bootstrap-responsive.min.css')?>
 <div class="winner">
 	<section class="main-cont subscriptions cabinet">
