@@ -246,7 +246,7 @@
 		<tr class="ol_<?=$item->id?>">			
 			<td><?=$item->id?></td>
 			<td><?=$item->user_id?></td>
-			<td><?=$item->email?></td>
+			<td><a href="<?=Url::site('khbackend/users/user_info/'.$item->user_id)?>" target="_blank"><?=$item->email?></a></td>
 			<td><?=$item->created_on?></td>
 			<td></td>
 			<td>

@@ -191,7 +191,7 @@ class Model_Objectload extends ORM {
 		foreach ($orm_objectloads as $load)
 		{
 			$rec_load = $load->get_row_as_obj();
-			
+			$rec_load->created_on 		  = date( "d.m.Y H:i",strtotime($rec_load->created_on));
 			$rec_load->objfiles 		  = $objectload_files->get_objectload_files_list($load->id);
 			$rec_load->email 			  = $load->user->email;
 			$rec_load->access_userdelete  = in_array( $rec_load->state, $this->get_foruserdelete_states() );
