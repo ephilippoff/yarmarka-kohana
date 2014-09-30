@@ -2,6 +2,12 @@
 <?//=HTML::style('bootstrap/css/bootstrap.min.css')?>
 <?=HTML::style('bootstrap/css/customize.bootstrap.css')?>
 <?=HTML::style('bootstrap/css/bootstrap-responsive.min.css')?>
+<script type="text/javascript">
+$(document).ready(function() {
+	$('#islide_services').click();
+})	
+</script>
+
 <div class="winner">
 	<section class="main-cont subscriptions cabinet">
 		<div class="hheader persomal_room-header"><h1 class="ta-c">Личный кабинет</h1></div>
