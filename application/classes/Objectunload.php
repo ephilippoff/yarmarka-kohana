@@ -120,7 +120,7 @@ class Objectunload
 		$row["city"] 			= ORM::factory('City', $object->city_id)->title;
 		$row["address"] 		= ORM::factory('Location', $object->location_id)->address;
 		$row["title"] 			= $object->title;
-		$row["user_text_adv"] 	= $object->user_text;
+		$row["user_text_adv"] 	= strip_tags($object->user_text);
 		$row["contact"] 	  	= $object->contact;
 
 		$row["contact_0_value"] = ORM::factory('Object_Contact')
