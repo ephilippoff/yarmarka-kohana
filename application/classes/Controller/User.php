@@ -268,6 +268,58 @@ class Controller_User extends Controller_Template {
 		$this->template->service_fields = array_keys( $service_fields );
 	}
 
+	public function action_objectunload()
+    {
+    	$this->layout = 'users';  
+
+    	$avail_categories = Kohana::$config->load('massload.frontend_load_category');
+
+    	$categories = Array();								
+    	foreach($avail_categories as $category)
+    	{
+			$cfg = Kohana::$config->load('massload/bycategory.'.$category);
+			$categories[$category] = $cfg["name"];
+		}
+		$this->template->categories = $categories;
+		$this->template->free_limit = Kohana::$config->load('massload.free_limit');
+
+		$already_agree = FALSE;
+    	$us = ORM::factory('User_Settings')
+    					->get_by_name($this->user->id, "massload_agreed")
+						->find();
+		$already_agree = $us->loaded();
+
+		$this->template->already_agree = $already_agree;
+    }
+
+    public function action_objectunload_file()
+    {
+    	$this->autorender = FALSE;  
+
+    	$category = $this->request->param('id');
+    	$user_id = $this->user->id;
+
+    	$limit = NULL;
+    	$setting_limit = ORM::factory('User_Settings')
+    							->get_by_name($user_id, "massload_limit")
+    							->find();
+    	if ($setting_limit->loaded())
+    		$limit = (int) $setting_limit->value;
+
+    	$objectunload = new Objectunload($user_id, $category);   
+    	$objects = $objectunload->get_objects($limit);
+
+
+    	$data = array();
+    	$data[] = array();
+    	$data[] = $objectunload->get_header();
+    	foreach ($objects as $object) {
+    		$data[] = $objectunload->row($object);
+    	}
+    	$objectunload->get_excel_file($data);
+
+    }
+
     public function action_massload()
     {
     	$this->layout = 'users';    	

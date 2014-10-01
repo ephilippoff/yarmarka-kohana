@@ -86,6 +86,12 @@
 				<li><a href="<?=URL::site('user/objectload')?>" class="clickable"><i class="ico "></i><span>Массовая загрузка</span></a></li>
 				<?php endif; ?>
 
+				<?php if (Request::current()->action() == 'objectunload') : ?>
+				<li><span class="noclickable"><i class="ico "></i><span><b>Выгрузка объявлений</b></span></span></li>
+				<?php else : ?>
+				<li><a href="<?=URL::site('user/objectunload')?>" class="clickable"><i class="ico "></i><span>Выгрузка объявлений</span></a></li>
+				<?php endif; ?>
+
 				<?/*Request::factory('block/massload_categories')->execute()*/?>
 
 				<? /* ?>

@@ -27,6 +27,37 @@ class Search {
 
 		return join('/', $url);
 	}
+
+	public static function get_filters_by_params(array $params)
+	{
+		$filter = array();
+		if (count($params) <= 0)
+			return;
+
+		$attributes = array();
+		$_attributes = ORM::factory('Attribute')
+				->where("seo_name", "IN", array_keys($params))
+				->find_all();
+		foreach ($_attributes as $attribute)
+		{
+			$attributes[$attribute->seo_name] = array(
+									"id"   => $attribute->id,
+									"type" => $attribute->type
+								);
+		}
+
+		foreach ($params as $seo_name => $value) {
+
+			$filter[] = DB::select("id")
+						->from("data_".$attributes[$seo_name]["type"])
+						->where("object","=", DB::expr("object.id"))
+						->where("attribute", "=", $attributes[$seo_name]["id"])
+						->where("value", ((is_array($value)) ? "IN" : "="), $value)
+						->limit(1);
+		}
+
+		return $filter;
+	}
 }
 
 /* End of file Search.php */

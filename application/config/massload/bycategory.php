@@ -24,6 +24,10 @@ return array(
 			'autofill'=>array(
 						'rubricid' => 3, //категория квартиры и комнаты
 						'param_441' => 3196, //вторичное жилье
+					),
+			'filter'  =>array(
+						'tip-sdelki5' => 3250,
+						'build-type'  => 3196,
 					)
 	),
 	'flat_rooms'	=> array( 
@@ -50,6 +54,11 @@ return array(
 						'rubricid' => 3, //категория квартиры и комнаты
 						'param_441' => 3196, //вторичное жилье
 						'param_440' => 3194, //комната
+					),
+			'filter'  =>array(
+						'tip-sdelki5' => 3250,
+						'build-type'  => 3196,
+						'flatrooms'   => 3194
 					)
 	),
 	'flat_new'		=> array( 
@@ -76,6 +85,10 @@ return array(
 			'autofill'=>array(
 						'rubricid' => 3, //категория квартиры и комнаты
 						'param_441' => 3631, //новостройка, дом сдан
+					),
+			'filter'  =>array(
+						'tip-sdelki5' => 3250,
+						'build-type'  => array(3197,3631)
 					)
 	),
 	'flat_rent'		=> array( 
@@ -102,6 +115,9 @@ return array(
 					),
 			'autofill'=>array(
 						'rubricid' => 96, //категория аренда квартир и комнат
+					),
+			'filter'  =>array(
+						'tip-sdelki1' => 3240,
 					)
 	),
 	'house'		=> array( 
@@ -125,8 +141,11 @@ return array(
 					),
 			'autofill'=>array(
 						'rubricid' => 30,
-				)					
 					),
+			'filter'  =>array(
+						'tip-sdelki3' => 3242,
+					)				
+	),
 	'land'		=> array( 
 			'id'    => 34,
 			'name'	=> 'Земельные участки',
@@ -147,8 +166,11 @@ return array(
 					),
 			'autofill'=>array(
 						'rubricid' => 34,
-				)					
 					),
+			'filter'  =>array(
+						'tip-sdelki3' => 3242,
+					)					
+	),
 	'commercial'		=> array( 
 			'id'    => 4,
 			'name'	=> 'Коммерческая недвижимость',
@@ -169,8 +191,11 @@ return array(
 					),
 			'autofill'=>array(
 						'rubricid' => 4,
-				)					
 					),
+			'filter'  =>array(
+						'tip-sdelki3' => 3242,
+					)					
+	),
 
 
 );
