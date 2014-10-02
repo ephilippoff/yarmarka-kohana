@@ -367,6 +367,8 @@ class Form_Add  {
 		{
 			$location = ORM::factory('Location',$object->location_id);
 			$this->_data->object_coordinates = $location->lat.",".$location->lon;
+		} elseif ($this->is_post) {
+			$this->_data->object_coordinates = $this->params['object_coordinates'];
 		}
 		return $this;
 	}
