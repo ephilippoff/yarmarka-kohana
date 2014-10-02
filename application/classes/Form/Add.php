@@ -179,23 +179,54 @@ class Form_Add  {
 							->find_all();
 		foreach ($city_list as $city_item)
 		{
+			$lat = $lon = "";
+			$location = ORM::factory('Location')
+						->where("id","=",$city_item->location_id)
+						->cached(DATE::WEEK)
+						->find();
+			if ($location->loaded())
+			{
+				$lat = $location->lat;
+				$lon = $location->lon;
+			}
+
 			if (in_array($city_item->id, array(1979,1919,1948,1947)))
-				$main_cities[$city_item->id] = $city_item->title;
+				$main_cities[$city_item->id] = array(
+									"title" => $city_item->title,
+									"lat" => $lat,
+									"lon" => $lon
+								);
 			else 
-				$other_cities[$city_item->id] = $city_item->title;
+				$other_cities[$city_item->id] = array(
+									"title" => $city_item->title,
+									"lat" => $lat,
+									"lon" => $lon
+								);
 		}
 
 		$city_array["Города"] 		 = $main_cities;
 		$city_array["Другие"] = $other_cities;
 
 		$value = $city->title;
+		$lat = $lon = "";
+		$location = ORM::factory('Location')
+						->where("id","=",$city_item->location_id)
+						->cached(DATE::WEEK)
+						->find();
+		if ($location->loaded())
+		{
+			$lat = $location->lat;
+			$lon = $location->lon;
+		}			
 		
 		$this->_data->city = array(	'city_list' => $city_array, 
 									'city_id' => $city_id,
 									'value' => $value, 
 									'edit' => $edit,
-									'city_error' => $errors->city_kladr_id
-									);
+									'city_error' => $errors->city_kladr_id,
+									"lat" => $lat,
+									"lon" => $lon
+								);
 		return $this;
 	}
 
