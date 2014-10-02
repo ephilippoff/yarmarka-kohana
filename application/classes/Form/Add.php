@@ -239,12 +239,19 @@ class Form_Add  {
 		if (empty($category_id))
 			return $this;
 
-		$ar = ORM::factory('Attribute_Relation', $category_id)->cached(DATE::WEEK);
+
 		$params = Array();
 
 		if ($object->loaded() AND !$this->is_post)
 		{
 			$params = self::parse_object_params($object_id);
+			$address_reference_id = ORM::factory('Attribute_Relation')
+										->where("category_id","=",$category_id)
+										->where("custom","=","address")
+										->cached(DATE::WEEK)
+										->find()->reference_id;
+			if ($address_reference_id)
+				$params[$address_reference_id] = ORM::factory('Location',$object->location_id)->address;
 
 		} elseif ($this->is_post)
 		{
