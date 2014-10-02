@@ -168,6 +168,7 @@ class Attribute {
 				"title" 	=> $info["title"],
 				"type" 		=> $info["type"],
 				"custom" 	=> $info["custom"],
+				"options" 	=> $info["options"],
 				"weight" 	=> $info["weight"],
 				"is_required"=> $info["is_required"],
 				"is_textarea"=> $info["is_textarea"],
