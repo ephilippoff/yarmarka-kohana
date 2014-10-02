@@ -217,10 +217,6 @@ class Lib_PlacementAds_AddEdit {
 				$this->raise_error('user not finded');
 		} 
 
-		if ($this->category){
-			$this->form_references = Forms::get_by_category_and_type($this->category->id, 'add');
-		}
-
 		return $this;
 	}
 
@@ -504,54 +500,56 @@ class Lib_PlacementAds_AddEdit {
 
 	function init_validation_rules_for_attributes()
 	{
-		$form_references = &$this->form_references;
+
 		$category 		 = &$this->category;
 		$postparams 	 = &$this->params;
 		$user     		 = &$this->user;
 
 		if (!$category) return $this;
 
+		$form_references = Forms::get_by_category($category->id, $postparams);
+
 		foreach ($form_references as $reference)
 		{
-			
-			if ($reference->is_required AND !self::is_nessesary_to_check($category->id, $reference->id, $postparams))
-				continue;			
+			$reference_id = $reference->reference_id;
+			//if ($reference->is_required AND !self::is_nessesary_to_check($category->id, $reference->id, $postparams))
+			//	continue;			
 
 			$rules = array();
 
 			if ($reference->is_range)
 			{
 				$params = array(
-					'param_'.$reference->id.'_min',
-					'param_'.$reference->id.'_max',
+					'param_'.$reference_id.'_min',
+					'param_'.$reference_id.'_max',
 				);
 			}
 			else
 			{
-				$params = array('param_'.$reference->id);
+				$params = array('param_'.$reference_id);
 			}
 
 			if ($reference->is_required)
 			{
 
-				$rules[] = array('not_empty', array(':value', $reference->attribute_obj->title));
+				$rules[] = array('not_empty', array(':value', $reference->attribute_title));
 			}
 
-			switch ($reference->attribute_obj->type)
+			switch ($reference->attribute_type)
 			{
 				case 'integer':
-					$rules[] = array('digit', array(':value', $reference->attribute_obj->title));
-					$rules[] = array('not_0', array(':value', $reference->attribute_obj->title));
-					$rules[] = array('max_length', array(':value', $reference->attribute_obj->solid_size, $reference->attribute_obj->title));
+					$rules[] = array('digit', array(':value', $reference->attribute_title));
+					$rules[] = array('not_0', array(':value', $reference->attribute_title));
+					$rules[] = array('max_length', array(':value', $reference->attribute_solid_size, $reference->attribute_title));
 				break;
 
 				case 'numeric':
-					$rules[] = array('numeric', array(':value', $reference->attribute_obj->title));
-					$rules[] = array('max_length', array(':value', $reference->attribute_obj->solid_size+$reference->attribute_obj->frac_size+1, $reference->attribute_obj->title));
+					$rules[] = array('numeric', array(':value', $reference->attribute_title));
+					$rules[] = array('max_length', array(':value', $reference->attribute_solid_size+$reference->attribute_frac_size+1, $reference->attribute_title));
 				break;
 
 				case 'text':
-					$rules[] = array('max_length', array(':value', $reference->attribute_obj->max_text_length, $reference->attribute_obj->title));
+					$rules[] = array('max_length', array(':value', $reference->attribute_max_text_length, $reference->attribute_title));
 				break;
 			}
 			// @todo check xss validation
