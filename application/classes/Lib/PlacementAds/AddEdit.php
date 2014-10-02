@@ -513,7 +513,6 @@ class Lib_PlacementAds_AddEdit {
 
 		foreach ($form_references as $reference)
 		{
-
 			
 			if ($reference->is_required AND !self::is_nessesary_to_check($category->id, $reference->id, $postparams))
 				continue;			
@@ -1041,20 +1040,15 @@ class Lib_PlacementAds_AddEdit {
 		$return = TRUE;
 
 		$ar = ORM::factory('Attribute_Relation')
-						->where("attribute_relation.category_id","=", $category_id)
-						->where("attribute_relation.reference_id","=", $reference_id)
-						->where("attribute_relation.parent_id","IS NOT", NULL)
-						->cached(Date::DAY)
-						->find_all();
+					->where("attribute_relation.category_id","=", $category_id)
+					->where("attribute_relation.reference_id","=", $reference_id)
+					//->where("attribute_relation.parent_id","IS NOT", NULL)
+					->where("attribute_relation.is_required","=", 1)
+					->cached(Date::DAY)
+					->find();
 
-		$relation_parent_elements = Array();
-		foreach ($ar as $item)
-			$relation_parent_elements[] = $item->parent_element_id;
-		
-
-		if (count($relation_parent_elements) AND
-				count($relation_parent_elements) == count(array_diff($relation_parent_elements, array_values((array) $postparams))))
-			$return = FALSE;
+		if (!array_key_exists("param_".$ar->reference_id, (array)$postparams) )
+			$return = FALSE;		
 
 		return $return;
 	}
