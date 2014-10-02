@@ -161,16 +161,19 @@ class Task_Objectload extends Minion_Task
 						);
 
 		});
+		
+		if (!$test)
+		{
+			ORM::factory('Objectload', $ol->_objectload_id)
+				->unpublish_expired(function ($comment, $category){
+					Minion::write($category,'Снимаем закончившиейся объявления '.$category.' '.$comment);
+				});
 
-		ORM::factory('Objectload', $ol->_objectload_id)
-			->unpublish_expired(function ($comment, $category){
-				Minion::write($category,'Снимаем закончившиейся объявления '.$category.' '.$comment);
-			});
-
-		ORM::factory('Objectload', $ol->_objectload_id)
-			->publish_and_prolonge(function ($comment, $category){
-				Minion::write($category,'Продляем и включаем активные объявления '.$category.' '.$comment);
-			});
+			ORM::factory('Objectload', $ol->_objectload_id)
+				->publish_and_prolonge(function ($comment, $category){
+					Minion::write($category,'Продляем и включаем активные объявления '.$category.' '.$comment);
+				});
+		}
 
 		$ol->setState(5);
 		

@@ -126,7 +126,7 @@ class Objectload
 				foreach ($fields as $field){
 					$fname = str_replace ( "-", "___", $field["name"]);
 					if ($row->{$field["name"]})
-						$t->{$fname} = $row->{$field["name"]};
+						$t->{$fname} = strip_tags(trim($row->{$field["name"]}));
 				}
 				$t->save();
 		});
