@@ -48,10 +48,11 @@ class StaticFile {
 			fclose($fp);
 
 			if ($user = Auth::instance()->get_user()){
-				ORM::factory('User_Settings')
+				$us = ORM::factory('User_Settings')
 							->get_by_name($user->id, "clearcache")
-							->find()
-							->delete();
+							->find();
+				if ($us->loaded())
+					$us->delete();
 			}
 		}
 	}
