@@ -9,9 +9,13 @@ class Attribute {
 
 		if ($category_id > 0 )
 		{
-			$_c = $category->where("id","=",$category_id)->find_all();	
+			$_c = $category->where("id","=",$category_id)
+								->cached(Date::WEEK)
+								->find_all();	
 		} else {
-			$_c = $category->order_by("id")->find_all();
+			$_c = $category->order_by("id")
+					->cached(Date::WEEK)
+					->find_all();
 		}
 		
 		foreach ($_c as $row)
@@ -38,36 +42,37 @@ class Attribute {
 
 		$attribute_relation = ORM::factory('Attribute_Relation');
 		
-		$ar = $attribute_relation->select(	'attribute.type',
-											'attribute.seo_name',
-											'attribute.is_textarea',
-											 array('attribute.id', 'aid'), 
-											 array('attribute.title', 'atitle'),
-											 'attribute_relation.weight',
-											 'attribute_relation.is_required',
-											 'attribute.unit'
-										)
-								->join('reference', 'left')
-									->on('attribute_relation.reference_id', '=', 'reference.id')
-								->join('attribute', 'left')
-									->on('reference.attribute', '=', 'attribute.id')
-								->where("reference.category","=",$category_id)
-								->where("attribute_relation.parent_id","=",$parent_id)
-								->where("attribute_relation.parent_element_id","=",$element_id)
-								->order_by("attribute_relation.weight")
-								->find_all();
+		$ar = $attribute_relation
+				->join('reference', 'left')
+					->on('attribute_relation.reference_id', '=', 'reference.id')
+				->where("reference.category","=",$category_id)
+				->where("attribute_relation.parent_id","=",$parent_id)
+				->where("attribute_relation.parent_element_id","=",$element_id)
+				->order_by("attribute_relation.weight")
+				->cached(Date::WEEK)
+				->find_all();
 
 		foreach ($ar as $relation)
 		{
+			$reference = ORM::factory('Reference')
+						->where("id", "=", $relation->reference_id)
+						->cached(Date::WEEK)
+						->find();
+
+			$attribute = ORM::factory('Attribute')
+						->where("id", "=", $reference->attribute)
+						->cached(Date::WEEK)
+						->find();
+
 			$rel_id = "_".$relation->reference_id;
 			$data[$rel_id] = Array();
 			$elements = Array();
 			$type = NULL;
 
-			switch ($relation->type) {
+			switch ($attribute->type) {
 				case 'integer':
 				case 'numeric':
-					$type = $relation->type;
+					$type = $attribute->type;
 
 					$options = $relation->options;
 					try 
@@ -85,17 +90,18 @@ class Attribute {
 					}
 				break;				
 				default:
-					$type = $relation->type;
+					$type = $attribute->type;
 
 					$elements = Array();
 					$ae = ORM::factory('Attribute_Element')
-								->where("attribute","=",$relation->aid);
+								->where("attribute","=",$attribute->id);
 					
 					if ($relation->options == "subelements")
 						$ae = $ae->where("parent_element","=",$parent_element_id);
 					
 					$ae = $ae->order_by("weight")
 								->order_by("title")
+								->cached(Date::WEEK)
 								->find_all();
 
 					foreach ($ae as $element)
@@ -116,15 +122,15 @@ class Attribute {
 
 			$data[$rel_id] = Array(0 => Array ( 
 												"id" => "param_".$relation->reference_id,
-												"title" => $relation->atitle,  
+												"title" => $attribute->title,  
 												"type" =>  $type, 
 												"ref_id" => $relation->reference_id, 
 												"custom" => $relation->custom,
 												"options" => $relation->options,
 												"weight" => $relation->weight,
-												"is_textarea" => $relation->is_textarea,
+												"is_textarea" => $attribute->is_textarea,
 												"is_required" => $relation->is_required,
-												"unit"		  => $relation->unit
+												"unit"		  => $attribute->unit
 											)
 										);
 			$data[$rel_id] = array_merge($data[$rel_id], $elements);
