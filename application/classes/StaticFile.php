@@ -20,7 +20,7 @@ class StaticFile {
 
 		$user = Auth::instance()->get_user();
 		if ($user){
-			$set = ORM::factory('User_Settings')-> get_by_name($user->id, "nocache")->find();
+			$set = ORM::factory('User_Settings')->get_by_name($user->id, "clearcache")->find();
 			if ($set->loaded()){
 				call_user_func(array($this, $this->name));
 				return;
@@ -30,11 +30,6 @@ class StaticFile {
 
 		if (!file_exists($this->path))
 			call_user_func(array($this, $this->name));
-		else {
-			if (!Cache::instance()->get('staticdatafile_'.$this->name)){
-				call_user_func(array($this, $this->name));
-			}
-		}
 	}
 
 	public function attributes()
@@ -51,7 +46,18 @@ class StaticFile {
 			$fp = fopen($this->path, "w");
 			fwrite($fp, $this->script);
 			fclose($fp);
-			Cache::instance()->set('staticdatafile_'.$this->name, TRUE);
+
+			if ($user = Auth::instance()->get_user()){
+				ORM::factory('User_Settings')
+							->get_by_name($user->id, "clearcache")
+							->find()
+							->delete();
+			}
 		}
 	}
 }
+
+/*
+Cache::instance()->get('staticdatafile_'.$this->name);
+Cache::instance()->set('staticdatafile_'.$this->name, TRUE);
+*/
