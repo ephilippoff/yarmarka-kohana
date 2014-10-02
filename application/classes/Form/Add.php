@@ -282,7 +282,10 @@ class Form_Add  {
 										->cached(DATE::WEEK)
 										->find()->reference_id;
 			if ($address_reference_id)
-				$params[$address_reference_id] = ORM::factory('Location',$object->location_id)->address;
+			{
+				$location = ORM::factory('Location',$object->location_id);
+				$params[$address_reference_id] = $location->address;
+			}
 
 		} elseif ($this->is_post)
 		{
@@ -355,8 +358,16 @@ class Form_Add  {
 
 	function Map()
 	{
+		$object 	= $this->object;
+
 		if ($this->map)
 			$this->_data->map = array();
+
+		if ($object->loaded() AND !$this->is_post)
+		{
+			$location = ORM::factory('Location',$object->location_id);
+			$this->_data->object_coordinates = $location->lat.",".$location->lon;
+		}
 		return $this;
 	}
 

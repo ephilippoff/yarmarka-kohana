@@ -209,7 +209,8 @@
 				<div class="fieldscont">
 					<div id="map_block_div" class="map_block_div add_form_info inp-cont-long mb20">
 						<div class="map" id="map_block" style="height:250px;width:100%;">		
-							<input type="hidden" id="object_coordinates" name="object_coordinates" value="<? if ($params->object_coordinates) echo $params->object_coordinates;?>"/>
+						
+							<input type="hidden" id="object_coordinates" name="object_coordinates" value="<? if ($form_data->object_coordinates) echo $form_data->object_coordinates;?>"/>
 						</div>				
 					</div><!--#map_block_div-->
 				</div><!--fieldscont-->
