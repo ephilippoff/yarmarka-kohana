@@ -103,7 +103,10 @@ class Controller_Admin_Users extends Controller_Admin_Template {
 			$categories[$name] = $item["name"];
 		$this->template->categories = $categories;
 
-		$user_settings = ORM::factory('User_Settings')->order_by("id", "desc")->find_all();
+		$user_settings = ORM::factory('User_Settings')
+								->order_by("user_id", "desc")
+								->order_by("name", "asc")
+								->find_all();
 		$this->template->user_settings =$user_settings;
 
 		if (HTTP_Request::POST === $this->request->method()) 
@@ -152,6 +155,130 @@ class Controller_Admin_Users extends Controller_Admin_Template {
 
 		//$this->response->body(json_encode(array('code' => 200)));
 	
+	}
+
+	public function action_objectload()
+	{
+		$crontask 			= ORM::factory('Crontask');
+
+		$this->template->states    = $crontask->get_states();
+		$this->template->crontasks = $crontask->where("state","<>",5)
+											->order_by("updated_on", "desc")
+											->order_by("created_on", "desc")
+											->find_all();
+
+		$this->template->qstate = $qstate = $this->request->query('state');
+
+		$objectload 		= ORM::factory('Objectload');
+    	$objectload_files   = ORM::factory('Objectload_Files'); 
+
+		if ($qstate)
+			$oloads = $objectload->where("state","=",$qstate);
+		
+		$oloads	= $objectload->order_by("created_on", "desc")
+				->limit(50)
+				->find_all();
+				
+		$this->template->objectloads = $objectload->get_objectload_list($oloads);
+		$this->template->states_ol   = $objectload->get_states();
+		$this->template->categories  = Kohana::$config->load('massload/bycategory');
+	}
+
+	public function action_objectload_shell()
+	{
+		$this->layout = 'shell';
+	}
+
+	public function action_crontask_to_archive()
+	{
+		$this->auto_render = FALSE;
+		$post = $_POST;
+		$ct = ORM::factory('Crontask', $post["id"]);
+
+		if ( ! $ct->loaded())
+		{
+			throw new HTTP_Exception_404;
+		}
+
+		$ct->state = 5;
+		$ct->update();
+
+		$json = array('code' => 200);
+		$this->response->body(json_encode($json));
+	}
+
+	public function action_crontask_to_stop()
+	{
+		$this->auto_render = FALSE;
+		$post = $_POST;
+		$ct = ORM::factory('Crontask', $post["id"]);
+
+		if ( ! $ct->loaded())
+		{
+			throw new HTTP_Exception_404;
+		}
+
+		$ct->state = 4;
+		$ct->update();
+
+		$json = array('code' => 200);
+		$this->response->body(json_encode($json));
+	}
+
+	public function action_objectload_refresh_statistic()
+	{
+		$this->auto_render = FALSE;
+		$post = $_POST;
+		$ol = ORM::factory('Objectload', $post["id"]);
+
+		if ( ! $ol->loaded())
+		{
+			throw new HTTP_Exception_404;
+		}
+		$json = array('code' => 200);
+
+		$ol->update_statistic();
+
+		$ol = ORM::factory('Objectload', $post["id"]);
+		
+		$statistic = new Obj(unserialize($ol->statistic));
+		$new = $statistic->loaded - $statistic->edited;
+		$json["common"] = $new." / ".$statistic->edited." / ".$statistic->all." err:".$statistic->error;
+
+		$of = ORM::factory('Objectload_Files')
+					->where("objectload_id","=",$post["id"])
+					->find_all();
+		$files_stat = array();
+		foreach ($of as $file) {
+			$statistic = new Obj(unserialize($file->statistic));
+			$new = $statistic->loaded - $statistic->edited;
+			$flagend ='';
+			if ($statistic->loaded + $statistic->error <> $statistic->all)
+				$flagend = '<span style="color:red;">notended</span>';
+			$files_stat[$file->id."_".$file->category] = $new." / ".$statistic->edited." / ".$statistic->all." err:".$statistic->error." ".$flagend;
+		}
+
+		$json["sub"] = $files_stat;
+		
+		$this->response->body(json_encode($json));
+	}
+
+	public function action_objectload_false_moderation()
+	{
+		$this->auto_render = FALSE;
+		$post = $_POST;
+		$ol = ORM::factory('Objectload', $post["id"]);
+
+		if ( ! $ol->loaded())
+		{
+			throw new HTTP_Exception_404;
+		}
+		$json = array('code' => 200);
+
+		$ol->comment = $post["text"];
+		$ol->state = 3;
+		$ol->update();
+		$this->response->body(json_encode($json));
 	}
 
 	public function action_ban()

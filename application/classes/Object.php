@@ -233,7 +233,7 @@ class Object
 		return $json;
 	}
 
-	static function PlacementAds_ByMassLoad($input_params, $massload_id, $user_id)
+	static function PlacementAds_ByMassLoad($input_params, $user_id)
 	{
 		$json = array();
 
@@ -274,8 +274,7 @@ class Object
 					->save_generated()
 					->save_contacts()
 					->save_signature()
-					->save_union()
-					->save_massload_info($massload_id);
+					->save_union();
 
 				$db->commit();
 			}

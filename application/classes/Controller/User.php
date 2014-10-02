@@ -154,6 +154,172 @@ class Controller_User extends Controller_Template {
         }
     }
 
+    public function action_objectload()
+    {
+    	$this->layout = 'users';    	
+    	$this->assets->js('http://yandex.st/underscore/1.6.0/underscore-min.js');
+    	$this->assets->js('http://yandex.st/backbone/1.1.2/backbone-min.js');  	
+    	$this->assets->js('ajaxupload.js');
+
+    	$already_agree = FALSE;
+    	$us = ORM::factory('User_Settings')
+    					->get_by_name($this->user->id, "massload_agreed")
+						->find();
+		$already_agree = $us->loaded();
+
+		$hidehelp = FALSE;
+    	$us = ORM::factory('User_Settings')
+    					->get_by_name($this->user->id, "massload_hidehelp")
+						->find();
+		$hidehelp = !$us->loaded();
+
+    	if (HTTP_Request::POST === $this->request->method())
+		{
+			$post = new Obj($_POST);
+			if ($post->i_agree AND !$already_agree)
+			{
+				$us->user_id = $this->user->id;
+				$us->name 	 = "massload_agreed";
+				$us->value   = 1;
+				$us->save();				
+			}
+
+			if ($post->hidehelp AND $hidehelp)
+			{
+				$us->user_id = $this->user->id;
+				$us->name 	 = "massload_hidehelp";
+				$us->value   = 1;
+				$us->save();				
+			}
+
+			if (!$post->hidehelp AND !$hidehelp)
+				$us->delete();				
+
+			header("Refresh:0");
+			exit;
+		}
+
+		$this->template->already_agree  = $already_agree;
+		$this->template->hidehelp 		= $hidehelp;
+
+    	$avail_categories = Kohana::$config->load('massload.frontend_load_category');
+    	
+    	$categories = Array();								
+    	$categories_templatelink = Array();
+    	foreach($avail_categories as $category)
+    	{
+    			$cfg = Kohana::$config->load('massload/bycategory.'.$category);
+    			$categories[$category] = $cfg["name"];
+
+    			$us = ORM::factory('User_Settings')
+    					->get_by_name(13, $category)
+    					->cached()
+						->find();
+
+				$categories_templatelink[$category] = ($us->value) ? $us->value : "#";
+    	}
+    	$this->template->categories = $categories;
+    	$this->template->categories_templates = $categories_templatelink;
+    	$this->template->config = Kohana::$config->load('massload/bycategory');
+    	$this->template->free_limit = Kohana::$config->load('massload.free_limit');
+
+    	$objectload 		= ORM::factory('Objectload');
+    	$objectload_files   = ORM::factory('Objectload_Files');    	
+
+		$oloads = $objectload->where("user_id","=",$this->user->id)
+								->order_by("created_on", "desc")
+								->limit(5)
+								->find_all();		
+
+		$this->template->objectloads = $objectload->get_objectload_list($oloads);
+		$this->template->states 	 = $objectload->get_states();
+
+    }
+
+    public function action_objectload_file_list()
+	{
+		$this->layout = 'admin_popup';
+		
+		if ($this->user->role == 1 OR $this->user->role == 9)
+			$of = ORM::factory('Objectload_Files', $this->request->param('id'));
+		else
+			$of = ORM::factory('Objectload_Files')
+						->join("objectload")
+							->on("object_load.id","=","objectload.id")
+						->where("user_id","=",$this->user->id)
+						->where("id","=",$this->request->param('id'));
+						
+		if (!$of->loaded())
+			throw new HTTP_Exception_404;
+
+		$this->template->config = Kohana::$config->load('massload/bycategory.'.$of->category);
+		$temp =  DB::select()->from("_temp_".$of->table_name);
+
+		if ($this->request->query('errors'))
+			$temp = $temp->where("error","=",1);
+
+		$this->template->fields = array_keys(ORM_Temp::factory($of->table_name)->list_columns());
+
+		$this->template->items =  $temp->order_by("id","asc")->as_object()->execute();
+		
+		$service_fields = Objectload::getServiceFields();
+		unset($service_fields["object_id"]);
+		unset($service_fields["text_error"]);
+		$this->template->service_fields = array_keys( $service_fields );
+	}
+
+	public function action_objectunload()
+    {
+    	$this->layout = 'users';  
+
+    	$avail_categories = Kohana::$config->load('massload.frontend_load_category');
+
+    	$categories = Array();								
+    	foreach($avail_categories as $category)
+    	{
+			$cfg = Kohana::$config->load('massload/bycategory.'.$category);
+			$categories[$category] = $cfg["name"];
+		}
+		$this->template->categories = $categories;
+		$this->template->free_limit = Kohana::$config->load('massload.free_limit');
+
+		$already_agree = FALSE;
+    	$us = ORM::factory('User_Settings')
+    					->get_by_name($this->user->id, "massload_agreed")
+						->find();
+		$already_agree = $us->loaded();
+
+		$this->template->already_agree = $already_agree;
+    }
+
+    public function action_objectunload_file()
+    {
+    	$this->autorender = FALSE;  
+
+    	$category = $this->request->param('id');
+    	$user_id = $this->user->id;
+
+    	$limit = NULL;
+    	$setting_limit = ORM::factory('User_Settings')
+    							->get_by_name($user_id, "massload_limit")
+    							->find();
+    	if ($setting_limit->loaded())
+    		$limit = (int) $setting_limit->value;
+
+    	$objectunload = new Objectunload($user_id, $category);   
+    	$objects = $objectunload->get_objects($limit);
+
+
+    	$data = array();
+    	$data[] = array();
+    	$data[] = $objectunload->get_header();
+    	foreach ($objects as $object) {
+    		$data[] = $objectunload->row($object);
+    	}
+    	$objectunload->get_excel_file($data);
+
+    }
+
     public function action_massload()
     {
     	$this->layout = 'users';    	
@@ -479,7 +645,15 @@ class Controller_User extends Controller_Template {
 		$objects = $objects->order_by('date_created', 'desc')
 			->limit($per_page)
 			->offset($per_page*($page-1))
-			->find_all();				
+			->find_all();
+
+		//get balance for premium ads				
+		
+		$premium_balance = (int) Service_Premium::get_balance($this->user);
+		$this->template->premium_balance = $premium_balance;
+
+		$already_buyed = Service_Premium::get_already_buyed($this->user);
+		$this->template->already_buyed = $already_buyed;
 
 		// get user objects categories
 		$this->template->categories = ($objects_ids = $objects->as_array(NULL, 'id')) 
@@ -518,6 +692,7 @@ class Controller_User extends Controller_Template {
 		$this->template->objects = $objects;
 		$this->template->service_promo_link = ORM::factory('Service')->where('name', '=', 'promo_link')->find();
 		$this->template->service_promo_link_bg = ORM::factory('Service')->where('name', '=', 'promo_link_bg')->find();
+		$this->template->running_line_site_s = ORM::factory('Service')->where('name', '=', 'running_line_site_s')->find();
 		$this->template->service_premium 		= ORM::factory('Service')->where('name', '=', 'premium_ads')->find();
 	}
 

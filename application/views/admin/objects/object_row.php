@@ -17,7 +17,7 @@
 			<a href="" title="Показать только объявления этого пользователя" onClick="return set_query('user_id=<?=$object->user->id?>')"><?=$object->user->email?></a>
 		</td>
 		<td>
-			<b><a href="<?=CI::site('detail/'.$object->id)?>" target="_blank"><?=$object->title?></a></b>
+			<b><a href="<?=CI::site('detail/'.$object->id)?>" target="_blank"><?=strip_tags($object->title)?></a></b>
 			<a href="<?=URL::site('khbackend/objects/edit/'.$object->id)?>" class="icon-pencil" style="margin-left: 15px;" title="Редактировать текст объявления" data-toggle="modal" data-target="#myModal"></a>
 			<br />
 			<p>
@@ -34,7 +34,7 @@
 						<?=Text::limit_chars(strip_tags($object->user_text), 200, '...', TRUE)?>
 						<a href="#" class="show_full_text" data-id="<?=$object->id?>">show full text</a>
 					<?php else : ?>
-						<?=$object->user_text?>
+						<?=strip_tags($object->user_text)?>
 					<?php endif; ?>
 				</span>
 			</p>

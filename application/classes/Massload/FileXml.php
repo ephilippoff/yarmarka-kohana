@@ -28,6 +28,10 @@ class Massload_FileXml extends Massload_File
 			}			
 			$row = self::clear_row($row);
 			$row->images = join(";", $images);
+			if (!Massload_Avito::is_own_format($row)) {
+				$row = Massload_Avito::convert_avito_row($config['category'], $row);
+				$row = Massload_Avito::format_values($row);
+			}
 			$return = $callback($row, $i);
 			$i++;
 
@@ -39,28 +43,33 @@ class Massload_FileXml extends Massload_File
 		unset($file);
 	}
 
-	public static function forRow($config, $pathtofile, $step, $iteration, $callback)
+	public static function forRow($config, $pathtofile, $row_num, $callback)
 	{
 		$file = self::openFile($pathtofile);
 
-		for ($i = $iteration*$step; $i<$iteration*$step+$step; $i++)
-		{
-			$row = new Obj((array) $file->Ad->{$i});
+		
+			$row = new Obj((array) $file->Ad->{$row_num});
 
 			$images = Array();
-			if (property_exists($file->Ad->{$i}, "images")){
-				foreach ($file->Ad->{$i}->images->Image as $image)
+			if (property_exists($file->Ad->{$row_num}, "images")){
+				foreach ($file->Ad->{$row_num}->images->Image as $image)
 				{
 					$attributes = $image->attributes();
 					$images[] = (string) $attributes["url"][0];
 				}	
 			}
-			$row = self::clear_row($row);
+
+			$row = new Obj((array) $row);
+			unset($row->images);
 			$row->images = join(";", $images);
-			$return = $callback($row, $i);
-			if ($return == 'break') break;
-			if ($return == 'continue') continue;
-		}
+
+			if (!Massload_Avito::is_own_format($row)) {
+				$row = Massload_Avito::convert_avito_row($config['category'], $row);
+				$row = Massload_Avito::format_values($row);
+			}
+
+			$return = $callback($row, $row_num);
+
 		unset($file);
 	}
 

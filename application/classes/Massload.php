@@ -85,7 +85,7 @@ class Massload
 		$sub = DB::select('external_id')->from('object_massload')
 						->join("massload", "left")
 							->on("massload.id","=","massload_id")
-						->where("path","=",$filepath)
+						->where("massload.created_on",">=",date('Y-m-d H:i:s', strtotime('-8 hours')))
 						->where("user_id","=",$user_id);
 
 		ORM::factory('Object')
@@ -100,9 +100,29 @@ class Massload
 				->where('is_union','IS', NULL)
 				->set('is_published', 0)
 				->update_all();
+
+		return $massload_id;
 	}
 
-	public function saveStrings($pathtofile, $pathtoimage, $category, $step, $iteration, $user_id)
+	public function afterProcess($massload_id)
+	{
+		$sub = DB::select('external_id')->from('object_massload')
+						->where("massload_id","=",$massload_id);
+
+		$date_expiration = date('Y-m-d H:i:s', strtotime('+14 days'));
+
+		ORM::factory('Object')
+			->where('number', 'IN', $sub)
+			->set('date_expiration', $date_expiration)
+			->set('in_archive', 'f')
+			->set('active', 1)
+			->set('is_published', 1)
+			->set('is_bad', 0)
+			->update_all();
+
+	}
+
+	public function saveStrings($pathtofile, $pathtoimage, $category, $row_num, $user_id)
 	{
 		$f = new Massload_File();
 
@@ -113,7 +133,7 @@ class Massload
 		@list($dictionary, $form_dictionary) = self::get_dictionary($config, $user_id, $config["category"]);
 		$category_id = $config["id"];
 
-		$f->forRow($config, $pathtofile, $step, $iteration, function($row, $i) use ($massload_id, $pathtoimage, $config, $category_id, &$objects, $dictionary, $user_id){
+		$f->forRow($config, $pathtofile, $row_num, function($row, $i) use ($massload_id, $pathtoimage, $config, $category_id, &$objects, $dictionary, $user_id){
 
 			/*if ($row->count() <> count($config["fields"]) )
 			{
@@ -121,7 +141,9 @@ class Massload
 			}*/
 
 			$validation = Massload::init_validation($row, $i, $config, $dictionary, $pathtoimage);
-			if (!$validation->check()) return "continue";	
+			if (!$validation->check()) {			
+				return "continue";	
+			}
 			
 
 			$record = Array();
@@ -148,7 +170,7 @@ class Massload
 		return Kohana::$config->load('massload/bycategory.'.$category);
 	}
 
-	public static function init_validation($row, $i, $config, $dictionary, $pathtoimage)
+	public static function init_validation($row, $i, $config, $dictionary, $pathtoimage = FALSE)
 	{
 		$validation = Validation::factory((array) $row);
 
@@ -162,7 +184,6 @@ class Massload
 			$valid_info 		= array(':value', $dictionary, $config_key->translate, $i, $value);
 			$valid_info_contact = array(':value', $config_key->maxlength, $dictionary, $config_key->translate, $i, $value);
 			$valid_info_dict 	= array(':value', $config_key->name, $dictionary, $config_key->translate, $i, $value);
-			$valid_info_photo 	= array(':value', $pathtoimage, $config_key->translate, $i, $value);
 			$valid_info_maxlength = array(':value', $config_key->maxlength, $dictionary, $config_key->translate, $i, $value);
 
 			if ($config_key->required) 
@@ -219,7 +240,7 @@ class Massload
 
 	public static function to_post_format($record_fields, $category_id, $pathtoimage, $config, $dictionary)
 	{
-		//echo var_dump($dictionary);
+
 		$return = Array();
 		foreach($record_fields as $key=>$value)
 		{

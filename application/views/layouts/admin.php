@@ -29,6 +29,7 @@
 								<ul class="dropdown-menu">
 									<li><a href="<?=Url::site('khbackend/users/index')?>">List</a></li>
 									<li><a href="<?=Url::site('khbackend/users/add_settings')?>">Добавить настройку</a></li>
+									<li><a href="<?=Url::site('khbackend/users/objectload')?>">Загрузки</a></li>
 								</ul>
 							</li>
 						<?php endif; ?>
@@ -87,8 +88,9 @@
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">Reklama <b class="caret"></b></a>
 							<ul class="dropdown-menu">
-								<li><a href="<?=Url::site('khbackend/reklama/index')?>">List</a></li>
-								<li><a href="<?=Url::site('khbackend/reklama/add')?>">Add</a></li>
+								<li><a href="<?=Url::site('khbackend/reklama/index')?>">Контекст. ссылки</a></li>
+								<li><a href="<?=Url::site('khbackend/reklama/add')?>">Добавить контекст. ссылку</a></li>
+								<li><a href="<?=Url::site('khbackend/reklama/tickets')?>">Бегающие ссылки</a></li>								
 							</ul>
 						</li>
 						<?php endif; ?>

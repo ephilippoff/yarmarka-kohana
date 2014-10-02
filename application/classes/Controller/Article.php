@@ -77,23 +77,31 @@ class Controller_Article extends Controller_Template {
 				
 		Seo::set_title($newsone->title.Seo::get_postfix());
 		Seo::set_description($newsone->get_meta_description());		
+		
+		$city_id = Region::get_current_city();		
 	
 		$photo = Imageci::getSavePaths($newsone->photo);												
 		$real_photo = is_file($_SERVER['DOCUMENT_ROOT'].trim($photo['341x256'], '.')) ? trim($photo['341x256'], '.') : ''; 		
 		$other_news = array();
 		
 		if ($newsone->is_category == 0)
+		{
 			$other_news = ORM::factory('Article')
 					->where('text_type', '=', 2)
 					->where('is_category', '=', 0)
 					->where('is_visible', '=', 1)
 					->where('parent_id', '=', $newsone->parent_id)
-					->where('start_date', '<', DB::expr('now()'))
-					->where('end_date', '>', DB::expr('now()'))
+					->where('start_date', '<=', DB::expr('now()'))
+					->where('end_date', '>=', DB::expr('now()'))
 					->where('id', '<>', $newsone->id)
 					->order_by('created', 'desc')
-					->limit(6)
-					->find_all();
+					->limit(6);
+			
+			if ($city_id)
+				$other_news->where (DB::expr($city_id), '=', DB::expr('ANY(cities)'));
+		
+			$other_news = $other_news->find_all(); 
+		}
 		
 		$this->template->set_global('is_news_page', 1);
 		$this->template->other_news = $other_news;

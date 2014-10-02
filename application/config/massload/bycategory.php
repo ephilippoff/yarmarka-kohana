@@ -24,15 +24,73 @@ return array(
 			'autofill'=>array(
 						'rubricid' => 3, //категория квартиры и комнаты
 						'param_441' => 3196, //вторичное жилье
+					),
+			'filter'  =>array(
+						'tip-sdelki5' => 3250,
+						'build-type'  => 3196,
+					)
+	),
+	'flat_rooms'	=> array( 
+			'id'    => 3,
+			'name'	=> 'Продажа комнат',
+			'category' =>'flat_rooms',
+			'fields'=>array
+					(
+						'external_id' 	=> array('name' => 'external_id','required' => TRUE, 'type' => 'external_id', 'translate' => 'ID', 'maxlength' => 30),
+						'city' 			=> array('name' => 'city',		'required' => TRUE, 'type' => 'city', 		'translate' => 'Город', 'maxlength' => 30),
+						'address'		=> array('name' => 'address',	'required' => TRUE, 'type' => 'address', 	'translate' => 'Адрес', 'maxlength' => 50),
+						'tip-sdelki5' 	=> array('name' => 'tip-sdelki5','required' => TRUE,'type' => 'dict', 		'translate' => 'Тип сделки', 'maxlength' => 30), 
+						'ploshchad' 	=> array('name' => 'ploshchad',	'required' => TRUE, 'type' => 'integer', 	'translate' => 'Площадь', 'maxlength' => 6),	
+						'etazh' 		=> array('name' => 'etazh',	'required' => TRUE, 	'type' => 'integer', 	'translate' => 'Этаж', 'maxlength' => 2),	
+						'etazhnost' 	=> array('name' => 'etazhnost',	'required' => TRUE, 'type' =>'integer', 	'translate' => 'Этажность', 'maxlength' => 2),			
+						'tsena' 		=> array('name' => 'tsena',		'required' => TRUE, 'type' => 'integer', 	'translate' => 'Цена', 'maxlength' => 9),
+						'user_text_adv' => array('name' => 'user_text_adv','required' => TRUE,'type' => 'textadv', 'translate' => 'Текст объявления', 'maxlength' => 15000),
+						'contact_0_value'=> array('name' => 'contact_0_value',	'required' => TRUE, 'type' => 'contact','translate' => 'Телефон №1', 'maxlength' => 40),
+						'contact_1_value'=> array('name' => 'contact_1_value',	'required' => FALSE, 'type' => 'contact','translate' => 'Телефон №2', 'maxlength' => 40),
+						'contact'		=> array('name' => 'contact',	'required' => TRUE, 'type' => 'contact_name', 	'translate' => 'ФИО', 'maxlength' => 50),
+						'images' 		=> array('name' => 'images',		'required' => FALSE,'type' => 'photo', 		'translate' => 'Фото', 'maxlength' => 0)
+					),
+			'autofill'=>array(
+						'rubricid' => 3, //категория квартиры и комнаты
+						'param_441' => 3196, //вторичное жилье
+						'param_440' => 3194, //комната
+					),
+			'filter'  =>array(
+						'tip-sdelki5' => 3250,
+						'build-type'  => 3196,
+						'flatrooms'   => 3194
 					)
 	),
 	'flat_new'		=> array( 
 			'id'    => 3,
 			'name'	=> 'Продажа квартир и комнат (новостройки)',
 			'category' =>'flat_new',
-			'fields'=>array(),
-			'autofill'=>array()					
+			'fields'=>array
+					(
+						'external_id' 	=> array('name' => 'external_id','required' => TRUE, 'type' => 'external_id', 'translate' => 'ID', 'maxlength' => 30),
+						'city' 			=> array('name' => 'city',		'required' => TRUE, 'type' => 'city', 		'translate' => 'Город', 'maxlength' => 30),
+						'address'		=> array('name' => 'address',	'required' => TRUE, 'type' => 'address', 	'translate' => 'Адрес', 'maxlength' => 50),
+						'tip-sdelki5' 	=> array('name' => 'tip-sdelki5','required' => TRUE,'type' => 'dict', 		'translate' => 'Тип сделки', 'maxlength' => 30), 
+						'flatrooms' 	=> array('name' => 'flatrooms',	'required' => TRUE, 'type' => 'dict', 		'translate' => 'Количество комнат', 'maxlength' => 30),
+						'ploshchad' 	=> array('name' => 'ploshchad',	'required' => TRUE, 'type' => 'integer', 	'translate' => 'Площадь', 'maxlength' => 6),	
+						'etazh' 		=> array('name' => 'etazh',	'required' => TRUE, 	'type' => 'integer', 	'translate' => 'Этаж', 'maxlength' => 2),	
+						'etazhnost' 	=> array('name' => 'etazhnost',	'required' => TRUE, 'type' =>'integer', 	'translate' => 'Этажность', 'maxlength' => 2),			
+						'tsena' 		=> array('name' => 'tsena',		'required' => TRUE, 'type' => 'integer', 	'translate' => 'Цена', 'maxlength' => 9),
+						'user_text_adv' => array('name' => 'user_text_adv','required' => TRUE,'type' => 'textadv', 'translate' => 'Текст объявления', 'maxlength' => 15000),
+						'contact_0_value'=> array('name' => 'contact_0_value',	'required' => TRUE, 'type' => 'contact','translate' => 'Телефон №1', 'maxlength' => 40),
+						'contact_1_value'=> array('name' => 'contact_1_value',	'required' => FALSE, 'type' => 'contact','translate' => 'Телефон №2', 'maxlength' => 40),
+						'contact'		=> array('name' => 'contact',	'required' => TRUE, 'type' => 'contact_name', 	'translate' => 'ФИО', 'maxlength' => 50),
+						'images' 		=> array('name' => 'images',		'required' => FALSE,'type' => 'photo', 		'translate' => 'Фото', 'maxlength' => 0)
 					),
+			'autofill'=>array(
+						'rubricid' => 3, //категория квартиры и комнаты
+						'param_441' => 3631, //новостройка, дом сдан
+					),
+			'filter'  =>array(
+						'tip-sdelki5' => 3250,
+						'build-type'  => array(3197,3631)
+					)
+	),
 	'flat_rent'		=> array( 
 			'id'    => 96,
 			'name'	=> 'Аренда квартир и комнат',
@@ -57,6 +115,9 @@ return array(
 					),
 			'autofill'=>array(
 						'rubricid' => 96, //категория аренда квартир и комнат
+					),
+			'filter'  =>array(
+						'tip-sdelki1' => 3240,
 					)
 	),
 	'house'		=> array( 
@@ -80,8 +141,11 @@ return array(
 					),
 			'autofill'=>array(
 						'rubricid' => 30,
-				)					
 					),
+			'filter'  =>array(
+						'tip-sdelki3' => 3242,
+					)				
+	),
 	'land'		=> array( 
 			'id'    => 34,
 			'name'	=> 'Земельные участки',
@@ -102,8 +166,11 @@ return array(
 					),
 			'autofill'=>array(
 						'rubricid' => 34,
-				)					
 					),
+			'filter'  =>array(
+						'tip-sdelki3' => 3242,
+					)					
+	),
 	'commercial'		=> array( 
 			'id'    => 4,
 			'name'	=> 'Коммерческая недвижимость',
@@ -124,8 +191,11 @@ return array(
 					),
 			'autofill'=>array(
 						'rubricid' => 4,
-				)					
 					),
+			'filter'  =>array(
+						'tip-sdelki3' => 3242,
+					)					
+	),
 
 
 );

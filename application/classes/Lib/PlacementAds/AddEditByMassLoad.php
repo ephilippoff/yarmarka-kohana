@@ -16,6 +16,8 @@ class Lib_PlacementAds_AddEditByMassLoad extends Lib_PlacementAds_AddEdit {
 			$object = ORM::factory('Object')
 						->where("author","=",$user->id)
 						->where("number","=",$params->external_id)
+						->where("category","=",$params->rubricid)
+						->where("active","=",1)
 						->find();
 			if ($object->loaded())
 			{

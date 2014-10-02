@@ -20,7 +20,7 @@
 	<tr>
 		<th>Access log:</th>
 	</tr>
-	<?php foreach ($user->access->find_all() as $access) : ?>
+	<?php foreach ($user->access->limit(30)->order_by("id","desc")->find_all() as $access) : ?>
 	<tr>
 		<td><?=$access->ip?> <?=date('Y-m-d H:i:s', strtotime($access->date))?></td>
 	</tr>
@@ -49,11 +49,17 @@
 	<div class="span6">
 	<table class="table table-hover table-condensed">
 	<tr>
+		<th>Date</th>
 		<th>User invoices:</th>
+		<th>State</th>
+		<th>PayDate</th>
 	</tr>
 	<?php foreach ($user->invoices->success()->order_by('created_on', 'desc')->find_all() as $invoice) : ?>
 	<tr>
+		<td><?=date('Y-m-d H:i', strtotime($invoice->created_on))?></td>
 		<td><?=$invoice->description?> <span class="badge"><?=$invoice->sum?>р</span></td>
+		<td><?=$invoice->state?></td>
+		<td><?=date('Y-m-d H:i', strtotime($invoice->payment_date))?></td>
 	</tr>
 	<?php endforeach; ?>
 	</table>

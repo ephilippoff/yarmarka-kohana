@@ -9,7 +9,8 @@ class Task_Object_MassloadAvito extends Minion_Task
 		'link'	=> FALSE,
 		'user'  => FALSE,
 		'category'	=> FALSE,
-		'send_email'=> FALSE
+		'send_email'=> FALSE,
+		'disable_preafterprocess'=> FALSE
 	);
 
 	protected function _execute(array $params)
@@ -17,7 +18,8 @@ class Task_Object_MassloadAvito extends Minion_Task
 		$link 				= $params['link'];
 		$user_id 			= $params['user'];
 		$direct_category 	= $params['category'];
-		$send_email 	= $params['send_email'];
+		$send_email 		= $params['send_email'];
+		$disable_preafterprocess = $params['disable_preafterprocess'];
 
 		$settings = Array();
 		if ($link AND $user_id)
@@ -31,7 +33,7 @@ class Task_Object_MassloadAvito extends Minion_Task
 
 		foreach ($settings as $setting)
 		{
-			try {
+			//try {
 
 				$link 		= $setting["link"];
 				$user_id 	= $setting["user_id"];
@@ -75,17 +77,18 @@ class Task_Object_MassloadAvito extends Minion_Task
 
 					$iteration = round($count/self::STEP);
 
-					$ml->preProccess($new_filepath, $category, $user->id);
+					if (!$disable_preafterprocess)
+						$massload_id = $ml->preProccess($new_filepath, $category, $user->id);
 
 					$object_count = 0;
 					$edited_count = 0;
 					$error_count  = 0;
 					$error_adverts = Array();
 
-					for ($i = 0; $i<$iteration; $i++)
+					for ($i = 0; $i<$count; $i++)
 					{
 						Minion_CLI::write("Loading...");
-						$data =  $ml->saveStrings($new_filepath, $imagepath, $category, self::STEP, $i, $user->id);
+						$data =  $ml->saveStrings($new_filepath, $imagepath, $category, $i, $user->id);
 						foreach ($data as $advert){
 							$object_id = $parent_id = $is_edit = "";
 							if (array_key_exists("object_id", $advert)){
@@ -105,6 +108,10 @@ class Task_Object_MassloadAvito extends Minion_Task
 							Minion_CLI::write($object_id.$parent_id.$is_edit.$error.$external_id);
 						}
 					}
+
+					if (!$disable_preafterprocess)
+						$ml->afterProcess($massload_id); 
+					
 					$config = Kohana::$config->load('massload/bycategory.'.$category);
 					$mail_message = 'Отчет по загрузке файла для компании : '.$user->org_name.' ('.$user->id.' '.$user->email.')</br>';
 					$mail_message .= 'Ссылка на файл : '.$link.' </br>';
@@ -129,7 +136,7 @@ class Task_Object_MassloadAvito extends Minion_Task
 						Kohana::$log->add(Log::ERROR, $ee->getMessage());
 					}
 				} //end foreach by category
-			} 
+			/*} 
 				catch(Exception $e)
 			{
 				$exception_message  = 'Ошибки при массовой загрузке: </br>';
@@ -143,7 +150,7 @@ class Task_Object_MassloadAvito extends Minion_Task
 					Kohana::$log->add(Log::ERROR, $eee->getMessage());
 				}
 				Minion_CLI::write('critical error: '.Minion_CLI::color($e->getMessage(), 'cyan'));
-			}
+			}*/
 
 			
 		} //end foreach by $links

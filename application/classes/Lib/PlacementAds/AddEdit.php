@@ -363,7 +363,7 @@ class Lib_PlacementAds_AddEdit {
 					if ($signature_full == $sign_existed->signature_full 
 							AND $attachments_count == $input_attachament_count)
 					{
-						$errors['signature'] = "Объявление не требует обновления.";	
+						$errors['nochange'] = "Объявление не требует обновления.";	
 						$this->union_cancel = TRUE;
 					}
 				}
@@ -978,12 +978,13 @@ class Lib_PlacementAds_AddEdit {
 		if ($user->email)
 		{
 			// отправляем уведомление о успешном редактировании/публикации
+			$is_edit = $this->is_edit;
 			$subj = $this->is_edit 
 				? 'Вы изменили Ваше объявление. Теперь объявление выглядит так:' 
-				: 'Поздравляем Вас с успешным размещением объявления на «Ярмарка-онлайн»!';
+				: 'Поздравляем Вас с успешным размещением объявления на «Ярмарка-онлайн»!';			
 
 			$msg = View::factory('emails/add_notice',
-					array('h1' => $subj,'object' => $object, 'name' => $user->get_user_name(), 
+					array('is_edit' => $is_edit,'object' => $object, 'name' => $user->get_user_name(), 
 						'obj' => $object, 'city' => $city, 'category' => $category, 'subdomain' => Region::get_domain_by_city($city->id), 
 						'contacts' => $contacts, 'address' => $params->address_str));
 
