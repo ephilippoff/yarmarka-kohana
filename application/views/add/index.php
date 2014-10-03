@@ -65,22 +65,10 @@
 					</div>
 					<div class="fieldscont">
 						<div class="inp-cont-short">
-							<a target="_blank" href="/user/registration">Зарегистрироваться</a>
+							<a target="_blank" href="http://<?=Kohana::$config->load('common.main_domain')?>/user/registration">Зарегистрироваться</a>
 						</div>
 					</div>
 				</div>	
-				
-				<div class="smallcont">
-					<div class="labelcont">
-						<label></label>
-					</div>
-					<div class="fieldscont">
-						<div class="inp-cont-short mt10">
-							<a target="_blank" href="">Напомнить пароль</a>
-						</div>
-					</div>
-				</div>				
-				
 			</div>
 			<? endif; ?>
 
@@ -615,9 +603,15 @@
 		</div>
 		<div class="fieldscont">
 			<div class="inp-cont-long">
-				<div class="inp-cont">
+				<div class="inp-cont <% if (error) {%> error <%}%>">
 					<span class="required-label">*</span>																		
 					<input type="text" maxlength="75"  id="title_adv" name="title_adv" value="<%=value%>"/>	
+
+					<% if (error) { %>
+					<span class="inform">
+						<span><?=$form_data->subject["subject_error"]?></span>
+					</span>
+					<% } %>
 				</div>							
 			</div>
 		</div><!--fieldscont-->
