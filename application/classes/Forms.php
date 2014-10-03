@@ -28,7 +28,7 @@ class Forms
 				$element->is_required  = $relation->is_required;
 			elseif ($ar_parent AND $relation->is_required 
 									AND array_key_exists("param_".$ar_parent->reference_id, (array) $params) 
-											AND $params->{"param_".$ar_parent->reference_id})
+											AND $params->{"param_".$ar_parent->reference_id} == $relation->parent_element_id)
 				$element->is_required  = $relation->is_required;
 
 			$reference = ORM::factory('Reference')
