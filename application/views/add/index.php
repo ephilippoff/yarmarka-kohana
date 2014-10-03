@@ -1,4 +1,3 @@
-<script type="text/javascript" src="/js/adaptive/tiny_mce/tiny_mce.js"></script>
 <div class="winner">
 	<section class="main-cont">
 		<div class="hheader">
