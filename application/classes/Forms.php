@@ -6,7 +6,7 @@
 class Forms
 {
 	public static function get_by_category($category_id, $params)
-	{echo Debug::vars($params);
+	{
 		$elements = array();
 		$ar = ORM::factory('Attribute_Relation')
 					->where("category_id","=", $category_id)
@@ -56,7 +56,7 @@ class Forms
 
 			$elements[] = $element;
 		}
-echo Debug::vars($elements);
+		
 		return $elements; 
 	}
 }
