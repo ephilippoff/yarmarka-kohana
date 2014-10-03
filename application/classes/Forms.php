@@ -16,6 +16,7 @@ class Forms
 		foreach ($ar as $relation) {
 			$element = new Obj();
 			$element->reference_id = $relation->reference_id;
+			$element->is_ilist 	   = $relation->is_ilist($relation->options);
 
 			$ar_parent = NULL;
 			if ($relation->parent_id)
@@ -24,14 +25,16 @@ class Forms
 								->cached(Date::WEEK)
 								->find();
 
+			/* Если элемент формы обязателен и есть на форме */
 			if (array_key_exists("param_".$relation->reference_id, (array) $params) AND $relation->is_required)
 				$element->is_required  = $relation->is_required;
-			
+			/* Если элемент формы обязателен и его родитель выбран, т.е. этот подчиненный элемент показан на форме */
 			elseif ($ar_parent AND $relation->is_required 
 									AND array_key_exists("param_".$ar_parent->reference_id, (array) $params) 
 											AND $params->{"param_".$ar_parent->reference_id} == $relation->parent_element_id)
 				$element->is_required  = $relation->is_required;
-			
+			/* Если элемент формы обязателен и его родитель выбран, т.е. этот подчиненный элемент показан на форме, 
+							и в мультивыборе выбрано одно из значений который показывает этот элемент формы */
 			elseif ($ar_parent AND $relation->is_required 
 									AND array_key_exists("param_".$ar_parent->reference_id, (array) $params) 
 										AND is_array($params->{"param_".$ar_parent->reference_id})
@@ -49,14 +52,14 @@ class Forms
 
 			$element->attribute_title 			= $reference->title;
 			$element->attribute_type 			= $reference->type;
-			$element->attribute_solid_size 	= $reference->solid_size;
+			$element->attribute_solid_size 		= $reference->solid_size;
 			$element->attribute_frac_size 		= $reference->frac_size;
 			$element->attribute_max_text_length = $reference->max_text_length;
 			$element->is_range 				    = FALSE;
 
 			$elements[] = $element;
 		}
-		
+
 		return $elements; 
 	}
 }

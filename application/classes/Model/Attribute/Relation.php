@@ -15,7 +15,43 @@ class Model_Attribute_Relation extends ORM
 		'parent_obj' => array('model' => 'Attribute_Relation', 'foreign_key' => 'parent_id'),
 	);
 
-	
+	public function parse_options($options)
+	{
+		$count_options = count(explode(",", $options));
+		if ($count_options>1)
+		{
+			try {
+
+				$result = array();
+				$params = explode(",", $options);
+				foreach ($params as $param) {
+					$keyvalue = explode("=", $param);
+					$result[$keyvalue[0]] = $keyvalue[1];
+					
+				}
+				return $result;
+			}
+			catch (Exception $e) 
+			{
+				return FALSE;
+			}
+		} else {
+			return FALSE;
+		}
+	}
+
+	public function is_ilist($options)
+	{
+		if (!$this->parse_options($options))
+			return FALSE;
+
+		$options = new Obj($this->parse_options($options));
+
+		if ($options->min AND $options->max AND $options->step)
+			return TRUE;
+		else
+			return FALSE;
+	}
 }
 
 /* End of file Element.php */

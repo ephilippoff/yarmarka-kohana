@@ -535,23 +535,24 @@ class Lib_PlacementAds_AddEdit {
 				$rules[] = array('not_empty', array(':value', $reference->attribute_title));
 			}
 
-			switch ($reference->attribute_type)
-			{
-				case 'integer':
-					$rules[] = array('digit', array(':value', $reference->attribute_title));
-					$rules[] = array('not_0', array(':value', $reference->attribute_title));
-					$rules[] = array('max_length', array(':value', $reference->attribute_solid_size, $reference->attribute_title));
-				break;
+			if (!$reference->is_ilist)
+				switch ($reference->attribute_type)
+				{
+					case 'integer':
+						$rules[] = array('digit', array(':value', $reference->attribute_title));
+						$rules[] = array('not_0', array(':value', $reference->attribute_title));
+						$rules[] = array('max_length', array(':value', $reference->attribute_solid_size, $reference->attribute_title));
+					break;
 
-				case 'numeric':
-					$rules[] = array('numeric', array(':value', $reference->attribute_title));
-					$rules[] = array('max_length', array(':value', $reference->attribute_solid_size+$reference->attribute_frac_size+1, $reference->attribute_title));
-				break;
+					case 'numeric':
+						$rules[] = array('numeric', array(':value', $reference->attribute_title));
+						$rules[] = array('max_length', array(':value', $reference->attribute_solid_size+$reference->attribute_frac_size+1, $reference->attribute_title));
+					break;
 
-				case 'text':
-					$rules[] = array('max_length', array(':value', $reference->attribute_max_text_length, $reference->attribute_title));
-				break;
-			}
+					case 'text':
+						$rules[] = array('max_length', array(':value', $reference->attribute_max_text_length, $reference->attribute_title));
+					break;
+				}
 			// @todo check xss validation
 
 			foreach ($params as $param)
