@@ -6,7 +6,7 @@
 class Forms
 {
 	public static function get_by_category($category_id, $params)
-	{
+	{echo Debug::vars($params);
 		$elements = array();
 		$ar = ORM::factory('Attribute_Relation')
 					->where("category_id","=", $category_id)
@@ -26,9 +26,16 @@ class Forms
 
 			if (array_key_exists("param_".$relation->reference_id, (array) $params) AND $relation->is_required)
 				$element->is_required  = $relation->is_required;
+			
 			elseif ($ar_parent AND $relation->is_required 
 									AND array_key_exists("param_".$ar_parent->reference_id, (array) $params) 
 											AND $params->{"param_".$ar_parent->reference_id} == $relation->parent_element_id)
+				$element->is_required  = $relation->is_required;
+			
+			elseif ($ar_parent AND $relation->is_required 
+									AND array_key_exists("param_".$ar_parent->reference_id, (array) $params) 
+										AND is_array($params->{"param_".$ar_parent->reference_id})
+											AND in_array($relation->parent_element_id, $params->{"param_".$ar_parent->reference_id}))
 				$element->is_required  = $relation->is_required;
 
 			$reference = ORM::factory('Reference')
@@ -49,7 +56,7 @@ class Forms
 
 			$elements[] = $element;
 		}
-
+echo Debug::vars($elements);
 		return $elements; 
 	}
 }

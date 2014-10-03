@@ -3,8 +3,8 @@
 				<label><span><?=$title?></span></label>
 			</div>
 			<div class="fieldscont">
-				<div class="inp-cont">
-					<div class="inp-cont-long <? if ($errors) echo "error";?>">
+				<div class="inp-cont-long">
+					<div class="inp-cont  <? if ($errors) echo "error";?>">
 						<? if ($is_required):?>
 							<span class="required-label">*</span>
 						<? endif; ?>
