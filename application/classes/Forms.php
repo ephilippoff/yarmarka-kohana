@@ -17,7 +17,18 @@ class Forms
 			$element = new Obj();
 			$element->reference_id = $relation->reference_id;
 
+			$ar_parent = NULL;
+			if ($relation->parent_id)
+				$ar_parent = ORM::factory('Attribute_Relation')
+								->where("id","=", $relation->parent_id)
+								->cached(Date::WEEK)
+								->find();
+
 			if (array_key_exists("param_".$relation->reference_id, (array) $params) AND $relation->is_required)
+				$element->is_required  = $relation->is_required;
+			elseif ($ar_parent AND $relation->is_required 
+									AND array_key_exists("param_".$ar_parent->reference_id, (array) $params) 
+											AND $params->{"param_".$ar_parent->reference_id})
 				$element->is_required  = $relation->is_required;
 
 			$reference = ORM::factory('Reference')
@@ -34,7 +45,7 @@ class Forms
 			$element->attribute_solid_size 	= $reference->solid_size;
 			$element->attribute_frac_size 		= $reference->frac_size;
 			$element->attribute_max_text_length = $reference->max_text_length;
-			$element->is_range 				= FALSE;
+			$element->is_range 				    = FALSE;
 
 			$elements[] = $element;
 		}
