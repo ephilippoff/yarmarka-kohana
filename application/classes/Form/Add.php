@@ -20,7 +20,7 @@ class Form_Add  {
 
 	const MAX_COUNT_CONTACTS = 3;
 
-	function Form_Add($params, $is_post = FALSE, $errors = NULL)
+	function __construct($params, $is_post = FALSE, $errors = NULL)
 	{
 		$this->_data = new Obj();
 		$this->is_post = $is_post;
@@ -56,7 +56,7 @@ class Form_Add  {
 
 		if ($object_id > 0) 
 		{
-			$this->object = ORM::factory('Object', $object_id); 
+			$this->object = ORM::factory('Object', $object_id)->cached(DATE::DAY); 
 
 			if ($this->object->loaded())
 			{				
@@ -73,7 +73,10 @@ class Form_Add  {
 		if ($category_id > 0)
 		{
 
-			$this->category = ORM::factory('Category', $category_id)->cached(DATE::WEEK);
+			$this->category = ORM::factory('Category')
+									->where("id","=",$category_id)
+									->cached(DATE::WEEK)
+									->find();
 			if ($this->category->loaded())
 			{
 				$this->category_id = $category_id;
@@ -84,7 +87,7 @@ class Form_Add  {
 
 		if ($city_id > 0)
 		{
-			$this->city = ORM::factory('City', $city_id);
+			$this->city = ORM::factory('City', $city_id)->cached(DATE::WEEK);
 			if ($this->city->loaded())
 			{
 				$this->city_id = $city_id;
@@ -135,8 +138,7 @@ class Form_Add  {
 					if (!ORM::factory('Category')
 							->where("parent_id","=",$child->id)
 							->where("is_ready", "=", 1)
-							->cached(DATE::WEEK)
-							->count_all())
+							->count_all(NULL, DATE::WEEK))
 					{
 						$childs_array[$child->id] = $child->title;
 					}

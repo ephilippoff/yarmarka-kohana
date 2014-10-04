@@ -126,7 +126,7 @@ class Model_Category extends ORM {
 
 	public function get_count_childs($category_id)
  	{
- 		return $this->where("parent_id","=",$category_id)->count_all();
+ 		return $this->where("parent_id","=",$category_id)->count_all(NULL, DATE::WEEK);
  	}
 
  	public function get_default_action($category_id)
@@ -134,6 +134,7 @@ class Model_Category extends ORM {
  		$ac = ORM::factory('Action_Category')
 						->where("category_id","=",$category_id)
 						->where("is_default","IS NOT", NULL)
+						->cached(DATE::WEEK)
 						->find();
 		if ($ac->action_id)
 			return $ac->action_id;

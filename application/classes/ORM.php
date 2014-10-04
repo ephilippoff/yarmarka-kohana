@@ -2,6 +2,8 @@
 
 class ORM extends Kohana_ORM {
 
+	protected $_reload_on_wakeup = FALSE;
+	
     /**
      * Updates all existing records
      *
@@ -68,7 +70,7 @@ class ORM extends Kohana_ORM {
 	 * @access public
 	 * @return integer
 	 */
-	public function count_all($column = NULL)
+	public function count_all($column = NULL, $cached = FALSE)
 	{
 		$selects = array();
 
@@ -94,8 +96,12 @@ class ORM extends Kohana_ORM {
 		$this->_build(Database::SELECT);
 
 		$records = $this->_db_builder->from(array($this->_table_name, $this->_object_name))
-			->select(array(DB::expr('COUNT('.( ( $column AND $this->_db_builder->_distinct ) ? 'DISTINCT ' : '' ).( $column ? '"'.$column.'"' : '*' ).')'), 'records_found'))
-			->execute($this->_db)
+			->select(array(DB::expr('COUNT('.( ( $column AND $this->_db_builder->_distinct ) ? 'DISTINCT ' : '' ).( $column ? '"'.$column.'"' : '*' ).')'), 'records_found'));
+
+		if ($cached)
+			$records = $records->cached($cached);
+
+		$records = 	$records->execute($this->_db)
 			->get('records_found');
 
 		// Add back in selected columns
