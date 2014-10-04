@@ -95,11 +95,11 @@
                 <?php foreach ($objects as $ad) : ?>
 				
 						<?php 
-						$user_messages = $ad->user_messages->order_by('createdOn', 'DESC')->find_all(); 
+						$user_messages = $ad->user_messages->order_by('createdOn', 'DESC')->cached(DATE::HOUR)->find_all(); 
 						$obj_is_active = ($ad->is_bad == 0 AND ! $ad->in_archive AND $ad->is_published); //активность объявления  
 						//Цена или зарплата
-						if (!$price = ORM::factory('Object')->get_intattr_value_by_id($ad->id, 44))
-							$price = ORM::factory('Object')->get_intattr_value_by_id($ad->id, 71);
+						if (!$price = ORM::factory('Object')->set_time_link_cache(15)->get_intattr_value_by_id($ad->id, 44))
+							$price = ORM::factory('Object')->set_time_link_cache(15)->get_intattr_value_by_id($ad->id, 71);
 						?>
 				
 					    <?
