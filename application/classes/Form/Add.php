@@ -56,7 +56,7 @@ class Form_Add  {
 
 		if ($object_id > 0) 
 		{
-			$this->object = ORM::factory('Object', $object_id)->cached(DATE::DAY); 
+			$this->object = ORM::factory('Object', $object_id); 
 
 			if ($this->object->loaded())
 			{				
@@ -75,7 +75,7 @@ class Form_Add  {
 
 			$this->category = ORM::factory('Category')
 									->where("id","=",$category_id)
-									->cached(DATE::WEEK)
+									->cached(DATE::WEEK, array("category", "add"))
 									->find();
 			if ($this->category->loaded())
 			{
@@ -87,7 +87,7 @@ class Form_Add  {
 
 		if ($city_id > 0)
 		{
-			$this->city = ORM::factory('City', $city_id)->cached(DATE::WEEK);
+			$this->city = ORM::factory('City', $city_id)->cached(DATE::WEEK, array("city", "add"));
 			if ($this->city->loaded())
 			{
 				$this->city_id = $city_id;
@@ -121,7 +121,7 @@ class Form_Add  {
 		$category_list = ORM::factory('Category')
 								->where("is_ready", "=", 1)
 								->order_by("through_weight")
-								->cached(DATE::WEEK)
+								->cached(DATE::WEEK, array("category", "add"))
 								->find_all();
 		foreach ($category_list as $item) {
 			
@@ -129,7 +129,7 @@ class Form_Add  {
 				->where("parent_id","=",$item->id)
 				->where("is_ready", "=", 1)
 				->order_by("weight")
-				->cached(DATE::WEEK)
+				->cached(DATE::WEEK, array("category", "add"))
 				->find_all();
 			if (count($childs)>0 AND $item->id <> 1)
 			{
@@ -138,7 +138,7 @@ class Form_Add  {
 					if (!ORM::factory('Category')
 							->where("parent_id","=",$child->id)
 							->where("is_ready", "=", 1)
-							->count_all(NULL, DATE::WEEK))
+							->count_all(NULL, DATE::WEEK, array("category", "add")))
 					{
 						$childs_array[$child->id] = $child->title;
 					}
@@ -177,14 +177,14 @@ class Form_Add  {
 		$other_cities = array();
 		$city_list = ORM::factory('City')
 							->where('is_visible','>',0)
-							->cached(DATE::WEEK)
+							->cached(DATE::WEEK, array("city", "add"))
 							->find_all();
 		foreach ($city_list as $city_item)
 		{
 			$lat = $lon = "";
 			$location = ORM::factory('Location')
 						->where("id","=",$city_item->location_id)
-						->cached(DATE::WEEK)
+						->cached(DATE::WEEK, array("city", "add"))
 						->find();
 			if ($location->loaded())
 			{
@@ -213,7 +213,7 @@ class Form_Add  {
 		$lat = $lon = "";
 		$location = ORM::factory('Location')
 						->where("id","=",$city_item->location_id)
-						->cached(DATE::WEEK)
+						->cached(DATE::WEEK, array("city", "add"))
 						->find();
 		if ($location->loaded())
 		{
@@ -281,11 +281,11 @@ class Form_Add  {
 			$address_reference_id = ORM::factory('Attribute_Relation')
 										->where("category_id","=",$category_id)
 										->where("custom","=","address")
-										->cached(DATE::WEEK)
+										->cached(DATE::WEEK, array("category","relation","add"))
 										->find()->reference_id;
 			if ($address_reference_id)
 			{
-				$location = ORM::factory('Location',$object->location_id);
+				$location = ORM::factory('Location',$object->location_id)->cached(DATE::WEEK, array("city", "add"));
 				$params[$address_reference_id] = $location->address;
 			}
 
@@ -367,7 +367,7 @@ class Form_Add  {
 
 		if ($object->loaded() AND !$this->is_post)
 		{
-			$location = ORM::factory('Location',$object->location_id);
+			$location = ORM::factory('Location',$object->location_id)->cached(DATE::WEEK, array("city", "add"));;
 			$this->_data->object_coordinates = $location->lat.",".$location->lon;
 		} elseif ($this->is_post) {
 			$this->_data->object_coordinates = $this->params['object_coordinates'];
@@ -490,7 +490,7 @@ class Form_Add  {
 		$errors		= $this->errors;
 		$contact_person = "";
 		$contacts = Array();
-		$contact_types = ORM::factory('Contact_Type')->cached(DATE::WEEK)->find_all();
+		$contact_types = ORM::factory('Contact_Type')->cached(DATE::WEEK, array("contact", "add"))->find_all();
 
 		$user_id = NULL;
 		if ($user = Auth::instance()->get_user())
