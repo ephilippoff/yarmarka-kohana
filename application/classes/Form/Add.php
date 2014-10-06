@@ -146,9 +146,12 @@ class Form_Add  {
 		}
 
 		$category_array["Другие"] = array(
-			155 => "Каталог компаний",
 			156 => "В хорошие руки"
 		);
+
+		if ($user = Auth::instance()->get_user())
+			if ($user->role == 9 OR $user->role == 1)
+				$category_array["Другие"][155] = "Каталог компаний";
 
 		$value = $category->title;
 
