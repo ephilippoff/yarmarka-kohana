@@ -1,6 +1,6 @@
 <header class="m_header header_image"  <?php if ( ! empty($style)) echo "style='$style'" ?>>
 	<section class="winner">
-		<?php echo View::factory('block/_user_message')?>
+		<?php //echo View::factory('block/_user_message')?>
 		
 	
 		
