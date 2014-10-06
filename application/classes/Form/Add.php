@@ -219,7 +219,10 @@ class Form_Add  {
 		{
 			$lat = $location->lat;
 			$lon = $location->lon;
-		}			
+		}
+
+		if (!$this->is_post AND !$edit AND $_COOKIE["location_city_id"])			
+			$city_id = $_COOKIE["location_city_id"];
 		
 		$this->_data->city = array(	'city_list' => $city_array, 
 									'city_id' => $city_id,
