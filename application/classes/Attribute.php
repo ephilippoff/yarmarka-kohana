@@ -74,19 +74,15 @@ class Attribute {
 				case 'numeric':
 					$type = $attribute->type;
 
-					$options = $relation->options;
-					try 
+					if ($relation->is_ilist($relation->options))
 					{
+						
+						$options  = self::parseOptionsIntNumAttribute($relation->options);
 						if ($options)
 						{
-							$type = "ilist";
-							$options  = self::parseOptionsIntNumAttribute($options);
 							$elements = self::genValuesForIntNumAttribute($options);
+							$type = "ilist";
 						}
-					} 
-						catch(Exception $e)
-					{
-
 					}
 				break;				
 				default:
@@ -205,17 +201,23 @@ class Attribute {
 	static function parseOptionsIntNumAttribute($options_str)
 	{
 		@list($min, $max, $step) = explode(",", $options_str);
-		$_min = explode("=", $min);
-		$_max = explode("=", $max);
-		$_step = explode("=", $step);
+		//if (!is_array($min) OR !is_array($max) OR !is_array($step))
+		//	return FALSE;
 
-		$options["min"] = $_min[1];
+		@list($min, $_min) = explode("=", $min);
+		@list($max, $_max) = explode("=", $max);
+		@list($step, $_step) = explode("=", $step);
+
+		if (!$_min OR !$_max OR !$_step)
+			return FALSE;
+
+		$options["min"] = $_min;
 		
-		$options["max"] = $_max[1];
-		if ($_max[1] == "year")
+		$options["max"] = $_max;
+		if ($_max == "year")
 			$options["max"] = date("Y");
 		
-		$options["step"] = $_step[1];
+		$options["step"] = $_step;
 
 		return $options;
 	}
