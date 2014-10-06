@@ -568,6 +568,7 @@ class Controller_User extends Controller_Template {
 
 		// get objects
 		$objects = ORM::factory('Object')
+			->set_time_link_cache(15)
 			->with_main_photo()
 			->where('active', '=', 1);
 
@@ -612,9 +613,9 @@ class Controller_User extends Controller_Template {
 		}
 
 		// region and city for filter
-		$region		= ORM::factory('Region', intval($this->request->query('region_id')));
-		$city		= ORM::factory('City', intval($this->request->query('city_id')));
-		$category	= ORM::factory('Category', intval($this->request->query('category_id')));
+		$region		= ORM::factory('Region', intval($this->request->query('region_id')))->cached(DATE::WEEK, array("category", "myads"));
+		$city		= ORM::factory('City', intval($this->request->query('city_id')))->cached(DATE::WEEK, array("category", "myads"));
+		$category	= ORM::factory('Category', intval($this->request->query('category_id')))->cached(DATE::WEEK, array("category", "myads"));
 
 		if ($region->loaded())
 		{
@@ -639,7 +640,7 @@ class Controller_User extends Controller_Template {
 
 		// count all user objects
 		$count = clone $objects;
-		$count = $count->count_all();
+		$count = $count->count_all(NULL, DATE::HOUR);
 
 		// get user objects
 		$objects = $objects->order_by('date_created', 'desc')
@@ -667,6 +668,7 @@ class Controller_User extends Controller_Template {
 			->group_by('category.title')
 			->order_by('category.title')
 			->as_object()
+			->cached(DATE::HOUR)
 			->execute()
 			: array();
 
@@ -685,15 +687,16 @@ class Controller_User extends Controller_Template {
 		));
 		$this->template->regions = ORM::factory('Region')
 			->where('is_visible', '=', 1)
+			->cached(DATE::WEEK, array("city", "myads"))
 			->find_all();
 		$this->template->cities = $region->loaded() 
-			? $region->cities->where('is_visible', '=', '1')->find_all()
+			? $region->cities->where('is_visible', '=', '1')->cached(DATE::WEEK, array("city", "myads"))->find_all()
 			: array();
 		$this->template->objects = $objects;
-		$this->template->service_promo_link = ORM::factory('Service')->where('name', '=', 'promo_link')->find();
-		$this->template->service_promo_link_bg = ORM::factory('Service')->where('name', '=', 'promo_link_bg')->find();
-		$this->template->running_line_site_s = ORM::factory('Service')->where('name', '=', 'running_line_site_s')->find();
-		$this->template->service_premium 		= ORM::factory('Service')->where('name', '=', 'premium_ads')->find();
+		$this->template->service_promo_link = ORM::factory('Service')->where('name', '=', 'promo_link')->cached(DATE::WEEK, array("service", "myads"))->find();
+		$this->template->service_promo_link_bg = ORM::factory('Service')->where('name', '=', 'promo_link_bg')->cached(DATE::WEEK, array("service", "myads"))->find();
+		$this->template->running_line_site_s = ORM::factory('Service')->where('name', '=', 'running_line_site_s')->cached(DATE::WEEK, array("service", "myads"))->find();
+		$this->template->service_premium 		= ORM::factory('Service')->where('name', '=', 'premium_ads')->cached(DATE::WEEK, array("service", "myads"))->find();
 	}
 
 	public function action_myads()

@@ -53,10 +53,25 @@ class Database_Query extends Kohana_Database_Query {
 		if (isset($cache_key) AND $this->_lifetime > 0)
 		{
 			// Cache the result array
-			Cache::instance('memcache')->set($cache_key, $result->as_array(), $this->_lifetime);
+			Cache::instance('memcache')->set($cache_key, $result->as_array(), $this->_lifetime, $this->_tags);
 		}
 
 		return $result;
+	}
+
+	public function cached($lifetime = NULL, $force = FALSE, $tag = NULL)
+	{
+		if ($lifetime === NULL)
+		{
+			// Use the global setting
+			$lifetime = Kohana::$cache_life;
+		}
+
+		$this->_force_execute = $force;
+		$this->_lifetime = $lifetime;
+		$this->_tags = $tag;
+
+		return $this;
 	}
 
 } // End Database_Query

@@ -44,6 +44,7 @@ class Controller_Block extends Controller_Template
 			->where('seo_name', '!=', '')
 			->order_by('sort_order')
 			->limit(24)
+			->cached(DATE::WEEK, array("city", "header"))
 			->find_all();
 	}
 
@@ -52,7 +53,7 @@ class Controller_Block extends Controller_Template
 		$this->template->categories = ORM::factory('Category')
 			->where('parent_id', '=', 1)
 			->order_by('weight')
-			->cached(60)
+			->cached(DATE::WEEK, array("category", "header"))
 			->find_all();
 	}
 
@@ -61,7 +62,7 @@ class Controller_Block extends Controller_Template
 		$this->template->categories = ORM::factory('Category')
 			->where('parent_id', '=', 1)
 			->order_by('title')
-			->cached(60)
+			->cached(DATE::WEEK, array("category", "header"))
 			->find_all();
 	}
 
@@ -146,7 +147,7 @@ class Controller_Block extends Controller_Template
 		$this->template->categories = ORM::factory('Category')
 			->where('parent_id', '=', 1)
 			->order_by('weight')
-			->cached(60)
+			->cached(DATE::WEEK)
 			->find_all();
 	}
 

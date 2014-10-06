@@ -94,6 +94,16 @@
 							</ul>
 						</li>
 						<?php endif; ?>
+
+						<?php if (Auth::instance()->have_access_to('settings')) : ?>
+						<li class="dropdown <?=($module_name == 'settings') ? 'active' : ''?>">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">Settings <b class="caret"></b></a>
+							<ul class="dropdown-menu">
+								<li><a href="<?=Url::site('khbackend/settings/index')?>">Index</a></li>
+								<li><a href="<?=Url::site('khbackend/settings/cache')?>">Cache</a></li>
+							</ul>
+						</li>
+						<?php endif; ?>
 						
 						<?php if (Auth::instance()->get_user()) : ?>
 							<li><a href="<?=Url::site('khbackend/welcome/logout')?>">Log Out</a></li>
