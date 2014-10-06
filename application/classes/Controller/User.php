@@ -11,7 +11,7 @@ class Controller_User extends Controller_Template {
 
 		if ( ! $this->user = Auth::instance()->get_user())
 		{
-			if (!in_array(Request::current()->action(), array('userpage','login')))
+			if (!in_array(Request::current()->action(), array('userpage','login','logout')))
 			{
 				$this->redirect(Url::site('user/login?return='.$this->request->uri()));
 			}
@@ -1088,7 +1088,7 @@ class Controller_User extends Controller_Template {
 		$is_post = ($_SERVER['REQUEST_METHOD']=='POST');
 		$post_data = new Obj($this->request->post());
 
-		$return_page = Arr::get($_GET, 'return', NULL);
+		$return_page = Arr::get($_GET, 'return', "");
 		$domain = Arr::get($_GET, 'domain', NULL);
 		if (!$domain)
 			$domain = Url::base('http');
@@ -1109,7 +1109,7 @@ class Controller_User extends Controller_Template {
 
 			} 
 
-			if (!$error AND $return_page)
+			if (!$error)
 					$this->redirect($return_page);
 
 		} else {
@@ -1127,15 +1127,19 @@ class Controller_User extends Controller_Template {
 	{
 		$this->use_layout	= FALSE;
 		$this->auto_render	= FALSE;
+		$_main = (int)$this->request->query('main');
+
 		if (Auth::instance()->get_user())
 		{
 			setcookie('user_id', '', time()-1, '/', Region::get_cookie_domain());
 			Auth::instance()->logout();
-			CI::logout();
 		}
 
+		$main = "";
+		if ($_main)
+			$main="?main=1";
 
-		$this->redirect('http://'.Region::get_current_domain().'/user/logout');
+		$this->redirect('http://'.Region::get_current_domain().'/user/logout'.$main);
 	}
 
 	public function action_edit_ad()
