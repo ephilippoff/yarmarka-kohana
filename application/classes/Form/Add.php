@@ -85,16 +85,13 @@ class Form_Add  {
 			}
 		}
 
-		if ($city_id > 0)
-		{
+		if ($this->_edit OR $this->is_post)		
 			$this->city = ORM::factory('City', $city_id)->cached(DATE::WEEK, array("city", "add"));
-			if ($this->city->loaded())
-			{
-				$this->city_id = $city_id;
-			} else {
-				throw new Exception("В нашей базе такого города не существует");
-			}
-		}
+		elseif (!$this->is_post AND $_COOKIE["location_city_id"])
+			$this->city = ORM::factory('City', $_COOKIE["location_city_id"])->cached(DATE::WEEK, array("city", "add"));
+		
+		if ($this->city->loaded())
+			$this->city_id = $this->city->id;
 
 		return $this;
 	}
@@ -206,13 +203,16 @@ class Form_Add  {
 								);
 		}
 
-		$city_array["Города"] 		 = $main_cities;
+		$city_array["Города"] = $main_cities;
 		$city_array["Другие"] = $other_cities;
 
-		$value = $city->title;
+		$city_title = NULL;
+		if ($city->loaded())
+			$city_title = $city->title;
+
 		$lat = $lon = "";
 		$location = ORM::factory('Location')
-						->where("id","=",$city_item->location_id)
+						->where("id","=",$city->location_id)
 						->cached(DATE::WEEK, array("city", "add"))
 						->find();
 		if ($location->loaded())
@@ -220,13 +220,10 @@ class Form_Add  {
 			$lat = $location->lat;
 			$lon = $location->lon;
 		}
-
-		if (!$this->is_post AND !$edit AND $_COOKIE["location_city_id"])			
-			$city_id = $_COOKIE["location_city_id"];
 		
 		$this->_data->city = array(	'city_list' => $city_array, 
 									'city_id' => $city_id,
-									'value' => $value, 
+									'city_title' => $city_title, 
 									'edit' => $edit,
 									'city_error' => $errors->city_kladr_id,
 									"lat" => $lat,
