@@ -145,6 +145,11 @@ class Form_Add  {
 			}
 		}
 
+		$category_array["Другие"] = array(
+			155 => "Каталог компаний",
+			156 => "В хорошие руки"
+		);
+
 		$value = $category->title;
 
 		$default_action = ORM::factory('Category')->get_default_action($category_id);
