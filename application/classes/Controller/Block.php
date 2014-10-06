@@ -147,7 +147,7 @@ class Controller_Block extends Controller_Template
 		$this->template->categories = ORM::factory('Category')
 			->where('parent_id', '=', 1)
 			->order_by('weight')
-			->cached(DATE::WEEK)
+			->cached(Date::WEEK)
 			->find_all();
 	}
 
