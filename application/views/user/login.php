@@ -52,6 +52,28 @@
 					</div>									
 				</div>
 
+				<div class="smallcont">
+					<div class="labelcont">
+						<label></label>
+					</div>
+					<div class="fieldscont">
+						<div class="inp-cont-short">
+							<a target="_blank" href="http://<?=Kohana::$config->load('common.main_domain')?>/user/registration">Зарегистрироваться</a>
+						</div>
+					</div>
+				</div>	
+
+				<div class="smallcont">
+					<div class="labelcont">
+						<label></label>
+					</div>
+					<div class="fieldscont">
+						<div class="inp-cont-short">
+							<a target="_blank" href="/user/forgot_password">Напомнить/сменить пароль</a>
+						</div>
+					</div>
+				</div>	
+
 
 			</div>
 			<div class="fl100 form-next-cont">

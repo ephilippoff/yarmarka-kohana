@@ -11,7 +11,8 @@ class Controller_User extends Controller_Template {
 
 		if ( ! $this->user = Auth::instance()->get_user())
 		{
-			if (!in_array(Request::current()->action(), array('userpage','login','logout')))
+			if (!in_array(Request::current()->action(), 
+					array('userpage','login','logout','forgot_password','forgot_password_link')))
 			{
 				$this->redirect(Url::site('user/login?return='.$this->request->uri()));
 			}
@@ -1123,6 +1124,76 @@ class Controller_User extends Controller_Template {
 		$this->template->user = $this->user; 
 		$this->template->params = $post_data;
 		$this->template->error = $error;
+
+	}
+
+	public function action_forgot_password()
+	{
+		$this->layout = 'auth';
+		$is_post = ($_SERVER['REQUEST_METHOD']=='POST');
+		$post_data = new Obj($this->request->post());
+
+		$error = NULL;
+		if ($is_post){
+			if (!trim($post_data->email))
+			{
+				$error = "Вы не ввели email";
+			} else {
+				$user = ORM::factory('User')
+							->get_user_by_email($post_data->email)
+							->cached(Date::WEEK)
+							->find();
+				if (!$user->loaded())
+				{
+					$error = "Этот email не зарегистрирован";
+				} elseif ($user->is_blocked == 1)
+				{
+					$error = "Этот email заблокирован, за нарушение правил сайта";
+				}
+				else 
+				{
+					$code = $user->create_forgot_password_code();
+					$url  = URL::base('http')."user/forgot_password_link/".$code;
+					$msg = View::factory('emails/add_notice', array('url' => $url));
+					Email::send($user->email, Kohana::$config->load('email.default_from'), 'Восстановление пароля', $msg);
+					$this->redirect(URL::base('http').'user/forgot_password?success=1');
+				}
+			}
+		} 
+
+		$this->template->status = NULL;
+		
+		$success = $this->request->query('success');
+		$failure = $this->request->query('failure');
+		if ($success)
+			$this->template->status = "success";
+		if ($failure)
+			$this->template->status = "failure";
+
+		$this->template->error = $error;
+		$this->template->params = $post_data;
+		$this->template->user = $this->user; 
+	}
+
+	public function action_forgot_password_link()
+	{
+		$this->use_layout	= FALSE;
+		$this->auto_render	= FALSE;
+
+		$code = $this->request->param('id');
+		if (!$code)
+			throw new HTTP_Exception_404;
+
+		$user = ORM::factory('User')
+					->get_user_by_code(trim($code))
+					->find();
+		if (!$user->loaded())
+			$this->redirect(URL::base('http').'user/forgot_password?failure=1');
+		else 
+		{
+			Auth::instance()->trueforcelogin($user);
+			$this->redirect(URL::base('http').'user/password');
+		}
 
 	}
 

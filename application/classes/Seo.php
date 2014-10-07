@@ -76,7 +76,7 @@ class Seo extends ORM
 
 		if ( ! $seo = Arr::get(self::$_cache, $url))
 		{
-			$seo = ORM::factory('Seo', array('url' => $url));
+			$seo = ORM::factory('Seo', array('url' => $url))->cached(Date::WEEK);
 			if ($seo->loaded())
 			{
 				$seo = $seo->as_array();

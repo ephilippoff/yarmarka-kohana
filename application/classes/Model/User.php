@@ -396,6 +396,39 @@ class Model_User extends Model_Auth_User {
 
 		return TRUE;
 	}
+
+	public function get_user_by_email($email)
+	{
+		return $this->join("contacts","left")
+					->on("contacts.verified_user_id","=","user.id")
+			  	->where(DB::expr("w_lower(contacts.contact_clear)"),"=",$email);
+
+	}
+
+	public function create_forgot_password_code($code = NULL)
+	{
+		
+
+		if (!$this->loaded() OR !$this->email)
+			return FALSE;
+
+		if ($this->is_blocked == 1)
+			return FALSE;
+
+		if (!$code)
+			$code = User::generate_code($this->email);
+
+		$this->code = $code;
+		$this->save();
+
+		return $code;
+	}
+
+	public function get_user_by_code($code)
+	{
+		return $this->where("code","=",trim($code));
+	}
+
 }
 
 /* End of file User.php */

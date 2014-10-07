@@ -26,7 +26,14 @@ class User {
 
 		return $user;
 	}
+
+	public static function generate_code($str)
+	{
+		return sha1($str.microtime());
+	}
 }
+
+
 
 /* End of file User.php */
 /* Location: ./application/classes/User.php */

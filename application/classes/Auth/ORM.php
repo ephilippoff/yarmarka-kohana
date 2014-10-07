@@ -55,6 +55,24 @@ class Auth_ORM extends Kohana_Auth_ORM {
 		}
 	}
 
+	public function trueforcelogin($user)
+	{
+		if (!is_object($user))
+		{
+			return FALSE;
+		}
+
+		$token = $this->create_token($user);
+
+		// Set the autologin cookie
+		Cookie::set('authautologin', $token->token, $this->_config['lifetime']);
+
+		// Finish the login
+		$this->complete_login($user);
+
+		return TRUE;
+	}
+
 	/**
 	 * Logs a user in.
 	 *
