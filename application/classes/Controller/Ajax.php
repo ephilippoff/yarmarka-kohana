@@ -328,7 +328,7 @@ class Controller_Ajax extends Controller_Template
 			throw new HTTP_Exception_404;
 		}
 
-		$info = Object::canEdit(Array("object_id" => $ad->id));
+		$info = Object::canEdit(Array("object_id" => $ad->id, "rubricid" => $ad->category));
 
 		if ( $info["code"] == "error" )
 		{
@@ -365,7 +365,7 @@ class Controller_Ajax extends Controller_Template
 		$obj->parent_id = NULL;	
 		$obj->update();
 
-		$info = Object::canEdit(Array("object_id" => $object->id));
+		$info = Object::canEdit(Array("object_id" => $object->id, "rubricid" => $ad->category));
 
 		if ($info["code"] == "ok")
 		{
@@ -444,7 +444,7 @@ class Controller_Ajax extends Controller_Template
 		$obj->is_published = ($obj->is_published) ? 0:1;
 		$obj->update();
 
-		$info = Object::canEdit(Array("object_id" => $object->id));
+		$info = Object::canEdit(Array("object_id" => $object->id, "rubricid" => $ad->category));
 
 		if ($object->is_published <> 0)
 		{

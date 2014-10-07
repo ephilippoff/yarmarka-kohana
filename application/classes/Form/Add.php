@@ -426,7 +426,9 @@ class Form_Add  {
 		if ($category->loaded())
 			$text_required = $category->text_required;
 
-		
+		if ($value)
+			$value = strip_tags($value);
+
 		$this->_data->text = array( 'value' 		=> $value,
 									'text_required' => $text_required,
 									'text_error' 	=> $errors->user_text_adv );
