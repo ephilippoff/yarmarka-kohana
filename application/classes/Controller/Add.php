@@ -9,7 +9,8 @@ class Controller_Add extends Controller_Template {
 		
 		
 		$staticfile = new StaticFile("attributes", 'static_attributes.js');
-		$this->assets->js($staticfile->jspath);
+		//$this->assets->js($staticfile->jspath);
+		echo Assets::factory('main')->js($staticfile->jspath);
 
 		$errors = new Obj();
 

@@ -688,4 +688,4 @@
 	</div>
 </script>
 
-<?=$assets->js("addapp.js")?>
+<?=Assets::factory('main')->js("addapp.js")?>
