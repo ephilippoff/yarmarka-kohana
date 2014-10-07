@@ -57,6 +57,7 @@ class Controller_Add extends Controller_Template {
 		$this->template->params 	= new Obj($params);
 		$this->template->form_data 	= $form_data->_data;
 		$this->template->errors = (array) $errors;
+		$this->template->assets = $this->assets;
 
 	}
 

@@ -688,4 +688,4 @@
 	</div>
 </script>
 
-<?=HTML::script('js/adaptive/addapp.js')?>
+<?=$assets->js("addapp.js")?>
