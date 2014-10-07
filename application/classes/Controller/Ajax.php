@@ -365,7 +365,7 @@ class Controller_Ajax extends Controller_Template
 		$obj->parent_id = NULL;	
 		$obj->update();
 
-		$info = Object::canEdit(Array("object_id" => $object->id, "rubricid" => $ad->category));
+		$info = Object::canEdit(Array("object_id" => $object->id, "rubricid" => $object->category));
 
 		if ($info["code"] == "ok")
 		{
@@ -444,7 +444,7 @@ class Controller_Ajax extends Controller_Template
 		$obj->is_published = ($obj->is_published) ? 0:1;
 		$obj->update();
 
-		$info = Object::canEdit(Array("object_id" => $object->id, "rubricid" => $ad->category));
+		$info = Object::canEdit(Array("object_id" => $object->id, "rubricid" => $object->category));
 
 		if ($object->is_published <> 0)
 		{
