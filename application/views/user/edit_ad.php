@@ -2,5 +2,6 @@
 		"object"	=> $object,
 		"params" 	=> $params,
 		"form_data" => $form_data,
-		"errors" 	=> $errors
+		"errors" 	=> $errors,
+		"assets" 	=> $assets
 	))?>
