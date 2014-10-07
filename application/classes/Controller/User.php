@@ -1154,7 +1154,7 @@ class Controller_User extends Controller_Template {
 				{
 					$code = $user->create_forgot_password_code();
 					$url  = URL::base('http')."user/forgot_password_link/".$code;
-					$msg = View::factory('emails/add_notice', array('url' => $url));
+					$msg = View::factory('emails/forgot_password', array('url' => $url));
 					Email::send($user->email, Kohana::$config->load('email.default_from'), 'Восстановление пароля', $msg);
 					$this->redirect(URL::base('http').'user/forgot_password?success=1');
 				}
