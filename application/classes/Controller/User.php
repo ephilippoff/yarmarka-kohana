@@ -1094,7 +1094,7 @@ class Controller_User extends Controller_Template {
 
 		$return_page = Arr::get($_GET, 'return', "");
 		$domain = Arr::get($_GET, 'domain', NULL);
-		if ($domain)
+		if (!$domain)
 			$domain = Url::base('http');
 		else
 			$domain = "http://".Kohana::$config->load("common.main_domain");
