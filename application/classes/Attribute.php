@@ -14,22 +14,33 @@ class Attribute {
 								->find_all();	
 		} else {
 			$_c = $category->order_by("id")
-					->cached(Date::WEEK)
+					->cached(Date::WEEK, array("add","search","category"))
 					->find_all();
 		}
+
+		$_address_precisions = Kohana::$config->load("maps.address_precision");
 		
 		foreach ($_c as $row)
 		{
+			$address_precisions = array();
+			foreach ($_address_precisions as $pricision) {
+				if ($row->id == $pricision["category_id"])
+					$address_precisions[] = $pricision;
+			}
 			
 			if ($category->get_count_childs($row->id) > 0)
 			{
 				$data[$row->id] =  $row->title;	
 			} else {
-				$data[$row->id] = array ( 0 => array (
+
+				$category_params =  array (
 													"title" => $row->title, 
 													"title_auto" => $row->title_auto_fill,
-													"text_required" =>  $row->text_required) );
+													"text_required" =>  $row->text_required);
+				if (count($address_precisions)>0)
+					$category_params["address_precisions"] = $address_precisions;
 
+				$data[$row->id] = array ( 0 => $category_params );
 				$data[$row->id] = array_merge($data[$row->id],  self::getElements((int) $row->id));
 			}
 		}
@@ -49,19 +60,19 @@ class Attribute {
 				->where("attribute_relation.parent_id","=",$parent_id)
 				->where("attribute_relation.parent_element_id","=",$element_id)
 				->order_by("attribute_relation.weight")
-				->cached(Date::WEEK)
+				->cached(Date::WEEK, array("add","search","relation"))
 				->find_all();
 
 		foreach ($ar as $relation)
 		{
 			$reference = ORM::factory('Reference')
 						->where("id", "=", $relation->reference_id)
-						->cached(Date::WEEK)
+						->cached(Date::WEEK, array("add","search","relation"))
 						->find();
 
 			$attribute = ORM::factory('Attribute')
 						->where("id", "=", $reference->attribute)
-						->cached(Date::WEEK)
+						->cached(Date::WEEK, array("add","search","relation"))
 						->find();
 
 			$rel_id = "_".$relation->reference_id;
@@ -97,7 +108,7 @@ class Attribute {
 					
 					$ae = $ae->order_by("weight")
 								->order_by("title")
-								->cached(Date::WEEK)
+								->cached(Date::WEEK, array("add","search","element"))
 								->find_all();
 
 					foreach ($ae as $element)
