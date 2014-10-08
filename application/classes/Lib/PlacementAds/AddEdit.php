@@ -834,7 +834,7 @@ class Lib_PlacementAds_AddEdit {
 			{
 				$action = ORM::factory('Attribute_Action')
 						->where('value_id','=',intval($value_detail))
-						->cached(Date::DAY)
+						->cached(Date::WEEK, array("add","category"))
 						->find();
 				if ( $action->loaded() )
 				{
@@ -842,28 +842,28 @@ class Lib_PlacementAds_AddEdit {
 				}
 			}
 
-			$form_element = ORM::factory('Form_Element')
-				->with('reference_obj:attribute_obj')
-				->where('form_element.reference', '=', $reference_id)
-				->cached(Date::DAY)
+			$reference = ORM::factory('Reference',$reference_id)
+				->where("id","=",$reference_id)
+				->set_time_link_cache(15)
+				->cached(Date::WEEK, array("add","relation"))
 				->find();
 
-			if ( ! $form_element->loaded())
+			if ( ! $reference->loaded())
 			{
 				// неизвестный элемент формы
 				continue;
 			}
 
-			if ($form_element->reference_obj->attribute_obj->type == 'boolean' AND ! $boolean_deleted)
+			if ($reference->attribute_obj->type == 'boolean' AND ! $boolean_deleted)
 			{
 				ORM::factory('Data_Boolean')->where('object', '=', $object->id)->delete_all();
 				$boolean_deleted = TRUE;
 			}
 
 			// удаляем старые значения
-			ORM::factory('Data_'.Text::ucfirst($form_element->reference_obj->attribute_obj->type))
+			ORM::factory('Data_'.Text::ucfirst($reference->attribute_obj->type))
 				->where('object', '=', $object->id)
-				->where('reference', '=', $form_element->reference_obj->id)
+				->where('reference', '=', $reference->id)
 				->delete_all();
 
 			// проверяем есть ли значение
@@ -881,12 +881,12 @@ class Lib_PlacementAds_AddEdit {
 			elseif (empty($value))
 			{
 				//Для цены допускаем ноль
-				if (!$form_element->reference_obj->attribute_obj->is_price)
+				if (!$reference->attribute_obj->is_price)
 					continue;
 			}
 
 			// сохраняем цену для объявления
-			if ($form_element->reference_obj->attribute_obj->is_price)
+			if ($reference->attribute_obj->is_price)
 			{
 				if (is_array($value) and isset($value['min']))
 				{
@@ -897,14 +897,14 @@ class Lib_PlacementAds_AddEdit {
 					$object->price = $value;
 				}
 
-				$object->price_unit = $form_element->reference_obj->attribute_obj->unit;
+				$object->price_unit = $reference->attribute_obj->unit;
 			}
 
 			// сохраняем дата атрибут
-			$data = ORM::factory('Data_'.Text::ucfirst($form_element->reference_obj->attribute_obj->type));
-			$data->attribute 	= $form_element->reference_obj->attribute;
+			$data = ORM::factory('Data_'.Text::ucfirst($reference->attribute_obj->type));
+			$data->attribute 	= $reference->attribute;
 			$data->object 		= $object->id;
-			$data->reference 	= $form_element->reference_obj->id;
+			$data->reference 	= $reference->id;
 			if ($data->is_range_value())
 			{
 				if (is_array($value))
