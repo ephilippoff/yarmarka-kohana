@@ -1120,7 +1120,10 @@ class Controller_User extends Controller_Template {
 
 		} else {
 			if ($this->user AND $return_page)
+			{
+				Auth::instance()->trueforcelogin($this->user);
 				$this->redirect($domain.$return_page);
+			}
 		}
 
 		$this->template->user = $this->user; 

@@ -6,7 +6,11 @@ class Controller_Add extends Controller_Template {
 	{
 		$this->layout = 'add';
 		//$this->assets->js(Url::base(TRUE).'static');
-		
+		//
+		$user = Auth::instance()->get_user();
+
+		if ($user AND !Cookie::get('authautologin'))
+				Auth::instance()->trueforcelogin($user);
 		
 		$staticfile = new StaticFile("attributes", 'static_attributes.js');
 		//$this->assets->js($staticfile->jspath);
