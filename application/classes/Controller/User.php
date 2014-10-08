@@ -1225,7 +1225,8 @@ class Controller_User extends Controller_Template {
 	{
 		$this->layout = 'add';
 		//$this->assets->js(Url::base(TRUE).'static');
-		$staticfile = new StaticFile("attributes", 'static_attributes.js');
+		$prefix = (@$_SERVER['HTTP_HOST'] === 'c.yarmarka.biz') ? "" : "dev_";
+		$staticfile = new StaticFile("attributes", $prefix.'static_attributes.js');
 		$this->assets->js($staticfile->jspath);
 
 		$errors = new Obj();
