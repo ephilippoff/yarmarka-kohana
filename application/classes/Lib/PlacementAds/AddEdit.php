@@ -842,7 +842,7 @@ class Lib_PlacementAds_AddEdit {
 				}
 			}
 
-			$reference = ORM::factory('Reference',$reference_id)
+			$reference = ORM::factory('Reference')
 				->where("id","=",$reference_id)
 				->set_time_link_cache(15)
 				->cached(Date::WEEK, array("add","relation"))
