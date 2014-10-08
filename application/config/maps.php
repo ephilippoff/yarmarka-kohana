@@ -22,7 +22,7 @@ return array(
 				//аренда жалья
 				"category_id" => 96,
 				"filters" => array("rubricid" => 96),
-				"precision" => "street",
+				"precision" => "exact",
 				"error_text" => "Адрес необходимо указать с точностью до дома. Например: ул. Ленина, д. 2"
 			)
 		)
