@@ -12,8 +12,8 @@ class Controller_Add extends Controller_Template {
 		if ($user AND !Cookie::get('authautologin'))
 				Auth::instance()->trueforcelogin($user);
 		
-		$staticfile = new StaticFile("attributes", 'static_attributes.js');
-		//$this->assets->js($staticfile->jspath);
+		$prefix = (@$_SERVER['HTTP_HOST'] === 'c.yarmarka.biz') ? "" : "dev_";
+		$staticfile = new StaticFile("attributes", $prefix.'static_attributes.js');
 		echo Assets::factory('main')->js($staticfile->jspath);
 
 		$errors = new Obj();
