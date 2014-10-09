@@ -20,10 +20,7 @@ class Forms
 
 			$ar_parent = NULL;
 			if ($relation->parent_id)
-				$ar_parent = ORM::factory('Attribute_Relation')
-								->where("id","=", $relation->parent_id)
-								->cached(Date::WEEK)
-								->find();
+				$ar_parent = ORM::factory('Attribute_Relation',$relation->parent_id)->cached(Date::WEEK);
 
 			/* Если элемент формы обязателен и он без родителей */
 			if (!$relation->parent_id AND $relation->is_required)
