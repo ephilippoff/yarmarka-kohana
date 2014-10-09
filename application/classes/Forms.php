@@ -29,7 +29,20 @@ class Forms
 			elseif ($ar_parent AND $relation->is_required 
 									AND array_key_exists("param_".$ar_parent->reference_id, (array) $params) 
 											AND $params->{"param_".$ar_parent->reference_id} == $relation->parent_element_id)
-				$element->is_required  = $relation->is_required;
+			{
+
+				if ($ar_parent->parent_id)
+				{
+					$p_element_id = $ar_parent->parent_element_id;
+					$ar_parent = ORM::factory('Attribute_Relation',$ar_parent->parent_id)->cached(Date::WEEK);
+					if ($ar_parent AND $relation->is_required 
+									AND array_key_exists("param_".$ar_parent->reference_id, (array) $params) 
+											AND $params->{"param_".$ar_parent->reference_id} == $p_element_id)
+						$element->is_required  = $relation->is_required;
+				} else {
+					$element->is_required  = $relation->is_required;
+				}
+			}
 			/* Если элемент формы обязателен и его родитель выбран, т.е. этот подчиненный элемент показан на форме, 
 							и в мультивыборе выбрано одно из значений который показывает этот элемент формы */
 			elseif ($ar_parent AND $relation->is_required 
