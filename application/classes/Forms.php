@@ -11,7 +11,7 @@ class Forms
 		$ar = ORM::factory('Attribute_Relation')
 					->where("category_id","=", $category_id)
 					->order_by("weight","asc")
-					->cached(Date::WEEK)
+					->cached(Date::WEEK, array("add","relation"))
 					->find_all();
 		foreach ($ar as $relation) {
 			$element = new Obj();
@@ -22,11 +22,11 @@ class Forms
 			if ($relation->parent_id)
 				$ar_parent = ORM::factory('Attribute_Relation')
 								->where("id","=", $relation->parent_id)
-								->cached(Date::WEEK)
+								->cached(Date::WEEK, array("add","relation"))
 								->find();
 
-			/* Если элемент формы обязателен и есть на форме */
-			if (array_key_exists("param_".$relation->reference_id, (array) $params) AND $relation->is_required)
+			/* Если элемент формы обязателен и он без родителей */
+			if (!$relation->parent_id AND $relation->is_required)
 				$element->is_required  = $relation->is_required;
 			/* Если элемент формы обязателен и его родитель выбран, т.е. этот подчиненный элемент показан на форме */
 			elseif ($ar_parent AND $relation->is_required 
@@ -47,7 +47,7 @@ class Forms
 							->join("attribute","left")
 								->on("reference.attribute","=","attribute.id")
 							->where("reference.id","=", $relation->reference_id)
-							->cached(Date::WEEK)
+							->cached(Date::WEEK, array("add","relation"))
 							->find();
 
 			$element->attribute_title 			= $reference->title;
