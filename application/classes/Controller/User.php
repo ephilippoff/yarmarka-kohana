@@ -1140,12 +1140,13 @@ class Controller_User extends Controller_Template {
 
 		$error = NULL;
 		if ($is_post){
-			if (!trim($post_data->email))
+			$email = mb_strtolower(trim($post_data->email), 'UTF-8');
+			if (!$email)
 			{
 				$error = "Вы не ввели email";
 			} else {
 				$user = ORM::factory('User')
-							->get_user_by_email($post_data->email)
+							->get_user_by_email($email)
 							->cached(Date::WEEK)
 							->find();
 				if (!$user->loaded())
