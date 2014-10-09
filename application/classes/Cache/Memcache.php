@@ -14,7 +14,7 @@ class Cache_Memcache extends Kohana_Cache_Memcache {
 	public function set($id, $data, $lifetime = 3600, $tag = NULL)
 	{
 		$id = $this->env.$id;
-		if ($tag AND $lifetime>3600)
+		/*if ($tag AND $lifetime>3600)
 		{
 			$memcached = ORM::factory('Memcached');
 			$memcached->key = $id;
@@ -25,7 +25,7 @@ class Cache_Memcache extends Kohana_Cache_Memcache {
 
 			$memcached->expired = DB::expr("NOW() + interval '$lifetime second'") ;
 			$memcached->save();
-		}
+		}*/
 
 		parent::set($id, $data, $lifetime);
 	}
