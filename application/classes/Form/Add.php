@@ -135,7 +135,7 @@ class Form_Add  {
 					if (!ORM::factory('Category')
 							->where("parent_id","=",$child->id)
 							->where("is_ready", "=", 1)
-							->count_all(NULL, DATE::WEEK, array("category", "add")))
+							->count_all(NULL, DATE::WEEK))
 					{
 						$childs_array[$child->id] = $child->title;
 					}

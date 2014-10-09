@@ -190,7 +190,7 @@ class Lib_PlacementAds_AddEdit {
 
 		//затычка на основной форме подачи, пока город берется из кладра
 		if (!$city_id AND $params->city_kladr_id)
-			$city_id = ORM::factory('City')->where("kladr_id","=",$params->city_kladr_id)->find()->id;
+			$city_id = ORM::factory('City')->where("kladr_id","=",$params->city_kladr_id)->cached(Date::WEEK, array("city", "add"))->find()->id;
 		if ($city_id AND !$params->city_kladr_id)
 			$params->city_kladr_id = ORM::factory('City',$city_id)->kladr_id;
 
@@ -201,7 +201,7 @@ class Lib_PlacementAds_AddEdit {
 
 		if ( $category_id > 0) 
 		{ 
-			$category = ORM::factory('Category', $category_id);
+			$category = ORM::factory('Category', $category_id)->cached(Date::WEEK, array("category", "add"));
 			if ( ! $category->loaded() )
 				$this->raise_error('category not finded');
 		} 

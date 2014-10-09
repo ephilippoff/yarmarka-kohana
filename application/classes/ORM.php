@@ -101,7 +101,7 @@ class ORM extends Kohana_ORM {
 			->select(array(DB::expr('COUNT('.( ( $column AND $this->_db_builder->_distinct ) ? 'DISTINCT ' : '' ).( $column ? '"'.$column.'"' : '*' ).')'), 'records_found'));
 
 		if ($cached)
-			$records = $records->cached($cached, $tag);
+			$records = $records->cached($cached);
 
 		$records = 	$records->execute($this->_db)
 			->get('records_found');
