@@ -429,6 +429,17 @@ class Model_User extends Model_Auth_User {
 		return $this->where("code","=",trim($code));
 	}
 
+	public function delete_code()
+	{
+		if (!$this->loaded())
+			return;
+
+		$this->code = "";
+		$this->is_blocked = 0;
+		$this->save();
+
+	}
+
 }
 
 /* End of file User.php */

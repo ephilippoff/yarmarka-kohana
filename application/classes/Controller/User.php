@@ -1186,7 +1186,7 @@ class Controller_User extends Controller_Template {
 		$this->use_layout	= FALSE;
 		$this->auto_render	= FALSE;
 
-		$code = $this->request->param('id');
+		$code = trim($this->request->param('id'));
 		if (!$code)
 			throw new HTTP_Exception_404;
 
@@ -1197,6 +1197,7 @@ class Controller_User extends Controller_Template {
 			$this->redirect(URL::base('http').'user/forgot_password?failure=1');
 		else 
 		{
+			$user->delete_code();
 			Auth::instance()->trueforcelogin($user);
 			$this->redirect(URL::base('http').'user/password');
 		}
