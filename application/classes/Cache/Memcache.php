@@ -6,7 +6,7 @@ class Cache_Memcache extends Kohana_Cache_Memcache {
 
 	function __construct(array $config)
 	{
-		if (Kohana::$environment == Kohana::DEVELOPMENT)
+		if (Kohana::$environment === Kohana::DEVELOPMENT)
 			$this->env = "dev_";
 		parent::__construct($config);
 	}
