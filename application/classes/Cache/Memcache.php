@@ -27,31 +27,31 @@ class Cache_Memcache extends Kohana_Cache_Memcache {
 			$memcached->save();
 		}*/
 
-		parent::set($id, $data, $lifetime);
+		return parent::set($id, $data, $lifetime);
 	}
 
 	public function get($id, $default = NULL)
 	{
 		$id = $this->env.$id;
-		parent::get($id, $default);
+		return parent::get($id, $default);
 	}
 
 	public function delete($id, $timeout = 0)
 	{
 		$id = $this->env.$id;
-		parent::delete($id, $timeout);
+		return parent::delete($id, $timeout);
 	}
 
 	public function increment($id, $step = 1)
 	{
 		$id = $this->env.$id;
-		parent::increment($id, $step);
+		return parent::increment($id, $step);
 	}
 
 	public function decrement($id, $step = 1)
 	{
 		$id = $this->env.$id;
-		parent::decrement($id, $step);
+		return parent::decrement($id, $step);
 	}
 
 }
