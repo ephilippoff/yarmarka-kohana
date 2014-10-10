@@ -15,7 +15,7 @@
 			<div class="fl100  pt16 pb15">
 					<div class="smallcont">
 						<div class="labelcont">
-							<label><span style="color:red;">Внимание!</span></label>
+							<label><span style="color:red;">!</span></label>
 						</div>
 						<div class="fieldscont">
 							<div class="inp-cont-short">
@@ -27,7 +27,7 @@
 					</div>
 			</div>
 		<? endif; ?>
-		
+
 		<form method="POST"  id="element_list">			
   			<input type="hidden" name="object_id" id="object_id" value="<?=$params->object_id?>">
   			<input type="hidden" name="session_id" value="<?=session_id()?>">
