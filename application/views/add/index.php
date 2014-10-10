@@ -10,7 +10,24 @@
 			</strong></span></h1>
 		</div><!--hheader-->
 
-
+		<? $problem = Kohana::$config->load("common.add_problem"); ?>
+		<? if($problem):?>
+			<div class="fl100  pt16 pb15">
+					<div class="smallcont">
+						<div class="labelcont">
+							<label><span style="color:red;">Внимание!</span></label>
+						</div>
+						<div class="fieldscont">
+							<div class="inp-cont-short">
+								<div class="inp-cont"  style="color:red;">
+									<?=$problem?>
+								</div>
+							</div>
+						</div>									
+					</div>
+			</div>
+		<? endif; ?>
+		
 		<form method="POST"  id="element_list">			
   			<input type="hidden" name="object_id" id="object_id" value="<?=$params->object_id?>">
   			<input type="hidden" name="session_id" value="<?=session_id()?>">
