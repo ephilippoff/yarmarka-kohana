@@ -1006,7 +1006,7 @@ class Controller_Ajax extends Controller_Template
 				if ($contact_type_id == Model_Contact_Type::MOBILE)
 				{
 					// высылаем код в смс
-					Sms::send($exists_contact->contact_clear, 'Ваш проверочный код '.$code, $session_id);
+					Sms::send($exists_contact->contact_clear, 'Код проверки телефона: '.$code, $session_id);
 				}
 				else
 				{
