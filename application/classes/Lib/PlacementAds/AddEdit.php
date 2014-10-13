@@ -45,7 +45,8 @@ class Lib_PlacementAds_AddEdit {
 				}
 			}
 
-			$this->params->address = $this->parse_address_from_params((array) $this->params);
+			if (!$this->params->address)
+				$this->params->address = $this->parse_address_from_params((array) $this->params);
 
 			
 
