@@ -112,8 +112,16 @@ class Auth_ORM extends Kohana_Auth_ORM {
 			// Load the user
 			$user = ORM::factory('User');
 			$user->where(DB::expr('w_lower('.$user->unique_key($username).')'), '=', DB::expr("w_lower('".$username."')"))
-				->where('is_blocked', '=', 0)
+				->where('is_blocked', '<>', 2)
 				->find();
+		}
+
+		if ($user->loaded() AND $user->is_blocked == 1)
+		{
+			$block_reason = "";
+			if ($user->block_reason)
+				$block_reason = "Причина: ".$user->block_reason;
+			throw new Exception("Учетная запись заблокирована. ".$block_reason, 303);
 		}
 
 		if (is_string($password))

@@ -12,9 +12,16 @@ class Controller_User extends Controller_Template {
 		if ( ! $this->user = Auth::instance()->get_user())
 		{
 			if (!in_array(Request::current()->action(), 
-					array('userpage','login','logout','forgot_password','forgot_password_link')))
+					array('userpage','login','logout','forgot_password','forgot_password_link','message')))
 			{
 				$this->redirect(Url::site('user/login?return='.$this->request->uri()));
+			}
+		} else {
+			$this->user->reload();
+			if ($this->user->is_blocked == 1 AND !in_array(Request::current()->action(), 
+					array('userpage','login','logout','forgot_password','forgot_password_link','message')))
+			{
+				$this->redirect(Url::site('user/message?message=userblock'));
 			}
 		}
 	}
@@ -1288,6 +1295,14 @@ class Controller_User extends Controller_Template {
 		$this->template->assets = $this->assets;
 
 	
+	}
+
+	public function action_message()
+	{
+		$message =  $this->request->query('message');
+
+		if ($message == 'userblock')
+			$message = "Ваша учетная запись была заблокирована, по причине: ".$this->user->block_reason;		$this->template->message = $message;
 	}
 }
 /* End of file User.php */

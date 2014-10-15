@@ -2,6 +2,21 @@
 
 class Controller_Add extends Controller_Template {
 
+	public function before()
+	{
+		parent::before();
+
+		$user = Auth::instance()->get_user();
+		if ($user)
+		{
+			$user->reload();
+			if ($user->is_blocked == 1)
+			{
+				$this->redirect(Url::site('user/message?message=userblock'));
+			}
+		}
+	}
+
 	public function action_index()
 	{
 		$this->layout = 'add';
