@@ -1223,6 +1223,29 @@ class Controller_User extends Controller_Template {
 		$this->redirect('http://'.Region::get_current_domain().'/user/logout'.$main);
 	}
 
+	public function action_orginfo()
+	{
+		$user = Auth::instance()->get_user();
+		$is_post = ($_SERVER['REQUEST_METHOD'] == 'POST');
+		$data = NULL;
+		$errors = new Obj();
+		$form = Form_Custom::factory("Orginfo");
+
+
+		if ($is_post)
+		{
+			$data = $this->request->post();
+			$form->save($data);
+			if ($form->errors)
+				$errors = new Obj($form->errors);
+		}
+		else 
+			$data = $form->get_data();		
+
+		$this->template->form = $form->prerender($data);
+		$this->template->errors = $errors;
+	}
+
 	public function action_edit_ad()
 	{
 		$this->layout = 'add';
