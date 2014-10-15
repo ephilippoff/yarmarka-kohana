@@ -11,8 +11,8 @@ return array(
 									"Description" 	=> "user_text_adv",
 									"ManagerName" 	=> "contact",
 									"Price" 		=> "tsena",
-									"EMail" 		=> "contact_0_value",
-									"ContactPhone"  => "contact_1_value",
+									"ContactPhone"  => "contact_0_value",
+									"EMail" 		=> "contact_1_value",									
 									"Street" 		=> "address",
 									"Images" 		=> "images"
 								),
@@ -26,8 +26,8 @@ return array(
 									"Description" 	=> "user_text_adv",
 									"ManagerName" 	=> "contact",
 									"Price" 		=> "tsena",
-									"EMail" 		=> "contact_0_value",
-									"ContactPhone"  => "contact_1_value",
+									"ContactPhone"  => "contact_0_value",
+									"EMail" 		=> "contact_1_value",
 									"Street" 		=> "address",
 									"Images" 		=> "images"
 								),
@@ -42,8 +42,8 @@ return array(
 									"Description" 	=> "user_text_adv",
 									"ManagerName" 	=> "contact",
 									"Price" 		=> "tsena",
-									"EMail" 		=> "contact_0_value",
-									"ContactPhone"  => "contact_1_value",
+									"ContactPhone"  => "contact_0_value",
+									"EMail" 		=> "contact_1_value",
 									"Street" 		=> "address",
 									"Images" 		=> "images"
 								),
@@ -59,8 +59,8 @@ return array(
 									"Description" 	=> "user_text_adv",
 									"ManagerName" 	=> "contact",
 									"Price" 		=> "tsena",
-									"EMail" 		=> "contact_0_value",
-									"ContactPhone"  => "contact_1_value",
+									"ContactPhone"  => "contact_0_value",
+									"EMail" 		=> "contact_1_value",
 									"Street" 		=> "address",
 									"Images" 		=> "images"
 								),
@@ -74,8 +74,8 @@ return array(
 									"Description" 	=> "user_text_adv",
 									"ManagerName" 	=> "contact",
 									"Price" 		=> "tsena",
-									"EMail" 		=> "contact_0_value",
-									"ContactPhone"  => "contact_1_value",
+									"ContactPhone"  => "contact_0_value",
+									"EMail" 		=> "contact_1_value",
 									"Street" 		=> "address",
 									"Images" 		=> "images"
 								),
@@ -88,8 +88,8 @@ return array(
 									"Description" 	=> "user_text_adv",
 									"ManagerName" 	=> "contact",
 									"Price" 		=> "tsena",
-									"EMail" 		=> "contact_0_value",
-									"ContactPhone"  => "contact_1_value",
+									"ContactPhone"  => "contact_0_value",
+									"EMail" 		=> "contact_1_value",
 									"Street" 		=> "address",
 									"Images" 		=> "images"
 								),
@@ -102,8 +102,8 @@ return array(
 									"Description" 	=> "user_text_adv",
 									"ManagerName" 	=> "contact",
 									"Price" 		=> "tsena",
-									"EMail" 		=> "contact_0_value",
-									"ContactPhone"  => "contact_1_value",
+									"ContactPhone"  => "contact_0_value",
+									"EMail" 		=> "contact_1_value",
 									"Street" 		=> "address",
 									"Images" 		=> "images"
 								)
