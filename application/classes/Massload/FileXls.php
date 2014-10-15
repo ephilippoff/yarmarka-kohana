@@ -39,6 +39,27 @@ class Massload_FileXls extends Massload_File
 		unset($file);
 	}
 
+	public static function forEachField($pathtofile, Obj $options, $callback)
+	{
+		$file = self::openFile($pathtofile);
+		
+		foreach ($file as $item)
+		{
+			$values = array_values($item);
+			$row = new Obj((array) $values);
+			$row = self::clear_row($row);
+			$i = 0;
+			foreach ($row as $key => $value) {
+				$callback($i, $value);
+				$i++;
+			}
+			
+			break;			
+		}
+		unset($file);
+
+	}
+
 	public static function forRow($config, $pathtofile, $row_num, $callback)
 	{
 		$file = self::openFile($pathtofile);
