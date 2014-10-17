@@ -314,12 +314,13 @@ class Form_Add  {
 
 		$data = array();
 
-		$cachedata = Cache::instance()->get('staticdata_addform_'.$category_id);
+		$cachekey = 'staticdata_addform_'.$category_id;
+		$cachedata = Cache::instance()->get($cachekey);
 		if ($cachedata)
 			$data = $cachedata;
 		else {
 			$data = Attribute::getData($category_id);
-			Cache::instance()->set('staticdata_addform_'.$category_id, $data);
+			Cache::instance()->set($cachekey, $data);
 		}
 
 		
@@ -329,7 +330,14 @@ class Form_Add  {
 	
 		//$params = Array("23" => "_223", "433" => "_1435", "466" => "_3238");
 
-		$elements = Attribute::parseAttributeLevel($data[$category_id], $params);
+		$cachekey = 'staticdata_addform_params_'.sha1($category_id.print_r($params, TRUE));
+		$cachedata = Cache::instance()->get($cachekey);
+		if ($cachedata)
+			$elements = $cachedata;
+		else {
+			$elements = Attribute::parseAttributeLevel($data[$category_id], $params);
+			Cache::instance()->set($cachekey, $elements);
+		}
 
 		$lists = Array();
 		$rows = Array();
