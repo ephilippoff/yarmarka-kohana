@@ -466,6 +466,7 @@ class Form_Add  {
 		{
 			$oa = ORM::factory('Object_Attachment')
 					->where("object_id","=",$object_id)
+					->where("type","<>",2)
 					->order_by("id")
 					->find_all();
 			foreach($oa as $photo)
