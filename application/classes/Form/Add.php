@@ -312,7 +312,17 @@ class Form_Add  {
 			}*/
 		}
 
-		$data = Attribute::getData($category_id);
+		$data = array();
+
+		$cachedata = Cache::instance()->get('staticdata_addform_'.$category_id);
+		if ($cachedata)
+			$data = $cachedata;
+		else {
+			$data = Attribute::getData($category_id);
+			Cache::instance()->set('staticdata_addform_'.$category_id, $data);
+		}
+
+		
 
 		if (count($data[$category_id]) == 1)
 			return $this;	

@@ -37,6 +37,18 @@ class Attribute {
 													"title" => $row->title, 
 													"title_auto" => $row->title_auto_fill,
 													"text_required" =>  $row->text_required);
+
+
+				$options = Kohana::$config->load("category.".$row->id);
+				if ($options)
+					foreach ($options as $key => $value) {
+						if (in_array($key, array("one_mobile_phone","max_count","description")))
+							$category_params[$key] = $value;
+					}
+
+				if ($options)
+					$category_params = array_merge($category_params, $options);
+
 				if (count($address_precisions)>0)
 					$category_params["address_precisions"] = $address_precisions;
 
@@ -44,6 +56,8 @@ class Attribute {
 				$data[$row->id] = array_merge($data[$row->id],  self::getElements((int) $row->id));
 			}
 		}
+
+		$data["descriptions"] = Kohana::$config->load("descriptions");
 		return $data;
 	}
 

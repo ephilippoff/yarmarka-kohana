@@ -161,12 +161,16 @@
 						</div> <!-- fieldscont -->		
 					</div>	 <!-- smallcont --> 
 				</div>  <!-- fl100 -->
+
+				<div class="fl100" id="div_category_description">
+
+				</div>
 			<? endif; ?>
 			</div>
 
 			<? if ( property_exists($form_data, 'advert_type') ): ?>
 
-			<div class="fl100" id="div_category">
+			<div class="fl100" id="div_advert_type">
 				<div class="smallcont">
 					<div class="labelcont">
 						<label><span>Тип объявления:</span></label>
@@ -660,6 +664,21 @@
 					<div class="textarea user_text_adv_wrp">
 					<textarea name="user_text_adv" id="user_text_adv" class="user_text_adv"><%=value%></textarea>
 					</div>
+				</div>
+			</div>
+		</div>
+	</div>  
+</script>
+
+<script id="template-category-description" type="text/template">
+	<div class="smallcont" id="div_text">
+		<div class="labelcont">
+			<label><span>!</span></label>
+		</div>		
+		<div class="fieldscont user-text mb15">
+			<div class="inp-cont">
+				<div class="inp-cont">
+					<%=text%>
 				</div>
 			</div>
 		</div>
