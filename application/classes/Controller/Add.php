@@ -67,6 +67,7 @@ class Controller_Add extends Controller_Template {
 				 	->Subject()
 				 	->Text()
 				 	->Photo()
+				 	->Video()
 				 	->Params()
 				 	->Map()
 				 	->Contacts();

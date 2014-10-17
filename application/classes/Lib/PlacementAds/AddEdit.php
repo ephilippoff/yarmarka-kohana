@@ -572,6 +572,7 @@ class Lib_PlacementAds_AddEdit {
 		$errors 		 	= &$this->errors;
 		$user 			 	= &$this->user;
 		$category 		 	= &$this->category;
+		$params 		 	= &$this->params;
 		$category_settings  = new Obj((array) $this->category_settings);
 
 		//заполнены ли обязательные параметры
@@ -581,6 +582,16 @@ class Lib_PlacementAds_AddEdit {
 				$errors = array();
 
 			$errors = array_merge($errors, $this->validation->errors('validation/object_form'));
+		}
+
+		if ($params->video)
+		{
+			$youtube = '@youtu(?:(?:\.be/([_\-A-Za-z0-9]+))|(?:be.com/(?:(?:watch\?v=)|(?:embed/))([\-A-Za-z0-9]+)))@i';
+			
+
+			if ( !preg_match($youtube, $params->video, $matches) ) {
+				$errors['video'] = 'Неподдерживаемый видеохостинг. Или неправильная ссылка на видео';
+			}
 		}
 
 		if (!$user)

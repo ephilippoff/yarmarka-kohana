@@ -1281,6 +1281,7 @@ class Controller_User extends Controller_Template {
 				 	->Subject()
 				 	->Text()
 				 	->Photo()
+				 	->Video()
 				 	->Params()
 				 	->Map()
 				 	->Contacts();

@@ -332,6 +332,39 @@
 			<? endif; ?>
 			</div>
 
+			<div id="div_video">
+				<? if ( property_exists($form_data, 'video') ): ?>
+					<div class="smallcont" id="div_video">
+						<div class="labelcont">
+								<label><span>Видео:</span></label>
+						</div>
+						<div class="fieldscont">
+							<div class="inp-cont-short">
+								<div class="inp-cont <?if ($form_data->video["video_error"]) echo "error";?>">																		
+									<?=View::factory('add/block/video',
+												array( 
+													"data" 	=> new Obj($form_data->video)												  
+												));?>							
+									<? if ($form_data->video AND $form_data->video["video_error"]): ?>
+										<span class="inform">
+											<span><?=$form_data->video["video_error"]?></span>
+										</span>
+									<? endif; ?>
+									<span class="inform">
+										<span>Короткая ссылка с youtube (Например: http://youtu.be/aQIFUD3M3Hk )</span>
+									</span>
+									<?if ($form_data->video['embed']):?>
+									<div style="padding-bottom:20px;">
+										<?=$form_data->video['embed']?>
+									</div>
+									<?endif;?>
+								</div>							
+							</div>
+						</div><!--fieldscont-->
+					</div><!--smallcont-->	
+				<? endif; ?>
+			</div>
+
 			<? if ( property_exists($form_data, 'contacts') ): ?>
 				<div class="fl100 add-coord-cont" id="div_contacts">	                    		
 						<div class="smallcont">
