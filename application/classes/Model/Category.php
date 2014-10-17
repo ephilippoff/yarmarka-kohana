@@ -124,6 +124,27 @@ class Model_Category extends ORM {
 		return TRUE;
 	}
 
+	public function get_count_active_object_in_category($user, $object_id)
+	{
+		if ( ! $this->loaded())
+		{
+			return FALSE;
+		}
+
+		if ( ! is_object($user))
+		{
+			$user = ORM::factory('User', $user);
+		}
+
+		$objects = $user->objects->where('category', '=', $this->id)->where('is_published', '=', 1)->where('active', '=', 1);
+		if ($object_id)
+		{
+			$objects = $objects->where('id', '!=', $object_id);
+		}
+
+		return $objects->count_all();
+	}
+
 	public function get_count_childs($category_id)
  	{
  		return $this->where("parent_id","=",$category_id)->count_all(NULL, DATE::WEEK, array("category", "add"));
