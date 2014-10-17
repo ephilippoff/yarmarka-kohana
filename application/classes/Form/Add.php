@@ -522,7 +522,10 @@ class Form_Add  {
 					->order_by("id")
 					->find();
 			if ($oa->loaded())
-				$value = $oa->filename;
+			{
+				$value = "http://youtu.be/".$oa->filename;
+				$embed = '<iframe src="http://www.youtube.com/embed/' . $oa->filename . '" type="text/html" width="400" height="300" frameborder="0" allowfullscreen></iframe>';
+			}
 		}
 		elseif ($this->is_post AND array_key_exists("video", $this->params))
 		{

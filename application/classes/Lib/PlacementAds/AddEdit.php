@@ -815,11 +815,25 @@ class Lib_PlacementAds_AddEdit {
 		$object = &$this->object;
 		if ($params->video AND $params->video_type)
 		{
-			$attachment = ORM::factory('Object_Attachment');
-			$attachment->filename 	= $params->video ;
-			$attachment->type 		= $params->video_type;
-			$attachment->object_id 	= $object->id;
-			$attachment->save();
+			$video = $params->video;
+
+			$youtube = '@youtu(?:(?:\.be/([_\-A-Za-z0-9]+))|(?:be.com/(?:(?:watch\?v=)|(?:embed/))([\-A-Za-z0-9]+)))@i';
+			$filename = '';
+			$error = NULL;
+
+			if ( preg_match($youtube, $video, $matches) ) {//youtube
+					if ( !empty($matches[1]) ) {
+						$filename = $matches[1];
+					} else {
+						$filename = $matches[2];
+					}
+				
+				$attachment = ORM::factory('Object_Attachment');
+				$attachment->filename 	= $filename;
+				$attachment->type 		= $params->video_type;
+				$attachment->object_id 	= $object->id;
+				$attachment->save();
+			}
 		}
 		return $this;
 	}
