@@ -592,17 +592,18 @@ class Lib_PlacementAds_AddEdit {
 		if ( !count($this->contacts))
 		{
 			$errors['contacts'] = Kohana::message('validation/object_form', 'empty_contacts');
-			if ($category_settings->one_mobile_phone)
+		} 
+		elseif ($category_settings->one_mobile_phone)
+		{
+			$mobile = array_filter(array_values($this->contacts), function($v){
+				return ($v["type"] == 1);
+			});
+			if (!count($mobile))
 			{
-				$mobile = array_filter(array_values($this->contacts), function($v){
-					return ($v["type"] == 1);
-				});
-				if (!count($mobile))
-				{
-					$errors['contacts'] = "В эту рубрику необходимо указать и подтвердить хотябы один мобильный телефон";
-				}
+				$errors['contacts'] = "В эту рубрику необходимо указать и подтвердить хотябы один мобильный телефон";
 			}
 		}
+
 
 		// проверяем количество уже поданных пользователем объявлений
 		if ( $category AND !$this->category->check_max_user_objects($user, $this->params->object_id))
