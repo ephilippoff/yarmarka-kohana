@@ -616,6 +616,8 @@ class Lib_PlacementAds_AddEdit {
 						$this->category->get_count_active_object_in_category($user, $this->params->object_id))
 		{
 			$errors['max_objects_for_user'] = "В эту рубрику можно разместить только одно объявление.";
+			if ($this->is_edit)
+				$errors['max_objects_for_user'] .= " Снимите другие объявления в этой рубрике, для того чтобы его можно было отредактировать/поднять/продлить";
 		}
 
 		return $this;
