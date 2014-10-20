@@ -253,9 +253,10 @@ class Controller_User extends Controller_Template {
 		else
 			$of = ORM::factory('Objectload_Files')
 						->join("objectload")
-							->on("object_load.id","=","objectload.id")
+							->on("objectload_files.objectload_id","=","objectload.id")
 						->where("user_id","=",$this->user->id)
-						->where("id","=",$this->request->param('id'));
+						->where("objectload_files.id","=",$this->request->param('id'))
+						->find();
 						
 		if (!$of->loaded())
 			throw new HTTP_Exception_404;
@@ -274,6 +275,94 @@ class Controller_User extends Controller_Template {
 		unset($service_fields["object_id"]);
 		unset($service_fields["text_error"]);
 		$this->template->service_fields = array_keys( $service_fields );
+	}
+
+	public function action_priceload()
+	{
+		$this->layout = 'users';    	
+    	$this->assets->js('http://yandex.st/underscore/1.6.0/underscore-min.js');
+    	$this->assets->js('http://yandex.st/backbone/1.1.2/backbone-min.js');  	
+    	$this->assets->js('ajaxupload.js');
+
+    	$already_agree = FALSE;
+    	$us = ORM::factory('User_Settings')
+    					->get_by_name($this->user->id, "priceload_agreed")
+						->find();
+		$already_agree = $us->loaded();
+
+		$hidehelp = FALSE;
+    	$us = ORM::factory('User_Settings')
+    					->get_by_name($this->user->id, "priceload_hidehelp")
+						->find();
+		$hidehelp = !$us->loaded();
+
+		$this->template->already_agree  = $already_agree;
+		$this->template->hidehelp 		= $hidehelp;
+
+
+		$priceloads = ORM::factory('Priceload');
+
+		$pload = $priceloads->where("user_id","=",$this->user->id)
+					->order_by("created_on","desc")
+					->find_all();
+
+		$this->template->priceloads = $pload;
+		$this->template->states 	= $priceloads->get_states();
+
+
+		$this->template->free_limit = Kohana::$config->load('priceload.free_limit');
+	}
+
+	public function action_priceload_file_list()
+	{
+		$this->layout = 'admin_popup';
+		
+		$is_post = ($_SERVER['REQUEST_METHOD']=='POST');
+		$post_data = new Obj($this->request->post());
+		$array_post_data = $this->request->post();
+
+		$show_form = FALSE;
+		if ($this->user->role == 1 OR $this->user->role == 9)
+		{
+			$pl = ORM::factory('Priceload', $this->request->param('id'));
+			$show_form = TRUE;
+		}
+		else
+			$pl = ORM::factory('Priceload')
+						->where("user_id","=",$this->user->id)
+						->where("id","=",$this->request->param('id'))
+						->find();
+						
+		if (!$pl->loaded())
+			throw new HTTP_Exception_404;
+
+		$temp =  DB::select()->from("_temp_".$pl->table_name);
+
+		if ($this->request->query('errors'))
+			$temp = $temp->where("error","=",1);
+
+		$this->template->fields = array_keys(ORM_Temp::factory($pl->table_name)->list_columns());
+		$this->template->items =  $temp->order_by("id","asc")->as_object()->execute();		
+		$service_fields = Priceload::getServiceFields();
+		$this->template->service_fields = array_keys( $service_fields );
+		$this->template->type_fields = Priceload::getTypeFields();
+
+		if ($is_post)
+		{
+			$pl->config = serialize($array_post_data);
+			$pl->save();
+		}
+
+		$fsetting = new Obj();
+		if ($pl->config)
+		{
+			$post_data = new Obj(unserialize($pl->config));
+			$fsetting = $post_data;
+		}
+
+		$this->template->show_form = $show_form;
+		$this->template->fsetting = $fsetting;
+		$this->template->data = $post_data;
 	}
 
 	public function action_objectunload()

@@ -185,6 +185,101 @@ class Controller_Ajax_Massload extends Controller_Template {
 		$this->json['objectload_id'] = $ol->_objectload_id;
 	}
 
+	public function action_save_userpricefile()
+	{
+		$title 		= $this->request->post("title");
+		$user = Auth::instance()->get_user();
+		if (!$user->loaded())
+		{
+			$this->json['error'] = 'Пользователь не определен';
+			return;
+		}
+		$user_id = $user->id;
+		$file = $_FILES["file"];
+
+		$priceload = ORM::factory("Priceload");
+		$free_limit = Kohana::$config->load('priceload.free_limit');
+
+		$quantity_price = $priceload->where("user_id","=",$user_id)
+								->count_all();
+
+		if ($quantity_price >= $free_limit)
+		{
+			$this->json['data'] ="error";
+			$this->json['error'] = "Бесплатно можно загрузить ".$free_limit." прайс-лист. Свяжитесь с нами, чтобы увеличить лимит.";
+			return;
+		}
+
+		$db = Database::instance();
+
+		$settings = new Obj();
+		$settings->file = $file;
+		$settings->title = $title;
+
+		$pl = new Priceload($user_id, $settings);		
+
+		try {
+			
+			$db->begin();	
+
+			$pl->saveTempRecordsByLoadedFiles();
+
+			$db->commit();
+
+		} catch(Exception $e)
+		{
+			$db->rollback();
+			$this->json['data'] ="error";
+			$this->json['error'] = "Непредвиденная ошибка при загрузке (saveTempRecordsByLoadedFiles). Возможно файл содержит некорректные строки";
+			Log::instance()->add(Log::NOTICE, $e->getMessage());
+			ORM::factory("Priceload", $pl->_priceload_id)->delete();
+			return;
+		}
+
+		$pl->setState(1);
+		
+
+
+		$this->json['data'] = "ok";
+		$this->json['priceload_id'] = $pl->_priceload_id;
+	}
+
+	public function action_priceload_delete()
+	{
+		$this->auto_render = FALSE;
+		$user = Auth::instance()->get_user();
+		if (!$user->loaded())
+		{
+			throw new HTTP_Exception_404;
+			return;
+		}
+
+		$post = $_POST;
+		if (!$post["id"])
+		{
+			throw new HTTP_Exception_404;
+			return;
+		}
+
+		if ($user->role ==1 OR $user->role ==9)
+			$ct = ORM::factory('Priceload')
+						->where("id","=",$post["id"])
+						->find();
+		else
+			$ct = ORM::factory('Priceload')
+						->where("user_id","=",$user->id)
+						->where("id","=",$post["id"])
+						->where("state","IN",array(99,0,1,2,3))
+						->find();
+
+		if ( ! $ct->loaded() )
+			throw new HTTP_Exception_404;
+
+		$ct->_delete();
+
+		$this->json['data'] = "ok";
+	}
+
 	public function action_save_userstaticfile()
 	{
 		$category 		= $this->request->post("category");
@@ -366,6 +461,43 @@ class Controller_Ajax_Massload extends Controller_Template {
 		$this->json['data'] = "ok";
 		$this->json['state'] = $state;
 		$this->json['objectload_id'] = $ol->_objectload_id;
+	}
+
+	public function action_save_pricefile()
+	{
+		$user_id 		= $this->request->post("user_id");
+		$title 		= $this->request->post("title");
+		$file = $_FILES["file"];
+		$db = Database::instance();
+		if (!$user_id)
+			return;
+
+		$settings = new Obj();
+		$settings->file = $file;
+		$settings->title = $title;
+
+		$ol = new Priceload($user_id, $settings);
+		
+
+		try {
+			
+			$db->begin();	
+
+			$ol->saveTempRecordsByLoadedFiles();
+
+			$db->commit();
+
+		} catch(Exception $e)
+		{
+			$db->rollback();
+			$this->json['data'] ="error";
+			$this->json['error'] = $e->getMessage();
+			ORM::factory("Priceload", $ol->_priceload_id)->delete();
+			return;
+		}
+
+		$this->json['data'] = "ok";
+		$this->json['priceload_id'] = $ol->_priceload_id;
 	}
 
 

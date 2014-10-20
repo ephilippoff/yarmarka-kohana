@@ -9,6 +9,61 @@ class Model_Priceload extends ORM {
 		'user'			=> array('model' => 'User', 'foreign_key' => 'user_id'),
 	);
 
+	function set_state($state = 0, $comment = NULL)
+	{
+		if (!$this->loaded())
+			return;
+
+		$this->state = $state;
+		$this->comment = $comment;
+		$this->update();
+	}
+
+	function get_states()
+	{
+		return array(
+    			0 => "у оператора",
+    			1 => "на модерации",
+    			2 => "одобрено",
+    			3 => "отклонено",
+    			4 => "в обработке",
+    			5 => "выполнено",
+    			99 => "ошибка"
+    		);
+	}
+
+	function get_active_states()
+	{
+		return array(1,2,3,4,99);
+	}
+
+	function _delete()
+	{
+		if (!$this->loaded())
+			return FALSE;
+
+			try {
+				Temptable::delete_table($this->table_name);
+			} catch (Exception $e)
+			{
+				return;
+			}
+
+		$this->delete();
+	}
+
+	/*
+		state may be:
+
+		0 - default
+		1 - on_moderation (active)
+		2 - true_moderation (active)
+		3 - false_moderation (active, end state) 
+		4 - in order/in proccess (active)
+		5 - finished (end state)
+		99 - error (active)
+	*/
+
 	/*
 		-- Table: priceload
 

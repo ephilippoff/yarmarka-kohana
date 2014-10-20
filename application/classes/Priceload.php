@@ -81,6 +81,13 @@ class Priceload
 		
 	}
 
+	public function setState($state = 0, $comment = NULL)
+	{
+		$pl = ORM::factory('Priceload', $this->_priceload_id)
+					->set_state($state, $comment);
+		return $state;
+	}
+
 	public static function getServiceFields()
 	{
 
@@ -101,6 +108,18 @@ class Priceload
 					"name" => "text_error",
 					"type" => "text",
 				),
+			);
+	}
+
+	public static function getTypeFields()
+	{
+
+		return array(
+				"info"    => 'Информационное поле',
+				"filter"  =>  'Фильтр',
+				"ident"    => 'Уникальный идентификатор',
+				"price"    => 'Цена',
+				"description" => 'Описание',
 			);
 	}
 

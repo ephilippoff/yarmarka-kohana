@@ -92,6 +92,12 @@
 				<li><a href="<?=URL::site('user/objectunload')?>" class="clickable"><i class="ico "></i><span>Выгрузка объявлений</span></a></li>
 				<?php endif; ?>
 
+				<?php if (Request::current()->action() == 'priceload') : ?>
+				<li><span class="noclickable"><i class="ico "></i><span><b>Прайс-листы</b></span></span></li>
+				<?php else : ?>
+				<li><a href="<?=URL::site('user/priceload')?>" class="clickable"><i class="ico "></i><span>Прайс-листы</span></a></li>
+				<?php endif; ?>
+
 				<?/*Request::factory('block/massload_categories')->execute()*/?>
 
 				<? /* ?>

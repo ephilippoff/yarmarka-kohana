@@ -182,6 +182,11 @@ class Controller_Admin_Users extends Controller_Admin_Template {
 		$this->template->objectloads = $objectload->get_objectload_list($oloads);
 		$this->template->states_ol   = $objectload->get_states();
 		$this->template->categories  = Kohana::$config->load('massload/bycategory');
+
+		$priceloads = ORM::factory('Priceload')
+								->order_by("id","desc")
+								->limit(50)->find_all();
+		$this->template->priceloads = $priceloads;
 	}
 
 	public function action_objectload_shell()
@@ -280,6 +285,26 @@ class Controller_Admin_Users extends Controller_Admin_Template {
 		$ol->update();
 		$this->response->body(json_encode($json));
 	}
+
+	public function action_priceload_set_state()
+	{
+		$this->auto_render = FALSE;
+		$post = $_POST;
+		$pl = ORM::factory('Priceload', $post["id"]);
+
+		if ( ! $pl->loaded())
+		{
+			throw new HTTP_Exception_404;
+		}
+		$json = array('code' => 200);
+
+		$pl->comment = $post["text"];
+		$pl->state = $post["state"];
+		$pl->update();
+		$this->response->body(json_encode($json));
+	}
+
+	
 
 	public function action_ban()
 	{
