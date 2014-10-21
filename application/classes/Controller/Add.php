@@ -42,7 +42,7 @@ class Controller_Add extends Controller_Template {
 				$errors = new Obj($errors->error);
 			else {
 				$object_id = $errors->object_id;
-				$this->redirect('http://'.Region::get_current_domain().'/billing/services_for_ads/'.$object_id);
+				$this->redirect('http://'.Region::get_current_domain().'/billing/services_for_ads/'.$object_id."?afteradd=1");
 			}
 
 			$params = $post_data;
