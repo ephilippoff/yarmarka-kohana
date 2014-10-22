@@ -623,6 +623,7 @@ class Form_Add  {
 
 		$prices = ORM::factory('Priceload')
 						->where("user_id","=",$user->id)
+						->where("state","=",2)
 						->find_all();
 
 		$value = NULL;
