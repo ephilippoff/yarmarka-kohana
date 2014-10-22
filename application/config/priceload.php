@@ -2,5 +2,5 @@
 return array(
 	'free_limit' => 1,
 	'free_rows_limit' =>100,
-	'allow_category' = array()
+	'allow_category' => array()
 );
