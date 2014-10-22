@@ -161,12 +161,16 @@
 						</div> <!-- fieldscont -->		
 					</div>	 <!-- smallcont --> 
 				</div>  <!-- fl100 -->
+
+				<div class="fl100" id="div_category_description">
+
+				</div>
 			<? endif; ?>
 			</div>
 
 			<? if ( property_exists($form_data, 'advert_type') ): ?>
 
-			<div class="fl100" id="div_category">
+			<div class="fl100" id="div_advert_type">
 				<div class="smallcont">
 					<div class="labelcont">
 						<label><span>Тип объявления:</span></label>
@@ -326,6 +330,39 @@
 					</div>
 				</div>
 			<? endif; ?>
+			</div>
+
+			<div id="div_video">
+				<? if ( property_exists($form_data, 'video') ): ?>
+					<div class="smallcont" id="div_video">
+						<div class="labelcont">
+								<label><span>Видео:</span></label>
+						</div>
+						<div class="fieldscont">
+							<div class="inp-cont-short">
+								<div class="inp-cont <?if ($form_data->video["video_error"]) echo "error";?>">																		
+									<?=View::factory('add/block/video',
+												array( 
+													"data" 	=> new Obj($form_data->video)												  
+												));?>							
+									<? if ($form_data->video AND $form_data->video["video_error"]): ?>
+										<span class="inform">
+											<span><?=$form_data->video["video_error"]?></span>
+										</span>
+									<? endif; ?>
+									<span class="inform">
+										<span>Короткая ссылка с youtube (Например: http://youtu.be/aQIFUD3M3Hk )</span>
+									</span>
+									<?if ($form_data->video['embed']):?>
+									<div style="padding-bottom:20px;">
+										<?=$form_data->video['embed']?>
+									</div>
+									<?endif;?>
+								</div>							
+							</div>
+						</div><!--fieldscont-->
+					</div><!--smallcont-->	
+				<? endif; ?>
 			</div>
 
 			<? if ( property_exists($form_data, 'contacts') ): ?>
@@ -660,6 +697,21 @@
 					<div class="textarea user_text_adv_wrp">
 					<textarea name="user_text_adv" id="user_text_adv" class="user_text_adv"><%=value%></textarea>
 					</div>
+				</div>
+			</div>
+		</div>
+	</div>  
+</script>
+
+<script id="template-category-description" type="text/template">
+	<div class="smallcont" id="div_text">
+		<div class="labelcont">
+			<label><span>!</span></label>
+		</div>		
+		<div class="fieldscont user-text mb15">
+			<div class="inp-cont">
+				<div class="inp-cont">
+					<%=text%>
 				</div>
 			</div>
 		</div>

@@ -439,31 +439,23 @@ class Controller_Ajax extends Controller_Template
 			throw new HTTP_Exception_404;
 		}
 
-		$obj = ORM::factory('Object', $object->id);	
-		$obj->parent_id = NULL;	
-		$obj->is_published = ($obj->is_published) ? 0:1;
-		$obj->update();
-
 		$info = Object::canEdit(Array("object_id" => $object->id, "rubricid" => $object->category));
 
-		if ($object->is_published <> 0)
+		if ($object->is_published == 1) //если размещено и надо снять
 		{
 			$object->toggle_published();
 			$this->json['code'] = 200;
-			$this->json['is_published'] = $object->is_published;
+			$this->json['is_published'] = 0;
 		} else {
 			if ($info["code"] == "error")
 			{
-				$obj = ORM::factory('Object', $object->id);	
-				$obj->parent_id = $object->parent_id;	
-				$obj->update();
 
 				$this->json['code'] = $info["code"];
 				$this->json['errors'] = $info["errors"];
 			} else {
 				$object->toggle_published();
 				$this->json['code'] = 200;
-				$this->json['is_published'] = $object->is_published;
+				$this->json['is_published'] = 1;
 			}
 		}
 	}

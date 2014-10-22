@@ -12,7 +12,7 @@ return array(
 	'check_image_similarity' 				=> FALSE,
 	'check_object_similarity' 				=> TRUE, //вкл выкл функционала проверки объявлений на похожесть (среди своих объяв)
 	'max_object_similarity'					=> 0.89,	//процент похожести объявлений при котором объявления будут сгруппированы
-	'union_objects_by_similarity' 			=> TRUE, //вкл выкл функционала группировки объявлений (зависит от check_object_similarity, если там false, то и тут false)
+	'union_objects_by_similarity' 			=> FALSE, //вкл выкл функционала группировки объявлений (зависит от check_object_similarity, если там false, то и тут false)
 	'union_objects_by_similarity_by_cat' 	=> array(3,96), //ID рубрик в которых работает функционал группировки объявлений
 	'address_attribute_ids'					=> array(47, 99),
 	'time_to_running_line'					=> 7,

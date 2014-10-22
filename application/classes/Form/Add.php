@@ -312,14 +312,32 @@ class Form_Add  {
 			}*/
 		}
 
-		$data = Attribute::getData($category_id);
+		$data = array();
+
+		$cachekey = 'staticdata_addform_'.$category_id;
+		$cachedata = Cache::instance()->get($cachekey);
+		if ($cachedata)
+			$data = $cachedata;
+		else {
+			$data = Attribute::getData($category_id);
+			Cache::instance()->set($cachekey, $data);
+		}
+
+		
 
 		if (count($data[$category_id]) == 1)
 			return $this;	
 	
 		//$params = Array("23" => "_223", "433" => "_1435", "466" => "_3238");
 
-		$elements = Attribute::parseAttributeLevel($data[$category_id], $params);
+		$cachekey = 'staticdata_addform_params_'.sha1($category_id.print_r($params, TRUE));
+		$cachedata = Cache::instance()->get($cachekey);
+		if ($cachedata)
+			$elements = $cachedata;
+		else {
+			$elements = Attribute::parseAttributeLevel($data[$category_id], $params);
+			Cache::instance()->set($cachekey, $elements);
+		}
 
 		$lists = Array();
 		$rows = Array();
@@ -448,6 +466,7 @@ class Form_Add  {
 		{
 			$oa = ORM::factory('Object_Attachment')
 					->where("object_id","=",$object_id)
+					->where("type","<>",2)
 					->order_by("id")
 					->find_all();
 			foreach($oa as $photo)
@@ -490,7 +509,53 @@ class Form_Add  {
 	}
 
 	function Video(){
+		$object_id  = $this->object_id;
+		$object 	= $this->object;
+		$errors 	= $this->errors;
 
+		$value = NULL;
+		$embed = '';
+		if ($object->loaded() AND !$this->is_post)
+		{
+			$oa = ORM::factory('Object_Attachment')
+					->where("object_id","=",$object_id)
+					->where("type","=",2)
+					->order_by("id")
+					->find();
+			if ($oa->loaded())
+			{
+				$value = "http://youtu.be/".$oa->filename;
+				$embed = '<iframe src="http://www.youtube.com/embed/' . $oa->filename . '" type="text/html" width="400" height="300" frameborder="0" allowfullscreen></iframe>';
+			}
+		}
+		elseif ($this->is_post AND array_key_exists("video", $this->params))
+		{
+			$value = $this->params['video'];
+
+			$youtube = '@youtu(?:(?:\.be/([_\-A-Za-z0-9]+))|(?:be.com/(?:(?:watch\?v=)|(?:embed/))([\-A-Za-z0-9]+)))@i';
+			$filename = '';
+			$error = NULL;
+
+			if ( preg_match($youtube, $value, $matches) ) {//youtube
+				if ( !empty($matches[1]) ) {
+					$filename = $matches[1];
+				} else {
+					$filename = $matches[2];
+				}
+
+				$embed = '<iframe src="http://www.youtube.com/embed/' . $filename . '" type="text/html" width="400" height="300" frameborder="0" allowfullscreen></iframe>';
+			} /*else {
+				$error = 'Неподдерживаемый видеохостинг';
+			}*/
+		}
+
+		
+
+		$this->_data->video = array( 
+									 'value' => $value,  
+								     'embed' => $embed,
+								     'video_error' => $errors->video
+									);
 		return $this;
 	}
 

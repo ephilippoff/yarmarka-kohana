@@ -20,6 +20,7 @@ class Lib_PlacementAds_AddEdit {
 	public $edit_union = FALSE;
 	public $destroy_union = FALSE;
 	public $object_without_parent_id = NULL;
+	public $category_settings = array();
 
 	public $union_cancel = FALSE;
 
@@ -205,6 +206,8 @@ class Lib_PlacementAds_AddEdit {
 			$category = ORM::factory('Category', $category_id)->cached(Date::WEEK, array("category", "add"));
 			if ( ! $category->loaded() )
 				$this->raise_error('category not finded');
+			else 
+				$this->category_settings = Kohana::$config->load("category.".$category->id);
 		} 
 		else 
 		{
@@ -566,9 +569,11 @@ class Lib_PlacementAds_AddEdit {
 
 	function exec_validation()
 	{
-		$errors 		 = &$this->errors;
-		$user 			 = &$this->user;
-		$category 		 = &$this->category;
+		$errors 		 	= &$this->errors;
+		$user 			 	= &$this->user;
+		$category 		 	= &$this->category;
+		$params 		 	= &$this->params;
+		$category_settings  = new Obj((array) $this->category_settings);
 
 		//заполнены ли обязательные параметры
 		if ( !$this->validation->check())
@@ -577,6 +582,16 @@ class Lib_PlacementAds_AddEdit {
 				$errors = array();
 
 			$errors = array_merge($errors, $this->validation->errors('validation/object_form'));
+		}
+
+		if ($params->video)
+		{
+			$youtube = '@youtu(?:(?:\.be/([_\-A-Za-z0-9]+))|(?:be.com/(?:(?:watch\?v=)|(?:embed/))([\-A-Za-z0-9]+)))@i';
+			
+
+			if ( !preg_match($youtube, $params->video, $matches) ) {
+				$errors['video'] = 'Неподдерживаемый видеохостинг. Или неправильная ссылка на видео';
+			}
 		}
 
 		if (!$user)
@@ -588,12 +603,32 @@ class Lib_PlacementAds_AddEdit {
 		if ( !count($this->contacts))
 		{
 			$errors['contacts'] = Kohana::message('validation/object_form', 'empty_contacts');
+		} 
+		elseif ($category_settings->one_mobile_phone)
+		{
+			$mobile = array_filter(array_values($this->contacts), function($v){
+				return ($v["type"] == 1);
+			});
+			if (!count($mobile))
+			{
+				$errors['contacts'] = "В эту рубрику необходимо указать и подтвердить хотябы один мобильный телефон";
+			}
 		}
+
 
 		// проверяем количество уже поданных пользователем объявлений
 		if ( $category AND !$this->category->check_max_user_objects($user, $this->params->object_id))
 		{
 			$errors['max_objects_for_user'] = Kohana::message('validation/object_form', 'max_objects');
+		}
+
+		if ( $category AND $category_settings->max_count AND
+					$category_settings->max_count <=
+						$this->category->get_count_active_object_in_category($user, $this->params->object_id))
+		{
+			$errors['max_objects_for_user'] = "В эту рубрику можно разместить только одно объявление.";
+			if ($this->is_edit)
+				$errors['max_objects_for_user'] .= " Снимите другие объявления в этой рубрике, для того чтобы его можно было отредактировать/поднять/продлить";
 		}
 
 		return $this;
@@ -780,11 +815,25 @@ class Lib_PlacementAds_AddEdit {
 		$object = &$this->object;
 		if ($params->video AND $params->video_type)
 		{
-			$attachment = ORM::factory('Object_Attachment');
-			$attachment->filename 	= $params->video ;
-			$attachment->type 		= $params->video_type;
-			$attachment->object_id 	= $object->id;
-			$attachment->save();
+			$video = $params->video;
+
+			$youtube = '@youtu(?:(?:\.be/([_\-A-Za-z0-9]+))|(?:be.com/(?:(?:watch\?v=)|(?:embed/))([\-A-Za-z0-9]+)))@i';
+			$filename = '';
+			$error = NULL;
+
+			if ( preg_match($youtube, $video, $matches) ) {//youtube
+					if ( !empty($matches[1]) ) {
+						$filename = $matches[1];
+					} else {
+						$filename = $matches[2];
+					}
+				
+				$attachment = ORM::factory('Object_Attachment');
+				$attachment->filename 	= $filename;
+				$attachment->type 		= $params->video_type;
+				$attachment->object_id 	= $object->id;
+				$attachment->save();
+			}
 		}
 		return $this;
 	}
@@ -1032,7 +1081,6 @@ class Lib_PlacementAds_AddEdit {
 	function init_defaults()
 	{
 		$this->contacts = array();
-
 	}
 
 	private static function is_nessesary_to_check($category_id, $reference_id, $postparams)
