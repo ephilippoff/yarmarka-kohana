@@ -365,7 +365,7 @@
 				<? endif; ?>
 			</div>
 
-			<div id="div_price">
+			<div id="div_price" style="display:none;">
 				<? if ( property_exists($form_data, 'price') ): ?>
 					<div class="smallcont" id="div_video">
 						<div class="labelcont">
