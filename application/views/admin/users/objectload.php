@@ -459,7 +459,7 @@
 			</td>	
 			<td id="stat_<?=$item->id?>"><? /*$item->statistic_str */?></td>
 			<td>
-				<a href="/user/priceload_file_list/<?=$item->id?>" target="_blank">Показать список</a>, 
+				<a href="/user/pricelist/<?=$item->id?>" target="_blank">Просмотр/редактирование</a>, 
 					<? /*if ($file->error_exists):?>
 						<a href="/user/objectload_file_list/<?=$file->id?>?errors=1" target="_blank">только ошибки</a>
 					<? endif;*/?>

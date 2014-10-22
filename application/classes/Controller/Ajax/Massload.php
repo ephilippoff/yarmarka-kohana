@@ -280,6 +280,103 @@ class Controller_Ajax_Massload extends Controller_Template {
 		$this->json['data'] = "ok";
 	}
 
+	public function action_pricerow_loadimage()
+	{
+		$price_id = $this->request->post("price_id");
+		$pricerow_id = $this->request->post("pricerow_id");
+
+		$user = Auth::instance()->get_user();
+		if (!$user->loaded())
+		{
+			throw new HTTP_Exception_404;
+			return;
+		}
+
+		$file = $_FILES["file"];
+
+		if ($user->role ==1 OR $user->role ==9)
+			$price = ORM::factory('Priceload')
+						->where("id","=",$price_id)
+						->find();
+		else
+			$price = ORM::factory('Priceload')
+						->where("user_id","=",$user->id)
+						->where("id","=",$price_id)
+						->find();
+
+		if (!$price->loaded())
+		{
+			$this->json['error'] = "Прайс не обнаружен";
+			return;
+		}
+
+		$pricerow =  ORM_Temp::factory($price->table_name, $pricerow_id);
+		if (!$pricerow->loaded())
+		{
+			$this->json['error'] = "Строка не обнаружена";
+			return;
+		}
+
+		try
+		{
+			$filename = Uploads::make_thumbnail($file);
+			$filepaths = Imageci::getSitePaths($filename);
+			$filepath = $filepaths["120x90"];
+
+		}
+		catch(Exception $e)
+		{
+			$this->json['error'] = $e->getMessage();
+			return;
+		}
+
+		$pricerow->image = $filename;
+		$pricerow->save();
+
+		$this->json['filepath'] = $filepath;
+		$this->json['data'] = "ok";
+	}
+
+	public function action_pricerow_delete()
+	{
+		$price_id = $this->request->post("price_id");
+		$pricerow_id = $this->request->post("pricerow_id");
+
+		$user = Auth::instance()->get_user();
+		if (!$user->loaded())
+		{
+			throw new HTTP_Exception_404;
+			return;
+		}
+
+		if ($user->role ==1 OR $user->role ==9)
+			$price = ORM::factory('Priceload')
+						->where("id","=",$price_id)
+						->find();
+		else
+			$price = ORM::factory('Priceload')
+						->where("user_id","=",$user->id)
+						->where("id","=",$price_id)
+						->find();
+
+		if (!$price->loaded())
+		{
+			$this->json['error'] = "Прайс не обнаружен";
+			return;
+		}
+
+		$pricerow =  ORM_Temp::factory($price->table_name, $pricerow_id);
+		if (!$pricerow->loaded())
+		{
+			$this->json['error'] = "Строка не обнаружена";
+			return;
+		}
+
+		$pricerow->delete();
+
+		$this->json['data'] = "ok";
+	}
+
 	public function action_save_userstaticfile()
 	{
 		$category 		= $this->request->post("category");

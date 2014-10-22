@@ -142,7 +142,7 @@ $(document).ready(function() {
 									<td><?=date( "d.m.Y H:i",strtotime($item->created_on))?></td>
 									<td><?=$item->title?></td>										
 									<td>
-										<a href="/user/priceload_file_list/<?=$item->id?>" target="_blank">Показать список</a>, 
+										<a href="/user/pricelist/<?=$item->id?>" target="_blank">Просмотр/редактирование</a>, 
 									</td>
 									<td>
 											<?if (!$item->comment): ?>
