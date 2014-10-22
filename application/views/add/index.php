@@ -365,6 +365,29 @@
 				<? endif; ?>
 			</div>
 
+			<div id="div_price">
+				<? if ( property_exists($form_data, 'price') ): ?>
+					<div class="smallcont" id="div_video">
+						<div class="labelcont">
+								<label><span>Прайс-лист:</span></label>
+						</div>
+						<div class="fieldscont">
+							<div class="inp-cont-short">
+								<div class="inp-cont">																		
+									<?=View::factory('add/block/price',
+												array( 
+													"data" 	=> new Obj($form_data->price)												  
+												));?>							
+									<span class="inform">
+										<span>Прайс лист необходимо предварительно загрузить <a>(?)</a></span>
+									</span>
+								</div>							
+							</div>
+						</div><!--fieldscont-->
+					</div><!--smallcont-->	
+				<? endif; ?>
+			</div>
+
 			<? if ( property_exists($form_data, 'contacts') ): ?>
 				<div class="fl100 add-coord-cont" id="div_contacts">	                    		
 						<div class="smallcont">

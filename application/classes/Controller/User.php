@@ -1396,6 +1396,7 @@ class Controller_User extends Controller_Template {
 				 	->Video()
 				 	->Params()
 				 	->Map()
+				 	->Price()
 				 	->Contacts();
 
 		if ($user AND $user->role == 9)

@@ -838,6 +838,32 @@ class Lib_PlacementAds_AddEdit {
 		return $this;
 	}
 
+	function save_price()
+	{
+		$params = &$this->params;
+		$object = &$this->object;
+
+		if (in_array("pricelist", array_keys((array) $params)))
+		{
+			$op = ORM::factory('Object_Priceload');
+			$op->where("object_id","=",$object->id)->delete_all();
+
+			if ($params->pricelist)
+			{
+				$price = ORM::factory('Priceload', $params->pricelist);
+				if (!$price->loaded())
+					return;
+
+				$op->object_id = $object->id;
+				$op->priceload_id =$params->pricelist;
+				$op->save();
+
+			}
+			
+		}
+		return $this;
+	}
+
 	function save_signature()
 	{
 		$object = &$this->object;
