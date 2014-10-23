@@ -313,7 +313,7 @@ class Controller_User extends Controller_Template {
 		$this->template->free_limit = Kohana::$config->load('priceload.free_limit');
 	}
 
-	public function action_priceload_file_list()
+	public function action_pricelist()
 	{
 		$this->layout = 'admin_popup';
 		
@@ -341,9 +341,15 @@ class Controller_User extends Controller_Template {
 		if ($this->request->query('errors'))
 			$temp = $temp->where("error","=",1);
 
-		$this->template->fields = array_keys(ORM_Temp::factory($pl->table_name)->list_columns());
-		$this->template->items =  $temp->order_by("id","asc")->as_object()->execute();		
 		$service_fields = Priceload::getServiceFields();
+		$fields = array_keys(ORM_Temp::factory($pl->table_name)->list_columns());
+		$states = $pl->get_states();
+
+		$this->template->fields = array_diff($fields, array_keys($service_fields), array("id"));
+		$this->template->items =  $temp->order_by("id","asc")->as_object()->execute();		
+		$this->template->price_id = $this->request->param('id');
+		$this->template->title = $pl->title;
+		$this->template->state = $states[$pl->state];
 		$this->template->service_fields = array_keys( $service_fields );
 		$this->template->type_fields = Priceload::getTypeFields();
 

@@ -108,6 +108,10 @@ class Priceload
 					"name" => "text_error",
 					"type" => "text",
 				),
+				"image" => array(
+					"name" => "image",
+					"type" => "path",
+				),
 			);
 	}
 
@@ -115,13 +119,12 @@ class Priceload
 	{
 
 		return array(
+				"no"    => 'Отключено',
 				"info"    => 'Информационное поле',
 				"filter"  =>  'Фильтр',
 				"ident"    => 'Уникальный идентификатор',
 				"price"    => 'Цена',
-				"description" => 'Описание',
-				"no"    => 'Отключено',
-
+				"description" => 'Описание'
 			);
 	}
 
