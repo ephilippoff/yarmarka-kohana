@@ -633,7 +633,7 @@ class Form_Add  {
 						->where("object_id","=",$object->id)
 						->find()->priceload_id;
 		}
-		elseif ($this->is_post)
+		elseif ($this->is_post and array_key_exists('pricelist', $this->params))
 		{
 			$value = $this->params['pricelist'];
 		}
