@@ -619,7 +619,7 @@ class Form_Add  {
 
 		$user = Auth::instance()->get_user();
 		if (!$user)
-			return;
+			return $this;
 
 		$prices = ORM::factory('Priceload')
 						->where("user_id","=",$user->id)
