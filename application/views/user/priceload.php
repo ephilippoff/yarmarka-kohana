@@ -20,15 +20,14 @@ $(document).ready(function() {
 					<form method="post">
 						<input type="hidden" name="hidehelp" value="<?=$hidehelp?>">
 						<? if ($hidehelp):?>
-							<input type="submit" class="btn btn-info" value="Скрыть пошаговую инструкцию">
+							<input type="submit" class="btn btn-info ml10 mt3" value="Скрыть пошаговую инструкцию">
 						<? else:?>
-							<input type="submit" class="btn btn-info" value="Показать пошаговую инструкцию">
+							<input type="submit" class="btn btn-info ml10 mt3" value="Показать пошаговую инструкцию">
 						<? endif;?>
 					</form>
 			</header>
 				<div class="p_cont massload">
 					<? if ($hidehelp):?>
-						<p>
 							<h2>Шаг 1. Подговьте файл для загрузки</h2>
 							<div class="massload-controlsrow">
 								
@@ -39,9 +38,8 @@ $(document).ready(function() {
 									</ul>
 								</div>		
 							</div>
-						</p>
 					<? endif; ?>
-					<p><h2><? if ($hidehelp):?> Шаг 2. <? endif; ?> Загрузите файл</h2>
+					<h2><? if ($hidehelp):?> Шаг 2. <? endif; ?> Загрузите файл</h2>
 						<div class="massload-controlsrow">
 								
 							<div class="massload-hint">	
@@ -100,16 +98,14 @@ $(document).ready(function() {
 							}
 
 					   </script>
-						<input id="fn-title-price" type="text" value="Прайс-лист" style="border:1px solid black;"/>
-						<div class="massload-controlsrow">
+						<input id="fn-title-price" class="form-control" type="text" value="Прайс-лист"/>
 									
+						<div id="fn-userfile-upload">
+							<!--<div class="">-->
+								<span class="btn btn-primary">Загрузить</span>
+							<!--</div>-->
+						</div>	
 
-							<div class="button" id="fn-userfile-upload">
-								<div class="button blue">
-									<span>Загрузить</span>
-								</div>									
-							</div>	
-						</div>
 						<div class="massload-controlsrow">
 							<div class="aloader" style="display:none;">
 								<img src="/images/aloader.gif">
@@ -126,7 +122,7 @@ $(document).ready(function() {
 						</div>
 
 
-						<p><h2>Ваши прайс листы</h2>
+						<h2>Ваши прайс листы</h2>
 						<table class="table table-hover table-condensed" style="width:100%">
 							<tr>
 								<th>#</th>
@@ -157,7 +153,7 @@ $(document).ready(function() {
 								</tr>
 							<?php endforeach; ?>
 						</table>
-					</p>
+				
 				</div>
 				<div class="clear"></div>
 				<br />
