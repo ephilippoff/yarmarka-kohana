@@ -13,26 +13,35 @@ class Task_Priceload_Indexer extends Minion_Task
 
 		Minion_CLI::write('indexer start');
 
-		
+		ORM::factory('Priceload_Index')->delete_all();
 
 		$pl = ORM::factory('Priceload')
-				->select("object_id")
-				->join("object_priceload")
-					->on("priceload.id","=","priceload_id")
 				->where("state", "=", 2)
 				->find_all();
-		Minion_CLI::write(count($pl));
+
 		foreach($pl as $priceload)
 		{
 			Minion_CLI::write($priceload->table_name);
 			$category_id = 0;
 			$city_id = 0;
-			$object = ORM::factory('Object', $priceload->object_id)->cached(60);
+
+			$object = ORM::factory('Object_Priceload')
+								->select("object.active","object.is_published","object.category","object.city_id")
+								->join("object")
+									->on("object_priceload.object_id","=","object.id")
+								->where("priceload_id","=",$priceload->id)
+								->cached(60)
+								->find();
+			if (!$object->loaded() OR $object->active = 0 OR $object->is_published = 0)
+				continue;
+
 			if ($object->loaded())
 			{
 				$category_id = $object->category;
 				$city_id 	 = $object->city_id;
 			}
+
+			$object_id = $object->object_id;
 		
 			//$pricerows = ORM_Temp::factory($priceload->table_name)->find_all();
 			$pricerows =  DB::select()->from("_temp_".$priceload->table_name)
@@ -63,7 +72,7 @@ class Task_Priceload_Indexer extends Minion_Task
 				if (count($idx_text) == 0 OR !$description)
 					continue;
 
-				$idx_text = implode(",",$idx_text);
+				$idx_text = implode(",", $idx_text);
 				
 				$plidx = ORM::factory('Priceload_Index');
 				$plidx->text = $idx_text;
@@ -71,7 +80,7 @@ class Task_Priceload_Indexer extends Minion_Task
 				$plidx->pricerow_id = $pricerow->id;
 				$plidx->category_id = $category_id;
 				$plidx->city_id = $city_id;
-				$plidx->object_id = $priceload->object_id;
+				$plidx->object_id = $object_id;
 				$plidx->description = $description;
 				$plidx->price = $price;
 				$plidx->save();	
