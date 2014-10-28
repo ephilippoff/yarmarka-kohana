@@ -83,6 +83,7 @@ class Task_Priceload_Indexer extends Minion_Task
 				$plidx->object_id = $object_id;
 				$plidx->description = $description;
 				$plidx->price = $price;
+				$plidx->image = $pricerow->image;
 				$plidx->save();	
 			}
 		}
