@@ -445,7 +445,7 @@ class Form_Add  {
 			$text_required = $category->text_required;
 
 		if ($value)
-			$value = strip_tags($value);
+			$value = Text::clear_usertext_tags($value);
 
 		$this->_data->text = array( 'value' 		=> $value,
 									'text_required' => $text_required,

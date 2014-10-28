@@ -730,7 +730,7 @@ class Lib_PlacementAds_AddEdit {
 			// при редактировании автора не меняем
 			$object->author 			= $user->id;
 		}
-		$object->user_text 			= $params->user_text_adv;
+		$object->user_text 			= Text::clear_usertext_tags($params->user_text_adv);
 		if ( ! $this->is_edit)
 		{
 			$object->date_expiration	= $this->lifetime_to_date($params->lifetime);
