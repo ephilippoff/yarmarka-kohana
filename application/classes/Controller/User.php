@@ -1233,7 +1233,9 @@ class Controller_User extends Controller_Template {
 	public function action_edit_ad()
 	{
 		$this->layout = 'add';
-		//$this->assets->js(Url::base(TRUE).'static');
+		
+		$this->assets->js("nicEdit.js");
+
 		$prefix = (@$_SERVER['HTTP_HOST'] === 'c.yarmarka.biz') ? "" : "dev_";
 		$staticfile = new StaticFile("attributes", $prefix.'static_attributes.js');
 		$this->assets->js($staticfile->jspath);

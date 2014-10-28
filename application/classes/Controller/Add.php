@@ -20,8 +20,9 @@ class Controller_Add extends Controller_Template {
 	public function action_index()
 	{
 		$this->layout = 'add';
-		//$this->assets->js(Url::base(TRUE).'static');
-		//
+		
+		$this->assets->js("nicEdit.js");
+		
 		$user = Auth::instance()->get_user();
 
 		if ($user AND !Cookie::get('authautologin'))
