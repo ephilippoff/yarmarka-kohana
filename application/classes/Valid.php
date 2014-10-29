@@ -73,5 +73,16 @@ class Valid extends Kohana_Valid {
 		return ORM::factory('Category')->check_max_user_objects($user, $category, $object_id);
 	}
 
-	
+	public static function not_empty_html($_value)
+	{
+		$value = strip_tags($_value);
+		if (is_object($value) AND $value instanceof ArrayObject)
+		{
+			// Get the array from the ArrayObject
+			$value = $value->getArrayCopy();
+		}
+
+		// Value cannot be NULL, FALSE, '', or an empty array
+		return ! in_array($value, array(NULL, FALSE, '', array()), TRUE);
+	}
 }

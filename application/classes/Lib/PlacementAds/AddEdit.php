@@ -270,7 +270,7 @@ class Lib_PlacementAds_AddEdit {
 		{
 			$validation->rules('title_adv', array(
 				array('not_empty', array(':value', "Заголовок")),
-				array('min_length', array(':value', 15)),
+				array('min_length', array(':value', 15, "Заголовок")),
 			));
 		}
 
@@ -282,8 +282,8 @@ class Lib_PlacementAds_AddEdit {
 		if ($category AND $category->text_required)
 		{
 			$validation->rules('user_text_adv', array(
-				array('not_empty', array(':value', "Текст объявления")),
-				array('max_length', array(':value', 15000)),
+				array('not_empty_html', array(':value', "Текст объявления")),
+				array('max_length', array(':value', 15000, "Текст объявления")),
 			));
 		}
 		return $this;
