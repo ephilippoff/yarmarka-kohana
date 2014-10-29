@@ -4,37 +4,17 @@
 class Task_Test extends Minion_Task
 {
 	protected $_options = array(
-
+		"number" => NULL,
+		"code" => NULL
 	);
 
 	protected function _execute(array $params)
 	{
-		$name = Temptable::get_name(array("flat_new", 327190));
+		$number = $params["number"];
+		$code = $params["code"];
+	
+		Minion_CLI::write('result: '.Text::format_contact($number, $code));
 
-		Temptable::create_table($name, array(
-					0 => array(
-							"name" => "text",
-							"type" => "textadv"
-						),
-					1 => array(
-							"name" => "title",
-							"type" => "dict"
-						)
-
-				));
-
-		$t = ORM_Temp::factory($name);
-
-		$t->text = 'sdfsdf';
-		$t->title = 'dd';
-		$id = $t->save();
-
-		Minion_CLI::write('id: '.$id);
-
-		$tt = ORM_Temp::factory($name, $id);
-		Minion_CLI::write('title: '.$tt->title);
-
-		//Temptable::delete_table($name);
 	}
 
 }
