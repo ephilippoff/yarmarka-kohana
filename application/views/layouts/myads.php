@@ -45,13 +45,13 @@
 	
 	<div style="display: none;" class="fn-stat-container fn-window stat-container"><span class="fn-close close"></span><div class="fn-inner inner"></div></div>
 	
-	<?php if (in_array(Auth::instance()->get_user()->role, array(1, 9))) : ?>
+	<?php //if (in_array(Auth::instance()->get_user()->role, array(1, 9))) : ?>
 		<script type="text/javascript">
 			$('.fn-stat').click(function() {
 				renderObjectStat(this, $(this).data('id'), 'fn-stat-container');
 			});	
 		</script>
-	<?php endif; ?>	
+	<?php //endif; ?>	
 	
 </body>  
 </html>
