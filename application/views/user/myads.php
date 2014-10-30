@@ -325,7 +325,7 @@
 													,<?=$ad->location_obj->address?>
 												<?php endif ?>
 											</p>
-											<p class="about"><?=$ad->user_text?></p>
+											<p class="about"><?=strip_tags($ad->user_text)?></p>
 											<?php if (count($user_messages) > 0) : ?><p class="panel-toggle"><span>Показать комментарии</span></p><?php endif; ?>
 										</div>
 									</div>
