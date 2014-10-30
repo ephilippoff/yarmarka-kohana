@@ -259,8 +259,8 @@ class Massload
 				break;
 				case 'integer':
 					$key = "param_".ORM::factory('Reference')->by_category_and_attribute($category_id, $key);					
-					if (is_float($value))
-						$value = round($value);
+					if (is_float($value*1))
+						$value = round($value*1);
 				break;
 				case 'photo':	
 					$files = explode(";", $value);	
