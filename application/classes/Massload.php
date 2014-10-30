@@ -209,7 +209,7 @@ class Massload
 			{
 				$validation->rule($key, 'not_0', $valid_info);
 				//$validation->rule($key, 'digit', $valid_info);
-				$validation->rule($key, 'max_length', $valid_info_maxlength);
+				//$validation->rule($key, 'max_length', $valid_info_maxlength);
 			}
 
 			if ($config_key->type == "external_id")
