@@ -1154,7 +1154,6 @@ class Controller_User extends Controller_Template {
 			} else {
 				$user = ORM::factory('User')
 							->get_user_by_email($email)
-							->cached(Date::WEEK)
 							->find();
 				if (!$user->loaded())
 				{
