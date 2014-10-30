@@ -82,4 +82,68 @@ class Text extends Kohana_Text {
 	{
 		return str_replace(array('!','#','$','%','&','\\','*','+','-','/','=','?','^','_','`','{','|','}','~','@','.','[',']',')','(',',', '"', "'"), '', $str);
 	}
+
+	public static function clear_usertext_tags($text)
+	{
+		$text = stripslashes($text); 
+		$text = strip_tags($text, '<b><strong><i><u><del><strike><em><center><li><ol><ul><br><hr><center><div><p>');
+		$text = preg_replace('/<([a-z][a-z0-9]*)[^>]*?(\/?)>/i','<$1$2>', $text);
+
+		return $text;
+	}
+
+	public static function format_contact($_contact, $citycode =  NULL)
+	{
+		$contact = $_contact;
+		$contact = trim($contact);
+		$result = $contact;
+
+
+		if (Valid::email($contact))
+		{
+			$result = $contact;
+		} else {
+			$contact = Text::clear_phone_number($contact);
+
+			$is_phonenumber = preg_match("/^\+?[0-9]{6,11}$/", $contact);
+			if ($is_phonenumber)
+			{
+
+				$is_citynumber = preg_match("/^[0-9]{6}$/", $contact);			
+				if ($is_citynumber)
+				{
+					if ($citycode)
+						$contact = "7".$citycode.$contact;
+				}
+
+				$is_worldformat = preg_match("/^\+7[0-9]{10}$/", $contact);			
+				if ($is_worldformat)
+				{
+					$contact = preg_replace("/\+7/", "7", $contact);
+				}
+
+				$is_oldformat = preg_match("/^8[0-9]{10}$/", $contact);
+				if ($is_oldformat)
+				{
+					$contact = preg_replace("/^8/", "7", $contact);
+				}
+
+				$is_shortformat = preg_match("/^9([0-9]{9})$/", $contact);
+				if ($is_shortformat)
+				{
+					$contact = "7".$contact;
+				}
+
+				$is_trueformat = preg_match("/^7([0-9]{10})$/", $contact);
+				if ($is_trueformat)
+				{
+					$result = $contact;
+				}
+				
+			} 
+
+		}
+
+		return $result;
+	}
 }

@@ -265,6 +265,10 @@
 			<? endif; ?>
 			</div>
 
+			<style type="text/css">
+			   .nicEdit-main ol{ list-style:inside; list-style-type: decimal; }
+				.nicEdit-main ul{ list-style: inside; list-style-type: circle; }
+			</style>
 			<div id="div_textadv">
 			<? if ( property_exists($form_data, 'text') ): ?>
 				<div class="smallcont">

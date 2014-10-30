@@ -253,9 +253,9 @@ class Controller_User extends Controller_Template {
 		else
 			$of = ORM::factory('Objectload_Files')
 						->join("objectload")
-							->on("object_load.id","=","objectload.id")
+							->on("objectload_files.objectload_id","=","objectload.id")
 						->where("user_id","=",$this->user->id)
-						->where("id","=",$this->request->param('id'));
+						->where("objectload_files.id","=",$this->request->param('id'))->find();
 						
 		if (!$of->loaded())
 			throw new HTTP_Exception_404;
@@ -1233,7 +1233,9 @@ class Controller_User extends Controller_Template {
 	public function action_edit_ad()
 	{
 		$this->layout = 'add';
-		//$this->assets->js(Url::base(TRUE).'static');
+		
+		$this->assets->js("nicEdit.js");
+
 		$prefix = (@$_SERVER['HTTP_HOST'] === 'c.yarmarka.biz') ? "" : "dev_";
 		$staticfile = new StaticFile("attributes", $prefix.'static_attributes.js');
 		$this->assets->js($staticfile->jspath);
