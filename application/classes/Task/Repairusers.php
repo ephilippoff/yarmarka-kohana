@@ -34,7 +34,7 @@ class Task_Repairusers extends Minion_Task
 
 		foreach ($emails as $doubleemail) {
 			$doubles = ORM::factory('User')
-						->where("email", "=",  mb_strtolower($doubleemail->email))
+						->where(DB::expr("w_lower(email)"), "=",  mb_strtolower($doubleemail->email))
 						->order_by("last_visit_date","desc NULLS last")
 						->find_all();
 
