@@ -12,9 +12,9 @@ class Task_Repairusers extends Minion_Task
 	{
 		$email = $params["email"];
 
-		$sql = 'select email,cnt from (select email, count(*) as cnt from "user"'.
+		$sql = 'select email,cnt from (select w_lower(email), count(*) as cnt from "user"'.
 				" where fax is null or fax <> '*' ".
-				'group by email
+				'group by w_lower(email)
 				order by cnt desc) as users
 				where ';
 
