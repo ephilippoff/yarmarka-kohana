@@ -868,8 +868,17 @@ class Lib_PlacementAds_AddEdit {
 
 		if ($this->is_edit AND $params->publish_and_prolonge)
 		{
-			$object->is_published = 1;
-			$object->date_expiration = $this->lifetime_to_date("2m");
+			if ($object->is_bad <> 2)
+			{
+				$object->is_published = 1;
+				if ($object->in_archive)
+				{
+					$object->prolong($this->lifetime_to_date("2m"));
+				} else 
+				{
+					$this->date_expiration = $this->lifetime_to_date("2m");
+				}
+			}
 		}
 		return $this;
 	}

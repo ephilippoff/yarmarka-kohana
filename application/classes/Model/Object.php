@@ -251,7 +251,7 @@ class Model_Object extends ORM {
 		return $result;
 	}
 
-	public function prolong($date_expiration, $to_forced_moderation = FALSE, $no_bad = FALSE)
+	public function prolong($date_expiration, $update = TRUE)
 	{
 		if ( ! $this->loaded())
 		{
@@ -263,23 +263,16 @@ class Model_Object extends ORM {
 		$this->is_published		= 1;
 		$this->in_archive		= FALSE;
 
-		if ($to_forced_moderation)
+		if ($update)
 		{
-			$this->to_forced_moderation = TRUE;
+			// update object
+			$object = $this->update();
 		}
-			
-		if ($no_bad)
-		{
-			$this->is_bad = 0;
-		}
-
-		// update object
-		$object = $this->update();
 
 		// add to log
-		DB::insert('object_archive_log', array('object_id', 'movedon', 'direction'))
+		/*DB::insert('object_archive_log', array('object_id', 'movedon', 'direction'))
 			->values(array($object->id, DB::expr('NOW()'), 2))
-			->execute();
+			->execute();*/
 
 		return $object;
 	}
