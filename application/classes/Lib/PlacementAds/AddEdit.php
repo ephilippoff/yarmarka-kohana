@@ -865,6 +865,12 @@ class Lib_PlacementAds_AddEdit {
 		{
 			$object->disable_comments();
 		}
+
+		if ($this->is_edit AND $params->publish_and_prolonge)
+		{
+			$object->is_published = 1;
+			$object->date_expiration = $this->lifetime_to_date("2m");
+		}
 		return $this;
 	}
 
