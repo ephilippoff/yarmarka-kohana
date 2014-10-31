@@ -34,7 +34,7 @@ class Task_Repairusers extends Minion_Task
 
 		foreach ($emails as $doubleemail) {
 			$doubles = ORM::factory('User')
-						->where("email", "=", $doubleemail->email)
+						->where("email", "=",  mb_strtolower($doubleemail->email))
 						->order_by("last_visit_date","desc NULLS last")
 						->find_all();
 
@@ -111,9 +111,16 @@ class Task_Repairusers extends Minion_Task
 				if ($info->main_account <> $user->id)
 				{
 					ORM::factory('User')
-						->set("email", "__".$user->email)
+						->set("email", "__".mb_strtolower($user->email))
 					 	->set("is_blocked", 2)
 					 	->set("fax", "*")
+						->where("id", "=", $user->id)->update_all();
+				}
+
+				if ($info->main_account == $user->id)
+				{
+					ORM::factory('User')
+						->set("email", mb_strtolower($user->email))
 						->where("id", "=", $user->id)->update_all();
 				}
 
