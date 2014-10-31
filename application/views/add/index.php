@@ -464,7 +464,11 @@
 															Заблокировано окончательно.
 														<? elseif ($object->is_bad == 0): ?>															
 															<input id="publish_and_prolonge" type="checkbox" name="publish_and_prolonge" value="1"  <? if ($params->publish_and_prolonge) echo "checked"; ?>/>
-															<label for="publish_and_prolonge">Опубликовать объявление</label>
+															<label for="publish_and_prolonge">Опубликовать объявление
+																<? if ($object->in_archive): ?>
+																	(будет продлено на 90 дней и поднято в поиске)
+																<? endif; ?>
+															</label>
 														<? endif; ?>
 													</p>
 												<? endif; ?>

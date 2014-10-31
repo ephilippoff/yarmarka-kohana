@@ -873,7 +873,7 @@ class Lib_PlacementAds_AddEdit {
 				$object->is_published = 1;
 				if ($object->in_archive)
 				{
-					$object->prolong($this->lifetime_to_date("2m"));
+					$object->prolong($this->lifetime_to_date("3m"));
 				} else 
 				{
 					$this->date_expiration = $this->lifetime_to_date("2m");
