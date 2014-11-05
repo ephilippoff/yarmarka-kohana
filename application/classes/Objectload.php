@@ -309,6 +309,10 @@ class Objectload
 				"object_id" => array(
 					"name" => "object_id",
 					"type" => "int",
+				),
+				"premium" => array(
+					"name" => "premium",
+					"type" => "int",
 				)
 			);
 	}

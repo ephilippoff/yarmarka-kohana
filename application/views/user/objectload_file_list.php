@@ -40,6 +40,8 @@
 				$style='color:red;';
 			if ($item->loaded)
 				$style='color:green;';
+			if ($item->premium)
+				$style='background:#FFFACC;';
 		?>
 		<tr style="<?=$style?>">
 		<? $statexist = FALSE;?>
