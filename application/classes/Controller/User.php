@@ -664,21 +664,52 @@ class Controller_User extends Controller_Template {
 		$already_buyed = Service_Premium::get_already_buyed($this->user);
 		$this->template->already_buyed = $already_buyed;
 
+		$cities 	= array();
+		$categories = array();
+
+		// get user objects categories		
+		$cities = DB::select(DB::expr('COUNT(object.id)'))
+					->select('city.id')->select('city.title')
+					->from('object')
+						->join('city')->on('object.city_id', '=', 'city.id')
+					->where('author', '=', $this->user->id)
+					->where('active', '=', 1);
+		
+		if ($category->loaded())
+		{
+			$cities = $cities->where('category', '=', $category->id);
+		}
+
+		$cities = $cities->group_by('city.id')
+					->group_by('city.title')
+					->order_by('city.title')
+					->as_object()
+					->cached(DATE::WEEK)
+					->execute();
+
+		$this->template->cities = $cities;
+
 		// get user objects categories
-		$this->template->categories = ($objects_ids = $objects->as_array(NULL, 'id')) 
-			? DB::select(DB::expr('COUNT(object.id)'))
-			->select('category.id')
-			->select('category.title')
-			->from('object')
-			->join('category')->on('object.category', '=', 'category.id')
-			->where('object.id', 'IN', $objects_ids)
-			->group_by('category.id')
-			->group_by('category.title')
-			->order_by('category.title')
-			->as_object()
-			->cached(DATE::HOUR)
-			->execute()
-			: array();
+		$categories = DB::select(DB::expr('COUNT(object.id)'))
+					->select('category.id')->select('category.title')
+					->from('object')
+						->join('category')->on('object.category', '=', 'category.id')
+					->where('author', '=', $this->user->id)
+					->where('active', '=', 1);
+
+		if ($city->loaded())
+		{
+			$categories = $categories->where('city_id', '=', $city->id);
+		}
+
+		$categories = $categories->group_by('category.id')
+					->group_by('category.title')
+					->order_by('category.title')
+					->as_object()
+					->cached(DATE::WEEK)
+					->execute();
+
+		$this->template->categories = $categories;
 
 	 	$this->template->pagination = Pagination::factory( array(
 			'current_page' => array('source' => 'query_string', 'key' => 'page'),
@@ -697,9 +728,7 @@ class Controller_User extends Controller_Template {
 			->where('is_visible', '=', 1)
 			->cached(DATE::WEEK, array("city", "myads"))
 			->find_all();
-		$this->template->cities = $region->loaded() 
-			? $region->cities->where('is_visible', '=', '1')->cached(DATE::WEEK, array("city", "myads"))->find_all()
-			: array();
+
 		$this->template->objects = $objects;
 		$this->template->service_promo_link = ORM::factory('Service')->where('name', '=', 'promo_link')->cached(DATE::WEEK, array("service", "myads"))->find();
 		$this->template->service_promo_link_bg = ORM::factory('Service')->where('name', '=', 'promo_link_bg')->cached(DATE::WEEK, array("service", "myads"))->find();

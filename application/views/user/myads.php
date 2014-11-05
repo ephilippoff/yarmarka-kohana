@@ -7,7 +7,8 @@
 
             <section class="p_room-inner">
 				<header>
-					<form method="get" id="ads_filter">
+					<form method="get" id="ads_filter" action="/user/myads">
+					<? /* ?>
 					<div class="input style3">
 						<div class="inp-cont-bl ">
 							<div class="inp-cont">
@@ -21,19 +22,21 @@
 							</div>
 						</div>
 					</div>
+					<? */ ?>
 					<div class="input style3">
 						<div class="inp-cont-bl ">
 							<div class="inp-cont">
 								<i class="imp320 imp">&nbsp; *</i>
 								<select class="iselect " name="city_id" id="city_id">
-									<option value="">--  выберите регион --</option>
+									<option value="">--  город --</option>
 									<?php foreach ($cities as $city) : ?>
-									<option value="<?=$city->id?>" <?=Arr::get($_GET, 'city_id') == $city->id ? 'selected' : ''?>><?=$city->title?></option>
+									<option value="<?=$city->id?>" <?=Arr::get($_GET, 'city_id') == $city->id ? 'selected' : ''?>><?=$city->title?>  (<?=$city->count?>)</option>
 									<?php endforeach; ?>
 								</select>
 							</div>
 						</div>
 					</div>
+					
 					<div class="input style3">
 						<div class="inp-cont-bl ">
 							<div class="inp-cont">
