@@ -835,8 +835,9 @@ class Controller_Ajax extends Controller_Template
 		$contact_clear 	= Text::clear_phone_number($this->request->post('contact'));
 		$contact 		= ORM::factory('Contact')->where('contact_clear', '=', $contact_clear)->find();
 		$link_to_user 	= (bool) $this->request->post('link_to_user');
+		$current_user 	= Auth::instance()->get_user();
 
-		if ($contact->loaded() AND $contact->verified_user_id)
+		if ($contact->loaded() AND $contact->verified_user_id  <> (int) $current_user->id)
 		{
 			$this->json['code'] = 400;
 		}
