@@ -616,7 +616,7 @@
 						<% if (is_required) { %>
 							<span class="required-label">*</span>
 						<% } %>
-						<input id="<%=id%>" type="text" name="<%=name%>" value="<%=value%>"/>
+						<input id="<%=id%>" type="text" name="<%=id%>" value="<%=value%>"/>
 					</div>
 				</div>
 			</div>
