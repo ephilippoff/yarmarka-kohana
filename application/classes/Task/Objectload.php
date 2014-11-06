@@ -161,11 +161,12 @@ class Task_Objectload extends Minion_Task
 							"object_id" => $object->object_id
 						);
 
-			if ( in_array($result["status"], array("nochange", "success")) )
+			if ( $row->premium AND in_array($result["status"], array("nochange", "success")) )
 			{
-				$isPremium = Task_Objectload::setPremium($object->object_id, $row->premium);
+				$isPremium = Task_Objectload::setPremium($object->object_id);
 				if ($isPremium)
 					Minion::write($prefix_log, 'Активировали премиум. Осталось: '.$isPremium);
+
 			}
 			return $result;
 
@@ -189,7 +190,7 @@ class Task_Objectload extends Minion_Task
 		ORM::factory('Objectload', $ol->_objectload_id)
 			->update_statistic();
 
-		
+		$ol->sendReport();
 
 		Minion::write("Success", 'End');
 
@@ -197,9 +198,9 @@ class Task_Objectload extends Minion_Task
 	}
 
 
-	static function setPremium($object_id, $isPremium)
+	static function setPremium($object_id)
 	{
-		if (!$isPremium OR !$object_id)
+		if (!$object_id)
 			return FALSE;
 
 		$alreadyBuyed = Service_Premium::is_already_buyed($object_id);

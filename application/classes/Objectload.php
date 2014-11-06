@@ -175,13 +175,14 @@ class Objectload
 					$row->{$value_repl} = $record->{$value};
 				}
 
-				$counters = new Obj(array(
-											"common" =>$common_counter,											
-											"counter"=>$counter,
-											"count"	 =>$count
+				$cc = new Obj(array(
+											"common" => $common_counter,											
+											"counter"=> $counter,
+											"count"	 => $count,
+											"of_id"  => $file->id
 									));
 
-				$return = $callback($row, $file->category, $counters);
+				$return = $callback($row, $file->category, $cc);
 				
 				$common_counter++;
 				$counter++;
@@ -280,6 +281,50 @@ class Objectload
 		$record->text_error = NULL;
 		$record->nochange 	= 1;
 		$record->save();
+	}
+
+	public function sendReport($objectload_id = NULL)
+	{
+		if (!$objectload_id){
+			$objectload_id  = $this->_objectload_id;
+		}
+
+		$objectload = ORM::factory('Objectload', $objectload_id);
+
+		$massload_email = ORM::factory('User_Settings')
+								->where("name","=","massload_email")
+								->where("user_id","=",$objectload->user_id)
+								->find();
+		
+		if (!$objectload_id OR !$massload_email->loaded() OR !$objectload->loaded())
+			return;
+
+		$common_stat = new Obj($objectload->get_statistic());
+		$category_stat = array();
+
+		$of = ORM::factory('Objectload_Files')
+				->where("objectload_id", "=", $objectload_id)
+				->find_all();
+
+		foreach ($of as $file)
+		{	
+			$cfg = Kohana::$config->load('massload/bycategory.'.$file->category);
+			$category_stat[$cfg["name"]] = array(
+					"id" => $file->id,
+					"title" => $cfg["name"],
+					"stat" => new Obj($file->get_statistic())
+				);
+		}
+
+		$subj = "Отчет по загрузке объявлений ";
+		$email_params = array( 'objectload' => $objectload, 
+							   'common_stat' => $common_stat, 
+								'category_stat' => $category_stat);
+
+		
+		$msg = View::factory('emails/massload_report',$email_params);
+		//Kohana::$log->add(Log::NOTICE, Debug::vars($email_params));
+		Email::send($massload_email->value, Kohana::$config->load('email.default_from'), $subj, $msg);
 	}
 
 	public static function getServiceFields()

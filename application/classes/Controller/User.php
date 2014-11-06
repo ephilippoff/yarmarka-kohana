@@ -274,6 +274,8 @@ class Controller_User extends Controller_Template {
 		unset($service_fields["object_id"]);
 		unset($service_fields["text_error"]);
 		$this->template->service_fields = array_keys( $service_fields );
+
+		$this->template->statistic = $of->get_statistic();
 	}
 
 	public function action_objectunload()
