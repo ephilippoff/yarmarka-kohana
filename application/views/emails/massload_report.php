@@ -23,7 +23,7 @@
 						
 			
 			<tr><td style="line-height: 0;" colspan="2">&nbsp;<img width="100%" height="20" title="" alt="" src="data:image/gif;base64,R0lGODlhAQABAJEAAAAAAP///////wAAACH5BAEAAAIALAAAAAABAAEAAAICVAEAOw%3D%3D"></td></tr>										
-			<tr><td colspan="2" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;line-height: 15px;text-align:left;font-size:20px;">Отчет по загрузке объявлений (<?=$org_name?>)<?=$objectload->created_on?></td></tr>
+			<tr><td colspan="2" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;line-height: 15px;text-align:left;font-size:20px;">Отчет по загрузке объявлений (<?=$org_name?>) <?=date( "d.m.Y H:i",strtotime($objectload->created_on))?></td></tr>
 			<tr><td colspan="2">&nbsp;</td></tr>
 			<? foreach($category_stat as $name=>$info): ?>	
 				<? 
