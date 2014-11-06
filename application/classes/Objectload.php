@@ -290,6 +290,7 @@ class Objectload
 		}
 
 		$objectload = ORM::factory('Objectload', $objectload_id);
+		$user = ORM::factory('User',$objectload->user_id);
 
 		$massload_email = ORM::factory('User_Settings')
 								->where("name","=","massload_email")
@@ -312,7 +313,8 @@ class Objectload
 			$category_stat[$cfg["name"]] = array(
 					"id" => $file->id,
 					"title" => $cfg["name"],
-					"stat" => new Obj($file->get_statistic())
+					"stat" => new Obj($file->get_statistic()),
+					"org_name" => $user->org_name
 				);
 		}
 
