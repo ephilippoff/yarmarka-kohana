@@ -313,15 +313,15 @@ class Objectload
 			$category_stat[$cfg["name"]] = array(
 					"id" => $file->id,
 					"title" => $cfg["name"],
-					"stat" => new Obj($file->get_statistic()),
-					"org_name" => $user->org_name
+					"stat" => new Obj($file->get_statistic())
 				);
 		}
 
 		$subj = "Отчет по загрузке объявлений ";
 		$email_params = array( 'objectload' => $objectload, 
 							   'common_stat' => $common_stat, 
-								'category_stat' => $category_stat);
+								'category_stat' => $category_stat,
+								"org_name" => $user->org_name);
 
 		
 		$msg = View::factory('emails/massload_report',$email_params);
