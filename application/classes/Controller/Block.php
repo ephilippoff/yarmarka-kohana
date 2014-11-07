@@ -210,6 +210,33 @@ class Controller_Block extends Controller_Template
 		$this->template->breadcrumbs = array_reverse($breadcrumbs);
 	}
 	
+	public function action_ourservices_breadcrumbs()
+	{
+		$article = ORM::factory('Article', $this->request->param('id'));
+		if ( ! $article->loaded())
+		{
+			throw new HTTP_Exception_404;
+		}
+
+		$breadcrumbs = array();
+		while ($article->loaded())
+		{
+			$breadcrumbs[] = array(
+				'url' => Route::get('ourservices')->uri(array('seo_name' => $article->seo_name)),
+				'anchor' => $article->title,
+			);
+			
+			$article = ORM::factory('Article', $article->parent_id);
+		}
+
+		$breadcrumbs[] = array(
+			'url' => '/',
+			'anchor' => 'Ярмарка',
+		);
+
+		$this->template->breadcrumbs = array_reverse($breadcrumbs);
+	}	
+	
 //	public function action_news_breadcrumbs()
 //	{	
 //		$this->template = View::factory('block/newsone_breadcrumbs');
