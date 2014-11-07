@@ -201,6 +201,7 @@ class Object
 				$add->save_object()
 					->save_photo()
 					->save_video()
+					->save_price()
 					->save_other_options()
 					->save_attributes()
 					->save_generated()
