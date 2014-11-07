@@ -14,7 +14,8 @@ return array(
 									"ContactPhone"  => "contact_0_value",
 									"EMail" 		=> "contact_1_value",									
 									"Street" 		=> "address",
-									"Images" 		=> "images"
+									"Images" 		=> "images",
+									"Emergency"		=> "premium"
 								),
 	'flat_rooms'		=> array( 
 									"Id" 			=> "external_id",
@@ -29,7 +30,8 @@ return array(
 									"ContactPhone"  => "contact_0_value",
 									"EMail" 		=> "contact_1_value",
 									"Street" 		=> "address",
-									"Images" 		=> "images"
+									"Images" 		=> "images",
+									"Emergency"		=> "premium"
 								),
 	'flat_new'			=> array( 
 									"Id" 			=> "external_id",
@@ -45,7 +47,8 @@ return array(
 									"ContactPhone"  => "contact_0_value",
 									"EMail" 		=> "contact_1_value",
 									"Street" 		=> "address",
-									"Images" 		=> "images"
+									"Images" 		=> "images",
+									"Emergency"		=> "premium"
 								),
 	'flat_rent'		=> array( 
 									"Id" 			=> "external_id",
@@ -62,7 +65,8 @@ return array(
 									"ContactPhone"  => "contact_0_value",
 									"EMail" 		=> "contact_1_value",
 									"Street" 		=> "address",
-									"Images" 		=> "images"
+									"Images" 		=> "images",
+									"Emergency"		=> "premium"
 								),
 	'house'				=> array( 
 									"Id" 			=> "external_id",
@@ -77,7 +81,8 @@ return array(
 									"ContactPhone"  => "contact_0_value",
 									"EMail" 		=> "contact_1_value",
 									"Street" 		=> "address",
-									"Images" 		=> "images"
+									"Images" 		=> "images",
+									"Emergency"		=> "premium"
 								),
 	'land'				=> array( 
 									"Id" 			=> "external_id",
@@ -91,7 +96,8 @@ return array(
 									"ContactPhone"  => "contact_0_value",
 									"EMail" 		=> "contact_1_value",
 									"Street" 		=> "address",
-									"Images" 		=> "images"
+									"Images" 		=> "images",
+									"Emergency"		=> "premium"
 								),
 	'commercial'		=> array( 
 									"Id" 			=> "external_id",
@@ -105,6 +111,7 @@ return array(
 									"ContactPhone"  => "contact_0_value",
 									"EMail" 		=> "contact_1_value",
 									"Street" 		=> "address",
-									"Images" 		=> "images"
+									"Images" 		=> "images",
+									"Emergency"		=> "premium"
 								)
 );

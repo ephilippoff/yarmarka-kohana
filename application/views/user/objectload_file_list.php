@@ -1,4 +1,29 @@
-<p><?=$config["name"]?></p>
+<p><h2><?=$config["name"]?></h2></p>
+
+<? 
+	$statistic = new Obj($statistic);
+	$premium_ids = array();
+	if ($statistic->premium_ids)
+		$premium_ids = explode(",",$statistic->premium_ids); 
+
+	$withservice_err_ids =  array();
+	if ($statistic->withservice_err_ids)
+ 		$withservice_err_ids = explode(",",$statistic->withservice_err_ids); 
+ ?>
+ <? if (count($premium_ids)): ?>
+	<p>Премиум объявления:
+		<? foreach ($premium_ids as $prem_id):?>
+			<a href="#<?=$prem_id?>"><?=$prem_id?></a>,
+		<? endforeach; ?>
+	</p>
+<? endif; ?>
+<? if (count($withservice_err_ids)): ?>
+	<p style="color:red;">Премиум не применился (т.к. содержат ошибки):
+		<? foreach ($withservice_err_ids as $prem_id):?>
+			<a href="#<?=$prem_id?>"><?=$prem_id?></a>,
+		<? endforeach; ?>
+	</p>
+<? endif; ?>
 <table class="table table-hover table-condensed" style="width:100%">
 	<tr>
 		<? $statexist = FALSE;?>
@@ -40,6 +65,8 @@
 				$style='color:red;';
 			if ($item->loaded)
 				$style='color:green;';
+			if (property_exists($item, "premium") AND $item->premium)
+				$style='background:#FFFACC;';
 		?>
 		<tr style="<?=$style?>">
 		<? $statexist = FALSE;?>
@@ -69,6 +96,10 @@
 					$value = "";
 					if (!$item->{"edited"} AND !$item->{"nochange"} AND !$item->{"error"})
 						$value = 1;
+				}
+				elseif ($field == 'external_id')
+				{
+					$value .= "<a name=$value></a>";
 				}
 
 				$field_visible = TRUE;

@@ -113,8 +113,11 @@ class Model_Objectload extends ORM {
 				"loaded" => 0,
 				"error"  => 0,
 				"edited" => 0,
-				"nochange" => 0
+				"nochange" => 0,
+				"premium" => 0
 			);
+
+		$common_withservice_err_ids =  array();
 
 		$of = ORM::factory('Objectload_Files')
 				->where("objectload_id","=", $this->id)
@@ -141,7 +144,31 @@ class Model_Objectload extends ORM {
 			$common_statistic["nochange"] += $statistic["nochange"] = ORM_Temp::factory($file->table_name)
 																	->where("nochange","=",1)
 																	->count_all();
+			try {
+				$common_statistic["premium"] += $statistic["premium"] = ORM_Temp::factory($file->table_name)
+																		->where("premium", "IS NOT", NULL)
+																		->where("error","IS", NULL)
+																		->count_all();
+				
+				$premium_ids		=  array_keys(DB::select()->from("_temp_".$file->table_name)
+												->select("external_id")
+												->where("premium", "IS NOT", NULL)
+												->where("error","IS", NULL)
+												->execute()
+												->as_array("external_id"));
 
+				$statistic["premium_ids"] =  implode(",",$premium_ids);
+
+				$withservice_err_ids = array_keys(DB::select()->from("_temp_".$file->table_name)
+												->where("premium", "IS NOT", NULL)
+												->where("error","=",1)
+												->execute()
+												->as_array("external_id"));
+
+				$statistic["withservice_err_ids"]  = implode(",", $withservice_err_ids);
+				
+			} catch(Exception $e){}
+			
 			ORM::factory('Objectload_Files')
 				->where("id","=",$file->id)
 				->set("statistic",serialize($statistic))

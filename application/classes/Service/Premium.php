@@ -74,6 +74,22 @@ class Service_Premium
 		return $result;
 	}
 
+	static function is_already_buyed($object_id)
+	{
+		if (!$object_id)
+			return FALSE;
+
+		$result = Array();
+		$buyed = ORM::factory('Object_Rating')
+					->join('object', 'left')
+						->on('object.id', '=', 'object_id')
+					->where("object.id","=", $object_id)
+					->where("object_rating.date_expiration",">",DB::expr("NOW()"))
+					->find();
+
+		return $buyed->loaded();
+	}
+
 	static function apply_service($object_id, $city_id = NULL, $user = NULL)
 	{
 		$object = ORM::factory('Object', $object_id);

@@ -416,39 +416,101 @@
 				</div>
 			<? endif; ?>
 
-			<div class="fl100">	                    					
-					<div class="smallcont">
-						<div class="labelcont">
-							<label><span>Срок жизни объявления:</span></label>
-						</div>	
-						<div class="fieldscont">
-							<div class="inp-cont-short">
-								<div class="inp-cont">
-									<div data-placeholder="Выберите срок жизни объявления..." class="values">
-										<?
-										 	$periods = array(	"2w" => "14 дней",
-										 						"1m" => "30 дней",
-										 						"2m" => "60 дней",
-										 						"3m" => "90 дней");
-										 	$default_period = "2m";
-										 	if ($params->lifetime)
-										 		$default_period = $params->lifetime;
-										?>
-										<? if ($form_data->_edit):?>
-											до <?=$object->date_expiration?>
-										<? else: ?>
+			<div class="fl100">	
+					<?
+						$prolongation_access = FALSE;
+					?>  
+
+					<? if ($form_data->_edit):?>
+						<div class="smallcont">
+							<div class="labelcont">
+								<label><span>Состояние объявления:</span></label>
+							</div>	
+							<div class="fieldscont">
+								<div class="inp-cont-short">
+									<div class="inp-cont">
+										<div data-placeholder="Выберите срок жизни объявления..." class="values">
+											<?
+											 	$periods = array(	"2w" => "14 дней",
+											 						"1m" => "30 дней",
+											 						"2m" => "60 дней",
+											 						"3m" => "90 дней");
+											 	$default_period = "2m";
+											 	if ($params->lifetime)
+											 		$default_period = $params->lifetime;
+											?>
+											
+												<? if ($object->is_published): ?>
+													<p class="mb10">
+														до <?=$object->date_expiration?>
+													</p>
+													<p class="mb10">
+															<span style="color:green;">Опубликовано, доступно в поиске</span>														
+													</p>
+												<? else: ?>
+													<p class="mb10">
+														<? if ($object->in_archive): ?>
+															В архиве
+														<? endif; ?>
+													</p>
+													<p class="mb10">
+															<span style="color:red;">Объявление не публикуется!</span>
+													</p>
+													<p class="mb10">
+														<? if ($object->is_bad == 1): ?>
+															Заблокировано до исправления. </br>
+															После правки, объявление снова будет проверено модератором
+														<? elseif ($object->is_bad == 2): ?>
+															Заблокировано окончательно.
+														<? elseif ($object->is_bad == 0): ?>															
+															<input id="publish_and_prolonge" type="checkbox" name="publish_and_prolonge" value="1"  <? if ($params->publish_and_prolonge) echo "checked"; ?>/>
+															<label for="publish_and_prolonge">Опубликовать объявление
+																<? if ($object->in_archive): ?>
+																	(будет продлено на 90 дней и поднято в поиске)
+																<? endif; ?>
+															</label>
+														<? endif; ?>
+													</p>
+												<? endif; ?>
+											</select>
+										</div>					
+
+									</div>						
+								</div>
+							</div><!--fieldscont-->
+						</div><!--smallcont-->	
+					<? endif; ?>	
+
+					<? if (!$form_data->_edit OR $prolongation_access):?>                  					
+						<div class="smallcont">
+							<div class="labelcont">
+								<label><span>Срок объявления:</span></label>
+							</div>	
+							<div class="fieldscont">
+								<div class="inp-cont-short">
+									<div class="inp-cont">
+										<div data-placeholder="Выберите срок жизни объявления..." class="values">
+											<?
+											 	$periods = array(	"2w" => "на 14 дней",
+											 						"1m" => "на 30 дней",
+											 						"2m" => "на 60 дней",
+											 						"3m" => "на 90 дней");
+											 	$default_period = "2m";
+											 	if ($params->lifetime)
+											 		$default_period = $params->lifetime;
+											?>
+											
 											 <select id="lifetime" name="lifetime">
 											 <? foreach ($periods as $key => $value): ?>
 											 		<option value="<?=$key?>" <? if ($default_period == $key) echo "selected";?>><?=$value?></option>
 											 <? endforeach; ?>
-										<? endif; ?>
-										</select>
-									</div>					
-
-								</div>						
-							</div>
-						</div><!--fieldscont-->
-					</div><!--smallcont-->														
+											</select>
+										</div>	
+									</div>						
+								</div>
+							</div><!--fieldscont-->
+						</div><!--smallcont-->	
+					<? endif; ?>												
 
 					<div class="smallcont inp-add-cont">
 						<div class="labelcont"></div>					
@@ -484,8 +546,14 @@
 				<div class="fl100 form-next-cont">
 					<div class="smallcont">
 						<div class="labelcont"></div>	
-						<div class="fieldscont ta-r mb15">						
-							<div id="submit_button" class="button blue icon-arrow-r btn-next"><span>Далее</span></div>							
+						<div class="fieldscont ta-r mb15">		
+							<? if ($form_data->_edit):?>	
+								<? if ($object->is_bad <> 2): ?>	
+									<div id="submit_button" class="button blue icon-arrow-r btn-next"><span>Далее</span></div>							
+								<? endif; ?>
+							<? else: ?>
+								<div id="submit_button" class="button blue icon-arrow-r btn-next"><span>Далее</span></div>							
+							<? endif; ?>
 						</div><!--fieldscont-->
 					</div><!--smallcont-->	
 				</div>
@@ -548,7 +616,7 @@
 						<% if (is_required) { %>
 							<span class="required-label">*</span>
 						<% } %>
-						<input id="<%=id%>" type="text" name="<%=name%>" value="<%=value%>"/>
+						<input id="<%=id%>" type="text" name="<%=id%>" value="<%=value%>"/>
 					</div>
 				</div>
 			</div>

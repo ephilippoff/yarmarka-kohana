@@ -176,11 +176,11 @@
     	return 
     }
 
-    function refresh_statistic(objectload_id){
+    function refresh_statistic(objectload_id, email){
     	if (!objectload_id)
     		return;
 
-    	$.post( "/khbackend/users/objectload_refresh_statistic", {id:objectload_id}, function( data ) {
+    	$.post( "/khbackend/users/objectload_refresh_statistic", {id:objectload_id, email:email}, function( data ) {
 		  	console.log(data);
 		  	if (data.common){
 		  		$('#stat_'+objectload_id).html(data.common);
@@ -259,7 +259,8 @@
 			<td id="stat_<?=$item->id?>"><?=$item->statistic_str?></td>
 			<td></td>
 			<td>
-				<span href="" class="icon-refresh" onclick="refresh_statistic(<?=$item->id?>)"></span>
+				<span href="" class="icon-refresh" onclick="refresh_statistic(<?=$item->id?>, 0)"></span>
+				<span href="" class="icon-envelope" onclick="refresh_statistic(<?=$item->id?>, 1)"></span>
 				<span href="" class="icon-retweet" onclick="set_command_line(<?=$item->id?>, <?=$item->user_id?>, null)"></span>
 				<span href="" class="icon-trash" onclick="delete_ol(<?=$item->id?>);"></span>
 			</td>		

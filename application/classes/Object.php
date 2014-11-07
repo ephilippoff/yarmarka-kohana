@@ -305,6 +305,7 @@ class Object
 		}
 		else
 		{
+			$json['object_id'] = $add->object->id;
 			$json['error'] = $add->errors;
 			$json['external_id'] = $input_params['external_id'];
 		}

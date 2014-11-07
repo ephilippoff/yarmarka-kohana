@@ -40,5 +40,8 @@ return array(
 		"one_mobile_phone" => TRUE,
 		"max_count" => 1,
 		"description" => "one_advert_category"
+	),
+	"36" => array( //вакансии
+		"description" => "vakancy_law"
 	)
 );
