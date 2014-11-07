@@ -51,5 +51,11 @@ return array(
 	),
 	"36" => array( //вакансии
 		"description" => "vakancy_law"
+	),
+	"155" => array( //каталог компаний
+		"price_enabled" => TRUE
+	),
+	"23" => array( //автозапчасти
+		"price_enabled" => TRUE
 	)
 );
