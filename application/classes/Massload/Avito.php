@@ -164,6 +164,13 @@ class Massload_Avito
 	public static function format_contacts($row)
 	{
 		$user = Auth::instance()->get_user();
+
+		$city_code = ORM::factory('User_Settings')
+								->where("name","=","city_code")
+								->where("user_id","=",$user->id)
+								->cached(60)
+								->find()->value;
+
 		$contacts = ORM::factory('User_Contact')
 						->where("user_id","=", $user->id)
 						->limit(2)
@@ -178,16 +185,10 @@ class Massload_Avito
 					$i++;
 				}
 			}
+		} else {
+			$row->contact_0_value = Text::format_contact($row->contact_0_value, $city_code);
+			$row->contact_1_value = Text::format_contact($row->contact_1_value, $city_code);
 		}
-
-		$num_prefixes = array("+7","8");
-
-		if (in_array(substr($row->contact_0_value, 0,1), $num_prefixes) and !Valid::email($row->contact_0_value))
-			$row->contact_0_value =  substr_replace($row->contact_0_value, "7", 0, 1);
-
-		if (in_array(substr($row->contact_1_value, 0,1), $num_prefixes) and !Valid::email($row->contact_1_value))
-			$row->contact_1_value =  substr_replace($row->contact_1_value, "7", 0, 1);
-	
 
 		if (!$row->contact)
 			$row->contact = $user->org_name;

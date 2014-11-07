@@ -209,7 +209,7 @@ class Massload
 			{
 				$validation->rule($key, 'not_0', $valid_info);
 				//$validation->rule($key, 'digit', $valid_info);
-				$validation->rule($key, 'max_length', $valid_info_maxlength);
+				//$validation->rule($key, 'max_length', $valid_info_maxlength);
 			}
 
 			if ($config_key->type == "external_id")
@@ -259,6 +259,8 @@ class Massload
 				break;
 				case 'integer':
 					$key = "param_".ORM::factory('Reference')->by_category_and_attribute($category_id, $key);					
+					if (is_float($value*1))
+						$value = round($value*1);
 				break;
 				case 'photo':	
 					$files = explode(";", $value);	

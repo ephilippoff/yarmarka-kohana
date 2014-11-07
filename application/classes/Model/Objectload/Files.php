@@ -28,6 +28,14 @@ class Model_Objectload_Files extends ORM {
 		return $statstr;
 	}
 
+	function get_statistic()
+	{
+		if (!$this->loaded())
+			return;
+
+		return unserialize($this->statistic);
+	}
+
 	function notloaded_records_exists($_statistic = NULL)
 	{
 		if (!$_statistic)

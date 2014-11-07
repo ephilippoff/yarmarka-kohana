@@ -111,9 +111,10 @@ class Auth_ORM extends Kohana_Auth_ORM {
 
 			// Load the user
 			$user = ORM::factory('User');
-			$user->where(DB::expr('w_lower('.$user->unique_key($username).')'), '=', DB::expr("w_lower('".$username."')"))
+			/*$user->where(DB::expr('w_lower('.$user->unique_key($username).')'), '=', DB::expr("w_lower('".$username."')"))
 				->where('is_blocked', '<>', 2)
-				->find();
+				->find();*/
+			$user->get_user_by_email($username)->find();
 		}
 
 		if ($user->loaded() AND $user->is_blocked == 1)
@@ -122,6 +123,14 @@ class Auth_ORM extends Kohana_Auth_ORM {
 			if ($user->block_reason)
 				$block_reason = "Причина: ".$user->block_reason;
 			throw new Exception("Учетная запись заблокирована. ".$block_reason, 303);
+		}
+
+		if ($user->loaded() AND $user->is_blocked == 2)
+		{
+			$block_reason = "";
+			if ($user->block_reason)
+				$block_reason = "Причина: Учетная запись еще не активирована. Для активации перейдите по ссылке высланной вам на email";
+			throw new Exception($block_reason, 303);
 		}
 
 		if (is_string($password))

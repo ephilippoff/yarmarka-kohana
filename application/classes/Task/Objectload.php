@@ -144,21 +144,31 @@ class Task_Objectload extends Minion_Task
 
 			Minion::write($prefix_log, $object->get_normal_string());
 
+			$result = array("status" => "no");
 			if ($object->error AND array_key_exists("nochange", $object->error))
-				return array(
+				$result = array(
 						"status" 	=> "nochange"
 					);
 			elseif ($object->error)
-				return array(
+				$result = array(
 						"status" 	=> "error",
 						"text_error" => "(Ошибка стр.".$object->external_id.") ".join("|", array_values($object->error))
 					);
 			else
-				return array(
+				$result = array(
 							"status" => "success",
 							"edit" 	 => $object->is_edit,
 							"object_id" => $object->object_id
 						);
+
+			if ( $row->premium AND in_array($result["status"], array("nochange", "success")) )
+			{
+				$isPremium = Task_Objectload::setPremium($object->object_id);
+				if ($isPremium)
+					Minion::write($prefix_log, 'Активировали премиум. Осталось: '.$isPremium);
+
+			}
+			return $result;
 
 		});
 		
@@ -180,11 +190,30 @@ class Task_Objectload extends Minion_Task
 		ORM::factory('Objectload', $ol->_objectload_id)
 			->update_statistic();
 
-		
+		if (!$test)
+		{
+			$objectload = new Objectload(NULL, $ol->_objectload_id);
+			$objectload->sendReport($ol->_objectload_id);
+		}
 
 		Minion::write("Success", 'End');
 
 		//Temptable::delete_table($name);
+	}
+
+
+	static function setPremium($object_id)
+	{
+		if (!$object_id)
+			return FALSE;
+
+		$alreadyBuyed = Service_Premium::is_already_buyed($object_id);
+		if (!$alreadyBuyed)
+		{
+			return Service_Premium::apply_prepayed($object_id);
+		}
+
+		return FALSE;
 	}
 
 	

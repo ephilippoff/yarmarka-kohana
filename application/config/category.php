@@ -48,5 +48,8 @@ return array(
 		"max_count" => 1,
 		"description" => "one_advert_category",
 		"price_enabled" => TRUE
+	),
+	"36" => array( //вакансии
+		"description" => "vakancy_law"
 	)
 );

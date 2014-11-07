@@ -264,6 +264,12 @@ class Controller_Admin_Users extends Controller_Admin_Template {
 		}
 
 		$json["sub"] = $files_stat;
+
+		if ($post["email"])
+		{
+			$objectload = new Objectload(NULL, $post["id"]);
+			$objectload->sendReport($post["id"]);
+		}
 		
 		$this->response->body(json_encode($json));
 	}

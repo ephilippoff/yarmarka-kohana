@@ -270,7 +270,7 @@ class Lib_PlacementAds_AddEdit {
 		{
 			$validation->rules('title_adv', array(
 				array('not_empty', array(':value', "Заголовок")),
-				array('min_length', array(':value', 15)),
+				array('min_length', array(':value', 15, "Заголовок")),
 			));
 		}
 
@@ -282,8 +282,8 @@ class Lib_PlacementAds_AddEdit {
 		if ($category AND $category->text_required)
 		{
 			$validation->rules('user_text_adv', array(
-				array('not_empty', array(':value', "Текст объявления")),
-				array('max_length', array(':value', 15000)),
+				array('not_empty_html', array(':value', "Текст объявления")),
+				array('max_length', array(':value', 15000, "Текст объявления")),
 			));
 		}
 		return $this;
@@ -730,7 +730,7 @@ class Lib_PlacementAds_AddEdit {
 			// при редактировании автора не меняем
 			$object->author 			= $user->id;
 		}
-		$object->user_text 			= $params->user_text_adv;
+		$object->user_text 			= Text::clear_usertext_tags($params->user_text_adv);
 		if ( ! $this->is_edit)
 		{
 			$object->date_expiration	= $this->lifetime_to_date($params->lifetime);
@@ -905,6 +905,21 @@ class Lib_PlacementAds_AddEdit {
 		if ($params->block_comments)
 		{
 			$object->disable_comments();
+		}
+
+		if ($this->is_edit AND $params->publish_and_prolonge)
+		{
+			if ($object->is_bad <> 2)
+			{
+				$object->is_published = 1;
+				if ($object->in_archive)
+				{
+					$object->prolong($this->lifetime_to_date("3m"));
+				} else 
+				{
+					$object->date_expiration = $this->lifetime_to_date("3m");
+				}
+			}
 		}
 		return $this;
 	}

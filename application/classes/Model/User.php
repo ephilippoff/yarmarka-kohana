@@ -399,9 +399,11 @@ class Model_User extends Model_Auth_User {
 
 	public function get_user_by_email($email)
 	{
-		return $this->join("contacts","left")
+		/*return $this->join("contacts","left")
 					->on("contacts.verified_user_id","=","user.id")
-			  	->where(DB::expr("w_lower(contacts.contact_clear)"),"=",$email);
+			  	->where(DB::expr("w_lower(contacts.contact_clear)"),"=",$email);*/
+
+		return $this->where(DB::expr('w_lower(email)'), '=', DB::expr("w_lower('".$email."')"));
 
 	}
 
