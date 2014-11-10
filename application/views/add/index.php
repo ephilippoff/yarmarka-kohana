@@ -846,7 +846,7 @@
 		<span class="close fn-verify-contact-win-close"></span>
 		<p class="title pb10">Проверка контакта <%=value%></p>										
 		<input class="inp-confirm-code fn-input-code" type="text" placeholder="Введите код" />
-		<p class="msg pt5 pb25 fn-error-block"></p>
+		<p class="msg pt5 pb25 fn-error-block" style="font-size:14px;"></p>
 		<? /*<div class='fn-btn-re-send'><span style="font-size:12px;">Отправить еще раз</span></div> */?>
 		<div class="ta-r"><div class="button blue  fn-verify-contact-win-submit">Готово</div></div>
 	</div>
