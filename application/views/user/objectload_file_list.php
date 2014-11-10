@@ -1,7 +1,7 @@
 <p><h2><?=$config["name"]?></h2></p>
 
 <? 
-	$statistic = new Obj($statistic);
+	$statistic = new Obj((array) $statistic);
 	$premium_ids = array();
 	if ($statistic->premium_ids)
 		$premium_ids = explode(",",$statistic->premium_ids); 
