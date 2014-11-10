@@ -57,6 +57,12 @@ Route::set('article', 'article/<seo_name>')
 		'action'     => 'index',
 	));
 
+Route::set('ourservices', 'ourservices/<seo_name>')
+	->defaults(array(
+		'controller' => 'Article',
+		'action'     => 'ourservices',
+	));
+
 Route::set('newsone', 'news/<id>-<seo_name>', array('id' => '\d+'))
 	->defaults(array(
 		'controller' => 'Article',

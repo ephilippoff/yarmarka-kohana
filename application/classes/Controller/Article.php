@@ -42,7 +42,7 @@ class Controller_Article extends Controller_Template {
 		$article = ORM::factory('Article')
 			->where('seo_name', '=', $this->request->param('seo_name'))
 			->where('is_visible', '=', 1)
-//			->where('text_type', '=', 1)	
+			->where('text_type', '=', 1)	
 			->find();
 		
 		if ( ! $article->loaded())
@@ -59,6 +59,39 @@ class Controller_Article extends Controller_Template {
 				->find_all();
 
 		$this->template->article = $article;
+	}
+	
+	public function action_ourservices()
+	{
+		$this->layout = 'article_ourservices';
+
+		
+		$article = ORM::factory('Article')
+			->where('seo_name', '=', $this->request->param('seo_name'))
+			->where('is_visible', '=', 1)
+			->where('text_type', '=', 3)	
+			->find();
+		
+		if ( ! $article->loaded())
+		{
+			throw new HTTP_Exception_404;
+		}
+		
+		//Определяем template
+		if (Kohana::find_file('views/article/ourservices', trim($article->meta)))
+			$this->template = View::factory('article/ourservices/'.trim($article->meta));
+		else
+			$this->template = View::factory('article/ourservices/ourservices_one');
+		
+		//Подбираем шаблон меню
+		$this->template->menu = Kohana::find_file('views/article/ourservices', '_menu_'.trim($article->name)) 
+			? $this->template->menu = View::factory('article/ourservices/'.'_menu_'.trim($article->name)) 
+			: '';
+				
+		Seo::set_title($article->title.Seo::get_postfix());
+		Seo::set_description($article->get_meta_description());
+
+		$this->template->article = $article;		
 	}
 	
 	public function action_newsone()
