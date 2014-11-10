@@ -109,6 +109,15 @@ class Massload_File
 		self::closeFile($file);
 	}
 
+	public static function forEachField($pathtofile, Obj $options, $callback)
+	{
+		$ext = File::ext_by_mime(mime_content_type($pathtofile));
+		if ($ext == "xls" OR $ext == "xlsx"){
+			Massload_FileXls::forEachField($pathtofile, $options, $callback);
+			return;
+		}
+	}
+
 	public static function forRow($config, $pathtofile, $row_num, $callback)
 	{
 		$ext = File::ext_by_mime(mime_content_type($pathtofile));

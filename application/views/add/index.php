@@ -369,6 +369,29 @@
 				<? endif; ?>
 			</div>
 
+			<div id="div_price" style="display:none;">
+				<? if ( property_exists($form_data, 'price') ): ?>
+					<div class="smallcont" id="div_video">
+						<div class="labelcont">
+								<label><span>Прайс-лист:</span></label>
+						</div>
+						<div class="fieldscont">
+							<div class="inp-cont-short">
+								<div class="inp-cont">																		
+									<?=View::factory('add/block/price',
+												array( 
+													"data" 	=> new Obj($form_data->price)												  
+												));?>							
+									<span class="inform">
+										<span>Прайс лист необходимо предварительно загрузить и дождаться одобрения модератора<a>(?)</a></span>
+									</span>
+								</div>							
+							</div>
+						</div><!--fieldscont-->
+					</div><!--smallcont-->	
+				<? endif; ?>
+			</div>
+
 			<? if ( property_exists($form_data, 'contacts') ): ?>
 				<div class="fl100 add-coord-cont" id="div_contacts">	                    		
 						<div class="smallcont">
@@ -823,7 +846,7 @@
 		<span class="close fn-verify-contact-win-close"></span>
 		<p class="title pb10">Проверка контакта <%=value%></p>										
 		<input class="inp-confirm-code fn-input-code" type="text" placeholder="Введите код" />
-		<p class="msg pt5 pb25 fn-error-block"></p>
+		<p class="msg pt5 pb25 fn-error-block" style="font-size:14px;"></p>
 		<? /*<div class='fn-btn-re-send'><span style="font-size:12px;">Отправить еще раз</span></div> */?>
 		<div class="ta-r"><div class="button blue  fn-verify-contact-win-submit">Готово</div></div>
 	</div>

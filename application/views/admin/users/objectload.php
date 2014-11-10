@@ -60,7 +60,7 @@
 	});
    </script>
 
-<p><h2>Статичный файл</h2>
+<p><h2>Загрузить статичный файл с объявлениями</h2>
 		<select id="fn-category">
 			<option value>--</option>
 			<? foreach($categories as $key=>$value): ?>
@@ -218,7 +218,7 @@
     </script>
 <p>
 <h2>
-	Загрузки
+	Загрузки Объявлений
 	<? if ($qstate):?>
 		(отфильтрвоано по '<?=$states_ol[$qstate]?>')
 	<? endif;?>
@@ -322,3 +322,156 @@
 <button type="button" onclick="false_moderate();">Отклонить загрузку</button>
 </div>
 </p>
+
+ <script type="text/javascript">
+ 	$(document).ready(function() {
+	 	var self = this;
+	    new AjaxUpload('fn-price-upload', {
+	            action: '/ajax/massload/save_pricefile',
+	            name: 'file',
+	            data : {context :self},
+	            autoSubmit: true,
+	            onSubmit: function(filename, response){
+	            	var self = this._settings.data.context;
+			        self.title = $("#fn-title-price").val();
+			        self.user_id = $("#fn-user-price").val();
+			        this.setData({ context : self, user_id : self.user_id, title: self.title});
+	            },
+	            onComplete: function(filename, response){
+	            	$(".pricefile_error").html("");
+	            	$(".pricefile_success").html("");
+	            	var data = null;
+       				var self = this._settings.data.context; 
+       				if (response) 
+            			data = $.parseJSON(response);
+            		if (data.error)
+            			$(".pricefile_error").html(data.error);
+            		if (data.priceload_id)
+            			$(".pricefile_success").html("Файл сохранен:" + data.priceload_id);
+            		console.log(data);
+	            }
+	       });
+	});
+   </script>
+
+<p><h2>Загрузить прайс</h2>
+		<input id="fn-title-price" type="text" value="Прайс-лист"/>
+		<input id="fn-user-price" type="text" value="327190"/>
+		<button id="fn-price-upload">
+			<div class="button blue">
+				<span>Загрузить</span>
+			</div>
+			
+		</button>	
+		<div class="pricefile_error" style="color:red;"></div>
+		<div class="pricefile_success" style="color:green;"></div>
+</p>
+
+<script type="text/javascript">
+ 	
+
+ 	function price_decline(id){
+ 		$("#pricecomment_container").attr("data-priceload-id", id);
+    	$("#pricecomment_container").show();
+    	$("#pricecomment_text").val("");
+
+ 	}
+
+    function delete_pl(id)
+    {
+    	if (!confirm("Удалить?")) {
+			return;
+		}
+    	$.post( "/ajax/massload/priceload_delete", {id:id}, function( data ) {
+		  	$('.pl_'+id).hide();
+		});
+
+    }
+
+    function pricestate_send(id, state) {
+    	var text = null;
+    	if (!id){
+			olid = $("#pricecomment_container").data("priceload-id");
+			text = $("#pricecomment_text").val();
+
+			if (!olid || !text)
+				return;
+    	}
+		else {
+			olid = id;
+		}		
+
+    	$.post( "/khbackend/users/priceload_set_state", {id:olid, state : state, text:text}, function( data ) {
+		 	if (data.code == 200){
+		 		console.log(1233);
+		 		$("#pricecomment_container").attr("data-priceload-id", false);
+				$("#pricecomment_container").hide();
+				location.reload();
+		 	}
+		});
+		if (state == 2)
+    		$('.pl_'+id).css("background","green");
+    	if (state == 3)
+    		$('.pl_'+id).css("background","red");
+		
+    }
+
+    </script>
+
+<h2>
+	Загрузки Прайсов
+	<? /*if ($qstate):?>
+		(отфильтрвоано по '<?=$states_ol[$qstate]?>')
+	<? endif;*/?>
+</h2>
+<p>
+	<a href="/khbackend/users/objectload#priceloads">все</a> /
+	<a href="/khbackend/users/objectload?state=1#priceloads">на модерации</a> /
+	<a href="/khbackend/users/objectload?state=99#priceloads">ошибка</a> /
+	<a href="/khbackend/users/objectload?state=5#priceloads">выполнено</a>
+</p>
+<a name="priceloads"></a>
+<table class="table table-hover table-condensed">
+	<tr>
+		<th>Id</th>
+		<th>Id User</th>
+		<th>Email</th>
+		<th>Created</th>
+		<th>Title</th>
+		<th>State</th>
+		<th>Stat (нов/изм/неизм/ош=все)</th>
+		<th>Log</th>
+		<th>Control</th>
+	</tr>
+	<?php foreach ($priceloads as $item) : ?>
+		<tr class="pl_<?=$item->id?>">			
+			<td><?=$item->id?></td>
+			<td><?=$item->user_id?></td>
+			<td><a href="<?=Url::site('khbackend/users/user_info/'.$item->user_id)?>" target="_blank"><?=$item->user->email?></a></td>
+			<td><?=$item->created_on?></td>
+			<td><?=$item->title?></td>
+			<td>
+				<? if ($item->state <> 1): ?>
+					<?=$states_ol[$item->state]?>
+				<? else: ?>
+					<a href="#comment" onclick="price_decline(<?=$item->id?>);" style="color:red">Отклонить<span href="" class="icon-trash"></span></a>
+					<a href="#comment" onclick="pricestate_send(<?=$item->id?>,2);" style="color:green">Одобрить<span href="" class="icon-refresh"></span></a>
+				<? endif; ?>
+			</td>	
+			<td id="stat_<?=$item->id?>"><? /*$item->statistic_str */?></td>
+			<td>
+				<a href="/user/pricelist/<?=$item->id?>" target="_blank">Просмотр/редактирование</a>, 
+					<? /*if ($file->error_exists):?>
+						<a href="/user/objectload_file_list/<?=$file->id?>?errors=1" target="_blank">только ошибки</a>
+					<? endif;*/?>
+			</td>
+			<td>
+				<span href="" class="icon-trash" onclick="delete_pl(<?=$item->id?>);"></span>
+			</td>		
+		</tr>
+	<?php endforeach; ?>
+</table>
+<div id="pricecomment_container" style="display:none;">
+<p>Причина отклонения загрузки:<br/><textarea id="pricecomment_text" style="width: 80%; height: 15em;"></textarea></p>
+<button type="button" onclick="pricestate_send(null, 3);">Отклонить прайс</button>
+</div>

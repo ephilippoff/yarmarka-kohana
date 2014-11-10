@@ -42,7 +42,10 @@ class Attribute {
 				$options = Kohana::$config->load("category.".$row->id);
 				if ($options)
 					foreach ($options as $key => $value) {
-						if (in_array($key, array("one_mobile_phone","max_count","description")))
+						if (in_array($key, array(	"one_mobile_phone",
+													"max_count",
+													"description",
+													"price_enabled")))
 							$category_params[$key] = $value;
 					}
 

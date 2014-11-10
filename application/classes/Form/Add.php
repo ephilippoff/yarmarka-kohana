@@ -614,6 +614,37 @@ class Form_Add  {
 		return $this;
 	}
 
+	function Price(){
+		$object 	= $this->object;
+
+		$user = Auth::instance()->get_user();
+		if (!$user)
+			return $this;
+
+		$prices = ORM::factory('Priceload')
+						->where("user_id","=",$user->id)
+						->where("state","=",2)
+						->find_all();
+
+		$value = NULL;
+		if ($object->loaded() AND !$this->is_post)
+		{
+			$value = ORM::factory('Object_Priceload')
+						->where("object_id","=",$object->id)
+						->find()->priceload_id;
+		}
+		elseif ($this->is_post and array_key_exists('pricelist', $this->params))
+		{
+			$value = $this->params['pricelist'];
+		}
+
+		$this->_data->price = array(
+									 'prices' => $prices,
+									 'value' => $value
+									);
+		return $this;
+	}
+
 	static private function parse_object_params($object_id){
 		$values = ORM::factory('Data_List')->where("object","=",$object_id)->find_all();
 		$params = Array();

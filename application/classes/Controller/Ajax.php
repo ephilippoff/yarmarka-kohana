@@ -837,9 +837,12 @@ class Controller_Ajax extends Controller_Template
 		$link_to_user 	= (bool) $this->request->post('link_to_user');
 		$current_user 	= Auth::instance()->get_user();
 
-		if ($contact->loaded() AND $contact->verified_user_id  <> (int) $current_user->id)
+		if ($contact->loaded() AND $contact->verified_user_id 
+				AND $current_user AND $contact->verified_user_id  <> (int) $current_user->id)
 		{
+			$email = ORM::factory('User', $contact->verified_user_id)->email;
 			$this->json['code'] = 400;
+			$this->json['msg']  = "Не удалось верифицировать контакт, он уже принадлежит другому пользователю (".$email.")";
 		}
 		elseif ($contact->loaded())
 		{
@@ -951,10 +954,11 @@ class Controller_Ajax extends Controller_Template
 				$this->json['code'] = 301;
 				$this->json['msg'] = 'Контакт уже подтвержден';
 			}
-			elseif ($exists_contact->verified_user_id)
+			elseif ($current_user AND $exists_contact->verified_user_id)
 			{
+				$email = ORM::factory('User', $exists_contact->verified_user_id)->email;
 				$this->json['code'] = 302;
-				$this->json['msg'] = 'Контакт принадлежит другому пользователю';
+				$this->json['msg'] = 'Не удалось верифицировать контакт, он уже принадлежит другому пользователю ('.$email.')';
 			}
 			elseif ($exists_contact->is_blocked())
 			{

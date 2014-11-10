@@ -268,6 +268,7 @@ class Massload
 					$values = Array();
 					$type_file = "";
 					foreach($files as $value){	
+						$value = trim($value);
 						$filename = $pathtoimage.$value;
 						if (filter_var($value, FILTER_VALIDATE_URL))
 							$type_file = 'url';
