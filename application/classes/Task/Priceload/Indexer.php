@@ -21,6 +21,12 @@ class Task_Priceload_Indexer extends Minion_Task
 
 		foreach($pl as $priceload)
 		{
+			$pi = ORM::factory('Priceload_Index')
+							->where("priceload_id","=",$priceload->id)
+							->find();
+			if ($pi->loaded())
+				continue;
+
 			Minion_CLI::write($priceload->table_name);
 			$category_id = 0;
 			$city_id = 0;
@@ -72,6 +78,8 @@ class Task_Priceload_Indexer extends Minion_Task
 				if (count($idx_text) == 0 OR !$description)
 					continue;
 
+				if ($priceload->keywords)
+					$description = $priceload->keywords." ".$description;
 				$idx_text = implode(",", $idx_text);
 				
 				$plidx = ORM::factory('Priceload_Index');

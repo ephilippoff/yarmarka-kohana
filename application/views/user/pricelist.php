@@ -25,6 +25,25 @@
 				</td>
 			</tr>
 		<? endforeach;?>
+			<tr>
+				<td colspan="3">
+					Название
+					<input name="title" type="text" style="width:100%;" value="<?=$data->title?>"/>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="3">
+					Описание
+					<textarea name ="description" style="width:100%;"><?=$data->description?></textarea>
+				</td>
+			</tr>
+			<tr>
+
+				<td colspan="3">
+					Ключевые слова
+					<textarea name ="keywords" style="width:100%;"><?=$data->keywords?></textarea>
+				</td>
+			</tr>
 		</table>
 		<input type="submit" value="Сохранить настройки формы">
 	</form>

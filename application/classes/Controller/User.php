@@ -358,6 +358,9 @@ class Controller_User extends Controller_Template {
 		if ($is_post)
 		{
 			$pl->config = serialize($array_post_data);
+			$pl->description = $array_post_data["description"];
+			$pl->keywords = $array_post_data["keywords"];
+			$pl->title = $array_post_data["title"];
 			$pl->save();
 		}
 
@@ -365,6 +368,9 @@ class Controller_User extends Controller_Template {
 		if ($pl->config)
 		{
 			$post_data = new Obj(unserialize($pl->config));
+			$post_data->title = $pl->title;
+			$post_data->description = $pl->description;
+			$post_data->keywords = $pl->keywords;
 			$fsetting = $post_data;
 		}
 
