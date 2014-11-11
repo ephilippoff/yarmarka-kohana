@@ -46,7 +46,7 @@
 
 					<span onclick="window.location='http://feedback.yarmarka.biz/'" class="menu g1 cur_p">Техподдержка</span>
 					<span onclick="window.location='http://job.yarmarka.biz/'" class="menu g1 cur_p">Вакансии</span>
-					<span onclick="window.location='/article/reklama-na-saite-yarmarkabiz'" class="menu g1 cur_p">Реклама на сайте</span>
+					<span onclick="window.location='/ourservices/reklamodatelyam'" class="menu g1 cur_p">Рекламодателям</span>
 					<span onclick="window.location='/article/pravila-razmeshcheniya-obyavlenii'" class="menu g1 cur_p">Правила</span>
 
 					<!--<a class="favorites menu" href="#">Избранное (0)</a>-->
