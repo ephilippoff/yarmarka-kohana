@@ -593,6 +593,8 @@ class Controller_Ajax_Massload extends Controller_Template {
 			return;
 		}
 
+		$ol->setState(2);
+
 		$this->json['data'] = "ok";
 		$this->json['priceload_id'] = $ol->_priceload_id;
 	}
