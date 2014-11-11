@@ -403,7 +403,6 @@
 
     	$.post( "/khbackend/users/priceload_set_state", {id:olid, state : state, text:text}, function( data ) {
 		 	if (data.code == 200){
-		 		console.log(1233);
 		 		$("#pricecomment_container").attr("data-priceload-id", false);
 				$("#pricecomment_container").hide();
 				location.reload();
@@ -415,6 +414,42 @@
     		$('.pl_'+id).css("background","red");
 		
     }
+
+    $(document).ready(function() {
+	 	var self = this;
+		$(".priceload").hover(function(event) {
+		   var button = $(this).find(".priceloadbutton");
+		   self.id = button.attr("data-id");
+
+		   new AjaxUpload(button, {
+		    action: '/ajax/massload/priceload_toindex',
+            name: 'file',
+            data : {context :self},
+            autoSubmit: true,
+		     onSubmit: function(filename, response) {
+		        this.setData({ context : self, priceload_id: self.id});
+		     },
+		     onComplete: function(file, response) {
+		     	var data = null;
+		        if (response) 
+	        		data = $.parseJSON(response);
+	        	console.log(data);
+	        	location.reload();
+		     }  
+		   });
+		});
+	});
+
+	function priceload_selftoindex(id) {
+		if (!id)
+			return;
+		$.post( "/ajax/massload/priceload_selftoindex", {id:id}, function( data ) {
+		 	if (data.code == 200){
+		 		console.log(data);
+				//location.reload();
+		 	}
+		});
+	}
 
     </script>
 
@@ -437,33 +472,38 @@
 		<th>Id User</th>
 		<th>Email</th>
 		<th>Created</th>
+		<th>Файл</th>
 		<th>Title</th>
 		<th>State</th>
-		<th>Stat (нов/изм/неизм/ош=все)</th>
-		<th>Log</th>
+		<th>Edit</th>
 		<th>Control</th>
 	</tr>
 	<?php foreach ($priceloads as $item) : ?>
-		<tr class="pl_<?=$item->id?>">			
+		<tr class="pl_<?=$item->id?> priceload">			
 			<td><?=$item->id?></td>
 			<td><?=$item->user_id?></td>
 			<td><a href="<?=Url::site('khbackend/users/user_info/'.$item->user_id)?>" target="_blank"><?=$item->user->email?></a></td>
 			<td><?=$item->created_on?></td>
+			<td><a href="/<?=$item->filepath_original?>">файл</a></td>
 			<td><?=$item->title?></td>
 			<td>
 				<? if ($item->state <> 1): ?>
-					<?=$states_ol[$item->state]?>
+					<?=$states_ol[$item->state]?></br>
 				<? else: ?>
-					<a href="#comment" onclick="price_decline(<?=$item->id?>);" style="color:red">Отклонить<span href="" class="icon-trash"></span></a>
-					<a href="#comment" onclick="pricestate_send(<?=$item->id?>,2);" style="color:green">Одобрить<span href="" class="icon-refresh"></span></a>
+					<a href="#comment" onclick="price_decline(<?=$item->id?>);" style="color:red">Отклонить<span href="" class="icon-trash"></span></a></br>
+					<a href="#comment" onclick="pricestate_send(<?=$item->id?>,2);" style="color:green">Одобрить<span href="" class="icon-ok"></span></a></br>			
 				<? endif; ?>
+				<a data-id="<?=$item->id?>" class="priceloadbutton" href="" style="color:purple">Загрузить в индекс (с диска)<span href="" class="icon-refresh"></span></a></br>
+				<a href="#comment" onclick="priceload_selftoindex(<?=$item->id?>);" style="color:brown">Загрузить в индекс (этот файл)<span href="" class="icon-refresh"></span></a>
 			</td>	
-			<td id="stat_<?=$item->id?>"><? /*$item->statistic_str */?></td>
+			
 			<td>
-				<a href="/user/pricelist/<?=$item->id?>" target="_blank">Просмотр/редактирование</a>, 
+				<? if ($item->table_name): ?>
+					<a href="/user/pricelist/<?=$item->id?>" target="_blank">ред</a>, 
 					<? /*if ($file->error_exists):?>
 						<a href="/user/objectload_file_list/<?=$file->id?>?errors=1" target="_blank">только ошибки</a>
 					<? endif;*/?>
+				<? endif; ?>
 			</td>
 			<td>
 				<span href="" class="icon-trash" onclick="delete_pl(<?=$item->id?>);"></span>

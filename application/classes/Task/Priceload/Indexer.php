@@ -17,6 +17,7 @@ class Task_Priceload_Indexer extends Minion_Task
 
 		$pl = ORM::factory('Priceload')
 				->where("state", "=", 2)
+				->where("table_name", "IS NOT", NULL)
 				->find_all();
 
 		foreach($pl as $priceload)
