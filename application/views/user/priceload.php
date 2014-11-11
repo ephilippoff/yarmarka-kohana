@@ -34,8 +34,15 @@ $(document).ready(function() {
 								
 								<div class="massload-hint">	
 									<ul>								
-										<li>Пример обычного файла (прайс-листа): ---</li>
-										<li>Пример плоского файла (прайс-листа): ---</li>
+										<li>Пример обычного файла (прайс-листа): 
+											<a href="https://docs.google.com/spreadsheets/d/10o5SY0_QECeORGOgTyonkHhFOPHa8cj1XbYwwdbu51M/edit" target="_blank">Услуги электрика</a>
+										</li>
+										<li>Пример плоского файла (прайс-листа): 
+											<a href="https://docs.google.com/spreadsheets/d/1QzfIo_gZVRsisJV3-TOt149ZGAHSCwKFryyqfffR5jc/edit#gid=0" target="_blank">Услуги сантехника</a>, 
+											<a href="https://docs.google.com/spreadsheets/d/1NDB-Oguk73JdQNyaRmORjuXzlWsjcOCq0fXXLUefPdk/edit#gid=0" target="_blank">Услуги свадебного салона</a>,
+											<a href="https://docs.google.com/spreadsheets/d/1KE7S66v-edxiWwdAcEN08rPMyD0vERTwc45nYLXEb3M/edit?pli=1#gid=0" target="_blank">Запчасти на грузовые автомобили HOWO</a>,
+											
+										</li>
 										<li>После загрузки, файл будет проверен модератором.</li>
 										<li>Если файл "плоский" и загрузка одобрена модератором, позиции из прайса будут импортированы в поисковый индекс. Ваши предложения увидят на страницах поиска.</li>
 									</ul>
