@@ -1,4 +1,9 @@
 <div class="winner article ourservices">
+<script type="text/javascript" charset="utf-8">
+	$(document).ready(function() {
+		scroll_fixed($('.fn-right-menu'));
+	});
+</script>	
 	<section class="main-cont ">
 		<div class="m_poll">
 			<div class="crumbs" style="margin: 4px 0 6px;">
