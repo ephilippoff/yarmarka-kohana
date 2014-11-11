@@ -198,12 +198,24 @@ class Controller_Ajax_Massload extends Controller_Template {
 		$file = $_FILES["file"];
 
 		$priceload = ORM::factory("Priceload");
+		$limit = 0;
 		$free_limit = Kohana::$config->load('priceload.free_limit');
+
+		$setting_limit = ORM::factory('User_Settings')
+    							->get_by_name($user_id, "priceload_limit")
+    							->find();
+    	if ($setting_limit->loaded())
+    		$limit = $setting_limit->value*1;
 
 		$quantity_price = $priceload->where("user_id","=",$user_id)
 								->count_all();
 
-		if ($quantity_price >= $free_limit)
+		if ($limit AND $quantity_price >= $limit)
+		{
+			$this->json['data'] ="error";
+			$this->json['error'] = "Вы оплатили загрузку до ".$limit." прайс-листов. Свяжитесь с нами, чтобы увеличить лимит.";
+			return;
+		} elseif (!$limit AND $free_limit AND $quantity_price >= $free_limit)
 		{
 			$this->json['data'] ="error";
 			$this->json['error'] = "Бесплатно можно загрузить ".$free_limit." прайс-лист. Свяжитесь с нами, чтобы увеличить лимит.";
@@ -218,7 +230,7 @@ class Controller_Ajax_Massload extends Controller_Template {
 
 		$pl = new Priceload($user_id, $settings);		
 
-		try {
+		/*try {
 			
 			$db->begin();	
 
@@ -234,7 +246,7 @@ class Controller_Ajax_Massload extends Controller_Template {
 			Log::instance()->add(Log::NOTICE, $e->getMessage());
 			ORM::factory("Priceload", $pl->_priceload_id)->delete();
 			return;
-		}
+		}*/
 
 		$pl->setState(1);
 		

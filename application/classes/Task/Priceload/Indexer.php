@@ -36,6 +36,8 @@ class Task_Priceload_Indexer extends Minion_Task
 								->join("object")
 									->on("object_priceload.object_id","=","object.id")
 								->where("priceload_id","=",$priceload->id)
+								->where("object.active","=",1)
+								->where("object.is_published","=",1)
 								->cached(60)
 								->find();
 			if (!$object->loaded() OR $object->active = 0 OR $object->is_published = 0)

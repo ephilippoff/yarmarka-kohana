@@ -34,6 +34,7 @@ class Priceload
 		$load->user_id  = $user_id;
 		$load->title    = $settings->title;
 		$load->filepath = $this->_filepath = $filepath;
+		$load->filepath_original =  $filepath;
 		$load->save();
 
 		return $load->id;
