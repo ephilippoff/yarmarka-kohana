@@ -198,12 +198,24 @@ class Controller_Ajax_Massload extends Controller_Template {
 		$file = $_FILES["file"];
 
 		$priceload = ORM::factory("Priceload");
+		$limit = 0;
 		$free_limit = Kohana::$config->load('priceload.free_limit');
+
+		$setting_limit = ORM::factory('User_Settings')
+    							->get_by_name($user_id, "priceload_limit")
+    							->find();
+    	if ($setting_limit->loaded())
+    		$limit = $setting_limit->value*1;
 
 		$quantity_price = $priceload->where("user_id","=",$user_id)
 								->count_all();
 
-		if ($quantity_price >= $free_limit)
+		if ($limit AND $quantity_price >= $limit)
+		{
+			$this->json['data'] ="error";
+			$this->json['error'] = "Вы оплатили загрузку до ".$limit." прайс-листов. Свяжитесь с нами, чтобы увеличить лимит.";
+			return;
+		} elseif (!$limit AND $free_limit AND $quantity_price >= $free_limit)
 		{
 			$this->json['data'] ="error";
 			$this->json['error'] = "Бесплатно можно загрузить ".$free_limit." прайс-лист. Свяжитесь с нами, чтобы увеличить лимит.";
@@ -218,7 +230,7 @@ class Controller_Ajax_Massload extends Controller_Template {
 
 		$pl = new Priceload($user_id, $settings);		
 
-		try {
+		/*try {
 			
 			$db->begin();	
 
@@ -234,7 +246,7 @@ class Controller_Ajax_Massload extends Controller_Template {
 			Log::instance()->add(Log::NOTICE, $e->getMessage());
 			ORM::factory("Priceload", $pl->_priceload_id)->delete();
 			return;
-		}
+		}*/
 
 		$pl->setState(1);
 		
@@ -335,6 +347,132 @@ class Controller_Ajax_Massload extends Controller_Template {
 
 		$this->json['filepath'] = $filepath;
 		$this->json['data'] = "ok";
+	}
+
+	public function action_priceload_toindex()
+	{
+
+		$priceload_id = $this->request->post("priceload_id");
+
+		$user = Auth::instance()->get_user();
+		if (!$user->loaded() OR ($user->role <>1 AND $user->role<>9) OR !$priceload_id)
+		{
+			throw new HTTP_Exception_404;
+			return;
+		}
+
+		$user_id = $user->id;
+
+		$file = $_FILES["file"];
+		$db = Database::instance();
+		if (!$user_id)
+			return;
+
+		$settings = new Obj();
+
+		$f = new Massload_File();
+		@list($filepath, $imagepath) = $f->init($file, $user_id);
+
+		$pl = new Priceload($user_id, $settings, $priceload_id);
+		
+		$pl->_filepath =  $filepath;
+
+		$load = ORM::factory('Priceload', $priceload_id);
+		
+		try {
+			Temptable::delete_table($load->table_name);
+		} catch (Exception $e)
+		{
+			return;
+		}
+
+		$load->filepath = $filepath;
+		$load->config = NULL;
+		$load->save();
+
+		try {
+			
+			$db->begin();	
+
+			$pl->saveTempRecordsByLoadedFiles();
+
+			$db->commit();
+
+		} catch(Exception $e)
+		{
+			$db->rollback();
+			$this->json['data'] ="error";
+			$this->json['error'] = $e->getMessage();
+			return;
+		}
+
+		$pl->setState(2);
+
+		$this->json['data'] = "ok";
+		$this->json['priceload_id'] = $pl->_priceload_id;
+
+	}
+
+	public function action_priceload_selftoindex()
+	{
+		$priceload_id = $this->request->post("id");
+
+		$user = Auth::instance()->get_user();
+		if (!$user->loaded() OR ($user->role <>1 AND $user->role<>9) OR !$priceload_id)
+		{
+			throw new HTTP_Exception_404;
+			return;
+		}
+
+		$user_id = $user->id;
+
+		
+		$db = Database::instance();
+		if (!$user_id)
+			return;
+
+		$settings = new Obj();
+
+
+		$pl = new Priceload($user_id, $settings, $priceload_id);
+
+		
+
+		$load = ORM::factory('Priceload', $priceload_id);
+
+		try {
+			Temptable::delete_table($load->table_name);
+		} catch (Exception $e)
+		{
+			return;
+		}
+		$load->filepath = $load->filepath_original;
+		$load->config = NULL;
+		$load->save();
+
+		$pl->_filepath =  $load->filepath_original;
+
+		try {
+			
+			$db->begin();	
+
+			$pl->saveTempRecordsByLoadedFiles();
+
+			$db->commit();
+
+		} catch(Exception $e)
+		{
+			$db->rollback();
+			$this->json['data'] ="error";
+			$this->json['error'] = $e->getMessage();
+			return;
+		}
+
+		$pl->setState(2);
+
+		$this->json['data'] = "ok";
+		$this->json['priceload_id'] = $pl->_priceload_id;
+
 	}
 
 	public function action_pricerow_delete()

@@ -17,7 +17,7 @@ $(document).ready(function() {
 				<header><span class="title">
 						Загрузка прайс-листов
 				</span>
-					<form method="post">
+					<? /* ?><form method="post">
 						<input type="hidden" name="hidehelp" value="<?=$hidehelp?>">
 						<? if ($hidehelp):?>
 							<input type="submit" class="btn btn-info ml10 mt3" value="Скрыть пошаговую инструкцию">
@@ -25,6 +25,7 @@ $(document).ready(function() {
 							<input type="submit" class="btn btn-info ml10 mt3" value="Показать пошаговую инструкцию">
 						<? endif;?>
 					</form>
+					<? */ ?>
 			</header>
 				<div class="p_cont massload">
 					<? if ($hidehelp):?>
@@ -33,8 +34,17 @@ $(document).ready(function() {
 								
 								<div class="massload-hint">	
 									<ul>								
-										<li>Пример файла: ---</li>
-										<li>Файл должен быть плоским. Пустые строки не допускаются.</li>
+										<li>Пример обычного файла (прайс-листа): 
+											<a href="https://docs.google.com/spreadsheets/d/10o5SY0_QECeORGOgTyonkHhFOPHa8cj1XbYwwdbu51M/edit" target="_blank">Услуги электрика</a>
+										</li>
+										<li>Пример плоского файла (прайс-листа): 
+											<a href="https://docs.google.com/spreadsheets/d/1QzfIo_gZVRsisJV3-TOt149ZGAHSCwKFryyqfffR5jc/edit#gid=0" target="_blank">Услуги сантехника</a>, 
+											<a href="https://docs.google.com/spreadsheets/d/1NDB-Oguk73JdQNyaRmORjuXzlWsjcOCq0fXXLUefPdk/edit#gid=0" target="_blank">Услуги свадебного салона</a>,
+											<a href="https://docs.google.com/spreadsheets/d/1KE7S66v-edxiWwdAcEN08rPMyD0vERTwc45nYLXEb3M/edit?pli=1#gid=0" target="_blank">Запчасти на грузовые автомобили HOWO</a>,
+											
+										</li>
+										<li>После загрузки, файл будет проверен модератором.</li>
+										<li>Если файл "плоский" и загрузка одобрена модератором, позиции из прайса будут импортированы в поисковый индекс. Ваши предложения увидят на страницах поиска.</li>
 									</ul>
 								</div>		
 							</div>
@@ -44,7 +54,7 @@ $(document).ready(function() {
 								
 							<div class="massload-hint">	
 								<ul>								
-									<li>Укажите название прайс-листа. Например: "Прайс за услуги" или "Акция на товары от 20.10.2014"</li>
+									<li>Укажите название прайс-листа. Например: "Услуги по ремонту компьютеров", "Акция на товары от 20.10.2014", "Запчасти на КАМАЗ"</li>
 									<li>Нажмите кнопку "Загрузить" для выбора файла</li>
 								</ul>
 							</div>		
@@ -98,7 +108,7 @@ $(document).ready(function() {
 							}
 
 					   </script>
-						<input id="fn-title-price" class="form-control" type="text" value="Прайс-лист"/>
+						<input id="fn-title-price" class="form-control" type="text" value="Название прайс-листа"/>
 									
 						<div id="fn-userfile-upload">
 							<!--<div class="">-->
@@ -128,6 +138,7 @@ $(document).ready(function() {
 								<th>#</th>
 								<th style="width:100px;">Дата</th>
 								<th style="width:150px;">Название</th>
+								<th>Файл</th>
 								<th>Просмотр</th>
 								<th>Состояние</th>
 								<th></th>
@@ -136,9 +147,12 @@ $(document).ready(function() {
 								<tr id="pl_<?=$item->id?>" class="pl_<?=$item->id?>">			
 									<td><?=$item->id?></td>
 									<td><?=date( "d.m.Y H:i",strtotime($item->created_on))?></td>
-									<td><?=$item->title?></td>										
+									<td><?=$item->title?></td>	
+									<td><a href="/<?=$item->filepath_original?>">Оригинал</a></td>								
 									<td>
-										<a href="/user/pricelist/<?=$item->id?>" target="_blank">Просмотр/редактирование</a>, 
+										<? if ($item->state == 2): ?>
+											<a href="/user/pricelist/<?=$item->id?>" target="_blank">Просмотр/редактирование</a>, 
+										<? endif; ?>
 									</td>
 									<td>
 											<?if (!$item->comment): ?>

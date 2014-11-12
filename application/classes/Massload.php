@@ -257,6 +257,9 @@ class Massload
 					$value = $dictionary[$key."_".$value];					
 					$key = "param_".ORM::factory('Reference')->by_category_and_attribute($category_id, $key);					
 				break;
+				case 'text':
+					$key = "param_".ORM::factory('Reference')->by_category_and_attribute($category_id, $key);					
+				break;
 				case 'integer':
 					$key = "param_".ORM::factory('Reference')->by_category_and_attribute($category_id, $key);					
 					if (is_float($value*1))
