@@ -295,9 +295,9 @@ class Objectload
 		$massload_email = ORM::factory('User_Settings')
 								->where("name","=","massload_email")
 								->where("user_id","=",$objectload->user_id)
-								->find();
+								->find_all();
 		
-		if (!$objectload_id OR !$massload_email->loaded() OR !$objectload->loaded())
+		if (!$objectload_id OR !$massload_email OR !$objectload->loaded())
 			return;
 
 		$common_stat = new Obj($objectload->get_statistic());
@@ -324,9 +324,11 @@ class Objectload
 								"org_name" => $user->org_name);
 
 		
-		$msg = View::factory('emails/massload_report',$email_params)->render();;
+		$msg = View::factory('emails/massload_report',$email_params)->render();
 		//Kohana::$log->add(Log::NOTICE, Debug::vars($email_params));
-		Email::send($massload_email->value, Kohana::$config->load('email.default_from'), $subj, $msg);
+		foreach ($massload_email as $email) {
+			Email::send($email->value, Kohana::$config->load('email.default_from'), $subj, $msg);
+		}
 	}
 
 	public static function getServiceFields()
