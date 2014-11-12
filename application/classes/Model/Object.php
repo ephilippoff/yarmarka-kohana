@@ -648,11 +648,13 @@ class Model_Object extends ORM {
 				$query = $query->where($filter,"IS NOT",NULL);
 			}
 
-			$count = $query->count_all();
+			
 
 			$f = $query->set('is_published', 0)
 						->set('parent_id', NULL)
 						->update_all();
+
+			$count = $query->count_all();
 		}
 
 		return $count;		
