@@ -324,7 +324,7 @@ class Objectload
 								"org_name" => $user->org_name);
 
 		
-		$msg = View::factory('emails/massload_report',$email_params);
+		$msg = View::factory('emails/massload_report',$email_params)->render();;
 		//Kohana::$log->add(Log::NOTICE, Debug::vars($email_params));
 		Email::send($massload_email->value, Kohana::$config->load('email.default_from'), $subj, $msg);
 	}
