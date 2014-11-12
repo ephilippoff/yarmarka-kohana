@@ -234,7 +234,7 @@ class Model_Objectload extends ORM {
 
 	}
 
-	public function get_categories_flatarray($objectload_id)
+	public function get_categories_flatarray($objectload_id, $flat_union = FALSE)
 	{
 		$of = DB::select("category")
 					->from('objectload_files')
@@ -255,6 +255,10 @@ class Model_Objectload extends ORM {
 
 		}
 
+		//костыль для недвижки, в которой три загрузки в одной рубрике
+		//if ($flat_union AND array_key_exists(3, $category_ids))
+		//	$category_ids[3] = array("flat_resale","flat_new","flat_rooms");
+
 		return $category_ids;
 	}
 
@@ -263,7 +267,7 @@ class Model_Objectload extends ORM {
 		if (!$this->loaded())
 			return;
 		
-		$flatcategories =  $this->get_categories_flatarray($this->id);
+		$flatcategories =  $this->get_categories_flatarray($this->id, TRUE);
 
 		if ($flatcategories)
 			foreach ($flatcategories as $category_id => $category_names) {

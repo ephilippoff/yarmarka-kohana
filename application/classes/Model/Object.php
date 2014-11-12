@@ -625,13 +625,15 @@ class Model_Object extends ORM {
 	{
 
 
-		$objects = ORM::factory('Objectload_files')
+		$objects = ORM::factory('Objectload_Files')
 				->get_union_subquery_by_category($objectload_id, $category_names);
+
+		$filters = $this->get_filter_subquery_by_category($category_names);
 
 		$count = 0;
 		if ($objects)
 		{
-			$count = ORM::factory('Object')
+			$query = ORM::factory('Object')
 					->where_open()
 					->where('number', 'NOT IN', $objects)
 						->or_where('number', 'IS', NULL)
@@ -640,25 +642,48 @@ class Model_Object extends ORM {
 					->where('category','=', $category_id)
 					->where('is_published','=', 1)
 					->where('active','=', 1)
-					->where('is_union','IS', NULL)
-					->count_all();
+					->where('is_union','IS', NULL);
 
-			$f = ORM::factory('Object')
-					->where_open()
-					->where('number', 'NOT IN', $objects)
-						->or_where('number', 'IS', NULL)
-					->where_close()
-					->where('author', '=', $user_id)
-					->where('category','=', $category_id)
-					->where('is_published','=', 1)
-					->where('active','=', 1)
-					->where('is_union','IS', NULL)
-					->set('is_published', 0)
-					->set('parent_id', NULL)
-					->update_all();
+			foreach ($filters as $filter) {
+				$query = $query->where($filter,"IS NOT",NULL);
+			}
+
+			$count = $query->count_all();
+
+			$f = $query->set('is_published', 0)
+						->set('parent_id', NULL)
+						->update_all();
 		}
 
 		return $count;		
+	}
+
+	public function get_filter_subquery_by_category($categories)
+	{
+		$filters = array();
+		foreach ($categories as $category) {
+			$config = Kohana::$config->load('massload/bycategory.'.$category);
+
+			foreach ($config["filter"] as $seo_name => $value)
+			{
+		
+				$query = DB::select(DB::expr("data_list.id"))
+							->from("data_list")
+							->join("attribute")
+								->on("attribute.id","=","data_list.attribute")
+							->where("attribute.seo_name","=", $seo_name)
+							->where("data_list.object","=",DB::expr("object.id"))
+							->limit(1);
+				if (is_array($value))		
+					$query = $query->where("data_list.value","IN", $value);
+				else 
+					$query = $query->where("data_list.value","=", $value);
+
+				$filters[] = $query;
+			}
+
+		}
+		return $filters;
 	}
 
 	public function publish_and_prolonge_objectload($objectload_id, $user_id)
