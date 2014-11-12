@@ -159,12 +159,21 @@ class Controller_Admin_Users extends Controller_Admin_Template {
 
 	public function action_objectload()
 	{
+		$limit_oloads = $limit_priceload = 5;
+		
+		$page_oloads  = $this->request->query('page_oloads');
+		$offset_oloads = ($page_oloads AND $page_oloads != 1) ? ($page_oloads-1) * $limit_oloads : 0;
+		
+		$page_priceload  = $this->request->query('page_priceload');
+		$offset_priceload = ($page_priceload AND $page_priceload != 1) ? ($page_priceload-1) * $limit_priceload : 0;		
+		
 		$crontask 			= ORM::factory('Crontask');
 
 		$this->template->states    = $crontask->get_states();
 		$this->template->crontasks = $crontask->where("state","<>",5)
 											->order_by("updated_on", "desc")
 											->order_by("created_on", "desc")
+											->limit(5)
 											->find_all();
 
 		$this->template->qstate = $qstate = $this->request->query('state');
@@ -175,18 +184,57 @@ class Controller_Admin_Users extends Controller_Admin_Template {
 		if ($qstate)
 			$oloads = $objectload->where("state","=",$qstate);
 		
-		$oloads	= $objectload->order_by("created_on", "desc")
-				->limit(50)
+		$clone_oloads = clone $objectload;
+		$total_oloads = $clone_oloads->count_all();
+		
+		$oloads	= $objectload
+				->order_by("created_on", "desc")
+				->limit($limit_oloads)
+				->offset($offset_oloads)
 				->find_all();
+		
+		
 				
 		$this->template->objectloads = $objectload->get_objectload_list($oloads);
 		$this->template->states_ol   = $objectload->get_states();
 		$this->template->categories  = Kohana::$config->load('massload/bycategory');
+		$this->template->limit_oloads = $limit_oloads;
+		$this->template->pagination_ol	= Pagination::factory(array(
+				'current_page'   => array('source' => 'query_string', 'key' => 'page_oloads'),
+				'total_items'    => $total_oloads,
+				'items_per_page' => $limit_oloads,
+				'auto_hide'      => TRUE,
+				'view'           => 'pagination/bootstrap',
+			))->route_params(array(
+				'controller' => 'users',
+				'action'     => 'objectload',
+			));			
+		
 
-		$priceloads = ORM::factory('Priceload')
-								->order_by("id","desc")
-								->limit(50)->find_all();
+		$priceloads = ORM::factory('Priceload');
+		
+		$clone_priceloads = clone $priceloads;
+		$total_priceloads = $clone_priceloads->count_all();
+		
+		$priceloads = $priceloads->order_by("id","desc")
+								->limit($limit_priceload)
+								->offset($offset_priceload)
+								->find_all();
+		
 		$this->template->priceloads = $priceloads;
+		$this->template->limit_priceload = $limit_priceload;
+		$this->template->pagination_pl	= Pagination::factory(array(
+				'current_page'   => array('source' => 'query_string', 'key' => 'page_priceload'),
+				'total_items'    => $total_priceloads,
+				'items_per_page' => $limit_priceload,
+				'auto_hide'      => TRUE,
+				'view'           => 'pagination/bootstrap',
+			))->route_params(array(
+				'controller' => 'users',
+				'action'     => 'objectload',
+			));			
+		
+		
 	}
 
 	public function action_objectload_shell()
