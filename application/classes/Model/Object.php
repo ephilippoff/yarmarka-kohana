@@ -712,7 +712,6 @@ class Model_Object extends ORM {
 				->set('is_published', 1)
 				->set('is_bad', 0)
 				->update_all();
-			Log::instance()->add(Log::INFO, Debug::vars($f));
 		}
 
 		return $count;	
