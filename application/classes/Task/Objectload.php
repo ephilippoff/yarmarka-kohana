@@ -192,7 +192,11 @@ class Task_Objectload extends Minion_Task
 
 		if (!$test)
 		{
-			Request::factory('user/send_report/'.$ol->_objectload_id)->execute();
+			try {
+				Request::factory('user/send_report/'.$ol->_objectload_id)->execute();
+			} catch (Exception $e){
+				Minion::write($prefix_log, 'Ошибка отпарвки отчета: '.$e->getMessage());
+			}
 		}
 
 		Minion::write("Success", 'End');
