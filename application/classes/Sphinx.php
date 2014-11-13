@@ -195,6 +195,8 @@ class Sphinx {
 
 	public static function getPricerowsResultDescription($result)
 	{
+		if (!array_key_exists("total", $result))
+			return "";
 
 		$founded = $result["total"];
 		$mode    = $result["mode"];
