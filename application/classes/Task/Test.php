@@ -12,8 +12,11 @@ class Task_Test extends Minion_Task
 	{
 		$number = $params["number"];
 		$code = $params["code"];
+
+		$sphinx = new Sphinx();
+		$result = $sphinx->search("автозапчасти");
 	
-		Minion_CLI::write('result: '.Text::format_contact($number, $code));
+		Minion_CLI::write('result: '.Debug::vars($result));
 
 	}
 

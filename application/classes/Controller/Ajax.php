@@ -1232,6 +1232,43 @@ class Controller_Ajax extends Controller_Template
 		$row = Model::factory('Object_Service_Ticket')->where('id' ,'=', $id)->find();
 		$this->json = array('words' => $row->words, 'date_expiration' => $row->date_expiration, 'active' => $row->active);
 	 }
+
+	 public function action_global_search(){
+
+		$text 		 = $this->request->post('text');
+		$category_id = 0;
+		$city_id 	 = 0;
+		$region_id 	 = $this->request->post('region_id');
+
+		if (!empty($text))
+		{
+			$sphinx = new Sphinx();
+			$result = $sphinx->search($text, $category_id, $city_id, FALSE, 0, 5);
+
+			$objects = Sphinx::getObjects($result);
+			$pricerows = Sphinx::getPricerows($result, $city_id);
+
+			$objects = array_slice($objects,0,6);
+	
+			$objects = ORM::factory('Object')->info_by_ids(implode(",",$objects))->find_all();
+			
+			$resobjects = array();
+			foreach ($objects as $object) {
+				$o = new Obj($object->as_array());
+				$o->category_url = "/".ORM::factory('Category',$object->category_id)->get_url($region_id, $city_id, NULL);
+				$resobjects[] = $o;
+			}
+
+			$this->json['objects'] = $resobjects;			
+			$this->json['pricerows'] = $pricerows;
+			try {
+				$this->json['objects_found'] = $result["objects"]["total_found"];
+				$this->json['pricerows_found'] = $result["pricerows"]["total_found"];
+			} catch(Exception $e){}
+			
+		}
+		
+	 }
 	 
 	  
 

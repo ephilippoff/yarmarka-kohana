@@ -716,6 +716,20 @@ class Model_Object extends ORM {
 
 		return $count;	
 	}
+
+	public function info_by_ids($ids)
+	{
+
+       return $this->select("object.id","object.title",array("category.id","category_id"),array("category.title","category_title"))
+        	->join("category")
+        		->on("category","=","category.id")
+        	->where("object.id","IN",DB::expr("(".$ids.")"))
+        	->where("active","=","1")
+        	//->where("is_published","=","1")
+        	//->where("date_expired","<=",DB::expr("NOW()"))
+        	->order_by("date_created","desc")
+        	->cached(60*60);
+	}
 }
 
 /* End of file Object.php */
