@@ -322,7 +322,7 @@ class Objectload
 							   'common_stat' => $common_stat, 
 								'category_stat' => $category_stat,
 								'org_name' => $user->org_name,
-								'logo' => URL::site('images/logo.png'));
+								'logo' => URL::site('images/logo.png','http'));
 
 		$msg = View::factory('emails/massload_report', $email_params)->render();
 		//$msg = "sdf";
