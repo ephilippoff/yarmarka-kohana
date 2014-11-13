@@ -40,7 +40,8 @@ class Controller_User extends Controller_Template {
 			->js('require.config.js')
 			->css('jquery-ui/themes/base/minified/jquery-ui.min.css')
 			->js('profile.js')
-			->js('http://yandex.st/underscore/1.5.2/underscore.js?v=1.0.101');
+//			->js('http://yandex.st/underscore/1.5.2/underscore.js?v=1.0.101')
+				;
 			//->js('maps.js');
 
 		$this->template->region_id	= $region_id = $this->user->user_city->loaded() 
@@ -165,7 +166,7 @@ class Controller_User extends Controller_Template {
     public function action_objectload()
     {
     	$this->layout = 'users';    	
-    	$this->assets->js('http://yandex.st/underscore/1.6.0/underscore-min.js');
+//    	$this->assets->js('http://yandex.st/underscore/1.6.0/underscore-min.js');
     	$this->assets->js('http://yandex.st/backbone/1.1.2/backbone-min.js');  	
     	$this->assets->js('ajaxupload.js');
 
@@ -282,7 +283,7 @@ class Controller_User extends Controller_Template {
 	public function action_priceload()
 	{
 		$this->layout = 'users';    	
-    	$this->assets->js('http://yandex.st/underscore/1.6.0/underscore-min.js');
+//    	$this->assets->js('http://yandex.st/underscore/1.6.0/underscore-min.js');
     	$this->assets->js('http://yandex.st/backbone/1.1.2/backbone-min.js');  	
     	$this->assets->js('ajaxupload.js');
 
@@ -434,7 +435,7 @@ class Controller_User extends Controller_Template {
     public function action_massload()
     {
     	$this->layout = 'users';    	
-    	$this->assets->js('http://yandex.st/underscore/1.6.0/underscore-min.js');
+//    	$this->assets->js('http://yandex.st/underscore/1.6.0/underscore-min.js');
     	$this->assets->js('http://yandex.st/backbone/1.1.2/backbone-min.js');
     	$this->assets->js('ajaxupload.js');
     	$this->assets->js('massload.js');
@@ -458,7 +459,7 @@ class Controller_User extends Controller_Template {
     public function action_massload_conformities()
     {
     	$this->layout = 'users';    	
-    	$this->assets->js('http://yandex.st/underscore/1.6.0/underscore-min.js');
+//    	$this->assets->js('http://yandex.st/underscore/1.6.0/underscore-min.js');
     	$this->assets->js('http://yandex.st/backbone/1.1.2/backbone-min.js');
     	$this->assets->js('massload_set.js');
 
