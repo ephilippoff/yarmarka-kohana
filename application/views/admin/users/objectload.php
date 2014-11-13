@@ -296,6 +296,14 @@
 		<?php endforeach; ?>
 	<?php endforeach; ?>
 </table>
+
+<?php if ($pagination_ol->total_pages > 1) : ?>
+	<div class="row">
+		<div class="span10"><?=$pagination_ol?></div>
+	</div>
+<?php endif; ?>
+
+
 <script type="text/javascript">
 	function false_moderate() {
 		console.log("sdfsd");
@@ -511,6 +519,13 @@
 		</tr>
 	<?php endforeach; ?>
 </table>
+
+<?php if ($pagination_pl->total_pages > 1) : ?>
+	<div class="row">
+		<div class="span10"><?=$pagination_pl?></div>
+	</div>
+<?php endif; ?>
+
 <div id="pricecomment_container" style="display:none;">
 <p>Причина отклонения загрузки:<br/><textarea id="pricecomment_text" style="width: 80%; height: 15em;"></textarea></p>
 <button type="button" onclick="pricestate_send(null, 3);">Отклонить прайс</button>
