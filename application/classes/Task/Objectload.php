@@ -190,11 +190,10 @@ class Task_Objectload extends Minion_Task
 		ORM::factory('Objectload', $ol->_objectload_id)
 			->update_statistic();
 
-		if (!$test)
-		{
-			$objectload = new Objectload(NULL, $ol->_objectload_id);
-			$objectload->sendReport($ol->_objectload_id);
-		}
+		//if (!$test)
+		//{
+			Request::factory('user/send_report/'.$ol->_objectload_id)->execute();
+		//}
 
 		Minion::write("Success", 'End');
 

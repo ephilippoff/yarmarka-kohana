@@ -1462,6 +1462,17 @@ class Controller_User extends Controller_Template {
 		if ($message == 'userblock')
 			$message = "Ваша учетная запись была заблокирована, по причине: ".$this->user->block_reason;		$this->template->message = $message;
 	}
+
+	public function action_send_report()
+	{
+		$this->use_layout	= FALSE;
+		$this->auto_render	= FALSE;
+		$objectload_id = (int)$this->request->param('id');
+
+		$objectload = new Objectload(NULL, $objectload_id);
+		$objectload->sendReport($objectload_id);
+
+	}
 }
 /* End of file User.php */
 /* Location: ./application/classes/Controller/User.php */

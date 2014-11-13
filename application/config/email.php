@@ -27,6 +27,6 @@ return array(
 	 */
 	'options' => array(),
 	// disabling mail sending for development may be usefull
-	'mail_sending' => Kohana::$environment == Kohana::PRODUCTION, 
+	'mail_sending' => TRUE,//Kohana::$environment == Kohana::PRODUCTION, 
 	'default_from' => array('noreply@yarmarka.biz', 'Ярмарка-Онлайн'),
 );

@@ -324,9 +324,8 @@ class Objectload
 								'org_name' => $user->org_name,
 								'logo' => URL::site('images/logo.png'));
 
-		
-		$msg = View::factory('emails/massload_report',$email_params)->render();
-
+		$msg = View::factory('emails/massload_report', $email_params)->render();
+		//$msg = "sdf";
 		
 		//Kohana::$log->add(Log::NOTICE, Debug::vars($email_params));
 		foreach ($massload_email as $email) {
