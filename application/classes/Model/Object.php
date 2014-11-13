@@ -725,8 +725,8 @@ class Model_Object extends ORM {
         		->on("category","=","category.id")
         	->where("object.id","IN",DB::expr("(".$ids.")"))
         	->where("active","=","1")
-        	//->where("is_published","=","1")
-        	//->where("date_expired","<=",DB::expr("NOW()"))
+        	->where("is_published","=","1")
+        	->where("date_expired","<=",DB::expr("NOW()"))
         	->order_by("date_created","desc")
         	->cached(60*60);
 	}
