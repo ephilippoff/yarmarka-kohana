@@ -247,6 +247,119 @@ class Controller_Admin_Phones extends Controller_Admin_Template {
 
 		$this->response->body(json_encode($json));
 	}
+
+	public function action_followme()
+	{
+		$this->template->errors = array();
+		if (HTTP_Request::POST === $this->request->method()) 
+		{
+						
+				$post = $_POST;
+				$post['contact'] = isset($post['contact']) ? $post['contact'] : 0;
+				$contact = ORM::factory('Contact')
+								->where("contact_clear","=",$post["contact"])
+								->find();
+				if (!$contact->loaded())
+				{	
+					$this->template->errors["contact"] =  "Телефон отсутствует в базе";
+				} else {
+					$cf = ORM::factory('Contact_Followme')
+							->where("contact_id","=",$contact->id)->find();
+					$cf->contact_id = $contact->id;
+					$cf->sid_id = $post["sid_id"];
+					$cf->save();	
+					$this->redirect('/khbackend/phones/followme');
+				}
+
+		}
+
+		$this->template->sids = Kohana::$config->load("followme.sids");
+		$this->template->list = ORM::factory('Contact_Followme')->find_all();
+	}
+
+	public function action_setfollowme()
+	{
+		$this->use_layout = FALSE;
+		$this->auto_render = FALSE;
+		$json = array('code' => 200);
+		
+		$id = $this->request->post("id");
+
+		$config = Kohana::$config->load("followme");
+		$config = new Obj($config);
+		
+		$sids = DB::select("sid_id")
+						->from("contact_followme")
+						->where("active","=","t")
+						->group_by("sid_id")
+						->execute()->as_array("sid_id");
+
+		$sids = array_keys($sids);
+		
+		$result = array();
+		foreach ($sids as $sid_id) {
+			$numbers = array();
+			$cf = ORM::factory('Contact_Followme')
+					->where("sid_id","=", $sid_id."")
+					->where("active","=","t")
+					->find_all();
+
+			foreach ($cf as $number){
+				$numbers[] = array(
+					"timeout" => 60,
+					"redirect_number" => "+".$number->contact->contact_clear,
+					"name" => "+".$number->contact->contact_clear,
+					"active" => "Y",
+					"period" => "always",
+					"period_description" => "Always",
+					"follow_order" => 1
+				);
+			}
+
+			$params = array(
+				$sid_id,
+				$numbers
+			);
+
+			$client = new Jsonrpc($config->url);
+			$client->debug = true;
+			$client->authentication($config->login, $config->pass);
+			$result[] = new Obj($client->execute('setFollowme', $params));
+		}
+		
+		echo Debug::vars($result);
+
+		$this->response->body(json_encode($json));
+	}
+
+	public function action_getfollowme()
+	{
+		$this->use_layout = FALSE;
+		$this->auto_render = FALSE;
+		$json = array('code' => 200);
+		
+		$id = $this->request->post("id");
+		$config = Kohana::$config->load("followme");
+		$config = new Obj($config);
+		$contact = ORM::factory('Contact_Followme',$id);
+
+		$params = array($contact->sid_id);
+
+		$client = new Jsonrpc($config->url);
+		$client->debug = true;
+		$client->authentication($config->login, $config->pass);
+		$result = new Obj($client->execute('getFollowme', $params));
+
+		echo Debug::vars($result);
+
+		$this->response->body(json_encode($json));
+
+	}
+
+	public function action_followme_statistic()
+	{
+
+	}
 }
 
 /* End of file Phones.php */

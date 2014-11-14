@@ -51,6 +51,8 @@
 								<ul class="dropdown-menu">
 									<li><a href="<?=Url::site('khbackend/phones/index')?>">List</a></li>
 									<li><a href="<?=Url::site('khbackend/phones/moderation')?>">Moderation</a></li>
+									<li><a href="<?=Url::site('khbackend/phones/followme')?>">Followme</a></li>
+									<li><a href="<?=Url::site('khbackend/phones/followme_statistic')?>">Followme - Statistic</a></li>
 								</ul>
 							</li>
 						<?php endif; ?>
