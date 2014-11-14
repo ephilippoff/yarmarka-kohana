@@ -47,6 +47,23 @@
 		</table>
 		<input type="submit" value="Сохранить настройки формы">
 	</form>
+	<script type="text/javascript">
+		function create_filters(id)
+		{
+			$.post( "/ajax/massload/priceload_create_filters", {id:id}, function( data ) {
+				console.log(data);
+			    /*if (data) 
+		        	data = $.parseJSON(data);
+			  	if (data.code == "200")
+			  		$('#pricerow'+id).remove();*/
+			});
+		}
+
+		$(document).ready(function() {
+			
+		});
+	</script>
+	<button onclick="create_filters(<?=$price_id?>)">Сформировать фильтры</button>
 <? endif; ?>
   <?=HTML::script('js/adaptive/ajaxupload.js')?>
  <script type="text/javascript">

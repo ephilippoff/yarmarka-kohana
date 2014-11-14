@@ -737,6 +737,66 @@ class Controller_Ajax_Massload extends Controller_Template {
 		$this->json['priceload_id'] = $ol->_priceload_id;
 	}
 
+	public function action_priceload_create_filters()
+	{
+		$priceload_id = $this->request->post("id");
+
+		$priceload = ORM::factory('Priceload',$priceload_id);
+
+		$config = new Obj(unserialize($priceload->config));
+
+		$fields = Priceload::getFieldsFromConfig($config, "filter");
+
+		$filters = array();
+		foreach ($fields as $field_key => $field_value) {
+			$pa = ORM::factory('Priceload_Attribute')
+					->where("priceload_id","=",$priceload_id)
+					->where("column","=", $field_key)
+					->find();
+
+			$pa->priceload_id = $priceload_id;
+			$pa->title = $field_value["title"];
+			$pa->column = $field_key;
+			$pa->save();
+
+			$_filters = DB::select($field_key, DB::expr("count(".$field_key.")"))->from("_temp_".$priceload->table_name)
+		 				->group_by($field_key)
+		 				->order_by($field_key,"asc")
+		 				->execute()->as_array($field_key);
+		 	foreach ($_filters as  $filter) {
+		 		$filter["column"] = $field_key;
+		 		$filter["title"] = $filter[$field_key];
+		 		$filter["priceload_attribute"] = $pa->id;
+		 		$filters[] = $filter;
+		 	}
+		}
+
+		foreach ($filters as $filter) {
+			if ($filter["title"] == "" OR !$filter["title"])
+				continue;
+
+			$_filtered_rows = DB::select("id")->from("_temp_".$priceload->table_name)
+							->where($filter["column"],"=",$filter["title"])							
+			 				->execute()->as_array("id");
+			$filtered_rows = serialize(array_keys($_filtered_rows));
+
+			$pf = ORM::factory('Priceload_Filter')
+					->where("priceload_id","=",$priceload_id)
+					->where("column","=",$filter["column"])
+					->where("title","=",$filter["title"])
+					->find();
+			$pf->title = $filter["title"];
+			$pf->column = $filter["column"];
+			$pf->priceload_id = $priceload_id;
+			$pf->count = $filter["count"];
+			$pf->filtered_rows = $filtered_rows;
+			$pf->priceload_attribute_id = $filter["priceload_attribute"];
+			$pf->save();
+		}		
+
+		echo Debug::vars($filtered_rows);
+
+	}
 
 	public function after()
 	{

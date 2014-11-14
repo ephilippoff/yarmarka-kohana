@@ -357,6 +357,7 @@ class Controller_User extends Controller_Template {
 
 		if ($is_post)
 		{
+			$array_post_data["columns"] = implode(",", $fields);
 			$pl->config = serialize($array_post_data);
 			$pl->description = $array_post_data["description"];
 			$pl->keywords = $array_post_data["keywords"];

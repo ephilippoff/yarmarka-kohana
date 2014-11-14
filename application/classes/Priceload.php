@@ -82,6 +82,22 @@ class Priceload
 		
 	}
 
+	public static function getFieldsFromConfig($config, $typefield = NULL)
+	{
+		if (!$config)
+			return;
+
+		$result = array();
+		$fields = explode(",", $config->columns);
+		foreach ($fields as $field) {
+			$title = $config->{$field.'_title'};
+			$type = $config->{$field.'_type'};
+			if (($type AND !$typefield) OR ($typefield AND $typefield == $type))
+				$result[$field] = array("title"=>$title,"type"=>$type);
+		}
+		return $result;
+	}
+
 	public function setState($state = 0, $comment = NULL)
 	{
 		$pl = ORM::factory('Priceload', $this->_priceload_id)
