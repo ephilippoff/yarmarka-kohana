@@ -12,7 +12,7 @@
 
 		?>
 		<div class="input-seach"><input type="text" name="k"  city="<?$city_id?>" region="<?=$region_id?>" id="search-input"  placeholder="Начните поиск. Например: Тойота Авенсис" autocomplete="off"/></div>
-		<div class="search-popup"></div>
+		<div class="search-popup fn-search-popup"></div>
 	</div>
 </div>
 <!--/noindex-->
@@ -48,7 +48,7 @@
 		  		}
 		  		
 		  		var tmpl =  _.template($("#template-search-popup").html(), params);
-		  		$(".search-popup").html(tmpl);
+		  		$(".search-popup").html(tmpl).show();
 
 		  		$( ".result-line" ).mouseout(function(e) {
 				  $(this).removeClass("mark");

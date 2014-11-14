@@ -287,7 +287,7 @@ class Controller_Block extends Controller_Template
 
 	public function action_plan_info()
 	{
-		$this->assets->js('http://yandex.st/underscore/1.6.0/underscore-min.js');
+//		$this->assets->js('http://yandex.st/underscore/1.6.0/underscore-min.js');
 		$user = Auth::instance()->get_user();
 
 		$user_plan = ORM::factory('User_Plan')->get_plans($user->id)->find_all();

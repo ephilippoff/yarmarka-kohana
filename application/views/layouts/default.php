@@ -30,6 +30,7 @@
 	->js('jquery.treeview.js')		
 	->js('js.js')
 	->js('jquery.openxtag.min.js')
+	->js('minified/underscore-min.js')		
 	.$_assets
 ?>
 </head>
