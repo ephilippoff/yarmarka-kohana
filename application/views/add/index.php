@@ -28,7 +28,8 @@
 			</div>
 		<? endif; ?>
 
-		<form method="POST"  id="element_list">			
+		<form method="POST"  id="element_list">	
+			<?=Form::hidden('csrf', Security::token(TRUE))?>		
   			<input type="hidden" name="object_id" id="object_id" value="<?=$params->object_id?>">
   			<input type="hidden" name="session_id" value="<?=session_id()?>">
 
