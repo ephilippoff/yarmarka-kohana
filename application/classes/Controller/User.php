@@ -12,7 +12,7 @@ class Controller_User extends Controller_Template {
 		if ( ! $this->user = Auth::instance()->get_user())
 		{
 			if (!in_array(Request::current()->action(), 
-					array('userpage','login','logout','forgot_password','forgot_password_link','message')))
+					array('userpage','registration','account_verification','login','logout','forgot_password','forgot_password_link','message')))
 			{
 				$this->redirect(Url::site('user/login?return='.$this->request->uri()));
 			}
@@ -1225,6 +1225,96 @@ class Controller_User extends Controller_Template {
 		}
 
 		$this->template->error = $error;
+	}
+
+	public function action_registration()
+	{
+		$this->layout = 'auth';
+		$is_post = ($_SERVER['REQUEST_METHOD']=='POST');
+		$post_data = new Obj($this->request->post());
+		$error = new Obj();
+
+		if ($is_post)
+		{
+			if(!Security::check($post_data->csrf)){
+				$error->login = "Подпись не прошла проверку подлинности. Обновите страницу";
+			} else {
+				$validation = Validation::factory((array) $post_data)
+					->rule('login', 'not_empty', array(':value', "Email"))
+					->rule('login', 'email', array(':value', "Email"))
+					->rule('login', 'login_exist', array(':value', $post_data->login))
+					->rule('pass', 'not_empty', array(':value', "Пароль"))
+					->rule('pass2', 'not_empty', array(':value', "Пароль (повторно)"))
+					->rule('pass2', 'matches', array((array) $post_data, "pass", "pass2"))
+					->rule('type', 'not_empty', array(':value', "Статус"))
+					->rule('type', 'valid_org_type', array(':value', "Статус"));;
+
+				if ( !$validation->check())
+				{
+					$error = new Obj($validation->errors('validation/auth'));
+				} else {
+					$user = ORM::factory('User')
+								->registration($post_data->login, $post_data->pass);
+
+					if ($user)
+					{
+						$user = ORM::factory('User', $user);
+						if ($user->loaded())
+						{
+							$msg = View::factory('emails/register_success', array('activationCode' => $user->code));
+							Email::send($user->email, Kohana::$config->load('email.default_from'), 'Восстановление пароля', $msg);
+						}
+					} else {
+						$error->login = 'Непредвиденная ошибка. Обратитесь пожалуйста в техподдержку';
+					}
+
+				}
+			}
+		}
+
+		$this->template->params = $post_data;
+		$this->template->error = $error;
+		$this->template->auth = Auth::instance()->get_user();
+	}
+
+	public function action_account_verification()
+	{
+
+		$code =$this->request->param("id");
+		$user = ORM::factory('User')
+						->where("code","=",$code)
+						->where("is_blocked","=",2)->find();
+
+		if ($user->loaded())
+		{
+			$user->delete_code();
+			$contact = ORM::factory('Contact')
+							->by_contact_and_type($user->email, Model_Contact_Type::EMAIL)
+							->find();
+
+			$contact->contact = $user->email;
+			$contact->contact_type_id = Model_Contact_Type::EMAIL;
+			$contact->verified_user_id = $user->id;
+			$contact->show = 1;
+			$contact->moderate = 1;
+			$contact->save();
+
+			$user_contact = ORM::factory('User_Contact');
+			$user_contact->user_id = $user->id;
+			$user_contact->contact_id = $contact->id;
+			$user_contact->save();
+
+
+			Auth::instance()->trueforcelogin($user);
+			$this->template->message = "Добро пожаловать! Вы успешно зарегистрировались";
+			$this->template->success = TRUE;
+			$this->template->redirectTo = "http://".Kohana::$config->load("common.main_domain");
+
+		} else {
+			$this->template->success = FALSE;
+			$this->template->message = "Ссылка устарела, либо вы уже активировали эту учетную запись ранее. ";
+		}
+
 	}
 
 	public function action_login()

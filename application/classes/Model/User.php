@@ -442,6 +442,36 @@ class Model_User extends Model_Auth_User {
 
 	}
 
+	public function registration($email, $password)
+	{
+		$user = ORM::factory('User')
+							->get_user_by_email($email)
+							->find();
+		if ($user->loaded())
+			return FALSE;
+
+		$this->login = $email;
+		$this->email = $email;
+		$this->passw = $password;
+		$this->role = 2;
+		$this->code = self::generate_code($email);
+		$this->is_blocked = 2;
+		$this->ip_addr = $_SERVER["REMOTE_ADDR"];
+		$this->save();
+		return $this->id;
+
+	}
+
+	private static function generate_code($str)
+	{
+		return sha1($str.microtime());
+	}
+
+	private static function password_hash($password)
+	{
+		return sha1($password . md5($password . 'secret_salted_hash##!&&1'));
+	}
+
 }
 
 /* End of file User.php */

@@ -85,4 +85,16 @@ class Valid extends Kohana_Valid {
 		// Value cannot be NULL, FALSE, '', or an empty array
 		return ! in_array($value, array(NULL, FALSE, '', array()), TRUE);
 	}
+
+	public static function login_exist($_email)
+	{	
+		$email = strtolower(trim($_email));
+		return !ORM::factory('User')->get_user_by_email($email)->find()->loaded();
+
+	}
+
+	public static function valid_org_type($_type)
+	{
+		return ($_type == "1" OR $_type == "2");
+	}
 }
