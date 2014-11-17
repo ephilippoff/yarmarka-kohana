@@ -1233,7 +1233,7 @@ class Controller_User extends Controller_Template {
 		$is_post = ($_SERVER['REQUEST_METHOD']=='POST');
 		$post_data = new Obj($this->request->post());
 		$error = new Obj();
-
+		$success = FALSE;
 		if ($is_post)
 		{
 			if(!Security::check($post_data->csrf)){
@@ -1254,7 +1254,7 @@ class Controller_User extends Controller_Template {
 					$error = new Obj($validation->errors('validation/auth'));
 				} else {
 					$user = ORM::factory('User')
-								->registration($post_data->login, $post_data->pass);
+								->registration($post_data->login, $post_data->pass, $post_data->type);
 
 					if ($user)
 					{
@@ -1264,6 +1264,8 @@ class Controller_User extends Controller_Template {
 							$msg = View::factory('emails/register_success', array('activationCode' => $user->code));
 							Email::send($user->email, Kohana::$config->load('email.default_from'), 'Восстановление пароля', $msg);
 						}
+
+						$success = TRUE;
 					} else {
 						$error->login = 'Непредвиденная ошибка. Обратитесь пожалуйста в техподдержку';
 					}
@@ -1272,6 +1274,7 @@ class Controller_User extends Controller_Template {
 			}
 		}
 
+		$this->template->success = $success;
 		$this->template->params = $post_data;
 		$this->template->error = $error;
 		$this->template->auth = Auth::instance()->get_user();

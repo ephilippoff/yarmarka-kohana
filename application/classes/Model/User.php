@@ -442,7 +442,7 @@ class Model_User extends Model_Auth_User {
 
 	}
 
-	public function registration($email, $password)
+	public function registration($email, $password, $type = 1)
 	{
 		$user = ORM::factory('User')
 							->get_user_by_email($email)
@@ -457,6 +457,7 @@ class Model_User extends Model_Auth_User {
 		$this->code = self::generate_code($email);
 		$this->is_blocked = 2;
 		$this->ip_addr = $_SERVER["REMOTE_ADDR"];
+		$this->org_type = $type;
 		$this->save();
 		return $this->id;
 

@@ -6,6 +6,53 @@
 			</strong></span></h1>
 		</div><!--hheader-->
 
+		<?if ($auth): ?>
+			<div class="fl100  pt16 pb15">
+				<?="Вы уже зарегистрированы и авторизованы"?>
+				<div class="smallcont">
+					<div class="labelcont">
+						<label><span>Перейти к:</span></label>
+					</div>
+					<div class="fieldscont">
+						<div class="inp-cont-short">
+							<div class="inp-cont"  style="color:red;">
+								<a href="/user/profile">Личные данные</a>
+							</div>
+						</div>
+					</div>									
+				</div>
+				<div class="smallcont">
+					<div class="labelcont">
+						<label><span></span></label>
+					</div>
+					<div class="fieldscont">
+						<div class="inp-cont-short">
+							<div class="inp-cont"  style="color:red;">
+								<a href="/">Главная страница</a>
+							</div>
+						</div>
+					</div>									
+				</div>
+				<div class="smallcont">
+					<div class="labelcont">
+						<label><span></span></label>
+					</div>
+					<div class="fieldscont">
+						<div class="inp-cont-short">
+							<div class="inp-cont"  style="color:red;">
+								<a href="/add">Подать объявление</a>
+							</div>
+						</div>
+					</div>									
+				</div>			
+			</div>
+
+		<?elseif ($success): ?>
+			<div class="fl100  pt16 pb15">
+				<?="На указанный email вам отправлено письмо с интрукцией, для завершения регистрации. Выможете перейти на <a href='yarmarka.biz'>главну</a> или закрыть эту страницу."?>
+			</div>
+
+		<?else: ?>
 		<form method="POST"  action="" id="element_list">			
 			<?=Form::hidden('csrf', Security::token(TRUE))?>
 			<div class="fl100  pt16 pb15">
@@ -95,19 +142,21 @@
 								
 								
 								
-								<input name="type" type="radio" id="type_company" value="1" <? if ($params->type == "1") echo "checked";?>/><label for="type_company">Компания</label></br>
-								<? if (!$error->type): ?>
-								<span class="inform">
-									<span>Для подтверждения этого статуса, требуется предоставить ИНН. Предоставляются дополнительные услуги и расширенные лимиты для подачи объявлений</span>
-								</span>
-								<? endif; ?>
+								
 
-								<input name="type" type="radio" id="type_fl" value="2" <? if ($params->type == "2") echo "checked";?>/><label for="type_fl">Частное лицо</label>
+								<input name="type" type="radio" id="type_fl" value="1" <? if ($params->type == "1") echo "checked";?>/><label for="type_fl">Частное лицо</label>
 								<? if (!$error->type): ?>
 								<span class="inform">
 									<span>В некоторые рубрики действует ограничение на количество объявлений</span>
 								</span>
 							    <? endif; ?>
+
+							    <input name="type" type="radio" id="type_company" value="2" <? if ($params->type == "2") echo "checked";?>/><label for="type_company">Компания</label></br>
+								<? if (!$error->type): ?>
+								<span class="inform">
+									<span>Для подтверждения этого статуса, требуется предоставить ИНН. Предоставляются дополнительные услуги и расширенные лимиты для подачи объявлений</span>
+								</span>
+								<? endif; ?>
 
 							    <? if ($error->type): ?>
 								<span class="inform fn-error">
@@ -146,5 +195,6 @@
 				</div><!--smallcont-->	
 			</div>
 		</form>
+		<? endif; ?>
 	</section>
 </div>
