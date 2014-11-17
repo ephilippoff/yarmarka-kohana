@@ -2,12 +2,12 @@
 	//Параметры для uri сортировок и параметры для uri фильтра
 	$params = $params_for_filter = array();
 	//Запоминаем сортировку для фильтра
-//	if (!empty($sort_by) and !empty($sort))
-//	{
-//		$params_for_filter['sort_by'] = $sort_by; 
-//		$params_for_filter['sort'] = $sort;		
-//	}
-//		
+	if (!empty($sort_by) and !empty($sort))
+	{
+		$params_for_filter['sort_by'] = $sort_by; 
+		$params_for_filter['sort'] = $sort;		
+	}
+		
 	if (!$only_active) $params_for_filter['only_active'] = '';
 	else $params['only_active'] = '';		
 ?>
@@ -86,12 +86,26 @@
 
 <table class="table table-hover table-condensed promo">
 	<tr>
-		<th>Id</th>
+		<th>
+			Id<br>
+			<?php if ($sort_by == 'id' and $sort == 'desc') : ?>
+				<a class="sort" href="/<?=Request::current()->uri().URL::query(array_merge($params, array('sort_by' => 'id', 'sort' => 'asc')), false) ?>">(по возр.)</a>
+			<?php else : ?>
+				<a class="sort" href="/<?=Request::current()->uri().URL::query(array_merge($params, array('sort_by' => 'id', 'sort' => 'desc')), false) ?>">(по убыв.)</a>
+			<?php endif;?>			
+		</th>
 		<th>Заголовок</th>
 		<th>Рубрика</th>
 		<th>Город</th>
 		<th>Дата заявки</th>
-		<th>Дата окончания</th>
+		<th>
+			Дата окончания<br>
+			<?php if ($sort_by == 'date_expiration' and $sort == 'desc') : ?>
+				<a class="sort" href="/<?=Request::current()->uri().URL::query(array_merge($params, array('sort_by' => 'date_expiration', 'sort' => 'asc')), false) ?>">(по возр.)</a>
+			<?php else : ?>
+				<a class="sort" href="/<?=Request::current()->uri().URL::query(array_merge($params, array('sort_by' => 'date_expiration', 'sort' => 'desc')), false) ?>">(по убыв.)</a>
+			<?php endif;?>				
+		</th>
 		<th>Активность</th>
 		<th>Оплата</th>
 		<th>Кол. слов</th>
