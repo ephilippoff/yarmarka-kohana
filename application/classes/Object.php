@@ -32,6 +32,11 @@ class Object
 
 	static function PlacementAds_Default($input_params)
 	{
+		if(!Security::check($input_params['csrf'])){
+			$json['error'] = array("Подпись не прошла проверку подлинности. Обновите страницу");
+			return $json;
+		}
+
 		$json = array();
 		$user = Auth::instance()->get_user();
 		
