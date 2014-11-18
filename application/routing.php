@@ -91,7 +91,7 @@ Route::set('backend', 'khbackend(/<controller>(/<action>(/<id>)))')
 		'action'     => 'index',
 	));
 
-if (array_key_exists("HTTP_FROM", $_SERVER) AND $_SERVER["HTTP_FROM"] == "ya24.biz")
+if (array_key_exists("HTTP_FROM", $_SERVER))
 {
 	if ($_SERVER['REQUEST_URI'] == "")
 	{
@@ -117,4 +117,3 @@ Route::set('default', '(<controller>(/<action>(/<id>)))')
 		'controller' => 'welcome',
 		'action'     => 'index',
 	));
-Debug::vars($_SERVER);

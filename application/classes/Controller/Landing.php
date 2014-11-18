@@ -12,13 +12,13 @@ class Controller_Landing extends Controller_Template {
 
 	function action_index()
 	{
-		$this->template->title = "Здесь будет страница ".$this->request->param("id").".ya24.biz";
+		$this->template->title = "Здесь будет страница ".$_SERVER['HTTP_FROM'].".ya24.biz";
 	}
 
 	function action_show()
 	{
 
-		$this->template->title =  "Здесь будет страница ".$this->request->param("id").".ya24.biz/show";
+		$this->template->title =  "Здесь будет страница ".$_SERVER['HTTP_FROM'].".ya24.biz/show";
 
 	}
 } // End Welcome
