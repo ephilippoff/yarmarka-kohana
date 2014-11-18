@@ -91,7 +91,7 @@ Route::set('backend', 'khbackend(/<controller>(/<action>(/<id>)))')
 		'action'     => 'index',
 	));
 
-if ($_SERVER["HTTP_FROM"] == "ya24.biz")
+if (array_key_exists("HTTP_FROM", $_SERVER) AND $_SERVER["HTTP_FROM"] == "ya24.biz")
 {
 	Route::set('landing', '(<controller>(/<id>(/<action>)))')
 	->defaults(array(
