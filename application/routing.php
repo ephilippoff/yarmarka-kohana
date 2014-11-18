@@ -93,7 +93,7 @@ Route::set('backend', 'khbackend(/<controller>(/<action>(/<id>)))')
 
 if (array_key_exists("HTTP_FROM", $_SERVER))
 {
-	if ($_SERVER['REQUEST_URI'] == "")
+	if (strpos($_SERVER['REQUEST_URI'],"landing"))
 	{
 		Route::set('landing', 'landing(/<id>(/<action>))')
 		->defaults(array(
