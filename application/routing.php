@@ -90,6 +90,12 @@ Route::set('backend', 'khbackend(/<controller>(/<action>(/<id>)))')
 		'controller' => 'Welcome',
 		'action'     => 'index',
 	));
+
+Route::set('landing', '(<controller>(/<id>(/<action>)))')
+	->defaults(array(
+		'controller' => 'landing',
+		'action'     => 'index',
+	));
 /**
  * Set the routes. Each route must have a minimum of a name, a URI and a set of
  * defaults for the URI.
