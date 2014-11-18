@@ -91,11 +91,14 @@ Route::set('backend', 'khbackend(/<controller>(/<action>(/<id>)))')
 		'action'     => 'index',
 	));
 
-Route::set('landing', '(<controller>(/<id>(/<action>)))')
+if ($_SERVER["FROM"] == "ya24.biz")
+{
+	Route::set('landing', '(<controller>(/<id>(/<action>)))')
 	->defaults(array(
 		'controller' => 'landing',
 		'action'     => 'index',
 	));
+}
 /**
  * Set the routes. Each route must have a minimum of a name, a URI and a set of
  * defaults for the URI.
@@ -105,3 +108,4 @@ Route::set('default', '(<controller>(/<action>(/<id>)))')
 		'controller' => 'welcome',
 		'action'     => 'index',
 	));
+Debug::vars($_SERVER);
