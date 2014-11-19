@@ -1407,9 +1407,19 @@ class Controller_User extends Controller_Template {
 				if (array_key_exists("INN", $data))
 				{
 					$user->org_inn = $data["INN"];
-					$user->save();
-					$this->redirect('/user/orginfo?success=1');
 				}
+				$user->org_name 		= $data["full_org_name"];
+				$user->org_post_address = $data["mail_address"];
+				$user->org_phone 		= $data["phone"];
+				$user->about = $data["commoninfo"];
+				$user->filename = ORM::factory('User_Settings')
+										->where("user_id","=",$user->id)
+										->where("name","=","orginfo-logo")
+										->find()
+										->value;				
+				$user->save();
+
+				$this->redirect('/user/orginfo?success=1');
 			}
 		}
 		else 
