@@ -4,6 +4,7 @@ class Form_Custom_Orginfo extends Form_Custom {
 
 	public $user = NULL;
 	private $prefix = "orginfo-";
+	public $_settings = NULL;
 
 	function __construct()
 	{
@@ -22,10 +23,17 @@ class Form_Custom_Orginfo extends Form_Custom {
 				foreach ($data as $key => $value) {
 					if ($value)
 					{
+						if (!array_key_exists($key, $this->_settings["fields"]))
+							continue;
+
 						$field = new Obj($this->_settings["fields"][$key]);
 						switch ($field->type) {
 							case 'photo':
-								$this->save_photo($key, $value);
+
+								if (!array_key_exists("delete_".$key, $data))
+									$this->save_photo($key, $value);
+								else 
+									$this->delete_photo($key);
 							break;
 							
 							default:
@@ -85,14 +93,26 @@ class Form_Custom_Orginfo extends Form_Custom {
 		{
 			return;
 		}
+
+		$size = $this->_settings["fields"][$name]["size"];
 		$setting = ORM::factory('User_Settings')
 						->where("user_id","=",$this->user)
 						->where("name","=",$this->prefix.$name)
 						->find();
 		$setting->user_id = $this->user->id;
 		$setting->name = $this->prefix.$name;
-		$setting->value = Uploads::get_file_path($filename, '272x203');
+		$setting->value = Uploads::get_file_path($filename, $size);
 		$setting->save();
+
+		return FALSE;
+	}
+
+	public function delete_photo($name)
+	{
+		$setting = ORM::factory('User_Settings')
+						->where("user_id","=",$this->user)
+						->where("name","=",$this->prefix.$name)
+						->delete_all();
 
 		return FALSE;
 	}

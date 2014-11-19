@@ -1371,6 +1371,66 @@ class Controller_User extends Controller_Template {
 		$errors = new Obj();
 		$form = Form_Custom::factory("Orginfo");
 
+		$inn = NULL;
+		if ($user->org_inn)
+		{
+			unset($form->_settings["fields"]["INN"]);
+			unset($form->_settings["fields"]["INN_photo"]);
+			$inn = array(
+					"inn" 	 => $user->org_inn,
+					"inn_skan" => ORM::factory('User_Settings')
+										->where("user_id","=",$user->id)
+										->where("name","=","orginfo-INN_photo")
+										->find()
+										->value,
+					"inn_moderate" => ORM::factory('User_Settings')
+										->where("user_id","=",$user->id)
+										->where("name","=","orginfo-moderate")
+										->find()
+										->value,
+					"inn_moderate_reason" => ORM::factory('User_Settings')
+										->where("user_id","=",$user->id)
+										->where("name","=","orginfo-moderate-reason")
+										->find()
+										->value,
+				);
+		} 
+
+		if ($is_post)
+		{
+			$data = $this->request->post();
+			$form->save($data);
+			if ($form->errors)
+			{
+				$errors = new Obj($form->errors);	
+			} else {
+				if (array_key_exists("INN", $data))
+				{
+					$user->org_inn = $data["INN"];
+					$user->save();
+					$this->redirect('/user/orginfo?success=1');
+				}
+			}
+		}
+		else 
+			$data = $form->get_data();		
+
+		$this->template->form = $form->prerender($data);
+		$this->template->data = new Obj($data);
+		$this->template->errors = $errors;
+		$this->template->inn = $inn;
+		$this->template->success = $this->request->query("success");
+		$this->template->org_moderate_states = Kohana::$config->load("dictionaries.org_moderate_states");
+	}
+
+	public function action_userinfo()
+	{
+		$user = Auth::instance()->get_user();
+		$is_post = ($_SERVER['REQUEST_METHOD'] == 'POST');
+		$data = NULL;
+		$errors = new Obj();
+		$form = Form_Custom::factory("Userinfo");
+
 
 		if ($is_post)
 		{
@@ -1382,6 +1442,8 @@ class Controller_User extends Controller_Template {
 		else 
 			$data = $form->get_data();		
 
+		$this->template->types = Kohana::$config->load("dictionaries.org_types");
+		$this->template->user = $user;
 		$this->template->form = $form->prerender($data);
 		$this->template->errors = $errors;
 	}

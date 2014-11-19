@@ -118,6 +118,18 @@
 				<?php else : ?>
 				<li><a href="<?=URL::site('user/profile')?>" class="clickable"><i class="ico "></i><span>Личные данные</span></a></li>
 				<?php endif; ?>
+
+				<?php if (Request::current()->action() == 'userinfo') : ?>
+				<li><i class="ico "></i><span><b>Данные пользователя</b></span></li>
+				<?php else : ?>
+				<li><a href="<?=URL::site('user/userinfo')?>" class="clickable"><i class="ico "></i><span>Данные пользователя</span></a></li>
+				<?php endif; ?>
+
+				<?php if (Request::current()->action() == 'orginfo') : ?>
+				<li><i class="ico "></i><span><b>Информация о компании</b></span></li>
+				<?php else : ?>
+				<li><a href="<?=URL::site('user/orginfo')?>" class="clickable"><i class="ico "></i><span>Информация о компании</span></a></li>
+				<?php endif; ?>
 				
 				<?php if (Request::current()->action() == 'units') : ?>
 				<li><i class="ico "></i><span><b>Адреса компании</b></span></li>
