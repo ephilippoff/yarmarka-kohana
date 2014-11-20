@@ -22,7 +22,7 @@ return array(
 					"contact" 		=> array("name"=>"contact"		  ,"translate"=>"Контактное лицо","required"=>TRUE),
 					"phone" 		=> array("name"=>"phone"		  ,"translate"=>"Телефон","required"=>TRUE,
 											 "description" => "Официальный телефон организации"),
-					"phonetech" 	=> array("name"=>"phonetech"		  ,"translate"=>"Телефон 2","required"=>TRUE,
+					"phonetech" 	=> array("name"=>"phonetech"		  ,"translate"=>"Телефон 2",
 											 "description" => "Для связи с нами по техническим и другим вопросам"),
 					"commoninfo" 	=> array(	"name"=>"commoninfo",
 												"translate"=>"О компании",

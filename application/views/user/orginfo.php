@@ -103,18 +103,20 @@
 										</div>
 									</div>									
 								</div>
-								<div class="smallcont">
-									<div class="labelcont">
-										<label><span>Состояние модерации</span></label>
-									</div>
-									<div class="fieldscont">										
-										<div class="">
-											<div class="inp-cont">
-												<?=$org_moderate_states[$inn["inn_moderate"]]?>
-									  		</div>
+								<? if (!is_null($inn["inn_moderate"])): ?>
+									<div class="smallcont">
+										<div class="labelcont">
+											<label><span>Состояние модерации</span></label>
 										</div>
-									</div>									
-								</div>
+										<div class="fieldscont">										
+											<div class="">
+												<div class="inp-cont">
+													<?=$org_moderate_states[$inn["inn_moderate"]]?>
+										  		</div>
+											</div>
+										</div>									
+									</div>
+								<? endif; ?>
 								<? if ($inn["inn_moderate_reason"]): ?>
 									<div class="smallcont">
 										<div class="labelcont">

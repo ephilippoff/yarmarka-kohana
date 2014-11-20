@@ -1407,6 +1407,15 @@ class Controller_User extends Controller_Template {
 				if (array_key_exists("INN", $data))
 				{
 					$user->org_inn = $data["INN"];
+					$moderate = ORM::factory('User_Settings')
+										->where("user_id","=",$user->id)
+										->where("name","=","orginfo-moderate")
+										->find();
+					$moderate->created_on = DB::expr("NOW()");						
+					$moderate->user_id = $user->id;				
+					$moderate->name = "orginfo-moderate";
+					$moderate->value = 0;
+					$moderate->save();
 				}
 				$user->org_name 		= $data["full_org_name"];
 				$user->org_post_address = $data["mail_address"];
