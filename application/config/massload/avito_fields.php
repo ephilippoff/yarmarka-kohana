@@ -1,5 +1,26 @@
 <?php defined('SYSPATH') OR die('No direct access allowed.');
 return array(
+	'auto'		=> array( 
+									"Id" 			=> "external_id",
+									"City" 			=> "city", 
+									"Make" 			=> "marka6",
+									"Model" 		=> "model2", 
+									"Year" 			=> "god-vypuska",
+									"Kilometrage"	=> "probeg",
+									"BodyType" 		=> "tip-kuzova",
+									"Transmission" 	=> "transmissiya",
+									"FuelType" 		=> "vid-topliva",
+									"Color" 		=> "tsvet",
+									"EngineSize" 	=> "obem-dvigatelya",
+									"DriveType" 	=> "privod",
+									"WheelType" 	=> "steering-wheel",
+									"Price" 		=> "tsena",
+									"Description" 	=> "user_text_adv",
+									"ContactPhone"  => "contact_0_value",
+									"EMail" 		=> "contact_1_value",									
+									"Images" 		=> "images",
+									"Emergency"		=> "premium"
+								),
 	'flat_resale'		=> array( 
 									"Id" 			=> "external_id",
 									"OperationType" => "tip-sdelki5", 
