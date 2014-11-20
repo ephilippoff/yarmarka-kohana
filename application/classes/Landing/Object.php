@@ -15,6 +15,7 @@ class Landing_Object extends Landing {
 
 	public function __construct(ORM $object)
 	{
+		$object->category_obj;
 		$this->_object = $object;
 		$this->init();
 
@@ -22,13 +23,15 @@ class Landing_Object extends Landing {
 	}
 
 	public function init()
-	{
+	{	
+
+		$this->favorite = Auth::instance()->get_user() ? $this->_object->get_favorite(Auth::instance()->get_user()->id) : null;	
 		$this->object = $this->_object->as_array();
 		$this->user = ORM::factory('User',$this->_object->author)->as_array();
 		$this->attributes = $this->_object->get_attributes()->as_array();
-		$this->contacts = $this->getContacts( ORM::factory('Contact')
+		$this->contacts = $this->getContacts( ORM::factory('Contact')				
 								->where_object_id($this->_object->id)
-								->order_by("id")
+								->order_by("contact.id")
 								->find_all()
 								->as_array() );
 		$this->images = $this->getImages( ORM::factory('Object_Attachment')
@@ -73,6 +76,7 @@ class Landing_Object extends Landing {
 			return $result;
 
 		foreach ($contacts as $contact) {
+			$contact->contact_type;
 			$result[] = $contact->as_array();
 		}
 		return $result;
@@ -86,14 +90,14 @@ class Landing_Object extends Landing {
 			return $result;
 		
 
-		$images = $_images;
+		$images = array_reverse($_images);
 
-		$result["logo"] = array_shift($images)->as_array();
-		$result["main"] = array_shift($images)->as_array();
+		$result["logo"] = Imageci::getSavePaths(array_shift($images)->filename);
+		$result["main"] = Imageci::getSavePaths(array_shift($images)->filename);
 
 		$result["other"] = array();
 		foreach ($images as $image) {
-			$result["other"][] = $image->as_array();
+			$result["other"][] = Imageci::getSavePaths($image->filename);
 		}
 		return $result;
 	}

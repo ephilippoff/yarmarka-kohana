@@ -175,6 +175,22 @@ class Model_Contact extends ORM {
 	{
 		return (bool) intval($this->blocked);
 	}
+	
+	public function increase_visits($object_id)
+	{
+		$object_contact = ORM::factory('Object_Contacts')
+				->where('object_id', '=', $object_id)
+				->where('contact_id', '=', $this->id)
+				->find();
+
+		if ($object_contact->loaded())
+		{
+			$object_contact->open_cnt++;
+			$object_contact->save();
+		}
+
+		
+	}
 }
 
 /* End of file Contact.php */
