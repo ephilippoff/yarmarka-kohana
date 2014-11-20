@@ -23,12 +23,12 @@ return array(
 						'steering-wheel' => array('name' => 'steering-wheel', 'required' => TRUE, 'type' => 'dict', 	'translate' => 'Руль', 'maxlength' => 30),
 						'transmissiya' 	=> array('name' => 'transmissiya', 'required' => TRUE, 'type' => 'dict', 	'translate' => 'Трансмиссия', 'maxlength' => 30),
 						'vid-topliva' 	=> array('name' => 'vid-topliva', 'required' => TRUE, 'type' => 'dict', 	'translate' => 'Вид топлива', 'maxlength' => 30),
-						'tsvet' 		=> array('name' => 'tsvet', 'required' => TRUE, 'type' => 'text', 	'translate' => 'Цвет', 'maxlength' => 30),
-						
+						'tsvet' 		=> array('name' => 'tsvet', 'required' => TRUE, 'type' => 'text', 	'translate' => 'Цвет', 'maxlength' => 30),						
 						'tsena' 		=> array('name' => 'tsena',		'required' => TRUE, 'type' => 'integer', 	'translate' => 'Цена', 'maxlength' => 9),
 						'user_text_adv' => array('name' => 'user_text_adv','required' => TRUE,'type' => 'textadv', 'translate' => 'Текст объявления', 'maxlength' => 15000),
 						'contact_0_value'=> array('name' => 'contact_0_value',	'required' => TRUE, 'type' => 'contact','translate' => 'Телефон №1', 'maxlength' => 40),
 						'contact_1_value'=> array('name' => 'contact_1_value',	'required' => FALSE, 'type' => 'contact','translate' => 'Телефон №2', 'maxlength' => 40),
+						'contact'		=> array('name' => 'contact',	'required' => TRUE, 'type' => 'contact_name', 	'translate' => 'ФИО', 'maxlength' => 50),
 						'images' 		=> array('name' => 'images',		'required' => FALSE,'type' => 'photo', 		'translate' => 'Фото', 'maxlength' => 0)
 					)
 	),
