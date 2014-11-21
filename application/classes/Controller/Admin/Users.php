@@ -493,4 +493,23 @@ class Controller_Admin_Users extends Controller_Admin_Template {
 			}
 		}
 	}
+
+	public function action_moderation()
+	{
+		$flags_moderation_query = DB::select("user_id")
+								->from("user_settings")
+								->where("name","=","orginfo-moderate");
+		
+		$users = ORM::factory('User')
+					->select(array("user_settings.value","moderate_state"), array("user_settings.created_on","moderate_on"))
+					->join("user_settings")
+						->on("user_settings.user_id","=","user.id")						
+					->where("user.id","IN",$flags_moderation_query)
+					->where("user_settings.name","=",'orginfo-moderate')
+					->where("user_settings.value","=",'0')
+					->order_by("user_settings.created_on","desc")
+					->find_all();
+
+		$this->template->users = $users;
+	}
 } // End Admin_Users

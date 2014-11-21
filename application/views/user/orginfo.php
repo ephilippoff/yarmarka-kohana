@@ -61,8 +61,9 @@
 								</div>									
 							</div>
 						</div>
+						<hr/>
 						<? if ($success): ?>
-							<div class="fl100 pb15">
+							<div class="fl100 pb10 pt20">
 									<div class="smallcont">
 									<div class="labelcont">
 										<label><span></span></label>
@@ -76,6 +77,39 @@
 									</div>									
 								</div>
 							</div>
+						<? endif; ?>
+						<? if (!is_null($inn_moderate["inn_moderate"])): ?>
+							<div class="fl100 pb10 pt20">
+							<div class="smallcont">
+								<div class="labelcont">
+									<label><span>Состояние модерации</span></label>
+								</div>
+								<div class="fieldscont">										
+									<div class="">
+										<div class="inp-cont">
+											<?=$org_moderate_states[$inn_moderate["inn_moderate"]]?>
+								  		</div>
+									</div>
+								</div>									
+							</div>
+						
+						<? if ($inn_moderate["inn_moderate_reason"]): ?>
+							<div class="smallcont">
+								<div class="labelcont">
+									<label><span>!</span></label>
+								</div>
+								<div class="fieldscont">										
+									<div class="">
+										<div class="inp-cont">
+											<?=$inn["inn_moderate_reason"]?>
+								  		</div>
+									</div>
+								</div>									
+							</div>
+							
+							<? endif; ?>
+							</div>
+							<hr/>
 						<? endif; ?>
 						<? if ($inn["inn"]): ?>
 							<div class="fl100 pb15">
@@ -93,6 +127,18 @@
 								</div>
 								<div class="smallcont">
 									<div class="labelcont">
+										<label><span>Юридическое название</span></label>
+									</div>
+									<div class="fieldscont">										
+										<div class="">
+											<div class="inp-cont">
+												<?=$inn["org_full_name"]?>
+									  		</div>
+										</div>
+									</div>									
+								</div>
+								<div class="smallcont">
+									<div class="labelcont">
 										<label><span>Скан ИНН</span></label>
 									</div>
 									<div class="fieldscont">										
@@ -103,37 +149,13 @@
 										</div>
 									</div>									
 								</div>
-								<? if (!is_null($inn["inn_moderate"])): ?>
-									<div class="smallcont">
-										<div class="labelcont">
-											<label><span>Состояние модерации</span></label>
-										</div>
-										<div class="fieldscont">										
-											<div class="">
-												<div class="inp-cont">
-													<?=$org_moderate_states[$inn["inn_moderate"]]?>
-										  		</div>
-											</div>
-										</div>									
-									</div>
-								<? endif; ?>
-								<? if ($inn["inn_moderate_reason"]): ?>
-									<div class="smallcont">
-										<div class="labelcont">
-											<label><span>!</span></label>
-										</div>
-										<div class="fieldscont">										
-											<div class="">
-												<div class="inp-cont">
-													<?=$inn["inn_moderate_reason"]?>
-										  		</div>
-											</div>
-										</div>									
-									</div>
-								<? endif; ?>
+								
 							</div>
+							<hr>
 						<? endif; ?>
-						<div class="fl100 pb15">
+
+						
+						<div class="fl100 pb15 pt20">
 							<? foreach ($form as $field): ?>
 								<div class="smallcont">
 									<div class="labelcont">

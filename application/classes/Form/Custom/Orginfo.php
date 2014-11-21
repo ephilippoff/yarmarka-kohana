@@ -3,11 +3,12 @@
 class Form_Custom_Orginfo extends Form_Custom {
 
 	public $user = NULL;
-	private $prefix = "orginfo-";
 	public $_settings = NULL;
+	public $prefix = NULL;
 
 	function __construct()
 	{
+		$this->prefix = "orginfo-";
 		$this->_settings = Kohana::$config->load("form/custom.orginfo");
 		$this->user = Auth::instance()->get_user();
 	}

@@ -1372,29 +1372,23 @@ class Controller_User extends Controller_Template {
 		$form = Form_Custom::factory("Orginfo");
 
 		$inn = NULL;
+		$settings = new Obj(ORM::factory('User_Settings')->get_group($user->id, "orginfo"));
 		if ($user->org_inn)
 		{
 			unset($form->_settings["fields"]["INN"]);
 			unset($form->_settings["fields"]["INN_photo"]);
+			unset($form->_settings["fields"]["org_full_name"]);
 			$inn = array(
-					"inn" 	 => $user->org_inn,
-					"inn_skan" => ORM::factory('User_Settings')
-										->where("user_id","=",$user->id)
-										->where("name","=","orginfo-INN_photo")
-										->find()
-										->value,
-					"inn_moderate" => ORM::factory('User_Settings')
-										->where("user_id","=",$user->id)
-										->where("name","=","orginfo-moderate")
-										->find()
-										->value,
-					"inn_moderate_reason" => ORM::factory('User_Settings')
-										->where("user_id","=",$user->id)
-										->where("name","=","orginfo-moderate-reason")
-										->find()
-										->value,
+					"inn" 	 		=> $user->org_inn,
+					"org_full_name"	=> $user->org_full_name,
+					"inn_skan" 		=> $settings->INN_photo
 				);
 		} 
+
+		$inn_moderate = array(
+			"inn_moderate" 			=> $settings->moderate,
+			"inn_moderate_reason" 	=> $settings->{"moderate-reason"}
+		);
 
 		if ($is_post)
 		{
@@ -1407,6 +1401,8 @@ class Controller_User extends Controller_Template {
 				if (array_key_exists("INN", $data))
 				{
 					$user->org_inn = $data["INN"];
+					$user->org_inn_skan = $data["INN_photo"];
+					$user->org_full_name = $data["org_full_name"];
 					$moderate = ORM::factory('User_Settings')
 										->where("user_id","=",$user->id)
 										->where("name","=","orginfo-moderate")
@@ -1417,7 +1413,7 @@ class Controller_User extends Controller_Template {
 					$moderate->value = 0;
 					$moderate->save();
 				}
-				$user->org_name 		= $data["full_org_name"];
+				$user->org_name 		= $data["org_name"];
 				$user->org_post_address = $data["mail_address"];
 				$user->org_phone 		= $data["phone"];
 				$user->about = $data["commoninfo"];
@@ -1438,6 +1434,7 @@ class Controller_User extends Controller_Template {
 		$this->template->data = new Obj($data);
 		$this->template->errors = $errors;
 		$this->template->inn = $inn;
+		$this->template->inn_moderate = $inn_moderate;
 		$this->template->success = $this->request->query("success");
 		$this->template->org_moderate_states = Kohana::$config->load("dictionaries.org_moderate_states");
 	}
@@ -1456,7 +1453,12 @@ class Controller_User extends Controller_Template {
 			$data = $this->request->post();
 			$form->save($data);
 			if ($form->errors)
+			{
 				$errors = new Obj($form->errors);
+			} else {
+				$user->fullname = $data["contact_name"];
+				$user->save();
+			}
 		}
 		else 
 			$data = $form->get_data();		

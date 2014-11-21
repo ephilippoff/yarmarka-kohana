@@ -5,7 +5,7 @@ class Controller_Ajax_Admin extends Controller_Ajax {
 	public function action_relation_save()
 	{
 		$data = $this->request->post();
-echo Debug::vars($data);
+
 		$ar = ORM::factory('Attribute_Relation');
 		$ar->category_id 			= $data["category_id"];
 		$ar->reference_id 			= $data["reference_id"];
@@ -52,5 +52,51 @@ echo Debug::vars($data);
 		DB::delete('attribute_relation')
 			->where('id', '=', $data["id"])
 			->execute();
+	}
+
+	function action_orginfo_moderate()
+	{
+		$user_id = $this->request->post("user_id");
+		$method  = $this->request->post("method");
+		$message = $this->request->post("message");
+
+		if ($method == "ok")
+		{
+			$setting = ORM::factory('User_Settings')
+							->where("user_id","=",$user_id)
+							->where("name","=","orginfo-moderate")
+							->find();
+
+			$setting->value = 1;
+			$setting->save();
+		} elseif ($method == "cancel"){
+
+			$user = ORM::factory('User', $user_id);
+
+			$user->org_inn 		 = NULL;
+			$user->org_inn_skan  = NULL;
+			$user->org_full_name = NULL;
+			$user->save();
+
+			$setting = ORM::factory('User_Settings')
+							->where("user_id","=",$user_id)
+							->where("name","=","orginfo-moderate")
+							->find();
+			$setting->value = 2;
+			$setting->save();
+
+			if ($message)
+			{
+				$setting = ORM::factory('User_Settings')
+								->where("user_id","=",$user_id)
+								->where("name","=","orginfo-moderate-reason")
+								->find();
+
+				$setting->value = $message;
+				$setting->save();
+			}
+
+
+		}
 	}
 }

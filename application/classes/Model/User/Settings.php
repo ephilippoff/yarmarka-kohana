@@ -38,4 +38,19 @@ class Model_User_Settings extends ORM {
 					->where('name', '=', $name);			
 	}
 
+	public function get_group($user_id, $group)
+	{
+		$result = array();
+
+		$settings = $this->where("user_id","=",$user_id)
+						 ->where("name","LIKE", $group."-"."%")
+						 ->find_all();
+		foreach ($settings as $setting) {
+			$name = str_replace($group."-", "", $setting->name);
+			$result[$name] = $setting->value;
+		}
+
+		return $result;
+	}
+
 } // End User_Settings Model

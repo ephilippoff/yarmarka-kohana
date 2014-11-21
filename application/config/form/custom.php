@@ -2,8 +2,10 @@
 return array(
 	'orginfo'		=> array(
 			"fields" => array(
-					"full_org_name" => array("name"=>"full_org_name" ,"translate"=>"Полное название","type"=>"long","required"=>TRUE,
-												"description" => "Например : ООО 'Рога и копыта'"),
+					"org_name" => array("name"=>"org_name" ,"translate"=>"Название","type"=>"long","required"=>TRUE,
+												"description" => "Например : Рога и копыта"),
+					"org_full_name" => array("name"=>"org_full_name" ,"translate"=>"Юридическое название","type"=>"long","required"=>TRUE,
+												"description" => "Например : ООО 'Рога и копыта'. Как указано в свидетельстве ИНН"),
 					"INN" 			=> array("name"=>"INN"			  ,"translate"=>"ИНН","required"=>TRUE),
 					"INN_photo" 	=> array("name"=>"INN_photo"	,
 											 "translate"=>"Скан ИНН", 
