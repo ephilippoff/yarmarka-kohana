@@ -51,7 +51,7 @@
 
                         ?>
                         <td><div class="ico <?=$contact_icon_class?>" title="<?=$contact['contact_type']['name'] ?>"></div></td>
-                        <td><?=contact::hide($contact['contact_clear']) ?></td>
+                        <td><?=Contact::hide($contact['contact_clear']) ?></td>
                     </tr>
                 <?php  endforeach;?>
                 </table>
@@ -84,7 +84,7 @@
             <p class="who">
                 <?=htmlspecialchars($data->user['org_name'])?>
             </p>
-             <?php if ($data->user['author_logo']) { ?>
+             <?php if (!empty($data->user['author_logo'])) { ?>
                 <p><img class="s120x90" src="/<?=Imageci::getThumbnailPath($data->user['author_logo'], '120x90')?>"></p>
             <?php } ?>
             <?php endif; ?>
