@@ -28,6 +28,7 @@ class Controller_User extends Controller_Template {
 
 	public function action_profile()
 	{
+		$this->redirect('/user/userinfo');
 		$this->layout = 'users';
 		$this->assets->js('ajaxfileupload.js')
 			->js('jquery.maskedinput-1.2.2.js')
@@ -1466,7 +1467,11 @@ class Controller_User extends Controller_Template {
 			}
 		}
 		else 
-			$data = $form->get_data();		
+			$data = $form->get_data();	
+
+		$this->template->categories_limit = ORM::factory('Category')
+												->where("max_count_for_user",">",0)
+												->find_all();	
 
 		$this->template->types = Kohana::$config->load("dictionaries.org_types");
 		$this->template->user = $user;
@@ -1562,6 +1567,24 @@ class Controller_User extends Controller_Template {
 		$objectload = new Objectload(NULL, $objectload_id);
 		$objectload->sendReport($objectload_id);
 
+	}
+
+	public function action_reset_orgtype()
+	{
+		$user = Auth::instance()->get_user();
+
+		ORM::factory('User',$user->id)->reset_orgtype();
+
+		$this->redirect('/user/userinfo');
+	}
+
+	public function action_reset_to_company()
+	{
+		$user = Auth::instance()->get_user();
+
+		ORM::factory('User',$user->id)->reset_to_company();
+
+		$this->redirect('/user/orginfo');
 	}
 }
 /* End of file User.php */

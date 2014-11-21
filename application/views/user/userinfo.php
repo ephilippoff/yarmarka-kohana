@@ -27,6 +27,13 @@
 									</div>
 								</div>									
 							</div>
+							<script type="text/javascript">
+								function reset_orgtype(){
+									if (confirm("Вы уверены что хотите сменить тип учетной записи на 'Частное лицо?'")) {
+									  window.location ="/user/reset_orgtype";
+									}
+								}
+							</script>
 							<div class="smallcont">
 								<div class="labelcont">
 									<label><span>Тип учетной записи</span></label>
@@ -38,14 +45,14 @@
 											<? if ($user->org_type == 2): ?>
 												<span class="inform">
 													<span>Необходимо заполнить информацию о компании <a href="/user/orginfo">здесь</a></br>
-															Вы можете сбросить тип учетной записи на "Частное лицо" если перейдете по <a href="/user/reset_orgtype">ссылке</a>
+															Вы можете сбросить тип учетной записи на "Частное лицо" если перейдете по <span class="link" style="cursor:pointer;" href="/user/reset_orgtype" onclick="reset_orgtype()">ссылке</span>. Учитывайте что объявления сверх лимитов будут сняты с публикации
 													</span>
 												</span>
 											<? endif; ?>
 											<? if ($user->org_type == 1): ?>
 												<span class="inform">
-													<span>Вы можете сменить тип учетной записи на "Компания" если перейдете по <a href="/user/reset_orgtype">ссылке</a></br>
-															Для подтверждения потребуется оригинал или копия ИНН.
+													<span>Вы можете сменить тип учетной записи на "Компания" если перейдете по <a href="/user/reset_to_company">ссылке</a></br>
+															Для подтверждения потребуется загрузить скан оригинала или копии ИНН.
 													</span>
 												</span>
 											<? endif; ?>
@@ -53,6 +60,27 @@
 									</div>
 								</div>									
 							</div>
+							<? if ($user->org_type == 1): ?>
+								<div class="smallcont">
+									<div class="labelcont">
+										<label><span>Рубрики с ограничениями</span></label>
+									</div>
+									<div class="fieldscont">										
+										<div class="">
+											<div class="inp-cont">
+												<? foreach($categories_limit as $category):?>
+													<?=$category->title?> (<?=$category->max_count_for_user?>),
+												<? endforeach; ?>
+												<span class="inform">
+													<span>В эти рубрики можно подать не более указанного количества объявлений.</br>
+															Для большего количества нужно сменить тип учетной записи на "Компания". </br>
+													</span>
+												</span>
+									  		</div>
+										</div>
+									</div>									
+								</div>
+							<? endif; ?>
 						</div>
 						<div class="fl100 pb15">
 							<? foreach ($form as $field): ?>

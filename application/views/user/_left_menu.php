@@ -113,11 +113,11 @@
 		</li>
 		<li class="info-tooltip" data-controller-character="index"><a href="" id="islide_profile"><i class="ico ico-profile"></i><span>Профиль</span></a>
 			<ul>
-				<?php if (Request::current()->action() == 'profile') : ?>
+				<?php /*if (Request::current()->action() == 'profile') : ?>
 				<li><i class="ico "></i><span><b>Личные данные</b></span></li>
 				<?php else : ?>
 				<li><a href="<?=URL::site('user/profile')?>" class="clickable"><i class="ico "></i><span>Личные данные</span></a></li>
-				<?php endif; ?>
+				<?php endif;*/ ?>
 
 				<?php if (Request::current()->action() == 'userinfo') : ?>
 				<li><i class="ico "></i><span><b>Данные пользователя</b></span></li>
@@ -125,11 +125,13 @@
 				<li><a href="<?=URL::site('user/userinfo')?>" class="clickable"><i class="ico "></i><span>Данные пользователя</span></a></li>
 				<?php endif; ?>
 
-				<?php if (Request::current()->action() == 'orginfo') : ?>
-				<li><i class="ico "></i><span><b>Информация о компании</b></span></li>
-				<?php else : ?>
-				<li><a href="<?=URL::site('user/orginfo')?>" class="clickable"><i class="ico "></i><span>Информация о компании</span></a></li>
-				<?php endif; ?>
+				<? if (Auth::instance()->get_user()->org_type == 2): ?>
+					<?php if (Request::current()->action() == 'orginfo') : ?>
+					<li><i class="ico "></i><span><b>Информация о компании</b></span></li>
+					<?php else : ?>
+					<li><a href="<?=URL::site('user/orginfo')?>" class="clickable"><i class="ico "></i><span>Информация о компании</span></a></li>
+					<?php endif; ?>
+				<? endif; ?>
 				
 				<?php if (Request::current()->action() == 'units') : ?>
 				<li><i class="ico "></i><span><b>Адреса компании</b></span></li>

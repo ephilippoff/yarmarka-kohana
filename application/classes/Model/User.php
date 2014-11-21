@@ -442,6 +442,49 @@ class Model_User extends Model_Auth_User {
 
 	}
 
+
+	public function reset_orgtype()
+	{
+		if (!$this->loaded())
+			return;
+
+		$this->org_type = 1;
+		$this->save();
+
+		$categories = ORM::factory('Category')
+						->where("max_count_for_user",">",0)
+						->find_all();
+
+		foreach ($categories as $category) {
+
+			$query = DB::select("id")
+							->from("object")
+							->where("author","=",$this->id)
+							->where("active","=",1)
+							->where("category","=",$category->id)
+							->where("is_published","=",1)
+							->order_by("date_created","desc")
+							->offset($category->max_count_for_user);
+
+			ORM::factory('Object')
+					->where("id","IN",$query)
+					->set("is_published", 0)
+					->update_all();
+			
+		}
+
+	}
+
+	public function reset_to_company()
+	{
+		if (!$this->loaded())
+			return;
+
+		$this->org_type = 2;
+		$this->save();	
+
+	}
+
 }
 
 /* End of file User.php */

@@ -54,18 +54,7 @@ class Form_Custom_Orginfo extends Form_Custom {
 
 	public function get_data()
 	{
-		$data = array();
-		$settings = ORM::factory('User_Settings')
-					->where("user_id","=",$this->user)
-					->where("name","LIKE",$this->prefix."%")
-					->find_all();
-
-		foreach ($settings as $setting) {
-			@list($type, $name) = explode("-",$setting->name);
-			$data[$name] = $setting->value;
-		}
-
-		return $data;
+		return ORM::factory('User_Settings')->get_group($this->user, str_replace("-", "", $this->prefix));
 	}
 
 	public function save_param($name, $value)
