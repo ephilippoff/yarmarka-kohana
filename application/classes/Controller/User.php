@@ -1412,6 +1412,11 @@ class Controller_User extends Controller_Template {
 					$moderate->name = "orginfo-moderate";
 					$moderate->value = 0;
 					$moderate->save();
+
+					ORM::factory('User_Settings')
+							->where("user_id","=",$user->id)
+							->where("name","=","orginfo-moderate-reason")
+							->delete_all();
 				}
 				$user->org_name 		= $data["org_name"];
 				$user->org_post_address = $data["mail_address"];

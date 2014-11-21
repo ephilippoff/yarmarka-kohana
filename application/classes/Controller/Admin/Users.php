@@ -496,6 +496,8 @@ class Controller_Admin_Users extends Controller_Admin_Template {
 
 	public function action_moderation()
 	{
+		$filter = $this->request->query('filter');
+
 		$flags_moderation_query = DB::select("user_id")
 								->from("user_settings")
 								->where("name","=","orginfo-moderate");
@@ -506,10 +508,91 @@ class Controller_Admin_Users extends Controller_Admin_Template {
 						->on("user_settings.user_id","=","user.id")						
 					->where("user.id","IN",$flags_moderation_query)
 					->where("user_settings.name","=",'orginfo-moderate')
-					->where("user_settings.value","=",'0')
-					->order_by("user_settings.created_on","desc")
-					->find_all();
+					->order_by("user_settings.created_on","desc");
+		if (!$filter)
+			$users = $users->where("user_settings.value","=",'0');
 
-		$this->template->users = $users;
+		$this->template->moderate_enable = (!$filter); 
+		$this->template->users = $users->find_all();
 	}
+
+	public function action_orginfoinn_declineform()
+	{
+		$this->use_layout = FALSE;
+
+		$this->decline_orginfoinn(2);
+	}
+
+	public function action_orginfoinn_decline()
+	{
+		$this->auto_render = FALSE;
+		$json = array('code' => 400);
+
+		$user = ORM::factory('User', $this->request->param('id'));
+		if ( ! $user->loaded())
+		{
+			throw new HTTP_Exception_404;
+		}
+
+		$reason = trim($this->request->post('reason'));
+
+		if ($reason)
+		{
+
+			$user->org_inn 		 = NULL;
+			$user->org_inn_skan  = NULL;
+			$user->org_full_name = NULL;
+			$user->save();
+
+			$setting = ORM::factory('User_Settings')
+							->where("user_id","=",$user->id)
+							->where("name","=","orginfo-moderate")
+							->find();
+			$setting->value = 2;
+			$setting->save();
+
+
+			$setting = ORM::factory('User_Settings')
+							->where("user_id","=",$user->id)
+							->where("name","=","orginfo-moderate-reason")
+							->find();
+
+			$setting->user_id = $user->id;
+			$setting->name = "orginfo-moderate-reason";
+			$setting->value = $reason;
+			$setting->save();
+
+			if ($this->request->post('send_email') AND $user->loaded())
+			{
+				$msg = View::factory('emails/manage_orginfo', 
+					array(
+						'UserName' => $user->fullname ? $user->fullname : $user->login,
+						'reason' => $reason
+					)
+				)->render();
+				Email::send($user->email, Kohana::$config->load('email.default_from'), "Модератор отклонил загруженный ИНН", $msg);
+			}
+			
+			$json['code'] = 200;
+		}
+
+		$this->response->body(json_encode($json));
+	}
+
+	private function decline_orginfoinn($state)
+	{
+		$this->template = View::factory('admin/users/decline_form');
+
+		$user = ORM::factory('User', $this->request->param('id'));
+		if ( ! $user->loaded())
+		{
+			throw new HTTP_Exception_404;
+		}
+
+		$this->template->user 	= $user;
+		$this->template->reasons = Kohana::$config->load("dictionaries.org_moderate_decline");
+		$this->template->state  = $state;
+	}
+
+	
 } // End Admin_Users

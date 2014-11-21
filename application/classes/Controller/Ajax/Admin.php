@@ -69,6 +69,11 @@ class Controller_Ajax_Admin extends Controller_Ajax {
 
 			$setting->value = 1;
 			$setting->save();
+
+			ORM::factory('User_Settings')
+							->where("user_id","=",$user_id)
+							->where("name","=","orginfo-moderate-reason")
+							->delete_all();
 		} elseif ($method == "cancel"){
 
 			$user = ORM::factory('User', $user_id);
@@ -99,4 +104,6 @@ class Controller_Ajax_Admin extends Controller_Ajax {
 
 		}
 	}
+
+
 }

@@ -101,7 +101,7 @@
 								<div class="fieldscont">										
 									<div class="">
 										<div class="inp-cont">
-											<?=$inn["inn_moderate_reason"]?>
+											<?=$inn_moderate["inn_moderate_reason"]?>
 								  		</div>
 									</div>
 								</div>									
