@@ -64,7 +64,8 @@ class Controller_Ajax_Admin extends Controller_Ajax {
 		{
 			$setting = ORM::factory('User_Settings')
 							->where("user_id","=",$user_id)
-							->where("name","=","orginfo-moderate")
+							->where("type","=","orginfo")
+							->where("name","=","moderate")
 							->find();
 
 			$setting->value = 1;
@@ -72,7 +73,8 @@ class Controller_Ajax_Admin extends Controller_Ajax {
 
 			ORM::factory('User_Settings')
 							->where("user_id","=",$user_id)
-							->where("name","=","orginfo-moderate-reason")
+							->where("type","=","orginfo")
+							->where("name","=","moderate-reason")
 							->delete_all();
 		} elseif ($method == "cancel"){
 
@@ -85,7 +87,8 @@ class Controller_Ajax_Admin extends Controller_Ajax {
 
 			$setting = ORM::factory('User_Settings')
 							->where("user_id","=",$user_id)
-							->where("name","=","orginfo-moderate")
+							->where("type","=","orginfo")
+							->where("name","=","moderate")
 							->find();
 			$setting->value = 2;
 			$setting->save();
@@ -94,7 +97,8 @@ class Controller_Ajax_Admin extends Controller_Ajax {
 			{
 				$setting = ORM::factory('User_Settings')
 								->where("user_id","=",$user_id)
-								->where("name","=","orginfo-moderate-reason")
+								->where("type","=","orginfo")
+								->where("name","=","moderate-reason")
 								->find();
 
 				$setting->value = $message;

@@ -7,7 +7,7 @@ class Form_Custom_Userinfo extends Form_Custom_Orginfo {
 
 	function __construct()
 	{
-		$this->prefix = "userinfo-";
+		$this->prefix = "userinfo";
 		$this->_settings = Kohana::$config->load("form/custom.userinfo");
 		$this->user = Auth::instance()->get_user();
 	}

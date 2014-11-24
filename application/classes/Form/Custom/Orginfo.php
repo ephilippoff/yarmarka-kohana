@@ -8,7 +8,7 @@ class Form_Custom_Orginfo extends Form_Custom {
 
 	function __construct()
 	{
-		$this->prefix = "orginfo-";
+		$this->prefix = "orginfo";
 		$this->_settings = Kohana::$config->load("form/custom.orginfo");
 		$this->user = Auth::instance()->get_user();
 	}
@@ -54,7 +54,7 @@ class Form_Custom_Orginfo extends Form_Custom {
 
 	public function get_data()
 	{
-		return ORM::factory('User_Settings')->get_group($this->user, str_replace("-", "", $this->prefix));
+		return ORM::factory('User_Settings')->get_group($this->user, $this->prefix);
 	}
 
 	public function save_param($name, $value)
@@ -63,11 +63,13 @@ class Form_Custom_Orginfo extends Form_Custom {
 			return;
 
 		$setting = ORM::factory('User_Settings')
-						->where("user_id","=",$this->user)
-						->where("name","=",$this->prefix.$name)
+						->where("user_id","=", $this->user)
+						->where("type","=", $this->prefix)
+						->where("name","=", $name)
 						->find();
 		$setting->user_id = $this->user->id;
-		$setting->name = $this->prefix.$name;
+		$setting->type = $this->prefix;
+		$setting->name = $name;
 		$setting->value = $value;
 		$setting->save();
 
@@ -87,10 +89,12 @@ class Form_Custom_Orginfo extends Form_Custom {
 		$size = $this->_settings["fields"][$name]["size"];
 		$setting = ORM::factory('User_Settings')
 						->where("user_id","=",$this->user)
-						->where("name","=",$this->prefix.$name)
+						->where("type","=", $this->prefix)
+						->where("name","=",$name)
 						->find();
 		$setting->user_id = $this->user->id;
-		$setting->name = $this->prefix.$name;
+		$setting->type = $this->prefix;
+		$setting->name = $name;
 		$setting->value = Uploads::get_file_path($filename, $size);
 		$setting->save();
 
@@ -101,7 +105,8 @@ class Form_Custom_Orginfo extends Form_Custom {
 	{
 		$setting = ORM::factory('User_Settings')
 						->where("user_id","=",$this->user)
-						->where("name","=",$this->prefix.$name)
+						->where("type","=", $this->prefix)
+						->where("name","=",$name)
 						->delete_all();
 
 		return FALSE;

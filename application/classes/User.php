@@ -36,12 +36,14 @@ class User {
 	{
 		
 		$date_expired = ORM::factory('User_Settings')
-								->get_by_name($user_id, "orginfo-date-expired")
+								->get_by_name($user_id, "date-expired")
+								->where("type","=","orginfo")
 								->find();
 		if (!$date_expired->loaded())
 		{
 			$date_expired->user_id = $user_id;
-			$date_expired->name = "orginfo-date-expired";
+			$date_expired->type = "orginfo";
+			$date_expired->name = "date-expired";
 			$date = new DateTime();
 			$date->add(date_interval_create_from_date_string('14 days'));
 			$date_expired->value  = $date->format('Y-m-d H:i:s');

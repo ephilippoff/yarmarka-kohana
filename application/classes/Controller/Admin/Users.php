@@ -103,11 +103,27 @@ class Controller_Admin_Users extends Controller_Admin_Template {
 			$categories[$name] = $item["name"];
 		$this->template->categories = $categories;
 
+		$type = $this->request->query('type');
+		$filter_user_id = $this->request->query('user_id');
+		$filter_user_email = $this->request->query('user_email');
+
 		$user_settings = ORM::factory('User_Settings')
 								->order_by("user_id", "desc")
-								->order_by("name", "asc")
-								->find_all();
+								->order_by("type", "asc")
+								->order_by("name", "asc");
+
+		if ($type)
+			$user_settings = $user_settings->where("type","=",$type);
+		if ($filter_user_id)
+			$user_settings = $user_settings->where("user_id","=",$filter_user_id);
+		if ($filter_user_email)
+			$user_settings = $user_settings->join("user")
+												->on("user.id","=","user_settings.user_id")
+											->where("user.email","LIKE",'%'.$filter_user_email.'%');
+		
+		$user_settings = $user_settings->find_all();
 		$this->template->user_settings =$user_settings;
+		$this->template->user_settings_types = Kohana::$config->load('dictionaries.user_setting_types');
 
 		if (HTTP_Request::POST === $this->request->method()) 
 		{
@@ -500,14 +516,16 @@ class Controller_Admin_Users extends Controller_Admin_Template {
 
 		$flags_moderation_query = DB::select("user_id")
 								->from("user_settings")
-								->where("name","=","orginfo-moderate");
+								->where("type","=","orginfo")
+								->where("name","=","moderate");
 		
 		$users = ORM::factory('User')
 					->select(array("user_settings.value","moderate_state"), array("user_settings.created_on","moderate_on"))
 					->join("user_settings")
 						->on("user_settings.user_id","=","user.id")						
 					->where("user.id","IN",$flags_moderation_query)
-					->where("user_settings.name","=",'orginfo-moderate')
+					->where("user_settings.type","=",'orginfo')
+					->where("user_settings.name","=",'moderate')					
 					->order_by("user_settings.created_on","desc");
 		if (!$filter)
 			$users = $users->where("user_settings.value","=",'0');
@@ -546,19 +564,23 @@ class Controller_Admin_Users extends Controller_Admin_Template {
 
 			$setting = ORM::factory('User_Settings')
 							->where("user_id","=",$user->id)
-							->where("name","=","orginfo-moderate")
+							->where("name","=","moderate")
+							->where("type","=","orginfo")
 							->find();
+			$setting->type = 'orginfo';
 			$setting->value = 2;
 			$setting->save();
 
 
 			$setting = ORM::factory('User_Settings')
 							->where("user_id","=",$user->id)
-							->where("name","=","orginfo-moderate-reason")
+							->where("name","=","moderate-reason")
+							->where("type","=","orginfo")
 							->find();
 
 			$setting->user_id = $user->id;
-			$setting->name = "orginfo-moderate-reason";
+			$setting->name = "moderate-reason";
+			$setting->type = 'orginfo';
 			$setting->value = $reason;
 			$setting->save();
 

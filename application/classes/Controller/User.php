@@ -1421,17 +1421,20 @@ class Controller_User extends Controller_Template {
 					$user->org_full_name = $data["org_full_name"];
 					$moderate = ORM::factory('User_Settings')
 										->where("user_id","=",$user->id)
-										->where("name","=","orginfo-moderate")
+										->where("name","=","moderate")
+										->where("type","=","orginfo")
 										->find();
 					$moderate->created_on = DB::expr("NOW()");						
 					$moderate->user_id = $user->id;				
-					$moderate->name = "orginfo-moderate";
+					$moderate->type = "orginfo";
+					$moderate->name = "moderate";
 					$moderate->value = 0;
 					$moderate->save();
 
 					ORM::factory('User_Settings')
 							->where("user_id","=",$user->id)
-							->where("name","=","orginfo-moderate-reason")
+							->where("name","=","moderate-reason")
+							->where("type","=","orginfo")
 							->delete_all();
 				}
 				$user->org_name 		= $data["org_name"];
@@ -1440,7 +1443,8 @@ class Controller_User extends Controller_Template {
 				$user->about = $data["commoninfo"];
 				$user->filename = ORM::factory('User_Settings')
 										->where("user_id","=",$user->id)
-										->where("name","=","orginfo-logo")
+										->where("name","=","logo")
+										->where("type","=","orginfo")
 										->find()
 										->value;				
 				$user->save();
