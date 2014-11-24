@@ -276,4 +276,5 @@ class ORM extends Kohana_ORM {
 
 		return $this;
 	}
+
 }

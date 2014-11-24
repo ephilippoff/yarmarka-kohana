@@ -103,11 +103,27 @@ class Controller_Admin_Users extends Controller_Admin_Template {
 			$categories[$name] = $item["name"];
 		$this->template->categories = $categories;
 
+		$type = $this->request->query('type');
+		$filter_user_id = $this->request->query('user_id');
+		$filter_user_email = $this->request->query('user_email');
+
 		$user_settings = ORM::factory('User_Settings')
 								->order_by("user_id", "desc")
-								->order_by("name", "asc")
-								->find_all();
+								->order_by("type", "asc")
+								->order_by("name", "asc");
+
+		if ($type)
+			$user_settings = $user_settings->where("type","=",$type);
+		if ($filter_user_id)
+			$user_settings = $user_settings->where("user_id","=",$filter_user_id);
+		if ($filter_user_email)
+			$user_settings = $user_settings->join("user")
+												->on("user.id","=","user_settings.user_id")
+											->where("user.email","LIKE",'%'.$filter_user_email.'%');
+		
+		$user_settings = $user_settings->find_all();
 		$this->template->user_settings =$user_settings;
+		$this->template->user_settings_types = Kohana::$config->load('dictionaries.user_setting_types');
 
 		if (HTTP_Request::POST === $this->request->method()) 
 		{
@@ -493,4 +509,112 @@ class Controller_Admin_Users extends Controller_Admin_Template {
 			}
 		}
 	}
+
+	public function action_moderation()
+	{
+		$filter = $this->request->query('filter');
+
+		$flags_moderation_query = DB::select("user_id")
+								->from("user_settings")
+								->where("type","=","orginfo")
+								->where("name","=","moderate");
+		
+		$users = ORM::factory('User')
+					->select(array("user_settings.value","moderate_state"), array("user_settings.created_on","moderate_on"))
+					->join("user_settings")
+						->on("user_settings.user_id","=","user.id")						
+					->where("user.id","IN",$flags_moderation_query)
+					->where("user_settings.type","=",'orginfo')
+					->where("user_settings.name","=",'moderate')					
+					->order_by("user_settings.created_on","desc");
+		if (!$filter)
+			$users = $users->where("user_settings.value","=",'0');
+
+		$this->template->moderate_enable = (!$filter); 
+		$this->template->users = $users->find_all();
+	}
+
+	public function action_orginfoinn_declineform()
+	{
+		$this->use_layout = FALSE;
+
+		$this->decline_orginfoinn(2);
+	}
+
+	public function action_orginfoinn_decline()
+	{
+		$this->auto_render = FALSE;
+		$json = array('code' => 400);
+
+		$user = ORM::factory('User', $this->request->param('id'));
+		if ( ! $user->loaded())
+		{
+			throw new HTTP_Exception_404;
+		}
+
+		$reason = trim($this->request->post('reason'));
+
+		if ($reason)
+		{
+
+			$user->org_inn 		 = NULL;
+			$user->org_inn_skan  = NULL;
+			$user->org_full_name = NULL;
+			$user->save();
+
+			$setting = ORM::factory('User_Settings')
+							->where("user_id","=",$user->id)
+							->where("name","=","moderate")
+							->where("type","=","orginfo")
+							->find();
+			$setting->type = 'orginfo';
+			$setting->value = 2;
+			$setting->save();
+
+
+			$setting = ORM::factory('User_Settings')
+							->where("user_id","=",$user->id)
+							->where("name","=","moderate-reason")
+							->where("type","=","orginfo")
+							->find();
+
+			$setting->user_id = $user->id;
+			$setting->name = "moderate-reason";
+			$setting->type = 'orginfo';
+			$setting->value = $reason;
+			$setting->save();
+
+			if ($this->request->post('send_email') AND $user->loaded())
+			{
+				$msg = View::factory('emails/manage_orginfo', 
+					array(
+						'UserName' => $user->fullname ? $user->fullname : $user->login,
+						'reason' => $reason
+					)
+				)->render();
+				Email::send($user->email, Kohana::$config->load('email.default_from'), "Модератор отклонил загруженный ИНН", $msg);
+			}
+			
+			$json['code'] = 200;
+		}
+
+		$this->response->body(json_encode($json));
+	}
+
+	private function decline_orginfoinn($state)
+	{
+		$this->template = View::factory('admin/users/decline_form');
+
+		$user = ORM::factory('User', $this->request->param('id'));
+		if ( ! $user->loaded())
+		{
+			throw new HTTP_Exception_404;
+		}
+
+		$this->template->user 	= $user;
+		$this->template->reasons = Kohana::$config->load("dictionaries.org_moderate_decline");
+		$this->template->state  = $state;
+	}
+
+	
 } // End Admin_Users

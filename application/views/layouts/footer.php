@@ -8,7 +8,7 @@
 				<li><a href="http://job.yarmarka.biz/">Вакансии</a></li>
 			</ul>
 			<ul class="fr">
-				<li><a href="<?=URL::site('user/profile')?>">Личный кабинет</a></li>
+				<li><a href="<?=URL::site('user/userinfo')?>">Личный кабинет</a></li>
 				<li><a href="<?=CI::site('user/registration')?>">Регистрация</a></li>
 			</ul>
 			</div>

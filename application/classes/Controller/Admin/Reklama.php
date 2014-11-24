@@ -222,10 +222,10 @@ class Controller_Admin_Reklama extends Controller_Admin_Template {
 
 		//Возможные варианты сортировки
 		$sorting_types = array('asc', 'desc');
-		$sorting_fields   = array('date_created', 'date_expiration');
+		$sorting_fields   = array('date_expiration', 'id');
 		//Принимаем, сверяем параметры сортировки
-//		$sort	 = in_array($this->request->query('sort'), $sorting_types) ? $this->request->query('sort') : '';
-//		$sort_by = in_array($this->request->query('sort_by'), $sorting_fields) ? $this->request->query('sort_by') : '';		
+		$sort	 = in_array($this->request->query('sort'), $sorting_types) ? $this->request->query('sort') : '';
+		$sort_by = in_array($this->request->query('sort_by'), $sorting_fields) ? $this->request->query('sort_by') : '';		
 		//Фильтр показа только активных, либо всех
 		$only_active = isset($_GET['only_active']) ? 1 : 0;
 			
@@ -237,8 +237,8 @@ class Controller_Admin_Reklama extends Controller_Admin_Template {
 		$clone_to_count = clone $tickets_list;
 		$count_all = $clone_to_count->count_all();
 		
-//		if ($sort_by and $sort)
-//			$tickets_list->order_by($sort_by, $sort);		
+		if ($sort_by and $sort)
+			$tickets_list->order_by($sort_by, $sort);		
 
 		$tickets_list->order_by('id', 'DESC')->limit($limit)->offset($offset); 
 		
@@ -247,8 +247,8 @@ class Controller_Admin_Reklama extends Controller_Admin_Template {
 //		$direction	= trim($this->request->query('direction')) ? trim($this->request->query('direction')) : 'desc';		
 
 		$this->template->tickets_list = $tickets_list->find_all();
-//		$this->template->sort	  = $sort;
-//		$this->template->sort_by  = $sort_by;
+		$this->template->sort	  = $sort;
+		$this->template->sort_by  = $sort_by;
 		$this->template->only_active = $only_active;
 		
 		$this->template->limit	  = $limit;

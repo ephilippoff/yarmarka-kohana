@@ -6,7 +6,7 @@ return array(
 			'category' =>'flat_resale',
 			'fields'=>array
 					(
-						'external_id' 	=> array('name' => 'external_id','required' => TRUE, 'type' => 'external_id', 'translate' => 'ID', 'maxlength' => 30),
+						'external_id' 	=> array('name' => 'external_id','required' => TRUE, 'type' => 'external_id', 'translate' => 'ID', 'maxlength' => 50),
 						'city' 			=> array('name' => 'city',		'required' => TRUE, 'type' => 'city', 		'translate' => 'Город', 'maxlength' => 30),
 						'address'		=> array('name' => 'address',	'required' => TRUE, 'type' => 'address', 	'translate' => 'Адрес', 'maxlength' => 50),
 						'tip-sdelki5' 	=> array('name' => 'tip-sdelki5','required' => TRUE,'type' => 'dict', 		'translate' => 'Тип сделки', 'maxlength' => 30), 
@@ -36,7 +36,7 @@ return array(
 			'category' =>'flat_rooms',
 			'fields'=>array
 					(
-						'external_id' 	=> array('name' => 'external_id','required' => TRUE, 'type' => 'external_id', 'translate' => 'ID', 'maxlength' => 30),
+						'external_id' 	=> array('name' => 'external_id','required' => TRUE, 'type' => 'external_id', 'translate' => 'ID', 'maxlength' => 50),
 						'city' 			=> array('name' => 'city',		'required' => TRUE, 'type' => 'city', 		'translate' => 'Город', 'maxlength' => 30),
 						'address'		=> array('name' => 'address',	'required' => TRUE, 'type' => 'address', 	'translate' => 'Адрес', 'maxlength' => 50),
 						'tip-sdelki5' 	=> array('name' => 'tip-sdelki5','required' => TRUE,'type' => 'dict', 		'translate' => 'Тип сделки', 'maxlength' => 30), 
@@ -67,7 +67,7 @@ return array(
 			'category' =>'flat_new',
 			'fields'=>array
 					(
-						'external_id' 	=> array('name' => 'external_id','required' => TRUE, 'type' => 'external_id', 'translate' => 'ID', 'maxlength' => 30),
+						'external_id' 	=> array('name' => 'external_id','required' => TRUE, 'type' => 'external_id', 'translate' => 'ID', 'maxlength' => 50),
 						'city' 			=> array('name' => 'city',		'required' => TRUE, 'type' => 'city', 		'translate' => 'Город', 'maxlength' => 30),
 						'address'		=> array('name' => 'address',	'required' => TRUE, 'type' => 'address', 	'translate' => 'Адрес', 'maxlength' => 50),
 						'tip-sdelki5' 	=> array('name' => 'tip-sdelki5','required' => TRUE,'type' => 'dict', 		'translate' => 'Тип сделки', 'maxlength' => 30), 
@@ -98,7 +98,7 @@ return array(
 			'category' =>'flat_rent',
 			'fields'=>array
 					(
-						'external_id' 	=> array('name' => 'external_id','required' => TRUE, 'type' => 'external_id', 'translate' => 'ID', 'maxlength' => 30),
+						'external_id' 	=> array('name' => 'external_id','required' => TRUE, 'type' => 'external_id', 'translate' => 'ID', 'maxlength' => 50),
 						'city' 			=> array('name' => 'city',		'required' => TRUE, 'type' => 'city', 		'translate' => 'Город', 'maxlength' => 30),
 						'address'		=> array('name' => 'address',	'required' => TRUE, 'type' => 'address', 	'translate' => 'Адрес', 'maxlength' => 50),
 						'tip-sdelki1' 	=> array('name' => 'tip-sdelki1','required' => TRUE,'type' => 'dict', 		'translate' => 'Тип сделки', 'maxlength' => 30), 
@@ -126,7 +126,7 @@ return array(
 			'name'	=> 'Дома, дачи, коттеджи',
 			'category' =>'house',
 			'fields'=>array(
-						'external_id' 	=> array('name' => 'external_id','required' => TRUE, 'type' => 'external_id', 'translate' => 'ID', 'maxlength' => 30),
+						'external_id' 	=> array('name' => 'external_id','required' => TRUE, 'type' => 'external_id', 'translate' => 'ID', 'maxlength' => 50),
 						'city' 			=> array('name' => 'city',		'required' => TRUE, 'type' => 'city', 		'translate' => 'Город', 'maxlength' => 30),
 						'address'		=> array('name' => 'address',	'required' => FALSE, 'type' => 'address', 	'translate' => 'Адрес', 'maxlength' => 50),
 						'tip-sdelki3' 	=> array('name' => 'tip-sdelki3','required' => TRUE,'type' => 'dict', 		'translate' => 'Тип сделки', 'maxlength' => 30), 
@@ -152,7 +152,7 @@ return array(
 			'name'	=> 'Земельные участки',
 			'category' =>'land',
 			'fields'=>array(
-						'external_id' 	=> array('name' => 'external_id','required' => TRUE, 'type' => 'external_id', 'translate' => 'ID', 'maxlength' => 30),
+						'external_id' 	=> array('name' => 'external_id','required' => TRUE, 'type' => 'external_id', 'translate' => 'ID', 'maxlength' => 50),
 						'city' 			=> array('name' => 'city',		'required' => TRUE, 'type' => 'city', 		'translate' => 'Город', 'maxlength' => 30),
 						'address'		=> array('name' => 'address',	'required' => FALSE, 'type' => 'address', 	'translate' => 'Адрес', 'maxlength' => 50),
 						'tip-sdelki3' 	=> array('name' => 'tip-sdelki3','required' => TRUE,'type' => 'dict', 		'translate' => 'Тип сделки', 'maxlength' => 30), 
@@ -177,7 +177,7 @@ return array(
 			'name'	=> 'Коммерческая недвижимость',
 			'category' =>'commercial',
 			'fields'=>array(
-						'external_id' 	=> array('name' => 'external_id','required' => TRUE, 'type' => 'external_id', 'translate' => 'ID', 'maxlength' => 30),
+						'external_id' 	=> array('name' => 'external_id','required' => TRUE, 'type' => 'external_id', 'translate' => 'ID', 'maxlength' => 50),
 						'city' 			=> array('name' => 'city',		'required' => TRUE, 'type' => 'city', 		'translate' => 'Город', 'maxlength' => 30),
 						'address'		=> array('name' => 'address',	'required' => FALSE, 'type' => 'address', 	'translate' => 'Адрес', 'maxlength' => 50),
 						'tip-sdelki3' 	=> array('name' => 'tip-sdelki3','required' => TRUE,'type' => 'dict', 		'translate' => 'Тип сделки', 'maxlength' => 30), 

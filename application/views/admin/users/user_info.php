@@ -38,8 +38,16 @@
 	<?php foreach ($user->objects->order_by('date_created', 'desc')->find_all() as $object) : ?>
 	<tr>
 		<td>
+			<?
+				$style = "black";
+				if ($object->is_published == 0)
+					$style = "red";
+
+			?>
+			<div style="color:<?=$style?>">
 			<small>#<b><?=$object->id?></b> <?=date('Y-m-d H:i', strtotime($object->real_date_created))?> </small>
 			<a href="<?=CI::site('detail/'.$object->id)?>" target="_blank"><?=$object->title?></a>
+			</div>
 		</td>
 	</tr>
 	<?php endforeach; ?>

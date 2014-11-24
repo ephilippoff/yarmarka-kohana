@@ -24,10 +24,21 @@ class Controller_User extends Controller_Template {
 				$this->redirect(Url::site('user/message?message=userblock'));
 			}
 		}
+
+		$date_new_registration = Kohana::$config->load("common.date_new_registration");
+		if ($this->user->org_type == 2 AND !$this->user->org_inn
+				AND strtotime($this->user->regdate) > strtotime($date_new_registration)
+					AND in_array(Request::current()->action(), array('edit_ad','objectload','priceload')))
+				{
+					User::check_orginfo($this->user->id);
+				}
 	}
+
+
 
 	public function action_profile()
 	{
+		$this->redirect('/user/userinfo');
 		$this->layout = 'users';
 		$this->assets->js('ajaxfileupload.js')
 			->js('jquery.maskedinput-1.2.2.js')
@@ -1459,10 +1470,102 @@ class Controller_User extends Controller_Template {
 	public function action_orginfo()
 	{
 		$user = Auth::instance()->get_user();
+
+		if ($user->org_type <> 2) {
+			HTTP::redirect("/user/userinfo");
+		}
+
 		$is_post = ($_SERVER['REQUEST_METHOD'] == 'POST');
 		$data = NULL;
 		$errors = new Obj();
 		$form = Form_Custom::factory("Orginfo");
+
+		$inn = NULL;
+		$settings = new Obj(ORM::factory('User_Settings')->get_group($user->id, "orginfo"));
+		if ($user->org_inn)
+		{
+			unset($form->_settings["fields"]["INN"]);
+			unset($form->_settings["fields"]["INN_photo"]);
+			unset($form->_settings["fields"]["org_full_name"]);
+			$inn = array(
+					"inn" 	 		=> $user->org_inn,
+					"org_full_name"	=> $user->org_full_name,
+					"inn_skan" 		=> $settings->INN_photo
+				);
+		} 
+
+		$inn_moderate = array(
+			"inn_moderate" 			=> $settings->moderate,
+			"inn_moderate_reason" 	=> $settings->{"moderate-reason"}
+		);
+
+		if ($is_post)
+		{
+			$data = $this->request->post();
+			$form->save($data);
+			if ($form->errors)
+			{
+				$errors = new Obj($form->errors);	
+			} else {
+				if (array_key_exists("INN", $data))
+				{
+					$user->org_inn = $data["INN"];
+					$user->org_inn_skan = $data["INN_photo"];
+					$user->org_full_name = $data["org_full_name"];
+					$moderate = ORM::factory('User_Settings')
+										->where("user_id","=",$user->id)
+										->where("name","=","moderate")
+										->where("type","=","orginfo")
+										->find();
+					$moderate->created_on = DB::expr("NOW()");						
+					$moderate->user_id = $user->id;				
+					$moderate->type = "orginfo";
+					$moderate->name = "moderate";
+					$moderate->value = 0;
+					$moderate->save();
+
+					ORM::factory('User_Settings')
+							->where("user_id","=",$user->id)
+							->where("name","=","moderate-reason")
+							->where("type","=","orginfo")
+							->delete_all();
+				}
+				$user->org_name 		= $data["org_name"];
+				$user->org_post_address = $data["mail_address"];
+				$user->org_phone 		= $data["phone"];
+				$user->about = $data["commoninfo"];
+				$user->filename = ORM::factory('User_Settings')
+										->where("user_id","=",$user->id)
+										->where("name","=","logo")
+										->where("type","=","orginfo")
+										->find()
+										->value;				
+				$user->save();
+
+				$this->redirect('/user/orginfo?success=1');
+			}
+		}
+		else 
+			$data = $form->get_data();		
+
+		$this->template->expired = $settings->{"date-expired"};
+		$this->template->from = $this->request->query("from");
+		$this->template->form = $form->prerender($data);
+		$this->template->data = new Obj($data);
+		$this->template->errors = $errors;
+		$this->template->inn = $inn;
+		$this->template->inn_moderate = $inn_moderate;
+		$this->template->success = $this->request->query("success");
+		$this->template->org_moderate_states = Kohana::$config->load("dictionaries.org_moderate_states");
+	}
+
+	public function action_userinfo()
+	{
+		$user = Auth::instance()->get_user();
+		$is_post = ($_SERVER['REQUEST_METHOD'] == 'POST');
+		$data = NULL;
+		$errors = new Obj();
+		$form = Form_Custom::factory("Userinfo");
 
 
 		if ($is_post)
@@ -1470,11 +1573,22 @@ class Controller_User extends Controller_Template {
 			$data = $this->request->post();
 			$form->save($data);
 			if ($form->errors)
+			{
 				$errors = new Obj($form->errors);
+			} else {
+				$user->fullname = $data["contact_name"];
+				$user->save();
+			}
 		}
 		else 
-			$data = $form->get_data();		
+			$data = $form->get_data();	
 
+		$this->template->categories_limit = ORM::factory('Category')
+												->where("max_count_for_user",">",0)
+												->find_all();	
+
+		$this->template->types = Kohana::$config->load("dictionaries.org_types");
+		$this->template->user = $user;
 		$this->template->form = $form->prerender($data);
 		$this->template->errors = $errors;
 	}
@@ -1567,6 +1681,24 @@ class Controller_User extends Controller_Template {
 		$objectload = new Objectload(NULL, $objectload_id);
 		$objectload->sendReport($objectload_id);
 
+	}
+
+	public function action_reset_orgtype()
+	{
+		$user = Auth::instance()->get_user();
+
+		ORM::factory('User',$user->id)->reset_orgtype();
+
+		$this->redirect('/user/userinfo');
+	}
+
+	public function action_reset_to_company()
+	{
+		$user = Auth::instance()->get_user();
+
+		ORM::factory('User',$user->id)->reset_to_company();
+
+		$this->redirect('/user/orginfo');
 	}
 }
 /* End of file User.php */
