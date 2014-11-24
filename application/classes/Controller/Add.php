@@ -23,9 +23,6 @@ class Controller_Add extends Controller_Template {
 				User::check_orginfo($user->id);
 			}
 		}
-
-		
-
 		
 		if ($user AND !$user->is_valid_orginfo()
 					AND in_array(Request::current()->action(), array('index')))

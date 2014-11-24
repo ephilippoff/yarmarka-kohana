@@ -36,7 +36,8 @@ class User {
 	{
 		
 		$date_expired = ORM::factory('User_Settings')
-								->get_by_name($user_id, "date-expired")
+								->where("user_id","=",$user_id)
+								->where("name","=","date-expired")
 								->where("type","=","orginfo")
 								->find();
 		if (!$date_expired->loaded())
