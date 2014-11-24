@@ -1,5 +1,37 @@
 <?php defined('SYSPATH') OR die('No direct access allowed.');
 return array(
+	'auto'		=> array( 
+			'id'    => 15,
+			'name'	=> 'Легковые автомобили',
+			'category' =>'auto',
+			'filter'=>array(),
+			'autofill'=>array(
+						'rubricid' => 15, //категория легковые автомобили
+						'param_466' => 3238, //вторичное жилье
+					),
+			'fields'  =>array(
+						'external_id' 	=> array('name' => 'external_id','required' => TRUE, 'type' => 'external_id', 'translate' => 'ID', 'maxlength' => 50),
+						'city' 			=> array('name' => 'city',		'required' => TRUE, 'type' => 'city', 		'translate' => 'Город', 'maxlength' => 30),
+
+						'marka6' 		=> array('name' => 'marka6', 'required' => TRUE, 'type' => 'dict', 	'translate' => 'Марка', 'maxlength' => 30),
+						'model2' 		=> array('name' => 'model2', 'required' => TRUE, 'type' => 'dict', 	'translate' => 'Модель', 'maxlength' => 30),
+						'god-vypuska' 	=> array('name' => 'god-vypuska', 'required' => TRUE, 'type' => 'integer', 	'translate' => 'Год выпуска', 'maxlength' => 5),	
+						'probeg' 		=> array('name' => 'probeg', 'required' => TRUE, 'type' => 'integer', 	'translate' => 'Пробег', 'maxlength' => 8),	
+						'tip-kuzova' 	=> array('name' => 'tip-kuzova', 'required' => TRUE, 'type' => 'dict', 	'translate' => 'Тип кузова', 'maxlength' => 30),
+						'obem-dvigatelya' => array('name' => 'obem-dvigatelya', 'required' => TRUE, 'type' => 'integer', 	'translate' => 'Объем двигателя', 'maxlength' => 5),	
+						'privod' 		=> array('name' => 'privod', 'required' => TRUE, 'type' => 'dict', 	'translate' => 'Привод', 'maxlength' => 30),
+						'steering-wheel' => array('name' => 'steering-wheel', 'required' => TRUE, 'type' => 'dict', 	'translate' => 'Руль', 'maxlength' => 30),
+						'transmissiya' 	=> array('name' => 'transmissiya', 'required' => TRUE, 'type' => 'dict', 	'translate' => 'Трансмиссия', 'maxlength' => 30),
+						'vid-topliva' 	=> array('name' => 'vid-topliva', 'required' => TRUE, 'type' => 'dict', 	'translate' => 'Вид топлива', 'maxlength' => 30),
+						'tsvet' 		=> array('name' => 'tsvet', 'required' => TRUE, 'type' => 'text', 	'translate' => 'Цвет', 'maxlength' => 30),						
+						'tsena' 		=> array('name' => 'tsena',		'required' => TRUE, 'type' => 'integer', 	'translate' => 'Цена', 'maxlength' => 9),
+						'user_text_adv' => array('name' => 'user_text_adv','required' => TRUE,'type' => 'textadv', 'translate' => 'Текст объявления', 'maxlength' => 15000),
+						'contact_0_value'=> array('name' => 'contact_0_value',	'required' => TRUE, 'type' => 'contact','translate' => 'Телефон №1', 'maxlength' => 40),
+						'contact_1_value'=> array('name' => 'contact_1_value',	'required' => FALSE, 'type' => 'contact','translate' => 'Телефон №2', 'maxlength' => 40),
+						'contact'		=> array('name' => 'contact',	'required' => TRUE, 'type' => 'contact_name', 	'translate' => 'ФИО', 'maxlength' => 50),
+						'images' 		=> array('name' => 'images',		'required' => FALSE,'type' => 'photo', 		'translate' => 'Фото', 'maxlength' => 0)
+					)
+	),
 	'flat_resale'		=> array( 
 			'id'    => 3,
 			'name'	=> 'Продажа квартир и комнат (вторичное жилье)',

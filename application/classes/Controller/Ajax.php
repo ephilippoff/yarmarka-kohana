@@ -1270,6 +1270,53 @@ class Controller_Ajax extends Controller_Template
 		
 	 }
 	 
+	 
+	 public function action_set_obj_favorite_status()
+	 {
+	 	$obj_id = (int)($this->request->post('obj_id'));
+
+		$this->json = array();
+		
+	 	$state = Model::factory('Favourite')
+				->where('objectid', '=', $obj_id)
+				->where('userid', '=', Auth::instance()->get_user()->id)
+				->find();
+		
+		if ($state->loaded()) 
+		{
+			$state->delete();
+			$status = 'deleted';
+		}
+		else
+		{
+			$favorite = Model::factory('Favourite');
+			$favorite->userid = Auth::instance()->get_user()->id;
+			$favorite->objectid = $obj_id;	
+			$favorite->save();
+			$status = 'added';
+		}
+		
+		$this->json = array('status' => $status);
+	 }
+	 
+	public function action_object_contacts()
+	{
+	 	$obj_id = (int)($this->request->post('id'));		
+	
+		$object = ORM::factory('Object', $obj_id);
+		$contacts = $object->get_contacts();
+	
+		foreach ($contacts as $contact)
+		{	
+			$contact->increase_visits($obj_id);
+		}
+
+		$object->increase_stat_contacts_show();
+
+		$this->response->body(View::factory('detail/show_contacts_table89')->bind('contacts', $contacts));
+		 
+	}	 
+	 
 	  
 
 //	public function  action_get_hints_by_page()

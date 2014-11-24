@@ -8,7 +8,7 @@ class Controller_Landing extends Controller_Template {
 	{
 		parent::before();
 
-		//$this->layout = "landing";
+		$this->layout = "landing";
 
 		if (array_key_exists("HTTP_FROM", $_SERVER))
 			$this->domain = str_replace(".ya24.biz", "", $_SERVER["HTTP_FROM"]);
@@ -34,19 +34,20 @@ class Controller_Landing extends Controller_Template {
 
 	function action_index()
 	{
-		$this->use_layout = FALSE;
-		$this->auto_render = FALSE;
+//		$this->use_layout = FALSE;
+//		$this->auto_render = FALSE;
 
 		if ($this->object)
 		{
 			$lo = new Landing_Object($this->object);
-			echo Debug::vars($lo->object);
-			echo Debug::vars($lo->user);
-			echo Debug::vars($lo->attributes);
-			echo Debug::vars($lo->contacts);
-			echo Debug::vars($lo->images);
-			echo Debug::vars($lo->location);
-			echo Debug::vars($lo->pricerows);
+//			echo Debug::vars($lo->object);
+//			echo Debug::vars($lo->user);
+//			echo Debug::vars($lo->attributes);
+//			echo Debug::vars($lo->contacts);
+//			echo Debug::vars($lo->images);
+//			echo Debug::vars($lo->location);
+//			echo Debug::vars($lo->pricerows);
+//			echo Debug::vars($lo->favorite);
 		}
 		
 		$this->template->data = new Obj( array(
@@ -56,6 +57,7 @@ class Controller_Landing extends Controller_Template {
 				"contacts" 	=> $lo->contacts,
 				"images" 	=> $lo->images,
 				"location" 	=> $lo->location,
+				"favorite"  => $lo->favorite
 
 			));
 	}

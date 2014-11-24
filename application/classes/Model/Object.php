@@ -730,6 +730,41 @@ class Model_Object extends ORM {
         	->order_by("date_created","desc")
         	->cached(60*60);
 	}
+	
+	public function get_favorite($user_id)
+	{
+		if ( ! $this->loaded() OR !$user_id)
+		{
+			return FALSE;
+		}
+
+		$favorite = ORM::factory('Favourite')
+			->where('objectid', '=', $this->id)
+			->where('userid', '=', $user_id)				
+			->find();
+
+		return $favorite->loaded() ? 1 : 0;
+	}	
+	
+	public function increase_stat_contacts_show()
+	{
+		if ( ! $this->loaded())
+		{
+			return FALSE;
+		}	
+
+		$object_statistic = ORM::factory('Object_Statistic')
+				->where('object_id', '=', $this->id)
+				->where('date', '=', DB::expr('CURRENT_DATE'))
+				->find();
+				
+		if ($object_statistic->loaded())
+		{
+			$object_statistic->contacts_show_count++;
+			$object_statistic->save();
+		}
+		
+	}
 }
 
 /* End of file Object.php */

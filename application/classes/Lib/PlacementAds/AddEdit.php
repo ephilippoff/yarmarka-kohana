@@ -848,6 +848,8 @@ class Lib_PlacementAds_AddEdit {
 
 		if (in_array("pricelist", array_keys((array) $params)))
 		{
+			$params->pricelist = (int) $params->pricelist;
+
 			$price_enabled = FALSE;
 			$settings = Kohana::$config->load("category.".$category->id);
 			if ($settings)
@@ -857,7 +859,7 @@ class Lib_PlacementAds_AddEdit {
 					$price_enabled = TRUE;
 			}
 
-			if (!$price_enabled)
+			if (!$price_enabled AND !$params->pricelist)
 				return $this;
 
 			$op = ORM::factory('Object_Priceload');
