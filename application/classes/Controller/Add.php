@@ -26,13 +26,12 @@ class Controller_Add extends Controller_Template {
 
 		
 
-		$date_new_registration = Kohana::$config->load("common.date_new_registration");
+		
 		if ($user AND !$user->is_valid_orginfo()
-				AND strtotime($user->regdate) > strtotime($date_new_registration)
 					AND in_array(Request::current()->action(), array('index')))
-				{
-					User::check_orginfo($user->id);
-				}
+		{
+			User::check_orginfo($user->id);
+		}
 	}
 
 	public function action_index()

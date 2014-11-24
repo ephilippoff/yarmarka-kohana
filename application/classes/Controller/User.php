@@ -25,9 +25,7 @@ class Controller_User extends Controller_Template {
 			}
 		}
 
-		$date_new_registration = Kohana::$config->load("common.date_new_registration");
 		if ($this->user AND !$this->user->is_valid_orginfo()
-				AND strtotime($this->user->regdate) > strtotime($date_new_registration)
 					AND in_array(Request::current()->action(), array('edit_ad','objectload','priceload','published')))
 				{
 					User::check_orginfo($this->user->id);

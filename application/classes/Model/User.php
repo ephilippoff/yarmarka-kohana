@@ -518,10 +518,12 @@ class Model_User extends Model_Auth_User {
 
 	public function is_valid_orginfo()
 	{
+		$date_new_registration = Kohana::$config->load("common.date_new_registration");
 		return ($this->loaded() 
 					AND $this->org_type == 2 
-						AND ($this->org_inn
-							OR $this->parent_id));
+						AND strtotime($this->regdate) < strtotime($date_new_registration)
+							AND ($this->org_inn
+								OR $this->parent_id));
 	}
 
 }
