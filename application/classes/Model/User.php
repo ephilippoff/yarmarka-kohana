@@ -516,6 +516,14 @@ class Model_User extends Model_Auth_User {
 		$this->save();	
 	}
 
+	public function is_valid_orginfo()
+	{
+		return ($this->loaded() 
+					AND $this->org_type == 2 
+						AND ($this->org_inn
+							OR $this->parent_id));
+	}
+
 }
 
 /* End of file User.php */
