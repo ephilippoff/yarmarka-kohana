@@ -28,7 +28,7 @@ class Controller_User extends Controller_Template {
 		$date_new_registration = Kohana::$config->load("common.date_new_registration");
 		if (!$this->user->is_valid_orginfo()
 				AND strtotime($this->user->regdate) > strtotime($date_new_registration)
-					AND in_array(Request::current()->action(), array('edit_ad','objectload','priceload')))
+					AND in_array(Request::current()->action(), array('edit_ad','objectload','priceload','published')))
 				{
 					User::check_orginfo($this->user->id);
 				}
@@ -1661,7 +1661,13 @@ class Controller_User extends Controller_Template {
 		$this->template->errors = (array) $errors;
 		$this->template->assets = $this->assets;
 
-	
+		$expired = NULL;
+		if (!$user->is_valid_orginfo())
+		{
+			$settings = new Obj(ORM::factory('User_Settings')->get_group($user->id, "orginfo"));
+			$expired =  $settings->{"date-expired"};
+		}
+		$this->template->expired_orginfo = $expired;
 	}
 
 	public function action_message()
