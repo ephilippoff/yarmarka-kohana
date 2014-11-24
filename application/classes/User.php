@@ -32,7 +32,7 @@ class User {
 		return sha1($str.microtime());
 	}
 
-	public static function check_orginfo(User $user)
+	public static function check_orginfo(ORM $user)
 	{
 		$date_new_registration = Kohana::$config->load("common.date_new_registration");
 		if (strtotime($this->regdate) > strtotime($date_new_registration))
