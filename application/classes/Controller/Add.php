@@ -17,7 +17,7 @@ class Controller_Add extends Controller_Template {
 		}
 
 		$date_new_registration = Kohana::$config->load("common.date_new_registration");
-		if ($user->org_type == 2 AND !$user->org_inn
+		if ($this->user AND $user->org_type == 2 AND !$user->org_inn
 				AND strtotime($user->regdate) > strtotime($date_new_registration)
 					AND in_array(Request::current()->action(), array('index')))
 				{
