@@ -32,17 +32,20 @@ class User {
 		return sha1($str.microtime());
 	}
 
-	public static function check_orginfo($user_id)
+	public static function check_orginfo(User $user)
 	{
+		$date_new_registration = Kohana::$config->load("common.date_new_registration");
+		if (strtotime($this->regdate) > strtotime($date_new_registration))
+			HTTP::redirect("/user/orginfo?from=another");
 		
 		$date_expired = ORM::factory('User_Settings')
-								->where("user_id","=",$user_id)
+								->where("user_id","=",$user->id)
 								->where("name","=","date-expired")
 								->where("type","=","orginfo")
 								->find();
 		if (!$date_expired->loaded())
 		{
-			$date_expired->user_id = $user_id;
+			$date_expired->user_id = $user->id;
 			$date_expired->type = "orginfo";
 			$date_expired->name = "date-expired";
 			$date = new DateTime();

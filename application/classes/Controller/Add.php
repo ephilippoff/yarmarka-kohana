@@ -15,19 +15,11 @@ class Controller_Add extends Controller_Template {
 				$this->redirect(Url::site('user/message?message=userblock'));
 			}
 
-			$date_new_registration = Kohana::$config->load("common.date_new_registration");
-			if ($user AND $user->org_type == 2 AND !$user->org_inn
-				AND strtotime($user->regdate) > strtotime($date_new_registration)
+			if (!$user->is_valid_orginfo()
 					AND in_array(Request::current()->action(), array('index')))
 			{
-				User::check_orginfo($user->id);
+				User::check_orginfo($user);
 			}
-		}
-		
-		if ($user AND !$user->is_valid_orginfo()
-					AND in_array(Request::current()->action(), array('index')))
-		{
-			User::check_orginfo($user->id);
 		}
 	}
 

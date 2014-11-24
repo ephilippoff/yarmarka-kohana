@@ -28,7 +28,7 @@ class Controller_User extends Controller_Template {
 		if ($this->user AND !$this->user->is_valid_orginfo()
 					AND in_array(Request::current()->action(), array('edit_ad','objectload','priceload','published')))
 				{
-					User::check_orginfo($this->user->id);
+					User::check_orginfo($this->user);
 				}
 	}
 
