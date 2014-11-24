@@ -35,7 +35,7 @@ class User {
 	public static function check_orginfo(ORM $user)
 	{
 		$date_new_registration = Kohana::$config->load("common.date_new_registration");
-		if (strtotime($this->regdate) > strtotime($date_new_registration))
+		if (strtotime($user->regdate) > strtotime($date_new_registration))
 			HTTP::redirect("/user/orginfo?from=another");
 		
 		$date_expired = ORM::factory('User_Settings')
