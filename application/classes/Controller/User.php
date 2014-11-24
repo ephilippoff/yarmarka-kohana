@@ -24,7 +24,17 @@ class Controller_User extends Controller_Template {
 				$this->redirect(Url::site('user/message?message=userblock'));
 			}
 		}
+
+		$date_new_registration = Kohana::$config->load("common.date_new_registration");
+		if ($this->user->org_type == 2 AND !$this->user->org_inn
+				AND strtotime($this->user->regdate) > strtotime($date_new_registration)
+					AND in_array(Request::current()->action(), array('edit_ad','objectload','priceload')))
+				{
+					User::check_orginfo($this->user->id);
+				}
 	}
+
+
 
 	public function action_profile()
 	{
@@ -1367,6 +1377,11 @@ class Controller_User extends Controller_Template {
 	public function action_orginfo()
 	{
 		$user = Auth::instance()->get_user();
+
+		if ($user->org_type <> 2) {
+			HTTP::redirect("/user/userinfo");
+		}
+
 		$is_post = ($_SERVER['REQUEST_METHOD'] == 'POST');
 		$data = NULL;
 		$errors = new Obj();
@@ -1436,6 +1451,8 @@ class Controller_User extends Controller_Template {
 		else 
 			$data = $form->get_data();		
 
+		$this->template->expired = $settings->{"date-expired"};
+		$this->template->from = $this->request->query("from");
 		$this->template->form = $form->prerender($data);
 		$this->template->data = new Obj($data);
 		$this->template->errors = $errors;

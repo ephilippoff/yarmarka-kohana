@@ -31,6 +31,33 @@ class User {
 	{
 		return sha1($str.microtime());
 	}
+
+	public static function check_orginfo($user_id)
+	{
+		
+		$date_expired = ORM::factory('User_Settings')
+								->get_by_name($user_id, "orginfo-date-expired")
+								->find();
+		if (!$date_expired->loaded())
+		{
+			$date_expired->user_id = $user_id;
+			$date_expired->name = "orginfo-date-expired";
+			$date = new DateTime();
+			$date->add(date_interval_create_from_date_string('14 days'));
+			$date_expired->value  = $date->format('Y-m-d H:i:s');
+			$date_expired->save();
+
+		}
+		elseif ($date_expired->loaded())
+		{
+			$date = new DateTime();
+			if (strtotime($date->format('Y-m-d H:i:s')) >= strtotime($date_expired->value))
+			{
+				HTTP::redirect("/user/orginfo?from=another");
+			}
+		}
+
+	}
 }
 
 

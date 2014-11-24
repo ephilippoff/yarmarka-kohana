@@ -9,10 +9,52 @@
 				</span>
 				</header>
 				<div class="p_cont">
-
+							<script type="text/javascript">
+								function reset_orgtype(){
+									if (confirm("Вы уверены что хотите сменить тип учетной записи на 'Частное лицо?'")) {
+									  window.location ="/user/reset_orgtype";
+									}
+								}
+							</script>
 					<form method="POST" id="orginfo" enctype="multipart/form-data">
+						<? 
+							$date = new DateTime(); 
+							if (!$inn["inn"]): 
+						?>
 						<div class="fl100  pt16 pb15">
+							<? if ($from OR strtotime($date->format('Y-m-d H:i:s')) >= strtotime($expired)): ?>
 							<div class="smallcont">
+								<div class="labelcont">
+									<label><span></span></label>
+								</div>
+								<div class="fieldscont">										
+									<div class="">
+										<div class="inp-cont" style=" font-size:16px;">
+											<span style="color:red;">Для продолжения работы с сайтом, пожалуйста, поделитесь с нами информацией о Вашей компании</span>.
+								  		</div>
+									</div>
+								</div>									
+							</div>
+							<? 
+								elseif (strtotime($date->format('Y-m-d H:i:s')) <= strtotime($expired)):							
+							?>
+								<div class="smallcont pb10">
+									<div class="labelcont">
+										<label><span></span></label>
+									</div>
+									<div class="fieldscont">										
+										<div class="">
+											<div class="inp-cont" style=" font-size:16px;">
+												<span style="color:red;">Для продолжения работы с сайтом, пожалуйста, поделитесь с нами информацией о Вашей компании</span>.
+												Если сейчас у Вас нет возможности заполнить форму, сделайте это в любое удобное время, но не позднее чем <?=$expired?>
+									  		</div>
+										</div>
+									</div>									
+								</div>
+							<? endif; ?>
+
+			
+							<div class="smallcont pt10">
 								<div class="labelcont">
 									<label><span>1</span></label>
 								</div>
@@ -43,7 +85,7 @@
 								<div class="fieldscont">										
 									<div class="">
 										<div class="inp-cont">
-											Вы можете не заполнять форму и сбросить тип учетной записи на "Частное лицо" если перейдете по <a href="/user/reset_orgtype">ссылке</a>. При этом будут применены ограничения на количество объявлений в некоторые рубрики (Продажа квартир и комнат, Аренда квартир и комнат, Вакансии)
+											Вы можете не заполнять форму и сбросить тип учетной записи на "Частное лицо" если перейдете по <span class="link" style="cursor:pointer;" href="/user/reset_orgtype" onclick="reset_orgtype()">ссылке</span>. При этом будут применены ограничения на количество объявлений в некоторые рубрики (Продажа квартир и комнат, Аренда квартир и комнат, Вакансии)
 								  		</div>
 									</div>
 								</div>									
@@ -62,6 +104,7 @@
 							</div>
 						</div>
 						<hr/>
+						<? endif; ?>
 						<? if ($success): ?>
 							<div class="fl100 pb10 pt20">
 									<div class="smallcont">
