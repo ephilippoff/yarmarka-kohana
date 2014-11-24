@@ -50,6 +50,8 @@ class Form_Custom  {
 			$required = $field->required;
 			if ($required)
 				$this->validation->rule( $key, 'not_empty', array(':value', $title) );
+			if ($field->type == "inn")
+				$this->validation->rule( $key, 'inn', array(':value', $title) );
 		}
 	}
 

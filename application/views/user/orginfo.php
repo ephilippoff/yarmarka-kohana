@@ -241,19 +241,19 @@
 									    			<? endif;?>
 									    		<? else: ?>
 									    			<?=$field["html"]?>
-									    		<? endif; ?>
-
-									    		<? if ($field["description"]): ?>
-									    			<span class="inform">
-														<span><?=$field["description"]?></span>
-													</span>
-												<? endif;?>
+									    		<? endif; ?> 		
 
 									    		<? if ($errors->{$field["name"]}): ?>
 													<span class="inform fn-error">
 														<span><?=$errors->{$field["name"]}?></span>
 													</span>
 												<? endif; ?>
+
+												<? if ($field["description"]): ?>
+									    			<span class="inform">
+														<span><?=$field["description"]?></span>
+													</span>
+												<? endif;?>
 
 									  		</div>
 										</div>
