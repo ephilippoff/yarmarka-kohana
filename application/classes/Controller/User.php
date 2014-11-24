@@ -1666,6 +1666,7 @@ class Controller_User extends Controller_Template {
 		{
 			$settings = new Obj(ORM::factory('User_Settings')->get_group($user->id, "orginfo"));
 			$expired =  $settings->{"date-expired"};
+			
 		}
 		$this->template->expired_orginfo = $expired;
 	}
