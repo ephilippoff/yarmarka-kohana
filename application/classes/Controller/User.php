@@ -26,7 +26,7 @@ class Controller_User extends Controller_Template {
 		}
 
 		$date_new_registration = Kohana::$config->load("common.date_new_registration");
-		if (!$this->user->is_valid_orginfo()
+		if ($this->user AND !$this->user->is_valid_orginfo()
 				AND strtotime($this->user->regdate) > strtotime($date_new_registration)
 					AND in_array(Request::current()->action(), array('edit_ad','objectload','priceload','published')))
 				{
@@ -1666,7 +1666,7 @@ class Controller_User extends Controller_Template {
 		{
 			$settings = new Obj(ORM::factory('User_Settings')->get_group($user->id, "orginfo"));
 			$expired =  $settings->{"date-expired"};
-			
+
 		}
 		$this->template->expired_orginfo = $expired;
 	}
