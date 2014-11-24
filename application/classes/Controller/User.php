@@ -1271,7 +1271,7 @@ class Controller_User extends Controller_Template {
 						if ($user->loaded())
 						{
 							$msg = View::factory('emails/register_success', array('activationCode' => $user->code));
-							Email::send($user->email, Kohana::$config->load('email.default_from'), 'Восстановление пароля', $msg);
+							Email::send($user->email, Kohana::$config->load('email.default_from'), 'Подтверждение регистрации на Ярмарке', $msg);
 						}
 
 						$success = TRUE;
