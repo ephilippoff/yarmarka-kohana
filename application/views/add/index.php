@@ -1,4 +1,5 @@
-<div class="winner">
+<div class="winner oh">	
+
 	<section class="main-cont">
 		<div class="hheader">
 			<h1 class="ta-c"><span><strong>
@@ -125,6 +126,7 @@
 									<? endif; ?>
 								</div>
 							</div><!--inp-cont-short-->
+							
 						</div><!--fieldscont-->
 					</div> <!-- smallcont -->
 			</div>
@@ -157,7 +159,8 @@
 									<? endif; ?>
 								</div> <!--inp-cont -->
 							</div> <!-- inp-cont-short -->
-
+							
+							<div class="inp-cont-short notice"><div class="cont">Внимание! В разделе "Вакансии" поднятие объявления доступно 1 раз в сутки. В остальных разделах поднятие объявления доступно 1 раз в 3 суток. УСЛУГА БЕСПЛАТНАЯ!</div></div>
 
 						</div> <!-- fieldscont -->		
 					</div>	 <!-- smallcont --> 
@@ -586,8 +589,61 @@
 			
 
 		</form>
+		
+
 
 	</section><!--main-cont add-ad-->
+	
+	
+	<aside class="rightside">
+		<noindex>
+			<div class="widget mb30 mt10">
+				<p class="title">Полезные ссылки</p>
+				<ul class="ul-menu">
+					<li><a rel="nofollow" href="/">Главная</a></li>
+					
+					<?php if (Region::get_current_city()) : ?>
+						<li><a rel="nofollow" href="http://<?=Region::get_current_domain().'/'.Region::get_current_city()->seo_name ?>">Все объявления</a></li>
+					<?php elseif (Region::get_current_region()) : ?>
+						<li><a rel="nofollow" href="http://<?=Region::get_current_domain().'/'.Region::get_current_region()->seo_name ?>">Все объявления</a></li>
+					<?php endif;?>
+						
+					<?php if (Auth::instance()->get_user()) : ?>
+						<li><a rel="nofollow" <?=URL::site('user/profile')?> >Данные пользователя</a></li>
+					<?php endif;?>
+					<li><a rel="nofollow" href="" onclick="UE.Popin.show(); return false;">Техподдержка</a></li>
+					<li><a rel="nofollow" href="/article/pravila-razmeshcheniya-obyavlenii">Правила сайта</a></li>
+					<li><a rel="nofollow" href="/article/usloviya-ispolzovaniya-saita-yarmarka">Условия использования сайта “Ярмарка”</a></li>
+
+				</ul>
+			</div>
+		</noindex>
+		
+<!--		<div class="widget mb30">
+			<p class="title ta-c s2">&laquo;Ярмарка-онлайн&raquo;</p>
+			<p class="info">Внимание! Теперь в разделе &laquo;Работа&raquo; поднятие объявлений доступно <br> <span class="red fs14">1 раз в сутки</span>,<br> во всех остальных разделах - <br><span class="red fs14">1 раз в 3 суток</span>.<br> Услуга бесплатная!</p>
+		</div>-->
+	</aside>
+	
+	<noindex>
+	<div class="tp-banner">
+		<div class="cont">
+			<p class="title">Техническая поддержка</p>
+			<ul>
+				<li><span>Не получается разместить объявление?</span></li>
+				<li><span>Нашли ошибку на сайте?</span></li>
+				<li><span>У вас есть идеи как улучшить работу сайта?</span></li>
+			</ul>
+			<p class="text-style1 mt10">Наша тех. поддержка готова помочь!</p>
+			<div class="feedback-cont">
+				<div class="feedback-block mt20 fb1"><span class="action pl20" onclick="UE.Popin.show(); return false;">Напиши нам!</span><p class="notice">(оставить заявку круглосуточно)</p></div>
+				<div class="feedback-block mt20 fb2"><span class="action" onclick="UE.Chat.open();">Он-лайн оператор</span><p class="notice">(с 9 до 18 часов)</p></div>
+			</div>
+		</div>
+	</div>	
+	</noindex>
+	
+	
 </div><!--end content winner-->
 
 <!--javascript templates-->
