@@ -609,7 +609,7 @@
 					<?php endif;?>
 						
 					<?php if (Auth::instance()->get_user()) : ?>
-						<li><a rel="nofollow" <?=URL::site('user/profile')?> >Данные пользователя</a></li>
+						<li><a rel="nofollow" href="<?=URL::site('user/profile')?>" >Данные пользователя</a></li>
 					<?php endif;?>
 					<li><a rel="nofollow" href="" onclick="UE.Popin.show(); return false;">Техподдержка</a></li>
 					<li><a rel="nofollow" href="/article/pravila-razmeshcheniya-obyavlenii">Правила сайта</a></li>
