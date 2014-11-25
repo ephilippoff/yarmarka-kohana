@@ -33,7 +33,7 @@
 						</article>
 						<?php if ($article->is_category) : ?>
 							<ul class="iPage-ul">
-								<?php foreach ($article->articles->find_all() as $article) : ?>
+								<?php foreach ($article->articles->where('is_visible', '=', 1)->find_all() as $article) : ?>
 									<li><a href="<?=URL::site(Route::get('article')->uri(array('seo_name' => $article->seo_name)))?>"><?=$article->title?></a></li>
 								<?php endforeach; ?>
 							</ul>
