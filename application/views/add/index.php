@@ -619,7 +619,7 @@
 			</div>
 			
 			<?php if (count($form_data->last_news)) : ?>
-				<div class="widget mb30">
+				<div class="widget last_news">
 					<p class="title">Новости «Ярмарки»</p>
 					<ul class="ul-menu">
 						<?php foreach ($form_data->last_news as $newsone) : ?>

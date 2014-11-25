@@ -150,7 +150,7 @@ class Model_Article extends ORM {
 	}	
 	
 	//Получить список n новостей из рубрики
-	public function get_lastnews_from_rubric($rubric_name, $limit = 20)
+	public function get_lastnews_from_rubric($rubric_name, $limit = 15)
 	{		
 		$key = 'get_lastnews_from_rubric_'.$rubric_name;
 		
