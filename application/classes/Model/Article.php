@@ -152,11 +152,7 @@ class Model_Article extends ORM {
 	//Получить список n новостей из рубрики
 	public function get_lastnews_from_rubric($rubric_name, $limit = 15)
 	{		
-		$key = 'get_lastnews_from_rubric_'.$rubric_name;
-		
-		if (!$news = Cache::instance('memcache')->get($key))
-		{
-			$news = ORM::factory('Article')
+		$news = ORM::factory('Article')
 					->where('is_category', '=', 0)
 					->where('text_type', '=', 2)
 					->where('is_visible', '=', 1)
@@ -165,10 +161,8 @@ class Model_Article extends ORM {
 					->where('end_date', '>=', DB::expr('now()'))
 					->order_by('start_date', 'desc')
 					->limit($limit)
+					->cached(300)
 					->find_all();	
-			
-			Cache::instance('memcache')->set($key, $news, 300);				
-		}
 		
 		return $news;
 	}
