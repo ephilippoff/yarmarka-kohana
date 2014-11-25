@@ -123,7 +123,7 @@ class Model_Article extends ORM {
 	}
 	
 	//Получить список рубрик новостей
-	function get_news_rubrics()
+	public function get_news_rubrics()
 	{				
 		$news_rubrics = ORM::factory('Article')
 				->where('is_category', '=', 1)
@@ -132,11 +132,11 @@ class Model_Article extends ORM {
 				->order_by('title')
 				->find_all();
 							
-		return $news_rubrics;;
+		return $news_rubrics;
 	}	
 	
 	//Получить список конечных(не имеющих дочерних групп) рубрик новостей
-	function get_final_news_rubrics()
+	public function get_final_news_rubrics()
 	{				
 		$news_rubrics = ORM::factory('Article')
 				->where('is_category', '=', 1)
@@ -146,8 +146,32 @@ class Model_Article extends ORM {
 				->order_by('title')
 				->find_all();
 							
-		return $news_rubrics;;
-	}		
+		return $news_rubrics;
+	}	
+	
+	//Получить список n новостей из рубрики
+	public function get_lastnews_from_rubric($rubric_name, $limit = 20)
+	{		
+		$key = 'get_lastnews_from_rubric_'.$rubric_name;
+		
+		if (!$news = Cache::instance('memcache')->get($key))
+		{
+			$news = ORM::factory('Article')
+					->where('is_category', '=', 0)
+					->where('text_type', '=', 2)
+					->where('is_visible', '=', 1)
+					->where('parent_id', '=', DB::expr("(select id from articles where name = '{$rubric_name}')"))
+					->where('start_date', '<=', DB::expr('now()'))
+					->where('end_date', '>=', DB::expr('now()'))
+					->order_by('start_date', 'desc')
+					->limit($limit)
+					->find_all();	
+			
+			Cache::instance('memcache')->set($key, $news, 300);				
+		}
+		
+		return $news;
+	}
 }
 
 /* End of file Article.php */

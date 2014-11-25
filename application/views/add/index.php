@@ -617,6 +617,19 @@
 
 				</ul>
 			</div>
+			
+			<?php if (count($form_data->last_news)) : ?>
+				<div class="widget mb30">
+					<p class="title">Новости «Ярмарки»</p>
+					<ul class="ul-menu">
+						<?php foreach ($form_data->last_news as $newsone) : ?>
+								<?php $query_uri = '?em_client_email=noreply@yarmarka.biz&em_campaign_id=4&em_campaign_name=newsone_'.$newsone->id ?>
+								<li><a target="_blank" rel="nofollow" href="<?=URL::site(Route::get('newsone')->uri(array('id' => $newsone->id, 'seo_name' => $newsone->seo_name))).$query_uri?>"><?=$newsone->title?></a></li>
+						<?php endforeach; ?>
+					</ul>
+				</div>			
+			<?php endif; ?>
+			
 		</noindex>
 		
 <!--		<div class="widget mb30">
