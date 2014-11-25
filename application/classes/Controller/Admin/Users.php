@@ -524,6 +524,7 @@ class Controller_Admin_Users extends Controller_Admin_Template {
 					->join("user_settings")
 						->on("user_settings.user_id","=","user.id")						
 					->where("user.id","IN",$flags_moderation_query)
+					->where("user.org_type","=",2)
 					->where("user_settings.type","=",'orginfo')
 					->where("user_settings.name","=",'moderate')					
 					->order_by("user_settings.created_on","desc");

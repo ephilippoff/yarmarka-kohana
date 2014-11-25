@@ -122,35 +122,44 @@
 							</div>
 						<? endif; ?>
 						<? if (!is_null($inn_moderate["inn_moderate"])): ?>
-							<div class="fl100 pb10 pt20">
-							<div class="smallcont">
-								<div class="labelcont">
-									<label><span>Состояние модерации</span></label>
-								</div>
-								<div class="fieldscont">										
-									<div class="">
-										<div class="inp-cont">
-											<?=$org_moderate_states[$inn_moderate["inn_moderate"]]?>
-								  		</div>
+							<? 
+								$style = ""; 
+								if ($inn_moderate["inn_moderate"] == 0)
+									$style = "background:#FFFACC"; 
+								elseif ($inn_moderate["inn_moderate"] == 1)
+									$style = "background:#8DE8AB"; 
+								elseif ($inn_moderate["inn_moderate"] == 2)
+									$style = "background:#FFA6A6";
+
+							?>
+							<div class="fl100 pb10 pt20" style="<?=$style?>">
+								<div class="smallcont">
+									<div class="labelcont">
+										<label><span>Состояние модерации</span></label>
 									</div>
-								</div>									
-							</div>
+									<div class="fieldscont">										
+										<div class="">
+											<div class="inp-cont">
+												<?=$org_moderate_states[$inn_moderate["inn_moderate"]]?>
+									  		</div>
+										</div>
+									</div>									
+								</div>
 						
-						<? if ($inn_moderate["inn_moderate_reason"]): ?>
-							<div class="smallcont">
-								<div class="labelcont">
-									<label><span>!</span></label>
-								</div>
-								<div class="fieldscont">										
-									<div class="">
-										<div class="inp-cont">
-											<?=$inn_moderate["inn_moderate_reason"]?>
-								  		</div>
-									</div>
-								</div>									
-							</div>
-							
-							<? endif; ?>
+								<? if ($inn_moderate["inn_moderate_reason"]): ?>
+									<div class="smallcont">
+										<div class="labelcont">
+											<label><span>!</span></label>
+										</div>
+										<div class="fieldscont">										
+											<div class="">
+												<div class="inp-cont">
+													<?=$inn_moderate["inn_moderate_reason"]?>
+										  		</div>
+											</div>
+										</div>									
+									</div>							
+								<? endif; ?>
 							</div>
 							<hr/>
 						<? endif; ?>
@@ -199,6 +208,22 @@
 
 						
 						<div class="fl100 pb15 pt20">
+							<script>
+								function setImage(fieldname, success, data, message)
+							 	{
+							 		if (success){
+							 			$('#'+fieldname+"_status").text(message).addClass("success");
+		            					$('#'+fieldname+"_image").html("<img src='"+data.filepaths["120x90"]+"'/>");
+		            					$('#'+fieldname+"_input").html("<input name='"+fieldname+"' type='hidden' value='"+data.filename+"'/>");
+		            					$('#'+fieldname+"_container").show();
+							 		} else {
+							 			$('#'+fieldname+"_status").text(message).addClass("error");
+							 			$('#'+fieldname+"_image").html("");
+		            					$('#'+fieldname+"_input").html("");
+		            					$('#'+fieldname+"_container").hide();
+							 		}
+							 	}
+							</script>
 							<? foreach ($form as $field): ?>
 								<div class="smallcont">
 									<div class="labelcont">
@@ -218,27 +243,50 @@
 									    		
 									    		<? if ($field["type"] == "photo"): ?>
 									    			<script>
-										    			$(document).ready(function() {
-										    				$("#<?=$field['name']?>").change(function(e){
-										    					$(".<?=$field['name']?>_hidden").remove();
-										    					$( "<input class='<?=$field['name']?>_hidden' type='hidden' name='<?=$field['name']?>' value='1'/>" ).insertAfter( e.target );
-										    				});
-										    			});
-									    			</script>
-									    			<?=$field["html"]?>
-									    			
-									    			<? if ($field["path"] AND $field["path"] <> "1"):?>
-									    				<div  style="padding:10px;">
-									    					<img src="<?=$field["path"]?>" style="padding:10px;max-width:300px;"></br>
-									    					<? if (!$field["required"]):?>
-									    						<input type="checkbox" name="delete_<?=$field['name']?>" <? if ($data->{"delete_".$field['name']} == "on") echo "checked"; ?> />Удалить
-									    					<? endif; ?>
-									    				</div>
-									    			<? elseif ($field["path"] == "1"): ?>
-									    				<div  style="padding:10px;">
-									    					<span style="color:green;">Файл загружен</span>
-									    				</div>
-									    			<? endif;?>
+													 	$(document).ready(function() {
+														 	var self = this,
+														 		fieldname = '<?=$field["name"]?>';
+
+														    new AjaxUpload(fieldname, {
+														            action: '/ajax_form/upload_photofield',
+														            name: fieldname,
+														            data : {fieldname :fieldname},
+														            autoSubmit: true,
+														            onSubmit: function(filename, response){
+
+														            },
+														            onComplete: function(filename, response){
+														            	if (response) 
+									            							data = $.parseJSON(response);
+									            						else
+									            							return;
+
+									            						setImage(fieldname, (!data.error), data, (data.error)?data.error:"Файл загружен");
+														            }
+														       });
+														});
+													</script>
+									    			<?=$field["html"]?></br>
+									    			<div class="p10">								    			
+									    				<span id="<?=$field["name"]?>_status"></span>
+									    			</div>
+								    				<div class="p10" style="<? if ( !isset($field['value']) ) { echo 'display:none;';}?>" id="<?=$field['name']?>_container">								    					
+								    					<span id="<?=$field["name"]?>_image">
+								    						<? if ( isset($field["value"]) ): ?>
+								    							<?
+								    								$filepaths = Imageci::getSitePaths($field["value"]);
+								    								$path = $filepaths["120x90"];
+								    							?>
+								    							<img src='<?=$path?>'/>
+								    						<? endif; ?>
+								    					</span></br>
+								    					<span id="<?=$field["name"]?>_input">
+								    						<? if (isset($field["value"])): ?>
+								    							<input name='<?=$field["name"]?>' type='hidden' value='<?=$field["value"]?>'/>
+								    						<? endif; ?>
+								    					</span></br>
+								    					<span class="link" style="cursor:pointer;" onclick="setImage('<?=$field["name"]?>',false, null, ''); return false;">Удалить</span>
+								    				</div>
 									    		<? else: ?>
 									    			<?=$field["html"]?>
 									    		<? endif; ?> 		

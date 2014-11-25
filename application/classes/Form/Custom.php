@@ -42,16 +42,14 @@ class Form_Custom  {
 	public function validation_prepare(array $data)
 	{
 		$this->validation = Validation::factory($data);
-		foreach ($data as $key => $value) {
-			if (!array_key_exists($key, $this->_settings["fields"]))
-				continue;
-			$field = new Obj($this->_settings["fields"][$key]);
-			$title = $field->translate;
-			$required = $field->required;
-			if ($required)
-				$this->validation->rule( $key, 'not_empty', array(':value', $title) );
+		foreach ($this->_settings["fields"] as $fieldname => $settings) {
+
+			$field = new Obj($settings);
+
+			if ($field->required)
+				$this->validation->rule( $fieldname, 'not_empty', array(':value', $field->translate) );
 			if ($field->type == "inn")
-				$this->validation->rule( $key, 'inn', array(':value', $title) );
+				$this->validation->rule( $fieldname, 'inn', array(':value', $field->translate) );
 		}
 	}
 
@@ -92,20 +90,11 @@ class Form_Custom  {
 
 	private function get_photo_field(Obj $field, $value = NULL)
 	{
-		$file_path = "";
-		if (!$value AND array_key_exists($field->name, $_FILES) AND $_FILES[$field->name]["size"])
-		{
-			$filename = Uploads::make_thumbnail($_FILES[$field->name]);
-			$paths = Imageci::getSitePaths($filename);
-			$file_path = $paths[$field->size];
-		} else {
-			$file_path = $value;
-		}
 		return array(	"title" => $field->translate,
 						"name"	=> $field->name,
-						"html"  => Form::file($field->name,  array("id" => $field->name, "class" => "form-control")).Form::hidden($field->name, $file_path, array("class" => $field->name."_hidden")),
+						"html"  => Form::button($field->name, 'Загрузить '.$field->translate, array("id" => $field->name, "class" => "form-control")),
 						"required" => $field->required,
-						"path" => $file_path,
+						"value" => $value,
 						"type"  => $field->type,
 						"description"  => $field->description
 					);

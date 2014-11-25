@@ -15,7 +15,7 @@ return array(
 											 "translate"=>"Фото или скан ИНН", 
 											 "type" => "photo",
 											 "required" => TRUE,
-											 "description" => "Оригинал или копия. Скан ИНН не публикуется",
+											 "description" => "Необходимо загрузить оригинал или копию свидетельства ИНН. Свидетельство не будет опубликовано.",
 											 "size" => "orig"),
 					"mail_address" 	=> array("name"=>"mail_address"  ,"translate"=>"Почтовый адрес","type"=>"long","required"=>TRUE,
 												"description" => "Формат: Город, улица, дом, офис"),
@@ -34,7 +34,7 @@ return array(
 												"translate"=>"О компании",
 												"required" => TRUE, 
 												"type" => "text",
-												"description" => "заполните краткую рекламную информацию о дейтельности компании"),
+												"description" => "Заполните краткую рекламную информацию о деятельности компании"),
 				)
 		),
 	'userinfo'		=> array(

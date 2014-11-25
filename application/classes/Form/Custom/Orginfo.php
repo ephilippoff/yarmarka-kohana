@@ -15,100 +15,43 @@ class Form_Custom_Orginfo extends Form_Custom {
 
 	public function save(array $data)
 	{
-		if (parent::save($data))
+
+		if (!parent::save($data))
+			return FALSE;
+
+		$db = Database::instance();
+		try
 		{
-			$db = Database::instance();
-			try
-			{
-				$db->begin();
-				foreach ($data as $key => $value) {
-					if ($value)
-					{
-						if (!array_key_exists($key, $this->_settings["fields"]))
-							continue;
-
-						$field = new Obj($this->_settings["fields"][$key]);
-						switch ($field->type) {
-							case 'photo':
-
-								if (!array_key_exists("delete_".$key, $data))
-									$this->save_photo($key, $value);
-								else 
-									$this->delete_photo($key);
-							break;
-							
-							default:
-								$this->save_param($key, $value);
-							break;
-						}
-					}
-				}
-				$db->commit();
+			$db->begin();
+			foreach ($this->_settings["fields"] as $fieldname => $settings) {
+				if (isset($data[$fieldname]))
+					$this->save_param($fieldname, $data[$fieldname]);
 			}
-			catch(Exception $e)
-			{
-				$db->rollback();
-			}
+			$db->commit();
 		}
+		catch(Exception $e)
+		{
+			$db->rollback();
+			return $e->getMessage();
+		}
+
+		return TRUE;		
 	}
 
 	public function get_data()
 	{
-		return ORM::factory('User_Settings')->get_group($this->user, $this->prefix);
+		return ORM::factory('User_Settings')
+					->get_group($this->user, $this->prefix);
 	}
 
 	public function save_param($name, $value)
-	{
+	{	
 		if (!$value)
-			return;
-
-		$setting = ORM::factory('User_Settings')
-						->where("user_id","=", $this->user)
-						->where("type","=", $this->prefix)
-						->where("name","=", $name)
-						->find();
-		$setting->user_id = $this->user->id;
-		$setting->type = $this->prefix;
-		$setting->name = $name;
-		$setting->value = $value;
-		$setting->save();
-
-		return $setting;
-	}
-
-	public function save_photo($name, $value)
-	{
-		$file = $_FILES[$name];
-		try {
-			$filename = Uploads::save($file);
-		} catch (Exception $e)
 		{
-			return;
+			return ORM::factory('User_Settings')
+					->_delete($this->user, $this->prefix, $name);
 		}
-
-		$size = $this->_settings["fields"][$name]["size"];
-		$setting = ORM::factory('User_Settings')
-						->where("user_id","=",$this->user)
-						->where("type","=", $this->prefix)
-						->where("name","=",$name)
-						->find();
-		$setting->user_id = $this->user->id;
-		$setting->type = $this->prefix;
-		$setting->name = $name;
-		$setting->value = Uploads::get_file_path($filename, $size);
-		$setting->save();
-
-		return FALSE;
-	}
-
-	public function delete_photo($name)
-	{
-		$setting = ORM::factory('User_Settings')
-						->where("user_id","=",$this->user)
-						->where("type","=", $this->prefix)
-						->where("name","=",$name)
-						->delete_all();
-
-		return FALSE;
+		return ORM::factory('User_Settings')
+						->update_or_save($this->user, $this->prefix, $name, $value);
 	}
 }

@@ -30,7 +30,12 @@
 		<td><?=$user->org_name?></td>
 		<td><?=$user->org_full_name?></td>
 		<td><?=$user->org_inn?></td>
-		<td><img src='<?=$user->org_inn_skan?>' width="400"/></td>
+		<td>
+			<?
+				$inn_skan = Imageci::getSitePaths($user->org_inn_skan);
+			?>
+			<img src='<?=$inn_skan["original"]?>' width="400"/>
+		</td>
 		<td> 
 			<? if ($moderate_enable): ?>
 				<p><button onclick="orginfo_moderate(<?=$user->id?>, 'ok');" class="btn btn-success"><span class="text">ОК</span></button></p>

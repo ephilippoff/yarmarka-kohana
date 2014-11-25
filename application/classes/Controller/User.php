@@ -1467,28 +1467,33 @@ class Controller_User extends Controller_Template {
 
 	public function action_orginfo()
 	{
+
+		$this->assets->js("ajaxupload.js");
+
 		$user = Auth::instance()->get_user();
 
-		if ($user->org_type <> 2) {
-			HTTP::redirect("/user/userinfo");
+		//если учетная запись не компании и не присоедене к другой компании то редиректим
+		if ($user->org_type <> 2 OR $user->parent_id) {
+			$this->redirect("/user/userinfo");
 		}
 
 		$is_post = ($_SERVER['REQUEST_METHOD'] == 'POST');
-		$data = NULL;
+		$data = $inn =NULL;
 		$errors = new Obj();
 		$form = Form_Custom::factory("Orginfo");
 
-		$inn = NULL;
-		$settings = new Obj(ORM::factory('User_Settings')->get_group($user->id, "orginfo"));
+		$settings = new Obj(ORM::factory('User_Settings')
+								->get_group($user->id, "orginfo"));
 		if ($user->org_inn)
 		{
 			unset($form->_settings["fields"]["INN"]);
 			unset($form->_settings["fields"]["INN_photo"]);
 			unset($form->_settings["fields"]["org_full_name"]);
+			$inn_skan = Imageci::getSitePaths($user->org_inn_skan);
 			$inn = array(
 					"inn" 	 		=> $user->org_inn,
 					"org_full_name"	=> $user->org_full_name,
-					"inn_skan" 		=> $settings->INN_photo
+					"inn_skan" 		=> $inn_skan["120x90"]
 				);
 		} 
 
@@ -1499,35 +1504,30 @@ class Controller_User extends Controller_Template {
 
 		if ($is_post)
 		{
-			$data = $this->request->post();
+			$data 		= $this->request->post();
 			$form->save($data);
 			if ($form->errors)
 			{
 				$errors = new Obj($form->errors);	
-			} else {
-				if (array_key_exists("INN", $data))
+			} 
+			else 
+			{
+				if ( array_key_exists("INN", $data) )
 				{
+					//прописываем инн, скан и юр имя организации в User
 					$user->org_inn = $data["INN"];
 					$user->org_inn_skan = $data["INN_photo"];
 					$user->org_full_name = $data["org_full_name"];
-					$moderate = ORM::factory('User_Settings')
-										->where("user_id","=",$user->id)
-										->where("name","=","moderate")
-										->where("type","=","orginfo")
-										->find();
-					$moderate->created_on = DB::expr("NOW()");						
-					$moderate->user_id = $user->id;				
-					$moderate->type = "orginfo";
-					$moderate->name = "moderate";
-					$moderate->value = 0;
-					$moderate->save();
 
+					//ставим на модерацию
 					ORM::factory('User_Settings')
-							->where("user_id","=",$user->id)
-							->where("name","=","moderate-reason")
-							->where("type","=","orginfo")
-							->delete_all();
+						->update_or_save($user->id, "orginfo", "moderate", 0);
+
+					//удаляем причину модерации, если она была проставлена ранее
+					ORM::factory('User_Settings')
+						->_delete($user->id, "orginfo", "moderate-reason");
 				}
+
 				$user->org_name 		= $data["org_name"];
 				$user->org_post_address = $data["mail_address"];
 				$user->org_phone 		= $data["phone"];
@@ -1544,7 +1544,9 @@ class Controller_User extends Controller_Template {
 			}
 		}
 		else 
+		{
 			$data = $form->get_data();		
+		}
 
 		$this->template->expired = $settings->{"date-expired"};
 		$this->template->from = $this->request->query("from");
