@@ -145,7 +145,7 @@
 				<li><a href="<?=URL::site('user/password')?>" class="clickable"><i class="ico "></i><span>Смена пароля</span></a></li>
 				<?php endif; ?>				
 
-				<?php if (Auth::instance()->get_user()->org_moderate == 1 AND Auth::instance()->get_user()->org_type == 2 AND ! Auth::instance()->get_user()->linked_to_user) : ?>
+				<?php if (Auth::instance()->get_user()->org_moderate === 1 AND Auth::instance()->get_user()->org_type == 2 AND ! Auth::instance()->get_user()->linked_to_user) : ?>
 					<?php if (Request::current()->action() == 'employers') : ?>
 					<li><i class="ico "></i><span><b>Сотрудники</b></span></li>
 					<?php else : ?>

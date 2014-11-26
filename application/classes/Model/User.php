@@ -558,7 +558,7 @@ class Model_User extends Model_Auth_User {
 		if ($this->org_type <> 2)
 			return TRUE;
 
-		if ($this->org_moderate == 1)
+		if ($this->org_moderate === 1)
 			return TRUE;
 
 		return FALSE;
@@ -569,7 +569,7 @@ class Model_User extends Model_Auth_User {
 		if (!$this->loaded())
 			return;
 
-		if ($this->org_moderate == 0)
+		if ($this->org_moderate === 0)
 			return FALSE;
 		
 		$date_new_registration = Kohana::$config->load("common.date_new_registration");
