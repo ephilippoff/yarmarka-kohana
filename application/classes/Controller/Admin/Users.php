@@ -572,6 +572,9 @@ class Controller_Admin_Users extends Controller_Admin_Template {
 			$setting->value = 2;
 			$setting->save();
 
+			$user->org_moderate = 2;
+			$user->save();
+
 
 			$setting = ORM::factory('User_Settings')
 							->where("user_id","=",$user->id)

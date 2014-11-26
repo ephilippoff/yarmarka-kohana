@@ -32,38 +32,6 @@ class User {
 		return sha1($str.microtime());
 	}
 
-	public static function check_orginfo(ORM $user)
-	{
-		$date_new_registration = Kohana::$config->load("common.date_new_registration");
-		if (strtotime($user->regdate) > strtotime($date_new_registration))
-			HTTP::redirect("/user/orginfo?from=another");
-		
-		$date_expired = ORM::factory('User_Settings')
-								->where("user_id","=",$user->id)
-								->where("name","=","date-expired")
-								->where("type","=","orginfo")
-								->find();
-		if (!$date_expired->loaded())
-		{
-			$date_expired->user_id = $user->id;
-			$date_expired->type = "orginfo";
-			$date_expired->name = "date-expired";
-			$date = new DateTime();
-			$date->add(date_interval_create_from_date_string('14 days'));
-			$date_expired->value  = $date->format('Y-m-d H:i:s');
-			$date_expired->save();
-
-		}
-		elseif ($date_expired->loaded())
-		{
-			$date = new DateTime();
-			if (strtotime($date->format('Y-m-d H:i:s')) >= strtotime($date_expired->value))
-			{
-				HTTP::redirect("/user/orginfo?from=another");
-			}
-		}
-
-	}
 }
 
 

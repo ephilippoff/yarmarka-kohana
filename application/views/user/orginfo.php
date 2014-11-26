@@ -61,43 +61,51 @@
 								<div class="fieldscont">										
 									<div class="">
 										<div class="inp-cont">
-											Вы выбрали тип учетной записи "Компания". Для завершения регистрации с этим типом, необходимо предоставить ИНН и загрузить его скан, а также заполнить другие обязательные поля отмеченные зведочкой <span style="color:red;">*</span>.
+											<div class="pt4">
+												Вы выбрали тип учетной записи "Компания". Для завершения регистрации с этим типом, необходимо предоставить ИНН и загрузить его скан, а также заполнить другие обязательные поля отмеченные зведочкой <span style="color:red;">*</span>.
+											</div>
 								  		</div>
 									</div>
 								</div>									
 							</div>
-							<div class="smallcont">
+							<div class="smallcont pt10">
 								<div class="labelcont">
 									<label><span>2</span></label>
 								</div>
 								<div class="fieldscont">										
 									<div class="">
 										<div class="inp-cont">
-											Если вы представитель компании, уже имеющей учетную запись на нашем сайте, и хотите подавать объявления от ее лица, совершите <a href="/user/office">привязку</a> учетной записи к этой компании. (Компания, в своей учетной записи должна подтвердить привязку)
+											<div class="pt4">
+												Если вы представитель компании, уже имеющей официальную учетную запись на нашем сайте, и хотите подавать объявления от ее лица, без ограничений, совершите привязку учетной записи к этой компании. (Т.е. компания, в своей учетной записи должна добавить Вашу учетную запись в разделе 'Сотрудники'). Свою учетную запись нужно сменить на тип "Частное лицо"
+								  			</div>
 								  		</div>
 									</div>
 								</div>									
 							</div>
-							<div class="smallcont">
+							<div class="smallcont pt10">
 								<div class="labelcont">
 									<label><span>3</span></label>
 								</div>
 								<div class="fieldscont">										
 									<div class="">
 										<div class="inp-cont">
-											Вы можете не заполнять форму и сбросить тип учетной записи на "Частное лицо" если перейдете по <span class="link" style="cursor:pointer;" href="/user/reset_orgtype" onclick="reset_orgtype()">ссылке</span>. При этом будут применены ограничения на количество объявлений в некоторые рубрики (Продажа квартир и комнат, Аренда квартир и комнат, Вакансии)
+											<div class="pt4">
+												Вы можете не заполнять форму и сбросить тип учетной записи на "Частное лицо" если перейдете по <span class="link" style="cursor:pointer;" href="/user/reset_orgtype" onclick="reset_orgtype()">ссылке</span>. При этом будут применены ограничения на количество объявлений в некоторые рубрики (Продажа квартир и комнат, Аренда квартир и комнат, Вакансии)
+											</div>
 								  		</div>
 									</div>
 								</div>									
 							</div>
-							<div class="smallcont">
+							<div class="smallcont pt10">
 								<div class="labelcont">
 									<label><span>4</span></label>
 								</div>
 								<div class="fieldscont">										
 									<div class="">
 										<div class="inp-cont">
-											Не забудьте нажать на кнопку "Сохранить", после заполнения формы!
+											<div class="pt4">
+												Не забудьте нажать на кнопку "Сохранить", после заполнения формы!
+											</div>
 								  		</div>
 									</div>
 								</div>									
@@ -105,7 +113,7 @@
 						</div>
 						<hr/>
 						<? endif; ?>
-						<? if ($success): ?>
+						<? if ($success OR count((array) $errors)): ?>
 							<div class="fl100 pb10 pt20">
 									<div class="smallcont">
 									<div class="labelcont">
@@ -114,7 +122,17 @@
 									<div class="fieldscont">										
 										<div class="">
 											<div class="inp-cont">
-												<span style="color:green;">Успешно сохранено!</span>
+												<div class="pt4">
+													<? if (count((array) $errors)): ?>
+														<span style="color:red;">
+															<? foreach((array) $errors as $error):?>
+																<?=$error?></br>
+															<?	endforeach; ?>
+														</span>
+													<? else: ?>
+														<span style="color:green;">Успешно сохранено!</span>
+													<? endif; ?>
+												</div>	
 									  		</div>
 										</div>
 									</div>									
@@ -140,7 +158,9 @@
 									<div class="fieldscont">										
 										<div class="">
 											<div class="inp-cont">
-												<?=$org_moderate_states[$inn_moderate["inn_moderate"]]?>
+												<div class="pt4">
+													<?=$org_moderate_states[$inn_moderate["inn_moderate"]]?>
+												</div>
 									  		</div>
 										</div>
 									</div>									
@@ -149,12 +169,14 @@
 								<? if ($inn_moderate["inn_moderate_reason"]): ?>
 									<div class="smallcont">
 										<div class="labelcont">
-											<label><span>!</span></label>
+											<label><span>Причина отклонения</span></label>
 										</div>
 										<div class="fieldscont">										
 											<div class="">
 												<div class="inp-cont">
-													<?=$inn_moderate["inn_moderate_reason"]?>
+													<div class="pt4">
+														<?=$inn_moderate["inn_moderate_reason"]?>
+													</div>
 										  		</div>
 											</div>
 										</div>									
@@ -172,7 +194,9 @@
 									<div class="fieldscont">										
 										<div class="">
 											<div class="inp-cont">
-												<?=$inn["inn"]?>
+												<div class="pt4">
+													<?=$inn["inn"]?>
+												</div>
 									  		</div>
 										</div>
 									</div>									
@@ -184,7 +208,9 @@
 									<div class="fieldscont">										
 										<div class="">
 											<div class="inp-cont">
-												<?=$inn["org_full_name"]?>
+												<div class="pt4">
+													<?=$inn["org_full_name"]?>
+												</div>
 									  		</div>
 										</div>
 									</div>									

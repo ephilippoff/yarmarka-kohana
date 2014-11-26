@@ -480,29 +480,46 @@ class Model_User extends Model_Auth_User {
 		if (!$this->loaded())
 			return;
 
-		$this->org_type = 1;
-		$this->save();
-
-		$categories = ORM::factory('Category')
-						->where("max_count_for_user",">",0)
-						->find_all();
-
-		foreach ($categories as $category) {
-
-			$query = DB::select("id")
-							->from("object")
-							->where("author","=",$this->id)
-							->where("active","=",1)
-							->where("category","=",$category->id)
-							->where("is_published","=",1)
-							->order_by("date_created","desc")
-							->offset($category->max_count_for_user);
-
-			ORM::factory('Object')
-					->where("id","IN",$query)
-					->set("is_published", 0)
-					->update_all();
+		$db = Database::instance();
+		try
+		{
+			$db->begin();
 			
+			$this->org_type = 1;
+			$this->save();
+
+			ORM::factory('User')
+				->where("linked_to_user","=",$this->id)
+				->set("linked_to_user", NULL)
+				->update_all();
+
+			$categories = ORM::factory('Category')
+							->where("max_count_for_user",">",0)
+							->find_all();
+
+			foreach ($categories as $category) {
+
+				$query = DB::select("id")
+								->from("object")
+								->where("author","=",$this->id)
+								->where("active","=",1)
+								->where("category","=",$category->id)
+								->where("is_published","=",1)
+								->order_by("date_created","desc")
+								->offset($category->max_count_for_user);
+
+				ORM::factory('Object')
+						->where("id","IN",$query)
+						->set("is_published", 0)
+						->update_all();
+				
+			}
+			$db->commit();
+		}
+		catch(Exception $e)
+		{
+			$db->rollback();
+			return $e->getMessage();
 		}
 
 	}
@@ -512,18 +529,74 @@ class Model_User extends Model_Auth_User {
 		if (!$this->loaded())
 			return;
 
+		$this->linked_to_user = NULL;
 		$this->org_type = 2;
+		$this->save();	
+	}
+
+	public function count_employers()
+	{
+		return ORM::factory('User')
+					->where("linked_to_user","=",$this->id)
+					->count_all();
+	}
+
+	public function reset_parent_user()
+	{
+		if (!$this->loaded())
+			return;
+
+		$this->linked_to_user = NULL;
 		$this->save();	
 	}
 
 	public function is_valid_orginfo()
 	{
+		if (!$this->loaded())	
+			return TRUE;
+
+		if ($this->org_type <> 2)
+			return TRUE;
+
+		if ($this->org_moderate == 1)
+			return TRUE;
+
+		return FALSE;
+	}
+
+	public function is_expired_date_validation()
+	{
+		if (!$this->loaded())
+			return;
+
+		if ($this->org_moderate == 0)
+			return FALSE;
+		
 		$date_new_registration = Kohana::$config->load("common.date_new_registration");
-		return ($this->loaded() 
-					AND $this->org_type == 2 
-						AND strtotime($this->regdate) < strtotime($date_new_registration)
-							AND ($this->org_inn
-								OR $this->parent_id));
+		if (strtotime($this->regdate) > strtotime($date_new_registration))
+			return TRUE;
+		
+		$date 		  = new DateTime();
+		$date_expired = ORM::factory('User_Settings')
+								->where("user_id","=",$this->id)
+								->where("name","=","date-expired")
+								->where("type","=","orginfo")
+								->find();
+
+		if (!$date_expired->loaded())
+		{
+			$date_expired->user_id = $this->id;
+			$date_expired->type = "orginfo";
+			$date_expired->name = "date-expired";			
+			$date_expired->value  = $date->add(date_interval_create_from_date_string('14 days'))->format('Y-m-d H:i:s');
+			$date_expired->save();
+		}
+		elseif ($date_expired->loaded() AND strtotime($date->format('Y-m-d H:i:s')) >= strtotime($date_expired->value))
+		{
+			return TRUE;
+		}
+
+		return FALSE;
 	}
 
 }

@@ -28,7 +28,8 @@ class Controller_User extends Controller_Template {
 		if ($this->user AND !$this->user->is_valid_orginfo()
 					AND in_array(Request::current()->action(), array('edit_ad','objectload','priceload','published')))
 				{
-					User::check_orginfo($this->user);
+					if ($this->user->is_expired_date_validation())
+						HTTP::redirect("/user/orginfo?from=another");
 				}
 	}
 
@@ -922,16 +923,70 @@ class Controller_User extends Controller_Template {
 		$this->template->user_papers = $user_papers->find_all();
 	}
 
-	public function action_office()
+	public function action_employers()
 	{
-		$this->layout = 'users';
-		$this->assets->js('office.js');
+		$user = Auth::instance()->get_user();
 
-		$this->template->users = $this->user->users->find_all();
-		$this->template->links = ORM::factory('User_Link_Request')
-			->where('user_id', '=', $this->user->id)
-			->order_by('created', 'desc')
-			->find_all();
+		if ($user->org_type <> 2){
+			$this->redirect("/user/userinfo");
+		}
+		if ($user->org_moderate <> 1){
+			$this->redirect("/user/orginfo");
+		}
+		if ($user->linked_to_user) {			
+			$this->template = View::factory('user/ischilduser', array("company" => ORM::factory('User',$user->linked_to_user),
+																		"name" => "Информация о компании"));
+			return;
+		}
+
+
+		$this->assets->js('office.js');
+		$error = NULL;
+		$is_post = (HTTP_Request::POST === $this->request->method());
+		$email = trim(mb_strtolower($this->request->post('email')));
+		$delete = (int) $this->request->query('delete');		
+
+		if ($is_post AND $email)
+		{
+			
+		
+			$childuser = ORM::factory('User')
+								->where("email","=",mb_strtolower($email))
+								//->where("linked_to_user","IS",NULL)
+								->where("id","<>",$user->id)
+								->find();
+
+			if (!$childuser->loaded())
+			{
+				$error = "Пользователь с таким email не зарегистрирован";
+			} elseif ($childuser->loaded() AND $childuser->linked_to_user == $user->id)
+			{
+				$error = "Учетная запись этого пользователя уже привязана к вашей компании";
+			} elseif ($childuser->loaded() AND $childuser->linked_to_user)
+			{
+				$error = "Учетная запись этого пользователя уже привязана к другой компании";				
+			} elseif ($childuser->loaded() AND $childuser->org_type <> 1)
+			{
+				$error = "Учетная запись этого пользователя 'Компания'. Вы не можете его добавить";
+			} else {
+				$childuser->linked_to_user = $user->id;
+				$childuser->save();
+
+				$this->redirect("/user/employers?success=1");
+			}
+		} elseif ($delete){
+
+			ORM::factory('User')
+				->where("linked_to_user","=",$user->id)
+				->where("id","=",$delete)
+				->set("linked_to_user", DB::expr("NULL"))
+				->update_all();
+		}
+		$this->template->is_post = $is_post; 
+		$this->template->error = $error;
+		$this->template->users = ORM::factory('User')
+								->where("linked_to_user","=", $user->id)
+								->find_all();
 	}
 
 	public function action_affiliates()
@@ -1472,9 +1527,13 @@ class Controller_User extends Controller_Template {
 
 		$user = Auth::instance()->get_user();
 
-		//если учетная запись не компании и не присоедене к другой компании то редиректим
-		if ($user->org_type <> 2 OR $user->parent_id) {
+		if ($user->org_type <> 2){
 			$this->redirect("/user/userinfo");
+		}
+		if ($user->linked_to_user) {			
+			$this->template = View::factory('user/ischilduser', array("company"=> ORM::factory('User', $user->linked_to_user),
+																		"name" => "Информация о компании"));
+			return;
 		}
 
 		$is_post = ($_SERVER['REQUEST_METHOD'] == 'POST');
@@ -1518,6 +1577,7 @@ class Controller_User extends Controller_Template {
 					$user->org_inn = $data["INN"];
 					$user->org_inn_skan = $data["INN_photo"];
 					$user->org_full_name = $data["org_full_name"];
+					$user->org_moderate = 0;
 
 					//ставим на модерацию
 					ORM::factory('User_Settings')
@@ -1591,6 +1651,7 @@ class Controller_User extends Controller_Template {
 		$this->template->user = $user;
 		$this->template->form = $form->prerender($data);
 		$this->template->errors = $errors;
+		$this->template->parent_user = ORM::factory('User', $user->linked_to_user);
 	}
 
 	public function action_edit_ad()
@@ -1706,6 +1767,15 @@ class Controller_User extends Controller_Template {
 		ORM::factory('User',$user->id)->reset_to_company();
 
 		$this->redirect('/user/orginfo');
+	}
+
+	public function action_reset_parent_user()
+	{
+		$user = Auth::instance()->get_user();
+
+		ORM::factory('User',$user->id)->reset_parent_user();
+
+		$this->redirect('/user/userinfo');
 	}
 }
 /* End of file User.php */

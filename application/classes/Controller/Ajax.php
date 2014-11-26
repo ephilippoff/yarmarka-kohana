@@ -1153,14 +1153,7 @@ class Controller_Ajax extends Controller_Template
 			}
 		}
 
-	public function after()
-	{
-		parent::after();
-		if ( ! $this->response->body())
-		{
-			$this->response->body(json_encode($this->json));
-		}
-	}
+
 
 //------------------------------------------------------------------
 	 public function action_ajax_get_hints_by_page()
@@ -1315,28 +1308,15 @@ class Controller_Ajax extends Controller_Template
 
 		$this->response->body(View::factory('detail/show_contacts_table89')->bind('contacts', $contacts));
 		 
-	}	 
+	}		 
 	 
-	  
+	 public function after()
+	{
+		parent::after();
+		if ( ! $this->response->body())
+		{
+			$this->response->body(json_encode($this->json));
+		}
+	}
 
-//	public function  action_get_hints_by_page()
-//	{
-//		$controllerCharacter = trim($this->request->query('controller_character'));
-//		
-//		$hint = Model::factory('Notice')->getHintByCChar($controllerCharacter);
-//		
-//		if (!$hint) return;
-//
-//		$data = array(
-//			'identify' => $hint->identify,
-//			'left'	=> $hint->left,
-//			'tops'	=> $hint->top,
-//			'width'	=> $hint->width,
-//			'height' => $hint->height,
-//			'html' 	=> View::factory('block/hint')->bind('hint', $hint)->render()
-//		);
-//
-//		$this->json['hint'] = $data;
-//	}
-//--------------------------------------------------------------
 }

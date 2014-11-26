@@ -60,8 +60,16 @@ class Controller_Ajax_Admin extends Controller_Ajax {
 		$method  = $this->request->post("method");
 		$message = $this->request->post("message");
 
+		$user = ORM::factory('User',$user_id);
+
+		if (!$user->loaded())
+			return;
+
 		if ($method == "ok")
-		{
+		{		
+			$user->org_moderate = 1;
+			$user->save();
+
 			$setting = ORM::factory('User_Settings')
 							->where("user_id","=",$user_id)
 							->where("type","=","orginfo")
@@ -77,6 +85,9 @@ class Controller_Ajax_Admin extends Controller_Ajax {
 							->where("name","=","moderate-reason")
 							->delete_all();
 		} elseif ($method == "cancel"){
+
+			$user->org_moderate = 2;
+			$user->save();
 
 			$user = ORM::factory('User', $user_id);
 

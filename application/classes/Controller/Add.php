@@ -18,7 +18,8 @@ class Controller_Add extends Controller_Template {
 			if (!$user->is_valid_orginfo()
 					AND in_array(Request::current()->action(), array('index')))
 			{
-				User::check_orginfo($user);
+				if ($user->is_expired_date_validation())
+					HTTP::redirect("/user/orginfo?from=another");
 			}
 		}
 	}
@@ -89,7 +90,8 @@ class Controller_Add extends Controller_Template {
 		$this->template->assets = $this->assets;
 
 		$expired = NULL;
-		if ($user AND !$user->is_valid_orginfo())
+		if (!$user->is_valid_orginfo()
+					AND !$user->is_expired_date_validation())
 		{
 			$settings = new Obj(ORM::factory('User_Settings')->get_group($user->id, "orginfo"));
 			$expired =  $settings->{"date-expired"};
