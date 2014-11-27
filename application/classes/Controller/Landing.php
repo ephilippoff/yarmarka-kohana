@@ -40,7 +40,6 @@ class Controller_Landing extends Controller_Template {
 		if ($this->object)
 		{
 			$lo = new Landing_Object($this->object);
-//			echo Debug::vars($lo->object);
 //			echo Debug::vars($lo->user);
 //			echo Debug::vars($lo->attributes);
 //			echo Debug::vars($lo->contacts);
@@ -50,16 +49,7 @@ class Controller_Landing extends Controller_Template {
 //			echo Debug::vars($lo->favorite);
 		}
 		
-		$this->template->data = new Obj( array(
-				"object" 	=> $lo->object,
-				"user" 		=> $lo->user,
-				"attributes"=> $lo->attributes,
-				"contacts" 	=> $lo->contacts,
-				"images" 	=> $lo->images,
-				"location" 	=> $lo->location,
-				"favorite"  => $lo->favorite
-
-			));
+		$this->template->data = $lo;
 	}
 
 	function action_show()
