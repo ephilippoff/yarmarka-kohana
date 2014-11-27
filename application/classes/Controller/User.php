@@ -1753,6 +1753,9 @@ class Controller_User extends Controller_Template {
 		if ($user AND $user->role == 9)
 			$form_data ->AdvertType();
 
+		if ($user AND $user->linked_to_user)
+			$form_data ->LinkedUser();
+
 		$this->template->object  = $object;
 		$this->template->params 	= new Obj($params);
 		$this->template->form_data 	= $form_data->_data;
