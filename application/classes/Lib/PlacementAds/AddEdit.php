@@ -917,6 +917,9 @@ class Lib_PlacementAds_AddEdit {
 		if ($user AND $user->linked_to_user AND isset($this->params->link_to_company))
 		{
 			$object->author_company_id = $user->linked_to_user;
+		} elseif ($user AND $user->linked_to_user AND !isset($this->params->link_to_company))
+		{
+			$object->author_company_id = $user->id;
 		}
 
 
