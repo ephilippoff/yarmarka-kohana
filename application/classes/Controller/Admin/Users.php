@@ -590,7 +590,7 @@ class Controller_Admin_Users extends Controller_Admin_Template {
 
 			if ($this->request->post('send_email') AND $user->loaded())
 			{
-				$msg = View::factory('emails/manage_orginfo', 
+				$msg = View::factory('emails/user_manage/decline_orginfo', 
 					array(
 						'UserName' => $user->fullname ? $user->fullname : $user->login,
 						'reason' => $reason

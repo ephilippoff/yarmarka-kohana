@@ -939,54 +939,74 @@ class Controller_User extends Controller_Template {
 			return;
 		}
 
-
-		$this->assets->js('office.js');
 		$error = NULL;
-		$is_post = (HTTP_Request::POST === $this->request->method());
-		$email = trim(mb_strtolower($this->request->post('email')));
-		$delete = (int) $this->request->query('delete');		
-
-		if ($is_post AND $email)
-		{
-			
 		
-			$childuser = ORM::factory('User')
+		$is_post = (HTTP_Request::POST === $this->request->method());
+		$email = trim(mb_strtolower($this->request->post('email')));		
+		$method = $this->request->query('method');
+		$actionuser_id = (int) $this->request->query('id');		
+
+		
+		if ($is_post AND $method == "link")
+		{
+			$childuser_add = ORM::factory('User')
 								->where("email","=",mb_strtolower($email))
-								//->where("linked_to_user","IS",NULL)
 								->where("id","<>",$user->id)
-								->find();
+								->find()
+								->link_user($user->id);
 
-			if (!$childuser->loaded())
+			if (!$childuser_add)
 			{
-				$error = "Пользователь с таким email не зарегистрирован";
-			} elseif ($childuser->loaded() AND $childuser->linked_to_user == $user->id)
-			{
-				$error = "Учетная запись этого пользователя уже привязана к вашей компании";
-			} elseif ($childuser->loaded() AND $childuser->linked_to_user)
-			{
-				$error = "Учетная запись этого пользователя уже привязана к другой компании";				
-			} elseif ($childuser->loaded() AND $childuser->org_type <> 1)
-			{
-				$error = "Учетная запись этого пользователя 'Компания'. Вы не можете его добавить";
-			} else {
-				$childuser->linked_to_user = $user->id;
-				$childuser->save();
-
 				$this->redirect("/user/employers?success=1");
+			} else {
+				$error = $childuser_add;
 			}
-		} elseif ($delete){
 
-			ORM::factory('User')
-				->where("linked_to_user","=",$user->id)
-				->where("id","=",$delete)
-				->set("linked_to_user", DB::expr("NULL"))
-				->update_all();
+		} elseif ($method == "accept_request"){
+
+			$childuser = ORM::factory('User',$actionuser_id);
+			$childuser_add = $childuser->link_user($user->id, TRUE);
+			if (!$childuser_add)
+			{
+				$msg = View::factory('emails/user_manage/accept_request_to_link_company', 
+					array(
+						'request_user' => $user,
+					)
+				);
+				Email::send($childuser->email, Kohana::$config->load('email.default_from'), "Привязка к компании ".$user->org_name." подтверждена", $msg);
+				
+				ORM::factory('User_Link_Request')->delete_request($user->id, $actionuser_id);
+				$this->redirect("/user/employers?success=1");
+			} else {
+				$error = $childuser_add;
+			}	
+
+		} elseif ($method == "unlink"){
+
+			ORM::factory('User')->unlink_user($user->id, $actionuser_id);
+
+		} elseif ($method == "decline_request"){
+			$childuser = ORM::factory('User',$actionuser_id);
+			$msg = View::factory('emails/user_manage/decline_request_to_link_company', 
+					array(
+						'request_user' => $user,
+					)
+				);
+			Email::send($childuser->email, Kohana::$config->load('email.default_from'), "Привязка к компании ".$user->org_name." НЕ подтверждена", $msg);
+				
+			ORM::factory('User_Link_Request')->decline_request($user->id, $actionuser_id);				
+
 		}
+
 		$this->template->is_post = $is_post; 
 		$this->template->error = $error;
 		$this->template->users = ORM::factory('User')
-								->where("linked_to_user","=", $user->id)
-								->find_all();
+										->where("linked_to_user","=", $user->id)
+										->find_all();
+
+		$this->template->requests = ORM::factory('User_Link_Request')
+										->where("user_id","=", $user->id)
+										->find_all();
 	}
 
 	public function action_affiliates()
@@ -1539,6 +1559,7 @@ class Controller_User extends Controller_Template {
 		$is_post = ($_SERVER['REQUEST_METHOD'] == 'POST');
 		$data = $inn =NULL;
 		$errors = new Obj();
+
 		$form = Form_Custom::factory("Orginfo");
 
 		$settings = new Obj(ORM::factory('User_Settings')
@@ -1557,13 +1578,25 @@ class Controller_User extends Controller_Template {
 		} 
 
 		$inn_moderate = array(
-			"inn_moderate" 			=> $settings->moderate,
+			"inn_moderate" 			=> $user->org_moderate,
 			"inn_moderate_reason" 	=> $settings->{"moderate-reason"}
 		);
 
 		if ($is_post)
 		{
 			$data 		= $this->request->post();
+
+			if (isset($data["INN"])){
+				$parentuser = ORM::factory('User')
+								->where("org_moderate","=",1)
+								->where("org_inn","=",$data["INN"])
+								->where("id","<>",$user->id)
+								->find();
+
+				if ($parentuser->loaded())
+					$this->redirect("/user/user_link_request?inn=".$data["INN"]);
+			}
+
 			$form->save($data);
 			if ($form->errors)
 			{
@@ -1645,7 +1678,11 @@ class Controller_User extends Controller_Template {
 
 		$this->template->categories_limit = ORM::factory('Category')
 												->where("max_count_for_user",">",0)
-												->find_all();	
+												->find_all();
+
+		$this->template->request_company = ORM::factory('User_Link_Request')
+												->where("linked_user_id","=",$user->id)
+												->find();	
 
 		$this->template->types = Kohana::$config->load("dictionaries.org_types");
 		$this->template->user = $user;
@@ -1776,6 +1813,76 @@ class Controller_User extends Controller_Template {
 		ORM::factory('User',$user->id)->reset_parent_user();
 
 		$this->redirect('/user/userinfo');
+	}
+
+	public function action_user_link_request()
+	{
+		$user = Auth::instance()->get_user();
+
+		$method = $this->request->query("method");
+		$parentuser_inn = $this->request->query("inn");
+		$parentuser_email = $this->request->query("email");
+
+		if ($method == "delete_request")
+		{
+			ORM::factory('User_Link_Request')
+				->delete_requests($user->id);
+
+			$this->redirect("/user/userinfo");
+		}
+		if (!$parentuser_inn AND !$parentuser_email)
+			$this->redirect("/user/orginfo");
+
+		$request_type = NULL;
+		if ($parentuser_email)
+		{
+			$parentuser = ORM::factory('User')
+								->where("org_moderate","=",1)
+								->where("email","=",trim(mb_strtolower($parentuser_email)))
+								->where("id","<>",$user->id)
+								->find();
+			$request_type = "email";
+		} else {
+			$parentuser = ORM::factory('User')
+								->where("org_moderate","=",1)
+								->where("org_inn","=",$parentuser_inn)
+								->where("id","<>",$user->id)
+								->find();
+			$request_type = "inn";
+		}
+
+		if (!$parentuser->loaded())
+			$this->redirect("/user/userinfo");
+
+		$is_post = ($_SERVER['REQUEST_METHOD']=='POST');
+		$ulr = NULL;
+		if ($is_post) { 
+			$parentuser_id = $this->request->post("id");
+
+			$ulr = ORM::factory('User_Link_Request')
+						->where("linked_user_id","=",$user->id)
+						->find();
+			$ulr->user_id = $parentuser_id;
+			$ulr->linked_user_id = $user->id;
+			$ulr->save();
+
+			$msg = View::factory('emails/user_manage/request_to_link_company', 
+				array(
+					'request_user' => $user,
+				)
+			);
+			Email::send($parentuser->email, Kohana::$config->load('email.default_from'), "Запрос на разрешение подачи объявлений от лица вашей компании", $msg);
+		} else {
+			$ulr = ORM::factory('User_Link_Request')
+						->where("linked_user_id","=",$user->id)
+						->find();
+		}
+
+		$this->template->request_type = $request_type;
+		$this->template->inn = $parentuser_inn;
+		$this->template->email = $parentuser_email;
+		$this->template->parentuser = $parentuser;
+		$this->template->request = $ulr;
 	}
 }
 /* End of file User.php */

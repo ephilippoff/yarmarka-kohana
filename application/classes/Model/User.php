@@ -475,44 +475,53 @@ class Model_User extends Model_Auth_User {
 
 	}
 
-	public function reset_orgtype()
+	/**
+	 * [reset_orgtype сброс типа учетной записи на Частное лицо]
+	 * @param  boolean $soft [мягкая смена, если true то объявыления не снимаются]
+	 * @return [type]        [void]
+	 */
+	public function reset_orgtype($soft = FALSE)
 	{
 		if (!$this->loaded())
 			return;
-
+				
 		$db = Database::instance();
 		try
 		{
 			$db->begin();
 			
+			//Сбрасываем тип на "Частное лицо"
 			$this->org_type = 1;
 			$this->save();
 
-			ORM::factory('User')
-				->where("linked_to_user","=",$this->id)
-				->set("linked_to_user", NULL)
-				->update_all();
+			//Отвязываем сотрудников если были
+			$this->unlink_users();
 
-			$categories = ORM::factory('Category')
-							->where("max_count_for_user",">",0)
-							->find_all();
+			if (!$soft)
+			{	
+				//находим категории с ограничениями
+				$categories = ORM::factory('Category')
+								->where("max_count_for_user",">",0)
+								->find_all();
 
-			foreach ($categories as $category) {
+				foreach ($categories as $category) {
 
-				$query = DB::select("id")
-								->from("object")
-								->where("author","=",$this->id)
-								->where("active","=",1)
-								->where("category","=",$category->id)
-								->where("is_published","=",1)
-								->order_by("date_created","desc")
-								->offset($category->max_count_for_user);
+					//снимаем объявления в категория с ограничениями
+					$query = DB::select("id")
+									->from("object")
+									->where("author","=",$this->id)
+									->where("active","=",1)
+									->where("category","=",$category->id)
+									->where("is_published","=",1)
+									->order_by("date_created","desc")
+									->offset($category->max_count_for_user);
 
-				ORM::factory('Object')
-						->where("id","IN",$query)
-						->set("is_published", 0)
-						->update_all();
-				
+					ORM::factory('Object')
+							->where("id","IN",$query)
+							->set("is_published", 0)
+							->update_all();
+					
+				}
 			}
 			$db->commit();
 		}
@@ -523,11 +532,17 @@ class Model_User extends Model_Auth_User {
 		}
 
 	}
-
+	/**
+	 * [reset_to_company Меняем тип учетной записи на "Компания"]
+	 * @return [type] [description]
+	 */
 	public function reset_to_company()
 	{
 		if (!$this->loaded())
 			return;
+
+		ORM::factory('User_Link_Request')
+			->delete_requests($this->id);
 
 		$this->linked_to_user = NULL;
 		$this->org_type = 2;
@@ -597,6 +612,46 @@ class Model_User extends Model_Auth_User {
 		}
 
 		return FALSE;
+	}
+
+	public function link_user($user_id, $force_for_company = FALSE)
+	{	
+		if (!$this->loaded())
+		{
+			return "Пользователь с таким email адресом не зарегистрирован";
+		} elseif ($this->loaded() AND $this->linked_to_user == $user_id)
+		{
+			return "Учетная запись этого пользователя уже привязана к вашей компании";
+		} elseif ($this->loaded() AND $this->linked_to_user)
+		{
+			return "Учетная запись этого пользователя уже привязана к другой компании";				
+		} elseif ($this->loaded() AND $this->org_type <> 1 AND !$force_for_company)
+		{
+			return "Учетная запись этого пользователя 'Компания'. Вы не можете его добавить";
+		} 
+
+		$this->linked_to_user = $user_id;
+		$this->save();
+
+		$this->reset_orgtype($force_for_company);
+
+		return;
+	}
+
+	public function unlink_user($user_id, $linked_user_id)
+	{
+		return ORM::factory('User')
+				->where("linked_to_user","=",$user_id)
+				->where("id","=",$linked_user_id)
+				->set("linked_to_user", DB::expr("NULL"))
+				->update_all();
+	}
+
+	public function unlink_users()
+	{
+		return $this->where("linked_to_user","=",$this->id)
+					->set("linked_to_user", DB::expr("NULL"))
+					->update_all();
 	}
 
 }
