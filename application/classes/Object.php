@@ -77,7 +77,8 @@ class Object
 					->save_generated()
 					->save_contacts()
 					->save_signature()
-					->save_union();
+					->save_union()
+					->save_compile_object();
 
 				$db->commit();
 			}
@@ -143,7 +144,8 @@ class Object
 					->save_other_options()
 					->save_attributes()
 					->save_generated()
-					->save_contacts();
+					->save_contacts()
+					->save_compile_object();
 
 				$db->commit();
 			}
@@ -210,7 +212,8 @@ class Object
 					->save_other_options()
 					->save_attributes()
 					->save_generated()
-					->save_contacts();
+					->save_contacts()
+					->save_compile_object();
 
 				$db->commit();
 			}
@@ -282,7 +285,8 @@ class Object
 					->save_generated()
 					->save_contacts()
 					->save_signature()
-					->save_union();
+					->save_union()
+					->save_compile_object();
 
 				$db->commit();
 			}
