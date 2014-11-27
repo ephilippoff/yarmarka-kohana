@@ -652,6 +652,15 @@ class Form_Add  {
 		return $this;
 	}	
 
+	function LinkedUser()
+	{
+		$user = Auth::instance()->get_user();
+		$this->_data->linked_company = array(
+				"company" => ORM::factory('User', $user->linked_to_user),
+				"value" => ( $this->is_post and !isset($this->params['link_to_company']) ) ? "off" : "on"
+			);
+	}
+
 	static private function parse_object_params($object_id){
 		$values = ORM::factory('Data_List')->where("object","=",$object_id)->find_all();
 		$params = Array();

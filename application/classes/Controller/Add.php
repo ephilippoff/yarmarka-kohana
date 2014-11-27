@@ -82,6 +82,9 @@ class Controller_Add extends Controller_Template {
 				 	->Contacts()
 					->Widgets();
 
+		if ($user AND $user->linked_to_user)
+			$form_data ->LinkedUser();
+
 		if ($user AND $user->role == 9)
 			$form_data ->AdvertType();
 

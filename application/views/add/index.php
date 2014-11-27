@@ -120,6 +120,38 @@
 			</div>
 			<? endif; ?>
 
+			
+
+			<? if ( property_exists($form_data, 'linked_company') ): ?>
+			<div class="fl100  pt16 pb15"  id="div_city">
+					<div class="smallcont">
+						<div class="labelcont">
+							<label><span>От компании:</span></label>
+						</div>	
+						<div class="fieldscont">
+							<div class="inp-cont-long ">
+								<div class="inp-cont <?if ($form_data->city["city_error"]) echo "error";?>">
+									<div class="pt4">
+										<? 
+											$company = $form_data->linked_company["company"];
+										?>
+										<input type="checkbox" name="link_to_company" <? if ($form_data->linked_company["value"] == "on") echo "checked"; ?>/>  <?=$company->org_name?>
+										<?=$company->org_name?> (<?=$company->email?>)
+										<? if ($company->filename): ?>
+											<div class="p10">
+												<? $logo = Imageci::getSitePaths($company->filename);?>
+												<img src="<?=$logo["120x90"]?>">
+											</div>
+										<? endif; ?>
+									</div>
+								</div>
+							</div><!--inp-cont-short-->
+							
+						</div><!--fieldscont-->
+					</div> <!-- smallcont -->
+			</div>
+			<? endif; ?>
+
 			<? if ( property_exists($form_data, 'city') ): ?>
 			<div class="fl100  pt16 pb15"  id="div_city">
 					<div class="smallcont">

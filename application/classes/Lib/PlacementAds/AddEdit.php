@@ -615,11 +615,14 @@ class Lib_PlacementAds_AddEdit {
 			}
 		}
 
-
-		// проверяем количество уже поданных пользователем объявлений
-		if ( $category AND !$this->category->check_max_user_objects($user, $this->params->object_id))
+		//если пользователь привязан к компании и подает объявления как от компании то не проверяем количество поданных
+		if ($user AND (!$user->linked_to_user OR !isset($params->link_to_company)) ) 
 		{
-			$errors['max_objects_for_user'] = Kohana::message('validation/object_form', 'max_objects');
+			// проверяем количество уже поданных пользователем объявлений
+			if ( $category AND !$this->category->check_max_user_objects($user, $this->params->object_id))
+			{
+				$errors['max_objects_for_user'] = Kohana::message('validation/object_form', 'max_objects');
+			}
 		}
 
 		if ( $category AND $category_settings->max_count AND
@@ -903,11 +906,19 @@ class Lib_PlacementAds_AddEdit {
 	{
 		$params = &$this->params;
 		$object = &$this->object;
+		$user   = &$this->user;
+
 		// отключаем комментарии к объявлению
 		if ($params->block_comments)
 		{
 			$object->disable_comments();
 		}
+
+		if ($user AND $user->linked_to_user AND isset($this->params->link_to_company))
+		{
+			$object->author_company_id = $user->linked_to_user;
+		}
+
 
 		if ($this->is_edit AND $params->publish_and_prolonge)
 		{
