@@ -79,7 +79,8 @@ class Controller_Add extends Controller_Template {
 				 	->Params()
 				 	->Map()
 				 	->Price()
-				 	->Contacts();
+				 	->Contacts()
+					->Widgets();
 
 		if ($user AND $user->role == 9)
 			$form_data ->AdvertType();

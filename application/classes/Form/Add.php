@@ -644,6 +644,13 @@ class Form_Add  {
 									);
 		return $this;
 	}
+	
+	function Widgets()
+	{		
+		$this->_data->last_news = ORM::factory('Article')->get_lastnews_from_rubric('novosti-yarmarki');
+		
+		return $this;
+	}	
 
 	static private function parse_object_params($object_id){
 		$values = ORM::factory('Data_List')->where("object","=",$object_id)->find_all();
