@@ -277,4 +277,10 @@ class ORM extends Kohana_ORM {
 		return $this;
 	}
 
+	public function where_cached($left, $contintion, $right, $cached = 0)
+	{
+		return $this->where($left,$contintion,$right)
+					->cached($cached);
+	}
+
 }

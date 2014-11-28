@@ -15,18 +15,24 @@ class Controller_Landing extends Controller_Template {
 		else
 			$this->domain = $this->request->param("domain");
 
-		$this->landing = ORM::factory('Landing')->where("domain","=", $this->domain)->find();
+		$this->landing = ORM::factory('Landing')
+							->where_cached("domain", "=",$this->domain,Date::DAY)
+							->find();
 
 		if (!$this->landing->loaded())
 			throw new HTTP_Exception_404;
 
 		if ($this->landing->object_id)
 		{
-			$this->object = ORM::factory('Object', $this->landing->object_id);
+			$this->object = ORM::factory('Object')
+								->where_cached("id","=",$this->landing->object_id,Date::DAY)
+								->find();
 		}
 		elseif ($this->landing->user_id)
 		{
-			$this->user = ORM::factory('User', $this->landing->user_id);
+			$this->user = ORM::factory('User')
+								->where_cached("id","=",$this->landing->user_id,Date::DAY)
+								->find();
 		}
 				
 	}

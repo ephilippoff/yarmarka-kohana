@@ -15,7 +15,6 @@ class Landing_Object extends Landing {
 
 	public function __construct(ORM $object)
 	{
-		$object->category_obj;
 		$this->_object = $object;
 		$this->init();
 
@@ -27,8 +26,8 @@ class Landing_Object extends Landing {
 
 		$this->compiled = NULL;
 		$compiled = ORM::factory('Object_Compiled')
-							->where("object_id","=",$this->_object->id)
-							->find()
+							->where_cached("object_id","=",$this->_object->id, Date::DAY)
+							->find()							
 							->compiled;
 		if ($compiled)
 			$this->compiled = unserialize($compiled);
@@ -40,11 +39,17 @@ class Landing_Object extends Landing {
 		$this->address 		= (isset($this->compiled["address"])) ? $this->compiled["address"] : NULL;
 		$this->lat 			= (isset($this->compiled["lat"])) ? $this->compiled["lat"] : NULL;
 		$this->lon 		 	= (isset($this->compiled["lon"])) ? $this->compiled["lon"] : NULL;
-		$this->priceload	= (isset($this->compiled["pricelist"])) ? ORM::factory('Priceload',$this->compiled["pricelist"]) : NULL;
+
+		$this->priceload	= (isset($this->compiled["pricelist"])) ? ORM::factory('Priceload')
+																				->where_cached("id","=",$this->compiled["pricelist"],Date::DAY)
+																				->find() : NULL;
 		$this->pricerows 	= $this->getPricelist( $this->priceload ,(isset($this->compiled["pricelist"])) ? $this->compiled["pricelist"] : NULL );
+		
 
 		$this->object 	= $this->_object->as_array();
-		$this->user 	= ORM::factory('User',$this->_object->author)->as_array();
+		$this->user 	= ORM::factory('User')
+									->where_cached("id","=",$this->_object->author,Date::DAY)
+									->find()->as_array();
 		$this->favorite = Auth::instance()->get_user() ? $this->_object->get_favorite(Auth::instance()->get_user()->id) : null;
 	}
 
