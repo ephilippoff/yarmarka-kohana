@@ -52,7 +52,7 @@ class Landing_Object extends Landing {
 									->find()->as_array();
 
 		$this->category = ORM::factory('Category')
-									->where_cached("id","=",$this->_object->category_id,Date::DAY)
+									->where_cached("id","=",$this->_object->category,Date::DAY)
 									->find()->as_array();
 
 		$this->favorite = Auth::instance()->get_user() ? $this->_object->get_favorite(Auth::instance()->get_user()->id) : null;
