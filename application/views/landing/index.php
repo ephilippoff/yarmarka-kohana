@@ -89,10 +89,12 @@ $(document).ready(function() {
 
 											<?=$data->object['user_text']?>
 
-											<? foreach ($data->attributes as $attribute): ?>
-												<p class="mt20"><b><?=$attribute["title"]?></b>: <?=$attribute["value"]?></p>
-											<? endforeach;?>
-
+											<? if (isset($data->attributes)):?>
+												<? foreach ($data->attributes as $attribute): ?>
+													<p class="mt20"><b><?=$attribute["title"]?></b>: <?=$attribute["value"]?></p>
+												<? endforeach;?>
+											<?php endif;?>
+											
 											<?php if ($data->priceload->loaded()): ?>
 													<p class="mt20"><b>Прайс-лист</b>: <a href="<?=trim($data->priceload->filepath_original, '.')?>"><?=$data->priceload->title?></a></p>
 											<?php endif;?>
