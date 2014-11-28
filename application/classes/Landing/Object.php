@@ -147,7 +147,7 @@ class Landing_Object extends Landing {
 			return $result;
 		
 
-		$images = array_reverse($_images);
+		$images = $_images;
 
 		$result["logo"] = Imageci::getSavePaths(array_shift($images));
 		$result["main"] = Imageci::getSavePaths(array_shift($images));

@@ -1123,6 +1123,11 @@ class Lib_PlacementAds_AddEdit {
 		$oc->compiled = serialize($object_compile);
 		$oc->save();
 
+		//пересохранили - сбрасываем кеш
+		ORM::factory('Object_Compiled')
+				->where_cached("object_id","=",$object->id, 0)
+				->find();
+
 		return $this;
 	}
 
