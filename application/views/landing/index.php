@@ -116,7 +116,7 @@ $(document).ready(function() {
 	                                        <?php //endif; ?>
                                         </div>												
 												
-										<?php if ($data->object['geo_loc'] && $data->object->category_obj->show_map) : ?>																																															
+										<?php if ($data->object['geo_loc'] && $data->category->show_map) : ?>																																															
 
 											<div class="act-center mt20" style="width:100%;">
 												<p class="title ">Карта</p>
