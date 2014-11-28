@@ -108,15 +108,15 @@ $(document).ready(function() {
 
 												
 										<div class="fl w100p mt20">
-											<?php //if (count($data->pricerows)): ?>
+											<?php if (isset($data->pricerows) AND count($data->pricerows)): ?>
 	                                          <?php  echo View::factory('landing/price/price_default', array(	"priceload" => $data->priceload, 
 	                                          																	"pricerows" => $data->pricerows,
 	                                          																	"pricerows_filters" => NULL,
 	                                          																	"object" =>$data->object)); ?>
-	                                        <?php //endif; ?>
+	                                        <?php endif; ?>
                                         </div>												
-												
-										<?php if ($data->object['geo_loc'] && $data->category->show_map) : ?>																																															
+
+										<?php if ($data->object['geo_loc'] && $data->category['show_map']) : ?>																																															
 
 											<div class="act-center mt20" style="width:100%;">
 												<p class="title ">Карта</p>
