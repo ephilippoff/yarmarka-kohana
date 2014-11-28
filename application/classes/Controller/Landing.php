@@ -27,6 +27,9 @@ class Controller_Landing extends Controller_Template {
 			$this->object = ORM::factory('Object')
 								->where_cached("id","=",$this->landing->object_id,Date::DAY)
 								->find();
+
+			if (!$this->object->loaded())
+				throw new HTTP_Exception_404;
 		}
 		elseif ($this->landing->user_id)
 		{
