@@ -94,9 +94,11 @@ $(document).ready(function() {
 													<p class="mt20"><b><?=$attribute["title"]?></b>: <?=$attribute["value"]?></p>
 												<? endforeach;?>
 											<?php endif;?>
-											
-											<?php if ($data->priceload->loaded()): ?>
-													<p class="mt20"><b>Прайс-лист</b>: <a href="<?=trim($data->priceload->filepath_original, '.')?>"><?=$data->priceload->title?></a></p>
+
+											<? if (isset($data->priceload)):?>
+												<?php if ($data->priceload->loaded()): ?>
+														<p class="mt20"><b>Прайс-лист</b>: <a href="<?=trim($data->priceload->filepath_original, '.')?>"><?=$data->priceload->title?></a></p>
+												<?php endif;?>
 											<?php endif;?>
 											
 											<?php if (!empty($site)) : ?>
