@@ -93,6 +93,7 @@
 								<li><a href="<?=Url::site('khbackend/reklama/index')?>">Контекст. ссылки</a></li>
 								<li><a href="<?=Url::site('khbackend/reklama/add')?>">Добавить контекст. ссылку</a></li>
 								<li><a href="<?=Url::site('khbackend/reklama/tickets')?>">Бегающие ссылки</a></li>								
+								<li><a href="<?=Url::site('khbackend/reklama/menu_banners')?>">Баннеры в меню</a></li>
 							</ul>
 						</li>
 						<?php endif; ?>
