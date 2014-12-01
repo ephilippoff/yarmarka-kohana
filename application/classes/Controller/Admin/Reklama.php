@@ -300,7 +300,7 @@ public function action_edit_menu_banner()
  
         if ($file = Upload::save($image, NULL, $directory))
         {
-            $filename = strtolower(Text::random('alnum', 20)).'.jpg';
+            $filename = strtolower(Text::random('alnum', 20)).'.png';
  
             Image::factory($file)->save($directory.$filename);
  

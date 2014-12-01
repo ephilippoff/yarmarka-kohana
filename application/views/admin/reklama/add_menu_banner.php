@@ -63,7 +63,14 @@ $(document).ready(function() {
 		<div class="controls">
 			<input type="text" class="input-small" placeholder="y" name="y" value="<?=Arr::get($_POST, 'y', 0)?>">
 		</div>	
-	</div>		
+	</div>
+	
+	<div class="control-group <?=Arr::get($errors, 'menu_width') ? 'error' : ''?>">
+		<label class="control-label">Ширина меню:</label>
+		<div class="controls">
+			<input type="text" class="input-small" placeholder="Введите значение в px" name="menu_width" value="<?=Arr::get($_POST, 'menu_width', 0)?>">
+		</div>	
+	</div>	
 	
 	<div class="control-group <?=Arr::get($errors, 'href') ? 'error' : ''?>">
 		<label class="control-label">Ссылка:</label>

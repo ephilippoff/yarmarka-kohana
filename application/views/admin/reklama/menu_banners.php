@@ -38,6 +38,7 @@
 		<th>Баннер</th>		
 		<th>X</th>
 		<th>Y</th>
+		<th>Ширина меню</th>
 		<th>
 			Дата окончания<br>
 			<?php if ($sort_by == 'date_expired' and $sort == 'desc') : ?>
@@ -67,12 +68,13 @@
 			<td class="td-banner">
 				<div style="position: relative;">
 					<?php if (is_file(DOCROOT.'uploads/banners/menu/'.$ads_element->image)) : ?>
-							<img src="<?='/uploads/banners/menu/'.$ads_element->image?>" />							
+							<img style="max-width:150px" src="<?='/uploads/banners/menu/'.$ads_element->image?>" />							
 					<?php endif;?>
 				</div>
 			</td>
 			<td><?=$ads_element->x?></td>
 			<td><?=$ads_element->y?></td>
+			<td><?=$ads_element->menu_width?></td>
 			<td><?=$ads_element->date_expired?></td>
 			<td><?=$ads_element->visits?></td>
 			<td><a href="http://<?=$ads_element->href?>"><?=$ads_element->href?></a></td>

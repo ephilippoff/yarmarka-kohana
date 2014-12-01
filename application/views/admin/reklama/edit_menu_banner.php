@@ -50,7 +50,7 @@ $(document).ready(function() {
 		<label class="control-label">Баннер:</label>
 		<div class="controls">
 				<?php if (is_file(DOCROOT.'uploads/banners/menu/'.@$ad_element->image)) : ?>
-						<p><img src="<?='/uploads/banners/menu/'.@$ad_element->image?>" /></p>
+						<p><img style="max-width:150px" src="<?='/uploads/banners/menu/'.@$ad_element->image?>" /></p>
 						<!--<p><input type="checkbox" name="delete_image"> Удалить загруженный баннер</p>-->
 				<?php endif;?>			
 			<input type="file" class="input-small" placeholder="banner" name="image" >
@@ -71,6 +71,13 @@ $(document).ready(function() {
 			<input type="text" class="input-small" placeholder="y" name="y" value="<?=Arr::get($_POST, 'y', @$ad_element->y)?>">
 		</div>	
 	</div>	
+	
+	<div class="control-group <?=Arr::get($errors, 'menu_width') ? 'error' : ''?>">
+		<label class="control-label">Ширина меню:</label>
+		<div class="controls">
+			<input type="text" class="input-small" placeholder="Введите значение в px" name="menu_width" value="<?=Arr::get($_POST, 'menu_width', @$ad_element->menu_width)?>">
+		</div>	
+	</div>		
 	
 	<div class="control-group <?=Arr::get($errors, 'href') ? 'error' : ''?>">
 		<label class="control-label">Ссылка:</label>
