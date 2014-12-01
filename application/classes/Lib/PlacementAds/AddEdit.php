@@ -21,6 +21,7 @@ class Lib_PlacementAds_AddEdit {
 	public $destroy_union = FALSE;
 	public $object_without_parent_id = NULL;
 	public $category_settings = array();
+	public $object_compile = array();
 
 	public $union_cancel = FALSE;
 
@@ -640,11 +641,20 @@ class Lib_PlacementAds_AddEdit {
 		$city = &$this->city;
 		$location = &$this->location;
 		$object = &$this->object;
+		
+		$object_compile = &$this->object_compile;
+		$object_compile["cities"] = array();
+		$object_compile["address"] = NULL;
+		$object_compile["lat"] = NULL;
+		$object_compile["lon"] = NULL;
 
 		// сохраняем город если нет такого города в базе
 		$city = Kladr::save_city($params->city_kladr_id, $params->city_name);
 
 		@list($lat, $lon) = explode(',', $params->object_coordinates);
+
+		$object_compile["lat"] = $lat;
+		$object_compile["lon"] = $lon;
 
 		$location = Kladr::save_address($lat, $lon,
  				$params->address,
@@ -656,6 +666,8 @@ class Lib_PlacementAds_AddEdit {
 		if ( ! $location->loaded())
 		{
 			$location = $city->location;
+		} else {
+			$object_compile["address"] = $location->address;
 		}
 
 		if ($object->loaded())
@@ -682,6 +694,8 @@ class Lib_PlacementAds_AddEdit {
 					}
 
 					$object->cities = $cities;
+
+					$object_compile["cities"] = $cities;
 				}
 			}
 		}
@@ -770,6 +784,9 @@ class Lib_PlacementAds_AddEdit {
 		$params = &$this->params;
 		$object = &$this->object;
 
+		$object_compile = &$this->object_compile;
+		$object_compile["photo"] 		= array();
+		$object_compile["main_photo"] 	= NULL;
 
 		// удаляем старые аттачи
 		// @todo по сути не надо заного прикреплять те же фотки при редактировании объявления
@@ -797,7 +814,10 @@ class Lib_PlacementAds_AddEdit {
 				if ($file == $main_photo)
 				{
 					$object->main_image_id = $attachment->id;
+					$object_compile["main_photo"] = $file;
 				}
+
+				$object_compile["photo"][] = $file;
 			}
 
 			// удаляем аттачи из временой таблицы
@@ -813,6 +833,10 @@ class Lib_PlacementAds_AddEdit {
 	{
 		$params = &$this->params;
 		$object = &$this->object;
+
+		$object_compile = &$this->object_compile;
+		$object_compile["video"] 	= NULL;
+
 		if ($params->video AND $params->video_type)
 		{
 			$video = $params->video;
@@ -833,6 +857,8 @@ class Lib_PlacementAds_AddEdit {
 				$attachment->type 		= $params->video_type;
 				$attachment->object_id 	= $object->id;
 				$attachment->save();
+
+				$object_compile["video"] = $filename;
 			}
 		}
 		return $this;
@@ -843,6 +869,9 @@ class Lib_PlacementAds_AddEdit {
 		$params = &$this->params;
 		$object = &$this->object;
 		$category = &$this->category;
+
+		$object_compile = &$this->object_compile;
+		$object_compile["pricelist"] 	= NULL;
 
 		if (!$category) return $this;
 
@@ -872,8 +901,11 @@ class Lib_PlacementAds_AddEdit {
 					return;
 
 				$op->object_id = $object->id;
-				$op->priceload_id =$params->pricelist;
+				$op->priceload_id = $params->pricelist;
 				$op->save();
+
+
+				$object_compile["pricelist"] = $params->pricelist;
 
 			}
 			
@@ -903,10 +935,15 @@ class Lib_PlacementAds_AddEdit {
 	{
 		$params = &$this->params;
 		$object = &$this->object;
+
+		$object_compile = &$this->object_compile;
+		$object_compile["block_comments"] 	= FALSE;
+
 		// отключаем комментарии к объявлению
 		if ($params->block_comments)
 		{
 			$object->disable_comments();
+			$object_compile["block_comments"] = TRUE;
 		}
 
 		if ($this->is_edit AND $params->publish_and_prolonge)
@@ -930,6 +967,10 @@ class Lib_PlacementAds_AddEdit {
 	{
 		$params = &$this->params;
 		$object = &$this->object;
+
+		$object_compile = &$this->object_compile;
+		$object_compile["attributes"] 	= array();
+		$object_compile["price"] 	= NULL;
 
 		$attributes = Object_Utils::prepare_form_elements((array) $params);
 
@@ -1004,9 +1045,10 @@ class Lib_PlacementAds_AddEdit {
 				{
 					$object->price = $value;
 				}
-
+				$object_compile["price"] = $object->price;
 				$object->price_unit = $reference->attribute_obj->unit;
 			}
+
 
 			// сохраняем дата атрибут
 			$data = ORM::factory('Data_'.Text::ucfirst($reference->attribute_obj->type));
@@ -1039,6 +1081,16 @@ class Lib_PlacementAds_AddEdit {
 				}
 			else
 				$data->save();
+
+			$for_compile = (array) $data->as_array();
+			$for_compile["_type"] = Text::ucfirst($reference->attribute_obj->type);
+			
+			$for_compile["_attribute"] = $data->attribute_obj->as_array("id","title");
+			if ($for_compile["_type"] == 'List')
+			{
+				$for_compile["_element"] = $data->attribute_element_obj->as_array("id","title");
+			}
+			$object_compile["attributes"][] = $for_compile;
 		}
 		return $this;
 	}
@@ -1055,6 +1107,27 @@ class Lib_PlacementAds_AddEdit {
 
 		$object->full_text = $object->generate_full_text();
 		$object->save();
+		return $this;
+	}
+
+	function save_compile_object()
+	{
+		$object = &$this->object;
+		$object_compile = &$this->object_compile;
+
+		$oc = ORM::factory('Object_Compiled')
+				->where("object_id","=",$object->id)
+				->find();
+
+		$oc->object_id = $object->id;
+		$oc->compiled = serialize($object_compile);
+		$oc->save();
+
+		//пересохранили - сбрасываем кеш
+		ORM::factory('Object_Compiled')
+				->where_cached("object_id","=",$object->id, 0)
+				->find();
+
 		return $this;
 	}
 
@@ -1117,6 +1190,10 @@ class Lib_PlacementAds_AddEdit {
 		$object = &$this->object;
 		$user = &$this->user;
 		$contacts = &$this->contacts;
+
+		$object_compile = &$this->object_compile;
+		$object_compile["contacts"] 	= array();
+
 		if ($this->is_edit)
 		{	
 			// удаляем связи на старые контакты
@@ -1131,6 +1208,8 @@ class Lib_PlacementAds_AddEdit {
 
 			// сохраянем новые контакты для объявления
 			$object->add_contact($contact['type'], $contact['value']);
+
+			$object_compile["contacts"][] = array("type" => $contact['type'], "value" => $contact['value']);
 		}
 
 		return $this;

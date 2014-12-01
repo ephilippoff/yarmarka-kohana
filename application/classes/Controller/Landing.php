@@ -15,18 +15,27 @@ class Controller_Landing extends Controller_Template {
 		else
 			$this->domain = $this->request->param("domain");
 
-		$this->landing = ORM::factory('Landing')->where("domain","=", $this->domain)->find();
+		$this->landing = ORM::factory('Landing')
+							->where_cached("domain", "=",$this->domain,Date::DAY)
+							->find();
 
 		if (!$this->landing->loaded())
 			throw new HTTP_Exception_404;
 
 		if ($this->landing->object_id)
 		{
-			$this->object = ORM::factory('Object', $this->landing->object_id);
+			$this->object = ORM::factory('Object')
+								->where_cached("id","=",$this->landing->object_id,Date::DAY)
+								->find();
+
+			if (!$this->object->loaded())
+				throw new HTTP_Exception_404;
 		}
 		elseif ($this->landing->user_id)
 		{
-			$this->user = ORM::factory('User', $this->landing->user_id);
+			$this->user = ORM::factory('User')
+								->where_cached("id","=",$this->landing->user_id,Date::DAY)
+								->find();
 		}
 				
 	}
@@ -40,7 +49,6 @@ class Controller_Landing extends Controller_Template {
 		if ($this->object)
 		{
 			$lo = new Landing_Object($this->object);
-//			echo Debug::vars($lo->object);
 //			echo Debug::vars($lo->user);
 //			echo Debug::vars($lo->attributes);
 //			echo Debug::vars($lo->contacts);
@@ -50,16 +58,7 @@ class Controller_Landing extends Controller_Template {
 //			echo Debug::vars($lo->favorite);
 		}
 		
-		$this->template->data = new Obj( array(
-				"object" 	=> $lo->object,
-				"user" 		=> $lo->user,
-				"attributes"=> $lo->attributes,
-				"contacts" 	=> $lo->contacts,
-				"images" 	=> $lo->images,
-				"location" 	=> $lo->location,
-				"favorite"  => $lo->favorite
-
-			));
+		$this->template->data = $lo;
 	}
 
 	function action_show()

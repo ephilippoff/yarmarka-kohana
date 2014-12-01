@@ -69,7 +69,8 @@ class Task_Priceload_Indexer extends Minion_Task
 			foreach ($pricerows as $pricerow) {
 				$description = NULL;
 				$price = NULL;
-				$idx_text = Array();
+				$idx_text = array();
+				$fullrow = array();
 				foreach ($fields as $field) {
 					if ($config[$field."_type"] <> "no")
 						$idx_text[] = $pricerow->{$field};
@@ -77,6 +78,8 @@ class Task_Priceload_Indexer extends Minion_Task
 						$description =  $pricerow->{$field};
 					if ($config[$field."_type"] == "price")
 						$price =  $pricerow->{$field};
+
+					$fullrow[$field] = $pricerow->{$field};
 				}
 				if (count($idx_text) == 0 OR !$description)
 					continue;
@@ -99,6 +102,7 @@ class Task_Priceload_Indexer extends Minion_Task
 				$plidx->description = $description;
 				$plidx->price = (int) $price;
 				$plidx->image = $pricerow->image;
+				$plidx->full = serialize($fullrow);
 				$plidx->save();	
 
 			}

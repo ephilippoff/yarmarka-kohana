@@ -32,7 +32,7 @@
                     <tr>
                         <?php
                             $contact_icon_class = null;
-                            switch($contact['contact_type_id'])
+                            switch($contact['type'])
                             {
                             case 1:
                             case 2:
@@ -50,8 +50,8 @@
                             }
 
                         ?>
-                        <td><div class="ico <?=$contact_icon_class?>" title="<?=$contact['contact_type']['name'] ?>"></div></td>
-                        <td><?=Contact::hide($contact['contact_clear']) ?></td>
+                        <td><div class="ico <?=$contact_icon_class?>" title=""></div></td>
+                        <td><?=Contact::hide($contact['value']) ?></td>
                     </tr>
                 <?php  endforeach;?>
                 </table>

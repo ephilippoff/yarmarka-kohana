@@ -35,9 +35,9 @@ $(document).ready(function() {
             <div class="m_poll">
                 <div class="fixshadow"></div>
 
-                <section class="main-section" itemscope itemtype="http://schema.org/ItemPage">                    
+                <section class="main-section">                    
                     <div class="crumbs-bl">
-                        <div class="crumbs" itemprop="breadcrumb">
+                        <div class="crumbs">
                             <span class="bnt-go-back span-link" href=""
                                onclick="window.history.back(); event.preventDefault();">
                                 <i class="ico"></i><span class="text">Вернуться</span>
@@ -50,53 +50,30 @@ $(document).ready(function() {
                         </div>
                     </div>
 					
-					<?php if (!$data->object['is_published'] or $data->object['in_archive'] === 't') : ?>							 
-								<div class="iPage-alert-bl error w100p">
-									<div class="cont">
-										<div class="img"></div>
-										<p class="text">
-											Обращаем ваше внимание, что данное объявление было снято или находится на сайте больше двух недель, контакты объявления скрыты. Вы всегда можете поискать подобные объявления в поиске или в наших рубриках.
-										</p>
-									</div>
-								</div>	
-					<?php endif; ?>	
-					
                     <section class="personal-card-bl">
 
                         <div class="personal-card">
 
 							
-					<?php echo View::factory('detail/aside_group_type89')->bind('data', $data) ?>						
+							<?php echo View::factory('detail/aside_group_type89')->bind('data', $data) ?>						
 							
 							
                             <div class="cont">
 
-                                <article class="article" itemscope itemtype="http://schema.org/Product">
-                                    <?php if(isset($data->object)):?>
-											<?php //if (isset($_GET['reklama'])) : ?>
-<!--												<div class="bmreklama">
-													<img src="/images/bmreklama.png">
-												</div>-->
-											<?php //endif; ?>
-                                        <div class="topinfo">
-                                            <header>
-                                                <h1><?=htmlspecialchars($data->object['title'])?></h1>
-												&nbsp;<?php if (!$data->object['is_published'] or $data->object['in_archive'] === 't') : ?><!--noindex--><span class="red status">(Объявления снято или в архиве)</span><!--/noindex--><?php endif; ?>
-                                                <meta itemprop="dateCreated" content="<?php echo date("Y-m-d h:m:s", strtotime($data->object['date_created'])) ?>" />
-                                            </header>	
-											
-                                        </div>									
-                                        
+                                <article class="article">
+                                    <div class="topinfo">
+                                        <header>
+                                            <h1><?=htmlspecialchars($data->object['title'])?></h1>
+                                        </header>	
+										
+                                    </div>									
+                                    
 
-                                                                                                                  
-                                        <?php
-											$img_count = isset($data->images['other']) ? count($data->images['other']) : 0;
-											//Переворачиваем для соблюдения порядка загрузки
-											//$data->images['other'] = array_reverse($data->images['other']);										
-                                        ?>
-                                        
-										<div class="fl w100p">
-											
+                                                                                                              
+                                    <?php $img_count = isset($data->images['other']) ? count($data->images['other']) : 0; ?>
+                                    
+									<div class="fl w100p">
+										
 										<?php if (isset($data->images['main'])) : ?>
 													<div class="box photo-bl">
 														<div class="img-cont">
@@ -106,27 +83,40 @@ $(document).ready(function() {
 														</div>	
 													</div>
 										<?php endif;?>
-													
-										<?php if (!empty($data->object['user_text']) or $priceload or !empty($site) ) : ?>	
-												<div class="text mt20 fl w100p" itemprop="description">
-													<?=$data->object['user_text']?>
-													<?php //if (is_file($_SERVER['DOCUMENT_ROOT'].trim($priceload->filepath_original, '.'))) : ?>
-															<p class="mt20"><b>Прайс-лист</b>: <a href="<?//=trim($priceload->filepath_original, '.')?>"><?//=$priceload->title?></a></p>
-													<?php //endif;?>
-													
-													<?php if (!empty($site)) : ?>
-														<p class="mt10"><b>Адрес сайта</b>: <span class="span-link" onclick="window.open('http://<?=$site?>', '_blank')"><?=trim($site, '/')?></span></p> 															
-													<?php endif;?>
-												</div>	
-										<?php endif;?>
+												
+	
+										<div class="text mt20 fl w100p">
+
+											<?=$data->object['user_text']?>
+
+											<? if (isset($data->attributes)):?>
+												<? foreach ($data->attributes as $attribute): ?>
+													<p class="mt20"><b><?=$attribute["title"]?></b>: <?=$attribute["value"]?></p>
+												<? endforeach;?>
+											<?php endif;?>
+
+											<? if (isset($data->priceload)):?>
+												<?php if ($data->priceload->loaded()): ?>
+														<p class="mt20"><b>Прайс-лист</b>: <a href="<?=trim($data->priceload->filepath_original, '.')?>"><?=$data->priceload->title?></a></p>
+												<?php endif;?>
+											<?php endif;?>
+											
+											<?php if (!empty($site)) : ?>
+												<p class="mt10"><b>Адрес сайта</b>: <span class="span-link" onclick="window.open('http://<?=$site?>', '_blank')"><?=trim($site, '/')?></span></p> 															
+											<?php endif;?>
+										</div>	
+
 												
 										<div class="fl w100p mt20">
-											<?php if (count($data->pricerows)): ?>
-	                                          <?php  View::factory('blocks/detail/pricerows')?>
+											<?php if (isset($data->pricerows) AND count($data->pricerows)): ?>
+	                                          <?php  echo View::factory('landing/price/price_default', array(	"priceload" => $data->priceload, 
+	                                          																	"pricerows" => $data->pricerows,
+	                                          																	"pricerows_filters" => NULL,
+	                                          																	"object" =>$data->object)); ?>
 	                                        <?php endif; ?>
                                         </div>												
-												
-										<?php if ($data->object['geo_loc'] && $data->object['category_obj']['show_map']) : ?>																																															
+
+										<?php if ($data->object['geo_loc'] && $data->category['show_map']) : ?>																																															
 
 											<div class="act-center mt20" style="width:100%;">
 												<p class="title ">Карта</p>
@@ -182,7 +172,7 @@ $(document).ready(function() {
 										<?php endif?>											
 											
 											
-										<?php if ($img_count /*OR !empty($VideosObject)*/) : ?>
+										<?php if ($img_count) : ?>
                                                                                             												
 												<div class="box photo-bl mt20">
                                                     
@@ -196,15 +186,15 @@ $(document).ready(function() {
                                                         <?php 
 															endforeach; ?>
 													
-														<?php //if ($embed_video) : ?>
-<!--																<div class="img-cont" id="video">
+														<?php if ($data->video) : ?>
+																<div class="img-cont" id="video">
 																	<div class="center-img">
 																		<a name="video"  rel="nofollow">
 																			<?//=$embed_video?>
 																		</a>
 																	</div>
 																</div>																															-->
-														<?php //endif;?>													
+														<?php endif;?>													
 													
                                                 </div>
                                             
@@ -220,10 +210,6 @@ $(document).ready(function() {
 												<div class="yashare-auto-init" data-yashareL10n="ru" data-yashareType="none" data-yashareQuickServices="yaru,vkontakte,facebook,twitter,odnoklassniki,moimir,lj,friendfeed,moikrug,gplus"></div>           
 											</div>
 										</div>
-
-                                    <?php else : ?>
-											<p>Такого объявления не существует. Попробуйте воспользоваться поиском.</p>
-                                    <?php endif; ?>
 
                                 </article>								
                             </div>                            

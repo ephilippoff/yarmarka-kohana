@@ -15,7 +15,6 @@ class Landing_Object extends Landing {
 
 	public function __construct(ORM $object)
 	{
-		$object->category_obj;
 		$this->_object = $object;
 		$this->init();
 
@@ -25,37 +24,81 @@ class Landing_Object extends Landing {
 	public function init()
 	{	
 
-		$this->favorite = Auth::instance()->get_user() ? $this->_object->get_favorite(Auth::instance()->get_user()->id) : null;	
-		$this->object = $this->_object->as_array();
-		$this->user = ORM::factory('User',$this->_object->author)->as_array();
-		$this->attributes = $this->_object->get_attributes()->as_array();
-		$this->contacts = $this->getContacts( ORM::factory('Contact')				
-								->where_object_id($this->_object->id)
-								->order_by("contact.id")
-								->find_all()
-								->as_array() );
-		$this->images = $this->getImages( ORM::factory('Object_Attachment')
-												->where("object_id","=",$this->_object->id)
-												->where("type","=","0")
-												->order_by("id")
-												->find_all()
-												->as_array() );
-		$this->location = ORM::factory('Location', $this->_object->location_id)->as_array();
+		$this->compiled = NULL;
+		$compiled = ORM::factory('Object_Compiled')
+							->where_cached("object_id","=",$this->_object->id, Date::DAY)
+							->find()							
+							->compiled;
+		if ($compiled)
+			$this->compiled = unserialize($compiled);
 
-		$this->pricerows = $this->getPricelist( ORM::factory('Object_Priceload')
-													->where("object_id","=",$this->_object->id)
-													->find() ); 
+		$this->images 		= $this->getImages( $this->compiled["photo"] );
+		$this->video 		= $this->getImages( $this->compiled["video"] );
+		$this->contacts 	= (isset($this->compiled["contacts"])) ? $this->compiled["contacts"] : NULL;
+		$this->attributes 	= $this->getAttributes( (isset($this->compiled["attributes"])) ? $this->compiled["attributes"] : NULL );
+		$this->address 		= (isset($this->compiled["address"])) ? $this->compiled["address"] : NULL;
+		$this->lat 			= (isset($this->compiled["lat"])) ? $this->compiled["lat"] : NULL;
+		$this->lon 		 	= (isset($this->compiled["lon"])) ? $this->compiled["lon"] : NULL;
+
+		$this->priceload	= (isset($this->compiled["pricelist"])) ? ORM::factory('Priceload')
+																				->where_cached("id","=",$this->compiled["pricelist"],Date::DAY)
+																				->find() : NULL;
+		$this->pricerows 	= $this->getPricelist( $this->priceload ,(isset($this->compiled["pricelist"])) ? $this->compiled["pricelist"] : NULL );
+		
+
+		$this->object 	= $this->_object->as_array();
+		$this->user 	= ORM::factory('User')
+									->where_cached("id","=",$this->_object->author,Date::DAY)
+									->find()->as_array();
+
+		$this->category = ORM::factory('Category')
+									->where_cached("id","=",$this->_object->category,Date::DAY)
+									->find()->as_array();
+
+		$this->favorite = Auth::instance()->get_user() ? $this->_object->get_favorite(Auth::instance()->get_user()->id) : null;
 	}
 
-	private function getPricelist($object_priceload)
+	private function getAttributes($attributes)
 	{
+		if (!$attributes)
+			return;
+
+		$result = array();
+		foreach ($attributes as $attribute) {
+			
+			$_attribute = array();
+			$_attribute["title"] = $attribute["_attribute"]["title"];
+
+			switch ($attribute["_type"]) {
+				case "List":
+					$_attribute["value"] = $attribute["_element"]["title"];
+				break;
+				case "Integer":
+				case "Numeric":
+					$_attribute["value"] = $attribute["value_min"];
+				break;
+				default:
+					$_attribute["value"] = $attribute["value"];
+				break;
+			}
+			$result[] = $_attribute;
+		}	
+
+		return $result;
+	}
+
+	private function getPricelist($priceload, $id)
+	{
+		if (!$id)
+			return;
+
+		$config = unserialize($priceload->config);
+		$columns = explode(",",$config["columns"]);
+
 		$result = array();
 
-		if (!$object_priceload->loaded())
-			return $result;
-
 		$pi = ORM::factory('Priceload_Index')
-				->where("priceload_id","=",$object_priceload->priceload_id)
+				->where("priceload_id","=",$id)
 				->limit(50)
 				->order_by("id")
 				->cached(Date::DAY)
@@ -63,7 +106,21 @@ class Landing_Object extends Landing {
 				->as_array();
 
 		foreach ($pi as $row) {
-			$result[] = $row->as_array();
+			$_row = $row->as_array();
+			$_row["titles"] =  array();
+			$_row["values"] =  array(); 
+
+			$full = unserialize($row->full);
+
+			foreach($columns as $column){
+				if (isset($config[$column."_type"]) AND $config[$column."_type"] == "info"){
+					//$_row["titles"][] = $config[$column."_title"];
+					//$_row["titles"][] = "Описание";
+					//$_row["titles"][] = "Цена";
+					$_row["values"][] = $full[$column];					
+				}				
+			}
+			$result[] = $_row;
 		}
 
 		return $result;
@@ -90,14 +147,14 @@ class Landing_Object extends Landing {
 			return $result;
 		
 
-		$images = array_reverse($_images);
+		$images = $_images;
 
-		$result["logo"] = Imageci::getSavePaths(array_shift($images)->filename);
-		$result["main"] = Imageci::getSavePaths(array_shift($images)->filename);
+		$result["logo"] = Imageci::getSavePaths(array_shift($images));
+		$result["main"] = Imageci::getSavePaths(array_shift($images));
 
 		$result["other"] = array();
 		foreach ($images as $image) {
-			$result["other"][] = Imageci::getSavePaths($image->filename);
+			$result["other"][] = Imageci::getSavePaths($image);
 		}
 		return $result;
 	}
