@@ -1,5 +1,6 @@
 <?php
 	$main_cities = array(1 => 'Тюменская область', 1919 => 'Тюмень', 1947 => 'Нефтеюганск', 1948 => 'Нижневартовск', 1979 => 'Сургут');
+	$states = array(0 => 'Неактивна', 1 => 'Активна', 2 => 'Предпросмотр');
 	$cities = '';
 	//Параметры для uri сортировок и параметры для uri фильтра
 	$params = $params_for_filter = array();
@@ -49,6 +50,7 @@
 		</th>
 		<th>Визиты</th>
 		<th>Ссылка</th>
+		<th>Статус</th>
 		<th></th>
 	</tr>
 	<?php foreach ($banners_list as $ads_element) : ?>		
@@ -78,6 +80,7 @@
 			<td><?=$ads_element->date_expired?></td>
 			<td><?=$ads_element->visits?></td>
 			<td><a href="http://<?=$ads_element->href?>"><?=$ads_element->href?></a></td>
+			<td><?=$states[$ads_element->state]?></td>			
 			<td>				
 				<a href="<?=Url::site('khbackend/reklama/edit_menu_banner/'.$ads_element->id)?>" class="icon-pencil"></a>
 				<a href="<?=Url::site('khbackend/reklama/delete_menu_banner/'.$ads_element->id)?>" class="icon-trash delete_article"></a>

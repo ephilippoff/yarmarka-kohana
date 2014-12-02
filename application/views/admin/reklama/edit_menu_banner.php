@@ -17,6 +17,7 @@ $(document).ready(function() {
 <?php
 	$main_cities = array(1 => 'Тюменская область', 1919 => 'Тюмень', 1947 => 'Нефтеюганск', 1948 => 'Нижневартовск', 1979 => 'Сургут');
 	$date_expired   = isset($ad_element->date_expired)   ? $ad_element->date_expired   : Arr::get($_POST, 'date_expired',   date('Y-m-d', strtotime('+7 days')));
+	$states = array(0 => 'Неактивна', 1 => 'Активна', 2 => 'Предпросмотр');
 ?>
 
 <form class="form-horizontal" method="post" enctype="multipart/form-data">
@@ -77,12 +78,27 @@ $(document).ready(function() {
 		<div class="controls">
 			<input type="text" class="input-small" placeholder="Введите значение в px" name="menu_width" value="<?=Arr::get($_POST, 'menu_width', @$ad_element->menu_width)?>">
 		</div>	
-	</div>		
+	</div>
+	
+	<div class="control-group <?=Arr::get($errors, 'map_params') ? 'error' : ''?>">
+		<label class="control-label">Координаты:</label>
+		<div class="controls">
+			<input type="text" class="input-block-level" placeholder="Введите координаты" name="map_params" value="<?=Arr::get($_POST, 'map_params', @$ad_element->map_params)?>">
+		</div>	
+	</div>	
 	
 	<div class="control-group <?=Arr::get($errors, 'href') ? 'error' : ''?>">
 		<label class="control-label">Ссылка:</label>
 		<div class="controls">
 			http:// <input type="text" class="input" placeholder="Ссылка" name="href" value="<?=Arr::get($_POST, 'href', @$ad_element->href)?>">
+		</div>	
+	</div>	
+	
+	<div class="control-group <?=Arr::get($errors, 'state') ? 'error' : ''?>">
+		<label class="control-label">Статус:</label>
+		<div class="controls">
+			<?=Form::select('state', $states, Arr::get($_POST, 'state', @$ad_element->state)) ?>
+			<span class="help-inline"><?=Arr::get($errors, 'state')?></span>
 		</div>	
 	</div>	
 	

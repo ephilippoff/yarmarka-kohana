@@ -208,7 +208,12 @@ class Controller_Admin_Reklama extends Controller_Admin_Template {
 					$post['cities'] = '{'.join(',', $post['cities']).'}';	
 				}
 				
-				ORM::factory('Category_Banners')->values($post)->save();				
+				ORM::factory('Category_Banners')->values($post)->save();
+				
+				//Сбрасываем кеш по ключам: state, city_id
+				if ($_POST['state'] == 1)
+					foreach ($_POST['cities'] as $city) 				
+						Cache::instance()->set("getBannersForCategories:{$city}", NULL, 0);							
 
 				$this->redirect('khbackend/reklama/menu_banners');
 			} 
@@ -252,7 +257,13 @@ public function action_edit_menu_banner()
 					$post['cities'] = '{'.join(',', $post['cities']).'}';	
 				}								
 				
-				$ad_element->values($post)->save();				
+				$ad_element->values($post)->save();
+				
+				//Сбрасываем кеш по ключам: state, city_id
+				foreach ($_POST['cities'] as $city) 				
+					Cache::instance('memcache')->set("getBannersForCategories:{$city}", NULL, 0);	
+					
+				Cache::instance('memcache')->set("getBannerById:{$ad_element->id}", NULL, 0);
 
 				$this->redirect('khbackend/reklama/menu_banners');
 			} 
