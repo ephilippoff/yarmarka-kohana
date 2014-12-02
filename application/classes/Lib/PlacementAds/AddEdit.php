@@ -1073,24 +1073,21 @@ class Lib_PlacementAds_AddEdit {
 			}
 			//Значения для множественных атрибутов(с учетом того, что is_multiple могут быть только list)
 			if (is_array($value) and isset($value[0]))
+			{
 				foreach ($value as $value_detail) 
 				{
 					$data2 = clone $data;
 					$data2->value = (int)$value_detail;
 					$data2->save();
-				}
-			else
-				$data->save();
 
-			$for_compile = (array) $data->as_array();
-			$for_compile["_type"] = Text::ucfirst($reference->attribute_obj->type);
-			
-			$for_compile["_attribute"] = $data->attribute_obj->as_array("id","title");
-			if ($for_compile["_type"] == 'List')
-			{
-				$for_compile["_element"] = $data->attribute_element_obj->as_array("id","title");
+					$object_compile["attributes"][] = $data2->get_compile();
+				}
 			}
-			$object_compile["attributes"][] = $for_compile;
+			else
+			{
+				$data->save();
+				$object_compile["attributes"][] = $data->get_compile();
+			}
 		}
 		return $this;
 	}
