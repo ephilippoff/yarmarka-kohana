@@ -25,13 +25,13 @@ class Landing_Object extends Landing {
 	{	
 
 		$this->compiled = NULL;
-echo 1;
+
 		if ($cachedLanding = Cache::instance('memcache')->get("landing:{$this->_object->id}"))
 		{
 			$this->unserialize($cachedLanding);
 			return;
 		}
-echo 2222222;
+
 		$compiled = ORM::factory('Object_Compiled')
 							->where_cached("object_id","=",$this->_object->id, Date::DAY)
 							->find()							
