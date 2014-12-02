@@ -8,6 +8,19 @@ class Model_Data_List extends Data
 		'attribute_obj' => array('model' => 'Attribute', 'foreign_key' => 'attribute'),
 		'attribute_element_obj' => array('model' => 'Attribute_Element', 'foreign_key' => 'value'),
 	);
+
+	public function get_compile()
+	{
+		if (!$this->loaded())
+			return;
+
+		$result = $this->as_array();
+
+		$result["_attribute"] 	= $this->attribute_obj->as_array("id","title");
+		$result["_element"] 	= $this->attribute_element_obj->as_array("id","title");
+
+		return $result;
+	}
 }
 
 /* End of file List.php */

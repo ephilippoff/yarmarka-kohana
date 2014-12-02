@@ -349,26 +349,28 @@ class Lib_PlacementAds_AddEdit {
 
 		$this->list_ids = $list_ids;
 
+		if ( $this->is_edit AND $params->itis_massload ){
+			$sign_existed = ORM::factory('Object_Signature')->where('object_id','=',$object->id)->find();
+			if ($sign_existed->loaded())
+			{
+				$attachments_count = ORM::factory('Object_Attachment')->where("object_id","=",$object->id)->count_all();
+				$input_attachament_count = count($params->userfile);
+
+				$signature_full = '{'.join(',', $this->signature_full).'}';
+				if ($signature_full == $sign_existed->signature_full 
+						AND $attachments_count == $input_attachament_count)
+				{
+					$errors['nochange'] = "Объявление не требует обновления.";	
+					$this->union_cancel = TRUE;
+				}
+			}
+		}
+		
 		if ($this->is_similarity_enabled())
 		{
 			$max_similarity = Kohana::$config->load('common.max_object_similarity');
 			$similarity 	= ORM::factory('Object_Signature')->get_similarity($max_similarity,$this->signature_full, NULL, $params->object_id, $user->id, "_full", $params->itis_massload);
-			if ( $this->is_edit AND $params->itis_massload ){
-				$sign_existed = ORM::factory('Object_Signature')->where('object_id','=',$object->id)->find();
-				if ($sign_existed->loaded())
-				{
-					$attachments_count = ORM::factory('Object_Attachment')->where("object_id","=",$object->id)->count_all();
-					$input_attachament_count = count($params->userfile);
-
-					$signature_full = '{'.join(',', $this->signature_full).'}';
-					if ($signature_full == $sign_existed->signature_full 
-							AND $attachments_count == $input_attachament_count)
-					{
-						$errors['nochange'] = "Объявление не требует обновления.";	
-						$this->union_cancel = TRUE;
-					}
-				}
-			}
+			
 			if ($similarity["sm"] > $max_similarity){
 				
 				if ( $this->is_edit ){
@@ -1073,24 +1075,21 @@ class Lib_PlacementAds_AddEdit {
 			}
 			//Значения для множественных атрибутов(с учетом того, что is_multiple могут быть только list)
 			if (is_array($value) and isset($value[0]))
+			{
 				foreach ($value as $value_detail) 
 				{
 					$data2 = clone $data;
 					$data2->value = (int)$value_detail;
 					$data2->save();
-				}
-			else
-				$data->save();
 
-			$for_compile = (array) $data->as_array();
-			$for_compile["_type"] = Text::ucfirst($reference->attribute_obj->type);
-			
-			$for_compile["_attribute"] = $data->attribute_obj->as_array("id","title");
-			if ($for_compile["_type"] == 'List')
-			{
-				$for_compile["_element"] = $data->attribute_element_obj->as_array("id","title");
+					$object_compile["attributes"][] = $data2->get_compile();
+				}
 			}
-			$object_compile["attributes"][] = $for_compile;
+			else
+			{
+				$data->save();
+				$object_compile["attributes"][] = $data->get_compile();
+			}
 		}
 		return $this;
 	}

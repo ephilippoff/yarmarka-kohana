@@ -132,10 +132,6 @@ class Object
 
 			$db = Database::instance();
 
-			try
-			{
-				// start transaction
-				$db->begin();
 
 				$add->save_object()
 					->save_photo()
@@ -147,21 +143,10 @@ class Object
 					->save_contacts()
 					->save_compile_object();
 
-				$db->commit();
-			}
-			catch(Exception $e)
-			{
-				Kohana::$log->add(Log::ERROR, 'Local Ошибка при сохранении объявления:'.$e->getMessage());
-				Email::send(Kohana::$config->load('common.admin_emails'), Kohana::$config->load('email.default_from'), 'Local Ошибка при сохранении объявления', $e->getMessage());
-
-				$db->rollback();
-
-				throw $e;
-			}
 
 			$add//->send_external_integrations()
-				->send_to_forced_moderation()
-				->send_message();
+				->send_to_forced_moderation();
+				//->send_message();
 
 			$json['object_id'] = $add->object->id;
 		}
