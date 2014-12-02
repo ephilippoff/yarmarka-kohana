@@ -350,6 +350,7 @@ class Lib_PlacementAds_AddEdit {
 		$this->list_ids = $list_ids;
 
 		if ( $this->is_edit AND $params->itis_massload ){
+
 			$sign_existed = ORM::factory('Object_Signature')->where('object_id','=',$object->id)->find();
 			if ($sign_existed->loaded())
 			{
@@ -357,7 +358,9 @@ class Lib_PlacementAds_AddEdit {
 				$input_attachament_count = count($params->userfile);
 
 				$signature_full = '{'.join(',', $this->signature_full).'}';
-				if ($signature_full == $sign_existed->signature_full 
+				$sign_existed = str_replace('"','',$sign_existed->signature_full);
+
+				if ($signature_full == $sign_existed 
 						AND $attachments_count == $input_attachament_count)
 				{
 					$errors['nochange'] = "Объявление не требует обновления.";	
@@ -365,7 +368,7 @@ class Lib_PlacementAds_AddEdit {
 				}
 			}
 		}
-		
+
 		if ($this->is_similarity_enabled())
 		{
 			$max_similarity = Kohana::$config->load('common.max_object_similarity');
