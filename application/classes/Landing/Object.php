@@ -25,10 +25,18 @@ class Landing_Object extends Landing {
 	{	
 
 		$this->compiled = NULL;
+
+		if ($cachedLanding = Cache::instance('memcache')->get("landing:{$this->_object->id}"))
+		{
+			$this->unserialize($cachedLanding);
+			return;
+		}
+
 		$compiled = ORM::factory('Object_Compiled')
 							->where_cached("object_id","=",$this->_object->id, Date::DAY)
 							->find()							
 							->compiled;
+
 		if ($compiled)
 			$this->compiled = unserialize($compiled);
 
@@ -43,8 +51,8 @@ class Landing_Object extends Landing {
 		$this->priceload	= (isset($this->compiled["pricelist"])) ? ORM::factory('Priceload')
 																				->where_cached("id","=",$this->compiled["pricelist"],Date::DAY)
 																				->find() : NULL;
+
 		$this->pricerows 	= $this->getPricelist( $this->priceload ,(isset($this->compiled["pricelist"])) ? $this->compiled["pricelist"] : NULL );
-		
 
 		$this->object 	= $this->_object->as_array();
 		$this->user 	= ORM::factory('User')
@@ -56,6 +64,8 @@ class Landing_Object extends Landing {
 									->find()->as_array();
 
 		$this->favorite = Auth::instance()->get_user() ? $this->_object->get_favorite(Auth::instance()->get_user()->id) : null;
+
+		Cache::instance('memcache')->set("landing:{$this->_object->id}", $this->serialize());
 	}
 
 	private function getAttributes($attributes)
@@ -157,6 +167,19 @@ class Landing_Object extends Landing {
 			$result["other"][] = Imageci::getSavePaths($image);
 		}
 		return $result;
+	}
+
+	private function serialize()
+	{
+		return get_object_vars($this);
+	}
+
+	private function unserialize($cache)
+	{
+		foreach ($cache as $key => $value) {
+			$this->{$key} = $value;
+		}
+
 	}
 
 }
