@@ -98,6 +98,181 @@ class Priceload
 		return $result;
 	}
 
+	public static function getFiltersHierarchy($queryResult)
+	{
+		$tree = array();
+		foreach ($queryResult as $_row) {
+			$row_keys = array_reverse(array_keys($_row));
+			$row = array_reverse(array_values($_row));
+
+			$level = count($row)-1;
+
+			while ($level >= 0) {
+				if ($level == count($row)-1)
+					$temp = &$tree[ $row_keys[$level]."_".$row[$level] ];
+				else
+					$temp = &$temp[ $row_keys[$level]."_".$row[$level] ];
+				$level--;
+			}
+
+		}
+		return $tree;
+	}
+
+	public static function createSimpleFilters($priceload_id)
+	{
+		$priceload = ORM::factory('Priceload',$priceload_id);
+		$table_name = $priceload->table_name;
+
+		$config = new Obj(unserialize($priceload->config));
+
+		$fields = Priceload::getFieldsFromConfig($config, "filter");
+
+		$filters = array();
+		foreach ($fields as $field_key => $field_value) {
+			$pa = ORM::factory('Priceload_Attribute')
+					->where("priceload_id","=",$priceload_id)
+					->where("column","=", $field_key)
+					->find();
+
+			$pa->priceload_id = $priceload_id;
+			$pa->title = $field_value["title"];
+			$pa->column = $field_key;
+			$pa->save();
+
+			ORM::factory('Priceload_Filter')
+				->where("priceload_id","=",$priceload_id)
+				->where("priceload_attribute_id","=",$pa->id)
+				->delete_all();
+
+			$_filters = DB::select($field_key, DB::expr("count(".$field_key.")"))->from("_temp_".$table_name)
+		 				->group_by($field_key)
+		 				->order_by($field_key,"asc")
+		 				->execute()->as_array($field_key);
+
+		 	foreach ($_filters as  $filter) {
+		 		$filter["column"] = $field_key;
+		 		$filter["title"] = $filter[$field_key];
+		 		$filter["priceload_attribute"] = $pa->id;
+		 		$filters[] = $filter;
+		 	}
+		}
+
+		
+
+		foreach ($filters as $filter) {
+			if ($filter["title"] == "" OR !$filter["title"])
+				continue;
+
+			$_filtered_rows = DB::select("id")->from("_temp_".$priceload->table_name)
+							->where($filter["column"],"=",$filter["title"])							
+			 				->execute()->as_array("id");
+			$filtered_rows = serialize(array_keys($_filtered_rows));
+
+			$pf = ORM::factory('Priceload_Filter');
+			$pf->title = $filter["title"];
+			$pf->column = $filter["column"];
+			$pf->priceload_id = $priceload_id;
+			$pf->count = $filter["count"];
+			$pf->filtered_rows = $filtered_rows;
+			$pf->priceload_attribute_id = $filter["priceload_attribute"];
+			$pf->save();
+		}	
+
+	}
+
+	public static function createHierarchyFilters($priceload_id)
+	{
+		$priceload = ORM::factory('Priceload',$priceload_id);
+		$table_name = $priceload->table_name;
+
+		$config = new Obj(unserialize($priceload->config));
+
+		$fields = Priceload::getFieldsFromConfig($config, "hierarchy_filter");
+
+		if (!count($fields))
+			return;
+
+		// создаем иерархический фильтр
+		$query = DB::select(DB::expr(implode(",",array_keys($fields))))
+						->from("_temp_".$priceload->table_name)
+		 				->execute()->as_array();
+
+		$tree = Priceload::getFiltersHierarchy($query);
+
+		$pa = ORM::factory('Priceload_Attribute')
+				->where("priceload_id","=",$priceload_id)
+				->where("title","=", "hierarchy")
+				->find();
+
+		$pa->priceload_id = $priceload_id;
+		$pa->title = "hierarchy";
+		$pa->save();
+
+		$hierarchy_id = $pa->id;
+
+		ORM::factory('Priceload_Filter')
+				->where("priceload_id","=",$priceload_id)
+				->where("priceload_attribute_id","=",$hierarchy_id)
+				->delete_all();
+
+		self::recurseHierarchyFilters($tree, function($key, $level, $parents) 
+													use ($table_name, $priceload_id, $hierarchy_id){
+
+			@list($column, $title) = explode("_", $key);
+			$parent_id = $parent_key = NULL;
+
+			$_filtered_rows = DB::select("id")->from("_temp_".$table_name);
+			foreach ($parents as $pkey => $pvalue) {
+				$_filtered_rows = $_filtered_rows->where($pkey,"=",$pvalue);
+
+				if ($pkey <>$column AND $pvalue <> $title)
+					$parent_key = $pkey;
+			}
+
+			
+
+			if ($parent_key)
+			{ 
+				$parent_id =  ORM::factory('Priceload_Filter')
+						->where("column","=",$parent_key)
+						->where("title","=",$parents[$parent_key])
+						->find()->id;
+			}
+
+			$_filtered_rows = $_filtered_rows->execute()->as_array("id");
+			$filtered_rows = serialize(array_keys($_filtered_rows));
+			
+			
+
+			$pf = ORM::factory('Priceload_Filter');
+			$pf->title 					= $title;
+			$pf->column 				= $column;
+			$pf->priceload_id 			= $priceload_id;
+			$pf->count 					= count($_filtered_rows);
+			$pf->filtered_rows 			= $filtered_rows;
+			$pf->priceload_attribute_id = $hierarchy_id;
+			$pf->parent_id = $parent_id;
+			$pf->save();
+		});
+
+	}
+
+	public static function recurseHierarchyFilters($data, $callback, $level = 0, $parents = array())
+	{
+		foreach ($data as $key => $value) {
+			@list($f, $v) = explode("_", $key);
+			$parents[$f] = $v;
+			$callback($key, $level, $parents);
+			if (is_array($value))
+			{
+				$level++;
+				self::recurseHierarchyFilters($value, $callback, $level, $parents);
+			}
+			
+		}
+	}
+
 	public function setState($state = 0, $comment = NULL)
 	{
 		$pl = ORM::factory('Priceload', $this->_priceload_id)
@@ -139,6 +314,7 @@ class Priceload
 				"no"    => 'Отключено',
 				"info"    => 'Информационное поле',
 				"filter"  =>  'Фильтр',
+				"hierarchy_filter"  =>  'Иерархический фильтр',
 				"ident"    => 'Уникальный идентификатор',
 				"price"    => 'Цена',
 				"description" => 'Описание'
