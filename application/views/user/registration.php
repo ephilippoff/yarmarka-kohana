@@ -7,49 +7,23 @@
 		</div><!--hheader-->
 
 		<?if ($auth): ?>
-			<div class="fl100  pt16 pb15">
-				<?="Вы уже зарегистрированы и авторизованы"?>
-				<div class="smallcont">
-					<div class="labelcont">
-						<label><span>Перейти к:</span></label>
-					</div>
-					<div class="fieldscont">
-						<div class="inp-cont-short">
-							<div class="inp-cont"  style="color:red;">
-								<a href="/user/profile">Личные данные</a>
-							</div>
-						</div>
-					</div>									
-				</div>
-				<div class="smallcont">
-					<div class="labelcont">
-						<label><span></span></label>
-					</div>
-					<div class="fieldscont">
-						<div class="inp-cont-short">
-							<div class="inp-cont"  style="color:red;">
-								<a href="/">Главная страница</a>
-							</div>
-						</div>
-					</div>									
-				</div>
-				<div class="smallcont">
-					<div class="labelcont">
-						<label><span></span></label>
-					</div>
-					<div class="fieldscont">
-						<div class="inp-cont-short">
-							<div class="inp-cont"  style="color:red;">
-								<a href="/add">Подать объявление</a>
-							</div>
-						</div>
-					</div>									
-				</div>			
+			<div class="fl100  pt16 pb15">				
+				<div class="smallcont reg-msg-cont">
+					<p class="mb20">Вы уже зарегистрированы и авторизованы.</p>
+					<p class="mb5">Перейти к:</p>
+					<ul>
+						<li><a href="/user/profile">Личные данные</a></li>
+						<li><a href="/">Главная страница</a></li>
+						<li><a href="/add">Подать объявление</a></li>				
+					</ul>
+				</div>		
 			</div>
 
 		<?elseif ($success): ?>
 			<div class="fl100  pt16 pb15">
-				<?="На е-мейл, который вы указали, отправлено письмо для подтверждения регистрации. Вы можете закрыть эту страницу или перейти на <a href='yarmarka.biz'>главную</a>."?>
+				<div class="smallcont reg-msg-cont">
+					На email, который вы указали, отправлено письмо для подтверждения регистрации. Вы можете закрыть эту страницу или перейти на <a href='yarmarka.biz'>главную</a>.
+				</div>
 			</div>
 
 		<?else: ?>
@@ -176,7 +150,7 @@
 					</div>
 					<div class="fieldscont">
 						<div class="inp-cont-short">
-							<div class="inp-cont">								
+							<div class="inp-cont accept">								
 								Нажимая на кнопку "Далее", я принимаю <a href="/article/usloviya-ispolzovaniya-saita-yarmarka" target="_blank">условия использования</a> и <a href="/article/pravila-razmeshcheniya-obyavlenii" target="_blank">правила размещения объявлений</a> на сайте "Ярмарка".
 							</div>
 						</div>

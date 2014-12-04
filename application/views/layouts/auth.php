@@ -6,7 +6,7 @@
 <!--<meta name="viewport" id="viewport" content="width=device-width,minimum-  scale=1.0,maximum-scale=10.0,initial-scale=1.0" />-->
 <!--<meta content="width=device-width, initial-scale=1.0" name="viewport">-->
 <meta name="viewport" id="viewport" content="width=device-width">
-<title>Подача объявления</title>
+<title>Регистрация</title>
 <?=Assets::factory('main')->css('css.css', array('media' => 'screen, projection'))
 	->css('iLight.css')
 	->js('jquery.min.js')
@@ -16,7 +16,7 @@
 	->js('header.js')
 	->js('minified/underscore-min.js')
 	->js('minified/backbone-min.js')
-	->js('http://api-maps.yandex.ru/2.0/?load=package.full&lang=ru-RU')
+//	->js('http://api-maps.yandex.ru/2.0/?load=package.full&lang=ru-RU')
 	->js('ajaxupload.js')
 	->js('jquery.inputmask.js')
 	.$_assets
