@@ -107,26 +107,33 @@ class Task_Priceload_Indexer extends Minion_Task
 
 			}
 
-
+			$this->createFilters($priceload->id);
 		}
 
-		Minion_CLI::write('create filters');
+		
+
+		//Temptable::delete_table($name);
+	}
+
+	function createFilters($priceload_id)
+	{
+		Minion_CLI::write('create filters '.$priceload_id);
 
 		$dquery = DB::select("priceload_idata.id")->from("priceload_idata")
 						->join("priceload_attribute","left")
 							->on("priceload_attribute_id","=","priceload_attribute.id")
-						->where("priceload_attribute.priceload_id","=",$priceload->id);
+						->where("priceload_attribute.priceload_id","=",$priceload_id);
 
 		ORM::factory('Priceload_Idata')
 			->where("id","IN",$dquery)
 			->delete_all();
 
 		$pfilter = ORM::factory('Priceload_Filter')
-						->where("priceload_id","=",$priceload->id)
+						->where("priceload_id","=",$priceload_id)
 						->order_by("priceload_id","desc")
 						->order_by("priceload_attribute_id","asc")
 						->find_all();
-						
+			
 		foreach ($pfilter as $filter) {
 			
 			$filtered_rows = unserialize($filter->filtered_rows);
@@ -152,8 +159,6 @@ class Task_Priceload_Indexer extends Minion_Task
 		
 
 		Minion_CLI::write('indexer stop');
-
-		//Temptable::delete_table($name);
 	}
 
 }

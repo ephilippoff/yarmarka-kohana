@@ -128,13 +128,15 @@ class Priceload
 
 		$fields = Priceload::getFieldsFromConfig($config, "filter");
 
-		$filters = array();
-		foreach ($fields as $field_key => $field_value) {
-			$pa = ORM::factory('Priceload_Attribute')
-					->where("priceload_id","=",$priceload_id)
-					->where("column","=", $field_key)
-					->find();
+		ORM::factory('Priceload_Attribute')
+				->where("priceload_id","=",$priceload_id)
+				->where("type","=", "simple")
+				->delete_all();
 
+		$filters = array();
+		foreach ($fields as $field_key => $field_value) {			
+
+			$pa = ORM::factory('Priceload_Attribute');
 			$pa->priceload_id = $priceload_id;
 			$pa->title = $field_value["title"];
 			$pa->column = $field_key;
@@ -179,7 +181,7 @@ class Priceload
 			$pf->priceload_attribute_id = $filter["priceload_attribute"];
 			$pf->save();
 		}	
-
+		self::resetObjectCache($priceload_id);
 	}
 
 	public static function createHierarchyFilters($priceload_id)
@@ -201,11 +203,12 @@ class Priceload
 
 		$tree = Priceload::getFiltersHierarchy($query);
 
-		$pa = ORM::factory('Priceload_Attribute')
-				->where("priceload_id","=",$priceload_id)
-				->where("title","=", "hierarchy")
-				->find();
+		ORM::factory('Priceload_Attribute')
+			->where("priceload_id","=",$priceload_id)
+			->where("type","=", "hierarchy")
+			->delete_all();
 
+		$pa = ORM::factory('Priceload_Attribute');
 		$pa->priceload_id = $priceload_id;
 		$pa->title = "hierarchy";
 		$pa->type = "hierarchy";
@@ -248,6 +251,18 @@ class Priceload
 			return $pf->id;
 		});
 
+		self::resetObjectCache($priceload_id);
+	}
+
+	public static function resetObjectCache($priceload_id)
+	{
+		$op =ORM::factory('Object_Priceload')
+				->where("priceload_id","=",$priceload_id)
+				->find_all();
+		foreach ($op as $price) {
+			Cache::instance('memcache')->delete("landing:{$price->object_id}");
+		}
+		
 	}
 
 	public static function recurseHierarchyFilters($data, $callback, $level = 0, $parents = array(), $parent_id = NULL)

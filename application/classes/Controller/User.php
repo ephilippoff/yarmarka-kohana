@@ -364,6 +364,8 @@ class Controller_User extends Controller_Template {
 			$pl->keywords = $array_post_data["keywords"];
 			$pl->title = $array_post_data["title"];
 			$pl->save();
+
+			Priceload::resetObjectCache($this->request->param('id'));
 		}
 
 		$fsetting = new Obj();

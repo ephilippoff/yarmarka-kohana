@@ -37,7 +37,7 @@
 				<?php echo View::factory('landing/price/hierarchy/hierarchy_default', array(	"hierarchy_filters" => $hierarchy_filters, "level0" => TRUE) );  ?>
 				<? if ($simple_filters): ?>
 					<? foreach($simple_filters as $filter):?>
-							<select attribute="<?=$filter['title']?>" class="priceattribute" onchange="_pricecontrol.price_attribute_search()">
+							<select attribute="<?=$filter['id']?>" class="priceattribute" onchange="_pricecontrol.price_attribute_search()">
 								<option value="">-- <?=$filter['title']?>--</option>
 								<? foreach($filter['values'] as $key => $value):?>
 									<option value="<?=$key?>"><?=$value["title"]?> (<?=$value["count"]?>)</option>
