@@ -17,7 +17,7 @@ class Controller_Ajax_Landing extends Controller_Ajax {
 		$attributes = array();
 		foreach ($_attributes as $_attribute) {
 			$attribute = explode("_", $_attribute);
-			$value = $this->input->post($_attribute);
+			$value = $this->request->post($_attribute);
 			if ($value AND $value<>"")
 				$attributes[$attribute[1]] = $value;
 		}
