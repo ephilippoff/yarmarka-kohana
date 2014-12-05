@@ -138,6 +138,7 @@ class Priceload
 			$pa->priceload_id = $priceload_id;
 			$pa->title = $field_value["title"];
 			$pa->column = $field_key;
+			$pa->type = "simple";
 			$pa->save();
 
 			ORM::factory('Priceload_Filter')
@@ -207,6 +208,7 @@ class Priceload
 
 		$pa->priceload_id = $priceload_id;
 		$pa->title = "hierarchy";
+		$pa->type = "hierarchy";
 		$pa->save();
 
 		$hierarchy_id = $pa->id;
@@ -216,29 +218,17 @@ class Priceload
 				->where("priceload_attribute_id","=",$hierarchy_id)
 				->delete_all();
 
-		self::recurseHierarchyFilters($tree, function($key, $level, $parents) 
+		self::recurseHierarchyFilters($tree, function($key, $level, $parents, $parent_id) 
 													use ($table_name, $priceload_id, $hierarchy_id){
 
 			@list($column, $title) = explode("_", $key);
-			$parent_id = $parent_key = NULL;
 
 			$_filtered_rows = DB::select("id")->from("_temp_".$table_name);
 			foreach ($parents as $pkey => $pvalue) {
 				$_filtered_rows = $_filtered_rows->where($pkey,"=",$pvalue);
-
-				if ($pkey <>$column AND $pvalue <> $title)
-					$parent_key = $pkey;
 			}
 
 			
-
-			if ($parent_key)
-			{ 
-				$parent_id =  ORM::factory('Priceload_Filter')
-						->where("column","=",$parent_key)
-						->where("title","=",$parents[$parent_key])
-						->find()->id;
-			}
 
 			$_filtered_rows = $_filtered_rows->execute()->as_array("id");
 			$filtered_rows = serialize(array_keys($_filtered_rows));
@@ -254,20 +244,22 @@ class Priceload
 			$pf->priceload_attribute_id = $hierarchy_id;
 			$pf->parent_id = $parent_id;
 			$pf->save();
+
+			return $pf->id;
 		});
 
 	}
 
-	public static function recurseHierarchyFilters($data, $callback, $level = 0, $parents = array())
+	public static function recurseHierarchyFilters($data, $callback, $level = 0, $parents = array(), $parent_id = NULL)
 	{
 		foreach ($data as $key => $value) {
 			@list($f, $v) = explode("_", $key);
 			$parents[$f] = $v;
-			$callback($key, $level, $parents);
+			$filter_id = $callback($key, $level, $parents, $parent_id);
 			if (is_array($value))
 			{
 				$level++;
-				self::recurseHierarchyFilters($value, $callback, $level, $parents);
+				self::recurseHierarchyFilters($value, $callback, $level, $parents, $filter_id);
 			}
 			
 		}

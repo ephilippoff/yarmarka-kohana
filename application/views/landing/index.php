@@ -108,11 +108,8 @@ $(document).ready(function() {
 
 												
 										<div class="fl w100p mt20">
-											<?php if (isset($data->pricerows) AND count($data->pricerows)): ?>
-	                                          <?php  echo View::factory('landing/price/price_default', array(	"priceload" => $data->priceload, 
-	                                          																	"pricerows" => $data->pricerows,
-	                                          																	"pricerows_filters" => NULL,
-	                                          																	"object" =>$data->object)); ?>
+											<?php if (isset($data->pricelist) AND count($data->pricelist["pricerows"])): ?>
+	                                          <?php  echo View::factory('landing/price/price_default', $data->pricelist); ?>
 	                                        <?php endif; ?>
                                         </div>												
 

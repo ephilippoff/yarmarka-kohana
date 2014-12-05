@@ -46,6 +46,8 @@ class Controller_Landing extends Controller_Template {
 //		$this->use_layout = FALSE;
 //		$this->auto_render = FALSE;
 
+		$this->assets->js("landing.js");
+
 		if ($this->object)
 		{
 			$lo = new Landing_Object($this->object);

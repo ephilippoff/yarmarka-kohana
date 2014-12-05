@@ -128,6 +128,10 @@ class Sphinx {
 					if ($cityrow->loaded())
 						$pricerow["city_name"] = $cityrow->title;
 				}
+				if ($pricerow["full"])
+				{
+					$pricerow["values"] = unserialize($pricerow["full"]);
+				}
 				$pricerows[] = $pricerow;
 
 				if (array_key_exists($pricerow["object_id"], $object_pricerows))
