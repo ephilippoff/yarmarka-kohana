@@ -1366,7 +1366,7 @@ class Controller_User extends Controller_Template {
 
 	public function action_account_verification()
 	{
-
+		$this->layout = 'auth';
 		$code =$this->request->param("id");
 		$user = ORM::factory('User')
 						->where("code","=",$code)

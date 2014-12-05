@@ -5,75 +5,29 @@
 			Завершение регистрации на сайте бесплатных объявлений «Ярмарка»
 			</strong></span></h1>
 		</div><!--hheader-->
+		
 		<div class="fl100 ta-c pt16 pb15">
-			<?=$message?>
+			<div class="smallcont reg-msg-cont">
+			<p class="mb20"><?=$message?></p>			
+			<? if ($success): ?>
+					
+					<p class="mb5">Перейти к:</p>
+					<ul>
+						<li><a href="/user/profile">Личные данные</a></li>
+						<li><a href="/">Главная страница</a></li>
+						<li><a href="/add">Подать объявление</a></li>				
+					</ul>
+								
+			<? else: ?>
+			
+					<p class="mb5">Перейти к:</p>
+					<ul>
+						<li><a href="/user/login">Войти на сайт</a></li>
+						<li><a href="/user/forgot_password">Напомнить пароль</a></li>			
+					</ul>
+								
+			<? endif;?>
+			</div>	
 		</div>
-		<? if ($success): ?>
-			<div class="fl100  pt16 pb15">
-					<div class="smallcont">
-						<div class="labelcont">
-							<label><span>Перейти к:</span></label>
-						</div>
-						<div class="fieldscont">
-							<div class="inp-cont-short">
-								<div class="inp-cont"  style="color:red;">
-									<a href="/user/profile">Личные данные</a>
-								</div>
-							</div>
-						</div>									
-					</div>
-					<div class="smallcont">
-						<div class="labelcont">
-							<label><span></span></label>
-						</div>
-						<div class="fieldscont">
-							<div class="inp-cont-short">
-								<div class="inp-cont"  style="color:red;">
-									<a href="/">Главная страница</a>
-								</div>
-							</div>
-						</div>									
-					</div>
-					<div class="smallcont">
-						<div class="labelcont">
-							<label><span></span></label>
-						</div>
-						<div class="fieldscont">
-							<div class="inp-cont-short">
-								<div class="inp-cont"  style="color:red;">
-									<a href="/add">Подать объявление</a>
-								</div>
-							</div>
-						</div>									
-					</div>					
-			</div>
-
-		<? else:?>
-			<div class="smallcont">
-				<div class="labelcont">
-					<label><span>Перейти к:</span></label>
-				</div>
-				<div class="fieldscont">
-					<div class="inp-cont-short">
-						<div class="inp-cont"  style="color:red;">
-							<a href="/user/login">Войти на сайт</a>
-						</div>
-					</div>
-				</div>									
-			</div>
-			<div class="smallcont">
-				<div class="labelcont">
-					<label><span></span></label>
-				</div>
-				<div class="fieldscont">
-					<div class="inp-cont-short">
-						<div class="inp-cont"  style="color:red;">
-							<a href="/user/forgot_password">Напомнить пароль</a>
-						</div>
-					</div>
-				</div>									
-			</div>
-		<? endif;?>
-
 	</section>
 </div>
