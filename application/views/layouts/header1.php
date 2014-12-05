@@ -1,3 +1,12 @@
+<?php if (Kohana::$config->load('common.enable_new_year_animation')) : //включение анимации?>
+			<script type="text/javascript" src="/js/adaptive/snow.js"></script>
+			<script type="text/javascript">
+			$(function() {
+				$(document).snow({ SnowImage: "/images/snow.gif" });
+			});
+			</script>
+<?php endif; ?>
+
 <header class="m_header header_image"  <?php if ( ! empty($style)) echo "style='$style'" ?>>
 	<section class="winner">
 		<?php //echo View::factory('block/_user_message')?>

@@ -632,10 +632,7 @@
 			
 		</noindex>
 		
-<!--		<div class="widget mb30">
-			<p class="title ta-c s2">&laquo;Ярмарка-онлайн&raquo;</p>
-			<p class="info">Внимание! Теперь в разделе &laquo;Работа&raquo; поднятие объявлений доступно <br> <span class="red fs14">1 раз в сутки</span>,<br> во всех остальных разделах - <br><span class="red fs14">1 раз в 3 суток</span>.<br> Услуга бесплатная!</p>
-		</div>-->
+
 	</aside>
 	
 	<noindex>
