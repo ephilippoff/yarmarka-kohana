@@ -1243,7 +1243,7 @@ class Controller_Ajax extends Controller_Template
 		if (!empty($text))
 		{
 			$sphinx = new Sphinx();
-			$result = $sphinx->search($text, $category_id, $city_id, FALSE, 0, 5);
+			$result = $sphinx->search($text, $category_id, $city_id, FALSE, NULL, 0, 5);
 
 			$objects = Sphinx::getObjects($result);
 			$pricerows = Sphinx::getPricerows($result, $city_id);

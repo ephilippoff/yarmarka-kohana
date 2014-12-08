@@ -9,13 +9,13 @@ class Sphinx {
 		Sphinx::$_prefix = Kohana::$config->load("common.sphinx_prefix");
 	}
 
-	public function search($_keywords, $category_id = 0, $city_id = 0, $save = FALSE, $offset = 0, $limit = 0)
+	public function search($_keywords, $category_id = 0, $city_id = 0, $save = FALSE, $object_id = 0, $offset = 0, $limit = 0)
 	{
 
 		$keywords = Sphinx::GetSphinxKeyword($_keywords);
 
 		$objects = Sphinx::searchObjects($keywords, $category_id, $city_id, $offset, $limit);
-		$pricerows = Sphinx::searchPricerow($keywords, $category_id, $city_id, $offset, $limit);
+		$pricerows = Sphinx::searchPricerow($keywords, $category_id, $city_id, $object_id, $offset, $limit);
 
 		$objectsFound = $objects["total_found"];	
 		$pricerowFound = $pricerows["total_found"];	
@@ -69,7 +69,7 @@ class Sphinx {
 		return $sphinx->Query("@* ".$keywords, $object_index_name);
 	}
 
-	public static function searchPricerow($keywords, $category_id = 0, $city_id = 0, $offset = 0, $limit = 0)
+	public static function searchPricerow($keywords, $category_id = 0, $city_id = 0, $object_id = 0,$offset = 0, $limit = 0)
 	{
 		$mode = SPH_MATCH_EXTENDED2;
 
@@ -92,6 +92,10 @@ class Sphinx {
 		
 		if ($city_id > 0){
 			$sphinx->SetFilter('city_id', array($city_id));
+		}
+
+		if ($object_id > 0){
+			$sphinx->SetFilter('object_id', array($object_id));
 		}
 
 		if ($offset > 0)
