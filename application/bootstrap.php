@@ -85,7 +85,7 @@ Kohana::init(array(
 	'index_file'	=> '',
 	'profile'		=> FALSE,
 	'caching'		=> Kohana::$environment === Kohana::PRODUCTION,
-	'errors'		=> Kohana::$environment === Kohana::DEVELOPMENT,
+	'errors'		=> Kohana::$environment === Kohana::DEVELOPMENT, //не работает для ошибок из ORM
 ));
 
 /**
