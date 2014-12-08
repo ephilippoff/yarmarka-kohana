@@ -18,6 +18,7 @@ class Model_Data_List extends Data
 
 		$result["_attribute"] 	= $this->attribute_obj->as_array("id","title");
 		$result["_element"] 	= $this->attribute_element_obj->as_array("id","title");
+		$result["_type"] = "List";
 
 		return $result;
 	}

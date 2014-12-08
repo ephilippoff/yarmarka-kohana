@@ -16,7 +16,7 @@ class Controller_Landing extends Controller_Template {
 			$this->domain = $this->request->param("domain");
 
 		$this->landing = ORM::factory('Landing')
-							->where_cached("domain", "=",$this->domain,Date::DAY)
+							->where_cached("domain", "=",$this->domain,0)
 							->find();
 
 		if (!$this->landing->loaded())
@@ -45,6 +45,8 @@ class Controller_Landing extends Controller_Template {
 	{
 //		$this->use_layout = FALSE;
 //		$this->auto_render = FALSE;
+
+		$this->assets->js("landing.js");
 
 		if ($this->object)
 		{

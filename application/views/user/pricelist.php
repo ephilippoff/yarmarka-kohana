@@ -12,7 +12,7 @@
 			<tr>
 				<?
 					$title = $data->{$field.'_title'};
-					$type = $data->{$field.'_type'};
+					$type  = $data->{$field.'_type'};
 				?>
 				<td ><?=$field?></td>
 				<td ><input name="<?=$field?>_title" type="text" value="<?=$title?>"/></td>

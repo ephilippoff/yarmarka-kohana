@@ -36,6 +36,11 @@ Route::set('ajax_massload', 'ajax/massload/<action>')
 		'controller' => 'Ajax_Massload',
 		'action'     => 'index',
 	));
+Route::set('ajax_landing', 'ajax/landing/<action>')
+	->defaults(array(
+		'controller' => 'Ajax_Landing',
+		'action'     => 'index',
+	));
 Route::set('ajax_admin', 'ajax/admin/<action>')
 	->defaults(array(
 		'controller' => 'Ajax_Admin',
