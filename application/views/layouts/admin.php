@@ -86,7 +86,7 @@
 						</li>
 						<?php endif; ?>
 						
-						<?php if (Auth::instance()->get_user()) : ?>
+						<?php if (Auth::instance()->have_access_to('reklama')) : ?>
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">Reklama <b class="caret"></b></a>
 							<ul class="dropdown-menu">
