@@ -252,11 +252,9 @@ class Priceload
 			
 
 			$_filtered_rows = $_filtered_rows->execute()->as_array("id");
-
-			if (!count($_filtered_rows))
-				continue;
-
 			$filtered_rows = serialize(array_keys($_filtered_rows));
+			
+			
 
 			$pf = ORM::factory('Priceload_Filter');
 			$pf->title 					= $title;
