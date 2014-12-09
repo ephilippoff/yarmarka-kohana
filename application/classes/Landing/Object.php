@@ -83,6 +83,7 @@ class Landing_Object extends Landing {
 												->where("priceload_id","=",$priceload->id)
 												->where("priceload_attribute_id","=",$hierarchy_filter_id)
 												->where("parent_id","IS",NULL)
+												->order_by("title","asc")
 												->find_all();
 
 			$this->pricelist = array(
