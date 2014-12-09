@@ -37,7 +37,7 @@
 <body class="adaptiveoff">
 	<?=View::factory('layouts/google_analytics')?>
 	<div class="wrapfix">
-			<?=View::factory('layouts/header1')?>
+			<?=View::factory('layouts/header')?>
 			<div class="m_content">
 			<?=$_content?>
 	        </div>
