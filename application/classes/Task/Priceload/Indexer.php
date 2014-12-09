@@ -130,6 +130,7 @@ class Task_Priceload_Indexer extends Minion_Task
 
 		$pfilter = ORM::factory('Priceload_Filter')
 						->where("priceload_id","=",$priceload_id)
+						->where("count",">",0)
 						->order_by("priceload_id","desc")
 						->order_by("priceload_attribute_id","asc")
 						->find_all();
@@ -142,7 +143,6 @@ class Task_Priceload_Indexer extends Minion_Task
 				Minion_CLI::write('!!!!!! filter:'.$filter->title.' ('.$filter->count.')');
 				continue;
 			}
-			
 
 			$pidata = ORM::factory('Priceload_Idata');
 			$query = DB::select("id", array(DB::expr($filter->id),"filter"), array(DB::expr($filter->priceload_attribute_id),"attribute"))
