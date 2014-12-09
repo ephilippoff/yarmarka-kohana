@@ -244,6 +244,9 @@ class Priceload
 
 			@list($column, $title) = explode("_", $key);
 
+			if (!$title)
+				return FALSE;
+
 			$_filtered_rows = DB::select("id")->from("_temp_".$table_name);
 			foreach ($parents as $pkey => $pvalue) {
 				$_filtered_rows = $_filtered_rows->where($pkey,"=",$pvalue);
@@ -289,6 +292,8 @@ class Priceload
 			@list($f, $v) = explode("_", $key);
 			$parents[$f] = $v;
 			$filter_id = $callback($key, $level, $parents, $parent_id);
+			if (!$filter_id)
+				continue;
 			if (is_array($value))
 			{
 				$level++;
