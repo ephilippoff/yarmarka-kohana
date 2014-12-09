@@ -389,6 +389,8 @@ class Controller_Ajax_Massload extends Controller_Template {
 		$load->filepath = $filepath;
 		$load->config = NULL;
 		$load->save();
+		
+		ini_set('memory_limit', '256M');
 
 		try {
 			
@@ -452,6 +454,7 @@ class Controller_Ajax_Massload extends Controller_Template {
 
 		$pl->_filepath =  $load->filepath_original;
 
+		ini_set('memory_limit', '256M');
 		try {
 			
 			$db->begin();	
