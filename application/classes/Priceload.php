@@ -40,11 +40,26 @@ class Priceload
 		return $load->id;
 	}
 
-	public function saveTempRecordsByLoadedFiles()
+	public function saveTempRecordsByLoadedFiles($edit = FALSE)
 	{
 		$pl = ORM::factory('Priceload', $this->_priceload_id);
-		$pl->table_name = $this->saveRecordsToTempTable();
-		$pl->save();
+		if (!$edit)
+		{
+			$pl->table_name = $this->saveRecordsToTempTable();
+			$pl->save();
+		} else {
+			$f = new Massload_File();
+			$config = unserialize($pl->config);
+
+			$config["fields"] = array();
+			foreach (explode(",", $config["columns"]) as $column) {
+				if (isset($config[$column."_title"]))
+				$config["fields"][$column] = array("name" => $column, "type" => $config[$column."_type"]);
+			}
+
+			$fields 	= array_merge($config["fields"], Priceload::getServiceFields());
+			$this->saveRowsToTempTable($f, $config, $this->_filepath, $fields, $pl->table_name);
+		}
 	}
 
 	public function saveRecordsToTempTable()
@@ -67,8 +82,14 @@ class Priceload
 		$fields 	= array_merge($config["fields"], Priceload::getServiceFields());
 		Temptable::create_table($table_name, $fields);
 
-				
+		$this->saveRowsToTempTable($f, $config, $filepath, $fields, $table_name);
+
+		return $table_name;
 		
+	}
+
+	public function saveRowsToTempTable(Massload_File $f, $config, $filepath, $fields, $table_name)
+	{
 		$f->forEachRow($config, $filepath, function($row, $i) use ($fields, $table_name){
 				$t = ORM_Temp::factory($table_name);
 				foreach ($fields as $field){
@@ -77,9 +98,6 @@ class Priceload
 				}
 				$t->save();
 		});
-
-		return $table_name;
-		
 	}
 
 	public static function getFieldsFromConfig($config, $typefield = NULL)
