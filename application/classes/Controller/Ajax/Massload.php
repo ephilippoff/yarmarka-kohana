@@ -415,6 +415,60 @@ class Controller_Ajax_Massload extends Controller_Template {
 
 	}
 
+	public function action_priceload_toindex_edit()
+	{
+
+		$priceload_id = $this->request->post("priceload_id");
+
+		$user = Auth::instance()->get_user();
+		if (!$user->loaded() OR ($user->role <>1 AND $user->role<>9) OR !$priceload_id)
+		{
+			throw new HTTP_Exception_404;
+			return;
+		}
+
+		$user_id = $user->id;
+
+		$file = $_FILES["file"];
+		$db = Database::instance();
+		if (!$user_id)
+			return;
+
+		$settings = new Obj();
+
+		$f = new Massload_File();
+		@list($filepath, $imagepath) = $f->init($file, $user_id);
+
+		$pl = new Priceload($user_id, $settings, $priceload_id);
+		
+		$pl->_filepath =  $filepath;
+
+		
+		ini_set('memory_limit', '256M');
+
+		try {
+			
+			$db->begin();	
+
+			$pl->saveTempRecordsByLoadedFiles(TRUE);
+
+			$db->commit();
+
+		} catch(Exception $e)
+		{
+			$db->rollback();
+			$this->json['data'] ="error";
+			$this->json['error'] = $e->getMessage();
+			return;
+		}
+
+		$pl->setState(2);
+
+		$this->json['data'] = "ok";
+		$this->json['priceload_id'] = $pl->_priceload_id;
+
+	}
+
 	public function action_priceload_selftoindex()
 	{
 		$priceload_id = $this->request->post("id");

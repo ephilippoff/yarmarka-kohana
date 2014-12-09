@@ -445,6 +445,26 @@
 	        	location.reload();
 		     }  
 		   });
+
+		   var button = $(this).find(".priceeditbutton");
+		   self.id = button.attr("data-id");
+
+		   new AjaxUpload(button, {
+		    action: '/ajax/massload/priceload_toindex_edit',
+            name: 'file',
+            data : {context :self},
+            autoSubmit: true,
+		     onSubmit: function(filename, response) {
+		        this.setData({ context : self, priceload_id: self.id});
+		     },
+		     onComplete: function(file, response) {
+		     	var data = null;
+		        if (response) 
+	        		data = $.parseJSON(response);
+	        	console.log(data);
+	        	//location.reload();
+		     }  
+		   });
 		});
 	});
 
@@ -458,6 +478,7 @@
 		 	}
 		});
 	}
+
 
     </script>
 
@@ -502,7 +523,8 @@
 					<a href="#comment" onclick="pricestate_send(<?=$item->id?>,2);" style="color:green">Одобрить<span href="" class="icon-ok"></span></a></br>			
 				<? endif; ?>
 				<a data-id="<?=$item->id?>" class="priceloadbutton" href="" style="color:purple">Загрузить в индекс (с диска)<span href="" class="icon-refresh"></span></a></br>
-				<a href="#comment" onclick="priceload_selftoindex(<?=$item->id?>);" style="color:brown">Загрузить в индекс (этот файл)<span href="" class="icon-refresh"></span></a>
+				<a href="#comment" onclick="priceload_selftoindex(<?=$item->id?>);" style="color:brown">Загрузить в индекс (этот файл)<span href="" class="icon-refresh"></span></a></br>
+				<a data-id="<?=$item->id?>" class="priceeditbutton" style="color:lightblue">Редактирование / Догрузка<span href="" class="icon-refresh"></span></a>
 			</td>	
 			
 			<td>

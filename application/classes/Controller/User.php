@@ -349,7 +349,8 @@ class Controller_User extends Controller_Template {
 		$states = $pl->get_states();
 
 		$this->template->fields = array_diff($fields, array_keys($service_fields), array("id"));
-		$this->template->items =  $temp->order_by("id","asc")->as_object()->execute();		
+		$this->template->count =  $temp->execute()->count();	
+		$this->template->items =  $temp->order_by("id","desc")->limit(50)->as_object()->execute();		
 		$this->template->price_id = $this->request->param('id');
 		$this->template->title = $pl->title;
 		$this->template->state = $states[$pl->state];

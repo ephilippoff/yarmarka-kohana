@@ -42,7 +42,7 @@ class Controller_Ajax_Landing extends Controller_Ajax {
 		if ($text <> "")
 		{
 			$sphinx = new Sphinx();
-			$result = $sphinx->search($text, NULL, NULL, FALSE, $offset, $limit);
+			$result = $sphinx->search($text, NULL, NULL, FALSE, $object_id, $offset, $limit);
 			$pricerows = Sphinx::getPricerows($result, 0);
 			$pricerows = Landing_Object::clearSphinxValues($priceload, $pricerows);
 			$count_pricerows = $result["pricerows"]["total"];
