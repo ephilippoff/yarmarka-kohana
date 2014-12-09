@@ -21,6 +21,8 @@
 					<span class="domen"><?=Region::get_current_domain()?></span>
 				</div>
 				
+				<?php if (!array_key_exists("HTTP_FROM", $_SERVER)) : ?>	
+					
 				<div class="btn-red big add-advert"><a href="<?=CI::site('add')?>"><span>Подать объявление</span></a></div>				
 												
 				<!--noindex-->
@@ -64,6 +66,8 @@
 				</div>	
 				
 				<!--/noindex-->
+				
+				<?php endif; ?>
 				
 					</div>		
 			</div>
