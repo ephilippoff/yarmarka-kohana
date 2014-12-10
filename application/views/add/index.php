@@ -1,5 +1,4 @@
 <div class="winner oh">	
-
 	<section class="main-cont main-cont-add">
 		<div class="hheader">
 			<h1 class="ta-c"><span><strong>
