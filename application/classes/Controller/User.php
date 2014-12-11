@@ -1314,51 +1314,38 @@ class Controller_User extends Controller_Template {
 	public function action_registration()
 	{
 		$this->layout = 'auth';
-		$is_post = ($_SERVER['REQUEST_METHOD']=='POST');
+		$is_post = (HTTP_Request::POST === $this->request->method());
 		$post_data = new Obj($this->request->post());
 		$error = new Obj();
 		$success = FALSE;
+
 		if ($is_post)
 		{
-			if(!Security::check($post_data->csrf)){
-				$error->login = "Подпись не прошла проверку подлинности. Обновите страницу";
+			$validation = ORM::factory('User')
+								->register_validation((array) $post_data);
+
+			if ( !$validation->check())
+			{
+				$error = new Obj($validation->errors('validation/auth'));
 			} else {
-				$validation = Validation::factory((array) $post_data)
-					->rule('login', 'not_empty', array(':value', "Email"))
-					->rule('login', 'email', array(':value', "Email"))
-					->rule('login', 'login_exist', array(':value', $post_data->login))
-					->rule('pass', 'not_empty', array(':value', "Пароль"))
-					->rule('pass2', 'not_empty', array(':value', "Пароль (повторно)"))
-					->rule('pass2', 'matches', array((array) $post_data, "pass", "pass2"))
-					->rule('type', 'not_empty', array(':value', "Статус"))
-					->rule('type', 'valid_org_type', array(':value', "Статус"));;
+				try {
 
-				if ( !$validation->check())
+					$user_id = ORM::factory('User')
+									->registration( $post_data->login, 
+													$post_data->pass, 
+													$post_data->type );
+				} catch (Exception $e)
 				{
-					$error = new Obj($validation->errors('validation/auth'));
-				} else {
-					$user = ORM::factory('User')
-								->registration($post_data->login, $post_data->pass, $post_data->type);
+					$error->login = "Произошла непредвиденная ошибка. Информация о ошибке отправлена администратору.";
 
-					if ($user)
-					{
-						$user = ORM::factory('User', $user);
-						if ($user->loaded())
-						{
-							$msg = View::factory('emails/register_success', array('activationCode' => $user->code));
-							Email::send($user->email, Kohana::$config->load('email.default_from'), 'Подтверждение регистрации на Ярмарке', $msg);
-						}
-
-						$success = TRUE;
-					} else {
-						$error->login = 'Непредвиденная ошибка. Обратитесь пожалуйста в техподдержку';
-					}
-
+					Admin::send_error("Ошибка при регистрации пользователя", array(
+							$e->getMessage(), Debug::vars($post_data), $e->getTraceAsString()
+					));
 				}
 			}
 		}
 
-		$this->template->success = $success;
+		$this->template->success = (isset($user_id));
 		$this->template->params = $post_data;
 		$this->template->error = $error;
 		$this->template->auth = Auth::instance()->get_user();

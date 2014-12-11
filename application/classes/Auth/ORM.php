@@ -111,9 +111,6 @@ class Auth_ORM extends Kohana_Auth_ORM {
 
 			// Load the user
 			$user = ORM::factory('User');
-			/*$user->where(DB::expr('w_lower('.$user->unique_key($username).')'), '=', DB::expr("w_lower('".$username."')"))
-				->where('is_blocked', '<>', 2)
-				->find();*/
 			$user->get_user_by_email($username)->find();
 		}
 
@@ -127,9 +124,7 @@ class Auth_ORM extends Kohana_Auth_ORM {
 
 		if ($user->loaded() AND $user->is_blocked == 2)
 		{
-			$block_reason = "";
-			if ($user->block_reason)
-				$block_reason = "Причина: Учетная запись еще не активирована. Для активации перейдите по ссылке высланной вам на email";
+			$block_reason = "Учетная запись еще не активирована. Для активации перейдите по ссылке высланной вам ранее на email";
 			throw new Exception($block_reason, 303);
 		}
 

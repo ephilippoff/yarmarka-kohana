@@ -46,10 +46,10 @@ class Model_User extends Model_Auth_User {
 				array('max_length', array(':value', 32)),
 				array(array($this, 'unique'), array('login', ':value')),
 				array(array($this, 'check_ip')),
-				array(array($this, 'check_cookie')),
 			),
 			'passw' => array(
 				array('not_empty'),
+				array('min_length', array(':value', 6)),
 			),
 			'email' => array(
 				array('email'),
@@ -73,9 +73,6 @@ class Model_User extends Model_Auth_User {
 		return array(
 			'passw' => array(
 				array(array(Auth::instance(), 'hash'))
-			),
-			'email' => array(
-				array(array($this, 'trigger_save_email'), array(':value')),
 			),
 			'phone' => array(
 				array(array($this, 'trigger_save_phone'), array(':value')),
@@ -319,20 +316,6 @@ class Model_User extends Model_Auth_User {
 
 		return TRUE;
 	}
-
-	public function check_cookie()
-	{
-		if ($user_id = Cookie::get('r_user_id'))
-		{
-			$user = ORM::factory('User', $user_id);
-			if ($user->loaded())
-			{
-				return FALSE; // пользователь уже регистрирвоался с этого браузера
-			}
-		}
-
-		return TRUE;
-	}
 	
 	public function getAllUnits()
 	{
@@ -350,9 +333,14 @@ class Model_User extends Model_Auth_User {
 		if ($email AND Valid::email($email))
 		{
 			$contact = ORM::factory('Contact');
-			$contact->contact 			= trim($email);
+			$contact->contact 			= trim(mb_strtolower($email));
 			$contact->contact_type_id 	= Model_Contact_Type::EMAIL;
 			$contact->create();
+			if ($contact->id)
+			{
+				$contact->verified_user_id 	= $this->id;
+				$contact->save();
+			}
 		}
 
 		return $email;
@@ -442,6 +430,20 @@ class Model_User extends Model_Auth_User {
 
 	}
 
+	public function register_validation(Array $data)
+	{
+		return Validation::factory($data)
+					->rule('csrf', 'Security::check')
+					->rule('login', 'not_empty', array(':value', "Email"))
+					->rule('login', 'email', array(':value', "Email"))
+					->rule('login', 'login_exist', array(':value', @$data['login']))
+					->rule('pass', 'not_empty', array(':value', "Пароль"))
+					->rule('pass', 'min_length', array(':value', 6, "Пароль"))
+					->rule('pass2', 'not_empty', array(':value', "Пароль (повторно)"))
+					->rule('pass2', 'matches', array($data, "pass", "pass2"))
+					->rule('type', 'not_empty', array(':value', "Статус"))
+					->rule('type', 'valid_org_type', array(':value', "Статус"));
+	}
 
 	public function registration($email, $password, $type = 1)
 	{
@@ -460,8 +462,25 @@ class Model_User extends Model_Auth_User {
 		$this->ip_addr = $_SERVER["REMOTE_ADDR"];
 		$this->org_type = $type;
 		$this->save();
+
+		$this->trigger_save_email($email);
+
+		$this->send_register_success();
+		
 		return $this->id;
 
+	}
+	/**
+	 * [send_register_success send email about success registration and link to complete registration]
+	 * @return [void]
+	 */
+	public function send_register_success()
+	{
+		if (!$this->loaded())
+			return;
+
+		$msg = View::factory('emails/register_success', array('activationCode' => $this->code));
+		Email::send($this->email, Kohana::$config->load('email.default_from'), 'Подтверждение регистрации на Ярмарке', $msg);
 	}
 
 	private static function generate_code($str)

@@ -22,7 +22,7 @@
 		<?elseif ($success): ?>
 			<div class="fl100  pt16 pb15">
 				<div class="smallcont reg-msg-cont">
-					На email, который вы указали, отправлено письмо для подтверждения регистрации. Вы можете закрыть эту страницу или перейти на <a href='yarmarka.biz'>главную</a>.
+					На email, который вы указали, отправлено письмо с информацией о завершении регистрации. Вы можете закрыть эту страницу или перейти на <a href='/'>главную</a>.
 				</div>
 			</div>
 
@@ -88,7 +88,7 @@
 							<div class="inp-cont <? if ($error->pass2) echo "error";?>">
 								<span class="required-label">*</span>
 								
-								<input type="password" name="pass2" value="<? if ($params->pass) echo $params->pass;?>" autocomplete="off"/>
+								<input type="password" name="pass2" value="<? if ($params->pass2) echo $params->pass2;?>" autocomplete="off"/>
 								
 								<? if ($error->pass2): ?>
 								<span class="inform fn-error">
