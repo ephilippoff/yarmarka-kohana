@@ -165,7 +165,7 @@
 			<% if (item.city_name){ %>
 				<span class="city"><%=item.city_name %></span>
 			<% } %>
-			<span class="city mr20" style="color:gray;"><a href="/detail/<%=item.object_id %><%=item.id%>"><%=item.title %></a></span>
+			<span class="city mr20" style="color:gray;"><a href="/detail/<%=item.object_id %>"><%=item.title %></a></span>
 		</li>
 	<% }); %>
 	</ul>

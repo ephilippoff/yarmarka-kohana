@@ -59,9 +59,10 @@
 
 						<?php if (Auth::instance()->have_access_to('object')) : ?>
 						<li class="dropdown <?=($module_name == 'object') ? 'active' : ''?>">
-							<a href="#"  class="dropdown-toggle" data-toggle="dropdown">Objects <b class="caret"></b></a>
+							<a href="#"  class="dropdown-toggle" data-toggle="dropdown">Объявления <b class="caret"></b></a>
 							<ul class="dropdown-menu">
-								<li><a href="<?=Url::site('khbackend/objects/index')?>">List</a></li>
+								<li><a href="<?=Url::site('khbackend/objects/index')?>">Список</a></li>
+								<li><a href="<?=Url::site('khbackend/landing/index')?>">Landings</a></li>
 							</ul>
 						</li>
 						<?php endif; ?>

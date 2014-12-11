@@ -41,6 +41,11 @@ Route::set('ajax_landing', 'ajax/landing/<action>')
 		'controller' => 'Ajax_Landing',
 		'action'     => 'index',
 	));
+Route::set('ajax_contacts', 'ajax/object_contacts')
+	->defaults(array(
+		'controller' => 'Ajax',
+		'action'     => 'object_contacts',
+	));
 Route::set('ajax_admin', 'ajax/admin/<action>')
 	->defaults(array(
 		'controller' => 'Ajax_Admin',
@@ -94,6 +99,12 @@ Route::set('backend', 'khbackend(/<controller>(/<action>(/<id>)))')
 		'directory'  => 'Admin',
 		'controller' => 'Welcome',
 		'action'     => 'index',
+	));
+
+Route::set('global_search', 'ajax/global_search')
+	->defaults(array(
+		'controller' => 'Ajax',
+		'action'     => 'global_search',
 	));
 
 if (array_key_exists("HTTP_FROM", $_SERVER))
