@@ -75,8 +75,11 @@ class Controller_Static extends Controller_Template {
 					$company_data["phone"] = $contact["value"];
 			}
 
-			$f->multiple("company", $company_data);
-			
+			if ($user->org_type == 2)
+				$f->multiple("company", $company_data);
+			else 
+				$f->multiple("anonymous-company", $company_data);
+
 			$f->compile();
 			
 			
