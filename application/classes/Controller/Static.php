@@ -15,7 +15,7 @@ class Controller_Static extends Controller_Template {
 		$this->response->headers('Content-Type', 'text/xml');
 
 		$vakancies_query = ORM::factory('Object_Compiled')
-						->select("title","date_created", "date_updated","author_company_id", "contact")
+						->select("title","date_created", "date_updated","author_company_id", "contact", "location_id")
 						->join("object")
 							->on("object_id","=","object.id")
 						->where("category","=",36)
@@ -30,6 +30,7 @@ class Controller_Static extends Controller_Template {
 		foreach ($vakancies_query as $vakancy_row) {
 			$compile = unserialize($vakancy_row->compiled);
 			$user = ORM::factory('User', $vakancy_row->author_company_id);
+			$location = ORM::factory('Location',$vakancy_row->location_id);
 			$attributes = $vakancy_row->naming_attributes($compile["attributes"]);			
 			
 			$f->single("url", "http://yarmarka.biz/detail/".$vakancy_row->object_id );
@@ -54,7 +55,9 @@ class Controller_Static extends Controller_Template {
 									));
 			$f->multiple("addresses", array( 
 										"address" => array(
-												"location" => $attributes["adres-raion"]
+												"location" => $location->address,
+												"lng" => $location->lon,
+												"lat" => $location->lat
 											)
 									));
 			$logo = Imageci::getSitePaths($user->filename);
@@ -66,7 +69,7 @@ class Controller_Static extends Controller_Template {
 									"email" => null,
 									"phone" => null,
 									"contact-name" => $vakancy_row->contact,
-									"hr-agency" => FALSE,
+									"hr-agency" => "false",
 								);
 
 			foreach ($compile["contacts"] as $contact) {
@@ -76,7 +79,7 @@ class Controller_Static extends Controller_Template {
 					$company_data["phone"] = $contact["value"];
 			}
 
-			if ($user->org_type == 2)
+			if ($user->org_type == 2 and $user->org_name and $user->about)
 				$f->multiple("company", $company_data);
 			else 
 				$f->multiple("anonymous-company", $company_data);
