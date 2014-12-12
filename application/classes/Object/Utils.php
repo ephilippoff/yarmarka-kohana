@@ -11,7 +11,7 @@ class Object_Utils
 		foreach ($array as $string)
 		{
 			$string = trim(Text::remove_symbols(trim($string)));
-			if ($string)
+			if ($string and strtolower($string) <> "null")
 			{
 				$result[] = $string;
 			}

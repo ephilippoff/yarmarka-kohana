@@ -868,17 +868,19 @@ class Controller_Ajax extends Controller_Template
 
 	public function action_check_contact_code()
 	{
-		$session_id 	= Arr::get($_POST, 'session_id', session_id());
-		$contact 		= ORM::factory('Contact', $this->request->param('id'));
+		$session_id 	= Arr::get($_POST, 'session_id', session_id());		
 		$link_to_user 	= (bool) $this->request->post('link_to_user');
-
-		if ( ! $contact->loaded())
-		{
-			throw new HTTP_Exception_404;
-		}
-
+		$contact_id =  (int) $this->request->param('id');
 		$code = trim($this->request->post('code'));
-		if (($code) AND ($contact->verification_code) AND ($code === trim($contact->verification_code)))
+
+		if ( !$contact_id ) throw new HTTP_Exception_404;
+
+		$contact 		= ORM::factory('Contact', $contact_id);
+
+		if ( !$contact->loaded() ) throw new HTTP_Exception_404;
+
+		
+		if ($code AND $contact->verification_code AND $code === trim($contact->verification_code))
 		{
 			$this->json['code'] = 200;
 
