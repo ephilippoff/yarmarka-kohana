@@ -80,12 +80,17 @@ class Controller_Static extends Controller_Template {
 			}
 
 			if ($user->org_type == 2 and $user->org_name and $user->about)
+			{
 				$f->multiple("company", $company_data);
-			else 
+				$f->compile();
+			}
+			elseif ($user->about)
+			{
 				$f->multiple("anonymous-company", $company_data);
-
-			$f->compile();
+				$f->compile();
+			}
 			
+			$f->reset();
 			
 		}
 		echo $f->save();

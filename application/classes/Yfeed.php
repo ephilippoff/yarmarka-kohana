@@ -72,6 +72,10 @@ class Yfeed
 		foreach ($this->data as $name => $row) {	
 			$this->compile_row($this->dom, $vacancy, $name, $row);
 		}
+	}
+
+	function reset()
+	{
 		$this->data = array();
 	}
 
