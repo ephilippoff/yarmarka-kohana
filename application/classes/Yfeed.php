@@ -72,7 +72,7 @@ class Yfeed
 		foreach ($this->data as $name => $row) {	
 			$this->compile_row($this->dom, $vacancy, $name, $row);
 		}
-		
+		$this->data = array();
 	}
 
 	function save()
