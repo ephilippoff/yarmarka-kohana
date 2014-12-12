@@ -56,7 +56,7 @@ class Controller_Static extends Controller_Template {
 									));
 			$f->multiple("addresses", array( 
 										"address" => array(
-												"location" => $location->address,
+												"location" => $location->city.", ".$location->address,
 												"lng" => $location->lon,
 												"lat" => $location->lat
 											)
