@@ -597,6 +597,8 @@
 	<aside class="rightside">
 		<noindex>
 			<div class="widget mb30 mt10">
+				<img class="mb30" src="/images/cat200x300.gif">
+				
 				<p class="title">Полезные ссылки</p>
 				<ul class="ul-menu">
 					<li><a rel="nofollow" href="/">Главная</a></li>
