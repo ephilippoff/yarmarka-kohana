@@ -60,11 +60,16 @@ class Controller_Static extends Controller_Template {
 												"lat" => $location->lat
 											)
 									));
-			$logo = Imageci::getSitePaths($user->filename);
+			$logo = null;
+			if ($user->filename)
+			{
+				$logo = Imageci::getSitePaths($user->filename);
+				$logo = URL::base("http").$logo["120x90"];
+			}
 			$company_data = array( 
 									"name" => $user->org_name,
 									"description" => $user->about,
-									"logo" => URL::base("http").$logo["120x90"],
+									"logo" => $logo,
 									"site" => null,
 									"email" => null,
 									"phone" => null,
