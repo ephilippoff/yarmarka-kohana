@@ -47,11 +47,12 @@ class Controller_Static extends Controller_Template {
 			$f->single("schedule", $attributes["tip-raboty"] );
 			$f->single("description", $vakancy_row->title );
 			$f->single("duty", $attributes["obyazannosti"]);
-			$f->multiple("requirement", array( 
-										"qualification" => $attributes["trebovaniya-k-kandidatu"] 
-									));
+			
 			$f->multiple("term", array( 
 										"text" => $attributes["usloviya-raboty"] 
+									));
+			$f->multiple("requirement", array( 
+										"qualification" => $attributes["trebovaniya-k-kandidatu"] 
 									));
 			$f->multiple("addresses", array( 
 										"address" => array(
