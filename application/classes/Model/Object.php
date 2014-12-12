@@ -178,6 +178,11 @@ class Model_Object extends ORM {
 	public function with_used_service($service_id = 0)
 	{
 		return $this->select(DB::expr('EXISTS(select id from service_object where service_object.object = object.id and service = '.(int)$service_id.') as used_service'));
+	}
+	
+	public function with_selection()
+	{	
+		return $this->select(DB::expr('EXISTS(select id from object_selection where object_selection.object_id = object.id) as in_selection'));		
 	}	
 
 	public function get_real_date_created($format = 'd.m.Y')

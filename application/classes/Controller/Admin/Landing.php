@@ -10,7 +10,7 @@ class Controller_Admin_Landing extends Controller_Admin_Template {
 		$page   = $this->request->query('page');
 		$offset = ($page AND $page != 1) ? ($page-1) * $limit : 0;	
 		
-		$landing_list = ORM::factory('landing');
+		$landing_list = ORM::factory('Landing');
 		
 		// количество общее
 		$clone_to_count = clone $landing_list;
@@ -34,13 +34,7 @@ class Controller_Admin_Landing extends Controller_Admin_Template {
 	
 	public function action_add()
 	{
-		$this->template->errors = array();
-
-		//$mysql_conn  = Database::instance('db_dns');
-		
-		//$res = $mysql_conn->query(Database::SELECT, "SELECT * FROM records limit 5");
-		
-//		$res = DB::select()->from('records')->limit(5)->execute('db_dns');		
+		$this->template->errors = array();	
 		
 		if (HTTP_Request::POST === $this->request->method()) 
 		{
@@ -82,7 +76,6 @@ class Controller_Admin_Landing extends Controller_Admin_Template {
 				
 		$this->redirect('khbackend/landing/index');
 
-		//$this->response->body(json_encode(array('code' => 200)));
 	}
 		
 }

@@ -21,6 +21,7 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 			->with('location_obj')
 			->with_main_photo()
 			->with_used_service(41)
+			->with_selection()
 			->where('source_id', '=', 1)
 			->where('active', '=', 1)
 			->where('is_union','IS', NULL)
@@ -119,7 +120,7 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 		$this->template->direction 	= $direction;
 
 		$this->template->objects 	= $objects->find_all();
-	
+
 		$this->template->categories = ORM::factory('Category')
 			->order_by('title')
 			->find_all()

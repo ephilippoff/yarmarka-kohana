@@ -1318,6 +1318,36 @@ class Controller_Ajax extends Controller_Template
 		$this->response->body(View::factory('detail/show_contacts_table89')->bind('contacts', $contacts));
 		 
 	}	 
+	
+	public function action_obj_selection()
+	{
+	 	$obj_id = (int)($this->request->post('obj_id'));
+		//Удаляем старые объявления
+		ORM::factory('Object_Selection')->clear_old();
+		
+		$selection = ORM::factory('Object_Selection')->where('object_id', '=', $obj_id)->find();
+				
+		$this->json = array();
+		//Чистим кэш
+		Cache::instance()->set("getObjectSelection", null, 0);
+		
+		//Если уже есть, удаляем
+		if ($selection->loaded())
+		{
+			$status = 'deleted';
+			$selection->delete();
+		}
+		else //Иначе добавляем
+		{
+			$selection = ORM::factory('Object_Selection');
+			$selection->object_id = $obj_id;
+			$selection->save();
+			
+			$status = 'added';
+		}
+				
+		$this->json = array('status' => $status);		
+	}	
 	 
 	  
 
