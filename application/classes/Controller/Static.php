@@ -15,14 +15,14 @@ class Controller_Static extends Controller_Template {
 		$this->response->headers('Content-Type', 'text/xml');
 
 		$vakancies_query = ORM::factory('Object_Compiled')
-						->select("title","date_created", "date_updated","author_company_id")
+						->select("title","date_created", "date_updated","author_company_id", "contact")
 						->join("object")
 							->on("object_id","=","object.id")
 						->where("category","=",36)
 						->where("active","=",1)
 						->where("is_published","=",1)
 						->order_by("id","desc")
-						->limit(5)
+						->limit(70)
 						->find_all();
 		$vakancies = array();
 		$f = new Yfeed("vacancies");
@@ -57,15 +57,16 @@ class Controller_Static extends Controller_Template {
 												"location" => $attributes["adres-raion"]
 											)
 									));
+			$logo = Imageci::getSitePaths($user->filename);
 			$company_data = array( 
 									"name" => $user->org_name,
 									"description" => $user->about,
-									"logo" => null,
+									"logo" => URL::base("http").$logo["120x90"],
 									"site" => null,
 									"email" => null,
 									"phone" => null,
-									"contact-name" => null,
-									"hr-agency" => null,
+									"contact-name" => $vakancy_row->contact,
+									"hr-agency" => FALSE,
 								);
 
 			foreach ($compile["contacts"] as $contact) {
