@@ -1329,7 +1329,7 @@ class Controller_Ajax extends Controller_Template
 				
 		$this->json = array();
 		//Чистим кэш
-		Cache::instance()->set("getObjectSelection", null, 0); //общий(для региона)
+		Cache::instance()->set("getObjectSelection0", null, 0); //общий(для региона)
 		Cache::instance()->set("getObjectSelection".$selection->object->city_id, null, 0);//по городу
 						
 		//Если уже есть, удаляем
