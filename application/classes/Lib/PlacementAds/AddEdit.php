@@ -671,6 +671,20 @@ class Lib_PlacementAds_AddEdit {
 			{
 				$errors['contacts'] = "В эту рубрику необходимо указать и подтвердить хотябы один мобильный телефон";
 			}
+		} elseif ( $category AND Kohana::$config->load("common.add_phone_required") AND !$params->itis_massload)
+		{
+			
+			$exclusion = Kohana::$config->load("common.add_phone_required_exlusion");
+			if (!in_array($category->id, $exclusion))
+			{
+				$mobile = array_filter(array_values($this->contacts), function($v){
+					return ($v["type"] == 1 OR $v["type"] == 2);
+				});
+				if (!count($mobile))
+				{
+					$errors['contacts'] = "В эту рубрику необходимо указать и подтвердить хотябы один телефон";
+				}
+			}
 		}
 
 
