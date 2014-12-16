@@ -1397,7 +1397,7 @@ class Controller_User extends Controller_Template {
 
 		$prefix = (@$_SERVER['HTTP_HOST'] === 'c.yarmarka.biz') ? "" : "dev_";
 		$staticfile = new StaticFile("attributes", $prefix.'static_attributes.js');
-		$this->assets->js($staticfile->jspath);
+//		$this->assets->js($staticfile->jspath);
 
 		$errors = new Obj();
 		$object_id = (int)$this->request->param('object_id');
@@ -1451,6 +1451,7 @@ class Controller_User extends Controller_Template {
 		if ($user AND $user->role == 9)
 			$form_data ->AdvertType();
 
+		$this->template->set_global('jspath', $staticfile->jspath);
 		$this->template->object  = $object;
 		$this->template->params 	= new Obj($params);
 		$this->template->form_data 	= $form_data->_data;

@@ -4,7 +4,7 @@
 	<input type="hidden" name="<?=$name?>" id="<?=$id?>" value="<?=$data->category_id?>"/>
 <? else: ?>		
 	<select name="<?=$name?>" id="<?=$id?>" class=<?=$_class?>>
-		<option value>---</option>
+		<option value="0">---</option>
 		<? foreach($data->category_list as $key=> $item) : ?>
 			<optgroup label="<?=$key?>">
 			<? foreach($item as $id=>$title) : ?>
