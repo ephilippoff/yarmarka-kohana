@@ -88,7 +88,7 @@ class Valid extends Kohana_Valid {
 
 	public static function min_value($value, $title, $min_value = 0)
 	{
-		return intval($value) > $min_value;
+		return $value > $min_value;
 	}
 
 	public static function max_value($value, $title, $max_value = 999999999)
