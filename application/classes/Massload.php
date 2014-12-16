@@ -208,6 +208,8 @@ class Massload
 			if ($config_key->type == "integer")
 			{
 				$validation->rule($key, 'not_0', $valid_info);
+				$validation->rule($key, 'min_value', $valid_info);
+				$validation->rule($key, 'max_value', $valid_info);
 				//$validation->rule($key, 'digit', $valid_info);
 				//$validation->rule($key, 'max_length', $valid_info_maxlength);
 			}
@@ -225,7 +227,8 @@ class Massload
 			if ($config_key->type == "numeric")
 			{
 				$validation->rule($key, 'numeric', $valid_info);
-				$validation->rule($key, 'max_length', $valid_info_maxlength);
+				$validation->rule($key, 'min_value', $valid_info);
+				$validation->rule($key, 'max_value', $valid_info);
 			}
 
 			//if ($config_key->type == "photo")
@@ -261,6 +264,11 @@ class Massload
 					$key = "param_".ORM::factory('Reference')->by_category_and_attribute($category_id, $key);					
 				break;
 				case 'integer':
+					$key = "param_".ORM::factory('Reference')->by_category_and_attribute($category_id, $key);					
+					if (is_float($value*1))
+						$value = round($value*1, 2);
+				break;
+				case 'numeric':
 					$key = "param_".ORM::factory('Reference')->by_category_and_attribute($category_id, $key);					
 					if (is_float($value*1))
 						$value = round($value*1, 2);

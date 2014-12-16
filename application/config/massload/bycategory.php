@@ -18,7 +18,7 @@ return array(
 						'god-vypuska' 	=> array('name' => 'god-vypuska', 'required' => TRUE, 'type' => 'integer', 	'translate' => 'Год выпуска', 'maxlength' => 5),	
 						'probeg' 		=> array('name' => 'probeg', 'required' => TRUE, 'type' => 'integer', 	'translate' => 'Пробег', 'maxlength' => 8),	
 						'tip-kuzova' 	=> array('name' => 'tip-kuzova', 'required' => TRUE, 'type' => 'dict', 	'translate' => 'Тип кузова', 'maxlength' => 30),
-						'obem-dvigatelya' => array('name' => 'obem-dvigatelya', 'required' => TRUE, 'type' => 'integer', 	'translate' => 'Объем двигателя', 'maxlength' => 5),	
+						'obem-dvigatelya' => array('name' => 'obem-dvigatelya', 'required' => TRUE, 'type' => 'numeric', 	'translate' => 'Объем двигателя', 'maxlength' => 5),	
 						'privod' 		=> array('name' => 'privod', 'required' => TRUE, 'type' => 'dict', 	'translate' => 'Привод', 'maxlength' => 30),
 						'steering-wheel' => array('name' => 'steering-wheel', 'required' => TRUE, 'type' => 'dict', 	'translate' => 'Руль', 'maxlength' => 30),
 						'transmissiya' 	=> array('name' => 'transmissiya', 'required' => TRUE, 'type' => 'dict', 	'translate' => 'Трансмиссия', 'maxlength' => 30),
