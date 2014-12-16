@@ -591,16 +591,17 @@ class Form_Add  {
 		} elseif ($user_id)
 		{
 			$phone_exists = FALSE;
+			$email_exists = FALSE;
 			self::parse_user_contact($user_id, function($id, $value, $type, $verified) use (&$contacts, &$phone_exists){
 				$contacts[] = Array("id" => $id, "type"  => $type,"value" => $value, "verified" => $verified);
 				if ($type == 1 OR $type == 2) $phone_exists = TRUE;
 			});
 
 			if (!$phone_exists)
-			{
 				$contacts[] = Array("id" => "000", "type"  => 1,"value" => "", "verified" => false);
+
+			if (!$email_exists)
 				$contacts[] = Array("id" => "001", "type"  => 5,"value" => "", "verified" => false);
-			}
 
 			$contact_person = $user->fullname;
 		} else
