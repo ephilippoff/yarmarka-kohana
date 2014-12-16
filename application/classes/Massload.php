@@ -208,8 +208,8 @@ class Massload
 			if ($config_key->type == "integer")
 			{
 				$validation->rule($key, 'not_0', $valid_info);
-				$validation->rule($key, 'min_value', $valid_info);
-				$validation->rule($key, 'max_value', $valid_info);
+				$validation->rule($key, 'min_value',  array(':value', $config_key->translate, 0) );
+				$validation->rule($key, 'max_value', array(':value', $config_key->translate, 999999999) );
 				//$validation->rule($key, 'digit', $valid_info);
 				//$validation->rule($key, 'max_length', $valid_info_maxlength);
 			}
@@ -227,8 +227,8 @@ class Massload
 			if ($config_key->type == "numeric")
 			{
 				$validation->rule($key, 'numeric', $valid_info);
-				$validation->rule($key, 'min_value', $valid_info);
-				$validation->rule($key, 'max_value', $valid_info);
+				$validation->rule($key, 'min_value',  array(':value', $config_key->translate, 0) );
+				$validation->rule($key, 'max_value', array(':value', $config_key->translate, 999999999) );
 			}
 
 			//if ($config_key->type == "photo")
