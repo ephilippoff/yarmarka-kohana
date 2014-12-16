@@ -10,7 +10,7 @@
 <?php if (isset($is_news_page)) : ?>
 	<meta name="robots" content="noindex" />
 <?php endif;?>	
-<title><?=Seo::get_title()?></title>
+<title><?=htmlspecialchars($data->object['title'])?></title>
 <?=Assets::factory('main')->css('css.css', array('media' => 'screen, projection'))
 	->css('iLight.css')
 	->css('jquery.jscrollpane.css')

@@ -60,7 +60,7 @@ class Controller_Landing extends Controller_Template {
 //			echo Debug::vars($lo->favorite);
 		}
 		
-		$this->template->data = $lo;
+		$this->template->set_global('data', $lo);
 	}
 
 	function action_show()
