@@ -532,6 +532,9 @@ class Lib_PlacementAds_AddEdit {
 				if (!$reference->loaded())
 					continue;
 
+				if (is_array($postparams->{"param_".$reference_id}))
+					continue;
+				
 				$postparams->{"param_".$reference_id} = trim($postparams->{"param_".$reference_id});
 
 				switch ($reference->type)
