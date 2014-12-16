@@ -595,6 +595,7 @@ class Form_Add  {
 			self::parse_user_contact($user_id, function($id, $value, $type, $verified) use (&$contacts, &$phone_exists){
 				$contacts[] = Array("id" => $id, "type"  => $type,"value" => $value, "verified" => $verified);
 				if ($type == 1 OR $type == 2) $phone_exists = TRUE;
+				if ($type == 5) $email_exists = TRUE;
 			});
 
 			if (!$phone_exists)
