@@ -85,4 +85,14 @@ class Valid extends Kohana_Valid {
 		// Value cannot be NULL, FALSE, '', or an empty array
 		return ! in_array($value, array(NULL, FALSE, '', array()), TRUE);
 	}
+
+	public static function min_value($value, $title, $min_value = 0)
+	{
+		return $value > $min_value;
+	}
+
+	public static function max_value($value, $title, $max_value = 999999999)
+	{
+		return intval($value) < $max_value;
+	}
 }

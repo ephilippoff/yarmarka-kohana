@@ -51,12 +51,8 @@ class Forms
 											AND in_array($relation->parent_element_id, $params->{"param_".$ar_parent->reference_id}))
 				$element->is_required  = $relation->is_required;
 
-			$reference = ORM::factory('Reference')
-							->select("attribute.title", "attribute.type", "attribute.solid_size", 
-													"attribute.frac_size", "attribute.max_text_length")
-							->join("attribute","left")
-								->on("reference.attribute","=","attribute.id")
-							->where("reference.id","=", $relation->reference_id)
+			$reference =  ORM::factory('Reference')
+							->with_attribute_by_id($relation->reference_id)
 							->cached(Date::WEEK)
 							->find();
 

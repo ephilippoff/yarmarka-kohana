@@ -507,6 +507,54 @@ class Lib_PlacementAds_AddEdit {
 		return $this;
 
 	}
+	/**
+	 * [normalize_attributes Приведение пользовательских данных в порядок, trim, replace и прочее]
+	 * @return [this]
+	 */
+	function normalize_attributes()
+	{
+		$category 		 = &$this->category;
+		$postparams 	 = &$this->params;
+
+		if (!$category) return $this;
+
+		try {
+			$_params = preg_grep("/^param_/", array_keys((array) $postparams));
+			
+
+			foreach ($_params as $_param) {
+				@list($_t, $reference_id) =  explode("_", $_param);
+
+				$reference = ORM::factory('Reference')
+								->with_attribute_by_id($reference_id)
+								->cached(Date::WEEK)
+								->find();
+				if (!$reference->loaded())
+					continue;
+
+				if (is_array($postparams->{"param_".$reference_id}))
+					continue;
+				
+				$postparams->{"param_".$reference_id} = trim($postparams->{"param_".$reference_id});
+
+				switch ($reference->type)
+				{
+					case 'integer':
+						$postparams->{"param_".$reference_id} = trim($postparams->{"param_".$reference_id});
+						$postparams->{"param_".$reference_id} = preg_replace('/[^0-9]/', '', $postparams->{"param_".$reference_id});
+					break;
+					case 'numeric':
+						$postparams->{"param_".$reference_id} = trim(str_replace(",", ".", $postparams->{"param_".$reference_id}));
+					break;
+				}
+			}
+		} catch (Exception $e)
+		{
+			Kohana::$log->add(Log::NOTICE, $e->getMessage());
+		}
+
+		return $this;
+	}
 
 	function init_validation_rules_for_attributes()
 	{
@@ -517,14 +565,16 @@ class Lib_PlacementAds_AddEdit {
 
 		if (!$category) return $this;
 
-		$form_references = Forms::get_by_category($category->id, $postparams);
+		$form_references = Cache::instance('memcache')->get("addAdvertReferences:{$category->id}");
+		if (!$form_references)
+		{
+			$form_references = Forms::get_by_category($category->id, $postparams);
+			Cache::instance('memcache')->set("addAdvertReferences:{$category->id}", $form_references);
+		}
 
 		foreach ($form_references as $reference)
 		{
 			$reference_id = $reference->reference_id;
-			//if ($reference->is_required AND !self::is_nessesary_to_check($category->id, $reference->id, $postparams))
-			//	continue;			
-
 			$rules = array();
 
 			if ($reference->is_range)
@@ -551,12 +601,14 @@ class Lib_PlacementAds_AddEdit {
 					case 'integer':
 						$rules[] = array('digit', array(':value', $reference->attribute_title));
 						$rules[] = array('not_0', array(':value', $reference->attribute_title));
-						$rules[] = array('max_length', array(':value', $reference->attribute_solid_size, $reference->attribute_title));
+						$rules[] = array('min_value', array(':value', $reference->attribute_title, 0));
+						$rules[] = array('max_value', array(':value', $reference->attribute_title, 999999999));
 					break;
 
 					case 'numeric':
 						$rules[] = array('numeric', array(':value', $reference->attribute_title));
-						$rules[] = array('max_length', array(':value', $reference->attribute_solid_size+$reference->attribute_frac_size+1, $reference->attribute_title));
+						$rules[] = array('min_value', array(':value', $reference->attribute_title, 0));
+						$rules[] = array('max_value', array(':value', $reference->attribute_title, 999999999));
 					break;
 
 					case 'text':
