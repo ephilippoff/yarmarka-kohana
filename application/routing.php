@@ -11,6 +11,11 @@ Route::set('native_save_object', 'add/native_save_object')
 		'controller' => 'Add',
 		'action'     => 'native_save_object',
 	));
+Route::set('object_upload_file', 'add/object_upload_file')
+	->defaults(array(
+		'controller' => 'Add',
+		'action'     => 'object_upload_file',
+	));
 Route::set('add', 'add/<rubricid>')
 	->defaults(array(
 		'controller' => 'Add',

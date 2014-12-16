@@ -143,6 +143,50 @@ class Controller_Add extends Controller_Template {
 
 		$this->response->body(json_encode($json));
 	}
+	
+	
+	public function action_object_upload_file()
+	{
+		$this->use_layout = FALSE;
+		$this->auto_render = FALSE;
+
+		$this->json['code'] = 200; // code by default
+		
+		try
+		{
+			if (empty($_FILES['userfile1']))
+		{
+			throw new Exception('Не загружен файл');
+		}
+
+		$filename = Uploads::make_thumbnail($_FILES['userfile1']);
+
+		$check_image_similarity = Kohana::$config->load('common.check_image_similarity');
+
+		if ($check_image_similarity)
+		{
+			$similarity = ORM::factory('Object_Attachment')->get_similarity(Uploads::get_full_path($filename));
+			if ($similarity > Kohana::$config->load('common.max_image_similarity'))
+			{
+				throw new Exception('Фотография не уникальная, уже есть активное объявление с такой фотографией либо у вас , либо у другого пользователя');
+			}
+		}
+
+		$this->json['filename'] = $filename;
+		$this->json['filepaths'] = Imageci::getSitePaths($filename);
+
+		$tmp_img = ORM::factory('Tmp_Img');
+		$tmp_img->name = $filename;
+		$tmp_img->save();
+		}
+			catch(Exception $e)
+		{
+			$this->json['error'] = $e->getMessage();
+		}
+		
+		
+		$this->response->body(json_encode($this->json));
+	}	
 
 }
 
