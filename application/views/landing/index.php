@@ -89,11 +89,11 @@ $(document).ready(function() {
 
 											<?=$data->object['user_text']?>
 
-											<? if (isset($data->attributes)):?>
-												<? foreach ($data->attributes as $attribute): ?>
-													<p class="mt20"><b><?=$attribute["title"]?></b>: <?=$attribute["value"]?></p>
-												<? endforeach;?>
-											<?php endif;?>
+											<? //if (isset($data->attributes)):?>
+												<? //foreach ($data->attributes as $attribute): ?>
+													<!--<p class="mt20"><b><?//=$attribute["title"]?></b>: <?//=$attribute["value"]?></p>-->
+												<? //endforeach;?>
+											<?php //endif;?>
 
 											<? if (isset($data->priceload)):?>
 												<?php if ($data->priceload->loaded()): ?>
@@ -102,7 +102,7 @@ $(document).ready(function() {
 											<?php endif;?>
 											
 											<?php if (!empty($site)) : ?>
-												<p class="mt10"><b>Адрес сайта</b>: <span class="span-link" onclick="window.open('http://<?=$site?>', '_blank')"><?=trim($site, '/')?></span></p> 															
+													<p class="mt10"><b>Адрес сайта</b>: <a href="http://<?=$site?>" target="_blank"><?=trim($site, '/')?></a></p> 															
 											<?php endif;?>
 										</div>	
 
