@@ -1321,6 +1321,7 @@ class Controller_User extends Controller_Template {
 
 		if ($is_post)
 		{
+			$post_data->login = strtolower(trim($post_data->login));
 			$validation = ORM::factory('User')
 								->register_validation((array) $post_data);
 
@@ -1740,7 +1741,9 @@ class Controller_User extends Controller_Template {
 		if ($user AND $user->role == 9)
 			$form_data ->AdvertType();
 
-		if ($user AND $user->linked_to_user)
+		if ($user AND $user->org_type == 2)
+			$form_data->OrgInfo();
+		elseif ($user AND $user->linked_to_user)
 			$form_data ->LinkedUser();
 
 		$this->template->object  = $object;

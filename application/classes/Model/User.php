@@ -447,6 +447,7 @@ class Model_User extends Model_Auth_User {
 
 	public function registration($email, $password, $type = 1)
 	{
+		$email = strtolower(trim($email));
 		$user = ORM::factory('User')
 							->get_user_by_email($email)
 							->find();

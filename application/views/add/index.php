@@ -120,10 +120,40 @@
 			</div>
 			<? endif; ?>
 
-			
+			<? if ( property_exists($form_data, 'org_info') ): ?>
+			<div class="fl100  pt16 pb15"  id="div_org_info">
+					<div class="smallcont">
+						<div class="labelcont">
+							<label><span>Компания:</span></label>
+						</div>	
+						<div class="fieldscont">
+							<div class="inp-cont-long ">
+								<div class="inp-cont <?if ($form_data->city["city_error"]) echo "error";?>">
+									<div class="pt4">
+										<?=$form_data->org_info["title"]?>
+										<? if ($form_data->org_info["logo"]): ?>
+											<div class="p10">
+												<? $logo = Imageci::getSitePaths($form_data->org_info["logo"]);?>
+												<img src="<?=$logo["120x90"]?>">
+											</div>
+										<? endif; ?>
+										<div style="height:30px;overflow:hidden;">
+											<?=$form_data->org_info["about"]?>...
+										</div>
+										<span class="inform">
+											<span>Изменить информацию о компании можно <a href="/user/orginfo">здесь</a></span>
+										</span>
+									</div>
+								</div>
+							</div><!--inp-cont-short-->
+							
+						</div><!--fieldscont-->
+					</div> <!-- smallcont -->
+			</div>
+			<? endif; ?>
 
 			<? if ( property_exists($form_data, 'linked_company') ): ?>
-			<div class="fl100  pt16 pb15"  id="div_city">
+			<div class="fl100  pt16 pb15"  id="div_linked_company">
 					<div class="smallcont">
 						<div class="labelcont">
 							<label><span>От компании:</span></label>
@@ -143,6 +173,9 @@
 												<img src="<?=$logo["120x90"]?>">
 											</div>
 										<? endif; ?>
+										<span class="inform">
+											<span>Вы можете отвязать свою учетную запись от этой компании <a href="/user/userinfo">здесь</a></span>
+										</span>
 									</div>
 								</div>
 							</div><!--inp-cont-short-->

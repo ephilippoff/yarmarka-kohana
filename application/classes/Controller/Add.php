@@ -81,9 +81,11 @@ class Controller_Add extends Controller_Template {
 				 	->Price()
 				 	->Contacts()
 					->Widgets();
-
-		if ($user AND $user->linked_to_user)
-			$form_data ->LinkedUser();
+					
+		if ($user AND $user->org_type == 2)
+			$form_data->OrgInfo();
+		elseif ($user AND $user->linked_to_user)
+			$form_data->LinkedUser();
 
 		if ($user AND $user->role == 9)
 			$form_data ->AdvertType();
@@ -94,7 +96,7 @@ class Controller_Add extends Controller_Template {
 		$this->template->assets = $this->assets;
 
 		$expired = NULL;
-		if (!$user->is_valid_orginfo()
+		if ($user AND !$user->is_valid_orginfo()
 					AND !$user->is_expired_date_validation())
 		{
 			$settings = new Obj(ORM::factory('User_Settings')->get_group($user->id, "orginfo"));

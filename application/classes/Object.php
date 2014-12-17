@@ -113,6 +113,7 @@ class Object
 	static function PlacementAds_Local($input_params)
 	{
 		$json = array();
+		$user = Auth::instance()->get_user();
 		
 		$add = new Lib_PlacementAds_AddEditLocal();
 		$add->init_input_params($input_params)
@@ -123,6 +124,9 @@ class Object
 			//->init_validation_rules_for_attributes()
 			->init_contacts()
 			->exec_validation();
+
+		if (!$user)
+			$add->login();
 
 		if ( ! $add->errors)
 		{
@@ -158,8 +162,8 @@ class Object
 			}
 
 			$add//->send_external_integrations()
-				->send_to_forced_moderation()
-				->send_message();
+				//->send_message()
+				->send_to_forced_moderation();
 
 			$json['object_id'] = $add->object->id;
 		}

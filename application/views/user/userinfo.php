@@ -14,6 +14,20 @@
 						<div class="fl100  pt16 pb15">
 							<div class="smallcont">
 								<div class="labelcont">
+									<label><span>Идентификатор</span></label>
+								</div>
+								<div class="fieldscont">										
+									<div class="">
+										<div class="inp-cont">
+											<div class="pt4">
+												<?=$user->id?>
+											</div>
+								  		</div>
+									</div>
+								</div>									
+							</div>
+							<div class="smallcont">
+								<div class="labelcont">
 									<label><span>Email</span></label>
 								</div>
 								<div class="fieldscont">										
@@ -68,80 +82,79 @@
 								</div>									
 							</div>
 							
-							<? if ($user->org_type == 1): ?>
-								<script type="text/javascript">
-									function reset_parent_user(){
-										if (confirm("Вы уверены что хотите отменить привязку к компании?")) {
-										  window.location ="/user/reset_parent_user";
-										}
+
+							<script type="text/javascript">
+								function reset_parent_user(){
+									if (confirm("Вы уверены что хотите отменить привязку к компании?")) {
+									  window.location ="/user/reset_parent_user";
 									}
+								}
 
-									function isValidEmail(email)
-									{
-									    return /^[a-z0-9]+([-._][a-z0-9]+)*@([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,4}$/.test(email)
-									        && /^(?=.{1,64}@.{4,64}$)(?=.{6,100}$).*/.test(email);
+								function isValidEmail(email)
+								{
+								    return /^[a-z0-9]+([-._][a-z0-9]+)*@([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,4}$/.test(email)
+								        && /^(?=.{1,64}@.{4,64}$)(?=.{6,100}$).*/.test(email);
+								}
+
+								function request_to_company()
+								{
+									var email = $('#request_email').val();
+									if (isValidEmail(email)){
+										window.location ="/user/user_link_request?email="+email;
 									}
-
-									function request_to_company()
-									{
-										var email = $('#request_email').val();
-										if (isValidEmail(email)){
-											window.location ="/user/user_link_request?email="+email;
-										}
-									}
-								</script>
-								<div class="smallcont">
-									<div class="labelcont">
-										<label><span>Привязка к компании</span></label>
-									</div>
-									<div class="fieldscont">										
-										<div class="">
-											<div class="inp-cont">
-												<? if (!$request_company->loaded()):?>
-													<div class="pt4">
-														
-															<? if ($parent_user->loaded()): ?>
-																<?=$parent_user->org_name?> (<?=$parent_user->email?>) | <span class="link" style="cursor:pointer;" href="/user/reset_parent_user" onclick="reset_parent_user()">отменить привязку</span>
-																<? if ($parent_user->filename): ?>
-																	<div class="p10">
-																		<? $logo = Imageci::getSitePaths($parent_user->filename);?>
-																		<img src="<?=$logo["120x90"]?>">
-																	</div>
-																<? endif; ?>
-															<? else: ?>
-																<div class="pb4">
-																	Нет привязки
-																</div>
-
-																
-																	<input type="text" style="width:350px" id="request_email" placeholder="Введите Email компании"/>
-																	<div onclick="request_to_company();" class="button blue"><span>Отправить запрос на привязку</span></div>
-															<? endif; ?>
-														
-													</div>
-													<? if (!$parent_user->loaded()): ?>
-														<span class="inform">
-															<span>Вы можете размещать объявления от лица какойлибо общей учетной записи компании, если компания подтвердила свой ИНН и добавила Вашу учетную запись в разделе "Сотрудники". Отправьте запрос на привязку.</span>
-														</span>
-													<? endif; ?>
-
-												<? else: ?>
-													<div class="pt4">
-														Нет привязки. Отправлен запрос |  <a href="/user/user_link_request?method=delete_request">Отменить</a> </br>
-														<?=$request_company->user->org_name?> (<?=$request_company->user->email?>)
-														<? if ($request_company->user->filename): ?>
-															<div class="p10">
-																<? $logo = Imageci::getSitePaths($request_company->user->filename);?>
-																<img src="<?=$logo["120x90"]?>">
-															</div>
-														<? endif; ?>
-													</div>
-												<? endif; ?>
-									  		</div>
-										</div>
-									</div>									
+								}
+							</script>
+							<div class="smallcont">
+								<div class="labelcont">
+									<label><span>Привязка к компании</span></label>
 								</div>
-							<? endif; ?>
+								<div class="fieldscont">										
+									<div class="">
+										<div class="inp-cont">
+											<? if (!$request_company->loaded()):?>
+												<div class="pt4">
+													
+														<? if ($parent_user->loaded()): ?>
+															<?=$parent_user->org_name?> (<?=$parent_user->email?>) | <span class="link" style="cursor:pointer;" href="/user/reset_parent_user" onclick="reset_parent_user()">отменить привязку</span>
+															<? if ($parent_user->filename): ?>
+																<div class="p10">
+																	<? $logo = Imageci::getSitePaths($parent_user->filename);?>
+																	<img src="<?=$logo["120x90"]?>">
+																</div>
+															<? endif; ?>
+														<? else: ?>
+															<div class="pb4">
+																Нет привязки
+															</div>
+
+															
+																<input type="text" style="width:350px" id="request_email" placeholder="Введите Email компании"/>
+																<div onclick="request_to_company();" class="button blue"><span>Отправить запрос на привязку</span></div>
+														<? endif; ?>
+													
+												</div>
+												<? if (!$parent_user->loaded()): ?>
+													<span class="inform">
+														<span>Вы можете размещать объявления от лица какойлибо общей учетной записи компании, если компания подтвердила свой ИНН и добавила Вашу учетную запись в разделе "Сотрудники". Отправьте запрос на привязку.</span>
+													</span>
+												<? endif; ?>
+
+											<? else: ?>
+												<div class="pt4">
+													Нет привязки. Отправлен запрос |  <a href="/user/user_link_request?method=delete_request">Отменить</a> </br>
+													<?=$request_company->user->org_name?> (<?=$request_company->user->email?>)
+													<? if ($request_company->user->filename): ?>
+														<div class="p10">
+															<? $logo = Imageci::getSitePaths($request_company->user->filename);?>
+															<img src="<?=$logo["120x90"]?>">
+														</div>
+													<? endif; ?>
+												</div>
+											<? endif; ?>
+								  		</div>
+									</div>
+								</div>									
+							</div>
 							
 							<? if ($user->org_type == 1 AND !$parent_user->loaded()): ?>
 								<div class="smallcont">

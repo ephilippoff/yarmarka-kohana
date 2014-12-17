@@ -240,6 +240,26 @@ class Form_Add  {
 		return $this;
 	}
 
+	function OrgInfo()
+	{
+		$user = Auth::instance()->get_user();
+		$title = $user->org_name;
+		if (!$title)
+			$title = "Не указано название компании";
+
+		$about = $user->about;
+		if (!$about)
+			$about = "Информация о компании не заполнена";
+		else
+			$about = substr($about, 0,300);
+
+		$this->_data->org_info = array(
+											'title' => $title,
+											'logo'		=> $user->filename,
+											'about'		=> $about
+										);
+	}
+
 	function AdvertType()
 	{	
 		$object 		= $this->object;

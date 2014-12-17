@@ -32,6 +32,9 @@ class Form_Custom_Orginfo extends Form_Custom {
 		catch(Exception $e)
 		{
 			$db->rollback();
+			Admin::send_error("Ошибка при отправке формы о компании", array(
+					$e->getMessage(), Debug::vars($data), $e->getTraceAsString()
+			));
 			return $e->getMessage();
 		}
 
