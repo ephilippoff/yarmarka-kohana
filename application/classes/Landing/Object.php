@@ -15,7 +15,6 @@ class Landing_Object extends Landing {
 
 	public function __construct(ORM $object)
 	{
-		$object->category_obj;
 		$this->_object = $object;
 		$this->init();
 
@@ -25,48 +24,227 @@ class Landing_Object extends Landing {
 	public function init()
 	{	
 
-		$this->favorite = Auth::instance()->get_user() ? $this->_object->get_favorite(Auth::instance()->get_user()->id) : null;	
-		$this->object = $this->_object->as_array();
-		$this->user = ORM::factory('User',$this->_object->author)->as_array();
-		$this->attributes = $this->_object->get_attributes()->as_array();
-		$this->contacts = $this->getContacts( ORM::factory('Contact')				
-								->where_object_id($this->_object->id)
-								->order_by("contact.id")
-								->find_all()
-								->as_array() );
-		$this->images = $this->getImages( ORM::factory('Object_Attachment')
-												->where("object_id","=",$this->_object->id)
-												->where("type","=","0")
-												->order_by("id")
-												->find_all()
-												->as_array() );
-		$this->location = ORM::factory('Location', $this->_object->location_id)->as_array();
+		$this->compiled = NULL;
 
-		$this->pricerows = $this->getPricelist( ORM::factory('Object_Priceload')
-													->where("object_id","=",$this->_object->id)
-													->find() ); 
+		if ($cachedLanding = Cache::instance('memcache')->get("landing:{$this->_object->id}"))
+		{
+			$this->unserialize($cachedLanding);
+			return;
+		}
+
+		$compiled = ORM::factory('Object_Compiled')
+							->where("object_id","=",$this->_object->id)
+							->find()							
+							->compiled;
+
+		if ($compiled)
+			$this->compiled = unserialize($compiled);
+
+		$this->images 		= $this->getImages( $this->compiled["photo"] );
+		$this->video 		= $this->compiled["video"];
+		$this->contacts 	= (isset($this->compiled["contacts"])) ? $this->compiled["contacts"] : NULL;
+		$this->attributes 	= $this->getAttributes( (isset($this->compiled["attributes"])) ? $this->compiled["attributes"] : NULL );
+		$this->address 		= (isset($this->compiled["address"])) ? $this->compiled["address"] : NULL;
+		$this->lat 			= (isset($this->compiled["lat"])) ? $this->compiled["lat"] : NULL;
+		$this->lon 		 	= (isset($this->compiled["lon"])) ? $this->compiled["lon"] : NULL;
+		$this->object 	= $this->_object->as_array();
+
+		//Прайсы
+		$simple_attributes = $hierarchy_attributes = NULL;
+		$this->priceload =  ORM::factory('Priceload')
+									->where("id","=",$this->compiled["pricelist"])
+									->find();
+
+		$priceload	= ORM::factory('Priceload')
+									->where("id","=",$this->compiled["pricelist"])
+									->where("table_name","IS NOT",DB::expr("NULL"))
+									->find();
+		
+		if ($priceload->loaded())
+		{
+			
+
+			$columns =  self::getPricelistColumns($priceload);
+			$pricerows 	= self::getPricelist( $priceload ,$priceload->id );
+			$pricerows_count 	= self::getPricelistCount($priceload->id);
+
+			$simple_filters = ORM::factory('Priceload_Attribute')
+												->where("priceload_id","=",$priceload->id)
+												->where("type","=","simple")
+												->find_all();
+			$simple_filters = $this->getSimpleFilters($priceload->id, $simple_filters);
+
+			$hierarchy_filter_id = ORM::factory('Priceload_Attribute')
+											->where("priceload_id","=",$priceload->id)
+											->where("type","=","hierarchy")
+											->find()->id;
+
+			$hierarchy_filters = ORM::factory('Priceload_Filter')
+												->where("priceload_id","=",$priceload->id)
+												->where("priceload_attribute_id","=",$hierarchy_filter_id)
+												->where("parent_id","IS",NULL)
+												->order_by("title","asc")
+												->find_all();
+
+			$this->pricelist = array(
+					"object" => $this->object,
+					"columns" => $columns,
+					"priceload" => $priceload,
+					"pricerows" => $pricerows,
+					"pricerows_count" => $pricerows_count,
+					"simple_filters" => $simple_filters,
+					"hierarchy_filters" => $hierarchy_filters
+				);
+
+		}
+		//----
+		
+		
+		$this->user 	= ORM::factory('User')
+									->where_cached("id","=",$this->_object->author,Date::DAY)
+									->find()->as_array();
+
+		$this->category = ORM::factory('Category')
+									->where_cached("id","=",$this->_object->category,Date::DAY)
+									->find()->as_array();
+
+		$this->favorite = Auth::instance()->get_user() ? $this->_object->get_favorite(Auth::instance()->get_user()->id) : null;
+
+		Cache::instance('memcache')->set("landing:{$this->_object->id}", $this->serialize());
 	}
 
-	private function getPricelist($object_priceload)
+	private function getSimpleFilters($priceload_id, $attributes)
 	{
 		$result = array();
+		foreach ($attributes as $attribute) {
+			$params = $attribute->as_array();
+			$values = array();
+			$pf =  ORM::factory('Priceload_Filter')
+												->where("priceload_id","=",$priceload_id)
+												->where("priceload_attribute_id","=",$attribute->id)
+												->find_all();
+			foreach ($pf as $filter) {
+				$values[$filter->id] =  array ( "title" => $filter->title, "count" => $filter->count);
+			}
+			$params["values"] = $values;
+			$result[] = $params;
+		}
 
-		if (!$object_priceload->loaded())
-			return $result;
+		return $result;
+	}
+
+	private function getAttributes($attributes)
+	{
+		if (!$attributes)
+			return;
+
+		$result = array();
+		foreach ($attributes as $attribute) {
+			
+			$_attribute = array();
+			$_attribute["title"] = $attribute["_attribute"]["title"];
+			$_attribute["seo_name"] = $attribute["_attribute"]["seo_name"];
+			$type = $attribute["_attribute"]["type"];
+
+			switch ($type) {
+				case "list":
+					$_attribute["value"] = $attribute["_element"]["title"];
+				break;
+				case "integer":
+				case "numeric":
+					$_attribute["value"] = $attribute["value_min"];
+				break;
+				default:
+					$_attribute["value"] = $attribute["value"];
+				break;
+			}
+			$result[] = $_attribute;
+		}	
+
+		return $result;
+	}
+
+	public static function getPricelistColumns($priceload)
+	{
+		$result = array();
+		$config = unserialize($priceload->config);
+		$columns = explode(",",$config["columns"]);
+
+		foreach($columns as $column){
+			if (isset($config[$column."_type"]) AND $config[$column."_type"] == "info"){
+				$result[] = $config[$column."_title"];
+			}
+		}
+		return $result;
+	}
+
+	public static function getPricelistCount($priceload_id, $attributes =  NULL, $limit = 50, $offset = 0)
+	{
+		return $pi = ORM::factory('Priceload_Index')
+				->where("priceload_id","=",$priceload_id)
+				->search($attributes)
+				//->cached(Date::DAY)
+				->count_all();
+	}
+
+	public static function getPricelist($priceload, $id, $attributes =  NULL, $limit = 50, $offset = 0)
+	{
+		if (!$id)
+			return;
+
+		$config = unserialize($priceload->config);
+		$columns = explode(",",$config["columns"]);
+
+		$result = array();
 
 		$pi = ORM::factory('Priceload_Index')
-				->where("priceload_id","=",$object_priceload->priceload_id)
-				->limit(50)
+				->where("priceload_id","=",$id)
+				->search($attributes)
+				->limit($limit)
+				->offset($offset)
 				->order_by("id")
-				->cached(Date::DAY)
+				//->cached(Date::DAY)
 				->find_all()
 				->as_array();
 
 		foreach ($pi as $row) {
-			$result[] = $row->as_array();
+			$_row = $row->as_array();
+			$_row["values"] =  array(); 
+
+			$full = unserialize($row->full);
+
+			foreach($columns as $column){
+				if (isset($config[$column."_type"]) AND $config[$column."_type"] == "info"){
+					$_row["values"][] = $full[$column];					
+				}				
+			}
+			$result[] = $_row;
+
 		}
 
 		return $result;
+	}
+
+	public static function clearSphinxValues($priceload, $_rows)
+	{
+		$config = unserialize($priceload->config);
+		$columns = explode(",",$config["columns"]);
+
+		$rows = array();
+		foreach ($_rows as $key => $row) {
+			$full = $row["values"];
+			$row["values"] = array();
+			foreach($columns as $column){
+				
+				if (isset($config[$column."_type"]) AND $config[$column."_type"] == "info"){
+					$row["values"][] = $full[$column];
+				}
+			}
+			$_rows[$key]["values"] = $row["values"];
+
+		}
+
+		return $_rows;
 	}
 
 	private function getContacts($contacts)
@@ -92,14 +270,38 @@ class Landing_Object extends Landing {
 
 		$images = array_reverse($_images);
 
-		$result["logo"] = Imageci::getSavePaths(array_shift($images)->filename);
-		$result["main"] = Imageci::getSavePaths(array_shift($images)->filename);
+		if (count($images))
+			$result["logo"] = Imageci::getSavePaths(array_shift($images));
+		if (count($images))
+			$result["main"] = Imageci::getSavePaths(array_shift($images));
 
 		$result["other"] = array();
-		foreach ($images as $image) {
-			$result["other"][] = Imageci::getSavePaths($image->filename);
-		}
+		if (count($images))
+			foreach ($images as $image) {
+				$result["other"][] = Imageci::getSavePaths($image);
+			}
 		return $result;
+	}
+
+	private function serialize()
+	{
+		return get_object_vars($this);
+	}
+
+	private function unserialize($cache)
+	{
+		foreach ($cache as $key => $value) {
+			$this->{$key} = $value;
+		}
+
+	}
+
+	function __get($key)
+	{
+		if (property_exists($this, $key))
+			return $key;
+		else
+			return NULL;
 	}
 
 }

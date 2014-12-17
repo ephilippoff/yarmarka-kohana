@@ -359,7 +359,8 @@ class Controller_User extends Controller_Template {
 		$states = $pl->get_states();
 
 		$this->template->fields = array_diff($fields, array_keys($service_fields), array("id"));
-		$this->template->items =  $temp->order_by("id","asc")->as_object()->execute();		
+		$this->template->count =  $temp->execute()->count();	
+		$this->template->items =  $temp->order_by("id","desc")->limit(50)->as_object()->execute();		
 		$this->template->price_id = $this->request->param('id');
 		$this->template->title = $pl->title;
 		$this->template->state = $states[$pl->state];
@@ -374,6 +375,8 @@ class Controller_User extends Controller_Template {
 			$pl->keywords = $array_post_data["keywords"];
 			$pl->title = $array_post_data["title"];
 			$pl->save();
+
+			Priceload::resetObjectCache($this->request->param('id'));
 		}
 
 		$fsetting = new Obj();
@@ -1687,7 +1690,7 @@ class Controller_User extends Controller_Template {
 
 		$prefix = (@$_SERVER['HTTP_HOST'] === 'c.yarmarka.biz') ? "" : "dev_";
 		$staticfile = new StaticFile("attributes", $prefix.'static_attributes.js');
-		$this->assets->js($staticfile->jspath);
+//		$this->assets->js($staticfile->jspath);
 
 		$errors = new Obj();
 		$object_id = (int)$this->request->param('object_id');
@@ -1746,6 +1749,10 @@ class Controller_User extends Controller_Template {
 		elseif ($user AND $user->linked_to_user)
 			$form_data ->LinkedUser();
 
+		if ($user AND in_array($user->role, array(3,9)))
+			$form_data ->CompanyInfo();
+
+		$this->template->set_global('jspath', $staticfile->jspath);
 		$this->template->object  = $object;
 		$this->template->params 	= new Obj($params);
 		$this->template->form_data 	= $form_data->_data;

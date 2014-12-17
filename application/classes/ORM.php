@@ -266,15 +266,25 @@ class ORM extends Kohana_ORM {
 		return $this;
 	}
 
-	public function cached($lifetime = NULL, $tag = NULL)
+	public function cached($lifetime = NULL, $tag = NULL, $force = FALSE)
 	{
 		// Add pending database call which is executed after query type is determined
 		$this->_db_pending[] = array(
 			'name' => 'cached',
-			'args' => array($lifetime, FALSE, $tag),
+			'args' => array($lifetime, $force, $tag),
 		);
 
 		return $this;
+	}
+
+	public function where_cached($left, $contintion, $right, $cached = 0)
+	{
+		if ($cached == 0)
+				return $this->where($left,$contintion,$right)
+					->cached($cached, NULL, TRUE);
+		else
+			return $this->where($left,$contintion,$right)
+					->cached($cached);
 	}
 
 }

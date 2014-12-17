@@ -11,6 +11,11 @@ Route::set('native_save_object', 'add/native_save_object')
 		'controller' => 'Add',
 		'action'     => 'native_save_object',
 	));
+Route::set('object_upload_file', 'add/object_upload_file')
+	->defaults(array(
+		'controller' => 'Add',
+		'action'     => 'object_upload_file',
+	));
 Route::set('add', 'add/<rubricid>')
 	->defaults(array(
 		'controller' => 'Add',
@@ -35,6 +40,16 @@ Route::set('ajax_massload', 'ajax/massload/<action>')
 	->defaults(array(
 		'controller' => 'Ajax_Massload',
 		'action'     => 'index',
+	));
+Route::set('ajax_landing', 'ajax/landing/<action>')
+	->defaults(array(
+		'controller' => 'Ajax_Landing',
+		'action'     => 'index',
+	));
+Route::set('ajax_contacts', 'ajax/object_contacts')
+	->defaults(array(
+		'controller' => 'Ajax',
+		'action'     => 'object_contacts',
 	));
 Route::set('ajax_admin', 'ajax/admin/<action>')
 	->defaults(array(
@@ -89,6 +104,12 @@ Route::set('backend', 'khbackend(/<controller>(/<action>(/<id>)))')
 		'directory'  => 'Admin',
 		'controller' => 'Welcome',
 		'action'     => 'index',
+	));
+
+Route::set('global_search', 'ajax/global_search')
+	->defaults(array(
+		'controller' => 'Ajax',
+		'action'     => 'global_search',
 	));
 
 if (array_key_exists("HTTP_FROM", $_SERVER))

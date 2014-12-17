@@ -19,6 +19,19 @@ class Model_Data_Numeric extends Data
 			),
 		);
 	}
+
+	public function get_compile()
+	{
+		if (!$this->loaded())
+			return;
+
+		$result = $this->as_array();
+
+		$result["_attribute"] 	= $this->attribute_obj->as_array("id","title");
+		$result["_type"] = "Numeric";
+
+		return $result;
+	}
 }
 
 /* End of file Numeric.php */

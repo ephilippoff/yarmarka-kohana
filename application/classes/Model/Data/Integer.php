@@ -40,6 +40,19 @@ class Model_Data_Integer extends Data
 
 		return Array (  (int) $result->get('min'),  (int) $result->get('max') );
 	}
+
+	public function get_compile()
+	{
+		if (!$this->loaded())
+			return;
+
+		$result = $this->as_array();
+
+		$result["_attribute"] 	= $this->attribute_obj->as_array("id","title");
+		$result["_type"] = "Integer";
+
+		return $result;
+	}
 }
 
 /* End of file Integer.php */

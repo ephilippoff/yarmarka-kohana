@@ -1,5 +1,4 @@
 <div class="winner oh">	
-
 	<section class="main-cont main-cont-add">
 		<div class="hheader">
 			<h1 class="ta-c"><span><strong>
@@ -273,6 +272,29 @@
 
 					</div> <!-- fieldscont -->		
 				</div>	 <!-- smallcont --> 
+			</div>  <!-- fl100 -->
+				
+
+			<? endif; ?>
+
+			<? if ( property_exists($form_data, 'company_info') ): ?>
+
+			<div class="fl100" id="div_company_info">
+				<? foreach ($form_data->company_info['info'] as $name => $field): ?>
+				
+					<div class="smallcont">
+						<div class="labelcont">
+							<label><span><?=$name?></span></label>
+						</div>
+						<div class="fieldscont">				 						
+							<div class="inp-cont-short">
+								<div class="inp-cont">
+									<?=$field?>
+								</div> <!--inp-cont -->
+							</div> <!-- inp-cont-short -->
+						</div> <!-- fieldscont -->		
+					</div>	 <!-- smallcont --> 
+				<? endforeach; ?>
 			</div>  <!-- fl100 -->
 				
 
@@ -681,6 +703,8 @@
 	<aside class="rightside">
 		<noindex>
 			<div class="widget mb30 mt10">
+				<img class="mb30" src="/images/cat200x300.gif">
+				
 				<p class="title">Полезные ссылки</p>
 				<ul class="ul-menu">
 					<li><a rel="nofollow" href="/">Главная</a></li>
@@ -715,10 +739,7 @@
 			
 		</noindex>
 		
-<!--		<div class="widget mb30">
-			<p class="title ta-c s2">&laquo;Ярмарка-онлайн&raquo;</p>
-			<p class="info">Внимание! Теперь в разделе &laquo;Работа&raquo; поднятие объявлений доступно <br> <span class="red fs14">1 раз в сутки</span>,<br> во всех остальных разделах - <br><span class="red fs14">1 раз в 3 суток</span>.<br> Услуга бесплатная!</p>
-		</div>-->
+
 	</aside>
 	
 	<noindex>

@@ -17,7 +17,7 @@ class Object
 			$json = Object::PlacementAds_Local($params);
 
 		} else {
-			if ($user AND $user->role == 9) 
+			if ($user AND in_array($user->role, array(3, 9))) 
 			{
 				//убрана проверка контактов
 				//убрана проверка на максимальное количество объяв в рубрику
@@ -49,7 +49,8 @@ class Object
 		$add->init_instances()
 			->init_object_and_mode()
 			->check_neccesaries()
-			->init_validation_rules()
+			->normalize_attributes()
+			->init_validation_rules()			
 			->init_validation_rules_for_attributes()
 			->init_contacts()
 			->exec_validation()
@@ -77,7 +78,8 @@ class Object
 					->save_generated()
 					->save_contacts()
 					->save_signature()
-					->save_union();
+					->save_union()
+					->save_compile_object();
 
 				$db->commit();
 			}
@@ -120,6 +122,7 @@ class Object
 			->init_instances()
 			->init_object_and_mode()
 			->check_neccesaries()
+			->normalize_attributes()
 			->init_validation_rules()
 			//->init_validation_rules_for_attributes()
 			->init_contacts()
@@ -135,10 +138,6 @@ class Object
 
 			$db = Database::instance();
 
-			try
-			{
-				// start transaction
-				$db->begin();
 
 				$add->save_object()
 					->save_photo()
@@ -147,23 +146,15 @@ class Object
 					->save_other_options()
 					->save_attributes()
 					->save_generated()
-					->save_contacts();
+					->save_contacts()
+					->save_service_fields()
+					->save_compile_object();
 
-				$db->commit();
-			}
-			catch(Exception $e)
-			{
-				Kohana::$log->add(Log::ERROR, 'Local Ошибка при сохранении объявления:'.$e->getMessage());
-				Email::send(Kohana::$config->load('common.admin_emails'), Kohana::$config->load('email.default_from'), 'Local Ошибка при сохранении объявления', $e->getMessage());
-
-				$db->rollback();
-
-				throw $e;
-			}
 
 			$add//->send_external_integrations()
 				//->send_message()
 				->send_to_forced_moderation();
+
 
 			$json['object_id'] = $add->object->id;
 		}
@@ -189,6 +180,7 @@ class Object
 		$add->init_instances()
 			->init_object_and_mode()
 			->check_neccesaries()
+			->normalize_attributes()
 			->init_validation_rules()
 			//->init_validation_rules_for_attributes()
 			->init_contacts()
@@ -214,7 +206,9 @@ class Object
 					->save_other_options()
 					->save_attributes()
 					->save_generated()
-					->save_contacts();
+					->save_contacts()
+					->save_service_fields()
+					->save_compile_object();
 
 				$db->commit();
 			}
@@ -257,6 +251,7 @@ class Object
 			->init_instances()
 			->init_object_and_mode()
 			->check_neccesaries()
+			->normalize_attributes()
 			->init_validation_rules()
 			//->init_validation_rules_for_attributes()
 			->init_contacts()
@@ -286,7 +281,8 @@ class Object
 					->save_generated()
 					->save_contacts()
 					->save_signature()
-					->save_union();
+					->save_union()
+					->save_compile_object();
 
 				$db->commit();
 			}

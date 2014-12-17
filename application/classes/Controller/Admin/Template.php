@@ -35,6 +35,11 @@ abstract class Controller_Admin_Template extends Controller_Template {
 		{
 			throw new HTTP_Exception_404;
 		}
+		
+		if (Auth::instance()->logged_in() AND Auth::instance()->get_user()->role == 2)
+		{
+			throw new HTTP_Exception_404;
+		}			
 
 		if (is_object($this->template))
 		{

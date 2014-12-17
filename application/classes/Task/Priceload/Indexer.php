@@ -107,31 +107,42 @@ class Task_Priceload_Indexer extends Minion_Task
 
 			}
 
-
+			$this->createFilters($priceload->id);
 		}
 
-		Minion_CLI::write('create filters');
+		
 
-		$pfilter = ORM::factory('Priceload_Filter')->order_by("priceload_id","desc")->find_all();
+		//Temptable::delete_table($name);
+	}
+
+	function createFilters($priceload_id)
+	{
+		Minion_CLI::write('create filters '.$priceload_id);
+
+		$dquery = DB::select("priceload_idata.id")->from("priceload_idata")
+						->join("priceload_attribute","left")
+							->on("priceload_attribute_id","=","priceload_attribute.id")
+						->where("priceload_attribute.priceload_id","=",$priceload_id);
+
+		ORM::factory('Priceload_Idata')
+			->where("id","IN",$dquery)
+			->delete_all();
+
+		$pfilter = ORM::factory('Priceload_Filter')
+						->where("priceload_id","=",$priceload_id)
+						->where("count",">",0)
+						->order_by("priceload_id","desc")
+						->order_by("priceload_attribute_id","asc")
+						->find_all();
+			
 		foreach ($pfilter as $filter) {
-
 			
 			$filtered_rows = unserialize($filter->filtered_rows);
-
-			$indexes = ORM::factory('Priceload_Index')
-						->select("id")
-						->where("pricerow_id","IN", $filtered_rows)
-						->where("priceload_id","=",$filter->priceload_id)
-						->find_all()->as_array("id");
-			if (count($indexes) == 0)
+			if (!count($filtered_rows))
+			{
+				Minion_CLI::write('!!!!!! filter:'.$filter->title.' ('.$filter->count.')');
 				continue;
-
-			$indexes = array_keys($indexes);
-
-			ORM::factory('Priceload_Idata')
-			->where("priceload_index_id","IN",$indexes)
-			->where("priceload_attribute_id","=",$filter->priceload_attribute_id)
-			->delete_all();
+			}
 
 			$pidata = ORM::factory('Priceload_Idata');
 			$query = DB::select("id", array(DB::expr($filter->id),"filter"), array(DB::expr($filter->priceload_attribute_id),"attribute"))
@@ -142,14 +153,12 @@ class Task_Priceload_Indexer extends Minion_Task
 			DB::insert('priceload_idata', array('priceload_index_id', 'priceload_filter_id', 'priceload_attribute_id'))
 					->select( $query )
 					->execute();
-
+	
 			Minion_CLI::write('process filter:'.$filter->title.' ('.$filter->count.')');
 		}
 		
 
 		Minion_CLI::write('indexer stop');
-
-		//Temptable::delete_table($name);
 	}
 
 }

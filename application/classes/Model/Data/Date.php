@@ -7,6 +7,19 @@ class Model_Data_Date extends Data
 	protected $_belongs_to = array(
 		'attribute_obj' => array('model' => 'Attribute', 'foreign_key' => 'attribute'),
 	);
+
+	public function get_compile()
+	{
+		if (!$this->loaded())
+			return;
+
+		$result = $this->as_array();
+
+		$result["_attribute"] 	= $this->attribute_obj->as_array("id","title");
+		$result["_type"] = "Date";
+
+		return $result;
+	}
 }
 
 /* End of file Date.php */

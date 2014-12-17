@@ -83,9 +83,14 @@
 			</div>	
 			<?php if ($object->complaints->count_all()) : ?>
 				<br />
-				<br />
-				<a href="<?=URL::site('khbackend/objects/complaints/'.$object->id)?>" class="btn btn-info" data-toggle="modal" data-target="#myModal">Посмотреть жалобы</a>
+				<br />				
+				<a href="<?=URL::site('khbackend/objects/complaints/'.$object->id)?>" class="btn btn-info" data-toggle="modal" data-target="#myModal">Посмотреть жалобы</a>				
 			<?php endif; ?>
+				<br />
+				<br />	
+				<?php if ($object->main_image_filename) : ?>
+					<a title="Удалить из показов(кр) / Поместить в показы(зел.) " href="#" onclick="obj_selection(this, <?=$object->id?>);return false;" class="<?php if ($object->in_selection) : ?> in <?php endif; ?> selection"></a>				
+				<?php endif; ?>
 		</td>
 		<td>
 			<?=Date::formatted_time($object->real_date_created, 'd.m.Y H:i')?>
@@ -95,6 +100,6 @@
 		<td>
 			<a href="<?=CI::site('detail/'.$object->id)?>" target="_blank" title="Open object in new window" class="icon-eye-open"></a>
 			<a href="<?=CI::site('user/edit_ad/'.$object->id)?>" target="_blank" title="Edit object in new window" class="icon-pencil"></a>
-			<a href="<?=URL::site('khbackend/objects/ajax_delete/'.$object->id)?>" title="Delete object" data-toggle="modal" data-target="#myModal" class="icon-trash"></a>
+			<a href="<?=URL::site('khbackend/objects/ajax_delete/'.$object->id)?>" title="Delete object" data-toggle="modal" data-target="#myModal" class="icon-trash"></a>			
 		</td>
 	</tr>

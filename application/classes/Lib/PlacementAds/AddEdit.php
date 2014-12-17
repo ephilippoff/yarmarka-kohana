@@ -21,6 +21,7 @@ class Lib_PlacementAds_AddEdit {
 	public $destroy_union = FALSE;
 	public $object_without_parent_id = NULL;
 	public $category_settings = array();
+	public $object_compile = array();
 
 	public $union_cancel = FALSE;
 
@@ -348,26 +349,31 @@ class Lib_PlacementAds_AddEdit {
 
 		$this->list_ids = $list_ids;
 
+		if ( $this->is_edit AND $params->itis_massload ){
+
+			$sign_existed = ORM::factory('Object_Signature')->where('object_id','=',$object->id)->find();
+			if ($sign_existed->loaded())
+			{
+				$attachments_count = ORM::factory('Object_Attachment')->where("object_id","=",$object->id)->count_all();
+				$input_attachament_count = count($params->userfile);
+
+				$signature_full = '{'.join(',', $this->signature_full).'}';
+				$sign_existed = str_replace('"','',$sign_existed->signature_full);
+
+				if ($signature_full == $sign_existed 
+						AND $attachments_count == $input_attachament_count)
+				{
+					$errors['nochange'] = "Объявление не требует обновления.";	
+					$this->union_cancel = TRUE;
+				}
+			}
+		}
+
 		if ($this->is_similarity_enabled())
 		{
 			$max_similarity = Kohana::$config->load('common.max_object_similarity');
 			$similarity 	= ORM::factory('Object_Signature')->get_similarity($max_similarity,$this->signature_full, NULL, $params->object_id, $user->id, "_full", $params->itis_massload);
-			if ( $this->is_edit AND $params->itis_massload ){
-				$sign_existed = ORM::factory('Object_Signature')->where('object_id','=',$object->id)->find();
-				if ($sign_existed->loaded())
-				{
-					$attachments_count = ORM::factory('Object_Attachment')->where("object_id","=",$object->id)->count_all();
-					$input_attachament_count = count($params->userfile);
-
-					$signature_full = '{'.join(',', $this->signature_full).'}';
-					if ($signature_full == $sign_existed->signature_full 
-							AND $attachments_count == $input_attachament_count)
-					{
-						$errors['nochange'] = "Объявление не требует обновления.";	
-						$this->union_cancel = TRUE;
-					}
-				}
-			}
+			
 			if ($similarity["sm"] > $max_similarity){
 				
 				if ( $this->is_edit ){
@@ -501,6 +507,54 @@ class Lib_PlacementAds_AddEdit {
 		return $this;
 
 	}
+	/**
+	 * [normalize_attributes Приведение пользовательских данных в порядок, trim, replace и прочее]
+	 * @return [this]
+	 */
+	function normalize_attributes()
+	{
+		$category 		 = &$this->category;
+		$postparams 	 = &$this->params;
+
+		if (!$category) return $this;
+
+		try {
+			$_params = preg_grep("/^param_/", array_keys((array) $postparams));
+			
+
+			foreach ($_params as $_param) {
+				@list($_t, $reference_id) =  explode("_", $_param);
+
+				$reference = ORM::factory('Reference')
+								->with_attribute_by_id($reference_id)
+								->cached(Date::WEEK)
+								->find();
+				if (!$reference->loaded())
+					continue;
+
+				if (is_array($postparams->{"param_".$reference_id}))
+					continue;
+				
+				$postparams->{"param_".$reference_id} = trim($postparams->{"param_".$reference_id});
+
+				switch ($reference->type)
+				{
+					case 'integer':
+						$postparams->{"param_".$reference_id} = trim($postparams->{"param_".$reference_id});
+						$postparams->{"param_".$reference_id} = preg_replace('/[^0-9]/', '', $postparams->{"param_".$reference_id});
+					break;
+					case 'numeric':
+						$postparams->{"param_".$reference_id} = trim(str_replace(",", ".", $postparams->{"param_".$reference_id}));
+					break;
+				}
+			}
+		} catch (Exception $e)
+		{
+			Kohana::$log->add(Log::NOTICE, $e->getMessage());
+		}
+
+		return $this;
+	}
 
 	function init_validation_rules_for_attributes()
 	{
@@ -516,9 +570,6 @@ class Lib_PlacementAds_AddEdit {
 		foreach ($form_references as $reference)
 		{
 			$reference_id = $reference->reference_id;
-			//if ($reference->is_required AND !self::is_nessesary_to_check($category->id, $reference->id, $postparams))
-			//	continue;			
-
 			$rules = array();
 
 			if ($reference->is_range)
@@ -544,13 +595,14 @@ class Lib_PlacementAds_AddEdit {
 				{
 					case 'integer':
 						$rules[] = array('digit', array(':value', $reference->attribute_title));
-						$rules[] = array('not_0', array(':value', $reference->attribute_title));
-						$rules[] = array('max_length', array(':value', $reference->attribute_solid_size, $reference->attribute_title));
+						$rules[] = array('min_value', array(':value', $reference->attribute_title, 0));
+						$rules[] = array('max_value', array(':value', $reference->attribute_title, 999999999));
 					break;
 
 					case 'numeric':
 						$rules[] = array('numeric', array(':value', $reference->attribute_title));
-						$rules[] = array('max_length', array(':value', $reference->attribute_solid_size+$reference->attribute_frac_size+1, $reference->attribute_title));
+						$rules[] = array('min_value', array(':value', $reference->attribute_title, 0));
+						$rules[] = array('max_value', array(':value', $reference->attribute_title, 999999999));
 					break;
 
 					case 'text':
@@ -613,6 +665,20 @@ class Lib_PlacementAds_AddEdit {
 			{
 				$errors['contacts'] = "В эту рубрику необходимо указать и подтвердить хотябы один мобильный телефон";
 			}
+		} elseif ( $category AND Kohana::$config->load("common.add_phone_required") AND !$params->itis_massload)
+		{
+			
+			$exclusion = Kohana::$config->load("common.add_phone_required_exlusion");
+			if (!in_array($category->id, $exclusion))
+			{
+				$mobile = array_filter(array_values($this->contacts), function($v){
+					return ($v["type"] == 1 OR $v["type"] == 2);
+				});
+				if (!count($mobile))
+				{
+					$errors['contacts'] = "В эту рубрику необходимо указать и подтвердить хотябы один телефон";
+				}
+			}
 		}
 
 		//если пользователь привязан к компании и подает объявления как от компании то не проверяем количество поданных
@@ -643,11 +709,20 @@ class Lib_PlacementAds_AddEdit {
 		$city = &$this->city;
 		$location = &$this->location;
 		$object = &$this->object;
+		
+		$object_compile = &$this->object_compile;
+		$object_compile["cities"] = array();
+		$object_compile["address"] = NULL;
+		$object_compile["lat"] = NULL;
+		$object_compile["lon"] = NULL;
 
 		// сохраняем город если нет такого города в базе
 		$city = Kladr::save_city($params->city_kladr_id, $params->city_name);
 
 		@list($lat, $lon) = explode(',', $params->object_coordinates);
+
+		$object_compile["lat"] = $lat;
+		$object_compile["lon"] = $lon;
 
 		$location = Kladr::save_address($lat, $lon,
  				$params->address,
@@ -659,6 +734,8 @@ class Lib_PlacementAds_AddEdit {
 		if ( ! $location->loaded())
 		{
 			$location = $city->location;
+		} else {
+			$object_compile["address"] = $location->address;
 		}
 
 		if ($object->loaded())
@@ -685,6 +762,8 @@ class Lib_PlacementAds_AddEdit {
 					}
 
 					$object->cities = $cities;
+
+					$object_compile["cities"] = $cities;
 				}
 			}
 		}
@@ -773,6 +852,9 @@ class Lib_PlacementAds_AddEdit {
 		$params = &$this->params;
 		$object = &$this->object;
 
+		$object_compile = &$this->object_compile;
+		$object_compile["photo"] 		= array();
+		$object_compile["main_photo"] 	= NULL;
 
 		// удаляем старые аттачи
 		// @todo по сути не надо заного прикреплять те же фотки при редактировании объявления
@@ -800,7 +882,10 @@ class Lib_PlacementAds_AddEdit {
 				if ($file == $main_photo)
 				{
 					$object->main_image_id = $attachment->id;
+					$object_compile["main_photo"] = $file;
 				}
+
+				$object_compile["photo"][] = $file;
 			}
 
 			// удаляем аттачи из временой таблицы
@@ -816,6 +901,10 @@ class Lib_PlacementAds_AddEdit {
 	{
 		$params = &$this->params;
 		$object = &$this->object;
+
+		$object_compile = &$this->object_compile;
+		$object_compile["video"] 	= NULL;
+
 		if ($params->video AND $params->video_type)
 		{
 			$video = $params->video;
@@ -836,6 +925,8 @@ class Lib_PlacementAds_AddEdit {
 				$attachment->type 		= $params->video_type;
 				$attachment->object_id 	= $object->id;
 				$attachment->save();
+
+				$object_compile["video"] = $filename;
 			}
 		}
 		return $this;
@@ -846,6 +937,9 @@ class Lib_PlacementAds_AddEdit {
 		$params = &$this->params;
 		$object = &$this->object;
 		$category = &$this->category;
+
+		$object_compile = &$this->object_compile;
+		$object_compile["pricelist"] 	= NULL;
 
 		if (!$category) return $this;
 
@@ -875,8 +969,11 @@ class Lib_PlacementAds_AddEdit {
 					return;
 
 				$op->object_id = $object->id;
-				$op->priceload_id =$params->pricelist;
+				$op->priceload_id = $params->pricelist;
 				$op->save();
+
+
+				$object_compile["pricelist"] = $params->pricelist;
 
 			}
 			
@@ -908,10 +1005,14 @@ class Lib_PlacementAds_AddEdit {
 		$object = &$this->object;
 		$user   = &$this->user;
 
+		$object_compile = &$this->object_compile;
+		$object_compile["block_comments"] 	= FALSE;
+
 		// отключаем комментарии к объявлению
 		if ($params->block_comments)
 		{
 			$object->disable_comments();
+			$object_compile["block_comments"] = TRUE;
 		}
 
 		if ($user AND $user->linked_to_user AND isset($this->params->link_to_company))
@@ -944,6 +1045,10 @@ class Lib_PlacementAds_AddEdit {
 	{
 		$params = &$this->params;
 		$object = &$this->object;
+
+		$object_compile = &$this->object_compile;
+		$object_compile["attributes"] 	= array();
+		$object_compile["price"] 	= NULL;
 
 		$attributes = Object_Utils::prepare_form_elements((array) $params);
 
@@ -1018,9 +1123,10 @@ class Lib_PlacementAds_AddEdit {
 				{
 					$object->price = $value;
 				}
-
+				$object_compile["price"] = $object->price;
 				$object->price_unit = $reference->attribute_obj->unit;
 			}
+
 
 			// сохраняем дата атрибут
 			$data = ORM::factory('Data_'.Text::ucfirst($reference->attribute_obj->type));
@@ -1045,14 +1151,21 @@ class Lib_PlacementAds_AddEdit {
 			}
 			//Значения для множественных атрибутов(с учетом того, что is_multiple могут быть только list)
 			if (is_array($value) and isset($value[0]))
+			{
 				foreach ($value as $value_detail) 
 				{
 					$data2 = clone $data;
 					$data2->value = (int)$value_detail;
 					$data2->save();
+
+					$object_compile["attributes"][] = $data2->get_compile();
 				}
+			}
 			else
+			{
 				$data->save();
+				$object_compile["attributes"][] = $data->get_compile();
+			}
 		}
 		return $this;
 	}
@@ -1069,6 +1182,40 @@ class Lib_PlacementAds_AddEdit {
 
 		$object->full_text = $object->generate_full_text();
 		$object->save();
+		return $this;
+	}
+
+	function save_service_fields()
+	{
+		$params = &$this->params;
+		$object = &$this->object;
+		$object_compile = &$this->object_compile;
+		
+		$object_compile["service_fields"] 	= array();
+
+		$fields = preg_grep("/^service_field_/", array_keys((array) $params));
+		foreach ($fields as $field) {
+			$object_compile["service_fields"][$field] = $params->{$field};
+		}
+
+		return $this;
+	}
+
+	function save_compile_object()
+	{
+		$object = &$this->object;
+		$object_compile = &$this->object_compile;
+
+		$oc = ORM::factory('Object_Compiled')
+				->where("object_id","=",$object->id)
+				->find();
+
+		$oc->object_id = $object->id;
+		$oc->compiled = serialize($object_compile);
+		$oc->save();
+
+		Cache::instance('memcache')->delete("landing:{$oc->object_id}");
+
 		return $this;
 	}
 
@@ -1131,6 +1278,10 @@ class Lib_PlacementAds_AddEdit {
 		$object = &$this->object;
 		$user = &$this->user;
 		$contacts = &$this->contacts;
+
+		$object_compile = &$this->object_compile;
+		$object_compile["contacts"] 	= array();
+
 		if ($this->is_edit)
 		{	
 			// удаляем связи на старые контакты
@@ -1145,6 +1296,8 @@ class Lib_PlacementAds_AddEdit {
 
 			// сохраянем новые контакты для объявления
 			$object->add_contact($contact['type'], $contact['value']);
+
+			$object_compile["contacts"][] = array("type" => $contact['type'], "value" => $contact['value']);
 		}
 
 		return $this;

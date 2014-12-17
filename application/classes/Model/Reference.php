@@ -22,6 +22,14 @@ class Model_Reference extends ORM {
 					->cached(Date::DAY)
 					->find();
 	}
+
+	public function with_attribute_by_id($id)
+	{
+		return $this->select("attribute.title", "attribute.type", "attribute.solid_size", "attribute.frac_size", "attribute.max_text_length")
+					->join("attribute","left")
+						->on("reference.attribute","=","attribute.id")
+					->where("reference.id","=", $id);
+	}
 }
 
 /* End of file Reference.php */

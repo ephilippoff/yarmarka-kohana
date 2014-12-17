@@ -19,7 +19,9 @@
 	->js('http://api-maps.yandex.ru/2.0/?load=package.full&lang=ru-RU')
 	->js('ajaxupload.js')
 	->js('jquery.inputmask.js')
-	.$_assets
+	.$_assets;
+	
+	echo Assets::factory('main')->js($jspath);
 ?>
 </head>
 <body class="adaptive page-addobj">

@@ -1,5 +1,5 @@
 
-<h2><?=$title?> (<?=$state?>)</h2>
+<h2><?=$title?> (<?=$state?>) <?=$count?> позиций</h2>
 <? if ($show_form): ?>
 	<form method="post">
 		<table class="table table-hover table-condensed" style="width:300px;">
@@ -12,7 +12,7 @@
 			<tr>
 				<?
 					$title = $data->{$field.'_title'};
-					$type = $data->{$field.'_type'};
+					$type  = $data->{$field.'_type'};
 				?>
 				<td ><?=$field?></td>
 				<td ><input name="<?=$field?>_title" type="text" value="<?=$title?>"/></td>

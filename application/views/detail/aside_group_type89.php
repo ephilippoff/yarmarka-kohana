@@ -32,7 +32,7 @@
                     <tr>
                         <?php
                             $contact_icon_class = null;
-                            switch($contact['contact_type_id'])
+                            switch($contact['type'])
                             {
                             case 1:
                             case 2:
@@ -50,8 +50,8 @@
                             }
 
                         ?>
-                        <td><div class="ico <?=$contact_icon_class?>" title="<?=$contact['contact_type']['name'] ?>"></div></td>
-                        <td><?=Contact::hide($contact['contact_clear']) ?></td>
+                        <td><div class="ico <?=$contact_icon_class?>" title=""></div></td>
+                        <td><?=Contact::hide($contact['value']) ?></td>
                     </tr>
                 <?php  endforeach;?>
                 </table>
@@ -92,6 +92,11 @@
             <?php if ( ! empty($linked_company)) : ?>
             <span onclick="window.location='<?=base_url()?>tyumenskaya-oblast/glavnaya-kategoriya?user_id=<?=$linked_company->id?>'" class="moreinfo span-link">Все объявления компании</span>
             <?php endif; ?>
+			
+			<?php if (!empty($site)) : ?>
+					<a class="button btn-site mt10" href="<?=URL::prep_url($site)?>" target="_blank">Наш сайт</a>															
+			<?php endif;?>			
+			
 </div>
 <?php else: ?>
 

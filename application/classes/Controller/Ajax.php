@@ -868,17 +868,19 @@ class Controller_Ajax extends Controller_Template
 
 	public function action_check_contact_code()
 	{
-		$session_id 	= Arr::get($_POST, 'session_id', session_id());
-		$contact 		= ORM::factory('Contact', $this->request->param('id'));
+		$session_id 	= Arr::get($_POST, 'session_id', session_id());		
 		$link_to_user 	= (bool) $this->request->post('link_to_user');
-
-		if ( ! $contact->loaded())
-		{
-			throw new HTTP_Exception_404;
-		}
-
+		$contact_id =  (int) $this->request->param('id');
 		$code = trim($this->request->post('code'));
-		if (($code) AND ($contact->verification_code) AND ($code === trim($contact->verification_code)))
+
+		if ( !$contact_id ) throw new HTTP_Exception_404;
+
+		$contact 		= ORM::factory('Contact', $contact_id);
+
+		if ( !$contact->loaded() ) throw new HTTP_Exception_404;
+
+		
+		if ($code AND $contact->verification_code AND $code === trim($contact->verification_code))
 		{
 			$this->json['code'] = 200;
 
@@ -1118,180 +1120,142 @@ class Controller_Ajax extends Controller_Template
 		}
 	}	
 
-		public function action_object_upload_file()
-		{
-			try
-			{
-				if (empty($_FILES['userfile1']))
-			{
-				throw new Exception('Не загружен файл');
-			}
-
-			$filename = Uploads::make_thumbnail($_FILES['userfile1']);
-
-			$check_image_similarity = Kohana::$config->load('common.check_image_similarity');
-
-			if ($check_image_similarity)
-			{
-				$similarity = ORM::factory('Object_Attachment')->get_similarity(Uploads::get_full_path($filename));
-				if ($similarity > Kohana::$config->load('common.max_image_similarity'))
-				{
-					throw new Exception('Фотография не уникальная, уже есть активное объявление с такой фотографией либо у вас , либо у другого пользователя');
-				}
-			}
-
-			$this->json['filename'] = $filename;
-			$this->json['filepaths'] = Imageci::getSitePaths($filename);
-
-			$tmp_img = ORM::factory('Tmp_Img');
-			$tmp_img->name = $filename;
-			$tmp_img->save();
-			}
-				catch(Exception $e)
-			{
-				$this->json['error'] = $e->getMessage();
-			}
-		}
-
-
-
-//------------------------------------------------------------------
-	 public function action_ajax_get_hints_by_page()
-	 {
-	 	$this->json = array();
-
-	 	$controller = trim($this->request->post('controller'));
-
-	 	$hints = Model::factory('Notice')->GetHintsByController($controller);
-		
-	 	foreach ($hints as $hint)
-	 	{
-	 		//var_dump($hint);
-	 		$data = array(
-	 			'identify'	=> $hint->identify,
-	 			'left'	=> $hint->left,
-	 			'tops'	=> $hint->top,
-	 			'width'	=> $hint->width,
-	 			'height' => $hint->height,
-	 			'html' 	=> View::factory('block/hint')->bind('hint', $hint)->render()
-	 		);
-
-	 		$this->json[] = $data;
-
-	 	}
-	 }
-	 
-	 public function action_ajax_get_obj_stat()
-	 {
-	 	$obj_id = (int)($this->request->post('obj_id'));
-
+	public function action_ajax_get_hints_by_page()
+	{
 		$this->json = array();
-		
-	 	$stat = Model::factory('Objectstat')
-				->where('object_id', '=', $obj_id)
-				->and_where('date', '>=', DB::expr("CURRENT_DATE - interval '14 days'"))
-				->and_where('date', '<', DB::expr("CURRENT_DATE"))
-				->order_by('date', 'asc')
-				->find_all();
-		
-		foreach ($stat as $value) 
+
+		$controller = trim($this->request->post('controller'));
+
+		$hints = Model::factory('Notice')->GetHintsByController($controller);
+
+		foreach ($hints as $hint)
 		{
-			$this->json[] = array('date' => strtotime($value->date.' UTC') * 1000,	'visits' => $value->visits, 'contacts_show_count' => $value->contacts_show_count);
-		}	
-	 }	 
-	 
-	 public function action_update_rl()
-	 {
-		$id	= (int)($this->request->post('id'));
-		$words = trim(($this->request->post('words')));
-		$active = (int)$this->request->post('active');
-		 
-		$this->json = array();
-		 
-		$row = Model::factory('Object_Service_Ticket')->where('id' ,'=', $id)->find();
-		 
-		if ($row->loaded())
-		{
-			if ($words) $row->words = $words;
-			if ($active)
-			{
-				$row->active = 1;
-				$time = (int)Kohana::$config->load('common.time_to_running_line');
-				$row->date_expiration = DB::expr("NOW() + INTERVAL '{$time} days'");
-			}
-			
-			$row->update();			
+			//var_dump($hint);
+			$data = array(
+				'identify'	=> $hint->identify,
+				'left'	=> $hint->left,
+				'tops'	=> $hint->top,
+				'width'	=> $hint->width,
+				'height' => $hint->height,
+				'html' 	=> View::factory('block/hint')->bind('hint', $hint)->render()
+			);
+
+			$this->json[] = $data;
+
 		}
-		$row = Model::factory('Object_Service_Ticket')->where('id' ,'=', $id)->find();
-		$this->json = array('words' => $row->words, 'date_expiration' => $row->date_expiration, 'active' => $row->active);
-	 }
+	}
 
-	 public function action_global_search(){
+	public function action_ajax_get_obj_stat()
+	{
+		$obj_id = (int)($this->request->post('obj_id'));
 
-		$text 		 = $this->request->post('text');
-		$category_id = 0;
-		$city_id 	 = 0;
-		$region_id 	 = $this->request->post('region_id');
+	$this->json = array();
 
-		if (!empty($text))
+		$stat = Model::factory('Objectstat')
+			->where('object_id', '=', $obj_id)
+			->and_where('date', '>=', DB::expr("CURRENT_DATE - interval '14 days'"))
+			->and_where('date', '<', DB::expr("CURRENT_DATE"))
+			->order_by('date', 'asc')
+			->find_all();
+
+	foreach ($stat as $value) 
+	{
+		$this->json[] = array('date' => strtotime($value->date.' UTC') * 1000,	'visits' => $value->visits, 'contacts_show_count' => $value->contacts_show_count);
+	}	
+	}	 
+
+	public function action_update_rl()
+	{
+	$id	= (int)($this->request->post('id'));
+	$words = trim(($this->request->post('words')));
+	$active = (int)$this->request->post('active');
+	 
+	$this->json = array();
+	 
+	$row = Model::factory('Object_Service_Ticket')->where('id' ,'=', $id)->find();
+	 
+	if ($row->loaded())
+	{
+		if ($words) $row->words = $words;
+		if ($active)
 		{
-			$sphinx = new Sphinx();
-			$result = $sphinx->search($text, $category_id, $city_id, FALSE, 0, 5);
-
-			$objects = Sphinx::getObjects($result);
-			$pricerows = Sphinx::getPricerows($result, $city_id);
-
-			$objects = array_slice($objects,0,6);
-	
-			$objects = ORM::factory('Object')->info_by_ids(implode(",",$objects))->find_all();
-			
-			$resobjects = array();
-			foreach ($objects as $object) {
-				$o = new Obj($object->as_array());
-				$o->category_url = "/".ORM::factory('Category',$object->category_id)->get_url($region_id, $city_id, NULL);
-				$resobjects[] = $o;
-			}
-
-			$this->json['objects'] = $resobjects;			
-			$this->json['pricerows'] = $pricerows;
-			try {
-				$this->json['objects_found'] = $result["objects"]["total_found"];
-				$this->json['pricerows_found'] = $result["pricerows"]["total_found"];
-			} catch(Exception $e){}
-			
+			$row->active = 1;
+			$time = (int)Kohana::$config->load('common.time_to_running_line');
+			$row->date_expiration = DB::expr("NOW() + INTERVAL '{$time} days'");
 		}
 		
-	 }
-	 
-	 
-	 public function action_set_obj_favorite_status()
-	 {
-	 	$obj_id = (int)($this->request->post('obj_id'));
+		$row->update();			
+	}
+	$row = Model::factory('Object_Service_Ticket')->where('id' ,'=', $id)->find();
+	$this->json = array('words' => $row->words, 'date_expiration' => $row->date_expiration, 'active' => $row->active);
+	}
 
-		$this->json = array();
+	public function action_global_search(){
+
+	$text 		 = $this->request->post('text');
+	$category_id = 0;
+	$city_id 	 = 0;
+	$region_id 	 = $this->request->post('region_id');
+
+	if (!empty($text))
+	{
+		$sphinx = new Sphinx();
+		$result = $sphinx->search($text, $category_id, $city_id, FALSE, NULL, 0, 5);
+
+		$objects = Sphinx::getObjects($result);
+		$pricerows = Sphinx::getPricerows($result, $city_id);
+
+		$objects = array_slice($objects,0,6);
+
+		$objects = ORM::factory('Object')->info_by_ids(implode(",",$objects))->find_all();
 		
-	 	$state = Model::factory('Favourite')
-				->where('objectid', '=', $obj_id)
-				->where('userid', '=', Auth::instance()->get_user()->id)
-				->find();
-		
-		if ($state->loaded()) 
-		{
-			$state->delete();
-			$status = 'deleted';
+		$resobjects = array();
+		foreach ($objects as $object) {
+			$o = new Obj($object->as_array());
+			$o->category_url = "/".ORM::factory('Category',$object->category_id)->get_url($region_id, $city_id, NULL);
+			$resobjects[] = $o;
 		}
-		else
-		{
-			$favorite = Model::factory('Favourite');
-			$favorite->userid = Auth::instance()->get_user()->id;
-			$favorite->objectid = $obj_id;	
-			$favorite->save();
-			$status = 'added';
-		}
+
+		$this->json['objects'] = $resobjects;			
+		$this->json['pricerows'] = $pricerows;
+		try {
+			$this->json['objects_found'] = $result["objects"]["total_found"];
+			$this->json['pricerows_found'] = $result["pricerows"]["total_found"];
+		} catch(Exception $e){}
 		
-		$this->json = array('status' => $status);
-	 }
-	 
+	}
+
+	}
+
+
+	public function action_set_obj_favorite_status()
+	{
+		$obj_id = (int)($this->request->post('obj_id'));
+
+	$this->json = array();
+
+		$state = Model::factory('Favourite')
+			->where('objectid', '=', $obj_id)
+			->where('userid', '=', Auth::instance()->get_user()->id)
+			->find();
+
+	if ($state->loaded()) 
+	{
+		$state->delete();
+		$status = 'deleted';
+	}
+	else
+	{
+		$favorite = Model::factory('Favourite');
+		$favorite->userid = Auth::instance()->get_user()->id;
+		$favorite->objectid = $obj_id;	
+		$favorite->save();
+		$status = 'added';
+	}
+
+	$this->json = array('status' => $status);
+	}
+
 	public function action_object_contacts()
 	{
 	 	$obj_id = (int)($this->request->post('id'));		
@@ -1308,7 +1272,39 @@ class Controller_Ajax extends Controller_Template
 
 		$this->response->body(View::factory('detail/show_contacts_table89')->bind('contacts', $contacts));
 		 
-	}		 
+	}	 
+	
+	public function action_obj_selection()
+	{
+	 	$obj_id = (int)($this->request->post('obj_id'));
+		//Удаляем старые объявления
+		ORM::factory('Object_Selection')->clear_old();
+		
+		$selection = ORM::factory('Object_Selection')->where('object_id', '=', $obj_id)->find();
+				
+		$this->json = array();
+		//Чистим кэш
+		Cache::instance()->set("getObjectSelection0", null, 0); //общий(для региона)
+		Cache::instance()->set("getObjectSelection".$selection->object->city_id, null, 0);//по городу
+						
+		//Если уже есть, удаляем
+		if ($selection->loaded())
+		{
+			$status = 'deleted';
+			$selection->delete();
+		}
+		else //Иначе добавляем
+		{
+			$selection = ORM::factory('Object_Selection');
+			$selection->object_id = $obj_id;
+			$selection->save();
+			
+			$status = 'added';
+		}
+				
+		$this->json = array('status' => $status);		
+	}	
+
 	 
 	 public function after()
 	{

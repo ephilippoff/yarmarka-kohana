@@ -84,6 +84,20 @@ function reload_row(object_id, moder_state) {
 		});
 	}
 }
+
+function obj_selection(src, obj_id)
+{	
+	$.post('/ajax/obj_selection', {obj_id:obj_id}, function(json){
+
+		if (json.status == 'added')
+		{
+			$(src).addClass('in');
+		}
+		else if (json.status == 'deleted')
+			$(src).removeClass('in');
+	}, 'json');	
+	
+}
 </script>
 
 <form class="form-inline">
