@@ -94,7 +94,7 @@
             <?php endif; ?>
 			
 			<?php if (!empty($site)) : ?>
-					<a class="button btn-site mt10" href="http://<?=$site?>" target="_blank">Наш сайт</a>															
+					<a class="button btn-site mt10" href="<?=URL::prep_url($site)?>" target="_blank">Наш сайт</a>															
 			<?php endif;?>			
 			
 </div>

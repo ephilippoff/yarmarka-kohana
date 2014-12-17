@@ -1,3 +1,16 @@
+<?php 
+if (isset($data->attributes))
+{	
+	foreach ($data->attributes as $attribute) 
+		if ($attribute['seo_name'] == 'site')
+		{
+			$site = $attribute['value'];
+			break;
+}		}
+?>
+
+
+
 <script type="text/javascript">
 	function favorites(obj_id) 
 	{
@@ -55,7 +68,7 @@ $(document).ready(function() {
                         <div class="personal-card">
 
 							
-							<?php echo View::factory('detail/aside_group_type89')->bind('data', $data) ?>						
+							<?php echo View::factory('detail/aside_group_type89')->bind('data', $data)->bind('site', $site) ?>						
 							
 							
                             <div class="cont">
@@ -90,7 +103,7 @@ $(document).ready(function() {
 											<?=$data->object['user_text']?>
 
 											<? //if (isset($data->attributes)):?>
-												<? //foreach ($data->attributes as $attribute): ?>
+												<? //foreach ($data->attributes as $attribute) : ?>
 													<!--<p class="mt20"><b><?//=$attribute["title"]?></b>: <?//=$attribute["value"]?></p>-->
 												<? //endforeach;?>
 											<?php //endif;?>
@@ -102,7 +115,7 @@ $(document).ready(function() {
 											<?php endif;?>
 											
 											<?php if (!empty($site)) : ?>
-													<p class="mt10"><b>Адрес сайта</b>: <a href="http://<?=$site?>" target="_blank"><?=trim($site, '/')?></a></p> 															
+													<p class="mt20"><b>Адрес сайта</b>: <a href="<?=URL::prep_url($site)?>" target="_blank"><?=trim($site, '/')?></a></p> 															
 											<?php endif;?>
 										</div>	
 

@@ -143,6 +143,7 @@ class Landing_Object extends Landing {
 			
 			$_attribute = array();
 			$_attribute["title"] = $attribute["_attribute"]["title"];
+			$_attribute["seo_name"] = $attribute["_attribute"]["seo_name"];
 			$type = $attribute["_attribute"]["type"];
 
 			switch ($type) {
