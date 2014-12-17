@@ -1172,6 +1172,22 @@ class Lib_PlacementAds_AddEdit {
 		return $this;
 	}
 
+	function save_service_fields()
+	{
+		$params = &$this->params;
+		$object = &$this->object;
+		$object_compile = &$this->object_compile;
+		
+		$object_compile["service_fields"] 	= array();
+
+		$fields = preg_grep("/^service_field_/", array_keys((array) $params));
+		foreach ($fields as $field) {
+			$object_compile["service_fields"][$field] = $params->{$field};
+		}
+
+		return $this;
+	}
+
 	function save_compile_object()
 	{
 		$object = &$this->object;

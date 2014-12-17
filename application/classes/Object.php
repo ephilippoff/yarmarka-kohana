@@ -143,6 +143,7 @@ class Object
 					->save_attributes()
 					->save_generated()
 					->save_contacts()
+					->save_service_fields()
 					->save_compile_object();
 
 
@@ -201,6 +202,7 @@ class Object
 					->save_attributes()
 					->save_generated()
 					->save_contacts()
+					->save_service_fields()
 					->save_compile_object();
 
 				$db->commit();

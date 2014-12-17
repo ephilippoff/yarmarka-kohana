@@ -77,6 +77,9 @@ class Controller_Add extends Controller_Template {
 
 		if ($user AND $user->role == 9)
 			$form_data ->AdvertType();
+
+		if ($user AND in_array($user->role, array(3,9)))
+			$form_data ->CompanyInfo();
 		
 		
 		
