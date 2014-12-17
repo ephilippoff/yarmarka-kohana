@@ -565,12 +565,7 @@ class Lib_PlacementAds_AddEdit {
 
 		if (!$category) return $this;
 
-		$form_references = Cache::instance('memcache')->get("addAdvertReferences:{$category->id}");
-		if (!$form_references)
-		{
-			$form_references = Forms::get_by_category($category->id, $postparams);
-			Cache::instance('memcache')->set("addAdvertReferences:{$category->id}", $form_references);
-		}
+		$form_references = Forms::get_by_category($category->id, $postparams);
 
 		foreach ($form_references as $reference)
 		{
@@ -600,7 +595,6 @@ class Lib_PlacementAds_AddEdit {
 				{
 					case 'integer':
 						$rules[] = array('digit', array(':value', $reference->attribute_title));
-						$rules[] = array('not_0', array(':value', $reference->attribute_title));
 						$rules[] = array('min_value', array(':value', $reference->attribute_title, 0));
 						$rules[] = array('max_value', array(':value', $reference->attribute_title, 999999999));
 					break;
