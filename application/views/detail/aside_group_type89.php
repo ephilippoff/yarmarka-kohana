@@ -93,8 +93,8 @@
             <span onclick="window.location='<?=base_url()?>tyumenskaya-oblast/glavnaya-kategoriya?user_id=<?=$linked_company->id?>'" class="moreinfo span-link">Все объявления компании</span>
             <?php endif; ?>
 			
-			<?php if (/*!empty($site)*/$site='fff.tt') : ?>
-					<a class="button btn-site" href="http://<?=$site?>" target="_blank">Наш сайт</a>															
+			<?php if (!empty($site)) : ?>
+					<a class="button btn-site mt10" href="http://<?=$site?>" target="_blank">Наш сайт</a>															
 			<?php endif;?>			
 			
 </div>
