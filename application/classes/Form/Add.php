@@ -725,8 +725,8 @@ class Form_Add  {
 					->join("contacts","left")
 						->on("contact_id","=","contacts.id")
 					->where("contacts.verified_user_id","=",$user_id)
-					->where("contacts.show","=",1)
 					->where("user_id","=",$user_id)
+					->limit(3)
 					->find_all();
 		foreach($oc as $contact)
 		{
