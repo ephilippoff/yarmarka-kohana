@@ -107,21 +107,20 @@
 
 				<div class="smallcont">
 					<div class="labelcont">
-						<label><span>Статус</span></label>
+						<label><span>Тип</span></label>
 					</div>
 					<div class="fieldscont">
 						<div class="inp-cont-short">
 							<div class="inp-cont <? if ($error->type) echo "error";?>">
 								<span class="required-label">*</span>
-								
-								
-								
-								
 
 								<input name="type" type="radio" id="type_fl" value="1" <? if ($params->type == "1") echo "checked";?>/><label for="type_fl">Частное лицо</label>
 								<? if (!$error->type): ?>
 								<span class="inform">
-									<span>В некоторые рубрики действует ограничение на количество объявлений</span>
+									<span>Ограничение на количество объявлений:</span></br>
+									<? foreach($limited_categories as $category):?>
+										<?=$category->title?> (<?=$category->max_count_for_user?>),
+									<? endforeach; ?>
 								</span>
 							    <? endif; ?>
 
@@ -142,16 +141,39 @@
 						</div>
 					</div>									
 				</div>
-
+				
+				<div class="smallcont">
+					<div class="labelcont">
+						<label><span>Введите слово с картинки</span></label>
+					</div>
+					<div class="fieldscont">
+						<div class="inp-cont-short">
+							<div class="inp-cont  <? if ($error->captcha) echo "error";?>">
+								<span class="required-label">*</span>
+								<?=$captcha?>
+								<input type="text" name="captcha" value="<? if ($params->captcha) echo $params->captcha;?>" autocomplete="off"/>
+								<? if ($error->captcha): ?>
+								<span class="inform fn-error">
+									<span><?=$error->captcha?></span>
+								</span>
+								<? else: ?>								
+									<span class="inform">
+										<span>на русском языке</span>
+									</span>
+								<? endif; ?>								
+							</div>
+						</div>
+					</div>									
+				</div>
 
 				<div class="smallcont">
 					<div class="labelcont">
-						<label><span></span></label>
+						<label><span>Правила</span></label>
 					</div>
 					<div class="fieldscont">
 						<div class="inp-cont-short">
 							<div class="inp-cont accept">								
-								Нажимая на кнопку "Далее", я принимаю <a href="/article/usloviya-ispolzovaniya-saita-yarmarka" target="_blank">условия использования</a> и <a href="/article/pravila-razmeshcheniya-obyavlenii" target="_blank">правила размещения объявлений</a> на сайте "Ярмарка".
+								Нажимая на кнопку "Далее", Вы принимаете <a href="/article/usloviya-ispolzovaniya-saita-yarmarka" target="_blank">условия использования</a> и <a href="/article/pravila-razmeshcheniya-obyavlenii" target="_blank">правила размещения объявлений</a> на сайте "Ярмарка".								
 							</div>
 						</div>
 					</div>									

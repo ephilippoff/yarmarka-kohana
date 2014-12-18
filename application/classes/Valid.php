@@ -149,4 +149,10 @@ class Valid extends Kohana_Valid {
 	{
 		return intval($value) < $max_value;
 	}
+
+	public static function captcha($value)
+	{
+		$value = mb_strtolower( trim($value) );
+		return Captcha::valid($value);
+	}
 }

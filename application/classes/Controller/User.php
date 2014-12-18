@@ -1349,6 +1349,13 @@ class Controller_User extends Controller_Template {
 			}
 		}
 
+		$limited_categories = ORM::factory('Category')
+					->where("max_count_for_user",">",0)
+					->cached(Date::DAY)
+					->find_all();
+
+		$this->template->limited_categories = $limited_categories;
+		$this->template->captcha = Captcha::instance()->render();
 		$this->template->success = (isset($user_id));
 		$this->template->params = $post_data;
 		$this->template->error = $error;

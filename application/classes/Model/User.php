@@ -443,7 +443,9 @@ class Model_User extends Model_Auth_User {
 					->rule('pass2', 'not_empty', array(':value', "Пароль (повторно)"))
 					->rule('pass2', 'matches', array($data, "pass", "pass2"))
 					->rule('type', 'not_empty', array(':value', "Статус"))
-					->rule('type', 'valid_org_type', array(':value', "Статус"));
+					->rule('type', 'valid_org_type', array(':value', "Статус"))
+					->rule('captcha', 'not_empty', array(':value', ""))
+					->rule('captcha', 'captcha', array(':value', ""));
 	}
 
 	public function registration($email, $password, $type = 1)
