@@ -646,7 +646,7 @@ class Lib_PlacementAds_AddEdit {
 			}
 		}
 
-		if (!$user)
+		if (!$user OR ($user AND !$user->loaded()))
 		{
 			$errors['not_autorized'] =  Kohana::message('validation/object_form', 'not_autorized');
 		}
