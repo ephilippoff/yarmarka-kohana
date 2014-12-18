@@ -194,6 +194,29 @@
 
 			<? endif; ?>
 
+			<? if ( property_exists($form_data, 'company_info') ): ?>
+
+			<div class="fl100" id="div_company_info">
+				<? foreach ($form_data->company_info['info'] as $name => $field): ?>
+				
+					<div class="smallcont">
+						<div class="labelcont">
+							<label><span><?=$name?></span></label>
+						</div>
+						<div class="fieldscont">				 						
+							<div class="inp-cont-short">
+								<div class="inp-cont">
+									<?=$field?>
+								</div> <!--inp-cont -->
+							</div> <!-- inp-cont-short -->
+						</div> <!-- fieldscont -->		
+					</div>	 <!-- smallcont --> 
+				<? endforeach; ?>
+			</div>  <!-- fl100 -->
+				
+
+			<? endif; ?>
+
 			<div id="div_params">
 			<? if ( property_exists($form_data, 'params') ): ?>
 				<div class="fn-parameters">

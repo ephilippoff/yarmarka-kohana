@@ -264,6 +264,45 @@ class Form_Add  {
 										);
 	}
 
+	function CompanyInfo()
+	{	
+		$object 		= $this->object;
+		
+		$service_field_inn = $service_field_orgname = $service_field_description = NULL;
+
+		if (!$this->is_post)
+		{
+			$compiled_query = ORM::factory('Object_Compiled')
+							->where("object_id","=",$object->id)
+							->find();
+			if ($compiled_query->loaded())
+			{
+				$compiled = unserialize($compiled_query->compiled);
+				$compiled = $compiled['service_fields'];
+				$service_field_inn = $compiled["service_field_inn"];
+				$service_field_orgname = $compiled["service_field_orgname"];
+				$service_field_description = $compiled["service_field_description"];
+			}
+		} else {
+			if ( array_key_exists("service_field_inn", $this->params))
+				$service_field_inn = $this->params["service_field_inn"];
+			if ( array_key_exists("service_field_orgname", $this->params))
+				$service_field_orgname = $this->params["service_field_orgname"];
+			if ( array_key_exists("service_field_description", $this->params))
+				$service_field_description = $this->params["service_field_description"];
+		}
+
+		$info = array(
+				"ИНН" => Form::input("service_field_inn", $service_field_inn, array("class" => "")),
+				"Компания" => Form::input("service_field_orgname", $service_field_orgname, array("class" => "")),
+				"Описание" => Form::textarea("service_field_description", $service_field_description, array("class" => ""))
+			);
+
+		$this->_data->company_info = array(
+											'info' => $info
+										);
+	}
+
 	function Other_Cities()
 	{
 

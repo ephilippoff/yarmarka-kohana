@@ -1451,6 +1451,9 @@ class Controller_User extends Controller_Template {
 		if ($user AND $user->role == 9)
 			$form_data ->AdvertType();
 
+		if ($user AND in_array($user->role, array(3,9)))
+			$form_data ->CompanyInfo();
+
 		$this->template->set_global('jspath', $staticfile->jspath);
 		$this->template->object  = $object;
 		$this->template->params 	= new Obj($params);
