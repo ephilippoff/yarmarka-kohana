@@ -47,7 +47,7 @@
 		<? endif; ?>
 
 		<form method="POST"  id="element_list">	
-			<?=Form::hidden('csrf', Security::token(TRUE))?>		
+			<?=Form::hidden('csrf', $token)?>		
   			<input type="hidden" name="object_id" id="object_id" value="<?=$params->object_id?>">
   			<input type="hidden" name="session_id" value="<?=session_id()?>">
 

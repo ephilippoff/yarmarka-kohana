@@ -12,7 +12,7 @@
 			</div>
 		<? else: ?>
 		<form method="POST"  action="" id="element_list">			
-
+			<?=Form::hidden('csrf', $token)?>
 			<div class="fl100  pt40 pb15">
 				<div class="smallcont">
 					<div class="labelcont">
