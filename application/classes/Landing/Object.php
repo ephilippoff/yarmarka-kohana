@@ -44,6 +44,7 @@ class Landing_Object extends Landing {
 		$this->video 		= $this->compiled["video"];
 		$this->contacts 	= (isset($this->compiled["contacts"])) ? $this->compiled["contacts"] : NULL;
 		$this->attributes 	= $this->getAttributes( (isset($this->compiled["attributes"])) ? $this->compiled["attributes"] : NULL );
+		$this->city 		= (isset($this->compiled["city"])) ? $this->compiled["city"] : NULL;		
 		$this->address 		= (isset($this->compiled["address"])) ? $this->compiled["address"] : NULL;
 		$this->lat 			= (isset($this->compiled["lat"])) ? $this->compiled["lat"] : NULL;
 		$this->lon 		 	= (isset($this->compiled["lon"])) ? $this->compiled["lon"] : NULL;

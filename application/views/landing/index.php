@@ -126,7 +126,7 @@ $(document).ready(function() {
 											<?php endif;?>
 													
 											<?php if (!empty($adres)) : ?>
-													<p class="mt20"><b>Адрес</b>: <?=trim($adres)?></p> 															
+													<p class="mt20"><b>Адрес</b>: <?php if ($data->city) : ?><?=$data->city?>, <?php endif; ?><?=trim($adres)?></p> 															
 											<?php endif;?>													
 													
 										</div>	
