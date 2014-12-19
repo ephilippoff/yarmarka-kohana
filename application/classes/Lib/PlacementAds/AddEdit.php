@@ -713,6 +713,8 @@ class Lib_PlacementAds_AddEdit {
 		$object_compile = &$this->object_compile;
 		$object_compile["cities"] = array();
 		$object_compile["address"] = NULL;
+		$object_compile["city"] = NULL;
+		$object_compile["region"] = NULL;
 		$object_compile["lat"] = NULL;
 		$object_compile["lon"] = NULL;
 
@@ -736,6 +738,8 @@ class Lib_PlacementAds_AddEdit {
 			$location = $city->location;
 		} else {
 			$object_compile["address"] = $location->address;
+			$object_compile["city"] = $location->city;
+			$object_compile["region"] = $location->region;
 		}
 
 		if ($object->loaded())
