@@ -14,6 +14,13 @@ class Controller_Add extends Controller_Template {
 			{
 				$this->redirect(Url::site('user/message?message=userblock'));
 			}
+
+			if (!$user->is_valid_orginfo()
+					AND in_array(Request::current()->action(), array('index')))
+			{
+				if ($user->is_expired_date_validation())
+					HTTP::redirect("/user/orginfo?from=another");
+			}
 		}
 	}
 
@@ -74,6 +81,11 @@ class Controller_Add extends Controller_Template {
 				 	->Price()
 				 	->Contacts()
 					->Widgets();
+					
+		if ($user AND $user->org_type == 2)
+			$form_data->OrgInfo();
+		elseif ($user AND $user->linked_to_user)
+			$form_data->LinkedUser();
 
 		if ($user AND $user->role == 9)
 			$form_data ->AdvertType();
@@ -88,6 +100,15 @@ class Controller_Add extends Controller_Template {
 		$this->template->form_data 	= $form_data->_data;
 		$this->template->errors = (array) $errors;
 		$this->template->assets = $this->assets;
+
+		$expired = NULL;
+		if ($user AND !$user->is_valid_orginfo()
+					AND !$user->is_expired_date_validation())
+		{
+			$settings = new Obj(ORM::factory('User_Settings')->get_group($user->id, "orginfo"));
+			$expired =  $settings->{"date-expired"};
+		}
+		$this->template->expired_orginfo = $expired;
 
 	}
 

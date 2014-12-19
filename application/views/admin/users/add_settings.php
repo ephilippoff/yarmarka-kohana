@@ -7,16 +7,28 @@
 		</div>
 	</div>
 
+	<div class="control-group">
+		<label class="control-label">Тип настройки</label>
+		<div class="controls">
+			<select class="input-block-level" name="type" id="type"/>
+				<option value>---</option>
+				<? foreach($user_settings_types as $key=>$value):?>
+					<option value="<?=$key?>"><?=$value?></option>
+				<? endforeach; ?>
+			</select>
+		</div>
+	</div>
+
 	<div class="control-group <?=Arr::get($errors, 'name') ? 'error' : ''?>">
 		<label class="control-label">Имя настройки</label>
 		<div class="controls">
-			<input type="text" value="massload" class="input-block-level" name="name" id="name"/>
+			<input type="text" value="" class="input-block-level" name="name" id="name"/>
 			<span class="help-inline"><?=Arr::get($errors, 'name')?></span>
 		</div>
 	</div>
 
 	<div class="control-group only1 articles-rubrics-box">
-		<label class="control-label">Категория:</label>
+		<label class="control-label">Значение:</label>
 		<div class="controls">
 			<input type="text" class="input-block-level" name="value" id="value"/>
 			<?//Form::select('value', Array("--Выберите категорию--")+$categories, Arr::get($_POST, 'category'), array('style' => 'width:500px;')) ?>
@@ -32,12 +44,34 @@
 	</div>
 	
 </form>
-
+<div>
+<a href="/khbackend/users/add_settings">Все</a> |
+<? foreach($user_settings_types as $key=>$value):?>
+	<a href="/khbackend/users/add_settings?type=<?=$key?>"><?=$value?></a> |
+<? endforeach; ?>
+</div>
+<div>
+	<form action="/khbackend/users/add_settings" method="GET">
+		<div style="float:left;padding:5px;">
+			<label for="filter_user_id">По ID юзера</label>
+			<input type="text" id="filter_user_id" name="user_id">
+		</div>
+		<div style="float:left;padding:5px;">
+			<label for="filter_user_id">По Email юзера</label>
+			<input type="text" id="filter_user_email" name="user_email">
+		</div>
+		<div style="float:left;padding:5px;">
+			<label for="filter_user_id">&nbsp;</label>
+			<input type="submit" value="Найти">
+		</div>
+	</form>
+</div>
 <table class="table table-hover table-condensed promo">
 	<tr>
 		<th>Id</th>
 		<th>Id User</th>
 		<th>Email</th>
+		<th>Type</th>
 		<th>Name</th>
 		<th>Value</th>
 		<th></th>
@@ -54,6 +88,7 @@
 			<td><?=$item->id?></td>
 			<td><?=$item->user_id?></td>
 			<td><?=$item->user->email?></td>
+			<td><?=$item->type?></td>
 			<td><?=$item->name?></td>
 			<td><?=$value?></td>	
 			<td>

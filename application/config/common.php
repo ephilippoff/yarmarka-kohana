@@ -17,8 +17,9 @@ return array(
 	'address_attribute_ids'					=> array(47, 99),
 	'time_to_running_line'					=> 7,
 	'add_problem'							=> NULL,//'Уважаемые посетители сайта! Доводим до Вашего сведения, что законодательно изменились правила рассылки коммерческих СМС-сообщений. В связи с этим у абонентов "Мегафон" могут возникнуть проблемы с получением кода подтверждения на телефон при размещении объявления. Мы стараемся как можно быстрее устранить проблему. Благодарим за понимание!'
+	'sphinx_prefix'							=> '_prod',
+	'date_new_registration'					=> '2014-11-21',
 	'add_phone_required' 					=> TRUE,
 	'add_phone_required_exlusion' 			=> array(36,35),
-	'sphinx_prefix'							=> '_prod',
-	'short_domain'							=> 'ya24.biz',
+	'short_domain'							=> 'ya24.biz'
 );

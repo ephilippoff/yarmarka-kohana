@@ -29,6 +29,8 @@ class Form_Custom  {
 
 			if ($field->type == "photo")
 				$data[] = $this->get_photo_field($field, $values->{$field->name});
+			elseif ($field->type == "text")
+				$data[] = $this->get_text_field($field, $values->{$field->name});
 			else
 				$data[] = $this->get_default_field($field, $values->{$field->name});
 		}
@@ -40,12 +42,14 @@ class Form_Custom  {
 	public function validation_prepare(array $data)
 	{
 		$this->validation = Validation::factory($data);
-		foreach ($data as $key => $value) {
-			$field = new Obj($this->_settings["fields"][$key]);
-			$title = $field->translate;
-			$required = $field->required;
-			if ($required)
-				$this->validation->rule( $key, 'not_empty', array(':value', $title) );
+		foreach ($this->_settings["fields"] as $fieldname => $settings) {
+
+			$field = new Obj($settings);
+
+			if ($field->required)
+				$this->validation->rule( $fieldname, 'not_empty', array(':value', $field->translate) );
+			if ($field->type == "inn")
+				$this->validation->rule( $fieldname, 'inn', array(':value', $field->translate) );
 		}
 	}
 
@@ -67,7 +71,20 @@ class Form_Custom  {
 						"html"  => Form::input($field->name, $value,  array("class" => "form-control")),
 						"required" => $field->required,
 						"value" => $field->value,
-						"type"  => $field->type
+						"type"  => $field->type,
+						"description"  => $field->description
+					);
+	}
+
+	private function get_text_field(Obj $field, $value = NULL)
+	{
+		return array(	"title" => $field->translate,
+						"name"	=> $field->name,
+						"html"  => Form::textarea($field->name, $value,  array("class" => "form-control")),
+						"required" => $field->required,
+						"value" => $field->value,
+						"type"  => $field->type,
+						"description"  => $field->description
 					);
 	}
 
@@ -75,11 +92,12 @@ class Form_Custom  {
 	{
 		return array(	"title" => $field->translate,
 						"name"	=> $field->name,
-						"html"  => Form::file($field->name,  array("class" => "form-control")).Form::hidden($field->name, (($value)?$value:1)),
+						"html"  => Form::button($field->name, 'Загрузить '.$field->translate, array("id" => $field->name, "class" => "form-control")),
 						"required" => $field->required,
-						"path" => $value,
-						"type"  => $field->type
-						);
+						"value" => $value,
+						"type"  => $field->type,
+						"description"  => $field->description
+					);
 	}
 
 }

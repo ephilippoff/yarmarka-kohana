@@ -1120,152 +1120,142 @@ class Controller_Ajax extends Controller_Template
 		}
 	}	
 
-	public function after()
+	public function action_ajax_get_hints_by_page()
 	{
-		parent::after();
-		if ( ! $this->response->body())
+		$this->json = array();
+
+		$controller = trim($this->request->post('controller'));
+
+		$hints = Model::factory('Notice')->GetHintsByController($controller);
+
+		foreach ($hints as $hint)
 		{
-			$this->response->body(json_encode($this->json));
+			//var_dump($hint);
+			$data = array(
+				'identify'	=> $hint->identify,
+				'left'	=> $hint->left,
+				'tops'	=> $hint->top,
+				'width'	=> $hint->width,
+				'height' => $hint->height,
+				'html' 	=> View::factory('block/hint')->bind('hint', $hint)->render()
+			);
+
+			$this->json[] = $data;
+
 		}
 	}
 
-//------------------------------------------------------------------
-	 public function action_ajax_get_hints_by_page()
-	 {
-	 	$this->json = array();
+	public function action_ajax_get_obj_stat()
+	{
+		$obj_id = (int)($this->request->post('obj_id'));
 
-	 	$controller = trim($this->request->post('controller'));
+	$this->json = array();
 
-	 	$hints = Model::factory('Notice')->GetHintsByController($controller);
-		
-	 	foreach ($hints as $hint)
-	 	{
-	 		//var_dump($hint);
-	 		$data = array(
-	 			'identify'	=> $hint->identify,
-	 			'left'	=> $hint->left,
-	 			'tops'	=> $hint->top,
-	 			'width'	=> $hint->width,
-	 			'height' => $hint->height,
-	 			'html' 	=> View::factory('block/hint')->bind('hint', $hint)->render()
-	 		);
+		$stat = Model::factory('Objectstat')
+			->where('object_id', '=', $obj_id)
+			->and_where('date', '>=', DB::expr("CURRENT_DATE - interval '14 days'"))
+			->and_where('date', '<', DB::expr("CURRENT_DATE"))
+			->order_by('date', 'asc')
+			->find_all();
 
-	 		$this->json[] = $data;
+	foreach ($stat as $value) 
+	{
+		$this->json[] = array('date' => strtotime($value->date.' UTC') * 1000,	'visits' => $value->visits, 'contacts_show_count' => $value->contacts_show_count);
+	}	
+	}	 
 
-	 	}
-	 }
+	public function action_update_rl()
+	{
+	$id	= (int)($this->request->post('id'));
+	$words = trim(($this->request->post('words')));
+	$active = (int)$this->request->post('active');
 	 
-	 public function action_ajax_get_obj_stat()
-	 {
-	 	$obj_id = (int)($this->request->post('obj_id'));
-
-		$this->json = array();
-		
-	 	$stat = Model::factory('Objectstat')
-				->where('object_id', '=', $obj_id)
-				->and_where('date', '>=', DB::expr("CURRENT_DATE - interval '14 days'"))
-				->and_where('date', '<', DB::expr("CURRENT_DATE"))
-				->order_by('date', 'asc')
-				->find_all();
-		
-		foreach ($stat as $value) 
-		{
-			$this->json[] = array('date' => strtotime($value->date.' UTC') * 1000,	'visits' => $value->visits, 'contacts_show_count' => $value->contacts_show_count);
-		}	
-	 }	 
+	$this->json = array();
 	 
-	 public function action_update_rl()
-	 {
-		$id	= (int)($this->request->post('id'));
-		$words = trim(($this->request->post('words')));
-		$active = (int)$this->request->post('active');
-		 
-		$this->json = array();
-		 
-		$row = Model::factory('Object_Service_Ticket')->where('id' ,'=', $id)->find();
-		 
-		if ($row->loaded())
+	$row = Model::factory('Object_Service_Ticket')->where('id' ,'=', $id)->find();
+	 
+	if ($row->loaded())
+	{
+		if ($words) $row->words = $words;
+		if ($active)
 		{
-			if ($words) $row->words = $words;
-			if ($active)
-			{
-				$row->active = 1;
-				$time = (int)Kohana::$config->load('common.time_to_running_line');
-				$row->date_expiration = DB::expr("NOW() + INTERVAL '{$time} days'");
-			}
-			
-			$row->update();			
-		}
-		$row = Model::factory('Object_Service_Ticket')->where('id' ,'=', $id)->find();
-		$this->json = array('words' => $row->words, 'date_expiration' => $row->date_expiration, 'active' => $row->active);
-	 }
-
-	 public function action_global_search(){
-
-		$text 		 = $this->request->post('text');
-		$category_id = 0;
-		$city_id 	 = 0;
-		$region_id 	 = $this->request->post('region_id');
-
-		if (!empty($text))
-		{
-			$sphinx = new Sphinx();
-			$result = $sphinx->search($text, $category_id, $city_id, FALSE, NULL, 0, 5);
-
-			$objects = Sphinx::getObjects($result);
-			$pricerows = Sphinx::getPricerows($result, $city_id);
-
-			$objects = array_slice($objects,0,6);
-	
-			$objects = ORM::factory('Object')->info_by_ids(implode(",",$objects))->find_all();
-			
-			$resobjects = array();
-			foreach ($objects as $object) {
-				$o = new Obj($object->as_array());
-				$o->category_url = "/".ORM::factory('Category',$object->category_id)->get_url($region_id, $city_id, NULL);
-				$resobjects[] = $o;
-			}
-
-			$this->json['objects'] = $resobjects;			
-			$this->json['pricerows'] = $pricerows;
-			try {
-				$this->json['objects_found'] = $result["objects"]["total_found"];
-				$this->json['pricerows_found'] = $result["pricerows"]["total_found"];
-			} catch(Exception $e){}
-			
+			$row->active = 1;
+			$time = (int)Kohana::$config->load('common.time_to_running_line');
+			$row->date_expiration = DB::expr("NOW() + INTERVAL '{$time} days'");
 		}
 		
-	 }
-	 
-	 
-	 public function action_set_obj_favorite_status()
-	 {
-	 	$obj_id = (int)($this->request->post('obj_id'));
+		$row->update();			
+	}
+	$row = Model::factory('Object_Service_Ticket')->where('id' ,'=', $id)->find();
+	$this->json = array('words' => $row->words, 'date_expiration' => $row->date_expiration, 'active' => $row->active);
+	}
 
-		$this->json = array();
+	public function action_global_search(){
+
+	$text 		 = $this->request->post('text');
+	$category_id = 0;
+	$city_id 	 = 0;
+	$region_id 	 = $this->request->post('region_id');
+
+	if (!empty($text))
+	{
+		$sphinx = new Sphinx();
+		$result = $sphinx->search($text, $category_id, $city_id, FALSE, NULL, 0, 5);
+
+		$objects = Sphinx::getObjects($result);
+		$pricerows = Sphinx::getPricerows($result, $city_id);
+
+		$objects = array_slice($objects,0,6);
+
+		$objects = ORM::factory('Object')->info_by_ids(implode(",",$objects))->find_all();
 		
-	 	$state = Model::factory('Favourite')
-				->where('objectid', '=', $obj_id)
-				->where('userid', '=', Auth::instance()->get_user()->id)
-				->find();
-		
-		if ($state->loaded()) 
-		{
-			$state->delete();
-			$status = 'deleted';
+		$resobjects = array();
+		foreach ($objects as $object) {
+			$o = new Obj($object->as_array());
+			$o->category_url = "/".ORM::factory('Category',$object->category_id)->get_url($region_id, $city_id, NULL);
+			$resobjects[] = $o;
 		}
-		else
-		{
-			$favorite = Model::factory('Favourite');
-			$favorite->userid = Auth::instance()->get_user()->id;
-			$favorite->objectid = $obj_id;	
-			$favorite->save();
-			$status = 'added';
-		}
+
+		$this->json['objects'] = $resobjects;			
+		$this->json['pricerows'] = $pricerows;
+		try {
+			$this->json['objects_found'] = $result["objects"]["total_found"];
+			$this->json['pricerows_found'] = $result["pricerows"]["total_found"];
+		} catch(Exception $e){}
 		
-		$this->json = array('status' => $status);
-	 }
-	 
+	}
+
+	}
+
+
+	public function action_set_obj_favorite_status()
+	{
+		$obj_id = (int)($this->request->post('obj_id'));
+
+	$this->json = array();
+
+		$state = Model::factory('Favourite')
+			->where('objectid', '=', $obj_id)
+			->where('userid', '=', Auth::instance()->get_user()->id)
+			->find();
+
+	if ($state->loaded()) 
+	{
+		$state->delete();
+		$status = 'deleted';
+	}
+	else
+	{
+		$favorite = Model::factory('Favourite');
+		$favorite->userid = Auth::instance()->get_user()->id;
+		$favorite->objectid = $obj_id;	
+		$favorite->save();
+		$status = 'added';
+	}
+
+	$this->json = array('status' => $status);
+	}
+
 	public function action_object_contacts()
 	{
 	 	$obj_id = (int)($this->request->post('id'));		
@@ -1314,27 +1304,15 @@ class Controller_Ajax extends Controller_Template
 				
 		$this->json = array('status' => $status);		
 	}	
-	 
-	  
 
-//	public function  action_get_hints_by_page()
-//	{
-//		$controllerCharacter = trim($this->request->query('controller_character'));
-//		
-//		$hint = Model::factory('Notice')->getHintByCChar($controllerCharacter);
-//		
-//		if (!$hint) return;
-//
-//		$data = array(
-//			'identify' => $hint->identify,
-//			'left'	=> $hint->left,
-//			'tops'	=> $hint->top,
-//			'width'	=> $hint->width,
-//			'height' => $hint->height,
-//			'html' 	=> View::factory('block/hint')->bind('hint', $hint)->render()
-//		);
-//
-//		$this->json['hint'] = $data;
-//	}
-//--------------------------------------------------------------
+	 
+	 public function after()
+	{
+		parent::after();
+		if ( ! $this->response->body())
+		{
+			$this->response->body(json_encode($this->json));
+		}
+	}
+
 }

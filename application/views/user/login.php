@@ -13,7 +13,7 @@
 		<? else: ?>
 		<form method="POST"  action="" id="element_list">			
 
-			<div class="fl100  pt16 pb15">
+			<div class="fl100  pt40 pb15">
 				<div class="smallcont">
 					<div class="labelcont">
 						<label><span>Логин</span></label>
@@ -52,24 +52,24 @@
 					</div>									
 				</div>
 
-				<div class="smallcont">
+				<div class="smallcont pb20">
 					<div class="labelcont">
 						<label></label>
 					</div>
 					<div class="fieldscont">
 						<div class="inp-cont-short">
-							<a target="_blank" href="http://<?=Kohana::$config->load('common.main_domain')?>/user/registration">Зарегистрироваться</a>
+							<a target="_blank" href="/user/registration">Зарегистрироваться</a>
 						</div>
 					</div>
 				</div>	
 
-				<div class="smallcont">
+				<div class="smallcont pb20">
 					<div class="labelcont">
 						<label></label>
 					</div>
 					<div class="fieldscont">
 						<div class="inp-cont-short">
-							<a target="_blank" href="/user/forgot_password">Напомнить/сменить пароль</a>
+							<a target="_blank" href="/user/forgot_password">Напомнить / сменить пароль</a>
 						</div>
 					</div>
 				</div>	

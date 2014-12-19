@@ -31,6 +31,7 @@ class User {
 	{
 		return sha1($str.microtime());
 	}
+
 }
 
 

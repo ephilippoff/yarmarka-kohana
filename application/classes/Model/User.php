@@ -46,10 +46,10 @@ class Model_User extends Model_Auth_User {
 				array('max_length', array(':value', 32)),
 				array(array($this, 'unique'), array('login', ':value')),
 				array(array($this, 'check_ip')),
-				array(array($this, 'check_cookie')),
 			),
 			'passw' => array(
 				array('not_empty'),
+				array('min_length', array(':value', 6)),
 			),
 			'email' => array(
 				array('email'),
@@ -73,9 +73,6 @@ class Model_User extends Model_Auth_User {
 		return array(
 			'passw' => array(
 				array(array(Auth::instance(), 'hash'))
-			),
-			'email' => array(
-				array(array($this, 'trigger_save_email'), array(':value')),
 			),
 			'phone' => array(
 				array(array($this, 'trigger_save_phone'), array(':value')),
@@ -320,20 +317,6 @@ class Model_User extends Model_Auth_User {
 
 		return TRUE;
 	}
-
-	public function check_cookie()
-	{
-		if ($user_id = Cookie::get('r_user_id'))
-		{
-			$user = ORM::factory('User', $user_id);
-			if ($user->loaded())
-			{
-				return FALSE; // пользователь уже регистрирвоался с этого браузера
-			}
-		}
-
-		return TRUE;
-	}
 	
 	public function getAllUnits()
 	{
@@ -351,9 +334,14 @@ class Model_User extends Model_Auth_User {
 		if ($email AND Valid::email($email))
 		{
 			$contact = ORM::factory('Contact');
-			$contact->contact 			= trim($email);
+			$contact->contact 			= trim(mb_strtolower($email));
 			$contact->contact_type_id 	= Model_Contact_Type::EMAIL;
 			$contact->create();
+			if ($contact->id)
+			{
+				$contact->verified_user_id 	= $this->id;
+				$contact->save();
+			}
 		}
 
 		return $email;
@@ -441,6 +429,252 @@ class Model_User extends Model_Auth_User {
 		$this->is_blocked = 0;
 		$this->save();
 
+	}
+
+	public function register_validation(Array $data)
+	{
+		return Validation::factory($data)
+					->rule('csrf', 'Security::check')
+					->rule('login', 'not_empty', array(':value', "Email"))
+					->rule('login', 'email', array(':value', "Email"))
+					->rule('login', 'login_exist', array(':value', @$data['login']))
+					->rule('pass', 'not_empty', array(':value', "Пароль"))
+					->rule('pass', 'min_length', array(':value', 6, "Пароль"))
+					->rule('pass2', 'not_empty', array(':value', "Пароль (повторно)"))
+					->rule('pass2', 'matches', array($data, "pass", "pass2"))
+					->rule('type', 'not_empty', array(':value', "Статус"))
+					->rule('type', 'valid_org_type', array(':value', "Статус"))
+					->rule('captcha', 'not_empty', array(':value', ""))
+					->rule('captcha', 'captcha', array(':value', ""));
+	}
+
+	public function registration($email, $password, $type = 1)
+	{
+		$email = strtolower(trim($email));
+		$user = ORM::factory('User')
+							->get_user_by_email($email)
+							->find();
+		if ($user->loaded())
+			return FALSE;
+
+		$this->login = $email;
+		$this->email = $email;
+		$this->passw = $password;
+		$this->role = 2;
+		$this->code = self::generate_code($email);
+		$this->is_blocked = 2;
+		$this->ip_addr = $_SERVER["REMOTE_ADDR"];
+		$this->org_type = $type;
+		$this->save();
+
+		$this->trigger_save_email($email);
+
+		$this->send_register_success();
+		
+		return $this->id;
+
+	}
+	/**
+	 * [send_register_success send email about success registration and link to complete registration]
+	 * @return [void]
+	 */
+	public function send_register_success()
+	{
+		if (!$this->loaded())
+			return;
+
+		$msg = View::factory('emails/register_success', array('activationCode' => $this->code));
+		Email::send($this->email, Kohana::$config->load('email.default_from'), 'Подтверждение регистрации на Ярмарке', $msg);
+	}
+
+	private static function generate_code($str)
+	{
+		return sha1($str.microtime());
+	}
+
+	private static function password_hash($password)
+	{
+		return sha1($password . md5($password . 'secret_salted_hash##!&&1'));
+
+	}
+
+	/**
+	 * [reset_orgtype сброс типа учетной записи на Частное лицо]
+	 * @param  boolean $soft [мягкая смена, если true то объявыления не снимаются]
+	 * @return [type]        [void]
+	 */
+	public function reset_orgtype($soft = FALSE)
+	{
+		if (!$this->loaded())
+			return;
+				
+		$db = Database::instance();
+		try
+		{
+			$db->begin();
+			
+			//Сбрасываем тип на "Частное лицо"
+			$this->org_type = 1;
+			$this->save();
+
+			//Отвязываем сотрудников если были
+			$this->unlink_users();
+
+			if (!$soft)
+			{	
+				//находим категории с ограничениями
+				$categories = ORM::factory('Category')
+								->where("max_count_for_user",">",0)
+								->find_all();
+
+				foreach ($categories as $category) {
+
+					//снимаем объявления в категория с ограничениями
+					$query = DB::select("id")
+									->from("object")
+									->where("author","=",$this->id)
+									->where("active","=",1)
+									->where("category","=",$category->id)
+									->where("is_published","=",1)
+									->order_by("date_created","desc")
+									->offset($category->max_count_for_user);
+
+					ORM::factory('Object')
+							->where("id","IN",$query)
+							->set("is_published", 0)
+							->update_all();
+					
+				}
+			}
+			$db->commit();
+		}
+		catch(Exception $e)
+		{
+			$db->rollback();
+			return $e->getMessage();
+		}
+
+	}
+	/**
+	 * [reset_to_company Меняем тип учетной записи на "Компания"]
+	 * @return [type] [description]
+	 */
+	public function reset_to_company()
+	{
+		if (!$this->loaded())
+			return;
+
+		ORM::factory('User_Link_Request')
+			->delete_requests($this->id);
+
+		$this->linked_to_user = NULL;
+		$this->org_type = 2;
+		$this->save();	
+	}
+
+	public function count_employers()
+	{
+		return ORM::factory('User')
+					->where("linked_to_user","=",$this->id)
+					->count_all();
+	}
+
+	public function reset_parent_user()
+	{
+		if (!$this->loaded())
+			return;
+
+		$this->linked_to_user = NULL;
+		$this->save();	
+	}
+
+	public function is_valid_orginfo()
+	{
+		if (!$this->loaded())	
+			return TRUE;
+
+		if ($this->org_type <> 2)
+			return TRUE;
+
+		if ($this->org_moderate === 1)
+			return TRUE;
+
+		return FALSE;
+	}
+
+	public function is_expired_date_validation()
+	{
+		if (!$this->loaded())
+			return;
+
+		if ($this->org_moderate === 0)
+			return FALSE;
+		
+		$date_new_registration = Kohana::$config->load("common.date_new_registration");
+		if (strtotime($this->regdate) > strtotime($date_new_registration))
+			return TRUE;
+		
+		$date 		  = new DateTime();
+		$date_expired = ORM::factory('User_Settings')
+								->where("user_id","=",$this->id)
+								->where("name","=","date-expired")
+								->where("type","=","orginfo")
+								->find();
+
+		if (!$date_expired->loaded())
+		{
+			$date_expired->user_id = $this->id;
+			$date_expired->type = "orginfo";
+			$date_expired->name = "date-expired";			
+			$date_expired->value  = $date->add(date_interval_create_from_date_string('14 days'))->format('Y-m-d H:i:s');
+			$date_expired->save();
+		}
+		elseif ($date_expired->loaded() AND strtotime($date->format('Y-m-d H:i:s')) >= strtotime($date_expired->value))
+		{
+			return TRUE;
+		}
+
+		return FALSE;
+	}
+
+	public function link_user($user_id, $force_for_company = FALSE)
+	{	
+		if (!$this->loaded())
+		{
+			return "Пользователь с таким email адресом не зарегистрирован";
+		} elseif ($this->loaded() AND $this->linked_to_user == $user_id)
+		{
+			return "Учетная запись этого пользователя уже привязана к вашей компании";
+		} elseif ($this->loaded() AND $this->linked_to_user)
+		{
+			return "Учетная запись этого пользователя уже привязана к другой компании";				
+		} elseif ($this->loaded() AND $this->org_type <> 1 AND !$force_for_company)
+		{
+			return "Учетная запись этого пользователя 'Компания'. Вы не можете его добавить";
+		} 
+
+		$this->linked_to_user = $user_id;
+		$this->save();
+
+		$this->reset_orgtype($force_for_company);
+
+		return;
+	}
+
+	public function unlink_user($user_id, $linked_user_id)
+	{
+		return ORM::factory('User')
+				->where("linked_to_user","=",$user_id)
+				->where("id","=",$linked_user_id)
+				->set("linked_to_user", DB::expr("NULL"))
+				->update_all();
+	}
+
+	public function unlink_users()
+	{
+		return $this->where("linked_to_user","=",$this->id)
+					->set("linked_to_user", DB::expr("NULL"))
+					->update_all();
 	}
 
 }

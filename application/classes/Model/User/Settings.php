@@ -38,4 +38,45 @@ class Model_User_Settings extends ORM {
 					->where('name', '=', $name);			
 	}
 
+	public function get_group($user_id, $type)
+	{
+		$result = array();
+
+		$settings = $this->where("user_id","=",$user_id)
+						 ->where("type","=", $type)
+						 ->find_all();
+		foreach ($settings as $setting) {
+			$result[$setting->name] = $setting->value;
+		}
+
+		return $result;
+	}
+
+	public function update_or_save($user_id, $type, $name, $value)
+	{
+
+		$setting = ORM::factory('User_Settings')
+										->where("user_id","=",$user_id)
+										->where("name","=",$name)
+										->where("type","=", $type)
+										->find();
+		$setting->created_on = DB::expr("NOW()");						
+		$setting->user_id = $user_id;				
+		$setting->type = $type;
+		$setting->name = $name;
+		$setting->value = $value;
+		$setting->save();
+
+		return $setting;
+	}
+
+	public function _delete($user_id, $type, $name)
+	{
+		return ORM::factory('User_Settings')
+							->where("user_id","=",$user_id)
+							->where("name","=",$name)
+							->where("type","=",$type)
+							->delete_all();
+	}
+
 } // End User_Settings Model

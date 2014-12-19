@@ -3,97 +3,58 @@
 class Form_Custom_Orginfo extends Form_Custom {
 
 	public $user = NULL;
-	private $prefix = "orginfo-";
+	public $_settings = NULL;
+	public $prefix = NULL;
 
 	function __construct()
 	{
+		$this->prefix = "orginfo";
 		$this->_settings = Kohana::$config->load("form/custom.orginfo");
 		$this->user = Auth::instance()->get_user();
 	}
 
 	public function save(array $data)
 	{
-		if (parent::save($data))
+
+		if (!parent::save($data))
+			return FALSE;
+
+		$db = Database::instance();
+		try
 		{
-			$db = Database::instance();
-			try
-			{
-				$db->begin();
-				foreach ($data as $key => $value) {
-					if ($value)
-					{
-						$field = new Obj($this->_settings["fields"][$key]);
-						switch ($field->type) {
-							case 'photo':
-								$this->save_photo($key, $value);
-							break;
-							
-							default:
-								$this->save_param($key, $value);
-							break;
-						}
-					}
-				}
-				$db->commit();
+			$db->begin();
+			foreach ($this->_settings["fields"] as $fieldname => $settings) {
+				if (isset($data[$fieldname]))
+					$this->save_param($fieldname, $data[$fieldname]);
 			}
-			catch(Exception $e)
-			{
-				$db->rollback();
-			}
+			$db->commit();
 		}
+		catch(Exception $e)
+		{
+			$db->rollback();
+			Admin::send_error("Ошибка при отправке формы о компании", array(
+					$e->getMessage(), Debug::vars($data), $e->getTraceAsString()
+			));
+			return $e->getMessage();
+		}
+
+		return TRUE;		
 	}
 
 	public function get_data()
 	{
-		$data = array();
-		$settings = ORM::factory('User_Settings')
-					->where("user_id","=",$this->user)
-					->where("name","LIKE",$this->prefix."%")
-					->find_all();
-
-		foreach ($settings as $setting) {
-			@list($type, $name) = explode("-",$setting->name);
-			$data[$name] = $setting->value;
-		}
-
-		return $data;
+		return ORM::factory('User_Settings')
+					->get_group($this->user, $this->prefix);
 	}
 
 	public function save_param($name, $value)
-	{
+	{	
 		if (!$value)
-			return;
-
-		$setting = ORM::factory('User_Settings')
-						->where("user_id","=",$this->user)
-						->where("name","=",$this->prefix.$name)
-						->find();
-		$setting->user_id = $this->user->id;
-		$setting->name = $this->prefix.$name;
-		$setting->value = $value;
-		$setting->save();
-
-		return $setting;
-	}
-
-	public function save_photo($name, $value)
-	{
-		$file = $_FILES[$name];
-		try {
-			$filename = Uploads::save($file);
-		} catch (Exception $e)
 		{
-			return;
+			return ORM::factory('User_Settings')
+					->_delete($this->user, $this->prefix, $name);
 		}
-		$setting = ORM::factory('User_Settings')
-						->where("user_id","=",$this->user)
-						->where("name","=",$this->prefix.$name)
-						->find();
-		$setting->user_id = $this->user->id;
-		$setting->name = $this->prefix.$name;
-		$setting->value = Uploads::get_file_path($filename, '272x203');
-		$setting->save();
-
-		return FALSE;
+		return ORM::factory('User_Settings')
+						->update_or_save($this->user, $this->prefix, $name, $value);
 	}
 }

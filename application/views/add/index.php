@@ -28,6 +28,24 @@
 			</div>
 		<? endif; ?>
 
+		<? if($expired_orginfo):?>
+			<div class="fl100  pt16 pb15">
+				<div class="smallcont pb10">
+					<div class="labelcont">
+						<label><span></span></label>
+					</div>
+					<div class="fieldscont">										
+						<div class="">
+							<div class="inp-cont" style=" font-size:16px;">
+								<span style="color:red;">Для продолжения работы с сайтом, пожалуйста, поделитесь с нами информацией о Вашей компании <a href="/user/orginfo">здесь</a></span>.
+								Если сейчас у Вас нет возможности заполнить форму, сделайте это в любое удобное время, но не позднее чем <?=$expired_orginfo?>
+					  		</div>
+						</div>
+					</div>									
+				</div>
+			</div>
+		<? endif; ?>
+
 		<form method="POST"  id="element_list">	
 			<?=Form::hidden('csrf', Security::token(TRUE))?>		
   			<input type="hidden" name="object_id" id="object_id" value="<?=$params->object_id?>">
@@ -98,6 +116,71 @@
 						</div>
 					</div>
 				</div>	
+			</div>
+			<? endif; ?>
+
+			<? if ( property_exists($form_data, 'org_info') ): ?>
+			<div class="fl100  pt16 pb15"  id="div_org_info">
+					<div class="smallcont">
+						<div class="labelcont">
+							<label><span>Компания:</span></label>
+						</div>	
+						<div class="fieldscont">
+							<div class="inp-cont-long ">
+								<div class="inp-cont <?if ($form_data->city["city_error"]) echo "error";?>">
+									<div class="pt4">
+										<?=$form_data->org_info["title"]?>
+										<? if ($form_data->org_info["logo"]): ?>
+											<div class="p10">
+												<? $logo = Imageci::getSitePaths($form_data->org_info["logo"]);?>
+												<img src="<?=$logo["120x90"]?>">
+											</div>
+										<? endif; ?>
+										<div style="height:30px;overflow:hidden;">
+											<?=$form_data->org_info["about"]?>...
+										</div>
+										<span class="inform">
+											<span>Изменить информацию о компании можно <a href="/user/orginfo">здесь</a></span>
+										</span>
+									</div>
+								</div>
+							</div><!--inp-cont-short-->
+							
+						</div><!--fieldscont-->
+					</div> <!-- smallcont -->
+			</div>
+			<? endif; ?>
+
+			<? if ( property_exists($form_data, 'linked_company') ): ?>
+			<div class="fl100  pt16 pb15"  id="div_linked_company">
+					<div class="smallcont">
+						<div class="labelcont">
+							<label><span>От компании:</span></label>
+						</div>	
+						<div class="fieldscont">
+							<div class="inp-cont-long ">
+								<div class="inp-cont <?if ($form_data->city["city_error"]) echo "error";?>">
+									<div class="pt4">
+										<? 
+											$company = $form_data->linked_company["company"];
+										?>
+										<input type="checkbox" name="link_to_company" <? if ($form_data->linked_company["value"] == "on") echo "checked"; ?>/>  <?=$company->org_name?>
+										<?=$company->org_name?> (<?=$company->email?>)
+										<? if ($company->filename): ?>
+											<div class="p10">
+												<? $logo = Imageci::getSitePaths($company->filename);?>
+												<img src="<?=$logo["120x90"]?>">
+											</div>
+										<? endif; ?>
+										<span class="inform">
+											<span>Вы можете отвязать свою учетную запись от этой компании <a href="/user/userinfo">здесь</a></span>
+										</span>
+									</div>
+								</div>
+							</div><!--inp-cont-short-->
+							
+						</div><!--fieldscont-->
+					</div> <!-- smallcont -->
 			</div>
 			<? endif; ?>
 
