@@ -1371,7 +1371,7 @@ class Controller_User extends Controller_Template {
 		$this->layout = 'auth';
 		$code =$this->request->param("id");
 		$user = ORM::factory('User')
-						->where("code","=",$code)
+						->where("code","=",trim($code))
 						->where("is_blocked","=",2)->find();
 
 		if ($user->loaded())
@@ -1392,7 +1392,6 @@ class Controller_User extends Controller_Template {
 			$user_contact->user_id = $user->id;
 			$user_contact->contact_id = $contact->id;
 			$user_contact->save();
-
 
 			Auth::instance()->trueforcelogin($user);
 			$this->template->message = "Добро пожаловать! Вы успешно зарегистрировались";
