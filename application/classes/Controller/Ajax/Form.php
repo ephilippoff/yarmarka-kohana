@@ -2,6 +2,14 @@
 
 class Controller_Ajax_Form extends Controller_Ajax {
 
+	public function before()
+	{
+		// disable global layout for this controller
+		$this->use_layout = FALSE;
+		$this->auto_render = FALSE;
+
+		$this->json['code'] = 200; // code by default
+	}
 
 	public function action_upload_photofield()
 	{
