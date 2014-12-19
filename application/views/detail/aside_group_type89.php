@@ -93,9 +93,7 @@
             <span onclick="window.location='<?=base_url()?>tyumenskaya-oblast/glavnaya-kategoriya?user_id=<?=$linked_company->id?>'" class="moreinfo span-link">Все объявления компании</span>
             <?php endif; ?>
 			
-			<?php if (!empty($site)) : ?>
-					<a class="button btn-site mt10" href="<?=URL::prep_url($site)?>" target="_blank">Наш сайт</a>															
-			<?php endif;?>			
+		
 			
 </div>
 <?php else: ?>
@@ -111,9 +109,9 @@
         <?php endif; ?>
 <?php endif; ?>
 
-        <?/*<td class="logo">
-                                                   
-                                                </td>*/?>
+		<?php if (!empty($site)) : ?>
+			<a target="_blank" class="site-addr" href="<?=URL::prep_url($site)?>">Наш сайт</a> 
+		<?php endif;?>
 		
 		
 		
