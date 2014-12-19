@@ -1,12 +1,19 @@
 <?php 
 if (isset($data->attributes))
 {	
+	$site = $adres = '';
+	
 	foreach ($data->attributes as $attribute) 
-		if ($attribute['seo_name'] == 'site')
-		{
+	{
+		if ($attribute['seo_name'] == 'site')		
 			$site = $attribute['value'];
-			break;
-}		}
+		
+		if ($attribute['seo_name'] == 'adres-raion')		
+			$adres = $attribute['value'];
+		
+		if ($site and $adres) break;
+	}
+}
 ?>
 
 
@@ -117,6 +124,11 @@ $(document).ready(function() {
 											<?php if (!empty($site)) : ?>
 													<p class="mt20"><b>Адрес сайта</b>: <a href="<?=URL::prep_url($site)?>" target="_blank"><?=trim($site, '/')?></a></p> 															
 											<?php endif;?>
+													
+											<?php if (!empty($adres)) : ?>
+													<p class="mt20"><b>Адрес</b>: <?=trim($adres)?></p> 															
+											<?php endif;?>													
+													
 										</div>	
 
 												
