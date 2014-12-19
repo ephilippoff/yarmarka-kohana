@@ -19,7 +19,7 @@ class Controller_Ajax extends Controller_Template
 		// only ajax request is allowed
 		if ( ! $this->request->is_ajax() AND Kohana::$environment !== Kohana::DEVELOPMENT)
 		{
-//			throw new HTTP_Exception_404;
+			throw new HTTP_Exception_404;
 		}
 		// disable global layout for this controller
 		$this->use_layout = FALSE;
