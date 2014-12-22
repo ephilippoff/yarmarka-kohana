@@ -732,6 +732,51 @@ class Form_Add  {
 			);
 	}
 
+	function Additional()
+	{
+		$category_id 	= $this->category_id;
+		$errors 		= $this->errors;
+		$user = Auth::instance()->get_user();
+
+		if ($user AND $user->org_type <> 1)
+			return;
+
+		$vakancy_org_type = Kohana::$config->load("dictionaries.vakancy_org_type");
+		$fields = $values = $settings =  array();
+
+		if ($category_id) 
+		{
+			
+			$settings = Kohana::$config->load("category.".$category_id.".additional_fields");
+			if (!$settings)
+				$settings = array();
+			
+			if ($this->is_post)
+			{
+				$fields = preg_grep("/^additional_/", array_keys( (array)$this->params ) );
+				foreach ($fields as $field) {
+					$values[$field] = $this->params[$field];
+				}
+			} else {
+				if ($user)
+				{
+					$orginfo_data = ORM::factory('User_Settings')
+									->get_group($user->id, "orginfo");
+					foreach ($orginfo_data as $key => $data) {
+						$values["additional_".$key] = $data;
+					}
+				}
+			}
+		}
+
+		$this->_data->additional = array(
+						"errors" => $errors,
+						"settings" => new Obj($settings),
+						"values" =>  new Obj($values),
+						"vakancy_org_type" => $vakancy_org_type
+			);
+	}
+
 	static private function parse_object_params($object_id){
 		$values = ORM::factory('Data_List')->where("object","=",$object_id)->find_all();
 		$params = Array();

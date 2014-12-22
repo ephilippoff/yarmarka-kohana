@@ -290,6 +290,41 @@ class Lib_PlacementAds_AddEdit {
 		return $this;
 	}
 
+	function init_additional()
+	{
+		$category = &$this->category;
+		$validation = &$this->validation;
+		$params = &$this->params;
+		$user = &$this->user;
+
+		if ($user AND $user->org_type == 1 
+					AND $category AND $settings = Kohana::$config->load("category.".$category->id.".additional_fields"))
+		{
+
+			$titles =  Kohana::$config->load("dictionaries.additional_fields");
+			foreach ($settings as $setting) {
+				$validation->rules($setting, array(
+						array('not_empty', array(':value', $titles[$setting]))
+					)
+				);
+			}
+
+			$saveas = Kohana::$config->load("category.".$category->id.".additional_saveas");
+			if (!$saveas)
+				$saveas = array();
+
+			foreach ($settings as $setting) {
+				
+				if (in_array($setting, array_keys($saveas)))
+				{
+					$param = $saveas[$setting];
+					$params->{$param} = $params->{$setting};
+				}
+			}
+		}
+		return $this;
+	}
+
 	function init_contacts()
 	{
 		$contacts = &$this->contacts;
@@ -1042,6 +1077,35 @@ class Lib_PlacementAds_AddEdit {
 				}
 			}
 		}
+		return $this;
+	}
+
+	function save_additional()
+	{
+		$params = &$this->params;
+		$object = &$this->object;
+		$user = &$this->user;
+		$object_compile = &$this->object_compile;
+
+		$object_compile["user_settings"] = array();
+		if ($user AND $user->org_type == 1 
+					AND $object->category AND $settings = Kohana::$config->load("category.".$object->category.".additional_fields"))
+		{
+			foreach ($settings as $setting) {
+				$name = str_replace("additional_", "", $setting);
+				$value = $params->{$setting};
+
+				if (!$value)
+					ORM::factory('User_Settings')
+						->_delete($user, "orginfo", $name);
+				
+				ORM::factory('User_Settings')
+						->update_or_save($user, "orginfo", $name, $value);
+
+				$object_compile["user_settings"][$name] = $value;
+			}
+		}
+
 		return $this;
 	}
 

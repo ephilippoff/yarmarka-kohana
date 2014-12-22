@@ -1764,7 +1764,8 @@ class Controller_User extends Controller_Template {
 				 	->Params()
 				 	->Map()
 				 	->Price()
-				 	->Contacts();
+				 	->Contacts()
+				 	->Additional();
 
 		if ($user AND $user->role == 9)
 			$form_data ->AdvertType();

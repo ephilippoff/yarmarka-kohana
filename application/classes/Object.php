@@ -8,7 +8,7 @@ class Object
 		$user = Auth::instance()->get_user();
 
 		//если в локале работаем с подачей, ставим 1
-		$local = 0;
+		$local = 1;
 
 		if ($local == 1)
 		{
@@ -50,7 +50,8 @@ class Object
 			->init_object_and_mode()
 			->check_neccesaries()
 			->normalize_attributes()
-			->init_validation_rules()			
+			->init_validation_rules()
+			->init_additional()
 			->init_validation_rules_for_attributes()
 			->init_contacts()
 			->exec_validation()
@@ -79,6 +80,7 @@ class Object
 					->save_contacts()
 					->save_signature()
 					->save_union()
+					->save_additional()
 					->save_compile_object();
 
 				$db->commit();
@@ -116,7 +118,7 @@ class Object
 	{
 		$json = array();
 		$user = Auth::instance()->get_user();
-		
+
 		$add = new Lib_PlacementAds_AddEditLocal();
 		$add->init_input_params($input_params)
 			->init_instances()
@@ -124,6 +126,7 @@ class Object
 			->check_neccesaries()
 			->normalize_attributes()
 			->init_validation_rules()
+			->init_additional()
 			//->init_validation_rules_for_attributes()
 			->init_contacts()
 			->exec_validation();
@@ -148,6 +151,7 @@ class Object
 					->save_generated()
 					->save_contacts()
 					->save_service_fields()
+					->save_additional()
 					->save_compile_object();
 
 

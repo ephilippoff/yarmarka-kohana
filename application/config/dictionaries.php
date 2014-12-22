@@ -28,6 +28,17 @@ return array(
 		"0_trash"  => "Деятельность компании сомнительна",
 		"50_normal" => "Не внимательно/как попало заполнена анкета",
 		"75_nologo" => "Нет логотипа",
-		"100_perfect" => "Идеально"
+		"100_perfect" => "Идеально",
+	),
+	"vakancy_org_type" => array(
+		"direct"  => "Прямой работодатель",
+		"agency"  => "Кадровое агентство"
+
+	),
+	"additional_fields" => array(
+		"additional_org_name"  => "Название компании",
+		"additional_vakancy_org_type"  => "Тип компании",
+		"additional_commoninfo" => "О компании"
+
 	)
 );

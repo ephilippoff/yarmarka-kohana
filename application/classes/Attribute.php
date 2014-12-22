@@ -45,7 +45,8 @@ class Attribute {
 						if (in_array($key, array(	"one_mobile_phone",
 													"max_count",
 													"description",
-													"price_enabled")))
+													"price_enabled",
+													"additional_fields")))
 							$category_params[$key] = $value;
 					}
 
