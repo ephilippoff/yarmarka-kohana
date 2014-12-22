@@ -531,6 +531,7 @@ class Controller_Admin_Users extends Controller_Admin_Template {
 		if (!$filter)
 			$users = $users->where("user_settings.value","=",'0');
 
+		$this->template->estimates = Kohana::$config->load("dictionaries.estimate_for_org_info");
 		$this->template->moderate_enable = (!$filter); 
 		$this->template->users = $users->find_all();
 	}
