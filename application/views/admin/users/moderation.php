@@ -3,7 +3,8 @@
 
 		function orginfo_moderate(user_id, method, message)
 		{
-			$.post( "/ajax/admin/orginfo_moderate", {user_id:user_id, method:method, message:message}, function( data ) {
+			var estimate = $("#estimate_"+user_id).val();
+			$.post( "/ajax/admin/orginfo_moderate", {user_id:user_id, method:method, message:message, estimate:estimate}, function( data ) {
 			  	console.log(data);	
 			  	$(".user"+user_id).hide();
 			},"json");
@@ -37,6 +38,13 @@
 			<img src='<?=$inn_skan["original"]?>' width="400"/>
 		</td>
 		<td> 
+			<select id="estimate_<?=$user->id?>">
+				<option>--</option>
+				<? foreach ($estimates as  $key => $estimate): ?>
+
+					<option value="<?=$key?>" <? if ($user->estimate == $key) echo "selected";?>><?=$estimate?></option>
+				<? endforeach; ?>
+			</select>
 			<? if ($moderate_enable): ?>
 				<p><button onclick="orginfo_moderate(<?=$user->id?>, 'ok');" class="btn btn-success"><span class="text">ОК</span></button></p>
 			<? endif;?>

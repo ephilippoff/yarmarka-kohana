@@ -59,6 +59,7 @@ class Controller_Ajax_Admin extends Controller_Ajax {
 		$user_id = $this->request->post("user_id");
 		$method  = $this->request->post("method");
 		$message = $this->request->post("message");
+		$estimate = $this->request->post("estimate");
 
 		$user = ORM::factory('User',$user_id);
 
@@ -66,7 +67,9 @@ class Controller_Ajax_Admin extends Controller_Ajax {
 			return;
 
 		if ($method == "ok")
-		{		
+		{
+			if ($estimate)
+				$user->estimate = $estimate;
 			$user->org_moderate = 1;
 			$user->save();
 

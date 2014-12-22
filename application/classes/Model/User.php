@@ -42,19 +42,14 @@ class Model_User extends Model_Auth_User {
 	public function rules()
 	{
 		return array(
-			'login' => array(
-				array('max_length', array(':value', 32)),
-				array(array($this, 'unique'), array('login', ':value')),
-				array(array($this, 'check_ip')),
-			),
 			'passw' => array(
 				array('not_empty'),
 				array('min_length', array(':value', 6)),
 			),
 			'email' => array(
 				array('email'),
-				// array(array($this, 'unique'), array('email', ':value')),
-				// array(array($this, 'check_domain'), array(':value')),
+				array(array($this, 'unique'), array('email', ':value')),
+				array(array($this, 'check_domain'), array(':value')),
 			),
 			'role' => array(
 				array('not_empty'),
@@ -434,6 +429,7 @@ class Model_User extends Model_Auth_User {
 	public function register_validation(Array $data)
 	{
 		return Validation::factory($data)
+					->rule('csrf', 'not_empty', array(':value', "CSRF"))
 					->rule('csrf', 'Security::check')
 					->rule('login', 'not_empty', array(':value', "Email"))
 					->rule('login', 'email', array(':value', "Email"))

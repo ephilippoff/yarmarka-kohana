@@ -40,7 +40,7 @@ class Controller_Add extends Controller_Template {
 //		echo Assets::factory('main')->js($staticfile->jspath);
 
 		$errors = new Obj();
-
+		$token = NULL;
 		$is_post = ($_SERVER['REQUEST_METHOD']=='POST');
 		$post_data = $this->request->post();
 
@@ -54,9 +54,11 @@ class Controller_Add extends Controller_Template {
 			}
 
 			$params = $post_data;
+			$token = (isset($post_data["csrf"])) ? $post_data["csrf"] : NULL;
 		} 
 		else
 		{
+			$token = Security::token();
 			$params = array(
 				'rubricid'		=> (int)$this->request->param('rubricid'),
 				//'object_id'		=> (int)$this->request->query('object_id'),
@@ -93,7 +95,7 @@ class Controller_Add extends Controller_Template {
 		if ($user AND in_array($user->role, array(3,9)))
 			$form_data ->CompanyInfo();
 		
-		
+		$this->template->token = $token;
 		
 		$this->template->set_global('jspath', $staticfile->jspath);
 		$this->template->params 	= new Obj($params);

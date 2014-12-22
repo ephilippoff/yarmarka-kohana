@@ -1321,10 +1321,11 @@ class Controller_User extends Controller_Template {
 		$post_data = new Obj($this->request->post());
 		$error = new Obj();
 		$success = FALSE;
-
+		$token = NULL;
 		if ($is_post)
 		{
 			$post_data->login = strtolower(trim($post_data->login));
+			$token = $post_data->csrf;
 			$validation = ORM::factory('User')
 								->register_validation((array) $post_data);
 
@@ -1347,6 +1348,8 @@ class Controller_User extends Controller_Template {
 					));
 				}
 			}
+		} else {
+			$token = Security::token();
 		}
 
 		$limited_categories = ORM::factory('Category')
@@ -1354,6 +1357,7 @@ class Controller_User extends Controller_Template {
 					->cached(Date::DAY)
 					->find_all();
 
+		$this->template->token = $token;
 		$this->template->limited_categories = $limited_categories;
 		$this->template->captcha = Captcha::instance()->render();
 		$this->template->success = (isset($user_id));
@@ -1367,7 +1371,7 @@ class Controller_User extends Controller_Template {
 		$this->layout = 'auth';
 		$code =$this->request->param("id");
 		$user = ORM::factory('User')
-						->where("code","=",$code)
+						->where("code","=",trim($code))
 						->where("is_blocked","=",2)->find();
 
 		if ($user->loaded())
@@ -1388,7 +1392,6 @@ class Controller_User extends Controller_Template {
 			$user_contact->user_id = $user->id;
 			$user_contact->contact_id = $contact->id;
 			$user_contact->save();
-
 
 			Auth::instance()->trueforcelogin($user);
 			$this->template->message = "Добро пожаловать! Вы успешно зарегистрировались";
@@ -1416,25 +1419,36 @@ class Controller_User extends Controller_Template {
 			$domain = "http://".Kohana::$config->load("common.main_domain");
 
 		
-
+		$token = NULL;
 		$error = NULL;
 		$success = NULL;
 		if ($is_post){
-			$auth = Auth::instance();
-			try {
-				$auth->login($post_data->login, $post_data->pass, TRUE);
-				
-			} 
-				catch (Exception $e)
+			$token = $post_data->csrf;
+			$validation = Validation::factory((array) $post_data)
+					->rule('csrf', 'not_empty', array(':value', "CSRF"))
+					->rule('csrf', 'Security::check');
+
+
+			if ( !$validation->check())
 			{
-				$error = $e->getMessage();
+				$error = new Obj($validation->errors('validation/auth'));
+			} else {
+				$auth = Auth::instance();
+				try {
+					$auth->login($post_data->login, $post_data->pass, TRUE);
+					
+				} 
+					catch (Exception $e)
+				{
+					$error = $e->getMessage();
 
-			} 
+				} 
 
-			if (!$error)
-					$this->redirect($domain.$return_page);
-
+				if (!$error)
+						$this->redirect($domain.$return_page);
+			}
 		} else {
+			$token = Security::token();
 			if ($this->user AND $return_page)
 			{
 				Auth::instance()->trueforcelogin($this->user);
@@ -1442,6 +1456,7 @@ class Controller_User extends Controller_Template {
 			}
 		}
 
+		$this->template->token = $token;
 		$this->template->user = $this->user; 
 		$this->template->params = $post_data;
 		$this->template->error = $error;
@@ -1700,6 +1715,7 @@ class Controller_User extends Controller_Template {
 //		$this->assets->js($staticfile->jspath);
 
 		$errors = new Obj();
+		$token = NULL;
 		$object_id = (int)$this->request->param('object_id');
 		$object = ORM::factory('Object', $object_id);
 		if (!$object_id OR !$object->loaded())
@@ -1723,9 +1739,11 @@ class Controller_User extends Controller_Template {
 			}	
 		
 			$params = $post_data;
+			$token = (isset($post_data["csrf"])) ? $post_data["csrf"] : NULL;
 		} 
 		else
 		{
+			$token = Security::token();
 			$params = array(
 				'object_id'		=> $object_id
 			);
@@ -1759,6 +1777,7 @@ class Controller_User extends Controller_Template {
 		if ($user AND in_array($user->role, array(3,9)))
 			$form_data ->CompanyInfo();
 
+		$this->template->token = $token;
 		$this->template->set_global('jspath', $staticfile->jspath);
 		$this->template->object  = $object;
 		$this->template->params 	= new Obj($params);

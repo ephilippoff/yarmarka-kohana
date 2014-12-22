@@ -28,7 +28,7 @@
 
 		<?else: ?>
 		<form method="POST"  action="" id="element_list">			
-			<?=Form::hidden('csrf', Security::token(TRUE))?>
+			<?=Form::hidden('csrf', $token)?>
 			<div class="fl100  pt16 pb15">
 				<div class="smallcont">
 					<div class="labelcont">
@@ -178,8 +178,20 @@
 						</div>
 					</div>									
 				</div>
-	
-
+				<? if ($error->csrf): ?>
+					<div class="smallcont">
+						<div class="labelcont">
+							<label><span></span></label>
+						</div>
+						<div class="fieldscont  fn-error">
+							<div class="inp-cont-short">
+								<div class="inp-cont accept">								
+									<span style="color:red"><?=$error->csrf;?></span>
+								</div>
+							</div>
+						</div>									
+					</div>
+				<? endif; ?>
 
 			</div>
 			<div class="fl100 form-next-cont">
