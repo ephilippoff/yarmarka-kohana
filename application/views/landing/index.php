@@ -98,7 +98,7 @@ $(document).ready(function() {
 													<div class="box photo-bl">
 														<div class="img-cont">
 															<div class="center-img">
-																<img src="<?=trim($data->images['main']['original'], '.')?>" />
+																<img src="<?=trim($data->images['main']['original'], '.')?>" alt="<?=htmlspecialchars($data->object['title'])?>" />
 															</div>
 														</div>	
 													</div>
