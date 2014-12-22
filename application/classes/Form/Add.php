@@ -750,24 +750,25 @@ class Form_Add  {
 			$settings = Kohana::$config->load("category.".$category_id.".additional_fields");
 			if (!$settings)
 				$settings = array();
-			
-			if ($this->is_post)
+		}
+		
+		if ($this->is_post)
+		{
+			$fields = preg_grep("/^additional_/", array_keys( (array)$this->params ) );
+			foreach ($fields as $field) {
+				$values[$field] = $this->params[$field];
+			}
+		} else {
+			if ($user)
 			{
-				$fields = preg_grep("/^additional_/", array_keys( (array)$this->params ) );
-				foreach ($fields as $field) {
-					$values[$field] = $this->params[$field];
-				}
-			} else {
-				if ($user)
-				{
-					$orginfo_data = ORM::factory('User_Settings')
-									->get_group($user->id, "orginfo");
-					foreach ($orginfo_data as $key => $data) {
-						$values["additional_".$key] = $data;
-					}
+				$orginfo_data = ORM::factory('User_Settings')
+								->get_group($user->id, "orginfo");
+				foreach ($orginfo_data as $key => $data) {
+					$values["additional_".$key] = $data;
 				}
 			}
 		}
+	
 
 		$this->_data->additional = array(
 						"errors" => $errors,
