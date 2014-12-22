@@ -1037,3 +1037,8 @@
 </script>
 
 <?=Assets::factory('main')->js("addapp.js")?>
+<script>
+	$( document ).ready(function() {
+	    var application = new applicationView({org_type: <?=$user?>});
+	});
+</script>

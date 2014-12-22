@@ -738,20 +738,17 @@ class Form_Add  {
 		$errors 		= $this->errors;
 		$user = Auth::instance()->get_user();
 
-		if ($user AND $user->org_type <> 1)
-			return;
-
 		$vakancy_org_type = Kohana::$config->load("dictionaries.vakancy_org_type");
 		$fields = $values = $settings =  array();
 
-		if ($category_id) 
+		if ($category_id AND $user) 
 		{
 			
-			$settings = Kohana::$config->load("category.".$category_id.".additional_fields");
+			$settings = Kohana::$config->load("category.".$category_id.".additional_fields.".$user->org_type);
 			if (!$settings)
 				$settings = array();
 		}
-		
+
 		if ($this->is_post)
 		{
 			$fields = preg_grep("/^additional_/", array_keys( (array)$this->params ) );

@@ -15,7 +15,10 @@ return array(
 	),
 	"36" => array( //вакансии
 		"description" => "vakancy_law",
-		"additional_fields" => array("additional_org_name", "additional_vakancy_org_type", "additional_commoninfo"),
+		"additional_fields" => array(
+			1 => array("additional_org_name", "additional_vakancy_org_type", "additional_commoninfo"),
+			2 => array("additional_vakancy_org_type"),
+		),
 		"additional_saveas" => array(
 			"additional_org_name" => "param_256"
 		)

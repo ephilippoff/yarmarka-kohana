@@ -297,11 +297,10 @@ class Lib_PlacementAds_AddEdit {
 		$params = &$this->params;
 		$user = &$this->user;
 
-		if ($user AND $user->org_type == 1 
-					AND $category AND $settings = Kohana::$config->load("category.".$category->id.".additional_fields"))
+		if ($user AND $category AND $settings = Kohana::$config->load("category.".$category->id.".additional_fields.".$user->org_type))
 		{
 
-			$titles =  Kohana::$config->load("dictionaries.additional_fields");
+			$titles =  Kohana::$config->load("dictionaries.additional_fields.".$user->org_type);
 			foreach ($settings as $setting) {
 				$validation->rules($setting, array(
 						array('not_empty', array(':value', $titles[$setting]))
@@ -1088,8 +1087,7 @@ class Lib_PlacementAds_AddEdit {
 		$object_compile = &$this->object_compile;
 
 		$object_compile["user_settings"] = array();
-		if ($user AND $user->org_type == 1 
-					AND $object->category AND $settings = Kohana::$config->load("category.".$object->category.".additional_fields"))
+		if ($user AND $object->category AND $settings = Kohana::$config->load("category.".$object->category.".additional_fields.".$user->org_type))
 		{
 			foreach ($settings as $setting) {
 				$name = str_replace("additional_", "", $setting);

@@ -103,6 +103,7 @@ class Controller_Add extends Controller_Template {
 		$this->template->form_data 	= $form_data->_data;
 		$this->template->errors = (array) $errors;
 		$this->template->assets = $this->assets;
+		$this->template->user = ($user AND $user->loaded()) ? $user->org_type : "undefined";
 
 		$expired = NULL;
 		if ($user AND !$user->is_valid_orginfo()
