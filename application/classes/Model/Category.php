@@ -162,6 +162,35 @@ class Model_Category extends ORM {
 		else 
 			return null;
  	}
+	
+	//Получить рубрики первого уровня вложенности
+	public function get_rubrics1l()
+	{
+		return ORM::factory('Category')
+				->where('parent_id', '=', 1)
+				->where('is_ready', '=', 1)
+				->order_by('weight')
+				->order_by('title')
+				->cached(60*24)
+				->find_all();				
+	}	
+	
+	//Получить дочерние рубрики
+	public function get_childs($parent_ids)
+	{
+		$parent_ids_str = implode(',', $parent_ids);
+		
+		return ORM::factory('Category')
+				->where('parent_id', 'in', DB::expr('('.$parent_ids_str.')'))
+				->where('is_ready', '=', 1)
+				->order_by('weight')
+				->order_by('title')				
+				->cached(60*24)
+				->find_all();	
+	}
+	
+	
+	
 }
 
 /* End of file Category.php */

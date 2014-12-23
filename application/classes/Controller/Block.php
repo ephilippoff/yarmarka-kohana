@@ -50,11 +50,18 @@ class Controller_Block extends Controller_Template
 
 	public function action_header_left_menu()
 	{
-		$this->template->categories = ORM::factory('Category')
-			->where('parent_id', '=', 1)
-			->order_by('weight')
-			->cached(DATE::WEEK, array("category", "header"))
-			->find_all();
+		$categories1l = ORM::factory('Category')->get_rubrics1l();
+		$categories1l_ids = array();
+		
+		//получаем массив id'шников
+		foreach ($categories1l as $category) 
+			$categories1l_ids[] = $category->id;
+		
+		//получаем рубрики второго уровня
+		$categories2l = ORM::factory('Category')->get_childs($categories1l_ids);			
+		
+		$this->template->categories1l = $categories1l;
+		$this->template->categories2l = $categories2l;
 	}
 
 	public function action_header_search()
