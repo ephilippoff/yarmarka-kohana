@@ -307,18 +307,21 @@ class Lib_PlacementAds_AddEdit {
 					)
 				);
 			}
+		}
 
-			$saveas = Kohana::$config->load("category.".$category->id.".additional_saveas");
+		if ($category AND $saveas = Kohana::$config->load("category.".$category->id.".additional_saveas"))
+		{
 			if (!$saveas)
 				$saveas = array();
 
-			foreach ($settings as $setting) {
-				
-				if (in_array($setting, array_keys($saveas)))
-				{
-					$param = $saveas[$setting];
-					$params->{$param} = $params->{$setting};
-				}
+			foreach ($saveas as $field => $_saveas) {
+
+					$param = $saveas[$field][0];
+					$value = trim($params->{$field});
+					if ($value)
+						$params->{$param} = $value;
+					else
+						$params->{$param} = $saveas[$field][1];
 			}
 		}
 		return $this;

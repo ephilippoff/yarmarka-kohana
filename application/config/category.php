@@ -20,7 +20,7 @@ return array(
 			2 => array("additional_vakancy_org_type"),
 		),
 		"additional_saveas" => array(
-			"additional_org_name" => "param_256"
+			"additional_org_name" => array("param_256","Компания")
 		)
 	),
 	"41" => array( //обучение курсы
