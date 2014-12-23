@@ -53,6 +53,13 @@
 				<input type="checkbox" name="send_email" value="1" checked />
 			</div>
 		</div>
+
+		<div class="control-group">
+		<label class="control-label">Бан пользователя со снятием объявлений</label>
+			<div class="controls">
+				<input type="checkbox" name="ban_user" />
+			</div>
+		</div>
 </div>
 <div class="modal-footer">
 	<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>

@@ -673,6 +673,21 @@ class Model_User extends Model_Auth_User {
 					->update_all();
 	}
 
+	public function ban($reason = NULL)
+	{
+		if (!$this->loaded())
+			return;
+		
+		$this->is_blocked = 1;
+		$this->block_reason = $reason;
+		$this->save();
+
+		ORM::factory('Object')
+				->where("author","=",$this->id)
+				->set("is_published", 0)
+				->update_all();
+	}
+
 }
 
 /* End of file User.php */

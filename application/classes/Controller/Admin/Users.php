@@ -524,12 +524,15 @@ class Controller_Admin_Users extends Controller_Admin_Template {
 					->join("user_settings")
 						->on("user_settings.user_id","=","user.id")						
 					->where("user.id","IN",$flags_moderation_query)
+					->where("user.is_blocked","=",0)
 					->where("user.org_type","=",2)
 					->where("user_settings.type","=",'orginfo')
 					->where("user_settings.name","=",'moderate')					
 					->order_by("user_settings.created_on","desc");
 		if (!$filter)
 			$users = $users->where("user_settings.value","=",'0');
+		elseif ($filter == "moderated")
+			$users = $users->where("user_settings.value","=",'1');
 
 		$this->template->estimates = Kohana::$config->load("dictionaries.estimate_for_org_info");
 		$this->template->moderate_enable = (!$filter); 
@@ -598,6 +601,11 @@ class Controller_Admin_Users extends Controller_Admin_Template {
 					)
 				)->render();
 				Email::send($user->email, Kohana::$config->load('email.default_from'), "Модератор отклонил загруженный ИНН", $msg);
+			}
+
+			if ($this->request->post('ban_user') AND $user->loaded())
+			{
+				$user->ban($reason);
 			}
 			
 			$json['code'] = 200;
