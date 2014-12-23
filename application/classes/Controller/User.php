@@ -1775,9 +1775,6 @@ class Controller_User extends Controller_Template {
 		elseif ($user AND $user->linked_to_user)
 			$form_data ->LinkedUser();
 
-		if ($user AND in_array($user->role, array(3,9)))
-			$form_data ->CompanyInfo();
-
 		$this->template->token = $token;
 		$this->template->set_global('jspath', $staticfile->jspath);
 		$this->template->object  = $object;
