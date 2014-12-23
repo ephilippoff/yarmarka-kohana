@@ -110,6 +110,9 @@
 		</table>
 	</div>
 </div>
+<p>
+	<a class="link" href="#" onclick="$('#userinfo').toggle()">Показать всю информацию</a>
+</p>
 <div class="row" id="userinfo" style="display:none"> 
 
 	<div class="span6">
@@ -145,13 +148,15 @@
 	<tr>
 		<th>User ads:</th>
 	</tr>
-	<?php foreach ($user->objects->order_by('date_created', 'desc')->find_all() as $object) : ?>
+	<?php foreach ($user->objects->order_by('real_date_created', 'desc')->find_all() as $object) : ?>
 	<tr>
 		<td>
 			<?
-				$style = "black";
+				$style = "green";
 				if ($object->is_published == 0)
 					$style = "red";
+				if ($object->active == 0)
+					$style = "gray";
 
 			?>
 			<div style="color:<?=$style?>">
