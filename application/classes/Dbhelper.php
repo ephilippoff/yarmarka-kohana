@@ -28,4 +28,17 @@ class Dbhelper
 		}
 
 	}
+	
+	//Преобразование массива DB data set в массив, в котором key = dbset->id
+	public static function convert_dbset_to_keyid_arr($db_result, $key_field)
+	{
+		$new_array = array();
+		
+		foreach ($db_result as $row)
+		{
+			if (!isset($row->$key_field)) return false;
+			$new_array[$row->$key_field] = $row;
+		}
+		return $new_array;			
+	}	
 }

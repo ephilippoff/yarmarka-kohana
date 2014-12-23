@@ -189,8 +189,30 @@ class Model_Category extends ORM {
 				->find_all();	
 	}
 	
-	
-	
+	//Взять баннеры категорий для региона/города
+	function get_banners($city_id = 1, $states = array(1), $cached = true)
+	{
+		$data = FALSE;
+		
+		$city_id = (int)$city_id ? (int)$city_id : 1;		
+		$states_str = implode(',', $states);
+
+		if ($cached)
+			$data = Cache::instance()->get("getBannersForCategories:$city_id");	
+		
+		if (!$data)
+		{		
+			$data = ORM::factory('Category_Banners')
+						->where(DB::expr($city_id), '=', DB::expr('ANY(cities)'))
+						->where('date_expired', '>=', DB::expr('CURRENT_DATE'))
+						->where('state', 'in', DB::expr('('.$states_str.')'))
+						->find_all();
+			
+			Cache::instance()->set("getBannersForCategories:{$city_id}", $data, 60*60);				
+		}
+		
+		return $data;		
+	}
 }
 
 /* End of file Category.php */

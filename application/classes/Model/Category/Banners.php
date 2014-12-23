@@ -38,4 +38,19 @@ class Model_Category_Banners extends ORM {
 		'category'	=> array('model' => 'Category', 'foreign_key' => 'category_id'),
 	);	
 
+	function increase_visits($id)
+	{
+		if (!$id = (int)$id) return 0;
+		
+		$banner = ORM::factory('Category_Banners', $id);
+		
+		if ($banner->loaded())
+		{
+			$banner->visits++;
+			$banner->save();
+		}
+							
+		return;				
+	}	
+	
 }
