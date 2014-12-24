@@ -725,10 +725,68 @@ class Form_Add  {
 
 	function LinkedUser()
 	{
+		
+		$object 	= $this->object;
 		$user = Auth::instance()->get_user();
+		$value = "off";
+
+		if ($this->is_post)
+		{ 
+			if (isset($this->params['link_to_company']))
+				$value = $this->params['link_to_company'];
+		} elseif ($this->_edit AND $object->loaded())
+		{
+			$value = ($object->author <> $object->author_company_id) ? "on" : "off";
+		} else {
+			$value = "on";
+		}
+		
 		$this->_data->linked_company = array(
 				"company" => ORM::factory('User', $user->linked_to_user),
-				"value" => ( $this->is_post and !isset($this->params['link_to_company']) ) ? "off" : "on"
+				"value" => $value
+			);
+	}
+
+	function Additional()
+	{
+		$category_id 	= $this->category_id;
+		$errors 		= $this->errors;
+		$user = Auth::instance()->get_user();
+
+		$vakancy_org_type = Kohana::$config->load("dictionaries.vakancy_org_type");
+		$fields = $values = $settings =  array();
+
+		if ($category_id AND $user) 
+		{
+			
+			$settings = Kohana::$config->load("category.".$category_id.".additional_fields.".$user->org_type);
+			if (!$settings)
+				$settings = array();
+		}
+
+		if ($this->is_post)
+		{
+			$fields = preg_grep("/^additional_/", array_keys( (array)$this->params ) );
+			foreach ($fields as $field) {
+				$values[$field] = $this->params[$field];
+			}
+		} else {
+			if ($user)
+			{
+				$orginfo_data = ORM::factory('User_Settings')
+								->get_group($user->id, "orginfo");
+				foreach ($orginfo_data as $key => $data) {
+					$values["additional_".$key] = $data;
+				}
+			}
+		}
+	
+
+		$this->_data->additional = array(
+						"errors" => $errors,
+						"settings" => new Obj($settings),
+						"values" =>  new Obj($values),
+						"vakancy_org_type" => $vakancy_org_type
 			);
 	}
 

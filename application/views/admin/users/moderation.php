@@ -13,14 +13,13 @@
 	//});
 </script>
 <a href="/khbackend/users/moderation">Модерация</a> | 
+<a href="/khbackend/users/moderation?filter=moderated">Прошли модерацию</a> | 
 <a href="/khbackend/users/moderation?filter=all">Все</a>
 <table class="table table-hover table-condensed promo">
 	<tr>
 		<th>Date</th>
 		<th>Email</th>
-		<th>Название</th>
-		<th>Юр. название</th>
-		<th>ИНН</th>
+		<th>Инфо</th>
 		<th>Скан</th>
 		<th></th>
 	</tr>
@@ -28,9 +27,53 @@
 	<tr class="user<?=$user->id?>">
 		<td><?=$user->moderate_on?></td>
 		<td><a href="/khbackend/users/user_info/<?=$user->id?>" target="_blank"><?=$user->email?></a></td>
-		<td><?=$user->org_name?></td>
-		<td><?=$user->org_full_name?></td>
-		<td><?=$user->org_inn?></td>
+		<td>
+			
+			<table style="width:400px;">
+				<tr>
+					<td>Название</td>
+					<td><?=$user->org_name?></td>
+				</tr>
+				<tr>
+					<td>Юр. название</td>
+					<td><?=$user->org_full_name?></td>
+				</tr>
+				<tr>
+					<td>ИНН</td>
+					<td><?=$user->org_inn?></td>
+				</tr>
+				<tr>
+					<td>Адрес</td>
+					<td><?=$user->org_post_address?></td>
+				</tr>
+				<tr>
+					<td>Телефон</td>
+					<td><?=$user->org_phone?></td>
+				</tr>
+				<tr>
+					<td>Описание</td>
+					<td style="width:250px;">
+						<div style="height:100px;overflow:hidden;">
+							<?=$user->about?>
+						</div>
+					</td>
+				</tr>
+				<?
+					$logo = NULL;
+					if ($user->filename)
+						$logo = Imageci::getSitePaths($user->filename);
+				?>
+				<? if ($logo): ?>
+				<tr>
+					
+					<td>Лого</td>
+					<td>					
+						<img src='<?=$logo["120x90"]?>'/>
+					</td>
+				</tr>
+				<? endif; ?>
+			</table>
+		</td>
 		<td>
 			<?
 				$inn_skan = Imageci::getSitePaths($user->org_inn_skan);

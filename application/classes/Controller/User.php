@@ -1764,7 +1764,8 @@ class Controller_User extends Controller_Template {
 				 	->Params()
 				 	->Map()
 				 	->Price()
-				 	->Contacts();
+				 	->Contacts()
+				 	->Additional();
 
 		if ($user AND $user->role == 9)
 			$form_data ->AdvertType();
@@ -1774,9 +1775,6 @@ class Controller_User extends Controller_Template {
 		elseif ($user AND $user->linked_to_user)
 			$form_data ->LinkedUser();
 
-		if ($user AND in_array($user->role, array(3,9)))
-			$form_data ->CompanyInfo();
-
 		$this->template->token = $token;
 		$this->template->set_global('jspath', $staticfile->jspath);
 		$this->template->object  = $object;
@@ -1784,6 +1782,7 @@ class Controller_User extends Controller_Template {
 		$this->template->form_data 	= $form_data->_data;
 		$this->template->errors = (array) $errors;
 		$this->template->assets = $this->assets;
+		$this->template->user = ($user AND $user->loaded()) ? $user->org_type : "undefined";
 
 		$expired = NULL;
 		if (!$user->is_valid_orginfo())

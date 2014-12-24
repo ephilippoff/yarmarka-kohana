@@ -34,7 +34,7 @@ class Controller_Static extends Controller_Template {
 			$attributes = $vakancy_row->naming_attributes($compile["attributes"]);			
 			
 			$f->single("url", "http://yarmarka.biz/detail/".$vakancy_row->object_id );
-			$f->single("creation-date", date("Y-m-d H:i:s", strtotime($vakancy_row->date_created))." GMT+5" );
+			$f->single("creation-date", date("Y-m-d H:i:s", strtotime($vakancy_row->real_date_created))." GMT+5" );
 			$f->single("update-date", ($vakancy_row->date_updated) ? date("Y-m-d H:i:s", strtotime($vakancy_row->date_updated))." GMT+5":NULL );
 			$f->single("salary", $attributes["zarplata"] );
 			$f->single("currency", "руб" );

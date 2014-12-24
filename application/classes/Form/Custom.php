@@ -92,7 +92,7 @@ class Form_Custom  {
 	{
 		return array(	"title" => $field->translate,
 						"name"	=> $field->name,
-						"html"  => Form::button($field->name, 'Загрузить '.$field->translate, array("id" => $field->name, "class" => "form-control")),
+						"html"  => Form::button($field->name, 'Нажмите чтобы загрузить '.$field->translate, array("id" => $field->name, "class" => "form-control")),
 						"required" => $field->required,
 						"value" => $value,
 						"type"  => $field->type,

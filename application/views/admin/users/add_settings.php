@@ -86,7 +86,7 @@
 		?>
 		<tr>			
 			<td><?=$item->id?></td>
-			<td><?=$item->user_id?></td>
+			<td><a href="<?=Url::site('khbackend/users/user_info/'.$item->user_id)?>" onClick="return popup(this)"><?=$item->user_id?></a></td>
 			<td><?=$item->user->email?></td>
 			<td><?=$item->type?></td>
 			<td><?=$item->name?></td>

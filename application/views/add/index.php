@@ -127,7 +127,7 @@
 						</div>	
 						<div class="fieldscont">
 							<div class="inp-cont-long ">
-								<div class="inp-cont <?if ($form_data->city["city_error"]) echo "error";?>">
+								<div class="inp-cont">
 									<div class="pt4">
 										<?=$form_data->org_info["title"]?>
 										<? if ($form_data->org_info["logo"]): ?>
@@ -159,7 +159,7 @@
 						</div>	
 						<div class="fieldscont">
 							<div class="inp-cont-long ">
-								<div class="inp-cont <?if ($form_data->city["city_error"]) echo "error";?>">
+								<div class="inp-cont">
 									<div class="pt4">
 										<? 
 											$company = $form_data->linked_company["company"];
@@ -279,25 +279,35 @@
 
 			<? if ( property_exists($form_data, 'company_info') ): ?>
 
-			<div class="fl100" id="div_company_info">
-				<? foreach ($form_data->company_info['info'] as $name => $field): ?>
-				
-					<div class="smallcont">
-						<div class="labelcont">
-							<label><span><?=$name?></span></label>
-						</div>
-						<div class="fieldscont">				 						
-							<div class="inp-cont-short">
-								<div class="inp-cont">
-									<?=$field?>
-								</div> <!--inp-cont -->
-							</div> <!-- inp-cont-short -->
-						</div> <!-- fieldscont -->		
-					</div>	 <!-- smallcont --> 
-				<? endforeach; ?>
-			</div>  <!-- fl100 -->
-				
+				<div class="fl100" id="div_company_info">
+					<? foreach ($form_data->company_info['info'] as $name => $field): ?>
+					
+						<div class="smallcont">
+							<div class="labelcont">
+								<label><span><?=$name?></span></label>
+							</div>
+							<div class="fieldscont">				 						
+								<div class="inp-cont-short">
+									<div class="inp-cont">
+										<?=$field?>
+									</div> <!--inp-cont -->
+								</div> <!-- inp-cont-short -->
+							</div> <!-- fieldscont -->		
+						</div>	 <!-- smallcont --> 
+					<? endforeach; ?>
+				</div>  <!-- fl100 -->
 
+			<? endif; ?>
+
+			<? if ( property_exists($form_data, 'additional') ): ?>
+				<div id="div_additional">
+						<?=View::factory('add/additional', array(
+											"errors" 		   => $form_data->additional["errors"],
+											"settings" 		   => $form_data->additional["settings"],
+											"vakancy_org_type" => $form_data->additional["vakancy_org_type"], 
+											"values" 		   => $form_data->additional["values"]
+										));?>
+				</div>
 			<? endif; ?>
 
 			<div id="div_params">
@@ -1027,3 +1037,8 @@
 </script>
 
 <?=Assets::factory('main')->js("addapp.js")?>
+<script>
+	$( document ).ready(function() {
+	    var application = new applicationView({org_type: <?=$user?>});
+	});
+</script>

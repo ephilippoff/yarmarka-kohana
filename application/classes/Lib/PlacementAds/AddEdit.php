@@ -128,6 +128,8 @@ class Lib_PlacementAds_AddEdit {
 		$params->title_adv		= $object->title;
 		$params->contact  		= $object->contact;
 
+		$params->link_to_company = ($object->author <> $object->author_company_id) ? "on" : "off";
+
 		$location = ORM::factory('Location', $object->location_id);
 		if ($location->loaded() && ! $params->address)
 			$params->address = $location->address;
@@ -286,6 +288,43 @@ class Lib_PlacementAds_AddEdit {
 				array('not_empty_html', array(':value', "Текст объявления")),
 				array('max_length', array(':value', 15000, "Текст объявления")),
 			));
+		}
+		return $this;
+	}
+
+	function init_additional()
+	{
+		$category = &$this->category;
+		$validation = &$this->validation;
+		$params = &$this->params;
+		$user = &$this->user;
+
+		if ($user AND $category AND $settings = Kohana::$config->load("category.".$category->id.".additional_fields.".$user->org_type))
+		{
+
+			$titles =  Kohana::$config->load("dictionaries.additional_fields.".$user->org_type);
+			foreach ($settings as $setting) {
+				$validation->rules($setting, array(
+						array('not_empty', array(':value', $titles[$setting]))
+					)
+				);
+			}
+		}
+
+		if ($category AND $saveas = Kohana::$config->load("category.".$category->id.".additional_saveas"))
+		{
+			if (!$saveas)
+				$saveas = array();
+
+			foreach ($saveas as $field => $_saveas) {
+
+					$param = $saveas[$field][0];
+					$value = trim($params->{$field});
+					if ($value)
+						$params->{$param} = $value;
+					else
+						$params->{$param} = $saveas[$field][1];
+			}
 		}
 		return $this;
 	}
@@ -1042,6 +1081,34 @@ class Lib_PlacementAds_AddEdit {
 				}
 			}
 		}
+		return $this;
+	}
+
+	function save_additional()
+	{
+		$params = &$this->params;
+		$object = &$this->object;
+		$user = &$this->user;
+		$object_compile = &$this->object_compile;
+
+		$object_compile["user_settings"] = array();
+		if ($user AND $object->category AND $settings = Kohana::$config->load("category.".$object->category.".additional_fields.".$user->org_type))
+		{
+			foreach ($settings as $setting) {
+				$name = str_replace("additional_", "", $setting);
+				$value = $params->{$setting};
+
+				if (!$value)
+					ORM::factory('User_Settings')
+						->_delete($user, "orginfo", $name);
+				
+				ORM::factory('User_Settings')
+						->update_or_save($user, "orginfo", $name, $value);
+
+				$object_compile["user_settings"][$name] = $value;
+			}
+		}
+
 		return $this;
 	}
 

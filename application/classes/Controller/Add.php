@@ -82,7 +82,8 @@ class Controller_Add extends Controller_Template {
 				 	->Map()
 				 	->Price()
 				 	->Contacts()
-					->Widgets();
+					->Widgets()
+					->Additional();
 					
 		if ($user AND $user->org_type == 2)
 			$form_data->OrgInfo();
@@ -91,9 +92,6 @@ class Controller_Add extends Controller_Template {
 
 		if ($user AND $user->role == 9)
 			$form_data ->AdvertType();
-
-		if ($user AND in_array($user->role, array(3,9)))
-			$form_data ->CompanyInfo();
 		
 		$this->template->token = $token;
 		
@@ -102,6 +100,7 @@ class Controller_Add extends Controller_Template {
 		$this->template->form_data 	= $form_data->_data;
 		$this->template->errors = (array) $errors;
 		$this->template->assets = $this->assets;
+		$this->template->user = ($user AND $user->loaded()) ? $user->org_type : "undefined";
 
 		$expired = NULL;
 		if ($user AND !$user->is_valid_orginfo()
@@ -124,7 +123,7 @@ class Controller_Add extends Controller_Template {
 	public function action_save_object()
 	{
 		
-		$this->auto_render = FALSE;
+		/*$this->auto_render = FALSE;
 		$json = array();
 		$user = Auth::instance()->get_user();
 
@@ -167,7 +166,7 @@ class Controller_Add extends Controller_Template {
 			//сохранение по дефолту
 			$json = Object::PlacementAds_Default($this->request->post());
 
-		$this->response->body(json_encode($json));
+		$this->response->body(json_encode($json));*/
 	}
 	
 	
@@ -212,8 +211,7 @@ class Controller_Add extends Controller_Template {
 		
 		
 		$this->response->body(json_encode($this->json));
-	}	
-
+	}
 }
 
 /* End of file Add.php */

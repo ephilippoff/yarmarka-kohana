@@ -5,18 +5,7 @@ Route::set('admin', '<controller>(/<action>)', array('controller' => '(admin_.*|
 	throw new HTTP_Exception_404;
 });
 
-
-Route::set('native_save_object', 'add/native_save_object')
-	->defaults(array(
-		'controller' => 'Add',
-		'action'     => 'native_save_object',
-	));
-Route::set('object_upload_file', 'add/object_upload_file')
-	->defaults(array(
-		'controller' => 'Add',
-		'action'     => 'object_upload_file',
-	));
-Route::set('add', 'add/<rubricid>')
+Route::set('add', 'add/<rubricid>', array('rubricid' => '.*[0-9]'))
 	->defaults(array(
 		'controller' => 'Add',
 		'action'     => 'index',

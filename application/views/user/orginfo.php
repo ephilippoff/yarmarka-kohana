@@ -245,7 +245,7 @@
 							 		} else {
 							 			$('#'+fieldname+"_status").text(message).addClass("error");
 							 			$('#'+fieldname+"_image").html("");
-		            					$('#'+fieldname+"_input").html("");
+		            					$('#'+fieldname+"_input > input").val("");
 		            					$('#'+fieldname+"_container").hide();
 							 		}
 							 	}

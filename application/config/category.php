@@ -14,7 +14,14 @@ return array(
 		"price_enabled" => TRUE
 	),
 	"36" => array( //вакансии
-		"description" => "vakancy_law"
+		"description" => "vakancy_law",
+		"additional_fields" => array(
+			1 => array("additional_org_name", "additional_vakancy_org_type", "additional_commoninfo"),
+			2 => array("additional_vakancy_org_type"),
+		),
+		"additional_saveas" => array(
+			"additional_org_name" => array("param_256","Компания")
+		)
 	),
 	"41" => array( //обучение курсы
 		"price_enabled" => TRUE
