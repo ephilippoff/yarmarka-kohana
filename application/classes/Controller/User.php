@@ -1643,8 +1643,14 @@ class Controller_User extends Controller_Template {
 										->where("name","=","logo")
 										->where("type","=","orginfo")
 										->find()
-										->value;				
-				$user->save();
+										->value;
+				try {
+					$user->save();
+				} catch (Exception $e) {
+					Admin::send_error("Ошибка при сохранении ИНН", array(
+							$e->getMessage(), Debug::vars($data), $e->getTraceAsString()
+					));
+				}
 
 				$this->redirect('/user/orginfo?success=1');
 			}
