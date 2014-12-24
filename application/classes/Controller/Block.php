@@ -56,7 +56,8 @@ class Controller_Block extends Controller_Template
 		//получить баннеры рубрик по региону/городу для показа в меню
 		$states = array(1);
 		$cached = TRUE;		
-		if (in_array((int)Auth::instance()->get_user()->role, array(1, 9)))
+			
+		if (Auth::instance()->get_user() and in_array((int)Auth::instance()->get_user()->role, array(1, 9)))
 		{
 			$states = array(1, 2);
 			$cached = FALSE;
