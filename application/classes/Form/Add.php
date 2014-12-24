@@ -725,10 +725,25 @@ class Form_Add  {
 
 	function LinkedUser()
 	{
+		
+		$object 	= $this->object;
 		$user = Auth::instance()->get_user();
+		$value = "off";
+
+		if ($this->is_post)
+		{ 
+			if (isset($this->params['link_to_company']))
+				$value = $this->params['link_to_company'];
+		} elseif ($this->_edit AND $object->loaded())
+		{
+			$value = ($object->author <> $object->author_company_id) ? "on" : "off";
+		} else {
+			$value = "on";
+		}
+		
 		$this->_data->linked_company = array(
 				"company" => ORM::factory('User', $user->linked_to_user),
-				"value" => ( $this->is_post and !isset($this->params['link_to_company']) ) ? "off" : "on"
+				"value" => $value
 			);
 	}
 
