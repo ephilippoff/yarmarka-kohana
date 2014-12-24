@@ -5,7 +5,13 @@
 	<?php else : ?>
 	<tr id="<?=$object->id?>">
 	<?php endif; ?>
-		<td><?=$object->id?> <?php if ($object->used_service) :?><span style="background-color: greenyellow;">Размещение в других городах</span><?php endif;?></td>
+		<?
+			$used_service = NULL;
+			try {
+				$used_service = $object->used_service;
+			} catch (Exception $e) {}
+		?>
+		<td><?=$object->id?> <?php if ($used_service) :?><span style="background-color: greenyellow;">Размещение в других городах</span><?php endif;?></td>
 		<td>
 			<?=$object->city_obj->title?><br />
 			<?=$object->category_obj->title?>
