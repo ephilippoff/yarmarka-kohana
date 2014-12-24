@@ -48,9 +48,9 @@
 							<?php foreach ($categories2l as $category2) : ?>
 							<?php if ($category2->parent_id != $category1->id) continue; ?>
 							<li>
-								<a href="<?=$category2->get_url()?>" >
+								<span class="menu-span-link" onclick="window.location='<?=$category2->get_url()?>'">
 									<span class="name2"><?=$category2->title?></span><span class="heading"><?=$category2->caption?></span>
-								</a>
+								</span>
 							</li>					
 							<?php endforeach;?>
 						</ul>
