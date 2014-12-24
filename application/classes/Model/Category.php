@@ -208,7 +208,8 @@ class Model_Category extends ORM {
 						->where('state', 'in', DB::expr('('.$states_str.')'))
 						->find_all();
 			
-			Cache::instance()->set("getBannersForCategories:{$city_id}", $data, 60*60);				
+			if ($cached)
+				Cache::instance()->set("getBannersForCategories:{$city_id}", $data, 60*60);				
 		}
 		
 		return $data;		
