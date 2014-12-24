@@ -178,7 +178,7 @@ class Model_Category extends ORM {
 	//Получить дочерние рубрики
 	public function get_childs($parent_ids)
 	{
-		$parent_ids_str = implode(',', $parent_ids);
+		$parent_ids_str = $parent_ids ? implode(',', $parent_ids) : 0;
 		
 		return ORM::factory('Category')
 				->where('parent_id', 'in', DB::expr('('.$parent_ids_str.')'))
