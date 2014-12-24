@@ -101,6 +101,12 @@ Route::set('global_search', 'ajax/global_search')
 		'action'     => 'global_search',
 	));
 
+Route::set('redirect/ref_cb', 'redirect/ref_cb')
+	->defaults(array(
+		'controller' => 'Redirect',
+		'action'     => 'ref_cb',
+	));
+
 if (array_key_exists("HTTP_FROM", $_SERVER))
 {
 	if (strpos($_SERVER['REQUEST_URI'],"landing"))

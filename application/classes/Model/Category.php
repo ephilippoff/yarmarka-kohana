@@ -162,6 +162,58 @@ class Model_Category extends ORM {
 		else 
 			return null;
  	}
+	
+	//Получить рубрики первого уровня вложенности
+	public function get_rubrics1l()
+	{
+		return ORM::factory('Category')
+				->where('parent_id', '=', 1)
+				->where('is_ready', '=', 1)
+				->order_by('weight')
+				->order_by('title')
+				->cached(60*24)
+				->find_all();				
+	}	
+	
+	//Получить дочерние рубрики
+	public function get_childs($parent_ids)
+	{
+		$parent_ids_str = $parent_ids ? implode(',', $parent_ids) : 0;
+		
+		return ORM::factory('Category')
+				->where('parent_id', 'in', DB::expr('('.$parent_ids_str.')'))
+				->where('is_ready', '=', 1)
+				->order_by('weight')
+				->order_by('title')				
+				->cached(60*24)
+				->find_all();	
+	}
+	
+	//Взять баннеры категорий для региона/города
+	function get_banners($city_id = 1, $states = array(1), $cached = true)
+	{
+		$data = FALSE;
+		
+		$city_id = (int)$city_id ? (int)$city_id : 1;		
+		$states_str = implode(',', $states);
+
+		if ($cached)
+			$data = Cache::instance()->get("getBannersForCategories:$city_id");	
+		
+		if (!$data)
+		{		
+			$data = ORM::factory('Category_Banners')
+						->where(DB::expr($city_id), '=', DB::expr('ANY(cities)'))
+						->where('date_expired', '>=', DB::expr('CURRENT_DATE'))
+						->where('state', 'in', DB::expr('('.$states_str.')'))
+						->find_all();
+			
+			if ($cached)
+				Cache::instance()->set("getBannersForCategories:{$city_id}", $data, 60*60);				
+		}
+		
+		return $data;		
+	}
 }
 
 /* End of file Category.php */
