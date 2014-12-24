@@ -128,6 +128,8 @@ class Lib_PlacementAds_AddEdit {
 		$params->title_adv		= $object->title;
 		$params->contact  		= $object->contact;
 
+		$params->link_to_company = ($object->author <> $object->author_company_id) ? "on" : "off";
+
 		$location = ORM::factory('Location', $object->location_id);
 		if ($location->loaded() && ! $params->address)
 			$params->address = $location->address;
