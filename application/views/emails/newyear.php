@@ -7,7 +7,7 @@
 </head>
 
 <body  align="center">	
-	<table style="width:100%;">
+	<table style="width:100%;" background="http://yarmarka.biz/images/ny2015bg.jpg">
 		<tr>
 			<td align="center">
 				<img src="http://yarmarka.biz/images/ny2015.jpg">		

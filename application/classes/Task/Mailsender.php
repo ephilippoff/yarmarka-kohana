@@ -11,7 +11,7 @@ class Task_Mailsender extends Minion_Task
 		foreach ($users as $email) 
 		{
 			$msg = View::factory('emails/newyear')->render();			
-			Email::send(trim($user->email), Kohana::$config->load('email.default_from'), "Поздравляем с новым годом!", $msg);
+			Email::send(trim($user->email), Kohana::$config->load('email.default_from'), "Ярмарка поздравляет Вас с Новым Годом!", $msg);
 		}				
 	}
 
