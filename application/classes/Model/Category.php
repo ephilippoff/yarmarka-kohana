@@ -214,6 +214,35 @@ class Model_Category extends ORM {
 		
 		return $data;		
 	}
+
+	function get_limited()
+	{
+		return $this->where("max_count_for_user",">",0);
+	}
+
+	function get_individual_limited($user_id, $category_id = 0)
+	{
+		$result = array();
+		$categories = $this->get_limited();
+
+		if ($category_id)
+			$categories = $categories->where("id","=",$category_id);
+
+		$categories = $categories->find_all();
+		foreach ($categories as $_category) {
+			$limit = ORM::factory('User_Settings')
+								->get_by_group_and_name($user_id, "userinfo", "limit_".$_category->id)
+								->find()->value;
+			$category = $_category->as_array("id","title");
+			if ((int) $limit > 0) {
+				$category["individual_limit"] = $limit;
+				$result[] = $category;
+			}
+
+		}
+
+		return $result;
+	}
 }
 
 /* End of file Category.php */

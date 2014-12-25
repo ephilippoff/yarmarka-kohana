@@ -721,12 +721,22 @@ class Lib_PlacementAds_AddEdit {
 		}
 
 		//если пользователь привязан к компании и подает объявления как от компании то не проверяем количество поданных
-		if ($user AND (!$user->linked_to_user OR !isset($params->link_to_company)) ) 
+		if ($user AND $category AND (!$user->linked_to_user OR !isset($params->link_to_company))) 
 		{
-			// проверяем количество уже поданных пользователем объявлений
-			if ( $category AND !$this->category->check_max_user_objects($user, $this->params->object_id))
+			if ($user->org_type == 1)
 			{
-				$errors['max_objects_for_user'] = Kohana::message('validation/object_form', 'max_objects');
+				$is_excess = $user->is_excess_max_count_objects_in_category($category, $this->params->object_id);
+				// проверяем количество уже поданных пользователем объявлений
+				if ($is_excess)
+				{
+					$errors['max_objects_for_user'] = Kohana::message('validation/object_form', 'max_objects');
+				}
+			} else {
+				$limit = ORM::factory('Category')->get_individual_limited($user->id, $category->id);
+				if (count($limit)>0){
+					$limit = $limit[0]["individual_limit"];
+					$errors['max_objects_for_company'] = Kohana::message('validation/object_form', 'max_objects_company');
+				}
 			}
 		}
 

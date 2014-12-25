@@ -688,6 +688,29 @@ class Model_User extends Model_Auth_User {
 				->update_all();
 	}
 
+
+	public function is_excess_max_count_objects_in_category($category, $object_id_exclusion = 0)
+	{
+		if (!$this->loaded())
+			return -1;
+
+		$category_id = $category->id;
+		$category_limit = $category->max_count_for_user;
+		$individual_limit = ORM::factory('Category')
+							->get_individual_limited($this->id, $category->id);
+
+		if (count($individual_limit)>0)
+			$individual_limit = $individual_limit[0]["individual_limit"];
+		$limit = ($individual_limit) ? $individual_limit : (($category_limit) ? $category_limit : 50000);
+		$count = $this->objects
+					->where('category', '=', $category_id)
+					->where('is_published', '=', 1)
+					->where('active', '=', 1)
+					->where('id', '<>', (int) $object_id_exclusion)
+					->count_all();
+
+		return ($count >= $limit);
+	}
 }
 
 /* End of file User.php */

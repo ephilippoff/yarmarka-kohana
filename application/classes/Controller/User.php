@@ -1696,8 +1696,11 @@ class Controller_User extends Controller_Template {
 			$data = $form->get_data();	
 
 		$this->template->categories_limit = ORM::factory('Category')
-												->where("max_count_for_user",">",0)
+												->get_limited()
 												->find_all();
+
+		$this->template->individual_limit = ORM::factory('Category')
+												->get_individual_limited($user->id);
 
 		$this->template->request_company = ORM::factory('User_Link_Request')
 												->where("linked_user_id","=",$user->id)
