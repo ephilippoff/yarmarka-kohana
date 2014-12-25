@@ -1259,6 +1259,8 @@ class Lib_PlacementAds_AddEdit {
 		if ($object->category_obj->title_auto_fill OR $params->itis_massload)
 		{
 			$object->title = $object->generate_title();
+		} else {
+			$object->title = Text::ucfirst(mb_strtolower($object->title));
 		}
 
 		$object->full_text = $object->generate_full_text();

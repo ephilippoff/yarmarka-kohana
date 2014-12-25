@@ -79,7 +79,7 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 				$objects->where(DB::expr("date($field)"), '<=', DB::expr("date '".date('Y-m-d', $to_time)."'"));
 			}
 		}
-		elseif ($filters_enable)
+		elseif ($filters_enable  AND !$contact AND !$email)
 		{
 			$objects->where(DB::expr('date(real_date_created)'), '>', DB::expr("date '".date('Y-m-d', strtotime('-3 days'))."'"));
 		}
@@ -89,7 +89,7 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 			$objects->where('object.category', '=', $category_id);
 		}
 
-		if ($filters_enable AND '' !== ($moder_state = Arr::get($_GET, 'moder_state', '0')))
+		if ($filters_enable AND '' !== ($moder_state = Arr::get($_GET, 'moder_state', '0'))  AND !$contact AND !$email)
 		{
 			if ($moder_state == 3)
 			{
