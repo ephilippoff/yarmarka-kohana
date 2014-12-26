@@ -8,7 +8,7 @@
 						<? if ($is_required):?>
 							<span class="required-label">*</span>
 						<? endif; ?>
-						<input id="<?=$id?>" type="text" name="<?=$name?>" value="<?=$value?>"/>
+						<input id="<?=$id?>" type="text" name="<?=$name?>" value="<?=$value?>" autocomplete="off"/>
 						<? if ($errors): ?>
 							<span class="inform fn-error">
 								<span><?=$errors?></span>

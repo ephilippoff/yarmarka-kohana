@@ -231,13 +231,7 @@
 							<div class="inp-cont-short ">
 								<div class="inp-cont ">
 									<span class="required-label">*</span>
-									<?=View::factory('add/element/_text',
-											array( 'id' 	=> "real_city",
-													'name' 	=> "real_city",
-													'title' => "",
-													'class' => "",
-													'value' => $form_data->city["real_city"]
-											));?>									
+									<input class="real_city" type="text" name="real_city" value="<?=$form_data->city["real_city"]?>"  id="real_city"  autocomplete="off"/>
 										<span class="inform fn-error">
 											<span>Укажите город расположения объекта/товара/услуги/вакансии</span>
 										</span>
