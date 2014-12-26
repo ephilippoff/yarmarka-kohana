@@ -26,7 +26,7 @@ class Kladr
 		if ( ! $object_city->loaded() OR ! $object_city->location_id)
 		{
 			// ищем координаты города
-			$coord = Ymaps::instance()->get_coord_by_name($city_kladr_row->city);
+			@list($coords, $yregion, $ycity) = Ymaps::instance()->get_coord_by_name($city_kladr_row->city);
 			$location = ORM::factory('Location');
 			if ($coord)
 			{
@@ -84,7 +84,7 @@ public static function save_address($lat, $lon, $address_str, $city_kladr_id, $a
 		if ( ! $lat OR ! $lon)
 		{
 			// если координаты не пришли, запрашиваем координаты по адресу
-			$coords = Ymaps::instance()->get_coord_by_name($city_kladr_row->city.', '.$address_str);
+			@list($coords, $yregion, $ycity) Ymaps::instance()->get_coord_by_name($city_kladr_row->city.', '.$address_str);
 			list($lon, $lat) = $coords;
 		}
 

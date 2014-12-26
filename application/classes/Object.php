@@ -60,7 +60,8 @@ class Object
 
 		if ( ! $add->errors)
 		{
-			$add->save_city_and_addrress()
+			$add->save_address()
+				//->save_many_cities()
 				->prepare_object();
 
 			$db = Database::instance();
@@ -136,7 +137,7 @@ class Object
 
 		if ( ! $add->errors)
 		{
-			$add->save_city_and_addrress()
+			$add->save_address()
 				->prepare_object();
 
 			$db = Database::instance();
@@ -186,13 +187,14 @@ class Object
 			->check_neccesaries()
 			->normalize_attributes()
 			->init_validation_rules()
+			->init_additional()
 			//->init_validation_rules_for_attributes()
 			->init_contacts()
 			->exec_validation();
 
 		if ( ! $add->errors)
 		{
-			$add->save_city_and_addrress()
+			$add->save_address()
 				->prepare_object()
 				->save_typetr_object();
 
@@ -212,6 +214,7 @@ class Object
 					->save_generated()
 					->save_contacts()
 					->save_service_fields()
+					->save_additional()
 					->save_compile_object();
 
 				$db->commit();
@@ -265,7 +268,7 @@ class Object
 
 		if ( ! $add->errors)
 		{
-			$add->save_city_and_addrress()
+			$add->save_address()
 				->prepare_object()
 				->save_external_info()
 				->save_parentid_object();

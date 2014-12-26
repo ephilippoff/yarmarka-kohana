@@ -185,33 +185,70 @@
 			<? endif; ?>
 
 			<? if ( property_exists($form_data, 'city') ): ?>
-			<div class="fl100  pt16 pb15"  id="div_city">
+				<div class="fl100  pt16 pb10"  id="div_city">
+						<div class="smallcont">
+							<div class="labelcont">
+								<label><span>Город публикации:</span></label>
+							</div>	
+							<div class="fieldscont">
+								<div class="inp-cont-short ">
+									<div class="inp-cont <?if ($form_data->city["city_error"]) echo "error";?>">
+										<span class="required-label">*</span>
+										<?=View::factory('add/block/city',
+												array( "data" 		=> new Obj($form_data->city),
+													   "_class" 	=> "",
+													   "name" 		=> "city_id",
+													   "id" 		=> "",
+													   "attributes" => ""
+												));?>	
+										<? if ($form_data->city AND $form_data->city["city_error"]): ?>
+											<span class="inform fn-error">
+												<span><?=$form_data->city["city_error"]?></span>
+											</span>
+										<? endif; ?>
+									</div>
+								</div><!--inp-cont-short-->
+								
+							</div><!--fieldscont-->
+						</div> <!-- smallcont -->
 					<div class="smallcont">
 						<div class="labelcont">
-							<label><span>Город:</span></label>
+							<label><span></span></label>
+						</div>	
+						<div class="fieldscont">
+							<div class="inp-cont-long ">								
+								<input type="checkbox" id="real_city_exists" name="real_city_exists" <? if ($form_data->city["real_city_exists"]) echo 'checked';?>>
+								<label for="real_city_exists" style="cursor:pointer">Товар/услуга/продукт/вакансия находится в другом городе</label>
+							</div><!--inp-cont-short-->							
+						</div><!--fieldscont-->
+					</div> <!-- smallcont -->
+
+					<div class="smallcont real_city_exists" <? if (!$form_data->city["real_city_exists"]) echo 'style="display:none;"';?>>
+						<div class="labelcont">
+							<label><span></span></label>
 						</div>	
 						<div class="fieldscont">
 							<div class="inp-cont-short ">
-								<div class="inp-cont <?if ($form_data->city["city_error"]) echo "error";?>">
+								<div class="inp-cont ">
 									<span class="required-label">*</span>
-									<?=View::factory('add/block/city',
-											array( "data" 		=> new Obj($form_data->city),
-												   "_class" 	=> "",
-												   "name" 		=> "city_id",
-												   "id" 		=> "",
-												   "attributes" => ""
-											));?>	
-									<? if ($form_data->city AND $form_data->city["city_error"]): ?>
+									<?=View::factory('add/element/_text',
+											array( 'id' 	=> "real_city",
+													'name' 	=> "real_city",
+													'title' => "",
+													'class' => "",
+													'value' => $form_data->city["real_city"]
+											));?>									
 										<span class="inform fn-error">
-											<span><?=$form_data->city["city_error"]?></span>
+											<span>Укажите город расположения объекта/товара/услуги/вакансии</span>
 										</span>
-									<? endif; ?>
 								</div>
 							</div><!--inp-cont-short-->
 							
 						</div><!--fieldscont-->
 					</div> <!-- smallcont -->
-			</div>
+				</div>
+
+				
 			<? endif; ?>
 
 			<div id="div_category">

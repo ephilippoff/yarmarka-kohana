@@ -38,7 +38,7 @@ class Task_City_Locations extends Minion_Task
 
 	public function get_location_for_city(Model_City $city)
 	{
-		$coords = Ymaps::instance()->get_coord_by_name($city->region->title.', '.$city->title);
+		@list($coords, $yregion, $ycity) = Ymaps::instance()->get_coord_by_name($city->region->title.', '.$city->title);
 		if ( ! $coords)
 		{
 			Minion_CLI::write(Minion_CLI::color('Coords not found', 'red'));

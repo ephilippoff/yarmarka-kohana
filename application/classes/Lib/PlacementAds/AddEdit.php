@@ -166,6 +166,7 @@ class Lib_PlacementAds_AddEdit {
 		$user 		= &$this->user;
 		$user_id 	= &$this->user_id;
 		$category 	= &$this->category;
+		$city 		= &$this->city;
 
 		$object_id 		= (int) $params->object_id;
 		$category_id 	= (int) $params->rubricid;
@@ -194,14 +195,17 @@ class Lib_PlacementAds_AddEdit {
 		}
 
 		//затычка на основной форме подачи, пока город берется из кладра
-		if (!$city_id AND $params->city_kladr_id)
+		/*if (!$city_id AND $params->city_kladr_id)
 			$city_id = ORM::factory('City')->where("kladr_id","=",$params->city_kladr_id)->cached(Date::WEEK, array("city", "add"))->find()->id;
 		if ($city_id AND !$params->city_kladr_id)
-			$params->city_kladr_id = ORM::factory('City',$city_id)->kladr_id;
+			$params->city_kladr_id = ORM::factory('City',$city_id)->kladr_id;*/
 
 		if ($city_id > 0)
 		{
-			$params->city_id = $city_id;
+			$city = ORM::factory('City', $city_id)
+								->cached(Date::WEEK, array("region", "add"));
+			if ( ! $city->loaded() )
+				$this->raise_error('city not finded');
 		} 
 
 		if ( $category_id > 0) 
@@ -261,7 +265,7 @@ class Lib_PlacementAds_AddEdit {
 		$params = &$this->params;
 
 		$validation = Validation::factory((array) $this->params)
-			->rule('city_kladr_id', 'not_empty', array(':value', "Город"))
+			->rule('city_id', 'not_empty', array(':value', "Город"))
 			->rule('rubricid', 'not_empty', array(':value', "Раздел"));
 
 		if ($category)
@@ -790,6 +794,86 @@ class Lib_PlacementAds_AddEdit {
 			$object_compile["city"] = $location->city;
 			$object_compile["region"] = $location->region;
 		}
+
+	}
+
+	function save_address()
+	{
+		$params = &$this->params;
+		$city = &$this->city;
+		$location = &$this->location;
+		$object = &$this->object;
+		
+		$object_compile = &$this->object_compile;
+		$object_compile["address"] = NULL;
+		$object_compile["city"] = NULL;
+		$object_compile["region"] = NULL;
+		$object_compile["lat"] = NULL;
+		$object_compile["lon"] = NULL;
+		$object_compile["real_city"] = NULL;
+
+		if (!$city->loaded()) {
+			$this->raise_error('При сохранении, не указан город');
+		}
+
+		$location = ORM::factory('Location');
+		$region_title = $city->region->title;
+		$city_title = $city->title;
+		$address = trim($params->address);
+
+		if ($params->real_city) {
+			$city_title = $object_compile["real_city"] = $params->real_city;
+		}
+
+		@list($lat, $lon) = explode(',', $params->object_coordinates);
+		if ( ! $lat OR ! $lon OR $params->real_city)
+		{
+			// если координаты не пришли, запрашиваем координаты по адресу
+			@list($coords, $region_title, $address) = Ymaps::instance()->get_coord_by_name($city_title.', '.$address);
+			$city_title = $region_title;
+			@list($lon, $lat) = $coords;
+		}
+
+		if ($address AND $object->location_id <> $city->location_id) 
+		{
+			$loc_count = 0;
+			if ($object->location_id)
+				$loc_count = ORM::factory('Object')->where("location_id","=", $object->location_id)->count_all();
+
+			if ($loc_count == 1)
+				$location = $location->where("id","=",$object->location_id)->find();
+
+			$location->region 	= $region_title;
+			$location->city 	= $city_title;
+			$location->address 	= $address;
+			$location->lat 		= $lat;
+			$location->lon 		= $lon;
+			$location->save();
+		}
+
+		// если не нашли адрес, то берем location города
+		if ( ! $location->loaded() )
+			$location = $city->location;
+
+		if ( $location->loaded() )
+		{
+			$object_compile["address"] = $location->address;
+			$object_compile["city"] = $location->city;
+			$object_compile["region"] = $location->region;
+			$object_compile["lat"] = $location->lat;
+			$object_compile["lon"] = $location->lon;
+		}
+
+		return $this;
+	}
+
+	function save_many_cities()
+	{
+		$city = &$this->city;
+		$object = &$this->object;
+		
+		$object_compile = &$this->object_compile;
+		$object_compile["cities"] = array();
 
 		if ($object->loaded())
 		{
