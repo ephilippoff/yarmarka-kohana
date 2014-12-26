@@ -834,13 +834,13 @@ class Lib_PlacementAds_AddEdit {
 			@list($lon, $lat) = $coords;
 		}
 
-		if ($address AND $object->location_id <> $city->location_id) 
+		if ($address)
 		{
 			$loc_count = 0;
 			if ($object->location_id)
 				$loc_count = ORM::factory('Object')->where("location_id","=", $object->location_id)->count_all();
 
-			if ($loc_count == 1)
+			if ($loc_count == 1 AND $object->location_id <> $city->location_id)
 				$location = $location->where("id","=",$object->location_id)->find();
 
 			$location->region 	= $region_title;
