@@ -821,12 +821,12 @@ class Lib_PlacementAds_AddEdit {
 		$city_title = $city->title;
 		$address = trim($params->address);
 
-		if ($params->real_city) {
+		if ($params->real_city_exists) {
 			$city_title = $object_compile["real_city"] = $params->real_city;
 		}
 
 		@list($lat, $lon) = explode(',', $params->object_coordinates);
-		if ( ! $lat OR ! $lon OR $params->real_city)
+		if ( ! $lat OR ! $lon OR $params->real_city_exists)
 		{
 			// если координаты не пришли, запрашиваем координаты по адресу
 			@list($coords, $region_title, $address) = Ymaps::instance()->get_coord_by_name($city_title.', '.$address);
