@@ -246,7 +246,7 @@ class Form_Add  {
 			{
 				$compiled = unserialize($compiled_query->compiled);
 				$real_city = (isset($compiled["real_city"])) ? $compiled["real_city"] : NULL;
-				$real_city_exists = TRUE;
+				$real_city_exists = (trim($real_city)) ? TRUE : FALSE;
 			}
 		}
 
