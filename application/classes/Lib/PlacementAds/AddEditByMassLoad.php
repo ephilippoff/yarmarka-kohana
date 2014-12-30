@@ -27,7 +27,7 @@ class Lib_PlacementAds_AddEditByMassLoad extends Lib_PlacementAds_AddEdit {
 		return $this;
 	}
 
-	function save_city_and_addrress()
+	function save_address()
 	{
 		$params = &$this->params;
 		$city = &$this->city;
@@ -46,8 +46,10 @@ class Lib_PlacementAds_AddEditByMassLoad extends Lib_PlacementAds_AddEdit {
 
 		$object_compile["address"] = $fulladdress;
 
-		@list($lon, $lat) = Ymaps::instance()->get_coord_by_name($fulladdress);
-
+		
+		@list($coords, $yregion, $ycity) = Ymaps::instance()->get_coord_by_name($fulladdress);
+		@list($lon, $lat) = $coords; 
+		
 		$object_compile["lat"] = $lat;
 		$object_compile["lon"] = $lon;
 

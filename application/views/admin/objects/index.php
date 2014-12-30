@@ -99,7 +99,7 @@ function obj_selection(src, obj_id)
 	
 }
 </script>
-
+<a href="/add" target="_blank">Подать объявление</a>
 <form class="form-inline">
 	<div class="input-prepend">
 		<span class="add-on"><i class="icon-envelope"></i></span>

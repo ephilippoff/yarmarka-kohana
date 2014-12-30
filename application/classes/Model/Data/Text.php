@@ -20,6 +20,12 @@ class Model_Data_Text extends Data
 
 		return $result;
 	}
+
+	public function save(Validation $validation = NULL)
+	{
+		$this->value = Text::ucfirst($this->value);
+		parent::save($validation);
+	}
 }
 
 /* End of file Text.php */

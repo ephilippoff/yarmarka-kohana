@@ -48,9 +48,11 @@ class Ymaps
 		if ($response->response->GeoObjectCollection->metaDataProperty->GeocoderResponseMetaData->found > 0)
 		{
 			$coord = explode(' ', $response->response->GeoObjectCollection->featureMember[0]->GeoObject->Point->pos);
+			$region = $response->response->GeoObjectCollection->featureMember[0]->GeoObject->description;
+			$address = $response->response->GeoObjectCollection->featureMember[0]->GeoObject->name;
 		}
 
-		return $coord;
+		return array($coord, $region, $address);
 	}
 }
 /* End of file Ymaps.php */

@@ -2,7 +2,7 @@
 
 class Lib_PlacementAds_AddEditLocal extends Lib_PlacementAds_AddEdit {
 
-	function save_city_and_addrress()
+	function save_address()
 	{
 		$city = &$this->city;
 		$location = &$this->location;

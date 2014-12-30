@@ -176,6 +176,7 @@ class Form_Add  {
 		$city_id 		= $this->city_id;
 		$edit 			= $this->_edit;
 		$errors 		= $this->errors;
+		$params  		= new Obj($this->params);
 
 		$city_array = array();
 		$main_cities = array();
@@ -228,10 +229,32 @@ class Form_Add  {
 			$lat = $location->lat;
 			$lon = $location->lon;
 		}
-		
+
+		$real_city = NULL;
+		$real_city_exists = FALSE;
+		if ($this->is_post) {
+			if ($params->real_city)
+				$real_city = trim($params->real_city);
+
+			$real_city_exists =  ($params->real_city_exists == "on") ? TRUE : FALSE;
+		} elseif ($object->loaded()) 
+		{
+			$compiled_query = ORM::factory('Object_Compiled')
+								->where("object_id","=",$object->id)
+								->find();
+			if ($compiled_query->loaded())
+			{
+				$compiled = unserialize($compiled_query->compiled);
+				$real_city = (isset($compiled["real_city"])) ? $compiled["real_city"] : NULL;
+				$real_city_exists = (trim($real_city)) ? TRUE : FALSE;
+			}
+		}
+
 		$this->_data->city = array(	'city_list' => $city_array, 
+									'city_title' => $city_title,
 									'city_id' => $city_id,
-									'city_title' => $city_title, 
+									'real_city' => $real_city, 
+									'real_city_exists' => $real_city_exists,
 									'edit' => $edit,
 									'city_error' => $errors->city_kladr_id,
 									"lat" => $lat,

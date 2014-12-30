@@ -172,7 +172,33 @@
 												<span class="inform">
 													<span>В эти рубрики можно подать не более указанного количества объявлений.</br>
 															Для большего количества нужно сменить тип учетной записи на "Компания". Либо привязать свою учетную запись к компании. </br>
+															Для некоторых случаев, мы можем расширить лимиты индивидуально, обратитесь в техподдержку.
 													</span>
+												</span>
+									  		</div>
+										</div>
+									</div>									
+								</div>
+							<? endif; ?>
+							<? if (!$parent_user->loaded() AND count($individual_limit)>0): ?>
+								<div class="smallcont">
+									<div class="labelcont">
+										<label><span style="color:red">Индивидуальные ограничения</span></label>
+									</div>
+									<div class="fieldscont">										
+										<div class="">
+											<div class="inp-cont">
+												<div class="pt4">
+												<? foreach($individual_limit as $category):?>
+													<?=$category['title']?> (<?=$category['individual_limit']?>),
+												<? endforeach; ?>
+												</div>
+												<span class="inform">
+													<? if ($user->org_type == 1): ?>
+														<span>Для этих рубрик, установлены расширенные лимиты на количество объявлений индивидуально для Вас</span>
+													<? else: ?>
+														<span><?=Kohana::message('validation/object_form', 'max_objects_company')?></span>
+													<? endif; ?>
 												</span>
 									  		</div>
 										</div>

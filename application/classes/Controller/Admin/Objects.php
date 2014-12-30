@@ -42,7 +42,7 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 			$objects->where('author', '=', $user_id);
 		}
 
-		if ($filters_enable AND $email = trim($this->request->query('email')))
+		if ($filters_enable AND $email = trim(mb_strtolower($this->request->query('email'))))
 		{
 			if (is_numeric($email)) // can be email or object id
 			{
@@ -55,7 +55,7 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 			}
 		}
 
-		if ($filters_enable AND $contact = trim($this->request->query('contact'))) 
+		if ($filters_enable AND $contact = trim(mb_strtolower($this->request->query('contact'))))
 		{
 			$objects
 				->where_open()
@@ -66,7 +66,7 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 				->where_close();
 		}
 
-		if ($filters_enable AND $date = $this->request->query('date'))
+		if ($filters_enable AND $date = $this->request->query('date') AND !$contact AND !$email)
 		{
 			$field = $this->request->query('date_field');
 			if ($from_time = strtotime($date['from']))
@@ -79,7 +79,7 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 				$objects->where(DB::expr("date($field)"), '<=', DB::expr("date '".date('Y-m-d', $to_time)."'"));
 			}
 		}
-		elseif ($filters_enable)
+		elseif ($filters_enable  AND !$contact AND !$email)
 		{
 			$objects->where(DB::expr('date(real_date_created)'), '>', DB::expr("date '".date('Y-m-d', strtotime('-3 days'))."'"));
 		}
@@ -89,7 +89,7 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 			$objects->where('object.category', '=', $category_id);
 		}
 
-		if ($filters_enable AND '' !== ($moder_state = Arr::get($_GET, 'moder_state', '0')))
+		if ($filters_enable AND '' !== ($moder_state = Arr::get($_GET, 'moder_state', '0'))  AND !$contact AND !$email)
 		{
 			if ($moder_state == 3)
 			{

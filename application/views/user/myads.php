@@ -321,11 +321,10 @@
 									<div class="col2">
 										<a href="<?=$ad->get_url()?>" target="_blank"><?=htmlspecialchars(mb_substr($ad->title, 0, 50))?></a>
 										<div class="ml5">
-											<p class="info"><?=$ad->category_obj->title?></p>
-											<p class="info">
-												<?=$ad->city_obj->loaded() ? $ad->city_obj->title : $ad->city?>
+											<p class="info">Публикуется в рубрике: <a href="<?=$ad->category_obj->get_url($ad->city_obj->region_id, $ad->city_id)?>"><?=$ad->category_obj->title?></a>, <?=$ad->city_obj->loaded() ? $ad->city_obj->title : $ad->city?></p>
+											<p class="info">Расположение:
 												<?php if ($ad->location_obj->loaded() AND $ad->location_obj->address) : ?>
-													,<?=$ad->location_obj->address?>
+													<?=$ad->location_obj->city?>,<?=$ad->location_obj->address?>
 												<?php endif ?>
 											</p>
 											<p class="about"><?=strip_tags($ad->user_text)?></p>

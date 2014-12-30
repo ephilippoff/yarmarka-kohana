@@ -6,7 +6,20 @@ class Controller_Admin_Settings extends Controller_Admin_Template {
 
 	function action_index()
 	{
+		if (HTTP_Request::POST === $this->request->method()) 
+		{
+			$email = $this->request->post("email");
 
+			setcookie('user_id', '', time()-1, '/', Region::get_cookie_domain());
+			Auth::instance()->logout();
+
+			$user = ORM::factory('User');
+			$user->get_user_by_email($email)->find();
+
+			Auth::instance()->trueforcelogin($user);
+
+			$this->redirect('user/published');
+		}
 	}
 
 	function action_cache()

@@ -38,6 +38,13 @@ class Model_User_Settings extends ORM {
 					->where('name', '=', $name);			
 	}
 
+	public function get_by_group_and_name($user_id, $type, $name)
+	{
+		return $this->where('user_id', '=', $user_id)
+					->where("type","=", $type)
+					->where('name', '=', $name);			
+	}
+
 	public function get_group($user_id, $type)
 	{
 		$result = array();

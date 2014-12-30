@@ -10,7 +10,7 @@ class Address
 		if ( ! $lat OR ! $lon)
 		{
 			// если координаты не пришли, запрашиваем координаты по адресу
-			$coords = Ymaps::instance()->get_coord_by_name($region_str.', '.$city_str.', '.$address_str);
+			@list($coords, $yregion, $ycity) = Ymaps::instance()->get_coord_by_name($region_str.', '.$city_str.', '.$address_str);
 			if ($coords)
 				list($lon, $lat) = $coords;
 		}

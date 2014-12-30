@@ -50,6 +50,8 @@ class Form_Custom  {
 				$this->validation->rule( $fieldname, 'not_empty', array(':value', $field->translate) );
 			if ($field->type == "inn")
 				$this->validation->rule( $fieldname, 'inn', array(':value', $field->translate) );
+			if ($field->length)
+				$this->validation->rule( $fieldname, 'max_length', array(':value', $field->length, $field->translate) );
 		}
 	}
 
