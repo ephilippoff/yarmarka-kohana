@@ -24,7 +24,7 @@
 		<tr><td colspan="2">&nbsp;</td></tr>   
    
 		<tr>
-			<td width="180"><img src="<?=URL::site('images/4_165.png', 'http')?>" /></td>
+			<td width="180"><img src="<?=URL::site('images/4_165.jpg', 'http')?>" /></td>
 			<td>
 				<table align="center" cellspacing="0" cellpadding="0" border="0" width="" style="color:#000;font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;border-collapse: collapse;">
 					<tbody>	
