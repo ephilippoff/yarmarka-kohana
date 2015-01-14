@@ -98,6 +98,12 @@
 	<?php endforeach; ?>
 </table>
 
+<?php if ($pagination->total_pages > 1) : ?>
+	<div class="row">
+		<div class="span10"><?=$pagination?></div>
+	</div>
+<?php endif; ?>
+
 <p>
 <h3>Массовые загрузки</h3>
 <ul>

@@ -95,6 +95,10 @@ class Controller_Admin_Users extends Controller_Admin_Template {
 
 	public function action_add_settings()
 	{
+		$limit  = Arr::get($_GET, 'limit', 50);
+		$page   = $this->request->query('page');
+		$offset = ($page AND $page != 1) ? ($page-1) * $limit : 0;		
+		
 		$this->template->errors = array();
 		$cfg_categories = Kohana::$config->load('massload/bycategory');
 		$categories = Array();
@@ -107,10 +111,8 @@ class Controller_Admin_Users extends Controller_Admin_Template {
 		$filter_user_id = $this->request->query('user_id');
 		$filter_user_email = $this->request->query('user_email');
 
-		$user_settings = ORM::factory('User_Settings')
-								->order_by("user_id", "desc")
-								->order_by("type", "asc")
-								->order_by("name", "asc");
+		$user_settings = ORM::factory('User_Settings');
+
 
 		if ($type)
 			$user_settings = $user_settings->where("type","=",$type);
@@ -121,9 +123,31 @@ class Controller_Admin_Users extends Controller_Admin_Template {
 												->on("user.id","=","user_settings.user_id")
 											->where("user.email","LIKE",'%'.$filter_user_email.'%');
 		
-		$user_settings = $user_settings->find_all();
+		$user_settings_clone = clone $user_settings;
+		$count_all = $user_settings_clone->count_all();
+		
+		$user_settings = $user_settings
+								->order_by("user_id", "desc")
+								->order_by("type", "asc")
+								->order_by("name", "asc");		
+		
+		$user_settings = $user_settings
+				->limit($limit)
+				->offset($offset)
+				->find_all();
+		
 		$this->template->user_settings =$user_settings;
 		$this->template->user_settings_types = Kohana::$config->load('dictionaries.user_setting_types');
+		$this->template->pagination	= Pagination::factory(array(
+				'current_page'   => array('source' => 'query_string', 'key' => 'page'),
+				'total_items'    => $count_all,
+				'items_per_page' => $limit,
+				'auto_hide'      => TRUE,
+				'view'           => 'pagination/bootstrap',
+			))->route_params(array(
+				'controller' => 'users',
+				'action'     => 'add_settings',
+			));		
 
 		if (HTTP_Request::POST === $this->request->method()) 
 		{
@@ -512,6 +536,10 @@ class Controller_Admin_Users extends Controller_Admin_Template {
 
 	public function action_moderation()
 	{
+		$limit  = Arr::get($_GET, 'limit', 50);
+		$page   = $this->request->query('page');
+		$offset = ($page AND $page != 1) ? ($page-1) * $limit : 0;			
+		
 		$filter = $this->request->query('filter');
 
 		$flags_moderation_query = DB::select("user_id")
@@ -527,16 +555,33 @@ class Controller_Admin_Users extends Controller_Admin_Template {
 					->where("user.is_blocked","=",0)
 					->where("user.org_type","=",2)
 					->where("user_settings.type","=",'orginfo')
-					->where("user_settings.name","=",'moderate')					
-					->order_by("user_settings.created_on","desc");
+					->where("user_settings.name","=",'moderate');
 		if (!$filter)
 			$users = $users->where("user_settings.value","=",'0');
 		elseif ($filter == "moderated")
 			$users = $users->where("user_settings.value","=",'1');
+		
+		$users_clone = clone $users;
+		$count_all = $users_clone->count_all();
+		
+		$users = $users->order_by("user_settings.created_on","desc");
 
 		$this->template->estimates = Kohana::$config->load("dictionaries.estimate_for_org_info");
 		$this->template->moderate_enable = (!$filter); 
-		$this->template->users = $users->find_all();
+		$this->template->users = $users
+									->limit($limit)
+									->offset($offset)
+									->find_all();
+		$this->template->pagination	= Pagination::factory(array(
+				'current_page'   => array('source' => 'query_string', 'key' => 'page'),
+				'total_items'    => $count_all,
+				'items_per_page' => $limit,
+				'auto_hide'      => TRUE,
+				'view'           => 'pagination/bootstrap',
+			))->route_params(array(
+				'controller' => 'users',
+				'action'     => 'moderation',
+			));		
 	}
 
 	public function action_orginfoinn_declineform()

@@ -98,6 +98,12 @@
 	<? endforeach;?>
 </table>
 
+<?php if ($pagination->total_pages > 1) : ?>
+	<div class="row">
+		<div class="span10"><?=$pagination?></div>
+	</div>
+<?php endif; ?>
+
 <!-- Modal -->
 <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 </div>
