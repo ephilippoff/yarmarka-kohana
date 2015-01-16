@@ -889,43 +889,6 @@ class Controller_User extends Controller_Template {
 		$this->myads('from_employees');
 	}
 
-	public function action_newspapers()
-	{
-		$this->layout = 'users';
-		$this->assets->js('newspapers.js');
-
-		// pagination settings
-		$per_page	= 20;
-		$page		= (int) Arr::get($_GET, 'page', 1);
-
-		$user_papers = ORM::factory('Service_Outputs')
-			->where('user_id', '=', $this->user->id);
-
-		$count = clone $user_papers;
-		$count = $count->count_all();
-
-		$user_papers->with('planningofnumber:edition')
-			->limit($per_page)
-			->offset($per_page*($page-1))
-			->order_by('date_to_show', 'desc');
-
-		$this->template->main_category = ORM::factory('Category', 1);
-	 	$this->template->pagination = Pagination::factory( array(
-			'current_page' => array('source' => 'query_string', 'key' => 'page'),
-			'total_items' => $count,
-			'items_per_page' => $per_page,
-			'auto_hide' => TRUE,
-			'view' => 'pagination/floating',
-			'first_page_in_url' => TRUE,
-			'count_out'	=> 5,
-			'count_in' => 5
-		))->route_params(array(
-			'controller' => 'user',
-			'action' => 'newspapers',
-		));
-		$this->template->user_papers = $user_papers->find_all();
-	}
-
 	public function action_employers()
 	{
 		$user = Auth::instance()->get_user();

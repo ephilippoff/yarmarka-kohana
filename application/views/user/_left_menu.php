@@ -64,15 +64,7 @@
 				<li><span class="noclickable"><i class="ico "></i><span><b>Счета</b></span></span></li>
 				<?php else : ?>
 				<li><a href="<?=URL::site('user/invoices')?>" class="clickable"><i class="ico "></i><span>Счета</span></a></li>
-				<?php endif; ?>
-
-				<?php if (Request::current()->action() == 'newspapers') : ?>
-				<li><span class="noclickable"><i class="ico "></i><span><b>Газеты</b></span></span></li>
-				<?php else : ?>
-				<li><a href="<?=URL::site('user/newspapers')?>" class="clickable"><i class="ico "></i><span>Газеты</span></a></li>
-				<?php endif; ?>
-
-				
+				<?php endif; ?>			
 
 				<?php /*if (Request::current()->action() == 'massload') : ?>
 				<li><span class="noclickable"><i class="ico "></i><span><b>Массовая загрузка</b></span></span></li>
