@@ -22,9 +22,11 @@ class Model_Object_Contact extends ORM
 			$input_contacts[] = $contact["value"];
 		}
 
+		asort($existed_contacts);
+		asort($input_contacts);
 		return !(count($existed_contacts) == count($input_contacts)
 					&& count($existed_contacts) > 0 && count($input_contacts) > 0
-						&& count(array_intersect($existed_contacts, $input_contacts) == count($input_contacts)));
+						&& implode(",", $existed_contacts) == implode(",", $input_contacts));
 	}
 
 }
