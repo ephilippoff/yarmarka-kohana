@@ -374,6 +374,7 @@ class Lib_PlacementAds_AddEdit {
 		$object = &$this->object;
 		$category = &$this->category;
 		$user     = &$this->user;
+		$contacts = &$this->contacts;
 
 		if (!$category OR !$user) return $this;
 
@@ -400,11 +401,17 @@ class Lib_PlacementAds_AddEdit {
 				$attachments_count = ORM::factory('Object_Attachment')->where("object_id","=",$object->id)->count_all();
 				$input_attachament_count = count($params->userfile);
 
+				$isChanged = ORM::factory('Object_Contact')
+								->where("object_id","=",$object->id)
+								->compare($contacts);
+
+
 				$signature_full = '{'.join(',', $this->signature_full).'}';
 				$sign_existed = str_replace('"','',$sign_existed->signature_full);
 
 				if ($signature_full == $sign_existed 
-						AND $attachments_count == $input_attachament_count)
+						AND $attachments_count == $input_attachament_count
+							AND !$isChanged)
 				{
 					$errors['nochange'] = "Объявление не требует обновления.";	
 					$this->union_cancel = TRUE;
