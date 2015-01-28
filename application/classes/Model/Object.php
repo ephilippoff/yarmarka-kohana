@@ -182,7 +182,10 @@ class Model_Object extends ORM {
 	
 	public function with_selection()
 	{	
-		return $this->select(DB::expr('EXISTS(select id from object_selection where object_selection.object_id = object.id) as in_selection'));		
+		return $this->select(DB::expr('EXISTS(select id 
+											  from object_service_photocard 
+											  where object_service_photocard.object_id = object.id and object_service_photocard.type = 2) 
+											  as in_selection'));		
 	}	
 
 	public function get_real_date_created($format = 'd.m.Y')

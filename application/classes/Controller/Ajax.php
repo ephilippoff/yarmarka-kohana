@@ -1278,25 +1278,33 @@ class Controller_Ajax extends Controller_Template
 	{
 	 	$obj_id = (int)($this->request->post('obj_id'));
 		//Удаляем старые объявления
-		ORM::factory('Object_Selection')->clear_old();
+		ORM::factory('object_service_photocard')->clear_old();
 		
-		$selection = ORM::factory('Object_Selection')->where('object_id', '=', $obj_id)->find();
-				
+		$selection = ORM::factory('object_service_photocard')->where('object_id', '=', $obj_id)->find();
+		$object = ORM::factory('Object', $obj_id);		
+		
 		$this->json = array();
-		//Чистим кэш
-		Cache::instance()->set("getObjectSelection0", null, 0); //общий(для региона)
-		Cache::instance()->set("getObjectSelection".$selection->object->city_id, null, 0);//по городу
+		$status = 'none';
 						
-		//Если уже есть, удаляем
+		//Если уже есть в таблице
 		if ($selection->loaded())
-		{
-			$status = 'deleted';
-			$selection->delete();
+		{	//Если бесплатная
+			if ($selection->type == 2)
+			{	//Удаляем		
+				$status = 'deleted';
+				$selection->delete();			
+			}
 		}
 		else //Иначе добавляем
 		{
-			$selection = ORM::factory('Object_Selection');
+			$selection = ORM::factory('object_service_photocard');
 			$selection->object_id = $obj_id;
+			$selection->date_expiration = date('Y-m-d H:i:s', strtotime('+10 days'));
+			$selection->active = 1;
+			$selection->invoice_id = 1;
+			$selection->type = 2;
+			$selection->category_id = $object->category;
+			
 			$selection->save();
 			
 			$status = 'added';
