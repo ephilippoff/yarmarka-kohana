@@ -1278,9 +1278,9 @@ class Controller_Ajax extends Controller_Template
 	{
 	 	$obj_id = (int)($this->request->post('obj_id'));
 		//Удаляем старые объявления
-		ORM::factory('object_service_photocard')->clear_old();
+		ORM::factory('Object_Service_Photocard')->clear_old();
 		
-		$selection = ORM::factory('object_service_photocard')->where('object_id', '=', $obj_id)->find();
+		$selection = ORM::factory('Object_Service_Photocard')->where('object_id', '=', $obj_id)->find();
 		$object = ORM::factory('Object', $obj_id);		
 		
 		$this->json = array();
@@ -1297,7 +1297,7 @@ class Controller_Ajax extends Controller_Template
 		}
 		else //Иначе добавляем
 		{
-			$selection = ORM::factory('object_service_photocard');
+			$selection = ORM::factory('Object_Service_Photocard');
 			$selection->object_id = $obj_id;
 			$selection->date_expiration = date('Y-m-d H:i:s', strtotime('+10 days'));
 			$selection->active = 1;
