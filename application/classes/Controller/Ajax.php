@@ -1189,6 +1189,29 @@ class Controller_Ajax extends Controller_Template
 	$row = Model::factory('Object_Service_Ticket')->where('id' ,'=', $id)->find();
 	$this->json = array('words' => $row->words, 'date_expiration' => $row->date_expiration, 'active' => $row->active);
 	}
+	
+	public function action_update_photocard()
+	{
+	$id	= (int)($this->request->post('id'));
+	$active = (int)$this->request->post('active');
+	 
+	$this->json = array();
+	 
+	$row = Model::factory('Object_Service_Photocard')->where('id' ,'=', $id)->find();
+	 
+	if ($row->loaded())
+	{
+		if ($active)
+		{
+			$row->active = 1;
+			$row->date_expiration = DB::expr("NOW() + INTERVAL '{$row->periods_count} days'");
+		}
+		
+		$row->update();			
+	}
+	$row = Model::factory('Object_Service_Photocard')->where('id' ,'=', $id)->find();
+	$this->json = array('date_expiration' => $row->date_expiration, 'active' => $row->active);
+	}	
 
 	public function action_global_search(){
 

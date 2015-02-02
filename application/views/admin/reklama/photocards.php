@@ -12,6 +12,28 @@
 	else $params['only_active'] = '';		
 ?>
 
+<script type="text/javascript" charset="utf-8">
+
+	$(document).ready(function() {		
+		
+		$('.fn-start').click(function(event){
+			
+			event.preventDefault();			
+			
+			var id = $(this).data("id");
+			
+			$.post("/ajax/update_photocard", { id:id, active: 1}, function(data){
+				
+				$('.fn-status'+id).html("Активна");
+				$('.fn-td-de'+id).html(data.date_expiration);
+				
+			}, 'json');			
+		})
+						
+	})	
+	
+</script>
+
 <div class="control-group only2" >		
 	<label for="only_active" class="control-label">
 		<input id="only_active" type="checkbox" class="input-small" placeholder="" name="only_active" <?php if ($only_active) : ?> checked <?php endif; ?> onclick=" window.location='/<?=Request::current()->uri().URL::query($params_for_filter, false)?>' ">
@@ -34,6 +56,7 @@
 		<th>Рубрика</th>
 		<th>Город</th>
 		<th>Дата заявки</th>
+		<th>Дней заказано</th>
 		<th>
 			Дата окончания<br>
 			<?php if ($sort_by == 'date_expiration' and $sort == 'desc') : ?>
@@ -63,8 +86,9 @@
 			<td><?=$ads_element->category_title?></td>
 			<td><?=$ads_element->city_title?></td>
 			<td><?=$ads_element->date_created?></td>
+			<td><?=$ads_element->periods_count?></td>
 			<td class="fn-td-de<?=$ads_element->id?>"><?=$ads_element->date_expiration?></td>
-			<td class="fn-status<?=$ads_element->id?>"><?php if ($ads_element->active == 1) : ?> Активна <?php else :?> Не активна <?php endif;?></td>
+			<td class="fn-status<?=$ads_element->id?>"><?php if ($ads_element->active == 1) : ?> Активна <?php else :?> <a href=""  class="red fn-start" data-id="<?=$ads_element->id?>">Запустить</a> <?php endif;?></td>
 			<td><?php if ($ads_element->invoice_id >= 1) : ?> Оплачена <?php else :?> Не оплачена <?php endif;?></td>
 		</tr>
 	<?php endforeach; ?>
