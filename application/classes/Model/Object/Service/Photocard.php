@@ -22,5 +22,21 @@ class Model_Object_Service_Photocard extends ORM
 				->where('type', '=', 2)
 			->execute();		
 	}
+	
+	public function with_data()
+	{
+		return $this->select(array('object_attachment.filename', 'main_image_filename'))
+			->select(array('object.title', 'object_title'))
+			->select(array('category.title', 'category_title'))
+			->select(array('city.title', 'city_title'))
+			->join('object', 'left')
+			->on('object_service_photocard.object_id', '=', 'object.id')
+			->join('category', 'left')
+			->on('object.category', '=', 'category.id')	
+			->join('city', 'left')
+			->on('object.city_id', '=', 'city.id')				
+			->join('object_attachment', 'left')
+			->on('object.main_image_id', '=', 'object_attachment.id');
+	}	
 }
 

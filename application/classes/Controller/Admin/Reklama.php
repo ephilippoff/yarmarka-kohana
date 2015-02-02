@@ -423,7 +423,64 @@ public function action_edit_menu_banner()
 				'controller' => 'reklama',
 				'action'     => 'menu_banners',
 			));		
-	}	
+	}
+	
+	
+	public function action_photocards()
+	{
+		$limit  = Arr::get($_GET, 'limit', 50);
+		$page   = $this->request->query('page');
+		$offset = ($page AND $page != 1) ? ($page-1) * $limit : 0;		
+
+		//Возможные варианты сортировки
+		$sorting_types = array('asc', 'desc');
+		$sorting_fields   = array('date_expiration', 'id');
+		//Принимаем, сверяем параметры сортировки
+		$sort	 = in_array($this->request->query('sort'), $sorting_types) ? $this->request->query('sort') : '';
+		$sort_by = in_array($this->request->query('sort_by'), $sorting_fields) ? $this->request->query('sort_by') : '';		
+		//Фильтр показа только активных, либо всех
+		$only_active = isset($_GET['only_active']) ? 1 : 0;
+			
+		$photocards_list = ORM::factory('Object_Service_Photocard')
+				->with_data()
+				->where('object_service_photocard.type', '=', 1);
+		
+		
+		
+
+
+		if ($only_active) $photocards_list->where('invoice_id', '>', 0);
+				
+		// количество общее
+		$clone_to_count = clone $photocards_list;
+		$count_all = $clone_to_count->count_all();
+		
+		if ($sort_by and $sort)
+			$photocards_list->order_by($sort_by, $sort);		
+
+		$photocards_list->order_by('id', 'DESC')->limit($limit)->offset($offset); 
+		
+		// order
+//		$sort_by	= trim($this->request->query('sort_by')) ? trim($this->request->query('sort_by')) : 'real_date_created';
+//		$direction	= trim($this->request->query('direction')) ? trim($this->request->query('direction')) : 'desc';		
+
+		$this->template->photocards_list = $photocards_list->find_all();
+		$this->template->sort	  = $sort;
+		$this->template->sort_by  = $sort_by;
+		$this->template->only_active = $only_active;
+		
+		$this->template->limit	  = $limit;
+		$this->template->pagination	= Pagination::factory(array(
+				'current_page'   => array('source' => 'query_string', 'key' => 'page'),
+				'total_items'    => $count_all,
+				'items_per_page' => $limit,
+				'auto_hide'      => TRUE,
+				'view'           => 'pagination/bootstrap',
+			))->route_params(array(
+				'controller' => 'reklama',
+				'action'     => 'photocards',
+			));		
+	}		
 
 	
 }
