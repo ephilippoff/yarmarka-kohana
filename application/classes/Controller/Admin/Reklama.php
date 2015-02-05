@@ -444,10 +444,6 @@ public function action_edit_menu_banner()
 		$photocards_list = ORM::factory('Object_Service_Photocard')
 				->with_data()
 				->where('object_service_photocard.type', '=', 1);
-		
-		
-		
-
 
 		if ($only_active) $photocards_list->where('invoice_id', '>', 0);
 				

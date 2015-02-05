@@ -80,9 +80,9 @@
 		?>
 	
 		<tr class="<?=$class?>">			
-			<td><?=$ads_element->id?></td>
+			<td><?=$ads_element->id?></td>			
 			<td><img style="max-width: 150px; max-height: 113px;" src="<?=Uploads::get_file_path($ads_element->main_image_filename, '208x208')?>" /></td>
-			<td><?=$ads_element->object_title?></td>
+			<td><a target="_blank" href="<?'http://'.Kohana::$config->load('common.main_domain')?>/detail/<?=$ads_element->object_id?>"><?=htmlspecialchars($ads_element->object_title)?></a></td>
 			<td><?=$ads_element->category_title?></td>
 			<td><?=$ads_element->city_title?></td>
 			<td><?=$ads_element->date_created?></td>
