@@ -72,18 +72,12 @@
             <br />
 
             <?php if ( ! empty($linked_company)) : ?>
-            <p class="contact-bl-title">Компания</p>
-            <p class="who">
-                <?=htmlspecialchars($linked_company->org_name)?>
-            </p>
+
              <?php if ($linked_company->filename) { ?>
                 <p><img class="s120x90" src="/<?=Imageci::getThumbnailPath($linked_company->filename, '120x90')?>"></p>
             <?php } ?>
             <?php elseif (($data->user['org_type'] == 2) && ($data->user['org_name'])) : ?>
-            <p class="contact-bl-title">Компания</p>
-            <p class="who">
-                <?=htmlspecialchars($data->user['org_name'])?>
-            </p>
+
              <?php if (!empty($data->user['author_logo'])) { ?>
                 <p><img class="s120x90" src="/<?=Imageci::getThumbnailPath($data->user['author_logo'], '120x90')?>"></p>
             <?php } ?>
@@ -99,10 +93,7 @@
 <?php else: ?>
 
         <?php if ($data->object['org_type'] == 2) : ?>
-            <p class="contact-bl-title">Компания</p>
-            <p class="who">
-                <?=htmlspecialchars($data->object['org_name'])?>
-            </p>
+
             <?php if ($data->object['author_logo']) { ?>
                 <p><img class="s120x90" src="/<?=Imageci::getThumbnailPath($data->object['author_logo'], '120x90')?>"></p>
             <?php } ?>
