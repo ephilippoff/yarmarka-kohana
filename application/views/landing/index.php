@@ -211,8 +211,8 @@ $(document).ready(function() {
 														<?php if ($data->video) : ?>
 																<div class="img-cont" id="video">
 																	<div class="center-img">
-																		<a name="video"  rel="nofollow">
-																			<?=$embed_video?>
+																		<a name="video"  rel="nofollow">																																						
+																			<iframe src="http://www.youtube.com/embed/<?=trim($data->video)?>" type="text/html" frameborder="0" allowfullscreen></iframe>
 																		</a>
 																	</div>
 																</div>
