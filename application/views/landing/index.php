@@ -212,10 +212,10 @@ $(document).ready(function() {
 																<div class="img-cont" id="video">
 																	<div class="center-img">
 																		<a name="video"  rel="nofollow">
-																			<?//=$embed_video?>
+																			<?=$embed_video?>
 																		</a>
 																	</div>
-																</div>																															-->
+																</div>
 														<?php endif;?>													
 													
                                                 </div>
