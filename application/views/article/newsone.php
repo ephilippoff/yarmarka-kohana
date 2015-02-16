@@ -19,7 +19,7 @@
 						<ul>
 							<?php foreach ($other_news as $key => $other) : ?>
 									<?php $query_uri = '?em_client_email=noreply@yarmarka.biz&em_campaign_id=4&em_campaign_name=newsone_'.$other->id ?>
-									<li><span><?=date('d.m', strtotime($other->created))?></span> <a rel="nofollow" href="<?=URL::site(Route::get('newsone')->uri(array('id' => $other->id, 'seo_name' => $other->seo_name))).$query_uri?>"><?=$other->title?></a></li>
+									<li><span><?=date('d.m', strtotime($other->start_date))?></span> <a rel="nofollow" href="<?=URL::site(Route::get('newsone')->uri(array('id' => $other->id, 'seo_name' => $other->seo_name))).$query_uri?>"><?=$other->title?></a></li>
 							<?php endforeach; ?>
 							
 						</ul>
@@ -27,7 +27,7 @@
 					<?php endif; ?>
 					<div class="innerPage-cont iPage-rightPadding">
 						<article class="iPage-article">
-							<?php if ($newsone->is_category == 0) : ?><span class="news-created"><?php if ($newsone->created) : ?><?=date('d.m.Y', strtotime($newsone->created))?><?php endif; ?></span><?php endif; ?>
+							<?php if ($newsone->is_category == 0) : ?><span class="news-created"><?php if ($newsone->start_date) : ?><?=date('d.m.Y', strtotime($newsone->start_date))?><?php endif; ?></span><?php endif; ?>
 							<h1 class="big" style="text-align: left;"><?=$newsone->title?></h1>							
 								<?php if (!empty($real_photo)) : ?>
 									<div class="photo-cont">							
@@ -64,12 +64,12 @@
 												->where('parent_id', '=', $newsone->id)
 												->where('start_date', '<', DB::expr('now()'))
 												->where('end_date', '>', DB::expr('now()'))
-												->order_by('created', 'desc')
+												->order_by('start_date', 'desc')
 												->find_all();
 								?>
 								<?php foreach ($news_list as $article) : ?>
 									<?php $query_uri = '?em_client_email=noreply@yarmarka.biz&em_campaign_id=4&em_campaign_name=newsone_'.$article->id ?>
-									<li><?php if ($article->is_category == 0) : ?><span><?=date('d.m', strtotime($article->created))?></span><?php endif; ?> <a rel="nofollow" href="<?=URL::site(Route::get('newsone')->uri(array('id' => $article->id, 'seo_name' => $article->seo_name))).$query_uri?>"><?=$article->title?></a></li>
+									<li><?php if ($article->is_category == 0) : ?><span><?=date('d.m', strtotime($article->start_date))?></span><?php endif; ?> <a rel="nofollow" href="<?=URL::site(Route::get('newsone')->uri(array('id' => $article->id, 'seo_name' => $article->seo_name))).$query_uri?>"><?=$article->title?></a></li>
 								<?php endforeach; ?>
 							</ul>
 						<?php endif; ?>						
