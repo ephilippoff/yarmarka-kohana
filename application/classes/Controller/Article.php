@@ -91,6 +91,7 @@ class Controller_Article extends Controller_Template {
 		Seo::set_title($article->title.Seo::get_postfix());
 		Seo::set_description($article->get_meta_description());
 
+		$this->template->set_global('article_name', $article->name);
 		$this->template->article = $article;		
 	}
 	

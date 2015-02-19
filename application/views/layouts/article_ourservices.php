@@ -36,7 +36,7 @@
 	.$_assets
 ?>
 </head>
-<body class="adaptiveoff">
+<body class="adaptiveoff ourservices-page <?=$article_name?>">
 	<?=View::factory('layouts/google_analytics')?>
 	<div class="wrapfix">
 			<?=View::factory('layouts/header')?>
