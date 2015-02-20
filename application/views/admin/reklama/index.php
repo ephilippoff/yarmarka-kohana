@@ -18,10 +18,19 @@
 ?>
 
 <div class="control-group only2" >		
-	<label for="only_active" class="control-label">
-		<input id="only_active" type="checkbox" class="input-small" placeholder="" name="only_active" <?php if ($only_active) : ?> checked <?php endif; ?> onclick=" window.location='/<?=Request::current()->uri().URL::query($params_for_filter, false)?>' ">
-		Только активные	
-	</label>					
+
+	
+	<form action="" class="navbar-form navbar-left" role="search">
+		<div class="form-group">
+			<label for="only_active" class="control-label">
+				<input id="only_active" type="checkbox" class="input-small" placeholder="" name="only_active" <?php if ($only_active) : ?> checked <?php endif; ?> >
+				Только активные	
+			</label>			
+			<input value="<?=strip_tags($s)?>" type="text" class="form-control" placeholder="По заголовкам и комментам" name="s">
+			<input type="submit" class="btn btn-default" value="Искать">
+			<a href="/<?=Request::current()->uri()?>">Сбросить</a>
+		</div>
+	</form>	
 </div>	
 
 <table class="table table-hover table-condensed promo">

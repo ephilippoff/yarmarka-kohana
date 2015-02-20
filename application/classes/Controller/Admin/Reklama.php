@@ -8,7 +8,8 @@ class Controller_Admin_Reklama extends Controller_Admin_Template {
 	{
 		$limit  = Arr::get($_GET, 'limit', 50);
 		$page   = $this->request->query('page');
-		$offset = ($page AND $page != 1) ? ($page-1) * $limit : 0;		
+		$offset = ($page AND $page != 1) ? ($page-1) * $limit : 0;	
+		$s = trim(Arr::get($_GET, 's', ''));
 
 		//Возможные варианты сортировки
 		$sorting_types = array('asc', 'desc');
@@ -22,7 +23,14 @@ class Controller_Admin_Reklama extends Controller_Admin_Template {
 		$reklama_list = ORM::factory('Reklama');
 		//Фильтр по active = 1
 		if ($only_active) $reklama_list->where('active', '=', 1);
-				
+		//Поиск
+		if ($s) 
+		{	
+			$reklama_list->where_open()
+							->where(DB::expr('lower(title)'), 'like', '%'.mb_strtolower($s).'%')
+							->or_where(DB::expr('lower(comments)'), 'like', '%'.mb_strtolower($s).'%')
+						->where_close();			
+		}		
 		// количество общее
 		$clone_to_count = clone $reklama_list;
 		$count_all = $clone_to_count->count_all();
@@ -40,6 +48,7 @@ class Controller_Admin_Reklama extends Controller_Admin_Template {
 		$this->template->sort	  = $sort;
 		$this->template->sort_by  = $sort_by;
 		$this->template->only_active = $only_active;
+		$this->template->s = $s;
 		
 		$this->template->limit	  = $limit;
 		$this->template->pagination	= Pagination::factory(array(
