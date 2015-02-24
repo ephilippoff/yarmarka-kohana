@@ -186,6 +186,48 @@ class Model_Object extends ORM {
 											  from object_service_photocard 
 											  where object_service_photocard.object_id = object.id and object_service_photocard.type = 2) 
 											  as in_selection'));		
+	}
+	
+	public function with_used_premium()
+	{
+		return $this->select(DB::expr('EXISTS(select id 
+											  from object_rating 
+											  where object_rating.object_id = object.id and object_rating.date_expiration > NOW()) 
+											  as premium_used'));
+	}
+	
+	public function with_used_lider()
+	{
+		return $this->select(DB::expr('EXISTS(select id 
+											from object_service_photocard as osp
+											where osp.object_id = object.id 
+											and osp.type = 1 
+											and osp.date_expiration >= CURRENT_TIMESTAMP
+											and osp.active = 1
+											and osp.invoice_id <> 0) 
+											as lider_used'));
+	}	
+	
+	public function with_used_reklama()
+	{
+		return $this->select(DB::expr("EXISTS(select id 
+											  from reklama 
+											  where link like '%'||object.id||'%' 
+											  and CURRENT_DATE >= start_date 
+											  and CURRENT_DATE <= end_date 
+											  and active = 1) 
+											  as reklama_used"));
+	}
+	
+	public function with_used_ticket()
+	{
+		return $this->select(DB::expr('EXISTS(select id 
+											from object_service_ticket as ost
+											where ost.object_id = object.id 
+											and ost.active = 1 
+											and ost.invoice_id <> 0
+											and NOW() <= ost.date_expiration)
+											as ticket_used'));
 	}	
 
 	public function get_real_date_created($format = 'd.m.Y')

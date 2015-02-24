@@ -163,6 +163,7 @@ function obj_selection(src, obj_id)
 			array('sort_by' => $sort_by, 'field_name' => 'real_date_created', 'direction' => $direction, 'name' => 'Real date/Up date'))?>
 
 
+		<th>Услуги</th>
 		<th></th>
 	</tr>
 	<?php foreach ($objects as $object) : ?>
