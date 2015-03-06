@@ -3,18 +3,20 @@
 class Task_DeleteObjects extends Minion_Task
 {
 	protected $_options = array(
-		'limit' => 1000,
-		'type'	=> NULL,
+		'limit' => 10,
 	);
 
 	protected function _execute(array $params)
 	{
+		$limit 	= $params['limit'];
+
 		Minion_CLI::write('Delete inactive objects (active = 0)');
 		$objects = ORM::factory('Object')
 			->where('active', '=', 0)
 			->order_by("date_created", "desc")
-			->limit(10)
+			->limit($limit)
 			->find_all();
+
 		Minion_CLI::write('Affected rows:'.Minion_CLI::color($objects->count(), 'cyan'));
 		foreach ($objects as $object)
 		{
