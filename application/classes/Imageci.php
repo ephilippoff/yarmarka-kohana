@@ -600,7 +600,7 @@ class Imageci {
 			if ($size == "original")  $size = "orig";
 			if (file_exists(".".$path))
 			{
-				$destination = ".".str_replace($size, "$dest/$size", $path);
+				$destination = str_replace("uploads/".$size, "/backup/uploads/$dest/$size", $path);
 				//Minion_CLI::write("moved:".$path." - ".$destination);
 				if (!is_dir(dirname($destination))) {
 					mkdir(dirname($destination), 0777, true);
