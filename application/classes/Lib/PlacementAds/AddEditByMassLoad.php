@@ -166,7 +166,7 @@ class Lib_PlacementAds_AddEditByMassLoad extends Lib_PlacementAds_AddEdit {
 
 		// удаляем старые аттачи
 		// @todo по сути не надо заного прикреплять те же фотки при редактировании объявления
-		ORM::factory('Object_Attachment')->where('object_id', '=', $object->id)->delete_all();
+		ORM::factory('Object_Attachment')->where('object_id', '=', $object->id)->fdelete();
 
 		// собираем аттачи
 		if ($userphotos = $params->userfile AND is_array($userphotos))

@@ -401,17 +401,16 @@ class Lib_PlacementAds_AddEdit {
 				$attachments_count = ORM::factory('Object_Attachment')->where("object_id","=",$object->id)->count_all();
 				$input_attachament_count = count($params->userfile);
 
-				$isChanged = ORM::factory('Object_Contact')
-								->where("object_id","=",$object->id)
-								->compare($contacts);
+				// $isChanged = ORM::factory('Object_Contact')
+				// 				->where("object_id","=",$object->id)
+				// 				->compare($contacts);
 
 
 				$signature_full = '{'.join(',', $this->signature_full).'}';
 				$sign_existed = str_replace('"','',$sign_existed->signature_full);
 
 				if ($signature_full == $sign_existed 
-						AND $attachments_count == $input_attachament_count
-							AND !$isChanged)
+						AND $attachments_count == $input_attachament_count)
 				{
 					$errors['nochange'] = "Объявление не требует обновления.";	
 					$this->union_cancel = TRUE;
@@ -1002,7 +1001,7 @@ class Lib_PlacementAds_AddEdit {
 
 		// удаляем старые аттачи
 		// @todo по сути не надо заного прикреплять те же фотки при редактировании объявления
-		ORM::factory('Object_Attachment')->where('object_id', '=', $object->id)->delete_all();
+		ORM::factory('Object_Attachment')->where('object_id', '=', $object->id)->fdelete();
 
 		// собираем аттачи
 		if ($userphotos = $params->userfile AND is_array($userphotos))
