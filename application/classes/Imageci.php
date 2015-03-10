@@ -429,9 +429,16 @@ class Imageci {
 //		log_message('debug', 'tgtfile: '.$tgtfile);
 		
 		$Image = "Image" . $this->filetype;
-		$Image($new_original, $tgtfile );
+		
+		if ($this->filetype == 'jpeg')
+		{			
+			$jpeg_quality = Kohana::$config->load('images.jpeg_quality');
+			$Image($new_original, $tgtfile, $jpeg_quality);
+		}	
+		else
+			$Image($new_original, $tgtfile);
+		
 		ImageDestroy($new_original);
-
 	}
 	
 	/**
