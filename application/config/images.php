@@ -2,4 +2,5 @@
 return array(
 	'watermark'	=> FALSE,
 	'diff_matrix' => 15, //матрица картинки для механизма поиска дублей
+	'jpeg_quality' => 50, //качество jpg
 );
