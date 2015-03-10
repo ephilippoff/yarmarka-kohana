@@ -78,6 +78,23 @@ class Model_Object_Attachment extends ORM
 		}
 		return join(",", $result);
 	}
+
+	/**
+	 * [fdelete - Delete attachement in DB and linked files]
+	 * @return void
+	 */
+	public function fdelete()
+	{
+		foreach ($this->find_all() as $attachment) {
+			foreach (Imageci::getSitePaths($attachment->filename) as $key => $_filename) {
+				$filename = "./".$_filename;
+				if ( file_exists($filename) AND !is_dir($filename) ) {
+					unlink($filename);
+				}
+			}
+			$attachment->delete();
+		}
+	}
 	/*
 		install smlar
 		

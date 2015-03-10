@@ -29,12 +29,13 @@ class Task_DeleteObjects extends Minion_Task
 			foreach ($attachments as $attachment) {
 				$sizes_finded = array();
 				$sizes_deleted = array();
-				foreach (Imageci::getSitePaths($attachment->filename) as $key => $filename) {
+				foreach (Imageci::getSitePaths($attachment->filename) as $key => $_filename) {
 					array_push($sizes_finded, $key);
-					if (file_exists("./".$filename)) {
+					$filename = "./".$_filename;
+					if (file_exists($filename) AND !is_dir($filename)) {
 						array_push($sizes_deleted, $key);
-						unlink("./".$filename);
-						if (file_exists("./".$filename)) {
+						unlink($filename);
+						if (file_exists($filename)) {
 							Minion_CLI::write('!!!!!!!!!!!!!!!!!!!!!!!!!');
 						}
 					}
