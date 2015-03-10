@@ -87,7 +87,6 @@ class Model_Object_Attachment extends ORM
 	{
 		if (!$this->loaded()) return;
 		Imageci::deleteImage($this->filename);
-		deleteImage($filename);
 		$this->delete();
 	}
 
