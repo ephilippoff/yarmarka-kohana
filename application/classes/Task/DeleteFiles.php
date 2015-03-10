@@ -71,6 +71,7 @@ class Task_DeleteFiles extends Minion_Task
 	{
 		$attachment = ORM::factory('User_Settings')
 								->where("value","=",$filename)
+								->where("name", "IN", array("INN_photo", "logo"))
 								->find();
 		return ($attachment->loaded() ? $attachment : FALSE);
 	}
