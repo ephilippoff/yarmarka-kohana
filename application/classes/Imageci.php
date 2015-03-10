@@ -576,7 +576,7 @@ class Imageci {
 		ImageDestroy($this->thumbnail);
 	}
 
-	public function deleteImage($filename)
+	public static function deleteImage($filename)
 	{
 		foreach (self::getSitePaths($filename) as $filepath)
 		{
@@ -587,7 +587,20 @@ class Imageci {
 		}
 	}
 
-	public function getSizes()
+	public static function moveImage($filename, $dest)
+	{
+		foreach(self::getSitePaths($filename) as $size => $path) {
+			if ($size == "original")  $size = "orig";
+			$destination = ".".str_replace($size, "$dest/$size", $path);
+			//Minion_CLI::write("moved:".$path." - ".$destination);
+			if (!is_dir(dirname($destination))) {
+			    mkdir(dirname($destination), 0777, true);
+			}
+			rename(".".$path, $destination);
+		}
+	}
+
+	public static function getSizes()
 	{
 		return array_keys(self::$sizes);
 	}

@@ -83,16 +83,22 @@ class Model_Object_Attachment extends ORM
 	 * [fdelete - Delete attachement in DB and linked files]
 	 * @return void
 	 */
+	public function rdelete()
+	{
+		if (!$this->loaded()) return;
+		Imageci::deleteImage($this->filename);
+		deleteImage($filename);
+		$this->delete();
+	}
+
+	/**
+	 * [fdelete - Delete attachements in DB and linked files]
+	 * @return void
+	 */
 	public function fdelete()
 	{
 		foreach ($this->find_all() as $attachment) {
-			foreach (Imageci::getSitePaths($attachment->filename) as $key => $_filename) {
-				$filename = "./".$_filename;
-				if ( file_exists($filename) AND !is_dir($filename) ) {
-					unlink($filename);
-				}
-			}
-			$attachment->delete();
+			$attachment->rdelete();
 		}
 	}
 	/*

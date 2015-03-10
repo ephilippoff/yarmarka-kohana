@@ -50,8 +50,7 @@ class Uploads
 
 	public static function delete($filename)
 	{
-		$image = new Imageci();
-		return $image->deleteImage($filename);
+		$image = Imageci::deleteImage($filename);
 	}
 
 	public static function save(array $file, $original_resize = array())
