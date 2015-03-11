@@ -100,14 +100,6 @@ class Task_DeleteFiles extends Minion_Task
 		return ($attachment->loaded() ? $attachment : FALSE);
 	}
 
-	public static function check_uploads($filename)
-	{
-		$attachment = ORM::factory('Uploads')
-								->where("filename","=",$filename)
-								->find();
-		return ($attachment->loaded() ? $attachment : FALSE);
-	}
-
 	protected function _execute(array $params)
 	{
 		$limit  = $params['limit'];
@@ -115,15 +107,17 @@ class Task_DeleteFiles extends Minion_Task
 
 		$count = &$this->count;
 		$total = &$this->total;
-		Minion_CLI::write('Previous Delete');
-		ORM::factory('Uploads')->delete_all();
-		Minion_CLI::write('Build uploads');
-		ORM::factory('Uploads')->build();
-		Minion_CLI::write('Uploads builded');
+
 		$this->get_all_files(1, function($filename, $dir = '', $check) use ($limit, &$count, &$total, $remove){
 			$total++;
 			//if ($check) {
-				if ( !Task_DeleteFiles::check_uploads($filename)) {
+				if ( !Task_DeleteFiles::check_user_settings($filename)
+						AND !Task_DeleteFiles::check_object_attachment($filename) 
+							AND !Task_DeleteFiles::check_user_logo($filename) 
+								AND !Task_DeleteFiles::check_userpage_banner($filename)
+									AND !Task_DeleteFiles::check_org_inn_scan($filename)
+										AND !Task_DeleteFiles::check_article($filename)
+											AND !Task_DeleteFiles::check_userunits($filename)) {
 					$count++;
 					if ($remove) {
 						Imageci::deleteImage($filename);
