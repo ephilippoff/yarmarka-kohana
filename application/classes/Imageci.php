@@ -606,6 +606,7 @@ class Imageci {
 					mkdir(dirname($destination), 0777, true);
 				}
 				rename(".".$path, $destination);
+				chown($destination,"www-data");
 			}
 		}
 	}
