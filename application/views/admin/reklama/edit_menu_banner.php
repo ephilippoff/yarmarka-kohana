@@ -16,6 +16,7 @@ $(document).ready(function() {
 
 <?php
 	$main_cities = array(1 => 'Тюменская область', 1919 => 'Тюмень', 1947 => 'Нефтеюганск', 1948 => 'Нижневартовск', 1979 => 'Сургут');
+	$date_start   = isset($ad_element->date_start)   ? $ad_element->date_start   : Arr::get($_POST, 'date_start',   date('Y-m-d'));
 	$date_expired   = isset($ad_element->date_expired)   ? $ad_element->date_expired   : Arr::get($_POST, 'date_expired',   date('Y-m-d', strtotime('+7 days')));
 	$states = array(0 => 'Неактивна', 1 => 'Активна', 2 => 'Предпросмотр');
 ?>
@@ -39,6 +40,13 @@ $(document).ready(function() {
 							array('multiple', 'size' => 5)) ?>
 		</div>	
 	</div>	
+	
+	<div class="control-group only2" >		
+		<label class="control-label">Дата старта(включительно):</label>
+		<div class="controls">			
+			<input type="text" class="input-small dp" placeholder="Дата старта" name="date_start" value="<?=$date_start?>">
+		</div>		
+	</div>		
 	
 	<div class="control-group only2" >		
 		<label class="control-label">Дата окончания(включительно):</label>

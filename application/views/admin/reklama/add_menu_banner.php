@@ -38,6 +38,13 @@ $(document).ready(function() {
 	</div>	
 	
 	<div class="control-group only2" >		
+		<label class="control-label">Дата старта(включительно):</label>
+		<div class="controls">			
+			<input type="text" class="input-small dp" placeholder="Дата старта" name="date_start" value="<?=Arr::get($_POST, 'date_start', date('Y-m-d'))?>">
+		</div>		
+	</div>	
+	
+	<div class="control-group only2" >		
 		<label class="control-label">Дата окончания(включительно):</label>
 		<div class="controls">			
 			<input type="text" class="input-small dp" placeholder="Дата окончания" name="date_expired" value="<?=Arr::get($_POST, 'date_expired', date('Y-m-d', strtotime('+7 days')))?>">
