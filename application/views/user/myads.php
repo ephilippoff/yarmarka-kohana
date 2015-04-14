@@ -82,7 +82,7 @@
                 </div>		
 				<div class="input style2 notice" style="font-size: 12px;">Внимание! В разделе "Вакансии" поднятие объявления доступно 1 раз в сутки. В остальных разделах поднятие объявления доступно 1 раз в 3 суток. УСЛУГА БЕСПЛАТНАЯ!</div>
 				<? if ($premium_balance>0):?>
-					<div class="input style2 notice">Ваш лимит Премиум объявлений - <span id="fn-premium-balance"><?=$premium_balance?><span></div>
+					<div class="input style2 notice" style="font-size: 12px; color: green;">Ваш лимит Премиум объявлений - <span id="fn-premium-balance"><?=$premium_balance?><span></div>
 				<? endif;?>
             </div>		
 			<header>

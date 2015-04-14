@@ -11,8 +11,7 @@
 			</li>
 			<?php endforeach; ?>
 		</ul>
-		<ul class="bottom">
-			<li><a href="/add"><span class="name">Подать объявление</span></a></li> 
+		<ul class="bottom"> 
 			<li><a href="/article/soveti"><span class="name">Советы от Ярмарки</span></a></li>
 		</ul>		
 	</div> 
@@ -23,7 +22,7 @@
 				$ulWidth = 191;
 				//$source = isset($source) ? $source : '';
 		?>
-				<?php if (in_array($category1->id, $parents_ids)) : ?>
+				<?php //if (in_array($category1->id, $parents_ids)) : ?>
 		
 					<div class="section section<?=$category1->id?>" id="section<?=$category1->id?>" style="width: <?=$divWidth;?>px">
 
@@ -56,7 +55,7 @@
 						</ul>
 					</div>
 		
-				<?php endif; ?>
+				<?php //endif; ?>
 		
 		<?php endforeach;?>
 	</div>	
