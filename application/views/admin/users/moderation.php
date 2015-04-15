@@ -12,6 +12,18 @@
 
 	//});
 </script>
+
+<div class="control-group only2" >		
+	<form action="" class="navbar-form navbar-left" role="search">
+		<div class="form-group">			
+			<input value="<?=strip_tags($s)?>" type="text" class="form-control" placeholder="По названию, юр. названию или ИНН" name="s">
+			<input type="submit" class="btn btn-default" value="Искать">
+			<a href="/<?=Request::current()->uri()?>">Сбросить</a>
+		</div>
+		<input type="hidden" name="filter" value="<?=$_GET['filter']?>">
+	</form>	
+</div>
+
 <a href="/khbackend/users/moderation">Модерация</a> | 
 <a href="/khbackend/users/moderation?filter=moderated">Прошли модерацию</a> | 
 <a href="/khbackend/users/moderation?filter=all">Все</a>

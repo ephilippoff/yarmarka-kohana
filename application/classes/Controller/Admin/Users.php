@@ -541,6 +541,7 @@ class Controller_Admin_Users extends Controller_Admin_Template {
 		$offset = ($page AND $page != 1) ? ($page-1) * $limit : 0;			
 		
 		$filter = $this->request->query('filter');
+		$s = trim(Arr::get($_GET, 's', ''));
 
 		$flags_moderation_query = DB::select("user_id")
 								->from("user_settings")
@@ -560,6 +561,16 @@ class Controller_Admin_Users extends Controller_Admin_Template {
 			$users = $users->where("user_settings.value","=",'0');
 		elseif ($filter == "moderated")
 			$users = $users->where("user_settings.value","=",'1');
+		
+		if ($s) 
+		{	
+			$users->where_open()
+					->where(DB::expr('lower(org_name)'), 'like', '%'.mb_strtolower($s).'%')
+					->or_where(DB::expr('lower(org_full_name)'), 'like', '%'.mb_strtolower($s).'%')
+					->or_where(DB::expr('lower(org_inn)'), 'like', '%'.mb_strtolower($s).'%')
+					->or_where(DB::expr('lower(email)'), 'like', '%'.mb_strtolower($s).'%')
+					->where_close();			
+		}		
 		
 		$users_clone = clone $users;
 		$count_all = $users_clone->count_all();
