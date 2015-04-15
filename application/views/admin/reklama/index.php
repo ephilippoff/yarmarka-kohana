@@ -117,7 +117,7 @@
 			<td><?=$ads_element->type?></td>
 			<td><?php if ($ads_element->active == 1) : ?> Активна <?php else :?> <span class="red"><b>Неактивна</b></span> <?php endif;?></td>
 			<td><?=$visits?></td>
-			<td><?=$ads_element->clicks_count?></td>
+			<td><a target="_blank" href="<?=URL::site(Route::get('reklama/linkstat')->uri(array('id' => $ads_element->id)))?>"><?=$ads_element->clicks_count?></a></td>
 			<td><?=trim($cities,', ')?></td>
 			<td><?=trim($ads_element->groups,'{}')?></td>
 			<td><?=$ads_element->comments?></td>

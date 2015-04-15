@@ -63,6 +63,31 @@ class Controller_Admin_Reklama extends Controller_Admin_Template {
 			));		
 	}
 	
+	public function action_linkstat()
+	{
+		$cities = '';
+		$main_cities = array(1 => 'Тюменская область', 1919 => 'Тюмень', 1947 => 'Нефтеюганск', 1948 => 'Нижневартовск', 1979 => 'Сургут');
+		$date_start = Arr::get($_GET, 'date_start', date('Y-m-d', strtotime('- 7 days')));
+		$date_end = Arr::get($_GET, 'date_end', date('Y-m-d'));
+		
+		$reklama_id = $this->request->param('id');
+		$this->template->link = $link = ORM::factory('Reklama', $reklama_id);
+		$this->template->stats = ORM::factory('Reklama_Linkstats')
+				->where('reklama_id', '=', $reklama_id)
+				->where('date', '>=', $date_start)
+				->where('date', '<=', $date_end)
+				->order_by('date')
+				->find_all();
+		
+		foreach (explode(',', trim($link->cities,'{}')) as $code)
+			if (isset($main_cities[$code])) 
+				$cities .= $main_cities[$code].', ';
+			
+		$this->template->cities = $cities;
+		$this->template->date_start = $date_start;
+		$this->template->date_end = $date_end;		
+	}
+	
 	public function action_add()
 	{
 		$this->template->errors = array();

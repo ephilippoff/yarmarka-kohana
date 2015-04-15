@@ -95,6 +95,13 @@ Route::set('backend', 'khbackend(/<controller>(/<action>(/<id>)))')
 		'action'     => 'index',
 	));
 
+Route::set('reklama/linkstat', 'reklama/linkstat/<id>', array('id' => '\d+'))
+	->defaults(array(
+		'directory'  => 'Admin',
+		'controller' => 'Reklama',
+		'action'     => 'linkstat',
+	));
+
 Route::set('global_search', 'ajax/global_search')
 	->defaults(array(
 		'controller' => 'Ajax',
