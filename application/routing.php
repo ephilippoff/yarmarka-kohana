@@ -95,7 +95,7 @@ Route::set('backend', 'khbackend(/<controller>(/<action>(/<id>)))')
 		'action'     => 'index',
 	));
 
-Route::set('reklama/linkstat', 'reklama/linkstat/<id>', array('id' => '\d+'))
+Route::set('backend/reklama/linkstat', 'khbackend/reklama/linkstat/<id>', array('id' => '\d+'))
 	->defaults(array(
 		'directory'  => 'Admin',
 		'controller' => 'Reklama',
