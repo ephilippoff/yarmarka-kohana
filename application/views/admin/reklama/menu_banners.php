@@ -80,7 +80,7 @@
 			<td><?=$ads_element->menu_width?></td>
 			<td><?=$ads_element->date_start?></td>
 			<td><?=$ads_element->date_expired?></td>
-			<td><?=$ads_element->visits?></td>
+			<td><a target="_blank" href="<?=URL::site(Route::get('backend/reklama/menubannerstat')->uri(array('id' => $ads_element->id)))?>"><?=$ads_element->visits?></a></td>
 			<td><a href="http://<?=$ads_element->href?>"><?=$ads_element->href?></a></td>
 			<td><?=$states[$ads_element->state]?></td>			
 			<td>				

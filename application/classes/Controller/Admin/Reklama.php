@@ -88,6 +88,33 @@ class Controller_Admin_Reklama extends Controller_Admin_Template {
 		$this->template->date_end = $date_end;		
 	}
 	
+	public function action_menubannerstat()
+	{
+		$cities = '';
+		$main_cities = array(1 => 'Тюменская область', 1919 => 'Тюмень', 1947 => 'Нефтеюганск', 1948 => 'Нижневартовск', 1979 => 'Сургут');
+		$states = array(0 => 'Неактивна', 1 => 'Активна', 2 => 'Предпросмотр');
+		$date_start = Arr::get($_GET, 'date_start', date('Y-m-d', strtotime('- 7 days')));
+		$date_end = Arr::get($_GET, 'date_end', date('Y-m-d'));
+		
+		$banner_id = $this->request->param('id');
+		$this->template->banner = $banner = ORM::factory('Category_Banners', $banner_id);
+		$this->template->stats = ORM::factory('Category_Banners_Stats')
+				->where('banner_id', '=', $banner_id)
+				->where('date', '>=', $date_start)
+				->where('date', '<=', $date_end)
+				->order_by('date')
+				->find_all();
+		
+		foreach (explode(',', trim($banner->cities,'{}')) as $code)
+			if (isset($main_cities[$code])) 
+				$cities .= $main_cities[$code].', ';
+			
+		$this->template->cities = $cities;
+		$this->template->states = $states;
+		$this->template->date_start = $date_start;
+		$this->template->date_end = $date_end;		
+	}	
+	
 	public function action_add()
 	{
 		$this->template->errors = array();

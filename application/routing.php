@@ -102,6 +102,13 @@ Route::set('backend/reklama/linkstat', 'khbackend/reklama/linkstat/<id>', array(
 		'action'     => 'linkstat',
 	));
 
+Route::set('backend/reklama/menubannerstat', 'khbackend/reklama/menubannerstat/<id>', array('id' => '\d+'))
+	->defaults(array(
+		'directory'  => 'Admin',
+		'controller' => 'Reklama',
+		'action'     => 'menubannerstat',
+	));
+
 Route::set('global_search', 'ajax/global_search')
 	->defaults(array(
 		'controller' => 'Ajax',

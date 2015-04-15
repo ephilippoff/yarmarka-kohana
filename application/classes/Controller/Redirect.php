@@ -15,6 +15,7 @@ class Controller_Redirect extends Controller_Template
 		if ($banner->loaded() and !empty($banner->href)) 
 		{ 
 			ORM::factory('Category_Banners')->increase_visits($id);
+			ORM::factory('Category_Banners_Stats')->increase_visits($id);
 			$this->redirect(URL::prep_url($banner->href));
 		}
 		
