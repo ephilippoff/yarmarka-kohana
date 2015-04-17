@@ -1065,15 +1065,23 @@ class Controller_User extends Controller_Template {
 			->js('maps.js');
 		
 		$user = ORM::factory('User')->where('login', '=', $this->request->param('login'))->find();
+
 		$region = ORM::factory('Region')->where('id', '=', 73)->find();
 		$city	= Region::get_current_city();
 		//Наличие объявлений у пользователя
 		$is_exist_objects = 0;
 		
-		if ( ! $user->loaded())
+		if ( ! $user->loaded() or $user->org_type != 2 )
 		{
 			throw new HTTP_Exception_404;
 		}
+		
+		$user_settings = ORM::factory('User_Settings')
+				->where('user_id', '=', $user->id)
+				->where('type', '=', 'orginfo')
+				->find_all();
+		
+		$user_settings = Dbhelper::convert_dbset_to_keyid_arr($user_settings, 'name');
 		
 		$job_category_id = 36;//TODO: Костыль: Пропись id
 
@@ -1104,6 +1112,8 @@ class Controller_User extends Controller_Template {
 			
 			$is_exist_objects = $objects->count_all();
 		}
+		
+		$this->template->user_settings = $user_settings;
 		$this->template->is_exist_objects = $is_exist_objects;
 		$this->template->is_owner = (Auth::instance()->get_user() AND Auth::instance()->get_user()->id === $user->id);
 		$this->template->filter_href = ORM::factory('Category')->where('id', '=', 1)->find()->get_url().'?user_id='.$user->id;

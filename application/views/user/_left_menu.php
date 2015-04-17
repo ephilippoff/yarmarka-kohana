@@ -112,14 +112,14 @@
 				<?php endif;*/ ?>
 
 				<?php if (Request::current()->action() == 'userinfo') : ?>
-				<li><i class="ico "></i><span><b>Данные пользователя</b></span></li>
+				<li class="active"><i class="ico "></i><span><b>Данные пользователя</b></span></li>
 				<?php else : ?>
 				<li><a href="<?=URL::site('user/userinfo')?>" class="clickable"><i class="ico "></i><span>Данные пользователя</span></a></li>
 				<?php endif; ?>
 
 				<? if (Auth::instance()->get_user()->org_type == 2): ?>
 					<?php if (Request::current()->action() == 'orginfo') : ?>
-					<li><i class="ico "></i><span><b>Информация о компании</b></span></li>
+					<li class="active"><i class="ico "></i><span><b>Информация о компании</b></span></li>
 					<?php else : ?>
 					<li><a href="<?=URL::site('user/orginfo')?>" class="clickable"><i class="ico "></i><span>Информация о компании</span></a></li>
 					<?php endif; ?>
@@ -132,14 +132,14 @@
 				<?php endif; */?>				
 
 				<?php if (Request::current()->action() == 'password') : ?>
-				<li><i class="ico "></i><span><b>Смена пароля</b></span></li>
+				<li class="active"><i class="ico "></i><span><b>Смена пароля</b></span></li>
 				<?php else : ?>
 				<li><a href="<?=URL::site('user/password')?>" class="clickable"><i class="ico "></i><span>Смена пароля</span></a></li>
 				<?php endif; ?>				
 
 				<?php if (Auth::instance()->get_user()->org_moderate === 1 AND Auth::instance()->get_user()->org_type == 2 AND ! Auth::instance()->get_user()->linked_to_user) : ?>
 					<?php if (Request::current()->action() == 'employers') : ?>
-					<li><i class="ico "></i><span><b>Сотрудники</b></span></li>
+					<li class="active"><i class="ico "></i><span><b>Сотрудники</b></span></li>
 					<?php else : ?>
 					<li><a href="<?=URL::site('user/employers')?>" class="clickable"><i class="ico "></i><span>Сотрудники (<?=Auth::instance()->get_user()->count_employers()?>)</span></a></li>
 					<?php endif; ?>

@@ -30,7 +30,7 @@
 
 				<a href="" class="my_logo">
 					<?php if ($user->filename) : ?>
-						<img src="<?=URL::site(Uploads::get_file_path($user->filename, '272x203'))?>" alt="" />
+						<img src="<?=URL::site(Uploads::get_file_path($user_settings['logo']->value, '272x203'))?>" alt="" />
 					<?php else : ?>
 						<img src="/images/nologo.png" alt="" />
 					<?php endif; ?>
@@ -44,10 +44,10 @@
 
 		<div class="hheader persomal_room-header ta-c">
 			<h1 style="font-size: 20px" class="ta-c d-in">
-						<?php if (empty($user->org_name)) : ?>
+						<?php if (empty($user_settings['org_name']->value)) : ?>
 								Страница компании №<?=$user->id?>
 						<?php else : ?>
-								<?=htmlspecialchars($user->org_name)?> 
+								<?=htmlspecialchars($user_settings['org_name']->value)?> 
 						<?php endif; ?>					
 			</h1>
 			<a class="bnt-go-back" href="/" rel='nofollow'><span class="text">На главную</span></a>
@@ -65,35 +65,7 @@
 						
 					<?php if ($is_exist_objects) : ?>						
 						<li class="no-li-slide"><a href="<?=$filter_href?>"><i class="ico ico-iadd"></i><span>Объявления</span></a></li>
-					<?php endif;?>	
-						
-					<li>
-						<div class="conpany_info w200">
-							<header><?=$user->org_name?></header>
-							<article class="cont">
-								<span class="title ">Контакты:</span><br/>
-								<?php foreach ($user->get_contacts(array(Model_Contact_Type::PHONE, Model_Contact_Type::MOBILE)) as $contact) : ?>
-									<span><?=$contact->contact?></span><br/>
-								<?php endforeach; ?>
-								<br />
-
-								<span class="title ">E-mail:</span><br/>
-								<?php foreach ($user->get_contacts(Model_Contact_Type::EMAIL) as $contact) : ?>
-									<span><a href="mailto:<?=$contact->contact?>">Написать письмо</a></span><br/><br/>
-								<?php endforeach; ?>
-
-								<span class="title ">Адрес:</span><br/>
-								<?php if ($user->user_city->loaded() AND trim($user->org_address)) : ?>
-									<span><?=$user->user_city->loaded() ? $user->user_city->title.',' : ''?> <?=$user->org_address?></span><br />
-								<?php endif; ?>
-								<br />
-								<?php if ($user->url) : ?>
-									<span><a href="<?=URL::prep_url($user->url)?>" target="_blank">Перейти на сайт</a></span>
-								<?php endif; ?>
-							</article>
-						</div>
-						<div></div>
-					</li>
+					<?php endif;?>							
 				</ul>
 
 			</aside>
@@ -101,56 +73,98 @@
 
 				<div class="p_cont">
 
-					<article class="person_info-bl">
+					<article class="person_info-bl about">
 						<ul class="sistem-ul">
-							<?php if (!empty($user->about)) : ?>
+							<?php if (!empty($user_settings['commoninfo']->value)) : ?>
 								<li>
 									<span class="title ">О компании:</span>
-									<div class="cont">
-										<p style="color: #808080;text-align: justify"><?=$user->about?></p>
+									<div class="cont fs12">
+										<p style="color: #808080;text-align: justify"><?=$user_settings['commoninfo']->value?></p>
 									</div>
 								</li>
-							<?php endif; ?>
-							<?php if (FALSE) : ?>
-							<li><span class="title">Видео:</span>
-								<div class="cont">
-									<object width="515" height="300"><param name="wmode" value="opaque"><param name="movie" value="http://www.youtube.com/v/H7Xyboh6GpY?version=3&amp;hl=ru_RU"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed wmode="opaque" src="http://www.youtube.com/v/H7Xyboh6GpY?version=3&amp;hl=ru_RU" type="application/x-shockwave-flash" width="515" height="300" allowscriptaccess="always" allowfullscreen="true"></embed></object>
-								</div>	                    							
-							</li>
+								
+								<?php if (!empty($user_settings['mail_address']->value)) : ?>
+									<li>
+										<span class="title ">Почтовый адрес:</span>
+										<div class="cont"><?=strip_tags($user_settings['mail_address']->value)?></div>									
+									</li>
+								<?php endif;?>
+								
+								<?php if ($user_settings['www']->value) : ?>					
+									<li>
+										<span class="title">Сайт:</span>
+										<div class="cont">
+											<a href="<?=URL::prep_url($user_settings['www']->value)?>" target="_blank"><?=URL::prep_url($user_settings['www']->value)?></a>
+										</div>
+									</li>									
+								<?php endif; ?>									
+									
+								<?php if (!empty($user_settings['vkontakte']->value)) : ?>
+									<li>
+										<span class="title">Группа Вконтакте:</span>
+										<div class="cont">
+											<span class="ico vkontakte"></span>
+											<a href="<?=URL::prep_url($user_settings['vkontakte']->value)?>" target="_blank"><?=URL::prep_url($user_settings['vkontakte']->value)?></a>
+										</div>
+									</li>	
+								<?php endif;?>
+
+								<?php if (!empty($user_settings['twitter']->value)) : ?>
+									<li>
+										<span class="title">Адрес Twitter:</span>
+										<div class="cont">
+											<span class="ico twitter"></span>
+											<a href="<?=URL::prep_url($user_settings['twitter']->value)?>" target="_blank"><?=URL::prep_url($user_settings['twitter']->value)?></a>
+										</div>
+									</li>	
+								<?php endif;?>	
+
+								<?php if (!empty($user_settings['instragram']->value)) : ?>
+									<li>
+										<span class="title">Instragram:</span>
+										<div class="cont">
+											<span class="ico instagram"></span>
+											<a href="<?=URL::prep_url($user_settings['instragram']->value)?>" target="_blank"><?=URL::prep_url($user_settings['instragram']->value)?></a>
+										</div>
+									</li>	
+								<?php endif;?>								
 							<?php endif; ?>
 						</ul>
 					</article>
 					<article class="person_info-bl person_contakt-bl contact shadow-top">
 						<ul class="sistem-ul cont-info">
-							<?php $contact_classes = array(
-								1 => 'tel',
-								2 => 'tel',
-								3 => 'skype',
-								4 => 'icq',
-								5 => 'email',
-							) ?>
 							<li ><span class="title ">Контакты:</span>
 								<ul>
-									<?php foreach ($user->get_contacts() as $contact) : ?>
+									<?php if (!empty($user_settings['phone']->value)) : ?>
+										<li>
+											<span class="title">Телефон:</span>
+											<div class="cont">
+												<span class="ico tel"></span>
+												<span class="text"><?=strip_tags($user_settings['phone']->value)?></span>
+											</div>
+										</li>
+									<?php endif;?>
+									
+									<?php if (!empty($user_settings['official_email']->value)) : ?>
 									<li>
-										<span class="title"><?=$contact->name?>:</span>
+										<span class="title">Email:</span>
 										<div class="cont">
-											<span class="ico <?=$contact_classes[$contact->contact_type_id]?>"></span>
-											<span class="text"><?=$contact->contact?></span>
+											<span class="ico email"></span>
+											<a rel="nofollow" href="mailto:<?=strip_tags($user_settings['official_email']->value)?>"><?=strip_tags($user_settings['official_email']->value)?></a>
 										</div>
 									</li>
-									<?php endforeach; ?>
-									<li>
-										<span class="title">Контактное лицо/ФИО:</span>
-										<div class="cont"><?=$user->fullname?></div>
-									</li>
+									<?php endif;?>
 									
-									
-									
-									
+																			
+										
+									<?php if (!empty($user_settings['contact']->value)) : ?>	
+										<li>
+											<span class="title">Контактное лицо/ФИО:</span>
+											<div class="cont"><?=strip_tags($user_settings['contact']->value)?></div>
+										</li>		
+									<?php endif;?>
 								</ul>
 							</li>
-
 						</ul>
 						<div style="" class="shadow-bottom fl100 pt7"></div>
 					</article>

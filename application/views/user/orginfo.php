@@ -1,4 +1,4 @@
-<div class="winner page-addobj">
+<div class="winner page-addobj winner-orginfo">
 	<section class="main-cont subscriptions cabinet">
 		<div class="hheader persomal_room-header"><h1 class="ta-c">Личный кабинет - Информация о компании</h1></div>
 		<div class="fl100 shadow-top z1 persomal_room">
