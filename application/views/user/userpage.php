@@ -90,7 +90,7 @@
 									</li>
 								<?php endif;?>
 								
-								<?php if ($user_settings['www']->value) : ?>					
+								<?php if (!empty($user_settings['www']->value)) : ?>					
 									<li>
 										<span class="title">Сайт:</span>
 										<div class="cont">
