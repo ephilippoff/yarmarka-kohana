@@ -27,7 +27,7 @@ class Task_Objectload extends Minion_Task
 			{
 				$user_settings = ORM::factory('User_Settings')
 										->where("name","=",self::SETTING_NAME)
-										->order_by("id","desc")->find_all();
+										->order_by("id","asc")->find_all();
 				foreach ($user_settings as $setting)
 				{
 					$ct->_update();
