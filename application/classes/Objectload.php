@@ -156,9 +156,10 @@ class Objectload
 
 	        $counter = 1;
 
-	        $t_object = DB::select()->from("_temp_".$file->table_name)
-	        ;
-	        if ($filters->notloaded == 1)
+	        $t_object = DB::select()->from("_temp_".$file->table_name);
+	        if ($filters->number)
+	        	$t_object = $t_object->where("external_id", "=", $filters->number)
+	        elseif ($filters->notloaded == 1)
 	        	$t_object = $t_object->where("loaded", "IS", NULL)->where("error", "IS", NULL);
 	        elseif ($filters->witherror == 1)
 	        	$t_object = $t_object->where("error", "IS NOT", NULL);
