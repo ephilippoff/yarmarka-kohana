@@ -345,7 +345,7 @@ class Objectload
 	public function saveFile($filepath)
 	{
 		$tmp = tempnam("/tmp", "imgurl");
-		//try {
+		try {
 			if (copy($filepath, $tmp)) {
 
 				$_file = Array(
@@ -356,10 +356,10 @@ class Objectload
 					);
 				return Uploads::save($_file);
 			}
-		//} catch (Exception $e) {
-		//	Log::instance()->add(Log::NOTICE, "error:".$e->getMessage());
-		//	return FALSE;
-		//}
+		} catch (Exception $e) {
+			Log::instance()->add(Log::NOTICE, "error:".$e->getMessage());
+			return FALSE;
+		}
 	}
 
 	public function setState($state = 0, $comment = NULL)
