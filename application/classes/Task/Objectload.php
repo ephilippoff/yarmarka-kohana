@@ -142,6 +142,14 @@ class Task_Objectload extends Minion_Task
 
 			$object = new Obj( $ol->saveRowAsObject($row, $config, $dictionary) );
 
+			if ($object->object_id) {
+
+				$_photos = $ol->savePhotos($object->object_id, $row->images, FALSE);
+				if (count($_photos) > 0) {
+					$ol->saveMainPhoto($object->object_id);
+				}
+			}
+
 			Minion::write($prefix_log, $object->get_normal_string());
 
 			$result = array("status" => "no");

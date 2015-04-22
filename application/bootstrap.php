@@ -121,8 +121,8 @@ Kohana::modules(array(
 	'pagination' => MODPATH.'pagination',        // kohana pagination module
 	'phpexcel'   => MODPATH.'phpexcel',
 	'captcha'	=> MODPATH.'captcha',
-	// 'unittest'   => MODPATH.'unittest',   // Unit testing
-	// 'userguide'  => MODPATH.'userguide',  // User guide and API documentation
+	'unittest'   => MODPATH.'unittest',   // Unit testing
+	//'userguide'  => MODPATH.'userguide',  // User guide and API documentation
 	));
 
 // set default cache driver
@@ -136,6 +136,5 @@ if ( ! Session::instance()->get('session_id'))
 {
 	Session::instance()->set('session_id', uniqid('', TRUE));
 }
-
 
 include 'routing.php';

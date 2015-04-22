@@ -223,6 +223,145 @@ class Objectload
 
 	}
 
+	public function saveMainPhoto($object_id)
+	{
+		$attachment = ORM::factory('Object_Attachment')
+					->where("object_id","=",$object_id)
+					->order_by("type", "asc")
+					->find();
+		if ( $attachment->loaded() ) {
+			if ($attachment->type == 4) {
+				$filename = $this->saveFile($attachment->url);
+				if ($filename) {
+					$attachment->type = 0;
+					$attachment->filename = $filename;
+					$attachment->save();
+					$object = ORM::factory('Object', $object_id);
+					$object->main_image_id = $attachment->id;
+					$object->save();
+				}
+			} else {
+				$object = ORM::factory('Object', $object_id);
+				$object->main_image_id = $attachment->id;
+				$object->save();
+			}
+			
+		}
+	}
+
+	public function savePhotos($object_id, $files_str = "", $save_images_accepted)
+	{
+		$existed_files = array();
+		$oa = ORM::factory('Object_Attachment')
+			->where("object_id","=",$object_id)
+			->find_all();
+		foreach ($oa as $attachment) {
+			$existed_files[$attachment->url] = array(
+				"id" => $attachment->id,
+				"type" => ($attachment->type == 0) ? "file" : (($attachment->type == 4) ? "url" : "other")
+			);
+		}
+
+		$filesAndUrls = $this->getFilesAndUrls(explode(";", $files_str), array_keys($existed_files), $save_images_accepted);
+
+		$this->saveFilesAndUrls($object_id, $filesAndUrls, $existed_files);
+
+		return $filesAndUrls;
+	}
+
+	public function saveFilesAndUrls($object_id, $filesAndUrls, $fileinfo) {
+		$add = array();
+		$delete = array();
+		$fdelete = array();
+		foreach ($filesAndUrls as $item) {
+			if ($item["action"] == "add") {
+				$add[] = $item;
+			}
+
+			if ($item["action"] == "delete") {
+				if ($fileinfo[ $item["url"] ]["type"] == "file") {
+					$fdelete[] = $fileinfo[ $item["url"] ]["id"];
+				} else {
+					$delete[] = $fileinfo[ $item["url"] ]["id"];
+				}
+			}
+		}
+
+		if (count($fdelete) > 0) {
+			$attachment = ORM::factory('Object_Attachment')
+					->where("id","IN",$fdelete)
+					->fdelete();
+		}
+		if (count($delete) > 0) {
+			$attachment = ORM::factory('Object_Attachment')
+					->where("id","IN",$delete)
+					->delete();
+		}
+		if (count($add) > 0) {
+			foreach ($add as $item) {
+				$attachment = ORM::factory('Object_Attachment');
+				$attachment->object_id = $object_id;
+				$attachment->filename = $item["path"];
+				$attachment->url = $item["url"];
+				$attachment->type = ($item["type"] == "file")? 0: 4;
+				$attachment->save();
+			}
+		}
+	}
+
+	public function getFilesAndUrls($images = array(), $existed_images = array(), $save_images_accepted)
+	{
+		$result = array();
+
+		$images_to_add = array_diff($images, $existed_images);
+		$images_to_delete = array_diff($existed_images, $images);
+
+		$i = 0;
+		foreach($images_to_add as $file){
+
+			if ($save_images_accepted) {
+				$filepath = $this->saveFile($file); 
+				if ($filepath) {
+					$result[] = array("action" => "add", "type" => "file", "path" => $filepath, "url" => $file);
+				}
+			} elseif ($i == 0 AND (count($existed_images) == 0 OR in_array($file, $images_to_delete) OR count($existed_images) - count($images_to_delete) == 0) ) {
+				$filepath = $this->saveFile($file); 
+				if ($filepath) {
+					$result[] = array("action" => "add", "type" => "file", "path" => $filepath, "url" => $file);
+				}
+			} else {
+				$result[] = array("action" => "add", "type" => "url", "path" => $file, "url" => $file);
+			}
+			$i++;
+		}
+
+		foreach($images_to_delete as $file){
+			$result[] = array("action" => "delete", "path" => $file, "url" => $file);
+		}
+
+		return $result;
+	}
+
+	public function saveFile($filepath)
+	{
+		$tmp = tempnam("/tmp", "imgurl");
+		//try {
+			if (copy($filepath, $tmp)) {
+
+				$_file = Array(
+						'tmp_name' => $tmp,
+						'size' => filesize($tmp),
+						'name' => $tmp,
+						'type' => mime_content_type($tmp),
+					);
+				return Uploads::save($_file);
+			}
+		//} catch (Exception $e) {
+		//	Log::instance()->add(Log::NOTICE, "error:".$e->getMessage());
+		//	return FALSE;
+		//}
+	}
+
 	public function setState($state = 0, $comment = NULL)
 	{
 		$ol = ORM::factory('Objectload', $this->_objectload_id)
