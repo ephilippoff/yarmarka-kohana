@@ -295,7 +295,7 @@ class Objectload
 		if (count($delete) > 0) {
 			$attachment = ORM::factory('Object_Attachment')
 					->where("id","IN",$delete)
-					->delete();
+					->delete_all();
 		}
 		if (count($add) > 0) {
 			foreach ($add as $item) {

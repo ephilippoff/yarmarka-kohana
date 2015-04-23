@@ -398,8 +398,8 @@ class Lib_PlacementAds_AddEdit {
 			$sign_existed = ORM::factory('Object_Signature')->where('object_id','=',$object->id)->find();
 			if ($sign_existed->loaded())
 			{
-				$attachments_count = ORM::factory('Object_Attachment')->where("object_id","=",$object->id)->count_all();
-				$input_attachament_count = count($params->userfile);
+				// $attachments_count = ORM::factory('Object_Attachment')->where("object_id","=",$object->id)->count_all();
+				// $input_attachament_count = count($params->userfile);
 
 				// $isChanged = ORM::factory('Object_Contact')
 				// 				->where("object_id","=",$object->id)
