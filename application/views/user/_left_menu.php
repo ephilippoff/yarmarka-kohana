@@ -144,6 +144,12 @@
 					<li><a href="<?=URL::site('user/employers')?>" class="clickable"><i class="ico "></i><span>Сотрудники (<?=Auth::instance()->get_user()->count_employers()?>)</span></a></li>
 					<?php endif; ?>
 				<?php endif; ?>
+					
+				<?php if (Request::current()->action() == 'contacts') : ?>
+					<li><i class="ico "></i><span><b>Управление контактами</b></span></li>
+				<?php else : ?>
+					<li><a href="<?=URL::site('user/contacts')?>" class="clickable"><i class="ico "></i><span>Управление контактами</span></a></li>
+				<?php endif; ?>					
 			</ul>
 		</li>
 	</ul>

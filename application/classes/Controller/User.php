@@ -1891,6 +1891,25 @@ class Controller_User extends Controller_Template {
 		$this->template->parentuser = $parentuser;
 		$this->template->request = $ulr;
 	}
+	
+	public function action_contacts()
+	{
+		
+		if ( ! $user = Auth::instance()->get_user())
+		{
+			throw new HTTP_Exception_404;
+		}					
+				
+		$this->template->user_contacts	= ORM::factory('Contact')
+			->select('contact_type.name')
+			->with('contact_type')
+			->where_user_id($user->id)
+			->where('verified_user_id', '=', $user->id)
+			->order_by('id')
+			->find_all();
+		
+		$this->template->user 			= $user;				
+	}
 }
 /* End of file User.php */
 /* Location: ./application/classes/Controller/User.php */
