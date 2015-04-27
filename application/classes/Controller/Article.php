@@ -143,6 +143,9 @@ class Controller_Article extends Controller_Template {
 		$this->template->real_photo = $real_photo;
 		$this->template->news_rubrics = ORM::factory('Article')->get_final_news_rubrics();			
 		$this->template->newsone = $newsone;
+		$this->template->parent_rubric = ORM::factory('Article')
+			->where('id', '=', (int)$newsone->parent_id)				
+			->find();
 	}	
 	
 	public function action_news()

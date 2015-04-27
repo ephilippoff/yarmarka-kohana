@@ -64,6 +64,7 @@ $(document).ready(function() {
 		
 	$start_date = isset($article->start_date) ? $article->start_date : Arr::get($_POST, 'start_date', date('Y-m-d'));	
 	$end_date   = isset($article->end_date)   ? $article->end_date   : Arr::get($_POST, 'end_date',   date('Y-m-d', strtotime('+3 days')));
+	$img_url	= isset($article->img_url)   ? $article->img_url   : Arr::get($_POST, 'img_url', '');
 ?>
 
 <form class="form-horizontal" method="post" enctype="multipart/form-data">
@@ -144,6 +145,13 @@ $(document).ready(function() {
 		<label class="control-label">Фото:</label>
 		<div class="controls">
 			<input type="file" class="input-small" placeholder="photo" name="photo" >
+		</div>		
+	</div>
+	
+	<div class="control-group only2" <?php if ($text_type == 1) : ?>style="display: none"<?php endif; ?> >		
+		<label class="control-label">URL картинки(инфографика):</label>
+		<div class="controls">
+			<input style="" type="text" class="input-block-level" placeholder="" name="img_url" value="<?=$img_url?>">
 		</div>		
 	</div>
 	

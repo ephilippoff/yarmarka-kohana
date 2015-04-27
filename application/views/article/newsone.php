@@ -29,12 +29,17 @@
 						<article class="iPage-article">
 							<?php if ($newsone->is_category == 0) : ?><span class="news-created"><?php if ($newsone->start_date) : ?><?=date('d.m.Y', strtotime($newsone->start_date))?><?php endif; ?></span><?php endif; ?>
 							<h1 class="big" style="text-align: left;"><?=$newsone->title?></h1>							
-								<?php if (!empty($real_photo)) : ?>
+								<?php if (!empty($real_photo) and $parent_rubric->name != 'infografika') : ?>
 									<div class="photo-cont">							
 										<img class="news-photo" src="<?=$real_photo?>" alt="<?=strip_tags($newsone->photo_comment)?>" title="<?=strip_tags($newsone->photo_comment)?>" >
 										<div class="photo-comment"><?=strip_tags($newsone->photo_comment, '<p><br>')?></div>
 									</div>
-								<?php endif; ?>									
+								<?php endif; ?>	
+								<?php if (!empty($newsone->img_url) and $parent_rubric->name == 'infografika') : ?>
+									<div class="photo-cont">							
+										<img class="news-photo" src="<?=$newsone->img_url?>">
+									</div>
+								<?php endif; ?>							
 							<div class="text-cont"><?=$newsone->text?></div>
 								<?php if ($newsone->is_category == 0) : ?>			
 											<div id="hypercomments_widget"></div>
