@@ -100,6 +100,16 @@ class Model_Object_Attachment extends ORM
 			$attachment->rdelete();
 		}
 	}
+
+	/**
+	 * [saveFilesAndUrls save files abnd urls ]
+	 * @param  [array] $filesAndUrls [description]
+	 * @return [void]               [description]
+	 */
+	public function saveFilesAndUrls($filesAndUrls) {
+		
+	}
+
 	/*
 		install smlar
 		

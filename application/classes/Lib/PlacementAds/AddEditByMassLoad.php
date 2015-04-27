@@ -155,6 +155,7 @@ class Lib_PlacementAds_AddEditByMassLoad extends Lib_PlacementAds_AddEdit {
 
 	function save_photo()
 	{
+		return $this;
 		$params = &$this->params;
 		$object = &$this->object;
 

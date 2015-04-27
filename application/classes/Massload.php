@@ -273,7 +273,7 @@ class Massload
 					if (is_float($value*1))
 						$value = round($value*1, 2);
 				break;
-				case 'photo':	
+				/*case 'photo':	
 					$files = explode(";", $value);	
 					$key = "userfile";
 					$values = Array();
@@ -341,7 +341,7 @@ class Massload
 					}	
 
 					$value = $values;			
-				break;
+				break;*/
 				default:
 				
 				break;

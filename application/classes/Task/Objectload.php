@@ -27,7 +27,7 @@ class Task_Objectload extends Minion_Task
 			{
 				$user_settings = ORM::factory('User_Settings')
 										->where("name","=",self::SETTING_NAME)
-										->order_by("id","desc")->find_all();
+										->order_by("id","asc")->find_all();
 				foreach ($user_settings as $setting)
 				{
 					$ct->_update();
@@ -141,6 +141,14 @@ class Task_Objectload extends Minion_Task
 				return 'continue';
 
 			$object = new Obj( $ol->saveRowAsObject($row, $config, $dictionary) );
+
+			if ($object->object_id) {
+
+				$_photos = $ol->savePhotos($object->object_id, $row->images, FALSE);
+				if (count($_photos) > 0) {
+					$ol->saveMainPhoto($object->object_id);
+				}
+			}
 
 			Minion::write($prefix_log, $object->get_normal_string());
 
