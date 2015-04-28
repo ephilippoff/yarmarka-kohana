@@ -36,9 +36,6 @@
 											<div class="pt4">
 												<?=$user->email?>
 											</div>
-											<span class="inform">
-												<span>Можно сменить через техподдержку</span>
-											</span>
 								  		</div>
 									</div>
 								</div>									
