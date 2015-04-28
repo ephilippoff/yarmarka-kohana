@@ -45,7 +45,7 @@
 	        </div>
 	  </div>
       <div class="wrapfix footer-wrap">
-	  <?=View::factory('layouts/footer')?>
+	  <?=View::factory('layouts/footer1')?>
       </div>
 </body>  
 </html>
