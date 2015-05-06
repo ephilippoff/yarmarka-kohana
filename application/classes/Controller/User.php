@@ -696,6 +696,7 @@ class Controller_User extends Controller_Template {
 		$objects = ORM::factory('Object')
 			->set_time_link_cache(15)
 			->with_main_photo()
+			->with_visits()
 			->where('active', '=', 1);
 
 		switch ($folder) 

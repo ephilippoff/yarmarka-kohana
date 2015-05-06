@@ -175,6 +175,11 @@ class Model_Object extends ORM {
 			->on('object.main_image_id', '=', 'object_attachment.id');
 	}
 	
+	public function with_visits()
+	{
+		return $this->select(DB::expr('(SELECT SUM(visits) FROM object_statistic1 WHERE object_id = object.id) as stat_visits'));
+	}
+	
 	public function with_used_service($service_id = 0)
 	{
 		return $this->select(DB::expr('EXISTS(select id from service_object where service_object.object = object.id and service = '.(int)$service_id.') as used_service'));
