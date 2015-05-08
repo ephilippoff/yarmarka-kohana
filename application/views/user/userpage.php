@@ -144,19 +144,7 @@
 											</div>
 										</li>
 									<?php endif;?>
-									
-									<?php if (!empty($user_settings['official_email']->value)) : ?>
-									<li>
-										<span class="title">Email:</span>
-										<div class="cont">
-											<span class="ico email"></span>
-											<a rel="nofollow" href="mailto:<?=strip_tags($user_settings['official_email']->value)?>"><?=strip_tags($user_settings['official_email']->value)?></a>
-										</div>
-									</li>
-									<?php endif;?>
-									
-																			
-										
+
 									<?php if (!empty($user_settings['contact']->value)) : ?>	
 										<li>
 											<span class="title">Контактное лицо/ФИО:</span>
