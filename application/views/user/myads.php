@@ -317,7 +317,7 @@
 									<div class="col3">
 										<div class="price-bl"><span class="price"><?php if (!$price) : ?> &mdash; <?php else : ?><?=$price?> р.<?php endif; ?></span></div>
 										<div title="Количество комментариев" class="mess-bl"><span class="mess"><?=count($user_messages)?></span></div>
-									    <div title="Количество просмотров" class="view-bl fn-stat" data-id="<?=$ad->id?>"><div class="iview"><?=isset($ad->stat_visits)?(int)$ad->stat_visits:0?></div></div>
+									    <div title="Количество просмотров" class="view-bl fn-stat" data-id="<?=$ad->id?>"><div class="iview"><?=$ad->visits?></div></div>
 									</div>
 									<div class="col2">
 										<a href="<?=$ad->get_url()?>" target="_blank"><?=htmlspecialchars(mb_substr($ad->title, 0, 50))?></a>
