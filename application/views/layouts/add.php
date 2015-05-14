@@ -18,7 +18,8 @@
 	->js('minified/backbone-min.js')
 	->js('http://api-maps.yandex.ru/2.0/?load=package.full&lang=ru-RU')
 	->js('ajaxupload.js')
-	->js('jquery.inputmask.js')
+//	->js('jquery.inputmask.js')
+	->js('jquery.maskedinput.min.js')		
 	.$_assets;
 	
 	echo Assets::factory('main')->js($jspath);
