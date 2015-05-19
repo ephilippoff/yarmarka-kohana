@@ -112,6 +112,15 @@
 						</li>
 						<?php endif; ?>
 						
+						<?php if (Auth::instance()->have_access_to('filesstorage')) : ?>
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">Файлы <b class="caret"></b></a>
+							<ul class="dropdown-menu">
+								<li><a href="<?=Url::site('khbackend/filesstorage/index')?>">Список</a></li>
+							</ul>
+						</li>
+						<?php endif; ?>						
+						
 						<?php if (Auth::instance()->get_user()) : ?>
 							<li><a href="<?=Url::site('khbackend/welcome/logout')?>">Log Out</a></li>
 						<?php endif; ?>

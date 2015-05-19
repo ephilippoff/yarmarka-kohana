@@ -4,6 +4,9 @@
 .green{color:green}
 .gray{color: gray}
 .white{color: #fff;}
+.fs22{font-size: 22px;}
+.mb50{margin-bottom: 50px;}
+
 table.promo td{border-color: #000;}
 table.promo .sort{font-size: 10px;}
 table.promo .td-banner{padding: 0px;}
@@ -17,3 +20,8 @@ table.promo .td-banner .wrapper .title{display: table-cell;text-align: center;ve
 
 .selection{padding: 5px 10px; background-color: #46a546; }
 .selection.in{background-color:red;}
+
+.table-filesstorage .td-thumb{padding: 5px;}
+.table-filesstorage .file-ext{padding: 10px;display: inline-block;border: 1px solid red;background-color: rgb(247, 193, 193);font-size: 22px;}
+.table-filesstorage .copy{cursor: pointer;}
+.table-filesstorage .file-path{line-height: 1; font-size: 10px;}
