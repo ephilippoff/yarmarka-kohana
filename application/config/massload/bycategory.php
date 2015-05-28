@@ -229,6 +229,57 @@ return array(
 						'tip-sdelki3' => 3242,
 					)					
 	),
-
+	'auto_parts'	=> array( 
+			'id'    => 23,
+			'name'	=> 'Автозапчасти',
+			'category' =>'auto_parts',
+			'filter'=>array(),
+			'autofill'=>array(
+						'rubricid' => 23, //категория запчасти и принадлежности
+						'param_473' => 3238, //продажа
+					),
+			'fields'  =>array(
+						'external_id' 	=> array('name' => 'external_id','required' => TRUE, 'type' => 'external_id', 'translate' => 'ID', 'maxlength' => 50),
+						'city' 			=> array('name' => 'city',		'required' => TRUE, 'type' => 'city', 		'translate' => 'Город', 'maxlength' => 30),
+						'zapchasti-tip' => array('name' => 'zapchasti-tip', 'required' => TRUE, 'type' => 'dict', 	'translate' => 'Тип автозапчасти', 'maxlength' => 30),
+						'tsena' 		=> array('name' => 'tsena',		'required' => TRUE, 'type' => 'integer', 	'translate' => 'Цена', 'maxlength' => 9),
+						'title_adv' 	=> array('name' => 'title_adv','required' => TRUE,'type' => 'titleadv', 'translate' => 'Заголовок', 'maxlength' => 250),
+						'user_text_adv' => array('name' => 'user_text_adv','required' => TRUE,'type' => 'textadv', 'translate' => 'Текст объявления', 'maxlength' => 15000),
+						'contact_0_value'=> array('name' => 'contact_0_value',	'required' => TRUE, 'type' => 'contact','translate' => 'Телефон №1', 'maxlength' => 40),
+						'contact_1_value'=> array('name' => 'contact_1_value',	'required' => FALSE, 'type' => 'contact','translate' => 'Телефон №2', 'maxlength' => 40),
+						'contact'		=> array('name' => 'contact',	'required' => TRUE, 'type' => 'contact_name', 	'translate' => 'ФИО', 'maxlength' => 50),
+						'images' 		=> array('name' => 'images',		'required' => FALSE,'type' => 'photo', 		'translate' => 'Фото', 'maxlength' => 0)
+					)
+	),
+	'vakansy'	=> array( 
+			'id'    => 36,
+			'name'	=> 'Вакансии',
+			'category' =>'vakansy',
+			'filter'=>array(),
+			'autofill'=>array(
+						'rubricid' => 36, //категория запчасти и принадлежности
+					),
+			'fields'  =>array(
+						'external_id' 	=> array('name' => 'external_id','required' => TRUE, 'type' => 'external_id', 'translate' => 'ID', 'maxlength' => 50),
+						'city' 			=> array('name' => 'city',		'required' => TRUE, 'type' => 'city', 		'translate' => 'Город', 'maxlength' => 30),
+						'kompaniya' 	=> array('name' => 'kompaniya', 'required' => TRUE, 'type' => 'text', 	'translate' => 'Компания', 'maxlength' => 250),
+						'tip-vakansii' => array('name' => 'tip-vakansii', 'required' => TRUE, 'type' => 'dict', 	'translate' => 'Тип компании', 'maxlength' => 30),
+						'sfera-deyatelnosti' => array('name' => 'sfera-deyatelnosti', 'required' => TRUE, 'type' => 'dict', 	'translate' => 'Сфера деятельности', 'maxlength' => 30),
+						'tip-raboty' => array('name' => 'tip-raboty', 'required' => TRUE, 'type' => 'dict', 	'translate' => 'Тип работы', 'maxlength' => 30),
+						'grafik-raboty' => array('name' => 'grafik-raboty', 'required' => TRUE, 'type' => 'dict', 	'translate' => 'График работы', 'maxlength' => 30),
+						'forma-oplaty' => array('name' => 'forma-oplaty', 'required' => FALSE, 'type' => 'dict', 	'translate' => 'Форма оплаты', 'maxlength' => 30),
+						'professiya-dolzhnost' => array('name' => 'professiya-dolzhnost', 'required' => TRUE, 'type' => 'text', 	'translate' => 'Должность', 'maxlength' => 250),
+						'obyazannosti' => array('name' => 'obyazannosti', 'required' => TRUE, 'type' => 'text', 	'translate' => 'Обязанности', 'maxlength' => 500),
+						'usloviya-raboty' => array('name' => 'usloviya-raboty', 'required' => TRUE, 'type' => 'text', 	'translate' => 'Условия', 'maxlength' => 500),
+						'trebovaniya-k-kandidatu' => array('name' => 'trebovaniya-k-kandidatu', 'required' => TRUE, 'type' => 'text', 	'translate' => 'Требования', 'maxlength' => 500),
+						'zarplata' 		=> array('name' => 'zarplata',		'required' => TRUE, 'type' => 'integer', 	'translate' => 'Зарплата', 'maxlength' => 9),
+						'adres-raion' => array('name' => 'adres-raion', 'required' => FALSE, 'type' => 'text', 	'translate' => 'Адрес', 'maxlength' => 250),
+						'user_text_adv' => array('name' => 'user_text_adv','required' => FALSE,'type' => 'textadv', 'translate' => 'Текст объявления', 'maxlength' => 15000),
+						'contact_0_value'=> array('name' => 'contact_0_value',	'required' => TRUE, 'type' => 'contact','translate' => 'Телефон №1', 'maxlength' => 40),
+						'contact_1_value'=> array('name' => 'contact_1_value',	'required' => FALSE, 'type' => 'contact','translate' => 'Телефон №2', 'maxlength' => 40),
+						'contact'		=> array('name' => 'contact',	'required' => TRUE, 'type' => 'contact_name', 	'translate' => 'ФИО', 'maxlength' => 50),
+						'images' 		=> array('name' => 'images',		'required' => FALSE,'type' => 'photo', 		'translate' => 'Фото', 'maxlength' => 0)
+					)
+	)
 
 );

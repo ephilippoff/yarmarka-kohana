@@ -44,6 +44,7 @@ class Temptable
 		switch ($type) {
 			case 'text':
 			case 'textadv':
+			case 'titleadv':
 			case 'photo':
 				return 'text';
 			break;

@@ -54,6 +54,7 @@ class Task_Objectload extends Minion_Task
 	*/
 	function load(array $params, &$ct)
 	{
+
 		$user_id 			= $params['user_id'];
 		$filter 			= $params['filter'];
 		$objectload_id 		= $params['objectload_id'];
