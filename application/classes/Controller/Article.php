@@ -112,7 +112,8 @@ class Controller_Article extends Controller_Template {
 		Seo::set_title($newsone->title.Seo::get_postfix());
 		Seo::set_description($newsone->get_meta_description());		
 		
-		$city_id = Region::get_current_city();		
+		$city_id = Region::get_current_city();
+		$parent_name = $newsone->article->name;
 	
 		$photo = Imageci::getSavePaths($newsone->photo);												
 		$real_photo = is_file($_SERVER['DOCUMENT_ROOT'].trim($photo['341x256'], '.')) ? trim($photo['341x256'], '.') : ''; 		
@@ -131,7 +132,7 @@ class Controller_Article extends Controller_Template {
 					->order_by('created', 'desc')
 					->limit(6);
 			
-			if ($city_id)
+			if ($city_id and $parent_name != 'infografika')
 				$other_news->where (DB::expr($city_id), '=', DB::expr('ANY(cities)'));
 		
 			$other_news = $other_news->find_all(); 
@@ -146,7 +147,7 @@ class Controller_Article extends Controller_Template {
 		$this->template->parent_rubric = ORM::factory('Article')
 			->where('id', '=', (int)$newsone->parent_id)				
 			->find();
-		$this->template->parent_name = $newsone->article->name;
+		$this->template->parent_name = $parent_name;
 	}	
 	
 	public function action_news()
