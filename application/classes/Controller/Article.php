@@ -146,6 +146,7 @@ class Controller_Article extends Controller_Template {
 		$this->template->parent_rubric = ORM::factory('Article')
 			->where('id', '=', (int)$newsone->parent_id)				
 			->find();
+		$this->template->parent_name = $newsone->article->name;
 	}	
 	
 	public function action_news()

@@ -4,6 +4,11 @@
 			<div class="crumbs" style="margin: 4px 0 15px;">
 				<?=Request::factory('block/newsone_breadcrumbs/'.$newsone->id)->execute()?>
 			</div>
+			<?php if ($parent_name == 'infografika') : ?>
+				<div class="fl mb20">
+					<img src="/images/ig1220х100.png">
+				</div>
+			<?php endif;?>
 			<aside class="w200 innerPage-leftAside news-rubrics">
 				<?php foreach ($news_rubrics as $key => $rubric) : ?>
 						<p><a rel="nofollow" href="<?=URL::site(Route::get('newsone')->uri(array('id' => $rubric->id, 'seo_name' => $rubric->seo_name)))?>"><?=$rubric->title?></a></p>
@@ -16,13 +21,36 @@
 					<aside class="iPage-rightAside other-news">
 						<h2 style="margin-top:3px;">Другие новости</h2>
 						<br/>
-						<ul>
-							<?php foreach ($other_news as $key => $other) : ?>
-									<?php $query_uri = '?em_client_email=noreply@yarmarka.biz&em_campaign_id=4&em_campaign_name=newsone_'.$other->id ?>
-									<li><span><?=date('d.m', strtotime($other->start_date))?></span> <a rel="nofollow" href="<?=URL::site(Route::get('newsone')->uri(array('id' => $other->id, 'seo_name' => $other->seo_name))).$query_uri?>"><?=$other->title?></a></li>
-							<?php endforeach; ?>
-							
-						</ul>
+						
+							<?php if ($parent_name == 'infografika') : ?>
+								<ul class="ul-infografika">
+									<?php foreach ($other_news as $key => $other) : ?>	
+											<?php 
+												$query_uri = '?em_client_email=noreply@yarmarka.biz&em_campaign_id=4&em_campaign_name=newsone_'.$other->id;
+												$url = URL::site(Route::get('newsone')->uri(array('id' => $other->id, 'seo_name' => $other->seo_name))).$query_uri;
+											?>
+											<li>
+												<?php if ($other->photo) : ?>
+													<img class="fl" src="<?=Uploads::get_file_path($other->photo, '120x90')?>">
+												<?php endif;?>
+												<p class="pb5">
+													<a rel="nofollow" href="<?=$url?>"><?=$other->title?></a>
+												</p>
+												<?=strip_tags($other->description)?>
+												<p class="ta-r"><a rel="nofollow" href="<?=$url?>">Смотреть</a></p>
+											</li>									
+									<?php endforeach; ?>
+								</ul>		
+							<?php else : ?>		
+								<ul>	
+									<?php foreach ($other_news as $key => $other) : ?>
+											<?php $query_uri = '?em_client_email=noreply@yarmarka.biz&em_campaign_id=4&em_campaign_name=newsone_'.$other->id ?>
+											<li><span><?=date('d.m', strtotime($other->start_date))?></span> <a rel="nofollow" href="<?=URL::site(Route::get('newsone')->uri(array('id' => $other->id, 'seo_name' => $other->seo_name))).$query_uri?>"><?=$other->title?></a></li>
+									<?php endforeach; ?>
+								</ul>	
+							<?php endif;?>
+
+						
 					</aside>
 					<?php endif; ?>
 					<div class="innerPage-cont iPage-rightPadding">
