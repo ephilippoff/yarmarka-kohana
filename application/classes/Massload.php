@@ -224,6 +224,11 @@ class Massload
 				$validation->rule($key, 'max_length', $valid_info_maxlength);
 			}
 
+			if ($config_key->type == "titleadv")
+			{
+				$validation->rule($key, 'max_length', $valid_info_maxlength);
+			}
+
 			if ($config_key->type == "numeric")
 			{
 				$validation->rule($key, 'numeric', $valid_info);
@@ -243,7 +248,7 @@ class Massload
 
 	public static function to_post_format($record_fields, $category_id, $pathtoimage, $config, $dictionary)
 	{
-
+	
 		$return = Array();
 		foreach($record_fields as $key=>$value)
 		{

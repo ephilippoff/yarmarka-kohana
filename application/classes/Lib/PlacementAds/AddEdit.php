@@ -1346,7 +1346,7 @@ class Lib_PlacementAds_AddEdit {
 		$object = &$this->object;
 		$params = &$this->params;
 
-		if ($object->category_obj->title_auto_fill OR $params->itis_massload)
+		if ($object->category_obj->title_auto_fill)
 		{
 			$object->title = $object->generate_title();
 		} else {
