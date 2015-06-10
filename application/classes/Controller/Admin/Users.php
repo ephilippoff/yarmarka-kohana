@@ -684,6 +684,47 @@ class Controller_Admin_Users extends Controller_Admin_Template {
 		$this->template->reasons = Kohana::$config->load("dictionaries.org_moderate_decline");
 		$this->template->state  = $state;
 	}
+	
+	public function action_registration_short()
+	{
+		$is_post = (HTTP_Request::POST === $this->request->method());
+		$post_data = $this->request->post();
+		$errors = array();
+		$success = false;
+		$user_id = 0;
+
+		$type = 2;
+
+		if ($is_post)
+		{
+			$post_data['login'] = strtolower(trim($post_data['login']));
+			
+			$validation = ORM::factory('User')->register_validation_short((array) $post_data);
+
+			if ( !$validation->check())
+			{
+				$errors = $validation->errors('validation/auth');
+			} 
+			else 
+			{
+				try 
+				{
+					$user_id = ORM::factory('User')->registration_short( $post_data['login'], $post_data['pass'], $post_data['org_name'], $type );
+				} 
+				catch (Exception $e)
+				{
+
+				}
+				
+				$success = true;
+			}
+		}
+
+		$this->template->params  = $post_data;
+		$this->template->errors  = $errors;
+		$this->template->success = $success;
+		$this->template->user_id = $user_id;
+	}	
 
 	
 } // End Admin_Users

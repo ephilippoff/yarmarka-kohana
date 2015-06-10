@@ -711,6 +711,45 @@ class Model_User extends Model_Auth_User {
 
 		return ($count >= $limit);
 	}
+	
+	public function register_validation_short(Array $data)
+	{
+		return Validation::factory($data)
+					->rule('login', 'not_empty', array(':value', "Email"))
+					->rule('login', 'email', array(':value', "Email"))
+					->rule('login', 'login_exist', array(':value', @$data['login']))
+					->rule('pass', 'not_empty', array(':value', "Пароль"))
+					->rule('pass', 'min_length', array(':value', 6, "Пароль"))
+					->rule('pass2', 'not_empty', array(':value', "Пароль (повторно)"))
+					->rule('pass2', 'matches', array($data, "pass", "pass2"))
+					->rule('org_name', 'not_empty', array(':value', "Название"));
+	}
+
+	public function registration_short($email, $password, $org_name, $type = 2)
+	{
+		$email = strtolower(trim($email));
+		$user = ORM::factory('User')
+							->get_user_by_email($email)
+							->find();
+		if ($user->loaded())
+			return FALSE;
+
+		$this->login = $email;
+		$this->email = $email;
+		$this->passw = $password;
+		$this->org_name = $org_name;
+		$this->role = 2;
+		$this->code = '';
+		$this->ip_addr = $_SERVER["REMOTE_ADDR"];
+		$this->org_type = $type;
+		
+		$this->save();
+
+		$this->trigger_save_email($email);
+		
+		return $this->id;
+
+	}	
 }
 
 /* End of file User.php */
