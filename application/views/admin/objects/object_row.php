@@ -11,7 +11,16 @@
 				$used_service = $object->used_service;
 			} catch (Exception $e) {}
 		?>
-		<td><?=$object->id?> <?php if ($used_service) :?><span style="background-color: greenyellow;">Размещение в других городах</span><?php endif;?></td>
+		<td>
+			<?=$object->id?> 
+			<?php if ($used_service) :?><span style="background-color: greenyellow;">Размещение в других городах</span><?php endif;?>
+			<span style="background-color: greenyellow;">
+				<?=($object->premium_used) ? 'премиум, ' : ''?>
+				<?=($object->lider_used) ? 'лидер, ' : ''?>
+				<?=($object->reklama_used) ? 'ссылки(!), ' : ''?>
+				<?=($object->ticket_used) ? 'бег.строка' : ''?>
+			</span>
+		</td>
 		<td>
 			<?=$object->city_obj->title?><br />
 			<?=$object->category_obj->title?>
@@ -102,12 +111,6 @@
 			<?=Date::formatted_time($object->real_date_created, 'd.m.Y H:i')?>
 			/
 			<?=Date::formatted_time($object->date_created, 'd.m.Y H:i')?>
-		</td>
-		<td>
-			<?=($object->premium_used) ? 'премиум' : ''?><br>
-			<?=($object->lider_used) ? 'лидер' : ''?><br>
-			<?=($object->reklama_used) ? 'ссылки(!)' : ''?><br>
-			<?=($object->ticket_used) ? 'бег.строка' : ''?>
 		</td>
 		<td>
 			<a href="<?=CI::site('detail/'.$object->id)?>" target="_blank" title="Open object in new window" class="icon-eye-open"></a>
