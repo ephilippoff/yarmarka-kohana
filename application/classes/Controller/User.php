@@ -709,8 +709,11 @@ class Controller_User extends Controller_Template {
 
 			case 'unpublished':
 				$objects->where('author', '=', $this->user->id)
-					->where('is_published', '=', '0')
-					->where('is_bad', '=', '0');
+					->where_open()
+						->where('is_published', '=', '0')
+						->or_where('is_bad', '<>', '0')
+						->or_where('in_archive', '=', '1')
+					->where_close();
 			break;
 
 			case 'in_archive':
@@ -767,7 +770,7 @@ class Controller_User extends Controller_Template {
 
 		// count all user objects
 		$count = clone $objects;
-		$count = $count->count_all(NULL, DATE::HOUR);
+		$count = $count->count_all();
 
 		// get user objects
 		$objects = $objects->order_by('date_created', 'desc')
@@ -868,21 +871,6 @@ class Controller_User extends Controller_Template {
 	public function action_unpublished()
 	{
 		$this->myads('unpublished');
-	}
-
-	public function action_in_archive()
-	{
-		$this->myads('in_archive');
-	}
-
-	public function action_rejected()
-	{
-		$this->myads('rejected');
-	}
-
-	public function action_banned()
-	{
-		$this->myads('banned');
 	}
 
 	public function action_from_employees()

@@ -20,24 +20,6 @@
 				<li class=""><a href="<?=URL::site('user/unpublished')?>" class="clickable"><i class="ico "></i><span>Снятые</span></a></li>
 				<?php endif; ?>
 
-				<?php if (Request::current()->action() == 'in_archive') : ?>
-				<li class=""><span class="noclickable"><b><i class="ico "></i><span>В архиве</span></b></span></li>
-				<?php else : ?>
-				<li class=""><a href="<?=URL::site('user/in_archive')?>" class="clickable"><i class="ico "></i><span>В архиве</span></a></li>
-				<?php endif; ?>
-
-				<?php if (Request::current()->action() == 'rejected') : ?>
-				<li class=""><span class="noclickable"><b><i class="ico "></i><span>Заблокированные до исправления</span></b></span></li>
-				<?php else : ?>
-				<li class=""><a href="<?=URL::site('user/rejected')?>" class="clickable"><i class="ico "></i><span>Заблокированные до исправления</span></a></li>
-				<?php endif; ?>
-
-				<?php if (Request::current()->action() == 'banned') : ?>
-				<li class=""><span class="noclickable"><b><i class="ico "></i><span>Заблокированные окончательно</span></b></span></li>
-				<?php else : ?>
-				<li class=""><a href="<?=URL::site('user/banned')?>" class="clickable"><i class="ico "></i><span>Заблокированные окончательно</span></a></li>
-				<?php endif; ?>
-
 				<li class="mt31">
 					<?php if (FALSE) : ?>
 					<?=Request::factory('block/user_from_employees_menu')->execute()?>
