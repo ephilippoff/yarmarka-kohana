@@ -462,7 +462,8 @@
 					<div class="fieldscont">
 						<div class="inp-cont-long">
 							<div class="inp-cont">
-								<div id="add-block" class="add-block fn-photo-list" data-max="8">
+								<input id="fileupload" type="file" name="userfile1" data-url="/add/object_upload_file" multiple>
+								<div id="add-block" class="add-block fn-photo-list mt20" data-max="8">
 									<?=View::factory('add/block/photo',
 										array( "data" 		=> new Obj($form_data->photo),
 											   "_class" 	=> "",
@@ -471,11 +472,11 @@
 											   "attributes" => ""
 										));?>
 									
-									<div id="addbtn" class="addbtn"><span class="add"><img src="/images/plus_icon.png" /><span id="userfile_upload" class="span">Загрузите фото</span></span></div>
+									<!-- <div id="addbtn" class="addbtn"><span class="add"><img src="/images/plus_icon.png"><span id="" class="span">Загрузите фото</span></span></div> -->
 								</div>
 								<input type="hidden" id="active_userfile" name="active_userfile" value="<?=$params->active_userfile?>" />
 								<span class="inform">
-									<span>Главным по умолчанию является первое фото, щелкните по любому фото, чтобы сделать его главным</span>
+									<span class="fn-photo-hint"></span>
 								</span>
 								<? /*<input class="mb10" type="file" value="" id="btn-photo-load" name="photo" class="btn-photo-load">*/ ?>
 								<div class="mb10 red" id="error_userfile1"></div>
