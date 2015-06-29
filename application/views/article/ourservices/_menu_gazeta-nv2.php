@@ -6,4 +6,5 @@
 							<li><a href="#item5">Тариф &laquo;Мы вместе ТЦ&raquo;</a></li>
 							<li><a href="#item6">Премиум размещение</a></li>
 							<li><a href="#item7">Статья на правах рекламы</a></li>							
+							<li><a href="#item8">Сквозное размещение</a></li>	
 						</ul>
