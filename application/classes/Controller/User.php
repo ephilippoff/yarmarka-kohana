@@ -1681,6 +1681,10 @@ class Controller_User extends Controller_Template {
 		
 		$this->assets->js("nicEdit.js");
 
+		$this->assets->js("vendor/jquery.ui.widget.js");
+		$this->assets->js("jquery.iframe-transport.js");
+		$this->assets->js("jquery.fileupload.js");
+
 		$prefix = (@$_SERVER['HTTP_HOST'] === 'c.yarmarka.biz') ? "" : "dev_";
 		$staticfile = new StaticFile("attributes", $prefix.'static_attributes.js');
 //		$this->assets->js($staticfile->jspath);

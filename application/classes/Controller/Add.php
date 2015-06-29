@@ -30,6 +30,10 @@ class Controller_Add extends Controller_Template {
 		
 		$this->assets->js("nicEdit.js");
 		
+		$this->assets->js("vendor/jquery.ui.widget.js");
+		$this->assets->js("jquery.iframe-transport.js");
+		$this->assets->js("jquery.fileupload.js");
+		
 		$user = Auth::instance()->get_user();
 
 		if ($user AND !Cookie::get('authautologin'))

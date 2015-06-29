@@ -272,7 +272,7 @@ return array(
 						'obyazannosti' => array('name' => 'obyazannosti', 'required' => TRUE, 'type' => 'text', 	'translate' => 'Обязанности', 'maxlength' => 500),
 						'usloviya-raboty' => array('name' => 'usloviya-raboty', 'required' => TRUE, 'type' => 'text', 	'translate' => 'Условия', 'maxlength' => 500),
 						'trebovaniya-k-kandidatu' => array('name' => 'trebovaniya-k-kandidatu', 'required' => TRUE, 'type' => 'text', 	'translate' => 'Требования', 'maxlength' => 500),
-						'zarplata' 		=> array('name' => 'zarplata',		'required' => TRUE, 'type' => 'integer', 	'translate' => 'Зарплата', 'maxlength' => 9),
+						'zarplata' 		=> array('name' => 'zarplata',		'required' => FALSE, 'type' => 'integer', 	'translate' => 'Зарплата', 'maxlength' => 9),
 						'adres-raion' => array('name' => 'adres-raion', 'required' => FALSE, 'type' => 'text', 	'translate' => 'Адрес', 'maxlength' => 250),
 						'user_text_adv' => array('name' => 'user_text_adv','required' => FALSE,'type' => 'textadv', 'translate' => 'Текст объявления', 'maxlength' => 15000),
 						'contact_0_value'=> array('name' => 'contact_0_value',	'required' => TRUE, 'type' => 'contact','translate' => 'Телефон №1', 'maxlength' => 40),
