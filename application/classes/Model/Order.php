@@ -4,7 +4,7 @@ class Model_Order extends ORM
 {
 	protected $_table_name = 'orders';
 
-	function check_state($order_id = NULL) {
+	function check_state($order_id = NULL, $callback = NULL) {
 
 		$robo = new Robokassa;
 
@@ -15,16 +15,27 @@ class Model_Order extends ORM
 		}
 		
 		foreach ($orders as $order) {
+
 			$data = $robo->get_invoice_state($order->id);
 			if ($data)
 			{
 				if ($data['code_request'] == 10 OR $data['code_request'] == 60)
 				{
 					$order->fail();
+					if ($callback) {
+						$callback($order->id, "cancel");
+					}
 				}
 				elseif ($data['code_request'] == 100)
 				{
 					$order->success();
+					if ($callback) {
+						$callback($order->id, "success");
+					}
+				} else {
+					if ($callback) {
+						$callback($order->id, "wait");
+					}
 				}
 			}
 		}
