@@ -843,6 +843,7 @@ class Model_Object extends ORM {
 
 			if ($_balance->value_min == 0) {
 				$object = ORM::factory('Object', $object_id);
+				$user = ORM::factory('User', $object->author);
 				if ($object->loaded()) {
 					$subj = "Уведомление о закончившимся товаре";
 					$msg = "<html><body><a href='http://yarmarka.biz/detail/".$object_id."'>".$object->title."</a></body></html>";
@@ -850,6 +851,9 @@ class Model_Object extends ORM {
 					$configBilling = Kohana::$config->load("billing");
 					foreach ($configBilling["emails_for_notify"] as $email) {
 						Email::send($email, Kohana::$config->load('email.default_from'), $subj, $msg);
+					}
+					if ($user->loaded() AND $user->email) {
+						Email::send($user->email, Kohana::$config->load('email.default_from'), $subj, $msg);
 					}
 				}
 			}
