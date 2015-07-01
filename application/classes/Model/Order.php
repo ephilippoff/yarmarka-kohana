@@ -37,12 +37,32 @@ class Model_Order extends ORM
 						$callback($order->id, "wait");
 					}
 				}
+			} else {
+				if (strtotime(date('Y-m-d H:i:s')) > strtotime($order->created)+60*60) {
+					$order->fail();
+					if ($callback) {
+						$callback($order->id, "cancel");
+					}
+				}
 			}
 		}
 	}
 
 	function fail() {
 		if (!$this->loaded()) return;
+
+		$orderItems = ORM::factory('Order_Item')->get_items($this->id);
+		foreach ($orderItems as $orderItem)
+		{
+			if ($orderItem->object_id) {
+
+				$object = ORM::factory('Object', $orderItem->object_id);
+				if ($object->loaded()){
+					$object->increase_balance($object->id, $orderItem->quantity);
+				}
+				
+			} 
+		}
 
 		$this->state = 3;
 		$this->save();

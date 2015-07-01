@@ -863,6 +863,16 @@ class Model_Object extends ORM {
 
 		return FALSE;
 	}
+
+	public function increase_balance($object_id, $count) {
+		$_balance = ORM::factory('Data_Integer')
+					->by_object_and_attribute($object_id, "balance");
+
+		if ($_balance->loaded()) {
+			$_balance->value_min = $_balance->value_min + intval($count);
+			$_balance->save();
+		}
+	}
 }
 
 /* End of file Object.php */
