@@ -46,7 +46,13 @@
 				<li><span class="noclickable"><i class="ico "></i><span><b>Счета</b></span></span></li>
 				<?php else : ?>
 				<li><a href="<?=URL::site('user/invoices')?>" class="clickable"><i class="ico "></i><span>Счета</span></a></li>
-				<?php endif; ?>			
+				<?php endif; ?>
+
+				<?php if (Request::current()->action() == 'orders') : ?>
+				<li><span class="noclickable"><i class="ico "></i><span><b>Заказы</b></span></span></li>
+				<?php else : ?>
+				<li><a href="<?=URL::site('user/orders')?>" class="clickable"><i class="ico "></i><span>Заказы</span></a></li>
+				<?php endif; ?>		
 
 				<?php /*if (Request::current()->action() == 'massload') : ?>
 				<li><span class="noclickable"><i class="ico "></i><span><b>Массовая загрузка</b></span></span></li>

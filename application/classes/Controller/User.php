@@ -470,6 +470,40 @@ class Controller_User extends Controller_Template {
 
     }
 
+    public function action_orders()
+    {
+    	$this->layout = 'users';    	
+
+    	$orders = ORM::factory('Order')->where("user_id","=",$this->user->id)
+	    		->order_by("created", "desc")
+	    		->find_all();
+
+	    $orderItems = array();
+    	foreach ($orders as $order) {
+    		$orderItems[$order->id] = ORM::factory('Order_Item')->get_items($order->id);
+    		
+    	}
+
+    	$this->template->orders = $orders;
+    	$this->template->orderItems =$orderItems;
+
+    	$this->template->getState = function($stateId) {
+    		if ($stateId == 0) {
+    			$state = "Инициирован";
+    		} elseif ($stateId == 1) {
+    			$state = "В ожидании оплаты";
+    		} elseif ($stateId == 2) {
+    			$state = "Оплачен";
+    		} elseif ($stateId == 3) {
+    			$state = "Отменен";
+    		} else {
+    			$state = "Отменен";
+    		}
+    		return $state;
+    	};
+
+    }
+
     public function action_massload_conformities()
     {
     	$this->layout = 'users';    	

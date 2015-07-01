@@ -6,5 +6,6 @@ return array(
 					3 	=> 3,
 					96 	=> 3,
 					36 	=> 2
-				)
+				),
+	'emails_for_notify' => array("a.vagapov@yarmarka.biz")
 );

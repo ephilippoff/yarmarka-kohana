@@ -820,6 +820,45 @@ class Model_Object extends ORM {
 		}
 		
 	}
+
+
+	public function get_balance($object_id) {
+		$_balance = ORM::factory('Data_Integer')
+					->by_object_and_attribute($object_id, "balance");
+		if ($_balance->loaded()) {
+			$balance = intval($_balance->value_min);
+		} else {
+			$balance = -1;
+		}
+		return $balance;
+	}
+
+	public function decrease_balance($object_id, $count) {
+		$_balance = ORM::factory('Data_Integer')
+					->by_object_and_attribute($object_id, "balance");
+
+		if ($_balance->loaded() AND $_balance->value_min - intval($count) >= 0) {
+			$_balance->value_min = $_balance->value_min - intval($count);
+			$_balance->save();
+
+			if ($_balance->value_min == 0) {
+				$object = ORM::factory('Object', $object_id);
+				if ($object->loaded()) {
+					$subj = "Уведомление о закончившимся товаре";
+					$msg = "<html><body><a href='http://yarmarka.biz/detail/".$object_id."'>".$object->title."</a></body></html>";
+
+					$configBilling = Kohana::$config->load("billing");
+					foreach ($configBilling["emails_for_notify"] as $email) {
+						Email::send($email, Kohana::$config->load('email.default_from'), $subj, $msg);
+					}
+				}
+			}
+
+			return $_balance->value_min;
+		}
+
+		return FALSE;
+	}
 }
 
 /* End of file Object.php */

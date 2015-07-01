@@ -30,6 +30,15 @@ class Model_Data_Integer extends Data
 					->find();
 	}
 
+	public function by_object_and_attribute($object_id, $seo_name)
+	{
+		return $this->join('attribute')
+					->on('attribute.id', '=', 'data_integer.attribute')
+					->where("data_integer.object","=",$object_id)
+					->where("attribute.seo_name","=",$seo_name)
+					->find();
+	}
+
 	public function get_min_max_price($object_id)
 	{
 		$query = DB::select(DB::expr("MIN(value_min) as min, MAX(value_min) AS max"))

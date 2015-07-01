@@ -58,7 +58,7 @@
 					<span onclick="window.location='/article/help'" class="man menu cur_p">Помощь</span>
 
 					<span onclick="window.location='http://feedback.yarmarka.biz/'" class="menu g1 cur_p">Техподдержка</span>
-					<span onclick="window.location='http://job.yarmarka.biz/'" class="menu g1 cur_p">Вакансии</span>
+					<span onclick="window.location='/cart'" class="menu g1 cur_p">Корзина (<span class="fn-cartCounter">0</span>)</span>
 					<span onclick="window.location='/ourservices/reklamodatelyam'" class="menu g1 cur_p">Рекламодателям</span>
 					<span onclick="window.location='/article/pravila-razmeshcheniya-obyavlenii'" class="menu g1 cur_p">Правила</span>
 

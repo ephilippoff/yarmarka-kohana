@@ -121,6 +121,12 @@ Route::set('redirect/ref_cb', 'redirect/ref_cb')
 		'action'     => 'ref_cb',
 	));
 
+Route::set('cart', 'cart')
+	->defaults(array(
+		'controller' => 'Cart',
+		'action'     => 'index',
+	));
+
 if (array_key_exists("HTTP_FROM", $_SERVER))
 {
 	if (strpos($_SERVER['REQUEST_URI'],"landing"))

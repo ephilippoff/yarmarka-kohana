@@ -1336,6 +1336,19 @@ class Controller_Ajax extends Controller_Template
 		$this->json = array('status' => $status);		
 	}	
 
+	public function action_cart_count()
+	{
+
+		$this->auto_render = FALSE;
+
+		$key = $_COOKIE['cartKey'];
+
+		$count = ORM::factory('Order_ItemTemp')->where("key","=",$key)->count_all();
+		$this->json["count"] = $count;
+
+		$this->json["code"] = 200;
+	}
+
 	 
 	 public function after()
 	{

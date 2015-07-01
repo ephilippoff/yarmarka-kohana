@@ -27,6 +27,7 @@
 	->js('jquery.treeview.js')		
 	->js('js.js')
 	->js('jquery.openxtag.min.js')
+	->js('cartCounter.js')
 	.$_assets
 ?>
 </head>
