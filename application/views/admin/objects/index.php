@@ -67,6 +67,13 @@ $(document).ready(function() {
 			// $(obj).parents('.btn-group').find('.dropdown-toggle').attr('class', 'btn dropdown-toggle '+$(obj).data('class'));
 		});
 	});
+	
+	$(document).on('click', '.fn-archive', function(e){
+		e.preventDefault();
+		$.post('/khbackend/objects/ajax_archive/'+$(this).data('id'), {}, function(){
+			window.location.reload();
+		});
+	});	
 });
 function reload_row(object_id, moder_state) {
 	var current_moder_state = $('select[name=moder_state]').val();

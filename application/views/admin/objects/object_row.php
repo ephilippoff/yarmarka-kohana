@@ -94,6 +94,9 @@
 					<li><a href="#" data-id="<?=$object->id?>" data-state="0" data-class="btn-warning" class="moder_state btn-warning">На модерации</a></li>
 					<li><a href="<?=URL::site('khbackend/objects/ajax_decline/'.$object->id)?>" data-toggle="modal" data-target="#myModal" class="btn-danger">На исправление</a></li>
 					<li><a href="<?=URL::site('khbackend/objects/ajax_ban/'.$object->id)?>" data-toggle="modal" data-target="#myModal" class="btn-danger">Заблокировать</a></li>
+					<?php if ($object->in_archive == 1) : ?>
+						<li><a href="#" data-id="<?=$object->id?>" class="btn-warning fn-archive">Разархивировать</a></li>
+					<?php endif;?>
 				</ul>
 			</div>	
 			<?php if ($object->complaints->count_all()) : ?>

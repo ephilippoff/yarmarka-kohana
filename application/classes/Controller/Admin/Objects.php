@@ -359,6 +359,34 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 
 		$this->template->object = $object;
 	}
+	
+	public function action_ajax_archive()
+	{
+		$this->auto_render = FALSE;
+		
+		$object = ORM::factory('Object', $this->request->param('id'));
+		if ( ! $object->loaded())
+		{
+			throw new HTTP_Exception_404;
+		}
+		
+		$object->in_archive	= 'f';
+		$object->save();
+		
+		// moderation log
+		$m_log = ORM::factory('Object_Moderation_Log');
+		$m_log->action_by 	= Auth::instance()->get_user()->id;
+		$m_log->user_id 	= $object->author;
+		$m_log->description = "Снята архивация";
+		$m_log->reason 		= '';		
+		$m_log->object_id 	= $object->id;
+		$m_log->save();		
+		
+		$json['code'] = 200;
+		
+		$this->response->body(json_encode($json));		
+	}	
+	
 }
 
 /* End of file Objects.php */
