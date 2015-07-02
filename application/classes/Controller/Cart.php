@@ -99,6 +99,7 @@ class Controller_Cart extends Controller_Template {
 
 		$this->template->state = $state;
 		$this->template->order = $order;
+		$this->template->orderParams = new Obj(json_decode($order->params));
 		$this->template->orderItems = $orderItems;
 
 		$sale_types = array();
@@ -197,7 +198,6 @@ class Controller_Cart extends Controller_Template {
 		}
 		
 		$quantityItems = $request->items;
-		$comment = $request->comment;
 		$order_id = -1;
 
 		$db = Database::instance();
@@ -213,7 +213,6 @@ class Controller_Cart extends Controller_Template {
 			$order->user_id = $user->id;
 			$order->state = 0;
 			$order->sum = $sum;
-			$order->comment = $comment;
 			$order->params = json_encode(array());
 			$order->save();
 
@@ -392,6 +391,13 @@ class Controller_Cart extends Controller_Template {
 		unset($_COOKIE['cartKey']);
 		ORM::factory('Order_ItemTemp')->where("key", "=", $order->key)->delete_all();
 
+		$params = json_decode($order->params);
+		$params["city"] = $this->request->post("city");
+		$params["comment"] = $this->request->post("comment");
+		$params["address"] = $this->request->post("address");
+		$params["phone"] = $this->request->post("phone");
+
+		$order->params = json_encode($params);
 		$order->key = NULL;
 		$order->state = 1;
 		$order->payment_url = $payment_url;
