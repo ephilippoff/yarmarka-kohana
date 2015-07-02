@@ -115,7 +115,11 @@ class Controller_Cart extends Controller_Template {
 		$this->template->getBalance = function($object_id) {
 			return ORM::factory('Object')->get_balance($object_id);
 		};
-		$this->template->user_city_id = $_COOKIE["location_city_id"];
+
+		$this->template->user_city_id = NULL;
+		if ( in_array("location_city_id", array_keys($_COOKIE)) ) {
+			$this->template->user_city_id = $_COOKIE["location_city_id"];
+		}
 		$this->template->cities = array(
 			1919 => "Тюмень",
 			1979 => "Сургут",
@@ -360,7 +364,6 @@ class Controller_Cart extends Controller_Template {
 		}
 
 		if (in_array("with-shipping", $sale_types)) {
-			$user_city_id = $_COOKIE["location_city_id"];
 
 			$validation = Validation::factory((array) $this->request->post())
 				->rule('address', 'not_empty', array(':value', "Адрес"))
