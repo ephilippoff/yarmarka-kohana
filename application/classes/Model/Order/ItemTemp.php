@@ -16,17 +16,6 @@ class Model_Order_ItemTemp extends ORM
 		return false;
 	}
 
-	function get_balance($object_id) {
-		$_balance = ORM::factory('Data_Integer')
-					->by_object_and_attribute($object_id, "balance");
-		if ($_balance->loaded()) {
-			$balance = intval($_balance->value_min);
-		} else {
-			$balance = -1;
-		}
-		return $balance;
-	}
-
 	function get_object_info()  {
 
 		$result = array();
@@ -36,7 +25,7 @@ class Model_Order_ItemTemp extends ORM
 		if ($object->loaded()) {
 			$result["object_id"] = $object->id;
 			$result["title"] = $object->title;
-			$result["balance"] = $this->get_balance($this->object_id);
+			$result["balance"] = ORM::factory('Object')->get_balance($this->object_id);
 			$result["quantity"] = 1;
 			$result["price"] = intval($object->price * $result["quantity"]);
 		}

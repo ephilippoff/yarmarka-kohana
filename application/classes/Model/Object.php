@@ -843,6 +843,7 @@ class Model_Object extends ORM {
 
 			if ($_balance->value_min == 0) {
 				$object = ORM::factory('Object', $object_id);
+				$user = ORM::factory('User', $object->author);
 				if ($object->loaded()) {
 					$subj = "Уведомление о закончившимся товаре";
 					$msg = "<html><body><a href='http://yarmarka.biz/detail/".$object_id."'>".$object->title."</a></body></html>";
@@ -851,6 +852,9 @@ class Model_Object extends ORM {
 					foreach ($configBilling["emails_for_notify"] as $email) {
 						Email::send($email, Kohana::$config->load('email.default_from'), $subj, $msg);
 					}
+					if ($user->loaded() AND $user->email) {
+						Email::send($user->email, Kohana::$config->load('email.default_from'), $subj, $msg);
+					}
 				}
 			}
 
@@ -858,6 +862,16 @@ class Model_Object extends ORM {
 		}
 
 		return FALSE;
+	}
+
+	public function increase_balance($object_id, $count) {
+		$_balance = ORM::factory('Data_Integer')
+					->by_object_and_attribute($object_id, "balance");
+
+		if ($_balance->loaded()) {
+			$_balance->value_min = $_balance->value_min + intval($count);
+			$_balance->save();
+		}
 	}
 }
 
