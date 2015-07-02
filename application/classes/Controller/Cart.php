@@ -196,6 +196,19 @@ class Controller_Cart extends Controller_Template {
 
 			$order_id = $order->id;
 
+			//return balance of goods if edit cart
+			if ($order_loaded) {
+				$orderItems = ORM::factory('Order_Item')
+											->where("order_id", "=", $order_id )
+											->find_all();
+				foreach ($orderItems as $orderItem) {
+					$params = new Obj(json_decode($orderItem->params));
+					if ($orderItem->object_id) {
+						ORM::factory('Object')->increase_balance($orderItem->object_id, $params->quantity);
+					}
+				}
+			}
+
 			$tempItems = ORM::factory('Order_ItemTemp')
 									->where("key", "=", $key )
 									->find_all();
@@ -242,6 +255,20 @@ class Controller_Cart extends Controller_Template {
 				$realItem->save();
 			}
 
+
+
+			$orderItems = ORM::factory('Order_Item')
+										->where("order_id", "=", $order_id )
+										->find_all();
+
+			//decrease balance of goods
+			foreach ($orderItems as $orderItem) {
+				$params = new Obj(json_decode($orderItem->params));
+				if ($orderItem->object_id) {
+					ORM::factory('Object')->decrease_balance($orderItem->object_id, $params->quantity);
+				}
+			}
+
 			$db->commit();
 
 		} catch (Exception $e) {
@@ -271,19 +298,22 @@ class Controller_Cart extends Controller_Template {
 		$order_id = $this->request->post("id");
 
 		$order = ORM::factory('Order', $order_id);
-		if (!$order->loaded() OR $order->sum <= 0) {
+		$orderItems = ORM::factory('Order_Item')
+									->where("order_id", "=", $order_id )
+									->find_all();
+		if (!$order->loaded() OR $order->sum <= 0 OR count($orderItems) == 0) {
 			HTTP::redirect("/cart/order/".$order_id."?error=400");
 			return;
 		}
 
-		if ($order->state > 0) {
+		if ($order->state > 0 AND $order->payment_url) {
 			HTTP::redirect($order->payment_url);
 			return;
+		} else {
+			HTTP::redirect("/cart/order/".$order_id."?error=400");
+			return;
 		}
-
-		$orderItems = ORM::factory('Order_Item')
-									->where("order_id", "=", $order_id )
-									->find_all();
+		
 		foreach ($orderItems as $orderItem) {
 			if ($orderItem->object_id) {
 				$balance = ORM::factory('Object')->get_balance($orderItem->object_id);
@@ -292,14 +322,6 @@ class Controller_Cart extends Controller_Template {
 					HTTP::redirect("/cart/order/".$order_id."?error=400");
 					return;
 				}
-			}
-		}
-
-		//decrease balance of goods
-		foreach ($orderItems as $orderItem) {
-			$params = new Obj(json_decode($orderItem->params));
-			if ($orderItem->object_id) {
-				ORM::factory('Object')->decrease_balance($orderItem->object_id, $params->quantity);
 			}
 		}
 

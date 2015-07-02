@@ -11,7 +11,7 @@ class Model_Order extends ORM
 		if ($order_id) {
 			$orders = ORM::factory('Order')->where("id","=", $order_id)->find_all();
 		} else {
-			$orders = ORM::factory('Order')->where("state","=",1)->find_all();
+			$orders = ORM::factory('Order')->where("state","in",array(0,1))->find_all();
 		}
 		
 		foreach ($orders as $order) {
@@ -38,7 +38,7 @@ class Model_Order extends ORM
 					}
 				}
 			} else {
-				if (strtotime(date('Y-m-d H:i:s')) > strtotime($order->created)+60*60) {
+				if (strtotime(date('Y-m-d H:i:s')) > strtotime($order->created) + 60*30) {
 					$order->fail();
 					if ($callback) {
 						$callback($order->id, "cancel");
@@ -51,17 +51,16 @@ class Model_Order extends ORM
 	function fail() {
 		if (!$this->loaded()) return;
 
+		//return goods to storage
 		$orderItems = ORM::factory('Order_Item')->get_items($this->id);
 		foreach ($orderItems as $orderItem)
 		{
 			if ($orderItem->object_id) {
-
 				$object = ORM::factory('Object', $orderItem->object_id);
-				if ($object->loaded()){
+				if ($object->loaded()) {
 					$object->increase_balance($object->id, $orderItem->quantity);
 				}
-				
-			} 
+			}
 		}
 
 		$this->state = 3;
