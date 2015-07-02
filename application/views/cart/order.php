@@ -54,6 +54,33 @@
 	<p>Проверьте заказ. Перейдите к оплате для того чтобы его забронировать и оплатить</p>
 	<form action="/cart/pay" method="POST">
 		<input type="hidden" name="id" value="<?=$order->id?>">
+		<? if (in_array("with-shipping", $sale_types)):?>
+
+			<select name="city">
+				<? foreach ($cities as $key => $city): ?>
+					<? 
+						$selected = "";
+						if  ($errors_post->city == $key) {
+							$selected = "selected";
+						} elseif ($user_city_id == $key) {
+							$selected = "selected";
+						}
+
+					?>
+					<option value="<?=$key?>" <?=$selected?>><?=$city?></option>
+				<? endforeach; ?>
+			</select>
+
+			<input type="text" name="address" value="<?=$errors_post->address?>">
+			<input type="text" name="phone" value="<?=$errors_post->phone?>">
+			<textarea class="fn-comment" name="comment" cols="30" rows="10" style="border:1px solid black;">
+				<? if ($errors_post->comment): ?>
+					<?=$errors_post->comment?>
+				<? else: ?>
+					<?=$order->comment?>
+				<? endif; ?>
+			</textarea>
+		<? endif; ?>
 		<input type="submit" value="Перейти к оплате">
 	</form>
 
@@ -69,4 +96,9 @@
 	<p>Оплата счета отменена</p>
 <? endif; ?>
 
-<div class="fn-error"></div>
+<div class="fn-error">
+	<? if ($errors): ?>
+		<? $err_values = array_values($errors); ?>
+		<?=join("<br>", $err_values);?>
+	<? endif; ?>
+</div>

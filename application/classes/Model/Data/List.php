@@ -22,6 +22,18 @@ class Model_Data_List extends Data
 
 		return $result;
 	}
+
+	public function by_object_and_attribute($object_id, $seo_name)
+	{
+		return $this->select(array('*', 'attribute_element.seo_name'))
+					->join('attribute')
+					->on('attribute.id', '=', 'data_list.attribute')
+					->join('attribute_element')
+						->on('attribute_element.id', '=', 'data_list.value')
+					->where("data_list.object","=",$object_id)
+					->where("attribute.seo_name","=",$seo_name)
+					->find();
+	}
 }
 
 /* End of file List.php */

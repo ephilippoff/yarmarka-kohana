@@ -61,6 +61,12 @@ class Controller_Cart extends Controller_Template {
 		$id = $this->request->param('id');
 		$user = Auth::instance()->get_user();
 
+		$session = Session::instance();
+		$errors = $session->get("errors");
+		$errors_post = $session->get("post");
+		$session->delete("errors");
+		$session->delete("post");
+
 		if (!$user OR !$id) {
 			HTTP::redirect("/cart");
 			return;
@@ -95,10 +101,27 @@ class Controller_Cart extends Controller_Template {
 		$this->template->order = $order;
 		$this->template->orderItems = $orderItems;
 
+		$sale_types = array();
+		foreach ($orderItems as $orderItem) {
+			if ($orderItem->object_id) {
+				$sale_type = ORM::factory('Object')->get_sale_type($orderItem->object_id);
+				array_push($sale_types, $sale_type);
+			}
+		}
+
+		$this->template->sale_types = $sale_types;
+
 		$this->template->getBalance = function($object_id) {
 			return ORM::factory('Object')->get_balance($object_id);
 		};
-		
+		$this->template->user_city_id = $_COOKIE["location_city_id"];
+		$this->template->cities = array(
+			1919 => "Тюмень",
+			1979 => "Сургут",
+			1948 => "Нижневартовск"
+		);
+		$this->template->errors = $errors;
+		$this->template->errors_post = new Obj(($errors_post)?$errors_post:array());
 	}
 
 	public function action_remove_item()
@@ -293,37 +316,69 @@ class Controller_Cart extends Controller_Template {
 	public function action_pay()
 	{
 		$this->auto_render = FALSE;
+		$errors = array();
 
 		$user = Auth::instance()->get_user();
 		$order_id = $this->request->post("id");
 
 		$order = ORM::factory('Order', $order_id);
 		$orderItems = ORM::factory('Order_Item')
-									->where("order_id", "=", $order_id )
-									->find_all();
+						->where("order_id", "=", $order_id)
+						->find_all();
+
 		if (!$order->loaded() OR $order->sum <= 0 OR count($orderItems) == 0) {
-			HTTP::redirect("/cart/order/".$order_id."?error=400");
+			//HTTP::redirect("/cart/order/".$order_id."?error=400");
+			$errors["null_order"] = "Заказ пуст";
+			$this->return_with_errors("/cart/order/".$order_id, $this->request->post(), $errors);
 			return;
 		}
 
-		if ($order->state > 0 AND $order->payment_url) {
-			HTTP::redirect($order->payment_url);
-			return;
-		} else {
-			HTTP::redirect("/cart/order/".$order_id."?error=400");
-			return;
-		}
-		
 		foreach ($orderItems as $orderItem) {
 			if ($orderItem->object_id) {
 				$balance = ORM::factory('Object')->get_balance($orderItem->object_id);
 				$params = new Obj(json_decode($orderItem->params));
 				if ($balance >= 0 AND $balance - intval($params->quantity) < 0) {
-					HTTP::redirect("/cart/order/".$order_id."?error=400");
+					//HTTP::redirect("/cart/order/".$order_id."?error=400");
+					$errors["paid_or_refused"] = "Заказ уже оплачен либо отклонен";
+					$this->return_with_errors("/cart/order/".$order_id, $this->request->post(), $errors);
 					return;
 				}
 			}
 		}
+
+		if ($order->state > 0) {
+			HTTP::redirect($order->payment_url);
+			return;
+		}
+
+		//check required params for shipping if is need
+		$sale_types = array();
+		foreach ($orderItems as $orderItem) {
+			if ($orderItem->object_id) {
+				$sale_type = ORM::factory('Object')->get_sale_type($orderItem->object_id);
+				array_push($sale_types, $sale_type);
+			}
+		}
+
+		if (in_array("with-shipping", $sale_types)) {
+			$user_city_id = $_COOKIE["location_city_id"];
+
+			$validation = Validation::factory((array) $this->request->post())
+				->rule('address', 'not_empty', array(':value', "Адрес"))
+				->rule('phone', 'not_empty', array(':value', "Телефон"))
+				->rule('city', 'not_empty', array(':value', "Город"));
+
+			if ( !$validation->check())
+			{
+				$errors = array_merge($errors, $validation->errors('validation/object_form'));
+				$this->return_with_errors("/cart/order/".$order_id, $this->request->post(), $errors);
+				return;
+			}
+		}
+		//=======
+
+
+		
 
 		$robo = new Robokassa($order_id);
 		$robo->set_description("Заказ №" . $order_id . ". Ярмарка Онлайн");
@@ -411,6 +466,13 @@ class Controller_Cart extends Controller_Template {
 		}
 
 		HTTP::redirect("/");
+	}
+
+	private function return_with_errors($uri, $post, $errors) {
+		$session = Session::instance();
+		$session->set("errors", $errors);
+		$session->set("post", $post);
+		HTTP::redirect($uri);
 	}
 
 	public function json_response()

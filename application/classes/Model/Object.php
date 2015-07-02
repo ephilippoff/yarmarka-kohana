@@ -821,6 +821,16 @@ class Model_Object extends ORM {
 		
 	}
 
+	public function get_sale_type($object_id) {
+		$_sale_type = ORM::factory('Data_List')
+					->by_object_and_attribute($object_id, "sale-type");
+		if ($_sale_type->loaded()) {
+			$_sale_type = $_sale_type->seo_name;
+		} else {
+			$_sale_type = "unknown";
+		}
+		return $_sale_type;
+	}
 
 	public function get_balance($object_id) {
 		$_balance = ORM::factory('Data_Integer')
