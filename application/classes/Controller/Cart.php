@@ -18,8 +18,8 @@ class Controller_Cart extends Controller_Template {
 		$this->assets->js("cart.js");
 
 		$cart = array();
-
-		$key = $_COOKIE['cartKey'];
+		$cookie = new Obj($_COOKIE);
+		$key = $cookie->cartKey;
 		$cartTempItems = array();
 
 		$sum = 0;
@@ -137,7 +137,8 @@ class Controller_Cart extends Controller_Template {
 		}
 		$this->auto_render = FALSE;
 		$id = $this->request->param('id');
-		$key = $_COOKIE['cartKey'];
+		$cookie = new Obj($_COOKIE);
+		$key = $cookie->cartKey;
 
 		if ($key) {
 			ORM::factory('Order_ItemTemp')
@@ -174,7 +175,8 @@ class Controller_Cart extends Controller_Template {
 			return;
 		}
 
-		$key = $_COOKIE['cartKey'];
+		$cookie = new Obj($_COOKIE);
+		$key = $cookie->cartKey;
 		if (!$key) {
 			$this->json["message"] = "Неверный ключ";
 			$this->json["code"] = 400;
@@ -391,7 +393,9 @@ class Controller_Cart extends Controller_Template {
 		}
 		$payment_url = $robo->get_payment_url();
 
-		unset($_COOKIE['cartKey']);
+		if ( in_array("cartKey", array_keys($_COOKIE)) ) {
+			unset($_COOKIE['cartKey']);
+		}
 		ORM::factory('Order_ItemTemp')->where("key", "=", $order->key)->delete_all();
 
 		$params = json_decode($order->params);
