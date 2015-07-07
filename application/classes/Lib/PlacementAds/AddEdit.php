@@ -277,7 +277,7 @@ class Lib_PlacementAds_AddEdit {
 		{
 			$validation->rules('title_adv', array(
 				array('not_empty', array(':value', "Заголовок")),
-				array('min_length', array(':value', 15, "Заголовок")),
+				array('min_length', array(':value', 10, "Заголовок")),
 			));
 		}
 
