@@ -1,7 +1,8 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 
 // close admin controllers
-Route::set('admin', '<controller>(/<action>)', array('controller' => '(admin_.*|Admin_.*)'))->filter(function($route, $params, $request){
+Route::set('admin', '<controller>(/<action>)', array('controller' => '(admin_.*|Admin_.*)'))
+	->filter(function($route, $params, $request){
 	throw new HTTP_Exception_404;
 });
 
@@ -10,6 +11,19 @@ Route::set('add', 'add/<rubricid>', array('rubricid' => '.*[0-9]'))
 		'controller' => 'Add',
 		'action'     => 'index',
 	));
+
+Route::set('/','')
+	->defaults(array(
+		'controller' => 'Index',
+		'action'     => 'index'
+	));
+
+Route::set('detail', 'obyavlenie<path>/<object_seo_name>',  array('path' => '[a-zA-Z0-9-_/]+'))
+	->defaults(array(
+		'controller' => 'Detail',
+		'action'     => 'index'
+	));
+
 Route::set('object_edit', 'user/edit_ad/<object_id>')
 	->defaults(array(
 		'controller' => 'User',
@@ -154,8 +168,18 @@ if (array_key_exists("HTTP_FROM", $_SERVER))
  * Set the routes. Each route must have a minimum of a name, a URI and a set of
  * defaults for the URI.
  */
-Route::set('default', '(<controller>(/<action>(/<id>)))')
+Route::set('default', '(<controller>(/<action>(/<id>(/<other1>(/<other2>(/<other3>(/<other4>(/<other5>))))))))')
+	->filter(function($route, $params, $request){
+		$category = ORM::factory('Category')
+			->where("seo_name","=", strtolower($params["controller"]) )
+			->find();
+		if ($category->loaded()) {
+			$params['controller'] = 'Search';
+			$params['action'] = 'index';
+			return $params;
+		}
+	})
 	->defaults(array(
-		'controller' => 'welcome',
+		'controller' => 'Index',
 		'action'     => 'index',
 	));

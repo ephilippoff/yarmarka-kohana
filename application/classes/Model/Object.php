@@ -270,10 +270,20 @@ class Model_Object extends ORM {
 		return (bool) $this->moder_state;
 	}
 
-	public function get_url()
+	public function get_category_segment()
 	{
-		return CI::site('obyavlenie/'.$this->category_obj->get_seo_without_geo().'/'.($this->seo_name ? $this->seo_name.'-' : '').$this->id,
-				'http', TRUE, Region::get_domain_by_city($this->city_id));
+		if (!$this->loaded()) return;
+		return Search_Url::get_uri_category_segment($this->category);
+	}
+
+	public function get_url($uri_category_segment)
+	{
+		if (!$this->loaded()) return;
+
+		if (!$uri_category_segment) {
+			$uri_category_segment = $this->get_category_segment();
+		}
+		return "obyavlenie/". $uri_category_segment."/".$this->seo_name."-".$this->id;
 	}
 
 	/**
