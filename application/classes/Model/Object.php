@@ -276,14 +276,46 @@ class Model_Object extends ORM {
 		return Search_Url::get_uri_category_segment($this->category);
 	}
 
-	public function get_url($uri_category_segment)
+	public function get_full_url($city_seo_name = NULL)
 	{
 		if (!$this->loaded()) return;
+		
+		$config = Kohana::$config->load("common");
+        $main_domain = $config["main_domain"];
+
+		$url = array("http:/");
+
+		$city = ORM::factory('City')
+					->where("id","=", (int) $this->city_id)
+					->where("is_visible","=", 1)
+					->find();
+		if ($city->loaded()) {
+			array_push($url, $city->seo_name.".".$main_domain);
+		} else {
+
+			array_push($url, $main_domain);
+		}
+
+		array_push($url, $this->get_url());
+
+		return implode("/", $url);
+	}
+
+	public function get_url($uri_category_segment = NULL)
+	{
+		if (!$this->loaded()) return;
+
+		
+		$url = array();
 
 		if (!$uri_category_segment) {
 			$uri_category_segment = $this->get_category_segment();
 		}
-		return "obyavlenie/". $uri_category_segment."/".$this->seo_name."-".$this->id;
+
+		array_push($url, $uri_category_segment);
+		array_push($url, $this->seo_name."-".$this->id.".html");
+
+		return implode("/", $url);
 	}
 
 	/**

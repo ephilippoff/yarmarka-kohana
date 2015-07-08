@@ -1,9 +1,15 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 
 class Controller_Detail extends Controller_Template {
+    
     public function before()
     {
         parent::before();
+
+        $this->domain = new Domain();
+        if ($proper_domain = $this->domain->is_domain_incorrect()) {
+            HTTP::redirect("http://".$proper_domain, 301);
+        }
     }
 
     public function action_index() {
@@ -23,11 +29,12 @@ class Controller_Detail extends Controller_Template {
             throw new HTTP_Exception_404;
         }
 
-        $proper_object_category_segment = $object->get_category_segment();
-        if ($proper_object_category_segment <> $object_category_segment 
-                OR $object_seo_name <> $object->seo_name."-".$object->id) {
-            HTTP::redirect($object->get_url($proper_object_category_segment));
+        $url = $object->get_full_url();
+
+        if ($url <> $this->request->get_full_url()) {
+            HTTP::redirect($url);
         }
-        
+
+        echo Debug::vars($url);
     }
 } // End Detail

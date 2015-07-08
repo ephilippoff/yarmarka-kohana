@@ -3,7 +3,7 @@
 class Request extends Kohana_Request {
 
 
-	public function get_parsed_uri() {
-		return $this->uri();
+	public function get_full_url() {
+		return "http://".$_SERVER['HTTP_HOST']."/".$this->uri();
 	}
 }

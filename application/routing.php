@@ -18,7 +18,7 @@ Route::set('/','')
 		'action'     => 'index'
 	));
 
-Route::set('detail', 'obyavlenie<path>/<object_seo_name>',  array('path' => '[a-zA-Z0-9-_/]+'))
+Route::set('detail', '<path>/<object_seo_name>.html',  array('path' => '[a-zA-Z0-9-_/]+'))
 	->defaults(array(
 		'controller' => 'Detail',
 		'action'     => 'index'
