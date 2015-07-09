@@ -1,0 +1,12 @@
+{% if user %}
+	<div>{{ user.email|e }}</div>
+	<div>
+		<ul>
+			<li><a href="{{ url('user/published') }}">Мои объявления</a></li>
+			<li><a href="{{ url('user/subscriptions') }}">Мои подписки</a></li>
+			<li><a href="{{ url('user/logout') }}">Выход</a></li>
+		</ul>
+	</div>
+{% else %}
+	<div>Вход в личный кабинет</div>
+{% endif %}

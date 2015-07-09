@@ -287,4 +287,14 @@ class ORM extends Kohana_ORM {
 					->cached($cached);
 	}
 
+	public function getprepared_all()
+	{
+		$result = array();
+		foreach ($this->find_all() as $item) {
+			array_push($result, (array) $item->get_row_as_obj());
+		}
+
+		return $result;
+	}
+
 }

@@ -1,0 +1,15 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html lang="ru">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8">
+  <link rel="shortcut icon" href="{{ staticfile("images/favicon.ico") }}">
+  {{ css("iLight.css") }}
+  {{ js("jquery.min.js") }}
+  {% block css %}{% endblock %}
+  {% block js %}{% endblock %}
+  <title>{% block title %} {% endblock %}</title>
+</head>
+<body class="{% block bodyclass %}{% endblock %}">
+{% block body %}{% endblock %}
+</body>

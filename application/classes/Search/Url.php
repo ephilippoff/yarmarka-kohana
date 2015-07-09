@@ -142,13 +142,13 @@ class Search_Url
         return $category;
     }
 
-    public static function get_uri_category_segment($category_id) {
-       $uri = array();
+    public static function get_category_segment_full($category_id) {
+       $result = array();
        $category = ORM::factory('Category', $category_id);
        if (!$category->loaded()) return "";
 
        $parent_category_id = $category->parent_id;
-       array_push($uri, $category->seo_name);
+       array_push($result, $category);
        while (1== 1) {
             if ($parent_category_id == 1 OR $parent_category_id == NULL) {
                 break;
@@ -156,14 +156,39 @@ class Search_Url
             $parent = ORM::factory('Category', $parent_category_id);
             if ($parent->loaded()) {
                 $parent_category_id = $parent->parent_id;
-                array_push($uri, $parent->seo_name);
+                array_push($result, $parent);
             } else {
                 $parent_category_id = NULL;
             }
        }
-       $uri = array_reverse($uri);
+       $result = array_reverse($result);
 
-       return implode("/", $uri);
+       return $result;
+    }
+
+    public static function get_uri_category_segment($category_id) {
+        $uri = array();
+        $segments = self::get_category_segment_full($category_id);
+        foreach ($segments as $segment) {
+            array_push($uri, $segment->seo_name);
+        }
+        return implode("/", $uri);
+    }
+
+    public static function get_category_crubms($category_id) {
+        $crumbs = array();
+        $segments = self::get_category_segment_full($category_id);
+        $crumburi = array();
+        foreach ($segments as $segment) {
+            array_push($crumburi, $segment->seo_name);
+            array_push($crumbs, array(
+                "id" => $segment->id,
+                "title" => $segment->title,
+                "seo_name" => $segment->seo_name,
+                "uri" => implode("/", $crumburi)
+            ));
+        }
+        return $crumbs;
     }
 
     public static function get_seo_param_segment($element_id) {

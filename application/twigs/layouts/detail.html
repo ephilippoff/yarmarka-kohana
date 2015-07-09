@@ -1,0 +1,22 @@
+{% extends "layouts/main_with_header" %}
+
+{% block body %} 
+	{% block header %} 
+		{{ parent() }}
+		{{ requestblock('block_twig/navigationline') }}
+		{{ requestblock('block_twig/adslinkline') }}
+
+	{% endblock %} 
+
+	{% block left %} 
+		Левый
+	{% endblock %}
+
+	{% block right %} 
+		Правый
+	{% endblock %} 
+
+	{% block footer %} 
+		Футер
+	{% endblock %} 
+{% endblock %} 

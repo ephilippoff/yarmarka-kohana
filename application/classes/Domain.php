@@ -46,4 +46,8 @@ class Domain
     public function get_city() {
         return $this->_city;
     }
+
+    public function get_domain() {
+        return $this->_domain;
+    }
 }

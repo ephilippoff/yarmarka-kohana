@@ -1,0 +1,5 @@
+<a href="http://{{ domain.get_domain() }}" rel="nofollow">{{ city.title }}</a> 
+{% for crumb in crumbs  %}
+	<a href="{{ url(crumb.uri) }}">{{crumb.title}}</a>
+{% endfor %}
+<h1>{{ object.title|e|capitalize }}</h1>

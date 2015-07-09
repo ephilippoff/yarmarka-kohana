@@ -6,6 +6,9 @@ class Controller_Detail extends Controller_Template {
     {
         parent::before();
 
+        $this->use_layout = FALSE;
+        $this->auto_render = FALSE;
+
         $this->domain = new Domain();
         if ($proper_domain = $this->domain->is_domain_incorrect()) {
             HTTP::redirect("http://".$proper_domain, 301);
@@ -24,7 +27,7 @@ class Controller_Detail extends Controller_Template {
             throw new HTTP_Exception_404;
         }
 
-        $object = ORM::factory('Object', $object_id);
+        $object = ORM::factory('Objectcompiled', $object_id);
         if (!$object->loaded()) {
             throw new HTTP_Exception_404;
         }
@@ -35,6 +38,14 @@ class Controller_Detail extends Controller_Template {
             HTTP::redirect($url);
         }
 
-        echo Debug::vars($url);
+        $twig = Twig::factory('detail/index');
+        $twig->domain      = $this->domain;
+        $twig->city        = $this->domain->get_city();
+        $twig->crumbs      = Search_Url::get_category_crubms($object->category);
+        $twig->object      = $object->get_row_as_obj();
+        $twig->object_info = $object->get_compiled();
+        
+        $this->response->body($twig);
+
     }
 } // End Detail
