@@ -188,6 +188,7 @@ Route::set('default', '(<controller>(/<action>(/<id>(/<other1>(/<other2>(/<other
 			->find();
 		if ($category->loaded()) {
 			$config = Kohana::$config->load("landing");
+			$config = $config["categories"];
 			if ( in_array( $category->seo_name,  array_keys((array) $config)) 
 					AND $params["action"] == "index") {
 				$params['controller'] = $config[$category->seo_name][0];

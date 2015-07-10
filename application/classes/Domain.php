@@ -50,4 +50,8 @@ class Domain
     public function get_domain() {
         return $this->_domain;
     }
+
+    public function get_subdomain() {
+        return $this->_subdomain;
+    }
 }

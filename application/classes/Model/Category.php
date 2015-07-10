@@ -176,12 +176,10 @@ class Model_Category extends ORM {
 	}	
 	
 	//Получить дочерние рубрики
-	public function get_childs($parent_ids)
+	public function get_childs($parent_ids = array())
 	{
-		$parent_ids_str = $parent_ids ? implode(',', $parent_ids) : 0;
-		
 		return ORM::factory('Category')
-				->where('parent_id', 'in', DB::expr('('.$parent_ids_str.')'))
+				->where('parent_id', 'in', $parent_ids)
 				->where('is_ready', '=', 1)
 				->order_by('weight')
 				->order_by('title')				
@@ -239,6 +237,44 @@ class Model_Category extends ORM {
 				$result[] = $category;
 			}
 
+		}
+
+		return $result;
+	}
+
+	function get_categories_extend($params = array("with_child" => TRUE, "with_ads" => TRUE, "city_id" => NULL))
+	{
+		$params = new Obj($params);
+		$categories1l_ids = $parents_ids = $result = array();
+
+		$categories1l = $this->get_rubrics1l();
+		$result["main"] = $categories1l;
+
+		//получаем массив id'шников
+		foreach ($categories1l as $category) 
+			$categories1l_ids[] = $category->id;
+		$result["main_ids"] = $categories1l_ids;
+		
+		//получить баннеры рубрик по региону/городу для показа в меню
+		$states = array(1);
+		$cached = TRUE;		
+			
+		if (Auth::instance()->get_user() and in_array((int)Auth::instance()->get_user()->role, array(1, 9)))
+		{
+			$states = array(1, 2);
+			$cached = FALSE;
+		}
+
+		if ($params->with_child) {
+			//получаем рубрики второго уровня
+			$categories2l = ORM::factory('Category')->get_childs($categories1l_ids);
+			$result["childs"] = $categories2l;
+		}
+
+		if ($params->with_ads) {
+			$city_id = ($params->city_id) ? $params->city_id : 1;
+			$banners = $this->get_banners($city_id, $states, $cached);
+			$result["banners"] = Dbhelper::convert_dbset_to_keyid_arr($banners, 'category_id');
 		}
 
 		return $result;

@@ -150,19 +150,23 @@ class Model_Article extends ORM {
 	}	
 	
 	//Получить список n новостей из рубрики
-	public function get_lastnews_from_rubric($rubric_name, $limit = 15)
+	public function get_lastnews($city_id = NULL, $category_name = NULL, $limit = 15)
 	{		
 		$news = ORM::factory('Article')
 					->where('is_category', '=', 0)
 					->where('text_type', '=', 2)
 					->where('is_visible', '=', 1)
-					->where('parent_id', '=', DB::expr("(select id from articles where name = '{$rubric_name}')"))
-					->where('start_date', '<=', DB::expr('now()'))
-					->where('end_date', '>=', DB::expr('now()'))
-					->order_by('start_date', 'desc')
+					->where('parent_id', '<>', 0)
+					->where('start_date', '<=', DB::expr('now()'));
+					//->where('end_date', '>=', DB::expr('now()'));
+
+		if ($city_id) {
+			$news = $news->where(DB::expr($city_id), '=', DB::expr('ANY(cities)'));
+		}
+
+		$news = $news->order_by('start_date', 'desc')
 					->limit($limit)
-					->cached(300)
-					->find_all();	
+					->cached(300);
 		
 		return $news;
 	}

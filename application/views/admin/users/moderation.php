@@ -16,11 +16,11 @@
 <div class="control-group only2" >		
 	<form action="" class="navbar-form navbar-left" role="search">
 		<div class="form-group">			
-			<input value="<?=strip_tags($s)?>" type="text" class="form-control" placeholder="По названию, юр. названию или ИНН" name="s">
+			<input value="" type="text" class="form-control" placeholder="По названию, юр. названию или ИНН" name="s">
 			<input type="submit" class="btn btn-default" value="Искать">
 			<a href="/<?=Request::current()->uri()?>">Сбросить</a>
 		</div>
-		<input type="hidden" name="filter" value="<?=$_GET['filter']?>">
+		<input type="hidden" name="filter" value="">
 	</form>	
 </div>
 

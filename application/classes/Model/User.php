@@ -749,7 +749,24 @@ class Model_User extends Model_Auth_User {
 		
 		return $this->id;
 
-	}	
+	}
+
+	public function get_good_companies($city_id = NULL) {
+
+		// $with_good_info = DB::select("user_id")
+		// 						->from("user_settings")
+		// 						->where("type","=","orginfo")
+		// 						->where("name","=","moderate")
+		// 						->where("value","=","moderate");
+
+		$companies = ORM::factory('User')
+					// ->where("id","IN",$with_good_info)
+					->where("is_blocked","=",0)
+					->where("org_type","=",2)
+					->where("estimate","=","100_perfect");
+
+		return $companies;
+	}
 }
 
 /* End of file User.php */

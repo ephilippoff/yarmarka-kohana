@@ -50,38 +50,22 @@ class Controller_Block extends Controller_Template
 
 	public function action_header_left_menu()
 	{
-		$categories1l = ORM::factory('Category')->get_rubrics1l();
-		$categories1l_ids = $parents_ids = array();
-		
-		//получить баннеры рубрик по региону/городу для показа в меню
-		$states = array(1);
-		$cached = TRUE;		
-			
-		if (Auth::instance()->get_user() and in_array((int)Auth::instance()->get_user()->role, array(1, 9)))
-		{
-			$states = array(1, 2);
-			$cached = FALSE;
-		}		
-
 		$city_id = Region::get_current_city() ? Region::get_current_city()->id : 1;
-		
-		$banners = ORM::factory('Category')->get_banners($city_id, $states, $cached);
 
-		//получаем массив id'шников
-		foreach ($categories1l as $category) 
-			$categories1l_ids[] = $category->id;
-		
-		//получаем рубрики второго уровня
-		$categories2l = ORM::factory('Category')->get_childs($categories1l_ids);
+		$categories = ORM::factory('Category')->get_categories_extend(array(
+			"with_child" => TRUE, 
+			"with_ads" => TRUE, 
+			"city_id" => $city_id
+		));
 		
 		//изымаем id всех родителей(для проверки наличия дочек)
-		foreach ($categories2l as $category) 
-			$parents_ids[] = $category->parent_id;		
+		// foreach ($categories2l as $category) 
+		// 	$parents_ids[] = $category->parent_id;
 		
-		$this->template->categories1l = $categories1l;
-		$this->template->categories2l = $categories2l;
-		$this->template->parents_ids  = $parents_ids;
-		$this->template->banners	  = Dbhelper::convert_dbset_to_keyid_arr($banners, 'category_id');;
+		$this->template->categories1l = $categories["main"];
+		$this->template->categories2l = $categories["childs"];
+		$this->template->parents_ids  = $categories["main_ids"];
+		$this->template->banners	  = $categories["banners"];
 	}
 
 	public function action_header_search()

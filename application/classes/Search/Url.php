@@ -77,12 +77,7 @@ class Search_Url
         }
         return FALSE;
     }
-
-    public function get_proper_category_uri()
-    {
-        return $this->_proper_category_uri;
-    }
-
+    
     public function get_category_and_seo_in_uri($uri = '')
     {
         $seo_param = NULL;
