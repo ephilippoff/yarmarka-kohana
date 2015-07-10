@@ -8,13 +8,13 @@ class Controller_Search extends Controller_Template {
     {
         parent::before();
 
+        $this->use_layout = FALSE;
+        $this->auto_render = FALSE;
+
         $this->domain = new Domain();
         if ($proper_domain = $this->domain->is_domain_incorrect()) {
             HTTP::redirect("http://".$proper_domain, 301);
         }
-    }
-
-    public function action_index() {
 
         $uri = $this->request->uri();
         $get_params = $this->request->query();
@@ -40,7 +40,18 @@ class Controller_Search extends Controller_Template {
             }
         }
 
-        echo Debug::vars($this->domain, $searchuri);
+        $this->params_by_uri = $searchuri;
+    }
+
+    public function action_index() {
+
+        $twig = Twig::factory('search/index');
+
+        $twig->domain      = $this->domain;
+        $twig->city        = $this->domain->get_city();
+        $twig->crumbs      = Search_Url::get_category_crubms($this->params_by_uri->get_category()->id);
+
+        $this->response->body($twig);
 
     }
     

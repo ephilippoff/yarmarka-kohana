@@ -5,7 +5,7 @@ class Twig_Functions
 {
     public static function requestblock($path, $params = array())
     {
-        return Request::factory($path)->execute();
+        return Request::factory($path, $params)->execute();
     }
 
     public static function requestoldview($path)

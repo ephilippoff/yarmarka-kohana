@@ -4,19 +4,36 @@ class Search_Url
 {
     static $reserved_segments = "/order_|page_|limit_|s_/";
 
-    function __construct($uri = '', $get_params = array()) {
+    public function __construct($uri = '', $get_params = array())
+    {
         $this->_reserved = array();
         $this->_uri = $this->save_and_clean_reserved($uri);
         $this->_category = self::get_category_in_uri($this->_uri);
         $this->_proper_category_uri = NULL;
 
         if (!$this->_category) {
-            throw new Exception("Category not founded", $uri);
+            throw new Exception("Category not found", $uri);
         }
         $this->_proper_category_uri = self::get_uri_category_segment($this->_category->id);
     }
 
-    public function save_and_clean_reserved($uri = '') {
+    public function get_category()
+    {
+        return $this->_category;
+    }
+
+    public function get_uri()
+    {
+        return $this->_uri;
+    }
+
+    public function get_proper_category_uri()
+    {
+        return $this->_proper_category_uri;
+    }
+
+    public function save_and_clean_reserved($uri = '')
+    {
         $segments = explode("/", $uri);
         $result = array();
         $reserved = array();
@@ -31,7 +48,8 @@ class Search_Url
         return implode("/", $result);
     }
 
-    public function is_seo_category_segment_incorrect() {
+    public function is_seo_category_segment_incorrect()
+    {
         $proper_uri = $this->_proper_category_uri;
         $this->_proper_category_uri = $proper_uri;
         if (strrpos($this->_uri, $proper_uri) === FALSE) {
@@ -40,7 +58,8 @@ class Search_Url
         return FALSE;
     }
 
-    public function is_seo_param_segment_incorrect() {
+    public function is_seo_param_segment_incorrect()
+    {
         $seo_params_uri = trim(str_replace($this->_proper_category_uri, "", $this->_uri), "/");
         if ($seo_params_uri AND $seo_params_uri <> "") {
             $element = $this->_seo_param = self::get_seo_param_in_uri($this->_category->id, $seo_params_uri);
@@ -59,16 +78,13 @@ class Search_Url
         return FALSE;
     }
 
-    public function get_proper_category_uri() {
+    public function get_proper_category_uri()
+    {
         return $this->_proper_category_uri;
     }
 
-    /**
-     * [get_category_and_seo_in_uri description]
-     * @param  string $uri like '/avtotransport/mototsikly-velosipedy/mopedi-skuteri/bmw/x-5'
-     * @return [array]      [description]
-     */
-    public function get_category_and_seo_in_uri($uri = '') {
+    public function get_category_and_seo_in_uri($uri = '')
+    {
         $seo_param = NULL;
         $category_in_uri = self::get_category_in_uri($uri);
         if ($category_in_uri) {
@@ -84,7 +100,8 @@ class Search_Url
         );
     }
 
-    public static function get_seo_param_in_uri($category_id, $uri = '') {
+    public static function get_seo_param_in_uri($category_id, $uri = '')
+    {
         $ae = NULL;
         $uri = explode("/", $uri);
         $uri = array_reverse($uri);
@@ -115,7 +132,8 @@ class Search_Url
         return $ae;
     }
     
-    public static function get_category_in_uri($uri = '') {
+    public static function get_category_in_uri($uri = '')
+    {
         $category = NULL;
         $_uri = explode("/", $uri);
         $_uri = array_reverse($_uri);
@@ -142,7 +160,8 @@ class Search_Url
         return $category;
     }
 
-    public static function get_category_segment_full($category_id) {
+    public static function get_category_segment_full($category_id)
+    {
        $result = array();
        $category = ORM::factory('Category', $category_id);
        if (!$category->loaded()) return "";
@@ -166,7 +185,8 @@ class Search_Url
        return $result;
     }
 
-    public static function get_uri_category_segment($category_id) {
+    public static function get_uri_category_segment($category_id)
+    {
         $uri = array();
         $segments = self::get_category_segment_full($category_id);
         foreach ($segments as $segment) {
@@ -175,7 +195,8 @@ class Search_Url
         return implode("/", $uri);
     }
 
-    public static function get_category_crubms($category_id) {
+    public static function get_category_crubms($category_id)
+    {
         $crumbs = array();
         $segments = self::get_category_segment_full($category_id);
         $crumburi = array();
@@ -191,7 +212,8 @@ class Search_Url
         return $crumbs;
     }
 
-    public static function get_seo_param_segment($element_id) {
+    public static function get_seo_param_segment($element_id)
+    {
        $uri = array();
        $element = ORM::factory('Attribute_Element', $element_id);
        if (!$element->loaded()) return "";

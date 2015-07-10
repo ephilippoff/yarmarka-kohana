@@ -13,6 +13,19 @@ Route::set('add', 'add/<rubricid>', array('rubricid' => '.*[0-9]'))
 	));
 
 Route::set('/','')
+	->filter(function($route, $params, $request){
+		$domain = $_SERVER['HTTP_HOST'];
+		$config = Kohana::$config->load("common");
+		$main_domain = $config["main_domain"];
+		if ($domain <> $main_domain) {
+			$params['controller'] = 'Index';
+			$params['action'] = 'city';
+		} else {
+			$params['controller'] = 'Index';
+			$params['action'] = 'index';
+		}
+		return $params;
+	})
 	->defaults(array(
 		'controller' => 'Index',
 		'action'     => 'index'
@@ -174,9 +187,17 @@ Route::set('default', '(<controller>(/<action>(/<id>(/<other1>(/<other2>(/<other
 			->where("seo_name","=", strtolower($params["controller"]) )
 			->find();
 		if ($category->loaded()) {
-			$params['controller'] = 'Search';
-			$params['action'] = 'index';
+			$config = Kohana::$config->load("landing");
+			if ( in_array( $category->seo_name,  array_keys((array) $config)) 
+					AND $params["action"] == "index") {
+				$params['controller'] = $config[$category->seo_name][0];
+				$params['action'] = $config[$category->seo_name][1];
+			} else {
+				$params['controller'] = 'Search';
+				$params['action'] = 'index';
+			}
 			return $params;
+
 		}
 	})
 	->defaults(array(

@@ -3,7 +3,19 @@
 {% block body %} 
 	{% block header %} 
 		{{ parent() }}
-		
+		{{ requestblock('block_twig/navigationline') }}
+		{{ requestblock('block_twig/adslinkline') }}
 	{% endblock %} 
 
+	{% block content %} 
+		контент
+	{% endblock %}
+
+	{% block footertext %} 
+		сео текст в футере
+	{% endblock %}
+
+	{% block footer %} 
+		Футер
+	{% endblock %} 
 {% endblock %} 

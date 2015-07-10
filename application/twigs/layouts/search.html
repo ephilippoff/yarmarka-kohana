@@ -1,24 +1,33 @@
 {% extends "layouts/main_with_header" %}
 
+
+
 {% block body %} 
 	{% block header %} 
 		{{ parent() }}
 		{{ requestblock('block_twig/navigationline') }}
 		{{ requestblock('block_twig/adslinkline') }}
-
-	{% endblock %}
+	{% endblock %} 
 
 	{% block crumbs %} 
 		Крошки
 	{% endblock %}
 
-	{% block left %} 
-		Левый
+	{% block filters %} 
+		Фильтры
 	{% endblock %}
 
-	{% block right %} 
-		Правый
-	{% endblock %} 
+	{% block content %} 
+		контент
+	{% endblock %}
+
+	{% block rightside %} 
+		Правая сторона
+	{% endblock %}
+
+	{% block footertext %} 
+		сео текст в футере
+	{% endblock %}
 
 	{% block footer %} 
 		Футер
