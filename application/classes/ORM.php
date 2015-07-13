@@ -291,7 +291,7 @@ class ORM extends Kohana_ORM {
 	{
 		$result = array();
 		foreach ($this->find_all() as $item) {
-			array_push($result, (array) $item->get_row_as_obj());
+			array_push($result, $item->get_row_as_obj());
 		}
 
 		return $result;

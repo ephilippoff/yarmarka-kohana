@@ -28,7 +28,7 @@ class Search {
 		return join('/', $url);
 	}
 
-	public static function get_filters_by_params(array $params)
+	public static function get_filters_by_params($params = array(), $alias = "object")
 	{
 		$filter = array();
 		if (count($params) <= 0)
@@ -47,19 +47,24 @@ class Search {
 		}
 
 		foreach ($params as $seo_name => $value) {
+			$type = $attributes[$seo_name]["type"];
+			$table_name = "data_".strtolower($type);
 
-			$filter[] = DB::select("id")
-						->from("data_".strtolower($attributes[$seo_name]["type"]))
-						->where("object","=", DB::expr("object.id"))
-						->where("attribute", "=", $attributes[$seo_name]["id"])
-						->where("value", ((is_array($value)) ? "IN" : "="), $value)
-						->limit(1);
+			if ($type == "list") {
+				$filter[] = DB::select("id")
+							->from(array($table_name, $table_name."_filter"))
+							->where($table_name."_filter."."object","=", DB::expr($alias.".id"))
+							->where($table_name."_filter."."attribute", "=", $attributes[$seo_name]["id"])
+							->where($table_name."_filter."."value", ((is_array($value)) ? "IN" : "="), $value)
+							->limit(1);
+			}
 		}
 
 		return $filter;
 	}
 
-	public static function get_search_cache() {
+	public static function get_search_cache()
+	{
 		$shash = Cookie::get('shash');
 		$shash = "8550145e167f5e0c7bae0fa3bfb5ab548e0f46f3";
 		if ($shash) {
@@ -70,7 +75,8 @@ class Search {
 	}
 
 
-	public static function get_similar_objects_by_cache(ORM $search_cache = NULL) {
+	public static function get_similar_objects_by_cache(ORM $search_cache = NULL)
+	{
 		$exclusion = $query_sql = null;
 		$exclusion = explode(',', Cookie::get('ohistory'));
 
@@ -83,6 +89,154 @@ class Search {
 							->get_result_by_sql($query_sql, "date_created", "DESC", 5, $exclusion);
 		}
 		return NULL;
+	}
+
+	/**
+	 * [search description]
+	 * @param  array  $params array(
+     *       "premium" => TRUE,
+     *       "id" => 3570644,//"id" => array(3570644),
+     *       "active" => TRUE,
+     *       "published" =>TRUE,
+     *       "city_id" => array(1919),//"city_id" => 1919,
+     *       "category_id" => 96,//"category_id" => array(96),
+     *       "user_id" => 327190,
+     *       "source" => 1,
+     *       "photo" => TRUE,
+     *       "video" => TRUE,
+     *      	"private" => TRUE,
+     *       "org" => TRUE,
+     *       "filters" =>array(
+     *                    'tip-sdelki5' => 3250,
+     *                    'build-type'  => 3196,
+     *               )
+     *       "page" => 1,
+     *       "limit" => 3,
+     *   )
+	 * @return [ORM]         [description]
+	 */
+	public static function searchquery(array $params = array())
+	{
+		$params = new Obj($params);
+
+		$order = ($params->order) ? $params->order : "date_created";
+		$order_direction = ($params->order_direction) ? $params->order_direction : "DESC";
+
+		$limit = ($params->limit) ? (int) $params->limit : 20;
+		$page = ($params->page) ? (int) $params->page : 0;
+
+		$active = (isset($params->active)) ? $params->active : TRUE;
+		$published = (isset($params->published)) ? $params->published : TRUE;
+		
+
+		$object = DB::select(DB::expr("o.*"))
+						->from(array("vw_objectcompiled","o"));
+
+		if ($active) {
+			$object = $object->where("o.active", "=", 1);
+		}
+
+		if ($published) {
+			$object = $object->where("o.is_published", "=", 1);
+		}
+
+		if ($params->id AND is_array($params->id)) {
+			$object = $object->where("o.id", "IN", $params->id);
+		} elseif ($params->id) {
+			$object = $object->where("o.id", "=", $params->id);
+		}
+
+		if ($params->user_id) {
+			$object = $object->where("o.author_company_id", "=", $params->user_id);
+		}
+
+		if ( $params->city_id AND is_array($params->city_id) ) {
+			$object = $object->where("o.city_id", "IN", $params->city_id);
+		} elseif ($params->city_id) {
+			$object = $object->where(DB::expr($params->city_id), "=", DB::expr("ANY(o.cities)"));
+		}
+
+		if ( $params->category_id AND is_array($params->category_id) ) {
+			$object = $object->where("o.category", "IN", $params->category_id);
+		} elseif ($params->category_id) {
+			$object = $object->where("o.category", "=", $params->category_id);
+		}
+		
+		if ($params->premium) {
+			$object = $object->join("object_rating", "inner")
+								->on("object_rating.object_id","=", "o.id");
+
+			$object = $object->where("object_rating.date_expiration", ">", DB::expr("NOW()"));
+			if ( $params->city_id AND is_array($params->city_id) ) {
+				$object = $object->where("object_rating.city_id", "IN", $params->city_id);
+			} elseif ($params->city_id) {
+				$object = $object->where("object_rating.city_id", "=" , $params->city_id);
+			}
+		}
+
+		if ($params->source) {
+			$object = $object->where("o.source", "=", (int) $params->source);
+		}
+
+		$multimedia_filter = array();
+		$photo_types = array(0);
+		$video_types = array(2,3);
+
+		if ($params->photo) {
+			$multimedia_filter = array_merge($multimedia_filter, $photo_types);
+		}
+
+		if ($params->video) {
+			$multimedia_filter = array_merge($multimedia_filter, $video_types);
+		}
+
+		if (count($multimedia_filter)) {
+			$multimedia_subquery = DB::select("photo.object_id")
+										->from(array("object_attachment","photo") )
+										->where("photo.object_id","=", DB::expr("o.id"))
+										->where("photo.type", "IN", $multimedia_filter)
+										->limit(1);
+			$object = $object->where("0", "<", $multimedia_subquery);
+		}
+
+		$orgtype_filter = array();
+		$private_types = array(1);
+		$org_types = array(2);
+
+		if ($params->private) {
+			$orgtype_filter = array_merge($orgtype_filter, $private_types);
+		}
+
+		if ($params->org) {
+			$orgtype_filter = array_merge($orgtype_filter, $org_types);
+		}
+
+		if (count($orgtype_filter)) {
+			$orgtype_subquery = DB::select("userorg.id")
+										->from(array("user","userorg") )
+										->where("userorg.id","=", DB::expr("o.author_company_id"))
+										->where("userorg.org_type", "IN", $orgtype_filter)
+										->limit(1);
+			$object = $object->where("0", "<", $orgtype_subquery);
+		}
+
+		
+		$filters = self::get_filters_by_params($params->filters, "o");
+		foreach ($filters as $filter)
+			$object = $object->where("0", "<", $filter);
+
+		$object = $object->limit($limit);
+
+		$object = $object->offset($limit*( ($page == 0)? 0: $page-1 ) );
+
+		if (is_array($order)) {
+			foreach ($order as $order_item) {
+				$object = $object->order_by("o.".$order_item[0], $order_item[1]);
+			}
+		} else {
+			$object = $object->order_by("o.".$order, $order_direction);
+		}
+		return $object;
 	}
 }
 

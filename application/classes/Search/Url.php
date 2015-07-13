@@ -2,13 +2,22 @@
 
 class Search_Url
 {
-    static $reserved_segments = "/order_|page_|limit_|s_/";
+    static $reserved_segments = "/order_|page_|limit_/";
+    static $reserved_requirements = array(
+        "order" => array("price","price_desc","date_desc","date"),
+        "limit" => array(5,10,15,20,25,30,60,90)
+    );
 
-    public function __construct($uri = '', $get_params = array())
+    static $reserved_query_params = array("search_by_params");
+
+    public function __construct($uri = '', $query_params = array())
     {
-        $this->_reserved = array();
-        $this->_uri = $this->save_and_clean_reserved($uri);
+        $this->_uri = $this->clean_uri($uri);
+        $this->_fulluri = $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+        $this->_uri_query_segment = urldecode(parse_url($this->_fulluri, PHP_URL_QUERY));
+        $this->_reserved = $this->clean_reserved($uri);
         $this->_category = self::get_category_in_uri($this->_uri);
+        $this->_query_params = $this->clean_query_params($this->_category->id, $query_params);
         $this->_proper_category_uri = NULL;
 
         if (!$this->_category) {
@@ -22,6 +31,11 @@ class Search_Url
         return $this->_category;
     }
 
+    public function get_reserved()
+    {
+        return $this->_reserved;
+    }
+
     public function get_uri()
     {
         return $this->_uri;
@@ -32,20 +46,87 @@ class Search_Url
         return $this->_proper_category_uri;
     }
 
-    public function save_and_clean_reserved($uri = '')
+    public function get_proper_seo_param_uri()
+    {
+        return $this->_proper_seo_param_uri;
+    }
+
+    public function get_query_params()
+    {
+        return $this->_query_params;
+    }
+
+    public function get_uri_query_segment()
+    {
+        return $this->_uri_query_segment;
+    }
+
+    public function get_old_seo_query_param()
+    {
+        $last_param = FALSE;
+        foreach ($this->_query_params as $key => $param) {
+            if ($param["attribute"]->is_seo_used AND count($param["value"]) == 1) {
+                    $last_param = $param["value"][0];
+            }
+        }
+        return $last_param;
+    }
+
+    public function clean_uri($uri = '')
     {
         $segments = explode("/", $uri);
         $result = array();
-        $reserved = array();
         foreach ($segments as $key => $value) {
-            if ( preg_match(self::$reserved_segments, $value) ) {
-                array_push($reserved, strtolower($value) );
-            } else {
+            if ( !preg_match(self::$reserved_segments, $value) ) {
                 array_push($result, strtolower($value) );
             }
         }
-        $this->_reserved = $reserved;
         return implode("/", $result);
+    }
+
+    public function clean_query_params($category_id, $params = array())
+    {
+        $result = array();
+        if (count(array_keys($params)) > 0) {
+
+            $attributes = ORM::factory('Attribute')
+                            ->select(DB::expr("attribute.*"),"reference.is_seo_used")
+                            ->join("reference")
+                                ->on("reference.attribute","=","attribute.id")
+                            ->where("reference.category","=",$category_id)
+                            ->where("attribute.seo_name","IN",array_keys($params))
+                            ->order_by("reference.weight")
+                            ->getprepared_all();
+
+            foreach ($attributes as $attribute) {
+                $value = $params[$attribute->seo_name];
+                if (is_array($value)) {
+                    if (!array_key_exists("min", $value)) {
+                        $value  = array_unique($value);
+                        foreach ($value as $key => $item) {
+                            $value[$key] = (int) $item;
+                        }
+                    } else {
+                        krsort($value);
+                        foreach ($value as $key => $item) {
+                            $value[$key] = (float) $item;
+                        }
+                    }
+                } else {
+                    if ($attribute->type == "list") {
+                        $value = array((int) $value);
+                    } else {
+                        $value = trim(mb_strtolower($value));
+                    }
+                    
+                }
+                $result[$attribute->seo_name] = array(
+                    "value" => $value,
+                    "attribute" => $attribute
+                );
+            }
+        }
+        return $result;
     }
 
     public function is_seo_category_segment_incorrect()
@@ -110,7 +191,8 @@ class Search_Url
                             ->join('reference')
                                 ->on("data_list.reference","=","reference.id")
                             ->where("seo_name", "=", strtolower($value) )
-                            ->where("reference.category", "=", (int) $category_id );;
+                            ->where("reference.category", "=", (int) $category_id )
+                            ->where("reference.is_seo_used","=",1);
             
             if ($_parent_ae) {
                 $_ae = $_ae->where("parent_element", "=", $_ae_id);
@@ -207,6 +289,29 @@ class Search_Url
         return $crumbs;
     }
 
+    public function get_query_params_segment($params = array()) {
+        $result = array();
+        foreach ($params as $param_key => $param_value) {
+            if (is_array($param_value["value"])){
+                if (!array_key_exists("min", $param_value["value"])) {
+                    $result[$param_key]  = array_unique($param_value["value"]);
+                } else {
+                    krsort($param_value["value"]);
+                    foreach ($param_value["value"] as $value_key => $value_value) {
+                        if ($value_value > 0) {
+                            $result[$param_key][$value_key] = $value_value;
+                        }
+                    }
+                }
+            } else {
+                if (!$param_value["value"]) continue;
+                 $result[$param_key]  = $param_value["value"];
+                
+            }
+        }
+        return urldecode(http_build_query($result));
+    }
+
     public static function get_seo_param_segment($element_id)
     {
        $uri = array();
@@ -230,6 +335,57 @@ class Search_Url
        $uri = array_reverse($uri);
 
        return implode("/", $uri);
+    }
+
+    public static function clean_reserved($uri = '') {
+        $params = explode("/", $uri);
+        $result = array();
+        foreach ($params as $param)
+        {
+            if (preg_match("/page_([0-9]+)/", $param, $match))
+            {
+                $result["page"] = (int) $match[1];
+            }
+            if (preg_match("/limit_([0-9]+)/", $param, $match))
+            {
+                $result["limit"] = (int) $match[1];
+            }
+            if (preg_match("/order_([a-zA-Z0-9_\-]+)/", $param, $match))
+            {
+                $value = trim(strtolower($match[1]));
+                $value_params = explode("_", $value);
+                if (count($value_params) == 1) {
+                    $result["order"] = $value_params[0];
+                    $result["order_direction"] = "asc";
+                } elseif (count($value_params) == 2) {
+                    $result["order"] = $value_params[0];
+                    $result["order_direction"] = "desc";
+                }
+            }
+        }
+
+        return $result;
+    }
+
+    public static function is_page_incorrect($value){
+        if ($value == 1) {
+            return TRUE;
+        }
+        return FALSE;
+    }
+
+    public static function is_order_incorrect($value){
+        if (in_array($value, self::$reserved_requirements["order"])) {
+            return FALSE;
+        }
+        return TRUE;
+    }
+
+    public static function is_limit_incorrect($value){
+        if (in_array($value, self::$reserved_requirements["limit"])) {
+            return FALSE;
+        }
+        return TRUE;
     }
 
 }
