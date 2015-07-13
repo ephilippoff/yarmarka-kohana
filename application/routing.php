@@ -32,6 +32,32 @@ Route::set('/','')
 	));
 
 Route::set('detail', '<path>/<object_seo_name>.html',  array('path' => '[a-zA-Z0-9-_/]+'))
+	->filter(function($route, $params, $request){
+
+		$object_seo_name =  $params["object_seo_name"];
+		$object_category_segment = trim($params["path"], "/");
+		$object_seo_name_segments = explode("-", $object_seo_name);
+
+		$object_id =  (int) end($object_seo_name_segments);
+
+		if ($object_id == 0) {
+			throw new HTTP_Exception_404;
+		}
+
+		$object = ORM::factory('Objectcompiled', $object_id);
+		if (!$object->loaded()) {
+			throw new HTTP_Exception_404;
+		}
+
+		$url = $object->get_full_url();
+		$params["url"] = $url;
+		$params["object"] = $object;
+
+		if ($object->type_tr) {
+			$params["action"] = "type".$object->type_tr;
+		}
+		return $params;
+	})
 	->defaults(array(
 		'controller' => 'Detail',
 		'action'     => 'index'

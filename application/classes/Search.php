@@ -32,7 +32,7 @@ class Search {
 	{
 		$filter = array();
 		if (count($params) <= 0)
-			return;
+			return $filter;
 
 		$attributes = array();
 		$_attributes = ORM::factory('Attribute')
@@ -49,7 +49,7 @@ class Search {
 		foreach ($params as $seo_name => $value) {
 
 			$filter[] = DB::select("id")
-						->from("data_".$attributes[$seo_name]["type"])
+						->from("data_".strtolower($attributes[$seo_name]["type"]))
 						->where("object","=", DB::expr("object.id"))
 						->where("attribute", "=", $attributes[$seo_name]["id"])
 						->where("value", ((is_array($value)) ? "IN" : "="), $value)
@@ -57,6 +57,32 @@ class Search {
 		}
 
 		return $filter;
+	}
+
+	public static function get_search_cache() {
+		$shash = Cookie::get('shash');
+		$shash = "8550145e167f5e0c7bae0fa3bfb5ab548e0f46f3";
+		if ($shash) {
+			return ORM::factory('Search_Cache')
+							->get_query_by_hash($shash)->find();
+		}
+		return NULL;
+	}
+
+
+	public static function get_similar_objects_by_cache(ORM $search_cache = NULL) {
+		$exclusion = $query_sql = null;
+		$exclusion = explode(',', Cookie::get('ohistory'));
+
+		if (!$search_cache) {
+			$search_cache = self:: get_search_cache();
+		}
+		if ($search_cache AND $search_cache->loaded()) {
+			$query_sql = $search_cache->query;
+			return ORM::factory('Search_Cache')
+							->get_result_by_sql($query_sql, "date_created", "DESC", 5, $exclusion);
+		}
+		return NULL;
 	}
 }
 

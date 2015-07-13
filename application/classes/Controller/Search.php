@@ -51,6 +51,8 @@ class Controller_Search extends Controller_Template {
         $twig->city        = $this->domain->get_city();
         $twig->crumbs      = Search_Url::get_category_crubms($this->params_by_uri->get_category()->id);
 
+        echo Debug::vars($this->params_by_uri);
+
         $this->response->body($twig);
 
     }

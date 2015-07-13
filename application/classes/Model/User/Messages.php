@@ -38,4 +38,14 @@ class Model_User_Messages extends ORM {
 		return $this->save();
 	}
 
+	public function get_messages($object_id, $from_moderators = FALSE) {
+		$query = $this->join('user', 'left')
+				->on('user_messages.user_id', '=', 'user.id');
+		if ($from_moderators) {
+			$query = $query->where('user.role', 'NOT IN', array(1,3));
+		}
+		return $query->where('object_id', '=', $object_id)
+					 ->order_by("createdOn", "desc");
+	}
+
 } // End User_Messages Model

@@ -24,4 +24,23 @@ class Cookie extends Kohana_Cookie {
 		return setcookie($name, $value, $expiration, Cookie::$path, ".".$main_domain, Cookie::$secure, Cookie::$httponly);
 	}
 
+	public static function save_toobject_history($object_id)
+	{
+		$cookie_name = 'ohistory';
+		$ohistory_max_count = 30;
+		
+		$objects_stack = ($cookie = trim(self::get($cookie_name))) ? explode(',', $cookie) : array();
+
+		//удаляем добавляемое значение, если оно уже есть в стеке(исключаем дубли и "освежаем" позицию в стеке)
+		if (($key = array_search($object_id, $objects_stack)) !== false)
+			unset($objects_stack[$key]);
+		//наполняем стек пока не достигнут лимит, удаляем последний элемент в стеке
+		if (count($objects_stack) >= $ohistory_max_count)
+			array_pop($objects_stack);
+		//новое значение в начало стека	
+		array_unshift($objects_stack, $object_id);
+		//запоминаем
+		self::set($cookie_name, implode(',', $objects_stack), strtotime( '+180 days' ));
+	}
+
 }
