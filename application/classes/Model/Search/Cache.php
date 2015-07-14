@@ -36,5 +36,5 @@ class Model_Search_Cache extends ORM {
 
 		return $result;
 	}
-} // End Service_Invoices Model
+}
 

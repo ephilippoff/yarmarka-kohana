@@ -1,7 +1,10 @@
 <phpunit colors="true" bootstrap="../../modules/unittest/bootstrap.php">
     <testsuites>
-        <testsuite name="Массовая Загрузка">
-            <directory>./classes/objectloadTest.php</directory>
+        <testsuite name="Тест поиска на правильность редиректов">
+            <directory>./classes/search/searchRedirectTest.php</directory>
+        </testsuite>
+         <testsuite name="Тест поиска на правильность GET параметров">
+            <directory>./classes/search/searchQueryParamsTest.php</directory>
         </testsuite>
     </testsuites>
 </phpunit>

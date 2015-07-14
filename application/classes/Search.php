@@ -57,7 +57,36 @@ class Search {
 							->where($table_name."_filter."."attribute", "=", $attributes[$seo_name]["id"])
 							->where($table_name."_filter."."value", ((is_array($value)) ? "IN" : "="), $value)
 							->limit(1);
+			} elseif ($type == "integer" OR $type == "numeric") {
+				$value = new Obj($value);
+				$query = DB::select("id")
+							->from(array($table_name, $table_name."_filter"))
+							->where($table_name."_filter."."object","=", DB::expr($alias.".id"))
+							->where($table_name."_filter."."attribute", "=", $attributes[$seo_name]["id"])
+							->limit(1);
+				if ($value->min) {
+					$query = $query->where($table_name."_filter."."value_min", ">=", $value->min);
+				}
+				if ($value->max) {
+					$query = $query->where($table_name."_filter."."value_min", "<=", $value->max);
+				}
+				$filter[] = $query;
+			} elseif ($type == "text") {
+				$filter[] = DB::select("id")
+							->from(array($table_name, $table_name."_filter"))
+							->where($table_name."_filter."."object","=", DB::expr($alias.".id"))
+							->where($table_name."_filter."."attribute", "=", $attributes[$seo_name]["id"])
+							->where($table_name."_filter."."value", "LIKE", "%".$value."%")
+							->limit(1);
 			}
+			// } elseif ($type == "boolean") {
+			// 	$filter[] = DB::select("id")
+			// 				->from(array($table_name, $table_name."_filter"))
+			// 				->where($table_name."_filter."."object","=", DB::expr($alias.".id"))
+			// 				->where($table_name."_filter."."attribute", "=", $attributes[$seo_name]["id"])
+			// 				->where($table_name."_filter."."value", "=", 1)
+			// 				->limit(1);
+			// }
 		}
 
 		return $filter;
@@ -115,9 +144,10 @@ class Search {
      *   )
 	 * @return [ORM]         [description]
 	 */
-	public static function searchquery(array $params = array())
+	public static function searchquery($filters = array(), $params = array(), $options = array())
 	{
-		$params = new Obj($params);
+		$params = new Obj(array_merge($filters, $params));
+		$options = new Obj($options);
 
 		$order = ($params->order) ? $params->order : "date_created";
 		$order_direction = ($params->order_direction) ? $params->order_direction : "DESC";
@@ -175,7 +205,7 @@ class Search {
 		}
 
 		if ($params->source) {
-			$object = $object->where("o.source", "=", (int) $params->source);
+			$object = $object->where("o.source_id", "=", (int) $params->source);
 		}
 
 		$multimedia_filter = array();
@@ -238,6 +268,7 @@ class Search {
 		}
 		return $object;
 	}
+
 }
 
 /* End of file Search.php */

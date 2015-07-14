@@ -4,7 +4,7 @@
  * Twig view
  */
 class Twig extends Kohana_Twig {
-
+    
     protected static function env()
     {
         $config = Kohana::$config->load('twig');

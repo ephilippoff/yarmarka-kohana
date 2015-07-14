@@ -8,22 +8,117 @@ class Search_Url
         "limit" => array(5,10,15,20,25,30,60,90)
     );
 
-    static $reserved_query_params = array("search_by_params");
+    static $reserved_query_params = array("photo", "video", "org", "private", "source", "user_id");
 
     public function __construct($uri = '', $query_params = array())
     {
         $this->_uri = $this->clean_uri($uri);
-        $this->_fulluri = $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
-        $this->_uri_query_segment = urldecode(parse_url($this->_fulluri, PHP_URL_QUERY));
         $this->_reserved = $this->clean_reserved($uri);
         $this->_category = self::get_category_in_uri($this->_uri);
-        $this->_query_params = $this->clean_query_params($this->_category->id, $query_params);
-        $this->_proper_category_uri = NULL;
-
         if (!$this->_category) {
             throw new Exception("Category not found", $uri);
         }
+        $this->_category_childs = ORM::factory('Category')
+                                ->get_childs(array($this->_category->id))
+                                ->getprepared_all();
+
+        $this->_query_params = $this->clean_query_params($this->_category->id, $query_params);
+        $this->_reserved_query_params = $this->clean_reserved_query_params($query_params);
         $this->_proper_category_uri = self::get_uri_category_segment($this->_category->id);
+        $this->incorrectly_query_params_for_seo = FALSE;
+    }
+
+    /**
+     * [check_uri_segments description]
+     * test application/tests/classes/searchRedirectTest.php
+     * @return [void]
+     */
+    public function check_uri_segments()
+    {
+        if ($proper_category_uri = $this->is_seo_category_segment_incorrect()) {
+            //TODO Log incorrect category seo
+
+            throw new Kohana_Exception_Withparams("category incorrect", array(
+                "uri" => $proper_category_uri,
+                "code" => 301
+            ));
+        }
+
+        if ($proper_seo_param_uri = $this->is_seo_param_segment_incorrect()) {
+            //TODO Log incorrect seo params
+            if ($proper_seo_param_uri === TRUE) {
+                throw new Kohana_Exception_Withparams("seo_param incorrect", array(
+                    "uri" => $this->get_proper_category_uri(),
+                    "code" => 301
+                ));
+            } else {
+                throw new Kohana_Exception_Withparams("seo_param correct, but uri wrong", array(
+                    "uri" => $this->get_proper_category_uri()."/".$proper_seo_param_uri,
+                    "code" => 301
+                ));
+            }
+        }
+
+        if (count($this->get_reserved()) > 0 ) {
+            $reserved = new Obj($this->get_reserved());
+            //TODO Log incorrect seo params
+            if ($reserved->page AND $this->is_page_incorrect($reserved->page)) {
+                throw new Kohana_Exception_Withparams("reserved param `page` incorrect", array(
+                    "uri" => $this->get_proper_segments(),
+                    "code" => 301
+                ));
+            }
+            //TODO Log incorrect seo params
+            if ($reserved->limit AND $this->is_limit_incorrect($reserved->limit)) {
+                 throw new Kohana_Exception_Withparams("reserved param `limit` incorrect",array(
+                    "uri" => $this->get_proper_segments(),
+                    "code" => 301
+                ));
+            }
+            //TODO Log incorrect seo params
+            if ($reserved->order AND $this->is_order_incorrect($reserved->order)) {
+                 throw new Kohana_Exception_Withparams("reserved param `order` incorrect",array(
+                    "uri" => $this->get_proper_segments(),
+                    "code" => 301
+                ));
+            }
+        }
+
+        if ($old_param = $this->get_old_seo_query_param()) {
+            throw new Kohana_Exception_Withparams("old seo param incorrect",array(
+                "uri" => $this->get_proper_category_uri()."/".$this->get_seo_param_segment($old_param),
+                "code" => 301
+            ));
+        }
+    }
+
+    public function check_query_params($query_params_from_source = array())
+    {   
+        $cleaned1_source_query_params = $this->clean_level1_query_params($query_params_from_source);
+        $cleaned2_query_params = $this->clean_level2_query_params( $this->get_query_params() );
+        if (count($cleaned1_source_query_params) > 0 
+                AND $cleaned1_source_query_params !==  $cleaned2_query_params) {
+            throw new Kohana_Exception_Withparams("query params incorrect");
+        }
+    }
+
+    public function get_proper_segments() {
+        $proper_category_uri = $this->get_proper_category_uri();
+        $proper_seo_param_uri = $this->get_proper_seo_param_uri();
+
+        return $proper_category_uri.( ($proper_seo_param_uri) ? "/".$proper_seo_param_uri: "" );
+    }
+
+    public function get_category_childs()
+    {
+        return $this->_category_childs;
+    }
+
+    public function get_category_childs_id()
+    {
+        return array_map(function($value){
+            return $value->id;
+        }, $this->_category_childs);
     }
 
     public function get_category()
@@ -31,14 +126,29 @@ class Search_Url
         return $this->_category;
     }
 
-    public function get_reserved()
-    {
-        return $this->_reserved;
-    }
-
     public function get_uri()
     {
         return $this->_uri;
+    }
+
+    public function get_query_params($name = NULL)
+    {
+        if ($name) {
+            $query_params = new Obj($this->_query_params);
+            return $query_params->{$name};
+        } else {
+            return $this->_query_params;
+        }
+    }
+
+    public function get_reserved_query_params($name = NULL)
+    {
+        if ($name) {
+            $query_params = new Obj($this->_reserved_query_params);
+            return $query_params->{$name};
+        } else {
+            return $this->_reserved_query_params;
+        }
     }
 
     public function get_proper_category_uri()
@@ -47,25 +157,34 @@ class Search_Url
     }
 
     public function get_proper_seo_param_uri()
-    {
-        return $this->_proper_seo_param_uri;
+    {   if (property_exists($this, "_proper_seo_param_uri")) {
+            return $this->_proper_seo_param_uri;
+        } else {
+            return "";
+        }
     }
 
-    public function get_query_params()
+    public function get_reserved($name = NULL)
     {
-        return $this->_query_params;
+        if ($name) {
+            $reserved = new Obj($this->_reserved);
+            return $reserved->{$name};
+        } else {
+            return $this->_reserved;
+        }
     }
 
-    public function get_uri_query_segment()
+    public function get_clean_query_params()
     {
-        return $this->_uri_query_segment;
+        return $this->clean_level2_query_params($this->_query_params);
     }
 
     public function get_old_seo_query_param()
     {
         $last_param = FALSE;
         foreach ($this->_query_params as $key => $param) {
-            if ($param["attribute"]->is_seo_used AND count($param["value"]) == 1) {
+            if (count($param["value"]) > 1) break;
+            if ($param["attribute"]->is_seo_used) {
                     $last_param = $param["value"][0];
             }
         }
@@ -82,6 +201,51 @@ class Search_Url
             }
         }
         return implode("/", $result);
+    }
+
+    public function clean_level1_query_params($params = array())
+    {
+        $result = array();
+        foreach ($params as $param_key => $param_value) {
+            if (is_array($param_value)){
+                if (!array_key_exists("min", $param_value)) {
+                    foreach ($param_value as $key => $item) {
+                        $result[$param_key][$key] = (int) $item;
+                    }
+                } else {
+                    foreach ($param_value as $key => $item) {
+                        $result[$param_key][$key] = (float) $item;
+                    }
+                }
+            } else {
+                $result[$param_key] = array((int) $param_value);
+            }
+        }
+        return $result;
+    }
+
+    
+    public function clean_level2_query_params($params = array()) {
+        $result = array();
+        foreach ($params as $param_key => $param_value) {
+            if (is_array($param_value["value"])){
+                if (!array_key_exists("min", $param_value["value"])) {
+                    $result[$param_key]  = array_unique($param_value["value"]);
+                } else {
+                    krsort($param_value["value"]);
+                    foreach ($param_value["value"] as $value_key => $value_value) {
+                        if ($value_value > 0) {
+                            $result[$param_key][$value_key] = $value_value;
+                        }
+                    }
+                }
+            } else {
+                if (!$param_value["value"]) continue;
+                 $result[$param_key]  = $param_value["value"];
+                
+            }
+        }
+        return $result;
     }
 
     public function clean_query_params($category_id, $params = array())
@@ -124,6 +288,16 @@ class Search_Url
                     "value" => $value,
                     "attribute" => $attribute
                 );
+            }
+        }
+        return $result;
+    }
+
+    public function clean_reserved_query_params($get_params = array()) {
+        $result = array();
+        foreach ($get_params as $key => $value) {
+            if (in_array($key, self::$reserved_query_params)){
+                $result[$key] = (int) $value;
             }
         }
         return $result;
@@ -287,29 +461,6 @@ class Search_Url
             ));
         }
         return $crumbs;
-    }
-
-    public function get_query_params_segment($params = array()) {
-        $result = array();
-        foreach ($params as $param_key => $param_value) {
-            if (is_array($param_value["value"])){
-                if (!array_key_exists("min", $param_value["value"])) {
-                    $result[$param_key]  = array_unique($param_value["value"]);
-                } else {
-                    krsort($param_value["value"]);
-                    foreach ($param_value["value"] as $value_key => $value_value) {
-                        if ($value_value > 0) {
-                            $result[$param_key][$value_key] = $value_value;
-                        }
-                    }
-                }
-            } else {
-                if (!$param_value["value"]) continue;
-                 $result[$param_key]  = $param_value["value"];
-                
-            }
-        }
-        return urldecode(http_build_query($result));
     }
 
     public static function get_seo_param_segment($element_id)

@@ -183,8 +183,7 @@ class Model_Category extends ORM {
 				->where('is_ready', '=', 1)
 				->order_by('weight')
 				->order_by('title')				
-				->cached(60*24)
-				->find_all();	
+				->cached(60*24);
 	}
 	
 	//Взять баннеры категорий для региона/города
@@ -267,7 +266,7 @@ class Model_Category extends ORM {
 
 		if ($params->with_child) {
 			//получаем рубрики второго уровня
-			$categories2l = ORM::factory('Category')->get_childs($categories1l_ids);
+			$categories2l = ORM::factory('Category')->get_childs($categories1l_ids)->find_all();
 			$result["childs"] = $categories2l;
 		}
 
