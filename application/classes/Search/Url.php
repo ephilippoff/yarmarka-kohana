@@ -19,10 +19,9 @@ class Search_Url
             throw new Exception("Category not found", $uri);
         }
         $this->_category_childs = ORM::factory('Category')
-                                ->get_childs(array($this->_category->id))
+                                ->get_childs(array($this->_category->id), TRUE)
                                 ->getprepared_all();
-
-        
+                                
         $this->_proper_category_uri = self::get_uri_category_segment($this->_category->id);
 
         $this->_seo_param = NULL;

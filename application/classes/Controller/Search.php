@@ -12,7 +12,7 @@ class Controller_Search extends Controller_Template {
         $this->auto_render = FALSE;
         $this->cached_search_info = FALSE;
 
-        if ($search_info = $this->get_search_info_from_cache() AND 1==0) {
+        if ($search_info = $this->get_search_info_from_cache()) {
             $this->cached_search_info = unserialize($search_info->params);
         } else {
 
@@ -58,6 +58,14 @@ class Controller_Search extends Controller_Template {
         //main search
         $main_search_query = Search::searchquery($search_info->search_filters, $search_info->search_params);
         $twig->main_search_result = $main_search_query->execute();
+        $twig->main_search_result = $main_search_query->execute();
+
+        if (!$search_info->main_search_result_count) {
+            $main_search_result_count = Search::searchquery($search_info->search_filters, array(), array("count" => TRUE))
+                                                    ->execute()
+                                                    ->get("count");
+            $search_info->main_search_result_count = $main_search_result_count;
+        }
 
         //premium
         $premium_search_query = Search::searchquery(
@@ -68,7 +76,13 @@ class Controller_Search extends Controller_Template {
 
 
         if (!$search_info->incorrectly_query_params_for_seo AND !$this->cached_search_info) {
-            $this->save_search_info_to_cache($search_info, (string) $main_search_query);
+            $this->save_search_info_to_cache(array(
+                    "info" => $search_info,
+                    "canonical_url" =>  $search_info->canonical_url,
+                    "sql" => (string) $main_search_query,
+                    "count" => $search_info->main_search_result_count,
+                )
+            );
         }
         foreach ((array) $search_info as $key => $item) {
             $twig->{$key} = $item;
@@ -88,6 +102,7 @@ class Controller_Search extends Controller_Template {
         $category_id = $this->params_by_uri->get_category()->id;
         $child_categories_ids = $this->params_by_uri->get_category_childs_id();
 
+        $info->canonical_url  =  $this->params_by_uri->get_proper_segments();
         $info->domain      = $this->domain;
         $info->city        = $this->domain->get_city();
         $info->crumbs      = Search_Url::get_category_crubms($category_id);
@@ -117,9 +132,16 @@ class Controller_Search extends Controller_Template {
         return $info;
     }
 
-    public function save_search_info_to_cache($info, $sql) {
+    public function save_search_info_to_cache($options = array()) {
+        $options = new Obj($options);
         ORM::factory('Search_Url_Cache')
-                ->save_search_info($info, $_SERVER["HTTP_HOST"].$_SERVER["REQUEST_URI"], $sql);
+                ->save_search_info(
+                    $options->info, 
+                    $_SERVER["HTTP_HOST"].$_SERVER["REQUEST_URI"], 
+                    $_SERVER["HTTP_HOST"]."/".$options->canonical_url, 
+                    $options->sql, 
+                    $options->count
+                );
     }
 
     public function get_search_info_from_cache() {

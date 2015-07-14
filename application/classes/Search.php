@@ -141,6 +141,8 @@ class Search {
      *               )
      *       "page" => 1,
      *       "limit" => 3,
+     *       "not_id" => array(1,2),
+     *       "not_user_id" => array(1,2)
      *   )
 	 * @return [ORM]         [description]
 	 */
@@ -148,6 +150,8 @@ class Search {
 	{
 		$params = new Obj(array_merge($filters, $params));
 		$options = new Obj($options);
+
+		$select = ($options->count) ? "count(o.id) as count" : "o.*";
 
 		$order = ($params->order) ? $params->order : "date_created";
 		$order_direction = ($params->order_direction) ? $params->order_direction : "DESC";
@@ -159,7 +163,7 @@ class Search {
 		$published = (isset($params->published)) ? $params->published : TRUE;
 		
 
-		$object = DB::select(DB::expr("o.*"))
+		$object = DB::select(DB::expr($select))
 						->from(array("vw_objectcompiled","o"));
 
 		if ($active) {
@@ -176,8 +180,16 @@ class Search {
 			$object = $object->where("o.id", "=", $params->id);
 		}
 
+		if ($params->not_id AND is_array($params->not_id)) {
+			$object = $object->where("o.id", "NOT IN", $params->not_id);
+		}
+
 		if ($params->user_id) {
 			$object = $object->where("o.author_company_id", "=", $params->user_id);
+		}
+
+		if ($params->not_user_id AND is_array($params->not_user_id)) {
+			$object = $object->where("o.author_company_id", "NOT IN", $params->not_user_id);
 		}
 
 		if ( $params->city_id AND is_array($params->city_id) ) {
@@ -255,17 +267,21 @@ class Search {
 		foreach ($filters as $filter)
 			$object = $object->where("0", "<", $filter);
 
-		$object = $object->limit($limit);
+		if (!$options->count) {
+			$object = $object->limit($limit);
 
-		$object = $object->offset($limit*( ($page == 0)? 0: $page-1 ) );
+			$object = $object->offset($limit*( ($page == 0)? 0: $page-1 ) );
 
-		if (is_array($order)) {
-			foreach ($order as $order_item) {
-				$object = $object->order_by("o.".$order_item[0], $order_item[1]);
+		
+			if (is_array($order)) {
+				foreach ($order as $order_item) {
+					$object = $object->order_by("o.".$order_item[0], $order_item[1]);
+				}
+			} else {
+				$object = $object->order_by("o.".$order, $order_direction);
 			}
-		} else {
-			$object = $object->order_by("o.".$order, $order_direction);
 		}
+
 		return $object;
 	}
 

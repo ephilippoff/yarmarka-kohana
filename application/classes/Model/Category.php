@@ -176,13 +176,28 @@ class Model_Category extends ORM {
 	}	
 	
 	//Получить дочерние рубрики
-	public function get_childs($parent_ids = array())
+	public function get_childs($parent_ids = array(), $with_subchilds = FALSE)
 	{
+		if ($with_subchilds) {
+
+			$categories = ORM::factory('Category')
+				->where('parent_id', 'in', $parent_ids)
+				->where('is_ready', '=', 1)
+				->order_by('weight')
+				->order_by('title')
+				->cached(60*24)
+				->getprepared_all();
+			$ids = array_map(function($value){
+				return $value->id;
+			}, (array) $categories);
+			
+			return $this->get_childs(array_merge($ids, $parent_ids));
+		}
 		return ORM::factory('Category')
 				->where('parent_id', 'in', $parent_ids)
 				->where('is_ready', '=', 1)
 				->order_by('weight')
-				->order_by('title')				
+				->order_by('title')
 				->cached(60*24);
 	}
 	

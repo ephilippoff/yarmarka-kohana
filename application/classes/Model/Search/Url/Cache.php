@@ -5,7 +5,7 @@ class Model_Search_Url_Cache extends ORM {
 	protected static $secret = 'secret_#ode123ocvxvhias0a!&sdf';
 	protected $_table_name = 'search_url_cache';
 
-	public function save_search_info($info, $url, $sql)
+	public function save_search_info($info, $url, $canonical_url, $sql, $count)
 	{
 		$hash_url = $this->hash($url);
 		$sql = $this->prepare_sql($sql);
@@ -25,6 +25,9 @@ class Model_Search_Url_Cache extends ORM {
 
 		$this->sql = $sql;
 		$this->hash_sql = $hash_sql;
+
+		$this->count = (int) $count;
+		$this->canonical_url = $canonical_url;
 		$this->save();
 	}
 
