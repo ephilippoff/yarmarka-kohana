@@ -22,10 +22,41 @@ class Search_Url
                                 ->get_childs(array($this->_category->id))
                                 ->getprepared_all();
 
+        
+        $this->_proper_category_uri = self::get_uri_category_segment($this->_category->id);
+
+        $this->_seo_param = NULL;
+        $this->_seo_filters = array();
+        $seo_params_uri = trim(str_replace($this->_proper_category_uri, "", $this->_uri), "/");
+        if ($seo_params_uri AND $seo_params_uri <> "") {
+            $this->_seo_param = self::get_seo_param_in_uri($this->_category->id, $seo_params_uri);
+            if ($this->_seo_param) {
+                $this->_seo_filters = $this->seo_params_to_query_params($this->_seo_param);
+            }
+        }
+
         $this->_query_params = $this->clean_query_params($this->_category->id, $query_params);
         $this->_reserved_query_params = $this->clean_reserved_query_params($query_params);
-        $this->_proper_category_uri = self::get_uri_category_segment($this->_category->id);
+
         $this->incorrectly_query_params_for_seo = FALSE;
+    }
+
+    public function seo_params_to_query_params($seo_param) {
+        $result = array();
+       
+        if ($seo_param->parent_element) {
+            $parent_ae = ORM::factory('Attribute_Element')
+                            ->select("attribute_element.*", array("attribute.seo_name","attribute_seo_name"))
+                            ->join('attribute')
+                                ->on("attribute_element.attribute","=","attribute.id")
+                            ->where("attribute_element.id","=",$seo_param->parent_element)
+                            ->find();
+            if ($parent_ae->loaded()) {
+                $result[$parent_ae->attribute_seo_name] = $parent_ae->id;
+            }
+        }
+        $result[$seo_param->attribute_seo_name] = $seo_param->id;
+        return $result;
     }
 
     /**
@@ -139,6 +170,11 @@ class Search_Url
         } else {
             return $this->_query_params;
         }
+    }
+
+    public function get_seo_filters()
+    {
+        return $this->_seo_filters;
     }
 
     public function get_reserved_query_params($name = NULL)
@@ -317,7 +353,7 @@ class Search_Url
     {
         $seo_params_uri = trim(str_replace($this->_proper_category_uri, "", $this->_uri), "/");
         if ($seo_params_uri AND $seo_params_uri <> "") {
-            $element = $this->_seo_param = self::get_seo_param_in_uri($this->_category->id, $seo_params_uri);
+            $element = $this->_seo_param;
             if ($element) {
                 $proper_seo_param = self::get_seo_param_segment($element->id);
                 $this->_proper_seo_param_uri = $proper_seo_param;
@@ -360,16 +396,19 @@ class Search_Url
 
         foreach ($uri as $key => $value) {
             $_ae = ORM::factory('Attribute_Element')
+                            ->select("attribute_element.*", array("attribute.seo_name","attribute_seo_name"))
                             ->join('data_list')
                                 ->on("data_list.value","=","attribute_element.id")
                             ->join('reference')
                                 ->on("data_list.reference","=","reference.id")
-                            ->where("seo_name", "=", strtolower($value) )
+                            ->join('attribute')
+                                ->on("data_list.attribute","=","attribute.id")
+                            ->where("attribute_element.seo_name", "=", strtolower($value) )
                             ->where("reference.category", "=", (int) $category_id )
                             ->where("reference.is_seo_used","=",1);
             
             if ($_parent_ae) {
-                $_ae = $_ae->where("parent_element", "=", $_ae_id);
+                $_ae = $_ae->where("attribute_element.parent_element", "=", $_ae_id);
             }
 
             $_ae->find();

@@ -12,7 +12,7 @@ class Controller_Search extends Controller_Template {
         $this->auto_render = FALSE;
         $this->cached_search_info = FALSE;
 
-        if ($search_info = $this->get_search_info_from_cache()) {
+        if ($search_info = $this->get_search_info_from_cache() AND 1==0) {
             $this->cached_search_info = unserialize($search_info->params);
         } else {
 
@@ -54,21 +54,22 @@ class Controller_Search extends Controller_Template {
         $twig = Twig::factory('search/index');
 
         $search_info = $this->get_search_info();
-        
+
         //main search
-        $search_query = Search::searchquery($search_info->search_filters, $search_info->search_params);
-        $twig->main_search_result = $search_query->execute();
+        $main_search_query = Search::searchquery($search_info->search_filters, $search_info->search_params);
+        $twig->main_search_result = $main_search_query->execute();
 
         //premium
-        $search_info->search_filters["premium"] = TRUE;
-        $search_info->search_params["limit"] = 5;
-        $search_query = Search::searchquery($search_info->search_filters, $search_info->search_params);
-        $twig->premium_search_result = $search_query->execute();
+        $premium_search_query = Search::searchquery(
+            array_merge($search_info->search_filters, array("premium" => TRUE)), 
+            array_merge($search_info->search_params, array("limit" => 5))
+        );
+        $twig->premium_search_result = $premium_search_query->execute();
+
 
         if (!$search_info->incorrectly_query_params_for_seo AND !$this->cached_search_info) {
-            $this->save_search_info_to_cache($search_info);
+            $this->save_search_info_to_cache($search_info, (string) $main_search_query);
         }
-
         foreach ((array) $search_info as $key => $item) {
             $twig->{$key} = $item;
         }
@@ -105,7 +106,7 @@ class Controller_Search extends Controller_Template {
             "private" => $this->params_by_uri->get_reserved_query_params("private"),
             "org" => $this->params_by_uri->get_reserved_query_params("org"),
 
-            "filters" => $this->params_by_uri->get_clean_query_params()
+            "filters" => array_merge($this->params_by_uri->get_clean_query_params(), $this->params_by_uri->get_seo_filters())
         );
 
         $info->search_params = array(
@@ -116,9 +117,9 @@ class Controller_Search extends Controller_Template {
         return $info;
     }
 
-    public function save_search_info_to_cache($info) {
+    public function save_search_info_to_cache($info, $sql) {
         ORM::factory('Search_Url_Cache')
-                ->save_search_info($info, $_SERVER["HTTP_HOST"].$_SERVER["REQUEST_URI"]);
+                ->save_search_info($info, $_SERVER["HTTP_HOST"].$_SERVER["REQUEST_URI"], $sql);
     }
 
     public function get_search_info_from_cache() {
