@@ -57,8 +57,7 @@ class Controller_Search extends Controller_Template {
 
         //main search
         $main_search_query = Search::searchquery($search_info->search_filters, $search_info->search_params);
-        $twig->main_search_result = $main_search_query->execute();
-        $twig->main_search_result = $main_search_query->execute();
+        $twig->main_search_result = $main_search_query->execute()->as_array();
 
         if (!$search_info->main_search_result_count) {
             $main_search_result_count = Search::searchquery($search_info->search_filters, array(), array("count" => TRUE))
@@ -72,7 +71,7 @@ class Controller_Search extends Controller_Template {
             array_merge($search_info->search_filters, array("premium" => TRUE)), 
             array_merge($search_info->search_params, array("limit" => 5))
         );
-        $twig->premium_search_result = $premium_search_query->execute();
+        $twig->premium_search_result = $premium_search_query->execute()->as_array();
 
 
         if (!$search_info->incorrectly_query_params_for_seo AND !$this->cached_search_info) {
@@ -107,7 +106,6 @@ class Controller_Search extends Controller_Template {
         $info->city        = $this->domain->get_city();
         $info->crumbs      = Search_Url::get_category_crubms($category_id);
         $info->incorrectly_query_params_for_seo =  $this->params_by_uri->incorrectly_query_params_for_seo;
-
         $info->search_filters = array(
             "active" => TRUE,
             "published" =>TRUE,
@@ -127,6 +125,13 @@ class Controller_Search extends Controller_Template {
         $info->search_params = array(
             "page" => $this->params_by_uri->get_reserved("page"),
             "limit" => $this->params_by_uri->get_reserved("limit"),
+        );
+
+        $info->seo_attributes =Seo::get_seo_attributes(
+            $this->params_by_uri->get_proper_segments(),
+            $info->search_filters["filters"],
+            $this->params_by_uri->get_category(),
+            $this->domain->get_city()
         );
 
         return $info;
