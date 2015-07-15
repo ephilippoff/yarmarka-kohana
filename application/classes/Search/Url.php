@@ -2,18 +2,21 @@
 
 class Search_Url
 {
-    static $reserved_segments = "/order_|page_|limit_/";
-    static $reserved_requirements = array(
+
+    static $reserved_query_params = array("photo", "video", "org", "private", "source", "user_id", "limit", "order", "page");
+    static $reserved_query_params_requirements = array(
         "order" => array("price","price_desc","date_desc","date"),
         "limit" => array(5,10,15,20,25,30,60,90)
     );
+    static $reserved_query_params_defaults = array(
+        "order" => "date_desc",
+        "limit" => 30,
+        "page" => 0
+    );
 
-    static $reserved_query_params = array("photo", "video", "org", "private", "source", "user_id");
-
-    public function __construct($uri = '', $query_params = array())
+    public function __construct($uri = '', $query_params = array(), $route_params = array())
     {
-        $this->_uri = $this->clean_uri($uri);
-        $this->_reserved = $this->clean_reserved($uri);
+        $this->_uri = $uri;
         $this->_category = self::get_category_in_uri($this->_uri);
         if (!$this->_category) {
             throw new Exception("Category not found", $uri);
@@ -36,7 +39,7 @@ class Search_Url
 
         $this->_query_params = $this->clean_query_params($this->_category->id, $query_params);
         $this->_reserved_query_params = $this->clean_reserved_query_params($query_params);
-
+echo Debug::vars($this->_reserved_query_params);
         $this->incorrectly_query_params_for_seo = FALSE;
     }
 
@@ -89,25 +92,10 @@ class Search_Url
             }
         }
 
-        if (count($this->get_reserved()) > 0 ) {
-            $reserved = new Obj($this->get_reserved());
+        if ($this->get_reserved_query_params("page")) {
             //TODO Log incorrect seo params
-            if ($reserved->page AND $this->is_page_incorrect($reserved->page)) {
+            if ($this->is_page_incorrect($this->get_reserved_query_params("page"))) {
                 throw new Kohana_Exception_Withparams("reserved param `page` incorrect", array(
-                    "uri" => $this->get_proper_segments(),
-                    "code" => 301
-                ));
-            }
-            //TODO Log incorrect seo params
-            if ($reserved->limit AND $this->is_limit_incorrect($reserved->limit)) {
-                 throw new Kohana_Exception_Withparams("reserved param `limit` incorrect",array(
-                    "uri" => $this->get_proper_segments(),
-                    "code" => 301
-                ));
-            }
-            //TODO Log incorrect seo params
-            if ($reserved->order AND $this->is_order_incorrect($reserved->order)) {
-                 throw new Kohana_Exception_Withparams("reserved param `order` incorrect",array(
                     "uri" => $this->get_proper_segments(),
                     "code" => 301
                 ));
@@ -199,16 +187,6 @@ class Search_Url
         }
     }
 
-    public function get_reserved($name = NULL)
-    {
-        if ($name) {
-            $reserved = new Obj($this->_reserved);
-            return $reserved->{$name};
-        } else {
-            return $this->_reserved;
-        }
-    }
-
     public function get_clean_query_params()
     {
         return $this->clean_level2_query_params($this->_query_params);
@@ -224,18 +202,6 @@ class Search_Url
             }
         }
         return $last_param;
-    }
-
-    public function clean_uri($uri = '')
-    {
-        $segments = explode("/", $uri);
-        $result = array();
-        foreach ($segments as $key => $value) {
-            if ( !preg_match(self::$reserved_segments, $value) ) {
-                array_push($result, strtolower($value) );
-            }
-        }
-        return implode("/", $result);
     }
 
     public function clean_level1_query_params($params = array())
@@ -330,9 +296,31 @@ class Search_Url
 
     public function clean_reserved_query_params($get_params = array()) {
         $result = array();
+        $reserved_query_params_requirements = new Obj(self::$reserved_query_params_requirements);
+        $reserved_query_params_defaults = new Obj(self::$reserved_query_params_defaults);
         foreach ($get_params as $key => $value) {
             if (in_array($key, self::$reserved_query_params)){
-                $result[$key] = (int) $value;
+                if ($reserved_query_params_requirements->{$key}) {
+                    if ($key == "order") {
+                        if ( in_array((string) $value, $reserved_query_params_requirements->{$key}) ) {
+                            $result[$key] = (string) $value;
+                        }
+                    } else {
+                        if ( in_array((int) $value, $reserved_query_params_requirements->{$key}) ) {
+                            $result[$key] = (int) $value;
+                        }
+                    }
+                } else {
+                    $result[$key] = (int) $value;
+                }
+            }
+        }
+
+        foreach (self::$reserved_query_params as $param) {
+            if (!isset($result[$param])) {
+                if ($reserved_query_params_defaults->{$param}) {
+                    $result[$param] = $reserved_query_params_defaults->{$param};
+                }
             }
         }
         return $result;
@@ -526,55 +514,12 @@ class Search_Url
        return implode("/", $uri);
     }
 
-    public static function clean_reserved($uri = '') {
-        $params = explode("/", $uri);
-        $result = array();
-        foreach ($params as $param)
-        {
-            if (preg_match("/page_([0-9]+)/", $param, $match))
-            {
-                $result["page"] = (int) $match[1];
-            }
-            if (preg_match("/limit_([0-9]+)/", $param, $match))
-            {
-                $result["limit"] = (int) $match[1];
-            }
-            if (preg_match("/order_([a-zA-Z0-9_\-]+)/", $param, $match))
-            {
-                $value = trim(strtolower($match[1]));
-                $value_params = explode("_", $value);
-                if (count($value_params) == 1) {
-                    $result["order"] = $value_params[0];
-                    $result["order_direction"] = "asc";
-                } elseif (count($value_params) == 2) {
-                    $result["order"] = $value_params[0];
-                    $result["order_direction"] = "desc";
-                }
-            }
-        }
 
-        return $result;
-    }
-
-    public static function is_page_incorrect($value){
+    public static function is_page_incorrect($value)
+    {
         if ($value == 1) {
             return TRUE;
         }
         return FALSE;
     }
-
-    public static function is_order_incorrect($value){
-        if (in_array($value, self::$reserved_requirements["order"])) {
-            return FALSE;
-        }
-        return TRUE;
-    }
-
-    public static function is_limit_incorrect($value){
-        if (in_array($value, self::$reserved_requirements["limit"])) {
-            return FALSE;
-        }
-        return TRUE;
-    }
-
 }

@@ -36,18 +36,23 @@ Class SearhRedirectTest extends Unittest_TestCase
             ),
             array(
                 "avtotransport/legkovye-avtomobili/bmw/order_price",
-                array(),
-                FALSE,
+                array("page"=>1),
+                "avtotransport/legkovye-avtomobili/bmw",
             ),
             array(
                 "avtotransport/limit_30",
                 array(),
-                FALSE,
+                "avtotransport",
             ),
             array(
-                "avtotransport/legkovye-avtomobili/page_23342",
-                array(),
-                FALSE,
+                "avtotransport/legkovye-avtomobili",
+                array("page"=>2),
+                false,
+            ),
+            array(
+                "avtotransport/legkovye-avtomobili",
+                array("page"=>1),
+                "avtotransport/legkovye-avtomobili",
             )
         );
     }

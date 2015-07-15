@@ -203,20 +203,36 @@ if (array_key_exists("HTTP_FROM", $_SERVER))
 			'action'     => 'index',
 		));
 }
+
 /**
  * Set the routes. Each route must have a minimum of a name, a URI and a set of
  * defaults for the URI.
  */
-Route::set('default', '(<controller>(/<action>(/<id>(/<other1>(/<other2>(/<other3>(/<other4>(/<other5>))))))))')
+Route::set('default', '(<controller>(/<action>(/<id>)))')
 	->filter(function($route, $params, $request){
+		if (! in_array($params["controller"], Kohana_Other::get_controllers(Kohana::list_files('classes/Controller')))) {
+			return FALSE;
+		}
+	})
+	->defaults(array(
+		'controller' => 'Index',
+		'action'     => 'index',
+	));
+
+Route::set('search', '<category_path>', array(
+		'category_path' => '[a-zA-Z0-9-_/]+',
+	))->filter(function($route, $params, $request){
+		$segments = explode("/", $params["category_path"]);
 		$category = ORM::factory('Category')
-			->where("seo_name","=", strtolower($params["controller"]) )
+			->where("seo_name","=", strtolower($segments[0]) )
 			->find();
+
 		if ($category->loaded()) {
+
 			$config = Kohana::$config->load("landing");
 			$config = $config["categories"];
 			if ( in_array( $category->seo_name,  array_keys((array) $config)) 
-					AND $params["action"] == "index") {
+					AND count($segments) == 1) {
 				$params['controller'] = $config[$category->seo_name][0];
 				$params['action'] = $config[$category->seo_name][1];
 			} else {
@@ -225,9 +241,9 @@ Route::set('default', '(<controller>(/<action>(/<id>(/<other1>(/<other2>(/<other
 			}
 			return $params;
 
+		} else {
+			return FALSE;
 		}
-	})
-	->defaults(array(
-		'controller' => 'Index',
-		'action'     => 'index',
-	));
+	});
+
+
