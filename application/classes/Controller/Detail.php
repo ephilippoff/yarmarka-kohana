@@ -12,6 +12,13 @@ class Controller_Detail extends Controller_Template {
         $this->domain = new Domain();
         if ($proper_domain = $this->domain->is_domain_incorrect()) {
             HTTP::redirect("http://".$proper_domain, 301);
+            return;
+        }
+
+        $is_old = $this->request->param("is_old");
+        if ($is_old) {
+            HTTP::redirect("detail/".$this->request->param("object_id").".html", 301);
+            return;
         }
 
         //TODO set header Last-Modified
