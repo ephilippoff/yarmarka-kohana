@@ -5,8 +5,8 @@
 {% block body %} 
 	{% block header %} 
 		{{ parent() }}
-		{{ requestblock('block_twig/navigationline') }}
-		{{ requestblock('block_twig/adslinkline') }}
+		{% include 'block/header/navigationline' %}
+		{{ requestblock('block_twig/adslinkline',{'city_id': city.id, 'category_id': category.id}) }}
 	{% endblock header %} 
 
 	{% block crumbs %} 

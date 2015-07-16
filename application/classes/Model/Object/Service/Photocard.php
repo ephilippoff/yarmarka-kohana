@@ -37,6 +37,23 @@ class Model_Object_Service_Photocard extends ORM
 			->on('object.city_id', '=', 'city.id')				
 			->join('object_attachment', 'left')
 			->on('object.main_image_id', '=', 'object_attachment.id');
-	}	
+	}
+
+	public function get_subquery_for_search($query, $category_ids = NULL, $type = 1)
+	{
+		$result = $query->where("object_service_photocard.date_expiration",">=", DB::expr("CURRENT_TIMESTAMP") )
+					->where("object_service_photocard.active"," =", 1)
+					->where("object_service_photocard.invoice_id"," <>", 0);
+
+		if ($type) {
+			$result = $result->where("object_service_photocard.type"," =", $type);
+		}
+
+		if ($category_ids AND is_array($category_ids)) {
+			$result = $result->where("object_service_photocard.category_id"," IN", $category_ids);
+		}
+
+		return $result;
+	}
 }
 

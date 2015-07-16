@@ -34,8 +34,12 @@ class Controller_Block_Twig extends Controller_Block
 
     public function action_adslinkline()
     {
+        $city_id = $this->request->post("city_id");
+        $category_id = $this->request->post("category_id");
+
         $twig = Twig::factory('block/header/adslinkline');
-        $twig->links = $this->adslinkline();
+        $twig->imagelinks = $this->adslinkline($city_id, $category_id, "image");
+        $twig->textlinks = $this->adslinkline($city_id, $category_id, "text");
         $this->response->body($twig);
     }
 
@@ -48,19 +52,26 @@ class Controller_Block_Twig extends Controller_Block
 
     ////// Реализация содержимого блоков
 
-    public function adslinkline($city_id = null, $category_id = null)
+    public function adslinkline($city_id = NULL, $category_id = NULL, $type = "image")
     {
         $reklama = ORM::factory('Reklama')
                         ->where(DB::expr('CURRENT_DATE'), '>=', DB::expr('start_date') )
                         ->where(DB::expr('CURRENT_DATE'), '<=', DB::expr('end_date') )
                         ->where('active', '=',  1);
         if ($city_id) {
-             $reklama =  $reklama->where((int) $city_id, "=", "ANY(cities)");
+             $reklama =  $reklama->where(DB::expr((int) $city_id), "=", DB::expr("ANY(cities)") );
         }
 
         if ($category_id) {
-             $reklama =  $reklama->where((int) $category_id, "=", "ANY(categories)");
+             $reklama =  $reklama->where(DB::expr((int) $category_id), "=", DB::expr("ANY(categories)"));
         }
+
+        $types = array(
+            "text" => array(1),
+            "image" => array(2,3)
+        );
+
+        $reklama =  $reklama->where("type", "IN", $types[$type]);
 
         return $reklama->getprepared_all();
     }

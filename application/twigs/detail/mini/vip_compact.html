@@ -1,0 +1,12 @@
+<div class="item">
+	<p class="line1">{{ vip_object.date_created|date("d.m") }} {{ vip_object.compiled.city }}</p>
+	<a rel="nofollow" href="{{ object.compiled.url }}">
+		{{ vip_object.title|e }}
+		{% if vip_object.compiled.images.main_photo %}
+			<div class="photo-cont">
+				<img class="img-frame" src="{{ staticfile(vip_object.compiled.images.main_photo['272x203']) }}" alt="{{ vip_object.title|e }}" title="{{ vip_object.title|e }}">
+			</div>
+		{% endif %}
+		<div class="line2">{{ vip_object.price|number_format(0, ' ', ' ') }}<span class="rub">Р</span></div>
+	</a>
+</div>

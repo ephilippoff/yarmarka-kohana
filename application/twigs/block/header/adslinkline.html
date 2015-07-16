@@ -1,54 +1,35 @@
 <!--noindex-->
 <div class="reklama-cont module">
 	<div id="reklama_container" class="reklama-line banners">
-		<div  class="cont-r">												
-			<a rel="nofollow" target="_blank"  onclick=""  class="text-t2" href="/">
-				<img src="{{ staticfile('images/1.png') }}"/>
-			</a>							
-			<a rel="nofollow" target="_blank"  onclick=""  class="text-t2" href="/">
-				<img src="{{ staticfile('images/1.png') }}"/>
-			</a>											
-			<a rel="nofollow" target="_blank"  onclick=""  class="text-t2" href="/">
-				<img src="{{ staticfile('images/1.png') }}"/>
-			</a>
-			<a rel="nofollow" target="_blank"  onclick=""  class="text-t2" href="/">
-				<img src="{{ staticfile('images/1.png') }}"/>
-			</a>
-			<a rel="nofollow" target="_blank"  onclick=""  class="text-t2" href="/">
-				<img src="{{ staticfile('images/1.png') }}"/>
-			</a>
-			<a rel="nofollow" target="_blank"  onclick=""  class="text-t2" href="/">
-				<img src="{{ staticfile('images/1.png') }}"/>
-			</a>
-			<a rel="nofollow" target="_blank"  onclick=""  class="text-t2" href="/">
-				<img src="{{ staticfile('images/1.png') }}"/>
-			</a>
-			<a rel="nofollow" target="_blank"  onclick=""  class="text-t2" href="/">
-				<img src="{{ staticfile('images/1.png') }}"/>
-			</a>
-			<a rel="nofollow" target="_blank"  onclick=""  class="text-t2" href="/">
-				<img src="{{ staticfile('images/1.png') }}"/>
-			</a>
-			<a rel="nofollow" target="_blank"  onclick=""  class="text-t2" href="/">
-				<img src="{{ staticfile('images/1.png') }}"/>
-			</a>						
+		<div  class="cont-r">
+			{% for i in 0..9 %}
+				{% set link = imagelinks|slice(i,1) %}
+				{% if link|length > 0 %}
+					{% set link = link|first %}
+					<a rel="nofollow" target="_blank"  onclick=""  class="text-t2" href="{{ link.link }}"  rel="nofollow">
+						<img src="{{ staticfile('./uploads/banners/' ~ link.image) }}"/>
+						{% if link.type == 3111 %}
+							<div class=""><span class="banner-title white">{{link.title}}</span></div>
+						{% endif %}
+					</a>
+				{% else %}
+					<a rel="nofollow" target="_blank"  onclick=""  class="text-t2" href="#" rel="nofollow">
+						<img src="{{ staticfile('images/1.png') }}"/>
+					</a>
+				{% endif %}
+			{% endfor  %}
 		</div>
 	</div>	
 
 	<div class="reklama-line text-banners">
 		<div class="cont-r">
-			<a rel="nofollow" target="_blank"  onclick="" href="/" class="red" >Реклама</a>
-			<a rel="nofollow" target="_blank"  onclick="" href="/" class="black" >Реклама</a>
-			<a rel="nofollow" target="_blank"  onclick="" href="/" class="red" >Реклама</a>
-			<a rel="nofollow" target="_blank"  onclick="" href="/" class="green" >Реклама</a>
-			<a rel="nofollow" target="_blank"  onclick="" href="/" class="red" >Реклама</a>
-			<a rel="nofollow" target="_blank"  onclick="" href="/" class="black" >Реклама</a>
-			<a rel="nofollow" target="_blank"  onclick="" href="/" class="red" >Реклама</a>
-			<a rel="nofollow" target="_blank"  onclick="" href="/" class="green" >Реклама</a>
-			<a rel="nofollow" target="_blank"  onclick="" href="/" class="red" >Реклама</a>
-			<a rel="nofollow" target="_blank"  onclick="" href="/" class="black" >Реклама</a>
-			<a rel="nofollow" target="_blank"  onclick="" href="/" class="red" >Реклама</a>
-			<a rel="nofollow" target="_blank"  onclick="" href="/" class="green" >Реклама</a>						
+			{% for i in 0..9 %}
+				{% set link = textlinks|slice(i,1) %}
+				{% if link|length > 0 %}
+					{% set link = link|first %}
+					<a rel="nofollow" target="_blank"  onclick="" href="{{ link.link }}" class="{{ link.class }}" >{{ link.title }}</a>
+				{% endif %}
+			{% endfor  %}
 		</div>
 	</div>
 

@@ -2,6 +2,7 @@
 
 return array(
 	'functions' => array(
+		'domain'  		=> array ('func' => array('Twig_Functions', 'domain'), 'options' => array() ),
 		'debug'  		=> array ('func' => array('Twig_Functions', 'debug'), 'options' => array() ),
 		'obj'  		=> array ('func' => array('Twig_Functions', 'obj'), 'options' => array() ),
 		'requestblock'  => array ('func' => array('Twig_Functions', 'requestblock'), 'options' => array() ),

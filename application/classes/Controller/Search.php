@@ -69,6 +69,7 @@ class Controller_Search extends Controller_Template {
                                                     ->get("count");
             $search_info->main_search_result_count = $main_search_result_count;
         }
+        //end main search
 
         //premium
         $premium_search_query = Search::searchquery(
@@ -76,7 +77,21 @@ class Controller_Search extends Controller_Template {
             array_merge($search_info->search_params, array("limit" => 5))
         );
         $twig->premium_search_result = Search::getresult($premium_search_query->execute()->as_array());
-
+        //premium end
+        
+        //vip
+        $vip_search_query = Search::searchquery(
+            array(
+                "photocard" => TRUE,
+                "active" => TRUE,
+                "published" =>TRUE,
+                "city_id" => $search_info->city_id,
+                "category_id" => (count($search_info->child_categories_ids) > 0) ? $search_info->child_categories_ids : $search_info->category->id,
+            ),
+            array_merge($search_info->search_params, array("limit" => 15))
+        );
+        $twig->vip_search_result = Search::getresult($vip_search_query->execute()->as_array());
+        //vip end
 
         //pagination
         $pagination = Pagination::factory( array(
@@ -104,6 +119,7 @@ class Controller_Search extends Controller_Template {
             "total" => $pagination->total_pages,
         ));
         $twig->pagination = $pagination;
+        //pagination end
 
         if (!$search_info->incorrectly_query_params_for_seo AND !$this->cached_search_info) {
             $this->save_search_info_to_cache(array(
@@ -130,9 +146,9 @@ class Controller_Search extends Controller_Template {
 
         $info = new Obj();
 
-        $city_id = ($this->domain->get_city()) ? $this->domain->get_city()->id : NULL;
-        $category_id = $this->params_by_uri->get_category()->id;
-        $child_categories_ids = $this->params_by_uri->get_category_childs_id();
+        $info->city_id = ($this->domain->get_city()) ? $this->domain->get_city()->id : NULL;
+        $info->category_id = $this->params_by_uri->get_category()->id;
+        $info->child_categories_ids = $this->params_by_uri->get_category_childs_id();
 
 
         $info->canonical_url  =  $this->params_by_uri->get_proper_segments();
@@ -140,13 +156,13 @@ class Controller_Search extends Controller_Template {
         $info->city        = $this->domain->get_city();
         $info->category = $this->params_by_uri->get_category();
         $info->category_childs = $this->params_by_uri->get_category_childs(TRUE);
-        $info->crumbs      = Search_Url::get_category_crubms($category_id);
+        $info->crumbs      = Search_Url::get_category_crubms($info->category_id);
         $info->incorrectly_query_params_for_seo =  $this->params_by_uri->incorrectly_query_params_for_seo;
         $info->search_filters = array(
             "active" => TRUE,
             "published" =>TRUE,
-            "city_id" => $city_id,
-            "category_id" => (count($child_categories_ids) > 0) ? $child_categories_ids : $category_id,
+            "city_id" => $info->city_id,
+            "category_id" => (count($info->child_categories_ids) > 0) ? $info->child_categories_ids : $info->category_id,
 
             "user_id" => $this->params_by_uri->get_reserved_query_params("user_id"),
             "source" => $this->params_by_uri->get_reserved_query_params("source"),

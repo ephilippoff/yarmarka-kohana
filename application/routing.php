@@ -75,25 +75,25 @@ Route::set('detail', '<path>/<object_seo_name>.html',  array('path' => '[a-zA-Z0
 /**
  * Поддержка старых урлов на карточку
  */
-Route::set('detail_old', '<path>',  array('path' => '[a-zA-Z0-9-_/]+'))
-	->filter(function($route, $params, $request){
-		$segments = explode("-", $params["path"]);
-		$maybe_id = (int) end($segments);
+// Route::set('detail_old', '<path>',  array('path' => '[a-zA-Z0-9-_/]+'))
+// 	->filter(function($route, $params, $request){
+// 		$segments = explode("-", $params["path"]);
+// 		$maybe_id = (int) end($segments);
 
-		$segments2 = explode("/", $params["path"]);
-		$maybe_id2 = (int) end($segments2);
+// 		$segments2 = explode("/", $params["path"]);
+// 		$maybe_id2 = (int) end($segments2);
 
-		if (($maybe_id > 0 AND $maybe_id < 9999999) OR ($maybe_id2 > 0 AND $maybe_id2 < 9999999)) {
-			$params["is_old"] = TRUE;
-			$params["object_id"] = ($maybe_id) ? $maybe_id : $maybe_id2;
-			return $params;
-		} else {
-			return FALSE;
-		}
-	})->defaults(array(
-		'controller' => 'Detail',
-		'action'     => 'index'
-	));
+// 		if (($maybe_id > 0 AND $maybe_id < 9999999) OR ($maybe_id2 > 0 AND $maybe_id2 < 9999999)) {
+// 			$params["is_old"] = TRUE;
+// 			$params["object_id"] = ($maybe_id) ? $maybe_id : $maybe_id2;
+// 			return $params;
+// 		} else {
+// 			return FALSE;
+// 		}
+// 	})->defaults(array(
+// 		'controller' => 'Detail',
+// 		'action'     => 'index'
+// 	));
 	
 
 Route::set('object_edit', 'user/edit_ad/<object_id>')

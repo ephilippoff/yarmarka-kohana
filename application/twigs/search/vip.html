@@ -1,0 +1,10 @@
+<div class="info-block-cont theme3 module">
+	<div class="block-title">
+		<span>VIP объявления</span>
+	</div>
+	<div class="items-list-cont3">
+		{% for vip_object in vip_search_result %}
+			{% include 'detail/mini/vip_compact' %}
+		{% endfor %}
+	</div>
+</div>

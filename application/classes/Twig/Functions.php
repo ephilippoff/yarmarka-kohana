@@ -5,7 +5,7 @@ class Twig_Functions
 {
     public static function requestblock($path, $params = array())
     {
-        return Request::factory($path, $params)->execute();
+        return Request::factory($path)->post($params)->execute();
     }
 
     public static function requestoldview($path)
@@ -41,5 +41,18 @@ class Twig_Functions
     public static function obj($array = array())
     {
         return new Obj($array);
+    }
+
+    public static function domain($domain_str, $url_str)
+    {
+        $config = Kohana::$config->load("common");
+        $main_domain = $config["main_domain"];
+
+        if (!$url_str) {
+            return "http://".$domain_str.".".$main_domain;
+        } else {
+            return "http://".$domain_str.".".$main_domain.self::url($url_str);
+        }
+        
     }
 }
