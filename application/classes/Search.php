@@ -221,8 +221,8 @@ class Search {
 		}
 
 		$multimedia_filter = array();
-		$photo_types = array(0);
-		$video_types = array(2,3);
+		$photo_types = array(0, 4);
+		$video_types = array(2, 3);
 
 		if ($params->photo) {
 			$multimedia_filter = array_merge($multimedia_filter, $photo_types);
@@ -283,6 +283,37 @@ class Search {
 		}
 
 		return $object;
+	}
+
+	public static function getresult($results =  array())
+	{
+		$result = array();
+		foreach ($results as $object) {
+			$compiled = array();
+			if ( array_key_exists("compiled", $object)) {
+				$compiled = unserialize($object["compiled"]);
+			}
+			if (!$compiled) {
+				$compiled = array();
+			}
+
+			if ( array_key_exists("images", $compiled)) {
+				$compiled["images"] = Object_Compiled::getImages( $compiled["images"] );
+			}
+
+			if ( array_key_exists("attributes", $compiled)) {
+				$compiled["attributes"] = Object_Compiled::getAttributes( $compiled["attributes"] );
+			}
+
+			if ( array_key_exists("author", $compiled)) {
+				if ($compiled["author"]["filename"]) {
+					$compiled["author"]["logo"] = Imageci::getSavePaths($compiled["author"]["filename"]);
+				}
+			}
+			$result[] = array_merge($object, array("compiled" => $compiled) );
+		}
+
+		return $result;
 	}
 
 }

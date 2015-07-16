@@ -56,26 +56,41 @@ for ($i = $n7; $i <= $n8; $i++)
 
 ?>
 
-<div class="pagination">
+<div class="paginator-cont module">
+	<div class="common">
+		<div class="row">
+			<div class="col-md-12">
+				<?php if ($previous_page !== FALSE): ?>
+					<a class="prev" href="<?php echo HTML::chars($page->url($previous_page)) ?>" rel="prev">&leftarrow; Предыдущая страница </a> 
+				<?php endif ?>
+				<?php if ($next_page !== FALSE): ?>
+					<a class="next" href="<?php echo HTML::chars($page->url($next_page)) ?>" rel="next">Следующая страница &rightarrow; </a>
+				<?php endif ?>
+				
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-8">
+			<div class="left">
+				<?php foreach ($links as $number => $content): ?>
 
-	<?php if ($previous_page !== FALSE): ?>
-		<a href="<?php echo HTML::chars($page->url($previous_page)) ?>" class="left navi-left" rel="prev"></a>
-	<?php endif ?>
+					<?php if ($number === $current_page): ?>
+						<a href="<?php echo HTML::chars($page->url($number)) ?>" class="active" rel=""><?php echo $content ?></a>
+					<?php else: ?>
+						<a href="<?php echo HTML::chars($page->url($number)) ?>" rel=""><?php echo $content ?></a>
+					<?php endif ?>
 
-	<ul>
-	<?php foreach ($links as $number => $content): ?>
+				<?php endforeach ?>
+			</div>
+		</div>
 
-		<?php if ($number === $current_page): ?>
-			<li><a href="<?php echo HTML::chars($page->url($number)) ?>" class="active"><?php echo $content ?></a></li>
-		<?php else: ?>
-			<li><a href="<?php echo HTML::chars($page->url($number)) ?>"><?php echo $content ?></a></li>
-		<?php endif ?>
-
-	<?php endforeach ?>
-	</ul>
-
-	<?php if ($next_page !== FALSE): ?>
-		<a href="<?php echo HTML::chars($page->url($next_page)) ?>" class="right navi-right" rel="next"></a>
-	<?php endif ?>
-
+		<div class="col-md-4">
+			<div class="right">
+				<?php foreach ($config['limits'] as $limit => $url): ?>
+					<a href="<?php echo $url; ?>" rel="nofollow"><?php echo $limit; ?></a>
+				<?php endforeach ?>
+			</div>
+		</div>
+	</div>
 </div>

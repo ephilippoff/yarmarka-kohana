@@ -3,6 +3,7 @@
 return array(
 	'functions' => array(
 		'debug'  		=> array ('func' => array('Twig_Functions', 'debug'), 'options' => array() ),
+		'obj'  		=> array ('func' => array('Twig_Functions', 'obj'), 'options' => array() ),
 		'requestblock'  => array ('func' => array('Twig_Functions', 'requestblock'), 'options' => array() ),
 		'requestview'  => array ('func' => array('Twig_Functions', 'requestview'), 'options' => array() ),
 		'css' 			=> array ('func' => array('Twig_Functions', 'css'), 'options' => array() ),

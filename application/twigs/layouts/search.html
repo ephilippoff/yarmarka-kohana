@@ -7,29 +7,40 @@
 		{{ parent() }}
 		{{ requestblock('block_twig/navigationline') }}
 		{{ requestblock('block_twig/adslinkline') }}
-	{% endblock %} 
+	{% endblock header %} 
 
 	{% block crumbs %} 
 		Крошки
-	{% endblock %}
+	{% endblock crumbs %}
+
+	{% block subcategories %}{% endblock subcategories %}
 
 	{% block filters %} 
 		Фильтры
-	{% endblock %}
+	{% endblock filters %}
 
-	{% block content %} 
-		контент
-	{% endblock %}
+	<div class="row">
+		<div class="col-md-9">
+			{% block content %} 
+				контент
+			{% endblock content %}
+		</div><!--col-->
+		<div class="col-md-3">
+			{% block rightside %} 
+				Правая сторона
+			{% endblock rightside %}
+		</div><!--col-->
+	</div><!--row-->
 
-	{% block rightside %} 
-		Правая сторона
-	{% endblock %}
-
-	{% block footertext %} 
-		сео текст в футере
-	{% endblock %}
+	<div class="row">
+		<div class="text-cont module">
+			{% block footertext %} 
+				сео текст в футере
+			{% endblock footertext %}
+		</div>
+	</div>
 
 	{% block footer %} 
 		Футер
-	{% endblock %} 
-{% endblock %} 
+	{% endblock footer %} 
+{% endblock body %} 

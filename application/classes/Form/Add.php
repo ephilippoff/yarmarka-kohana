@@ -741,7 +741,7 @@ class Form_Add  {
 	
 	function Widgets()
 	{		
-		$this->_data->last_news = ORM::factory('Article')->get_lastnews_from_rubric('novosti-yarmarki');
+		$this->_data->last_news = array();
 		
 		return $this;
 	}	

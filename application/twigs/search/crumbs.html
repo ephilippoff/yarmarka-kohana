@@ -1,7 +1,9 @@
-<a href="http://{{ domain.get_domain() }}" rel="nofollow">{{ city.title }}</a> 
-{% for crumb in crumbs %}
-	{% if loop.last == FALSE %}
-		<a href="{{ url(crumb.uri) }}">{{crumb.title}}</a>
-	{% endif %}
-{% endfor %}
-<h1></h1>
+<div class="breadcrumbs-cont module">
+	<a href="http://{{ domain.get_domain() }}" rel="nofollow">{{ city.title }}</a>
+	{% for crumb in crumbs %}
+		{% if loop.last == FALSE %}
+			\ <a href="{{ url(crumb.uri) }}">{{crumb.title}}</a>
+		{% endif %}
+	{% endfor %}
+	\ <h1>{{ seo_attributes.h1 ? seo_attributes.h1: category.title }}</h1>
+</div>

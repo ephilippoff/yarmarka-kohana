@@ -1,8 +1,10 @@
 {% extends "layouts/main" %}
 
 {% block body %} 
-	{% block header %} 
+	{% block header %}
+		<header>
 		{{ requestblock('block_twig/topline') }}
 		{{ requestblock('block_twig/logoline') }}
-	{% endblock %} 
-{% endblock %} 
+		</header>
+	{% endblock header %} 
+{% endblock body %} 

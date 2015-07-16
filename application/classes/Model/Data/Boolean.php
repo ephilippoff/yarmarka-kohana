@@ -15,7 +15,7 @@ class Model_Data_Boolean extends Data
 
 		$result = $this->as_array();
 
-		$result["_attribute"] 	= $this->attribute_obj->as_array("id","title");
+		$result["_attribute"] 	= $this->attribute_obj->select_array(array("id","title"));
 		$result["_type"] = "Boolean";
 
 		return $result;

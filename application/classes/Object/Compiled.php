@@ -13,16 +13,23 @@ class Object_Compiled
 
 		$images = array_reverse($_images);
 
-		if (count($images))
-			$result["logo"] = Imageci::getSavePaths(array_shift($images));
-		if (count($images))
-			$result["main"] = Imageci::getSavePaths(array_shift($images));
+		if (count($images) AND $images["main_photo"])
+			$result["main_photo"] = Imageci::getSavePaths($images["main_photo"]);
 
-		$result["other"] = array();
-		if (count($images))
-			foreach ($images as $image) {
-				$result["other"][] = Imageci::getSavePaths($image);
+		$result["local_photo"] = array();
+		if (count($images)) {
+			foreach ($images["local_photo"] as $image) {
+				$result["local_photo"][] = Imageci::getSavePaths($image);
 			}
+		}
+
+		$result["remote_photo"] = array();
+		if (count($images)) {
+			foreach ($images["remote_photo"] as $image) {
+				$result["remote_photo"][] = $image;
+			}
+		}
+
 		return $result;
 	}
 

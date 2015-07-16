@@ -12,7 +12,7 @@ class Controller_Search extends Controller_Template {
         $this->auto_render = FALSE;
         $this->cached_search_info = FALSE;
 
-        if ($search_info = $this->get_search_info_from_cache()) {
+        if ($search_info = $this->get_search_info_from_cache() AND 1==0) {
             $this->cached_search_info = unserialize($search_info->params);
         } else {
 
@@ -51,6 +51,7 @@ class Controller_Search extends Controller_Template {
     }
 
     public function action_index() {
+        $start = microtime(true);
 
         $twig = Twig::factory('search/index');
 
@@ -58,7 +59,9 @@ class Controller_Search extends Controller_Template {
 
         //main search
         $main_search_query = Search::searchquery($search_info->search_filters, $search_info->search_params);
-        $twig->main_search_result = $main_search_query->execute()->as_array();
+        
+        $twig->main_search_result = Search::getresult($main_search_query->execute()->as_array());
+
 
         if (!$search_info->main_search_result_count) {
             $main_search_result_count = Search::searchquery($search_info->search_filters, array(), array("count" => TRUE))
@@ -72,11 +75,11 @@ class Controller_Search extends Controller_Template {
             array_merge($search_info->search_filters, array("premium" => TRUE)), 
             array_merge($search_info->search_params, array("limit" => 5))
         );
-        $twig->premium_search_result = $premium_search_query->execute()->as_array();
+        $twig->premium_search_result = Search::getresult($premium_search_query->execute()->as_array());
 
 
         //pagination
-        $twig->pagination =  Pagination::factory( array(
+        $pagination = Pagination::factory( array(
             'current_page' => array('source' => 'query_string', 'key' => 'page'),
             'total_items' => $search_info->main_search_result_count,
             'items_per_page' => $search_info->search_params['limit'],
@@ -84,8 +87,23 @@ class Controller_Search extends Controller_Template {
             'view' => 'pagination/search',
             'first_page_in_url' => FALSE,
             'count_out' => 1,
-            'count_in' => 8
+            'count_in' => 8,
+            'limits' => array(
+                "30" => $this->url_with_query(array(), array("page","limit")),
+                "60" => $this->url_with_query(array( "limit" => 60), array("page")),
+                "90" => $this->url_with_query(array( "limit" => 90), array("page")),
+            )
         ));
+
+        $twig->small_pagination = (array(
+            "prev" => $pagination->previous_page,
+            "prev_url" => $pagination->url($pagination->previous_page),
+            "next" => $pagination->next_page,
+            "next_url" => $pagination->url($pagination->next_page),
+            "current" => $pagination->current_page,
+            "total" => $pagination->total_pages,
+        ));
+        $twig->pagination = $pagination;
 
         if (!$search_info->incorrectly_query_params_for_seo AND !$this->cached_search_info) {
             $this->save_search_info_to_cache(array(
@@ -100,8 +118,9 @@ class Controller_Search extends Controller_Template {
         foreach ((array) $search_info as $key => $item) {
             $twig->{$key} = $item;
         }
-        $this->response->body($twig);
 
+        $twig->php_time = microtime(true) - $start;
+        $this->response->body($twig);
     }
 
     public function get_search_info() {
@@ -115,9 +134,12 @@ class Controller_Search extends Controller_Template {
         $category_id = $this->params_by_uri->get_category()->id;
         $child_categories_ids = $this->params_by_uri->get_category_childs_id();
 
+
         $info->canonical_url  =  $this->params_by_uri->get_proper_segments();
         $info->domain      = $this->domain;
         $info->city        = $this->domain->get_city();
+        $info->category = $this->params_by_uri->get_category();
+        $info->category_childs = $this->params_by_uri->get_category_childs(TRUE);
         $info->crumbs      = Search_Url::get_category_crubms($category_id);
         $info->incorrectly_query_params_for_seo =  $this->params_by_uri->incorrectly_query_params_for_seo;
         $info->search_filters = array(
@@ -169,6 +191,19 @@ class Controller_Search extends Controller_Template {
                         ->find();
 
         return ($search_info->loaded()) ? $search_info->get_row_as_obj() : FALSE;
+    }
+
+    public function url_with_query($params = array(), $unset_params = array()) {
+        $query_params = $this->request->query();
+        foreach ($params as $key => $value) {
+            $query_params[$key] = $value;
+        }
+        foreach ($unset_params as $unset_param) {
+            unset($query_params[$unset_param]);
+        }
+
+        $query_str = http_build_query($query_params);
+        return $this->request->route()->uri($this->request->param()).($query_str?"?".$query_str:"");
     }
     
 } // End Search

@@ -39,7 +39,7 @@ class Search_Url
 
         $this->_query_params = $this->clean_query_params($this->_category->id, $query_params);
         $this->_reserved_query_params = $this->clean_reserved_query_params($query_params);
-echo Debug::vars($this->_reserved_query_params);
+
         $this->incorrectly_query_params_for_seo = FALSE;
     }
 
@@ -127,16 +127,22 @@ echo Debug::vars($this->_reserved_query_params);
         return $proper_category_uri.( ($proper_seo_param_uri) ? "/".$proper_seo_param_uri: "" );
     }
 
-    public function get_category_childs()
+    public function get_category_childs($direct_childs = FALSE)
     {
+        $category_id = $this->_category->id;
+        if ($direct_childs) {
+            return array_filter($this->_category_childs, function($value) use ($category_id) {
+                return  $category_id == $value->parent_id;
+            });
+        }
         return $this->_category_childs;
     }
 
-    public function get_category_childs_id()
+    public function get_category_childs_id($direct_childs = FALSE)
     {
         return array_map(function($value){
             return $value->id;
-        }, $this->_category_childs);
+        }, $this->get_category_childs($direct_childs));
     }
 
     public function get_category()

@@ -767,6 +767,16 @@ class Model_User extends Model_Auth_User {
 
 		return $companies;
 	}
+
+	public function get_compile() {
+		if (!$this->loaded()) return;
+		return $this->select_array(array(
+				"id","email","fullname","city",
+				"org_name","org_full_name","org_post_address",
+				"org_phone","org_type","role","regdate",
+				"filename", "about", "last_visit_date", "org_moderate"
+		));
+	}
 }
 
 /* End of file User.php */

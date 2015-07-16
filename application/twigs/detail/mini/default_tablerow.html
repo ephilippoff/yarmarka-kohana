@@ -1,0 +1,48 @@
+<tr class="premium tr">
+	<td class="td td-1">
+		<div class="img-cont">
+			{% if object.compiled.images.main_photo %}
+				<img class="img-frame" src="{{ staticfile(object.compiled.images.main_photo['120x90']) }}" alt="{{ object.title }}" title="{{ object.title }}">
+			{% endif %}
+			<span class="premium-tape"></span>
+		</div>
+	</td>
+	<td class="td td-2">
+		<p class="title">
+			<i class="favorit-ico"></i>
+			<a href="{{ object.compiled.url }}" title="{{ object.title }}">
+				{{ object.title }}
+			</a>
+		</p>
+		<p class="style1"><span>{{ object.date_created|date("d.m") }}</span> / <span>{{ object.compiled.city }}</span> </p>
+		{% if object.price %}
+			<p class="amount">{{ object.price }}<span class="rub">Р</span></p>
+		{% endif %}
+
+		{% if object.compiled.attributes|length > 0 %}
+			<table class="table-details">									
+				<tbody>
+					{% for attr in object.compiled.attributes|slice(0, 3) if attr.value %}
+					<tr>
+						<td class="attr-title">{{ attr.title }}</td>
+						<td class="value">{{ attr.value|e }}</td>
+					</tr>
+					{% endfor %}
+			</tbody></table>
+		{% endif %}
+		<p><a class="style1 style2" href="">Подробнее</a></p>		
+	</td>		
+	<td class="td td-3">
+		{% if object.compiled.author.org_type == 2 %}
+			{% if object.compiled.author.logo %}
+				<div class="img-cont">
+					<img src="{{ staticfile(object.compiled.author.logo['120x90']) }}" alt="">
+				</div>
+			{% endif %}
+			<div class="title">{{ object.compiled.author.org_name }}</div>
+		{% endif %}
+	</td>
+	<td class="td td-4">
+		<span class="ico-b"></span>	
+	</td>		
+</tr>

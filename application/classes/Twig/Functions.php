@@ -37,4 +37,9 @@ class Twig_Functions
     {
         return Debug::vars($param);
     }
+
+    public static function obj($array = array())
+    {
+        return new Obj($array);
+    }
 }

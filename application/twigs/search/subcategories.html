@@ -1,0 +1,20 @@
+{% set cols = 2 %}
+{% set rows = (category_childs|length/cols)|round %}
+{% set i = 0 %}
+<div class="subcategories-cont module">
+	<div class="row">
+		{% for col in 0..cols %}
+			<div class="col-md-4">
+				<ul>
+				{% for child_category in category_childs|slice(i, rows) %}
+					<li>
+						<a href="/surgut/nedvizhimost/kvartiry-i-komnaty" title="{{child_category.title}}">{{child_category.title}}</a>
+						<span class="count">(8451)</span>
+					</li>
+				{% endfor %}
+				</ul>
+			</div>
+			{% set i = i + rows %}
+		{% endfor %}
+	</div>
+</div>
