@@ -124,5 +124,6 @@ return array(
 	),
 	"155" => array( //каталог компаний
 		"price_enabled" => TRUE
-	)
+	),
+	'categories_view_hidden' => array('modulnaya-reklama', 'kupony')//исключение категорий из рендера меню
 );
