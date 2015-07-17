@@ -1,0 +1,33 @@
+<div class="text-cont module">
+	{{object.user_text}}
+</div>
+<div class="params-cont module">
+	{% if object.compiled.attributes|length > 0 %}
+		<table>
+			<tbody>
+				<tr>
+					<td>Город</td>
+					<td>{{ object.compiled.city }}</td>
+				</tr>
+				{% for attr in object.compiled.attributes if attr.value and attr.seo_name in ['adres-raion']%}
+				<tr>
+					<td>{{ attr.title }}</td>
+					<td>{{ attr.value|e }}</td>
+				</tr>
+				{% endfor %}
+				{% for attr in object.compiled.attributes if attr.value and attr.seo_name not in ['tsena','adres-raion']%}
+				<tr>
+					<td>{{ attr.title }}</td>
+					<td>{{ attr.value|e }}</td>
+				</tr>
+				{% endfor %}
+				{% for attr in object.compiled.attributes if attr.value and attr.seo_name in ['tsena']%}
+				<tr>
+					<td>{{ attr.title }}</td>
+					<td><p class="amount">{{ attr.value|e|number_format(0, ' ', ' ') }}<span class="rub">Р</span></p></td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	{% endif %}
+</div>

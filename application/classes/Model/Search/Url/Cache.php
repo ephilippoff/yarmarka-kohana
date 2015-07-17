@@ -29,6 +29,8 @@ class Model_Search_Url_Cache extends ORM {
 		$this->count = (int) $count;
 		$this->canonical_url = $canonical_url;
 		$this->save();
+
+		return $this;
 	}
 
 	public function get_search_info($url)

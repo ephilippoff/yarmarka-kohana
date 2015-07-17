@@ -103,23 +103,6 @@ class Search {
 		return NULL;
 	}
 
-
-	public static function get_similar_objects_by_cache(ORM $search_cache = NULL)
-	{
-		$exclusion = $query_sql = null;
-		$exclusion = explode(',', Cookie::get('ohistory'));
-
-		if (!$search_cache) {
-			$search_cache = self:: get_search_cache();
-		}
-		if ($search_cache AND $search_cache->loaded()) {
-			$query_sql = $search_cache->query;
-			return ORM::factory('Search_Cache')
-							->get_result_by_sql($query_sql, "date_created", "DESC", 5, $exclusion);
-		}
-		return NULL;
-	}
-
 	/**
 	 * [search description]
 	 * @param  array  $params array(
@@ -152,6 +135,14 @@ class Search {
 		$options = new Obj($options);
 
 		$select = ($options->count) ? "count(o.id) as count" : "o.*";
+
+		if ($params->hash) {
+			$suc = ORM::factory('Search_Url_Cache')->where("hash","=",$params->hash)->find();
+			if ($suc->loaded()){
+				$suc_params = unserialize($suc->params);
+				$params = new Obj(array_merge((array) $params, $suc_params->search_filters));
+			}
+		}
 
 		$order = ($params->order) ? $params->order : "date_created";
 		$order_direction = ($params->order_direction) ? $params->order_direction : "DESC";
@@ -298,31 +289,36 @@ class Search {
 	{
 		$result = array();
 		foreach ($results as $object) {
-			$compiled = array();
-			if ( array_key_exists("compiled", $object)) {
-				$compiled = unserialize($object["compiled"]);
-			}
-			if (!$compiled) {
-				$compiled = array();
-			}
-
-			if ( array_key_exists("images", $compiled)) {
-				$compiled["images"] = Object_Compiled::getImages( $compiled["images"] );
-			}
-
-			if ( array_key_exists("attributes", $compiled)) {
-				$compiled["attributes"] = Object_Compiled::getAttributes( $compiled["attributes"] );
-			}
-
-			if ( array_key_exists("author", $compiled)) {
-				if ($compiled["author"]["filename"]) {
-					$compiled["author"]["logo"] = Imageci::getSavePaths($compiled["author"]["filename"]);
-				}
-			}
-			$result[] = array_merge($object, array("compiled" => $compiled) );
+			$result[] = array_merge($object, array("compiled" => self::getresultrow($object)) );
 		}
 
 		return $result;
+	}
+
+	public static function getresultrow($object)
+	{
+		$compiled = array();
+		if ( array_key_exists("compiled", $object)) {
+			$compiled = unserialize($object["compiled"]);
+		}
+		if (!$compiled) {
+			$compiled = array();
+		}
+
+		if ( array_key_exists("images", $compiled)) {
+			$compiled["images"] = Object_Compiled::getImages( $compiled["images"] );
+		}
+
+		if ( array_key_exists("attributes", $compiled)) {
+			$compiled["attributes"] = Object_Compiled::getAttributes( $compiled["attributes"] );
+		}
+
+		if ( array_key_exists("author", $compiled)) {
+			if ($compiled["author"]["filename"]) {
+				$compiled["author"]["logo"] = Imageci::getSavePaths($compiled["author"]["filename"]);
+			}
+		}
+		return $compiled;
 	}
 
 }

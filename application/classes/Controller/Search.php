@@ -14,6 +14,8 @@ class Controller_Search extends Controller_Template {
 
         if ($search_info = $this->get_search_info_from_cache() AND 1==0) {
             $this->cached_search_info = unserialize($search_info->params);
+            Cookie::set('search_hash', $search_info->hash, strtotime( '+14 days' ));
+            echo $search_info->hash."<br>";
         } else {
 
             $this->domain = new Domain();
@@ -121,14 +123,15 @@ class Controller_Search extends Controller_Template {
         $twig->pagination = $pagination;
         //pagination end
 
-        if (!$search_info->incorrectly_query_params_for_seo AND !$this->cached_search_info) {
-            $this->save_search_info_to_cache(array(
+        if (!$this->cached_search_info) {
+            $cache = $this->save_search_info_to_cache(array(
                     "info" => $search_info,
                     "canonical_url" =>  $search_info->canonical_url,
                     "sql" => (string) $main_search_query,
                     "count" => $search_info->main_search_result_count,
                 )
             );
+            Cookie::set('search_hash', $cache->hash, strtotime( '+14 days' ));
         }
 
         foreach ((array) $search_info as $key => $item) {
@@ -196,14 +199,15 @@ class Controller_Search extends Controller_Template {
 
     public function save_search_info_to_cache($options = array()) {
         $options = new Obj($options);
-        ORM::factory('Search_Url_Cache')
-                ->save_search_info(
-                    $options->info, 
-                    $_SERVER["HTTP_HOST"].$_SERVER["REQUEST_URI"], 
-                    $_SERVER["HTTP_HOST"]."/".$options->canonical_url, 
-                    $options->sql, 
-                    $options->count
-                );
+        $suc = ORM::factory('Search_Url_Cache')
+                    ->save_search_info(
+                        $options->info, 
+                        $_SERVER["HTTP_HOST"].$_SERVER["REQUEST_URI"], 
+                        $_SERVER["HTTP_HOST"]."/".$options->canonical_url, 
+                        $options->sql, 
+                        $options->count
+                    );
+        return $suc;
     }
 
     public function get_search_info_from_cache() {

@@ -1,0 +1,15 @@
+
+<div class="info-block-cont theme1 module">
+	<div class="block-title">
+		<span>Похожие предложения</span>
+	</div>
+	<table class="table-result-info style1">
+		<tbody>
+			{% for object in similar_search_result %}
+				{% include 'detail/mini/default_tablerow_simple' %}
+			{% endfor %}
+		</tbody>
+	</table>
+
+	
+</div>

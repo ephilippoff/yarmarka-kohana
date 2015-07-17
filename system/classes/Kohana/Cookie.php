@@ -80,7 +80,6 @@ class Kohana_Cookie {
 			// The cookie signature is invalid, delete it
 			Cookie::delete($key);
 		}
-
 		return $default;
 	}
 

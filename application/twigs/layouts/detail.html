@@ -6,21 +6,23 @@
 		{{ requestblock('block_twig/navigationline') }}
 		{{ requestblock('block_twig/adslinkline') }}
 
-	{% endblock %}
+	{% endblock header %}
 
 	{% block crumbs %} 
 		Крошки
-	{% endblock %}
+	{% endblock crumbs %}
+	
+	<div class="row">
+		{% block leftside %} 
+			Левый
+		{% endblock leftside %}
 
-	{% block left %} 
-		Левый
-	{% endblock %}
-
-	{% block right %} 
-		Правый
-	{% endblock %} 
+		{% block rightside %} 
+			Правый
+		{% endblock rightside %}
+	</div>
 
 	{% block footer %} 
-		Футер
-	{% endblock %} 
-{% endblock %} 
+		Время генерации php {{ php_time }}
+	{% endblock footer %}
+{% endblock body %} 

@@ -1,0 +1,16 @@
+<div class="thumbnails-cont module">
+	{% for photo in object.compiled.images.local_photo %}
+		<a href="/" class="img-cont" rel="nofollow">
+			<div class="center-img">
+				<img class="" alt="Объявление. {{object.compiled.city}}, {{object.title}}. Фото {{loop.index}}" src="{{ staticfile(photo['120x90']) }}">
+			</div>
+		</a>
+	{% endfor %}
+	{% for photo in object.compiled.images.remote_photo %}
+		<a href="/" class="img-cont" rel="nofollow">
+			<div class="center-img">
+				<img class="" alt="Объявление. {{object.compiled.city}}, {{object.title}}. Фото {{loop.index}}" src="{{ staticfile(photo) }}">
+			</div>
+		</a>
+	{% endfor %}
+</div>
