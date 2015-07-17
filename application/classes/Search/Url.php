@@ -526,27 +526,58 @@ class Search_Url
         return $crumbs;
     }
 
+    public static function get_seo_elements_crubms($seo_filters, $category_url)
+    {
+        $crumbs = array();
+        if (count($seo_filters) < 2) return $crumbs;
+        $seo_filters_values = array_values($seo_filters);
+        $first_element_id = reset($seo_filters_values);
+
+        
+        $segments = self::get_seo_param_segment_full($first_element_id);
+        $crumburi = array();
+        foreach ($segments as $segment) {
+            array_push($crumburi, $segment->seo_name);
+            array_push($crumbs, array(
+                "id" => $segment->id,
+                "title" => $segment->title,
+                "seo_name" => $segment->seo_name,
+                "uri" => $category_url."/".implode("/", $crumburi)
+            ));
+        }
+        return $crumbs;
+    }
+
+    public static function get_seo_param_segment_full($element_id)
+    {
+        $result = array();
+        $element = ORM::factory('Attribute_Element', $element_id);
+        if (!$element->loaded()) return "";
+
+        $parent_element_id = $element->parent_element;
+        array_push($result, $element);
+        while (1== 1) {
+             if ($parent_element_id == NULL) {
+                 break;
+             }
+             $parent = ORM::factory('Attribute_Element', $parent_element_id);
+             if ($parent->loaded()) {
+                 $parent_element_id = $parent->parent_element;
+                 array_push($result, $parent);
+             } else {
+                 $parent_element_id = NULL;
+             }
+        }
+        return array_reverse($result);
+    }
+
     public static function get_seo_param_segment($element_id)
     {
-       $uri = array();
-       $element = ORM::factory('Attribute_Element', $element_id);
-       if (!$element->loaded()) return "";
+       $segments = self::get_seo_param_segment_full($element_id);
 
-       $parent_element_id = $element->parent_element;
-       array_push($uri, $element->seo_name);
-       while (1== 1) {
-            if ($parent_element_id == NULL) {
-                break;
-            }
-            $parent = ORM::factory('Attribute_Element', $parent_element_id);
-            if ($parent->loaded()) {
-                $parent_element_id = $parent->parent_element;
-                array_push($uri, $parent->seo_name);
-            } else {
-                $parent_element_id = NULL;
-            }
-       }
-       $uri = array_reverse($uri);
+       $uri = array_map(function($value){
+            return $value->seo_name;
+        }, $segments);
 
        return implode("/", $uri);
     }

@@ -161,7 +161,7 @@ class Controller_Search extends Controller_Template {
         $info->category_childs_elements = $this->params_by_uri->get_category_childs_elements($info->category_id, $this->params_by_uri->get_seo_filters());
         $info->link_counters = $this->params_by_uri->getcounters($info->host, $info->category_url, array_merge($info->category_childs, $info->category_childs_elements) );
         $info->category_childs_elements = $this->params_by_uri->clean_empty_category_childs_elements($info->category_childs_elements, $info->link_counters, $info->url);
-        $info->crumbs      = $this->params_by_uri->get_category_crubms($info->category_id);
+        $info->crumbs      = array_merge($this->params_by_uri->get_category_crubms($info->category_id), $this->params_by_uri->get_seo_elements_crubms($this->params_by_uri->get_seo_filters(), $info->category_url));
         $info->incorrectly_query_params_for_seo =  $this->params_by_uri->incorrectly_query_params_for_seo;
         $info->search_filters = array(
             "active" => TRUE,

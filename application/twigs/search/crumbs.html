@@ -1,15 +1,9 @@
 <div class="breadcrumbs-cont module">
 	<a href="http://{{ domain.get_domain() }}" rel="nofollow">{{ city.title }}</a>
 	{% for crumb in crumbs %}
-		{% if loop.last == FALSE %}
+		{% if crumb.uri != canonical_url %}
 			\ <a href="{{ url(crumb.uri) }}">{{crumb.title}}</a>
 		{% endif %}
 	{% endfor %}
-
-	{% if category_url != canonical_url %}
-		\ <a href="{{ url(category_url) }}">{{category.title}}</a>
-	{% endif %}
-
 	\ <h1>{{ seo_attributes.h1 ? seo_attributes.h1: category.title }}</h1>
-
 </div>
