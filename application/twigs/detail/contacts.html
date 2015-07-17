@@ -5,26 +5,31 @@
 	<div class="body">
 		<div class="row">
 			<div class="col-md-6 col-sm-6">
-				<span class="author-name">Вадим</span>
+				<span class="author-name">{{object.contact}}</span>
 				<div class="contacts-list-cont">
-					<p>+7(926) XX-XX-XX</p>
-					<p>+7(912)093-89-03</p>
-					<p><a href="mailto:tatiana-mtv2007@yandex.ru">mail@yandex.ru</a></p>
+					{% for contact in object.compiled.contacts %}
+						<p>{{ contact.value|contacthide }}</p>
+					{% endfor %}
 				</div>
 				<button class="button style1">Показать контакты</button>
 			</div>
-			<div class="col-md-6 col-sm-6">
-				<p>ООО Компания</p>
-				<div class="img-cont"><img src="images/content/2.jpg"></div>
-				<p><span class="moreinfo span-link">Все объявления компании</span></p>
-				<p>Нижневартовск, Ленина 25, оф.123</p>
-				<p><i class="ico phone"></i>89221002233</p>
-				<p><i class="ico vkontakte"></i><span class="span-link">http://vk.com/454545</span></p>
-				<p><i class="ico twitter"></i><span class="span-link">http://twitter.com/acc</span></p>
-				<p><i class="ico instagram"></i><span class="span-link">http://link.com</span></p>
-				<p><i class="ico email"></i><span class="span-link">sss@domain.ru</span></p>
-				<p><i class="ico site"></i><span class="span-link">http://site.ru</span></p>
-			</div>
+			{% if object.compiled.author.org_type == 2 %}
+				<div class="col-md-6 col-sm-6">
+					<p>{{ object.compiled.author.org_name }}</p>
+					{% if object.compiled.author.logo %}
+						<div class="img-cont"><img src="{{ staticfile(object.compiled.author.logo['120x90']) }}"></div>
+					{% endif %}
+					<p><span class="moreinfo span-link">Все объявления компании</span></p>
+					<p>{{ object.compiled.author.org_post_address }}</p>
+					<p><i class="ico phone"></i>{{ object.compiled.author.org_phone }}</p>
+					
+					<!-- <p><i class="ico vkontakte"></i><span class="span-link">http://vk.com/454545</span></p>
+					<p><i class="ico twitter"></i><span class="span-link">http://twitter.com/acc</span></p>
+					<p><i class="ico instagram"></i><span class="span-link">http://link.com</span></p>
+					<p><i class="ico email"></i><span class="span-link">sss@domain.ru</span></p>
+					<p><i class="ico site"></i><span class="span-link">http://site.ru</span></p> -->
+				</div>
+			{% endif %}
 		</div>
 	</div>					
 </div>

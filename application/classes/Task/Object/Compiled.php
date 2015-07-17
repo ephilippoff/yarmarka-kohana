@@ -59,6 +59,10 @@ class Task_Object_Compiled extends Minion_Task
 			$compiled = array_merge($compiled, $this->getAuthor($item->author_company_id, $item->author));
 			Minion_CLI::write('author: '.$compiled["author"]["email"]);
 
+			$compiled = array_merge($compiled, $this->getContacts($item->id) );
+			Minion_CLI::write('contacts: saved');
+
+			
 			
 
 			$oc->object_id = $item->id;
@@ -144,6 +148,20 @@ class Task_Object_Compiled extends Minion_Task
 
 		$result["real_author_id"] 	= $real_author_id;
 		$result["author"] = ORM::factory('User', $user_id)->get_compile();
+
+		return $result;
+	}
+
+	function getContacts($object_id) {
+		$result = array();
+		$result["contacts"] = array();
+
+		$contacts = ORM::factory('Object_Contact')
+						->where("object_id","=",$object_id)
+						->find_all();
+		foreach ($contacts as $contact) {
+			$result["contacts"][] = array("type" => $contact->contact_obj->contact_type_id, "value" => $contact->contact_obj->contact_clear);
+		}
 
 		return $result;
 	}

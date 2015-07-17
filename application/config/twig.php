@@ -12,4 +12,7 @@ return array(
 		'url' 			=> array ('func' => array('Twig_Functions', 'url'), 'options' => array() ),
 		'staticfile' 	=> array ('func' => array('Twig_Functions', 'staticfile'), 'options' => array() )
 	),
+	'filters' => array(
+		'contacthide' => array('Twig_Filters', 'contacthide'),
+	),
 );

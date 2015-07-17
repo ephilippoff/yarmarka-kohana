@@ -1,8 +1,7 @@
 <div class="service-block-cont module">
 	<div class="line">Объявление снято</div>
-	<div class="line color1">Код объявления: 123123</div>
-	<div class="line color1">Обновлено: 25.05.2012</div>
-	<div class="line color1">Просмотров: 6</div>
+	<div class="line color1">Код объявления: {{ object.id }}</div>
+	<div class="line color1">Обновлено: {{ object.date_created|date('d.m.Y') }}</div>
+	<div class="line color1">Просмотров: {{ object.visits }}</div>
 	<div class="button">Пожаловаться</div>
-	<div class="button color1">Поделиться</div>
 </div>
