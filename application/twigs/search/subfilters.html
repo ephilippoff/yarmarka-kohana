@@ -1,15 +1,16 @@
-{% set cols = 2 %}
-{% set rows = (category_childs|length/cols)|round %}
+{% set cols = 3 %}
+{% set rows = (category_childs_elements|length/cols)|round %}
 {% set i = 0 %}
 <div class="subcategories-cont module">
 	<div class="row">
 		{% for col in 0..cols %}
 			<div class="col-md-4">
 				<ul>
-				{% for child_category in category_childs|slice(i, rows) %}
-					{% set count = link_counters[host ~ '/' ~ child_category.url] %}
+				{% for element in category_childs_elements|slice(i, rows) %}
+					{% set count = link_counters[host ~ '/' ~ canonical_url ~ '/' ~ element.url] %}
 					<li>
-						<a href="{{ url(child_category.url) }}" title="{{child_category.title}}">{{child_category.title}}</a>
+						<a href="{{ url(canonical_url ~ '/' ~ element.url) }}" title="{{element.title}}">{{element.title}}</a>
+						
 						{% if count > 0 %}
 							<span class="count">({{count}})</span>
 						{% else %}

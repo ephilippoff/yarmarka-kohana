@@ -132,6 +132,7 @@ class Search_Url
         $category_id = $this->_category->id;
         if ($direct_childs) {
             return array_filter($this->_category_childs, function($value) use ($category_id) {
+                $value->url = Search_Url::get_uri_category_segment($value->id);
                 return  $category_id == $value->parent_id;
             });
         }
@@ -414,6 +415,36 @@ class Search_Url
         }
         return $ae;
     }
+
+    public static function get_category_childs_elements($category_id, $seo_filters = array())
+    {
+        $seo_filters_values = array_values($seo_filters);
+        $parent_element_id = end($seo_filters_values);
+
+        $elements = ORM::factory('Attribute_Element')
+                        ->select("attribute_element.*", array("attribute.seo_name","attribute_seo_name"))
+                        ->join('attribute')
+                            ->on("attribute_element.attribute","=","attribute.id")
+                        ->join('reference')
+                            ->on("attribute.id","=","reference.attribute")
+                        ->where("reference.category", "=", (int) $category_id )
+                        ->where("reference.is_seo_used","=",1)
+                        ->where("attribute_element.is_popular","=",1);
+        if ($parent_element_id) {
+            $elements = $elements->where("attribute_element.parent_element","=",$parent_element_id);
+        } else {
+            $elements = $elements->is_null("attribute.parent");
+        }
+        $elements = $elements->order_by("attribute_element.title");
+        $elements = $elements->getprepared_all();
+
+        foreach ($elements as $element) {
+            $element->url = Search_Url::get_seo_param_segment($element->id);
+        }
+        
+
+        return $elements;
+    }
     
     public static function get_category_in_uri($uri = '')
     {
@@ -527,5 +558,40 @@ class Search_Url
             return TRUE;
         }
         return FALSE;
+    }
+
+    public static function getcounters($domain, $category_url, $categories = array())
+    {
+        $result = array();
+
+        $suc = DB::select("count","url")->from("search_url_cache");
+
+        $urls = array_map(function($value) use ($domain, $category_url) {
+            if ($value->attribute) {
+                return $domain."/".$category_url."/".$value->url;
+            } else {
+                return $domain."/".$value->url;
+            }
+        }, $categories);
+
+        if (count($urls) > 0) {
+            $suc = ORM::factory('Search_Url_Cache')->get_search_info_by_urls($urls, $suc);
+            $suc = $suc->execute()->as_array();
+            foreach ($suc as $item) {
+                $result[$item["url"]] = $item["count"];
+            };
+        }
+        return $result;
+    }
+
+    public static function clean_empty_category_childs_elements($categories, $counters, $url)
+    {
+        $result = array();
+        $counters = new Obj($counters);
+        foreach ($categories as $category) {
+            if (isset($counters->{$url."/".$category->url}) AND $counters->{$url."/".$category->url} == 0) continue;
+            $result[] = $category;
+        }
+        return $result;
     }
 }

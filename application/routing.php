@@ -41,7 +41,7 @@ Route::set('detail_work', 'detail/<object_id>',  array('object_id' => '[0-9]+'))
 		'action'     => 'index'
 	));
 
-Route::set('detail', '<path>/<object_seo_name>.html',  array('path' => '[a-zA-Z0-9-_/]+'))
+Route::set('detail', '<path>/<object_seo_name>.html',  array('path' => '[a-zA-Z0-9-\._/]+'))
 	->filter(function($route, $params, $request){
 
 		$object_seo_name =  $params["object_seo_name"];
@@ -253,7 +253,7 @@ Route::set('default', '(<controller>(/<action>(/<id>)))')
 	));
 
 Route::set('search', '<category_path>', array(
-		'category_path' => '[a-zA-Z0-9-_/]+',
+		'category_path' => '[a-zA-Z0-9-\._/]+',
 	))->filter(function($route, $params, $request){
 		$segments = explode("/", $params["category_path"]);
 		$category = ORM::factory('Category')

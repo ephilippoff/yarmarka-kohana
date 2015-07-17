@@ -150,13 +150,18 @@ class Controller_Search extends Controller_Template {
         $info->category_id = $this->params_by_uri->get_category()->id;
         $info->child_categories_ids = $this->params_by_uri->get_category_childs_id();
 
-
+        $info->host = $_SERVER["HTTP_HOST"];
+        $info->category_url = $this->params_by_uri->get_proper_category_uri();
+        $info->url = $info->host."/".$info->category_url;
         $info->canonical_url  =  $this->params_by_uri->get_proper_segments();
         $info->domain      = $this->domain;
         $info->city        = $this->domain->get_city();
         $info->category = $this->params_by_uri->get_category();
         $info->category_childs = $this->params_by_uri->get_category_childs(TRUE);
-        $info->crumbs      = Search_Url::get_category_crubms($info->category_id);
+        $info->category_childs_elements = $this->params_by_uri->get_category_childs_elements($info->category_id, $this->params_by_uri->get_seo_filters());
+        $info->link_counters = $this->params_by_uri->getcounters($info->host, $info->category_url, array_merge($info->category_childs, $info->category_childs_elements) );
+        $info->category_childs_elements = $this->params_by_uri->clean_empty_category_childs_elements($info->category_childs_elements, $info->link_counters, $info->url);
+        $info->crumbs      = $this->params_by_uri->get_category_crubms($info->category_id);
         $info->incorrectly_query_params_for_seo =  $this->params_by_uri->incorrectly_query_params_for_seo;
         $info->search_filters = array(
             "active" => TRUE,

@@ -37,6 +37,18 @@ class Model_Search_Url_Cache extends ORM {
 		return $this->where("hash","=",$hash);
 	}
 
+	public function get_search_info_by_urls($urls = array(), $query = NULL)
+	{
+		if (!$query) {
+			$query = $this;
+		}
+		$hashs = array();
+		foreach ($urls as $url) {
+			$hashs[] = $this->hash($url);
+		}
+		return $query->where("hash","IN",$hashs);
+	}
+
 	public static function hash($url)
 	{	if (!$url) return FALSE;
 		return sha1($url.self::$secret);
