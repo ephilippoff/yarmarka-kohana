@@ -1,6 +1,13 @@
 {% extends "layouts/search" %}
 
+{% block css %} 
+	{{ parent() }}
+	{{ css("develop/filters.css") }}
+{% endblock css%}
+
+
 {% block title %} {{ seo_attributes.title }} {% endblock title%}
+{% block meta_description %} {{ seo_attributes.description }} {% endblock meta_description%}
 
 {% block crumbs %} 
 	{% include 'search/crumbs' %}

@@ -1,5 +1,7 @@
 <div class="service-block-cont module">
-	<div class="line">Объявление снято</div>
+	{% if object.active == 0 %}
+		<div class="line">Объявление снято</div>
+	{% endif %}
 	<div class="line color1">Код объявления: {{ object.id }}</div>
 	<div class="line color1">Обновлено: {{ object.date_created|date('d.m.Y') }}</div>
 	<div class="line color1">Просмотров: {{ object.visits }}</div>

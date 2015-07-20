@@ -5,7 +5,9 @@
 	{{ css("develop/comments.css") }}
 {% endblock css%}
 
-{% block title %} Карточка объявления {% endblock title%}
+{% block title %} {{object.title|e}} {% endblock title%}
+{% block meta_description %} {{ object.user_text|e }} {% endblock meta_description%}
+
 {% block wrapperclass %}page-detail{% endblock wrapperclass %}
 
 {% block crumbs %} 

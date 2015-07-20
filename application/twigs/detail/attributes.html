@@ -24,7 +24,7 @@
 				{% for attr in object.compiled.attributes if attr.value and attr.seo_name in ['tsena']%}
 				<tr>
 					<td>{{ attr.title }}</td>
-					<td><p class="amount">{{ attr.value|e|number_format(0, ' ', ' ') }}<span class="rub">Р</span></p></td>
+					<td><p class="amount">{{ attr.value|e|number_format(0, ' ', ' ') }} руб.</p></td>
 				</tr>
 				{% endfor %}
 			</tbody>

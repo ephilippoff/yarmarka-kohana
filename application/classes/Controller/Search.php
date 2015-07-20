@@ -15,7 +15,6 @@ class Controller_Search extends Controller_Template {
         if ($search_info = $this->get_search_info_from_cache() AND 1==0) {
             $this->cached_search_info = unserialize($search_info->params);
             Cookie::set('search_hash', $search_info->hash, strtotime( '+14 days' ));
-            echo $search_info->hash."<br>";
         } else {
 
             $this->domain = new Domain();
@@ -153,16 +152,21 @@ class Controller_Search extends Controller_Template {
         $info->category_id = $this->params_by_uri->get_category()->id;
         $info->child_categories_ids = $this->params_by_uri->get_category_childs_id();
 
-        $info->host = $_SERVER["HTTP_HOST"];
+        $info->s_host = $_SERVER["HTTP_HOST"];
+        $info->s_suri = $_SERVER["REQUEST_URI"];
         $info->category_url = $this->params_by_uri->get_proper_category_uri();
-        $info->url = $info->host."/".$info->category_url;
+        $info->url = $info->s_host."/".$info->category_url;
         $info->canonical_url  =  $this->params_by_uri->get_proper_segments();
+        if ($info->s_suri <> "/".$info->canonical_url) {
+             $info->show_canonical = TRUE;
+        }
         $info->domain      = $this->domain;
         $info->city        = $this->domain->get_city();
+
         $info->category = $this->params_by_uri->get_category();
         $info->category_childs = $this->params_by_uri->get_category_childs(TRUE);
         $info->category_childs_elements = $this->params_by_uri->get_category_childs_elements($info->category_id, $this->params_by_uri->get_seo_filters());
-        $info->link_counters = $this->params_by_uri->getcounters($info->host, $info->category_url, array_merge($info->category_childs, $info->category_childs_elements) );
+        $info->link_counters = $this->params_by_uri->getcounters($info->s_host, $info->category_url, array_merge($info->category_childs, $info->category_childs_elements) );
         $info->category_childs_elements = $this->params_by_uri->clean_empty_category_childs_elements($info->category_childs_elements, $info->link_counters, $info->url);
         $info->crumbs      = array_merge($this->params_by_uri->get_category_crubms($info->category_id), $this->params_by_uri->get_seo_elements_crubms($this->params_by_uri->get_seo_filters(), $info->category_url));
         $info->incorrectly_query_params_for_seo =  $this->params_by_uri->incorrectly_query_params_for_seo;

@@ -3,9 +3,14 @@
 	<head>
 		<title>{% block title %} {% endblock title%}</title>
 		<meta charset="UTF-8">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		{% block meta %} {% endblock meta%}
+		<meta name="Description" content="{% block meta_description %}{% endblock meta_description%}">
+		<meta name="robots" content="{% block meta_robots %}all{% endblock meta_robots%}">
 		<link rel="shortcut icon" href="{{ staticfile("images/favicon.ico") }}">
+		{% if show_canonical %}
+			<link rel="canonical" href="{{ url(canonical_url) }}">
+		{% endif %}
 		
 		{{ css("develop/bootstrap.min.css") }}
 		{{ css("develop/iLight.css") }}

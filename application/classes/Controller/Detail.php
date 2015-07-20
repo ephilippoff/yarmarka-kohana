@@ -34,6 +34,10 @@ class Controller_Detail extends Controller_Template {
             HTTP::redirect($url, 301);
         }
 
+        if ($object->active == 0) {
+           throw new HTTP_Exception_404;
+        }
+
         $twig = Twig::factory('detail/index');
         $twig->domain      = $this->domain;
         $twig->city        = $this->domain->get_city();

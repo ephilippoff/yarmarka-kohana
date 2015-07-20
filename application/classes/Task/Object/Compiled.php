@@ -62,6 +62,9 @@ class Task_Object_Compiled extends Minion_Task
 			$compiled = array_merge($compiled, $this->getContacts($item->id) );
 			Minion_CLI::write('contacts: saved');
 
+			$compiled = array_merge($compiled, $this->getCommon($item) );
+			Minion_CLI::write('common: saved');
+
 			
 			
 
@@ -162,6 +165,16 @@ class Task_Object_Compiled extends Minion_Task
 		foreach ($contacts as $contact) {
 			$result["contacts"][] = array("type" => $contact->contact_obj->contact_type_id, "value" => $contact->contact_obj->contact_clear);
 		}
+
+		return $result;
+	}
+
+	function getCommon($object) {
+		$result = array();
+
+		$category = ORM::factory('Category', $object->category)->find();
+		$result["category"] = $category->get_row_as_obj();
+		
 
 		return $result;
 	}
