@@ -2,9 +2,8 @@
 	<div class="left">
 		<ul class="top" role="menu">
 			<?php foreach ($categories1l as $category) : ?>
-			<?php if (trim($category->seo_name) == 'kupony') $url_kupony = $category->get_url(); ?>
 			<?php if (in_array(trim($category->seo_name), Kohana::$config->load('category.categories_view_hidden'))) continue; ?>
-			<li data-submenu-id="section<?=$category->id?>">
+			<li data-submenu-id="section<?=$category->id?>" class="section<?=$category->id?>">
 				<a href="<?=$category->get_url()?>">
 					<span class="name"><?=$category->title?></span>
 					<span class="heading"></span>
@@ -12,11 +11,6 @@
 			</li>
 			<?php endforeach; ?>
 		</ul>
-		<?if ($url_kupony) : ?>
-			<ul class="bottom"> 
-				<li><a href="<?=$url_kupony?>"><span class="name">Купоны</span></a></li>
-			</ul>	
-		<?php endif;?>
 	</div> 
 	
 	<div class="right">
