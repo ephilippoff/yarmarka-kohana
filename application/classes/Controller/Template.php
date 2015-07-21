@@ -86,7 +86,6 @@ abstract class Controller_Template extends Controller {
 			}
 		}
 		
-		$this->assets->js('jquery.cookie.js');
 	}
 
 	public function after()
