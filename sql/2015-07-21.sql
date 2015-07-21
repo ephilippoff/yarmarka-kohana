@@ -70,3 +70,60 @@ CREATE INDEX seo_hash_idx
   ON seo
   USING btree
   (hash COLLATE pg_catalog."default");
+
+
+-- View: vw_objectcompiled
+
+-- DROP VIEW vw_objectcompiled;
+
+CREATE OR REPLACE VIEW vw_objectcompiled AS 
+ SELECT o.id,
+    o.number,
+    o.action,
+    o.category,
+    o.date_created,
+    o.date_updated,
+    o.date_expired,
+    o.author,
+    o.contact,
+    o.full_text,
+    o.price,
+    o.price_unit,
+    o.is_published,
+    o.is_bad,
+    o.origin,
+    o.city,
+    o.paper_num,
+    o.paper_date,
+    o.ip_addr,
+    o.style,
+    o.phone,
+    o.active,
+    o.id_tr,
+    o.city_id,
+    o.visits,
+    o.type_tr,
+    o.source_id,
+    o.title,
+    o.user_text,
+    o.real_date_created,
+    o.geo_loc,
+    o.main_image_id,
+    o.seo_name,
+    o.date_expiration,
+    o.in_archive,
+    o.to_forced_moderation,
+    o.moder_state,
+    o.cities,
+    o.geo_loc_temp,
+    o.location,
+    o.location_id,
+    o.author_company_id,
+    o.parent_id,
+    o.is_union,
+    oc.compiled
+   FROM object o
+     LEFT JOIN object_compiled oc ON o.id = oc.object_id;
+
+ALTER TABLE vw_objectcompiled
+  OWNER TO yarmarka_biz;
