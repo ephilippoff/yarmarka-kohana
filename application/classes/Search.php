@@ -238,7 +238,7 @@ class Search {
 										->where("photo.object_id","=", DB::expr("o.id"))
 										->where("photo.type", "IN", $multimedia_filter)
 										->limit(1);
-			$object = $object->where("0", "<", $multimedia_subquery);
+			$object = $object->where(DB::expr('exists'), DB::expr(''), $multimedia_subquery);
 		}
 
 		$orgtype_filter = array();
@@ -259,13 +259,13 @@ class Search {
 										->where("userorg.id","=", DB::expr("o.author_company_id"))
 										->where("userorg.org_type", "IN", $orgtype_filter)
 										->limit(1);
-			$object = $object->where("0", "<", $orgtype_subquery);
+			$object = $object->where(DB::expr('exists'), DB::expr(''), $orgtype_subquery);
 		}
 
 		
 		$filters = self::get_filters_by_params($params->filters, "o");
 		foreach ($filters as $filter)
-			$object = $object->where("0", "<", $filter);
+			$object = $object->where(DB::expr('exists'), DB::expr(''), $filter);
 
 		if (!$options->count) {
 			$object = $object->limit($limit);
