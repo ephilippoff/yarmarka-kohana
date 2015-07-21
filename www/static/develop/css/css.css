@@ -6,7 +6,7 @@ a:hover, .span-link:hover{text-decoration: underline;}
 body h1 {font-size: 16px;font-weight: normal;display: inline;}
 
 /* css helpers */
-.bg-color1{background-color:#D90000}.border-color1{border-color:#D90000}
+.bg-color-crimson{background-color:#D90000}.border-color-crimson{border-color:#D90000}
 .p5{padding:5px}.p10{padding:10px}.p15{padding:15px}
 .white{color:white !important}.black{color:black !important}.red{color:red !important;}.green{color:green !important;}
 .dib{display: inline-block}
@@ -18,14 +18,15 @@ body h1 {font-size: 16px;font-weight: normal;display: inline;}
 
 /* mini-elements */
 .button{cursor:pointer; text-align:center; border:0; padding:0}
-.button.bg-color1:hover{background-color: #F98C8C;}
+.button.bg-color-crimson:hover{background-color: #F98C8C;}
 .button.style1{padding: 7px 10px; color:#fff; background-color: #2370a6;}
 .button.style1:hover{background-color: #3c96d6;}
 .clearfix:after{display: block;clear: both;height: 0;content: '';}
 .rub {display: inline-block;font-size: 16px;line-height: 6px;border-bottom: 1px solid #9F9F9F;width: 0.4em;font-weight: bold;color: #9F9F9F;}
 .favorit-ico{width: 19px;height: 18px;background: url(/images/favorite_ico.svg) -23px 0 no-repeat;display: block;cursor: pointer;}
 .favorit-ico.in{background-position: 0 0;}
-.link {color: #2B587A;text-decoration: none;font-size: 12px;font-weight: bold;}
+.link {color: #2a76a1;text-decoration: none;font-size: 12px;font-weight: bold;}
+.caret {display: inline-block;width: 0;height: 0;margin-left: 2px;vertical-align: middle;border-top: 4px solid;border-right: 4px solid transparent;border-left: 4px solid transparent;}
 
 input{background-color: #FFFFFF;}
 input[type="text"], input[type="password"]{background-color: #FFFFFF;border: 1px solid #89898c;color: #384354;font-size: 12px;height: 25px;padding:0px 3px;}
@@ -37,6 +38,7 @@ select{background-color: #FFFFFF;border: 1px solid #89898c;color: #384354;paddin
 .menu-cont1 .menu-item{color: #2a76a1;text-decoration: none; cursor: pointer; font-weight: bold;}
 .menu-cont1 .menu-item:hover{text-decoration: underline;}
 .menu-cont1 .cont1 .menu-item{float: left; margin-right: 40px;}
+.menu-cont1 .cont1 .menu-item img{vertical-align: sub;}
 .menu-cont1 .cont2 .menu-item{float: right; margin-left: 20px;}
 .menu-cont1 .cont2 .menu-item-wrp{float: right; position: relative;}
 .menu-cont1 .proom-list {position: absolute;top: 120%;left: -34px;background: #fff;border: 1px solid #a0a1a1;white-space: nowrap;display: none;width: 175px;z-index: 1;}
@@ -103,7 +105,7 @@ select{background-color: #FFFFFF;border: 1px solid #89898c;color: #384354;paddin
 .m_menu .cont .heading {color: #808080;font-size: 10px;line-height: 14px;margin-bottom: 3px;min-height: 10px;}
 .menu-cont2 .main-page-style.iLight-disable .cont {display: block!important;}	
 
-.menu-cont2 .popup-menu-cont {position: absolute;top: 120%;left: -39px;background: #fff;border: 1px solid #a0a1a1;white-space: nowrap;display: none;width: 175px;z-index: 1;overflow: hidden;}
+.menu-cont2 .popup-menu-cont {position: absolute;top: 120%;left: -22px;background: #fff;border: 1px solid #a0a1a1;white-space: nowrap;display: none;width: 175px;z-index: 1;overflow: hidden;}
 .menu-cont2 .popup-menu-cont ul {padding-left: 7px;padding-top: 6px;padding-right: 7px;}
 .menu-cont2 .popup-menu-cont li {margin-bottom: 4px;min-height: 16px;}
 .menu-cont2 .popup-menu-cont li a {color: #5D6B76;font-size: 12px;border: 0 none;padding: 0; }
@@ -198,17 +200,21 @@ select{background-color: #FFFFFF;border: 1px solid #89898c;color: #384354;paddin
 /* view-container1 end */
 
 /* skin-theme1 */
+.realty-theme{color:white}
 .realty-theme .subcategories-cont ul li a{color: #fff;}
 .realty-theme .menu-cont2{background-color: #5988F4;}
 .realty-theme .view-container1{background: url(http://rasfokus.ru/images/photos/medium/3ec96aceb3a0049ec227d723f87b1286.jpg) no-repeat;}
 .realty-theme .subcategories-cont ul li span {color: gray;}
+.realty-theme a{color:white}
 /* skin-theme1 end */
 
 /* skin-theme2 */
+.job-theme{color:white}
 .job-theme .subcategories-cont ul li a{color: #fff;}
 .job-theme .menu-cont2{background-color: #6A0002;}
 .job-theme .view-container1{background: url(http://i.hh.ru/css/globals/blocks/index-dashboard/images/anonymous-background-anniversary.jpg) no-repeat;}
 .job-theme .subcategories-cont ul li span {color: gray;}
+.job-theme a{color:white}
 /* skin-theme2 end */
 
 .main-theme{background: url(https://raw.githubusercontent.com/subtlepatterns/SubtlePatterns/gh-pages/classy_fabric.png);padding: 20px;color:white;height: 320px;}
@@ -220,6 +226,9 @@ select{background-color: #FFFFFF;border: 1px solid #89898c;color: #384354;paddin
 .main-theme .buttons-cont ul li a {color: white;text-decoration: none;font-size: 16px;}
 .main-theme .buttons-cont ul li:hover {background: white;color: gray;cursor: pointer;}
 .main-theme .buttons-cont ul li:hover a {color: gray;}
+.main-theme .buttons-cont .ico {width: 16px;height: 16px;display: inline-block;vertical-align: sub;margin-right: 5px;}
+.main-theme .buttons-cont .ico.premium {background: url('/images/pr1.png') no-repeat center center;}
+.main-theme a{color: white;}
 
 
 /* obj-control-head */

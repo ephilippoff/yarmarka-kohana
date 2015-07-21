@@ -2,10 +2,10 @@
 	<div class="row">
 		<div class="col-md-6 left clearfix">
 			<a class="item" href="/add/{{ category.id }}">Подать объявление в этот раздел</a>
-			<a class="item" href="#">Подписка</a>
+			<a class="item" href="#">Подписка<span class="caret mr3"></span></a>
 		</div>
 		<div class="col-md-6 right clearfix">
-			<a class="item" href="#">Сортировка</a>
+			<a class="item" href="#">Сортировка<span class="caret mr3"></span></a>
 			{% if small_pagination.next %}
 				<a class="item" href="{{small_pagination.next_url}}">Далее</a>
 			{% endif %}
