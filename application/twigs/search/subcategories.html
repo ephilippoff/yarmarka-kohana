@@ -7,7 +7,7 @@
 			<div class="col-md-4">
 				<ul>
 				{% for child_category in category_childs|slice(i, rows) %}
-					{% set count = link_counters[host ~ '/' ~ child_category.url] %}
+					{% set count = link_counters[s_host ~ '/' ~ child_category.url] %}
 					<li>
 						<a href="{{ url(child_category.url) }}" title="{{child_category.title}}">{{child_category.title}}</a>
 						{% if count > 0 %}

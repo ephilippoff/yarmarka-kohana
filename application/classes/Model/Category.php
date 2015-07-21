@@ -169,10 +169,8 @@ class Model_Category extends ORM {
 		return ORM::factory('Category')
 				->where('parent_id', '=', 1)
 				->where('is_ready', '=', 1)
-				->order_by('weight')
-				->order_by('title')
-				->cached(60*24)
-				->find_all();				
+				->order_by('through_weight')
+				->order_by('title');
 	}	
 	
 	//Получить дочерние рубрики
@@ -185,7 +183,6 @@ class Model_Category extends ORM {
 				->where('is_ready', '=', 1)
 				->order_by('weight')
 				->order_by('title')
-				->cached(60*24)
 				->getprepared_all();
 			$ids = array_map(function($value){
 				return $value->id;
@@ -197,8 +194,7 @@ class Model_Category extends ORM {
 				->where('parent_id', 'in', $parent_ids)
 				->where('is_ready', '=', 1)
 				->order_by('weight')
-				->order_by('title')
-				->cached(60*24);
+				->order_by('title');
 	}
 	
 	//Взять баннеры категорий для региона/города
@@ -261,7 +257,9 @@ class Model_Category extends ORM {
 		$params = new Obj($params);
 		$categories1l_ids = $parents_ids = $result = array();
 
-		$categories1l = $this->get_rubrics1l();
+		$categories1l = $this->get_rubrics1l()
+								//->cached(60*24)
+								->getprepared_all();
 		$result["main"] = $categories1l;
 
 		//получаем массив id'шников
@@ -281,7 +279,10 @@ class Model_Category extends ORM {
 
 		if ($params->with_child) {
 			//получаем рубрики второго уровня
-			$categories2l = ORM::factory('Category')->get_childs($categories1l_ids)->find_all();
+			$categories2l = ORM::factory('Category')
+							->get_childs($categories1l_ids)
+							//->cached(60*24)
+							->getprepared_all();
 			$result["childs"] = $categories2l;
 		}
 

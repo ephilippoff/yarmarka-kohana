@@ -3,19 +3,22 @@
 {% block body %} 
 	{% block header %} 
 		{{ parent() }}
-		{{ requestblock('block_twig/navigationline') }}
-		{{ requestblock('block_twig/adslinkline') }}
-	{% endblock %} 
+		{% include 'index/header/navigationline' %}
+	{% endblock header %} 
+	
+	<div class="row">
+		{% block leftside %}
+		{% endblock leftside %}
 
-	{% block content %} 
-		контент
-	{% endblock %}
+		{% block rightside %}
+		{% endblock rightside %}
+	</div>
 
 	{% block footertext %} 
 		сео текст в футере
-	{% endblock %}
+	{% endblock footertext %}
 
 	{% block footer %} 
-		Футер
-	{% endblock %} 
-{% endblock %} 
+		Время генерации php {{ php_time }}
+	{% endblock footer %} 
+{% endblock body %} 
