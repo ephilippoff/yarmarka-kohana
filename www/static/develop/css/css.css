@@ -69,11 +69,11 @@ select{background-color: #FFFFFF;border: 1px solid #89898c;color: #384354;paddin
 
 
 /* catalog menu */
-.menu-cont2 {line-height: 25px; padding: 0 5px; box-sizing: border-box;}
+.menu-cont2 {line-height: 25px; box-sizing: border-box;}
 .menu-cont2 .menu-item {color: white;padding: 0 20px;font-weight: bold;text-decoration: none;line-height: 25px;cursor: pointer;}
 .menu-cont2 .menu-item.right {float: right;margin-left: 5px;}
-.menu-cont2 .menu-item.left {float: left;  }
-.menu-cont2 .menu-item-wrp{float: left; position: relative;}
+.menu-cont2 .menu-item.left {display: block; text-align: center;}
+.menu-cont2 .menu-item-wrp{position: relative;}
 .menu-cont2 .menu-item:hover{background-color: #F98C8C;}
 
 .menu-cont2 .menu-item-wrp .cont{display: none; box-shadow: 3px 3px 5px #AAAAAA; position:absolute; top:101%; left:-5px; border-width: 1px; border-style: solid; background: url(/images/shadow.png) repeat-y 197px 0 #fff; z-index: 10;}
@@ -233,13 +233,13 @@ select{background-color: #FFFFFF;border: 1px solid #89898c;color: #384354;paddin
 
 
 /* obj-control-head */
-.obj-control-head{padding: 0px 13px; box-sizing: border-box; background: #2B587A;line-height: 25px;}
-.obj-control-head .item{font-size: 12px;color: white;text-decoration: none;font-weight: bold;}
+.obj-control-head{box-sizing: border-box; background: #2B587A;line-height: 25px;}
+.obj-control-head .item{font-size: 12px;color: white;text-decoration: none;font-weight: bold;padding: 0px 20px;}
 .obj-control-head .item:hover{background-color: #F98C8C;}
 .obj-control-head .caption{font-size: 12px;color: white;}
-.obj-control-head .left .item{float: left; margin-right: 20px; padding: 0px 3px;}
-.obj-control-head .right .item{float: right; margin-left: 20px;}
-.obj-control-head .right .caption{float: right; margin-left: 20px;}
+.obj-control-head .left .item{float: left; margin-right: 5px;}
+.obj-control-head .right .item{float: right; margin-left: 5px;}
+.obj-control-head .right .caption{float: right; margin-left: 5px;padding: 0px 20px;}
 /* obj-control-head end */
 
 /* table-result-info */
