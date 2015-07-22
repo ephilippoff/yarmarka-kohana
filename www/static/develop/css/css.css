@@ -217,7 +217,8 @@ select{background-color: #FFFFFF;border: 1px solid #89898c;color: #384354;paddin
 .job-theme a{color:white}
 /* skin-theme2 end */
 
-.main-theme{background: url(https://raw.githubusercontent.com/subtlepatterns/SubtlePatterns/gh-pages/classy_fabric.png);padding: 20px;color:white;height: 320px;}
+
+.main-theme{background: url(https://raw.githubusercontent.com/subtlepatterns/SubtlePatterns/gh-pages/classy_fabric.png);padding: 20px;color:white;min-height: 320px;}
 .main-theme .breadcrumbs-cont{margin-bottom: 10px;}
 .main-theme .breadcrumbs-cont span{font-size: 12px; color:#333;}
 .main-theme .items-cont ul li{line-height: 20px;font-size: 14px;padding-left: 10px;margin: 10px 5px;border-left: 2px solid #2B587A;color: white;}
@@ -399,4 +400,8 @@ select{background-color: #FFFFFF;border: 1px solid #89898c;color: #384354;paddin
 @media (max-width: 768px){
 	.top-line .counter{display: none;}
 	.info404-wrp{float: none;}
+}
+
+@media screen and (min-width: 993px) {
+	html {margin-left: calc(100vw - 100%);margin-right: 0;}
 }
