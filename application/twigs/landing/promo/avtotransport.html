@@ -1,0 +1,14 @@
+<div class="job-theme module">
+	<div class="view-container view-container1">
+		{% include 'search/crumbs' %}
+		
+		{% block subcategories %}
+			{% if category_childs|length > 0 %}
+				{% include 'search/subcategories' %}
+			{% elseif category_childs_elements|length > 0 %}
+				{% include 'search/subfilters' %}
+			{% endif %}
+		{% endblock subcategories %}
+
+	</div><!--view-container1-->
+</div><!--skin-theme1-->
