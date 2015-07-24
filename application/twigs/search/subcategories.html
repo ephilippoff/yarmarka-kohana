@@ -1,4 +1,4 @@
-{% set cols = 2 %}
+{% set cols = (category_childs|length > 4) ? 2 : 1 %}
 {% set rows = (category_childs|length/cols)|round %}
 {% set i = 0 %}
 <div class="subcategories-cont module">
@@ -11,9 +11,9 @@
 					<li>
 						<a href="{{ url(child_category.url) }}" title="{{child_category.title}}">{{child_category.title}}</a>
 						{% if count > 0 %}
-							<span class="count">({{count}})</span>
+							<span class="count">{{count}}</span>
 						{% else %}
-							<span class="count">(?)</span>
+							<!-- <span class="count">?</span> -->
 						{% endif %}
 					</li>
 				{% endfor %}

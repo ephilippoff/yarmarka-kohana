@@ -1,5 +1,6 @@
 {% extends "layouts/landing" %}
 
+{% block wrapperclass %}page-landing{% endblock wrapperclass %}
 {% block title %} Автотранспорт {% endblock %}
 
 {% block css %} 
@@ -9,24 +10,14 @@
 
 {% block header %} 
 	{{ parent() }}
-	{% include 'landing/topline/avtotransport' %}
-	{% include 'landing/promo/avtotransport' %}
+	{% include 'block/header/navigationline' %}
+	{% include 'block/header/promo' %}
 	{{ requestblock('block_twig/adslinkline',{'city_id': city.id, 'category_id': category.id}) }}
 {% endblock header %} 
 
 {% block crumbs %}{% endblock crumbs %}
-
-
-{% block wrapperclass %}page-landing{% endblock wrapperclass %}
-
-
-
 {% block subcategories %}{% endblock subcategories %}
-
-
-{% block filters %} 
-
-{% endblock filters %}
+{% block filters %}{% endblock filters %}
 
 {% block content %} 
 	{% include 'search/control' %}

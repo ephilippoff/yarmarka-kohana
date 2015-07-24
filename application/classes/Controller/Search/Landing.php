@@ -88,7 +88,7 @@ class Controller_Search_Landing extends Controller_Search {
         foreach ((array) $search_info as $key => $item) {
             $twig->{$key} = $item;
         }
-
+        $twig->theme_class = "job-theme";
         $twig->php_time = microtime(true) - $start;
         $this->response->body($twig);
     }

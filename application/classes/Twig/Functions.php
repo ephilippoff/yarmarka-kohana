@@ -43,16 +43,8 @@ class Twig_Functions
         return new Obj($array);
     }
 
-    public static function domain($domain_str, $url_str)
+    public static function domain($domain_str, $url_str, $protocol_str = "http://")
     {
-        $config = Kohana::$config->load("common");
-        $main_domain = $config["main_domain"];
-
-        if (!$url_str) {
-            return "http://".$domain_str.".".$main_domain;
-        } else {
-            return "http://".$domain_str.".".$main_domain.self::url($url_str);
-        }
-        
+        return Domain::get_domain_by_city($domain_str, $url_str, $protocol_str);
     }
 }

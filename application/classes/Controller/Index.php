@@ -100,8 +100,14 @@ class Controller_Index extends Controller_Template {
             return $item;
         }, $info->categories["main"] );
 
+        
+        
         $info->link_counters = Search_Url::getcounters($info->s_host, "", $info->categories["main"]);
-
+        foreach (array("nizhnevartovsk","tyumen","surgut","nefteyugansk", FALSE) as $city_seo) {
+            $city_counter = Search_Url::getcounters($this->domain->get_domain_by_city($city_seo, FALSE, ""), "", array( new Obj(array("url"=>"glavnaya-kategoriya")) ) );
+            $info->link_counters = array_merge($info->link_counters, $city_counter);
+        }
+        
         $info->theme = new Obj(array(
             "theme_class" => $this->theme_class,
             "theme_img" => $this->theme_img

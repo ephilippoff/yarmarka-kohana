@@ -69,7 +69,10 @@ class Controller_Search extends Controller_Template {
                                                     ->execute()
                                                     ->get("count");
             $search_info->main_search_result_count = $main_search_result_count;
+           
         }
+
+        $search_info->link_counters[$search_info->s_host.$search_info->s_suri] = $search_info->main_search_result_count;
         //end main search
 
         //premium
@@ -166,7 +169,13 @@ class Controller_Search extends Controller_Template {
         $info->category = $this->params_by_uri->get_category();
         $info->category_childs = $this->params_by_uri->get_category_childs(TRUE);
         $info->category_childs_elements = $this->params_by_uri->get_category_childs_elements($info->category_id, $this->params_by_uri->get_seo_filters());
+        
         $info->link_counters = $this->params_by_uri->getcounters($info->s_host, $info->category_url, array_merge($info->category_childs, $info->category_childs_elements) );
+        foreach (array("nizhnevartovsk","tyumen","surgut","nefteyugansk", FALSE) as $city_seo) {
+            $city_counter = Search_Url::getcounters($this->domain->get_domain_by_city($city_seo, FALSE, ""), "", array( new Obj(array("url"=>$info->canonical_url)) ) );
+            $info->link_counters = array_merge($info->link_counters, $city_counter);
+        }
+        
         $info->category_childs_elements = $this->params_by_uri->clean_empty_category_childs_elements($info->category_childs_elements, $info->link_counters, $info->url);
         $info->crumbs      = array_merge($this->params_by_uri->get_category_crubms($info->category_id), $this->params_by_uri->get_seo_elements_crubms($this->params_by_uri->get_seo_filters(), $info->category_url));
         $info->incorrectly_query_params_for_seo =  $this->params_by_uri->incorrectly_query_params_for_seo;
