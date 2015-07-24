@@ -133,6 +133,7 @@ class Controller_Search extends Controller_Template {
         $twig->pagination = $pagination;
         //pagination end
 
+        //save search settings cache
         if (!$this->cached_search_info AND $search_info->s_suri == "/".$search_info->canonical_url) {
             $cache = $this->save_search_info_to_cache(array(
                     "info" => $search_info,
@@ -143,6 +144,11 @@ class Controller_Search extends Controller_Template {
             );
             Cookie::set('search_hash', $cache->hash, strtotime( '+14 days' ));
         }
+        //save search settings cache end
+
+        //clean empty links
+        $search_info->category_childs_elements = Search_url::clean_empty_category_childs_elements($search_info->category_childs_elements, $search_info->link_counters, $search_info->url);
+        // end clean empty links
 
         foreach ((array) $search_info as $key => $item) {
             $twig->{$key} = $item;
@@ -178,12 +184,11 @@ class Controller_Search extends Controller_Template {
         if ($info->s_suri <> "/".$info->canonical_url) {
              $info->show_canonical = TRUE;
         }
-        
 
         $info->category = $this->params_by_uri->get_category();
         $info->category_childs = $this->params_by_uri->get_category_childs(TRUE);
         $info->category_childs_elements = $this->params_by_uri->get_category_childs_elements($info->category_id, $this->params_by_uri->get_seo_filters());
-        //$info->category_childs_elements = $this->params_by_uri->clean_empty_category_childs_elements($info->category_childs_elements, $info->link_counters, $info->url);
+        $info->category_childs_elements_colsize = Kohana::$config->load("landing.subfilters.".$info->category_id);
         $info->crumbs      = array_merge($this->params_by_uri->get_category_crubms($info->category_id), $this->params_by_uri->get_seo_elements_crubms($this->params_by_uri->get_seo_filters(), $info->category_url));
         $info->incorrectly_query_params_for_seo =  $this->params_by_uri->incorrectly_query_params_for_seo;
         $info->search_filters = array(
@@ -213,6 +218,7 @@ class Controller_Search extends Controller_Template {
             $this->params_by_uri->get_category(),
             $this->domain->get_city()
         );
+
 
         return $info;
     }

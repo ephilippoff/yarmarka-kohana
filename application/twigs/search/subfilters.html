@@ -4,12 +4,12 @@
 <div class="subcategories-cont module">
 	<div class="row">
 		{% for col in 0..cols %}
-			<div class="col-md-4">
+			<div class="col-md-{{ category_childs_elements_colsize ? category_childs_elements_colsize : 2 }}">
 				<ul>
 				{% for element in category_childs_elements|slice(i, rows) %}
-					{% set count = link_counters[s_host ~ '/' ~ canonical_url ~ '/' ~ element.url] %}
+					{% set count = link_counters[s_host ~ '/' ~ category_url ~ '/' ~ element.url] %}
 					<li>
-						<a href="{{ url(canonical_url ~ '/' ~ element.url) }}" title="{{element.title}}">{{element.title}}</a>
+						<a href="{{ url(category_url ~ '/' ~ element.url) }}" title="{{element.title}}">{{element.title}}</a>
 						
 						{% if count > 0 %}
 							<span class="count">{{count}}</span>
