@@ -6,13 +6,13 @@
 		<div class="col-md-6 items-cont">
 			<ul>
 				{% for key, _city in  {'nizhnevartovsk':'Нижневартовске','surgut':'Сургуте','tyumen':'Тюмени','nefteyugansk':'Нефтеюганске'} if key != city.seo_name %}
-					{% set count = link_counters[domain(key, 'glavnaya-kategoriya', '')] %}
+					{% set count = link_counters[domain(key, main_category, '')] %}
 					<li>				
 						<a href="{{ domain(key, FALSE) }}" title="Газета бесплатных объявлений Ярмарка в {{ _city }}">в {{ _city }}</a>
 						<span class="count">{{ count }}</span>
 					</li>
 				{% endfor %}
-				{% set count = link_counters[domain(FALSE, 'glavnaya-kategoriya', '')] %}
+				{% set count = link_counters[domain(FALSE, main_category, '')] %}
 				<li>				
 					<a href="{{ domain(FALSE, FALSE) }}" title="Газета бесплатных объявлений Ярмарка"> Все объявления</a>
 					<span class="count">{{ count }}</span>

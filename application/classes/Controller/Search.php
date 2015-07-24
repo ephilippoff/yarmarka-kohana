@@ -12,7 +12,7 @@ class Controller_Search extends Controller_Template {
         $this->auto_render = FALSE;
         $this->cached_search_info = FALSE;
 
-        if ($search_info = $this->get_search_info_from_cache() AND 1==0) {
+        if ($search_info = $this->get_search_info_from_cache()) {
             $this->cached_search_info = unserialize($search_info->params);
             Cookie::set('search_hash', $search_info->hash, strtotime( '+14 days' ));
         } else {
@@ -27,7 +27,7 @@ class Controller_Search extends Controller_Template {
             $query_params = $this->request->query();
 
             try {
-                $searchuri = new Search_Url($uri, $query_params, $route_params);
+                $searchuri = new Search_Url($route_params['category_path'], $query_params);
             } catch (Kohana_Exception $e) {
                 //TODO Log incorrect seo
                 //HTTP::redirect("/", 301);
@@ -57,6 +57,14 @@ class Controller_Search extends Controller_Template {
         $twig = Twig::factory('search/index');
 
         $search_info = $this->get_search_info();
+
+        //counters
+        $search_info->link_counters = Search_Url::getcounters($search_info->s_host, $search_info->category_url, array_merge($search_info->category_childs, $search_info->category_childs_elements) );
+        foreach (array("nizhnevartovsk","tyumen","surgut","nefteyugansk", FALSE) as $city_seo) {
+            $city_counter = Search_Url::getcounters(Domain::get_domain_by_city($city_seo, FALSE, ""), "", array( new Obj(array("url"=>$search_info->canonical_url)) ) );
+            $search_info->link_counters = array_merge($search_info->link_counters, $city_counter);
+        }
+        //counters end
 
         //main search
         $main_search_query = Search::searchquery($search_info->search_filters, $search_info->search_params);
@@ -125,7 +133,7 @@ class Controller_Search extends Controller_Template {
         $twig->pagination = $pagination;
         //pagination end
 
-        if (!$this->cached_search_info) {
+        if (!$this->cached_search_info AND $search_info->s_suri == "/".$search_info->canonical_url) {
             $cache = $this->save_search_info_to_cache(array(
                     "info" => $search_info,
                     "canonical_url" =>  $search_info->canonical_url,
@@ -157,26 +165,25 @@ class Controller_Search extends Controller_Template {
 
         $info->s_host = $_SERVER["HTTP_HOST"];
         $info->s_suri = $_SERVER["REQUEST_URI"];
+        $info->domain      = $this->domain;
+        $info->city        = $this->domain->get_city();
+        $info->main_category = $this->domain->get_main_category();
+
         $info->category_url = $this->params_by_uri->get_proper_category_uri();
         $info->url = $info->s_host."/".$info->category_url;
         $info->canonical_url  =  $this->params_by_uri->get_proper_segments();
+        if ($info->canonical_url === $info->main_category) {
+            $info->canonical_url = "";
+        }
         if ($info->s_suri <> "/".$info->canonical_url) {
              $info->show_canonical = TRUE;
         }
-        $info->domain      = $this->domain;
-        $info->city        = $this->domain->get_city();
+        
 
         $info->category = $this->params_by_uri->get_category();
         $info->category_childs = $this->params_by_uri->get_category_childs(TRUE);
         $info->category_childs_elements = $this->params_by_uri->get_category_childs_elements($info->category_id, $this->params_by_uri->get_seo_filters());
-        
-        $info->link_counters = $this->params_by_uri->getcounters($info->s_host, $info->category_url, array_merge($info->category_childs, $info->category_childs_elements) );
-        foreach (array("nizhnevartovsk","tyumen","surgut","nefteyugansk", FALSE) as $city_seo) {
-            $city_counter = Search_Url::getcounters($this->domain->get_domain_by_city($city_seo, FALSE, ""), "", array( new Obj(array("url"=>$info->canonical_url)) ) );
-            $info->link_counters = array_merge($info->link_counters, $city_counter);
-        }
-        
-        $info->category_childs_elements = $this->params_by_uri->clean_empty_category_childs_elements($info->category_childs_elements, $info->link_counters, $info->url);
+        //$info->category_childs_elements = $this->params_by_uri->clean_empty_category_childs_elements($info->category_childs_elements, $info->link_counters, $info->url);
         $info->crumbs      = array_merge($this->params_by_uri->get_category_crubms($info->category_id), $this->params_by_uri->get_seo_elements_crubms($this->params_by_uri->get_seo_filters(), $info->category_url));
         $info->incorrectly_query_params_for_seo =  $this->params_by_uri->incorrectly_query_params_for_seo;
         $info->search_filters = array(
@@ -212,11 +219,14 @@ class Controller_Search extends Controller_Template {
 
     public function save_search_info_to_cache($options = array()) {
         $options = new Obj($options);
+        if ($options->canonical_url) {
+            $options->canonical_url = "/".$options->canonical_url;
+        }
         $suc = ORM::factory('Search_Url_Cache')
                     ->save_search_info(
                         $options->info, 
                         $_SERVER["HTTP_HOST"].$_SERVER["REQUEST_URI"], 
-                        $_SERVER["HTTP_HOST"]."/".$options->canonical_url, 
+                        $_SERVER["HTTP_HOST"].$options->canonical_url, 
                         $options->sql, 
                         $options->count
                     );

@@ -9,6 +9,7 @@ class Domain
         
         $config = Kohana::$config->load("common");
         $this->_main_domain = $config["main_domain"];
+        $this->_main_category = $config["main_category"];
 
         $this->_subdomain = strtolower(trim( str_replace($this->_main_domain, "", $this->_domain), "."));
         $this->_city = NULL;
@@ -55,7 +56,12 @@ class Domain
         return $this->_subdomain;
     }
 
-    public static function get_domain_by_city($domain_str, $url_str, $protocol_str = "http://") {
+    public function get_main_category() {
+        return $this->_main_category;
+    }
+
+    public static function get_domain_by_city($domain_str, $url_str, $protocol_str = "http://")
+    {
         $config = Kohana::$config->load("common");
         $main_domain = $config["main_domain"];
         if ($domain_str) {

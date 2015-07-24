@@ -14,12 +14,12 @@ class Search_Url
         "page" => 0
     );
 
-    public function __construct($uri = '', $query_params = array(), $route_params = array())
+    public function __construct($uri = '', $query_params = array())
     {
         $this->_uri = $uri;
         $this->_category = self::get_category_in_uri($this->_uri);
         if (!$this->_category) {
-            throw new Exception("Category not found", $uri);
+            throw new Kohana_Exception("Category not found ");
         }
         $this->_category_childs = ORM::factory('Category')
                                 ->get_childs(array($this->_category->id), TRUE)

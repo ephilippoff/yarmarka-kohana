@@ -1,14 +1,14 @@
 <div class="breadcrumbs-cont module">
-	{% if canonical_url != 'glavnaya-kategoriya' %}
+	{% if canonical_url and canonical_url != main_category %}
 		{% if city %}
-			<a href="/glavnaya-kategoriya" rel="nofollow">Все объявления в {{ city.sinonim }} </a>
+			<a href="/" rel="nofollow">Все объявления в {{ city.sinonim }} </a>
 		{% else %}
-			<a href="/glavnaya-kategoriya" rel="nofollow">Все объявления в России</a>
+			<a href="/" rel="nofollow">Все объявления в России</a>
 		{% endif %}
 	{% endif %}
 
 	{% for crumb in crumbs %}
-		{% if crumb.uri != canonical_url %}
+		{% if crumb.uri != canonical_url and canonical_url %}
 			/ <a href="{{ url(crumb.uri) }}">{{crumb.title}}</a>
 		{% endif %}
 	{% endfor %}

@@ -20,7 +20,7 @@ class Model_Search_Url_Cache extends ORM {
 		$this->where("hash","=",$hash_url)->find();
 
 		$this->hash = $hash_url;
-		$this->url = $url;
+		$this->url = trim($url,"/");
 		$this->params = $serialized_info;
 
 		$this->sql = $sql;
