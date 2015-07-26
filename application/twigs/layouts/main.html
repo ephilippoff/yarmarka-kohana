@@ -1,30 +1,33 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<title>{% block title %} {% endblock title%}</title>
-		<meta charset="UTF-8">
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<meta name="Description" content="{% block meta_description %}{% endblock meta_description%}">
-		<meta name="robots" content="{% block meta_robots %}all{% endblock meta_robots%}">
-		<link rel="shortcut icon" href="{{ staticfile("images/favicon.ico") }}">
-		{% if show_canonical %}
-			<link rel="canonical" href="{{ url(canonical_url) }}">
-		{% endif %}
-		
-		{{ css("bootstrap.min.css") }}
-		{{ css("iLight.css") }}
-		{{ css("css.css") }}
+    <head>
+        <title>{% block title %} {% endblock title%}</title>
+        <meta charset="UTF-8">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="Description" content="{% block meta_description %}{% endblock meta_description%}">
+        <meta name="robots" content="{% block meta_robots %}all{% endblock meta_robots%}">
+        <link rel="shortcut icon" href="{{ staticfile("images/favicon.ico") }}">
+        {% if show_canonical %}
+            <link rel="canonical" href="{{ url(canonical_url) }}">
+        {% endif %}
+        
+        {{ css("bootstrap.min.css") }}
+        {{ css("iLight.css") }}
+        {{ css("css.css") }}
 
-		{{ js("jquery.min.js") }}
-		{{ js("jquery.menu-aim.js") }}
+        {% block css %}{% endblock css%}
 
-		{% block css %}{% endblock css%}
-		{% block js %}{% endblock js%}
-	</head>
-	<body class="{% block bodyclass %}{% endblock bodyclass%}">
-		<div class="wrapper container {% block wrapperclass %}{% endblock wrapperclass %}">
-			{% block body %}{% endblock body%}
-		</div>
-	</body>
+    </head>
+    <body class="{% block bodyclass %}{% endblock bodyclass%}">
+        <div class="wrapper container {% block wrapperclass %}{% endblock wrapperclass %}">
+            {% block body %}{% endblock body%}
+        </div>
+        <!-- inject:js -->
+        <script>
+          var _globalSettings =  { host: '{{ s_host }}', page: '{% block page_name %}index{% endblock page_name%}' };
+        </script>
+        <script data-main="/static/develop/js/main.js" src="/static/develop/js/lib/require.js"></script>
+        <!-- endinject -->
+    </body>
 </html>

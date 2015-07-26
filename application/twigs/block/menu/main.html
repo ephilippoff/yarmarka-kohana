@@ -1,0 +1,41 @@
+<div class="cont iLight-cont border-color-crimson js-mainmenu">
+	<div class="left mh-style1 border-color-crimson">
+		<ul class="top" role="menu">
+			{% for category in categories1l %}
+				<li data-submenu-id="section{{category.id}}">
+					<span class="span-link" onclick="window.location = '/{{category.seo_name}}'">
+						<span class="name">{{category.title}}</span>
+					</span>
+				</li>
+			{% endfor %}
+		</ul>
+	</div> 
+	<div class="right mh-style1 border-color-crimson">
+		{% for category in categories1l %}
+			{% set divWidth = (banners[category.id] is defined and banners[category.id].menu_width) ? banners[category.id].menu_width : 341 %}
+			{% set ulWidth = 191 %}
+			<div class="section section{{category.id}}" id="section{{category.id}}" style="width: {{divWidth}}px; display: none;">
+				{% if banners[category.id] is defined and file_exist('/uploads/banners/menu/' ~ banners[category.id].image) %}
+					<img hidefocus="true" style="position: absolute;right:{{banners[category.id].x}}px ; bottom:{{banners[category.id].y}}px;" usemap="#map{{category.id}}" src="/uploads/banners/menu/{{banners[category.id].image}}"/>
+
+					<map name="map{{category.id}}" id="map{{category.id}}">
+						<area shape="poly" coords="{{banners[category.id].map_params}}" class="" href="/redirect/ref_cb?id={{banners[category.id].id}}" target="_blank" />
+					</map>
+				{% elseif file_exist(category.main_menu_image) %}
+					<span class="img">
+						<img  hidefocus="true"  src="{{category.main_menu_image}}">
+					</span>
+				{% endif %}
+				
+				<ul style="position: absolute;width:{{ulWidth}}px">
+					<li class="li-title"><span class="header3" style="width: 165px">{{category.title}}</span></li>
+					{% for subcategory in categories2l if subcategory.parent_id == category.id %}
+						<li>
+							<span class="span-link" onclick="window.location = '/{{category.seo_name}}/{{subcategory.seo_name}}'">
+							<span class="name2">{{subcategory.title}}</span><span class="heading"></span>
+						</span></li>
+					{% endfor %}
+				</ul>
+			</div>
+		{% endfor %}
+</div>

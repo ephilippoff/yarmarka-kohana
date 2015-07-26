@@ -2,7 +2,8 @@
 
 
 
-{% block body %} 
+{% block body %}
+	
 	{% block header %} 
 		{{ parent() }}
 		{% include 'block/header/navigationline' %}
@@ -43,4 +44,7 @@
 	{% block footer %} 
 		Футер
 	{% endblock footer %} 
+
+	{% block templates %}{{ parent() }}{% endblock templates %}
+	{%block page_name%}search{% endblock page_name %}
 {% endblock body %} 

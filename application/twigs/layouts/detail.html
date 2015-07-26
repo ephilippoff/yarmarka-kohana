@@ -1,6 +1,7 @@
 {% extends "layouts/main_with_header" %}
 
-{% block body %} 
+{% block body %}
+	
 	{% block header %} 
 		{{ parent() }}
 		{{ requestblock('block_twig/navigationline') }}
@@ -25,4 +26,7 @@
 	{% block footer %} 
 		Время генерации php {{ php_time }}
 	{% endblock footer %}
+	
+	{% block templates %}{{ parent() }}{% endblock templates %}
+	{%block page_name%}detail{% endblock page_name %}
 {% endblock body %} 

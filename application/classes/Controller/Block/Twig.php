@@ -43,10 +43,34 @@ class Controller_Block_Twig extends Controller_Block
         $this->response->body($twig);
     }
 
-
-    public function action_navigationline()
+    public function action_othercities()
     {
-        $twig = Twig::factory('block/header/navigationline');
+        $city_id = $this->request->post("city_id");
+        $twig = Twig::factory('block/menu/city');
+
+        $cities = ORM::factory('City')->where("is_visible","=",1);
+        if ($city_id)
+            $cities = $cities->where("id","<>",$city_id);
+        $twig->cities = $cities->getprepared_all();
+        $this->response->body($twig);
+    }
+
+    public function action_mainmenu()
+    {
+        $city_id = $this->request->post("city_id");
+        $twig = Twig::factory('block/menu/main');
+
+        $categories = ORM::factory('Category')->get_categories_extend(array(
+            "with_child" => TRUE, 
+            "with_ads" => TRUE, 
+            "city_id" => $city_id
+        ));
+        
+        $twig->categories1l = $categories["main"];
+        $twig->categories2l = $categories["childs"];
+        $twig->parents_ids  = $categories["main_ids"];
+        $twig->banners      = $categories["banners"];
+
         $this->response->body($twig);
     }
 

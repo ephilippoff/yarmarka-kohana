@@ -47,4 +47,9 @@ class Twig_Functions
     {
         return Domain::get_domain_by_city($domain_str, $url_str, $protocol_str);
     }
+
+    public static function file_exist($path)
+    {
+        return is_file($_SERVER['DOCUMENT_ROOT'].$path);
+    }
 }

@@ -1,20 +1,20 @@
 <!--noindex-->
 <div class="reklama-cont module">
 	<div id="reklama_container" class="reklama-line banners">
-		<div  class="cont-r">
+		<div  class="cont-r" u="slides">
 			{% for i in 0..9 %}
 				{% set link = imagelinks|slice(i,1) %}
 				{% if link|length > 0 %}
 					{% set link = link|first %}
 					<a rel="nofollow" target="_blank"  onclick=""  class="text-t2" href="{{ link.link }}"  rel="nofollow">
-						<img src="{{ staticfile('./uploads/banners/' ~ link.image) }}"/>
+						<img u="image" src="{{ staticfile('./uploads/banners/' ~ link.image) }}"/>
 						{% if link.type == 3111 %}
 							<div class=""><span class="banner-title white">{{link.title}}</span></div>
 						{% endif %}
 					</a>
 				{% else %}
 					<a rel="nofollow" target="_blank"  onclick=""  class="text-t2" href="#" rel="nofollow">
-						<img src="{{ staticfile('images/1.png') }}"/>
+						<img u="image" src="{{ staticfile('images/1.png') }}"/>
 					</a>
 				{% endif %}
 			{% endfor  %}

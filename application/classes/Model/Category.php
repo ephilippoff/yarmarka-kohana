@@ -214,7 +214,7 @@ class Model_Category extends ORM {
 						->where(DB::expr($city_id), '=', DB::expr('ANY(cities)'))
 						->where('date_expired', '>=', DB::expr('CURRENT_DATE'))
 						->where('state', 'in', DB::expr('('.$states_str.')'))
-						->find_all();
+						->getprepared_all();
 			
 			if ($cached)
 				Cache::instance()->set("getBannersForCategories:{$city_id}", $data, 60*60);				
@@ -289,7 +289,15 @@ class Model_Category extends ORM {
 		if ($params->with_ads) {
 			$city_id = ($params->city_id) ? $params->city_id : 1;
 			$banners = $this->get_banners($city_id, $states, $cached);
-			$result["banners"] = Dbhelper::convert_dbset_to_keyid_arr($banners, 'category_id');
+
+			$categories_banners = array_map(function($value) {
+				return $value->category_id;
+			}, $banners);
+			if (count($banners) > 0) {
+				$result["banners"] = array_combine($categories_banners, $banners);
+			} else {
+				$result["banners"] = array();
+			}
 		}
 
 		return $result;

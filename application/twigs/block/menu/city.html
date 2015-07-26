@@ -1,0 +1,7 @@
+<div class="popup-menu-cont iLight-cont js-citymenu">
+	<ul>
+		{% for city in cities %}
+			<li><a href="{{ domain(city.seo_name, FALSE) }}">{{ city.title}}</a></li>
+		{% endfor %}
+	</ul>
+</div>

@@ -6,5 +6,10 @@
 		{{ requestblock('block_twig/topline') }}
 		{{ requestblock('block_twig/logoline') }}
 		</header>
-	{% endblock header %} 
+	{% endblock header %}
+	{% block templates %}
+		<script id="template-usermenu" type="text/template">
+			{% include "block/menu/user" %}
+		</script>
+	{% endblock templates %}
 {% endblock body %} 

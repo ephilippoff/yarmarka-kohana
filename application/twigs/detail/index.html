@@ -58,6 +58,15 @@
 	</div>
 {% endblock rightside %}
 
+{% block templates %}
+	{{ parent() }}
+	<script id="template-mainmenu" type="text/template">
+		{% include "block/menu/main" %}
+	</script>
+	<script id="template-citymenu" type="text/template">
+		{% include "block/menu/city" %}
+	</script>
+{% endblock templates %}
 
 
 

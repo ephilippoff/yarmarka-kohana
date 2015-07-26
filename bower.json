@@ -1,0 +1,29 @@
+{
+  "name": "yarmarka.biz",
+  "version": "0.0.0",
+  "authors": [
+    "almaznv <almaznv@gmail.com>"
+  ],
+  "dependencies": {
+    "jquery": "latest",
+    "underscore": "latest",
+    "backbone": "latest",
+    "requirejs": "latest",
+    "marionette": "~2.3.1",
+    "backbone.localStorage": "~1.1.16",
+    "requirejs-text": "~2.0.13",
+    "requirejs-plugins": "~1.0.3",
+    "backbone.paginator": "~2.0.2"
+  },
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "resolutions": {
+    "underscore": "1.8.3"
+  }
+}

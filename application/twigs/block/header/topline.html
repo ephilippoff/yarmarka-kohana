@@ -7,21 +7,9 @@
 			<a href="/" class="menu-item">Техподдержка</a>
 		</div>
 		<div class="cont2 col-md-6 clearfix">
-			<div class="menu-item-wrp">
+			<div class="menu-item-wrp {% if user %}js-usermenu-dropdown{% endif %}">
 				{% if user %}
-				<span class="menu-item fn-lk-menu-cont">Личный кабинет ({{ user.email|e }})<span class="caret mr3"></span></span>
-				<div class="proom-list iLight-cont fn-lk-menu">
-					<ul>
-						<li><a href="{{ url('user/published') }}"><div class="img"><img src="images/pr1.png" alt=""></div>Мои объявления</a></li>
-						<li><a href="{{ url('user/subscriptions') }}"><div class="img"></div>Мои подписки</a></li>				
-						<li><a href="{{ url('user/favorites') }}"><div class="img"></div>Мои избранные</a></li>
-						<li><a href="{{ url('user/profile') }}"><div class="img"><img src="images/pr2.png" alt=""></div>Личные данные</a></li>
-						<li><a href="{{ url('user/services_history') }}"><div class="img"></div>История услуг</a></li>
-						<li><a href="{{ url('user/newspapers') }}"><div class="img"></div>Купленные газеты</a></li>
-						<li><a class="item-massload" href="{{ url('user/objectload') }}"><div class="img"></div>Массовая загрузка</a></li>												
-						<li class="last"><a href="{{ url('user/logout') }}"><div class="img"><img src="images/pr3.png" alt=""></div>Выход</a></li>
-					</ul>
-				</div>
+					<span class="menu-item fn-lk-menu-cont">Личный кабинет ({{ user.email|e }})<span class="caret mr3"></span></span>
 				{% else %}
 					<span class="menu-item">Вход в личный кабинет</span>
 				{% endif %}
