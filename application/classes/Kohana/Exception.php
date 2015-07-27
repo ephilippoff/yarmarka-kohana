@@ -252,13 +252,7 @@ class Kohana_Exception extends Exception {
 
 			if (Kohana::$environment === Kohana::PRODUCTION)
 			{	
-				$categories = ORM::factory('Category')
-							->where('parent_id', '=', 1)
-							->order_by('weight')
-							->cached(Date::WEEK)
-							->find_all();	
-				
-				$_content = View::factory('errors/404', array('categories' => $categories))->render();
+				$_content = View::factory('errors/404')->render();
 				$view = View::factory('layouts/default', array('_content' => $_content, '_assets' => ''));				
 			}
 			else

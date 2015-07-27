@@ -2,8 +2,8 @@
 	<div class="left">
 		<ul class="top" role="menu">
 			<?php foreach ($categories1l as $category) : ?>
-			<?php if ($category->seo_name == 'modulnaya-reklama') continue; ?>
-			<li data-submenu-id="section<?=$category->id?>">
+			<?php if (in_array(trim($category->seo_name), Kohana::$config->load('category.categories_view_hidden'))) continue; ?>
+			<li data-submenu-id="section<?=$category->id?>" class="section<?=$category->id?>">
 				<a href="<?=$category->get_url()?>">
 					<span class="name"><?=$category->title?></span>
 					<span class="heading"></span>
@@ -11,9 +11,6 @@
 			</li>
 			<?php endforeach; ?>
 		</ul>
-		<ul class="bottom"> 
-			<li><a href="/article/soveti"><span class="name">Советы от Ярмарки</span></a></li>
-		</ul>		
 	</div> 
 	
 	<div class="right">
