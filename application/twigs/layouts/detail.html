@@ -4,7 +4,7 @@
 	
 	{% block header %} 
 		{{ parent() }}
-		{{ requestblock('block_twig/navigationline') }}
+		{% include 'block/header/navigationline' %}
 		{{ requestblock('block_twig/adslinkline') }}
 
 	{% endblock header %}

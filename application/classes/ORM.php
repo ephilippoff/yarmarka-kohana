@@ -170,8 +170,14 @@ class ORM extends Kohana_ORM {
 		return $result;
 	}
 
-	public function get_row_as_obj()
+	public function get_row_as_obj($columns = array())
 	{
+		if (count($columns) > 0) {
+			$o = $this->select_array($columns);
+			return new Obj($o);
+		} else {
+
+		}
 		$o = unserialize($this->serialize());
 		return new Obj($o["_object"]);
 	}
@@ -287,11 +293,11 @@ class ORM extends Kohana_ORM {
 					->cached($cached);
 	}
 
-	public function getprepared_all()
+	public function getprepared_all($columns = array())
 	{
 		$result = array();
 		foreach ($this->find_all() as $item) {
-			array_push($result, $item->get_row_as_obj());
+			array_push($result, $item->get_row_as_obj($columns));
 		}
 
 		return $result;

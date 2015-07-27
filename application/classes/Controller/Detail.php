@@ -57,6 +57,10 @@ class Controller_Detail extends Controller_Template {
             "user", "messages", "search_cache", "similar"
         ));
 
+        //favourites
+        $twig->favourites = ORM::factory('Favourite')->get_list_by_cookie();
+        //end favourites
+
         foreach ((array) $detail_interact as $key => $item) {
             $twig->{$key} = $item;
         }

@@ -27,6 +27,10 @@ function (Marionette, templates, utils, IndexPage, SearchPage, DetailPage) {
         start_searchSection : function() {
             console.log("search start");
             app.menu.init(["main", "city"]);
+            app.favourite.init(["list"]);
+            new SearchPage({
+                el: "body"
+            });
         },
         
         notFound : function() {

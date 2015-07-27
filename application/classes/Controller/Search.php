@@ -147,9 +147,13 @@ class Controller_Search extends Controller_Template {
         //save search settings cache end
 
         //clean empty links
-        $search_info->category_childs_elements = Search_url::clean_empty_category_childs_elements($search_info->category_childs_elements, $search_info->link_counters, $search_info->url);
+        $twig->category_childs_elements = Search_url::clean_empty_category_childs_elements($search_info->category_childs_elements, $search_info->link_counters, $search_info->url);
         // end clean empty links
 
+        //favourites
+        $twig->favourites = ORM::factory('Favourite')->get_list_by_cookie();
+        //end favourites
+        
         foreach ((array) $search_info as $key => $item) {
             $twig->{$key} = $item;
         }

@@ -14,7 +14,7 @@
 					<span class="menu-item">Вход в личный кабинет</span>
 				{% endif %}
 			</div>
-			<span class="menu-item">Избранное (0)</span>
+			<span class="menu-item js-favourite-counter">Избранное (<span>{{ favourites ? favourites|length : 0 }}</span>)</span>
 			<a href="/" class="menu-item">Корзина (0)</a>
 		</div>
 	</div>

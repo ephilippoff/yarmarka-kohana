@@ -23,6 +23,7 @@ class Controller_Block_Twig extends Controller_Block
     {
         $twig = Twig::factory('block/header/topline');
         $twig->user = Auth::instance()->get_user();
+        $twig->favourites = $this->request->post("favourites");
         $this->response->body($twig);
     }
 

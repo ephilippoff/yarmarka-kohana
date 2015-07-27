@@ -12,7 +12,11 @@
 	</td>
 	<td class="td td-2">
 		<p class="title">
-			<i class="favorit-ico"></i>
+			{% set is_favourite = '' %}
+			{% if object.id in favourites %}
+				{% set is_favourite = 'in' %}
+			{% endif %}
+			<i class="favorit-ico js-favourite {{is_favourite}}" data-id="{{object.id}}"></i>
 			<a href="{{ object.compiled.url }}" title="{{ object.title|e }}">
 				{{ object.title|e }}
 			</a>

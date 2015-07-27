@@ -43,6 +43,10 @@ class Controller_Index extends Controller_Template {
             $index_info->link_counters = array_merge($index_info->link_counters, $city_counter);
         }
 
+        //favourites
+        $twig->favourites = ORM::factory('Favourite')->get_list_by_cookie();
+        //end favourites
+
         foreach ((array) $index_info as $key => $item) {
             $twig->{$key} = $item;
         }

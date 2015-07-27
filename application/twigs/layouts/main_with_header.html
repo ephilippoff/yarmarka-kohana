@@ -3,7 +3,7 @@
 {% block body %} 
 	{% block header %}
 		<header>
-		{{ requestblock('block_twig/topline') }}
+		{{ requestblock('block_twig/topline', {'favourites':favourites}) }}
 		{{ requestblock('block_twig/logoline') }}
 		</header>
 	{% endblock header %}
