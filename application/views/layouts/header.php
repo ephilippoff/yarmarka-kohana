@@ -78,7 +78,7 @@
 		<div class="active-bl z2"><div class="active-bl-bg">
 			<div class="m_menu  iLight ">
 				<span  class="choose iLight-nav"></span>
-				<?=Request::factory('block/header_left_menu')->execute()?>
+				<? //Request::factory('block/header_left_menu')->execute() ?>
 			</div>
 			<?=Request::factory('block/header_search')->execute()?>
 		</div></div>       
