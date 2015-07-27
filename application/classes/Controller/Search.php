@@ -89,8 +89,11 @@ class Controller_Search extends Controller_Template {
             array_merge($search_info->search_params, array("limit" => 5))
         );
         $twig->premium_search_result = Search::getresult($premium_search_query->execute()->as_array());
+        foreach ($twig->premium_search_result as $key => $value) {
+            $twig->premium_search_result[$key]["is_premium"] = TRUE;
+        }
         //premium end
-        
+       
         //vip
         $vip_search_query = Search::searchquery(
             array(

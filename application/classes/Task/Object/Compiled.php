@@ -62,8 +62,8 @@ class Task_Object_Compiled extends Minion_Task
 			$compiled = array_merge($compiled, $this->getContacts($item->id) );
 			Minion_CLI::write('contacts: saved');
 
-			$compiled = array_merge($compiled, $this->getCommon($item) );
-			Minion_CLI::write('common: saved');
+			// $compiled = array_merge($compiled, $this->getCommon($item) );
+			// Minion_CLI::write('common: saved');
 
 			
 			
