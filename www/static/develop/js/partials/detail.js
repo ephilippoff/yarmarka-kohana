@@ -1,13 +1,21 @@
 /*global define */
 define([
-    'templates',
-    'jssorSlider'
-], function (templates, jssorSlider) {
-    'use strict';
+    "templates",
+    "jssorSlider",
+    "partials/behaviors/favourite"
+], function (templates, jssorSlider, FavouriteBehavior) {
+    "use strict";
 
-    return function() {
-        console.log("start detail");
+     return Marionette.LayoutView.extend({
 
-        
-    }
+        behaviors: {
+            FavouriteBehavior: {
+                behaviorClass: FavouriteBehavior
+            }
+        },
+
+        initialize: function() {
+            this.bindUIElements();
+        }
+    });
 });

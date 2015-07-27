@@ -11,12 +11,12 @@
         {% if show_canonical %}
             <link rel="canonical" href="{{ url(canonical_url) }}">
         {% endif %}
-        
-        {{ css("bootstrap.min.css") }}
-        {{ css("iLight.css") }}
-        {{ css("css.css") }}
 
-        {% block css %}{% endblock css%}
+        {% block css %}
+            {{ css("bootstrap.min.css") }}
+            {{ css("iLight.css") }}
+            {{ css("css.css") }}
+        {% endblock css%}
 
     </head>
     <body class="{% block bodyclass %}{% endblock bodyclass%}">

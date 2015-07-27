@@ -22,6 +22,9 @@ function (Marionette, templates, utils, IndexPage, SearchPage, DetailPage) {
         start_detailSection : function() {
             console.log("detail start");
             app.menu.init(["main", "city"]);
+            new DetailPage({
+                el: "body"
+            });
         },
 
         start_searchSection : function() {

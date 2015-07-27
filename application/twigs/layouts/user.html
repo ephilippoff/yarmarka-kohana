@@ -1,0 +1,14 @@
+{% extends "layouts/main_with_header" %}
+
+{% block body %}
+	
+	{% block header %} 
+		{{ parent() }}
+	{% endblock header %}
+	
+	<div class="m_content">
+		{% block content %} 
+			контент
+		{% endblock content %}
+	</div>
+{% endblock body %} 

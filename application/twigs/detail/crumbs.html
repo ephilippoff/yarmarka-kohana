@@ -1,7 +1,7 @@
 <div class="breadcrumbs-cont module">
 	<a href="http://{{ domain.get_domain() }}" rel="nofollow">{{ city.title }}</a>
 	{% for crumb in crumbs %}
-			\ <a href="{{ url(crumb.uri) }}">{{crumb.title}}</a>
+			/ <a href="{{ url(crumb.uri) }}">{{crumb.title}}</a>
 	{% endfor %}
-	\ <h1>{{ object.title|e|capitalize }}</h1>
+	/ <h1>{{ object.title|e|capitalize }}</h1>
 </div>

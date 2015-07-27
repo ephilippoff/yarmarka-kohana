@@ -1,0 +1,12 @@
+{% extends "layouts/main" %}
+
+{% block body %} 
+	{% block header %}
+		<header>
+		{{ requestblock('block_twig/topline', {'favourites':favourites}) }}
+		</header>
+	{% endblock header %}
+	{% block templates %}
+		
+	{% endblock templates %}
+{% endblock body %} 
