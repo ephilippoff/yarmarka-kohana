@@ -246,7 +246,7 @@
 		<tr class="ol_<?=$item->id?>">			
 			<td><?=$item->id?></td>
 			<td><?=$item->user_id?></td>
-			<td><a href="<?=Url::site('khbackend/users/user_info/'.$item->user_id)?>" target="_blank"><?=$item->email?></a></td>
+			<td><a href="<?=URL::site('khbackend/users/user_info/'.$item->user_id)?>" target="_blank"><?=$item->email?></a></td>
 			<td><?=$item->created_on?></td>
 			<td></td>
 			<td>
@@ -511,7 +511,7 @@
 		<tr class="pl_<?=$item->id?> priceload">			
 			<td><?=$item->id?></td>
 			<td><?=$item->user_id?></td>
-			<td><a href="<?=Url::site('khbackend/users/user_info/'.$item->user_id)?>" target="_blank"><?=$item->user->email?></a></td>
+			<td><a href="<?=URL::site('khbackend/users/user_info/'.$item->user_id)?>" target="_blank"><?=$item->user->email?></a></td>
 			<td><?=$item->created_on?></td>
 			<td><a href="/<?=$item->filepath_original?>">файл</a></td>
 			<td><?=$item->title?></td>

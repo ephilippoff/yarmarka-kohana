@@ -28,11 +28,11 @@ class Controller_Add extends Controller_Template {
 	{
 		$this->layout = 'add';
 		
-		$this->assets->js("nicEdit.js");
+		$this->assets->js("old/nicEdit.js");
 		
-		$this->assets->js("vendor/jquery.ui.widget.js");
-		$this->assets->js("jquery.iframe-transport.js");
-		$this->assets->js("jquery.fileupload.js");
+		$this->assets->js("old/vendor/jquery.ui.widget.js");
+		$this->assets->js("old/jquery.iframe-transport.js");
+		$this->assets->js("old/jquery.fileupload.js");
 		
 		$user = Auth::instance()->get_user();
 

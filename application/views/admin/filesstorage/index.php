@@ -70,7 +70,7 @@
 			<td><?=strip_tags($file_row->description)?></td>
 			<td><?=$file_row->date_created?></td>
 			<td>
-				<a href="<?=Url::site('khbackend/filesstorage/delete/'.$file_row->id)?>" class="icon-trash delete_file fn-delete"></a>
+				<a href="<?=URL::site('khbackend/filesstorage/delete/'.$file_row->id)?>" class="icon-trash delete_file fn-delete"></a>
 				<span class="copy" data-url="/<?=kohana::$config->load('filesstorage.path').$file_row->filename?>" title="Копировать адрес" class="icon-file fn-copy-url"></span>
 			</td>
 		</tr>

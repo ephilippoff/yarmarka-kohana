@@ -27,11 +27,11 @@
 							<li class="dropdown <?=($module_name == 'user') ? 'active' : ''?>">
 								<a href="#"  class="dropdown-toggle" data-toggle="dropdown">Users <b class="caret"></b></a>
 								<ul class="dropdown-menu">
-									<li><a href="<?=Url::site('khbackend/users/index')?>">List</a></li>									
-									<li><a href="<?=Url::site('khbackend/users/objectload')?>">Загрузки</a></li>
+									<li><a href="<?=URL::site('khbackend/users/index')?>">List</a></li>									
+									<li><a href="<?=URL::site('khbackend/users/objectload')?>">Загрузки</a></li>
 									<hr>
-									<li><a href="<?=Url::site('khbackend/users/add_settings')?>">Все настройки</a></li>
-									<li><a href="<?=Url::site('khbackend/users/moderation')?>">Модерация компаний</a></li>
+									<li><a href="<?=URL::site('khbackend/users/add_settings')?>">Все настройки</a></li>
+									<li><a href="<?=URL::site('khbackend/users/moderation')?>">Модерация компаний</a></li>
 								</ul>
 							</li>
 						<?php endif; ?>
@@ -40,9 +40,9 @@
 							<li class="dropdown <?=($module_name == 'articles') ? 'active' : ''?>">
 								<a href="#"  class="dropdown-toggle" data-toggle="dropdown">Articles <b class="caret"></b></a>
 								<ul class="dropdown-menu">
-									<li><a href="<?=Url::site('khbackend/articles/index')?>">Articles list</a></li>
-									<li><a href="<?=Url::site('khbackend/articles/news')?>">News list</a></li>
-									<li><a href="<?=Url::site('khbackend/articles/add')?>">Add</a></li>
+									<li><a href="<?=URL::site('khbackend/articles/index')?>">Articles list</a></li>
+									<li><a href="<?=URL::site('khbackend/articles/news')?>">News list</a></li>
+									<li><a href="<?=URL::site('khbackend/articles/add')?>">Add</a></li>
 								</ul>
 							</li>
 						<?php endif; ?>
@@ -51,10 +51,10 @@
 							<li class="dropdown <?=($module_name == 'phones') ? 'active' : ''?>">
 								<a href="#"  class="dropdown-toggle" data-toggle="dropdown">Phones <b class="caret"></b></a>
 								<ul class="dropdown-menu">
-									<li><a href="<?=Url::site('khbackend/phones/index')?>">List</a></li>
-									<li><a href="<?=Url::site('khbackend/phones/moderation')?>">Moderation</a></li>
-									<li><a href="<?=Url::site('khbackend/phones/followme')?>">Followme</a></li>
-									<li><a href="<?=Url::site('khbackend/phones/followme_statistic')?>">Followme - Statistic</a></li>
+									<li><a href="<?=URL::site('khbackend/phones/index')?>">List</a></li>
+									<li><a href="<?=URL::site('khbackend/phones/moderation')?>">Moderation</a></li>
+									<li><a href="<?=URL::site('khbackend/phones/followme')?>">Followme</a></li>
+									<li><a href="<?=URL::site('khbackend/phones/followme_statistic')?>">Followme - Statistic</a></li>
 								</ul>
 							</li>
 						<?php endif; ?>
@@ -63,8 +63,8 @@
 						<li class="dropdown <?=($module_name == 'object') ? 'active' : ''?>">
 							<a href="#"  class="dropdown-toggle" data-toggle="dropdown">Объявления <b class="caret"></b></a>
 							<ul class="dropdown-menu">
-								<li><a href="<?=Url::site('khbackend/objects/index')?>">Список</a></li>
-								<li><a href="<?=Url::site('khbackend/landing/index')?>">Landings</a></li>
+								<li><a href="<?=URL::site('khbackend/objects/index')?>">Список</a></li>
+								<li><a href="<?=URL::site('khbackend/landing/index')?>">Landings</a></li>
 							</ul>
 						</li>
 						<?php endif; ?>
@@ -73,8 +73,8 @@
 						<li class="dropdown <?=($module_name == 'reports') ? 'active' : ''?>">
 							<a href="#"  class="dropdown-toggle" data-toggle="dropdown">Reports <b class="caret"></b></a>
 							<ul class="dropdown-menu">
-								<li><a href="<?=Url::site('khbackend/reports/operstat')?>">Количество модераций</a></li>
-								<li><a href="<?=Url::site('khbackend/reports/oper_objects_list')?>">Модерации</a></li>								
+								<li><a href="<?=URL::site('khbackend/reports/operstat')?>">Количество модераций</a></li>
+								<li><a href="<?=URL::site('khbackend/reports/oper_objects_list')?>">Модерации</a></li>								
 							</ul>
 						</li>
 						<?php endif; ?>						
@@ -83,8 +83,8 @@
 						<li class="dropdown <?=($module_name == 'category') ? 'active' : ''?>">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">Categories <b class="caret"></b></a>
 							<ul class="dropdown-menu">
-								<li><a href="<?=Url::site('khbackend/category/index')?>">List</a></li>
-								<li><a href="<?=Url::site('khbackend/category/relations')?>">Настройка атрибутов</a></li>
+								<li><a href="<?=URL::site('khbackend/category/index')?>">List</a></li>
+								<li><a href="<?=URL::site('khbackend/category/relations')?>">Настройка атрибутов</a></li>
 							</ul>
 						</li>
 						<?php endif; ?>
@@ -93,11 +93,11 @@
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">Reklama <b class="caret"></b></a>
 							<ul class="dropdown-menu">
-								<li><a href="<?=Url::site('khbackend/reklama/index')?>">Контекст. ссылки</a></li>
-								<li><a href="<?=Url::site('khbackend/reklama/add')?>">Добавить контекст. ссылку</a></li>
-								<li><a href="<?=Url::site('khbackend/reklama/tickets')?>">Бегающие ссылки</a></li>								
-								<li><a href="<?=Url::site('khbackend/reklama/menu_banners')?>">Баннеры в меню</a></li>
-								<li><a href="<?=Url::site('khbackend/reklama/photocards')?>">Фото-объявления("Лидер")</a></li>
+								<li><a href="<?=URL::site('khbackend/reklama/index')?>">Контекст. ссылки</a></li>
+								<li><a href="<?=URL::site('khbackend/reklama/add')?>">Добавить контекст. ссылку</a></li>
+								<li><a href="<?=URL::site('khbackend/reklama/tickets')?>">Бегающие ссылки</a></li>								
+								<li><a href="<?=URL::site('khbackend/reklama/menu_banners')?>">Баннеры в меню</a></li>
+								<li><a href="<?=URL::site('khbackend/reklama/photocards')?>">Фото-объявления("Лидер")</a></li>
 							</ul>
 						</li>
 						<?php endif; ?>
@@ -106,8 +106,8 @@
 						<li class="dropdown <?=($module_name == 'settings') ? 'active' : ''?>">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">Settings <b class="caret"></b></a>
 							<ul class="dropdown-menu">
-								<li><a href="<?=Url::site('khbackend/settings/index')?>">Index</a></li>
-								<li><a href="<?=Url::site('khbackend/settings/cache')?>">Cache</a></li>
+								<li><a href="<?=URL::site('khbackend/settings/index')?>">Index</a></li>
+								<li><a href="<?=URL::site('khbackend/settings/cache')?>">Cache</a></li>
 							</ul>
 						</li>
 						<?php endif; ?>
@@ -116,13 +116,13 @@
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">Файлы <b class="caret"></b></a>
 							<ul class="dropdown-menu">
-								<li><a href="<?=Url::site('khbackend/filesstorage/index')?>">Список</a></li>
+								<li><a href="<?=URL::site('khbackend/filesstorage/index')?>">Список</a></li>
 							</ul>
 						</li>
 						<?php endif; ?>						
 						
 						<?php if (Auth::instance()->get_user()) : ?>
-							<li><a href="<?=Url::site('khbackend/welcome/logout')?>">Log Out</a></li>
+							<li><a href="<?=URL::site('khbackend/welcome/logout')?>">Log Out</a></li>
 						<?php endif; ?>
 					</ul>
 				</div>

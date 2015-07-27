@@ -37,8 +37,8 @@
 	</td>
 	<td><?=$article->created?></td>
 	<td>
-		<a href="<?=Url::site('khbackend/articles/edit/'.$article->id)?>" class="icon-pencil"></a>
-		<a href="<?=Url::site('khbackend/articles/delete/'.$article->id)?>" class="icon-trash delete_article"></a>
+		<a href="<?=URL::site('khbackend/articles/edit/'.$article->id)?>" class="icon-pencil"></a>
+		<a href="<?=URL::site('khbackend/articles/delete/'.$article->id)?>" class="icon-trash delete_article"></a>
 	</td>
 </tr>
 <?php endforeach; ?>

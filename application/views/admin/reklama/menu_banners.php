@@ -84,8 +84,8 @@
 			<td><a href="http://<?=$ads_element->href?>"><?=$ads_element->href?></a></td>
 			<td><?=$states[$ads_element->state]?></td>			
 			<td>				
-				<a href="<?=Url::site('khbackend/reklama/edit_menu_banner/'.$ads_element->id)?>" class="icon-pencil"></a>
-				<a href="<?=Url::site('khbackend/reklama/delete_menu_banner/'.$ads_element->id)?>" class="icon-trash delete_article"></a>
+				<a href="<?=URL::site('khbackend/reklama/edit_menu_banner/'.$ads_element->id)?>" class="icon-pencil"></a>
+				<a href="<?=URL::site('khbackend/reklama/delete_menu_banner/'.$ads_element->id)?>" class="icon-trash delete_article"></a>
 			</td>
 		</tr>
 	<?php endforeach; ?>

@@ -86,13 +86,13 @@
 		?>
 		<tr>			
 			<td><?=$item->id?></td>
-			<td><a href="<?=Url::site('khbackend/users/user_info/'.$item->user_id)?>" onClick="return popup(this)"><?=$item->user_id?></a></td>
+			<td><a href="<?=URL::site('khbackend/users/user_info/'.$item->user_id)?>" onClick="return popup(this)"><?=$item->user_id?></a></td>
 			<td><?=$item->user->email?></td>
 			<td><?=$item->type?></td>
 			<td><?=$item->name?></td>
 			<td><?=$value?></td>	
 			<td>
-				<a href="<?=Url::site('khbackend/users/delete_settings/'.$item->id)?>" class="icon-trash delete_article"></a>
+				<a href="<?=URL::site('khbackend/users/delete_settings/'.$item->id)?>" class="icon-trash delete_article"></a>
 			</td>		
 		</tr>
 	<?php endforeach; ?>

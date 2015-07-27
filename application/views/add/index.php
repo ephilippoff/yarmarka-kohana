@@ -1068,7 +1068,7 @@
 	</div>
 </script>
 
-<?=Assets::factory('main')->js("addapp.js")?>
+<?=Assets::factory('main')->js("old/addapp.js")?>
 <script>
 	$( document ).ready(function() {
 	    var application = new applicationView({org_type: <?=$user?>});

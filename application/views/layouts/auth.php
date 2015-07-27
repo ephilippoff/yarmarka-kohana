@@ -7,18 +7,18 @@
 <!--<meta content="width=device-width, initial-scale=1.0" name="viewport">-->
 <meta name="viewport" id="viewport" content="width=device-width">
 <title>Регистрация/авторизация</title>
-<?=Assets::factory('main')->css('css.css', array('media' => 'screen, projection'))
-	->css('iLight.css')
-	->js('jquery.min.js')
+<?=Assets::factory('main')->css('old/css.css', array('media' => 'screen, projection'))
+	->css('old/iLight.css')
+	->js('old/jquery.min.js')
 	->js('http://html5shiv.googlecode.com/svn/trunk/html5.js', array('condition' => 'lte IE 8'))
 	->js('http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js', array('condition' => 'lte IE 8'))
-	->js('PIE.js', array('condition' => 'lte IE 10'))
-	->js('header.js')
-	->js('minified/underscore-min.js')
-	->js('minified/backbone-min.js')
+	->js('old/PIE.js', array('condition' => 'lte IE 10'))
+	->js('old/header.js')
+	->js('old/minified/underscore-min.js')
+	->js('old/minified/backbone-min.js')
 //	->js('http://api-maps.yandex.ru/2.0/?load=package.full&lang=ru-RU')
-	->js('ajaxupload.js')
-	->js('jquery.inputmask.js')
+	->js('old/ajaxupload.js')
+	->js('old/jquery.inputmask.js')
 	.$_assets
 ?>
 </head>

@@ -529,7 +529,7 @@ class Controller_Ajax extends Controller_Template
 	{
 		$str = $this->request->post('str');
 
-		$this->json['str'] = Url::title($str, '-', TRUE);
+		$this->json['str'] = URL::title($str, '-', TRUE);
 	}
 
 	public function action_get_full_text()

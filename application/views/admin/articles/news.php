@@ -42,8 +42,8 @@
 	<td><?=$news_one['end_date']?></td>
 	<td><?=$news_one['visits']?></td>
 	<td>
-		<a href="<?=Url::site('khbackend/articles/edit/'.$news_one['id'])?>" class="icon-pencil"></a>
-		<a href="<?=Url::site('khbackend/articles/delete/'.$news_one['id'])?>" class="icon-trash delete_article"></a>
+		<a href="<?=URL::site('khbackend/articles/edit/'.$news_one['id'])?>" class="icon-pencil"></a>
+		<a href="<?=URL::site('khbackend/articles/delete/'.$news_one['id'])?>" class="icon-trash delete_article"></a>
 	</td>
 </tr>
 <?php endforeach; ?>

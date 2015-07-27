@@ -17,7 +17,7 @@
 			<td><?=strip_tags($ads_element->object->title)?></td>
 			<td><?=$ads_element->created_on?></td>		
 			<td>				
-				<a href="<?=Url::site('khbackend/landing/delete/'.$ads_element->id)?>" class="icon-trash delete_article"></a>				
+				<a href="<?=URL::site('khbackend/landing/delete/'.$ads_element->id)?>" class="icon-trash delete_article"></a>				
 			</td>
 		</tr>
 	<?php endforeach; ?>

@@ -39,20 +39,20 @@ class Controller_User extends Controller_Template {
 	{
 		$this->redirect('/user/userinfo');
 		$this->layout = 'users';
-		$this->assets->js('ajaxfileupload.js')
-			->js('jquery.maskedinput-1.2.2.js')
-			->js('jquery-ui/ui/minified/jquery.ui.core.min.js')
-			->js('jquery-ui/ui/minified/jquery.ui.widget.min.js')
-			->js('jquery-ui/ui/minified/jquery.ui.position.min.js')
-			->js('jquery-ui/ui/minified/jquery.ui.menu.min.js')
-			->js('jquery-ui/ui/minified/jquery.ui.autocomplete.min.js')
-			->js('require.js')
-			->js('require.config.js')
+		$this->assets->js('old/ajaxfileupload.js')
+			->js('old/jquery.maskedinput-1.2.2.js')
+			->js('old/jquery-ui/ui/minified/jquery.ui.core.min.js')
+			->js('old/jquery-ui/ui/minified/jquery.ui.widget.min.js')
+			->js('old/jquery-ui/ui/minified/jquery.ui.position.min.js')
+			->js('old/jquery-ui/ui/minified/jquery.ui.menu.min.js')
+			->js('old/jquery-ui/ui/minified/jquery.ui.autocomplete.min.js')
+			->js('old/require.js')
+			->js('old/require.config.js')
 			->css('jquery-ui/themes/base/minified/jquery-ui.min.css')
-			->js('profile.js')
-//			->js('http://yandex.st/underscore/1.5.2/underscore.js?v=1.0.101')
+			->js('old/profile.js')
+//			->js('old/http://yandex.st/underscore/1.5.2/underscore.js?v=1.0.101')
 				;
-			//->js('maps.js');
+			//->js('old/maps.js');
 
 		$this->template->region_id	= $region_id = $this->user->user_city->loaded() 
 			? $this->user->user_city->region_id 
@@ -78,21 +78,21 @@ class Controller_User extends Controller_Template {
 	{
 		$this->layout = 'users';
 
-		// $this->assets->js('info-tooltip.js');
+		// $this->assets->js('old/info-tooltip.js');
 
 		$this->assets
-            ->js('ajaxfileupload.js')
-			->js('jquery.maskedinput-1.2.2.js')
-			->js('jquery-ui/ui/minified/jquery.ui.core.min.js')
-			->js('jquery-ui/ui/minified/jquery.ui.widget.min.js')
-			->js('jquery-ui/ui/minified/jquery.ui.position.min.js')
-			->js('jquery-ui/ui/minified/jquery.ui.menu.min.js')
-			->js('jquery-ui/ui/minified/jquery.ui.autocomplete.min.js')
-//			->js('jquery.tooltipster.min.js')
+            ->js('old/ajaxfileupload.js')
+			->js('old/jquery.maskedinput-1.2.2.js')
+			->js('old/jquery-ui/ui/minified/jquery.ui.core.min.js')
+			->js('old/jquery-ui/ui/minified/jquery.ui.widget.min.js')
+			->js('old/jquery-ui/ui/minified/jquery.ui.position.min.js')
+			->js('old/jquery-ui/ui/minified/jquery.ui.menu.min.js')
+			->js('old/jquery-ui/ui/minified/jquery.ui.autocomplete.min.js')
+//			->js('old/jquery.tooltipster.min.js')
 //			->css('tooltipster.css')
 			->css('jquery-ui/themes/base/minified/jquery-ui.min.css');
-			//->js('chosen.jquery.js')
-			//->js('profile.js');
+			//->js('old/chosen.jquery.js')
+			//->js('old/profile.js');
 		$this->template->region_id	= $region_id = $this->user->user_city->loaded() 
 			? $this->user->user_city->region_id 
 			: Kohana::$config->load('common.default_region_id');
@@ -176,9 +176,9 @@ class Controller_User extends Controller_Template {
     public function action_objectload()
     {
     	$this->layout = 'users';    	
-//    	$this->assets->js('http://yandex.st/underscore/1.6.0/underscore-min.js');
+//    	$this->assets->js('old/http://yandex.st/underscore/1.6.0/underscore-min.js');
     	$this->assets->js('http://yandex.st/backbone/1.1.2/backbone-min.js');  	
-    	$this->assets->js('ajaxupload.js');
+    	$this->assets->js('old/ajaxupload.js');
 
     	$already_agree = FALSE;
     	$us = ORM::factory('User_Settings')
@@ -293,9 +293,9 @@ class Controller_User extends Controller_Template {
 	public function action_priceload()
 	{
 		$this->layout = 'users';    	
-//    	$this->assets->js('http://yandex.st/underscore/1.6.0/underscore-min.js');
+//    	$this->assets->js('old/http://yandex.st/underscore/1.6.0/underscore-min.js');
     	$this->assets->js('http://yandex.st/backbone/1.1.2/backbone-min.js');  	
-    	$this->assets->js('ajaxupload.js');
+    	$this->assets->js('old/ajaxupload.js');
 
     	$already_agree = FALSE;
     	$us = ORM::factory('User_Settings')
@@ -449,10 +449,10 @@ class Controller_User extends Controller_Template {
     public function action_massload()
     {
     	$this->layout = 'users';    	
-//    	$this->assets->js('http://yandex.st/underscore/1.6.0/underscore-min.js');
+//    	$this->assets->js('old/http://yandex.st/underscore/1.6.0/underscore-min.js');
     	$this->assets->js('http://yandex.st/backbone/1.1.2/backbone-min.js');
-    	$this->assets->js('ajaxupload.js');
-    	$this->assets->js('massload.js');
+    	$this->assets->js('old/ajaxupload.js');
+    	$this->assets->js('old/massload.js');
 
     	
     	$avail_categories = ORM::factory('User_Settings')->get_by_name($this->user->id, "massload")->find_all();
@@ -507,9 +507,9 @@ class Controller_User extends Controller_Template {
     public function action_massload_conformities()
     {
     	$this->layout = 'users';    	
-//    	$this->assets->js('http://yandex.st/underscore/1.6.0/underscore-min.js');
+//    	$this->assets->js('old/http://yandex.st/underscore/1.6.0/underscore-min.js');
     	$this->assets->js('http://yandex.st/backbone/1.1.2/backbone-min.js');
-    	$this->assets->js('massload_set.js');
+    	$this->assets->js('old/massload_set.js');
 
     	$categories = Array();
     	$category = $this->request->param('category');
@@ -569,7 +569,7 @@ class Controller_User extends Controller_Template {
     public function action_favorites()
 	{
 		$this->layout = 'users';
-		$this->assets->js('favorites.js');
+		$this->assets->js('old/favorites.js');
 
 		// pagination settings
 		$per_page	= 20;
@@ -628,7 +628,7 @@ class Controller_User extends Controller_Template {
 	public function action_subscriptions()
 	{
 		$this->layout = 'users';
-		$this->assets->js('subscriptions.js');
+		$this->assets->js('old/subscriptions.js');
 
 		// pagination settings
 		$per_page	= 20;
@@ -662,7 +662,7 @@ class Controller_User extends Controller_Template {
 	public function action_invoices()
 	{
 		$this->layout = 'users';
-		$this->assets->js('invoices.js');
+		$this->assets->js('old/invoices.js');
 
 		// pagination settings
 		$per_page	= 20;
@@ -718,9 +718,9 @@ class Controller_User extends Controller_Template {
 	{
 		$this->template = View::factory('user/myads');
 		$this->layout = 'myads';
-		$this->assets->js('myads.js');
-		$this->assets->js('jquery.flot.min.js');
-		$this->assets->js('jquery.flot.time.min.js');
+		$this->assets->js('old/myads.js');
+		$this->assets->js('old/jquery.flot.min.js');
+		$this->assets->js('old/jquery.flot.time.min.js');
 
 		// pagination settings
 		$per_page	= 20;
@@ -1001,8 +1001,8 @@ class Controller_User extends Controller_Template {
 	public function action_affiliates()
 	{
 		$this->layout = 'users';
-		$this->assets->js('affiliates.js')
-			->js('jquery.maskedinput-1.2.2.js');
+		$this->assets->js('old/affiliates.js')
+			->js('old/jquery.maskedinput-1.2.2.js');
 
 		$this->template->errors = array();
 
@@ -1083,9 +1083,9 @@ class Controller_User extends Controller_Template {
 	public function action_userpage()
 	{
 		$this->layout = 'userpage';
-		$this->assets->js('userpage.js')
-			->js('ajaxfileupload.js')
-			->js('maps.js');
+		$this->assets->js('old/userpage.js')
+			->js('old/ajaxfileupload.js')
+			->js('old/maps.js');
 		
 		$user = ORM::factory('User')->where('login', '=', $this->request->param('login'))->find();
 
@@ -1410,7 +1410,7 @@ class Controller_User extends Controller_Template {
 		$return_page = Arr::get($_GET, 'return', "");
 		$domain = Arr::get($_GET, 'domain', NULL);
 		if (!$domain)
-			$domain = Url::base('http');
+			$domain = URL::base('http');
 		else
 			$domain = "http://".Kohana::$config->load("common.main_domain");
 
@@ -1552,7 +1552,7 @@ class Controller_User extends Controller_Template {
 	public function action_orginfo()
 	{
 
-		$this->assets->js("ajaxupload.js");
+		$this->assets->js("old/ajaxupload.js");
 
 		$user = Auth::instance()->get_user();
 
@@ -1713,11 +1713,11 @@ class Controller_User extends Controller_Template {
 	{
 		$this->layout = 'add';
 		
-		$this->assets->js("nicEdit.js");
+		$this->assets->js("old/nicEdit.js");
 
-		$this->assets->js("vendor/jquery.ui.widget.js");
-		$this->assets->js("jquery.iframe-transport.js");
-		$this->assets->js("jquery.fileupload.js");
+		$this->assets->js("old/vendor/jquery.ui.widget.js");
+		$this->assets->js("old/jquery.iframe-transport.js");
+		$this->assets->js("old/jquery.fileupload.js");
 
 		$prefix = (@$_SERVER['HTTP_HOST'] === 'c.yarmarka.biz') ? "" : "dev_";
 		$staticfile = new StaticFile("attributes", $prefix.'static_attributes.js');

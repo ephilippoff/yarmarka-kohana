@@ -8,9 +8,9 @@ class Twig_Functions
         return Request::factory($path)->post($params)->execute();
     }
 
-    public static function requestoldview($path)
+    public static function requestoldview($path, $params = array())
     {
-        return View::factory($path);
+        return View::factory($path, $params)->render();
     }
 
     public static function css($file)

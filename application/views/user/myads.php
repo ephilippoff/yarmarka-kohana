@@ -215,7 +215,7 @@
 	                                            </li>
 
 	                                            <li class="">
-	                                                <a title="Редактировать объявление" href="<?=Url::site('user/edit_ad/'.$ad->id)?>" class="btn-funcmenu  ">
+	                                                <a title="Редактировать объявление" href="<?=URL::site('user/edit_ad/'.$ad->id)?>" class="btn-funcmenu  ">
 	                                                    <i class="ico change"></i><span>Изменить</span>
 	                                                </a>
 	                                            </li>
@@ -242,7 +242,7 @@
 	                                            <?php endif?>
 
 	                                            <li class="">
-	                                                <a title="Редактировать объявление" href="<?=Url::site('user/edit_ad/'.$ad->id)?>" class="btn-funcmenu  ">
+	                                                <a title="Редактировать объявление" href="<?=URL::site('user/edit_ad/'.$ad->id)?>" class="btn-funcmenu  ">
 	                                                    <i class="ico change"></i><span>Изменить</span>
 	                                                </a>
 	                                            </li>

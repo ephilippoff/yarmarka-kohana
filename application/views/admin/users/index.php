@@ -118,7 +118,7 @@ function delete_user(obj) {
 	<?php else : ?>
 	<tr>
 	<?php endif; ?>
-		<td><a href="<?=Url::site('khbackend/users/user_info/'.$user->id)?>" onClick="return popup(this)"><?=$user->id?></a></td>
+		<td><a href="<?=URL::site('khbackend/users/user_info/'.$user->id)?>" onClick="return popup(this)"><?=$user->id?></a></td>
 		<td><?=$user->email?></td>
 		<td><?=$user->phone?></td>
 		<td><?=$user->city?></td>

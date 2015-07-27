@@ -123,8 +123,8 @@
 			<td><?=$ads_element->comments?></td>
 			<td>
 				<?php if ($is_finded_id) : ?><span onclick="renderObjectStat(this, <?=(int)$matches[0]?>, 'fn-stat-container');return false;" class="icon-eye-open"></span><?php endif; ?>
-				<a href="<?=Url::site('khbackend/reklama/edit/'.$ads_element->id)?>" class="icon-pencil"></a>
-				<a href="<?=Url::site('khbackend/reklama/delete/'.$ads_element->id)?>" class="icon-trash delete_article"></a>
+				<a href="<?=URL::site('khbackend/reklama/edit/'.$ads_element->id)?>" class="icon-pencil"></a>
+				<a href="<?=URL::site('khbackend/reklama/delete/'.$ads_element->id)?>" class="icon-trash delete_article"></a>
 			</td>
 		</tr>
 	<?php endforeach; ?>

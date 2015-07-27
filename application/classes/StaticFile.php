@@ -16,7 +16,7 @@ class StaticFile {
 		$this->name = $name;
 		$this->filename = $filename;
 		$this->path = APPPATH.self::PATH.$filename;
-		$this->jspath = "../../uploads/".$filename;
+		$this->jspath = "old/".$filename;
 
 		$user = Auth::instance()->get_user();
 		if ($user){
