@@ -11,7 +11,8 @@ return array(
 		'js' 			=> array ('func' => array('Twig_Functions', 'js'), 'options' => array() ),
 		'url' 			=> array ('func' => array('Twig_Functions', 'url'), 'options' => array() ),
 		'staticfile' 	=> array ('func' => array('Twig_Functions', 'staticfile'), 'options' => array() ),
-		'file_exist' 	=> array ('func' => array('Twig_Functions', 'file_exist'), 'options' => array() )
+		'file_exist' 	=> array ('func' => array('Twig_Functions', 'file_exist'), 'options' => array() ),
+		'strim' 	=> array ('func' => array('Twig_Functions', 'strim'), 'options' => array() )
 	),
 	'filters' => array(
 		'contacthide' => array('Twig_Filters', 'contacthide'),

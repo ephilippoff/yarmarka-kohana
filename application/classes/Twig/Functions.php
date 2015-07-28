@@ -52,4 +52,12 @@ class Twig_Functions
     {
         return is_file($_SERVER['DOCUMENT_ROOT'].$path);
     }
+
+    public static function strim($str, $param = NULL)
+    {
+        if ($param) {
+            return trim($str, $param);
+        }
+        return trim($str);
+    }
 }
