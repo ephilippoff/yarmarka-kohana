@@ -303,7 +303,7 @@ class Model_Object extends ORM {
 		$url = array();
 
 		if (!$uri_category_segment) {
-			$uri_category_segment = $this->url;
+			$uri_category_segment = ORM::factory('Category',$this->category)->url;
 		}
 
 		array_push($url, $uri_category_segment);
