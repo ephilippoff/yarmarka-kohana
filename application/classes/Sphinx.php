@@ -9,7 +9,7 @@ class Sphinx {
 		Sphinx::$_prefix = Kohana::$config->load("common.sphinx_prefix");
 	}
 
-	public function search($_keywords, $category_id = 0, $city_id = 0, $save = FALSE, $object_id = 0, $offset = 0, $limit = 0)
+	public static function search($_keywords, $category_id = 0, $city_id = 0, $save = FALSE, $object_id = 0, $offset = 0, $limit = 0)
 	{
 
 		$keywords = Sphinx::GetSphinxKeyword($_keywords);
@@ -38,7 +38,21 @@ class Sphinx {
 		return $result;
 	}
 
-	public static function searchObjects($keywords, $category_id = 0, $city_id = 0, $offset = 0, $limit = 0)
+	public function searchGroupByCategory($_keywords, $city_id = 0, $category_id = 0, $group_by = "category")
+	{
+		$keywords = Sphinx::GetSphinxKeyword($_keywords);
+		$objects = Sphinx::searchObjects($keywords, $category_id, $city_id, 0, 0, $group_by);
+		$objectsFound = $objects["total_found"];
+
+		$result = array(
+			"categories" => self::getCategories($objects),
+			"found" => $objectsFound
+		);
+
+		return $result;
+	}
+
+	public static function searchObjects($keywords, $category_id = 0, $city_id = 0, $offset = 0, $limit = 0, $groupby = FALSE)
 	{
 		$mode = SPH_MATCH_EXTENDED2;
 
@@ -48,13 +62,19 @@ class Sphinx {
 		$sphinx->SetArrayResult ( true );		
 		$sphinx->SetMatchMode($mode);
 		$sphinx->SetFieldWeights(array (
-		        'city_title' => 50,
-		        'cat_title' => 40,
-		        'full_text' => 10
-        ));
-
-		$sphinx->SetLimits ( $offset, $limit );
-		$sphinx->setSortMode (SPH_SORT_RELEVANCE, "date_created" ); 
+				'city_title' => 50,
+				'cat_title' => 40,
+				'full_text' => 10
+		));
+		
+		if ($groupby == "category") {
+			$sphinx->SetGroupBy('category', SPH_GROUPBY_ATTR,"@count desc");
+		} elseif ($groupby == "city") {
+			$sphinx->SetGroupBy('city_id', SPH_GROUPBY_ATTR);
+		} else {
+			$sphinx->SetLimits ( $offset, $limit );
+			$sphinx->setSortMode (SPH_SORT_RELEVANCE, "date_created" ); 
+		}
 
 		$object_index_name = "yarmarka".Sphinx::$_prefix;
 
@@ -63,8 +83,12 @@ class Sphinx {
 		} elseif($category_id>0){
 			$sphinx->SetFilter('category', array($category_id));
 		}
-		if ($city_id > 0)
+
+		if (is_array($city_id)) {
+			$sphinx->SetFilter('city_id', $city_id);
+		} elseif($city_id>0){
 			$sphinx->SetFilter('city_id', array($city_id));
+		}
 
 		return $sphinx->Query("@* ".$keywords, $object_index_name);
 	}
@@ -115,6 +139,26 @@ class Sphinx {
 			}
 		}
 		return $ids; 
+	}
+
+	public static function getCategories($result)
+	{
+		$objects = array();
+		$object_pricerows = array();
+		if($result && is_array(@$result["matches"])) {
+			foreach ($result['matches'] as $match) {
+				$object = $match['attrs'];
+				$objects[] = new Obj(array(
+					"id" => $object["category"],
+					"title" => $object["cat_title"],
+					"url" => $object["cat_url"],
+					"count" => $object["@count"]
+				));
+
+			}
+		}
+
+		return $objects;
 	}
 
 	public static function getPricerows($_result, $city_id)
@@ -219,18 +263,18 @@ class Sphinx {
 		mb_internal_encoding("UTF-8");
 		$sQuery = Text::remove_symbols($sQuery);
 		$aKeyword = array();
-	    $aRequestString=explode(' ', $sQuery);
+		$aRequestString=explode(' ', $sQuery);
 
-	    if ($aRequestString) {
-	        foreach ($aRequestString as $sValue)
-	        {
-	            if (mb_strlen($sValue)>2)
-	            {
-	                $aKeyword[] .= "(".$sValue." | *".$sValue."*)";
-	            }
-	        }
-	        $sSphinxKeyword = implode(" & ", $aKeyword);
-	    }
-	    return $sSphinxKeyword;
+		if ($aRequestString) {
+			foreach ($aRequestString as $sValue)
+			{
+				if (mb_strlen($sValue)>2)
+				{
+					$aKeyword[] .= "(".$sValue." | *".$sValue."*)";
+				}
+			}
+			$sSphinxKeyword = implode(" & ", $aKeyword);
+		}
+		return $sSphinxKeyword;
 	}
 };

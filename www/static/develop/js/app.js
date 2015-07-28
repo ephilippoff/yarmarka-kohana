@@ -4,9 +4,10 @@ define([
 	"routers/index",
 	"controllers/index",
 	"modules/menu",
-    "modules/favourite"
+    "modules/favourite",
+    "modules/search"
 ], 
-function (Marionette, IndexRouter, IndexController, Mainmenu, Favourite) {
+function (Marionette, IndexRouter, IndexController, Mainmenu, Favourite, Search) {
     "use strict";
 
     var app = new Marionette.Application();
@@ -19,6 +20,7 @@ function (Marionette, IndexRouter, IndexController, Mainmenu, Favourite) {
 
         app.module("menu", Mainmenu);
         app.module("favourite", Favourite);
+        app.module("search", Search);
 
         app.indexRouter = new IndexRouter({
             controller : IndexController

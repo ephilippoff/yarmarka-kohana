@@ -1,13 +1,21 @@
 /*global define */
 define([
-    'templates',
-    'jssorSlider'
-], function (templates, jssorSlider) {
-    'use strict';
+    "templates",
+    "jssorSlider",
+    "partials/behaviors/search"
+], function (templates, jssorSlider, SearchBehavior) {
+    "use strict";
 
-    return function() {
-        console.log("start indexpage");
+     return Marionette.LayoutView.extend({
 
-        
-    }
+        behaviors: {
+            SearchBehavior: {
+                behaviorClass: SearchBehavior
+            }
+        },
+
+        initialize: function() {
+            this.bindUIElements();
+        }
+    });
 });

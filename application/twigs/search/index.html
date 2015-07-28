@@ -19,7 +19,9 @@
 
 
 {% block subcategories %}
-	{% if category_childs|length > 0 %}
+	{% if sphinx_category_childs|length > 0%}
+		{% include 'search/sphinxcategories' %}
+	{% elseif category_childs|length > 0 %}
 		{% include 'search/subcategories' %}
 	{% elseif category_childs_elements|length > 0 %}
 		{% include 'search/subfilters' %}

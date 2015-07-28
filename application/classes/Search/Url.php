@@ -3,7 +3,7 @@
 class Search_Url
 {
 
-    static $reserved_query_params = array("photo", "video", "org", "private", "source", "user_id", "limit", "order", "page");
+    static $reserved_query_params = array("photo", "video", "org", "private", "source", "user_id", "limit", "order", "page", "search");
     static $reserved_query_params_requirements = array(
         "order" => array("price","price_desc","date_desc","date"),
         "limit" => array(5,10,15,20,25,30,60,90)
@@ -25,7 +25,7 @@ class Search_Url
                                 ->get_childs(array($this->_category->id), TRUE)
                                 ->getprepared_all();
                                 
-        $this->_proper_category_uri = self::get_uri_category_segment($this->_category->id);
+        $this->_proper_category_uri = $this->_category->url;
 
         $this->_seo_param = NULL;
         $this->_seo_filters = array();
@@ -132,7 +132,6 @@ class Search_Url
         $category_id = $this->_category->id;
         if ($direct_childs) {
             return array_filter($this->_category_childs, function($value) use ($category_id) {
-                $value->url = Search_Url::get_uri_category_segment($value->id);
                 return  $category_id == $value->parent_id;
             });
         }
@@ -318,7 +317,12 @@ class Search_Url
                         }
                     }
                 } else {
-                    $result[$key] = (int) $value;
+                    if  ($key == "search") {
+                        $result[$key] = (string) $value;
+                    } else {
+                        $result[$key] = (int) $value;
+                    }
+                    
                 }
             }
         }
@@ -368,7 +372,7 @@ class Search_Url
         $seo_param = NULL;
         $category_in_uri = self::get_category_in_uri($uri);
         if ($category_in_uri) {
-            $category_uri = self::get_uri_category_segment($category_in_uri->id);
+            $category_uri = $category_in_uri->url;
             $seo_params_uri = trim(str_replace($category_uri, "", $uri), "/");
             if ($seo_params_uri) {
                 $seo_param = self::get_seo_param_in_uri($category_in_uri->id, $seo_params_uri);
@@ -509,18 +513,17 @@ class Search_Url
         return implode("/", $uri);
     }
 
-    public static function get_category_crubms($category_id)
+    public static function get_category_crubms($category_id, $query = '')
     {
         $crumbs = array();
         $segments = self::get_category_segment_full($category_id);
-        $crumburi = array();
         foreach ($segments as $segment) {
-            array_push($crumburi, $segment->seo_name);
             array_push($crumbs, array(
                 "id" => $segment->id,
                 "title" => $segment->title,
                 "seo_name" => $segment->seo_name,
-                "uri" => implode("/", $crumburi)
+                "uri" => $segment->url,
+                "query" => $query
             ));
         }
         return $crumbs;

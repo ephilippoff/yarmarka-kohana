@@ -19,7 +19,7 @@ Route::set('/','')
 		$config = Kohana::$config->load("common");
 		$main_domain = $config["main_domain"];
 		$main_category = $config["main_category"];
-		if ($domain <> $main_domain) {
+		if ($domain <> $main_domain || $request->query("search")) {
 			$config = Kohana::$config->load("landing");
 			$config = $config["categories"];
 			if ( in_array( $domain_segments[0],  array_keys((array) $config))) {

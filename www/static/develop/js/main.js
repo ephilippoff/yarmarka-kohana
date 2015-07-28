@@ -56,5 +56,17 @@ function (app, $, Marionette, Backbone, _) {
         return window.Behaviors;
     };
 
+    //переопредляем загрузку шаблонов для совместимостис requirejs
+    Marionette.TemplateCache.prototype.loadTemplate = function(templateId) {
+        var template = templateId;
+        if (!template || template.length === 0){
+            var msg = "Could not find template: '" + templateId + "'";
+            var err = new Error(msg);
+            err.name = "NoTemplateError";
+            throw err;
+        }
+        return template;
+    };
+
     app.start();
 });

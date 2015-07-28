@@ -4,7 +4,7 @@
 	{% block header %}
 		<header>
 		{{ requestblock('block_twig/topline', {'favourites':favourites}) }}
-		{{ requestblock('block_twig/logoline') }}
+		{% include 'block/header/logoline' %}
 		</header>
 	{% endblock header %}
 	{% block templates %}

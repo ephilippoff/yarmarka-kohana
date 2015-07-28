@@ -270,12 +270,6 @@ class Model_Object extends ORM {
 		return (bool) $this->moder_state;
 	}
 
-	public function get_category_segment()
-	{
-		if (!$this->loaded()) return;
-		return Search_Url::get_uri_category_segment($this->category);
-	}
-
 	public function get_full_url($city_seo_name = NULL)
 	{
 		if (!$this->loaded()) return;
@@ -309,7 +303,7 @@ class Model_Object extends ORM {
 		$url = array();
 
 		if (!$uri_category_segment) {
-			$uri_category_segment = $this->get_category_segment();
+			$uri_category_segment = $this->url;
 		}
 
 		array_push($url, $uri_category_segment);

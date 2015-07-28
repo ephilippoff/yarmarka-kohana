@@ -1,0 +1,20 @@
+{% set cols = (sphinx_category_childs|length > 4) ? 2 : 1 %}
+{% set rows = (sphinx_category_childs|length/cols)|round %}
+{% set i = 0 %}
+<div class="subcategories-cont module">
+	<div class="row">
+		{% for col in 0..cols %}
+			<div class="col-md-4">
+				<ul>
+				{% for category in sphinx_category_childs|slice(i, rows) if (s_host ~ '/' ~ category.url ~ sphinx_search_query != dirty_url) %}
+					<li>
+						<a href="{{ url(category.url ~ sphinx_search_query) }}" title="{{category.title}}">{{category.title}}</a>
+						<span class="count">{{category.count}}</span>
+					</li>
+				{% endfor %}
+				</ul>
+			</div>
+			{% set i = i + rows %}
+		{% endfor %}
+	</div>
+</div>

@@ -17,6 +17,9 @@ function (Marionette, templates, utils, IndexPage, SearchPage, DetailPage) {
 
         start_indexSection : function() {
             console.log("index start");
+            new IndexPage({
+                el: "body"
+            });
         },
 
         start_detailSection : function() {

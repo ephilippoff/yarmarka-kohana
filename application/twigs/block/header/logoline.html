@@ -19,39 +19,13 @@
 					<div class="input-seach">
 						<span class="info">У нас более 100 тысяч предложений товаров, услуг и вакансий</span>
 						<br>
-						<form action="/search" method="get" name="search-form" id="search-form">
-							<input class="search placeholder" name="k" id="search-input" value="" type="text" placeholder="Поиск" autocomplete="off">
+						<form action="/" method="get" name="search-form" id="search-form" class="js-search-form">
+							<input class="search placeholder js-search-input" name="search" id="search-input" value="{{ search_text }}" type="text" placeholder="Поиск" autocomplete="off" data-city="{{city.id}}">
 						</form>
-					</div>										
-					<div class="search-popup fn-search-popup">
-						<ul>
-							<li class="finded-header"><p>Найдено 9509 объявлений. Нажмите Enter чтобы посмотреть все</p></li>
-							<li class="result-line fn-obj">
-								<span class="finded-title">Запчасти для полуприцепов,чмзап, маз, сзап ,сат, bpw,saf ступица колеса</span>
-								<a href="/tyumenskaya-oblast/avtotransport/avtozapchasti-i-prinadlezhnosti">Автозапчасти и принадлежности</a>
-							</li>
-							<li class="result-line fn-obj">
-								<span class="finded-title">Автозапчасти для иномарок peugeot , citroёn, samand</span>
-								<a href="/tyumenskaya-oblast/avtotransport/avtozapchasti-i-prinadlezhnosti">Автозапчасти и принадлежности</a>
-							</li>
-							<li class="result-line fn-obj">
-								<span class="finded-title">Запчасти для минипогрузчика Forway, Polar Wolverine, Mitsuber</span>
-								<a href="/tyumenskaya-oblast/avtotransport/avtozapchasti-i-prinadlezhnosti">Автозапчасти и принадлежности</a>
-							</li>
+					</div>
+					<div class="search-popup js-search-popup-cont">
 
-							<li class="finded-header"><p>Найдено 4403 позиций в прайс-листах</p></li>	
-							<li class="result-line pricerow fn-pricerow">
-								<span class="finded-title">Аккумуляторная батарея АКБ 6 СТ 190 АПЗ конус</span>
-								<span class="city">г. Нижневартовск</span>
-								<span class="city mr20" style="color:gray;"><a href="/detail/3646452">Прайс ООО ЦЗЧ "Грузовик"</a></span>
-							</li>
-							<li class="result-line pricerow fn-pricerow">
-								<span class="finded-title">Амортизатор под кабину 5320-5001076 в сборе СААЗ</span>
-								<span class="city">г. Нижневартовск</span>
-								<span class="city mr20" style="color:gray;"><a href="/detail/3646452">Прайс ООО ЦЗЧ "Грузовик"</a></span>
-							</li>
-						</ul>
-					</div>										
+					</div>
 				</div>
 
 			</div>

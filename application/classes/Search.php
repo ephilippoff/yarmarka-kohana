@@ -282,6 +282,16 @@ class Search {
 			}
 		}
 
+		if ($params->search_text) {
+			$city_id = $params->city_id ? $params->city_id : 0;
+			$category_id = $params->category_id ? $params->category_id : 0;
+
+			$sphinx_result = Sphinx::search($params->search_text, $category_id, $city_id, FALSE, NULL, 0, 1000);
+			$objects = Sphinx::getObjects($sphinx_result);
+			$ids = implode(",",$objects);
+			$object = $object->where("o.id","IN",DB::expr("(".$ids.")"));
+		}
+
 		return $object;
 	}
 

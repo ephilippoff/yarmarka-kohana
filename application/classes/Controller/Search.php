@@ -58,29 +58,15 @@ class Controller_Search extends Controller_Template {
 
         $search_info = $this->get_search_info();
 
-        //counters
-        $search_info->link_counters = Search_Url::getcounters($search_info->s_host, $search_info->category_url, array_merge($search_info->category_childs, $search_info->category_childs_elements) );
-        foreach (array("nizhnevartovsk","tyumen","surgut","nefteyugansk", FALSE) as $city_seo) {
-            $city_counter = Search_Url::getcounters(Domain::get_domain_by_city($city_seo, FALSE, ""), "", array( new Obj(array("url"=>$search_info->canonical_url)) ) );
-            $search_info->link_counters = array_merge($search_info->link_counters, $city_counter);
-        }
-        //counters end
-
         //main search
         $main_search_query = Search::searchquery($search_info->search_filters, $search_info->search_params);
-        
         $twig->main_search_result = Search::getresult($main_search_query->execute()->as_array());
-
-
         if (!$search_info->main_search_result_count) {
             $main_search_result_count = Search::searchquery($search_info->search_filters, array(), array("count" => TRUE))
                                                     ->execute()
                                                     ->get("count");
             $search_info->main_search_result_count = $main_search_result_count;
-           
         }
-
-        $search_info->link_counters[$search_info->s_host.$search_info->s_suri] = $search_info->main_search_result_count;
         //end main search
 
         //premium
@@ -97,6 +83,7 @@ class Controller_Search extends Controller_Template {
         //vip
         $vip_search_query = Search::searchquery(
             array(
+                "search_text" => @$search_info->search_filters["search_text"],
                 "photocard" => TRUE,
                 "active" => TRUE,
                 "published" =>TRUE,
@@ -124,7 +111,6 @@ class Controller_Search extends Controller_Template {
                 "90" => $this->url_with_query(array( "limit" => 90), array("page")),
             )
         ));
-
         $twig->small_pagination = (array(
             "prev" => $pagination->previous_page,
             "prev_url" => $pagination->url($pagination->previous_page),
@@ -149,18 +135,28 @@ class Controller_Search extends Controller_Template {
         }
         //save search settings cache end
 
-        //clean empty links
-        $twig->category_childs_elements = Search_url::clean_empty_category_childs_elements($search_info->category_childs_elements, $search_info->link_counters, $search_info->url);
-        // end clean empty links
+        //link counters
+        if ($search_info->enable_link_couters) {
+            $search_info->link_counters = Search_Url::getcounters($search_info->s_host, $search_info->category_url, array_merge($search_info->category_childs, $search_info->category_childs_elements) );
+            foreach (array("nizhnevartovsk","tyumen","surgut","nefteyugansk", FALSE) as $city_seo) {
+                $city_counter = Search_Url::getcounters(Domain::get_domain_by_city($city_seo, FALSE, ""), "", array( new Obj(array("url"=>$search_info->canonical_url)) ) );
+                $search_info->link_counters = array_merge($search_info->link_counters, $city_counter);
+            }
+            $search_info->link_counters[$search_info->s_host.$search_info->s_suri] = $search_info->main_search_result_count;
+            
+            //clean empty links
+            $search_info->category_childs_elements = Search_url::clean_empty_category_childs_elements($search_info->category_childs_elements, $search_info->link_counters, $search_info->url);
+            // end clean empty links
+        }
+        //link counters end
 
         //favourites
         $twig->favourites = ORM::factory('Favourite')->get_list_by_cookie();
         //end favourites
-        
+
         foreach ((array) $search_info as $key => $item) {
             $twig->{$key} = $item;
         }
-
         $twig->php_time = microtime(true) - $start;
         $this->response->body($twig);
     }
@@ -170,8 +166,18 @@ class Controller_Search extends Controller_Template {
             return new Obj($this->cached_search_info);
         }
 
+        $search_text = $this->params_by_uri->get_reserved_query_params("search");
+        if ($search_text) {
+            return $this->get_search_info_by_sphinx($search_text);
+        }
+
+        return $this->get_search_info_by_filters();
+    }
+
+    public function get_search_info_by_filters() {
         $info = new Obj();
 
+        $info->enable_link_couters = TRUE;
         $info->city_id = ($this->domain->get_city()) ? $this->domain->get_city()->id : NULL;
         $info->category_id = $this->params_by_uri->get_category()->id;
         $info->child_categories_ids = $this->params_by_uri->get_category_childs_id();
@@ -210,7 +216,6 @@ class Controller_Search extends Controller_Template {
             "video" => $this->params_by_uri->get_reserved_query_params("video"),
             "private" => $this->params_by_uri->get_reserved_query_params("private"),
             "org" => $this->params_by_uri->get_reserved_query_params("org"),
-
             "filters" => array_merge($this->params_by_uri->get_clean_query_params(), $this->params_by_uri->get_seo_filters())
         );
 
@@ -226,7 +231,75 @@ class Controller_Search extends Controller_Template {
             $this->domain->get_city()
         );
 
+        
+        return $info;
+    }
 
+    public function get_search_info_by_sphinx($search_text) {
+        $info = new Obj();
+
+        $info->search_text = $search_text;
+
+        $info->city_id = ($this->domain->get_city()) ? $this->domain->get_city()->id : NULL;
+        $info->category_id = $this->params_by_uri->get_category()->id;
+        $info->child_categories_ids = $this->params_by_uri->get_category_childs_id();
+
+        $info->s_host = $_SERVER["HTTP_HOST"];
+        $info->s_suri = trim($_SERVER["REQUEST_URI"],"/");
+        $info->domain      = $this->domain;
+        $info->city        = $this->domain->get_city();
+        $info->main_category = $this->domain->get_main_category();
+
+        $sphinx = new Sphinx();
+        $sphinx_category_childs = $sphinx->searchGroupByCategory( 
+            $info->search_text, 
+            $info->city_id,
+            (count($info->child_categories_ids) > 0) ? $info->child_categories_ids : $info->category_id
+        );
+        $info->sphinx_category_childs = $sphinx_category_childs["categories"];
+        $info->category_childs_elements_colsize = 4;
+
+        $info->category_url = $this->params_by_uri->get_proper_category_uri();
+        $info->url = $info->s_host."/".$info->category_url;
+        $info->canonical_url  =  $this->params_by_uri->get_proper_segments();
+        $info->sphinx_search_query = "?search=".$info->search_text;
+        $info->dirty_url = $info->url.$info->sphinx_search_query;
+        if ($info->canonical_url === $info->main_category) {
+            $info->canonical_url = "";
+        }
+        if ($info->s_suri <> "/".$info->canonical_url.$info->sphinx_search_query) {
+             $info->show_canonical = TRUE;
+        }        
+        $info->category = $this->params_by_uri->get_category();
+        $info->crumbs      = $this->params_by_uri->get_category_crubms($info->category_id,  $info->sphinx_search_query);
+        $info->incorrectly_query_params_for_seo =  $this->params_by_uri->incorrectly_query_params_for_seo;
+        $info->search_filters = array(
+            "active" => TRUE,
+            "published" =>TRUE,
+            "city_id" => $info->city_id,
+            "category_id" => (count($info->child_categories_ids) > 0) ? $info->child_categories_ids : $info->category_id,
+
+            //TODO фильтр по фото
+            //"user_id" => $this->params_by_uri->get_reserved_query_params("user_id"),
+            //"photo" => $this->params_by_uri->get_reserved_query_params("photo"),
+
+            "search_text" => $info->search_text,
+            "filters" => array()
+        );
+
+        $info->search_params = array(
+            "page" => $this->params_by_uri->get_reserved_query_params("page"),
+            "limit" => $this->params_by_uri->get_reserved_query_params("limit"),
+        );
+
+        $info->seo_attributes = Seo::get_seo_attributes(
+            $this->params_by_uri->get_proper_segments(),
+            $info->search_filters["filters"],
+            $this->params_by_uri->get_category(),
+            $this->domain->get_city()
+        );
+
+        
         return $info;
     }
 
