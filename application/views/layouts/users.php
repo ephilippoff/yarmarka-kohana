@@ -7,7 +7,9 @@
 <!--<meta content="width=device-width, initial-scale=1.0" name="viewport">-->
 <meta name="viewport" id="viewport" content="width=device-width">
 <title><?=Seo::get_title()?></title>
-<?=Assets::factory('main')->css('old/cssadm.css', array('media' => 'screen, projection'))
+<?=Assets::factory('main')
+	->css('old/bootstrap.min.css', array('media' => 'screen, projection'))		
+	->css('old/cssadm.css', array('media' => 'screen, projection'))
 	->css('old/iLight.css')
 	->css('old/jquery.jscrollpane.css')
 	->css('old/cusel.css')

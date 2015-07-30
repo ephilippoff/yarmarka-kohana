@@ -12,8 +12,10 @@
 <?php endif;?>	
 <title><?=Seo::get_title()?></title>
 <?=Assets::factory('main')
+	->css('old/bootstrap.min.css', array('media' => 'screen, projection'))		
 	->css('old/css.css', array('media' => 'screen, projection'))
 	->css('old/iLight.css')
+	->css('old/css2.css', array('media' => 'screen, projection'))		
 	->css('old/jquery.jscrollpane.css')
 	->css('old/cusel.css')
 	->css('old/chosen.css')
@@ -38,7 +40,7 @@
 <body class="adaptiveoff">
 	<?=View::factory('layouts/google_analytics')?>
 	<div class="wrapfix">
-			<?=View::factory('layouts/header')?>
+			<?=View::factory('layouts/header_v2')?>
 			<div class="m_content">
 			<?=$_content?>
 	        </div>

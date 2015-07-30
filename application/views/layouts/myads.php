@@ -7,11 +7,14 @@
 <!--<meta content="width=device-width, initial-scale=1.0" name="viewport">-->
 <meta name="viewport" id="viewport" content="width=device-width">
 <title><?=Seo::get_title()?></title>
-<?=Assets::factory('main')->css('old/cssadm.css', array('media' => 'screen, projection'))
+<?=Assets::factory('main')
+	->css('old/bootstrap.min.css', array('media' => 'screen, projection'))	
 	->css('old/iLight.css')
+	->css('old/cssadm.css', array('media' => 'screen, projection'))
+	->css('old/css2.css', array('media' => 'screen, projection'))
 	->css('old/jquery.jscrollpane.css')
 	->css('old/cusel.css')
-	->css('old/chosen.css')
+	->css('old/chosen.css')		
 	->js('old/jquery.min.js')
 	->js('http://html5shiv.googlecode.com/svn/trunk/html5.js', array('condition' => 'lte IE 8'))
 	->js('http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js', array('condition' => 'lte IE 8'))
@@ -35,7 +38,7 @@
 	<div class="popup-layer"></div>
 	<?=View::factory('layouts/google_analytics')?>
 	<div class="wrapfix">
-		<?=View::factory('layouts/header')?>
+		<?=View::factory('layouts/header_v2')?>
 		<div class="m_content">
 			<?=$_content?>
 		</div>
