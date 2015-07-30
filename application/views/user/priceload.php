@@ -1,7 +1,7 @@
 <?=HTML::script('bootstrap/js/bootstrap.min.js')?>
 <?//=HTML::style('bootstrap/css/bootstrap.min.css')?>
 <?=HTML::style('bootstrap/css/customize.bootstrap.css')?>
-<?=HTML::style('bootstrap/css/bootstrap-responsive.min.css')?>
+<?//=HTML::style('bootstrap/css/bootstrap-responsive.min.css')?>
 <script type="text/javascript">
 $(document).ready(function() {
 	$('#islide_services').click();

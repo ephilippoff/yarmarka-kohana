@@ -54,7 +54,7 @@
 						<div class="inp-cont-bl ">
 							<div class="inp-cont">
 								<div class="inp">
-									<input class="" type="text" name="text" value="<?=Arr::get($_GET, 'text')?>" placeholder="Искать объявления по содержимому">
+									<input style="box-sizing: initial" type="text" name="text" value="<?=Arr::get($_GET, 'text')?>" placeholder="Искать объявления по содержимому">
 								</div>
 							</div>
 						</div>

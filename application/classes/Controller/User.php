@@ -175,7 +175,7 @@ class Controller_User extends Controller_Template {
 
     public function action_objectload()
     {
-    	$this->layout = 'users';    	
+    	$this->layout = 'users_v2';    	
 //    	$this->assets->js('old/http://yandex.st/underscore/1.6.0/underscore-min.js');
     	$this->assets->js('http://yandex.st/backbone/1.1.2/backbone-min.js');  	
     	$this->assets->js('old/ajaxupload.js');
@@ -292,7 +292,7 @@ class Controller_User extends Controller_Template {
 
 	public function action_priceload()
 	{
-		$this->layout = 'users';    	
+		$this->layout = 'users_v2';    	
 //    	$this->assets->js('old/http://yandex.st/underscore/1.6.0/underscore-min.js');
     	$this->assets->js('http://yandex.st/backbone/1.1.2/backbone-min.js');  	
     	$this->assets->js('old/ajaxupload.js');
@@ -396,7 +396,7 @@ class Controller_User extends Controller_Template {
 
 	public function action_objectunload()
     {
-    	$this->layout = 'users';  
+    	$this->layout = 'users_v2';  
 
     	$avail_categories = Kohana::$config->load('massload.frontend_load_category');
 
@@ -472,7 +472,7 @@ class Controller_User extends Controller_Template {
 
     public function action_orders()
     {
-    	$this->layout = 'users';    	
+    	$this->layout = 'users_v2';    	
 
     	$orders = ORM::factory('Order')->where("user_id","=",$this->user->id)
 	    		->order_by("created", "desc")
@@ -568,7 +568,7 @@ class Controller_User extends Controller_Template {
 
     public function action_favorites()
 	{
-		$this->layout = 'users';
+		$this->layout = 'users_v2';
 		$this->assets->js('old/favorites.js');
 
 		// pagination settings
@@ -627,7 +627,7 @@ class Controller_User extends Controller_Template {
 
 	public function action_subscriptions()
 	{
-		$this->layout = 'users';
+		$this->layout = 'users_v2';
 		$this->assets->js('old/subscriptions.js');
 
 		// pagination settings
@@ -661,7 +661,7 @@ class Controller_User extends Controller_Template {
 
 	public function action_invoices()
 	{
-		$this->layout = 'users';
+		$this->layout = 'users_v2';
 		$this->assets->js('old/invoices.js');
 
 		// pagination settings
@@ -1285,6 +1285,8 @@ class Controller_User extends Controller_Template {
 
 	public function action_password()
 	{
+		$this->layout = 'default_v2';
+		
 		$error = NULL;
 
 		if (HTTP_Request::POST === $this->request->method())
@@ -1669,6 +1671,8 @@ class Controller_User extends Controller_Template {
 
 	public function action_userinfo()
 	{
+		$this->layout = 'default_v2';
+		
 		$user = Auth::instance()->get_user();
 		$is_post = ($_SERVER['REQUEST_METHOD'] == 'POST');
 		$data = NULL;
@@ -1921,6 +1925,7 @@ class Controller_User extends Controller_Template {
 	
 	public function action_contacts()
 	{
+		$this->layout = 'default_v2';
 		
 		if ( ! $user = Auth::instance()->get_user())
 		{

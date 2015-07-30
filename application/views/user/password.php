@@ -27,7 +27,7 @@ $(document).ready(function(){
 									<div class="inp-cont-bl">
 										<div class="inp-profile">
 											<div class="inp">
-												<input type="password" name="password" value="" />
+												<input style="box-sizing: initial;" type="password" name="password" value="" />
 											</div>
 										</div>
 									</div>
@@ -50,7 +50,7 @@ $(document).ready(function(){
 									<div class="inp-cont-bl">
 										<div class="inp-profile">
 											<div class="inp">
-												<input type="password" name="password_repeat" value="" />
+												<input style="box-sizing: initial;" type="password" name="password_repeat" value="" />
 											</div>
 										</div>
 									</div>
