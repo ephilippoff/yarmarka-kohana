@@ -6,8 +6,10 @@ define([
     "partials/index",
     "partials/search",
     "partials/detail",
+
+    "modules/filters"
 ], 
-function (Marionette, templates, utils, IndexPage, SearchPage, DetailPage) {
+function (Marionette, templates, utils, IndexPage, SearchPage, DetailPage, FiltersModule) {
     "use strict";
     
     return Marionette.Controller.extend({
@@ -32,6 +34,10 @@ function (Marionette, templates, utils, IndexPage, SearchPage, DetailPage) {
 
         start_searchSection : function() {
             console.log("search start");
+
+            app.module("filters", FiltersModule);
+            app.filters.initFilters(app.settings.category_id);
+
             app.menu.init(["main", "city"]);
             app.favourite.init(["list"]);
             new SearchPage({

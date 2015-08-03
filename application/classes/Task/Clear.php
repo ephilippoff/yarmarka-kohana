@@ -15,6 +15,7 @@ class Task_Clear extends Minion_Task
 
 		$this->clear_search_url_cache();
 		$this->set_category_urls();
+		$this->set_attribute_element_urls();
 	}
 
 	function clear_search_url_cache()
@@ -34,4 +35,18 @@ class Task_Clear extends Minion_Task
 		}
 		
 	}
+
+	function set_attribute_element_urls()
+	{
+		$aes = ORM::factory('Attribute_Element')->find_all();
+		foreach ($aes as $ae) {
+			$url = Search_Url::get_seo_param_segment($ae->id);
+			$ae->url = $url;
+			$ae->save();
+		}
+		
+	}
+
+
+	
 }

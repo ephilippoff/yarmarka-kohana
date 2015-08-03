@@ -255,7 +255,7 @@ class Search_Url
         return $result;
     }
 
-    public function clean_query_params($category_id, $params = array())
+    public static function clean_query_params($category_id, $params = array())
     {
         $result = array();
         if (count(array_keys($params)) > 0) {

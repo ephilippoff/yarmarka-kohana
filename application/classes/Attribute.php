@@ -135,7 +135,11 @@ class Attribute {
 						$child = self:: getElements($category_id, $relation->id, $element->id, $element->id);
 						if (count($child)>0)
 						{
-							$elements[$el_id] = Array(0 => Array ( "title" => $element->title));
+							$el_params = Array ( "title" => $element->title);
+							if ($reference->is_seo_used) {
+								$el_params["url"] = $element->url;
+							}
+							$elements[$el_id] = Array(0 => $el_params);
 							$elements[$el_id] = array_merge($elements[$el_id],  $child);
 						} else {
 							$elements[$el_id] = $element->title;
@@ -147,7 +151,8 @@ class Attribute {
 
 			$data[$rel_id] = Array(0 => Array ( 
 												"id" => "param_".$relation->reference_id,
-												"title" => $attribute->title,  
+												"title" => $attribute->title,
+												"seo_name" => $attribute->seo_name,
 												"type" =>  $type, 
 												"ref_id" => $relation->reference_id, 
 												"custom" => $relation->custom,
@@ -155,7 +160,8 @@ class Attribute {
 												"weight" => $relation->weight,
 												"is_textarea" => $attribute->is_textarea,
 												"is_required" => $relation->is_required,
-												"unit"		  => $attribute->unit
+												"unit"		  => $attribute->unit,
+												"is_short_url" => $reference->is_seo_used
 											)
 										);
 			$data[$rel_id] = array_merge($data[$rel_id], $elements);

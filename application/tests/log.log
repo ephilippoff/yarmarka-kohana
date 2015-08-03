@@ -1,0 +1,9 @@
+PHPUnit 4.6.4 by Sebastian Bergmann and contributors.
+
+Configuration read from /home/avagapov/web/yarmarka/yarmarka-kh/application/tests/phpunit.xml
+
+........................
+
+Time: 756 ms, Memory: 26.25Mb
+
+OK (24 tests, 24 assertions)

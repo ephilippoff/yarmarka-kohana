@@ -54,7 +54,11 @@ class Controller_Search extends Controller_Template {
     public function action_index() {
         $start = microtime(true);
 
+        $prefix = (Kohana::$environment == Kohana::PRODUCTION) ? "" : "dev_";
+        $staticfile = new StaticFile("attributes", $prefix.'static_attributes.js');
+
         $twig = Twig::factory('search/index');
+        $twig->data_file = $staticfile->jspath;
 
         $search_info = $this->get_search_info();
 
@@ -189,6 +193,7 @@ class Controller_Search extends Controller_Template {
         $info->main_category = $this->domain->get_main_category();
 
         $info->category_url = $this->params_by_uri->get_proper_category_uri();
+        $info->seo_segment_url = $this->params_by_uri->get_proper_seo_param_uri();
         $info->url = $info->s_host."/".$info->category_url;
         $info->canonical_url  =  $this->params_by_uri->get_proper_segments();
         if ($info->canonical_url === $info->main_category) {
@@ -230,8 +235,8 @@ class Controller_Search extends Controller_Template {
             $this->params_by_uri->get_category(),
             $this->domain->get_city()
         );
-
         
+        $info->query_params_for_js = json_encode(array_merge($this->params_by_uri->get_clean_query_params(), $this->params_by_uri->get_seo_filters()));
         return $info;
     }
 

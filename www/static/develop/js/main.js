@@ -45,12 +45,21 @@ require([ 'app',
 function (app, $, Marionette, Backbone, _) {
     "use strict";
 
-    console.log(_globalSettings);
-
     app.settings = {
         page: _globalSettings.page,
-        data: _globalSettings.data
+        data: _globalSettings.data,
+        category_id: _globalSettings.category_id,
+        city_id: _globalSettings.city_id
     };
+
+    try {
+        app.settings.query_params = (_globalSettings.query_params) ? JSON.parse(_globalSettings.query_params) : {};
+    } catch (e) {
+        app.settings.query_params = {};
+    }
+
+    Backbone.emulateHTTP = true;
+    //Backbone.emulateJSON = true;
 
     Marionette.Behaviors.behaviorsLookup = function() {
         return window.Behaviors;

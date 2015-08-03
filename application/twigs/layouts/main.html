@@ -18,6 +18,8 @@
             {{ css("css.css") }}
         {% endblock css%}
 
+        {% block js %}{% endblock js%}
+
     </head>
     <body class="{% block bodyclass %}{% endblock bodyclass%}">
         <div class="wrapper container {% block wrapperclass %}{% endblock wrapperclass %}">
@@ -25,7 +27,14 @@
         </div>
         <!-- inject:js -->
         <script>
-          var _globalSettings =  { host: '{{ s_host }}', page: '{% block page_name %}index{% endblock page_name%}' };
+          var _globalSettings =  { 
+                host: '{{ s_host }}', 
+                page: '{% block page_name %}index{% endblock page_name%}', 
+                data: window.data, 
+                category_id: '{{category_id}}',
+                query_params: '{{query_params_for_js}}',
+                city_id: '{{city_id}}'
+            };
         </script>
         <script data-main="/static/develop/js/main.js" src="/static/develop/js/lib/require.js"></script>
         <!-- endinject -->

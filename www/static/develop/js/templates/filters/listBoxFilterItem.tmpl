@@ -1,0 +1,26 @@
+<div class="multiselect li ">
+	<div class="cont js-filter-label">
+	<p><span class="name"><%=title%></span></p>
+	<p><span class="info js-filter-str-value">Не важно</span></p>
+</div>
+<% var cols = 5; %>
+<% if (_.keys(values).length <= cols) { rows = 5; cols = 1;} else { %>
+	<% var rows = Math.round(_.keys(values).length/cols); %>
+<% } %>
+<% var i = 0; %>
+
+<div class="checkbox js-filter-values-cont" style="display: none;z-index:90;">
+	<div class="filters-items" style="width:<%=155*cols%>px">
+		<div class="line" style="float:left;">
+			<div style="width:100%;float: left;"><label><input class="js-filter-anyinput" type="checkbox" disabled checked data-type="service"><span>Не важно</span></label></div>
+			<% _.each(_.range(cols), function(col) { %>
+				<div class="column-list">
+					<% _.each(_.keys(values).slice(i, i + rows), function(key){ %>
+						<div><label><input type="checkbox" name="<%=seo_name%>[<%=key%>]" value="<%=clearValue(key)%>" data-str="<%=values[key]%>" <%=checked(key)%>><span><%=values[key]%></span></label></div>
+					<% }); %>
+				</div>
+				<% i = i + rows;  %>
+			<% }); %>
+		</div>
+	</div>
+</div>
