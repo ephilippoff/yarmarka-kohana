@@ -170,7 +170,7 @@ define([
             input: "input"
         },
         events: {
-            "click .js-filter-label": "showHide",
+            "click .js-filter-label, .js-filter-ok": "showHide",
             "keyup @ui.input": "inputKeyUp"
         },
         initialize: function(options){
@@ -200,7 +200,7 @@ define([
             input: "input"
         },
         events: {
-            "click .js-filter-label": "showHide",
+            "click .js-filter-label, .js-filter-ok": "showHide",
             "keyup @ui.input": "inputKeyUp"
         },
         initialize: function(options){
@@ -234,7 +234,7 @@ define([
             select: "select"
         },
         events: {
-            "click .js-filter-label": "showHide",
+            "click .js-filter-label, .js-filter-ok": "showHide",
             "change @ui.select": "selectChange"
         },
         initialize: function(options){
@@ -295,7 +295,7 @@ define([
             anyInput: ".js-filter-anyinput"
         },
         events: {
-            "click .js-filter-label": "showHide",
+            "click .js-filter-label, .js-filter-ok": "showHide",
             "change input:not(.js-filter-anyinput)": "changeInput",
             "change @ui.anyInput": "changeAnyInput"
         },
