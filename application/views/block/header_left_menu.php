@@ -4,7 +4,7 @@
 			<?php foreach ($categories1l as $category) : ?>
 			<?php if (in_array(trim($category->seo_name), Kohana::$config->load('category.categories_view_hidden'))) continue; ?>
 			<li data-submenu-id="section<?=$category->id?>" class="section<?=$category->id?>">
-				<span onclick="" class="span-link" href="<?=$category->get_url()?>">
+				<span onclick="" class="span-link" href="<?=$category->url?>">
 					<span class="name"><?=$category->title?></span>
 					<span class="heading"></span>
 				</span>
@@ -44,7 +44,7 @@
 							<?php foreach ($categories2l as $category2) : ?>
 							<?php if ($category2->parent_id != $category1->id) continue; ?>
 							<li>
-								<span class="span-link" onclick="window.location='<?=$category2->get_url()?>'">
+								<span class="span-link" onclick="window.location='<?=$category2->url?>'">
 									<span class="name2"><?=$category2->title?></span><span class="heading"><?=$category2->caption?></span>
 								</span>
 							</li>					
