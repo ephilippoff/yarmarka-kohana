@@ -1,0 +1,77 @@
+{% extends "layouts/search" %}
+
+{% block header %} 
+		{{ requestblock('block_twig/topline', {'favourites':favourites}) }}
+		{% include 'block/header/logoline' %}
+		{% include 'block/header/navigationline/simple' %}
+		{% include 'search/user/promo' %}
+{% endblock header %} 
+
+{% block css %} 
+	{{ parent() }}
+	{{ css("filters.css") }}
+{% endblock css%}
+
+
+{% block js %} 
+	{% if data_file %}
+		{{ js(data_file) }}
+	{% endif %}
+{% endblock js%}
+
+
+{% block title %} {{ seo_attributes.title }} {% endblock title%}
+{% block meta_description %}{% endblock meta_description%}
+
+{% block crumbs %} 
+	
+{% endblock crumbs %}
+
+
+{% block wrapperclass %}page-search{% endblock wrapperclass %}
+
+
+
+{% block subcategories %}
+
+{% endblock subcategories %}
+
+
+{% block filters %} 
+	
+{% endblock filters %}
+
+{% block content %}
+	{% if (main_search_result|length) %}
+		{% include 'search/user/control' %}
+		{% include 'search/user/result' %}
+		{% include 'search/paginator' %}
+	{% else %}
+		{{empty_text}}
+	{% endif %}
+{% endblock content%}
+
+{% block rightside %} 
+	{% include 'search/user/messages' %}
+{% endblock rightside %}
+
+
+{% block footertext %} 
+		
+{% endblock footertext %}
+
+{% block footer %} 
+		Время генерации php {{ php_time }}
+{% endblock footer %}
+
+{% block templates %}
+	{{ parent() }}
+	<script id="template-mainmenu" type="text/template">
+		{{ requestblock('block_twig/mainmenu', {'city_id': city.id}) }}
+	</script>
+	<script id="template-citymenu" type="text/template">
+		{{ requestblock('block_twig/othercities', {'city_id': city.id}) }}
+	</script>
+{% endblock templates %}
+
+{%block page_name%}usersearch{% endblock page_name %}

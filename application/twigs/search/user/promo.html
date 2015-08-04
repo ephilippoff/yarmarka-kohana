@@ -1,0 +1,12 @@
+<div class="main-theme module">
+	<div class="view-container">
+		{% include 'search/user/crumbs' %}
+		
+		{% block subcategories %}
+			{% if user_categories|length > 0%}
+				{% include 'search/user/usercategories' %}
+			{% endif %}
+		{% endblock subcategories %}
+
+	</div><!--view-container1-->
+</div><!--skin-theme1-->

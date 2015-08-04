@@ -134,7 +134,13 @@ class Search {
 		$params = new Obj(array_merge($filters, $params));
 		$options = new Obj($options);
 
-		$select = ($options->count) ? "count(o.id) as count" : "o.*";
+		$select = "o.*";
+		if ( $options->count ) {
+			$select = "count(o.id) as count";
+		} elseif ($options->group_category) {
+			$select = "category.title, category.url, count(o.id)";
+		}
+		
 
 		if ($params->hash) {
 			$suc = ORM::factory('Search_Url_Cache')->where("hash","=",$params->hash)->find();
@@ -161,8 +167,11 @@ class Search {
 			$object = $object->where("o.active", "=", 1);
 		}
 
-		if ($published) {
+		if ($published === TRUE) {
 			$object = $object->where("o.is_published", "=", 1);
+		} 
+		if ($published === FALSE) {
+			$object = $object->where("o.is_published", "=", 0);
 		}
 
 		if ($params->id AND is_array($params->id)) {
@@ -220,6 +229,16 @@ class Search {
 			$object = $object->where("o.source_id", "=", (int) $params->source);
 		}
 
+		if ($params->is_favorite) {
+			$code = Cookie::get("code");
+			if ($code) {
+				$favorite_subquery = DB::select("objectid")
+											->from("favorite")
+											->where("code", "=", $code);
+				$object = $object->where("o.id","IN",$favorite_subquery);
+			}
+		}
+
 		$multimedia_filter = array();
 		$photo_types = array(0, 4);
 		$video_types = array(2, 3);
@@ -267,7 +286,7 @@ class Search {
 		foreach ($filters as $filter)
 			$object = $object->where(DB::expr('exists'), DB::expr(''), $filter);
 
-		if (!$options->count) {
+		if (!$options->count and !$options->group_category) {
 			$object = $object->limit($limit);
 
 			$object = $object->offset($limit*( ($page == 0)? 0: $page-1 ) );
@@ -280,6 +299,12 @@ class Search {
 			} else {
 				$object = $object->order_by("o.".$order, $order_direction);
 			}
+		}
+
+		if ($options->group_category) {
+			$object = $object->join("category","left")
+                     			->on("o.category","=","category.id")
+                     			->group_by( "category.title", "category.url" );
 		}
 
 		if ($params->search_text) {

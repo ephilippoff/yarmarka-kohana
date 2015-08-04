@@ -223,6 +223,19 @@ Route::set('cart', 'cart')
 		'action'     => 'index',
 	));
 
+Route::set('user', 'user(/<action>(/<category_path>))', array(
+		'category_path' => '[a-zA-Z0-9-\._/]+',
+	))
+	->filter(function($route, $params, $request){
+		if ( !in_array($params["action"], array("published", "unpublished", "favorites")) ) {
+			return FALSE;
+		}
+	})
+	->defaults(array(
+		'controller' => 'User_Search',
+		'action'     => 'published',
+	));
+
 if (array_key_exists("HTTP_FROM", $_SERVER))
 {
 	if (strpos($_SERVER['REQUEST_URI'],"landing"))

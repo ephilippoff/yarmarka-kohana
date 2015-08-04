@@ -6,10 +6,11 @@ define([
     "partials/index",
     "partials/search",
     "partials/detail",
+    "partials/userSearch",
 
     "modules/filters"
 ], 
-function (Marionette, templates, utils, IndexPage, SearchPage, DetailPage, FiltersModule) {
+function (Marionette, templates, utils, IndexPage, SearchPage, DetailPage, UserSearchPage, FiltersModule) {
     "use strict";
     
     return Marionette.Controller.extend({
@@ -26,7 +27,7 @@ function (Marionette, templates, utils, IndexPage, SearchPage, DetailPage, Filte
 
         start_detailSection : function() {
             console.log("detail start");
-            app.menu.init(["main", "city"]);
+            app.menu.init(["main"]);
             new DetailPage({
                 el: "body"
             });
@@ -41,6 +42,16 @@ function (Marionette, templates, utils, IndexPage, SearchPage, DetailPage, Filte
             app.menu.init(["main", "city"]);
             app.favourite.init(["list"]);
             new SearchPage({
+                el: "body"
+            });
+        },
+
+        start_usersearchSection : function() {
+            console.log("search start");
+
+            app.menu.init(["main"]);
+            app.favourite.init(["list"]);
+            new UserSearchPage({
                 el: "body"
             });
         },

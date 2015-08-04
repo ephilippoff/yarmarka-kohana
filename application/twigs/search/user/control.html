@@ -1,0 +1,14 @@
+<div class="obj-control-head clearfix">
+	<div class="row">
+		<div class="col-md-12 right clearfix">
+			<a class="item" href="#">Сортировка<span class="caret mr3"></span></a>
+			{% if small_pagination.next %}
+				<a class="item" href="{{small_pagination.next_url}}">Далее</a>
+			{% endif %}
+			<span class="caption">{{ small_pagination.current }}/{{ small_pagination.total }}</span>
+			{% if small_pagination.prev %}
+				<a class="item" href="{{small_pagination.prev_url}}">Назад</a>
+			{% endif %}
+		</div>
+	</div>
+</div>

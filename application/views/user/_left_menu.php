@@ -1,38 +1,5 @@
 <aside class="p_room-menu">
 	<ul class="islide-menu">
-		<li class="info-tooltip" data-controller-character="advert"><a href="" id="islide_myads"><i class="ico ico-myadd"></i><span>Мои объявления</span></a>
-			<ul class="no_text-decoration">
-				<?php if (Request::current()->action() == 'myads') : ?>
-				<li class=""><span class="noclickable"><b><i class="ico "></i><span>Все</span></b></span></li>
-				<?php else : ?>
-				<li class=""><a href="<?=URL::site('user/myads')?>" class="clickable"><i class="ico "></i><span>Все</span></a></li>
-				<?php endif; ?>
-
-				<?php if (Request::current()->action() == 'published') : ?>
-				<li class=""><span class="noclickable"><b><i class="ico "></i><span>Опубликованные</span></b></span></li>
-				<?php else : ?>
-				<li class=""><a href="<?=URL::site('user/published')?>" class="clickable"><i class="ico "></i><span>Опубликованные</span></a></li>
-				<?php endif; ?>
-
-				<?php if (Request::current()->action() == 'unpublished') : ?>
-				<li class=""><span class="noclickable"><b><i class="ico "></i><span>Снятые</span></b></span></li>
-				<?php else : ?>
-				<li class=""><a href="<?=URL::site('user/unpublished')?>" class="clickable"><i class="ico "></i><span>Снятые</span></a></li>
-				<?php endif; ?>
-
-				<li class="mt31">
-					<?php if (FALSE) : ?>
-					<?=Request::factory('block/user_from_employees_menu')->execute()?>
-					<?php endif ?>
-
-					<?php if (Request::current()->action() == 'favorites') : ?>
-					<span class="noclickable"><b><i class="ico ico-favorites"></i><span>Избранные</span></b></span>
-					<?php else : ?>
-					<a href="<?=URL::site('user/favorites')?>" class="clickable"><i class="ico ico-favorites"></i><span>Избранные</span></a>
-					<?php endif; ?>
-				</li>
-			</ul>
-		</li>
 		<?php if (Request::current()->action() == 'subscriptions') : ?>
 		<li class="active">
 		<?php else : ?>

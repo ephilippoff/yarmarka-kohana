@@ -1,0 +1,24 @@
+<div class="info-block-cont theme3 module">
+	<div class="block-title">
+		<span>Информация</span>
+	</div>
+	Внимание! В разделе "Вакансии" поднятие объявления доступно 1 раз в сутки. В остальных разделах поднятие объявления доступно 1 раз в 3 суток. УСЛУГА БЕСПЛАТНАЯ!<br>
+		Ваш лимит Премиум объявлений - 87
+</div>
+{% if messages|length > 0 %}
+	<div class="info-block-cont theme3 module">
+		<div class="block-title">
+			<span>Сообщения к вашим объявлениям</span>
+		</div>
+		<div class="items-list-cont3">
+			<ul>
+				{% for message in messages %}
+				<li>
+					{{message.createdOn|date('d.m.Y')}} : {{message.text}}
+					<a href="/detail/{{message.object_id}}">К объявлению</a>
+				</li>
+				{% endfor %}
+			</ul>
+		</div>
+	</div>
+{% endif %}

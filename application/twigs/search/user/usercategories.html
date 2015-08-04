@@ -1,0 +1,32 @@
+{% set cols = (user_categories|length > 4) ? 2 : 1 %}
+{% set rows = (user_categories|length/cols)|round %}
+{% set i = 0 %}
+<div class="subcategories-cont module">
+	<div class="row">
+			<div class="col-md-2">
+				<ul>
+					<li><a href="{{ url('user') }}">Опубликованные</a></li>
+					<li><a href="{{ url('user/unpublished') }}">Снятые/Архивные</a></li>
+					<li><a href="{{ url('user/favorites') }}">Избранные</a></li>
+				</ul>
+
+			</div>
+		{% for col in 0..cols %}
+			<div class="col-md-3">
+				<ul>
+				{% for category in user_categories|slice(i, rows) %}
+					<li>
+						<a href="{{ url(canonical_url ~ (category.url ? '/' ~ category.url : '') ) }}" title="{{category.title}}">{{category.title}}</a>
+						{% if category.count > 0 %}
+							<span class="count">{{category.count}}</span>
+						{% else %}
+							<!-- <span class="count">?</span> -->
+						{% endif %}
+					</li>
+				{% endfor %}
+				</ul>
+			</div>
+			{% set i = i + rows %}
+		{% endfor %}
+	</div>
+</div>

@@ -1536,19 +1536,11 @@ class Controller_User extends Controller_Template {
 	{
 		$this->use_layout	= FALSE;
 		$this->auto_render	= FALSE;
-		$_main = (int)$this->request->query('main');
 
-		if (Auth::instance()->get_user())
-		{
-			setcookie('user_id', '', time()-1, '/', Region::get_cookie_domain());
-			Auth::instance()->logout();
-		}
+		setcookie('user_id', '', time()-1, '/', Region::get_cookie_domain());
+		Auth::instance()->logout();
 
-		$main = "";
-		if ($_main)
-			$main="?main=1";
-
-		$this->redirect('http://'.Region::get_current_domain().'/user/logout'.$main);
+		$this->redirect('/');
 	}
 
 	public function action_orginfo()

@@ -1,0 +1,67 @@
+<tr class="tr">
+	<td class="td td-1">
+		<div class="img-cont">
+			{% if object.compiled.images.main_photo and file_exist( strim(object.compiled.images.main_photo['120x90'] , '.')) %}
+				<img class="img-frame" src="{{ staticfile(object.compiled.images.main_photo['120x90']) }}" alt="{{ object.title|e }}">
+			{% else %}
+				<img class="img-frame" src="{{staticfile('images/nophoto_estate136x107.png')}}">
+			{% endif %}
+			{% if object.is_premium %}
+				<span class="premium-tape"></span>
+			{% endif %}
+		</div>
+	</td>
+	<td class="td td-2">
+		<p class="title">
+			{% set is_favourite = '' %}
+			{% if object.id in favourites %}
+				{% set is_favourite = 'in' %}
+			{% endif %}
+			<i class="ico ico19 favorit-ico js-favourite {{is_favourite}}" data-id="{{object.id}}"></i>
+			<a href="{{ object.compiled.url }}" title="{{ object.title|e }}">
+				{{ object.title|e }}
+			</a>
+		</p>
+		<p class="style1"><span>{{ object.date_created|date("d.m") }}</span> / <span>{{ object.compiled.city }}</span> </p>
+		{% if object.price > 0 %}
+			<p class="amount">{{ object.price|number_format(0, ' ', ' ') }} руб.</p>
+		{% endif %}
+
+		{% if object.compiled.attributes|length > 0 %}
+			<table class="table-details">									
+				<tbody>
+					{% for attr in object.compiled.attributes|slice(0, 3) if attr.value %}
+					<tr>
+						<td class="attr-title">{{ attr.title }}</td>
+						<td class="value">{{ attr.value|e }}</td>
+					</tr>
+					{% endfor %}
+			</tbody></table>
+
+
+		{% endif %}
+	</td>
+	<td class="td td-3">
+		<div class="button js-ocontrol-publish" data-id="{{object.id}}">
+			<span>
+				{% if object.is_published %} 
+					Снять с публикации
+				{% else %}
+					Опубликовать
+				{% endif %}
+			</span>
+		</div>
+		<div class="button js-service-up" data-id="{{object.id}}">
+			<span>Поднять</span>
+		</div>
+		<div class="button js-ocontrol-edit" data-id="{{object.id}}">
+			<span>Редактировать</span>
+		</div>
+	</td>
+	<td class="td td-3">
+		Код: {{object.id}} <br>
+		Обновлено: {{ object.date_created|date('d.m.Y') }} <br>
+		Просмотров: {{ object.visits }}
+	</td>
+	
+</tr>
