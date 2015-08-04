@@ -1,15 +1,28 @@
-<div class="service-block-cont module">
-	<div class="button js-favourite" data-id="{{object.id}}">
-		{% set is_favourite = '' %}
-		{% if object.id in favourites %}
-			{% set is_favourite = 'in' %}
-		{% endif %}
-		<i class="favorit-ico {{is_favourite}}"></i> <span class="js-favourite-caption">{{is_favourite ? 'В избранном': 'В избранное'}}</span>
-	</div>
-	{% if object.active == 0 %}
-		<div class="line">Объявление снято</div>
-	{% endif %}
-	<div class="line color1">Код объявления: {{ object.id }}</div>
-	<div class="line color1">Обновлено: {{ object.date_created|date('d.m.Y') }}</div>
-	<div class="line color1">Просмотров: {{ object.visits }}</div>
+<div class="info-block-cont theme2 contacts-cont module">
+	<div class="block-title">
+		<span>Управление объявлением</span>
+	</div>					
+	<div class="body">
+		<div class="row">
+			<div class="list list1 col-md-6">
+				<div class="button js-ocontrol-publish" data-id="{{object.id}}">
+					<span>
+						{% if object.is_published %} 
+							Снять с публикации
+						{% else %}
+							Опубликовать
+						{% endif %}
+					</span>
+				</div>
+				<div class="button js-service-up" data-id="{{object.id}}">
+					<span>Поднять</span>
+				</div>
+			</div>
+			<div class="list list2 col-md-6">
+				<div class="button js-ocontrol-edit" data-id="{{object.id}}">
+					<span>Редактировать</span>
+				</div>
+			</div>
+		</div>
+	</div>					
 </div>

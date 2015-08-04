@@ -1,13 +1,15 @@
 /*global define, window */
 define([
-	"marionette",
-	"routers/index",
-	"controllers/index",
-	"modules/menu",
+    "marionette",
+    "routers/index",
+    "controllers/index",
+    "modules/menu",
     "modules/favourite",
-    "modules/search"
+    "modules/ocontrol",
+    "modules/search",
+    "modules/services"
 ], 
-function (Marionette, IndexRouter, IndexController, Mainmenu, Favourite, Search) {
+function (Marionette, IndexRouter, IndexController, Mainmenu, Favourite, Ocontrol, Search, Services) {
     "use strict";
 
     var app = new Marionette.Application();
@@ -20,6 +22,8 @@ function (Marionette, IndexRouter, IndexController, Mainmenu, Favourite, Search)
 
         app.module("menu", Mainmenu);
         app.module("favourite", Favourite);
+        app.module("ocontrol", Ocontrol);
+        app.module("services", Services);
         app.module("search", Search);
 
         app.indexRouter = new IndexRouter({
@@ -33,8 +37,6 @@ function (Marionette, IndexRouter, IndexController, Mainmenu, Favourite, Search)
     app.on("start", function(){
         if (Backbone.history){ Backbone.history.start(); }
     });
-
-    
 
     return (window.app = app);
 });

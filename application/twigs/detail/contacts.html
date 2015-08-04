@@ -4,30 +4,36 @@
 	</div>					
 	<div class="body">
 		<div class="row">
-			<div class="col-md-6 col-sm-6">
-				<span class="author-name">{{object.contact}}</span>
-				<div class="contacts-list-cont">
-					{% for contact in object.compiled.contacts %}
-						<p>{{ contact.value|contacthide }}</p>
-					{% endfor %}
-				</div>
-				<button class="button style1">Показать контакты</button>
-			</div>
-			{% if object.compiled.author.org_type == 2 %}
+			{% if object.is_published > 0 or check_object_access(object, 'object.control') %}
 				<div class="col-md-6 col-sm-6">
-					<p>{{ object.compiled.author.org_name }}</p>
-					{% if object.compiled.author.logo %}
-						<div class="img-cont"><img src="{{ staticfile(object.compiled.author.logo['120x90']) }}"></div>
-					{% endif %}
-					<p><span class="moreinfo span-link">Все объявления компании</span></p>
-					<p>{{ object.compiled.author.org_post_address }}</p>
-					<p><i class="ico phone"></i>{{ object.compiled.author.org_phone }}</p>
-					
-					<!-- <p><i class="ico vkontakte"></i><span class="span-link">http://vk.com/454545</span></p>
-					<p><i class="ico twitter"></i><span class="span-link">http://twitter.com/acc</span></p>
-					<p><i class="ico instagram"></i><span class="span-link">http://link.com</span></p>
-					<p><i class="ico email"></i><span class="span-link">sss@domain.ru</span></p>
-					<p><i class="ico site"></i><span class="span-link">http://site.ru</span></p> -->
+					<span class="author-name">{{object.contact}}</span>
+					<div class="contacts-list-cont">
+						{% for contact in object.compiled.contacts %}
+							<p>{{ contact.value|contacthide }}</p>
+						{% endfor %}
+					</div>
+					<button class="button style1">Показать контакты</button>
+				</div>
+				{% if object.compiled.author.org_type == 2 %}
+					<div class="col-md-6 col-sm-6">
+						<p>{{ object.compiled.author.org_name }}</p>
+						{% if object.compiled.author.logo %}
+							<div class="img-cont"><img src="{{ staticfile(object.compiled.author.logo['120x90']) }}"></div>
+						{% endif %}
+						<p><span class="moreinfo span-link">Все объявления компании</span></p>
+						<p>{{ object.compiled.author.org_post_address }}</p>
+						<p><i class="ico phone"></i>{{ object.compiled.author.org_phone }}</p>
+						
+						<!-- <p><i class="ico vkontakte"></i><span class="span-link">http://vk.com/454545</span></p>
+						<p><i class="ico twitter"></i><span class="span-link">http://twitter.com/acc</span></p>
+						<p><i class="ico instagram"></i><span class="span-link">http://link.com</span></p>
+						<p><i class="ico email"></i><span class="span-link">sss@domain.ru</span></p>
+						<p><i class="ico site"></i><span class="span-link">http://site.ru</span></p> -->
+					</div>
+				{% endif %}
+			{% else %}
+				<div class="col-md-12 col-sm-12">
+					Объявление снято с публикации, контактные данные не доступны.
 				</div>
 			{% endif %}
 		</div>

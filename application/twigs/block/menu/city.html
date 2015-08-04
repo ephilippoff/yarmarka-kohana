@@ -1,7 +1,15 @@
-<div class="popup-menu-cont iLight-cont js-citymenu">
-	<ul>
-		{% for city in cities %}
-			<li><a href="{{ domain(city.seo_name, FALSE) }}">{{ city.title}}</a></li>
-		{% endfor %}
-	</ul>
+{% set cols = 3 %}
+{% set rows = (cities|length/cols)|round %}
+{% set i = 0 %}
+<div class="popup-menu-cont iLight-cont js-citymenu border-color-crimson right">
+	{% for col in 0..cols %}
+		<ul>
+			{% for city in cities|slice(i, rows) %}
+				<li>
+					<a href="{{ domain(city.seo_name, FALSE) }}">{{ city.title}}</a>
+				</li>
+			{% endfor %}
+		</ul>
+		{% set i = i + rows %}
+	{% endfor %}
 </div>

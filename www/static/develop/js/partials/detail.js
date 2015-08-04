@@ -3,8 +3,10 @@ define([
     "templates",
     "jssorSlider",
     "partials/behaviors/favourite",
-    "partials/behaviors/search"
-], function (templates, jssorSlider, FavouriteBehavior, SearchBehavior) {
+    "partials/behaviors/search",
+    "partials/behaviors/ocontrol",
+    "partials/behaviors/services"
+], function (templates, jssorSlider, FavouriteBehavior, SearchBehavior, OControlBehavior, ServicesBehavior) {
     "use strict";
 
      return Marionette.LayoutView.extend({
@@ -15,6 +17,12 @@ define([
             },
             SearchBehavior: {
                 behaviorClass: SearchBehavior
+            },
+            OControlBehavior: {
+                behaviorClass: OControlBehavior
+            },
+            ServicesBehavior: {
+                behaviorClass: ServicesBehavior
             }
         },
 

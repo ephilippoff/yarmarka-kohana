@@ -60,4 +60,9 @@ class Twig_Functions
         }
         return trim($str);
     }
+
+    public static function check_object_access($object, $action)
+    {
+        return Acl::check_object($object, $action);
+    }
 }

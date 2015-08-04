@@ -1,0 +1,17 @@
+<div class="service-block-cont module">
+	<div class="button js-favourite" data-id="{{object.id}}">
+		{% set is_favourite = '' %}
+		{% if object.id in favourites %}
+			{% set is_favourite = 'in' %}
+		{% endif %}
+		<i class="ico ico19 favorit-ico {{is_favourite}}"></i> <span class="js-favourite-caption">{{is_favourite ? 'В избранном': 'В избранное'}}</span>
+	</div>
+	{% if object.is_published == 0 %}
+		<div class="line">Объявление снято</div>
+	{% elseif object.is_published == 1 %}
+		<div class="line color1">Объявление опубликовано</div>
+	{% endif %}
+	<div class="line color1">Код объявления: {{ object.id }}</div>
+	<div class="line color1">Обновлено: {{ object.date_created|date('d.m.Y') }}</div>
+	<div class="line color1">Просмотров: {{ object.visits }}</div>
+</div>

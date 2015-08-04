@@ -21,6 +21,8 @@ class Controller_Detail extends Controller_Template {
             return;
         }
 
+        $this->acl = new Acl("object");
+
         //TODO set header Last-Modified
         //$this->output->set_header('Last-Modified: '.gmdate('D, d M Y H:i:s', mysql_to_unix($last_modified)).' GMT');
     }
@@ -36,6 +38,7 @@ class Controller_Detail extends Controller_Template {
 
         if ($object->active == 0) {
            throw new HTTP_Exception_404;
+           return;
         }
 
         $twig = Twig::factory('detail/index');
@@ -44,8 +47,12 @@ class Controller_Detail extends Controller_Template {
 
         //блок информации которую можно закеширвоать всю разом
         $detail_info = $this->get_detail_info($object, array(
-            "crumbs", "object", "object_compiled", "author",
-            "attributes", "images"
+            "crumbs", 
+            "object", 
+            "object_compiled", 
+            "author",
+            "attributes", 
+            "images"
         ));
 
         foreach ((array) $detail_info as $key => $item) {
@@ -54,7 +61,10 @@ class Controller_Detail extends Controller_Template {
 
         //блоки взаимодействия которые кешируются отдельно
         $detail_interact = $this->get_detail_interact($object, array(
-            "user", "messages", "search_cache", "similar"
+            "user", 
+            "messages", 
+            "search_cache", 
+            "similar"
         ));
 
         //favourites

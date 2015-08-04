@@ -24,7 +24,7 @@
 				</article>
 			</div>
 			<div class="col-md-3">
-				{% include 'detail/controls' %}
+				{% include 'detail/info' %}
 			</div>
 		</div>
 		
@@ -51,9 +51,18 @@
 {% block rightside %}
 	<div class="col-md-5">
 		<aside>
+			{% if check_object_access(object, 'object.control') %}
+				{% include 'detail/controls' %}
+			{% endif %}
+
 			{% include 'detail/services' %}
-			{% include 'detail/similar' %}
-			{% include 'detail/comments' %}
+			
+			{% if check_object_access(object, 'object.control') not in ["by_role", "owner"] %}
+				{% include 'detail/similar' %}
+			{% endif %}
+			{#
+				{% include 'detail/comments' %}
+			#}
 		</aside>
 	</div>
 {% endblock rightside %}
