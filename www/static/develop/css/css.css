@@ -7,7 +7,7 @@ body h1 {font-size: 16px;font-weight: normal;display: inline;}
 
 /* css helpers */
 .bg-color-crimson{background-color:#D90000}.border-color-crimson{border-color:#D90000}
-.border-color-blue{border-color: #2B587A;}
+.bg-color-blue{background-color: #2B587A;}.border-color-blue{border-color: #2B587A;}
 .p5{padding:5px}.p10{padding:10px}.p15{padding:15px}
 .white{color:white !important}.black{color:black !important}.red{color:red !important;}.green{color:green !important;}
 .dib{display: inline-block}
@@ -16,13 +16,15 @@ body h1 {font-size: 16px;font-weight: normal;display: inline;}
 .mh-style1{min-height: 590px;}
 .relative{position: relative}
 .clear{clear: both;}
+.w100p{width: 100%;}
 /* css helpers end */
 
 /* mini-elements */
 .button{cursor:pointer; text-align:center; border:0; padding:0}
 .button.bg-color-crimson:hover{background-color: #F98C8C;}
-.button.style1{padding: 7px 10px; color:#fff; background-color: #2370a6;}
-.button.style1:hover{background-color: #3c96d6;}
+.button.bg-color-blue:hover{background-color: #4381AF}
+.button.style1{padding: 7px 10px; color:#fff;}
+.button.style2{font-size: 16px;font-weight: 700;height: 30px;}
 .clearfix:after{display: block;clear: both;height: 0;content: '';}
 .rub {display: inline-block;font-size: 16px;line-height: 6px;border-bottom: 1px solid #9F9F9F;width: 0.4em;font-weight: bold;color: #9F9F9F;}
 .link {color: #2a76a1;text-decoration: none;font-size: 12px;font-weight: bold;}
@@ -33,12 +35,18 @@ input[type="text"], input[type="password"]{background-color: #FFFFFF;border: 1px
 textarea{background-color: #FFFFFF;border: 1px solid #89898c;color: #384354;font-size: 12px;padding: 5px;}
 select{background-color: #FFFFFF;border: 1px solid #89898c;color: #384354;padding:2px;height: 25px;}
 
+.required-label {position: absolute;top: 0;width: 230px;right: -230px;height: 25px}
+.required-label .msg {position: absolute;top: 0;left: 5px;padding: 0px 10px;color: #fff;font-size: 12px; line-height: 25px;}
+.required-label .msg:after {content: '';position: absolute;width: 0;height: 0;bottom: 10px;left: -5px;border-right: 5px solid #2B587A;border-top: 5px solid transparent;border-bottom: 5px solid transparent;top: 8px;}
+/*.required-label .msg.bg-color-blue:after{}*/
+
 .popup-menu-cont.left{left: 0px;}
 .popup-menu-cont.right{right: 0px;}
 
 .ico{display: inline-block;vertical-align: sub;}
 .ico16{width:16px;height:16px;}.ico17{width:17px;height:17px;}.ico19{width:19px;height:19px;}.ico22{width:22px;height:22px;}
 .vkontakte-ico16{background: url(/images/vkontakte16.png) no-repeat center center;width:16px;height:16px;}
+.close-ico16{background: url("/images/close16.png") no-repeat center center;width:16px;height:16px;}
 .vkontakte-ico17{background: url('/images/ico4.png') no-repeat;width:17px;height:17px;background-position: 0px -104px;}
 .twitter-ico17{background: url('/images/ico4.png') no-repeat;width:17px;height:17px;background-position: 0px -86px;}
 .instagram-ico17{background: url('/images/ico4.png') no-repeat;width:17px;height:17px;background-position: 0px -122px;}
@@ -49,6 +57,14 @@ select{background-color: #FFFFFF;border: 1px solid #89898c;color: #384354;paddin
 .favorit-ico.in{background-position: 0 0;}
 .premium-ico22{background: url('/images/clock22.png') no-repeat center center;width:22px;height:22px;}
 .leader-ico22{background: url('/images/to_publish22.png') no-repeat center center;width:22px;height:22px;}
+
+#popup-layer {background: #000;bottom: 0;display: none;left: 0;position: fixed;right: 0;top: 0;opacity: .3;z-index: 1000;}
+.popup-wrp {left: 0;margin: auto;position: fixed;top: 70px;width: 100%;z-index: 1001;}
+.popup-window {position: relative;background-color: #f9f9f9;margin: auto;padding: 5px;box-sizing: border-box;}
+.popup-window .header {font-size: 17px;position: relative;min-height: 40px;padding: 5px 40px 5px 5px;box-sizing: border-box;line-height: 1.5;}
+.popup-window .cont{padding: 5px;}
+.popup-window .popup-window-close {height: 30px;width: 30px;background: #ccc;position: absolute;top: 5px;right: 5px;cursor: pointer;text-align: center;}
+.popup-window .inp-cont {position: relative;margin-bottom: 5px;}
 /* mini-elements end */
 
 .menu-cont1{line-height: 25px; border-bottom: 1px solid #D90000;}

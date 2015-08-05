@@ -1,0 +1,27 @@
+<table>
+	<thead>
+		<th>Услуга</th>
+		<th>Цена</th>
+	</thead>
+	<tbody>
+	<tr>
+		<td>"<%=info.service.title%>" для объявления "<%=info.object.title%>"</td>
+		<td>
+			<% if (info.code != 200) { %>
+				<span><%=info.service.price%> руб.</span>
+			<% } else { %>
+				<span>Бесплатно</span>
+			<% } %>
+		</td>
+	</tr>
+	</tbody>
+</table>
+
+<% if (info.code > 200 && info.code < 400) { %>
+	<%=info.text%>
+<% } %>
+
+<% if (info.code >= 400) { %>
+	<p>Вы не можете воспользоваться этой услугой, потомуч объявление заполнено не полностью.</p>
+	<p><%=info.text%></p>
+<% } %>

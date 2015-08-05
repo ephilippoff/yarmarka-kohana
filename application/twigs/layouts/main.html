@@ -22,9 +22,11 @@
 
     </head>
     <body class="{% block bodyclass %}{% endblock bodyclass%}">
+        <div id="popup-layer" style="display: none;"></div>
         <div class="wrapper container {% block wrapperclass %}{% endblock wrapperclass %}">
             {% block body %}{% endblock body%}
         </div>
+        <div id="windows"></div>
         <!-- inject:js -->
         <script>
           var _globalSettings =  { 

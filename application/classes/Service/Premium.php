@@ -1,9 +1,31 @@
 <?php defined('SYSPATH') OR die('No direct script access.');
 
-class Service_Premium
+class Service_Premium extends Service
 {
 	const PREMIUM_SETTING_NAME = 'premium';
 	const PREMIUM_DAYS = 7;
+
+	protected $_name = "premium";
+	protected $_is_multiple = TRUE;
+
+	public function __construct()
+	{
+		$this->_initialize();
+	}
+
+	public function get()
+	{
+
+		return array(
+			"name" => $this->_name,
+			"price" => ($this->_is_multiple) ? $this->getPriceMultiple() : $this->getPrice()
+		);
+	}
+
+	public function apply()
+	{
+
+	}
 
 	static function apply_prepayed($object_id, $city_id = NULL, $user = NULL)
 	{

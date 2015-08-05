@@ -2,10 +2,10 @@
 define([
     "templates",
     "jssorSlider",
-    "partials/behaviors/favourite",
-    "partials/behaviors/search",
-    "partials/behaviors/ocontrol",
-    "partials/behaviors/services"
+    "views/partials/behaviors/favourite",
+    "views/partials/behaviors/search",
+    "views/partials/behaviors/ocontrol",
+    "views/partials/behaviors/services"
 ], function (templates, jssorSlider, FavouriteBehavior, SearchBehavior, OControlBehavior, ServicesBehavior) {
     "use strict";
 

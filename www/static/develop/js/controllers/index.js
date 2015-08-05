@@ -3,10 +3,10 @@ define([
     "templates",
     "base/utils",
 
-    "partials/index",
-    "partials/search",
-    "partials/detail",
-    "partials/userSearch",
+    "views/partials/index",
+    "views/partials/search",
+    "views/partials/detail",
+    "views/partials/userSearch",
 
     "modules/filters"
 ], 

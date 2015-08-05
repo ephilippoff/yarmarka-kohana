@@ -2,7 +2,7 @@
 define([
     "templates",
     "jssorSlider",
-    "partials/behaviors/search"
+    "views/partials/behaviors/search"
 ], function (templates, jssorSlider, SearchBehavior) {
     "use strict";
 

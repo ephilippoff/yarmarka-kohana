@@ -1,0 +1,17 @@
+<div class="popup-window w500">	
+	<div class="header">
+		<%=title%>
+		<div class="popup-window-close js-close">
+			<i class="ico close-ico16"></i>
+		</div>			
+	</div>					
+	<div class="cont">
+		<form>		
+			<div class="w100p js-service-cont"></div>
+			<% if (code < 400) { %>
+				<button class="w100p button style2 bg-color-blue white mb5 js-tocontinue">В корзину и продолжить</button>
+				<button class="w100p button style2 bg-color-blue white js-tocart">Перейти к оформлению</button>
+			<% } %>
+		</form>
+	</div>
+</div>

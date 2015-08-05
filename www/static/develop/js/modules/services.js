@@ -1,29 +1,44 @@
 /*global define */
 define([
     "marionette",
-    "backbone"
-], function (Marionette, Backbone) {
+    "backbone",
+    "templates"
+], function (Marionette, Backbone, templates) {
     'use strict';
 
     var ServiceModel = Backbone.Model.extend({
 
     });
 
+    var ServiceUpView = Marionette.ItemView.extend({
+        template: templates.components.services.up
+    });
+
     return Marionette.Module.extend({
         up: function(id, options) {
+            
             var serviceModel = new ServiceModel();
-            serviceModel.urlRoot = "/ajax/service_up/"+id;
+            serviceModel.urlRoot = "/rest_service/check_freeup";
             options.error = options.error || function() {};
             options.success = options.success || function() {};
-            serviceModel.save({}, {
+            serviceModel.save({
+                id: id,
+                is_check: true
+            }, {
                 success: function(model) {
                     var resp = model.toJSON();
-                    if (resp.code == 200) {
-                        options.success(resp);
-                    } else {
-                        options.error(resp);
-                    }
-                    
+
+                    app.windows.vent.trigger("showWindow", "service", {
+                        title: "Услуга поднятия объявления",
+                        serviceView : new ServiceUpView({
+                            model: new ServiceModel({
+                                info: resp
+                            })
+                        }),
+                        code: resp.code,
+                        success: options.success,
+                        error: options.error
+                    });
                 }
             });
         }

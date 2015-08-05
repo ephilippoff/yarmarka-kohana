@@ -10,6 +10,14 @@ define(function(require){
             ilistFilterItem: require('lib/text!templates/filters/ilistFilterItem.tmpl'),
             textFilterItem: require('lib/text!templates/filters/textFilterItem.tmpl'),
             listPopup: require('lib/text!templates/filters/listPopup.tmpl'),
+        },
+        components: {
+            windows: {
+                service: require('lib/text!templates/windows/service.tmpl'),
+            },
+            services: {
+                up: require('lib/text!templates/services/up.tmpl'),
+            },
         }
     };
 });

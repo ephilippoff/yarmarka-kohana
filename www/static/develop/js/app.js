@@ -3,13 +3,14 @@ define([
     "marionette",
     "routers/index",
     "controllers/index",
+    "modules/windows",
     "modules/menu",
     "modules/favourite",
     "modules/ocontrol",
     "modules/search",
     "modules/services"
 ], 
-function (Marionette, IndexRouter, IndexController, Mainmenu, Favourite, Ocontrol, Search, Services) {
+function (Marionette, IndexRouter, IndexController, Windows, Mainmenu, Favourite, Ocontrol, Search, Services) {
     "use strict";
 
     var app = new Marionette.Application();
@@ -19,7 +20,9 @@ function (Marionette, IndexRouter, IndexController, Mainmenu, Favourite, Ocontro
 
     app.addInitializer(function(){
         console.log("app initialized");
+        app.backLayer = $("#popup-layer");
 
+        app.module("windows", Windows);
         app.module("menu", Mainmenu);
         app.module("favourite", Favourite);
         app.module("ocontrol", Ocontrol);

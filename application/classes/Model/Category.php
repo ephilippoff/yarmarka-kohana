@@ -302,6 +302,25 @@ class Model_Category extends ORM {
 
 		return $result;
 	}
+
+	function get_parent($category_id)
+	{
+		$result = array();
+
+		$category = ORM::factory('Category')->where("id","=",$category_id)->find();
+
+		if ($category->loaded()) 
+		{
+			$result[] = $category->get_row_as_obj();
+			
+			if ($category->parent_id) 
+			{
+				$result = array_merge($result, self::get_parent($category->parent_id));
+			}
+		}
+
+		return $result;
+	}
 }
 
 /* End of file Category.php */

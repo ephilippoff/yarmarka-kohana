@@ -1,8 +1,8 @@
 /*global define */
 define(['marionette',
     'templates',
-    'views/components/windows/Auth'
-], function (Marionette, templates, AuthView) {
+    'views/components/windows/service'
+], function (Marionette, templates, ServiceView) {
     'use strict';
 
     var ErrorWindow = Marionette.ItemView.extend({
@@ -29,20 +29,20 @@ define(['marionette',
         $layer: null,
         windows : [],
         windowView: {
-            login: AuthView,
+            service: ServiceView,
             //error_register: ErrorWindow,
             //error_forbidden: ErrorWindow,
 
         },
         zIndex: {
-            gallery: "z150",
-            gomonitor: "z250"
+            // gallery: "z150",
+            // gomonitor: "z250"
         },
         label: {
             //panel: {class:".s_panel_label", winclass:".leftsidecont", depency:[] },
         },
         blackLayer: {
-            login : true,
+            service : true,
         },
         transparentLayer: {
             //galleryItem: "z151"
