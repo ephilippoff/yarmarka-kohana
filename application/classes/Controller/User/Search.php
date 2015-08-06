@@ -8,13 +8,24 @@ class Controller_User_Search extends Controller_Template {
     public function before()
     {
         parent::before();
+        $this->start = microtime(true);
         $this->use_layout = FALSE;
         $this->auto_render = FALSE;
         $this->domain = new Domain();
         $this->twig = Twig::factory('search/user/index');
 
         $this->user = Auth::instance()->get_user();
-        
+
+        if ( $this->request->query("user_id") ) {
+            $user = ORM::factory('User', $this->request->query("user_id") );
+            if ($user->loaded()) {
+                $this->user = $user;
+            } else {
+                throw new HTTP_Exception_404;
+                return;
+            }
+        }
+
         if (!$this->user)
         {
             $this->redirect(Url::site('user/login?return='.$this->request->uri()));
@@ -23,6 +34,7 @@ class Controller_User_Search extends Controller_Template {
         $uri = $this->request->uri();
         $route_params = $this->request->param();
         $query_params = $this->request->query();
+        $this->twig->query_url_str = (count($query_params)) ? "?".http_build_query($query_params) : "";
         $this->twig->main_category = $this->domain->get_main_category();
         $category_path = ( isset($route_params['category_path']) ) ? $route_params['category_path'] : $this->twig->main_category;
         $this->twig->category_url = $category_path;
@@ -163,7 +175,9 @@ class Controller_User_Search extends Controller_Template {
     public function after()
     {
         parent::after();
+        $this->twig->php_time = microtime(true) - $this->start;
         $this->response->body($this->twig);
+
     }
 
     public function url_with_query($params = array(), $unset_params = array()) {

@@ -2,8 +2,7 @@
 	<h1>Личный кабинет. {{ seo_attributes.h1 ? seo_attributes.h1: category.title }}</h1> <span class="count">{{ link_counters[s_host ~ s_suri] }}</span>
 
 	{% for crumb in crumbs if crumb.uri != main_category  %}
-
-			/ <a href="{{ url(canonical_url ~ '/' ~ crumb.uri ~ crumb.query) }}">{{crumb.title}}</a>
+			/ <a href="{{ url(canonical_url ~ '/' ~ crumb.uri ~ crumb.query) ~ query_url_str}}">{{crumb.title}}</a>
 	{% endfor %}
 	<span>({{main_search_result_count}})</span>
 </div>
