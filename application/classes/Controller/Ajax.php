@@ -1372,7 +1372,7 @@ class Controller_Ajax extends Controller_Template
 		{
 			Email::send( 
 					Kohana::$config->load('common.kupon_requests_sending'), 
-					Kohana::$config->load('common.default_from'), 
+					Kohana::$config->load('email.default_from'), 
 					'Поступила заявка на обратный звонок по купону №'.$object_id, 
 					"ФИО: {$fio}<br>Телефон: {$phone}<br>Комментарий: {$comment}" );		
 		}
