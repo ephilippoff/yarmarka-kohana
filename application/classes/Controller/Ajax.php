@@ -1334,10 +1334,52 @@ class Controller_Ajax extends Controller_Template
 		}
 				
 		$this->json = array('status' => $status);		
-	}	
+	}
+	
+	public function action_kupon_request()
+	{
+		$this->json = array();
+		$this->json['code'] = 200;
+		
+		$object_id = (int)$this->request->post('object_id');
+		$fio	   = strip_tags($this->request->post('fio'));
+		$phone	   = strip_tags($this->request->post('phone'));
+		$comment   = strip_tags($this->request->post('comment'));
+		
+		$kupon_request = ORM::factory('Object_Kupon_Requests');
+		$kupon_request->fio			 = $fio;
+		$kupon_request->phone		 = $phone;
+		$kupon_request->object_id	 = $object_id;
+		$kupon_request->comment		 = $comment;
+		$kupon_request->status		 = 0;
+		$kupon_request->date_created = date('Y-m-d H:i:s');		
+		
+		try
+        {			
+            $kupon_request->save();					
+        }
+        catch (ORM_Validation_Exception $e)
+        {
+			foreach ($e->errors('validation') as $value) 
+			{
+				$this->json['errors'][] = $value;
+			}
+			
+			$this->json['code'] = 500;
+        }
+		
+		if ($this->json['code'] == 200)
+		{
+			Email::send( 
+					Kohana::$config->load('common.kupon_requests_sending'), 
+					Kohana::$config->load('common.default_from'), 
+					'Поступила заявка на обратный звонок по купону №'.$object_id, 
+					"ФИО: {$fio}<br>Телефон: {$phone}<br>Комментарий: {$comment}" );		
+		}
+	}
 
 	 
-	 public function after()
+	public function after()
 	{
 		parent::after();
 		if ( ! $this->response->body())
