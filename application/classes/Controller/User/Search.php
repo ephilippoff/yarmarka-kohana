@@ -25,6 +25,7 @@ class Controller_User_Search extends Controller_Template {
         $query_params = $this->request->query();
         $this->twig->main_category = $this->domain->get_main_category();
         $category_path = ( isset($route_params['category_path']) ) ? $route_params['category_path'] : $this->twig->main_category;
+        $this->twig->category_url = $category_path;
         $searchuri = new Search_Url($category_path, $query_params);
         $this->params_by_uri = $searchuri;
 

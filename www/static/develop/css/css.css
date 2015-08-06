@@ -218,6 +218,7 @@ select{background-color: #FFFFFF;border: 1px solid #89898c;color: #384354;paddin
 /* subcategories-cont end */
 
 /* view-container */
+.view-container {padding:20px;}
 .view-container .buttons-cont{margin-top: 10px;box-sizing: border-box;float: right;}
 .view-container .buttons-cont ul{padding: 0px 20px;}
 .view-container .buttons-cont ul li{border: 1px solid white;border-radius: 3px;width: 200px;text-align: center;padding: 5px;margin-bottom: 5px;}
@@ -249,6 +250,49 @@ select{background-color: #FFFFFF;border: 1px solid #89898c;color: #384354;paddin
 .job-theme .subcategories-cont ul li span {color: gray;}
 .job-theme a{color:white}
 /* skin-theme2 end */
+
+/* skin-theme3 */
+.light-blue-theme {color:black}
+.light-blue-theme .subcategories-cont ul li a{color: #0C4E74;}
+.light-blue-theme .subcategories-cont ul li a.active{ color:#F23817;}
+.light-blue-theme .menu-cont2{background-color: #12B0EC;}
+.light-blue-theme .view-container{background: url(http://www.free-patterns.info/wp-content/uploads/2015/04/light-blue-mixed-squares-v27315.png);}
+.light-blue-theme .subcategories-cont ul li span {color: black;}
+.light-blue-theme a{color: #0C4E74;text-decoration: underline;}
+.light-blue-theme.obj-control-head {background-color: #12B0EC;}
+/* skin-theme3 end */
+
+/* skin-theme4 */
+.blue-subtle-theme{color:white}
+.blue-subtle-theme .subcategories-cont ul li a{color: #fff;}
+.blue-subtle-theme .subcategories-cont ul li a.active{ color:#E96F4F;}
+.blue-subtle-theme .menu-cont2{background-color: #2D5169;}
+.blue-subtle-theme .view-container{background: url(http://www.free-patterns.info/wp-content/uploads/2015/03/blue-subtle-wall-of-lines-21315.png);}
+.blue-subtle-theme .subcategories-cont ul li span {color: black;}
+.blue-subtle-theme a{color:white; text-decoration: underline;}
+.blue-subtle-theme.obj-control-head {background-color: #2D5169;}
+/* skin-theme4 end */
+
+
+/* skin-theme5 */
+.dark-pagoda-theme {color:white}
+.dark-pagoda-theme .subcategories-cont ul li a{color: #fff;}
+.dark-pagoda-theme .menu-cont2{background-color: #2B2B2B;}
+.dark-pagoda-theme .view-container{background: url(http://www.free-patterns.info/wp-content/uploads/2014/10/dark-pagoda-roof-241014.png);}
+.dark-pagoda-theme .subcategories-cont ul li span {color: gray;}
+.dark-pagoda-theme a{color:white; text-decoration: underline;}
+/* skin-theme5 end */
+
+/* skin-theme6 */
+.green-dense-theme{color: black}
+.green-dense-theme .subcategories-cont ul li a{}
+.green-dense-theme .subcategories-cont ul li a.active{ color:#E96F4F;}
+.green-dense-theme .menu-cont2{background-color: #8EC745;}
+.green-dense-theme .view-container{background: url(http://www.free-patterns.info/wp-content/uploads/2014/08/green-dense-circle-wall-2911814.png);}
+.green-dense-theme .subcategories-cont ul li span {color: gray;}
+.green-dense-theme a{ text-decoration: underline;}
+.green-dense-theme.obj-control-head {background-color: #8EC745;}
+/* skin-theme6 end */
 
 
 .main-theme{background: url(https://raw.githubusercontent.com/subtlepatterns/SubtlePatterns/gh-pages/classy_fabric.png);padding: 20px;color:white;min-height: 320px;}

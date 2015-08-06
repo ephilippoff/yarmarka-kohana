@@ -26,20 +26,21 @@
 		{% if object.price > 0 %}
 			<p class="amount">{{ object.price|number_format(0, ' ', ' ') }} руб.</p>
 		{% endif %}
-
-		{% if object.compiled.attributes|length > 0 %}
-			<table class="table-details">									
-				<tbody>
-					{% for attr in object.compiled.attributes|slice(0, 3) if attr.value %}
-					<tr>
-						<td class="attr-title">{{ attr.title }}</td>
-						<td class="value">{{ attr.value|e }}</td>
-					</tr>
-					{% endfor %}
-			</tbody></table>
-
-
-		{% endif %}
+		
+		<div>
+			Ваше объявление в последний раз видели на 3й странице в рубрике легковые автомобили. 
+			Воспользуйтесь услугами чтобы увеличить количество просмотров.
+		</div>
+		<table>
+			<tbody>
+				<tr>
+					<td>Премиум</td>
+					<td>Лидер</td>
+					<td>В газету</td>
+					<td>В другие города</td>
+				</tr>
+			</tbody>
+		</table>
 	</td>
 	<td class="td td-3">
 		<div class="button js-ocontrol-publish" data-id="{{object.id}}">
