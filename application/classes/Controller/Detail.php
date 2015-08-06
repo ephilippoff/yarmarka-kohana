@@ -160,5 +160,14 @@ class Controller_Detail extends Controller_Template {
         parent::after();
         $object = $this->request->param("object");
         Cookie::save_toobject_history($object->id);
+
+        $visits = Cachestat::factory($object->id."object_visit_counter")->fetch();
+        $visits = (!$visits) ? 0 : $visits;
+        $visits = $visits + 1;
+        Cachestat::factory($object->id."object_visit_counter")
+                    ->add(0, $visits);
+
+        Cachestat::factory("objects_in_visit_counter")
+                    ->add($object->id, $object->id);
     }
 } // End Detail

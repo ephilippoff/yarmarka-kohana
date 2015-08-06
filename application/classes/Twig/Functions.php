@@ -65,4 +65,9 @@ class Twig_Functions
     {
         return Acl::check_object($object, $action);
     }
+
+    public static function get_stat_cached_info($id)
+    {
+        return Cachestat::factory($id."insearch")->fetch();
+    }
 }

@@ -127,7 +127,7 @@ class Controller_Search extends Controller_Template {
         //pagination end
 
         //save search settings cache
-        if (!$this->cached_search_info AND $search_info->s_suri == "/".$search_info->canonical_url) {
+        if (!$this->cached_search_info AND $search_info->is_canonical) {
             $cache = $this->save_search_info_to_cache(array(
                     "info" => $search_info,
                     "canonical_url" =>  $search_info->canonical_url,
@@ -160,12 +160,32 @@ class Controller_Search extends Controller_Template {
 
         foreach ((array) $search_info as $key => $item) {
             $twig->{$key} = $item;
-        }
+        }        
+        $this->cache_stat($twig);
         $twig->php_time = microtime(true) - $start;
         $this->response->body($twig);
+
     }
 
-    public function get_search_info() {
+    public function cache_stat($info)
+    {
+
+        $result = array();
+
+        $result['ids'] = array_map(function($item){
+            return $item["id"];
+        }, $info->main_search_result);
+
+        $result['title'] = isset($info->seo_attributes["h1"]) ? $info->seo_attributes["h1"] : $info->category->title;
+        $result['url'] = $info->canonical_url;
+        $result['page'] = ($info->search_params["page"]) ? $info->search_params["page"] : 1;
+        $result['city_id'] = $info->city_id;
+
+        Cachestat::factory($info->category_id."search")->add(sha1(serialize($result)), $result);
+    }
+
+    public function get_search_info()
+    {
         if ($this->cached_search_info) {
             return new Obj($this->cached_search_info);
         }
@@ -178,7 +198,8 @@ class Controller_Search extends Controller_Template {
         return $this->get_search_info_by_filters();
     }
 
-    public function get_search_info_by_filters() {
+    public function get_search_info_by_filters()
+    {
         $info = new Obj();
 
         $info->enable_link_couters = TRUE;
@@ -200,7 +221,10 @@ class Controller_Search extends Controller_Template {
             $info->canonical_url = "";
         }
         if ($info->s_suri <> "/".$info->canonical_url) {
-             $info->show_canonical = TRUE;
+            $info->show_canonical = TRUE;
+            $info->is_canonical = FALSE;
+        } else {
+             $info->is_canonical = TRUE;
         }
 
         $info->category = $this->params_by_uri->get_category();
@@ -240,7 +264,8 @@ class Controller_Search extends Controller_Template {
         return $info;
     }
 
-    public function get_search_info_by_sphinx($search_text) {
+    public function get_search_info_by_sphinx($search_text)
+    {
         $info = new Obj();
 
         $info->search_text = $search_text;
@@ -308,7 +333,8 @@ class Controller_Search extends Controller_Template {
         return $info;
     }
 
-    public function save_search_info_to_cache($options = array()) {
+    public function save_search_info_to_cache($options = array())
+    {
         $options = new Obj($options);
         if ($options->canonical_url) {
             $options->canonical_url = "/".$options->canonical_url;
@@ -324,7 +350,8 @@ class Controller_Search extends Controller_Template {
         return $suc;
     }
 
-    public function get_search_info_from_cache() {
+    public function get_search_info_from_cache()
+    {
         $search_info = ORM::factory('Search_Url_Cache')
                         ->get_search_info($_SERVER["HTTP_HOST"].$_SERVER["REQUEST_URI"])
                         ->find();
@@ -332,7 +359,8 @@ class Controller_Search extends Controller_Template {
         return ($search_info->loaded()) ? $search_info->get_row_as_obj() : FALSE;
     }
 
-    public function url_with_query($params = array(), $unset_params = array()) {
+    public function url_with_query($params = array(), $unset_params = array())
+    {
         $query_params = $this->request->query();
         foreach ($params as $key => $value) {
             $query_params[$key] = $value;
