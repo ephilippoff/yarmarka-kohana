@@ -3,6 +3,15 @@
 		<span>Хотите получить отклик быстрее? Воспользуйтесь услугами</span>
 	</div>
 	<div class="body row">
+		<div class="col-md-12">
+			{% set statInfo = get_stat_cached_info(object.id) %}
+				{% if statInfo %}
+				{{ statInfo }} <br>
+				Для увеличения количества просмотров, предлагаем слудющие услуги:
+			{% endif %}
+		</div>
+	</div>
+	<div class="body row">
 		<div class="list list1 col-md-6">
 			<span class="item span-link"><i class="ico premium"></i>Премиум (180р)</span>
 			<span class="item span-link"><i class="ico leader"></i>Лидер (100р)</span>

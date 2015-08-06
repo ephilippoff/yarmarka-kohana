@@ -177,7 +177,7 @@ class Controller_Search extends Controller_Template {
         }, $info->main_search_result);
 
         $result['title'] = isset($info->seo_attributes["h1"]) ? $info->seo_attributes["h1"] : $info->category->title;
-        $result['url'] = $info->canonical_url;
+        $result['url'] = "http://".$info->s_host.$info->s_suri;
         $result['page'] = ($info->search_params["page"]) ? $info->search_params["page"] : 1;
         $result['city_id'] = $info->city_id;
 
