@@ -1,0 +1,69 @@
+{% extends "layouts/cart" %}
+
+
+{% block content %} 
+	<div class="eshop-cont cart-cont page-addobj w800" style="margin:auto;">
+		<h1>Корзина</h1>
+		{% if cartTempItems|length == 0 %}
+			<p class="msg">Корзина пуста</p>
+			
+		{% endif %}
+		
+		<table class="cart-table table">
+			<tr>
+				<th>#</th>
+				<th>Наименование</th>
+				<th>Количество</th>
+				<th>Цена</th>
+				<th>Сумма</th>
+				<th></th>
+			</tr>
+			{% set i = 1 %}
+			{% for cartItem in cartTempItems %}
+				<tr data-id="{{ cartItem.id }}" data-type="object" data-object-id="{{ cartItem.object_id }}" data-price="{{ cartItem.price }}" data-quantity="{{ cartItem.quantity }}" class="js-cartitem">
+					<td>{{ i }}</td>
+					<td>{{ cartItem.title }}</td>
+					<td>
+
+						{% if cartItem.available != 1 %}
+							<span style="color:red;">{{ cartItem.available }}</span>
+						{% else %}
+							<input type="number" class="js-quanitity" value="{{ cartItem.quantity }}" min="0" {% if cartItem.balance > 0 %} max="{{cartItem.balance}}" {% else %} max="100" {% endif %} >
+						{% endif %}
+
+						
+					</td>
+					<td>{{cartItem.price}}  руб.</td>
+					<td class="js-itemsum itemsum">{{cartItem.price * cartItem.quantity}} руб.</td>
+					<td><a class="js-delete">Удалить</a></td>
+				</tr>
+				{% set i = i + 1 %}
+			{% endfor %}
+			<tr>
+				<td></td>
+				<td></td>
+				<td></td>		
+				<td></td>
+				<td class="js-endsum">{{ sum }} руб.</td>
+			</tr>
+		</table>
+		
+		{% if user %}
+			<div class="ta-l mb20">
+				<input type="submit" class="js-save button submit p20" value="Далее" data-next-page="{{next_page}}">
+			</div>
+		{% else %}
+			<div class="ta-l mb20">
+				<a href="/user/login?return=cart">Вход</a>
+				<a href="/user/registration?return=cart">Регистрация</a>
+			</div>
+		{% endif %}
+			
+		<div class="js-error errors-cont mb20 red"></div>	
+		
+	</div>
+{% endblock content %}
+
+{% block rightside %} 
+	Правая сторона
+{% endblock rightside %}

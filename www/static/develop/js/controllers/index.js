@@ -7,10 +7,11 @@ define([
     "views/partials/search",
     "views/partials/detail",
     "views/partials/userSearch",
+    "views/partials/cart",
 
     "modules/filters"
 ], 
-function (Marionette, templates, utils, IndexPage, SearchPage, DetailPage, UserSearchPage, FiltersModule) {
+function (Marionette, templates, utils, IndexPage, SearchPage, DetailPage, UserSearchPage, CartPage, FiltersModule) {
     "use strict";
     
     return Marionette.Controller.extend({
@@ -47,11 +48,21 @@ function (Marionette, templates, utils, IndexPage, SearchPage, DetailPage, UserS
         },
 
         start_usersearchSection : function() {
-            console.log("search start");
+            console.log("usersearch start");
 
             app.menu.init(["main"]);
             app.favourite.init(["list"]);
             new UserSearchPage({
+                el: "body"
+            });
+        },
+
+        start_cartSection : function() {
+            console.log("cart start");
+
+            app.menu.init(["main"]);
+            app.favourite.init(["list"]);
+            new CartPage({
                 el: "body"
             });
         },

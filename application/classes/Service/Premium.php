@@ -5,6 +5,7 @@ class Service_Premium extends Service
 	const PREMIUM_SETTING_NAME = 'premium';
 	const PREMIUM_DAYS = 7;
 
+	protected $_title = "Премиум";
 	protected $_name = "premium";
 	protected $_is_multiple = TRUE;
 

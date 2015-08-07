@@ -7,4 +7,9 @@ class Twig_Filters
     {
         return Contact::hide($value);
     }
+
+    public static function values($array)
+    {
+        return array_values($array);
+    }
 }
