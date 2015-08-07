@@ -1,12 +1,12 @@
 <div class="images-cont module">
 	{% for photo in object.compiled.images.local_photo %}
 		<div class="image-cont">
-			<img class="" alt="Объявление. {{object.compiled.city}}, {{object.title}}. Фото {{loop.index}}" src="{{ staticfile(photo['original']) }}">
+			<img class="" alt="Объявление. {{object.compiled.city}}, {{object.title}}. Фото {{loop.index}}" src="{{ '/' ~ photo['original'] }}">
 		</div>
 	{% endfor %}
 	{% for photo in object.compiled.images.remote_photo %}
 		<div class="image-cont">
-			<img class="" alt="Объявление. {{object.compiled.city}}, {{object.title}}. Фото {{loop.index}}" src="{{ staticfile(photo) }}">
+			<img class="" alt="Объявление. {{object.compiled.city}}, {{object.title}}. Фото {{loop.index}}" src="{{ photo }}">
 		</div>
 	{% endfor %}
 </div>
