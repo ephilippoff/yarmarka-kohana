@@ -76,4 +76,30 @@ class Twig_Functions
     {
         return Cachestat::factory($id."insearch")->fetch();
     }
+
+    public static function get_cart_info()
+    {
+        return Cart::get_info();
+    }
+
+    public static function get_favorites_info()
+    {
+        return ORM::factory('Favourite')->get_list_by_cookie();
+    }
+
+    public static function get_myobjects_info()
+    {
+
+        $myobject_count = Search::searchquery(
+                array(
+                    "active" => TRUE,
+                    "published" =>TRUE,
+                    "user_id" => Auth::instance()->get_user()->id,
+                    "filters" => array()
+                ), 
+                array(), 
+                array("count" => TRUE)
+            )->execute()->get("count");
+        return $myobject_count;
+    }
 }

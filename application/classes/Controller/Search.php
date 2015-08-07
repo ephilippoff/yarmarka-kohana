@@ -154,10 +154,6 @@ class Controller_Search extends Controller_Template {
         }
         //link counters end
 
-        //favourites
-        $twig->favourites = ORM::factory('Favourite')->get_list_by_cookie();
-        //end favourites
-
         foreach ((array) $search_info as $key => $item) {
             $twig->{$key} = $item;
         }        

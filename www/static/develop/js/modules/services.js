@@ -6,9 +6,8 @@ define([
 ], function (Marionette, Backbone, templates) {
     'use strict';
 
-    var ServiceModel = Backbone.Model.extend({
-
-    });
+    var CartModel = Backbone.Model.extend({});
+    var ServiceModel = Backbone.Model.extend({});
 
     var ServiceUpView = Marionette.ItemView.extend({
         template: templates.components.services.up
@@ -19,6 +18,31 @@ define([
     });
 
     return Marionette.Module.extend({
+        initialize: function()
+        {
+            // var key = $.cookie("cartKey");
+            // if (key) {
+            //     updateCart();
+            //     setInterval(function() {
+            //         updateCart();
+            //     }, 10000);
+            // }
+        },
+        updateCart: function(){
+            var cartModel = new CartModel();
+            cartModel.urlRoot = "/rest_service/cart_count";
+            cartModel.save({},
+                {
+                    success: function(model) {
+                        var resp = model.toJSON();
+                        $(".js-cart-counter").text(resp.count);
+                        if (resp.sum) {
+                            $(".js-cart-summ").text(resp.sum + " руб.");
+                        }
+                    }
+                }
+            );
+        },
         up: function(id, options) {
             
             var serviceModel = new ServiceModel();

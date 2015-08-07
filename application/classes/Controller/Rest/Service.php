@@ -72,4 +72,9 @@ class Controller_Rest_Service extends Controller_Rest {
 
 		$this->json["result"] = $service_result;
 	}
+
+	public function action_cart_count()
+	{
+		$this->json = array_merge($this->json, Cart::get_info());
+	}
 }

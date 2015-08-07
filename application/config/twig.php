@@ -16,6 +16,9 @@ return array(
 		'check_object_access' => array ('func' => array('Twig_Functions', 'check_object_access'), 'options' => array() ),
 		'get_stat_cached_info' => array ('func' => array('Twig_Functions', 'get_stat_cached_info'), 'options' => array() ),
 		'check_access' => array ('func' => array('Twig_Functions', 'check_access'), 'options' => array() ),
+		'get_cart_info' => array ('func' => array('Twig_Functions', 'get_cart_info'), 'options' => array() ),
+		'get_favorites_info' => array ('func' => array('Twig_Functions', 'get_favorites_info'), 'options' => array() ),
+		'get_myobjects_info' => array ('func' => array('Twig_Functions', 'get_myobjects_info'), 'options' => array() ),
 	),
 	'filters' => array(
 		'contacthide' => array('Twig_Filters', 'contacthide'),

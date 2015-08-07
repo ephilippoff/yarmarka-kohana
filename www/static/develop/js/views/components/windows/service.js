@@ -68,6 +68,7 @@ define([
                 success: function(model) {
                     var resp = model.toJSON();
                     if (resp.code == 200) {
+                        app.services.updateCart();
                         app.windows.vent.trigger("closeWindow","service");
                     }
                 }, 

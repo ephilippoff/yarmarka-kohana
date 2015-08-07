@@ -15,10 +15,12 @@
 				{% endif %}
 			</div>
 			{% if user %}
-				<span class="menu-item" onclick="window.location='/user'">Мои объявления (<span>0</span>)</span>
+				<span class="menu-item" onclick="window.location='/user'">Мои объявления (<span>{{get_myobjects_info()}}</span>)</span>
 			{% endif %}
-			<span class="menu-item js-favourite-counter" onclick="window.location='/user/favorites'">Избранное (<span>{{ favourites ? favourites|length : 0 }}</span>)</span>
-			<span class="menu-item " onclick="window.location='/cart'">Корзина (<span>0</span>)</span>
+			<span class="menu-item js-favourite-counter" onclick="window.location='/user/favorites'">Избранное (<span>{{ get_favorites_info()|length }}</span>)</span>
+			{% set cart_info = get_cart_info() %}
+			{% set cart_count = cart_info.count %}
+			<span class="menu-item " onclick="window.location='/cart'">Корзина (<span class="js-cart-counter">{{cart_count}}</span>) <span class="js-cart-summ"></span></span>
 			
 		</div>
 	</div>
