@@ -30,7 +30,7 @@ class Twig_Functions
 
     public static function staticfile($file)
     {
-        return "/".$file;
+        return "/static/develop/".$file;
     }
 
     public static function debug($param)
@@ -90,16 +90,16 @@ class Twig_Functions
     public static function get_myobjects_info()
     {
 
-        $myobject_count = Search::searchquery(
-                array(
-                    "active" => TRUE,
-                    "published" =>TRUE,
-                    "user_id" => Auth::instance()->get_user()->id,
-                    "filters" => array()
-                ), 
-                array(), 
-                array("count" => TRUE)
-            )->execute()->get("count");
-        return $myobject_count;
+        // $myobject_count = Search::searchquery(
+        //         array(
+        //             "active" => TRUE,
+        //             "published" =>TRUE,
+        //             "user_id" => Auth::instance()->get_user()->id,
+        //             "filters" => array()
+        //         ), 
+        //         array(), 
+        //         array("count" => TRUE)
+        //     )->execute()->get("count");
+        return 1;
     }
 }
