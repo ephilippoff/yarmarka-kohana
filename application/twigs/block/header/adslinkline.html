@@ -7,7 +7,7 @@
 				{% if link|length > 0 %}
 					{% set link = link|first %}
 					<a rel="nofollow" target="_blank"  onclick=""  class="text-t2" href="{{ link.link }}"  rel="nofollow">
-						<img u="image" src="{{ staticfile('./uploads/banners/' ~ link.image) }}"/>
+						<img u="image" src="{{ '/./uploads/banners/' ~ link.image }}"/>
 						{% if link.type == 3111 %}
 							<div class=""><span class="banner-title white">{{link.title}}</span></div>
 						{% endif %}
