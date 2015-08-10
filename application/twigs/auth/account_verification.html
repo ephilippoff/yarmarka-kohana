@@ -1,0 +1,24 @@
+{% extends "layouts/auth" %}
+
+{% block content %}
+	<p class="mb20">{{message}}</p>			
+	{% if success %}
+			
+			<p class="mb5">Перейти к:</p>
+			<ul>
+				<li><a href="/user/profile">Личные данные</a></li>
+				<li><a href="/">Главная страница</a></li>
+				<li><a href="/add">Подать объявление</a></li>				
+			</ul>
+						
+	{% else %}
+	
+			<p class="mb5">Перейти к:</p>
+			<ul>
+				<li><a href="/user/login">Войти на сайт</a></li>
+				<li><a href="/user/forgot_password">Напомнить пароль</a></li>			
+			</ul>
+						
+	{% endif %}
+
+{% endblock %}

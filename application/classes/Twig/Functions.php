@@ -102,4 +102,12 @@ class Twig_Functions
         //     )->execute()->get("count");
         return 1;
     }
+
+    public static function get_form_element()
+    {
+        $arguments = func_get_args();
+        $name = $arguments[0];
+        array_shift($arguments);
+        return call_user_func_array("Form::".$name, $arguments);
+    }
 }

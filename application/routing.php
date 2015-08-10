@@ -106,7 +106,7 @@ Route::set('detail', '<path>/<object_seo_name>.html',  array('path' => '[a-zA-Z0
 // 	));
 	
 
-Route::set('object_edit', 'user/edit_ad/<object_id>')
+Route::set('object_edit', 'edit/<object_id>')
 	->defaults(array(
 		'controller' => 'User',
 		'action'     => 'edit_ad',
@@ -223,18 +223,32 @@ Route::set('cart', 'cart')
 		'action'     => 'index',
 	));
 
+//user routing
+
 Route::set('user', 'user(/<action>(/<category_path>))', array(
 		'category_path' => '[a-zA-Z0-9-\._/]+',
 	))
 	->filter(function($route, $params, $request){
-		if ( !in_array($params["action"], array("published", "unpublished", "favorites")) ) {
-			return FALSE;
+		if (in_array($params["action"], array("login", "logout", "registration", "account_verification","forgot_password", "forgot_password_link") ))
+		{
+			$params["controller"] = 'User_Auth';
+			return $params;
 		}
+		elseif ( in_array($params["action"], array("published", "unpublished", "favorites")) )
+		{
+			$params["controller"] = 'User_Search';
+			return $params;
+		}
+
+		return FALSE;
 	})
 	->defaults(array(
 		'controller' => 'User_Search',
 		'action'     => 'published',
 	));
+
+//end user routing
+
 
 if (array_key_exists("HTTP_FROM", $_SERVER))
 {
