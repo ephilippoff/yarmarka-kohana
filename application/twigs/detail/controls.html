@@ -5,22 +5,20 @@
 	<div class="body">
 		<div class="row">
 			<div class="list list1 col-md-6">
-				<div class="button js-ocontrol-publish" data-id="{{object.id}}">
-					<span>
+				<div class="button js-ocontrol-publish button-style1 bg-color-blue mb3 w100p" data-id="{{object.id}}">
 						{% if object.is_published %} 
 							Снять с публикации
 						{% else %}
 							Опубликовать
 						{% endif %}
-					</span>
 				</div>
-				<div class="button js-service-up" data-id="{{object.id}}">
-					<span>Поднять</span>
+				<div class="button js-service-up button-style1 bg-color-blue mb3 w100p" data-id="{{object.id}}">
+					Поднять
 				</div>
 			</div>
 			<div class="list list2 col-md-6">
-				<div class="button js-ocontrol-edit" data-id="{{object.id}}">
-					<span>Редактировать</span>
+				<div class="button js-ocontrol-edit button-style1 bg-color-blue mb3 w100p" data-id="{{object.id}}">
+					Редактировать
 				</div>
 			</div>
 		</div>
