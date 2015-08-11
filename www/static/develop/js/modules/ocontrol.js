@@ -29,7 +29,7 @@ define([
         },
 
         edit: function(id) {
-            $(window).attr('location','/user/edit_ad/'+id);
+            $(window).attr('location','/edit/'+id);
         }
     });
 

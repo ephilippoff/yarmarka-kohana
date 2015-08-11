@@ -31,6 +31,7 @@ class Controller_User_Search extends Controller_Template {
             $this->redirect(URL::site('user/login?return='.$this->request->uri()));
         }
 
+        $this->twig->user = $this->user;
         $uri = $this->request->uri();
         $route_params = $this->request->param();
         $query_params = $this->request->query();

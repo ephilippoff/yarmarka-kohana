@@ -49,9 +49,9 @@ define([
         render: function(){
             var self = this;
 
-            var template_name = "#template-"+this.model.get("type");
+            var template_name = this.model.get("type");
             if (this.model.get("custom"))
-                template_name = "#template-custom-"+this.model.get("custom");
+                template_name = "custom"+this.model.get("custom");
 
             var html = _.template(templates[template_name])(this.model.toJSON());
 
@@ -1231,7 +1231,6 @@ define([
         },
 
         _init_controls : function(){
-            console.log(this)
             if (!this.reinit_after_change) {
                 this.category = new categoryView({app : this});
                 this.city     = new cityView({      

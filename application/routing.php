@@ -6,6 +6,12 @@ Route::set('admin', '<controller>(/<action>)', array('controller' => '(admin_.*|
 	throw new HTTP_Exception_404;
 });
 
+Route::set('object_edit', 'edit/<object_id>', array('object_id' => '.*[0-9]'))
+	->defaults(array(
+		'controller' => 'Add',
+		'action'     => 'edit_ad',
+	));
+
 Route::set('add', 'add/<rubricid>', array('rubricid' => '.*[0-9]'))
 	->defaults(array(
 		'controller' => 'Add',
@@ -106,11 +112,7 @@ Route::set('detail', '<path>/<object_seo_name>.html',  array('path' => '[a-zA-Z0
 // 	));
 	
 
-Route::set('object_edit', 'edit/<object_id>')
-	->defaults(array(
-		'controller' => 'User',
-		'action'     => 'edit_ad',
-	));
+
 Route::set('not_unique_contact_msg', 'block/not_unique_contact_msg/<number>')
 	->defaults(array(
 		'controller' => 'Block',

@@ -131,6 +131,100 @@ class Controller_Add extends Controller_Template {
 
 	}
 
+	public function action_edit_ad()
+	{
+		$this->use_layout   = FALSE;
+		$this->auto_render  = FALSE;
+		$twig = Twig::factory('user/add');
+		$twig->params = new Obj();
+
+		$user = Auth::instance()->get_user();
+		
+		$prefix = (Kohana::$environment == Kohana::PRODUCTION) ? "" : "dev_";
+		$staticfile = new StaticFile("attributes", $prefix.'static_attributes.js');
+		$twig->data_file = $staticfile->jspath;
+
+		$errors = new Obj();
+		$token = NULL;
+		$object_id = (int)$this->request->param('object_id');
+		$object = ORM::factory('Object', $object_id);
+		if (!$object_id OR !$object->loaded())
+    		throw new HTTP_Exception_404;
+
+    	if ($object->author <> $user->id AND !in_array($user->role, array(1,9,3)))
+    		throw new HTTP_Exception_404;
+
+		$is_post = ($_SERVER['REQUEST_METHOD']=='POST');
+		$post_data = $this->request->post();
+
+		if ($is_post) {  
+			$errors = new Obj(Object::default_save_object($post_data));
+			if ($errors->error){
+				$errors = new Obj($errors->error);
+			}
+			else 
+			{
+				$return_object_id = $errors->object_id;
+				$this->redirect('http://'.Region::get_current_domain().'/detail/'.$return_object_id);
+			}	
+		
+			$params = $post_data;
+			$token = (isset($post_data["csrf"])) ? $post_data["csrf"] : NULL;
+		} 
+		else
+		{
+			$token = Security::token();
+			$params = array(
+				'object_id'		=> $object_id
+			);
+		}
+
+		$form_data = new Form_Add($params, $is_post, $errors);
+
+		if (!$user)
+			$form_data->Login();
+
+		$form_data	->Category()
+				 	->City()
+				 	->Subject()
+				 	->Text()
+				 	->Photo()
+				 	->Video()
+				 	->Params()
+				 	->Map()
+				 	->Price()
+				 	->Contacts()
+				 	->Additional();
+
+		if ($user AND $user->role == 9)
+			$form_data ->AdvertType();
+
+		if ($user AND $user->org_type == 2)
+			$form_data->OrgInfo();
+		elseif ($user AND $user->linked_to_user)
+			$form_data ->LinkedUser();
+
+		$twig->params->token = $token;
+		$twig->params->object  = $object;
+		$twig->params->params 	= new Obj($params);
+		$twig->params->form_data 	= $form_data->_data;
+		$twig->params->errors = (array) $errors;
+		$twig->params->assets = $this->assets;
+		$twig->params->user = ($user AND $user->loaded()) ? $user->org_type : "undefined";
+
+		$expired = NULL;
+		if (!$user->is_valid_orginfo())
+		{
+			$settings = new Obj(ORM::factory('User_Settings')->get_group($user->id, "orginfo"));
+			$expired =  $settings->{"date-expired"};
+
+		}
+		$twig->params->expired_orginfo = $expired;
+		$twig->params = (array) $twig->params;
+		$twig->block_name = "add/_index";
+		$this->response->body($twig);
+	}
+
 	public function action_native_save_object($params = NULL)
 	{
 		if (!$params)
