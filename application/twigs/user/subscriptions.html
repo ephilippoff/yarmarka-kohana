@@ -1,0 +1,36 @@
+{% extends "layouts/user" %}
+
+{% block header %} 
+		{{ requestblock('block_twig/topline', {'favourites':favourites}) }}
+		{% include 'block/header/logoline' %}
+		{% include 'user/personal/promo' %}
+{% endblock header %} 
+
+{% block crumbs %}{% endblock crumbs %}
+
+{% block content %}
+	<table class="orders-table table">
+		<tr>
+			<th class="col1">Наименование</th>
+			<th class="col2"></th>
+		</tr>
+
+		{% for subscription in subscriptions %}
+			<tr>
+				<td class="col1">Подписка на раздел: {{subscription.title}}</td> 
+				<td class="col2"><span>Отписаться</span></td> 
+			</tr>
+		{% endfor %}
+	</table>
+{% endblock content %}
+
+{% block rightside %}{% endblock rightside %}
+
+
+
+{% block templates %}
+	{{ parent() }}
+	<script id="template-mainmenu" type="text/template">
+		{{ requestblock('block_twig/mainmenu', {'city_id': city.id}) }}
+	</script>
+{% endblock templates %}

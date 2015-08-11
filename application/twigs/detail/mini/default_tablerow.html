@@ -1,11 +1,14 @@
 <tr class="tr">
 	<td class="td td-1">
 		<div class="img-cont">
-			{% if object.compiled.images.main_photo and file_exist( strim(object.compiled.images.main_photo['120x90'] , '.')) %}
-				<img class="img-frame" src="{{ '/' ~ object.compiled.images.main_photo['120x90'] }}" alt="{{ object.title|e }}">
-			{% else %}
-				<img class="img-frame" src="{{staticfile('images/nophoto_estate136x107.png')}}">
-			{% endif %}
+			<div class="img-wrapper">
+				{% if object.compiled.images.main_photo and file_exist( strim(object.compiled.images.main_photo['120x90'] , '.')) %}
+					<img class="img-frame" src="{{ '/' ~ object.compiled.images.main_photo['120x90'] }}" alt="{{ object.title|e }}">
+					<span class="photos-count">{{object.compiled.images.local_photo|length + object.compiled.images.remote_photo|length}}</span>
+				{% else %}
+					<img class="img-frame" src="{{staticfile('images/nophoto_estate136x107.png')}}">
+				{% endif %}
+			</div>
 			{% if object.is_premium %}
 				<span class="premium-tape"></span>
 			{% endif %}

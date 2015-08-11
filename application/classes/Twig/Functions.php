@@ -115,4 +115,9 @@ class Twig_Functions
     {
         return Kohana::$config->load($path);
     }
+
+    public static function get_user()
+    {
+        return Auth::instance()->get_user();
+    }
 }

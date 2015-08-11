@@ -30,4 +30,7 @@
 			{% endblock rightside %}
 		</div><!--col-->
 	</div><!--row-->
+	{% block templates %}{{ parent() }}{% endblock templates %}
+	{% block page_name%}user{% endblock page_name %}
 {% endblock body %} 
+

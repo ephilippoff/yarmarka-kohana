@@ -242,6 +242,18 @@ Route::set('user', 'user(/<action>(/<category_path>))', array(
 			return $params;
 		}
 
+		elseif ( in_array($params["action"], array("userinfo", "orginfo", "password", "employers", "contacts")) )
+		{
+			$params["controller"] = 'User_Profile';
+			return $params;
+		}
+
+		elseif ( in_array($params["action"], array("orders", "subscriptions", "objectload")) )
+		{
+			$params["controller"] = 'User_Service';
+			return $params;
+		}
+
 		return FALSE;
 	})
 	->defaults(array(

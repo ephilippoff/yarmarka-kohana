@@ -63,7 +63,7 @@ class Controller_Add extends Controller_Template {
 				$errors = new Obj($errors->error);
 			else {
 				$object_id = $errors->object_id;
-				$this->redirect('http://'.Region::get_current_domain().'/billing/services_for_ads/'.$object_id."?afteradd=1");
+				$this->redirect('/detail/'.$object_id."?afteradd=1");
 			}
 
 			$params = $post_data;
@@ -165,7 +165,7 @@ class Controller_Add extends Controller_Template {
 			else 
 			{
 				$return_object_id = $errors->object_id;
-				$this->redirect('http://'.Region::get_current_domain().'/detail/'.$return_object_id);
+				$this->redirect('/detail/'.$return_object_id);
 			}	
 		
 			$params = $post_data;

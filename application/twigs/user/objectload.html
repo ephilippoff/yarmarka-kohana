@@ -1,0 +1,26 @@
+{% extends "layouts/user" %}
+
+{% block header %} 
+		{{ requestblock('block_twig/topline', {'favourites':favourites}) }}
+		{% include 'block/header/logoline' %}
+		{% include 'user/personal/promo' %}
+{% endblock header %} 
+
+{% block crumbs %}{% endblock crumbs %}
+
+{% block content %}
+	{{ requestoldview(block_name, params) }}
+{% endblock content %}
+
+{% block rightside %} 
+	
+{% endblock rightside %}
+
+
+
+{% block templates %}
+	{{ parent() }}
+	<script id="template-mainmenu" type="text/template">
+		{{ requestblock('block_twig/mainmenu', {'city_id': city.id}) }}
+	</script>
+{% endblock templates %}

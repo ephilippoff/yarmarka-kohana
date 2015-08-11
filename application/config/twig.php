@@ -21,6 +21,7 @@ return array(
 		'get_myobjects_info' => array ('func' => array('Twig_Functions', 'get_myobjects_info'), 'options' => array() ),
 		'get_form_element' => array ('func' => array('Twig_Functions', 'get_form_element'), 'options' => array() ),
 		'get_config' => array ('func' => array('Twig_Functions', 'get_config'), 'options' => array() ),
+		'get_user' =>  array ('func' => array('Twig_Functions', 'get_user'), 'options' => array() ),
 	),
 	'filters' => array(
 		'contacthide' => array('Twig_Filters', 'contacthide'),

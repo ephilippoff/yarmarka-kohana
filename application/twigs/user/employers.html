@@ -1,0 +1,35 @@
+{% extends "layouts/user" %}
+
+{% block header %} 
+		{{ requestblock('block_twig/topline', {'favourites':favourites}) }}
+		{% include 'block/header/logoline' %}
+		{% include 'user/personal/promo' %}
+{% endblock header %} 
+
+{% block crumbs %}{% endblock crumbs %}
+
+{% block content %}
+	{% if user.linked_to_user %}
+		<div class="p10" style="font-size:14px; padding:20px">
+			<p class="p10" style="width:400px">Вы не можете просмотреть этот раздел т.к. Ваша учетная запись является подчиненной 
+				для компании '{{company.org_name}}' ({{company.email}})</p>
+			<p class="p10" style="width:400px">Отменить привязку учетной записи к другой компании вы можете, если перейдете по <a href="/user/reset_parent">ссылке</a>
+			</p>
+		</div>
+	{% else %}
+		{{ requestoldview(block_name, params) }}
+	{% endif %}
+{% endblock content %}
+
+{% block rightside %} 
+	
+{% endblock rightside %}
+
+
+
+{% block templates %}
+	{{ parent() }}
+	<script id="template-mainmenu" type="text/template">
+		{{ requestblock('block_twig/mainmenu', {'city_id': city.id}) }}
+	</script>
+{% endblock templates %}

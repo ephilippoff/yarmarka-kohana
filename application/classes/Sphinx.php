@@ -169,9 +169,9 @@ class Sphinx {
 		if($result && is_array(@$result["matches"])) {
 			foreach ($result['matches'] as $match) {
 				$pricerow = $match['attrs'];
-				if ($city_id == 0 AND $pricerow["city_id"])
+				if ($city_id > 0 AND $pricerow["city_id"])
 				{
-
+					$pricerow["city_name"] = "";
 					$cityrow = ORM::factory('City',$pricerow["city_id"]);
 					if ($cityrow->loaded())
 						$pricerow["city_name"] = $cityrow->title;

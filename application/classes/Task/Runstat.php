@@ -22,7 +22,7 @@ class Task_Runstat extends Minion_Task
         Cachestat::factory("search")->fetch_search(function($data){
             foreach ($data["ids"] as $object_id) {
                 $pos = array_search($object_id, $data["ids"]) + 1;
-                $string = "Последний раз ваше объявление увидели на ".$pos."й позиции, ".$data["page"]."й страницы рубрики <a href='".$data["url"]."'>".$data["title"]."</a>";
+                $string = "~ ".($pos * $data["page"])." место в рубрике <a href='".$data["url"]."'>".$data["title"]."</a>";
                 Cachestat::factory($object_id."insearch")
                     ->add(0, $string);
             }

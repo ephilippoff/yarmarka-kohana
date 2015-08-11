@@ -5,8 +5,9 @@
 			<div class="img-wrapper">
 				{% if object.compiled.images.main_photo and file_exist( strim(object.compiled.images.main_photo['120x90'] , '.')) %}
 					<img class="img-frame" src="{{ '/' ~ object.compiled.images.main_photo['120x90'] }}" alt="{{ object.title|e }}">
+					<span class="photos-count">{{object.compiled.images.local_photo|length + object.compiled.images.remote_photo|length}}</span>
 				{% else %}
-					<img class="img-frame" src="{{staticfile('images/nophoto_estate136x107.png')}}">
+					<img class="img-frame" src="{{ staticfile('images/nophoto_estate136x107.png') }}">
 				{% endif %}
 			</div>
 
@@ -31,14 +32,12 @@
 			<p class="amount">{{ object.price|number_format(0, ' ', ' ') }} руб.</p>
 		{% endif %}
 		
+	
+	
+		<p class="pt10 pb10">Для увеличения количества просмотров, предлагаем следующие услуги:</p>
+
 		<div>
-			{% set statInfo = get_stat_cached_info(object.id) %}
-			{% if statInfo %}
-				{{ statInfo }} <br>
-				Для увеличения количества просмотров, предлагаем слудющие услуги:
-			{% endif %}
-		</div>
-		<div>
+			<span class="button w140 button-style1 bg-color-blue mr3 mb3 js-service-up" data-id="{{object.id}}"><i class="ico vkontakte-ico16 mr5"></i><span>Поднять</span></span>
 			<span class="button w140 button-style1 bg-color-blue mr3 mb3"><i class="ico vkontakte-ico16 mr5"></i>Премиум</span>
 			<span class="button w140 button-style1 bg-color-blue mr3 mb3"><i class="ico vkontakte-ico16 mr5"></i>Лидер</span>
 			<span class="button w140 button-style1 bg-color-blue mr3 mb3"><i class="ico vkontakte-ico16 mr5"></i>В газету</span>
@@ -49,25 +48,29 @@
 	<td class="td w190 p10 va-t">
 		<span class="button w100p button-style1 bg-color-lightgreen mb3 ta-l js-ocontrol-publish" data-id="{{object.id}}">
 			{% if object.is_published %} 
-				<i class="ico vkontakte-ico16 mr5"></i>Снять с публикации
+				<i class="ico vkontakte-ico16 mr5"></i><span>Снять с публикации</span>
 			{% else %}
-				<i class="ico vkontakte-ico16 mr5"></i>Опубликовать
+				<i class="ico vkontakte-ico16 mr5"></i><span>Опубликовать</span>
 			{% endif %}			
 		</span>		
 
-		<span class="button w100p button-style1 bg-color-lightgreen mb3 ta-l js-service-up" data-id="{{object.id}}"><i class="ico vkontakte-ico16 mr5"></i>Поднять</span>
 		<span class="button w100p button-style1 bg-color-lightgreen mb3 ta-l js-ocontrol-edit" data-id="{{object.id}}"><i class="ico vkontakte-ico16 mr5"></i>Редактировать</span>
 	</td>
 	<td class="td td-4">		
-		<i class="ico premium-ico22"></i>
-		<i class="ico leader-ico22"></i>
+		<i class="ico vkontakte-ico16" title="Премиум"></i>
+		<i class="ico vkontakte-ico16"></i>
 	</td>
 	<td class="td-additional">
 		<div class="relative">
 			<div class="additional-cont p20">
 				Код: {{object.id}} <br>
 				Обновлено: {{ object.date_created|date('d.m.Y') }} <br>
-				Просмотров: {{ object.visits }}				
+				Просмотров: {{ object.visits }}
+
+				{% set statInfo = get_stat_cached_info(object.id) %}
+				{% if statInfo %}
+					<p class="pt10 pb10">{{ statInfo }}</p>
+				{% endif %}
 			</div>
 		</div>			
 	</td>	

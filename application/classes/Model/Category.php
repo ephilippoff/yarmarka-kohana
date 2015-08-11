@@ -35,11 +35,11 @@ class Model_Category extends ORM {
 		}
 
 		$region = $region_id 
-			? ORM::factory('Region', intval($region_id))->cached(DATE::WEEK, array("city", "seo"))
+			? ORM::factory('Region', intval($region_id))->cached(Date::WEEK, array("city", "seo"))
 			: Region::get_current_region();
 
 		$city = $city_id 
-			? ORM::factory('City', intval($city_id))->cached(DATE::WEEK, array("city", "seo"))
+			? ORM::factory('City', intval($city_id))->cached(Date::WEEK, array("city", "seo"))
 			: Region::get_current_city();
 
 		if ( ! $city AND ! $region)

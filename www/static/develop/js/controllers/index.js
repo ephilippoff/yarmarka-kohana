@@ -68,13 +68,19 @@ function (Marionette, templates, utils, IndexPage, SearchPage, DetailPage, UserS
             });
         },
 
-         start_addSection : function() {
+        start_addSection : function() {
             console.log("Add start");
 
             app.menu.init(["main"]);
             new AddPage({
                 el: "body"
             });
+        },
+
+        start_userSection : function() {
+            console.log("user start");
+
+            app.menu.init(["main"]);
         },
         
         notFound : function() {

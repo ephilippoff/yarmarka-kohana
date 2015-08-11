@@ -8,7 +8,6 @@
 
 {% block css %} 
 	{{ parent() }}
-	{{ css("filters.css") }}
 	{{ css("comments.css") }}
 {% endblock css%}
 
@@ -51,7 +50,8 @@
 	{% endif %}
 {% endblock content%}
 
-{% block rightside %} 
+{% block rightside %}
+	{% include 'search/user/info' %}
 	{% include 'search/user/messages' %}
 {% endblock rightside %}
 

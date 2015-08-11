@@ -94,6 +94,7 @@ class Controller_User_Search extends Controller_Template {
                 "90" => $this->url_with_query(array( "limit" => 90), array("page")),
             )
         ));
+
         $small_pagination = (array(
             "prev" => $pagination->previous_page,
             "prev_url" => $pagination->url($pagination->previous_page),
@@ -102,6 +103,7 @@ class Controller_User_Search extends Controller_Template {
             "current" => $pagination->current_page,
             "total" => $pagination->total_pages,
         ));
+
         $this->twig->pagination = $pagination;
         $this->twig->small_pagination = $small_pagination;
         //end pagination
@@ -117,6 +119,10 @@ class Controller_User_Search extends Controller_Template {
 
         $this->twig->user_categories = $user_categories;
 
+        //get balance for premium ads               
+        
+        $premium_balance = (int) Service_Premium::get_balance($this->user);
+        $this->twig->premium_balance = $premium_balance;
     }
 
     public function action_published()
@@ -132,8 +138,8 @@ class Controller_User_Search extends Controller_Template {
         );
 
         $this->twig->seo_attributes = new Obj(array(
-            "title" => "Мои опубликованные объявления - Личный кабинет",
-            "h1" => "Мои опубликованные объявления"
+            "title" => "Личный кабинет - Мои опубликованные объявления",
+            "h1" => "Личный кабинет - Мои опубликованные объявления"
         ));
 
         $this->get_user_search_page();
@@ -152,8 +158,8 @@ class Controller_User_Search extends Controller_Template {
         );
 
         $this->twig->seo_attributes = new Obj(array(
-            "title" => "Мои снятые и архивные объявления - Личный кабинет",
-            "h1" => "Мои снятые и архивные объявления"
+            "title" => "Личный кабинет - Мои снятые и архивные объявления",
+            "h1" => "Личный кабинет - Мои снятые и архивные объявления"
         ));
 
         $this->get_user_search_page();
@@ -170,8 +176,8 @@ class Controller_User_Search extends Controller_Template {
         );
 
         $this->twig->seo_attributes = new Obj(array(
-            "title" => "Избранные объявления - Личный кабинет",
-            "h1" => "Избранные объявления"
+            "title" => "Личный кабинет - Избранные объявления",
+            "h1" => "Личный кабинет - Избранные объявления"
         ));
 
         $this->get_user_search_page();

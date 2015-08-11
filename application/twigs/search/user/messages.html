@@ -1,12 +1,3 @@
-<div class="info-block-cont theme3 module">
-	<div class="block-title">
-		<span>Информация</span>
-	</div>
-	<div class="p10">
-		Внимание! В разделе "Вакансии" поднятие объявления доступно 1 раз в сутки. В остальных разделах поднятие объявления доступно 1 раз в 3 суток. УСЛУГА БЕСПЛАТНАЯ!<br>
-			Ваш лимит Премиум объявлений - 87
-	</div>
-</div>
 {% if messages|length > 0 %}
 	<div class="info-block-cont theme3 module">
 		<div class="block-title">
@@ -21,10 +12,10 @@
 						</div>
 						<div class="cont">		
 							<span class="user-name">
-								{{message.user_name}}											
+								{{message.user_name}}
 							</span>
 							<p class="text-comment">
-								— {{message.text}}																								
+								— {{message.text}} <a href="/detail/{{message.object_id}}">к объявлению</a>
 							</p>
 						</div>
 					</div>

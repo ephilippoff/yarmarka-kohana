@@ -1,0 +1,40 @@
+<div class="blue-subtle-theme module">
+	{% include 'block/header/navigationline/simple' %}
+	<div class="view-container">
+		<div class="breadcrumbs-cont module mt10">
+		{% for crumb in crumbs %}
+			{% if crumb.url %}
+				<a href="{{ url(crumb.url) }}">{{crumb.title}}</a> /
+			{% else  %}
+				<h1>{{crumb.title}}</h1>
+			{% endif %}
+		{% endfor %}
+		</div>
+		<div class="subcategories-cont module">
+			<div class="row">
+					<div class="col-md-3">
+						<ul>
+							<li><a href="{{ url('user/userinfo') ~ query_url_str }}" class="{{ (canonical_url == 'user/userinfo') ? 'active' }}">Данные пользователя</a></li>
+							<li><a href="{{ url('user/orginfo') ~ query_url_str }}" class="{{ (canonical_url == 'user/orginfo') ? 'active' }}">Данные компании</a></li>
+							<li><a href="{{ url('user/password') ~ query_url_str }}" class="{{ (canonical_url == 'user/password') ? 'active' }}">Смена пароля</a></li>
+							<li><a href="{{ url('user/employers') ~ query_url_str }}" class="{{ (canonical_url == 'user/employers') ? 'active' }}">Сотрудники</a></li>
+						</ul>
+					</div>
+					<div class="col-md-3">
+						<ul>
+							<li><a href="{{ url('user/orders') ~ query_url_str }}" class="{{ (canonical_url == 'user/orders') ? 'active' }}">Заказы</a></li>
+							<li><a href="{{ url('user/objectload') ~ query_url_str }}" class="{{ (canonical_url == 'user/objectload') ? 'active' }}">Массовая загрузка</a></li>
+							<li><a href="{{ url('user/subscriptions') ~ query_url_str }}" class="{{ (canonical_url == 'user/subscriptions') ? 'active' }}">Подписки</a></li>
+						</ul>
+					</div>
+					<div class="col-md-3">
+						<ul>
+							<li><a href="{{ url('user/contacts') ~ query_url_str }}" class="{{ (canonical_url == 'user/contacts') ? 'active' }}">Управление контактами</a></li>
+							
+						</ul>
+					</div>
+			</div>
+		</div>
+
+	</div><!--view-container1-->
+</div><!--skin-theme1-->

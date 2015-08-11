@@ -21,7 +21,9 @@
 		<div class="row">
 			<div class="col-md-9">
 				<article>
-					{% include 'detail/nophoto' %}
+					{% if (object.compiled.images.local_photo|length == 0 and object.compiled.images.remote_photo|length == 0) %}
+						{% include 'detail/nophoto' %}
+					{% endif %}
 					{% include 'detail/thumbnails' %}
 					{% include 'detail/attributes' %}
 				</article>
