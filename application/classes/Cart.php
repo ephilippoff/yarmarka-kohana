@@ -15,4 +15,25 @@ class Cart {
 
 		return $key;
 	}
+
+	static function get_info()
+	{
+		if (!Cookie::get("cartKey"))
+		{
+			return array(
+				"count" => 0,
+				"summ" => 0
+			);
+		}
+
+		$key = Cart::get_key();
+
+		$order_count = ORM::factory('Order_ItemTemp')
+						->where("key","=",$key)->count_all();
+
+		return array(
+				"count" => $order_count,
+				"summ" => 0
+		);
+	}
 }

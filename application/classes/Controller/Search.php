@@ -96,7 +96,7 @@ class Controller_Search extends Controller_Template {
             ),
             array_merge($search_info->search_params, array("limit" => 15))
         );
-        $twig->vip_search_result = Search::getresult($vip_search_query->execute()->as_array());
+        //$twig->vip_search_result = Search::getresult($vip_search_query->execute()->as_array());
         //vip end
 
         //pagination
@@ -153,10 +153,6 @@ class Controller_Search extends Controller_Template {
             // end clean empty links
         }
         //link counters end
-
-        //favourites
-        $twig->favourites = ORM::factory('Favourite')->get_list_by_cookie();
-        //end favourites
 
         foreach ((array) $search_info as $key => $item) {
             $twig->{$key} = $item;

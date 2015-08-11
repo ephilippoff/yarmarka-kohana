@@ -1,0 +1,66 @@
+{% extends "layouts/cart" %}
+
+
+{% block content %} 
+	<form action="/cart/delivery/{{ order.id }}" method="POST">
+		<input type="hidden" name="id" value="{{ order.id }}">
+		<p class="mb10">Для некоторых из выбранных позиций, требуется оформить доставку</p>
+		<p class="mb10">Внимательно заполните поля формы</p>
+		<div class="ta-l mb10 field">
+			<p><b>Варианты:</b></p>
+			<input class="input fields js-delivery-type" type="radio" name="type" value="pickup" {% if post.type == "pickup" %} checked {% endif %}>Самовывоз
+			<input class="input fields js-delivery-type" type="radio" name="type" value="city-delivery" {% if post.type == "city-delivery" %} checked {% endif %}>Доставка по городу
+		</div>
+		<div class="js-delivery-cont js-pickup-cont"  {% if post.type != "pickup" %} style="display:none;" {% endif%} >
+			<div class="ta-l mb10 field">
+				{% if user_city_id == 1948 %}
+					<p>Адрес редакции в Нижневартовске</p>
+				{% elseif user_city_id == 1979 %}
+					<p>Адрес редакции в Сургуте</p>
+				{% else %}
+					<p>Адрес редакции в Тюмени</p>
+				{% endif %}
+			</div>
+		</div>
+		<div class="js-delivery-cont js-city-delivery-cont" {% if post.type != "city-delivery" %} style="display:none;" {% endif%}>
+			<div class="ta-l mb10 field">
+				<p><b>Город:</b></p>
+				<select name="city" class="input fields">
+					{% for key, city in cities %}
+						{% set selected = "" %}
+						{% if post.city == key %}
+							{% set selected = "selected" %}
+						{% elseif user_city_id == key%}
+							{% set selected = "selected" %}
+						{% endif %}
+						<option value="{{key}}" {{ selected }}>{{city}}</option>
+					{% endfor %}
+				</select>
+			</div>
+			<div class="ta-l mb10 field">
+				<p><b>Адрес:</b></p>
+				<input class="input fields" type="text" name="address" value="{{ post.address }}">
+			</div>
+			<div class="ta-l mb10 field">
+				<p><b>Телефон:</b></p>
+				<input class="input fields" type="text" name="phone" value="{{ post.phone }}">
+			</div>
+			<div class="ta-l mb10 field">
+				<p><b>Комментарий:</b></p>
+				<textarea class="js-comment input comment-area" rows="5" name="comment">{% if post.comment %}{{ post.comment }}{% else %}{{ order.comment }}{% endif %}</textarea>
+				<span class="hint">Например, укажите предпочитаемое время доставки</span>
+			</div>
+		</div>
+		<div class="js-error errors-cont mb20 red">
+			{% if errors %}
+				{% set err_values = errors|values %}
+				{{ err_values|join("<br>") }}
+			{% endif %}
+		</div>
+		<input type="submit" class="button submit mt20" value="Далее">
+	</form>
+{% endblock content %}
+
+{% block rightside %} 
+	Правая сторона
+{% endblock rightside %}

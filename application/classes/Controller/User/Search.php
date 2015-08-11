@@ -26,9 +26,9 @@ class Controller_User_Search extends Controller_Template {
             }
         }
 
-        if (!$this->user)
+        if (!$this->user and $this->request->action() <> "favorites")
         {
-            $this->redirect(Url::site('user/login?return='.$this->request->uri()));
+            $this->redirect(URL::site('user/login?return='.$this->request->uri()));
         }
 
         $uri = $this->request->uri();
@@ -50,11 +50,14 @@ class Controller_User_Search extends Controller_Template {
         //end favourites
         
         //messages
-        $this->twig->messages = ORM::factory('User_Messages')
-                                ->get_messages_user_objects($this->user->id)
-                                ->order_by("createdOn", "desc")
-                                ->limit(20)
-                                ->getprepared_all();
+        if ($this->user)
+        {
+            $this->twig->messages = ORM::factory('User_Messages')
+                                    ->get_messages_user_objects($this->user->id)
+                                    ->order_by("createdOn", "desc")
+                                    ->limit(20)
+                                    ->getprepared_all();
+        }
         //end message
     }
 
@@ -110,6 +113,7 @@ class Controller_User_Search extends Controller_Template {
             array(array("title"=>"Все", "url" => "")),
             $user_categories
         );
+
         $this->twig->user_categories = $user_categories;
 
     }

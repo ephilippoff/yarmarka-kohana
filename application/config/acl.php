@@ -9,6 +9,7 @@ return array(
 			"control" => array(1,3, "auth", "owner"),
 			"edit" => array(1,3, "auth", "owner"),
 			"moderate" => array(1,3, "auth")
-		)
+		),
+		"pay_service" => array("auth", 1)
 	)
 );

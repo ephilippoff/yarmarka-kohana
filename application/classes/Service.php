@@ -4,14 +4,15 @@ class Service
 {
     protected $_city = NULL;
     protected $_category = NULL;
+    protected $_object_id = NULL;
     protected $_price_config = NULL;
 
-    public static function factory($service)
+    public static function factory($service, $param = NULL)
     {   
         // Set class name
         $service = 'Service_'.$service;
 
-        return new $service();
+        return new $service($param);
     }
 
     public function _initialize()
@@ -70,5 +71,63 @@ class Service
         return $this;
     }
 
+    public function object($object_id)
+    {
+        $this->_object_id = $object_id;
+        return $this;
+    }
 
+    public function reload_service_info($params)
+    {
+        if ($params->service["name"] == "object")
+        {
+            $service = Service::factory(Text::ucfirst($params->service["name"]), $params->object["id"]);
+        } else {
+            $service = Service::factory(Text::ucfirst($params->service["name"]));
+        }
+        if ($params->category) {
+            $service = $service->category($params->category);
+        }
+        if ($params->city) {
+            $service = $service->category($params->city);
+        }
+
+        return $service->get();
+    }
+
+    public function save($service_info)
+    {
+
+        $params = new Obj();
+        $params->service = $this->reload_service_info($service_info);
+        $params->quantity = ($params->quantity) ? $params->quantity : 1;
+        $params->balance = ($params->balance) ? $params->balance : -1;
+        $params->price =$params->service["price"];
+        $params->total = $this->calculate_total((array) $params);
+        $params->type = $service_info->service["name"];
+
+        if ($params->service["name"] == "object")
+        {
+            $params->title = "<a href='/detail/".$service_info->object['id']."'>".$service_info->object['title']."</a>";
+        } else
+        {
+            $params->title = "Услуга '".$params->service['title']."' для объявления <a href='/detail/".$service_info->object['id']."'>'".$service_info->object['title']."'</a>";
+        }
+
+        $total_params = json_encode(array_merge( (array) $service_info, (array) $params) ) ;
+
+        $order_item_temp = ORM::factory('Order_ItemTemp');
+        $order_item_temp->object_id = $service_info->object["id"];
+        $order_item_temp->service_id = NULL;
+        $order_item_temp->params = $total_params;
+        $order_item_temp->key = Cart::get_key();
+        $order_item_temp->save();
+
+        return $order_item_temp;
+    }
+
+    public function apply()
+    {
+        
+    }
 }

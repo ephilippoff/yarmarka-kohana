@@ -3,10 +3,10 @@
 class Service_Up extends Service
 {
 	protected $_name = "up";
-	protected $_title = "Подъем объявления";
+	protected $_title = "Подъем";
 	protected $_is_multiple = FALSE;
 
-	public function __construct()
+	public function __construct($param = NULL)
 	{
 		$this->_initialize();
 	}

@@ -1,6 +1,6 @@
 <?php defined('SYSPATH') OR die('No direct access allowed.');
 return array(
-	'main_domain'							=> 'yarmarka.dev',
+	'main_domain'							=> 'new.yarmarka.biz',
 	'main_category'							=> 'glavnaya-kategoriya',
 	'is_local' 								=> 0,
 	'default_region_id'						=> 73,

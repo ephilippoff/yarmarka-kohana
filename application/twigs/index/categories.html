@@ -3,7 +3,7 @@
 		<div class="col-md-4 col-xs-6">
 			<div class="group-cont">				
 				<div class="group">
-					<div class="img"><img src="images/min_auto.png" alt=""></div>
+					<div class="img"><img src="{{staticfile('images/min_auto.png')}}" alt=""></div>
 					<div class="text-cont">
 						<p class="text"><a href="{{ url('avtotransport') }}">Автотранспорт</a></p>
 						{% set count = link_counters[s_host ~ '/avtotransport'] %}
@@ -22,7 +22,7 @@
 
 			<div class="group-cont">				
 				<div class="group">
-					<div class="img"><img src="images/min_sport.png" alt=""></div>
+					<div class="img"><img src="{{staticfile('images/min_sport.png')}}" alt=""></div>
 					<div class="text-cont">
 						<p class="text"><a href="{{ url('sport-otdih-hobby') }}">Спорт, отдых, хобби</a>													
 						{% set count = link_counters[s_host ~ '/sport-otdih-hobby'] %}
@@ -41,7 +41,7 @@
 
 			<div class="group-cont">				
 				<div class="group">
-					<div class="img"><img src="images/min_znakomstva.png" alt=""></div>
+					<div class="img"><img src="{{staticfile('images/min_znakomstva.png')}}" alt=""></div>
 					<div class="text-cont">
 						<p class="text"><a href="{{ url('znakomstvo-i-obshenie') }}">Знакомство и общение</a>													
 						{% set count = link_counters[s_host ~ '/znakomstvo-i-obshenie'] %}
@@ -61,7 +61,7 @@
 
 			<div class="group-cont">				
 				<div class="group">
-					<div class="img"><img src="images/min_cat.png" alt=""></div>
+					<div class="img"><img src="{{staticfile('images/min_cat.png')}}" alt=""></div>
 					<div class="text-cont">
 						<p class="text">
 							<a href="{{ url('domashnie-zhivotnye-i-rasteniya') }}index.html">Домашние любимцы и растения</a>
@@ -84,7 +84,7 @@
 		<div class="col-md-4 col-xs-6">
 			<div class="group-cont">				
 				<div class="group">
-					<div class="img"><img src="images/min_nedvizimost.png" alt=""></div>
+					<div class="img"><img src="{{staticfile('images/min_nedvizimost.png')}}" alt=""></div>
 					<div class="text-cont">
 						<p class="text"><a href="{{ url('nedvizhimost') }}">Недвижимость</a>													
 						{% set count = link_counters[s_host ~ '/nedvizhimost'] %}
@@ -103,7 +103,7 @@
 			</div>
 			<div class="group-cont">				
 				<div class="group">
-					<div class="img"><img src="images/min_stroy.png" alt=""></div>
+					<div class="img"><img src="{{staticfile('images/min_stroy.png')}}" alt=""></div>
 					<div class="text-cont">
 						<p class="text"><a href="{{ url('stroitelstvo-i-remont') }}">Строительство и ремонт</a>													
 						{% set count = link_counters[s_host ~ '/stroitelstvo-i-remont'] %}
@@ -122,7 +122,7 @@
 			</div>
 			<div class="group-cont">				
 				<div class="group">
-					<div class="img"><img src="images/min_dom.png" alt=""></div>
+					<div class="img"><img src="{{staticfile('images/min_dom.png')}}" alt=""></div>
 					<div class="text-cont">
 						<p class="text"><a href="{{ url('dlya-doma-i-dachi') }}">Для дома и дачи</a>													
 						{% set count = link_counters[s_host ~ '/dlya-doma-i-dachi'] %}
@@ -141,7 +141,7 @@
 			</div>
 			<div class="group-cont">				
 				<div class="group">
-					<div class="img"><img src="images/min_things.png" alt=""></div>
+					<div class="img"><img src="{{staticfile('images/min_things.png')}}" alt=""></div>
 					<div class="text-cont">
 						<p class="text"><a href="{{ url('lichnie-veshi') }}">Барахолка</a>													
 						{% set count = link_counters[s_host ~ '/lichnie-veshi'] %}
@@ -160,7 +160,7 @@
 			</div>
 			<div class="group-cont">				
 				<div class="group">
-					<div class="img"><img src="images/min_elektronika.png" alt=""></div>
+					<div class="img"><img src="{{staticfile('images/min_elektronika.png')}}" alt=""></div>
 					<div class="text-cont">
 						<p class="text"><a href="{{ url('bitovaya-elektronika') }}">Бытовая электроника</a>													
 						{% set count = link_counters[s_host ~ '/bitovaya-elektronika'] %}
@@ -182,7 +182,7 @@
 		<div class="col-md-4 col-xs-6">
 			<div class="group-cont">				
 				<div class="group">
-					<div class="img"><img src="images/min_rabota.png" alt=""></div>
+					<div class="img"><img src="{{staticfile('images/min_rabota.png')}}" alt=""></div>
 					<div class="text-cont">
 						<p class="text"><a href="{{ url('rabota') }}">Работа</a>													
 						{% set count = link_counters[s_host ~ '/rabota'] %}
@@ -200,7 +200,7 @@
 			</div>
 			<div class="group-cont">				
 				<div class="group">
-					<div class="img"><img src="images/min_biznes.png" alt=""></div>
+					<div class="img"><img src="{{staticfile('images/min_biznes.png')}}" alt=""></div>
 					<div class="text-cont">
 						<p class="text"><a href="{{ url('biznes') }}">Для бизнеса</a>													
 						{% set count = link_counters[s_host ~ '/biznes'] %}
@@ -218,7 +218,7 @@
 			</div>
 			<div class="group-cont">				
 				<div class="group">
-					<div class="img"><img src="images/min_services.png" alt=""></div>
+					<div class="img"><img src="{{staticfile('images/min_services.png')}}" alt=""></div>
 					<div class="text-cont">
 						<p class="text"><a href="{{ url('uslugi') }}">Услуги</a>
 						{% set count = link_counters[s_host ~ '/uslugi'] %}
@@ -236,7 +236,7 @@
 			</div>
 			<div class="group-cont">				
 				<div class="group">
-					<div class="img"><img src="images/min_prod.png" alt=""></div>
+					<div class="img"><img src="{{staticfile('images/min_prod.png')}}" alt=""></div>
 					<div class="text-cont">
 						<p class="text"><a href="{{ url('prodovolstvennye-tovary') }}">Продовольственные товары</a>													
 						{% set count = link_counters[s_host ~ '/prodovolstvennye-tovary'] %}
@@ -254,7 +254,7 @@
 			</div>
 			<div class="group-cont">				
 				<div class="group">
-					<div class="img"><img src="images/min_modul.png" alt=""></div>
+					<div class="img"><img src="{{staticfile('images/min_modul.png')}}" alt=""></div>
 					<div class="text-cont">
 						<p class="text">
 							<a href="{{ url('modulnaya-reklama') }}">Каталог компаний</a>													
@@ -270,7 +270,7 @@
 				</p></div>
 			<div class="group-cont">				
 				<div class="group">
-					<div class="img"><img src="images/min_vruki.png" alt=""></div>
+					<div class="img"><img src="{{staticfile('images/min_vruki.png')}}" alt=""></div>
 					<div class="text-cont">
 						<p class="text"><a href="{{ url('v-horoshie-ruki') }}">В хорошие руки</a></p>
 						{% set count = link_counters[s_host ~ '/v-horoshie-ruki'] %}

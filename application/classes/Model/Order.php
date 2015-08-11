@@ -4,8 +4,9 @@ class Model_Order extends ORM
 {
 	protected $_table_name = 'orders';
 
-	function check_state($order_id = NULL, $callback = NULL) {
+	function check_state($order_id = NULL, $params = array(), $callback = NULL) {
 
+		$params = new Obj($params);
 		$robo = new Robokassa;
 
 		if ($order_id) {
@@ -16,7 +17,15 @@ class Model_Order extends ORM
 		
 		foreach ($orders as $order) {
 
-			$data = $robo->get_invoice_state($order->id);
+			if ($params->fake)
+			{
+				$data = $params->fake;
+			}
+			else
+			{
+				$data = $robo->get_invoice_state($order->id);
+			}
+			
 			if ($data)
 			{
 				if ($data['code_request'] == 10 OR $data['code_request'] == 60)
@@ -90,24 +99,42 @@ class Model_Order extends ORM
 			Email::send($user->email, Kohana::$config->load('email.default_from'), $subj, $msg);
 		}
 
-		$objects = array();
-		//apply services
-		foreach ($orderItems as $orderItem)
-		{
-			if ($orderItem->object_id) {
-				array_push($objects, $orderItem->object_id);
-			} 
-		}
+		$db = Database::instance();
 
-		if (count($objects) > 0) {
-			$subj = "Уведомление администратору об оплате заказа с товарами. Заказ №".$this->id;
-			$msg = View::factory('emails/payment_success',
-					array('order' => $this,'orderItems' => $orderItems));
+		try {
 
-			$configBilling = Kohana::$config->load("billing");
-			foreach ($configBilling["emails_for_notify"] as $email) {
-				Email::send($email, Kohana::$config->load('email.default_from'), $subj, $msg);
+			$db->begin();
+
+			$objects = array();
+			//apply services
+			foreach ($orderItems as $orderItem)
+			{
+				if ($orderItem->type == "object") {
+					Service::factory("Object", $orderItem->object_id)->apply();
+					array_push($objects, $orderItem->object_id);
+				} else {
+					Service::factory(Text::ucfirst($orderItem->type))->apply();
+				}
 			}
+
+			$db->commit();
+
+		} catch (Kohana_Exception $e) {
+			$db->rollback();
+			$message =  "Ошибка применения заказа ".$e->getMessage();
+			Email::send_to_admin("Ошибка применения заказа #".$order->id, $message);
+			return;
 		}
+
+	
+		$subj = "Уведомление администратору об оплате заказа с товарами. Заказ №".$this->id;
+		$msg = View::factory('emails/payment_success',
+				array('order' => $this,'orderItems' => $orderItems));
+
+		$configBilling = Kohana::$config->load("billing");
+		foreach ($configBilling["emails_for_notify"] as $email) {
+			Email::send($email, Kohana::$config->load('email.default_from'), $subj, $msg);
+		}
+	
 	}
 }

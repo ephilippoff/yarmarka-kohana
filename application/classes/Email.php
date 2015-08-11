@@ -168,4 +168,9 @@ class Email {
 		return $result;
 	}
 
+
+	public static function send_to_admin($subj, $msg)
+	{
+		Email::send( Kohana::$config->load('email.admin'), Kohana::$config->load('email.default_from'), $subj, $msg);
+	}
 } // End email

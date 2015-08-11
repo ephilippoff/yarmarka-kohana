@@ -1,0 +1,133 @@
+{% extends "layouts/cart" %}
+
+
+{% block content %} 
+	<div class="eshop-cont order-cont  page-addobj flat-form-style w800" style="margin:auto;">
+		{% set error = FALSE %}
+		<table class="table">
+			<tr>
+				<th>#</th>
+				<th>Наименование</th>
+				<th>Количество</th>
+				<th>Цена</th>
+				<th>Сумма</th>
+			</tr>
+			{% set sum = 0 %}
+			{% set i = 1 %}
+			{% for item in orderItems %}
+				<tr>
+					<td>{{ i }}</td>
+					<td>{{ item.title }}</td>
+					<td>
+						{% if item.available != 1 %}
+							<span style="color:red;">{{ item.available }}</span>
+						{% else %}
+							{{ item.quantity }}
+						{% endif %}
+					</td>
+					<td>{{ item.price }} руб.</td>
+					<td>{{ item.total }} руб.</td>
+				</tr>
+				{% set sum = sum + item.total %}
+				{% set i = i +1 %}
+			{% endfor %}
+			<tr>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td align="right">Итого:</td>
+				<td>{{ sum }} руб. </td>
+			</tr>
+		</table>
+		
+		{% if delivery_info %}
+		<div class="messages-cont mb20">
+			<hr>
+			<p>Информация по доставке</p>
+			<div class="ta-l mb10 field">
+				<p><b>Тип доставки:</b></p>
+				<p>
+					{% if delivery_info.type == "pickup" %}
+						<span>Самовывоз</span>
+					{% elseif delivery_info.type == "city-delivery" %}
+						<span>Доставка по городу</span>
+					{% endif %}
+				</p>
+			</div>
+
+			{% if delivery_info.address %}
+				<div class="ta-l mb10 field">
+					<p><b>Адрес:</b></p>
+					<p>{{delivery_info.address}}</p>
+				</div>
+			{% endif %}
+
+			{% if delivery_info.phone %}
+				<div class="ta-l mb10 field">
+					<p><b>Телефон:</b></p>
+					<p>{{delivery_info.phone}}</p>
+				</div>
+			{% endif %}
+
+			{% if delivery_info.comment %}
+				<div class="ta-l mb10 field">
+					<p><b>Комментарий:</b></p>
+					<p>{{delivery_info.comment}}</p>
+				</div>
+			{% endif %}
+		</div>
+		{% endif %}
+		
+		<div class="messages-cont mb20">
+		
+			{% if error %}
+				<p>Некоторых товаров нет в наличии, сделайте корректировку заказа</p>
+				<p>
+					<a href="/cart">Вернуться к редактирвоанию заказа</a>
+				</p>
+			{% endif %}
+			
+			{% if state == "initial" %}
+				<!-- <p>Мы забронировали для вас данные товарные позиции. У вас есть 30 минут чтобы оплатить заказ.</p> -->
+				
+				<p class="mt20">
+					<a href="/cart">Вернуться к оформлению заказа</a>
+				</p>
+				<p>
+					<form action="/cart/to_payment_system" method="POST">
+						<input type="hidden" name="id" value="{{ order.id }}">
+						<input type="submit" class="button submit mt20" value="Перейти к оплате">
+					</form>
+				</p>
+			{% elseif state == "notPaid" %}
+				<p>Заказ в ожидании оплаты</p>
+				<form action="/cart/to_payment_system" method="POST">
+					<input type="hidden" name="id" value="{{ order.id }}">
+					<input type="submit" class="button submit mt20" value="Перейти к счету в платежной системе">
+				</form>
+			{% elseif state == "paid" %}
+				<p>Счет оплачен. В будущем вы можете вернуться к этой странице через <a href="/user/orders">историю заказов</a></p>
+			{% elseif state == "cancelPayment" %}
+				<p>Заказ отменен. Истекло время оплаты, либо отмена инициирована пользователем</p>
+			{% endif %}
+
+			{% if check_access("pay_service") %}
+				<form action="/cart/to_admin_success" method="POST">
+					<input type="hidden" name="id" value="{{ order.id }}">
+					<input type="hidden" name="code" value="100">
+					<input type="submit" class="button submit mt20" value="Оплатить счет (для администраторов)">
+				</form>
+
+				<form action="/cart/to_admin_success" method="POST">
+					<input type="hidden" name="id" value="{{ order.id }}">
+					<input type="hidden" name="code" value="10">
+					<input type="submit" class="button submit mt20" value="Отменить счет (для администраторов)">
+				</form>
+			{% endif %}
+		</div>
+	</div>
+{% endblock content %}
+
+{% block rightside %} 
+	Правая сторона
+{% endblock rightside %}

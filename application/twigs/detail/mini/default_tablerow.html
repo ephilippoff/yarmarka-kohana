@@ -2,7 +2,7 @@
 	<td class="td td-1">
 		<div class="img-cont">
 			{% if object.compiled.images.main_photo and file_exist( strim(object.compiled.images.main_photo['120x90'] , '.')) %}
-				<img class="img-frame" src="{{ staticfile(object.compiled.images.main_photo['120x90']) }}" alt="{{ object.title|e }}">
+				<img class="img-frame" src="{{ '/' ~ object.compiled.images.main_photo['120x90'] }}" alt="{{ object.title|e }}">
 			{% else %}
 				<img class="img-frame" src="{{staticfile('images/nophoto_estate136x107.png')}}">
 			{% endif %}
@@ -45,7 +45,7 @@
 		{% if object.compiled.author.org_type == 2 %}
 			{% if object.compiled.author.logo %}
 				<div class="img-cont">
-					<img src="{{ staticfile(object.compiled.author.logo['120x90']) }}" alt="">
+					<img src="{{ '/' ~ object.compiled.author.logo['120x90'] }}" alt="">
 				</div>
 			{% endif %}
 			<div class="title">{{ object.compiled.author.org_name }}</div>

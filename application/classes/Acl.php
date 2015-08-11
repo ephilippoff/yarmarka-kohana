@@ -27,4 +27,23 @@ class Acl
 
         return $result;
     }
+
+    public static function check($action)
+    {
+        $user =  Auth::instance()->get_user();
+        $settings = Kohana::$config->load("acl.settings");
+        $cl = Kohana::$config->load("acl.cl.".$action);
+
+        $result = FALSE;
+
+        if (!$user and !in_array("auth", $cl)) {
+            $result = FALSE;
+        }
+
+        if ( $user and in_array($user->role, $cl) ) {
+            $result = "by_role";
+        }
+
+        return $result;
+    }
 }

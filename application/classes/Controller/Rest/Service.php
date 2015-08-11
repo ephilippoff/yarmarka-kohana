@@ -5,7 +5,6 @@ class Controller_Rest_Service extends Controller_Rest {
 	public function action_check_freeup()
 	{
 		$object_id = $this->post->id;
-		$is_check = $this->post->is_check;
 
 		$ad = ORM::factory('Object', intval($object_id));
 		if (!$ad->loaded() OR $ad->active == 0)
@@ -13,6 +12,7 @@ class Controller_Rest_Service extends Controller_Rest {
 			throw new HTTP_Exception_404;
 		}
 
+		$this->json['available'] = true;
 		$this->json['service'] = Service::factory("Up")->get();
 		$this->json['object'] = $ad->get_row_as_obj(array("id","title"));
 
@@ -38,40 +38,43 @@ class Controller_Rest_Service extends Controller_Rest {
 		// 	->get() );
 	}
 
+	public function action_check_buy_object()
+	{
+		$object_id = intval($this->post->id);
+		$ad = ORM::factory('Object', $object_id);
+		if (!$ad->loaded())
+		{
+			throw new HTTP_Exception_404;
+		}
+
+		$service = Service::factory("Object", $object_id);
+
+		$this->json['available'] = $service->check_available(1);
+		$this->json['service'] = $service->get();
+		$this->json['object'] = $ad->get_row_as_obj(array("id","title"));
+
+		if ($this->json['available'] !== TRUE)
+		{
+			$this->json['code'] = 400;
+			$this->json['text'] = $this->json['available'];
+		}
+	}
+
+	
 
 	public function action_save()
 	{
 		$service_info = new Obj($this->post->serviceData["info"]);
-		$service_params = new Obj(isset($this->post->serviceData["params"]) ? $this->post->serviceData["params"] : array() ) ;
+		
+		$service_result = Service::factory(Text::ucfirst($service_info->service["name"]))
+						->save($service_info)
+						->get_row_as_obj();
 
-		// $service = ORM::factory('Services')
-		// 				->where("name","=",$service_name)
-		// 				->find();
+		$this->json["result"] = $service_result;
+	}
 
-		$service = Service::factory(Text::ucfirst($service_info->service["name"]));
-		if ($service_info->category) {
-			$service = $service->category($service_info->category);
-		}
-		if ($service_info->city) {
-			$service = $service->category($service_info->city);
-		}
-
-		$service_info->service = $service->get();
-
-		$service_params->total = $service->calculate_total((array) $service_params);
-
-		$total_params = json_encode(array_merge((array) $service_params, (array) $service_info));
-
-		$key = Cart::get_key();
-
-		$order_item_temp = ORM::factory('Order_ItemTemp');
-
-		$order_item_temp->object_id = $service_info->object["id"];
-		$order_item_temp->service_id = NULL;
-		$order_item_temp->params = $total_params;
-		$order_item_temp->key = $key;
-		$order_item_temp->save();
-
-		$this->json["result"] = $order_item_temp->get_row_as_obj();
+	public function action_cart_count()
+	{
+		$this->json = array_merge($this->json, Cart::get_info());
 	}
 }

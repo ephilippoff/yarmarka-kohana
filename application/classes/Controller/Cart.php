@@ -7,65 +7,98 @@ class Controller_Cart extends Controller_Template {
 	public function before()
 	{
 		parent::before();
+
+		$this->use_layout = FALSE;
+		$this->auto_render = FALSE;
+
+		$this->domain = new Domain();
+		if ($proper_domain = $this->domain->is_domain_incorrect()) {
+			HTTP::redirect("http://".$proper_domain, 301);
+		}
 	}
 
 	public function action_index()
 	{
+		$start = microtime(true);
+		$twig = Twig::factory('cart/index');
 
-		$this->assets->js("minified/backbone-min.js");
-		$this->assets->js("minified/backbone.marionette.min.js");
+		$cart = $cartTempItems = $sale_types = array();
+		$key = Cart::get_key();
 
-		$this->assets->js("cart.js");
-
-		$cart = array();
-		$cookie = new Obj($_COOKIE);
-		$key = $cookie->cartKey;
-		$cartTempItems = array();
+		$twig->crumbs = array(
+			array(
+				"title" => "Оформление заказа"
+			)
+		);
 
 		$sum = 0;
-
+		//если корзина не пуста, т.е. есть ключ
 		if ($key) {
 
-			$_cartTempItems = ORM::factory('Order_ItemTemp')->where("key","=", $key)->find_all();
-			foreach ($_cartTempItems as $_item) {
-				$item = array();				
-				$item["id"] = $_item->id;				
-				$item = array_merge($item, $_item->get_info());
+			$_cartTempItems = ORM::factory('Order_ItemTemp')
+								->where("key","=", $key)->find_all();
 
+			foreach ($_cartTempItems as $_item) {
 				$params = json_decode($_item->params);
-				if ($params->quantity) {
-					$item["quantity"] = $params->quantity;
-				}
 				
-				$sum += $item["price"]* $item["quantity"];
+				$item = array();
+				$item = array_merge($item, (array) $params);
+				$item["id"] = $_item->id;
+				
+				$sum += $item["price"] * $item["quantity"];
+
+				//если заказан товар , проверяем доступность, и информацию по доставке
+				if ($params->type == "object") {
+					$service = Service::factory("Object", $_item->object_id);
+					$sale_type = $service->get_delivery_info();
+					$available = $service->check_available($params->quantity);
+					$item["available"] = $available;
+					$item["balance"] = $service->getBalance();
+					if ($sale_type)
+					{
+						array_push($sale_types, $sale_type);
+					}
+					
+				} else {
+
+				}
+
 				array_push($cartTempItems, new Obj($item));
 			}
 
-			$this->template->order = null;
+			$twig->order = null;
+			//если уже был сохранен заказ
 			$order = ORM::factory('Order')->where("key","=",$key)->find();
 			if ($order->loaded()) {
-				
-				$this->template->order = $order;
+				$twig->order = $order;
 			}
 		}
 
-		$this->template->cartTempItems = $cartTempItems;
-		$this->template->sum = $sum;
-		$this->template->user = $user = Auth::instance()->get_user();
+		
 
+		if (in_array("with-shipping", $sale_types)) {
+			$twig->next_page = "cart/delivery/";
+		} else {
+			$twig->next_page = "cart/order/";
+		}
+		
 
+		$twig->cartTempItems = $cartTempItems;
+		$twig->sum = $sum;
+		$twig->user = $user = Auth::instance()->get_user();
+
+		$twig->php_time = microtime(true) - $start;
+		$this->response->body($twig);
 	}
 
-	public function action_order()
+	public function action_delivery()
 	{
+
+		$start = microtime(true);
+		$twig = Twig::factory('cart/delivery');
 		$id = $this->request->param('id');
 		$user = Auth::instance()->get_user();
-
-		$session = Session::instance();
-		$errors = $session->get("errors");
-		$errors_post = $session->get("post");
-		$session->delete("errors");
-		$session->delete("post");
+		$errors = array();
 
 		if (!$user OR !$id) {
 			HTTP::redirect("/cart");
@@ -76,10 +109,146 @@ class Controller_Cart extends Controller_Template {
 					->where("user_id","=", $user->id)
 					->where("id","=", intval($id))
 					->find();
-		if (!$order->loaded()) {
-			HTTP::redirect("/cart");
+		if (!$order->loaded() or $order->state > 0) {
+			throw new HTTP_Exception_404;
 			return;
 		}
+		$twig->order = $order;
+
+
+		$twig->user_city_id = $this->domain->get_city()->id;
+
+		
+		$twig->cities = array(
+			1919 => "Тюмень",
+			1979 => "Сургут",
+			1948 => "Нижневартовск"
+		);
+
+		$twig->crumbs = array(
+			array(
+				"title" => "Оформление заказа",
+				"url" => "cart"
+			),
+			array(
+				"title" => "Оформление доставки"
+			)
+		);
+
+		
+		$params = ($order->params) ? $order->params : "{}";
+		$params = new Obj(json_decode($params));
+		if ($params->delivery)
+		{
+			$twig->post = $params->delivery;
+		}
+
+		$is_post = ($_SERVER['REQUEST_METHOD']=='POST');
+		if ($is_post)
+		{
+			if ($this->request->post("type") == "city-delivery")
+			{
+			$validation = Validation::factory((array) $this->request->post())
+					->rule('type', 'not_empty', array(':value', "Варианты доставки"))
+					->rule('address', 'not_empty', array(':value', "Адрес"))
+					->rule('phone', 'not_empty', array(':value', "Телефон"))
+					->rule('city', 'not_empty', array(':value', "Город"));
+			} 
+			else 
+			{
+				$validation = Validation::factory((array) $this->request->post())
+					->rule('type', 'not_empty', array(':value', "Варианты доставки"));
+			}
+			if ( !$validation->check())
+			{
+				$errors = $validation->errors('validation/object_form');
+			}
+
+			$twig->errors = $errors;
+			$twig->post = $this->request->post();
+
+			if (!count($errors))
+			{
+				
+				if ($this->request->post("type") == "city-delivery")
+				{
+					$params->delivery = array(
+						"type" => $this->request->post("type"),
+						"city" => $this->request->post("city"),
+						"comment" => $this->request->post("comment"),
+						"address" => $this->request->post("address"),
+						"phone" => $this->request->post("phone"),
+						"price" => 0
+					);
+				} 
+				else 
+				{
+					$params->delivery = array(
+						"type" => $this->request->post("type")
+					);
+				}
+				$order->params = json_encode((array) $params);
+				$order->save();
+				HTTP::redirect("/cart/order/".$order->id);
+			}
+		}
+
+		$twig->php_time = microtime(true) - $start;
+		$this->response->body($twig);
+	}
+
+
+	public function action_order()
+	{
+		$start = microtime(true);
+		$twig = Twig::factory('cart/order');
+
+		$id = $this->request->param('id');
+		$user = Auth::instance()->get_user();
+
+		$session = Session::instance();
+		$errors = $session->get("errors");
+		$errors_post = $session->get("post");
+		$session->delete("errors");
+		$session->delete("post");
+
+		if (!$user OR !$id) {
+			throw new HTTP_Exception_404;
+			return;
+		}
+
+		$order = ORM::factory('Order')
+					->where("user_id","=", $user->id)
+					->where("id","=", intval($id))
+					->find();
+		if (!$order->loaded()) {
+			throw new HTTP_Exception_404;
+			return;
+		}
+
+		$twig->crumbs = array(
+			array(
+				"title" => "Оформление заказа",
+				"url" => "cart"
+			)
+		);
+
+		$params = ($order->params) ? $order->params : "{}";
+		$params = new Obj(json_decode($params));
+		if ($params->delivery)
+		{
+
+			$twig->crumbs[] = array(
+				"title" => "Оформление доставки",
+				"url" => "cart/delivery/".$order->id
+			);
+
+			$twig->delivery_info = $params->delivery;
+		}
+
+		$twig->crumbs[] = array(
+			"title" => "Подтверждение заказа"
+		);
 
 		$orderItems = ORM::factory('Order_Item')->get_items($order->id);
 
@@ -97,58 +266,24 @@ class Controller_Cart extends Controller_Template {
 			$state = "cancelPayment";
 		}
 
-		$this->template->state = $state;
-		$this->template->order = $order;
-		$this->template->orderParams = new Obj(json_decode($order->params));
-		$this->template->orderItems = $orderItems;
-
-		$sale_types = array();
-		foreach ($orderItems as $orderItem) {
-			if ($orderItem->object_id) {
-				$sale_type = ORM::factory('Object')->get_sale_type($orderItem->object_id);
-				array_push($sale_types, $sale_type);
-			}
-		}
-
-		$this->template->sale_types = $sale_types;
-
-		$this->template->getBalance = function($object_id) {
-			return ORM::factory('Object')->get_balance($object_id);
-		};
-
-		$this->template->user_city_id = NULL;
-		if ( in_array("location_city_id", array_keys($_COOKIE)) ) {
-			$this->template->user_city_id = $_COOKIE["location_city_id"];
-		}
-		$this->template->cities = array(
-			1919 => "Тюмень",
-			1979 => "Сургут",
-			1948 => "Нижневартовск"
-		);
-		$this->template->errors = $errors;
-		$this->template->errors_post = new Obj(($errors_post)?$errors_post:array());
-	}
-
-	public function action_remove_item()
-	{
-		if ( ! $this->request->is_ajax() AND Kohana::$environment !== Kohana::DEVELOPMENT)
+		if ($state <> "initial")
 		{
-			throw new HTTP_Exception_404;
-		}
-		$this->auto_render = FALSE;
-		$id = $this->request->param('id');
-		$cookie = new Obj($_COOKIE);
-		$key = $cookie->cartKey;
-
-		if ($key) {
-			ORM::factory('Order_ItemTemp')
-				->where("key","=", $key)
-				->where("id","=", $id)
-				->delete_all();
+			$twig->crumbs = array(
+				array(
+					"title" => "Заказ №".$order->id
+				)
+			);
 		}
 
-		$this->json["code"] = 200;
-		$this->json_response();
+		$twig->state = $state;
+		$twig->order = $order;
+		$twig->orderItems = $orderItems;
+
+		$twig->errors = $errors;
+		$twig->errors_post = new Obj(($errors_post)?$errors_post:array());
+
+		$twig->php_time = microtime(true) - $start;
+		$this->response->body($twig);
 	}
 
 	public function action_save()
@@ -175,8 +310,8 @@ class Controller_Cart extends Controller_Template {
 			return;
 		}
 
-		$cookie = new Obj($_COOKIE);
-		$key = $cookie->cartKey;
+		$key = Cart::get_key();
+
 		if (!$key) {
 			$this->json["message"] = "Неверный ключ";
 			$this->json["code"] = 400;
@@ -213,72 +348,80 @@ class Controller_Cart extends Controller_Template {
 			$db->begin();
 
 
-			$order = ORM::factory('Order')->where("key","=",$key)->find();
+			$order = ORM::factory('Order')
+						->where("key","=",$key)
+						->find();
 			$order_loaded = $order->loaded();
+
 			$order->key = $key;
 			$order->user_id = $user->id;
 			$order->state = 0;
 			$order->sum = $sum;
-			$order->params = json_encode(array());
+			$order->params = ($order->params) ? $order->params : "{}";
 			$order->save();
 
 			$order_id = $order->id;
 
 			//return balance of goods if edit cart
-			if ($order_loaded) {
+			if ($order_loaded)
+			{
 				$orderItems = ORM::factory('Order_Item')
 											->where("order_id", "=", $order_id )
 											->find_all();
-				foreach ($orderItems as $orderItem) {
+				foreach ($orderItems as $orderItem)
+				{
 					$params = new Obj(json_decode($orderItem->params));
-					if ($orderItem->object_id) {
+					if ($params->type == "object")
+					{
 						ORM::factory('Object')->increase_balance($orderItem->object_id, $params->quantity);
 					}
 				}
-			}
 
-			$tempItems = ORM::factory('Order_ItemTemp')
-									->where("key", "=", $key )
-									->find_all();
-
-			if ($order_loaded) {
 				ORM::factory('Order_Item')
 						->where("order_id","=",$order_id)
 						->delete_all();
 			}
-				
-			foreach ($tempItems as $tempItem) {
-				$tempItem->params = json_encode(array(
-					"quantity" => $quantityItems->{$tempItem->id}
-				));
 
-				if ($tempItem->object_id) {
-					$balance = ORM::factory('Object')->get_balance($tempItem->object_id);
-					$params = new Obj(json_decode($tempItem->params));
-					if ($balance >= 0 AND $balance - intval($params->quantity) < 0) {
-						throw new Exception($params->title. " недоступен для заказа (остутсвует)");
-					}
+			$tempItems = ORM::factory('Order_ItemTemp')
+									->where("key", "=", $key)
+									->find_all();
+				
+			foreach ($tempItems as $tempItem)
+			{
+				$params = new Obj(json_decode($tempItem->params));
+				
+				$params->quantity = $quantityItems->{$tempItem->id};
+
+				if ($params->type == "object" )
+				{
+					$params->available = Service::factory("Object",$tempItem->object_id)
+											->check_available($params->quantity);
+				} else {
+					$params->available = TRUE;
 				}
-				
-				$tempItem->save();
 
-				$title = $price = null;
+				if ($params->available !== TRUE)
+				{
+					$db->rollback();
+					$this->json["message"] = "В заказе присутствуют недоступные позиции, удалите их прежде чем продолжить";
+					$this->json["code"] = 400;
+					$this->json_response();
+					return;
+				}
+
+				$tempItem->params = json_encode((array) $params);
+				$tempItem->save();
+				
 				$realItem = ORM::factory('Order_Item');
 				$realItem->order_id = $order_id;
-				if ($tempItem->object_id) {
-					$object = ORM::factory('Object', $tempItem->object_id);
-					if (!$object->loaded()) {
-						continue;
-					}
-					$title = $object->title;
-					$price = $object->price;
-					$realItem->object_id = $tempItem->object_id;
-
-				}
+				$realItem->object_id = $tempItem->object_id;
 				$realItem->params = json_encode(array(
-					"title" => $title,
-					"price" => $price,
-					"quantity" => $quantityItems->{$tempItem->id}
+					"title" => $params->title,
+					"price" => $params->price,
+					"quantity" => $params->quantity,
+					"total" => $params->quantity * $params->price,
+					"available" => $params->available,
+					"type" => $params->type
 				));
 				$realItem->save();
 			}
@@ -292,7 +435,7 @@ class Controller_Cart extends Controller_Template {
 			//decrease balance of goods
 			foreach ($orderItems as $orderItem) {
 				$params = new Obj(json_decode($orderItem->params));
-				if ($orderItem->object_id) {
+				if ($params->type == "object") {
 					ORM::factory('Object')->decrease_balance($orderItem->object_id, $params->quantity);
 				}
 			}
@@ -318,7 +461,29 @@ class Controller_Cart extends Controller_Template {
 
 	}
 
-	public function action_pay()
+
+	public function action_remove_item()
+	{
+		if ( ! $this->request->is_ajax() AND Kohana::$environment !== Kohana::DEVELOPMENT)
+		{
+			throw new HTTP_Exception_404;
+		}
+		$this->auto_render = FALSE;
+		$id = $this->request->param('id');
+		$key = Cart::get_key();
+
+		if ($key) {
+			ORM::factory('Order_ItemTemp')
+				->where("key","=", $key)
+				->where("id","=", $id)
+				->delete_all();
+		}
+
+		$this->json["code"] = 200;
+		$this->json_response();
+	}
+
+	public function action_to_payment_system()
 	{
 		$this->auto_render = FALSE;
 		$errors = array();
@@ -339,12 +504,12 @@ class Controller_Cart extends Controller_Template {
 		}
 
 		foreach ($orderItems as $orderItem) {
-			if ($orderItem->object_id) {
-				$balance = ORM::factory('Object')->get_balance($orderItem->object_id);
-				$params = new Obj(json_decode($orderItem->params));
-				if ($balance >= 0 AND $balance - intval($params->quantity) < 0) {
-					//HTTP::redirect("/cart/order/".$order_id."?error=400");
-					$errors["paid_or_refused"] = "Заказ уже оплачен либо отклонен";
+			$params = json_decode($orderItem->params);
+			if ($params->type == "object") {
+				$service = Service::factory("Object", $orderItem->object_id);
+				$available = $service->check_available(0);
+				if ($available !== TRUE) {
+					$errors["paid_or_refused"] = $available;
 					$this->return_with_errors("/cart/order/".$order_id, $this->request->post(), $errors);
 					return;
 				}
@@ -355,34 +520,6 @@ class Controller_Cart extends Controller_Template {
 			HTTP::redirect($order->payment_url);
 			return;
 		}
-
-		//check required params for shipping if is need
-		$sale_types = array();
-		foreach ($orderItems as $orderItem) {
-			if ($orderItem->object_id) {
-				$sale_type = ORM::factory('Object')->get_sale_type($orderItem->object_id);
-				array_push($sale_types, $sale_type);
-			}
-		}
-
-		if (in_array("with-shipping", $sale_types)) {
-
-			$validation = Validation::factory((array) $this->request->post())
-				->rule('address', 'not_empty', array(':value', "Адрес"))
-				->rule('phone', 'not_empty', array(':value', "Телефон"))
-				->rule('city', 'not_empty', array(':value', "Город"));
-
-			if ( !$validation->check())
-			{
-				$errors = array_merge($errors, $validation->errors('validation/object_form'));
-				$this->return_with_errors("/cart/order/".$order_id, $this->request->post(), $errors);
-				return;
-			}
-		}
-		//=======
-
-
-		
 
 		$robo = new Robokassa($order_id);
 		$robo->set_description("Заказ №" . $order_id . ". Ярмарка Онлайн");
@@ -398,13 +535,6 @@ class Controller_Cart extends Controller_Template {
 		}
 		ORM::factory('Order_ItemTemp')->where("key", "=", $order->key)->delete_all();
 
-		$params = json_decode($order->params);
-		$params["city"] = $this->request->post("city");
-		$params["comment"] = $this->request->post("comment");
-		$params["address"] = $this->request->post("address");
-		$params["phone"] = $this->request->post("phone");
-
-		$order->params = json_encode($params);
 		$order->key = NULL;
 		$order->state = 1;
 		$order->payment_url = $payment_url;
@@ -463,6 +593,32 @@ class Controller_Cart extends Controller_Template {
 		{
 			HTTP::redirect("/cart/order/".$order_id);
 		}
+	}
+
+	public function action_to_admin_success()
+	{
+		$this->auto_render = FALSE;
+
+		if (!Acl::check("pay_service")) {
+			throw new HTTP_Exception_404;
+			return;
+		}
+
+		$order_id = $this->request->post("id");
+		$code = $this->request->post("code");
+
+		$order = ORM::factory('Order', $order_id);
+
+		if (!$order->loaded())
+		{
+			throw new HTTP_Exception_404;
+			return;
+		}
+
+		$order->check_state($order->id, array(
+			"fake" => array("code_request" => $code)
+		));
+		HTTP::redirect("/cart/order/".$order->id);
 	}
 
 	public function action_fail()

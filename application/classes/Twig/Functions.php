@@ -30,7 +30,7 @@ class Twig_Functions
 
     public static function staticfile($file)
     {
-        return "/".$file;
+        return "/static/develop/".$file;
     }
 
     public static function debug($param)
@@ -66,8 +66,48 @@ class Twig_Functions
         return Acl::check_object($object, $action);
     }
 
+
+    public static function check_access($action)
+    {
+        return Acl::check($action);
+    }
+
     public static function get_stat_cached_info($id)
     {
         return Cachestat::factory($id."insearch")->fetch();
+    }
+
+    public static function get_cart_info()
+    {
+        return Cart::get_info();
+    }
+
+    public static function get_favorites_info()
+    {
+        return ORM::factory('Favourite')->get_list_by_cookie();
+    }
+
+    public static function get_myobjects_info()
+    {
+
+        // $myobject_count = Search::searchquery(
+        //         array(
+        //             "active" => TRUE,
+        //             "published" =>TRUE,
+        //             "user_id" => Auth::instance()->get_user()->id,
+        //             "filters" => array()
+        //         ), 
+        //         array(), 
+        //         array("count" => TRUE)
+        //     )->execute()->get("count");
+        return 1;
+    }
+
+    public static function get_form_element()
+    {
+        $arguments = func_get_args();
+        $name = $arguments[0];
+        array_shift($arguments);
+        return call_user_func_array("Form::".$name, $arguments);
     }
 }

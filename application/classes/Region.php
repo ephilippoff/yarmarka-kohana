@@ -47,7 +47,7 @@ class Region {
 
 	public static function get_cookie_domain()
 	{
-		return '.'.Kohana::$config->load('main_domain');
+		return '.'.Kohana::$config->load('common.main_domain');
 	}
 
 	public static function get_domain_by_city($city_id = NULL)
