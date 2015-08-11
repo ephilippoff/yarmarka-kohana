@@ -1,11 +1,14 @@
 <tr class="tr">
 	<td class="td td-1">
 		<div class="img-cont">
-			{% if object.compiled.images.main_photo and file_exist( strim(object.compiled.images.main_photo['120x90'] , '.')) %}
-				<img class="img-frame" src="{{ staticfile(object.compiled.images.main_photo['120x90']) }}" alt="{{ object.title|e }}">
-			{% else %}
-				<img class="img-frame" src="{{staticfile('images/nophoto_estate136x107.png')}}">
-			{% endif %}
+			<div class="img-wrapper">
+				{% if object.compiled.images.main_photo and file_exist( strim(object.compiled.images.main_photo['120x90'] , '.')) %}
+					<img class="img-frame" src="{{ staticfile(object.compiled.images.main_photo['120x90']) }}" alt="{{ object.title|e }}">
+					<span class="photos-count">5</span>
+				{% else %}
+					<img class="img-frame" src="{{staticfile('images/nophoto_estate136x107.png')}}">
+				{% endif %}					
+			</div>
 			{% if object.is_premium %}
 				<span class="premium-tape"></span>
 			{% endif %}
@@ -36,38 +39,37 @@
 			{% endif %}
 			
 		</div>
-		<table>
-			<tbody>
-				<tr>
-					<td>Премиум</td>
-					<td>Лидер</td>
-					<td>В газету</td>
-					<td>В другие города</td>
-				</tr>
-			</tbody>
-		</table>
-	</td>
-	<td class="td td-3">
-		<div class="button js-ocontrol-publish" data-id="{{object.id}}">
-			<span>
-				{% if object.is_published %} 
-					Снять с публикации
-				{% else %}
-					Опубликовать
-				{% endif %}
-			</span>
-		</div>
-		<div class="button js-service-up" data-id="{{object.id}}">
-			<span>Поднять</span>
-		</div>
-		<div class="button js-ocontrol-edit" data-id="{{object.id}}">
-			<span>Редактировать</span>
+		<div>
+			<span class="button w140 button-style1 bg-color-blue mr3 mb3"><i class="ico vkontakte-ico16 mr5"></i>Премиум</span>
+			<span class="button w140 button-style1 bg-color-blue mr3 mb3"><i class="ico vkontakte-ico16 mr5"></i>Лидер</span>
+			<span class="button w140 button-style1 bg-color-blue mr3 mb3"><i class="ico vkontakte-ico16 mr5"></i>В газету</span>
+			<span class="button w140 button-style1 bg-color-blue mr3 mb3"><i class="ico vkontakte-ico16 mr5"></i>В другие города</span>
 		</div>
 	</td>
-	<td class="td td-3">
-		Код: {{object.id}} <br>
-		Обновлено: {{ object.date_created|date('d.m.Y') }} <br>
-		Просмотров: {{ object.visits }}
+	<td class="td w190 p10 va-t">
+		<span class="button w100p button-style1 bg-color-lightgreen mb3 ta-l js-ocontrol-publish" data-id="{{object.id}}">
+			{% if object.is_published %} 
+				<i class="ico vkontakte-ico16 mr5"></i>Снять с публикации
+			{% else %}
+				<i class="ico vkontakte-ico16 mr5"></i>Опубликовать
+			{% endif %}			
+		</span>		
+
+		<span class="button w100p button-style1 bg-color-lightgreen mb3 ta-l js-service-up" data-id="{{object.id}}"><i class="ico vkontakte-ico16 mr5"></i>Поднять</span>
+		<span class="button w100p button-style1 bg-color-lightgreen mb3 ta-l js-ocontrol-edit" data-id="{{object.id}}"><i class="ico vkontakte-ico16 mr5"></i>Редактировать</span>
 	</td>
+	<td class="td td-4">		
+		<i class="ico premium-ico22"></i>
+		<i class="ico leader-ico22"></i>
+	</td>
+	<td class="td-additional">
+		<div class="relative">
+			<div class="additional-cont p20">
+				Код: {{object.id}} <br>
+				Обновлено: {{ object.date_created|date('d.m.Y') }} <br>
+				Просмотров: {{ object.visits }}				
+			</div>
+		</div>			
+	</td>	
 	
 </tr>

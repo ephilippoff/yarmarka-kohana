@@ -2,23 +2,34 @@
 	<div class="block-title">
 		<span>Информация</span>
 	</div>
-	Внимание! В разделе "Вакансии" поднятие объявления доступно 1 раз в сутки. В остальных разделах поднятие объявления доступно 1 раз в 3 суток. УСЛУГА БЕСПЛАТНАЯ!<br>
-		Ваш лимит Премиум объявлений - 87
+	<div class="p10">
+		Внимание! В разделе "Вакансии" поднятие объявления доступно 1 раз в сутки. В остальных разделах поднятие объявления доступно 1 раз в 3 суток. УСЛУГА БЕСПЛАТНАЯ!<br>
+			Ваш лимит Премиум объявлений - 87
+	</div>
 </div>
 {% if messages|length > 0 %}
 	<div class="info-block-cont theme3 module">
 		<div class="block-title">
 			<span>Сообщения к вашим объявлениям</span>
 		</div>
-		<div class="items-list-cont3">
-			<ul>
-				{% for message in messages %}
-				<li>
-					{{message.createdOn|date('d.m.Y')}} : {{message.text}}
-					<a href="/detail/{{message.object_id}}">К объявлению</a>
-				</li>
-				{% endfor %}
-			</ul>
+		<div class="comments-list-cont p10">
+			{% for message in messages %}
+				<div class="comment-cont">
+					<div class="li-cont moderator1">
+						<div class="aside">
+							<span class="created-on">{{message.createdOn|date('d.m.Y')}}</span>
+						</div>
+						<div class="cont">		
+							<span class="user-name">
+								{{message.user_name}}											
+							</span>
+							<p class="text-comment">
+								— {{message.text}}																								
+							</p>
+						</div>
+					</div>
+				</div>				
+			{% endfor %}
 		</div>
 	</div>
 {% endif %}
