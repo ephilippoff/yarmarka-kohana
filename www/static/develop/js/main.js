@@ -11,6 +11,10 @@ require.config({
         jssorSlider : 'lib/jssor.slider.mini',
         menuAim : 'lib/jquery.menu-aim',
         jcookie: 'lib/jquery.cookie',
+        iframeTransport: 'lib/vendor/jquery.iframe-transport',
+        fileupload: 'lib/vendor/jquery.fileupload',
+        nicEdit: 'lib/vendor/nicEdit',
+        maskedInput: 'lib/vendor/jquery.maskedinput'
     },
     shim : {
         'lib/backbone-localStorage' : ['backbone'],
@@ -31,6 +35,9 @@ require.config({
         paginator : {
             deps : ['backbone'],
             exports: 'Backbone.Paginator'
+        },
+        fileupload: {
+             deps : ['iframeTransport'],
         }
     },
     deps : ['jquery', 'underscore']

@@ -26,13 +26,22 @@ class Controller_Add extends Controller_Template {
 
 	public function action_index()
 	{
-		$this->layout = 'add';
+		$this->use_layout   = FALSE;
+		$this->auto_render  = FALSE;
+		$twig = Twig::factory('user/add');
+		$twig->params = new Obj();
 		
-		$this->assets->js("old/nicEdit.js");
+		$prefix = (Kohana::$environment == Kohana::PRODUCTION) ? "" : "dev_";
+		$staticfile = new StaticFile("attributes", $prefix.'static_attributes.js');
+		$twig->data_file = $staticfile->jspath;
 		
-		$this->assets->js("old/vendor/jquery.ui.widget.js");
-		$this->assets->js("old/jquery.iframe-transport.js");
-		$this->assets->js("old/jquery.fileupload.js");
+		// $this->layout = 'add';
+		
+		// $this->assets->js("old/nicEdit.js");
+		
+		// $this->assets->js("old/vendor/jquery.ui.widget.js");
+		// $this->assets->js("old/jquery.iframe-transport.js");
+		// $this->assets->js("old/jquery.fileupload.js");
 		
 		$user = Auth::instance()->get_user();
 
@@ -77,15 +86,15 @@ class Controller_Add extends Controller_Template {
 			$form_data->Login();
 
 		$form_data	->Category()
-				 	->City()
-				 	->Subject()
-				 	->Text()
-				 	->Photo()
-				 	->Video()
-				 	->Params()
-				 	->Map()
-				 	->Price()
-				 	->Contacts()
+					->City()
+					->Subject()
+					->Text()
+					->Photo()
+					->Video()
+					->Params()
+					->Map()
+					->Price()
+					->Contacts()
 					->Widgets()
 					->Additional();
 					
@@ -96,15 +105,16 @@ class Controller_Add extends Controller_Template {
 
 		if ($user AND $user->role == 9)
 			$form_data ->AdvertType();
+
+		$twig->params->token = $token;
 		
-		$this->template->token = $token;
-		
-		$this->template->set_global('jspath', $staticfile->jspath);
-		$this->template->params 	= new Obj($params);
-		$this->template->form_data 	= $form_data->_data;
-		$this->template->errors = (array) $errors;
-		$this->template->assets = $this->assets;
-		$this->template->user = ($user AND $user->loaded()) ? $user->org_type : "undefined";
+		//$twig->template->set_global('jspath', $staticfile->jspath);
+
+		$twig->params->params 	= new Obj($params);
+		$twig->params->form_data 	= $form_data->_data;
+		$twig->params->errors = (array) $errors;
+		$twig->params->assets = $this->assets;
+		$twig->params->user = ($user AND $user->loaded()) ? $user->org_type : "undefined";
 
 		$expired = NULL;
 		if ($user AND !$user->is_valid_orginfo()
@@ -113,7 +123,11 @@ class Controller_Add extends Controller_Template {
 			$settings = new Obj(ORM::factory('User_Settings')->get_group($user->id, "orginfo"));
 			$expired =  $settings->{"date-expired"};
 		}
-		$this->template->expired_orginfo = $expired;
+		$twig->params->expired_orginfo = $expired;
+
+		$twig->params = (array) $twig->params;
+		$twig->block_name = "add/_index";
+		$this->response->body($twig);
 
 	}
 

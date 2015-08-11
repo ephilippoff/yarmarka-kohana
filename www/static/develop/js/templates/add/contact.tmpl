@@ -1,0 +1,19 @@
+<div class="cont-left">
+	<select class="sl-contact-type fn-contact-type" name="contact_<%=id%>_type">
+		<option value="1" data-comment="Введите номер" data-validation-type="phone" data-format="+7(999)999-99-99" <% if (type == "1") {%> selected <%}%> >Мобильный тел.</option>
+		<option value="2" data-comment="Введите номер" data-validation-type="phone" data-format="+7(9999)99-99-99" <% if (type == "2") {%> selected <%}%> >Городской тел.</option>
+		<option value="5" data-comment="Введите ваш почтовый ящик" data-validation-type="email" data-format="" <% if (type == "5") {%> selected <%}%> >Email</option>
+	</select>
+	<input class='inp_contact fn-contact-value' type="text" name="contact_<%=id%>_value" value="<%=value%>">
+	<span class="inform"><span class="fn-contact-inform">
+		<% if (status == "verified") { %>
+			Контакт подтвержден
+		<% } else if (status == "noverified"){ %>
+			Контакт не подтвержден
+		<% } %>
+	</span></span>
+</div>
+<div class="cont-right">
+	<span title="Верифицировать" class="button apply fn-contact-verify-button">Подтвердить контакт</span>
+	<span class="cansel like-link fn-contact-delete-button" title="Удалить">Удалить</span>
+</div><!--contact-right-->			

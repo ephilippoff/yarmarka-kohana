@@ -1,0 +1,17 @@
+<div class="inp-cont-short" id="div_<%=id%>">
+		<div class="inp-cont">
+		<% if (is_required) { %>
+			<span class="required-label">*</span>
+		<% } %>
+			<select id="<%=id%>" name="<%=id%>" class="<%=classes%>">
+		  		<option value="">--<%=title%><%=(unit)?", "+unit:""%>--</option>
+		  		<% _.each(data, function(item, key){ %>
+		  			<% if (key == 0) return; %>
+		  			<%  if (typeof item == "object") item = item[0].title %>
+
+
+		  			<option value="<%=key%>"><%=item%></option>
+		  		<% }); %>
+		  	</select> 
+  		</div>
+	</div>

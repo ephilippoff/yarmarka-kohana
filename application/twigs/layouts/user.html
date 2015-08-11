@@ -5,10 +5,29 @@
 	{% block header %} 
 		{{ parent() }}
 	{% endblock header %}
-	
-	<div class="m_content">
-		{% block content %} 
-			контент
-		{% endblock content %}
-	</div>
+
+	{% block crumbs %}
+		<div class="breadcrumbs-cont module mt10">
+		{% for crumb in crumbs %}
+			{% if crumb.url %}
+				<a href="{{ url(crumb.url) }}">{{crumb.title}}</a> /
+			{% else  %}
+				<h1>{{crumb.title}}</h1>
+			{% endif %}
+		{% endfor %}
+		</div>
+	{% endblock crumbs %}
+
+	<div class="row">
+		<div class="col-md-9">
+			{% block content %} 
+				контент
+			{% endblock content %}
+		</div><!--col-->
+		<div class="col-md-3">
+			{% block rightside %} 
+				Правая сторона
+			{% endblock rightside %}
+		</div><!--col-->
+	</div><!--row-->
 {% endblock body %} 

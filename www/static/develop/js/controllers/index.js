@@ -8,10 +8,11 @@ define([
     "views/partials/detail",
     "views/partials/userSearch",
     "views/partials/cart",
+    "views/partials/add",
 
     "modules/filters"
 ], 
-function (Marionette, templates, utils, IndexPage, SearchPage, DetailPage, UserSearchPage, CartPage, FiltersModule) {
+function (Marionette, templates, utils, IndexPage, SearchPage, DetailPage, UserSearchPage, CartPage, AddPage, FiltersModule) {
     "use strict";
     
     return Marionette.Controller.extend({
@@ -63,6 +64,15 @@ function (Marionette, templates, utils, IndexPage, SearchPage, DetailPage, UserS
             app.menu.init(["main"]);
             app.favourite.init(["list"]);
             new CartPage({
+                el: "body"
+            });
+        },
+
+         start_addSection : function() {
+            console.log("Add start");
+
+            app.menu.init(["main"]);
+            new AddPage({
                 el: "body"
             });
         },

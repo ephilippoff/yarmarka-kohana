@@ -110,4 +110,9 @@ class Twig_Functions
         array_shift($arguments);
         return call_user_func_array("Form::".$name, $arguments);
     }
+
+    public static function get_config($path)
+    {
+        return Kohana::$config->load($path);
+    }
 }

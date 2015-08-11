@@ -1,0 +1,17 @@
+<div class="smallcont" id="div_text">
+		<div class="labelcont">
+			<label><span>Текст объявления:</span></label>
+		</div>		
+		<div class="fieldscont user-text mb15">
+			<div class="inp-cont-long ">
+				<div class="inp-cont">
+					<% if (text_required) { %>
+						<span class="required-label">*</span>
+					<% } %>
+					<div class="textarea user_text_adv_wrp">
+					<textarea name="user_text_adv" id="user_text_adv" class="user_text_adv"><%=value%></textarea>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>  

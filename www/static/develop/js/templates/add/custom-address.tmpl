@@ -1,0 +1,20 @@
+<div class="smallcont" id="div_<%=id%>">
+			<div class="labelcont">
+				<label><span><%=title%><%=(unit)?", "+unit+":":":"%></span></label>
+			</div>
+			<div class="fieldscont">
+				<div class="inp-cont">
+					<div class="inp-cont-long">
+						<% if (is_required) { %>
+							<span class="required-label">*</span>
+						<% } %>
+						
+						<input id="<%=id%>" type="text" name="<%=id%>" value="<%=value%>"/>
+
+						<span class="inform">
+							<span>Например: ул. Мельникайте, д. 44, корп. 2</span>
+						</span>
+					</div>
+			</div>
+		</div>									
+</div>

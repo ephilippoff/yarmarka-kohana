@@ -1,0 +1,15 @@
+<div class="smallcont" id="div_<%=id%>">
+		<div class="labelcont">
+			<label><span><%=title%><%=(unit)?", "+unit+":":":"%></span></label>
+		</div>
+		<div class="fieldscont">
+			<div class="inp-cont-short" data-condition="">
+				<div class="inp-cont">
+					<% if (is_required) { %>
+						<span class="required-label">*</span>
+					<% } %>
+					<input  id="<%=id%>" name="<%=id%>" class="<%=classes%>" type="text" value="<%=value%>"/>
+				</div>
+			</div>
+		</div>
+</div>

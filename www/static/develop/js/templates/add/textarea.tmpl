@@ -1,0 +1,15 @@
+<div class="smallcont" id="div_<%=id%>">
+			<div class="labelcont">
+				<label><span><%=title%></span></label>
+			</div>
+			<div class="fieldscont">
+				<div class="inp-cont-long" data-condition="">
+					<div class="inp-cont">
+						<% if (is_required) { %>
+							<span class="required-label">*</span>
+						<% } %>
+						<textarea id="<%=id%>" name="<%=id%>" class="<%=classes%>"><%=value%></textarea>
+					</div>
+				</div>
+			</div>
+	</div>

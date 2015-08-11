@@ -1,7 +1,7 @@
 
 <? $i = 0; ?>
 <?	foreach ($data->contacts as $contact):	?>
-	<div id="contact_<?=$contact["id"]?>" class="contact-cont fn-contact <? if (!$contact["verified"]) echo "noverified"; ?> <?if ($contact["verified"]) echo "verified";?>" id="contact_item_<?=$i?>" data-item-id="<?=$i?>">
+	<div id="contact_<?=$i?>" class="contact-cont fn-contact <? if (!$contact["verified"]) echo "noverified"; ?> <?if ($contact["verified"]) echo "verified";?>" id="contact_item_<?=$i?>" data-item-id="<?=$i?>">
 		<div class="cont-left">
 			<select id="contact_type_select_<?=$i?>"  name="contact_<?=$i?>_type" class="sl-contact-type fn-contact-type">
 				<? foreach ($data->contact_types as $contact_type):?>
