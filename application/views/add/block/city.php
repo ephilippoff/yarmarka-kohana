@@ -2,7 +2,7 @@
 	<?=$data->city_title?>
 	<input type="hidden" name="<?=$name?>" id="city_id" value="<?=$data->city_id?>" data-title="<?=$data->city_title?>" data-lat="<?=$data->lat?>" data-lon="<?=$data->lon?>"/>
 <? else: ?>
-	<select  name="<?=$name?>" id="city_id" class="<?=$_class?>" data-lat="<?=$data->lat?>" data-lon="<?=$data->lon?>">
+	<select  name="<?=$name?>" id="city_id" class="<?=$_class?> w100p" data-lat="<?=$data->lat?>" data-lon="<?=$data->lon?>">
 		<option value>---</option>
 		<? foreach($data->city_list as $key=> $item) : ?>
 			<optgroup label="<?=$key?>">

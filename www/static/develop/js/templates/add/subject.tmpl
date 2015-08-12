@@ -1,19 +1,17 @@
-<div class="smallcont" id="div_subject">
-		<div class="labelcont">
-				<label><span>Заголовок:</span></label>
-		</div>
-		<div class="fieldscont">
-			<div class="inp-cont-long">
-				<div class="inp-cont <% if (error) {%> error <%}%>">
-					<span class="required-label">*</span>																		
-					<input type="text" maxlength="75"  id="title_adv" name="title_adv" value="<%=value%>"/>	
+<div class="row mb10" id="div_subject">
+	<div class="col-md-3 col-xs-4 labelcont">
+		<label>Заголовок:</label>
+	</div>
+	<div class="col-md-9 col-xs-8">
+		<div class="inp-cont <% if (error) {%> error <%}%>">
+			<span class="required-star">*</span>																		
+			<input class="w100p" type="text" maxlength="75"  id="title_adv" name="title_adv" value="<%=value%>"/>	
 
-					<% if (error) { %>
-					<span class="inform">
-						<span></span>
-					</span>
-					<% } %>
-				</div>							
-			</div>
-		</div><!--fieldscont-->
-	</div><!--smallcont-->		  
+			<% if (error) { %>
+			<span class="inform">
+				<span></span>
+			</span>
+			<% } %>				
+		</div>
+	</div>
+</div>	  

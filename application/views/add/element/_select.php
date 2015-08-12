@@ -1,4 +1,4 @@
-<select class="<?=$class?>" name="<?=$name?>" id="<?=$id?>">
+<select class="<?=$class?> w100p" name="<?=$name?>" id="<?=$id?>">
 	<option value="">--<?=$title?>--</option>
 	<? foreach($values as $key=>$item): ?>
 			<option value='<?=$key?>' 

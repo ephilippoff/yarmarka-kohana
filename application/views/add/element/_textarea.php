@@ -1,1 +1,1 @@
-<textarea class="<?=$class?>" name="<?=$name?>" id="<?=$id?>"><?=$value?></textarea>
+<textarea class="<?=$class?> w100p" name="<?=$name?>" id="<?=$id?>"><?=$value?></textarea>

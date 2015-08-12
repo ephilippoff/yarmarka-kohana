@@ -5,10 +5,10 @@
 		if ($element["options"] == "whitespace")
 			$whitespace = "whitespace";
 	?>
-	<div class="inp-cont-short <?=$whitespace?>" id="div_<?=$element["name"]?>">
+	<div class="<?=$whitespace?>" id="div_<?=$element["name"]?>">
 		<div class="inp-cont <? if ($data->errors->{$element["name"]}) echo "error";?>">
 		<? if ($element["is_required"]):?>
-			<span class="required-label">*</span>
+			<span class="required-star">*</span>
 		<? endif; ?>
 		<? $parameters = array(	
 								'id' 	=> $element["name"],
@@ -25,7 +25,7 @@
 		
 		<? if ($data->errors->{$element["name"]}): ?>
 			<span class="inform fn-error">
-				<span><?=$data->errors->{$element["name"]}?></span>
+				<?=$data->errors->{$element["name"]}?>
 			</span>
 		<? endif; ?>
 		</div>

@@ -3,7 +3,7 @@
 	<?=$data->value?>
 	<input type="hidden" name="<?=$name?>" id="<?=$id?>" value="<?=$data->category_id?>"/>
 <? else: ?>		
-	<select name="<?=$name?>" id="<?=$id?>" class=<?=$_class?>>
+	<select name="<?=$name?>" id="<?=$id?>" class="<?=$_class?> w100p">
 		<option value="0">---</option>
 		<? foreach($data->category_list as $key=> $item) : ?>
 			<optgroup label="<?=$key?>">

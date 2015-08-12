@@ -17,7 +17,7 @@ body h1 {font-size: 16px;font-weight: normal;display: inline;}
 .white{color:white !important}.black{color:black !important}.red{color:red !important;}.green{color:green !important;}.gray{color:gray !important;}
 .dib{display: inline-block}
 .br3{border-radius: 3px}
-.ta-r{text-align: right;}.ta-l{text-align: left !important}
+.ta-r{text-align: right;}.ta-l{text-align: left !important}.ta-c{text-align: center;}
 .va-t{vertical-align: top}
 .mh-style1{min-height: 590px;}
 .relative{position: relative}
@@ -54,7 +54,7 @@ select{background-color: #FFFFFF;border: 1px solid #89898c;color: #384354;paddin
 .popup-menu-cont.right{right: 0px;}
 
 .ico{display: inline-block;vertical-align: sub;}
-.ico16{width:16px;height:16px;}.ico17{width:17px;height:17px;}.ico19{width:19px;height:19px;}.ico22{width:22px;height:22px;}
+.ico15{width:15px;height:15px;}.ico16{width:16px;height:16px;}.ico17{width:17px;height:17px;}.ico19{width:19px;height:19px;}.ico22{width:22px;height:22px;}
 .vkontakte-ico16{background: url(/static/develop/images/vkontakte16.png) no-repeat center center;width:16px;height:16px;}
 .close-ico16{background: url("/static/develop/images/close16.png") no-repeat center center;width:16px;height:16px;}
 .vkontakte-ico17{background: url('/static/develop/images/ico4.png') no-repeat;width:17px;height:17px;background-position: 0px -104px;}
@@ -67,6 +67,8 @@ select{background-color: #FFFFFF;border: 1px solid #89898c;color: #384354;paddin
 .favorit-ico.in{background-position: 0 0;}
 .premium-ico22{background: url('/static/develop/images/clock22.png') no-repeat center center;width:22px;height:22px;}
 .leader-ico22{background: url('/static/develop/images/to_publish22.png') no-repeat center center;width:22px;height:22px;}
+.plus-ico17{background: url('/static/develop/images/plus17.png') no-repeat center center; width:17px;height:17px;}
+.white-right-arrow-ico{background: url("/static/develop/images/white_right_arrow.svg") no-repeat center center;}
 
 #popup-layer {background: #000;bottom: 0;display: none;left: 0;position: fixed;right: 0;top: 0;opacity: .3;z-index: 1000;}
 .popup-wrp {left: 0;margin: auto;position: fixed;top: 70px;width: 100%;z-index: 1001;}
@@ -505,9 +507,26 @@ select{background-color: #FFFFFF;border: 1px solid #89898c;color: #384354;paddin
 .infographics-cont .title {padding-bottom: 5px;}
 .infographics-cont .more-info {padding-top: 5px;text-align: right;}
 
-/* layout */
+.form-cont .labelcont{text-align: right;}
+.form-cont .labelcont label{font-size: 14px;font-weight: bold;}
+.form-cont .inp-cont{min-height: 40px;position: relative;}
+.form-cont .inp-cont.error input[type="text"],
+.form-cont .inp-cont.error input[type="password"]{border:1px solid #EF8680;}
+.form-cont .inp-cont.error select{border:1px solid #EF8680;}
+.form-cont .inp-cont.error textarea{border:1px solid #EF8680;}
+.form-cont .inp-cont .required-star{color: #FF0000;position: absolute;right: -10px;top: -5px;font-size: 12px;}
+.form-cont .notice-cont{font-size: 10px;border: 1px solid #cfd0d5;background: linear-gradient(to bottom, #fdfdfd, #bfc3c6);padding: 5px;}
+.form-cont .inform {color: #7F7F7F;font-size: 11px;display: block;}
 
+
+/* layout */
 .module{margin-bottom: 10px;}
+/* end layout */
+
+/* pages */
+
+/* end pages */
+
 
 @media (max-width: 992px){
 	.top-line{height: auto;}
