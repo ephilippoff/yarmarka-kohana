@@ -28,7 +28,11 @@
 			</ul>
 		</div>
 		<div class="col-md-6">
-			<img src="http://yarmarka.biz/uploads/banners/menu/vtnhpw54a0l91cyvw7fc.png" alt="" width="613" style="margin-top:-30px;">
+			<div class="js-promo-thumbnails" style="margin-top:-30px;">
+				{% for thumbnail in promo_thumbnails %}
+					<img src="{{ '/' ~ thumbnail['120x90'] }}" alt="" style="display:none;">
+				{% endfor %}
+			</div>
 		</div>
 	</div>
 </div>
