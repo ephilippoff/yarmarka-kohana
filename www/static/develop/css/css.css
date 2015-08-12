@@ -518,6 +518,7 @@ select{background-color: #FFFFFF;border: 1px solid #89898c;color: #384354;paddin
 .form-cont .inp-cont .required-star{color: #FF0000;position: absolute;right: -10px;top: -5px;font-size: 12px;}
 .form-cont .notice-cont{font-size: 10px;border: 1px solid #cfd0d5;background: linear-gradient(to bottom, #fdfdfd, #bfc3c6);padding: 5px;}
 .form-cont .inform {color: #7F7F7F;font-size: 11px;display: block;}
+.form-cont .btn-next{line-height: 47px;position: relative;width: 207px;font-weight: bold;}
 
 
 /* layout */
