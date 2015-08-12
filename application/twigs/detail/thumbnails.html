@@ -1,5 +1,5 @@
 <div class="thumbnails-cont module">
-	{% for photo in object.compiled.images.local_photo %}
+	{% for photo in object.compiled.images.local_photo if file_exist(strim(photo['120x90'],'.')) %}
 		<a href="/" class="img-cont" rel="nofollow">
 			<div class="center-img">
 				<img class="" alt="Объявление. {{object.compiled.city}}, {{object.title}}. Фото {{loop.index}}" src="{{ '/' ~ photo['120x90'] }}">
