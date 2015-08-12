@@ -1,5 +1,9 @@
 {% extends "layouts/user" %}
 
+{% block css %} 
+	{{ parent() }}
+	{{ css("add.css") }}
+{% endblock css%}
 
 {% block js %} 
 	{% if data_file %}

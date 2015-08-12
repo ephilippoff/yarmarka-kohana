@@ -1,30 +1,28 @@
-<div class="smallcont" id="div_<%=id%>">
-				<div class="labelcont">
-					<label><span><%=title%><%=(unit)?", "+unit+":":":"%></span></label>
-				</div>
-				<div class="fieldscont">
-					<div class="inp-cont">
-						<div class="inp-cont-long">
-							<% if (is_required) { %>
-								<span class="required-label">*</span>
-							<% } %>
-							<select id="<%=id%>" name="<%=id%>[]" class="<%=classes%>" multiple style="height:<%=(_.values(data).length*15)%>px;">
-								<% if (!is_required) { %>
-						  			<option value="">--нет--</option>
-						  		<% } %>
-						  		<% _.each(data, function(item, key){ %>
-						  			<% if (key == 0) return; %>
-						  			<%  if (typeof item == "object") item = item[0].title %>
-
-
-						  			<option value="<%=key%>"><%=item%></option>
-						  		<% }); %>
-						  	</select> 
-
-							<span class="inform">
-								<span>Используйте Ctrl чтобы выбрать несколько значений</span>
-							</span>
-						</div>
-				</div>
-			</div>									
+<div class="row mb10" id="div_<%=id%>">
+	<div class="col-md-3 col-xs-4 labelcont">
+		<label><%=title%><%=(unit)?", "+unit+":":":"%></label>
 	</div>
+	<div class="col-md-9 col-xs-8">
+		<div class="inp-cont ">
+			<% if (is_required) { %>
+				<span class="required-star">*</span>
+			<% } %>
+			<select id="<%=id%>" name="<%=id%>[]" class="<%=classes%> w100p" multiple style="height:<%=(_.values(data).length*15)%>px;">
+				<% if (!is_required) { %>
+					<option value="">--нет--</option>
+				<% } %>
+				<% _.each(data, function(item, key){ %>
+					<% if (key == 0) return; %>
+					<%  if (typeof item == "object") item = item[0].title %>
+
+
+					<option value="<%=key%>"><%=item%></option>
+				<% }); %>
+			</select> 
+
+			<span class="inform">
+				<span>Используйте Ctrl чтобы выбрать несколько значений</span>
+			</span>				
+		</div>
+	</div>
+</div>

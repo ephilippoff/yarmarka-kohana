@@ -1,1 +1,1 @@
-<input class="<?=$class?>" type="text" name="<?=$name?>" value="<?=$value?>"  id="<?=$id?>"/>
+<input class="<?=$class?> w100p" type="text" name="<?=$name?>" value="<?=$value?>"  id="<?=$id?>"/>

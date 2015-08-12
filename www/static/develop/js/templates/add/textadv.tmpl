@@ -1,17 +1,14 @@
-<div class="smallcont" id="div_text">
-		<div class="labelcont">
-			<label><span>Текст объявления:</span></label>
-		</div>		
-		<div class="fieldscont user-text mb15">
-			<div class="inp-cont-long ">
-				<div class="inp-cont">
-					<% if (text_required) { %>
-						<span class="required-label">*</span>
-					<% } %>
-					<div class="textarea user_text_adv_wrp">
-					<textarea name="user_text_adv" id="user_text_adv" class="user_text_adv"><%=value%></textarea>
-					</div>
-				</div>
-			</div>
+<div class="row mb10" id="div_text">
+	<div class="col-md-3 col-xs-4 labelcont">
+		<label>Текст объявления:</label>
+	</div>
+	<div class="col-md-9 col-xs-8">
+		<div class="inp-cont user-text">
+			<% if (text_required) { %>
+				<span class="required-star">*</span>
+			<% } %>
+			<div class="textarea user_text_adv_wrp">
+			<textarea name="user_text_adv" id="user_text_adv" class="user_text_adv w100p"><%=value%></textarea>					
 		</div>
-	</div>  
+	</div>
+</div>

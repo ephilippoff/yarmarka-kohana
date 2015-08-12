@@ -7,12 +7,15 @@
 <!--<meta content="width=device-width, initial-scale=1.0" name="viewport">-->
 <meta name="viewport" id="viewport" content="width=device-width">
 <title><?=Seo::get_title()?></title>
-<?=Assets::factory('main')->css('old/css.css', array('media' => 'screen, projection'))
-	->css('old/iLight.css')
+<?=Assets::factory('main')
+	->css('bootstrap.min.css', array('media' => 'screen, projection'))
+	->css('iLight.css')		
+	->css('css.css', array('media' => 'screen, projection'))
+	->css('add.css', array('media' => 'screen, projection'))
 	->js('old/jquery.min.js')
-	->js('http://html5shiv.googlecode.com/svn/trunk/html5.js', array('condition' => 'lte IE 8'))
-	->js('http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js', array('condition' => 'lte IE 8'))
-	->js('old/PIE.js', array('condition' => 'lte IE 10'))
+//	->js('http://html5shiv.googlecode.com/svn/trunk/html5.js', array('condition' => 'lte IE 8'))
+//	->js('http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js', array('condition' => 'lte IE 8'))
+//	->js('old/PIE.js', array('condition' => 'lte IE 10'))
 	->js('old/header.js')
 	->js('old/minified/underscore-min.js')
 	->js('old/minified/backbone-min.js')
@@ -25,7 +28,7 @@
 	echo Assets::factory('main')->js($jspath);
 ?>
 </head>
-<body class="adaptive page-addobj">
+<body class="adaptive page-add-obj">
 	<div class="popup-layer"></div>
 	<?=View::factory('layouts/google_analytics')?>
 	<div class="wrapfix add">
