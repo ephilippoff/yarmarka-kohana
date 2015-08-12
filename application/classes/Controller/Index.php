@@ -46,6 +46,16 @@ class Controller_Index extends Controller_Template {
         foreach ((array) $index_info as $key => $item) {
             $twig->{$key} = $item;
         }
+
+        $attachments = ORM::factory('Object_Attachment')
+                            ->order_by("id","desc")
+                            ->limit(20)
+                            ->getprepared_all();
+        $promo_thumbnails = array_map(function($item){
+            return Imageci::getSavePaths($item->filename);
+        }, $attachments);
+
+        $twig->promo_thumbnails = $promo_thumbnails;
         $twig->php_time = microtime(true) - $start;
         $this->response->body($twig);
     }

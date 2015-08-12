@@ -1,14 +1,14 @@
 /*global define */
 define([
     "templates",
-    "jssorSlider",
     "views/partials/behaviors/favourite",
     "views/partials/behaviors/search",
     "views/partials/behaviors/ocontrol",
     "views/partials/behaviors/services",
     "views/partials/behaviors/ads"
-], function (templates, jssorSlider, FavouriteBehavior, SearchBehavior, OControlBehavior, ServicesBehavior, AdsBehavior) {
+], function (templates, FavouriteBehavior, SearchBehavior, OControlBehavior, ServicesBehavior, AdsBehavior) {
     "use strict";
+
 
      return Marionette.LayoutView.extend({
 

@@ -76,7 +76,7 @@ define([
                 iso.arrange({sortBy: 'weight'});
                 iso.updateSortData();
                 adCollection.reorder();
-            }, 2000);
+            }, 3000);
         }
     });
 
