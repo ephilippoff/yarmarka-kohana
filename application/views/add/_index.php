@@ -183,11 +183,6 @@
 									</span>
 								<? endif; ?>						
 							</div>
-							<div class="col-md-6">
-								<div class="notice-cont">
-									Внимание! В разделе "Вакансии" поднятие объявления доступно 1 раз в сутки. В остальных разделах поднятие объявления доступно 1 раз в 3 суток. УСЛУГА БЕСПЛАТНАЯ!
-								</div>					
-							</div>
 						</div>				
 					</div>
 				</div>
@@ -266,7 +261,7 @@
 							</div>
 							<div class="col-md-9 col-xs-8">
 								<div class="row bg-color-whitesmoke pt15 mb20">
-									<div class="col-md-6">
+									
 										<?=
 										View::factory('add/block/params', array("data" => new Obj($form_data->params),
 											"_class" => "",
@@ -275,7 +270,7 @@
 											"attributes" => ""
 										));
 										?>
-									</div>					
+													
 								</div>				
 							</div>
 						</div>					
