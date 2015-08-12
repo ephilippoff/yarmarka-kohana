@@ -14,10 +14,11 @@ require.config({
         iframeTransport: 'lib/vendor/jquery.iframe-transport',
         fileupload: 'lib/vendor/jquery.fileupload',
         nicEdit: 'lib/vendor/nicEdit',
-        maskedInput: 'lib/vendor/jquery.maskedinput'
+        maskedInput: 'lib/vendor/jquery.maskedinput',
+        isotope: 'lib/vendor/isotope.pkgd'
     },
     shim : {
-        'lib/backbone-localStorage' : ['backbone'],
+        localStorage : ['backbone'],
         underscore : {
             exports : '_'
         },
