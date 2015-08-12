@@ -1,8 +1,7 @@
 <div class="col-md-6" id="div_<%=id%>">
 	<div class="inp-cont">
-		<span class="required-star">*</span>
 		<% if (is_required) { %>
-			<span class="required-label">*</span>
+			<span class="required-star">*</span>
 		<% } %>
 			<select id="<%=id%>" name="<%=id%>" class="w100p <%=classes%>">
 				<option value="">--<%=title%><%=(unit)?", "+unit:""%>--</option>

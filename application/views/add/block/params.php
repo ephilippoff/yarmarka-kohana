@@ -1,3 +1,4 @@
+
 <div class="fn-list-parameters">
 <? foreach($data->elements as $element): ?>
 	<? 
@@ -5,7 +6,8 @@
 		if ($element["options"] == "whitespace")
 			$whitespace = "whitespace";
 	?>
-	<div class="<?=$whitespace?>" id="div_<?=$element["name"]?>">
+	
+	<div class="col-md-6 <?=$whitespace?>" id="div_<?=$element["name"]?>">
 		<div class="inp-cont <? if ($data->errors->{$element["name"]}) echo "error";?>">
 		<? if ($element["is_required"]):?>
 			<span class="required-star">*</span>
