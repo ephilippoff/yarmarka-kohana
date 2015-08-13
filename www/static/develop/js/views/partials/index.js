@@ -61,9 +61,9 @@ define([
         },
 
         changeSizes: function(show) {
-            var sizes = [50, 100, 150, 200];
+            var sizes = [50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180];
             _.each($('.js-promo-thumbnails img'), function(item){
-                var width = sizes[_.random(0,2)];
+                var width = sizes[_.random(0,12)];
                 $(item).width(width);
                 if (show) {
                      $(item).fadeIn();
