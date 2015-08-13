@@ -49,7 +49,7 @@ class Controller_Index extends Controller_Template {
 
         $attachments = ORM::factory('Object_Attachment')
                             ->order_by("id","desc")
-                            ->limit(20)
+                            ->limit(15)
                             ->getprepared_all();
         $promo_thumbnails = array_map(function($item){
             return Imageci::getSavePaths($item->filename);
