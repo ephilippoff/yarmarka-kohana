@@ -1,46 +1,60 @@
 <?php if (Session::instance()->get_once('success')) : ?>
-<div style="color:green">Пароль успешно изменен</div>
+	<div class="row mb10">
+		<div class="col-md-3 col-xs-4 labelcont">
+			<label></label>
+		</div>
+		<div class="col-md-9 col-xs-8">
+			<div style="color:green">Пароль успешно изменен</div>
+		</div>
+	</div>
 <?php endif ?>
 
-<form action="/user/password" id="password" method="POST">
-<ul>
-	<li>
-		<div class="input style2 <?php if ($error) echo 'error'?>">
-			<label><span><i class="name">Пароль:</i></span></label>					                    			
-			<p class="myinform profile-input-wrapper">
-				<div class="inp-cont-bl">
-					<div class="inp-profile">
-						<div class="inp">
-							<input style="box-sizing: initial;" type="password" name="password" value="" />
+<div class="form-cont">
+	<form action="/user/password" id="password" method="POST">
+		
+		<div class="row mb10">
+			<div class="col-md-3 col-xs-4 labelcont">
+				<label>Пароль:</label>
+			</div>
+			<div class="col-md-9 col-xs-8">
+				<div class="row">
+					<div class="col-md-6">
+						<div class="inp-cont <?php if ($error) echo 'error'?>">
+							<input class="w100p" type="password" name="password" value="" />
+							<span class="inform">
+								<?=$error?>
+							</span>							
 						</div>
 					</div>
-				</div>
-			</p>
-
-			<div class="alert-bl " <?php if ($error) : ?>style="display: block" <?php endif ?>>
-				<div class="cont">
-					<div class="img"></div>
-					<div class="arr"></div>
-					<p class="text"><span><?=$error?></span></p>
-				</div>
+				</div>				
+			</div>
+		</div>	
+		
+		<div class="row mb10">
+			<div class="col-md-3 col-xs-4 labelcont">
+				<label>Повтор пароля:</label>
+			</div>
+			<div class="col-md-9 col-xs-8">
+				<div class="row">
+					<div class="col-md-6">
+						<div class="inp-cont <?php if ($error) echo 'error'?>">
+							<input class="w100p" type="password" name="password_repeat" value="" />
+							<span class="inform">
+								<?=$error?>
+							</span>							
+						</div>
+					</div>
+				</div>				
 			</div>
 		</div>
-	</li>
-
-	<li>
-		<div class="input style2 <?php if ($error) echo 'error'?>">
-			<label><span><i class="name">Повтор пароля:</i></span></label>					                    			
-			<p class="myinform profile-input-wrapper">
-				<div class="inp-cont-bl">
-					<div class="inp-profile">
-						<div class="inp">
-							<input style="box-sizing: initial;" type="password" name="password_repeat" value="" />
-						</div>
-					</div>
-				</div>
-			</p>
-		</div>
-	</li>
-</ul>
-</form>
-<div onclick="$('#password').submit()" class="button blue icon-arrow-r btn-next"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Сохранить</span></div>							
+		
+		<div class="row mb20">
+			<div class="col-md-3 labelcont">
+				<label></label>
+			</div>
+			<div class="col-md-9 ta-r">	
+				<span onclick="$('#password').submit()" class="button button-style1 bg-color-blue btn-next">Сохранить</span>
+			</div>
+		</div>		
+	</form>
+</div>
