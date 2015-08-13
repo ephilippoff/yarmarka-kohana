@@ -1,3 +1,4 @@
+<div class="form-cont">
 <script type="text/javascript">
 	$(document).ready(function(){
 		$('.fn_delete_verified_contact').live('click', function(){
@@ -12,31 +13,38 @@
 		});		
 	})
 </script>
-<div class="fl100 pb15 pt15">
-	<div class="smallcont">В этом разделе Вы можете увидеть все контакты, привязанные к вашему аккаунту. Также здесь можно удалять контакты. В этом случае происходит их отвязка от вашего аккаунта. Кроме того, все объявления, в которых были указаны удаленные контакты, снимаются с публикации. Удаленный контакт можно заново привязать к своему аккаунту на странице подачи объявления.</div>
+<div class="row mb15 mt15">
+	<div class="col-md-3 col-xs-4 labelcont">
+		<label></label>
+	</div>
+	<div class="col-md-9 col-xs-8">
+		В этом разделе Вы можете увидеть все контакты, привязанные к вашему аккаунту. Также здесь можно удалять контакты. В этом случае происходит их отвязка от вашего аккаунта. Кроме того, все объявления, в которых были указаны удаленные контакты, снимаются с публикации. Удаленный контакт можно заново привязать к своему аккаунту на странице подачи объявления.
+	</div>
 </div>
-<div class="fl100 pb15 pt15">
+
+<div class="row mb15 mt15">
 	<?php if (!count($user_contacts)) : ?>
-		<div class="smallcont ta-c fs18">
-			<b>У Вас нет привязанных контактов</b>
-		</div>
+			<div class="col-md-3 col-xs-4 labelcont">
+				<label></label>
+			</div>
+			<div class="col-md-9 col-xs-8">
+				<b>У Вас нет привязанных контактов</b>
+			</div>	
 	<?php else : ?>
-		<?php foreach ($user_contacts as $contact) : ?>												
-			<div class="smallcont contact">
-				<div class="labelcont">
-					<label><span><?=$contact->name?></span></label>
+		<?php foreach ($user_contacts as $contact) : ?>	
+	
+			<div class="col-md-3 col-xs-4 labelcont">
+				<label><?=$contact->name?></label>
+			</div>
+			<div class="col-md-9 col-xs-8">
+				<div class="inp-cont">
+						<a class="usercontact contact-input" data-id="<?=$contact->id?>"><?=$contact->get_contact_value()?></a>
+						<span class="span-link ml10 fn_delete_verified_contact" data-id="<?=$contact->id?>">Удалить</span>
 				</div>
-				<div class="fieldscont">										
-					<div class="">
-						<div class="inp-cont">
-							<div class="cont-info">
-								<a class="usercontact contact-input" data-id="<?=$contact->id?>"><?=$contact->get_contact_value()?></a>
-								<span class="like_link ml10 fn_delete_verified_contact" data-id="<?=$contact->id?>">Удалить</span>
-							</div>
-						</div>
-					</div>
-				</div>									
-			</div>																		
+			</div>
+
+									
 		<?php endforeach; ?>
 	<?php endif;?>
+</div>
 </div>
