@@ -70,7 +70,7 @@ class Form_Custom  {
 	{
 		return array(	"title" => $field->translate,
 						"name"	=> $field->name,
-						"html"  => Form::input($field->name, $value,  array("class" => "form-control")),
+						"html"  => Form::input($field->name, $value,  array("class" => "form-control w100p")),
 						"required" => $field->required,
 						"value" => $field->value,
 						"type"  => $field->type,
@@ -82,7 +82,7 @@ class Form_Custom  {
 	{
 		return array(	"title" => $field->translate,
 						"name"	=> $field->name,
-						"html"  => Form::textarea($field->name, $value,  array("class" => "form-control")),
+						"html"  => Form::textarea($field->name, $value,  array("class" => "form-control w100p")),
 						"required" => $field->required,
 						"value" => $field->value,
 						"type"  => $field->type,
