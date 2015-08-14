@@ -26,7 +26,39 @@
 			<p class="fw-b"><?=strip_tags($attributes_values['goden-do'])?></p>
 		</div>
 		<div class="fr">
-			
+			<script src="http://api-maps.yandex.ru/2.0-stable/?load=package.standard&lang=ru-RU&coordorder=latlong" type="text/javascript"></script>
+			<script type="text/javascript">
+				var map;
+				var placemark;
+
+				ymaps.ready(function(){
+					map = new ymaps.Map("card-map", {
+						center: [<?=$object->geo_loc?>],
+						zoom: 14
+					});
+
+					map.controls.add('zoomControl', { top: 5, left: 5 });
+					map.controls.add(new ymaps.control.TypeSelector(['yandex#map', 'yandex#satellite', 'yandex#hybrid', 'yandex#publicMap', 'yandex#publicMapHybrid']));
+
+					placemark = new ymaps.Placemark([<?=$object->geo_loc?>], {
+						},
+						{
+							draggable: false,
+							iconImageHref: '/images/map_mark_active.png',
+							iconImageSize: [47,47],
+							iconImageOffset: [-15, -45],
+
+							iconContentOffset: [],
+							hintHideTimeout: 0
+
+						});
+
+					map.geoObjects.add(placemark);
+				});
+
+			</script>
+
+			<div id="card-map" style="width: 290px; height: 200px;"></div>			
 		</div>
 	</div>
 	<hr>
