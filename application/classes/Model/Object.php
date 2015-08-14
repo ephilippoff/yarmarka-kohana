@@ -396,7 +396,7 @@ class Model_Object extends ORM {
 			->execute();
 	}
 
-	public function get_attributes_values($object_id = NULL, $mark_required = TRUE)
+	public function get_attributes_values($object_id = NULL, $mark_required = TRUE, $key_name = '')
 	{
 		$attrs = $this->get_attributes($object_id);
 		if ( ! $attrs)
@@ -429,7 +429,10 @@ class Model_Object extends ORM {
 				$value .= '*';
 			}
 
-			$result[] = $value;
+			if ($key_name and isset($row[$key_name]))			
+				$result[$row[$key_name]] = $value;
+			else
+				$result[] = $value;
 		}
 
 		return $result;

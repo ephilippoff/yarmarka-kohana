@@ -73,6 +73,18 @@ Route::set('newsone', 'news/<id>-<seo_name>', array('id' => '\d+'))
 		'action'     => 'newsone',
 	));
 
+Route::set('kupon', 'kupon/<id>', array('id' => '\d+'))
+	->defaults(array(
+		'controller' => 'Kupon',
+		'action'     => 'index',
+	));
+
+Route::set('barcode', 'barcode/ean13/<code>')
+	->defaults(array(
+		'controller' => 'Barcode',
+		'action'     => 'ean13',
+	));
+
 Route::set('backend/news', 'articles/news')
 	->defaults(array(
 		'directory'  => 'Admin',
