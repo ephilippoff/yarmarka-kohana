@@ -1,0 +1,46 @@
+{% extends "layouts/user" %}
+
+{% block header %} 
+		{{ requestblock('block_twig/topline', {'favourites':favourites}) }}
+		{% include 'block/header/logoline' %}
+		{% include 'user/add/promo' %}
+{% endblock header %} 
+
+{% block crumbs %}{% endblock crumbs %}
+
+{% block content %}
+	{{ parent() }}
+	<div class="bg-color-whitesmoke p20">
+
+		<p class="mb20">{{message}}</p>			
+		{% if success %}
+				
+				<p class="mb5">Перейти к:</p>
+				<ul>
+					<li><a href="/user/profile">Личные данные</a></li>
+					<li><a href="/">Главная страница</a></li>
+					<li><a href="/add">Подать объявление</a></li>				
+				</ul>
+							
+		{% else %}
+		
+				<p class="mb5">Перейти к:</p>
+				<ul>
+					<li><a href="/user/login">Войти на сайт</a></li>
+					<li><a href="/user/forgot_password">Напомнить пароль</a></li>			
+				</ul>
+							
+		{% endif %}
+	</div>
+{% endblock %}
+
+{% block rightside %} 
+	<div class="info-block-cont theme3 module">
+		<div class="block-title">
+			<span>Информация</span>
+		</div>						
+		<div class="bg-color-whitesmoke p20">
+			Возможно вы уже регистрировались ранее?
+		</div>
+	</div>
+{% endblock rightside %}

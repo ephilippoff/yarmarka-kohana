@@ -50,29 +50,6 @@
 			</div>		
 		<? endif; ?>
 
-		<? if (property_exists($form_data, 'org_info')): ?>
-			<div class="row mb30">
-				<div class="col-md-3 col-xs-4 labelcont">
-					<label>Компания:</label>
-				</div>
-				<div class="col-md-9 col-xs-8">
-					<?= $form_data->org_info["title"] ?>
-					<? if ($form_data->org_info["logo"]): ?>
-						<div class="p10">
-							<? $logo = Imageci::getSitePaths($form_data->org_info["logo"]); ?>
-							<img src="<?= $logo["120x90"] ?>">
-						</div>
-					<? endif; ?>
-					<div>
-						<?= $form_data->org_info["about"] ?>...
-					</div>
-					<span class="inform">
-						Изменить информацию о компании можно <a href="/user/orginfo">здесь</a>
-					</span>				
-				</div>
-			</div>		
-		<? endif; ?>
-
 		<? if (property_exists($form_data, 'linked_company')) : ?>
 			<div class="row mb10">
 				<div class="col-md-3 col-xs-4 labelcont">

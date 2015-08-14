@@ -5,15 +5,11 @@
 	
 	{% block header %} 
 		{{ parent() }}
-		{% include 'index/header/navigationline' %}
 	{% endblock header %} 
 	
 	<div class="row">
-		{% block leftside %}
-		{% endblock leftside %}
-
-		{% block rightside %}
-		{% endblock rightside %}
+		{% block content %}
+		{% endblock content %}
 	</div>
 
 	{% block footertext %} 

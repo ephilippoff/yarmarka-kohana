@@ -16,7 +16,8 @@ body h1 {font-size: 16px;font-weight: normal;display: inline;}
 .p5{padding:5px}.p10{padding:10px}.p15{padding:15px}
 .white{color:white !important}.black{color:black !important}.red{color:red !important;}.green{color:green !important;}.gray{color:gray !important;}
 .dib{display: inline-block}
-.br3{border-radius: 3px}
+.br2{border-radius: 2px}.brt2{border-radius: 2px 2px 0 0}.brb2{border-radius: 0 0 2px 2px}.brl2{border-radius: 2px 0 2px 0}.brr2{border-radius: 0 2px 0 2px}
+.br3{border-radius: 3px}.brt3{border-radius: 3px 3px 0 0}.brb3{border-radius: 0 0 3px 3px}.brl3{border-radius: 3px 0 3px 0}.brr3{border-radius: 0 3px 0 3px}
 .ta-r{text-align: right;}.ta-l{text-align: left !important}.ta-c{text-align: center;}
 .va-t{vertical-align: top}
 .mh-style1{min-height: 590px;}

@@ -33,28 +33,30 @@
 		{% endif %}
 		
 	
-	
-		<p class="pt10 pb10">Для увеличения количества откликов, предлагаем следующие услуги:</p>
-
-		<div>
-			<span class="button w140 button-style1 bg-color-blue mr3 mb3 js-service-up" data-id="{{object.id}}"><i class="ico vkontakte-ico16 mr5"></i><span>Поднять</span></span>
-			<span class="button w140 button-style1 bg-color-blue mr3 mb3"><i class="ico vkontakte-ico16 mr5"></i>Премиум</span>
-			<span class="button w140 button-style1 bg-color-blue mr3 mb3"><i class="ico vkontakte-ico16 mr5"></i>Лидер</span>
-			<span class="button w140 button-style1 bg-color-blue mr3 mb3"><i class="ico vkontakte-ico16 mr5"></i>В газету</span>
-			<span class="button w140 button-style1 bg-color-blue mr3 mb3"><i class="ico vkontakte-ico16 mr5"></i>В другие города</span>
-			<span class="button w140 button-style1 bg-color-blue mr3 mb3"><i class="ico vkontakte-ico16 mr5"></i>Купить</span>
-		</div>
+		{% if object.is_published == 1 %}
+			<p class="pt10 pb10">Для увеличения количества откликов, предлагаем следующие услуги:</p>
+			<div>
+				<span class="button w140 button-style1 bg-color-blue mr3 mb3 js-service-up" data-id="{{object.id}}"><i class="fa fa-angle-double-up fa-lg mr5"></i><span>Поднять</span></span>
+				<span class="button w140 button-style1 bg-color-blue mr3 mb3"><i class="ico vkontakte-ico16 mr5"></i>Премиум</span>
+				<span class="button w140 button-style1 bg-color-blue mr3 mb3"><i class="ico vkontakte-ico16 mr5"></i>Лидер</span>
+				<span class="button w140 button-style1 bg-color-blue mr3 mb3"><i class="ico vkontakte-ico16 mr5"></i>В газету</span>
+				<span class="button w140 button-style1 bg-color-blue mr3 mb3"><i class="ico vkontakte-ico16 mr5"></i>В другие города</span>
+				<span class="button w140 button-style1 bg-color-blue mr3 mb3"><i class="ico vkontakte-ico16 mr5"></i>Купить</span>
+			</div>
+		{% else %}
+			<p class="pt10 pb10">Объявление снято с публикации</p>
+		{% endif %}
 	</td>
 	<td class="td w190 p10 va-t">
 		<span class="button w100p button-style1 bg-color-lightgreen mb3 ta-l js-ocontrol-publish" data-id="{{object.id}}">
 			{% if object.is_published %} 
-				<i class="ico vkontakte-ico16 mr5"></i><span>Снять с публикации</span>
+				<i class="fa fa-trash pull-left fa-lg"></i><span>Снять с публикации</span>
 			{% else %}
-				<i class="ico vkontakte-ico16 mr5"></i><span>Опубликовать</span>
+				<i class="fa fa-check pull-left fa-lg"></i><span>Опубликовать</span>
 			{% endif %}			
 		</span>		
 
-		<span class="button w100p button-style1 bg-color-lightgreen mb3 ta-l js-ocontrol-edit" data-id="{{object.id}}"><i class="ico vkontakte-ico16 mr5"></i>Редактировать</span>
+		<span class="button w100p button-style1 bg-color-lightgreen mb3 ta-l js-ocontrol-edit" data-id="{{object.id}}"><i class="fa fa-edit pull-left fa-lg"></i>Редактировать</span>
 	</td>
 	<td class="td td-4">		
 		<i class="ico vkontakte-ico16" title="Премиум"></i>

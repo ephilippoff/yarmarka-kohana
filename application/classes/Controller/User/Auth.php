@@ -17,7 +17,7 @@ class Controller_User_Auth extends Controller_Template {
 
     public function action_registration()
     {
-        $twig = Twig::factory('auth/registration');
+        $twig = Twig::factory('user/registration');
 
         $is_post = (HTTP_Request::POST === $this->request->method());
         $post_data = new Obj($this->request->post());
@@ -68,8 +68,6 @@ class Controller_User_Auth extends Controller_Template {
         $twig->auth = Auth::instance()->get_user();
 
         $twig->crumbs = array(
-            array("title" => "Вход", "url" => "user/login"),
-            array("title" => "Восстановление пароля", "url" => "user/forgot_password"),
             array("title" => "Регистрация"),
         );
 
@@ -78,7 +76,7 @@ class Controller_User_Auth extends Controller_Template {
 
     public function action_account_verification()
     {
-        $twig = Twig::factory('auth/account_verification');
+        $twig = Twig::factory('user/account_verification');
         $code =$this->request->param("id");
         $user = ORM::factory('User')
                         ->where("code","=",trim($code))
@@ -122,7 +120,7 @@ class Controller_User_Auth extends Controller_Template {
 
     public function action_login()
     {
-        $twig = Twig::factory('auth/login');
+        $twig = Twig::factory('user/login');
         $is_post = ($_SERVER['REQUEST_METHOD']=='POST');
         $post_data = new Obj($this->request->post());
 
@@ -176,8 +174,6 @@ class Controller_User_Auth extends Controller_Template {
         $twig->params = $post_data;
         $twig->error = $error;
         $twig->crumbs = array(
-            array("title" => "Регистрация", "url" => "user/registration"),
-            array("title" => "Восстановление пароля", "url" => "user/forgot_password"),
             array("title" => "Вход")
         );
         $this->response->body($twig);
@@ -185,7 +181,7 @@ class Controller_User_Auth extends Controller_Template {
 
     public function action_forgot_password()
     {
-        $twig = Twig::factory('auth/forgot_password');
+        $twig = Twig::factory('user/forgot_password');
         $is_post = ($_SERVER['REQUEST_METHOD']=='POST');
         $post_data = new Obj($this->request->post());
 
@@ -230,8 +226,6 @@ class Controller_User_Auth extends Controller_Template {
         $twig->params = $post_data;
         $twig->user = $this->user; 
         $twig->crumbs = array(
-            array("title" => "Вход", "url" => "user/login"),
-            array("title" => "Регистрация", "url" => "user/registration"),
             array("title" => "Восстановление пароля")
         );
         $this->response->body($twig);

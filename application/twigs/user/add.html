@@ -11,77 +11,82 @@
 	{% endif %}
 {% endblock js%}
 
+{% block header %} 
+		{{ requestblock('block_twig/topline', {'favourites':favourites}) }}
+		{% include 'block/header/logoline' %}
+		{% include 'user/add/promo' %}
+{% endblock header %} 
+
+{% block crumbs %}
+{% endblock crumbs %} 
+
 {% block content %}
-	{% set problem = get_config("common.add_problem") %}
-	{% if problem %}
-		<div class="fl100  pt16 pb15">
-				<div class="smallcont">
-					<div class="labelcont">
-						<label><span style="color:red;">!</span></label>
-					</div>
-					<div class="fieldscont">
-						<div class="inp-cont-short">
-							<div class="inp-cont"  style="color:red;">
-								{{problem}}
+	<div class="obj-control-head clearfix brt2">&nbsp;</div>
+	<div class="bg-color-whitesmoke p20">
+		{% set problem = get_config("common.add_problem") %}
+		{% if problem %}
+			<div class="fl100  pt16 pb15">
+					<div class="smallcont">
+						<div class="labelcont">
+							<label><span style="color:red;">!</span></label>
+						</div>
+						<div class="fieldscont">
+							<div class="inp-cont-short">
+								<div class="inp-cont"  style="color:red;">
+									{{problem}}
+								</div>
 							</div>
 						</div>
 					</div>
-				</div>
-		</div>
-	{% endif %}
+			</div>
+		{% endif %}
 
-	{% if expired_orginfo  %}
-		<div class="fl100  pt16 pb15">
-			<div class="smallcont pb10">
-				<div class="labelcont">
-					<label><span></span></label>
-				</div>
-				<div class="fieldscont">										
-					<div class="">
-						<div class="inp-cont" style=" font-size:16px;">
-							<span style="color:red;">Для продолжения работы с сайтом, пожалуйста, поделитесь с нами информацией о Вашей компании <a href="/user/orginfo">здесь</a></span>.
-							Если сейчас у Вас нет возможности заполнить форму, сделайте это в любое удобное время, но не позднее чем {{expired_orginfo}}
-				  		</div>
+		{% if expired_orginfo  %}
+			<div class="fl100  pt16 pb15">
+				<div class="smallcont pb10">
+					<div class="labelcont">
+						<label><span></span></label>
+					</div>
+					<div class="fieldscont">										
+						<div class="">
+							<div class="inp-cont" style=" font-size:16px;">
+								<span style="color:red;">Для продолжения работы с сайтом, пожалуйста, поделитесь с нами информацией о Вашей компании <a href="/user/orginfo">здесь</a></span>.
+								Если сейчас у Вас нет возможности заполнить форму, сделайте это в любое удобное время, но не позднее чем {{expired_orginfo}}
+					  		</div>
+						</div>
 					</div>
 				</div>
 			</div>
-		</div>
-	{% endif %}
+		{% endif %}
 
-	{{ requestoldview(block_name, params) }}
+		{{ requestoldview(block_name, params) }}
+	</div>
 {% endblock content %}
 
 {% block rightside %} 
-	<noindex>
-			<div class="widget mb30 mt10">
-				<img class="mb30" src="staticfile('/images/cat200x300.gif')">
-				
-				<p class="title">Полезные ссылки</p>
+	<div class="info-block-cont theme3 module">
+		<div class="block-title">
+			<span>Информация</span>
+		</div>						
+		<div class="bg-color-whitesmoke p20">
+			<img class="mb30" src="{{staticfile('images/cat200x300.gif')}}">
+		</div>
+	</div>
+	{% if form_data.last_news|length > 0 %}
+		<div class="info-block-cont theme3 module">
+			<div class="block-title">
+				<span>Новости «Ярмарки»</span>
+			</div>						
+			<div class="banner style2">
 				<ul class="ul-menu">
-					<li><a rel="nofollow" href="/">Главная</a></li>
-					
-					<li><a rel="nofollow" href="/">К объявлениям</a></li>
-					{% if user %}
-						<li><a rel="nofollow" href="{{ url('user/profile') }}" >Данные пользователя</a></li>
-					{% endif %}
-					<li><a rel="nofollow" href="" onclick="UE.Popin.show(); return false;">Техподдержка</a></li>
-					<li><a rel="nofollow" href="/article/pravila-razmeshcheniya-obyavlenii">Правила сайта</a></li>
-					<li><a rel="nofollow" href="/article/usloviya-ispolzovaniya-saita-yarmarka">Условия использования сайта “Ярмарка”</a></li>
-
+					{% for newsone in form_data.last_news %}
+						{% set query_uri = '?em_client_email=noreply@yarmarka.biz&em_campaign_id=4&em_campaign_name=newsone_' ~ newsone.id %}
+							<li><a target="_blank" rel="nofollow" href="">{{newsone.title}}</a></li>
+					{% endfor %}
 				</ul>
-			</div>			
-			{% if form_data.last_news|length > 0 %}
-				<div class="widget last_news">
-					<p class="title">Новости «Ярмарки»</p>
-					<ul class="ul-menu">
-						{% for newsone in form_data.last_news %}
-							{% set query_uri = '?em_client_email=noreply@yarmarka.biz&em_campaign_id=4&em_campaign_name=newsone_' ~ newsone.id %}
-								<li><a target="_blank" rel="nofollow" href="">{{newsone.title}}</a></li>
-						{% endfor %}
-					</ul>
-				</div>
-			{% endif %}
-	</noindex>
+			</div>
+		</div>
+	{% endif %}
 {% endblock rightside %}
 
 {% block page_name %}add{% endblock page_name%}

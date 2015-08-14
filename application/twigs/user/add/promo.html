@@ -1,0 +1,28 @@
+<div class="blue-subtle-theme module">
+	{% include 'block/header/navigationline/simple' %}
+	<div class="view-container">
+		<div class="row">
+			<div class="col-md-6 items-cont">
+				<div class="breadcrumbs-cont module mt10">
+				{% for crumb in crumbs %}
+					{% if crumb.url %}
+						<a href="{{ url(crumb.url) }}">{{crumb.title}}</a> /
+					{% else  %}
+						<h1>{{crumb.title}}</h1>
+					{% endif %}
+				{% endfor %}
+				</div>
+				{% if params.form_data.org_info %}
+						<p class="mb10">Компания: {{ params.form_data.org_info.title }}</p>
+						<p class="mb10">
+							{% if params.form_data.org_info.logo %}
+								<img src="{{ params.form_data.org_info.logo }}" class="fl mr5 mb5">
+							{% endif %}
+							<span class="mb10">{{ params.form_data.org_info.about }}...</span>
+						</p>
+						<p>Изменить информацию о компании можно <a href="/user/orginfo">здесь</a></p>
+				{% endif %}
+			</div>
+		</div>
+	</div><!--view-container1-->
+</div><!--skin-theme1-->
