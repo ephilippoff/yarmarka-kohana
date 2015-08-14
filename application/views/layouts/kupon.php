@@ -21,6 +21,7 @@
 	.text-cont{font-size: 10px;}
 	.fs10{font-size: 10px}.fs16{font-size: 16px}.fs18{font-size: 18px}.fs20{font-size: 20px}.fs26{font-size: 26px}
 	.fw-b{font-weight: bold}
+	.w49p{width: 49%;}
 </style>
 </head>
 <body class="adaptiveoff">

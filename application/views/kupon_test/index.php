@@ -3,17 +3,17 @@
 		<div class="logo fl"><img src="/images/black_logo.png"></div>
 		<div class="fr"></div>
 	</div>
-	<p class="tt-u ta-c fs20 fw-b mb5">Скидочный купон №<?=$kupon->id?></p>
+	<p class="tt-u ta-c fs20 fw-b mb5">Скидочный купон №<номер></p>
 	<p class="ta-c color-gray mb20">Предъявите этот купон на месте, чтобы получить услугу</p>
 	<hr class="mb10">
-	<p class="ta-c tt-u fs26 mb5">ПИН-КОД <?=$kupon->code?></p>
+	<p class="ta-c tt-u fs26 mb5">ПИН-КОД <код></p>
 	<p class="ta-c tt-u color-gray mb15">Внимание! Не сообщайте пин-код до момента получения товара или услуги</p>
 	<hr class="mb20">
 	<p class="mb20 fs16 fw-b ta-c"><a href="<?'http://'.Kohana::$config->load('common.main_domain')?>/detail/<?=$object->id?>"><?=strip_tags($object->title)?></a></p>
 	<hr class="mb10">
 	<div class="row mb10">
 		<div class="fl w49p">
-			<p class="fs18 fw-b mb20">Количество: <?=$kupon->count?></p>
+			<p class="fs18 fw-b mb20">Количество: <количество></p>
 			<?php 
 				$contact_types = array(1 => 'Тел.', 2 => 'Тел.', 5 => 'Email');
 				foreach ($object->get_contacts() as $contact) : ?>
