@@ -31,9 +31,9 @@ class Controller_Index extends Controller_Template {
         
         $twig = Twig::factory('index/index');
 
-        // $twig->lastnews  = ORM::factory('Article')
-        //                         ->get_lastnews(NULL, NULL, 5)
-        //                         ->getprepared_all();
+        $twig->lastnews  = ORM::factory('Article')
+                                ->get_lastnews(NULL, NULL, 4)
+                                ->getprepared_all();
         
         $index_info = $this->get_index_info();
 
@@ -49,7 +49,7 @@ class Controller_Index extends Controller_Template {
 
         $attachments = ORM::factory('Object_Attachment')
                             ->order_by("id","desc")
-                            ->limit(15)
+                            ->limit(3)
                             ->getprepared_all();
         $promo_thumbnails = array_map(function($item){
             return Imageci::getSavePaths($item->filename);

@@ -323,9 +323,19 @@ select{background-color: #FFFFFF;border: 1px solid #89898c;color: #384354;paddin
 .green-dense-theme.obj-control-head {background-color: #8EC745;}
 /* skin-theme6 end */
 
+/* skin-theme6 */
+.main-theme{color: white}
+.main-theme .subcategories-cont ul li a{color: white}
+.main-theme .subcategories-cont ul li a.active{ color:#E96F4F;}
+.main-theme .menu-cont2{background-color: #D30000;}
+.main-theme .view-container{background: url(https://raw.githubusercontent.com/subtlepatterns/SubtlePatterns/gh-pages/classy_fabric.png);}
+.main-theme .subcategories-cont ul li span {color: gray;}
+.main-theme a{ text-decoration: underline;}
+.main-theme.obj-control-head {background-color: #D30000;}
+/* skin-theme6 end */
 
 
-.main-theme{background: url(https://raw.githubusercontent.com/subtlepatterns/SubtlePatterns/gh-pages/classy_fabric.png);padding: 20px;color:white;min-height: 320px;}
+/*.main-theme{background: url(https://raw.githubusercontent.com/subtlepatterns/SubtlePatterns/gh-pages/classy_fabric.png);color:white;}
 .main-theme .breadcrumbs-cont{margin-bottom: 10px;}
 .main-theme .breadcrumbs-cont span{font-size: 12px; color:#333;}
 .main-theme .items-cont ul li{line-height: 20px;font-size: 14px;padding-left: 10px;margin: 10px 5px;border-left: 2px solid #2B587A;color: white;}
@@ -336,7 +346,7 @@ select{background-color: #FFFFFF;border: 1px solid #89898c;color: #384354;paddin
 .main-theme .buttons-cont ul li:hover a {color: gray;}
 .main-theme .buttons-cont .ico {width: 16px;height: 16px;display: inline-block;vertical-align: sub;margin-right: 5px;}
 .main-theme .buttons-cont .ico.premium {background: url('/static/develop/images/pr1.png') no-repeat center center;}
-.main-theme a{color: white;}
+.main-theme a{color: white;}*/
 
 
 /* obj-control-head */

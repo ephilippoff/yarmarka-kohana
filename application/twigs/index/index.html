@@ -7,15 +7,18 @@
 
 {% block header %} 
 	{{ parent() }}
-	{% include 'block/header/navigationline/empty' %}
-	{% include 'index/promo' %}
-	{{ requestblock('block_twig/adslinkline',{'city_id': city.id}) }}
+
 {% endblock header %} 
 
 {% block content %}
-	<div class="col-md-12 col-sm-9">
-		
+	<div class="col-md-6">
+		{% include 'index/promo/city' %}
+		{# {{ requestblock('block_twig/adslinkline',{'city_id': city.id}) }} #}
 		{% include 'index/categories' %}
+	</div>
+	<div class="col-md-6">
+		{% include 'index/promo/kupon' %}
+		{% include 'index/promo/news' %}
 	</div>
 {% endblock content %}
 

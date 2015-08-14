@@ -1,9 +1,9 @@
-<div class="main-theme" style="height:350px;">
+<div class="main-theme module brb2" style="height:350px;overflow:hidden;">
 	<div class="breadcrumbs-cont">						
 		<h1>Газета бесплатных объявлений Ярмарка</h1>
 	</div>	
 	<div class="row">
-		<div class="col-md-6 items-cont">
+		<div class="col-md-8 items-cont">
 			<ul>
 				{% for key, _city in  {'nizhnevartovsk':'Нижневартовске','surgut':'Сургуте','tyumen':'Тюмени','nefteyugansk':'Нефтеюганске'} if key != city.seo_name %}
 					{% set count = link_counters[domain(key, '', '')] %}
@@ -27,7 +27,7 @@
 				</li>
 			</ul>
 		</div>
-		<div class="col-md-6 height:150px; overflow:hidden;">
+		<div class="col-md-4 height:150px; overflow:hidden;">
 			<div class="js-promo-thumbnails" style="margin-top:-30px;">
 				{% for thumbnail in promo_thumbnails %}
 					<img src="{{ '/' ~ thumbnail['272x203'] }}" alt="" style="display:none;">
