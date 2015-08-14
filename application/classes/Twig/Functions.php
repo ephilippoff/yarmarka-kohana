@@ -120,4 +120,9 @@ class Twig_Functions
     {
         return Auth::instance()->get_user();
     }
+
+    public static function get_image_paths($filename)
+    {
+        return Imageci::getSitePaths($filename);
+    }
 }

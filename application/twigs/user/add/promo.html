@@ -1,6 +1,6 @@
 <div class="blue-subtle-theme module">
 	{% include 'block/header/navigationline/simple' %}
-	<div class="view-container">
+	<div class="view-container brb2">
 		<div class="row">
 			<div class="col-md-6 items-cont">
 				<div class="breadcrumbs-cont module mt10">
@@ -13,14 +13,16 @@
 				{% endfor %}
 				</div>
 				{% if params.form_data.org_info %}
-						<p class="mb10">Компания: {{ params.form_data.org_info.title }}</p>
-						<p class="mb10">
-							{% if params.form_data.org_info.logo %}
-								<img src="{{ params.form_data.org_info.logo }}" class="fl mr5 mb5">
-							{% endif %}
-							<span class="mb10">{{ params.form_data.org_info.about }}...</span>
-						</p>
-						<p>Изменить информацию о компании можно <a href="/user/orginfo">здесь</a></p>
+					<p class="mb10">Компания: {{ params.form_data.org_info.title }}</p>
+					<p class="mb10">
+						
+						{% if params.form_data.org_info.logo %}
+							{% set logo = get_image_paths(params.form_data.org_info.logo) %}
+							<img src="{{ logo['120x90'] }}" class="fl mr5 mb5">
+						{% endif %}
+						<span class="mb10">{{ params.form_data.org_info.about }}...</span>
+					</p>
+					<p>Изменить информацию о компании можно <a href="/user/orginfo">здесь</a></p>
 				{% endif %}
 			</div>
 		</div>
