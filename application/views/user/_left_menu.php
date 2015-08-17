@@ -72,6 +72,11 @@
 				<li><a href="<?=URL::site('user/priceload')?>" class="clickable"><i class="ico "></i><span>Прайс-листы</span></a></li>
 				<?php endif; ?>
 
+				<?php if (Request::current()->action() == 'kupons') : ?>
+				<li><span class="noclickable"><i class="ico "></i><span><b>Купоны</b></span></span></li>
+				<?php else : ?>
+				<li><a href="<?=URL::site('user/kupons')?>" class="clickable"><i class="ico "></i><span>Купоны</span></a></li>
+				<?php endif; ?>								
 				<?/*Request::factory('block/massload_categories')->execute()*/?>
 
 				<? /* ?>

@@ -7,7 +7,21 @@ class Model_Kupon extends ORM
 	protected $_has_many = array(
 	);
 
-	protected $_belongs_to = array(
+	protected $_has_one = array(
 		'invoice'	=> array('model' => 'Invoices', 'foreign_key' => 'invoice_id')
 	);
+	
+	public function with_objects()
+	{
+		return $this->select(array('object.title', 'object_title'))
+			->join('object', 'left')
+			->on('kupon.object_id', '=', 'object.id');
+	}	
+	
+	public function with_invoices()
+	{
+		return $this->select(array('invoices.user_id', 'user_id'))
+			->join('invoices', 'left')
+			->on('kupon.invoice_id', '=', 'invoices.id');
+	}	
 }

@@ -1903,6 +1903,45 @@ class Controller_User extends Controller_Template {
 		
 		$this->template->user 			= $user;				
 	}
+	
+	public function action_kupons()
+	{
+		$this->layout = 'users';
+
+		// pagination settings
+		$per_page	= 20;
+		$page		= (int) Arr::get($_GET, 'page', 1);
+
+		$kupons = ORM::factory('Kupon')
+			->with_invoices()
+			->with_objects()	
+			->where('user_id', '=', $this->user->id);
+
+		$count = clone $kupons;
+		$count = $count->count_all();
+
+		$kupons->limit($per_page)
+			->offset($per_page*($page-1))
+			->order_by('id', 'asc');
+
+	 	$this->template->pagination = Pagination::factory( array(
+			'current_page' => array('source' => 'query_string', 'key' => 'page'),
+			'total_items' => $count,
+			'items_per_page' => $per_page,
+			'auto_hide' => TRUE,
+			'view' => 'pagination/floating',
+			'first_page_in_url' => TRUE,
+			'count_out'	=> 5,
+			'count_in' => 5
+		))->route_params(array(
+			'controller' => 'user',
+			'action' => 'kupons',
+		));
+
+		$this->template->kupons = $kupons->find_all();
+	}	
+	
+	
 }
 /* End of file User.php */
 /* Location: ./application/classes/Controller/User.php */
