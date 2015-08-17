@@ -13,7 +13,7 @@
 	<hr class="mb10">
 	<div class="row mb10">
 		<div class="fl w49p">
-			<p class="fw-b mb20"><?=$kupon->text?></p>
+			<p class="fw-b mb20"><Описание></p>
 			<?php 
 				$contact_types = array(1 => 'Тел.', 2 => 'Тел.', 5 => 'Email');
 				foreach ($object->get_contacts() as $contact) : ?>
