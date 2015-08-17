@@ -63,7 +63,7 @@
 	<hr>
 	<p class="mb10">Описание услуги:</p>
 	<div class="text-cont mb15">
-		<?=strip_tags($attributes_values['support-info'])?>
+		<?=$attributes_values['support-info']?>
 	</div>
 	<hr class="mb15">
 	<p class="ta-c fs16 color-gray">Служба поддержки Ярмарка-Скидки в Нижневартовске:</p>
