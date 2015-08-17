@@ -24,7 +24,7 @@
 								</div>
 								<div class="col2">
 									<p class="kupon-title">
-										<a target="_blank" href="<?=Url::site('kupon_test/index/'.$kupon->object_id)?>"><?=$kupon->object_title?></a>
+										<a target="_blank" href="<?=Url::site('kupon/'.$kupon->id)?>"><?=$kupon->object_title?></a>
 									</p>
 								</div>								
 							</div>			                    					                   					
