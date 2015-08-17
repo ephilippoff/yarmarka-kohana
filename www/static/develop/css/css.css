@@ -218,17 +218,21 @@ select{background-color: #FFFFFF;border: 1px solid #89898c;color: #384354;paddin
 /* jssor end */
 
 /* reklama-cont */
-.reklama-cont {background-color: #F7F7F7;position: relative;border-bottom: 1px dotted #D90000;padding: 5px 0px;}
-.reklama-cont .unit,
-.reklama-cont a{color: #333;font-weight: bold;}
-.reklama-cont .unit{display: inline-block;cursor: pointer;margin:0px 5px;}
-.reklama-cont .banners {max-height: 50px;}
-.reklama-cont .banners a img {max-width: 100px;max-height: 50px;  }
-.reklama-cont .reklama-line{/*float: left;width: 100%;*/text-align: center;}
-.reklama-cont .reklama-line .cont-r {display: inline-block;text-align: center;}
-.reklama-cont .text-banners a {margin: 2px 5px 0px 5px;}
+.reklama-cont {background: url(http://www.free-patterns.info/wp-content/uploads/2015/08/subtle-red-scratched-wall-221614.png);position: relative;padding: 5px 9px;}
+.reklama-cont .banners {height: 50px !important;}
+.reklama-cont .banners .item {border-radius: 2px;display: inline-block;text-align: center; margin-right: 9px;position:relative;}
+.reklama-cont .banners .item img {width: 100px;height: 50px;border-radius: 2px;}
+.reklama-cont .banners .item span {position: absolute;left:0px;top:10px;font-weight: bold;display:inline-block; width:100%;text-align: center;}
+.reklama-cont .banners .item.noactive img {
+	opacity:0.4;
+	-moz-opacity:0.4;
+	filter: alpha(opacity=40) black;
+	-khtml-opacity: 0.4;
+}
+.reklama-cont .text-banners {text-align: center;}
+.reklama-cont .text-banners a {font-weight:bold;margin: 2px 5px 0px 5px;}
 .reklama-cont .reklama {left: 10px;position: absolute;bottom: 3px;}
-.reklama-cont .notice-bg {font-size: 10px;color: #AAAAAA;letter-spacing: -1px;}
+.reklama-cont .notice-bg {font-size: 10px;color: #AAAAAA;}
 .reklama-cont .how-to-buy {right: 10px;position: absolute;bottom: 3px;text-decoration: underline;cursor: pointer;}
 .reklama-cont .banners .unit.text-t3 {position: relative;}
 .reklama-cont .banners .unit.text-t3 .wrapper {position: absolute;top: 0px;left: 0px;width: 100px;height: 50px;display: table;}
@@ -324,14 +328,15 @@ select{background-color: #FFFFFF;border: 1px solid #89898c;color: #384354;paddin
 /* skin-theme6 end */
 
 /* skin-theme6 */
-.main-theme{color: white}
+.main-theme .view-container{color: white}
 .main-theme .subcategories-cont ul li a{color: white}
 .main-theme .subcategories-cont ul li a.active{ color:#E96F4F;}
 .main-theme .menu-cont2{background-color: #D30000;}
-.main-theme .view-container{background: url(https://raw.githubusercontent.com/subtlepatterns/SubtlePatterns/gh-pages/classy_fabric.png);}
+.main-theme .view-container{background: url(http://www.free-patterns.info/wp-content/uploads/2015/08/subtle-red-scratched-wall-221614.png);}
 .main-theme .subcategories-cont ul li span {color: gray;}
-.main-theme a{ text-decoration: underline;}
+.main-theme .view-container a{ text-decoration: underline;}
 .main-theme.obj-control-head {background-color: #D30000;}
+/*table.main-theme tr.hover {background:#F5E1E1 !important;}*/
 /* skin-theme6 end */
 
 
@@ -363,7 +368,7 @@ select{background-color: #FFFFFF;border: 1px solid #89898c;color: #384354;paddin
 
 /* table-result-info */
 .table-result-info{width: 100%; font-size: 12px;}
-.table-result-info .tr{background-color: #F5F5F5; line-height: 1.3  ;border-bottom: 1px solid #A7A8A7;}
+.table-result-info .tr{background-color: #F5F5F5; line-height: 1.3  ;border-bottom: 8px solid white;}
 .table-result-info .tr.hover{background-color: #DCDCDC;}
 .table-result-info .tr.hover .additional-cont{background-color: #DCDCDC;display: block;}
 .table-result-info .td{box-sizing: border-box;}
@@ -384,9 +389,22 @@ select{background-color: #FFFFFF;border: 1px solid #89898c;color: #384354;paddin
 .table-result-info .td-3{vertical-align: top;padding: 10px;width: 150px;}
 .table-result-info .td-3 img{max-width: 100px;}
 .table-result-info .td-3 .title{margin-top: 10px;}
-.table-result-info .td-4{vertical-align:top;padding:10px 5px;width: 30px;}
+.table-result-info .td-icons{vertical-align:top;padding:10px 5px;width: 30px;}
 .table-result-info .td-additional{width: 1px;vertical-align: top}
 .table-result-info .additional-cont{display:none;width: 190px; background-color: #F5F5F5; position: absolute;top:0px; right: -190px; min-height: 120px;border-bottom: 1px solid #A7A8A7;    z-index: 1;}
+
+.table-result-info .td-company-info{vertical-align: top;padding: 10px;width: 150px;}
+.table-result-info .td-company-info div {text-align: right;}
+.table-result-info .td-company-info img{max-width:50px;max-height: 70px;}
+.table-result-info .hover .td-company-info img{max-width:150px;max-height: 70px;
+    -webkit-transition: max-width 0.5s ease-out 0.2s;
+     -moz-transition: max-width 0.5s ease-out 0.2s;
+     -o-transition: max-width 0.5s ease-out 0.2s;
+     transition: max-width 0.5s ease-out 0.2s;
+}
+
+.table-result-info .td-company-info .state{display:none;}
+.table-result-info .hover .td-company-info .state{display:block;}
 
 .table-result-info.style1{margin-bottom: 5px;}
 .table-result-info.style1 .img-frame{max-width: 100px;max-height: 75px;}

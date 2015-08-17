@@ -1,0 +1,13 @@
+<div class="green-dense-theme module br2" >
+	<div class="menu-cont2 bg-color-crimson brt2">
+		<div class="row">
+			<div class="col-md-12 clearfix">
+				<span class="menu-item">Все</span>
+				{% for rubric in news_rubrics%}
+					<span class="menu-item">{{rubric.title}}</span>
+				{% endfor %}
+				<span class="menu-item right">К объявлениям</span>
+			</div>
+		</div>			
+	</div>
+</div>

@@ -1,0 +1,60 @@
+{% extends "layouts/article" %}
+
+{% block header %} 
+		{{ requestblock('block_twig/topline', {'favourites':favourites}) }}
+		{% include 'block/header/logoline' %}
+		{% include 'article/index/promo' %}
+{% endblock header %} 
+
+{% block crumbs %}{% endblock crumbs %}
+
+{% block content %}
+	<article class="iPage-article">
+		{% if newsone.is_category == 0 %}
+		<p class="news-created">
+			{% if newsone.start_date %}
+				{{newsone.start_date|date('H:m, d.m.Y')}}
+			{% endif %}
+		</p>
+		{% endif %}
+		<h1 class="big" style="text-align: left;">{{newsone.title}}</h1>
+			{% if not real_photo and parent_rubric.name != 'infografika' %}
+				<div class="photo-cont">							
+					<img class="news-photo" src="{{real_photo}}" alt="{{newsone.photo_comment|e}}" title="{{newsone.photo_comment|e}}">
+					<div class="photo-comment">{{newsone.photo_comment|e}}</div>
+				</div>
+			{% endif %}
+		<div class="photo-cont">							
+			<img class="news-photo" src="/uploads/orig/cd/4a/35/cd4a35aba15be95db7f29e38188f0aa3.jpg" width="500">
+		</div>
+		<div class="text-cont">{{newsone.text}}</div>
+			{% if newsone.is_category == 0 %}
+				<div id="hypercomments_widget"></div>
+				<script type="text/javascript">
+					_hcwp = window._hcwp || [];
+					_hcwp.push({widget:"Stream", widget_id:16227, callback: function(app, init){$('#hypercomments_widget .hc_count_user_online').remove();} });
+					(function() {
+						if("HC_LOAD_INIT" in window)return;
+						HC_LOAD_INIT = true;
+						var lang = (navigator.language || navigator.systemLanguage || navigator.userLanguage || "en").substr(0, 2).toLowerCase();
+						var hcc = document.createElement("script"); hcc.type = "text/javascript"; hcc.async = true;
+						hcc.src = ("https:" == document.location.protocol ? "https" : "http")+"://w.hypercomments.com/widget/hc/16227/"+lang+"/widget.js";
+						var s = document.getElementsByTagName("script")[0];
+						s.parentNode.insertBefore(hcc, s.nextSibling);
+					})();
+				</script>
+				<a href="http://hypercomments.com" class="hc-link" title="comments widget">comments powered by HyperComments</a>							
+			{% endif %}
+	</article>
+{% endblock content %}
+
+{% block leftside %} 
+	<div class="info-block-cont theme3 module">
+		<div class="block-title">
+			<span>Последние новости</span>
+		</div>						
+		<div class="bg-color-whitesmoke p20">
+			
+		</div>
+	</div>
+{% endblock leftside %}

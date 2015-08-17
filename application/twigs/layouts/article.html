@@ -4,8 +4,7 @@
 	
 	{% block header %} 
 		{{ parent() }}
-		{% include 'block/header/navigationline/simple' %}
-	{% endblock header %} 
+	{% endblock header %}
 
 	{% block crumbs %}
 		<div class="breadcrumbs-cont module mt10">
@@ -20,22 +19,23 @@
 	{% endblock crumbs %}
 
 	<div class="row">
-		<div class="col-md-12">
+		<div class="col-md-9">
 			{% block content %} 
-				контент
+				<div class="obj-control-head clearfix brt2">&nbsp;</div>
 			{% endblock content %}
 		</div><!--col-->
+		<div class="col-md-3">
+			{% block leftside %} 
+				<div class="obj-control-head clearfix brt2">&nbsp;</div>
+			{% endblock leftside %}
+		</div><!--col-->
 	</div><!--row-->
-
-	{% block footer %} 
-		Футер
-	{% endblock footer %} 
-
 	{% block templates %}
 		{{ parent() }}
 		<script id="template-mainmenu" type="text/template">
 			{{ requestblock('block_twig/mainmenu', {'city_id': city.id}) }}
 		</script>
 	{% endblock templates %}
-	{%block page_name%}cart{% endblock page_name %}
+	{% block page_name%}user{% endblock page_name %}
 {% endblock body %} 
+

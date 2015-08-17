@@ -32,7 +32,7 @@ class Controller_Index extends Controller_Template {
         $twig = Twig::factory('index/index');
 
         $twig->lastnews  = ORM::factory('Article')
-                                ->get_lastnews(NULL, NULL, 4)
+                                ->get_lastnews(NULL, NULL, 6)
                                 ->getprepared_all();
         
         $index_info = $this->get_index_info();
