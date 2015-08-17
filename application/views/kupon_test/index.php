@@ -13,11 +13,11 @@
 	<hr class="mb10">
 	<div class="row mb10">
 		<div class="fl w49p">
-			<p class="fs18 fw-b mb20">Количество: <количество></p>
+			<p class="fw-b mb20"><?=$kupon->text?></p>
 			<?php 
 				$contact_types = array(1 => 'Тел.', 2 => 'Тел.', 5 => 'Email');
 				foreach ($object->get_contacts() as $contact) : ?>
-					<p><?=$contact_types[$contact->contact_type_id]?>: <?=$contact->contact?></p>
+					<p><?=$contact_types[$contact->contact_type_id]?>: <?=Contact::hide($contact->contact)?></p>
 			<?php endforeach; ?>			
 				<p>Адрес: <?=strip_tags($attributes_values['adres-raion'])?></p>
 			<p class="mb20"><?=strip_tags($attributes_values['adres-detail'])?></p>
@@ -63,7 +63,7 @@
 	<hr>
 	<p class="mb10">Описание услуги:</p>
 	<div class="text-cont mb15">
-		<?=$object->user_text?>
+		<?=strip_tags($attributes_values['support-info'])?>
 	</div>
 	<hr class="mb15">
 	<p class="ta-c fs16 color-gray">Служба поддержки Ярмарка-Скидки в Нижневартовске:</p>
