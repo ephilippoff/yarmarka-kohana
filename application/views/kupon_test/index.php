@@ -66,6 +66,9 @@
 		<?=$attributes_values['support-info']?>
 	</div>
 	<hr class="mb15">
-	<p class="ta-c fs16 color-gray">Служба поддержки Ярмарка-Скидки в Нижневартовске:</p>
-	<p class="ta-c fs16 color-gray mb20">Тел. +7(909)555-44-33, email info@yarmarka.biz</p>
+	<p class="ta-c fs16 color-gray mb10">Служба поддержки Ярмарка-Скидки:</p>
+	<p class="ta-c fs16 color-gray">в Нижневартовске: +7(3466)29-28-77</p>
+	<p class="ta-c fs16 color-gray">в Сургуте: +7(3462)21-92-77</p>
+	<p class="ta-c fs16 color-gray">в Тюмени: +7(3452)49-21-21</p>
+	<p class="ta-c fs16 color-gray">email: skidki@yarmarka.biz</p>
 </div>
