@@ -17,7 +17,7 @@
 			<?php 
 				$contact_types = array(1 => 'Тел.', 2 => 'Тел.', 5 => 'Email');
 				foreach ($object->get_contacts() as $contact) : ?>
-					<p><?=$contact_types[$contact->contact_type_id]?>: <?=Contact::hide($contact->contact)?></p>
+					<p><?=$contact_types[$contact->contact_type_id]?>: <?=Contact::format_phone($contact->contact)?></p>
 			<?php endforeach; ?>			
 				<p>Адрес: <?=strip_tags($attributes_values['adres-raion'])?></p>
 			<p class="mb20"><?=strip_tags($attributes_values['adres-detail'])?></p>
