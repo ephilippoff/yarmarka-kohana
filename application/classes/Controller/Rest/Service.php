@@ -38,6 +38,56 @@ class Controller_Rest_Service extends Controller_Rest {
 		// 	->get() );
 	}
 
+	public function action_check_premium()
+	{
+		$object_id = $this->post->id;
+
+		$ad = ORM::factory('Object', intval($object_id));
+		if (!$ad->loaded() OR $ad->active == 0)
+		{
+			throw new HTTP_Exception_404;
+		}
+
+		$this->json['available'] = true;
+		$this->json['service'] = Service::factory("Premium")->get();
+		$this->json['object'] = $ad->get_row_as_obj(array("id","title"));
+
+		// $info = Object::canEdit(Array("object_id" => $ad->id, "rubricid" => $ad->category));
+
+		// if ( $info["code"] == "error" )
+		// {
+		// 	$this->json['code'] = 400;
+		// 	$this->json['text'] = $info["errors"];
+		// 	return;
+		// }
+
+	}
+
+	public function action_check_lider()
+	{
+		$object_id = $this->post->id;
+
+		$ad = ORM::factory('Object', intval($object_id));
+		if (!$ad->loaded() OR $ad->active == 0)
+		{
+			throw new HTTP_Exception_404;
+		}
+
+		$this->json['available'] = true;
+		$this->json['service'] = Service::factory("Lider")->get();
+		$this->json['object'] = $ad->get_row_as_obj(array("id","title"));
+
+		// $info = Object::canEdit(Array("object_id" => $ad->id, "rubricid" => $ad->category));
+
+		// if ( $info["code"] == "error" )
+		// {
+		// 	$this->json['code'] = 400;
+		// 	$this->json['text'] = $info["errors"];
+		// 	return;
+		// }
+
+	}
+
 	public function action_check_buy_object()
 	{
 		$object_id = intval($this->post->id);

@@ -1,0 +1,99 @@
+{% extends "layouts/user" %}
+
+{% block header %} 
+		{{ requestblock('block_twig/topline', {'favourites':favourites}) }}
+		{% include 'block/header/logoline' %}
+		{% include 'user/add/promo' %}
+{% endblock header %} 
+
+{% block crumbs %}{% endblock crumbs %}
+
+{% block content %}
+	<div class="obj-control-head clearfix brt2">
+		<div class="row">
+			<div class="col-md-6 left clearfix">
+				
+			</div>
+			<div class="col-md-6 right clearfix">
+				<a class="item" href="/user/registration">Регистрация</a>
+				<a class="item" href="/user/forgot_password">Забыли пароль?</a>
+			</div>
+		</div>
+	</div>
+	<div class="bg-color-whitesmoke p20">
+		{% if user %}
+			<div class="ta-c pt16 pb15">
+				Вы уже авторизованы
+			</div>
+			{% else %}
+			<div class="form-cont">
+				<form method="POST"  action="" id="element_list">			
+					{{ get_form_element('hidden','csrf', token) }}
+
+					<div class="row mb10">
+						<div class="col-md-3 col-xs-4 labelcont">
+							<label>Логин</label>
+						</div>
+						<div class="col-md-9 col-xs-8">
+							<div class="row">
+								<div class="col-md-6">
+									<div class="inp-cont ">
+										<span class="required-star">*</span>																		
+										<input class="w100p" type="text" name="login" value="{% if params.login %} {{params.login}} {% endif%}"/>					
+									</div>
+								</div>
+							</div>				
+						</div>
+					</div>	
+
+					<div class="row mb10">
+						<div class="col-md-3 col-xs-4 labelcont">
+							<label>Пароль</label>
+						</div>
+						<div class="col-md-9 col-xs-8">
+							<div class="row">
+								<div class="col-md-6">
+									<div class="inp-cont {% if params.login %}error{% endif%}">
+										<span class="required-star">*</span>																		
+										<input class="w100p" type="password" name="pass" value="{% if params.pass %} {{params.pass}} {% endif%}"/>
+
+										{% if error %} 
+										<span class="inform fn-error">
+											{{error}}
+										</span>
+										{% endif %}					
+									</div>
+								</div>
+							</div>				
+						</div>
+					</div>			
+
+					<div class="row mb20">
+						<div class="col-md-3 labelcont">
+							<label></label>
+						</div>
+						<div class="col-md-9">	
+							<div class="row">
+								<div class="col-md-6 ta-r">
+									<span onclick="$('#element_list').submit()" class="button button-style1 bg-color-blue btn-next"><i class="ico ico15 white-right-arrow-ico mr3"></i>Вход</span>
+								</div>				
+							</div>
+						</div>
+					</div>			
+
+				</form>
+			</div>
+			{% endif %}
+	</div>
+{% endblock content %}
+
+{% block rightside %} 
+	<div class="info-block-cont theme3 module">
+		<div class="block-title">
+			<span>Информация</span>
+		</div>						
+		<div class="bg-color-whitesmoke p20">
+			Возможно вы уже регистрировались ранее?
+		</div>
+	</div>
+{% endblock rightside %}

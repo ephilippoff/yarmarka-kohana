@@ -1,0 +1,24 @@
+{% extends "layouts/article" %}
+
+{% block header %} 
+		{{ requestblock('block_twig/topline', {'favourites':favourites}) }}
+		{% include 'block/header/logoline' %}
+		{% include 'user/add/promo' %}
+{% endblock header %} 
+
+{% block crumbs %}{% endblock crumbs %}
+
+{% block content %}
+	
+{% endblock content %}
+
+{% block leftside %} 
+	<div class="info-block-cont theme3 module">
+		<div class="block-title">
+			<span>Информация</span>
+		</div>						
+		<div class="bg-color-whitesmoke p20">
+			Возможно вы уже регистрировались ранее?
+		</div>
+	</div>
+{% endblock leftside %}

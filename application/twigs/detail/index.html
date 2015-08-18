@@ -29,7 +29,6 @@
 				</article>
 			</div>
 			<div class="col-md-3">
-				{% include 'detail/info' %}
 				<div class="banner module">
 					<img src="http://openx.yarmarka.biz/www/images/a4e051e122b1cd4ac7f48e4db9f762af.gif" alt="">
 				</div>				
@@ -54,9 +53,7 @@
 
 			{% include 'detail/services' %}
 			
-			{% if check_object_access(object, 'object.control') not in ["by_role", "owner"] %}
 				{% include 'detail/similar' %}
-			{% endif %}
 			{#
 				{% include 'detail/comments' %}
 			#}

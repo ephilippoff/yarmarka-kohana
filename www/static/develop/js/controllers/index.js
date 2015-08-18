@@ -9,10 +9,12 @@ define([
     "views/partials/userSearch",
     "views/partials/cart",
     "views/partials/add",
+    "views/partials/article",
 
     "modules/filters"
 ], 
-function (Marionette, templates, utils, IndexPage, SearchPage, DetailPage, UserSearchPage, CartPage, AddPage, FiltersModule) {
+function (Marionette, templates, utils, IndexPage, SearchPage, DetailPage, 
+    UserSearchPage, CartPage, AddPage, ArticlePage, FiltersModule) {
     "use strict";
     
     return Marionette.Controller.extend({
@@ -81,6 +83,14 @@ function (Marionette, templates, utils, IndexPage, SearchPage, DetailPage, UserS
             console.log("user start");
 
             app.menu.init(["main"]);
+        },
+
+        start_articleSection : function() {
+            console.log("article start");
+
+            new ArticlePage({
+                el: "body"
+            });
         },
         
         notFound : function() {

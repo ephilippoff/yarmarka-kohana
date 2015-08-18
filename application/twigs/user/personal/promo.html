@@ -1,7 +1,7 @@
 <div class="blue-subtle-theme module">
 	{% include 'block/header/navigationline/simple' %}
-	<div class="view-container">
-		<div class="breadcrumbs-cont module mt10">
+	<div class="view-container brb2">
+		<div class="breadcrumbs-cont module">
 		{% for crumb in crumbs %}
 			{% if crumb.url %}
 				<a href="{{ url(crumb.url) }}">{{crumb.title}}</a> /

@@ -120,4 +120,19 @@ class Twig_Functions
     {
         return Auth::instance()->get_user();
     }
+
+    public static function get_image_paths($filename)
+    {
+        return Imageci::getSitePaths($filename);
+    }
+
+    public static function get_file($path)
+    {
+        $path = trim('/'.$path);
+        if (is_file($_SERVER['DOCUMENT_ROOT'].$path)) {
+            return $path;
+        } else {
+            return "http://yarmarka.biz/".$path;
+        }
+    }
 }

@@ -3,6 +3,9 @@ return array(
 	"up" => array(
 		"default" => 20
 	),
+	"lider" => array(
+		"default" => 200
+	),
 	"premium" => array(
 		"tyumen" => array(
 			"avtotransport" => 5,

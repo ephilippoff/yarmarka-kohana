@@ -110,10 +110,10 @@ class Model_Order extends ORM
 			foreach ($orderItems as $orderItem)
 			{
 				if ($orderItem->type == "object") {
-					Service::factory("Object", $orderItem->object_id)->apply();
+					Service::factory("Object", $orderItem->object_id)->apply($orderItem);
 					array_push($objects, $orderItem->object_id);
 				} else {
-					Service::factory(Text::ucfirst($orderItem->type))->apply();
+					Service::factory(Text::ucfirst($orderItem->type))->apply($orderItem);
 				}
 			}
 
@@ -122,7 +122,7 @@ class Model_Order extends ORM
 		} catch (Kohana_Exception $e) {
 			$db->rollback();
 			$message =  "Ошибка применения заказа ".$e->getMessage();
-			Email::send_to_admin("Ошибка применения заказа #".$order->id, $message);
+			Email::send_to_admin("Ошибка применения заказа #".$this->id, $message);
 			return;
 		}
 

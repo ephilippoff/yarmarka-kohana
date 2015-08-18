@@ -4,7 +4,11 @@ class Controller_Article extends Controller_Template {
 
 	public function before()
 	{
+		$this->use_layout   = FALSE;
+		$this->auto_render  = FALSE;
 		parent::before();
+		
+
 		if ($client_email = trim($this->request->query('em_client_email')) 
 			AND $campaign_name = trim($this->request->query('em_campaign_name')))
 		{
@@ -37,7 +41,7 @@ class Controller_Article extends Controller_Template {
 
 	public function action_index()
 	{
-		//$this->assets->js('jquery.treeview.js');
+		$twig = Twig::factory('article/index');
 		
 		$article = ORM::factory('Article')
 			->where('seo_name', '=', $this->request->param('seo_name'))
@@ -53,12 +57,14 @@ class Controller_Article extends Controller_Template {
 		Seo::set_title($article->title.Seo::get_postfix());
 		Seo::set_description($article->get_meta_description());
 
-		$this->template->articles = ORM::factory('Article')
+		$twig->articles = ORM::factory('Article')
 				->where('is_visible', '=', 1)
 				->where('text_type', '=', 1)
 				->find_all();
 
-		$this->template->article = $article;
+		$twig->article = $article;
+		echo Debug::vars($twig);
+		$this->response->body($twig);
 	}
 	
 	public function action_ourservices()
@@ -97,7 +103,8 @@ class Controller_Article extends Controller_Template {
 	
 	public function action_newsone()
 	{
-		//$this->assets->js('jquery.treeview.js');
+		$twig = Twig::factory('article/index');
+
 		$newsone = ORM::factory('Article')
 			->where('id', '=', (int)$this->request->param('id'))
 			->where('is_visible', '=', 1)
@@ -138,16 +145,17 @@ class Controller_Article extends Controller_Template {
 			$other_news = $other_news->find_all(); 
 		}
 		
-		$this->template->set_global('is_news_page', 1);
-		$this->template->other_news = $other_news;
-		$this->template->count_other_news = ($other_news) ? $other_news->count() : 0;
-		$this->template->real_photo = $real_photo;
-		$this->template->news_rubrics = ORM::factory('Article')->get_final_news_rubrics();			
-		$this->template->newsone = $newsone;
-		$this->template->parent_rubric = ORM::factory('Article')
+		$twig->set_global('is_news_page', 1);
+		$twig->other_news = $other_news;
+		$twig->count_other_news = ($other_news) ? $other_news->count() : 0;
+		$twig->real_photo = $real_photo;
+		$twig->news_rubrics = ORM::factory('Article')->get_final_news_rubrics();			
+		$twig->newsone = $newsone;
+		$twig->parent_rubric = ORM::factory('Article')
 			->where('id', '=', (int)$newsone->parent_id)				
 			->find();
-		$this->template->parent_name = $parent_name;
+		$twig->parent_name = $parent_name;
+		$this->response->body($twig);
 	}	
 	
 	public function action_news()

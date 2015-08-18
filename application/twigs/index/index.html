@@ -5,23 +5,21 @@
 
 {% block wrapperclass %}page-index{% endblock wrapperclass %}
 
+{% block header %} 
+	{{ parent() }}
 
-{% block leftside %}
-	{#<div class="col-md-2 col-sm-3">
-		<div class="menu-cat-cont menu-item-wrp">
-			{% include 'index/menu' %}
-		</div>
-	</div>#}
-{% endblock leftside %}
+{% endblock header %} 
 
-{% block rightside %}
-	<div class="col-md-12 col-sm-9">
-		{% include 'index/promo' %}
-		{{ requestblock('block_twig/adslinkline',{'city_id': city.id}) }}
+{% block content %}
+	<div class="col-md-6">
+		{% include 'index/promo/city' %}
+		{# {{ requestblock('block_twig/adslinkline',{'city_id': city.id}) }} #}
 		{% include 'index/categories' %}
 	</div>
-{% endblock rightside %}
+	<div class="col-md-6">
+		{% include 'index/promo/kupon' %}
+		{% include 'index/promo/news' %}
+	</div>
+{% endblock content %}
 
-{% block footertext %} 
-		
-{% endblock %}
+{% block footertext %}{% endblock %}

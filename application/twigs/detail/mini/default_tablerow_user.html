@@ -3,8 +3,8 @@
 		<div class="img-cont">
 
 			<div class="img-wrapper">
-				{% if object.compiled.images.main_photo and file_exist( strim(object.compiled.images.main_photo['120x90'] , '.')) %}
-					<img class="img-frame" src="{{ '/' ~ object.compiled.images.main_photo['120x90'] }}" alt="{{ object.title|e }}">
+				{% if object.compiled.images.main_photo %}
+					<img class="img-frame" src="{{ get_file(object.compiled.images.main_photo['120x90']) }}" alt="{{ object.title|e }}">
 					<span class="photos-count">{{object.compiled.images.local_photo|length + object.compiled.images.remote_photo|length}}</span>
 				{% else %}
 					<img class="img-frame" src="{{ staticfile('images/nophoto_estate136x107.png') }}">
@@ -33,32 +33,40 @@
 		{% endif %}
 		
 	
-	
-		<p class="pt10 pb10">Для увеличения количества откликов, предлагаем следующие услуги:</p>
-
-		<div>
-			<span class="button w140 button-style1 bg-color-blue mr3 mb3 js-service-up" data-id="{{object.id}}"><i class="ico vkontakte-ico16 mr5"></i><span>Поднять</span></span>
-			<span class="button w140 button-style1 bg-color-blue mr3 mb3"><i class="ico vkontakte-ico16 mr5"></i>Премиум</span>
-			<span class="button w140 button-style1 bg-color-blue mr3 mb3"><i class="ico vkontakte-ico16 mr5"></i>Лидер</span>
-			<span class="button w140 button-style1 bg-color-blue mr3 mb3"><i class="ico vkontakte-ico16 mr5"></i>В газету</span>
-			<span class="button w140 button-style1 bg-color-blue mr3 mb3"><i class="ico vkontakte-ico16 mr5"></i>В другие города</span>
-			<span class="button w140 button-style1 bg-color-blue mr3 mb3"><i class="ico vkontakte-ico16 mr5"></i>Купить</span>
-		</div>
+		{% if object.is_published == 1 %}
+			<p class="pt10 pb10">Для увеличения количества откликов, предлагаем следующие услуги:</p>
+			<div>
+				<span class="button w140 button-style1 bg-color-blue mr3 mb3 js-service-up" data-id="{{object.id}}"><i class="fa fa-angle-double-up fa-lg mr5"></i><span>Поднять</span></span>
+				<span class="button w140 button-style1 bg-color-blue mr3 mb3 js-service-premium" data-id="{{object.id}}"><i class="ico vkontakte-ico16 mr5"></i>Премиум</span>
+				<span class="button w140 button-style1 bg-color-blue mr3 mb3 js-service-lider" data-id="{{object.id}}"><i class="ico vkontakte-ico16 mr5"></i>Лидер</span>
+				<span class="button w140 button-style1 bg-color-blue mr3 mb3"><i class="ico vkontakte-ico16 mr5"></i>В газету</span>
+				<span class="button w140 button-style1 bg-color-blue mr3 mb3"><i class="ico vkontakte-ico16 mr5"></i>В другие города</span>
+				<span class="button w140 button-style1 bg-color-blue mr3 mb3"><i class="ico vkontakte-ico16 mr5"></i>Купить</span>
+			</div>
+		{% else %}
+			<p class="pt10 pb10">Объявление снято с публикации</p>
+		{% endif %}
 	</td>
 	<td class="td w190 p10 va-t">
 		<span class="button w100p button-style1 bg-color-lightgreen mb3 ta-l js-ocontrol-publish" data-id="{{object.id}}">
 			{% if object.is_published %} 
-				<i class="ico vkontakte-ico16 mr5"></i><span>Снять с публикации</span>
+				<i class="fa fa-trash pull-left fa-lg"></i><span>Снять с публикации</span>
 			{% else %}
-				<i class="ico vkontakte-ico16 mr5"></i><span>Опубликовать</span>
+				<i class="fa fa-check pull-left fa-lg"></i><span>Опубликовать</span>
 			{% endif %}			
 		</span>		
 
-		<span class="button w100p button-style1 bg-color-lightgreen mb3 ta-l js-ocontrol-edit" data-id="{{object.id}}"><i class="ico vkontakte-ico16 mr5"></i>Редактировать</span>
+		<span class="button w100p button-style1 bg-color-lightgreen mb3 ta-l js-ocontrol-edit" data-id="{{object.id}}"><i class="fa fa-edit pull-left fa-lg"></i>Редактировать</span>
 	</td>
-	<td class="td td-4">		
-		<i class="ico vkontakte-ico16" title="Премиум"></i>
-		<i class="ico vkontakte-ico16"></i>
+	<td class="td td-icons">		
+		{% if object.compiled.services.premium|length  > 0 %}
+			{% set premium = object.compiled.services.premium[0] %}
+			<i class="fa fa-info-circle fa-lg" title="Действует услуга 'Премиум' до {{ premium.date_expiration|date('H:m d.m.Y') }}" style="color:#D30000"></i>
+		{% endif %}
+		{% if object.compiled.services.lider|length  > 0%}
+			{% set lider = object.compiled.services.lider[0] %}
+			<i class="fa fa-info-circle fa-lg"  title="Действует услуга 'Лидер' до {{ lider.date_expiration|date('H:m d.m.Y') }}"  style="color:#D30000"></i>
+		{% endif %}
 	</td>
 	<td class="td-additional">
 		<div class="relative">

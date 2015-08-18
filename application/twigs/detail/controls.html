@@ -1,26 +1,40 @@
-<div class="info-block-cont theme2 contacts-cont module">
+<div class="info-block-cont theme2 module">
 	<div class="block-title">
 		<span>Управление объявлением</span>
 	</div>					
-	<div class="body">
-		<div class="row">
-			<div class="list list1 col-md-6">
-				<div class="button js-ocontrol-publish button-style1 bg-color-blue mb3 w100p" data-id="{{object.id}}">
-						{% if object.is_published %} 
-							Снять с публикации
-						{% else %}
-							Опубликовать
-						{% endif %}
-				</div>
-				<div class="button js-service-up button-style1 bg-color-blue mb3 w100p" data-id="{{object.id}}">
-					Поднять
-				</div>
-			</div>
-			<div class="list list2 col-md-6">
-				<div class="button js-ocontrol-edit button-style1 bg-color-blue mb3 w100p" data-id="{{object.id}}">
-					Редактировать
-				</div>
-			</div>
+	<div class="row p10">
+		<div class="service-block-cont col-md-5">
+			{#<div class="button button-style1 w100p bg-color-crimson mb3 js-favourite js-favourite-caption" data-id="{{object.id}}">
+				{% set is_favourite = '' %}
+				{% if object.id in favourites %}
+					{% set is_favourite = 'in' %}
+				{% endif %}
+				<i class="ico ico19 favorit-ico {{is_favourite}}"></i> {{is_favourite ? 'В избранном': 'В избранное'}}
+			</div>#}
+			{% if object.is_published == 0 %}
+				<div class="line">Объявление снято</div>
+			{% elseif object.is_published == 1 %}
+				<div class="line">Объявление опубликовано</div>
+			{% endif %}
+			<div class="line">Код объявления: {{ object.id }}</div>
+			<div class="line">Обновлено: {{ object.date_created|date('H:i d.m.Y') }}</div>
+			<div class="line">Просмотров: {{ object.visits }}</div>
 		</div>
-	</div>					
+		<div class="list list1 col-md-7">
+			<p class="button js-ocontrol-publish button-style1 bg-color-lightgreen mb3" data-id="{{object.id}}">
+					{% if object.is_published %} 
+						<i class="fa fa-trash fa-lg mr5"></i><span>Снять с публикации</span>
+					{% else %}
+						<i class="fa fa-check fa-lg mr5"></i><span>Опубликовать</span>
+					{% endif %}
+			</p><br>
+			<p class="button js-ocontrol-edit button-style1 bg-color-lightgreen mb3" data-id="{{object.id}}">
+				<i class="fa fa-edit fa-lg mr5"></i>Редактировать
+			</p>
+			{#<p class="button js-service-up button-style1 bg-color-lightgreen mb3" data-id="{{object.id}}">
+				<i class="fa fa-angle-double-up fa-lg mr5"></i>Поднять
+			</p>#}
+		</div>
+		
+	</div>
 </div>

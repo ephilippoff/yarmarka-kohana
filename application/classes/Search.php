@@ -217,12 +217,24 @@ class Search {
 		}
 
 		if ($params->photocard) {
-			$photocard_subquery = DB::select("object_service_photocard.object_id")
-										->from( "object_service_photocard" )
-										->where("object_service_photocard.object_id","=", DB::expr("o.id"))
-										->limit(1);
-			$photocard_subquery = ORM::factory('Object_Service_Photocard')->get_subquery_for_search($photocard_subquery, is_array($params->category_id)? $params->category_id: array($params->category_id) );
-			$object = $object->where("0", "<", $photocard_subquery);
+			$object = $object->join("object_service_photocard", "inner")
+								->on("object_service_photocard.object_id","=", "o.id");
+
+			$object = $object->where("object_service_photocard.date_expiration", ">", DB::expr("NOW()"));
+			$object = $object->where("object_service_photocard.active","=", 1);
+
+			// if ( $params->city_id AND is_array($params->city_id) ) {
+			// 	$object = $object->where("object_rating.city_id", "IN", $params->city_id);
+			// } elseif ($params->city_id) {
+			// 	$object = $object->where("object_rating.city_id", "=" , $params->city_id);
+			// }
+
+			// $photocard_subquery = DB::select("object_service_photocard.object_id")
+			// 							->from( "object_service_photocard" )
+			// 							->where("object_service_photocard.object_id","=", DB::expr("o.id"))
+			// 							->limit(1);
+			// $photocard_subquery = ORM::factory('Object_Service_Photocard')->get_subquery_for_search($photocard_subquery, is_array($params->category_id)? $params->category_id: array($params->category_id) );
+			//$object = $object->where("0", "<", $photocard_subquery);
 		}
 
 		if ($params->source) {

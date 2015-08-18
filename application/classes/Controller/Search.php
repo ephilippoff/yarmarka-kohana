@@ -96,7 +96,7 @@ class Controller_Search extends Controller_Template {
             ),
             array_merge($search_info->search_params, array("limit" => 15))
         );
-        //$twig->vip_search_result = Search::getresult($vip_search_query->execute()->as_array());
+        $twig->vip_search_result = Search::getresult($vip_search_query->execute()->as_array());
         //vip end
 
         //pagination

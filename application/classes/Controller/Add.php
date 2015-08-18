@@ -34,6 +34,10 @@ class Controller_Add extends Controller_Template {
 		$prefix = (Kohana::$environment == Kohana::PRODUCTION) ? "" : "dev_";
 		$staticfile = new StaticFile("attributes", $prefix.'static_attributes.js');
 		$twig->data_file = $staticfile->jspath;
+
+		$twig->crumbs = array(
+			array("title" => "Создание объявления"),
+		);
 		
 		// $this->layout = 'add';
 		
@@ -103,7 +107,7 @@ class Controller_Add extends Controller_Template {
 		elseif ($user AND $user->linked_to_user)
 			$form_data->LinkedUser();
 
-		if ($user AND $user->role == 9)
+		if ($user AND in_array($user->role, array(9, 1)))
 			$form_data ->AdvertType();
 
 		$twig->params->token = $token;
@@ -144,15 +148,19 @@ class Controller_Add extends Controller_Template {
 		$staticfile = new StaticFile("attributes", $prefix.'static_attributes.js');
 		$twig->data_file = $staticfile->jspath;
 
+		$twig->crumbs = array(
+			array("title" => "Создание объявления"),
+		);
+
 		$errors = new Obj();
 		$token = NULL;
 		$object_id = (int)$this->request->param('object_id');
 		$object = ORM::factory('Object', $object_id);
 		if (!$object_id OR !$object->loaded())
-    		throw new HTTP_Exception_404;
+			throw new HTTP_Exception_404;
 
-    	if ($object->author <> $user->id AND !in_array($user->role, array(1,9,3)))
-    		throw new HTTP_Exception_404;
+		if ($object->author <> $user->id AND !in_array($user->role, array(1,9,3)))
+			throw new HTTP_Exception_404;
 
 		$is_post = ($_SERVER['REQUEST_METHOD']=='POST');
 		$post_data = $this->request->post();
@@ -185,16 +193,16 @@ class Controller_Add extends Controller_Template {
 			$form_data->Login();
 
 		$form_data	->Category()
-				 	->City()
-				 	->Subject()
-				 	->Text()
-				 	->Photo()
-				 	->Video()
-				 	->Params()
-				 	->Map()
-				 	->Price()
-				 	->Contacts()
-				 	->Additional();
+					->City()
+					->Subject()
+					->Text()
+					->Photo()
+					->Video()
+					->Params()
+					->Map()
+					->Price()
+					->Contacts()
+					->Additional();
 
 		if ($user AND $user->role == 9)
 			$form_data ->AdvertType();

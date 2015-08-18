@@ -1,0 +1,268 @@
+{% extends "layouts/user" %}
+
+{% block header %} 
+		{{ requestblock('block_twig/topline', {'favourites':favourites}) }}
+		{% include 'block/header/logoline' %}
+		{% include 'user/add/promo' %}
+{% endblock header %} 
+
+{% block crumbs %}{% endblock crumbs %}
+
+{% block content %}
+	<div class="obj-control-head clearfix brt2">
+		<div class="row">
+			<div class="col-md-6 left clearfix">
+				
+			</div>
+			<div class="col-md-6 right clearfix">
+				<a class="item" href="/user/login">Вход</a>
+				<a class="item" href="/user/forgot_password">Забыли пароль?</a>
+			</div>
+		</div>
+	</div>
+	<div class="bg-color-whitesmoke p20">
+
+		{% if auth %}
+			<div class="row mb10">
+				<div class="col-md-3 col-xs-4 labelcont">
+					<label></label>
+				</div>
+				<div class="col-md-9 col-xs-8">
+					<div class="row">
+						<div class="col-md-6">
+							<p class="mb20">Вы уже зарегистрированы и авторизованы.</p>
+							<p class="mb5">Перейти к:</p>
+							<ul>
+								<li><a href="/user/profile">Личные данные</a></li>
+								<li><a href="/">Главная страница</a></li>
+								<li><a href="/add">Подать объявление</a></li>				
+							</ul>
+						</div>
+					</div>				
+				</div>
+			</div>
+		{% elseif success %}
+			<div class="row mb10">
+				<div class="col-md-3 col-xs-4 labelcont">
+					<label></label>
+				</div>
+				<div class="col-md-9 col-xs-8">
+					<div class="row">
+						<div class="col-md-6">
+							На email, который вы указали, отправлено письмо с информацией о завершении регистрации. Вы можете закрыть эту страницу или перейти на <a href='/'>главную</a>.
+						</div>
+					</div>				
+				</div>
+			</div>
+		{% else %}
+		<div class="form-cont">
+			<form method="POST"  action="" id="element_list">			
+				{{ get_form_element('hidden','csrf', token) }}
+
+				<div class="row mb10">
+					<div class="col-md-3 col-xs-4 labelcont">
+						<label>Email</label>
+					</div>
+					<div class="col-md-9 col-xs-8">
+						<div class="row">
+							<div class="col-md-6">
+								<div class="inp-cont {% if error.login %}error{% endif%}">
+									<span class="required-star">*</span>																		
+									<input class="w100p" type="text" name="login" value="{% if params.login %} {{params.login}} {% endif%}"/>
+									{% if error.login %} 
+									<span class="inform fn-error">
+										{{error.login}}
+									</span>
+									{% else %}
+									<span class="inform">
+										<span>На ваш E-mail придет письмо с подтверждением регистрации</span>
+									</span>
+									{% endif %}					
+								</div>
+							</div>
+						</div>				
+					</div>
+				</div>			
+
+				<div class="row mb10">	
+					<div class="col-md-3 col-xs-4 labelcont">
+						<label>Пароль</label>
+					</div>
+					<div class="col-md-9 col-xs-8">
+						<div class="row">
+							<div class="col-md-6">
+								<div class="inp-cont {% if error.pass %}error{% endif%}">
+									<span class="required-star">*</span>																		
+									<input class="w100p" type="password" name="pass" value="{% if params.pass %} {{params.pass}} {% endif%}" autocomplete="off"/>
+
+									{% if error.pass %} 
+									<span class="inform fn-error">
+										<span>{{error.pass}}</span>
+									</span>
+									{% else %}
+									<span class="inform">
+										<span>Поле пароль не может быть пустым</span>
+									</span>
+									{% endif %}
+								</div>
+							</div>				
+						</div>
+					</div>			
+				</div>	
+
+				<div class="row mb10">
+					<div class="col-md-3 col-xs-4 labelcont">
+						<label></label>
+					</div>
+					<div class="col-md-9 col-xs-8">
+						<div class="row">
+							<div class="col-md-6">
+								<div class="inp-cont {% if error.pass2 %}error{% endif%}">
+									<span class="required-star">*</span>																		
+									<input class="w100p" type="password" name="pass2" value="{% if params.pass2 %} {{params.pass2}} {% endif%}" autocomplete="off"/>
+
+									{% if error.pass2 %} 
+									<span class="inform fn-error">
+										{{error.pass2}}
+									</span>
+									{% else %}
+									<span class="inform">
+										Введите тот же пароль второй раз
+									</span>
+									{% endif %}					
+								</div>
+							</div>
+						</div>				
+					</div>
+				</div>			
+
+				<div class="row mb10">
+					<div class="col-md-3 col-xs-4 labelcont">
+						<label>Тип</label>
+					</div>
+					<div class="col-md-9 col-xs-8">
+						<div class="row">
+							<div class="col-md-6">
+								<div class="inp-cont {% if error.type %}error{% endif%}">
+									<span class="required-star">*</span>																		
+									<input name="type" type="radio" id="type_fl" value="1" {% if params.type == "1" %}checked{% endif%}/><label for="type_fl">Частное лицо</label>
+									{% if not error.type %} 
+									<span class="inform">
+										<span>Ограничение на количество объявлений:</span></br>
+										{% for category in limited_categories %}
+										{{category.title}} ({{category.max_count_for_user}}),
+										{% endfor %}
+									</span>
+									{% endif %}
+
+									<input name="type" type="radio" id="type_company" value="2" {% if params.type == "2" %}checked{% endif%}/><label for="type_company">Компания</label></br>
+									{% if not error.type %} 
+									<span class="inform">
+										Для подтверждения этого статуса, требуется предоставить ИНН. Предоставляются дополнительные услуги и расширенные лимиты для подачи объявлений
+									</span>
+									{% endif %}
+
+									{% if error.type %} 
+									<span class="inform fn-error">
+										{{error.type}}
+									</span>
+									{% endif %}					
+								</div>
+							</div>
+						</div>				
+					</div>
+				</div>			
+
+
+				<div class="row mb10">
+					<div class="col-md-3 col-xs-4 labelcont">
+						<label>Введите слово с картинки</label>
+					</div>
+					<div class="col-md-9 col-xs-8">
+						<div class="row">
+							<div class="col-md-6">
+								<div class="inp-cont {% if error.captcha %}error{% endif%}">
+									<span class="required-star">*</span>
+									{{captcha}}
+									<input class="w100p" type="text" name="captcha" value="{% if params.captcha %} {{params.captcha}} {% endif%}" autocomplete="off"/>
+									{% if error.captcha %} 
+									<span class="inform fn-error">
+										{{error.captcha}}
+									</span>
+									{% else %}
+									<span class="inform">
+										на русском языке
+									</span>
+									{% endif %}					
+								</div>
+							</div>
+						</div>				
+					</div>
+				</div>			
+
+				<div class="row mb10">
+					<div class="col-md-3 col-xs-4 labelcont">
+						<label>Правила</label>
+					</div>
+					<div class="col-md-9 col-xs-8">
+						<div class="row">
+							<div class="col-md-6">
+								<div class="inp-cont accept">
+									Нажимая на кнопку "Далее", Вы принимаете <a href="/article/usloviya-ispolzovaniya-saita-yarmarka" target="_blank">условия использования</a> и <a href="/article/pravila-razmeshcheniya-obyavlenii" target="_blank">правила размещения объявлений</a> на сайте "Ярмарка".													
+								</div>
+							</div>
+						</div>				
+					</div>
+				</div>			
+
+
+
+				{% if error.csrf %} 
+
+				<div class="row mb10">
+					<div class="col-md-3 col-xs-4 labelcont">
+						<label>Заголовок:</label>
+					</div>
+					<div class="col-md-9 col-xs-8">
+						<div class="row">
+							<div class="col-md-6">
+								<div class="inp-cont accept">
+									<span style="color:red">{{error.csrf}}</span>					
+								</div>
+							</div>
+						</div>				
+					</div>
+				</div>				
+
+				{% endif %}
+
+
+				<div class="row mb20">
+					<div class="col-md-3 labelcont">
+						<label></label>
+					</div>
+					<div class="col-md-9">	
+						<div class="row">
+							<div class="col-md-6 ta-r">
+								<span onclick="$('#element_list').submit()" class="button button-style1 bg-color-blue btn-next"><i class="ico ico15 white-right-arrow-ico mr3"></i>Далее</span>
+							</div>				
+						</div>
+					</div>
+				</div>				
+
+			</form>
+		</div>
+		{% endif %}
+	</div>
+{% endblock content %}
+
+{% block rightside %} 
+	<div class="info-block-cont theme3 module">
+		<div class="block-title">
+			<span>Информация</span>
+		</div>						
+		<div class="bg-color-whitesmoke p20">
+			Возможно вы уже регистрировались ранее?
+		</div>
+	</div>
+{% endblock rightside %}

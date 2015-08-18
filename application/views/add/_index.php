@@ -50,29 +50,6 @@
 			</div>		
 		<? endif; ?>
 
-		<? if (property_exists($form_data, 'org_info')): ?>
-			<div class="row mb30">
-				<div class="col-md-3 col-xs-4 labelcont">
-					<label>Компания:</label>
-				</div>
-				<div class="col-md-9 col-xs-8">
-					<?= $form_data->org_info["title"] ?>
-					<? if ($form_data->org_info["logo"]): ?>
-						<div class="p10">
-							<? $logo = Imageci::getSitePaths($form_data->org_info["logo"]); ?>
-							<img src="<?= $logo["120x90"] ?>">
-						</div>
-					<? endif; ?>
-					<div>
-						<?= $form_data->org_info["about"] ?>...
-					</div>
-					<span class="inform">
-						Изменить информацию о компании можно <a href="/user/orginfo">здесь</a>
-					</span>				
-				</div>
-			</div>		
-		<? endif; ?>
-
 		<? if (property_exists($form_data, 'linked_company')) : ?>
 			<div class="row mb10">
 				<div class="col-md-3 col-xs-4 labelcont">
@@ -93,6 +70,24 @@
 					</span>			
 				</div>
 			</div>		
+		<? endif; ?>
+
+		<? if (property_exists($form_data, 'advert_type')): ?>
+			<div id="div_advert_type" class="row mb10">
+				<div class="col-md-3 col-xs-4 labelcont">
+					<label>Тип объявления:</label>
+				</div>
+				<div class="col-md-9 col-xs-8">
+					<div class="row">
+						<div class="col-md-6">
+							<div class="inp-cont ">
+								<span class="required-star">*</span>																		
+								<?= Form::select("obj_type", $form_data->advert_type['type_list'], $form_data->advert_type['value'], array('class' => 'w100p')); ?>					
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>			
 		<? endif; ?>
 
 		<? if (property_exists($form_data, 'city')): ?>
@@ -198,24 +193,6 @@
 
 			<? endif; ?>
 		</div>
-
-		<? if (property_exists($form_data, 'advert_type')): ?>
-			<div id="div_advert_type" class="row mb10">
-				<div class="col-md-3 col-xs-4 labelcont">
-					<label>Тип объявления:</label>
-				</div>
-				<div class="col-md-9 col-xs-8">
-					<div class="row">
-						<div class="col-md-6">
-							<div class="inp-cont ">
-								<span class="required-star">*</span>																		
-								<?= Form::select("obj_type", $form_data->advert_type['type_list'], $form_data->advert_type['value'], array('class' => 'w100p')); ?>					
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>			
-		<? endif; ?>
 
 		<? if (property_exists($form_data, 'company_info')): ?>
 			<div id="div_company_info">

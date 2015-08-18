@@ -1,0 +1,40 @@
+<div class="light-blue-theme module br2" >
+	<div class="menu-cont2 bg-color-crimson brt2">
+		<div class="row">
+			<div class="col-md-12 clearfix">
+				<span class="menu-item right">Категории<i class="fa fa-caret-down ml3"></i></span>
+				<span class="menu-item right"><i class="fa fa-question-circle mr3"></i>Условия</span>
+				<span class="menu-item right"><i class="fa fa-question-circle mr3"></i>Что такое купон?</span>
+			</div>
+		</div>			
+	</div>
+	<div class="view-container brb2">
+		<div class="breadcrumbs-cont">						
+			<p class="white">Ярмарка - Купоны</p>
+		</div>
+		<div class="row">
+			<div class="col-md-6 items-cont">
+				<ul>
+					{% for news in lastnews|slice(0,2) %}
+						<li>
+							<div  style="width:250px;height:200px;float:left;padding:10px;overflow:hidden;position:relative;">
+								{% set image = get_image_paths(news.photo) %}
+								<img src="http://yarmarka.biz/uploads/272x203/59/6d/22/596d22a7cb09a1ce38dc7b7f6851cf8b.png" alt="" width="100%">
+								<p style="position:relative;top:-30px;background:white;padding:10px;"><a href="news/{{ news.id ~ '-' ~ news.seo_name}}">Чистка зубов -50%</a></p>
+							</div>
+						</li>
+					{% endfor %}
+				</ul>
+			</div>
+			<div class="col-md-6 items-cont">
+				<ul>
+					{% for news in lastnews %}
+					<li>
+						<p class="mt10"><a href="news/{{ news.id ~ '-' ~ news.seo_name}}">{{news.title}}</a></p>
+					</li>
+					{% endfor %}
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>

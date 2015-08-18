@@ -1,15 +1,15 @@
 {% set user = get_user() %}
-<div class="proom-list iLight-cont js-usermenu border-color-blue popup-menu-cont right">
+<div class="proom-list iLight-cont js-usermenu border-color-blue popup-menu-cont right brb2">
 	<ul>
-		<li><a href="{{ url('user/profile') }} "><div class="img"><img src="{{ staticfile('images/pr2.png') }}" alt=""></div>Настройки пользователя</a></li>
-		<li><a href="{{ url('user/subscriptions') }}"><div class="img"></div>Подписки</a></li>
-		<li><a href="{{ url('user/orders') }}"><div class="img"></div>Заказы</a></li>
-		<li class=""><a href="{{ url('user/password') }}"><div class="img"></div>Смена пароля</a></li>
+		<li><a href="{{ url('user/profile') }} "><i class="fa fa-user mr5"></i>Настройки пользователя</a></li>
+		<li><a href="{{ url('user/subscriptions') }}"><i class="fa fa-envelope mr5"></i>Подписки</a></li>
+		<li><a href="{{ url('user/orders') }}"><i class="fa fa-credit-card mr5"></i>Заказы</a></li>
+		<li class=""><a href="{{ url('user/password') }}"><i class="fa fa-wrench mr5"></i>Смена пароля</a></li>
 		{% if user.org_type == 2  %}
-			<li class=""><a href="{{ url('user/orginfo') }}"><div class="img"></div>Настройки компании</a></li>
-			<li class=""><a href="{{ url('user/employers') }}"><div class="img"></div>Сотрудники</a></li>
-			<li class=""><a href="{{ url('user/objectload') }}"><div class="img"></div>Массовая загрузка</a></li>
+			<li class=""><a href="{{ url('user/orginfo') }}"><i class="fa fa-cogs mr5"></i>Настройки компании</a></li>
+			<li class=""><a href="{{ url('user/employers') }}"><i class="fa fa-cogs mr5"></i>Сотрудники</a></li>
+			<li class=""><a href="{{ url('user/objectload') }}"><i class="fa fa-cogs mr5"></i>Массовая загрузка</a></li>
 		{% endif %}
-		<li class="last border-color-blue"><a href="{{ url('user/logout') }}"><div class="img"><img src="{{ staticfile('images/pr3.png') }}" alt=""></div>Выход</a></li>
+		<li class="last border-color-blue"><a href="{{ url('user/logout') }}"><i class="fa fa-sign-out mr5"></i>Выход</a></li>
 	</ul>
 </div>	

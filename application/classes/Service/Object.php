@@ -80,7 +80,7 @@ class Service_Object extends Service
 		}
 	}
 
-	public function apply()
+	public function apply($orderItem)
 	{
 
 	}

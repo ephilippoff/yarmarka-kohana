@@ -9,43 +9,37 @@
 {% block crumbs %}{% endblock crumbs %}
 
 {% block content %}
-	<table class="orders-table table">
-		<tr>
-			<th class="col1">Наименование</th>
-			<th class="col2">Состояние</th>
-			<th class="col3">Сумма</th>
-		</tr>
-
-		{% for order in orders %}
+	{{ parent() }}
+	<div class="bg-color-whitesmoke p20">
+		<table class="orders-table table">
 			<tr>
-				<td class="col1"><a href="/cart/order/{{order.id}}">Заказ #{{order.id}} от {{order.created|date("d.m.Y H:m:s")}}</a></td> 
-				<td class="col2">
-					{# {{ getState(order.state) }} #}
-					{% if order.state == 3 %}
-						{{order.payment_date|date("d.m.Y H:m:s")}}
-					{% endif %}
-				</td> 
-				<td class="col3">{{ order.sum }} р.</td> 
+				<th class="col1">Наименование</th>
+				<th class="col2">Состояние</th>
+				<th class="col3">Сумма</th>
 			</tr>
-			<tr style="display:none;" class="info_<?=$order->id?>">
-				<td colspan="3">
-					{% for orderItem in orderitems[order.id] %}
-						{{orderItem.title}}
-						{{orderItem.price * orderItem.quantity}} руб.
-					{% endfor %}
-				</td>
-			</tr>
-		{% endfor %}
-	</table>
+
+			{% for order in orders %}
+				<tr>
+					<td class="col1"><a href="/cart/order/{{order.id}}">Заказ #{{order.id}} от {{order.created|date("d.m.Y H:m:s")}}</a></td> 
+					<td class="col2">
+						{# {{ getState(order.state) }} #}
+						{% if order.state == 3 %}
+							{{order.payment_date|date("d.m.Y H:i:s")}}
+						{% endif %}
+					</td> 
+					<td class="col3">{{ order.sum }} р.</td> 
+				</tr>
+				<tr style="display:none;" class="info_<?=$order->id?>">
+					<td colspan="3">
+						{% for orderItem in orderitems[order.id] %}
+							{{orderItem.title}}
+							{{orderItem.price * orderItem.quantity}} руб.
+						{% endfor %}
+					</td>
+				</tr>
+			{% endfor %}
+		</table>
+	</div>
 {% endblock content %}
 
 {% block rightside %}{% endblock rightside %}
-
-
-
-{% block templates %}
-	{{ parent() }}
-	<script id="template-mainmenu" type="text/template">
-		{{ requestblock('block_twig/mainmenu', {'city_id': city.id}) }}
-	</script>
-{% endblock templates %}

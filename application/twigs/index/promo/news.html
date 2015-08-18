@@ -1,0 +1,33 @@
+<div class="green-dense-theme module br2" >
+	<div class="menu-cont2 bg-color-crimson brt2">
+		<div class="row">
+			<div class="col-md-12 clearfix">
+				<span class="menu-item right"><i class="fa fa-globe mr3"></i>Все</span>
+				<span class="menu-item right"><i class="fa fa-truck mr3"></i>Авто</span>
+				<span class="menu-item right"><i class="fa fa-umbrella mr3"></i>Город</span>
+				<span class="menu-item right"><i class="fa fa-home mr3"></i>Недвижимость</span>
+			</div>
+		</div>			
+	</div>
+	<div class="view-container brb2">
+		<div class="breadcrumbs-cont">						
+			<p>Ярмарка - Новости</p>
+		</div>
+		<div class="row">
+			<div class="col-md-12 items-cont">
+				<ul>
+					{% for news in lastnews %}
+						<li>
+							<div  style="width:180px;height:200px;float:left;padding:10px;overflow:hidden;">
+								{% set image = get_image_paths(news.photo) %}
+								<span class="bg-color-lightorange mr3"><i class="fa fa-home mr3"></i>{{news.start_date|date('H:m:s, d/m')}} </span>
+								<img src="{{get_file(get_image_paths(news.photo)['original'])}}" alt="" width="100%">
+								<p><a href="news/{{ news.id ~ '-' ~ news.seo_name}}">{{news.title}}</a></p>
+							</div>
+						</li>
+					{% endfor %}
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>

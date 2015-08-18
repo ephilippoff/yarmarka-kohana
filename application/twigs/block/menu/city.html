@@ -1,7 +1,7 @@
 {% set cols = 3 %}
 {% set rows = (cities|length/cols)|round %}
 {% set i = 0 %}
-<div class="popup-menu-cont iLight-cont js-citymenu border-color-crimson right">
+<div class="popup-menu-cont iLight-cont js-citymenu border-color-crimson right brb2">
 	{% for col in 0..cols %}
 		<ul>
 			{% for city in cities|slice(i, rows) %}

@@ -9,7 +9,18 @@ define([
     "use strict";
 
     return Marionette.LayoutView.extend({
-
+        ui: {
+            tr:"tr.tr"
+        },
+        events: {
+            "mouseover @ui.tr": function(e) {
+                e.preventDefault();
+                $(e.currentTarget).addClass("hover");
+            },
+            "mouseleave @ui.tr": function(e) {
+                 $(e.currentTarget).removeClass("hover");
+            }
+        },
         behaviors: {
             FavouriteBehavior: {
                 behaviorClass: FavouriteBehavior
