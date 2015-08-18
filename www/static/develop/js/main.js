@@ -8,14 +8,13 @@ require.config({
         jquery     : 'lib/jquery',
         async      : 'lib/async',
         propertyParser: 'lib/propertyParser',
-        jssorSlider : 'lib/jssor.slider.mini',
         menuAim : 'lib/jquery.menu-aim',
         jcookie: 'lib/jquery.cookie',
         iframeTransport: 'lib/vendor/jquery.iframe-transport',
         fileupload: 'lib/vendor/jquery.fileupload',
         nicEdit: 'lib/vendor/nicEdit',
         maskedInput: 'lib/vendor/jquery.maskedinput',
-        isotope: 'lib/vendor/isotope.pkgd'
+        //isotope: 'lib/vendor/isotope.pkgd'
     },
     shim : {
         localStorage : ['backbone'],
@@ -38,7 +37,16 @@ require.config({
             exports: 'Backbone.Paginator'
         },
         fileupload: {
-             deps : ['iframeTransport'],
+             deps : ['jquery', 'iframeTransport']
+        },
+        maskedInput: {
+            deps : ['jquery']
+        },
+        menuAim: {
+            deps : ['jquery']
+        },
+        jcookie: {
+            deps : ['jquery']
         }
     },
     deps : ['jquery', 'underscore']

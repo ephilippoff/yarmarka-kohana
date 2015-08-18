@@ -1,9 +1,8 @@
 /*global define */
 define([
     'marionette',
-    'templates',
-    "isotope"
-], function (Marionette, templates, Isotope) {
+    'templates'
+], function (Marionette, templates) {
     'use strict';
 
     var AdModel = Backbone.Model.extend({});

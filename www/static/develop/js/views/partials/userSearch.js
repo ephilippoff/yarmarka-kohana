@@ -2,12 +2,11 @@
 define([
     "marionette",
     "templates",
-    "jssorSlider",
     "views/partials/behaviors/favourite",
     "views/partials/behaviors/search",
     "views/partials/behaviors/ocontrol",
     "views/partials/behaviors/services"
-], function (Marionette, templates, jssorSlider, FavouriteBehavior, SearchBehavior, OControlBehavior, ServicesBehavior) {
+], function (Marionette, templates, FavouriteBehavior, SearchBehavior, OControlBehavior, ServicesBehavior) {
     "use strict";
 
     return Marionette.LayoutView.extend({

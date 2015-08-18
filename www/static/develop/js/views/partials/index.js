@@ -1,10 +1,9 @@
 /*global define */
 define([
     "templates",
-    "isotope",
     "views/partials/behaviors/search",
     "views/partials/behaviors/ads"
-], function (templates, Isotope, SearchBehavior, AdsBehavior) {
+], function (templates, SearchBehavior, AdsBehavior) {
     "use strict";
 
 
@@ -23,33 +22,33 @@ define([
             this.bindUIElements();
             var s = this;
 
-            this.changeSizes();
+            // this.changeSizes();
             
-            this.iso = new Isotope(  document.querySelector('.js-promo-thumbnails'), {
-                // options
-                itemSelector: 'img',
-                layoutMode: 'masonry',
-                isOriginLeft: false,
-                isOriginTop: false,
-                masonry: {
-                  columnWidth: 50,
-                  gutter: 1
-                },
-                getSortData: {
-                    active: '[data-weight] parseInt'
-                },
-                //sortBy: 'weight'
-            });
+            // this.iso = new Isotope(  document.querySelector('.js-promo-thumbnails'), {
+            //     // options
+            //     itemSelector: 'img',
+            //     layoutMode: 'masonry',
+            //     isOriginLeft: false,
+            //     isOriginTop: false,
+            //     masonry: {
+            //       columnWidth: 50,
+            //       gutter: 1
+            //     },
+            //     getSortData: {
+            //         active: '[data-weight] parseInt'
+            //     },
+            //     //sortBy: 'weight'
+            // });
 
-            this.changeSizes(true);
-            this.iso.layout();
-            this.promoTimer = this.startPromo();
-            $(".js-promo-thumbnails").on("mouseover", function(){
-                clearInterval(s.promoTimer);
-            });
-            $(".js-promo-thumbnails").on("mouseout", function(){
-                 s.promoTimer = s.startPromo();
-            });
+            // this.changeSizes(true);
+            // this.iso.layout();
+            // this.promoTimer = this.startPromo();
+            // $(".js-promo-thumbnails").on("mouseover", function(){
+            //     clearInterval(s.promoTimer);
+            // });
+            // $(".js-promo-thumbnails").on("mouseout", function(){
+            //      s.promoTimer = s.startPromo();
+            // });
         },
 
         startPromo: function() {
