@@ -3,7 +3,7 @@
 		<div class="logo fl"><img src="/images/black_logo.png"></div>
 		<div class="fr"></div>
 	</div>
-	<p class="tt-u ta-c fs20 fw-b mb5">Скидочный купон №<?=$kupon->id?></p>
+	<p class="tt-u ta-c fs20 fw-b mb5">Скидочный купон №<?=$kupon->number?></p>
 	<p class="ta-c color-gray mb20">Предъявите этот купон на месте, чтобы получить услугу</p>
 	<hr class="mb10">
 	<p class="ta-c tt-u fs26 mb5">ПИН-КОД <?=$kupon->code?></p>
@@ -61,7 +61,7 @@
 		</div>
 	</div>
 	<hr>
-	<p class="mb10">Описание услуги:</p>
+	<p class="mb10">Дополнительная информация:</p>
 	<div class="text-cont mb15">
 		<?=$attributes_values['support-info']?>
 	</div>

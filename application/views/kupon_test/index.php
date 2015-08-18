@@ -61,7 +61,7 @@
 		</div>
 	</div>
 	<hr>
-	<p class="mb10">Описание услуги:</p>
+	<p class="mb10">Дополнительная информация:</p>
 	<div class="text-cont mb15">
 		<?=$attributes_values['support-info']?>
 	</div>
