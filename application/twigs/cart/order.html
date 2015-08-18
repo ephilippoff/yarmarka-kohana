@@ -4,7 +4,7 @@
 {% block content %} 
 	<div class="eshop-cont order-cont  page-addobj flat-form-style w800" style="margin:auto;">
 		{% set error = FALSE %}
-		<table class="table">
+		<table class="table table-bordered">
 			<tr>
 				<th>#</th>
 				<th>Наименование</th>
@@ -83,7 +83,7 @@
 			{% if error %}
 				<p>Некоторых товаров нет в наличии, сделайте корректировку заказа</p>
 				<p>
-					<a href="/cart">Вернуться к редактирвоанию заказа</a>
+					<a href="/cart">Вернуться к редактированию заказа</a>
 				</p>
 			{% endif %}
 			
@@ -93,17 +93,15 @@
 				<p class="mt20">
 					<a href="/cart">Вернуться к оформлению заказа</a>
 				</p>
-				<p>
-					<form action="/cart/to_payment_system" method="POST">
-						<input type="hidden" name="id" value="{{ order.id }}">
-						<input type="submit" class="button submit mt20" value="Перейти к оплате">
-					</form>
-				</p>
+				<form class="ta-r" action="/cart/to_payment_system" method="POST">
+					<input type="hidden" name="id" value="{{ order.id }}">
+					<input type="submit" class="button button-style1 bg-color-blue submit mt10" value="Перейти к оплате">
+				</form>
 			{% elseif state == "notPaid" %}
 				<p>Заказ в ожидании оплаты</p>
-				<form action="/cart/to_payment_system" method="POST">
+				<form class="ta-r" action="/cart/to_payment_system" method="POST">
 					<input type="hidden" name="id" value="{{ order.id }}">
-					<input type="submit" class="button submit mt20" value="Перейти к счету в платежной системе">
+					<input type="submit" class="button button-style1 bg-color-blue submit mt10" value="Перейти к счету в платежной системе">
 				</form>
 			{% elseif state == "paid" %}
 				<p>Счет оплачен. В будущем вы можете вернуться к этой странице через <a href="/user/orders">историю заказов</a></p>
@@ -112,16 +110,16 @@
 			{% endif %}
 
 			{% if check_access("pay_service") %}
-				<form action="/cart/to_admin_success" method="POST">
+				<form class="ta-r" action="/cart/to_admin_success" method="POST">
 					<input type="hidden" name="id" value="{{ order.id }}">
 					<input type="hidden" name="code" value="100">
-					<input type="submit" class="button submit mt20" value="Оплатить счет (для администраторов)">
+					<input type="submit" class="button button-style1 bg-color-blue submit mt10" value="Оплатить счет (для администраторов)">
 				</form>
 
-				<form action="/cart/to_admin_success" method="POST">
+				<form class="ta-r" action="/cart/to_admin_success" method="POST">
 					<input type="hidden" name="id" value="{{ order.id }}">
 					<input type="hidden" name="code" value="10">
-					<input type="submit" class="button submit mt20" value="Отменить счет (для администраторов)">
+					<input type="submit" class="button button-style1 bg-color-blue submit mt10" value="Отменить счет (для администраторов)">
 				</form>
 			{% endif %}
 		</div>
