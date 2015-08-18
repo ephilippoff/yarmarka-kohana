@@ -17,7 +17,7 @@
 				<div class="line">Объявление опубликовано</div>
 			{% endif %}
 			<div class="line">Код объявления: {{ object.id }}</div>
-			<div class="line">Обновлено: {{ object.date_created|date('d.m.Y') }}</div>
+			<div class="line">Обновлено: {{ object.date_created|date('H:i d.m.Y') }}</div>
 			<div class="line">Просмотров: {{ object.visits }}</div>
 		</div>
 		<div class="list list1 col-md-7">

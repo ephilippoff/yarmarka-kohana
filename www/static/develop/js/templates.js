@@ -17,6 +17,8 @@ define(function(require){
             },
             services: {
                 up: require('lib/text!templates/services/up.tmpl'),
+                premium: require('lib/text!templates/services/premium.tmpl'),
+                lider: require('lib/text!templates/services/lider.tmpl'),
                 buyObject: require('lib/text!templates/services/buyObject.tmpl'),
             },
         }

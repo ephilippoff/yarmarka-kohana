@@ -37,10 +37,12 @@ class Controller_Block_Twig extends Controller_Block
     {
         $city_id = $this->request->post("city_id");
         $category_id = $this->request->post("category_id");
+        $theme = $this->request->post("theme");
 
         $twig = Twig::factory('block/header/adslinkline');
         $twig->imagelinks = $this->adslinkline($city_id, $category_id, "image");
         $twig->textlinks = $this->adslinkline($city_id, $category_id, "text");
+        $twig->theme = $theme;
         $this->response->body($twig);
     }
 

@@ -1,7 +1,7 @@
 <div class="thumbnails-cont module">
 	<div class="js-thumbnails">
-		{% for photo in object.compiled.images.local_photo if file_exist(strim(photo['120x90'],'.')) %}
-			<img class="" alt="Объявление. {{object.compiled.city}}, {{object.title}}. Фото {{loop.index}}" src="{{ '/' ~ photo['120x90'] }}">
+		{% for photo in object.compiled.images.local_photo %}
+			<img class="" alt="Объявление. {{object.compiled.city}}, {{object.title}}. Фото {{loop.index}}" src="{{ get_file(photo['120x90']) }}">
 		{% endfor %}
 		{% for photo in object.compiled.images.remote_photo %}
 			<img class="" alt="Объявление. {{object.compiled.city}}, {{object.title}}. Фото {{loop.index}}" src="{{ photo }}">

@@ -13,6 +13,14 @@ define([
         template: templates.components.services.up
     });
 
+    var ServicePremiumView = Marionette.ItemView.extend({
+        template: templates.components.services.premium
+    });
+
+    var ServiceLiderView = Marionette.ItemView.extend({
+        template: templates.components.services.lider
+    });
+
     var ServiceBuyObjectView = Marionette.ItemView.extend({
         template: templates.components.services.buyObject
     });
@@ -58,6 +66,58 @@ define([
                     app.windows.vent.trigger("showWindow", "service", {
                         title: "Услуга поднятия объявления",
                         serviceView : new ServiceUpView({
+                            model: new ServiceModel({
+                                info: resp
+                            })
+                        }),
+                        code: resp.code,
+                        success: options.success,
+                        error: options.error
+                    });
+                }
+            });
+        },
+        premium: function(id, options) {
+            
+            var serviceModel = new ServiceModel();
+            serviceModel.urlRoot = "/rest_service/check_premium";
+            options.error = options.error || function() {};
+            options.success = options.success || function() {};
+            serviceModel.save({
+                id: id
+            }, {
+                success: function(model) {
+                    var resp = model.toJSON();
+
+                    app.windows.vent.trigger("showWindow", "service", {
+                        title: "Услуга - премиум объявление",
+                        serviceView : new ServicePremiumView({
+                            model: new ServiceModel({
+                                info: resp
+                            })
+                        }),
+                        code: resp.code,
+                        success: options.success,
+                        error: options.error
+                    });
+                }
+            });
+        },
+        lider: function(id, options) {
+            
+            var serviceModel = new ServiceModel();
+            serviceModel.urlRoot = "/rest_service/check_lider";
+            options.error = options.error || function() {};
+            options.success = options.success || function() {};
+            serviceModel.save({
+                id: id
+            }, {
+                success: function(model) {
+                    var resp = model.toJSON();
+
+                    app.windows.vent.trigger("showWindow", "service", {
+                        title: "Услуга - объявление 'Лидер'",
+                        serviceView : new ServiceLiderView({
                             model: new ServiceModel({
                                 info: resp
                             })

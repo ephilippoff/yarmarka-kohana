@@ -72,6 +72,24 @@
 			</div>		
 		<? endif; ?>
 
+		<? if (property_exists($form_data, 'advert_type')): ?>
+			<div id="div_advert_type" class="row mb10">
+				<div class="col-md-3 col-xs-4 labelcont">
+					<label>Тип объявления:</label>
+				</div>
+				<div class="col-md-9 col-xs-8">
+					<div class="row">
+						<div class="col-md-6">
+							<div class="inp-cont ">
+								<span class="required-star">*</span>																		
+								<?= Form::select("obj_type", $form_data->advert_type['type_list'], $form_data->advert_type['value'], array('class' => 'w100p')); ?>					
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>			
+		<? endif; ?>
+
 		<? if (property_exists($form_data, 'city')): ?>
 			<div id="div_city">
 				<div class="row mb10">
@@ -175,24 +193,6 @@
 
 			<? endif; ?>
 		</div>
-
-		<? if (property_exists($form_data, 'advert_type')): ?>
-			<div id="div_advert_type" class="row mb10">
-				<div class="col-md-3 col-xs-4 labelcont">
-					<label>Тип объявления:</label>
-				</div>
-				<div class="col-md-9 col-xs-8">
-					<div class="row">
-						<div class="col-md-6">
-							<div class="inp-cont ">
-								<span class="required-star">*</span>																		
-								<?= Form::select("obj_type", $form_data->advert_type['type_list'], $form_data->advert_type['value'], array('class' => 'w100p')); ?>					
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>			
-		<? endif; ?>
 
 		<? if (property_exists($form_data, 'company_info')): ?>
 			<div id="div_company_info">

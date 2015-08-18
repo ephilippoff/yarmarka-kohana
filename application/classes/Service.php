@@ -126,8 +126,26 @@ class Service
         return $order_item_temp;
     }
 
-    public function apply()
+    public function apply($orderItem)
     {
+        
+    }
+
+    public function saveServiceInfoToCompiled($orderItem)
+    {
+        $oc = ORM::factory('Object_Compiled')
+                ->where("object_id","=",$orderItem->object_id)
+                ->find();
+        $compiled = array();
+        if ($oc->loaded()) {
+            $compiled = unserialize($oc->compiled);
+        }
+
+        $compiled = array_merge($compiled, Task_Object_Compiled::getServices($orderItem->object_id) );
+
+        $oc->object_id = $orderItem->object_id;
+        $oc->compiled = serialize($compiled);
+        $oc->save();
         
     }
 }

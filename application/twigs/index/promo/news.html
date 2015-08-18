@@ -21,7 +21,7 @@
 							<div  style="width:180px;height:200px;float:left;padding:10px;overflow:hidden;">
 								{% set image = get_image_paths(news.photo) %}
 								<span class="bg-color-lightorange mr3"><i class="fa fa-home mr3"></i>{{news.start_date|date('H:m:s, d/m')}} </span>
-								<img src="http://c.yarmarka.biz/uploads/341x256/c3/92/eb/c392eba143f2e47d2baa1888d0885c68.jpg" alt="" width="100%">
+								<img src="{{get_file(get_image_paths(news.photo)['original'])}}" alt="" width="100%">
 								<p><a href="news/{{ news.id ~ '-' ~ news.seo_name}}">{{news.title}}</a></p>
 							</div>
 						</li>

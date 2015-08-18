@@ -10,6 +10,9 @@ return array(
 			"edit" => array(1,3, "auth", "owner"),
 			"moderate" => array(1,3, "auth")
 		),
-		"pay_service" => array("auth", 1)
+		"pay_service" => array("auth", 1),
+		"news" => array(
+			"edit" => array("auth", 1, 3)
+		)
 	)
 );

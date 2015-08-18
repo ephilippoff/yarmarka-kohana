@@ -107,7 +107,7 @@ class Controller_Add extends Controller_Template {
 		elseif ($user AND $user->linked_to_user)
 			$form_data->LinkedUser();
 
-		if ($user AND $user->role == 9)
+		if ($user AND in_array($user->role, array(9, 1)))
 			$form_data ->AdvertType();
 
 		$twig->params->token = $token;

@@ -2,8 +2,8 @@
 	<td class="td td-1">
 		<div class="img-cont">
 			<div class="img-wrapper">
-				{% if object.compiled.images.main_photo and file_exist( strim(object.compiled.images.main_photo['120x90'] , '.')) %}
-					<img class="img-frame" src="{{ '/' ~ object.compiled.images.main_photo['120x90'] }}" alt="{{ object.title|e }}">
+				{% if object.compiled.images.main_photo %}
+					<img class="img-frame" src="{{ get_file(object.compiled.images.main_photo['120x90']) }}" alt="{{ object.title|e }}">
 					<span class="photos-count">{{object.compiled.images.local_photo|length + object.compiled.images.remote_photo|length}}</span>
 				{% else %}
 					<img class="img-frame" src="{{staticfile('images/nophoto_estate136x107.png')}}">
@@ -34,10 +34,10 @@
 			<table class="table-details">									
 				<tbody>
 					{% for attr in object.compiled.attributes|slice(0, 3) if attr.value %}
-					<tr>
-						<td class="attr-title">{{ attr.title }}</td>
-						<td class="value">{{ attr.value|e }}</td>
-					</tr>
+						<tr>
+							<td class="attr-title">{{ attr.title }}</td>
+							<td class="value">{{ attr.value|e }}</td>
+						</tr>
 					{% endfor %}
 			</tbody></table>
 
@@ -48,7 +48,7 @@
 		{% if object.compiled.author.org_type == 2 %}
 			{% if object.compiled.author.logo %}
 				<div class="img-cont">
-					<img src="{{ '/' ~ object.compiled.author.logo['120x90'] }}" alt="">
+					<img src="{{ get_file( object.compiled.author.logo['120x90']) }}" alt="">
 				</div>
 			{% endif %}
 			<div class="title mt5">{{ object.compiled.author.org_name }}</div>
@@ -56,7 +56,24 @@
 		{% endif %}
 	</td>
 	<td class="td td-icons" style="text-align:center;">
-		<i class="fa fa-angle-double-up fa-lg" title="Это объявление было поднято" style="color:#D30000"></i>
-		<i class="fa fa-info-circle fa-lg" title="Премиум" style="color:#D30000"></i>
+	
+		{% if object.compiled.services.up|length  > 0 %}
+			{% set up = object.compiled.services.up[0] %}
+			{% if date(up.date_created)|date_modify("+7 day") > date() %}
+				<i class="fa fa-angle-double-up fa-lg" title="Поднято {{ up.date_created|date('H:i d.m.Y') }}" style="color:#D30000"></i>
+			{% endif %}
+		{% endif %}
+		{% if object.compiled.services.premium|length  > 0 %}
+			{% set premium = object.compiled.services.premium[0] %}
+			{% if date(premium.date_expiration) > date() %}
+				<i class="fa fa-info-circle fa-lg" title="Действует услуга 'Премиум' до {{ premium.date_expiration|date('H:i d.m.Y') }}" style="color:#D30000"></i>
+			{% endif %}
+		{% endif %}
+		{% if object.compiled.services.lider|length  > 0 %}
+			{% set lider = object.compiled.services.lider[0] %}
+			{% if date(lider.date_expiration) > date() %}
+				<i class="fa fa-info-circle fa-lg"  title="Действует услуга 'Лидер' до {{ lider.date_expiration|date('H:i d.m.Y') }}"  style="color:#D30000"></i>
+			{% endif %}
+		{% endif %}
 	</td>
 </tr>

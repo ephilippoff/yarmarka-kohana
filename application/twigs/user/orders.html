@@ -24,7 +24,7 @@
 					<td class="col2">
 						{# {{ getState(order.state) }} #}
 						{% if order.state == 3 %}
-							{{order.payment_date|date("d.m.Y H:m:s")}}
+							{{order.payment_date|date("d.m.Y H:i:s")}}
 						{% endif %}
 					</td> 
 					<td class="col3">{{ order.sum }} р.</td> 

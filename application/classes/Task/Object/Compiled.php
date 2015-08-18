@@ -6,7 +6,7 @@ class Task_Object_Compiled extends Minion_Task
 	protected $_options = array(
 		'category_id'	=> 96,
 		'active'	=> TRUE,
-		'city_id'	=> 1919
+		'city_id'	=> NULL
 	);
 
 	protected function _execute(array $params)
@@ -83,6 +83,12 @@ class Task_Object_Compiled extends Minion_Task
 		if ($show_hint)
 		{
 			Minion_CLI::write('contacts: saved');
+		}
+
+		$compiled = array_merge($compiled, self::getServices($item->id) );
+		if ($show_hint)
+		{
+			Minion_CLI::write('services: saved');
 		}
 
 		// $compiled = array_merge($compiled, $this->getCommon($item) );
@@ -184,6 +190,48 @@ class Task_Object_Compiled extends Minion_Task
 						->find_all();
 		foreach ($contacts as $contact) {
 			$result["contacts"][] = array("type" => $contact->contact_obj->contact_type_id, "value" => $contact->contact_obj->contact_clear);
+		}
+
+		return $result;
+	}
+
+	static function getServices($object_id) {
+		$result = array();
+		$result["services"] = array();
+		$result["services"]["premium"] = array();
+		$result["services"]["lider"] = array();
+
+		$premiums = ORM::factory('Object_Rating')
+						->where("object_id","=",$object_id)
+						->where("object_rating.date_expiration", ">", DB::expr("NOW()"))
+						->find_all();
+		foreach ($premiums as $premium) {
+			$result["services"]["premium"][] = array(
+				"rating" =>$premium->rating,
+				"city_id" =>$premium->city_id, 
+				"date_expiration" =>$premium->date_expiration
+			);
+		}
+
+		$photocards = ORM::factory('Object_Service_Photocard')
+						->where("object_id","=",$object_id)
+						->where("object_service_photocard.date_expiration", ">", DB::expr("NOW()"))
+						->find_all();
+		foreach ($photocards as $photocard) {
+			$result["services"]["lider"][] = array(
+				"category_id" =>$photocard->category_id, 
+				"date_expiration" =>$photocard->date_expiration
+			);
+		}
+
+		$photocards = ORM::factory('Object_Service_Up')
+						->where("object_id","=",$object_id)
+						->where("object_service_up.date_created", ">", DB::expr("NOW() - interval '7 days'"))
+						->find_all();
+		foreach ($photocards as $photocard) {
+			$result["services"]["up"][] = array(
+				"date_created" => $photocard->date_created
+			);
 		}
 
 		return $result;

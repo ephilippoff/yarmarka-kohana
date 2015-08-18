@@ -19,13 +19,15 @@ class Service_Premium extends Service
 
 		return array(
 			"name" => $this->_name,
+			"title" => $this->_title,
 			"price" => ($this->_is_multiple) ? $this->getPriceMultiple() : $this->getPrice()
 		);
 	}
 
-	public function apply()
+	public function apply($orderItem)
 	{
-
+		Service_Premium::apply_service($orderItem->object_id);
+		self::saveServiceInfoToCompiled($orderItem);
 	}
 
 	static function apply_prepayed($object_id, $city_id = NULL, $user = NULL)

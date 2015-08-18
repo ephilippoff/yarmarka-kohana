@@ -218,7 +218,7 @@ select{background-color: #FFFFFF;border: 1px solid #89898c;color: #384354;paddin
 /* jssor end */
 
 /* reklama-cont */
-.reklama-cont {background: url(http://www.free-patterns.info/wp-content/uploads/2015/08/subtle-red-scratched-wall-221614.png);position: relative;padding: 5px 9px;}
+.reklama-cont {position: relative;padding: 5px 9px;}
 .reklama-cont .banners {height: 50px !important;}
 .reklama-cont .banners .item {border-radius: 2px;display: inline-block;text-align: center; margin-right: 9px;position:relative;}
 .reklama-cont .banners .item img {width: 100px;height: 50px;border-radius: 2px;}
@@ -325,17 +325,21 @@ select{background-color: #FFFFFF;border: 1px solid #89898c;color: #384354;paddin
 .green-dense-theme .subcategories-cont ul li span {color: gray;}
 .green-dense-theme a{ text-decoration: underline;}
 .green-dense-theme.obj-control-head {background-color: #8EC745;}
+.green-dense-theme.reklama-cont {  background: url(http://www.free-patterns.info/wp-content/uploads/2014/08/green-dense-circle-wall-2911814.png);}
 /* skin-theme6 end */
 
 /* skin-theme6 */
 .main-theme .view-container{color: white}
+.main-theme .view-container{background: url(http://www.free-patterns.info/wp-content/uploads/2015/08/subtle-red-scratched-wall-221614.png);}
+.main-theme .view-container a{ text-decoration: underline;}
+
 .main-theme .subcategories-cont ul li a{color: white}
 .main-theme .subcategories-cont ul li a.active{ color:#E96F4F;}
-.main-theme .menu-cont2{background-color: #D30000;}
-.main-theme .view-container{background: url(http://www.free-patterns.info/wp-content/uploads/2015/08/subtle-red-scratched-wall-221614.png);}
 .main-theme .subcategories-cont ul li span {color: gray;}
-.main-theme .view-container a{ text-decoration: underline;}
+
+.main-theme .menu-cont2{background-color: #D30000;}
 .main-theme.obj-control-head {background-color: #D30000;}
+.main-theme.reklama-cont {  background: url(http://www.free-patterns.info/wp-content/uploads/2015/08/subtle-red-scratched-wall-221614.png);}
 /*table.main-theme tr.hover {background:#F5E1E1 !important;}*/
 /* skin-theme6 end */
 
@@ -493,7 +497,7 @@ select{background-color: #FFFFFF;border: 1px solid #89898c;color: #384354;paddin
 .items-list-cont2 .items-cont ul li span{color: gray}
 
 .items-list-cont3{border-bottom: none;}
-.items-list-cont3 .item {line-height: 20px;margin: 10px 0;padding: 5px 38px;background: #F0F0F0;cursor: pointer;border-left: 4px solid #D30000;border-radius: 5px;}
+.items-list-cont3 .item {line-height: 20px;margin: 10px 0;padding: 5px 38px;background: #F0F0F0;cursor: pointer;border-radius: 5px;}
 .items-list-cont3 .item .line1{font-size: 10px;}
 .items-list-cont3 .item a{font-size: 14px;font-weight: bold;}
 .items-list-cont3 .item .line2 {color: #333;font-weight: bold; font-size: 14px;}
