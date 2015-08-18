@@ -1,5 +1,10 @@
 {% extends "layouts/main_with_header" %}
 
+{% block css %}
+	{{ parent() }}
+	{{ css("bootstrap.tables.min.css") }}
+{% endblock css%}
+
 {% block body %}
 	
 	{% block header %} 
