@@ -1,0 +1,12 @@
+<div class="info-block-cont theme2 module">
+	<div class="block-title">
+		{% if object.compiled.region == object.compiled.city %}
+			<span><i class="fa fa-map-o mr5"></i>{{object.compiled.region}}, {{object.compiled.address}}</span>
+		{% else %}
+			<span><i class="fa fa-map-o mr5"></i>{{object.compiled.region}}, {{object.compiled.city}}, {{object.compiled.address}}</span>
+		{% endif %}
+	</div>
+	<div class="">
+		<div id="map" data-lat="{{object.compiled.lat}}" data-lon="{{object.compiled.lon}}" style="width:100%;height:300px;"></div>
+	</div>
+</div>

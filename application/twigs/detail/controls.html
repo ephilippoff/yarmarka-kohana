@@ -4,13 +4,13 @@
 	</div>					
 	<div class="row p10">
 		<div class="service-block-cont col-md-5">
-			{#<div class="button button-style1 w100p bg-color-crimson mb3 js-favourite js-favourite-caption" data-id="{{object.id}}">
-				{% set is_favourite = '' %}
+			<div class="button button-style1 w100p bg-color-crimson mb3 js-favourite" data-id="{{object.id}}">
+				{% set is_favourite = 'fa-heart-o' %}
 				{% if object.id in favourites %}
-					{% set is_favourite = 'in' %}
+					{% set is_favourite = 'fa-heart' %}
 				{% endif %}
-				<i class="ico ico19 favorit-ico {{is_favourite}}"></i> {{is_favourite ? 'В избранном': 'В избранное'}}
-			</div>#}
+				<i class="fa {{is_favourite}} fa-lg mr5 js-favourite-ico"></i> <span class="js-favourite-caption">{{is_favourite == 'fa-heart' ? 'В избранном': 'В избранное'}}</span>
+			</div>
 			{% if object.is_published == 0 %}
 				<div class="line">Объявление снято</div>
 			{% elseif object.is_published == 1 %}

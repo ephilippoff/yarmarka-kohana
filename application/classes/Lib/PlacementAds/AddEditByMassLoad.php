@@ -34,24 +34,13 @@ class Lib_PlacementAds_AddEditByMassLoad extends Lib_PlacementAds_AddEdit {
 		$location = &$this->location;
 		$object = &$this->object;
 
-		$object_compile = &$this->object_compile;
-		$object_compile["cities"] = array();
-		$object_compile["address"] = NULL;
-		$object_compile["lat"] = NULL;
-		$object_compile["lon"] = NULL;
-
 		$city = ORM::factory('City', $params->city_id);
 
 		$fulladdress = $city->region->title.', '.$city->title.', '.$params->address;
 
-		$object_compile["address"] = $fulladdress;
-
 		
 		@list($coords, $yregion, $ycity) = Ymaps::instance()->get_coord_by_name($fulladdress);
 		@list($lon, $lat) = $coords; 
-		
-		$object_compile["lat"] = $lat;
-		$object_compile["lon"] = $lon;
 
 		$location = Address::save_address($lat, $lon,
  				$city->region->title,
@@ -121,9 +110,6 @@ class Lib_PlacementAds_AddEditByMassLoad extends Lib_PlacementAds_AddEdit {
 		$user = &$this->user;
 		$contacts = &$this->contacts;
 
-		$object_compile = &$this->object_compile;
-		$object_compile["contacts"] 	= array();
-
 		if ($this->is_edit)
 		{	
 			// удаляем связи на старые контакты
@@ -136,8 +122,6 @@ class Lib_PlacementAds_AddEditByMassLoad extends Lib_PlacementAds_AddEdit {
 			$user->add_contact($contact['type'], $contact['value'], 0, 1);
 			// сохраянем новые контакты для объявления
 			$object->add_contact($contact['type'], $contact['value']);
-
-			$object_compile["contacts"][] = array("type" => $contact['type'], "value" => $contact['value']);
 		}
 
 		return $this;
@@ -158,10 +142,6 @@ class Lib_PlacementAds_AddEditByMassLoad extends Lib_PlacementAds_AddEdit {
 		return $this;
 		$params = &$this->params;
 		$object = &$this->object;
-
-		$object_compile = &$this->object_compile;
-		$object_compile["photo"] 		= array();
-		$object_compile["main_photo"] 	= NULL;
 
 		$urls = $params->userfile_urls;
 
@@ -192,10 +172,7 @@ class Lib_PlacementAds_AddEditByMassLoad extends Lib_PlacementAds_AddEdit {
 				if ($file == $main_photo)
 				{
 					$object->main_image_id = $attachment->id;
-					$object_compile["main_photo"] = $file;
 				}
-
-				$object_compile["photo"][] = $file;
 			}
 
 			// удаляем аттачи из временой таблицы

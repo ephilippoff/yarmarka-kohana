@@ -49,9 +49,6 @@ class Lib_PlacementAds_AddEditByModerator extends Lib_PlacementAds_AddEdit {
 		$user = &$this->user;
 		$contacts = &$this->contacts;
 
-		$object_compile = &$this->object_compile;
-		$object_compile["contacts"] 	= array();
-
 		if ($this->is_edit)
 		{	
 			// удаляем связи на старые контакты
@@ -64,8 +61,6 @@ class Lib_PlacementAds_AddEditByModerator extends Lib_PlacementAds_AddEdit {
 			$user->add_contact($contact['type'], $contact['value'], 0, 1);
 			// сохраянем новые контакты для объявления
 			$object->add_contact($contact['type'], $contact['value']);
-
-			$object_compile["contacts"][] = array("type" => $contact['type'], "value" => $contact['value']);
 		}
 
 		return $this;
@@ -75,10 +70,14 @@ class Lib_PlacementAds_AddEditByModerator extends Lib_PlacementAds_AddEdit {
 	{
 		$errors = &$this->errors;
 		$user = &$this->user;
+
 		//заполнены ли обязательные параметры
-		if ( ! $this->validation->check())
+		if ( !$this->validation->check())
 		{
-			$errors = $this->validation->errors('validation/object_form');
+			if (!$errors)
+				$errors = array();
+
+			$errors = array_merge($errors, $this->validation->errors('validation/object_form'));
 		}
 
 		// указаны ли контакты

@@ -11,10 +11,11 @@ define([
     "views/partials/add",
     "views/partials/article",
 
-    "modules/filters"
+    "modules/filters",
+    "modules/map"
 ], 
 function (Marionette, templates, utils, IndexPage, SearchPage, DetailPage, 
-    UserSearchPage, CartPage, AddPage, ArticlePage, FiltersModule) {
+    UserSearchPage, CartPage, AddPage, ArticlePage, FiltersModule, MapModule) {
     "use strict";
     
     return Marionette.Controller.extend({
@@ -32,6 +33,7 @@ function (Marionette, templates, utils, IndexPage, SearchPage, DetailPage,
         start_detailSection : function() {
             console.log("detail start");
             app.menu.init(["main"]);
+            app.module("map", MapModule);
             new DetailPage({
                 el: "body"
             });
@@ -41,6 +43,7 @@ function (Marionette, templates, utils, IndexPage, SearchPage, DetailPage,
             console.log("search start");
 
             app.module("filters", FiltersModule);
+            app.module("map", MapModule);
             app.filters.initFilters(app.settings.category_id);
 
             app.menu.init(["main", "city"]);
@@ -72,7 +75,7 @@ function (Marionette, templates, utils, IndexPage, SearchPage, DetailPage,
 
         start_addSection : function() {
             console.log("Add start");
-
+            app.module("map", MapModule);
             app.menu.init(["main"]);
             new AddPage({
                 el: "body"

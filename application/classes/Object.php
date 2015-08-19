@@ -8,29 +8,21 @@ class Object
 		$user = Auth::instance()->get_user();
 
 		//если в локале работаем с подачей, ставим 1
-		$local = 0;
-
-		if ($local == 1)
+		$is_local = Kohana::$config->load("common.is_local");
+		if ( Acl::check("object.add.type") AND Arr::get($params, "user_type", "default") == "moderator")
 		{
-			//подставляется дефолтный город 1947 не из кладра, чтоб кладр на локале не разворачивать
-			//не сохраняется короткий урл
-			$json = Object::PlacementAds_Local($params);
-
+			//убрана проверка каких либо атрибутов
+			//убрана проверка контактов
+			//убрана проверка на максимальное количество объяв в рубрику
+			$json = Object::PlacementAds_ByModerator($params, $is_local);
 		} else {
-			if ($user AND in_array($user->role, array(3, 9))) 
-			{
-				//убрана проверка контактов
-				//убрана проверка на максимальное количество объяв в рубрику
-				$json = Object::PlacementAds_ByModerator($params);
-			} else {
-				$json = Object::PlacementAds_Default($params);
-			}
+			$json = Object::PlacementAds_Default($params, $is_local);
 		}
 
 		return $json;
 	}
 
-	static function PlacementAds_Default($input_params)
+	static function PlacementAds_Default($input_params, $is_local = FALSE)
 	{
 		if(!Security::check($input_params['csrf'])){
 			$json['error'] = array("Подпись не прошла проверку подлинности. Обновите страницу");
@@ -101,9 +93,13 @@ class Object
 				throw $e;
 			}
 
-			$add->send_external_integrations()
-				->send_to_forced_moderation()
-				->send_message();
+			if (!$is_local) {
+				$add->send_external_integrations()
+					->send_to_forced_moderation()
+					->send_message();
+			} else {
+				$add->send_to_forced_moderation();
+			}
 
 			$json['object_id'] = $add->object->id;
 		}
@@ -115,63 +111,7 @@ class Object
 		return $json;
 	}
 
-	static function PlacementAds_Local($input_params)
-	{
-		$json = array();
-		$user = Auth::instance()->get_user();
-
-		$add = new Lib_PlacementAds_AddEditLocal();
-		$add->init_input_params($input_params)
-			->init_instances()
-			->init_object_and_mode()
-			->check_neccesaries()
-			->normalize_attributes()
-			->init_validation_rules()
-			->init_additional()
-			//->init_validation_rules_for_attributes()
-			->init_contacts()
-			->exec_validation();
-
-		if (!$user)
-			$add->login();
-
-		if ( ! $add->errors)
-		{
-			$add->save_address()
-				->prepare_object();
-
-			$db = Database::instance();
-
-
-				$add->save_object()
-					->save_photo()
-					->save_video()
-					->save_price()
-					->save_other_options()
-					->save_attributes()
-					->save_generated()
-					->save_contacts()
-					->save_service_fields()
-					->save_additional()
-					->save_compile_object();
-
-
-			$add//->send_external_integrations()
-				//->send_message()
-				->send_to_forced_moderation();
-
-
-			$json['object_id'] = $add->object->id;
-		}
-		else
-		{
-			$json['error'] = $add->errors;
-		}
-
-		return $json;
-	}
-
-	static function PlacementAds_ByModerator($input_params)
+	static function PlacementAds_ByModerator($input_params, $is_local)
 	{
 		$json = array();
 		$user = Auth::instance()->get_user();
@@ -213,7 +153,6 @@ class Object
 					->save_attributes()
 					->save_generated()
 					->save_contacts()
-					->save_service_fields()
 					->save_additional()
 					->save_compile_object();
 
@@ -234,7 +173,9 @@ class Object
 				throw $e;
 			}
 
-			$add->send_external_integrations();
+			if (!$is_local) {
+				$add->send_external_integrations();
+			}
 
 			$json['object_id'] = $add->object->id;
 		}

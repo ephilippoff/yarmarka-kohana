@@ -52,7 +52,8 @@ class Controller_Detail extends Controller_Template {
             "object_compiled", 
             "author",
             "attributes", 
-            "images"
+            "images",
+            "category"
         ));
 
         foreach ((array) $detail_info as $key => $item) {
@@ -97,7 +98,11 @@ class Controller_Detail extends Controller_Template {
         
 
         if (in_array("object", $need) AND $object->loaded()) {
-            $info->object      = $object->get_row_as_obj();
+            $info->object = $object->get_row_as_obj();
+        }
+
+        if (in_array("category", $need) AND $object->loaded()) {
+            $info->category = ORM::factory('Category', $object->category)->get_row_as_obj();
         }
 
         if (in_array("object_compiled", $need) AND $info->object) {
@@ -147,9 +152,24 @@ class Controller_Detail extends Controller_Template {
                                         array_merge(explode(",", Cookie::get('ohistory')), array($object->id)) 
                                             : array($object->id)
                 ),
-                array("limit" => 3, "page" => 0)
+                array("limit" => 10, "page" => 0)
             );
             $info->similar_search_result = Search::getresult($similar_search_query->execute()->as_array());
+            
+            if (count($info->similar_search_result) > 0) 
+            {
+                $info->similar_coords = array_map(function($item){
+                    return array(
+                        "id" => $item["id"],
+                        "title" => $item["title"],
+                        "price" => $item["price"],
+                        "photo" => @$item["compiled"]["images"]["main_photo"]["120x90"],
+                        "coords" => array(@$item["compiled"]["lat"], @$item["compiled"]["lon"])
+                    );
+                }, $info->similar_search_result);
+
+                $info->objects_for_map = json_encode($info->similar_coords);
+            }
         }
 
         return $info;

@@ -5,7 +5,7 @@
 	</div>
 	<table class="table-result-info style1">
 		<tbody>
-			{% for object in similar_search_result %}
+			{% for object in similar_search_result|slice(0,3) %}
 				{% include 'detail/mini/default_tablerow_simple' %}
 			{% endfor %}
 		</tbody>

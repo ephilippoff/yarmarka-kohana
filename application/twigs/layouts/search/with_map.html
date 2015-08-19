@@ -21,15 +21,22 @@
 	{% endblock filters %}
 
 	<div class="row">
-		<div class="col-md-9">
+		<div class="col-md-7">
 			{% block content %}
 				контент
 			{% endblock content %}
 		</div><!--col-->
-		<div class="col-md-3">
-			{% block rightside %}
-				Правая сторона
-			{% endblock rightside %}
+		<div class="col-md-5">
+			<div class="row">
+				<div class="col-md-12">
+					{% block map %}Карта{% endblock map %}
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					{% block rightside %}Правая сторона{% endblock rightside %}
+				</div>
+			</div>
 		</div><!--col-->
 	</div><!--row-->
 

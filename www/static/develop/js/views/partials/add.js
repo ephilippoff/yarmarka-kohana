@@ -4,7 +4,8 @@ define([
     "templates/set/add",
     "fileupload",
     "nicEdit",
-    "maskedInput"
+    "maskedInput",
+    "ymap"
 ], function (Marionette, templates) {
     "use strict";
 
@@ -360,8 +361,9 @@ define([
             _.extend(self, options);
 
             self.$el.removeClass("hidden");
-            
+           
             ymaps.ready(function(){
+           
                 var coords = $('#object_coordinates').val();
                 var default_lat = $('#city_id').data("lat");
                 var default_lon = $('#city_id').data("lon");
@@ -383,22 +385,15 @@ define([
 
                 self.map = new ymaps.Map('map_block', {
                         center: coords,
-                        zoom: zoom
+                        zoom: zoom,
+                        controls: ['smallMapDefaultSet']
                     });
 
-                self.map.controls.add('zoomControl')
-                        .add("mapTools")
-                        .add(new ymaps.control.TypeSelector(['yandex#map', 'yandex#satellite', 'yandex#hybrid', 'yandex#publicMap', 'yandex#publicMapHybrid']));
+                
 
-                self.placemark = new ymaps.Placemark(coords, {},
-                    {
-                        draggable: true,
-                        iconImageHref: '/images/house.png',
-                        iconImageSize: [27,39],
-                        iconImageOffset: [-13.5, -39],
-                        iconContentOffset: [],
-                        hintHideTimeout: 0
-                    });
+                 self.placemark = app.map.createPlacemark(coords, {
+                    style: _.extend(app.map.getIconSettings("house"), {draggable: true})
+                })
 
                 self.map.geoObjects.add(self.placemark);
 
@@ -885,10 +880,11 @@ define([
 
     var categoryDescriptionView = Backbone.View.extend({
         el : '#div_category_description',
-        template : templates.categoryDescription,
+        className: "row mb10",
+        template : templates.description,
 
         initialize : function (options) {
-            _.extend(this, options); 
+            _.extend(this, options);
             this.render();     
         },
 

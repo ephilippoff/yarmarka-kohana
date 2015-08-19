@@ -53,14 +53,16 @@ class Controller_Search extends Controller_Template {
 
     public function action_index() {
         $start = microtime(true);
-
+        $objects_for_map = array();
         $prefix = (Kohana::$environment == Kohana::PRODUCTION) ? "" : "dev_";
         $staticfile = new StaticFile("attributes", $prefix.'static_attributes.js');
 
-        $twig = Twig::factory('search/index');
-        $twig->data_file = $staticfile->jspath;
-
         $search_info = $this->get_search_info();
+
+        
+        $twig = Twig::factory('search/index');
+
+        $twig->data_file = $staticfile->jspath;
 
         //main search
         $main_search_query = Search::searchquery($search_info->search_filters, $search_info->search_params);
@@ -70,6 +72,20 @@ class Controller_Search extends Controller_Template {
                                                     ->execute()
                                                     ->get("count");
             $search_info->main_search_result_count = $main_search_result_count;
+        }
+        if (count($twig->main_search_result) > 0) 
+        {
+            $main_search_coords = array_map(function($item){
+                return array(
+                    "id" => $item["id"],
+                    "title" => $item["title"],
+                    "price" => $item["price"],
+                    "photo" => @$item["compiled"]["images"]["main_photo"]["120x90"],
+                    "coords" => array(@$item["compiled"]["lat"], @$item["compiled"]["lon"])
+                );
+            }, $twig->main_search_result);
+
+            $objects_for_map = array_merge($objects_for_map, $main_search_coords);
         }
         //end main search
 
@@ -81,6 +97,21 @@ class Controller_Search extends Controller_Template {
         $twig->premium_search_result = Search::getresult($premium_search_query->execute()->as_array());
         foreach ($twig->premium_search_result as $key => $value) {
             $twig->premium_search_result[$key]["is_premium"] = TRUE;
+        }
+        if (count($twig->premium_search_result) > 0) 
+        {
+            $premium_search_coords = array_map(function($item){
+                return array(
+                    "id" => $item["id"],
+                    "title" => $item["title"],
+                    "type" => "premium",
+                    "price" => $item["price"],
+                    "photo" => @$item["compiled"]["images"]["main_photo"]["120x90"],
+                    "coords" => array(@$item["compiled"]["lat"], @$item["compiled"]["lon"])
+                );
+            }, $twig->premium_search_result);
+
+            $objects_for_map = array_merge($objects_for_map, $premium_search_coords);
         }
         //premium end
        
@@ -97,6 +128,21 @@ class Controller_Search extends Controller_Template {
             array_merge($search_info->search_params, array("limit" => 15))
         );
         $twig->vip_search_result = Search::getresult($vip_search_query->execute()->as_array());
+        if (count($twig->vip_search_result) > 0) 
+        {
+            $vip_search_coords = array_map(function($item){
+                return array(
+                    "id" => $item["id"],
+                    "title" => $item["title"],
+                    "type" => "lider",
+                    "price" => $item["price"],
+                    "photo" => @$item["compiled"]["images"]["main_photo"]["120x90"],
+                    "coords" => array(@$item["compiled"]["lat"], @$item["compiled"]["lon"])
+                );
+            }, $twig->vip_search_result);
+
+            $objects_for_map = array_merge($objects_for_map, $vip_search_coords);
+        }
         //vip end
 
         //pagination
@@ -153,6 +199,18 @@ class Controller_Search extends Controller_Template {
             // end clean empty links
         }
         //link counters end
+
+        if (count($objects_for_map) > 0 ) {
+            $twig->objects_for_map = json_encode($objects_for_map);
+        }
+
+        //favourites
+        $twig->favourites = ORM::factory('Favourite')->get_list_by_cookie();
+        //end favourites
+        
+        if ($search_info->category->show_map or count($twig->vip_search_result) > 6) {
+             $twig->set_filename('search/index/with_map');
+        }
 
         foreach ((array) $search_info as $key => $item) {
             $twig->{$key} = $item;

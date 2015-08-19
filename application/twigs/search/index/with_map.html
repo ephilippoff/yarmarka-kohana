@@ -1,4 +1,4 @@
-{% extends "layouts/search" %}
+{% extends "layouts/search/with_map" %}
 
 {% block css %} 
 	{{ parent() }}
@@ -47,7 +47,15 @@
 	{% include 'search/paginator' %}
 {% endblock content%}
 
+
+{% block map %}
+	{% if category.show_map %}
+		{% include 'search/map' %}
+	{% endif %}
+{% endblock map %}
+
 {% block rightside %} 
+	{% set half = TRUE %}
 	{% include 'search/vip' %}
 	{% include 'search/banner' %}
 {% endblock rightside %}

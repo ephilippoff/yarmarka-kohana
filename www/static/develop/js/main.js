@@ -14,6 +14,7 @@ require.config({
         fileupload: 'lib/vendor/jquery.fileupload',
         nicEdit: 'lib/vendor/nicEdit',
         maskedInput: 'lib/vendor/jquery.maskedinput',
+        ymap: "http://api-maps.yandex.ru/2.1/?load=package.full&lang=ru-RU",
         //isotope: 'lib/vendor/isotope.pkgd'
     },
     shim : {
@@ -65,7 +66,8 @@ function (app, $, Marionette, Backbone, _) {
         page: _globalSettings.page,
         data: _globalSettings.data,
         category_id: _globalSettings.category_id,
-        city_id: _globalSettings.city_id
+        city_id: _globalSettings.city_id,
+        objects_for_map: _globalSettings.objects_for_map
     };
 
     try {

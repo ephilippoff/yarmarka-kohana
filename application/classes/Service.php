@@ -141,7 +141,7 @@ class Service
             $compiled = unserialize($oc->compiled);
         }
 
-        $compiled = array_merge($compiled, Task_Object_Compiled::getServices($orderItem->object_id) );
+        $compiled = array_merge($compiled, Object_Compile::getServices($orderItem->object_id) );
 
         $oc->object_id = $orderItem->object_id;
         $oc->compiled = serialize($compiled);

@@ -21,6 +21,9 @@ define(function(require){
                 lider: require('lib/text!templates/services/lider.tmpl'),
                 buyObject: require('lib/text!templates/services/buyObject.tmpl'),
             },
+            detail: {
+                baloon: require('lib/text!templates/detail/baloon.tmpl'), 
+            }
         }
     };
 });

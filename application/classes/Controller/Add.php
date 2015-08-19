@@ -39,14 +39,6 @@ class Controller_Add extends Controller_Template {
 			array("title" => "Создание объявления"),
 		);
 		
-		// $this->layout = 'add';
-		
-		// $this->assets->js("old/nicEdit.js");
-		
-		// $this->assets->js("old/vendor/jquery.ui.widget.js");
-		// $this->assets->js("old/jquery.iframe-transport.js");
-		// $this->assets->js("old/jquery.fileupload.js");
-		
 		$user = Auth::instance()->get_user();
 
 		if ($user AND !Cookie::get('authautologin'))
@@ -54,7 +46,6 @@ class Controller_Add extends Controller_Template {
 		
 		$prefix = (@$_SERVER['HTTP_HOST'] === 'c.yarmarka.biz') ? "" : "dev_";
 		$staticfile = new StaticFile("attributes", $prefix.'static_attributes.js');
-//		echo Assets::factory('main')->js($staticfile->jspath);
 
 		$errors = new Obj();
 		$token = NULL;
@@ -107,8 +98,11 @@ class Controller_Add extends Controller_Template {
 		elseif ($user AND $user->linked_to_user)
 			$form_data->LinkedUser();
 
-		if ($user AND in_array($user->role, array(9, 1)))
+		if ( Acl::check("object.add.type") )
 			$form_data ->AdvertType();
+
+		if ( Acl::check("object.add.type") )
+			$form_data ->UserType();
 
 		$twig->params->token = $token;
 		
@@ -204,8 +198,11 @@ class Controller_Add extends Controller_Template {
 					->Contacts()
 					->Additional();
 
-		if ($user AND $user->role == 9)
+		if ( Acl::check("object.add.type") )
 			$form_data ->AdvertType();
+
+		if ( Acl::check("object.add.type") )
+			$form_data ->UserType();
 
 		if ($user AND $user->org_type == 2)
 			$form_data->OrgInfo();

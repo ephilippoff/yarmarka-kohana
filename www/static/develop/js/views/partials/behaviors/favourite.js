@@ -23,18 +23,18 @@ define([
             var id = $(e.currentTarget).data("id");
             var $ico = $(e.currentTarget);
             var $icoCaption = $(e.currentTarget).find(s.ui.favouriteCaption);
-            if (!$(e.currentTarget).hasClass("favorit-ico")) {
-                $ico = $ico.find(".favorit-ico");
+            if (!$(e.currentTarget).hasClass("js-favourite-ico")) {
+                $ico = $ico.find(".js-favourite-ico");
             }
             app.favourite.addRemove(id, {
                 success: function(result, favourites) {
                     if (result) {
-                        $ico.addClass("in");
+                        $ico.removeClass("fa-heart-o").addClass("fa-heart");
                         if ($icoCaption) {
                             $icoCaption.text("В избранном");
                         }
                     } else {
-                        $ico.removeClass("in");
+                        $ico.removeClass("fa-heart").addClass("fa-heart-o");
                          if ($icoCaption) {
                             $icoCaption.text("В избранное");
                         }

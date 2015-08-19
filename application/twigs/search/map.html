@@ -1,0 +1,12 @@
+<div class="info-block-cont theme3 module">
+	<div class="block-title">
+		<span><i class="fa fa-map-o mr5"></i>На карте</span>
+	</div>						
+	<div class="">
+		{% if city %}
+			{% set lat = city.geo_loc|split(',')[0] %}
+			{% set lon = city.geo_loc|split(',')[1] %}
+		{% endif %}
+		<div id="map"style="width:100%;height:400px;"  data-lat="{{lat}}" data-lon="{{lon}}" ></div>
+	</div>
+</div>

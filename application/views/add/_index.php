@@ -90,6 +90,24 @@
 			</div>			
 		<? endif; ?>
 
+		<? if (property_exists($form_data, 'user_type')): ?>
+			<div id="div_advert_type" class="row mb10">
+				<div class="col-md-3 col-xs-4 labelcont">
+					<label>Тип пользователя:</label>
+				</div>
+				<div class="col-md-9 col-xs-8">
+					<div class="row">
+						<div class="col-md-6">
+							<div class="inp-cont ">
+								<span class="required-star">*</span>
+								<?= Form::select("user_type", $form_data->user_type['user_type_list'], $form_data->user_type['value'], array('class' => 'w100p')); ?>					
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>			
+		<? endif; ?>
+
 		<? if (property_exists($form_data, 'city')): ?>
 			<div id="div_city">
 				<div class="row mb10">
@@ -182,14 +200,8 @@
 					</div>
 				</div>
 
-				<div class="row mb10">
-					<div class="col-md-3 col-xs-4 labelcont">
-						<label></label>
-					</div>
-					<div class="col-md-9 col-xs-8">
-						<div id="div_category_description"></div>
-					</div>
-				</div>			
+
+				<div id="div_category_description"></div>
 
 			<? endif; ?>
 		</div>

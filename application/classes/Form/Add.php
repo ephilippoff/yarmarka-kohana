@@ -41,7 +41,12 @@ class Form_Add  {
 		if (array_key_exists("city_id", $params)) 
 			$this->_city_id 	= (int) $params['city_id'];
 
-		$this -> Get_Instances();
+		$this->domain = new Domain();
+		if ($proper_domain = $this->domain->is_domain_incorrect()) {
+			HTTP::redirect("http://".$proper_domain, 301);
+		}
+		$this->Get_Instances();
+		
 	}
 
 	function Get_Instances()
@@ -87,8 +92,8 @@ class Form_Add  {
 
 		if ($this->_edit OR $this->is_post)		
 			$this->city = ORM::factory('City', $city_id)->cached(DATE::WEEK, array("city", "add"));
-		elseif (!$this->is_post AND isset($_COOKIE["location_city_id"]) AND $_COOKIE["location_city_id"])
-			$this->city = ORM::factory('City', $_COOKIE["location_city_id"])->cached(DATE::WEEK, array("city", "add"));
+		elseif (!$this->is_post AND $this->domain->get_city())
+			$this->city = ORM::factory('City', $this->domain->get_city()->id)->cached(DATE::WEEK, array("city", "add"));
 		
 		if ($this->city->loaded())
 			$this->city_id = $this->city->id;
@@ -259,7 +264,7 @@ class Form_Add  {
 									'real_city' => $real_city, 
 									'real_city_exists' => $real_city_exists,
 									'edit' => $edit,
-									'city_error' => $errors->city_kladr_id,
+									'city_error' => $errors->city_id,
 									"lat" => $lat,
 									"lon" => $lon
 								);
@@ -289,10 +294,6 @@ class Form_Add  {
 	function AdvertType()
 	{	
 		$object 		= $this->object;
-		/*<option <?php if ($type_tr == 88) : ?> selected <?php endif;?> value="88">Модульная реклама (88)</option>
-										<option <?php if ($type_tr == 89) : ?> selected <?php endif;?> value="89">Рекламное объявление (89)</option>
-										<option <?php if ($type_tr == 90) : ?> selected <?php endif;?> value="90">Рекламное объявление с фоном (90)</option>	
-										*/
 		$type = array(
 				0 => "---",
 				//88 => "Модульная реклама (88)",
@@ -309,6 +310,27 @@ class Form_Add  {
 
 		$this->_data->advert_type = array(
 											'type_list' => $type,
+											'value'		=> $value
+										);
+	}
+
+	function UserType()
+	{	
+		$object 		= $this->object;
+		$type = array(
+				"default" => "Обычный пользователь",
+				"moderator" => "Модератор",
+			);
+
+		$value = "default";
+		if ( Acl::check("object.add.type") ) {
+			$value = "moderator";
+		}
+		if ( array_key_exists("user_type", $this->params))
+			$value = $this->params['user_type'];
+
+		$this->_data->user_type = array(
+											'user_type_list' => $type,
 											'value'		=> $value
 										);
 	}
