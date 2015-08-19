@@ -163,15 +163,15 @@ class Search {
 		$object = DB::select(DB::expr($select))
 						->from(array("vw_objectcompiled","o"));
 
-		if ($active) {
-			$object = $object->where("o.active", "=", 1);
-		}
-
 		if ($published === TRUE) {
 			$object = $object->where("o.is_published", "=", 1);
 		} 
 		if ($published === FALSE) {
 			$object = $object->where("o.is_published", "=", 0);
+		}
+
+		if ($active) {
+			$object = $object->where("o.active", "=", 1);
 		}
 
 		if ($params->id AND is_array($params->id)) {
@@ -192,18 +192,18 @@ class Search {
 			$object = $object->where("o.author_company_id", "NOT IN", $params->not_user_id);
 		}
 
+		if ( $params->category_id AND is_array($params->category_id) ) {
+			$object = $object->where("o.category", "IN", $params->category_id);
+		} elseif ($params->category_id) {
+			$object = $object->where("o.category", "=", $params->category_id);
+		}
+
 		if ( $params->city_id AND is_array($params->city_id) ) {
 			$object = $object->where("o.city_id", "IN", $params->city_id);
 		} elseif ($params->city_id) {
 			$object = $object->where(DB::expr($params->city_id), "=", DB::expr("ANY(o.cities)"));
 		}
 
-		if ( $params->category_id AND is_array($params->category_id) ) {
-			$object = $object->where("o.category", "IN", $params->category_id);
-		} elseif ($params->category_id) {
-			$object = $object->where("o.category", "=", $params->category_id);
-		}
-		
 		if ($params->premium) {
 			$object = $object->join("object_rating", "inner")
 								->on("object_rating.object_id","=", "o.id");

@@ -90,17 +90,17 @@ class Twig_Functions
     public static function get_myobjects_info()
     {
 
-        // $myobject_count = Search::searchquery(
-        //         array(
-        //             "active" => TRUE,
-        //             "published" =>TRUE,
-        //             "user_id" => Auth::instance()->get_user()->id,
-        //             "filters" => array()
-        //         ), 
-        //         array(), 
-        //         array("count" => TRUE)
-        //     )->execute()->get("count");
-        return 1;
+        $myobject_count = Search::searchquery(
+                array(
+                    "active" => TRUE,
+                    "published" =>TRUE,
+                    "user_id" => Auth::instance()->get_user()->id,
+                    "filters" => array()
+                ), 
+                array(), 
+                array("count" => TRUE)
+            )->cached(Date::HOUR)->execute()->get("count");
+        return $myobject_count;
     }
 
     public static function get_form_element()
