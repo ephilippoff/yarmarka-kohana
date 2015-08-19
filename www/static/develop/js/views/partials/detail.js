@@ -50,13 +50,14 @@ define([
                 collection.add( app.map.createPlacemark([lat,lon], {
                     style: app.map.getIconSettings("house"),
                     content: {
-                        hintContent: 'Адрес объекта'
+                        hintContent: 'Расположение объекта'
                     }
                 }));
 
                 _.each(similarObjects, function(item){
                     if (!item.coords[0]) return;
                     var placemark = app.map.createPlacemark([item.coords[0],item.coords[1]],{
+                        style: app.map.getIconSettings("defTwitter"),
                         content: {
                             hintContent: item.title,
                             balloonContent: _.template(baloonTemplate)(item)

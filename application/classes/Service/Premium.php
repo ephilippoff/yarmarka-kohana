@@ -41,12 +41,17 @@ class Service_Premium extends Service
 
 	static function get_balance($user)
 	{
-		if (!$user)
+		if (!$user) 
 			$user = Auth::instance()->get_user();
 
-		return (int) ORM::factory('User_Settings')
+		if ($user)
+		{
+			return (int) ORM::factory('User_Settings')
 						->get_by_name($user->id, Service_Premium::PREMIUM_SETTING_NAME)
 						->find()->value;
+		} else {
+			return 0;
+		}
 	}
 
 	static function set_balance($user, $count)

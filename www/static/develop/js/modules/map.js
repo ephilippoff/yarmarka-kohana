@@ -11,7 +11,7 @@ define([
             iconImageHref: '/static/develop/images/house.png',
             iconImageSize: [27,39],
             iconImageOffset: [-13.5, -39],
-            zIndex: 1000
+            zIndex: 10
         },
         defBlue: {
             preset: 'islands#icon',
@@ -19,11 +19,18 @@ define([
         },
         defRed: {
             preset: 'islands#icon',
-            iconColor: '#D30000'
+            iconColor: '#D30000',
+            zIndex: 1
         },
         defTwitter: {
             preset: 'islands#circleDotIcon',
-            iconColor: '#1faee9'
+            iconColor: '#1faee9',
+            zIndex:0
+        },
+        defTwitterActive: {
+            preset: 'islands#circleDotIcon',
+            iconColor: '#D30000',
+            zIndex:2
         }
     }
 

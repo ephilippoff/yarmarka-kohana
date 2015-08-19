@@ -64,14 +64,15 @@ define([
             } catch (e) {
                 mapObjects = [];
             }
+            var s = this;
             var lat = +this.ui.map.data("lat");
             var lon = +this.ui.map.data("lon");
             var baloonTemplate = templates.components.detail.baloon;
             app.map.getMap({ elid: "map", lat: lat, lon: lon, zoom: 10}, function(map){
-                var collection = new ymaps.GeoObjectCollection();
+                var collection =  new ymaps.GeoObjectCollection();
+                var objects = {};
                 _.each(mapObjects, function(item){
                     if (!item.coords[0]) return;
-                    console.log(item.type)
                     var placemark = app.map.createPlacemark([item.coords[0],item.coords[1]],{
                         style: app.map.getIconSettings( (item.type) ? "defRed" : "defTwitter" ),
                         content: {
@@ -79,12 +80,25 @@ define([
                             balloonContent: _.template(baloonTemplate)(item)
                         }
                     });
+                    objects[item.id] = placemark;
                     collection.add(placemark);
                 });
                 map.geoObjects.add(collection);
                 
                 map.setBounds(collection.getBounds(), {
                     checkZoomRange: true
+                });
+
+                s.ui.tr.on("mouseover", function(e){
+                    e.preventDefault();
+                    var object_id = $(e.currentTarget).data("id");
+                    objects[object_id].options.set( app.map.getIconSettings("defTwitterActive") );
+                });
+
+                s.ui.tr.on("mouseleave", function(e){
+                    e.preventDefault();
+                    var object_id = $(e.currentTarget).data("id");
+                    objects[object_id].options.set( app.map.getIconSettings("defTwitter") );
                 });
             });
         },
