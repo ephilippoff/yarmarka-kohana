@@ -7,10 +7,12 @@
 	</div>					
 	<div class="cont">
 		<form>		
-			<div class="w100p js-service-cont"></div>
+			<div class="service-cont js-service-cont"></div>
 			<% if (code < 400) { %>
-				<button class="w100p button style2 bg-color-blue white mb5 js-tocontinue">В корзину и продолжить</button>
-				<button class="w100p button style2 bg-color-blue white js-tocart">Перейти к оформлению</button>
+				<div class="row mt10">
+					<div class="col-md-6"><button class="w100p button button-style1 bg-color-blue white mb5 js-tocontinue">В корзину и продолжить</button></div>
+					<div class="col-md-6"><button class="w100p button button-style1 bg-color-blue white js-tocart">Перейти к оформлению</button></div>
+				</div>
 			<% } %>
 		</form>
 	</div>
