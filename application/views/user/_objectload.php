@@ -178,7 +178,7 @@
 			</p>
 			<? endif; ?>
 			<p><h2>Ваши загрузки</h2>
-			<table class="table table-hover table-condensed" style="width:100%">
+			<table class="table table-bordered table-striped">
 				<tr>
 					<th>#</th>
 					<th style="width:100px;">Дата</th>

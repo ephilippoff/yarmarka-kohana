@@ -1,12 +1,12 @@
-<table>
+<table class="table table-bordered">
 	<thead>
-		<th>Услуга</th>
-		<th>Цена</th>
+		<th class="service-title">Услуга</th>
+		<th class="price">Цена</th>
 	</thead>
 	<tbody>
 	<tr>
-		<td>"<%=info.service.title%>" для объявления "<%=info.object.title%>"</td>
-		<td>
+		<td class="service-title">"<%=info.service.title%>" для объявления "<%=info.object.title%>"</td>
+		<td class="price">
 			<% if (info.code != 200) { %>
 				<span><%=info.service.price%> руб.</span>
 			<% } else { %>

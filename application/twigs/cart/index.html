@@ -9,7 +9,7 @@
 			
 		{% endif %}
 		
-		<table class="cart-table table">
+		<table class="cart-table table table-bordered">
 			<tr>
 				<th>#</th>
 				<th>Наименование</th>
@@ -49,8 +49,8 @@
 		</table>
 		
 		{% if user %}
-			<div class="ta-l mb20">
-				<input type="submit" class="js-save button submit p20" value="Далее" data-next-page="{{next_page}}">
+			<div class="ta-r mb20">
+				<input type="submit" class="js-save button submit w100 button-style1 bg-color-blue" value="Далее" data-next-page="{{next_page}}">
 			</div>
 		{% else %}
 			<div class="ta-l mb20">

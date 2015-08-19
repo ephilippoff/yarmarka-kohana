@@ -81,6 +81,12 @@ select{background-color: #FFFFFF;border: 1px solid #89898c;color: #384354;paddin
 .popup-window .cont{padding: 5px;}
 .popup-window .popup-window-close {height: 30px;width: 30px;background: #ccc;position: absolute;top: 5px;right: 5px;cursor: pointer;text-align: center;}
 .popup-window .inp-cont {position: relative;margin-bottom: 5px;}
+.popup-window .service-cont table{margin-bottom: 10px;}
+.popup-window .service-cont table td,
+.popup-window .service-cont table th{padding: 5px;}
+.popup-window .service-cont table td.price{width: 100px;}
+.popup-window .service-cont .description-cont{margin-bottom: 10px;}
+.popup-window .service-cont .description-cont p{margin-bottom: 10px;}
 
 .img-wrapper{position: relative;display: inline-block;}
 
