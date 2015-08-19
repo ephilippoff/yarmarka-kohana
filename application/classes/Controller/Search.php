@@ -78,7 +78,7 @@ class Controller_Search extends Controller_Template {
             $main_search_coords = array_map(function($item){
                 return array(
                     "id" => $item["id"],
-                    "title" => $item["title"],
+                    "title" => addslashes($item["title"]),
                     "price" => $item["price"],
                     "photo" => @$item["compiled"]["images"]["main_photo"]["120x90"],
                     "coords" => array(@$item["compiled"]["lat"], @$item["compiled"]["lon"])
@@ -103,7 +103,7 @@ class Controller_Search extends Controller_Template {
             $premium_search_coords = array_map(function($item){
                 return array(
                     "id" => $item["id"],
-                    "title" => $item["title"],
+                    "title" => addslashes($item["title"]),
                     "type" => "premium",
                     "price" => $item["price"],
                     "photo" => @$item["compiled"]["images"]["main_photo"]["120x90"],
@@ -133,7 +133,7 @@ class Controller_Search extends Controller_Template {
             $vip_search_coords = array_map(function($item){
                 return array(
                     "id" => $item["id"],
-                    "title" => $item["title"],
+                    "title" => addslashes($item["title"]),
                     "type" => "lider",
                     "price" => $item["price"],
                     "photo" => @$item["compiled"]["images"]["main_photo"]["120x90"],
@@ -200,16 +200,17 @@ class Controller_Search extends Controller_Template {
         }
         //link counters end
 
-        if (count($objects_for_map) > 0 ) {
-            $twig->objects_for_map = json_encode($objects_for_map);
-        }
+        
 
         //favourites
         $twig->favourites = ORM::factory('Favourite')->get_list_by_cookie();
         //end favourites
         
         if ($search_info->category->show_map or count($twig->vip_search_result) > 6) {
-             $twig->set_filename('search/index/with_map');
+            if (count($objects_for_map) > 0 ) {
+                $twig->objects_for_map = json_encode($objects_for_map);
+                $twig->set_filename('search/index/with_map');
+            }
         }
 
         foreach ((array) $search_info as $key => $item) {
