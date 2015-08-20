@@ -400,7 +400,7 @@ select{background-color: #FFFFFF;border: 1px solid #89898c;color: #384354;paddin
 .table-result-info .td-1 .img-cont{width: 136px;height: 107px;position: relative;text-align: left;cursor: pointer;}
 .table-result-info .img-frame{max-width: 136px;max-height: 107px;}
 .table-result-info .img-cont .premium-tape {background: url('/static/develop/images/premium.png') no-repeat;width: 93px;height: 34px;position: absolute;top: -3px;left: -5px;}
-.table-result-info .img-cont .photos-count{position: absolute;bottom: 10px;left: 10px; width: 20px; color: white;border: 1px solid #fff;line-height: 1;padding: 1px; text-align: center;background-color: rgba(157, 157, 157, 0.4);}
+.photos-count{position: absolute;bottom: 10px;left: 10px; width: 20px; color: white;border: 1px solid #fff;line-height: 1;padding: 1px; text-align: center;background-color: rgba(157, 157, 157, 0.4);}
 .table-result-info .td-2{vertical-align: top; padding: 10px;word-wrap: break-word;}
 .table-result-info .td-2 .title{/*line-height: 25px;*/ font-size: 14px;}
 .table-result-info .td-2 .title a{font-size: 16px; font-weight: bold;}
