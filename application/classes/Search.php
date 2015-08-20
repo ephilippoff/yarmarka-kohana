@@ -371,6 +371,21 @@ class Search {
 		return $compiled;
 	}
 
+	public static function count_estimate($sql, $table_name = NULL, $limit_str = NULL)
+	{
+		$sql = self::prepare_sql($sql, $table_name, $limit_str);
+		$query = DB::select(DB::expr("count_estimate('SELECT * FROM $table_name $sql') as count"))->execute()->current("count_estimate");
+		return $query;
+	}
+
+	public static function prepare_sql($sql = "", $table_name = "\"vw_objectcompiled\" AS \"o\"", $limit_str = "ORDER BY")
+	{
+		preg_match("/FROM $table_name (.*) $limit_str/", $sql, $match);
+		if (count($match) == 2){
+			return $match[1];
+		}
+	}
+
 }
 
 /* End of file Search.php */

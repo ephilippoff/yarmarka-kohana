@@ -8,7 +8,7 @@ class Model_Search_Url_Cache extends ORM {
 	public function save_search_info($info, $url, $canonical_url, $sql, $count)
 	{
 		$hash_url = $this->hash($url);
-		$sql = $this->prepare_sql($sql);
+		$sql = $this->prepare_sql($sql, "\"vw_objectcompiled\" AS \"o\"", "ORDER BY");
 
 		if (!$sql) {
 			return;
@@ -56,12 +56,9 @@ class Model_Search_Url_Cache extends ORM {
 		return sha1($url.self::$secret);
 	}
 
-	public static function prepare_sql($sql = "")
+	public static function prepare_sql($sql = "", $table_name = NULL, $limit_str = NULL)
 	{
-		preg_match("/FROM \"vw_objectcompiled\" AS \"o\" (.*) ORDER BY/", $sql, $match);
-		if (count($match) == 2){
-			return $match[1];
-		}
+		return Search::prepare_sql($sql, $table_name, $limit_str);
 	}
 
 }

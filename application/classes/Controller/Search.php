@@ -72,6 +72,7 @@ class Controller_Search extends Controller_Template {
         //main search
         $this->performance->add("Search","main_search_query");
         $main_search_query = Search::searchquery($search_info->search_filters, $search_info->search_params);
+
         $twig->main_search_result = Search::getresult($main_search_query->execute()->as_array());
         if (!$search_info->main_search_result_count) {
             $main_search_result_count = Search::searchquery($search_info->search_filters, array(), array("count" => TRUE))
@@ -79,6 +80,7 @@ class Controller_Search extends Controller_Template {
                                                     ->get("count");
             $search_info->main_search_result_count = $main_search_result_count;
         }
+
         if (count($twig->main_search_result) > 0) 
         {
             $main_search_coords = array_map(function($item){
