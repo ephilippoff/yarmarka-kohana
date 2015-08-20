@@ -306,11 +306,13 @@ Route::set('default', '(<controller>(/<action>(/<id>)))')
 Route::set('search', '<category_path>', array(
 		'category_path' => '[a-zA-Z0-9-\._/]+',
 	))->filter(function($route, $params, $request){
+		$performance = Performance::factory(Acl::check('profiler'));
+		$performance->add("SearchRouting","start");
 		$segments = explode("/", $params["category_path"]);
 		$category = ORM::factory('Category')
 			->where("seo_name","=", strtolower($segments[0]) )
 			->find();
-
+		
 		if ($category->loaded()) {
 
 			$config = Kohana::$config->load("landing");
@@ -323,6 +325,7 @@ Route::set('search', '<category_path>', array(
 				$params['controller'] = 'Search';
 				$params['action'] = 'index';
 			}
+			$performance->add("SearchRouting","end");
 			return $params;
 
 		} else {
