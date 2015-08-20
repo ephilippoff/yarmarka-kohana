@@ -59,7 +59,7 @@ class Controller_Search extends Controller_Template {
         $objects_for_map = array();
         $prefix = (Kohana::$environment == Kohana::PRODUCTION) ? "" : "dev_";
         $staticfile = new StaticFile("attributes", $prefix.'static_attributes.js');
-        
+
         $this->performance->add("Search","search_info");
         $search_info = $this->get_search_info();
 

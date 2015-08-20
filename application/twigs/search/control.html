@@ -1,7 +1,8 @@
 <div class="main-theme obj-control-head clearfix brt2">
 	<div class="row">
 		<div class="col-md-4 left clearfix">
-			<a class="item" href="/add/{{ category.id }}">Добавить</a>
+			<span class="item" onclick="window.location='/add/{{ category.id }}'">Добавить</span>
+			<span class="item js-search-extend">Расширенный поиск</span>
 		</div>
 		<div class="col-md-8 right clearfix">
 			{% if small_pagination.next %}

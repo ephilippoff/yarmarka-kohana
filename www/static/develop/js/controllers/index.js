@@ -32,7 +32,7 @@ function (Marionette, templates, utils, IndexPage, SearchPage, DetailPage,
 
         start_detailSection : function() {
             console.log("detail start", "kupon", "news");
-            app.menu.init(["main"]);
+            app.menu.init(["main", "kupon", "news"]);
             app.module("map", MapModule);
             new DetailPage({
                 el: "body"

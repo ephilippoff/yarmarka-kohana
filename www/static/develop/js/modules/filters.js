@@ -486,6 +486,15 @@ define([
         initialize: function() {
             this.data = app.settings.data;
             this.queryParams = app.settings.query_params;
+
+            if ( !_.isEmpty(this.queryParams) ) {
+                $(".js-filters").show();
+            }
+
+            $(".js-search-extend").click(function(e){
+                e.preventDefault();
+                $(".js-filters").toggle();
+            });
         },
         initFilters: function(category_id) {
             if (!this.data) return;
