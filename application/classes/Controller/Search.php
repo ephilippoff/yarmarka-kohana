@@ -8,6 +8,10 @@ class Controller_Search extends Controller_Template {
     {
         parent::before();
 
+        $this->performance = Performance::factory(Acl::check('profiler'));
+
+        $this->performance->add("Search","start");
+
         $this->use_layout = FALSE;
         $this->auto_render = FALSE;
         $this->cached_search_info = FALSE;
@@ -52,19 +56,21 @@ class Controller_Search extends Controller_Template {
     }
 
     public function action_index() {
-        $start = microtime(true);
+
+        $this->performance->add("Search","staticfile");
         $objects_for_map = array();
         $prefix = (Kohana::$environment == Kohana::PRODUCTION) ? "" : "dev_";
         $staticfile = new StaticFile("attributes", $prefix.'static_attributes.js');
-
+        
+        $this->performance->add("Search","search_info");
         $search_info = $this->get_search_info();
-
+        
         
         $twig = Twig::factory('search/index');
-
         $twig->data_file = $staticfile->jspath;
 
         //main search
+        $this->performance->add("Search","main_search_query");
         $main_search_query = Search::searchquery($search_info->search_filters, $search_info->search_params);
         $twig->main_search_result = Search::getresult($main_search_query->execute()->as_array());
         if (!$search_info->main_search_result_count) {
@@ -90,6 +96,7 @@ class Controller_Search extends Controller_Template {
         //end main search
 
         //premium
+        $this->performance->add("Search","premium_search_query");
         $premium_search_query = Search::searchquery(
             array_merge($search_info->search_filters, array("premium" => TRUE)), 
             array_merge($search_info->search_params, array("limit" => 5))
@@ -116,6 +123,7 @@ class Controller_Search extends Controller_Template {
         //premium end
        
         //vip
+        $this->performance->add("Search","vip_search_query");
         $vip_search_query = Search::searchquery(
             array(
                 "search_text" => @$search_info->search_filters["search_text"],
@@ -172,7 +180,9 @@ class Controller_Search extends Controller_Template {
         $twig->pagination = $pagination;
         //pagination end
 
+        
         //save search settings cache
+        $this->performance->add("Search","save_search_settings_cache");
         if (!$this->cached_search_info AND $search_info->is_canonical) {
             $cache = $this->save_search_info_to_cache(array(
                     "info" => $search_info,
@@ -182,10 +192,13 @@ class Controller_Search extends Controller_Template {
                 )
             );
             Cookie::set('search_hash', $cache->hash, strtotime( '+14 days' ));
+            
         }
         //save search settings cache end
 
+
         //link counters
+        $this->performance->add("Search","link_couters");
         if ($search_info->enable_link_couters) {
             $search_info->link_counters = Search_Url::getcounters($search_info->s_host, $search_info->category_url, array_merge($search_info->category_childs, $search_info->category_childs_elements) );
             foreach (array("nizhnevartovsk","tyumen","surgut","nefteyugansk", FALSE) as $city_seo) {
@@ -201,7 +214,7 @@ class Controller_Search extends Controller_Template {
         //link counters end
 
         
-
+        $this->performance->add("Search","additional");
         //favourites
         $twig->favourites = ORM::factory('Favourite')->get_list_by_cookie();
         //end favourites
@@ -212,12 +225,12 @@ class Controller_Search extends Controller_Template {
                 $twig->set_filename('search/index/with_map');
             }
         }
-
+        $this->performance->add("Search","end");
         foreach ((array) $search_info as $key => $item) {
             $twig->{$key} = $item;
         }        
         $this->cache_stat($twig);
-        $twig->php_time = microtime(true) - $start;
+        $twig->php_time = $this->performance->getProfilerStat();
         $this->response->body($twig);
 
     }

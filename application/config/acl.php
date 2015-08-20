@@ -16,6 +16,7 @@ return array(
 		"pay_service" => array("auth", 1),
 		"news" => array(
 			"edit" => array("auth", 1, 3)
-		)
+		),
+		"profiler" => array("auth", 1),
 	)
 );

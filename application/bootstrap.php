@@ -83,7 +83,7 @@ Kohana::$environment = (@$_SERVER['HTTP_HOST'] === 'c.yarmarka.biz') ? Kohana::P
 Kohana::init(array(
 	'base_url'   	=> '/',
 	'index_file'	=> '',
-	'profile'		=> FALSE,
+	'profile'		=> Kohana::$environment === Kohana::DEVELOPMENT,
 	'caching'		=> Kohana::$environment === Kohana::PRODUCTION,
 	'errors'		=> Kohana::$environment === Kohana::DEVELOPMENT, //не работает для ошибок из ORM
 ));

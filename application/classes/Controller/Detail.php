@@ -6,6 +6,10 @@ class Controller_Detail extends Controller_Template {
     {
         parent::before();
 
+        $this->performance = Performance::factory(Acl::check('profiler'));
+
+        $this->performance->add("Detail","start");
+
         $this->use_layout = FALSE;
         $this->auto_render = FALSE;
 
@@ -46,6 +50,7 @@ class Controller_Detail extends Controller_Template {
         $twig->city        = $this->domain->get_city();
 
         //блок информации которую можно закеширвоать всю разом
+        $this->performance->add("Detail","info");
         $detail_info = $this->get_detail_info($object, array(
             "crumbs", 
             "object", 
@@ -61,13 +66,14 @@ class Controller_Detail extends Controller_Template {
         }
 
         //блоки взаимодействия которые кешируются отдельно
+        $this->performance->add("Detail","interact");
         $detail_interact = $this->get_detail_interact($object, array(
             "user", 
             "messages", 
             "search_cache", 
             "similar"
         ));
-
+        $this->performance->add("Detail","additional");
         //favourites
         $twig->favourites = ORM::factory('Favourite')->get_list_by_cookie();
         //end favourites
@@ -76,7 +82,8 @@ class Controller_Detail extends Controller_Template {
             $twig->{$key} = $item;
         }
 
-        $twig->php_time = microtime(true) - $start;
+        $this->performance->add("Detail","end");
+        $twig->php_time = $this->performance->getProfilerStat();
         $this->response->body($twig);
     }
 
@@ -138,12 +145,14 @@ class Controller_Detail extends Controller_Template {
             }
         }
 
+        $this->performance->add("Detail_Interact","messages");
         if (in_array("messages", $need) AND $object->loaded()) {
             $info->messages = ORM::factory('User_Messages')
                                 ->get_messages($object->id)
                                 ->getprepared_all();
         }
 
+        $this->performance->add("Detail_Interact","similar");
         if (in_array("similar", $need)) {
             $similar_search_query = Search::searchquery(
                 array(
@@ -171,7 +180,7 @@ class Controller_Detail extends Controller_Template {
                 $info->objects_for_map = json_encode($info->similar_coords);
             }
         }
-
+        $this->performance->add("Detail_Interact","end");
         return $info;
     }
 
