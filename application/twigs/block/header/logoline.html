@@ -8,19 +8,21 @@
 			</div>
 		</div>
 		<div class="col-md-2 col-md-push-8 col-xs-6">
-			<div id="add-advert" class="button bg-color-crimson white add-advert"><span onclick="window.location='/add'">Подать объявление</span></div>
+			<span class="button w100p dib bg-color-crimson add-advert white" onclick="window.location='/add'">Подать объявление</span>
 		</div>
 		<div class="clearfix visible-xs visible-sm"></div>
 		<div class="col-md-4 col-md-pull-2">
 			<!--/noindex-->
 			<div class="search-cont">
-
 				<div class="seach-bl">														
 					<div class="input-seach">
-						<span class="info">У нас более 100 тысяч предложений товаров, услуг и вакансий</span>
-						<br>
 						<form action="/" method="get" name="search-form" id="search-form" class="js-search-form">
-							<input class="search placeholder js-search-input" name="search" id="search-input" value="{{ search_text }}" type="text" placeholder="Поиск" autocomplete="off" data-city="{{city.id}}">
+							<div class="input-group w100p">
+								<input class="search placeholder form-control js-search-input" name="search" id="search-input" value="{{ search_text }}" type="text" placeholder="Поиск" autocomplete="off" data-city="{{city.id}}">
+								<div class="input-group-addon">
+									<button class="button bg-color-crimson button-style1" type="submit"><i class="fa fa-search fa-lg"></i></button>
+								</div>
+							</div>
 						</form>
 					</div>
 					<div class="search-popup js-search-popup-cont">
