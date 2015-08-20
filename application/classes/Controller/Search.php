@@ -179,9 +179,9 @@ class Controller_Search extends Controller_Template {
             'count_out' => 1,
             'count_in' => 8,
             'limits' => array(
-                "30" => $this->url_with_query(array(), array("page","limit")),
-                "60" => $this->url_with_query(array( "limit" => 60), array("page")),
-                "90" => $this->url_with_query(array( "limit" => 90), array("page")),
+                "30" => Search_Url::get_suri_without_reserved($this->request->query()),
+                "60" => Search_Url::get_suri_without_reserved($this->request->query(), array( "limit" => 60)),
+                "90" => Search_Url::get_suri_without_reserved($this->request->query(), array( "limit" => 90)),
             )
         ));
         $twig->small_pagination = (array(
@@ -198,7 +198,7 @@ class Controller_Search extends Controller_Template {
         
         //save search settings cache
         $this->performance->add("Search","save_search_settings_cache");
-        if (!$this->cached_search_info) {
+        if (!$this->cached_search_info AND !$search_info->search_text) {
             $cache = $this->save_search_info_to_cache(array(
                     "info" => $search_info,
                     "canonical_url" =>  $search_info->canonical_url,
@@ -429,20 +429,6 @@ class Controller_Search extends Controller_Template {
                         ->find();
 
         return ($search_info->loaded()) ? $search_info->get_row_as_obj() : FALSE;
-    }
-
-    public function url_with_query($params = array(), $unset_params = array())
-    {
-        $query_params = $this->request->query();
-        foreach ($params as $key => $value) {
-            $query_params[$key] = $value;
-        }
-        foreach ($unset_params as $unset_param) {
-            unset($query_params[$unset_param]);
-        }
-
-        $query_str = http_build_query($query_params);
-        return $this->request->route()->uri($this->request->param()).($query_str?"?".$query_str:"");
     }
     
     public function after()

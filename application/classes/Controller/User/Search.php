@@ -95,9 +95,9 @@ class Controller_User_Search extends Controller_Template {
             'count_out' => 1,
             'count_in' => 8,
             'limits' => array(
-                "30" => $this->url_with_query(array(), array("page","limit")),
-                "60" => $this->url_with_query(array( "limit" => 60), array("page")),
-                "90" => $this->url_with_query(array( "limit" => 90), array("page")),
+                "30" => Search_Url::get_suri_without_reserved($this->request->query()),
+                "60" => Search_Url::get_suri_without_reserved($this->request->query(), array( "limit" => 60)),
+                "90" => Search_Url::get_suri_without_reserved($this->request->query(), array( "limit" => 90)),
             )
         ));
 
@@ -197,18 +197,5 @@ class Controller_User_Search extends Controller_Template {
         $this->twig->php_time = $this->performance->getProfilerStat();
         $this->response->body($this->twig);
 
-    }
-
-    public function url_with_query($params = array(), $unset_params = array()) {
-        $query_params = $this->request->query();
-        foreach ($params as $key => $value) {
-            $query_params[$key] = $value;
-        }
-        foreach ($unset_params as $unset_param) {
-            unset($query_params[$unset_param]);
-        }
-
-        $query_str = http_build_query($query_params);
-        return $this->request->route()->uri($this->request->param()).($query_str?"?".$query_str:"");
     }
 }

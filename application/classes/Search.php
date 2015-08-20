@@ -246,12 +246,11 @@ class Search {
 
 		if ($params->is_favorite) {
 			$code = Cookie::get("code");
-			if ($code) {
-				$favorite_subquery = DB::select("objectid")
-											->from("favorite")
-											->where("code", "=", $code);
-				$object = $object->where("o.id","IN",$favorite_subquery);
-			}
+			if (!$code) $code = "sdaf980sd6fgsdfg9sdfgsd89076";
+			$favorite_subquery = DB::select("objectid")
+										->from("favorite")
+										->where("code", "=", $code);
+			$object = $object->where("o.id","IN",$favorite_subquery);
 		}
 
 		$multimedia_filter = array();
