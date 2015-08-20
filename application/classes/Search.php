@@ -135,10 +135,13 @@ class Search {
 		$options = new Obj($options);
 
 		$select = "o.*";
+		$table_name = "vw_objectcompiled";
 		if ( $options->count ) {
 			$select = "count(o.id) as count";
+			$table_name = "object";
 		} elseif ($options->group_category) {
 			$select = "category.title, category.url, count(o.id)";
+			$table_name = "object";
 		}
 		
 
@@ -161,7 +164,7 @@ class Search {
 		
 
 		$object = DB::select(DB::expr($select))
-						->from(array("vw_objectcompiled","o"));
+						->from(array($table_name,"o"));
 
 		if ($published === TRUE) {
 			$object = $object->where("o.is_published", "=", 1);
