@@ -22,4 +22,9 @@ class URL extends Kohana_URL {
 
 		return $str;
 	}
+
+	public static function SERVER($name)
+	{
+		return (@$_SERVER[$name]) ? $_SERVER[$name]: "";
+	}
 }

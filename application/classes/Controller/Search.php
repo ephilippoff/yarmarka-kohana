@@ -62,7 +62,22 @@ class Controller_Search extends Controller_Template {
         
         $this->performance->add("Search","search_info");
         $search_info = $this->get_search_info();
-        
+
+        //link counters
+        $this->performance->add("Search","link_couters");
+        if ($search_info->enable_link_couters) {
+            $search_info->link_counters = Search_Url::getcounters($search_info->s_host, $search_info->category_url, array_merge($search_info->category_childs, $search_info->category_childs_elements) );
+            foreach (array("nizhnevartovsk","tyumen","surgut","nefteyugansk", FALSE) as $city_seo) {
+                $city_counter = Search_Url::getcounters(Domain::get_domain_by_city($city_seo, FALSE, ""), "", array( new Obj(array("url"=>$search_info->canonical_url)) ) );
+                $search_info->link_counters = array_merge($search_info->link_counters, $city_counter);
+            }
+            $search_info->link_counters[$search_info->s_host.$search_info->s_suri] = $search_info->main_search_result_count;
+            
+            //clean empty links
+            $search_info->category_childs_elements = Search_url::clean_empty_category_childs_elements($search_info->category_childs_elements, $search_info->link_counters, $search_info->url);
+            // end clean empty links
+        }
+        //link counters end
         
         $twig = Twig::factory('search/index');
         $twig->data_file = $staticfile->jspath;
@@ -73,10 +88,10 @@ class Controller_Search extends Controller_Template {
 
         $twig->main_search_result = Search::getresult($main_search_query->execute()->as_array());
         if (!$search_info->main_search_result_count) {
-            $main_search_result_count = Search::searchquery($search_info->search_filters, array(), array("count" => TRUE))
-                                                    ->execute()
-                                                    ->get("count");
-            $search_info->main_search_result_count = $main_search_result_count;
+                $main_search_result_count = Search::searchquery($search_info->search_filters, array(), array("count" => TRUE))
+                                                        ->execute()
+                                                        ->get("count");
+                $search_info->main_search_result_count = $main_search_result_count;
         }
 
         if (count($twig->main_search_result) > 0) 
@@ -183,7 +198,7 @@ class Controller_Search extends Controller_Template {
         
         //save search settings cache
         $this->performance->add("Search","save_search_settings_cache");
-        if (!$this->cached_search_info AND $search_info->is_canonical) {
+        if (!$this->cached_search_info) {
             $cache = $this->save_search_info_to_cache(array(
                     "info" => $search_info,
                     "canonical_url" =>  $search_info->canonical_url,
@@ -197,21 +212,7 @@ class Controller_Search extends Controller_Template {
         //save search settings cache end
 
 
-        //link counters
-        $this->performance->add("Search","link_couters");
-        if ($search_info->enable_link_couters) {
-            $search_info->link_counters = Search_Url::getcounters($search_info->s_host, $search_info->category_url, array_merge($search_info->category_childs, $search_info->category_childs_elements) );
-            foreach (array("nizhnevartovsk","tyumen","surgut","nefteyugansk", FALSE) as $city_seo) {
-                $city_counter = Search_Url::getcounters(Domain::get_domain_by_city($city_seo, FALSE, ""), "", array( new Obj(array("url"=>$search_info->canonical_url)) ) );
-                $search_info->link_counters = array_merge($search_info->link_counters, $city_counter);
-            }
-            $search_info->link_counters[$search_info->s_host.$search_info->s_suri] = $search_info->main_search_result_count;
-            
-            //clean empty links
-            $search_info->category_childs_elements = Search_url::clean_empty_category_childs_elements($search_info->category_childs_elements, $search_info->link_counters, $search_info->url);
-            // end clean empty links
-        }
-        //link counters end
+        
 
         
         $this->performance->add("Search","additional");
@@ -275,8 +276,8 @@ class Controller_Search extends Controller_Template {
         $info->category_id = $this->params_by_uri->get_category()->id;
         $info->child_categories_ids = $this->params_by_uri->get_category_childs_id();
 
-        $info->s_host = $_SERVER["HTTP_HOST"];
-        $info->s_suri = $_SERVER["REQUEST_URI"];
+        $info->s_host = URL::SERVER("HTTP_HOST");
+        $info->s_suri = URL::SERVER("REQUEST_URI");
         $info->domain      = $this->domain;
         $info->city        = $this->domain->get_city();
         $info->main_category = $this->domain->get_main_category();
@@ -342,8 +343,8 @@ class Controller_Search extends Controller_Template {
         $info->category_id = $this->params_by_uri->get_category()->id;
         $info->child_categories_ids = $this->params_by_uri->get_category_childs_id();
 
-        $info->s_host = $_SERVER["HTTP_HOST"];
-        $info->s_suri = trim($_SERVER["REQUEST_URI"],"/");
+        $info->s_host = URL::SERVER("HTTP_HOST");
+        $info->s_suri = trim(URL::SERVER("REQUEST_URI"),"/");
         $info->domain      = $this->domain;
         $info->city        = $this->domain->get_city();
         $info->main_category = $this->domain->get_main_category();
@@ -403,6 +404,8 @@ class Controller_Search extends Controller_Template {
 
     public function save_search_info_to_cache($options = array())
     {
+        $suri_without_reserved = Search_Url::get_suri_without_reserved($this->request->query());
+
         $options = new Obj($options);
         if ($options->canonical_url) {
             $options->canonical_url = "/".$options->canonical_url;
@@ -410,8 +413,8 @@ class Controller_Search extends Controller_Template {
         $suc = ORM::factory('Search_Url_Cache')
                     ->save_search_info(
                         $options->info, 
-                        $_SERVER["HTTP_HOST"].$_SERVER["REQUEST_URI"], 
-                        $_SERVER["HTTP_HOST"].$options->canonical_url, 
+                        URL::SERVER("HTTP_HOST").URL::SERVER("PATH_INFO").$suri_without_reserved, 
+                        URL::SERVER("HTTP_HOST").$options->canonical_url, 
                         $options->sql, 
                         $options->count
                     );
@@ -420,8 +423,9 @@ class Controller_Search extends Controller_Template {
 
     public function get_search_info_from_cache()
     {
+        $suri_without_reserved = Search_Url::get_suri_without_reserved($this->request->query());
         $search_info = ORM::factory('Search_Url_Cache')
-                        ->get_search_info($_SERVER["HTTP_HOST"].$_SERVER["REQUEST_URI"])
+                        ->get_search_info(URL::SERVER("HTTP_HOST").URL::SERVER("PATH_INFO").$suri_without_reserved)
                         ->find();
 
         return ($search_info->loaded()) ? $search_info->get_row_as_obj() : FALSE;

@@ -13,6 +13,7 @@ class Search_Url
         "limit" => 30,
         "page" => 0
     );
+    static $reserved = array("order", "page", "limit");
 
     public function __construct($uri = '', $query_params = array())
     {
@@ -626,6 +627,26 @@ class Search_Url
             if (isset($counters->{$url."/".$category->url}) AND $counters->{$url."/".$category->url} == 0) continue;
             $result[] = $category;
         }
+        return $result;
+    }
+
+    public static function get_suri_without_reserved($query_params = array(), $set_params = array(), $unset_params = array())
+    {
+        $query_params = ( count( array_keys($unset_params) )>0 ) ? $unset_params : $query_params;
+
+        $result = array();
+        $reserved = self::$reserved;
+        foreach ($query_params as $key => $value) {
+            if (!in_array($key, $reserved)){
+                $result[$key] = $value;
+            }
+        }
+        foreach ($set_params as $key => $value) {
+            $result[$key] = $value;
+        }
+        ksort($result);
+        $result = http_build_query($result);
+        $result = ($result) ? "?".$result : "";
         return $result;
     }
 }
