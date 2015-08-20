@@ -23,6 +23,18 @@ define([
         menuTemplate: "#template-citymenu"
     }
 
+    var newsMenuSettings = {
+        controlClass: ".js-newsmenu-dropdown",
+        menuClass: ".js-newsmenu",
+        menuTemplate: "#template-newsmenu"
+    }
+
+    var kuponMenuSettings = {
+        controlClass: ".js-kuponmenu-dropdown",
+        menuClass: ".js-kuponmenu",
+        menuTemplate: "#template-kuponmenu"
+    }
+
     var MenuView = Marionette.ItemView.extend({
         initialize: function(options) {
             this.$el.append($(options.templateClass).html());
@@ -101,6 +113,22 @@ define([
                     el: cityMenuSettings.controlClass,
                     templateClass: cityMenuSettings.menuTemplate,
                     menuClass: cityMenuSettings.menuClass,
+                });
+            }
+
+            if (_.contains(menusToload, "news")) {
+                this.news = new MainmenuView({
+                    el: newsMenuSettings.controlClass,
+                    templateClass: newsMenuSettings.menuTemplate,
+                    menuClass: newsMenuSettings.menuClass,
+                });
+            }
+
+            if (_.contains(menusToload, "kupon")) {
+                this.kupon = new MainmenuView({
+                    el: kuponMenuSettings.controlClass,
+                    templateClass: kuponMenuSettings.menuTemplate,
+                    menuClass: kuponMenuSettings.menuClass,
                 });
             }
         },
