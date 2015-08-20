@@ -6,11 +6,9 @@ class Controller_Search extends Controller_Template {
 
     public function before()
     {
-        parent::before();
-
         $this->performance = Performance::factory(Acl::check('profiler'));
-
         $this->performance->add("Search","start");
+        parent::before();
 
         $this->use_layout = FALSE;
         $this->auto_render = FALSE;
@@ -443,4 +441,8 @@ class Controller_Search extends Controller_Template {
         return $this->request->route()->uri($this->request->param()).($query_str?"?".$query_str:"");
     }
     
+    public function after()
+    {
+        parent::after();
+    }
 } // End Search
