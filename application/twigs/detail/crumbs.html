@@ -3,5 +3,5 @@
 	{% for crumb in crumbs %}
 			/ <a href="{{ url(crumb.uri) }}">{{crumb.title}}</a>
 	{% endfor %}
-	/ <h1>{{ object.title|e|capitalize }}</h1>
+	/ <h1 class="js-object-title-{{object.id}} {% if object.is_published == 0 %} red strike {% endif %}">{{ object.title|e|capitalize }}</h1>
 </div>

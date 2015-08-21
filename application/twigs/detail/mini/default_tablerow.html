@@ -21,7 +21,7 @@
 				{% set is_favourite = 'fa-heart' %}
 			{% endif %}
 			<i class="fa {{is_favourite}} fa-lg mr5 js-favourite js-favourite-ico pointer red" data-id="{{object.id}}" title="Избранное"></i>
-			<a href="{{ object.compiled.url }}" title="{{ object.title|e }}">
+			<a href="{{ object.compiled.url }}" title="{{ object.title|e }}" class="{% if object.is_published == 0 %} red strike {% endif %}">
 				{{ object.title|e }}
 			</a>
 		</p>
@@ -49,8 +49,9 @@
 						{% endfor %}
 					{% endif %}
 			</tbody></table>
-
-
+		{% endif %}
+		{% if object.is_published == 0 %}
+			<p class="pt10 pb10 js-object-state-{{object.id}} red">Объявление снято с публикации</p>
 		{% endif %}
 	</td>		
 	<td class="td td-company-info">

@@ -3,22 +3,22 @@
 		<span>Контактные данные</span>
 	</div>					
 	<div class="body">
-		<div class="row">
-			{% if object.is_published > 0 or check_object_access(object, 'object.control') %}
+		<div class="row js-object-contacts-{{object.id}}">
+			{% if object.is_published > 0 %}
 				<div class="col-md-6 col-sm-6">
 					<span class="author-name">{{object.contact}}</span>
-					<div class="contacts-list-cont">
+					<div class="contacts-list-cont js-contact-list">
 						{% for contact in object.compiled.contacts %}
 							<p>{{ contact.value|contacthide }}</p>
 						{% endfor %}
 					</div>
-					<button class="button style1">Показать контакты</button>
+					<span class="button dib bg-color-blue white p10 br2 js-contacts-show" data-id="{{object.id}}">Показать контакты</span>
 				</div>
-				{% if object.compiled.author.org_type == 2 %}
-					<div class="col-md-6 col-sm-6">
+				<div class="col-md-6 col-sm-6">
+					{% if object.compiled.author.org_type == 2 %}
 						<p>{{ object.compiled.author.org_name }}</p>
 						{% if object.compiled.author.logo %}
-							<div class="img-cont"><img src="{{ staticfile(object.compiled.author.logo['120x90']) }}"></div>
+							<div class="img-cont"><img src="{{  get_file(object.compiled.author.logo['120x90']) }}"></div>
 						{% endif %}
 						<p><span class="moreinfo span-link">Все объявления компании</span></p>
 						<p>{{ object.compiled.author.org_post_address }}</p>
@@ -29,8 +29,8 @@
 						<p><i class="ico instagram"></i><span class="span-link">http://link.com</span></p>
 						<p><i class="ico email"></i><span class="span-link">sss@domain.ru</span></p>
 						<p><i class="ico site"></i><span class="span-link">http://site.ru</span></p> -->
-					</div>
-				{% endif %}
+					{% endif %}
+				</div>
 			{% else %}
 				<div class="col-md-12 col-sm-12">
 					Объявление снято с публикации, контактные данные не доступны.

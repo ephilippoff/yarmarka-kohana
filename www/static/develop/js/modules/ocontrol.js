@@ -30,6 +30,27 @@ define([
 
         edit: function(id) {
             $(window).attr('location','/edit/'+id);
+        },
+
+        contacts: function(id, options) {
+            var controlModel = new ControlModel();
+            controlModel.urlRoot = "/rest_object/show_contacts";
+            options.error = options.error || function() {};
+            options.success = options.success || function() {};
+            options.captcha = options.captcha || function() {};
+            controlModel.save({id: id, captcha: options.code}, {
+                success: function(model) {
+                    var resp = model.toJSON();
+                    if (resp.code == 200) {
+                        options.success(resp.result);
+                    } else if (resp.code == 300) {
+                        options.captcha(resp.result);
+                    } else {
+                        options.error(resp.error);
+                    }
+                    
+                }
+            });
         }
     });
 

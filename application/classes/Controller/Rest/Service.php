@@ -16,7 +16,7 @@ class Controller_Rest_Service extends Controller_Rest {
 		$this->json['service'] = Service::factory("Up")->get();
 		$this->json['object'] = $ad->get_row_as_obj(array("id","title"));
 
-		$info = Object::canEdit(Array("object_id" => $ad->id, "rubricid" => $ad->category));
+		$info = Object::canEdit(Array("object_id" => $ad->id, "rubricid" => $ad->category, "city_id" => $ad->city_id));
 
 		if ( $info["code"] == "error" )
 		{
@@ -52,7 +52,7 @@ class Controller_Rest_Service extends Controller_Rest {
 		$this->json['service'] = Service::factory("Premium")->get();
 		$this->json['object'] = $ad->get_row_as_obj(array("id","title"));
 
-		// $info = Object::canEdit(Array("object_id" => $ad->id, "rubricid" => $ad->category));
+		// $info = Object::canEdit(Array("object_id" => $ad->id, "rubricid" => $ad->category, "city_id" => $ad->city_id));
 
 		// if ( $info["code"] == "error" )
 		// {
@@ -77,7 +77,7 @@ class Controller_Rest_Service extends Controller_Rest {
 		$this->json['service'] = Service::factory("Lider")->get();
 		$this->json['object'] = $ad->get_row_as_obj(array("id","title"));
 
-		// $info = Object::canEdit(Array("object_id" => $ad->id, "rubricid" => $ad->category));
+		// $info = Object::canEdit(Array("object_id" => $ad->id, "rubricid" => $ad->category, "city_id" => $ad->city_id));
 
 		// if ( $info["code"] == "error" )
 		// {

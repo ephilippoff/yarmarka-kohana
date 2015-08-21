@@ -1,10 +1,12 @@
 <div class="info-block-cont theme2 module">
 	<div class="block-title">
-		<span>Управление объявлением</span>
+		{% if check_object_access(object, 'object.control') %}
+			<span>Управление объявлением</span>
+		{% endif %}
 	</div>					
 	<div class="row p10">
 		<div class="service-block-cont col-md-5">
-			<div class="button button-style1 w100p bg-color-crimson mb3 js-favourite" data-id="{{object.id}}">
+			<div class="line js-favourite red pointer" data-id="{{object.id}}">
 				{% set is_favourite = 'fa-heart-o' %}
 				{% if object.id in favourites %}
 					{% set is_favourite = 'fa-heart' %}
@@ -12,29 +14,77 @@
 				<i class="fa {{is_favourite}} fa-lg mr5 js-favourite-ico"></i> <span class="js-favourite-caption">{{is_favourite == 'fa-heart' ? 'В избранном': 'В избранное'}}</span>
 			</div>
 			{% if object.is_published == 0 %}
-				<div class="line">Объявление снято</div>
+				<div class="line red js-object-state-{{object.id}}">Объявление снято</div>
 			{% elseif object.is_published == 1 %}
-				<div class="line">Объявление опубликовано</div>
+				<div class="line js-object-state-{{object.id}}">Объявление опубликовано</div>
 			{% endif %}
 			<div class="line">Код объявления: {{ object.id }}</div>
 			<div class="line">Обновлено: {{ object.date_created|date('H:i d.m.Y') }}</div>
-			<div class="line">Просмотров: {{ object.visits }}</div>
+			{% if check_object_access(object, 'object.control') %}
+				<div class="line">Просмотров: {{ object.visits }}</div>
+			{% endif %}
 		</div>
 		<div class="list list1 col-md-7">
-			<p class="button js-ocontrol-publish button-style1 bg-color-lightgreen mb3" data-id="{{object.id}}">
-					{% if object.is_published %} 
-						<i class="fa fa-trash fa-lg mr5"></i><span>Снять с публикации</span>
-					{% else %}
-						<i class="fa fa-check fa-lg mr5"></i><span>Опубликовать</span>
-					{% endif %}
-			</p><br>
-			<p class="button js-ocontrol-edit button-style1 bg-color-lightgreen mb3" data-id="{{object.id}}">
-				<i class="fa fa-edit fa-lg mr5"></i>Редактировать
-			</p>
-			{#<p class="button js-service-up button-style1 bg-color-lightgreen mb3" data-id="{{object.id}}">
-				<i class="fa fa-angle-double-up fa-lg mr5"></i>Поднять
-			</p>#}
+			{% if check_object_access(object, 'object.control') %}
+				<p class="button js-ocontrol-publish button-style1 bg-color-lightgreen mb3" data-id="{{object.id}}">
+						{% if object.is_published %} 
+							<i class="fa fa-trash fa-lg mr5"></i><span>Снять с публикации</span>
+						{% else %}
+							<i class="fa fa-check fa-lg mr5"></i><span>Опубликовать</span>
+						{% endif %}
+				</p><br>
+				<p class="button js-ocontrol-edit button-style1 bg-color-lightgreen mb3" data-id="{{object.id}}">
+					<i class="fa fa-edit fa-lg mr5"></i>Редактировать
+				</p>
+			{% else %}
+				<p class="p5">Это ваше объявление? <span class="link" onclick="document.location='/user/login?return={{object.compiled.url}}'">Авторизуйтесь</span> для управления</p>
+			{% endif %}
 		</div>
-		
 	</div>
+	{% if check_object_access(object, 'object.moderate') %}
+		<div class="block-title">
+				<span>Функции администратора</span><i class="fa fa-eye fa-lg ml5" onclick="$('.js-admin-control-cont').toggleClass('hidden');"></i>
+		</div>
+		<div class="row p10 hidden js-admin-control-cont">
+			<div class="list list1 col-md-6">
+				<p class="button js-ocontrol-edit button-style1 bg-color-crimson mb3" data-id="{{object.id}}">
+					<i class="fa fa-edit fa-lg mr5"></i>Редактировать
+				</p>
+			</div>
+			<div class="list list1 col-md-6">
+				<p class="button js-ocontrol-block button-style1 bg-color-crimson mb3" data-id="{{object.id}}">
+					<i class="fa fa-edit fa-lg mr5"></i>Блок объявления
+				</p>
+				<p class="button js-ocontrol-block-user button-style1 bg-color-crimson mb3" data-id="{{object.id}}">
+					<i class="fa fa-edit fa-lg mr5"></i>Блок объяв. и польз.
+				</p>
+			</div>
+		</div>
+		<div class="block-title mt10">
+				<span>Контакты для администратора</span><i class="fa fa-eye fa-lg ml5" onclick="$('.js-admin-contact-cont').toggleClass('hidden');"></i>
+		</div>
+		<div class="row contacts-cont hidden js-admin-contact-cont">
+			<div class="col-md-6">
+				<div class="p10">
+					<span class="author-name">{{object.contact}}</span>
+					<div class="contacts-list-cont">
+						{% for contact in object.compiled.contacts %}
+							<p>{{ contact.value }}</p>
+						{% endfor %}
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6">
+				{% if object.compiled.author.org_type == 2 %}
+					<p>{{ object.compiled.author.org_name }}</p>
+					{% if object.compiled.author.logo %}
+						<div class="img-cont"><img src="{{  get_file(object.compiled.author.logo['120x90']) }}"></div>
+					{% endif %}
+					<p><span class="moreinfo span-link">Все объявления компании</span></p>
+					<p>{{ object.compiled.author.org_post_address }}</p>
+					<p><i class="ico phone"></i>{{ object.compiled.author.org_phone }}</p>
+				{% endif %}
+			</div>
+		</div>
+	{% endif %}
 </div>

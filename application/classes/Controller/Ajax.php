@@ -439,7 +439,7 @@ class Controller_Ajax extends Controller_Template
 			throw new HTTP_Exception_404;
 		}
 
-		$info = Object::canEdit(Array("object_id" => $object->id, "rubricid" => $object->category));
+		$info = Object::canEdit(Array("object_id" => $object->id, "rubricid" => $object->category, "city_id" => $object->city_id));
 
 		if ($object->is_published == 1) //если размещено и надо снять
 		{
