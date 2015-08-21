@@ -301,7 +301,7 @@ class Search_Url
         return $result;
     }
 
-    public function clean_reserved_query_params($get_params = array()) {
+    public static function clean_reserved_query_params($get_params = array()) {
         $result = array();
         $reserved_query_params_requirements = new Obj(self::$reserved_query_params_requirements);
         $reserved_query_params_defaults = new Obj(self::$reserved_query_params_defaults);

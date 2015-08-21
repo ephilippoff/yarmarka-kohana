@@ -76,7 +76,7 @@ class Search {
 							->from(array($table_name, $table_name."_filter"))
 							->where($table_name."_filter."."object","=", DB::expr($alias.".id"))
 							->where($table_name."_filter."."attribute", "=", $attributes[$seo_name]["id"])
-							->where($table_name."_filter."."value", "LIKE", "%".$value."%")
+							->where(DB::expr("w_lower(".$table_name."_filter."."value".")"), "LIKE", "%".trim(strtolower($value))."%")
 							->limit(1);
 			}
 			// } elseif ($type == "boolean") {

@@ -197,19 +197,21 @@ define([
         ui: {
             valuesCont: ".js-filter-values-cont",
             strValue: ".js-filter-str-value",
-            input: "input"
+            firstInput: "input.first",
+            lastInput: "input.last"
         },
         events: {
             "click .js-filter-label, .js-filter-ok": "showHide",
-            "keyup @ui.input": "inputKeyUp"
+            "keyup @ui.firstInput": "inputKeyUp",
+            "keyup @ui.lastInput": "inputKeyUp"
         },
         initialize: function(options){
             this.bindUIElements();
             FilterItem.prototype.initialize.call(this, options);
         },
         inputKeyUp: function() {
-            var min = parseInt(this.ui.input.first().val());
-            var max = parseInt(this.ui.input.last().val());
+            var min = parseInt(this.ui.firstInput.val());
+            var max = parseInt(this.ui.lastInput.val());
             if (min > 0 || max > 0) {
                  this.model.set("str_value", "от "+((min) ? min : "неогр.")+" до "+((max) ? max : "неогр.") );
              } else {
@@ -380,7 +382,8 @@ define([
     var FiltersView = Marionette.LayoutView.extend({
         ui: {
             form: ".js-filters-form",
-            submit: ".js-filters-submit"
+            submit: ".js-filters-submit",
+            staticFilters: ".js-filters-static input"
         },
         regions: {
             filters: ".js-filters-cont"
@@ -390,8 +393,20 @@ define([
         },
         initialize: function(options) {
             this.bindUIElements();
+            this.initStaticFilters();
+            this.initVariableFilters();
+        },
+        initStaticFilters: function() {
+            var queryParams = this.getOption("queryParams");
+            _.each(this.ui.staticFilters, function(item){
+                if (queryParams[$(item).attr("name")]) {
+                    $(item).prop("checked", true);
+                }
+            });
+        },
+        initVariableFilters: function() {
             var s = this,
-                data = options.data;
+                data = this.getOption("data");
 
             var filtersList = new FiltersList();
             
@@ -404,8 +419,8 @@ define([
 
             this.filters.show( new FiltersListView({
                 collection: filtersList,
-                queryParams: options.queryParams
-            }) );
+                queryParams: this.getOption("queryParams")
+            }));
 
             $(document).mouseup(function (e) {
                 var container = $(".js-filters-cont");
@@ -490,22 +505,25 @@ define([
             
         },
         initFilters: function(category_id) {
-            if (!this.data) {
-                this.filtersLoaded();
-                return;
-            }
+            // if (!this.data) {
+            //     this.filtersLoaded();
+            //     return;
+            // }
 
-            this.categoryData = this.data[category_id];
-            if (!_.isObject(this.categoryData)) {
-                this.filtersLoaded();
-                return;
-            }
-            var categoryInfo = this.categoryData[0];
+            var data = this.data[category_id];
+            // if (!_.isObject(this.categoryData)) {
+            //     this.filtersLoaded();
+            //     return;
+            // }
 
-            delete this.categoryData[0];
+            if (_.isObject(data)) {
+                delete data[0];
+            } else {
+                data = null;
+            }
             var filtersView = new FiltersView({
                 el: ".js-filters",
-                data: this.categoryData,
+                data: data,
                 queryParams: this.queryParams
             });
 

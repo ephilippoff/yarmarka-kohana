@@ -37,6 +37,8 @@ class Controller_Ajax_Search extends Controller_Ajax {
 
         $seo_segment_url = ($seo_segment_is_null) ? "" : $seo_segment_url;
         $cleaned_filters = ($seo_segment_is_null) ? $cleaned_filters_all : $cleaned_filters_without_seo;
+        $cleaned_reserved_filters = Search_Url::get_query_params_without_reserved( Search_Url::clean_reserved_query_params($query_params));
+        $cleaned_filters = array_merge($cleaned_filters, $cleaned_reserved_filters);
 
         $this->json["seo_segment_url"] = $seo_segment_url;
         $this->json["query"] = http_build_query($cleaned_filters);
