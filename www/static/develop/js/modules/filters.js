@@ -446,9 +446,9 @@ define([
                             success: function(model, response) {
                                 var count = model.get("count");
                                 if (count) {
-                                    s.ui.submit.attr("value","Найдено: " + count + ". Показать!");
+                                    s.ui.submit.text("Найдено: " + count + ". Показать!").removeClass("bg-color-crimson").addClass("bg-color-blue");
                                 } else {
-                                     s.ui.submit.attr("value","Не найдено");
+                                     s.ui.submit.text("Не найдено").addClass("bg-color-crimson").removeClass("bg-color-blue");
                                 }
                             }
                         });
