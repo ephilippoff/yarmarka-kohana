@@ -14,7 +14,7 @@ class Controller_Search extends Controller_Template {
         $this->auto_render = FALSE;
         $this->cached_search_info = FALSE;
 
-        if ($search_info = $this->get_search_info_from_cache()) {
+        if ($search_info = $this->get_search_info_from_cache() and 1==0) {
             $this->cached_search_info = unserialize($search_info->params);
             Cookie::set('search_hash', $search_info->hash, strtotime( '+14 days' ));
         } else {
@@ -178,10 +178,11 @@ class Controller_Search extends Controller_Template {
             'first_page_in_url' => FALSE,
             'count_out' => 1,
             'count_in' => 8,
+            'path' => URL::SERVER("PATH_INFO"),
             'limits' => array(
-                "30" => Search_Url::get_suri_without_reserved($this->request->query()),
-                "60" => Search_Url::get_suri_without_reserved($this->request->query(), array( "limit" => 60)),
-                "90" => Search_Url::get_suri_without_reserved($this->request->query(), array( "limit" => 90)),
+                "30" => Search_Url::get_suri_without_reserved($this->request->query(),array(),array("limit","page")),
+                "60" => Search_Url::get_suri_without_reserved($this->request->query(), array( "limit" => 60), array("page")),
+                "90" => Search_Url::get_suri_without_reserved($this->request->query(), array( "limit" => 90), array("page")),
             )
         ));
         $twig->small_pagination = (array(
@@ -329,7 +330,13 @@ class Controller_Search extends Controller_Template {
             $this->domain->get_city()
         );
         
-        $info->query_params_for_js = json_encode(array_merge($this->params_by_uri->get_clean_query_params(), $this->params_by_uri->get_seo_filters()));
+        $info->query_params_for_js = json_encode(
+            array_merge(
+                $this->params_by_uri->get_query_params_without_reserved($this->request->query()),
+                $this->params_by_uri->get_clean_query_params(), 
+                $this->params_by_uri->get_seo_filters()
+            )
+        );
         return $info;
     }
 

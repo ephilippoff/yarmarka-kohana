@@ -88,7 +88,7 @@ for ($i = $n7; $i <= $n8; $i++)
 		<div class="col-md-4">
 			<div class="right">
 				<?php foreach ($config['limits'] as $limit => $url): ?>
-					<a href="<?php echo $url; ?>" rel="nofollow"><?php echo $limit; ?></a>
+					<a href="<?=$config['path'].$url?>" rel="nofollow"><?=$limit ?></a>
 				<?php endforeach ?>
 			</div>
 		</div>

@@ -1,10 +1,10 @@
 <div class="main-theme obj-control-head clearfix brt2">
 	<div class="row">
-		<div class="col-md-4 left clearfix">
+		<div class="col-md-6 left clearfix">
 			<span class="item" onclick="window.location='/add/{{ category.id }}'">Добавить</span>
-			<span class="item js-search-extend">Расширенный поиск</span>
+			<span class="item js-search-extend"><i class="fa fa-spinner fa-spin fa-lg mr3 js-search-extend-spinner"></i>Расширенный поиск</span>
 		</div>
-		<div class="col-md-8 right clearfix">
+		<div class="col-md-6 right clearfix">
 			{% if small_pagination.next %}
 				<a class="item" href="{{small_pagination.next_url}}">Далее</a>
 			{% endif %}

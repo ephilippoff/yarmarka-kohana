@@ -329,10 +329,8 @@ class Search_Url
         }
 
         foreach (self::$reserved_query_params as $param) {
-            if (!isset($result[$param])) {
-                if ($reserved_query_params_defaults->{$param}) {
-                    $result[$param] = $reserved_query_params_defaults->{$param};
-                }
+            if (!isset($result[$param]) and $reserved_query_params_defaults->{$param}) {
+                $result[$param] = $reserved_query_params_defaults->{$param};
             }
         }
         return $result;
@@ -630,10 +628,9 @@ class Search_Url
         return $result;
     }
 
-    public static function get_suri_without_reserved($query_params = array(), $set_params = array(), $unset_params = array())
+    public static function get_query_params_without_reserved($query_params = array(), $set_params = array(), $unset_params = array())
     {
-        $query_params = ( count( array_keys($unset_params) )>0 ) ? $unset_params : $query_params;
-
+       
         $result = array();
         $reserved = self::$reserved;
         foreach ($query_params as $key => $value) {
@@ -644,8 +641,20 @@ class Search_Url
         foreach ($set_params as $key => $value) {
             $result[$key] = $value;
         }
+
+        foreach ($unset_params as $value) {
+            if (isset($result[$value])) {
+                unset($result[$value]);
+            }
+        }
         ksort($result);
-        $result = http_build_query($result);
+        return $result;
+    }
+
+    public static function get_suri_without_reserved($query_params = array(), $set_params = array(), $unset_params = array())
+    {
+        $query_params = self::get_query_params_without_reserved($query_params, $set_params, $unset_params);
+        $result = http_build_query($query_params);
         $result = ($result) ? "?".$result : "";
         return $result;
     }

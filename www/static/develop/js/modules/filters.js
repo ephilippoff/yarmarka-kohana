@@ -487,19 +487,19 @@ define([
             this.data = app.settings.data;
             this.queryParams = app.settings.query_params;
 
-            if ( !_.isEmpty(this.queryParams) ) {
-                $(".js-filters").show();
-            }
-
-            $(".js-search-extend").click(function(e){
-                e.preventDefault();
-                $(".js-filters").toggle();
-            });
+            
         },
         initFilters: function(category_id) {
-            if (!this.data) return;
+            if (!this.data) {
+                this.filtersLoaded();
+                return;
+            }
+
             this.categoryData = this.data[category_id];
-            if (!_.isObject(this.categoryData)) return;
+            if (!_.isObject(this.categoryData)) {
+                this.filtersLoaded();
+                return;
+            }
             var categoryInfo = this.categoryData[0];
 
             delete this.categoryData[0];
@@ -507,6 +507,22 @@ define([
                 el: ".js-filters",
                 data: this.categoryData,
                 queryParams: this.queryParams
+            });
+
+            
+            if ( !_.isEmpty(this.queryParams) ) {
+                $(".js-filters").show();
+            }
+
+            this.filtersLoaded();
+
+            
+        },
+        filtersLoaded: function() {
+            $(".js-search-extend i").remove();
+            $(".js-search-extend").click(function(e){
+                e.preventDefault();
+                $(".js-filters").toggle();
             });
         }
     });
