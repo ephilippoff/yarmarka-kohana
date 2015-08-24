@@ -31,6 +31,7 @@ body h1 {font-size: 16px;font-weight: normal;display: inline;}
 .whitespace{clear: left;}
 .fixed{position: fixed;top: 0px;}
 .pointer{cursor: pointer;}
+.strike{text-decoration: line-through};
 /* css helpers end */
 
 /* mini-elements */
@@ -266,12 +267,12 @@ select{background-color: #FFFFFF;border: 1px solid #89898c;color: #384354;paddin
 
 /* breadcrumbs */
 .breadcrumbs-cont{font-size: 16px;}
-.breadcrumbs-cont a{font-size: 16px;font-weight: bold;}
+.breadcrumbs-cont a{font-size: 16px;font-weight: bold;text-decoration: underline;}
 /* breadcrumbs end */
 
 /* subcategories-cont */
 .subcategories-cont ul li{line-height: 25px;}
-.subcategories-cont ul li a{font-size: 16px;}
+.subcategories-cont ul li a{font-size: 16px;text-decoration: underline;}
 .subcategories-cont ul li span{color:gray;}
 /* subcategories-cont end */
 
