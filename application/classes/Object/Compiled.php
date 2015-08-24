@@ -58,7 +58,7 @@ class Object_Compiled
 					$_attribute["value"] = $attribute["value"];
 				break;
 			}
-			$result[] = $_attribute;
+			$result[$_attribute["seo_name"]] = $_attribute;
 		}	
 
 		return $result;

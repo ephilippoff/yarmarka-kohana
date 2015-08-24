@@ -42,10 +42,13 @@ class Controller_User_Search extends Controller_Template {
         $uri = $this->request->uri();
         $route_params = $this->request->param();
         $query_params = $this->request->query();
+       
         $this->twig->query_url_str = Search_Url::get_suri_without_reserved($query_params);
         $this->twig->main_category = $this->domain->get_main_category();
+        
         $category_path = ( isset($route_params['category_path']) ) ? $route_params['category_path'] : $this->twig->main_category;
         $this->twig->category_url = $category_path;
+        
         $searchuri = new Search_Url($category_path, $query_params);
         $this->params_by_uri = $searchuri;
 
@@ -70,6 +73,9 @@ class Controller_User_Search extends Controller_Template {
                                     ->getprepared_all();
         }
         //end message
+        
+        $this->twig->s_host = URL::SERVER("HTTP_HOST");
+        $this->twig->s_suri = URL::SERVER("REQUEST_URI");
     }
 
     public function get_user_search_page($action)

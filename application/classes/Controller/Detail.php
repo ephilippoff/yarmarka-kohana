@@ -114,6 +114,7 @@ class Controller_Detail extends Controller_Template {
 
         if (in_array("object_compiled", $need) AND $info->object) {
            $info->object->compiled =  Search::getresultrow((array) $info->object);
+           echo Debug::vars($info->object->compiled);
         }
 
         if (in_array("crumbs", $need) AND $info->object) {
