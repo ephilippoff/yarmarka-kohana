@@ -88,7 +88,8 @@ class Object_Compile
 						->order_by("reference.weight")
 						->find_all();
 			foreach ($data as $data_item) {
-				$result["attributes"][$data_item->seo_name] = $data_item->get_compile();
+				$compile = $data_item->get_compile();
+				$result["attributes"][$compile["_attribute"]->seo_name] = $compile;
 			}
 		}
 
