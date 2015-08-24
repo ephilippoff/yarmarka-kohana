@@ -5,7 +5,7 @@
 	{% block header %} 
 		{{ parent() }}
 		{% include 'block/header/navigationline/simple' %}
-		{{ requestblock('block_twig/adslinkline') }}
+		{{ requestblock('block_twig/adslinkline', {'city_id': city.id, 'category_id': category.id}) }}
 	{% endblock header %}
 
 	{% block crumbs %} 
@@ -35,6 +35,11 @@
 		{% endif %}
 	{% endblock footer %}
 	
-	{% block templates %}{{ parent() }}{% endblock templates %}
+	{% block templates %}
+		{{ parent() }}
+		<script id="template-mainmenu" type="text/template">
+			{{ requestblock('block_twig/mainmenu', {'city_id': city.id}) }}
+		</script>
+	{% endblock templates %}
 	{%block page_name%}detail{% endblock page_name %}
 {% endblock body %} 

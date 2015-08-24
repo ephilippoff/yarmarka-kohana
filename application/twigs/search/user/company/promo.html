@@ -1,0 +1,32 @@
+<div class="blue-subtle-theme module">
+	{% include 'block/header/navigationline/simple' %}
+	<div class="view-container brb2">
+		<div class="row">
+			<div class="col-md-12 items-cont">
+				<div class="breadcrumbs-cont module">
+					<h1>{{seo_attributes.h1}}</h1>
+				</div>
+				{% if user.org_type == 2 %}
+					<p class="mb10">Компания: {{ user.org_name }}</p>
+					<p class="mb10">
+						
+						{% if user.filename %}
+							{% set logo = get_image_paths(user.filename) %}
+							<img src="{{ logo['120x90'] }}" class="fl mr5 mb5">
+						{% endif %}
+						<span class="mb10">{{ user.about }}...</span>
+					</p>
+				{% endif %}
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				{% block subcategories %}
+					{% if user_categories|length > 0%}
+						{% include 'search/user/company/usercategories' %}
+					{% endif %}
+				{% endblock subcategories %}
+			</div>
+		</div>
+	</div><!--view-container1-->
+</div><!--skin-theme1-->

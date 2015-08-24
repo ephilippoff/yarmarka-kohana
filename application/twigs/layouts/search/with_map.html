@@ -49,9 +49,26 @@
 	</div>
 
 	{% block footer %} 
-		Футер
+		{% if php_time %}
+			<div class="info-block-cont theme2 module">
+				<div class="block-title">
+						<span>Timing for admin</span><i class="fa fa-eye fa-lg ml5" onclick="$('.js-admin-control-cont').toggleClass('hidden');"></i>
+				</div>
+				<div class="hidden js-admin-control-cont">
+					{{ php_time }}
+				</div>
+			</div>
+		{% endif %}
 	{% endblock footer %} 
 
-	{% block templates %}{{ parent() }}{% endblock templates %}
+	{% block templates %}
+		{{ parent() }}
+		<script id="template-mainmenu" type="text/template">
+			{{ requestblock('block_twig/mainmenu', {'city_id': city.id}) }}
+		</script>
+		<script id="template-citymenu" type="text/template">
+			{{ requestblock('block_twig/othercities', {'city_id': city.id}) }}
+		</script>
+	{% endblock templates %}
 	{%block page_name%}search{% endblock page_name %}
 {% endblock body %} 

@@ -5,7 +5,7 @@
 		{% include 'block/header/logoline' %}
 		{% include 'article/index/promo' %}
 		{% set theme = 'green-dense-theme' %}
-		{{ requestblock('block_twig/adslinkline',{'city_id': city.id, 'theme': theme}) }}
+		{{ requestblock('block_twig/adslinkline',{'city_id': city.id}) }}
 {% endblock header %} 
 
 {% block crumbs %}{% endblock crumbs %}
