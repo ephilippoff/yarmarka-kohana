@@ -1,0 +1,72 @@
+<div class="coupon-item-cont w288">
+		<div class="img-cont">
+			<a href="{{ object.compiled.url }}">
+				<img src="{{ get_file(object.compiled.images.main_photo['272x203']) }}" alt="{{ object.title|e }}">
+			</a>
+			<div class="discount-label">-{{ object.compiled.skidka }}<span>%</span></div>
+			<a href="{{ object.compiled.url }}">
+				<div class="slide-cont">
+					<div class="geo-cont">
+						<ul class="geo-items">
+							<li>
+								<div class="addr-item" style=" background-color: #FFDD03;"></div>
+								<span>
+									Авиамоторная</span>
+							</li>
+							<li>
+								<div class="addr-item" style=" background-color: #8b8b8b;"></div>
+								<span>
+									Алтуфьево</span>
+							</li>
+							<li>
+								<div class="addr-item" style=" background-color: #0a6f20;"></div>
+								<span>
+									Белорусская</span>
+							</li>
+							<li>
+								<div class="addr-item" style=" background-color: #cd0506;"></div>
+								<span>
+									Красные ворота</span>
+							</li>
+						</ul>
+					</div>
+
+					<div class="data-cont">
+						<div class="time-cont">
+							<div class="ico"></div>
+							1 <span>день</span> 14:59					
+						</div>
+						<div class="number-cont">
+							<div class="ico"></div>
+							{{ object.compiled.id }}                    
+						</div>
+					</div>
+
+					<div class="info-cont">
+						<div class="button button-style1 bg-color-blue">Подробнее</div>
+						<div class="likes-cont">
+							<div class="ico"></div>
+							<span>23</span>
+						</div>
+					</div>
+				</div>
+			</a>
+		</div>
+
+		<a href="{{ object.compiled.url }}">
+			<div class="description-cont">
+				{{ object.title|e }}
+			</div>
+		</a>
+		<a href="{{ object.compiled.url }}">
+			<div class="price-cont">
+				<div class="price">
+					{{ object.compiled.old-price }}					
+				</div>
+				<div class="discounted">
+					<div class="separator"></div>
+					{{ object.compiled.price }}<b style=" font-size: 26px; line-height: 10px; ">.</b>-
+				</div>
+			</div>
+		</a>
+	</div>

@@ -1,0 +1,7 @@
+<div class="kupons-cont">
+	{% for object in main_search_result %}
+		{% include 'detail/mini/kupon' %}
+	{% else %}
+		{% include 'search/noresult' %}
+	{% endfor %}
+</div>

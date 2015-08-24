@@ -227,6 +227,10 @@ class Controller_Search extends Controller_Template {
                 $twig->set_filename('search/index/with_map');
             }
         }
+		
+		if ($search_info->category->seo_name == 'kupony')
+			$twig->set_filename('search/kupony/index');		
+		
         $this->performance->add("Search","end");
         foreach ((array) $search_info as $key => $item) {
             $twig->{$key} = $item;
