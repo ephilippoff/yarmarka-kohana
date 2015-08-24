@@ -604,7 +604,7 @@ select{background-color: #FFFFFF;border: 1px solid #89898c;color: #384354;paddin
 .coupon-item-cont {display: block;position: relative;font-size: 14px;float: left;background: #fff;margin: 7px;box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);text-decoration: none;}
 .coupon-item-cont:hover .slide-cont {bottom: 0;}
 .coupon-item-cont:hover {box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);color: #333;text-decoration: none;}
-.coupon-item-cont .img-cont {width: 100%;border-bottom: 2px solid #DADADA;overflow: hidden;position: relative;height: 176px;}
+.coupon-item-cont .img-cont {width: 100%;border-bottom: 2px solid #DADADA;overflow: hidden;position: relative;height: 203px;text-align: center}
 .coupon-item-cont .discount-label {width: 50px;height: 35px;text-align: center;color: white;font-size: 18px;position: absolute;top: 0px;left: 10px;padding-top: 5px;line-height: 25px;text-decoration: none;background-color: #f6753e;border-radius: 0px 0px 10px 10px;}
 .coupon-item-cont .slide-cont {width: 100%;height: 214px;position: absolute;bottom: -214px;left: 0;transition: all 0.5s ease-out;}
 .coupon-item-cont .geo-cont {color: #ffffff;position: absolute;bottom: 83px;background-color: #333;background: rgba(0, 0, 0, 0.4);}
@@ -646,6 +646,7 @@ select{background-color: #FFFFFF;border: 1px solid #89898c;color: #384354;paddin
 	.info404-wrp{float: none;}
 	.popup-window .required-label{position: static; width: auto;}
 	.popup-window .required-label .msg{position: static}
+	.popup-window .required-label .msg:after{display: none;}
 }
 
 @media screen and (min-width: 993px) {

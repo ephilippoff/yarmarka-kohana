@@ -1,0 +1,18 @@
+<div class="menu-cont3 module">
+	<div class="row">
+		<div class="col-md-10">
+			<a href="/" class="catalog-title">
+				<div class="ico"></div>Категории<div class="separator"></div>
+			</a>
+			<div class="subs-links-cont">
+				{% for element in category_childs_elements %}					
+					<a href="{{ url(category_url ~ '/' ~ element.url) }}" title="{{element.title}}">{{element.title}}</a>
+					<div class="separator"></div>
+				{% endfor %}				
+			</div>			
+		</div>
+		<div class="col-md-2">
+			<a href="/" class="other-link">Все акции (767) <span>></span></a>			
+		</div>
+	</div>
+</div>
