@@ -20,7 +20,9 @@
             {{ css("css.css") }}
         {% endblock css%}
 
-        {% block js %}{% endblock js%}
+        {% block js %}
+            {{ js("lib/jquery.js") }}
+        {% endblock js%}
 
     </head>
     <body class="{% block bodyclass %}{% endblock bodyclass%}">

@@ -274,6 +274,8 @@ class Controller_Search extends Controller_Template {
 
     public function get_search_info_by_filters()
     {
+        $clean_query_params = array_merge($this->params_by_uri->get_clean_query_params(), $this->params_by_uri->get_seo_filters());
+
         $info = new Obj();
 
         $info->enable_link_couters = TRUE;
@@ -319,7 +321,7 @@ class Controller_Search extends Controller_Template {
             "video" => $this->params_by_uri->get_reserved_query_params("video"),
             "private" => $this->params_by_uri->get_reserved_query_params("private"),
             "org" => $this->params_by_uri->get_reserved_query_params("org"),
-            "filters" => array_merge($this->params_by_uri->get_clean_query_params(), $this->params_by_uri->get_seo_filters())
+            "filters" => $clean_query_params
         );
 
         $info->search_params = array(
@@ -334,11 +336,12 @@ class Controller_Search extends Controller_Template {
             $this->domain->get_city()
         );
         
+        $info->clean_query_params = $clean_query_params;
+
         $info->query_params_for_js = json_encode(
             array_merge(
                 $this->params_by_uri->get_query_params_without_reserved($this->request->query()),
-                $this->params_by_uri->get_clean_query_params(), 
-                $this->params_by_uri->get_seo_filters()
+                $clean_query_params
             )
         );
         return $info;

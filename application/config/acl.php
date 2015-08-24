@@ -6,7 +6,7 @@ return array(
 	),
 	"cl" => array(
 		"object" => array (
-			"control" => array(1,3,9, "auth", "owner"),
+			"control" => array("auth", "owner"),
 			"edit" => array(1,3,9, "auth", "owner"),
 			"moderate" => array(1,3,9, "auth"),
 			"add" => array(

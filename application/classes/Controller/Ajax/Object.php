@@ -2,7 +2,6 @@
 
 class Controller_Ajax_Object extends Controller_Ajax {
 
-	
 
 	public function action_favourite() {
 		if ( in_array($_SERVER['REQUEST_METHOD'], array("POST", "PUT")) ) {

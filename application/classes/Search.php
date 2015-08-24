@@ -160,16 +160,14 @@ class Search {
 		$page = ($params->page) ? (int) $params->page : 0;
 
 		$active = (isset($params->active)) ? $params->active : TRUE;
-		$published = (isset($params->published)) ? $params->published : TRUE;
-		
 
 		$object = DB::select(DB::expr($select))
 						->from(array($table_name,"o"));
 
-		if ($published === TRUE) {
+		if (isset($params->published) AND $params->published === TRUE) {
 			$object = $object->where("o.is_published", "=", 1);
 		} 
-		if ($published === FALSE) {
+		if (isset($params->published) AND $params->published === FALSE) {
 			$object = $object->where("o.is_published", "=", 0);
 		}
 

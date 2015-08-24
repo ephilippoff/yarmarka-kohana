@@ -39,7 +39,7 @@ class Controller_User_Search extends Controller_Template {
         $uri = $this->request->uri();
         $route_params = $this->request->param();
         $query_params = $this->request->query();
-        $this->twig->query_url_str = (count($query_params)) ? "?".http_build_query($query_params) : "";
+        $this->twig->query_url_str = Search_Url::get_suri_without_reserved($query_params);
         $this->twig->main_category = $this->domain->get_main_category();
         $category_path = ( isset($route_params['category_path']) ) ? $route_params['category_path'] : $this->twig->main_category;
         $this->twig->category_url = $category_path;
@@ -68,7 +68,7 @@ class Controller_User_Search extends Controller_Template {
         //end message
     }
 
-    public function get_user_search_page()
+    public function get_user_search_page($action)
     {
 
         $search_params = array(
@@ -94,11 +94,15 @@ class Controller_User_Search extends Controller_Template {
             'first_page_in_url' => FALSE,
             'count_out' => 1,
             'count_in' => 8,
+            'path' => URL::SERVER("PATH_INFO"),
             'limits' => array(
-                "30" => Search_Url::get_suri_without_reserved($this->request->query()),
-                "60" => Search_Url::get_suri_without_reserved($this->request->query(), array( "limit" => 60)),
-                "90" => Search_Url::get_suri_without_reserved($this->request->query(), array( "limit" => 90)),
+                "30" => Search_Url::get_suri_without_reserved($this->request->query(),array(),array("limit","page")),
+                "60" => Search_Url::get_suri_without_reserved($this->request->query(), array( "limit" => 60), array("page")),
+                "90" => Search_Url::get_suri_without_reserved($this->request->query(), array( "limit" => 90), array("page")),
             )
+        ))->route_params(array(
+            'controller' => 'User_Search',
+            'action'     => $action,
         ));
 
         $small_pagination = (array(
@@ -149,7 +153,7 @@ class Controller_User_Search extends Controller_Template {
             "h1" => "Личный кабинет - Мои опубликованные объявления"
         ));
 
-        $this->get_user_search_page();
+        $this->get_user_search_page("");
     }
 
     public function action_unpublished()
@@ -169,7 +173,7 @@ class Controller_User_Search extends Controller_Template {
             "h1" => "Личный кабинет - Мои снятые и архивные объявления"
         ));
 
-        $this->get_user_search_page();
+        $this->get_user_search_page("unpublished");
     }
 
     public function action_favorites()
@@ -187,7 +191,7 @@ class Controller_User_Search extends Controller_Template {
             "h1" => "Личный кабинет - Избранные объявления"
         ));
 
-        $this->get_user_search_page();
+        $this->get_user_search_page("favorites");
     }
 
     public function after()

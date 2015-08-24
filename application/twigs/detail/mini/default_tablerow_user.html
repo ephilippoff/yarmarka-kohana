@@ -23,7 +23,7 @@
 				{% set is_favourite = 'fa-heart' %}
 			{% endif %}
 			<i class="fa {{is_favourite}} fa-lg mr5 js-favourite js-favourite-ico pointer red" data-id="{{object.id}}" title="Избранное"></i>
-			<a href="{{ object.compiled.url }}" title="{{ object.title|e }}">
+			<a href="{{ object.compiled.url }}" title="{{ object.title|e }}" class="js-object-title-{{object.id}} {% if object.is_published == 0 %} red strike {% endif %}">
 				{{ object.title|e }}
 			</a>
 		</p>
@@ -33,19 +33,22 @@
 		{% endif %}
 		
 	
-		{% if object.is_published == 1 %}
-			<p class="pt10 pb10">Для увеличения количества откликов, предлагаем следующие услуги:</p>
-			<div>
-				<span class="button w140 button-style1 bg-color-blue mr3 mb3 js-service-up" data-id="{{object.id}}"><i class="fa fa-angle-double-up fa-lg mr5"></i><span>Поднять</span></span>
-				<span class="button w140 button-style1 bg-color-blue mr3 mb3 js-service-premium" data-id="{{object.id}}"><i class="ico vkontakte-ico16 mr5"></i>Премиум</span>
-				<span class="button w140 button-style1 bg-color-blue mr3 mb3 js-service-lider" data-id="{{object.id}}"><i class="ico vkontakte-ico16 mr5"></i>Лидер</span>
-				<span class="button w140 button-style1 bg-color-blue mr3 mb3"><i class="ico vkontakte-ico16 mr5"></i>В газету</span>
-				<span class="button w140 button-style1 bg-color-blue mr3 mb3"><i class="ico vkontakte-ico16 mr5"></i>В другие города</span>
-				<span class="button w140 button-style1 bg-color-blue mr3 mb3"><i class="ico vkontakte-ico16 mr5"></i>Купить</span>
-			</div>
-		{% else %}
-			<p class="pt10 pb10">Объявление снято с публикации</p>
+
+		<div class="js-object-services-{{object.id}} {% if object.is_published == 0 %} hidden {% endif %}">
+			<p class="pt10 pb10">Для увеличения отклика, предлагаем следующие услуги:</p>
+			<span class="button w140 button-style1 bg-color-blue mr3 mb3 js-service-up" data-id="{{object.id}}"><i class="fa fa-angle-double-up fa-lg mr5"></i><span>Поднять</span></span>
+			<span class="button w140 button-style1 bg-color-blue mr3 mb3 js-service-premium" data-id="{{object.id}}"><i class="ico vkontakte-ico16 mr5"></i>Премиум</span>
+			<span class="button w140 button-style1 bg-color-blue mr3 mb3 js-service-lider" data-id="{{object.id}}"><i class="ico vkontakte-ico16 mr5"></i>Лидер</span>
+			<span class="button w140 button-style1 bg-color-blue mr3 mb3"><i class="ico vkontakte-ico16 mr5"></i>В газету</span>
+			<span class="button w140 button-style1 bg-color-blue mr3 mb3"><i class="ico vkontakte-ico16 mr5"></i>В другие города</span>
+			<span class="button w140 button-style1 bg-color-blue mr3 mb3"><i class="ico vkontakte-ico16 mr5"></i>Купить</span>
+		</div>
+		{% if object.is_published == 0 %}
+			<p class="pt10 pb10 js-object-state-{{object.id}} red">Объявление снято с публикации</p>
+		{% elseif object.is_published == 1 %}
+			<p class="pt10 pb10 js-object-state-{{object.id}}">Объявление опубликовано</p>
 		{% endif %}
+		
 	</td>
 	<td class="td w190 p10 va-t">
 		<span class="button w100p button-style1 bg-color-lightgreen mb3 ta-l js-ocontrol-publish" data-id="{{object.id}}">

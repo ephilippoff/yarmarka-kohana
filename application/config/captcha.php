@@ -20,7 +20,7 @@
 return array(
 	'default' => array(
 		'style'      	=> 'word',
-		'width'      	=> 320,
+		'width'      	=> 200,
 		'height'     	=> 60,
 		'complexity' 	=> 4,
 		'background' 	=> '',

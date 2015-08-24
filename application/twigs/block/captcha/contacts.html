@@ -1,0 +1,27 @@
+<div class="form-cont">
+	<div class="row mb10">
+		<div class="col-md-3 col-xs-4 labelcont">
+			<label>Введите слово с картинки</label>
+		</div>
+		<div class="col-md-9 col-xs-8">
+			<div class="row">
+				<div class="col-md-6">
+					<div class="inp-cont {% if error.captcha %}error{% endif%}">
+						<span class="required-star">*</span>
+						{{captcha}}
+						<input class="w100p" type="text" name="captcha" value="{% if params.captcha %} {{params.captcha}} {% endif%}" autocomplete="off"/>
+						{% if error.captcha %} 
+						<span class="inform fn-error">
+							{{error.captcha}}
+						</span>
+						{% else %}
+						<span class="inform">
+							на русском языке
+						</span>
+						{% endif %}					
+					</div>
+				</div>
+			</div>				
+		</div>
+	</div>
+</div>

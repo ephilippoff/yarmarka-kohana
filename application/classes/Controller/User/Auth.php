@@ -124,14 +124,17 @@ class Controller_User_Auth extends Controller_Template {
         $is_post = ($_SERVER['REQUEST_METHOD']=='POST');
         $post_data = new Obj($this->request->post());
 
-        $return_page = Arr::get($_GET, 'return', "");
         $domain = Arr::get($_GET, 'domain', NULL);
         if (!$domain)
             $domain = URL::base('http');
         else
             $domain = "http://".Kohana::$config->load("common.main_domain");
 
-        
+        $return_page = Arr::get($_GET, 'return', "");
+        if (!strrpos($return_page,"p://")) {
+            $return_page = $domain.$return_page;
+        }
+
         $token = NULL;
         $error = NULL;
         $success = NULL;
@@ -158,14 +161,17 @@ class Controller_User_Auth extends Controller_Template {
                 } 
 
                 if (!$error)
-                        $this->redirect($domain.$return_page);
+                {
+                    $this->redirect($return_page);
+                }
             }
         } else {
             $token = Security::token();
             if ($this->user AND $return_page)
             {
                 Auth::instance()->trueforcelogin($this->user);
-                $this->redirect($domain.$return_page);
+
+                $this->redirect($return_page);
             }
         }
 
