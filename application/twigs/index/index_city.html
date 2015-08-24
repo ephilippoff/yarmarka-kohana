@@ -17,7 +17,7 @@
 {% block rightside %}
 	<div class="col-md-10 col-sm-9">
 		{% include 'index/promo_city' %}
-		{{ requestblock('block_twig/adslinkline',{'city_id': city.id}) }}
+		{{ requestblock('block_twig/adslinkline',{'city_id': city.id, 'category_id': category.id}) }}
 		{% include 'index/categories' %}
 	</div>
 {% endblock rightside %}

@@ -19,11 +19,14 @@ class Controller_User_Search extends Controller_Template {
         $this->twig = Twig::factory('search/user/index');
 
         $this->user = Auth::instance()->get_user();
+        $this->is_owner = TRUE;
 
-        if ( $this->request->query("user_id") ) {
-            $user = ORM::factory('User', $this->request->query("user_id") );
-            if ($user->loaded()) {
+        if ( $this->request->query("id") ) {
+            $user = ORM::factory('User', $this->request->query("id") );
+            if ($user->loaded() AND ($user->org_type == 2 AND $this->request->action() == "published") OR Acl::check('object.moderate') ) {
                 $this->user = $user;
+                $this->is_owner = FALSE;
+                $this->twig->set_filename('search/user/company/index');
             } else {
                 throw new HTTP_Exception_404;
                 return;
@@ -46,7 +49,8 @@ class Controller_User_Search extends Controller_Template {
         $searchuri = new Search_Url($category_path, $query_params);
         $this->params_by_uri = $searchuri;
 
-        $this->category_id = $this->params_by_uri->get_category()->id;
+        $this->category = $this->params_by_uri->get_category();
+        $this->category_id = $this->category->id;
         $this->child_categories_ids = $this->params_by_uri->get_category_childs_id();
         $this->twig->crumbs = $this->params_by_uri->get_category_crubms($this->category_id);
 
@@ -148,10 +152,21 @@ class Controller_User_Search extends Controller_Template {
             "filters" => array()
         );
 
-        $this->twig->seo_attributes = new Obj(array(
-            "title" => "Личный кабинет - Мои опубликованные объявления",
-            "h1" => "Личный кабинет - Мои опубликованные объявления"
-        ));
+
+        if ($this->is_owner)
+        {
+            $this->twig->seo_attributes = new Obj(array(
+                "title" => "Личный кабинет - Мои опубликованные объявления",
+                "h1" => "Личный кабинет - Мои опубликованные объявления"
+            ));
+        } else {
+            $org_name = $this->user->org_name;
+            $category_title = ($this->category_id > 1) ? " в рубрике ".$this->category->title : "";
+            $this->twig->seo_attributes = new Obj(array(
+                "title" => "Все объявления компании '".$org_name."' ".$category_title,
+                "h1" => "Все объявления компании '".$org_name."' ".$category_title,
+            ));
+        }
 
         $this->get_user_search_page("");
     }

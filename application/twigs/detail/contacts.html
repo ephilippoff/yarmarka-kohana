@@ -16,11 +16,10 @@
 				</div>
 				<div class="col-md-6 col-sm-6">
 					{% if object.compiled.author.org_type == 2 %}
-						<p>{{ object.compiled.author.org_name }}</p>
+						<p><span class="moreinfo span-link" onclick='document.location="/user?id={{object.author}}"'>{{ object.compiled.author.org_name }}</span></p>
 						{% if object.compiled.author.logo %}
 							<div class="img-cont"><img src="{{  get_file(object.compiled.author.logo['120x90']) }}"></div>
 						{% endif %}
-						<p><span class="moreinfo span-link">Все объявления компании</span></p>
 						<p>{{ object.compiled.author.org_post_address }}</p>
 						<p><i class="ico phone"></i>{{ object.compiled.author.org_phone }}</p>
 						
