@@ -1,0 +1,25 @@
+{% extends "layouts/main_with_header" %}
+
+{% block css %}
+	{{ parent() }}
+{% endblock css%}
+
+{% block body %}
+	
+	{% block header %} 
+		{{ parent() }}
+	{% endblock header %}
+
+	<div class="row mt10">
+		{% block content %} {% endblock content %}
+	</div><!--row-->
+
+	{% block templates %}
+		{{ parent() }}
+		<script id="template-mainmenu" type="text/template">
+			{{ requestblock('block_twig/mainmenu', {'city_id': city.id}) }}
+		</script>
+	{% endblock templates %}
+	{% block page_name%}user{% endblock page_name %}
+{% endblock body %} 
+

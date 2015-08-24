@@ -31,6 +31,8 @@ class Controller_Cart extends Controller_Template {
 			)
 		);
 
+		$twig->city = $this->domain->get_city();
+
 		$sum = 0;
 		//если корзина не пуста, т.е. есть ключ
 		if ($key) {
@@ -96,6 +98,7 @@ class Controller_Cart extends Controller_Template {
 
 		$start = microtime(true);
 		$twig = Twig::factory('cart/delivery');
+		$twig->city = $this->domain->get_city();
 		$id = $this->request->param('id');
 		$user = Auth::instance()->get_user();
 		$errors = array();
@@ -202,6 +205,7 @@ class Controller_Cart extends Controller_Template {
 	{
 		$start = microtime(true);
 		$twig = Twig::factory('cart/order');
+		$twig->city = $this->domain->get_city();
 
 		$id = $this->request->param('id');
 		$user = Auth::instance()->get_user();

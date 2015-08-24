@@ -16,8 +16,11 @@ class Controller_User_Search extends Controller_Template {
         $this->use_layout = FALSE;
         $this->auto_render = FALSE;
         $this->domain = new Domain();
+        if ($proper_domain = $this->domain->is_domain_incorrect()) {
+            HTTP::redirect("http://".$proper_domain, 301);
+        }
         $this->twig = Twig::factory('search/user/index');
-
+        $this->twig->city = $this->domain->get_city();
         $this->user = Auth::instance()->get_user();
         $this->is_owner = TRUE;
 

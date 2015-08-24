@@ -2,7 +2,7 @@
 	<div class="left mh-style1 border-color-crimson brb2">
 		<ul class="top" role="menu">
 			{% for category in categories1l %}
-				<li data-submenu-id="section{{category.id}}">
+				<li class="js-submenu-item" data-submenu-id="section{{category.id}}" class="section{{category.id}}">
 					<span class="span-link" onclick="window.location = '/{{category.seo_name}}'">
 						<span class="name">{{category.title}}</span>
 					</span>
