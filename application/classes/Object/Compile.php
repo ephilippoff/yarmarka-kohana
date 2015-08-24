@@ -89,7 +89,7 @@ class Object_Compile
 						->find_all();
 			foreach ($data as $data_item) {
 				$compile = $data_item->get_compile();
-				$result["attributes"][$compile["_attribute"]->seo_name] = $compile;
+				$result["attributes"][$compile["_attribute"]["seo_name"]] = $compile;
 			}
 		}
 
