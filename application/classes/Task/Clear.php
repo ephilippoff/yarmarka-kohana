@@ -76,7 +76,7 @@ class Task_Clear extends Minion_Task
 
         $cities_modified = array_combine ( 
             array_map(function($item){ return $item["url"]; }, $cities_modified), 
-            array_map(function($item){ return $item["date_created"]; }, $cities_modified)
+            array_map(function($item){ return @$item["date_created"]; }, $cities_modified)
         );
 
         $cities = ORM::factory('City')->where("is_visible","=",1)->find_all();
