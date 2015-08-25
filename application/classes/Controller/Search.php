@@ -29,7 +29,7 @@ class Controller_Search extends Controller_Template {
             $query_params = $this->request->query();
 
             try {
-                $searchuri = new Search_Url($route_params['category_path'], $query_params);
+                $searchuri = new Search_Url($route_params['category_path'], $query_params, ($this->domain->get_city()) ? $this->domain->get_city()->id : FALSE);
             } catch (Kohana_Exception $e) {
                 //TODO Log incorrect seo
                 //HTTP::redirect("/", 301);
@@ -305,7 +305,7 @@ class Controller_Search extends Controller_Template {
 
         $info->category = $this->params_by_uri->get_category();
         $info->category_childs = $this->params_by_uri->get_category_childs(TRUE);
-        $info->category_childs_elements = $this->params_by_uri->get_category_childs_elements($info->category_id, $this->params_by_uri->get_seo_filters());
+        $info->category_childs_elements = $this->params_by_uri->get_category_childs_elements($info->category_id, $info->city_id, $this->params_by_uri->get_seo_filters());
         $info->category_childs_elements_colsize = Kohana::$config->load("landing.subfilters.".$info->category_id);
         $info->crumbs      = array_merge($this->params_by_uri->get_category_crubms($info->category_id), $this->params_by_uri->get_seo_elements_crubms($this->params_by_uri->get_seo_filters(), $info->category_url));
         $info->incorrectly_query_params_for_seo =  $this->params_by_uri->incorrectly_query_params_for_seo;

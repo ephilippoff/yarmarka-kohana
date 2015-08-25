@@ -15,7 +15,7 @@ class Search_Url
     );
     static $reserved = array("order", "page", "limit");
 
-    public function __construct($uri = '', $query_params = array())
+    public function __construct($uri = '', $query_params = array(), $city_id = FALSE)
     {
         $this->_uri = $uri;
         $this->_category = self::get_category_in_uri($this->_uri);
@@ -32,7 +32,7 @@ class Search_Url
         $this->_seo_filters = array();
         $seo_params_uri = trim(str_replace($this->_proper_category_uri, "", $this->_uri), "/");
         if ($seo_params_uri AND $seo_params_uri <> "") {
-            $this->_seo_param = self::get_seo_param_in_uri($this->_category->id, $seo_params_uri);
+            $this->_seo_param = self::get_seo_param_in_uri($this->_category->id, $city_id, $seo_params_uri);
             if ($this->_seo_param) {
                 $this->_seo_filters = $this->seo_params_to_query_params($this->_seo_param);
             }
@@ -366,24 +366,24 @@ class Search_Url
         return FALSE;
     }
     
-    public function get_category_and_seo_in_uri($uri = '')
-    {
-        $seo_param = NULL;
-        $category_in_uri = self::get_category_in_uri($uri);
-        if ($category_in_uri) {
-            $category_uri = $category_in_uri->url;
-            $seo_params_uri = trim(str_replace($category_uri, "", $uri), "/");
-            if ($seo_params_uri) {
-                $seo_param = self::get_seo_param_in_uri($category_in_uri->id, $seo_params_uri);
-            }
-        }
-        return array(
-            "category" => $category_in_uri,
-            "seo_param" => $seo_param
-        );
-    }
+    // public function get_category_and_seo_in_uri($uri = '')
+    // {
+    //     $seo_param = NULL;
+    //     $category_in_uri = self::get_category_in_uri($uri);
+    //     if ($category_in_uri) {
+    //         $category_uri = $category_in_uri->url;
+    //         $seo_params_uri = trim(str_replace($category_uri, "", $uri), "/");
+    //         if ($seo_params_uri) {
+    //             $seo_param = self::get_seo_param_in_uri($category_in_uri->id, $city_id, $seo_params_uri);
+    //         }
+    //     }
+    //     return array(
+    //         "category" => $category_in_uri,
+    //         "seo_param" => $seo_param
+    //     );
+    // }
 
-    public static function get_seo_param_in_uri($category_id, $uri = '')
+    public static function get_seo_param_in_uri($category_id, $city_id, $uri = '')
     {
         $ae = NULL;
         $uri = explode("/", $uri);
@@ -392,18 +392,11 @@ class Search_Url
         $_ae_id = array();
 
         foreach ($uri as $key => $value) {
+
             $_ae = ORM::factory('Attribute_Element')
-                            ->select("attribute_element.*", array("attribute.seo_name","attribute_seo_name"))
-                            ->join('data_list')
-                                ->on("data_list.value","=","attribute_element.id")
-                            ->join('reference')
-                                ->on("data_list.reference","=","reference.id")
-                            ->join('attribute')
-                                ->on("data_list.attribute","=","attribute.id")
-                            ->where("attribute_element.seo_name", "=", strtolower($value) )
-                            ->where("reference.category", "=", (int) $category_id )
-                            ->where("reference.is_seo_used","=",1);
-            
+                        ->get_elements_with_published_objects($category_id, $city_id);
+
+            $_ae = $_ae->where("attribute_element.seo_name", "=", strtolower($value) );
             if ($_parent_ae) {
                 $_ae = $_ae->where("attribute_element.parent_element", "=", $_ae_id);
             }
@@ -419,20 +412,14 @@ class Search_Url
         return $ae;
     }
 
-    public static function get_category_childs_elements($category_id, $seo_filters = array())
+    public static function get_category_childs_elements($category_id, $city_id, $seo_filters = array())
     {
         $seo_filters_values = array_values($seo_filters);
         $parent_element_id = end($seo_filters_values);
 
         $elements = ORM::factory('Attribute_Element')
-                        ->select("attribute_element.*", array("attribute.seo_name","attribute_seo_name"))
-                        ->join('attribute')
-                            ->on("attribute_element.attribute","=","attribute.id")
-                        ->join('reference')
-                            ->on("attribute.id","=","reference.attribute")
-                        ->where("reference.category", "=", (int) $category_id )
-                        ->where("reference.is_seo_used","=",1)
-                        ->where("attribute_element.is_popular","=",1);
+                        ->get_elements_with_published_objects($category_id, $city_id);
+
         if ($parent_element_id) {
             $elements = $elements->where("attribute_element.parent_element","=",$parent_element_id);
         } else {

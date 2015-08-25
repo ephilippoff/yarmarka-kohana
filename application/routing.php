@@ -333,4 +333,8 @@ Route::set('search', '<category_path>', array(
 		}
 	});
 
-
+Route::set('sitemap', '(<subtitle>.)sitemap.xml')
+	->defaults(array(
+		'controller' => 'Static',
+		'action'     => 'sitemap',
+	));
