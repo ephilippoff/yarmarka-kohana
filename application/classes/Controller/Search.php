@@ -14,7 +14,7 @@ class Controller_Search extends Controller_Template {
         $this->auto_render = FALSE;
         $this->cached_search_info = FALSE;
 
-        if ($search_info = $this->get_search_info_from_cache() and 1==0) {
+        if ($search_info = $this->get_search_info_from_cache()) {
             $this->cached_search_info = unserialize($search_info->params);
             Cookie::set('search_hash', $search_info->hash, strtotime( '+14 days' ));
         } else {
