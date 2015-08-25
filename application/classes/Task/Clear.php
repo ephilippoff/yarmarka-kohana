@@ -148,13 +148,12 @@ class Task_Clear extends Minion_Task
                                             ->order_by("date_created", "desc")
                                             ->limit(1)
                         )->from("category")
-
                         ->execute()
                         ->as_array();
 
         $categories_modified = array_combine ( 
             array_map(function($item){ return $item["url"]; }, $categories_modified), 
-            array_map(function($item){ return $item["date_created"]; }, $categories_modified)
+            array_map(function($item){ return @$item["date_created"]; }, $categories_modified)
         );
 
         $categories = ORM::factory('Category')
