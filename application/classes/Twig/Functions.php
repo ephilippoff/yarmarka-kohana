@@ -139,8 +139,14 @@ class Twig_Functions
 	public static function get_date_diff($date1, $date2)
 	{
 		$result = "";
+		try {
 		$date1 = new DateTime($date1);
-		$date2 = new DateTime(($date2));
+		$date2 = new DateTime($date2);
+		}
+		catch (Exception $e)
+		{
+			return "";
+		}
 		
 		$diff = $date1->diff($date2);
 
@@ -149,7 +155,6 @@ class Twig_Functions
 		if ($diff->d) { $result .= $diff->format("%d дн. "); }
 		if ($diff->h) { $result .= $diff->format("%h ч. "); }
 		if ($diff->i) { $result .= $diff->format("%i мин. "); }
-		if ($diff->s) { $result .= $diff->format("%s сек. "); }
 
 		return $result;		
 	}
