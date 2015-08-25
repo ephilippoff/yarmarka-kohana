@@ -12,12 +12,17 @@ class Controller_User_Auth extends Controller_Template {
         $this->auto_render  = FALSE;
 
         $this->user = Auth::instance()->get_user();
+        $this->domain = new Domain();
+        if ($proper_domain = $this->domain->is_domain_incorrect()) {
+            HTTP::redirect("http://".$proper_domain, 301);
+        }
     }
 
 
     public function action_registration()
     {
         $twig = Twig::factory('user/registration');
+        $twig->city = $this->domain->get_city();
 
         $is_post = (HTTP_Request::POST === $this->request->method());
         $post_data = new Obj($this->request->post());
@@ -77,6 +82,7 @@ class Controller_User_Auth extends Controller_Template {
     public function action_account_verification()
     {
         $twig = Twig::factory('user/account_verification');
+        $twig->city = $this->domain->get_city();
         $code =$this->request->param("id");
         $user = ORM::factory('User')
                         ->where("code","=",trim($code))
@@ -121,6 +127,7 @@ class Controller_User_Auth extends Controller_Template {
     public function action_login()
     {
         $twig = Twig::factory('user/login');
+        $twig->city = $this->domain->get_city();
         $is_post = ($_SERVER['REQUEST_METHOD']=='POST');
         $post_data = new Obj($this->request->post());
 
@@ -188,6 +195,7 @@ class Controller_User_Auth extends Controller_Template {
     public function action_forgot_password()
     {
         $twig = Twig::factory('user/forgot_password');
+        $twig->city = $this->domain->get_city();
         $is_post = ($_SERVER['REQUEST_METHOD']=='POST');
         $post_data = new Obj($this->request->post());
 

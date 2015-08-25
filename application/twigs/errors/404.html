@@ -1,0 +1,318 @@
+{% extends "layouts/simple" %}
+
+{% block header %} 
+		{{ requestblock('block_twig/topline', {'favourites':favourites}) }}
+		{% include 'block/header/logoline' %}
+		{% include 'block/header/navigationline/simple' %}
+{% endblock header %} 
+
+{% block content %}
+	<div class="col-md-4 col-sm-6 clearfix">
+		<div class="info404-wrp">
+			<div class="info404-cont">
+				<h2>Страница не найдена</h2>
+				<p class="mess404">404</p>
+				<p>Страница не найдена, возможно, она<br>
+					находится в другом месте или удалена.<br>
+					Я посмотрел рядом, и тоже ничего...</p>
+				<p>Если вы уверены, что она должна здесь быть,<br> 
+					напишите нам через форму техподдержки.</p>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-7 col-sm-12">
+		<div class="ml20 pl10">
+			<div class="items-list-cont4">
+				<div class="row">
+					<div class="col-md-4 col-xs-6">
+						<div class="group-cont">				
+							<div class="group">
+								<div class="img"><img src="{{staticfile('images/min_auto.png')}}" alt=""></div>
+								<div class="text-cont">
+									<p class="text"><a href="{{ url('avtotransport') }}">Автотранспорт</a></p>
+									{% set count = link_counters[s_host ~ '/avtotransport'] %}
+									{% if (count) %}
+										<span class="info">{{count}} объявлений</span>
+									{% endif %}
+								</div>
+							</div>
+
+							<p class="href-bl">
+								{% for category in categories.childs if category.parent_id == 14 %}
+									<span class="el mt3"><a href="{{ url('avtotransport/' ~ category.seo_name) }}">{{ category.title }}</a></span>
+								{% endfor %}
+							</p>
+						</div>
+
+						<div class="group-cont">				
+							<div class="group">
+								<div class="img"><img src="{{staticfile('images/min_sport.png')}}" alt=""></div>
+								<div class="text-cont">
+									<p class="text"><a href="{{ url('sport-otdih-hobby') }}">Спорт, отдых, хобби</a>													
+									{% set count = link_counters[s_host ~ '/sport-otdih-hobby'] %}
+									</p>
+									{% if (count) %}
+										<span class="info">{{count}} объявлений</span>
+									{% endif %}
+								</div>
+							</div>
+							<p class="href-bl">
+								{% for category in categories.childs if category.parent_id == 18 %}
+									<span class="el mt3"><a href="{{ url('sport-otdih-hobby/' ~ category.seo_name) }}">{{ category.title }}</a></span>
+								{% endfor %}
+							</p>
+						</div>
+
+						<div class="group-cont">				
+							<div class="group">
+								<div class="img"><img src="{{staticfile('images/min_znakomstva.png')}}" alt=""></div>
+								<div class="text-cont">
+									<p class="text"><a href="{{ url('znakomstvo-i-obshenie') }}">Знакомство и общение</a>													
+									{% set count = link_counters[s_host ~ '/znakomstvo-i-obshenie'] %}
+									</p>
+									{% if (count) %}
+										<span class="info">{{count}} объявлений</span>
+									{% endif %}
+								</div>
+							</div>
+
+							<p class="href-bl">
+								{% for category in categories.childs if category.parent_id == 20 %}
+									<span class="el mt3"><a href="{{ url('znakomstvo-i-obshenie/' ~ category.seo_name) }}">{{ category.title }}</a></span>
+								{% endfor %}
+							</p>
+						</div>
+
+						<div class="group-cont">				
+							<div class="group">
+								<div class="img"><img src="{{staticfile('images/min_cat.png')}}" alt=""></div>
+								<div class="text-cont">
+									<p class="text">
+										<a href="{{ url('domashnie-zhivotnye-i-rasteniya') }}index.html">Домашние любимцы и растения</a>
+									</p>
+									{% set count = link_counters[s_host ~ '/domashnie-zhivotnye-i-rasteniya'] %}
+									
+									{% if (count) %}
+										<span class="info">{{count}} объявлений</span>
+									{% endif %}
+								</div>
+							</div>
+							<p class="href-bl">
+								{% for category in categories.childs if category.parent_id == 70 %}
+									<span class="el mt3"><a href="{{ url('domashnie-zhivotnye-i-rasteniya/' ~ category.seo_name) }}">{{ category.title }}</a></span>
+								{% endfor %}
+							</p>
+						</div>
+					</div>
+
+					<div class="col-md-4 col-xs-6">
+						<div class="group-cont">				
+							<div class="group">
+								<div class="img"><img src="{{staticfile('images/min_nedvizimost.png')}}" alt=""></div>
+								<div class="text-cont">
+									<p class="text"><a href="{{ url('nedvizhimost') }}">Недвижимость</a>													
+									{% set count = link_counters[s_host ~ '/nedvizhimost'] %}
+									</p>
+									{% if (count) %}
+										<span class="info">{{count}} объявлений</span>
+									{% endif %}
+								</div>
+							</div>
+
+							<p class="href-bl">
+								{% for category in categories.childs if category.parent_id == 2 %}
+									<span class="el mt3"><a href="{{ url('nedvizhimost/' ~ category.seo_name) }}">{{ category.title }}</a></span>
+								{% endfor %}
+							</p>
+						</div>
+						<div class="group-cont">				
+							<div class="group">
+								<div class="img"><img src="{{staticfile('images/min_stroy.png')}}" alt=""></div>
+								<div class="text-cont">
+									<p class="text"><a href="{{ url('stroitelstvo-i-remont') }}">Строительство и ремонт</a>													
+									{% set count = link_counters[s_host ~ '/stroitelstvo-i-remont'] %}
+									</p>
+									{% if (count) %}
+										<span class="info">{{count}} объявлений</span>
+									{% endif %}
+								</div>
+							</div>
+
+							<p class="href-bl">
+								{% for category in categories.childs if category.parent_id == 171 %}
+									<span class="el mt3"><a href="{{ url('stroitelstvo-i-remont/' ~ category.seo_name) }}">{{ category.title }}</a></span>
+								{% endfor %}
+							</p>
+						</div>
+						<div class="group-cont">				
+							<div class="group">
+								<div class="img"><img src="{{staticfile('images/min_dom.png')}}" alt=""></div>
+								<div class="text-cont">
+									<p class="text"><a href="{{ url('dlya-doma-i-dachi') }}">Для дома и дачи</a>													
+									{% set count = link_counters[s_host ~ '/dlya-doma-i-dachi'] %}
+									</p>
+									{% if (count) %}
+										<span class="info">{{count}} объявлений</span>
+									{% endif %}
+								</div>
+							</div>
+
+							<p class="href-bl">
+								{% for category in categories.childs if category.parent_id == 159 %}
+									<span class="el mt3"><a href="{{ url('dlya-doma-i-dachi/' ~ category.seo_name) }}">{{ category.title }}</a></span>
+								{% endfor %}
+							</p>
+						</div>
+						<div class="group-cont">				
+							<div class="group">
+								<div class="img"><img src="{{staticfile('images/min_things.png')}}" alt=""></div>
+								<div class="text-cont">
+									<p class="text"><a href="{{ url('lichnie-veshi') }}">Барахолка</a>													
+									{% set count = link_counters[s_host ~ '/lichnie-veshi'] %}
+									</p>
+									{% if (count) %}
+										<span class="info">{{count}} объявлений</span>
+									{% endif %}
+								</div>
+							</div>
+
+							<p class="href-bl">
+								{% for category in categories.childs if category.parent_id == 160 %}
+									<span class="el mt3"><a href="{{ url('lichnie-veshi/' ~ category.seo_name) }}">{{ category.title }}</a></span>
+								{% endfor %}
+							</p>
+						</div>
+						<div class="group-cont">				
+							<div class="group">
+								<div class="img"><img src="{{staticfile('images/min_elektronika.png')}}" alt=""></div>
+								<div class="text-cont">
+									<p class="text"><a href="{{ url('bitovaya-elektronika') }}">Бытовая электроника</a>													
+									{% set count = link_counters[s_host ~ '/bitovaya-elektronika'] %}
+									</p>
+									{% if (count) %}
+										<span class="info">{{count}} объявлений</span>
+									{% endif %}
+								</div>
+							</div>
+							
+							<p class="href-bl">
+								{% for category in categories.childs if category.parent_id == 161 %}
+									<span class="el mt3"><a href="{{ url('bitovaya-elektronika/' ~ category.seo_name) }}">{{ category.title }}</a></span>
+								{% endfor %}
+							</p>
+						</div>
+					</div>
+
+					<div class="col-md-4 col-xs-6">
+						<div class="group-cont">				
+							<div class="group">
+								<div class="img"><img src="{{staticfile('images/min_rabota.png')}}" alt=""></div>
+								<div class="text-cont">
+									<p class="text"><a href="{{ url('rabota') }}">Работа</a>													
+									{% set count = link_counters[s_host ~ '/rabota'] %}
+									</p>
+									{% if (count) %}
+										<span class="info">{{count}} объявлений</span>
+									{% endif %}
+								</div>
+							</div>
+							<p class="href-bl">
+								{% for category in categories.childs if category.parent_id == 16 %}
+									<span class="el mt3"><a href="{{ url('rabota/' ~ category.seo_name) }}">{{ category.title }}</a></span>
+								{% endfor %}
+							</p>
+						</div>
+						<div class="group-cont">				
+							<div class="group">
+								<div class="img"><img src="{{staticfile('images/min_biznes.png')}}" alt=""></div>
+								<div class="text-cont">
+									<p class="text"><a href="{{ url('biznes') }}">Для бизнеса</a>													
+									{% set count = link_counters[s_host ~ '/biznes'] %}
+									</p>
+									{% if (count) %}
+										<span class="info">{{count}} объявлений</span>
+									{% endif %}
+								</div>
+							</div>
+							<p class="href-bl">
+								{% for category in categories.childs if category.parent_id == 121 %}
+									<span class="el mt3"><a href="{{ url('biznes/' ~ category.seo_name) }}">{{ category.title }}</a></span>
+								{% endfor %}
+							</p>
+						</div>
+						<div class="group-cont">				
+							<div class="group">
+								<div class="img"><img src="{{staticfile('images/min_services.png')}}" alt=""></div>
+								<div class="text-cont">
+									<p class="text"><a href="{{ url('uslugi') }}">Услуги</a>
+									{% set count = link_counters[s_host ~ '/uslugi'] %}
+									</p>
+									{% if (count) %}
+										<span class="info">{{count}} объявлений</span>
+									{% endif %}
+								</div>
+							</div>
+							<p class="href-bl">
+								{% for category in categories.childs if category.parent_id == 40 %}
+									<span class="el mt3"><a href="{{ url('uslugi/' ~ category.seo_name) }}">{{ category.title }}</a></span>
+								{% endfor %}
+							</p>
+						</div>
+						<div class="group-cont">				
+							<div class="group">
+								<div class="img"><img src="{{staticfile('images/min_prod.png')}}" alt=""></div>
+								<div class="text-cont">
+									<p class="text"><a href="{{ url('prodovolstvennye-tovary') }}">Продовольственные товары</a>													
+									{% set count = link_counters[s_host ~ '/prodovolstvennye-tovary'] %}
+									</p>
+									{% if (count) %}
+										<span class="info">{{count}} объявлений</span>
+									{% endif %}
+								</div>
+							</div>
+							<p class="href-bl">
+								{% for category in categories.childs if category.parent_id == 74 %}
+									<span class="el mt3"><a href="{{ url('prodovolstvennye-tovary/' ~ category.seo_name) }}">{{ category.title }}</a></span>
+								{% endfor %}
+							</p>
+						</div>
+						<div class="group-cont">				
+							<div class="group">
+								<div class="img"><img src="{{staticfile('images/min_modul.png')}}" alt=""></div>
+								<div class="text-cont">
+									<p class="text">
+										<a href="{{ url('modulnaya-reklama') }}">Каталог компаний</a>													
+									</p>
+									{% set count = link_counters[s_host ~ '/modulnaya-reklama'] %}
+									{% if (count) %}
+										<span class="info">{{count}} объявлений</span>
+									{% endif %}
+								</div>
+							</div>
+
+							<p class="href-bl">
+							</p></div>
+						<div class="group-cont">				
+							<div class="group">
+								<div class="img"><img src="{{staticfile('images/min_vruki.png')}}" alt=""></div>
+								<div class="text-cont">
+									<p class="text"><a href="{{ url('v-horoshie-ruki') }}">В хорошие руки</a></p>
+									{% set count = link_counters[s_host ~ '/v-horoshie-ruki'] %}
+									{% if (count) %}
+										<span class="info">{{count}} объявлений</span>
+									{% endif %}
+								</div>
+							</div>
+
+							<p class="href-bl">
+							</p></div>													
+					</div>						
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock content %}
+
+{% block templates %}
+		{{ parent() }}
+{% endblock templates %}

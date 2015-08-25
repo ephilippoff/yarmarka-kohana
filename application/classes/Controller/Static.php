@@ -2,10 +2,37 @@
 
 class Controller_Static extends Controller_Template {
 
-	function action_index()
+	public function action_index()
 	{
 		$this->use_layout = FALSE;
 		$this->template->data = Attribute::getData();
+	}
+
+	public function action_sitemap()
+	{
+		$this->use_layout = FALSE;
+		$this->auto_render = FALSE;
+
+		$domain = new Domain();
+		if ($proper_domain = $domain->is_domain_incorrect()) {
+			HTTP::redirect("http://".$proper_domain, 301);
+		}
+		$subdomain = ($domain->get_city()) ? $domain->get_subdomain(): FALSE;
+		
+		if ($subdomain) {
+			$filename = APPPATH."../sitemaps/$subdomain.sitemap.xml";
+			if (!file_exists($filename)) {
+				Task_Clear::sitemap_by_city($subdomain);
+			}
+		} else {
+			$subtitle = $this->request->param("subtitle") ? $this->request->param("subtitle")."." : "";
+			$filename = APPPATH."../sitemaps/".$subtitle."sitemap.xml";
+			if (!file_exists($filename)) {
+				Task_Clear::sitemap();
+			}
+		}
+		$this->response->headers('Content-Type', 'text/xml');
+		echo file_get_contents($filename);
 	}
 
 	public function action_yandex_feed(){

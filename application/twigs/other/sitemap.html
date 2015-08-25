@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+{% if sitemaps|length %}
+	<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+		{% for sitemap in sitemaps %}
+			{% include 'other/sitemap/city' %}
+		{% endfor %}
+	</sitemapindex>
+{% else %}
+	<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+		{% for entry in entries %}
+			{% include 'other/sitemap/item' %}
+		{% endfor %}
+	</urlset> 
+{% endif %}

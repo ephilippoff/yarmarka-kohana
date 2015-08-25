@@ -151,15 +151,24 @@ class Controller_Block extends Controller_Template
 
 	public function action_error_404()
 	{
-		$this->assets->css('css.css');
-		$this->use_layout	= TRUE;
-		$this->template		= View::factory('errors/404');
+		$this->use_layout	= FALSE;
+		$this->auto_render	= FALSE;
 
-		$this->template->categories = ORM::factory('Category')
-			->where('parent_id', '=', 1)
-			->order_by('weight')
-			->cached(Date::WEEK)
-			->find_all();
+		$domain = new Domain();
+		if ($proper_domain = $domain->is_domain_incorrect()) {
+			HTTP::redirect("http://".$proper_domain, 301);
+		}
+
+		$twig = Twig::factory('errors/404');
+		$twig->city = $domain->get_city();
+
+		$twig->categories = ORM::factory('Category')->get_categories_extend(array(
+					"with_child" => TRUE, 
+					"with_ads" => TRUE, 
+					"city_id" => NULL
+				));
+
+		$this->response->body($twig);
 	}
 
 	public function action_articles_menu()
@@ -331,17 +340,17 @@ class Controller_Block extends Controller_Template
 	{
 		$user = Auth::instance()->get_user();
 		$avail_categories = ORM::factory('User_Settings')->get_by_name($user->id, "massload")->find_all();
-    	
-    	$categories = Array();								
-    	foreach($avail_categories as $category)
-    	{
-    		try 
-    		{ 
-    			$cfg = Kohana::$config->load('massload/bycategory.'.$category->value);
-    			$categories[$category->value] = $cfg["name"];
-    		} catch(Exception $e){}
-    	}
-    	$this->template->categories = $categories;
+		
+		$categories = Array();								
+		foreach($avail_categories as $category)
+		{
+			try 
+			{ 
+				$cfg = Kohana::$config->load('massload/bycategory.'.$category->value);
+				$categories[$category->value] = $cfg["name"];
+			} catch(Exception $e){}
+		}
+		$this->template->categories = $categories;
 	}
 }
 

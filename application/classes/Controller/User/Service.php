@@ -5,11 +5,16 @@ class Controller_User_Service extends Controller_User_Profile {
     public function before()
     {
         parent::before();
+        $this->domain = new Domain();
+        if ($proper_domain = $this->domain->is_domain_incorrect()) {
+            HTTP::redirect("http://".$proper_domain, 301);
+        }
     }
 
     public function action_objectload()
     {
         $twig = Twig::factory('user/objectload');
+        $twig->city = $this->domain->get_city();
         $twig->canonical_url = "user/objectload";
         $twig->block_name = "user/_objectload";
         $twig->params = new Obj();
@@ -99,6 +104,7 @@ class Controller_User_Service extends Controller_User_Profile {
     public function action_orders()
     {
         $twig = Twig::factory('user/orders');
+        $twig->city = $this->domain->get_city();
         $twig->canonical_url = "user/orders";
 
         $twig->crumbs = array(
@@ -142,6 +148,7 @@ class Controller_User_Service extends Controller_User_Profile {
     {
 
         $twig = Twig::factory('user/subscriptions');
+        $twig->city = $this->domain->get_city();
         $twig->canonical_url = "user/subscriptions";
 
         $twig->crumbs = array(

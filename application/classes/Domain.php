@@ -5,7 +5,7 @@ class Domain
     static $reserved_segments = array("c");
 
     public function __construct() {
-        $this->_domain = $_SERVER['HTTP_HOST'];
+        $this->_domain = URL::SERVER('HTTP_HOST');
         
         $config = Kohana::$config->load("common");
         $this->_main_domain = $config["main_domain"];

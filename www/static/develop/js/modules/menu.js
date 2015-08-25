@@ -2,7 +2,7 @@
 define([
     'marionette',
     'menuAim'
-], function (Marionette, menuAim) {
+], function (Marionette) {
     'use strict';
 
     var mainMenuSettings = {
@@ -36,6 +36,10 @@ define([
     }
 
     var MenuView = Marionette.ItemView.extend({
+        events: {
+            "mouseover" : "showMenu",
+            "mouseout" : "closeMenu"
+        },
         initialize: function(options) {
             this.$el.append($(options.templateClass).html());
             $(options.templateClass).remove();
@@ -51,39 +55,34 @@ define([
     });
 
     var MainmenuView = MenuView.extend({
-        events: {
-            "mouseover" : "showMenu",
-            "mouseout" : "closeMenu"
-        },
-        
         initialize: function(options) {
             MenuView.prototype.initialize.call(this, options);
             var s = this;
-            var $menu = this.$el.find(".cont .left .top");
-            if ($menu.size()>0){
+            var $menu = this.$el.find(".js-mainmenu ul.top");
+            if ($menu.size() > 0){
                 $menu.menuAim({
-                    activate: activateSubmenu, 
-                    deactivate: deactivateSubmenu
+                    activate: this.activateSubmenu, 
+                    deactivate: this.deactivateSubmenu,
+                    rowSelector: ".js-submenu-item"
                 });
             }
+        },
+        onRender: function() {
 
-            function activateSubmenu(row) {
-                var $row = $(row), 
-                    submenuId = $row.data("submenu-id"), 
-                    $submenu = $("#" + submenuId);
+        },
+        activateSubmenu: function(row) {
+            var $row = $(row), 
+                submenuId = $row.data("submenu-id"), 
+                $submenu = $("#" + submenuId);
 
-                $submenu.css("display", "block");
-                //$row.find("a").addClass("maintainHover");
-            }
+            $submenu.css("display", "block");
+        },
+        deactivateSubmenu: function(row) {
+            var $row = $(row), 
+                submenuId = $row.data("submenu-id"), 
+                $submenu = $("#" + submenuId);
 
-            function deactivateSubmenu(row) {
-                var $row = $(row), 
-                    submenuId = $row.data("submenu-id"), 
-                    $submenu = $("#" + submenuId);
-
-                $submenu.css("display", "none");
-                //$row.find("a").removeClass("maintainHover");
-            }
+            $submenu.css("display", "none");
         }
     });
 
@@ -91,7 +90,7 @@ define([
 
     return Marionette.Module.extend({
         initialize: function() {
-            this.user = new MainmenuView({
+            this.user = new MenuView({
                 el: userMenuSettings.controlClass,
                 templateClass: userMenuSettings.menuTemplate,
                 menuClass: userMenuSettings.menuClass,
@@ -109,7 +108,7 @@ define([
             }
 
             if (_.contains(menusToload, "city")) {
-                this.city = new MainmenuView({
+                this.city = new MenuView({
                     el: cityMenuSettings.controlClass,
                     templateClass: cityMenuSettings.menuTemplate,
                     menuClass: cityMenuSettings.menuClass,
@@ -117,7 +116,7 @@ define([
             }
 
             if (_.contains(menusToload, "news")) {
-                this.news = new MainmenuView({
+                this.news = new MenuView({
                     el: newsMenuSettings.controlClass,
                     templateClass: newsMenuSettings.menuTemplate,
                     menuClass: newsMenuSettings.menuClass,
@@ -125,7 +124,7 @@ define([
             }
 
             if (_.contains(menusToload, "kupon")) {
-                this.kupon = new MainmenuView({
+                this.kupon = new MenuView({
                     el: kuponMenuSettings.controlClass,
                     templateClass: kuponMenuSettings.menuTemplate,
                     menuClass: kuponMenuSettings.menuClass,

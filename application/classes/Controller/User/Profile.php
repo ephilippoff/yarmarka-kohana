@@ -21,6 +21,10 @@ class Controller_User_Profile extends Controller_Template {
             }
         }
 
+        $this->domain = new Domain();
+        if ($proper_domain = $this->domain->is_domain_incorrect()) {
+            HTTP::redirect("http://".$proper_domain, 301);
+        }
         // if ($this->user AND !$this->user->is_valid_orginfo()
         //             AND in_array(Request::current()->action(), array('edit_ad','objectload','priceload','published')))
         //         {
@@ -32,6 +36,7 @@ class Controller_User_Profile extends Controller_Template {
     public function action_orginfo()
     {
         $twig = Twig::factory('user/orginfo');
+        $twig->city = $this->domain->get_city();
         $twig->canonical_url = "user/orginfo";
         $twig->block_name = "user/_orginfo";
         $twig->params = new Obj();
@@ -159,6 +164,7 @@ class Controller_User_Profile extends Controller_Template {
     public function action_userinfo()
     {
         $twig = Twig::factory('user/userinfo');
+        $twig->city = $this->domain->get_city();
         $twig->canonical_url = "user/userinfo";
         $twig->block_name = "user/_userinfo";
         $twig->params = new Obj();
@@ -214,6 +220,7 @@ class Controller_User_Profile extends Controller_Template {
     public function action_password()
     {
         $twig = Twig::factory('user/password');
+        $twig->city = $this->domain->get_city();
         $twig->canonical_url = "user/password";
         $twig->block_name = "user/_password";
         $twig->params = new Obj();
@@ -254,6 +261,7 @@ class Controller_User_Profile extends Controller_Template {
     public function action_employers()
     {
         $twig = Twig::factory('user/employers');
+        $twig->city = $this->domain->get_city();
         $twig->canonical_url = "user/employers";
         $twig->block_name = "user/_employers";
         $twig->params = new Obj();
@@ -349,6 +357,7 @@ class Controller_User_Profile extends Controller_Template {
     public function action_contacts()
     {
         $twig = Twig::factory('user/contacts');
+        $twig->city = $this->domain->get_city();
         $twig->canonical_url = "user/contacts";
         $twig->block_name = "user/_contacts";
         $twig->params = new Obj();

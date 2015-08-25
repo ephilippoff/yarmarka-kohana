@@ -14,7 +14,7 @@ class Controller_Search extends Controller_Template {
         $this->auto_render = FALSE;
         $this->cached_search_info = FALSE;
 
-        if ($search_info = $this->get_search_info_from_cache() and 1==0) {
+        if ($search_info = $this->get_search_info_from_cache()) {
             $this->cached_search_info = unserialize($search_info->params);
             Cookie::set('search_hash', $search_info->hash, strtotime( '+14 days' ));
         } else {
@@ -29,7 +29,7 @@ class Controller_Search extends Controller_Template {
             $query_params = $this->request->query();
 
             try {
-                $searchuri = new Search_Url($route_params['category_path'], $query_params);
+                $searchuri = new Search_Url($route_params['category_path'], $query_params, ($this->domain->get_city()) ? $this->domain->get_city()->id : FALSE);
             } catch (Kohana_Exception $e) {
                 //TODO Log incorrect seo
                 //HTTP::redirect("/", 301);
@@ -63,6 +63,8 @@ class Controller_Search extends Controller_Template {
         $this->performance->add("Search","search_info");
         $search_info = $this->get_search_info();
 
+        $search_params = Search_Url::clean_reserved_query_params($this->request->query());
+
         //link counters
         $this->performance->add("Search","link_couters");
         if ($search_info->enable_link_couters) {
@@ -84,7 +86,7 @@ class Controller_Search extends Controller_Template {
 
         //main search
         $this->performance->add("Search","main_search_query");
-        $main_search_query = Search::searchquery($search_info->search_filters, $search_info->search_params);
+        $main_search_query = Search::searchquery($search_info->search_filters, $search_params);
 
         $twig->main_search_result = Search::getresult($main_search_query->execute()->as_array());
         if (!$search_info->main_search_result_count) {
@@ -114,7 +116,7 @@ class Controller_Search extends Controller_Template {
         $this->performance->add("Search","premium_search_query");
         $premium_search_query = Search::searchquery(
             array_merge($search_info->search_filters, array("premium" => TRUE)), 
-            array_merge($search_info->search_params, array("limit" => 5))
+            array_merge($search_params, array("limit" => 5))
         );
         $twig->premium_search_result = Search::getresult($premium_search_query->execute()->as_array());
         foreach ($twig->premium_search_result as $key => $value) {
@@ -148,7 +150,7 @@ class Controller_Search extends Controller_Template {
                 "city_id" => $search_info->city_id,
                 "category_id" => (count($search_info->child_categories_ids) > 0) ? $search_info->child_categories_ids : $search_info->category->id,
             ),
-            array_merge($search_info->search_params, array("limit" => 15))
+            array_merge($search_params, array("limit" => 15))
         );
         $twig->vip_search_result = Search::getresult($vip_search_query->execute()->as_array());
         if (count($twig->vip_search_result) > 0) 
@@ -172,7 +174,7 @@ class Controller_Search extends Controller_Template {
         $pagination = Pagination::factory( array(
             'current_page' => array('source' => 'query_string', 'key' => 'page'),
             'total_items' => $search_info->main_search_result_count,
-            'items_per_page' => $search_info->search_params['limit'],
+            'items_per_page' => $search_params['limit'],
             'auto_hide' => TRUE,
             'view' => 'pagination/search',
             'first_page_in_url' => FALSE,
@@ -235,13 +237,13 @@ class Controller_Search extends Controller_Template {
         foreach ((array) $search_info as $key => $item) {
             $twig->{$key} = $item;
         }        
-        $this->cache_stat($twig);
+        $this->cache_stat($twig, $search_params);
         $twig->php_time = $this->performance->getProfilerStat();
         $this->response->body($twig);
 
     }
 
-    public function cache_stat($info)
+    public function cache_stat($info, $search_params)
     {
 
         $result = array();
@@ -252,7 +254,7 @@ class Controller_Search extends Controller_Template {
 
         $result['title'] = isset($info->seo_attributes["h1"]) ? $info->seo_attributes["h1"] : $info->category->title;
         $result['url'] = "http://".$info->s_host.$info->s_suri;
-        $result['page'] = ($info->search_params["page"]) ? $info->search_params["page"] : 1;
+        $result['page'] = ( isset($search_params["page"]) ) ? $search_params["page"] : 1;
         $result['city_id'] = $info->city_id;
 
         Cachestat::factory($info->category_id."search")->add(sha1(serialize($result)), $result);
@@ -305,7 +307,7 @@ class Controller_Search extends Controller_Template {
 
         $info->category = $this->params_by_uri->get_category();
         $info->category_childs = $this->params_by_uri->get_category_childs(TRUE);
-        $info->category_childs_elements = $this->params_by_uri->get_category_childs_elements($info->category_id, $this->params_by_uri->get_seo_filters());
+        $info->category_childs_elements = $this->params_by_uri->get_category_childs_elements($info->category_id, $info->city_id, $this->params_by_uri->get_seo_filters());
         $info->category_childs_elements_colsize = Kohana::$config->load("landing.subfilters.".$info->category_id);
         $info->crumbs      = array_merge($this->params_by_uri->get_category_crubms($info->category_id), $this->params_by_uri->get_seo_elements_crubms($this->params_by_uri->get_seo_filters(), $info->category_url));
         $info->incorrectly_query_params_for_seo =  $this->params_by_uri->incorrectly_query_params_for_seo;
@@ -322,11 +324,6 @@ class Controller_Search extends Controller_Template {
             "private" => $this->params_by_uri->get_reserved_query_params("private"),
             "org" => $this->params_by_uri->get_reserved_query_params("org"),
             "filters" => $clean_query_params
-        );
-
-        $info->search_params = array(
-            "page" => $this->params_by_uri->get_reserved_query_params("page"),
-            "limit" => $this->params_by_uri->get_reserved_query_params("limit"),
         );
 
         $info->seo_attributes = Seo::get_seo_attributes(
@@ -398,11 +395,6 @@ class Controller_Search extends Controller_Template {
 
             "search_text" => $info->search_text,
             "filters" => array()
-        );
-
-        $info->search_params = array(
-            "page" => $this->params_by_uri->get_reserved_query_params("page"),
-            "limit" => $this->params_by_uri->get_reserved_query_params("limit"),
         );
 
         $info->seo_attributes = Seo::get_seo_attributes(
