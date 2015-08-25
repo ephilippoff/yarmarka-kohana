@@ -9,7 +9,7 @@ class Search_Url
         "limit" => array(5,10,15,20,25,30,60,90)
     );
     static $reserved_query_params_defaults = array(
-        "order" => "date_desc",
+        "order" => "date_created",
         "limit" => 30,
         "page" => 0
     );
