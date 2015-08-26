@@ -8,26 +8,26 @@
 			<tr>
 				<th>#</th>
 				<th>Наименование</th>
-				<th>Количество</th>
+				<th>Параметры</th>
 				<th>Цена</th>
 				<th>Сумма</th>
 			</tr>
 			{% set sum = 0 %}
 			{% set i = 1 %}
-			{% for item in orderItems %}
-				<tr>
-					<td>{{ i }}</td>
-					<td>{{ item.title }}</td>
-					<td>
-						{% if item.available != 1 %}
-							<span style="color:red;">{{ item.available }}</span>
-						{% else %}
-							{{ item.quantity }}
-						{% endif %}
-					</td>
-					<td>{{ item.price }} руб.</td>
-					<td>{{ item.total }} руб.</td>
-				</tr>
+			{% for item in orderItems  if item.type == 'object' %}
+				{% if loop.first %}
+					<tr><td colspan="5">Купоны</td></tr>
+				{% endif %}
+				{% include 'cart/item/object' %}
+
+				{% set sum = sum + item.total %}
+				{% set i = i +1 %}
+			{% endfor %}
+			{% for item in orderItems  if item.type != 'object' %}
+				{% if loop.first %}
+					<tr><td colspan="6">Услуги для объявлений</td></tr>
+				{% endif %}
+				{% include 'cart/item/other' %}
 				{% set sum = sum + item.total %}
 				{% set i = i +1 %}
 			{% endfor %}
@@ -41,45 +41,44 @@
 		</table>
 		
 		{% if delivery_info %}
-		<div class="messages-cont mb20">
-			<hr>
-			<p>Информация по доставке</p>
-			<div class="ta-l mb10 field">
-				<p><b>Тип доставки:</b></p>
-				<p>
-					{% if delivery_info.type == "pickup" %}
-						<span>Самовывоз</span>
-					{% elseif delivery_info.type == "city-delivery" %}
-						<span>Доставка по городу</span>
-					{% endif %}
-				</p>
+			<div class="messages-cont mb20">
+				<hr>
+				<p>Информация по доставке</p>
+				<div class="ta-l mb10 field">
+					<p><b>Тип доставки:</b></p>
+					<p>
+						{% if delivery_info.type == "pickup" %}
+							<span>Самовывоз</span>
+						{% elseif delivery_info.type == "city-delivery" %}
+							<span>Доставка по городу</span>
+						{% endif %}
+					</p>
+				</div>
+
+				{% if delivery_info.address %}
+					<div class="ta-l mb10 field">
+						<p><b>Адрес:</b></p>
+						<p>{{delivery_info.address}}</p>
+					</div>
+				{% endif %}
+
+				{% if delivery_info.phone %}
+					<div class="ta-l mb10 field">
+						<p><b>Телефон:</b></p>
+						<p>{{delivery_info.phone}}</p>
+					</div>
+				{% endif %}
+
+				{% if delivery_info.comment %}
+					<div class="ta-l mb10 field">
+						<p><b>Комментарий:</b></p>
+						<p>{{delivery_info.comment}}</p>
+					</div>
+				{% endif %}
 			</div>
-
-			{% if delivery_info.address %}
-				<div class="ta-l mb10 field">
-					<p><b>Адрес:</b></p>
-					<p>{{delivery_info.address}}</p>
-				</div>
-			{% endif %}
-
-			{% if delivery_info.phone %}
-				<div class="ta-l mb10 field">
-					<p><b>Телефон:</b></p>
-					<p>{{delivery_info.phone}}</p>
-				</div>
-			{% endif %}
-
-			{% if delivery_info.comment %}
-				<div class="ta-l mb10 field">
-					<p><b>Комментарий:</b></p>
-					<p>{{delivery_info.comment}}</p>
-				</div>
-			{% endif %}
-		</div>
 		{% endif %}
 		
 		<div class="messages-cont mb20">
-		
 			{% if error %}
 				<p>Некоторых товаров нет в наличии, сделайте корректировку заказа</p>
 				<p>

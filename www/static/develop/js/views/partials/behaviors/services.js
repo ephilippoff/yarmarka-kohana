@@ -26,11 +26,10 @@ define([
             var id = $(e.currentTarget).data("id");
             app.services.up(id, {
                 success: function(result) {
-                    console.log(result, result.date_service_up_available);
-                    $(e.currentTarget).find("span").text("Поднято");
+                    console.log(result);
                 },
                 error: function(result) {
-                    alert("В следующий раз Вы можете поднять объявление не ранее " + result.date_service_up_available);
+                   console.log(result);
                 }
             });
         },

@@ -13,30 +13,25 @@
 			<tr>
 				<th>#</th>
 				<th>Наименование</th>
-				<th>Количество</th>
+				<th>Параметры</th>
 				<th>Цена</th>
 				<th>Сумма</th>
 				<th></th>
 			</tr>
 			{% set i = 1 %}
-			{% for cartItem in cartTempItems %}
-				<tr data-id="{{ cartItem.id }}" data-type="object" data-object-id="{{ cartItem.object_id }}" data-price="{{ cartItem.price }}" data-quantity="{{ cartItem.quantity }}" class="js-cartitem">
-					<td>{{ i }}</td>
-					<td>{{ cartItem.title }}</td>
-					<td>
+			{% for cartItem in cartTempItems if cartItem.type == 'object' %}
+				{% if loop.first %}
+					<tr><td colspan="6">Купоны</td></tr>
+				{% endif %}
+				{% include 'cart/temp_item/object' %}
+				{% set i = i + 1 %}
+			{% endfor %}
 
-						{% if cartItem.available != 1 %}
-							<span style="color:red;">{{ cartItem.available }}</span>
-						{% else %}
-							<input type="number" class="js-quanitity" value="{{ cartItem.quantity }}" min="0" {% if cartItem.balance > 0 %} max="{{cartItem.balance}}" {% else %} max="100" {% endif %} >
-						{% endif %}
-
-						
-					</td>
-					<td>{{cartItem.price}}  руб.</td>
-					<td class="js-itemsum itemsum">{{cartItem.price * cartItem.quantity}} руб.</td>
-					<td><a class="js-delete">Удалить</a></td>
-				</tr>
+			{% for cartItem in cartTempItems if cartItem.type != 'object' %}
+				{% if loop.first %}
+					<tr><td colspan="6">Услуги для объявлений</td></tr>
+				{% endif %}
+				{% include 'cart/temp_item/other' %}
 				{% set i = i + 1 %}
 			{% endfor %}
 			<tr>
@@ -45,6 +40,7 @@
 				<td></td>		
 				<td></td>
 				<td class="js-endsum">{{ sum }} руб.</td>
+				<td></td>
 			</tr>
 		</table>
 		

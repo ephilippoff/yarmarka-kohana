@@ -1,0 +1,13 @@
+<tr>
+	<td>{{ i }}</td>
+	<td>{{ item.title }}</td>
+	<td>
+		{% if item.available != 1 %}
+			<span style="color:red;">{{ item.available }}</span>
+		{% else %}
+			{{ item.quantity }}
+		{% endif %}
+	</td>
+	<td>{{ item.price }} руб.</td>
+	<td>{{ item.total }} руб.</td>
+</tr>

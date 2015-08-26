@@ -4,6 +4,10 @@ class Model_Order extends ORM
 {
 	protected $_table_name = 'orders';
 
+	protected $_belongs_to = array(
+		'user_obj'			=> array('model' => 'User', 'foreign_key' => 'user_id'),
+	);
+
 	function check_state($order_id = NULL, $params = array(), $callback = NULL) {
 
 		$params = new Obj($params);

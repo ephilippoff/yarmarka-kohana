@@ -1,0 +1,18 @@
+<div class="popup-window w500">	
+	<div class="header">
+		<%=title%>
+		<div class="popup-window-close js-close">
+			<i class="ico close-ico16"></i>
+		</div>			
+	</div>					
+	<div class="cont">
+		<form>		
+			<div class="service-cont js-service-cont"></div>
+			<% if (code < 400) { %>
+				<div class="row mt10">
+					<div class="col-md-12"><button class="w100 button button-style1 bg-color-blue white js-ok fr">OK</button></div>
+				</div>
+			<% } %>
+		</form>
+	</div>
+</div>

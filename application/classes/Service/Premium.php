@@ -1,5 +1,6 @@
 <?php defined('SYSPATH') OR die('No direct script access.');
 
+
 class Service_Premium extends Service
 {
 	const PREMIUM_SETTING_NAME = 'premium';
@@ -9,8 +10,12 @@ class Service_Premium extends Service
 	protected $_name = "premium";
 	protected $_is_multiple = TRUE;
 
-	public function __construct()
+	public function __construct($object_id = NULL)
 	{
+		$object = ORM::factory('Object',$object_id);
+		if ($object->loaded()) {
+			$this->object($object);
+		}
 		$this->_initialize();
 	}
 
@@ -24,10 +29,47 @@ class Service_Premium extends Service
 		);
 	}
 
+	public function get_params_description($params = array())
+	{
+		$params = new Obj($params);
+		$free = ($params->available) ? " (бесплатно)": "";
+		return "Количество: ".$params->quantity.$free;
+	}
+
+	/**
+	 * [apply Apply payd service Premium to object.]
+	 * @param  [type] $orderItem [description]
+	 * @return [void]
+	 */
 	public function apply($orderItem)
 	{
-		Service_Premium::apply_service($orderItem->object_id);
+		self::apply_service($orderItem->object_id);
+
+		// available = TRUE когда применяется один бесплатный премиум
+		if ($orderItem->available) {
+			$user = ORM::factory('User', $orderItem->user_id);
+			self::decrease_balance($user, $orderItem->quantity);
+		}
+
 		self::saveServiceInfoToCompiled($orderItem);
+	}
+
+	public static function check_available($quantity)
+	{
+		$result = FALSE;
+
+		if ($quantity > 1) return $result;
+
+		$user = Auth::instance()->get_user();
+		if (!$user) return $result;
+
+		$balance = self::get_balance($user);
+
+		if ($balance >= 0 AND $balance - intval($quantity) >= 0) {
+			return TRUE;
+		}
+
+		return $result;
 	}
 
 	static function apply_prepayed($object_id, $city_id = NULL, $user = NULL)
@@ -39,7 +81,7 @@ class Service_Premium extends Service
 		return Service_Premium::decrease_balance($user);
 	}
 
-	static function get_balance($user)
+	static function get_balance($user = NULL)
 	{
 		if (!$user) 
 			$user = Auth::instance()->get_user();
@@ -70,7 +112,7 @@ class Service_Premium extends Service
 		return $count;
 	}
 
-	static function decrease_balance($user)
+	static function decrease_balance($user, $count = 1)
 	{
 		if (!$user)
 			$user = Auth::instance()->get_user();
@@ -80,7 +122,7 @@ class Service_Premium extends Service
 		if ($balance == 0)
 			return FALSE;
 
-		return Service_Premium::set_balance($user, $balance-1);
+		return Service_Premium::set_balance($user, $balance - $count);
 	}
 
 	static function get_already_buyed($user)

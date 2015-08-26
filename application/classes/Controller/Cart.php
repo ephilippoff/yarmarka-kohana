@@ -38,20 +38,19 @@ class Controller_Cart extends Controller_Template {
 		if ($key) {
 
 			$_cartTempItems = ORM::factory('Order_ItemTemp')
-								->where("key","=", $key)->find_all();
+								->where("key","=", $key)->order_by("id")->find_all();
 
 			foreach ($_cartTempItems as $_item) {
 				$params = json_decode($_item->params);
-				
+				$service = Service::factory(Text::ucfirst($params->type), $_item->object_id);
+
 				$item = array();
 				$item = array_merge($item, (array) $params);
 				$item["id"] = $_item->id;
-				
-				$sum += $item["price"] * $item["quantity"];
 
 				//если заказан товар , проверяем доступность, и информацию по доставке
 				if ($params->type == "object") {
-					$service = Service::factory("Object", $_item->object_id);
+					
 					$sale_type = $service->get_delivery_info();
 					$available = $service->check_available($params->quantity);
 					$item["available"] = $available;
@@ -60,10 +59,24 @@ class Controller_Cart extends Controller_Template {
 					{
 						array_push($sale_types, $sale_type);
 					}
-					
+				} elseif ( in_array( $params->type, array("up", "premium",) ) ) {
+					$item["available"] = $service->check_available($params->quantity);
+					if ($item["available"]) {
+						$item["price"] = 0;
+					}
+					$item["description"] = $service->get_params_description(array(
+						"quantity" => $item["quantity"],
+						"available" => $item["available"]
+					));
 				} else {
-
+					$item["available"] = FALSE;
+					$item["description"] = $service->get_params_description(array(
+						"quantity" => $item["quantity"],
+						"available" => $item["available"]
+					));
 				}
+
+				$sum += $item["price"] * $item["quantity"];
 
 				array_push($cartTempItems, new Obj($item));
 			}
@@ -341,8 +354,6 @@ class Controller_Cart extends Controller_Template {
 			$this->json_response();
 			return;
 		}
-		
-		$quantityItems = $request->items;
 		$order_id = -1;
 
 		$db = Database::instance();
@@ -393,24 +404,40 @@ class Controller_Cart extends Controller_Template {
 			foreach ($tempItems as $tempItem)
 			{
 				$params = new Obj(json_decode($tempItem->params));
-				
-				$params->quantity = $quantityItems->{$tempItem->id};
-
+				$service = Service::factory(Text::ucfirst($params->type), $tempItem->object_id);
+				$description = "";
 				if ($params->type == "object" )
 				{
-					$params->available = Service::factory("Object",$tempItem->object_id)
-											->check_available($params->quantity);
-				} else {
-					$params->available = TRUE;
-				}
+					$params->available = $service->check_available($params->quantity);
 
-				if ($params->available !== TRUE)
-				{
-					$db->rollback();
-					$this->json["message"] = "В заказе присутствуют недоступные позиции, удалите их прежде чем продолжить";
-					$this->json["code"] = 400;
-					$this->json_response();
-					return;
+					if ($params->available !== TRUE)
+					{
+						$db->rollback();
+						$this->json["message"] = "В заказе присутствуют недоступные позиции, удалите их прежде чем продолжить";
+						$this->json["code"] = 400;
+						$this->json_response();
+						return;
+					}
+
+				} elseif ( in_array( $params->type, array("up", "premium") ) ) {
+
+					$params->available = $service->check_available($params->quantity);
+					if ($params->available) {
+						$params->price = 0;
+					}
+
+					$description = $service->get_params_description(array(
+						"quantity" => $params->quantity,
+						"available" => $params->available
+					));
+
+				} else {
+
+					$description = $service->get_params_description(array(
+						"quantity" => $params->quantity
+					));
+
+					$params->available = FALSE;
 				}
 
 				$tempItem->params = json_encode((array) $params);
@@ -423,14 +450,13 @@ class Controller_Cart extends Controller_Template {
 					"title" => $params->title,
 					"price" => $params->price,
 					"quantity" => $params->quantity,
+					"description" => $description,
 					"total" => $params->quantity * $params->price,
 					"available" => $params->available,
 					"type" => $params->type
 				));
 				$realItem->save();
 			}
-
-
 
 			$orderItems = ORM::factory('Order_Item')
 										->where("order_id", "=", $order_id )
@@ -446,7 +472,7 @@ class Controller_Cart extends Controller_Template {
 
 			$db->commit();
 
-		} catch (Exception $e) {
+		} catch (Kohana_Exception $e) {
 			$db->rollback();
 			$this->json["message"] = "Ошибка сохранения заказа. ".$e->getMessage();
 			$this->json["code"] = 400;
@@ -622,6 +648,12 @@ class Controller_Cart extends Controller_Template {
 		$order->check_state($order->id, array(
 			"fake" => array("code_request" => $code)
 		));
+
+		if ( in_array("cartKey", array_keys($_COOKIE)) ) {
+			unset($_COOKIE['cartKey']);
+		}
+		ORM::factory('Order_ItemTemp')->where("key", "=", $order->key)->delete_all();
+
 		HTTP::redirect("/cart/order/".$order->id);
 	}
 

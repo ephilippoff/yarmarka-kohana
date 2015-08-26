@@ -35,7 +35,7 @@ define(['marionette',
 
         },
         zIndex: {
-            // gallery: "z150",
+            service: "z150",
             // gomonitor: "z250"
         },
         label: {
