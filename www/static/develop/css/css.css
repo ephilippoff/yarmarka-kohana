@@ -10,7 +10,7 @@ body h1 {font-size: 16px;font-weight: normal;display: inline;}
 .bg-color-blue{background-color: #2B587A;}.border-color-blue{border-color: #2B587A;}
 .border-color-gray{border-color:gray;}
 .bg-color-lightgreen{background-color: #57A957}
-.bg-color-lightorange{backgrountext-decoration: underline;d-color: #FFC700;}
+.bg-color-lightorange{background-color: #FFC700;}
 .bg-color-deepskyblue{background-color: deepskyblue}
 .bg-color-whitesmoke{background-color: #f5f5f5}
 .bg-color-yelgreen{background-color: #8EC745}.border-color-yelgreen{border-color: #8EC745;}
@@ -31,11 +31,11 @@ body h1 {font-size: 16px;font-weight: normal;display: inline;}
 .whitespace{clear: left;}
 .fixed{position: fixed;top: 0px;}
 .pointer{cursor: pointer;}
-.strike{text-decoration: line-through};
+.strike{text-decoration: line-through;}
 /* css helpers end */
 
 /* mini-elements */
-.button{cursor:pointer; text-align:center; border:0;}
+.button {cursor:pointer; text-align:center; border:0;}
 .button.bg-color-crimson:hover{background-color: #F98C8C;}
 .button.bg-color-blue:hover{background-color: #4381AF}
 .button.bg-color-lightgreen:hover{background-color: #74DC74}
@@ -601,17 +601,19 @@ select{background-color: #FFFFFF;border: 1px solid #89898c;color: #384354;paddin
 .menu-cont3 .other-link {display: block;padding: 7px 20px 0px 0;font-size: 10px;font-weight: bold;text-align: right;}
 .menu-cont3 .other-link span{font-size: 12px;}
 
-.coupon-item-cont {display: block;position: relative;font-size: 14px;float: left;background: #fff;margin: 7px;box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);text-decoration: none;}
+.coupon-item-cont {float:left;display: block;position: relative;font-size: 14px;background: #fff;margin: 1%;box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);text-decoration: none;cursor: pointer;max-width: 341px;}
+.coupons-cont .coupon-item-cont{width: 31%;}
 .coupon-item-cont:hover .slide-cont {bottom: 0;}
 .coupon-item-cont:hover {box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);color: #333;text-decoration: none;}
-.coupon-item-cont .img-cont {width: 100%;border-bottom: 2px solid #DADADA;overflow: hidden;position: relative;height: 203px;text-align: center}
+.coupon-item-cont .img-cont {width: 100%;overflow: hidden;position: relative;text-align: center;max-height: 255px;}
+.coupon-item-cont .img-cont img{max-width: 100%}
 .coupon-item-cont .discount-label {width: 50px;height: 35px;text-align: center;color: white;font-size: 18px;position: absolute;top: 0px;left: 10px;padding-top: 5px;line-height: 25px;text-decoration: none;background-color: #f6753e;border-radius: 0px 0px 10px 10px;}
 .coupon-item-cont .slide-cont {width: 100%;height: 214px;position: absolute;bottom: -214px;left: 0;transition: all 0.5s ease-out;}
-.coupon-item-cont .geo-cont {color: #ffffff;position: absolute;bottom: 83px;background-color: #333;background: rgba(0, 0, 0, 0.4);}
+.coupon-item-cont .geo-cont {color: #ffffff;position: absolute;bottom: 28px;background-color: #333;background: rgba(0, 0, 0, 0.4);width: 100%}
 .coupon-item-cont .geo-cont .geo-items {margin: 4px 0;overflow: hidden;}
 .coupon-item-cont .geo-cont .geo-items li {font-size: 10px;float: left;padding-left: 7px;margin: 0 3px 0 5px;line-height: 12px;position: relative;}
 .coupon-item-cont .addr-item {width: 5px;height: 5px;border-radius: 10px;position: absolute;top: 3px;left: 0;}
-.coupon-item-cont .data-cont {color: #ffffff;height: 28px;position: absolute;bottom: 55px;background-color: #333;background: rgba(0, 0, 0, 0.6);width: 100%;}
+.coupon-item-cont .data-cont {color: #ffffff;height: 28px;position: absolute;bottom: 0px;background-color: #333;background: rgba(0, 0, 0, 0.6);width: 100%;}
 .coupon-item-cont .data-cont span {font-size: 12px;}
 .coupon-item-cont .time-cont {float: left;padding: 6px 5px 4px 28px;}
 .coupon-item-cont .number-cont {float: right;padding: 6px 10px 4px 27px;}
@@ -647,6 +649,11 @@ select{background-color: #FFFFFF;border: 1px solid #89898c;color: #384354;paddin
 	.popup-window .required-label{position: static; width: auto;}
 	.popup-window .required-label .msg{position: static}
 	.popup-window .required-label .msg:after{display: none;}
+	.coupons-cont .coupon-item-cont{width: 48%;}
+}
+
+@media (max-width: 500px){
+	.coupons-cont .coupon-item-cont{width: auto;}
 }
 
 @media screen and (min-width: 993px) {

@@ -24,6 +24,7 @@ return array(
 		'get_user' =>  array ('func' => array('Twig_Functions', 'get_user'), 'options' => array() ),
 		'get_image_paths' => array ('func' => array('Twig_Functions', 'get_image_paths'), 'options' => array() ),
 		'get_file' => array ('func' => array('Twig_Functions', 'get_file'), 'options' => array() ),
+		'get_date_diff' => array ('func' => array('Twig_Functions', 'get_date_diff'), 'options' => array() ),
 	),
 	'filters' => array(
 		'contacthide' => array('Twig_Filters', 'contacthide'),

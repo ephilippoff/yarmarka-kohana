@@ -1,56 +1,25 @@
-<div class="coupon-item-cont w288">
+<div class="coupon-item-cont" onclick = "window.location.href='{{ object.compiled.url }}'">
 		<div class="img-cont">
-			<a href="{{ object.compiled.url }}">
-				<img src="{{ get_file(object.compiled.images.main_photo['272x203']) }}" alt="{{ object.title|e }}">
-			</a>
+				<img src="{{ get_file(object.compiled.images.main_photo['341x256']) }}" alt="{{ object.title|e }}">
 			<div class="discount-label">-{{ object.compiled.attributes.skidka.value }}<span>%</span></div>
-			<a href="{{ object.compiled.url }}">
 				<div class="slide-cont">
 					<div class="geo-cont">
 						<ul class="geo-items">
 							<li>
-								<div class="addr-item" style=" background-color: #FFDD03;"></div>
-								<span>
-									Авиамоторная</span>
+								<div class="addr-item"></div>
+								<span>{{ object.compiled.city }}</span>
 							</li>
-							<li>
-								<div class="addr-item" style=" background-color: #8b8b8b;"></div>
-								<span>
-									Алтуфьево</span>
-							</li>
-							<li>
-								<div class="addr-item" style=" background-color: #0a6f20;"></div>
-								<span>
-									Белорусская</span>
-							</li>
-							<li>
-								<div class="addr-item" style=" background-color: #cd0506;"></div>
-								<span>
-									Красные ворота</span>
-							</li>
+
 						</ul>
 					</div>
 
 					<div class="data-cont">
 						<div class="time-cont">
 							<div class="ico"></div>
-							1 <span>день</span> 14:59					
-						</div>
-						<div class="number-cont">
-							<div class="ico"></div>
-							{{ object.compiled.id }}                    
-						</div>
-					</div>
-
-					<div class="info-cont">
-						<div class="button button-style1 bg-color-blue">Подробнее</div>
-						<div class="likes-cont">
-							<div class="ico"></div>
-							<span>23</span>
+							{{ get_date_diff("now", object.compiled.attributes['goden-do'].value ) }}
 						</div>
 					</div>
 				</div>
-			</a>
 		</div>
 
 		<a href="{{ object.compiled.url }}">
@@ -58,15 +27,13 @@
 				{{ object.title|e }}
 			</div>
 		</a>
-		<a href="{{ object.compiled.url }}">
 			<div class="price-cont">
 				<div class="price">
-					{{ object.compiled.attributes.old-price.value }}					
+					{{ object.compiled.attributes['old-price'].value }}	<span class="rub">Р</span>				
 				</div>
 				<div class="discounted">
 					<div class="separator"></div>
-					{{ object.compiled.attributes.tsena.value }}<b style=" font-size: 26px; line-height: 10px; ">.</b>-
+					{{ object.compiled.attributes.tsena.value }} <span class="rub">Р</span>
 				</div>
 			</div>
-		</a>
 	</div>

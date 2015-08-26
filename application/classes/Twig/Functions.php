@@ -135,4 +135,27 @@ class Twig_Functions
             return "http://yarmarka.biz/".$path;
         }
     }
+	
+	public static function get_date_diff($date1, $date2)
+	{
+		$result = "";
+		try {
+		$date1 = new DateTime($date1);
+		$date2 = new DateTime($date2);
+		}
+		catch (Exception $e)
+		{
+			return "";
+		}
+		
+		$diff = $date1->diff($date2);
+
+		if ($diff->y) { $result .= $diff->format("%y л. "); }
+		if ($diff->m) { $result .= $diff->format("%m мес. "); }
+		if ($diff->d) { $result .= $diff->format("%d дн. "); }
+		if ($diff->h) { $result .= $diff->format("%h ч. "); }
+		if ($diff->i) { $result .= $diff->format("%i мин. "); }
+
+		return $result;		
+	}
 }
