@@ -22,7 +22,7 @@ class Controller_Kupon extends Controller_Template {
 		if(!$kupon->loaded())
 			throw new HTTP_Exception_404;
 		
-		if ($kupon->invoice->user_id != $user->id)
+		if ($kupon->invoice->user_id != $user->id or !in_array($user->role, array(1,3)))
 			throw new HTTP_Exception_404;				
 		
 		$object = ORM::factory('Object', $kupon->object_id);
