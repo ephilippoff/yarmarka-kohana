@@ -41,7 +41,7 @@ class Service_Object extends Service
 			return $result;
 		}
 
-		$balance = $this->getBalance();
+		$balance = $this->get_balance();
 		if ($balance >= 0 AND $balance - intval($quantity) < 0) {
 			$result = "Недоступен для заказа (отсутсвует)";
 			return $result;
@@ -70,7 +70,7 @@ class Service_Object extends Service
 		}
 	}
 
-	public function getBalance()
+	public function get_balance()
 	{
 		if ($this->_object->loaded())
 		{

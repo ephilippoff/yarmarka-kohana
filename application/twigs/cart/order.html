@@ -12,7 +12,6 @@
 				<th>Цена</th>
 				<th>Сумма</th>
 			</tr>
-			{% set sum = 0 %}
 			{% set i = 1 %}
 			{% for item in orderItems  if item.type == 'object' %}
 				{% if loop.first %}
@@ -20,7 +19,6 @@
 				{% endif %}
 				{% include 'cart/item/object' %}
 
-				{% set sum = sum + item.total %}
 				{% set i = i +1 %}
 			{% endfor %}
 			{% for item in orderItems  if item.type != 'object' %}
@@ -28,7 +26,6 @@
 					<tr><td colspan="6">Услуги для объявлений</td></tr>
 				{% endif %}
 				{% include 'cart/item/other' %}
-				{% set sum = sum + item.total %}
 				{% set i = i +1 %}
 			{% endfor %}
 			<tr>

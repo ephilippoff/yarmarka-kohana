@@ -20,22 +20,42 @@ class Service_Lider extends Service
 	}
 
 	public function period($period = NULL)
-    {
-    	if (!$period) return $this->_period;
-        $this->_period = $period;
-        return $this;
-    }
-
-	public function get()
 	{
+		if (!$period) return $this->_period;
+		$this->_period = $period;
+		return $this;
+	}
+
+	public function get($params = array())
+	{
+		$params = new Obj($params);
+		$quantity = $params->quantity = ($params->quantity) ? $params->quantity : 1;
+		$price = $price_total = $this->getPriceMultiple();
+		$discount = 0;
+		$discount_reason = "";
+		$discount_name = FALSE;
+		$price_total = $price * $quantity - $discount;
+		$description = $this->get_params_description($params).$discount_reason;
+
 		return array(
 			"period" => $this->period(),
 			"city" => $this->city(),
 			"category" => $this->category(),
 			"name" => $this->_name,
 			"title" => $this->_title,
-			"price" => ($this->_is_multiple) ? $this->getPriceMultiple() : $this->getPrice()
+			"price" => $price,
+			"quantity" => $quantity,
+			"discount" => $discount,
+			"discount_name" => $discount_name,
+			"discount_reason" => $discount_reason,
+			"price_total" => $price_total,
+			"description" => $description
 		);
+	}
+
+	public function get_params_description($params)
+	{
+		return "Количество: ".$params->quantity;
 	}
 
 	public function set_params($params = array())
@@ -77,11 +97,5 @@ class Service_Lider extends Service
 		$or->save();
 
 		return TRUE;
-	}
-
-	public function get_params_description($params = array())
-	{
-		$params = new Obj($params);
-		return "Количество: ".$params->quantity;
 	}
 }

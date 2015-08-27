@@ -142,6 +142,27 @@ class Model_Order extends ORM
 						->find_all();
 		foreach ($orderItems as $orderItem) $orderItem->return_reserve();
 	}
+
+	static function each_item($query, $callback)
+	{
+		$sum = 0;
+		$cart_items = $query->find_all();
+
+		foreach ($cart_items as $cart_item) {
+			$params = json_decode($cart_item->params);
+			$service = Service::factory(Text::ucfirst($params->type), $cart_item->object_id);
+
+			$item = new Obj((array) $params);
+			$item->id = $cart_item->id;
+			$item->available = FALSE;
+
+			$item = $callback($service, new Obj($item), $cart_item);
+
+			$sum += $item->service->price_total;
+		}
+
+		return $sum;
+	}
 	
 
 }

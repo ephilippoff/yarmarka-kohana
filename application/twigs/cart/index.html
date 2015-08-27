@@ -17,11 +17,12 @@
 				<th>Цена</th>
 				<th>Сумма</th>
 				<th></th>
+				<th></th>
 			</tr>
 			{% set i = 1 %}
 			{% for cartItem in cartTempItems if cartItem.type == 'object' %}
 				{% if loop.first %}
-					<tr><td colspan="6">Купоны</td></tr>
+					<tr><td colspan="7">Купоны</td></tr>
 				{% endif %}
 				{% include 'cart/temp_item/object' %}
 				{% set i = i + 1 %}
@@ -29,7 +30,7 @@
 
 			{% for cartItem in cartTempItems if cartItem.type != 'object' %}
 				{% if loop.first %}
-					<tr><td colspan="6">Услуги для объявлений</td></tr>
+					<tr><td colspan="7">Услуги для объявлений</td></tr>
 				{% endif %}
 				{% include 'cart/temp_item/other' %}
 				{% set i = i + 1 %}
@@ -40,6 +41,7 @@
 				<td></td>		
 				<td></td>
 				<td class="js-endsum">{{ sum }} руб.</td>
+				<td></td>
 				<td></td>
 			</tr>
 		</table>

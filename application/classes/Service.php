@@ -176,10 +176,10 @@ class Service
 
         $this->set_params($user_result);
 
-        $params->service =  $this->get();
-        $params->quantity =  ($user_result->quantity) ? (int) $user_result->quantity : 1;
-        $params->balance = ($params->balance) ? $params->balance : -1;
-        $params->price = $params->service["price"];
+        $params->service =  $this->get($user_result);
+        // $params->quantity =  ($user_result->quantity) ? (int) $user_result->quantity : 1;
+        // $params->balance = ($params->balance) ? $params->balance : -1;
+        // $params->price = $params->service["price"];
         $params->type = $params->service["name"];
 
         if ($params->service["name"] == "object")
@@ -194,6 +194,7 @@ class Service
 
         if ($tempOrderItemId) {
             $order_item_temp = ORM::factory('Order_ItemTemp', $tempOrderItemId);
+            
         } else {
             $order_item_temp = ORM::factory('Order_ItemTemp')
                                         ->where("key","=",$key)
@@ -201,12 +202,18 @@ class Service
                                         ->where("service_name","=", $params->service["name"])
                                         ->find();
         }
+        
+        if ($order_item_temp->loaded()) {
+            $order_item_temp->return_reserve();
+        }
         $order_item_temp->object_id = $object_id;
         $order_item_temp->service_id = NULL;
         $order_item_temp->service_name = $params->service["name"];
         $order_item_temp->params = $total_params;
         $order_item_temp->key = $key;
         $order_item_temp->save();
+
+        $order_item_temp->reserve();
 
         return $order_item_temp->get_row_as_obj();
     }

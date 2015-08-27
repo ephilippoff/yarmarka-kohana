@@ -12,33 +12,45 @@ class Service_Up extends Service
 		$this->_initialize();
 	}
 
-	public function get()
+	public function get($params = array())
 	{
+
+		$params = new Obj($params);
+		$quantity = $params->quantity = ($params->quantity) ? $params->quantity : 1;
+		$price = $price_total = $this->getPrice();
+		$discount = 0;
+		$discount_reason = "";
+		$discount_name = FALSE;
+		$params->available = $this->check_available($quantity);
+		if ($params->available) {
+			$discount = $price * $quantity;
+			$discount_reason = " (бесплатный)";
+			$discount_name = "free_up";
+		}
+		$price_total = $price * $quantity - $discount;
+		$description = $this->get_params_description($params).$discount_reason;
 
 		return array(
 			"name" => $this->_name,
 			"title" => $this->_title,
-			"price" => ($this->_is_multiple) ? $this->getPriceMultiple() : $this->getPrice()
+			"price" => $price,
+			"quantity" => $quantity,
+			"discount" => $discount,
+			"discount_name" => $discount_name,
+			"discount_reason" => $discount_reason,
+			"price_total" => $price_total,
+			"description" => $description
 		);
 	}
 
 	public function get_params_description($params = array())
 	{
-		$params = new Obj($params);
-		$free = ($params->available) ? " (бесплатно)": "";
-		return "Количество: ".$params->quantity.$free;
+		return "Количество: ".$params->quantity;
 	}
 
 	public function apply($orderItem)
 	{
 		self::apply_service($orderItem->object_id);
-
-		// available = TRUE когда применяется один бесплатный подъем
-		if ($orderItem->available) {
-			$user = ORM::factory('User', $orderItem->user_id);
-			self::decrease_balance($user, $orderItem->quantity);
-		}
-		
 		self::saveServiceInfoToCompiled($orderItem);
 	}
 
@@ -61,16 +73,16 @@ class Service_Up extends Service
 		return TRUE;
 	}
 
-	public static function check_available($quantity)
+	public static function check_available($quantity, $balance = FALSE)
 	{
 		$result = FALSE;
-
+		$quantity = ($quantity) ? $quantity : 1;
 		if ($quantity > 1) return $result;
 		
 		$user = Auth::instance()->get_user();
 		if (!$user) return $result;
 
-		$balance = self::get_balance($user);
+		$balance = ($balance) ? $balance : self::get_balance($user);
 		if (!isset($balance)) {
 			$balance = (int) self::set_balance($user, Service_Up::$_free_count);
 		}
@@ -123,9 +135,6 @@ class Service_Up extends Service
 			$user = Auth::instance()->get_user();
 
 		$balance = self::get_balance($user);
-
-		if ($balance == 0)
-			return FALSE;
 
 		return self::set_balance($user, $balance + $count);
 	}
