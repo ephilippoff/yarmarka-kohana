@@ -1,0 +1,11 @@
+<tr data-id="{{ cartItem.id }}" data-type="{{ cartItem.type }}" data-object-id="{{ cartItem.object.id }}" data-total="{{cartItem.price * cartItem.quantity}}" class="js-cartitem">
+	<td>{{ i }}</td>
+	<td>{{ cartItem.title }}</td>
+	<td>
+		<span class="js-params">{{cartItem.description}}</span>
+		<span class="span-link js-edit"><i class="fa fa-pencil mr3"></i>Изменить</span>
+	</td>
+	<td class="js-itemprice">{{cartItem.price}}  руб.</td>
+	<td class="js-itemsum itemsum">{{cartItem.price * cartItem.quantity}} руб.</td>
+	<td><a class="js-delete pointer"><i class="fa fa-trash mr3"></i>Удалить</a></td>
+</tr>

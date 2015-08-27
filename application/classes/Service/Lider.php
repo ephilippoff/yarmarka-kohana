@@ -7,21 +7,45 @@ class Service_Lider extends Service
 
 	protected $_name = "lider";
 	protected $_title = "Лидер";
-	protected $_is_multiple = FALSE;
+	protected $_is_multiple = TRUE;
+	public $_period = 7;
 
-	public function __construct($param = NULL)
+	public function __construct($object_id = NULL)
 	{
+		$object = ORM::factory('Object',$object_id);
+		if ($object->loaded()) {
+			$this->object($object);
+		}
 		$this->_initialize();
 	}
 
+	public function period($period = NULL)
+    {
+    	if (!$period) return $this->_period;
+        $this->_period = $period;
+        return $this;
+    }
+
 	public function get()
 	{
-
 		return array(
+			"period" => $this->period(),
+			"city" => $this->city(),
+			"category" => $this->category(),
 			"name" => $this->_name,
 			"title" => $this->_title,
-			"price" => $this->getPrice()
+			"price" => ($this->_is_multiple) ? $this->getPriceMultiple() : $this->getPrice()
 		);
+	}
+
+	public function set_params($params = array())
+	{
+		parent::set_params($params);
+		$params = new Obj($params);
+
+		if ($params->period) {
+			$this->period($params->period);
+		}
 	}
 
 	public function apply($orderItem)
@@ -53,5 +77,11 @@ class Service_Lider extends Service
 		$or->save();
 
 		return TRUE;
+	}
+
+	public function get_params_description($params = array())
+	{
+		$params = new Obj($params);
+		return "Количество: ".$params->quantity;
 	}
 }

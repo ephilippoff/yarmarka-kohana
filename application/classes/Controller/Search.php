@@ -150,9 +150,10 @@ class Controller_Search extends Controller_Template {
                 "city_id" => $search_info->city_id,
                 "category_id" => (count($search_info->child_categories_ids) > 0) ? $search_info->child_categories_ids : $search_info->category->id,
             ),
-            array_merge($search_params, array("limit" => 15))
+            array_merge($search_params, array("limit" => 15, "page" => 1))
         );
         $twig->vip_search_result = Search::getresult($vip_search_query->execute()->as_array());
+        shuffle($twig->vip_search_result);
         if (count($twig->vip_search_result) > 0) 
         {
             $vip_search_coords = array_map(function($item){

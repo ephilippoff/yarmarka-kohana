@@ -1,0 +1,14 @@
+<tr data-id="{{ cartItem.id }}" data-type="object" data-object-id="{{ cartItem.object_id }}" data-price="{{ cartItem.price }}" data-quantity="{{ cartItem.quantity }}" class="js-cartitem">
+	<td>{{ i }}</td>
+	<td>{{ cartItem.title }}</td>
+	<td>
+		{% if cartItem.available != 1 %}
+			<span style="color:red;">{{ cartItem.available }}</span>
+		{% else %}
+			<input type="number" class="js-quanitity" value="{{ cartItem.quantity }}" min="0" {% if cartItem.balance > 0 %} max="{{cartItem.balance}}" {% else %} max="100" {% endif %} >
+		{% endif %}
+	</td>
+	<td>{{cartItem.price}}  руб.</td>
+	<td class="js-itemsum itemsum">{{cartItem.price * cartItem.quantity}} руб.</td>
+	<td><a class="js-delete">Удалить</a></td>
+</tr>

@@ -4,14 +4,19 @@ return array(
 		"default" => 20
 	),
 	"lider" => array(
-		"default" => 200
+		"tyumen" => array(
+			"vodnii-transport" => 4,
+			"default" => 2
+		),
+		"default" => 1,
+		"base" => 200,
 	),
 	"premium" => array(
 		"tyumen" => array(
-			"avtotransport" => 5,
-			"default" => 3
+			"avtotransport" => 1.5,
+			"default" => 1
 		),
-		"default" => 2,
-		"base" =>10
+		"default" => 1,
+		"base" => 40
 	)
 );

@@ -14,6 +14,7 @@ define(function(require){
         components: {
             windows: {
                 service: require('lib/text!templates/windows/service.tmpl'),
+                editService: require('lib/text!templates/windows/editService.tmpl')
             },
             services: {
                 up: require('lib/text!templates/services/up.tmpl'),
