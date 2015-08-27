@@ -97,7 +97,67 @@ class Controller_Detail extends Controller_Template {
 
     public function action_type90() {
 
-    }
+    }	
+	
+    public function action_type100() {
+		$start = microtime(true);
+        $object = $this->request->param("object");
+        $url = $this->request->param("url");
+
+        if ($url <> $this->request->get_full_url()) {
+            HTTP::redirect($url, 301);
+        }
+
+        if ($object->active == 0) {
+           throw new HTTP_Exception_404;
+           return;
+        }
+
+        $twig = Twig::factory('detail/kupon/index');
+        $twig->domain      = $this->domain;
+        $twig->city        = $this->domain->get_city();
+
+        //блок информации которую можно закеширвоать всю разом
+        $this->performance->add("Detail","info");
+        $detail_info = $this->get_detail_info($object, array(
+            "crumbs", 
+            "object", 
+            "object_compiled", 
+            "author",
+            "images",
+            "category"
+        ));
+
+        foreach ((array) $detail_info as $key => $item) {			
+            $twig->{$key} = $item;
+        }
+
+		//декодируем json-атрибут price-params
+		$price_params = json_decode($twig->object->compiled['attributes']['price-params']['value']);		
+		if ($price_params and json_last_error() == JSON_ERROR_NONE)
+			$twig->price_params_decoded = $price_params;
+		else
+			$twig->price_params_decoded = array();
+		
+		$twig->request_uri = $_SERVER['REQUEST_URI'];
+
+        //блоки взаимодействия которые кешируются отдельно
+        $this->performance->add("Detail","interact");
+        $detail_interact = $this->get_detail_interact($object, array(
+            "user", 
+            "search_cache", 
+        ));
+		
+        $this->performance->add("Detail","additional");
+
+        foreach ((array) $detail_interact as $key => $item) {
+			$twig->{$key} = $item;
+        }
+		
+        $this->performance->add("Detail","end");
+        $twig->php_time = $this->performance->getProfilerStat();
+        $this->response->body($twig);
+    }		
 
     public function get_detail_info(ORM $object, $need = array()) {
         $info = new Obj();

@@ -1,0 +1,24 @@
+<div class="module">
+	{% if user %}
+		{% if price_params_decoded %}
+			<table class="buy-items-table">
+				<thead>
+					<tr>
+						<td>Количество</td>
+						<td>Цена</td>
+						<td></td>
+					</tr>
+				</thead>
+				{% for item in price_params_decoded %}
+					<tr>
+						<td>{{ item.quantity }} {{ item.unit }}</td>
+						<td>{{ item.price }} <span class="rub">Р</span></td>
+						<td><div class="button bg-color-lightorange white pt10 pb10 fs20">Купить</div></td>
+					</tr>
+				{% endfor %}
+			</table>
+		{% endif %}
+	{% else %}
+		<p class="fs16"><a href="{{ url('user/login?return=') }}{{ request_uri }}">Авторизуйтесь</a>, чтобы купить купон онлайн прямо сейчас!</p>
+	{% endif %}
+</div>

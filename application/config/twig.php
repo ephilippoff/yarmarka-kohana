@@ -28,6 +28,7 @@ return array(
 	),
 	'filters' => array(
 		'contacthide' => array('Twig_Filters', 'contacthide'),
-		'values' => array('Twig_Filters', 'values')
+		'values' => array('Twig_Filters', 'values'),
+		'formatphone' => array('Twig_Filters', 'formatphone'),
 	),
 );
