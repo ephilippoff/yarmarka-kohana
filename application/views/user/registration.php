@@ -168,12 +168,17 @@
 
 				<div class="smallcont">
 					<div class="labelcont">
-						<label><span>Правила</span></label>
+						
 					</div>
 					<div class="fieldscont">
 						<div class="inp-cont-short">
-							<div class="inp-cont accept">								
-								Нажимая на кнопку "Далее", Вы принимаете <a href="/article/usloviya-ispolzovaniya-saita-yarmarka" target="_blank">условия использования</a> и <a href="/article/pravila-razmeshcheniya-obyavlenii" target="_blank">правила размещения объявлений</a> на сайте "Ярмарка".								
+							<div class="inp-cont accept <? if ($error->i_agree) echo "error";?>"">								
+								<input type="checkbox" value="yes" name="i_agree"> Я согласен с <a href="/article/usloviya-ispolzovaniya-saita-yarmarka" target="_blank">условиями использования</a> и <a href="/article/pravila-razmeshcheniya-obyavlenii" target="_blank">правилами размещения объявлений</a> на сайте "Ярмарка".								
+								<?php if ($error->i_agree): ?>
+									<span class="inform fn-error">
+										<span><?=$error->i_agree?></span>
+									</span>
+								<?php endif?>
 							</div>
 						</div>
 					</div>									

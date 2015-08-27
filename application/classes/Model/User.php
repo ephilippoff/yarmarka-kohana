@@ -441,7 +441,8 @@ class Model_User extends Model_Auth_User {
 					->rule('type', 'not_empty', array(':value', "Статус"))
 					->rule('type', 'valid_org_type', array(':value', "Статус"))
 					->rule('captcha', 'not_empty', array(':value', ""))
-					->rule('captcha', 'captcha', array(':value', ""));
+					->rule('captcha', 'captcha', array(':value', ""))
+					->rule('i_agree', 'not_empty', array(':value', ""));
 	}
 
 	public function registration($email, $password, $type = 1)
