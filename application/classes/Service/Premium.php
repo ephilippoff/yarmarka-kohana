@@ -61,7 +61,9 @@ class Service_Premium extends Service
 	 */
 	public function apply($orderItem)
 	{
-		self::apply_service($orderItem->object->id);
+		$quantity = $orderItem->service->quantity;
+
+		self::apply_service($orderItem->object->id, $quantity);
 		self::saveServiceInfoToCompiled($orderItem);
 	}
 
@@ -81,15 +83,6 @@ class Service_Premium extends Service
 		}
 
 		return $result;
-	}
-
-	static function apply_prepayed($object_id, $city_id = NULL, $user = NULL)
-	{
-		if (Service_Premium::get_balance($user)<=0)
-			return FALSE;
-		
-		Service_Premium::apply_service($object_id, $city_id);
-		return Service_Premium::decrease_balance($user);
 	}
 
 	static function get_balance($user = NULL)
@@ -186,7 +179,7 @@ class Service_Premium extends Service
 		return $buyed->loaded();
 	}
 
-	static function apply_service($object_id, $city_id = NULL, $user = NULL)
+	static function apply_service($object_id, $quantity, $city_id = NULL, $user = NULL)
 	{
 		$object = ORM::factory('Object', $object_id);
 
@@ -202,13 +195,15 @@ class Service_Premium extends Service
 					->where("object_id", "=", $object_id)
 					->where("city_id", "=", $city_id)
 					->find();
+		if ($or->loaded())
+		{
+			$quantity += $or->count;
+		}
+		$or->count = $quantity;
 		$or->object_id = $object_id;
 		$or->city_id = $city_id;
 		$or->date_expiration = DB::expr("(NOW() + INTERVAL '".Service_Premium::PREMIUM_DAYS." days')");
 		$or->save();
-
-		$object->date_created = DB::expr("NOW()");
-		$object->save();
 
 		return TRUE;
 	}

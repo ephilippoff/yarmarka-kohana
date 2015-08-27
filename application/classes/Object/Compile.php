@@ -132,7 +132,9 @@ class Object_Compile
 			$result["services"]["premium"][] = array(
 				"rating" =>$premium->rating,
 				"city_id" =>$premium->city_id, 
-				"date_expiration" =>$premium->date_expiration
+				"date_expiration" =>$premium->date_expiration,
+				"count" => $premium->count,
+				"activated" => $premium->activated
 			);
 		}
 
@@ -143,7 +145,9 @@ class Object_Compile
 		foreach ($photocards as $photocard) {
 			$result["services"]["lider"][] = array(
 				"category_id" =>$photocard->category_id, 
-				"date_expiration" =>$photocard->date_expiration
+				"date_expiration" =>$photocard->date_expiration,
+				"count" => $photocard->count,
+				"activated" => $photocard->activated
 			);
 		}
 
@@ -153,7 +157,9 @@ class Object_Compile
 						->find_all();
 		foreach ($photocards as $photocard) {
 			$result["services"]["up"][] = array(
-				"date_created" => $photocard->date_created
+				"date_created" => $photocard->date_created,
+				"count" => $photocard->count,
+				"activated" => $photocard->activated
 			);
 		}
 

@@ -220,7 +220,7 @@ class Search {
 		if ($params->photocard) {
 			$object = DB::select(DB::expr($select))
 							->from(array($table_name,"o"));
-							
+
 			if (isset($params->published) AND $params->published === TRUE) {
 				$object = $object->where("o.is_published", "=", 1);
 			} 
@@ -253,13 +253,6 @@ class Search {
 				}
 				$object = $object->where("object_service_photocard.cities", "&&", DB::expr('ARRAY['.join(',', $city_id).']') );
 			}
-
-			// $photocard_subquery = DB::select("object_service_photocard.object_id")
-			// 							->from( "object_service_photocard" )
-			// 							->where("object_service_photocard.object_id","=", DB::expr("o.id"))
-			// 							->limit(1);
-			// $photocard_subquery = ORM::factory('Object_Service_Photocard')->get_subquery_for_search($photocard_subquery, is_array($params->category_id)? $params->category_id: array($params->category_id) );
-			//$object = $object->where("0", "<", $photocard_subquery);
 		}
 
 		if ($params->source) {

@@ -50,11 +50,13 @@ class Service_Up extends Service
 
 	public function apply($orderItem)
 	{
-		self::apply_service($orderItem->object->id);
+		$quantity = $orderItem->service->quantity;
+
+		self::apply_service($orderItem->object->id, $quantity);
 		self::saveServiceInfoToCompiled($orderItem);
 	}
 
-	static function apply_service($object_id)
+	static function apply_service($object_id, $quantity)
 	{
 		$object = ORM::factory('Object', $object_id);
 
@@ -66,7 +68,11 @@ class Service_Up extends Service
 		$or = ORM::factory('Object_Service_Up')
 					->where("object_id", "=", $object_id)
 					->find();
-
+		if ($or->loaded())
+		{
+			$quantity += $or->count;
+		}
+		$or->count = $quantity;
 		$or->object_id = $object_id;
 		$or->save();
 
