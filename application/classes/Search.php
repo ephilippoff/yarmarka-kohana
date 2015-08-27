@@ -218,17 +218,41 @@ class Search {
 		}
 
 		if ($params->photocard) {
+			$object = DB::select(DB::expr($select))
+							->from(array($table_name,"o"));
+							
+			if (isset($params->published) AND $params->published === TRUE) {
+				$object = $object->where("o.is_published", "=", 1);
+			} 
+			if (isset($params->published) AND $params->published === FALSE) {
+				$object = $object->where("o.is_published", "=", 0);
+			}
+
+			if ($active) {
+				$object = $object->where("o.active", "=", 1);
+			}
+
 			$object = $object->join("object_service_photocard", "inner")
 								->on("object_service_photocard.object_id","=", "o.id");
 
 			$object = $object->where("object_service_photocard.date_expiration", ">", DB::expr("NOW()"));
 			$object = $object->where("object_service_photocard.active","=", 1);
 
-			// if ( $params->city_id AND is_array($params->city_id) ) {
-			// 	$object = $object->where("object_rating.city_id", "IN", $params->city_id);
-			// } elseif ($params->city_id) {
-			// 	$object = $object->where("object_rating.city_id", "=" , $params->city_id);
-			// }
+			if ( $params->category_id ) {
+				$category_id = $params->category_id;
+				if (!is_array($category_id)) {
+					$category_id = array($category_id);
+				}
+				$object = $object->where("object_service_photocard.categories", "&&", DB::expr('ARRAY['.join(',', $category_id).']') );
+			}
+
+			if ( $params->city_id ) {
+				$city_id = $params->city_id;
+				if (!is_array($city_id)) {
+					$city_id = array($city_id);
+				}
+				$object = $object->where("object_service_photocard.cities", "&&", DB::expr('ARRAY['.join(',', $city_id).']') );
+			}
 
 			// $photocard_subquery = DB::select("object_service_photocard.object_id")
 			// 							->from( "object_service_photocard" )

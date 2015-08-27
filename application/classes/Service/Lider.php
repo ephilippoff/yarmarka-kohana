@@ -70,31 +70,62 @@ class Service_Lider extends Service
 
 	public function apply($orderItem)
 	{
-		Service_Lider::apply_service($orderItem->object->id);
+		$quantity = $orderItem->service->quantity;
+		$object_id = $orderItem->object->id;
+		$cities = $orderItem->service->city;
+		$categories = $orderItem->service->category;
+
+		Service_Lider::apply_service($object_id, $quantity, $cities, $categories);
 		self::saveServiceInfoToCompiled($orderItem);
 	}
 
-	static function apply_service($object_id, $category_id = NULL, $user = NULL)
+	static function apply_service($object_id, $quantity, $cities = NULL, $categories = NULL)
 	{
 		$object = ORM::factory('Object', $object_id);
 
 		if (!$object->loaded()) return FALSE;
 
-		if (!$category_id) 
-			$category_id = $object->category;
+		if (!$cities) 
+			$cities = array($object->city_id);
+		else
+			$cities = array_map(function($item) {
+				return $item->id;
+			} , (array) ORM::factory('City')->where("seo_name","IN", $cities)->getprepared_all());
 
-		if (!$user)
-			$user = Auth::instance()->get_user();
+		if (!$categories) 
+			$categories = array($object->category);
+		else
+			$categories = array_map(function($item) {
+				return $item->id;
+			} , (array) ORM::factory('Category')->where("seo_name","IN", $categories)->getprepared_all());
 
 		$or = ORM::factory('Object_Service_Photocard')
 					->where("object_id", "=", $object_id)
-					->where("category_id", "=", $category_id)
-					->find();
-		$or->object_id = $object_id;
-		$or->category_id = $category_id;
-		$or->active = 1;
-		$or->date_expiration = DB::expr("(NOW() + INTERVAL '".Service_Lider::LIDER_DAYS." days')");
-		$or->save();
+					->where("active","=",1)
+					->find_all();
+		$find_exact_service = FALSE;
+		foreach ($or as $or_item) {
+			$_cities = array_map('intval', explode(",", trim(trim($or_item->cities,"{"),"}")));
+			$_categories = array_map('intval', explode(",", trim(trim($or_item->categories,"{"),"}")));
+			if ( count(array_diff($_cities, $cities)) > 0  OR count(array_diff($_categories, $categories)) > 0) {
+				$find_exact_service = TRUE;
+				continue;
+			} else {
+				$quantity += $or_item->count;
+				$find_exact_service = FALSE;
+				break;
+			}
+		}
+		if ($find_exact_service) {
+			$or_item = ORM::factory('Object_Service_Photocard');
+		}
+		$or_item->object_id = $object_id;
+		$or_item->cities = '{'.join(',', $cities).'}';
+		$or_item->categories = '{'.join(',', $categories).'}';
+		$or_item->active = 1;
+		$or_item->count = $quantity;
+		$or_item->date_expiration = DB::expr("(NOW() + INTERVAL '".Service_Lider::LIDER_DAYS." days')");
+		$or_item->save();
 
 		return TRUE;
 	}
