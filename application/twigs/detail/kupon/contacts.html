@@ -1,0 +1,37 @@
+<div class="info-block-cont theme2 contacts-cont module">
+	<div class="block-title">
+		<span>Контактные данные</span>
+	</div>					
+	<div class="body">
+		<div class="row">
+			{% if object.is_published > 0 %}
+				<div class="col-md-6 col-sm-6">
+					<span class="author-name">{{object.contact}}</span>
+					<div class="contacts-list-cont js-contact-list">
+						{% for contact in object.compiled.contacts %}
+							{% if contact.type == 1 or contact.type == 2 %}
+								<p>{{ contact.value|formatphone }}</p>
+							{% else %}
+								<p>{{ contact.value }}</p>
+							{% endif %}
+						{% endfor %}
+					</div>
+				</div>
+				<div class="col-md-6 col-sm-6">
+					{% if object.compiled.author.org_type == 2 %}
+						<p><span class="moreinfo span-link" onclick='document.location="/user_id={{object.author}}"'>{{ object.compiled.author.org_name }}</span></p>
+						{% if object.compiled.author.logo %}
+							<div class="img-cont"><img src="{{  get_file(object.compiled.author.logo['120x90']) }}"></div>
+						{% endif %}
+						<p>{{ object.compiled.author.org_post_address }}</p>
+						<p><i class="ico phone"></i>{{ object.compiled.author.org_phone }}</p>						
+					{% endif %}
+				</div>
+			{% else %}
+				<div class="col-md-12 col-sm-12">
+					Объявление снято с публикации, контактные данные не доступны.
+				</div>
+			{% endif %}
+		</div>
+	</div>					
+</div>

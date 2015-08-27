@@ -7,6 +7,11 @@ class Twig_Filters
     {
         return Contact::hide($value);
     }
+	
+    public static function formatphone($value)
+    {
+        return Contact::format_phone($value);
+    }	
 
     public static function values($array)
     {

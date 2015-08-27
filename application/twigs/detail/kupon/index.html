@@ -1,0 +1,61 @@
+{% extends "layouts/detail" %}
+
+{% block css %} 
+	{{ parent() }}
+{% endblock css%}
+
+{% block title %} {{object.title|e}} {% endblock title%}
+{% block meta_description %} {{ object.user_text|e }} {% endblock meta_description%}
+
+{% block wrapperclass %}page-detail{% endblock wrapperclass %}
+
+{% block crumbs %} 
+	{% include 'detail/crumbs' %}
+{% endblock crumbs %}
+
+	{% block leftside %} 
+		<div class="col-md-8">
+			<article>
+
+				{% if (object.compiled.images.main_photo|length != 0) %}
+					{% include 'detail/kupon/main_photo' %}
+				{% endif %}				
+				
+				<div class="text-cont module">
+					{{ object.user_text }}
+				</div>
+				
+				{% include 'detail/kupon/photo' %}
+			</article>
+		</div>
+	{% endblock %}	
+
+	{% block rightside %}
+		<div class="col-md-4">
+			<aside>
+				<div class="module">
+					{% include 'detail/kupon/coupon_info' %}
+				</div>
+				
+				{% if object.compiled.attributes.site.value %}
+					<div class="button bg-color-crimson white pt15 pb15 fs20 mb5" onclick="window.location.href='{{ object.compiled.attributes.site.value }}'">Наш сайт</div>
+				{% endif %}
+				
+				<div class="button bg-color-lightgreen white pt15 pb15 fs20 mb10 fn-kupon-callback">Заказать обратный звонок</div>
+				
+				{% include 'detail/kupon/buy_items' %}
+				{% include 'detail/kupon/contacts' %}
+				
+				{% if (category.show_map) %}
+					{% include 'detail/map' %}
+				{% endif %}	
+			</aside>
+		</div>		
+	{% endblock rightside %}
+
+{% block templates %}
+	{{ parent() }}
+{% endblock templates %}
+
+
+

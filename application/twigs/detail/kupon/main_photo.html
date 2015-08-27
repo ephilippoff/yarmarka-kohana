@@ -1,0 +1,12 @@
+<div class="images-cont module">
+	<div class="image-cont coupon-image-cont">
+		<div class="img-wrapper">
+			<img alt="{{ object.title|e }}" src="{{ get_file(object.compiled.images.main_photo['original']) }}">
+			<span class="procent-cont bg-color-crimson">-{{ object.compiled.attributes.skidka.value }}<span>%</span></span>
+			<span class="discount-price-cont bg-color-lightorange">
+				<span class="old">{{ object.compiled.attributes['old-price'].value }}</span><span class="rub gray border-color-gray mr10">Р</span>
+				<span class="new">{{ object.compiled.attributes.tsena.value }}</span><span class="rub">Р</span>
+			</span>
+		</div>
+	</div>
+</div>
