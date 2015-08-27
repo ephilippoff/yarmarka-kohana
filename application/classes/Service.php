@@ -177,9 +177,9 @@ class Service
         $this->set_params($user_result);
 
         $params->service =  $this->get();
-        $params->quantity = (int) ($user_result->quantity) ? $user_result->quantity : 1;
+        $params->quantity =  ($user_result->quantity) ? (int) $user_result->quantity : 1;
         $params->balance = ($params->balance) ? $params->balance : -1;
-        $params->price =$params->service["price"];
+        $params->price = $params->service["price"];
         $params->type = $params->service["name"];
 
         if ($params->service["name"] == "object")

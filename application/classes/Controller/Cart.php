@@ -303,7 +303,7 @@ class Controller_Cart extends Controller_Template {
 		$this->response->body($twig);
 	}
 
-	public function action_save()
+	public function action_saveorder()
 	{
 		if ( ! $this->request->is_ajax() AND Kohana::$environment !== Kohana::DEVELOPMENT)
 		{
@@ -321,7 +321,7 @@ class Controller_Cart extends Controller_Template {
 
 		try {
 			$request = json_decode($this->request->body());
-		} catch (Exception $e) {
+		} catch (Kohana_Exception $e) {
 			$this->json["code"] = 400;
 			$this->json_response();
 			return;
@@ -331,15 +331,6 @@ class Controller_Cart extends Controller_Template {
 
 		if (!$key) {
 			$this->json["message"] = "Неверный ключ";
-			$this->json["code"] = 400;
-			$this->json_response();
-			return;
-		}
-
-		$sum = intval($request->sum);
-
-		if ($sum <= 0) {
-			$this->json["message"] = "Нулевая сумма заказа";
 			$this->json["code"] = 400;
 			$this->json_response();
 			return;
@@ -362,16 +353,16 @@ class Controller_Cart extends Controller_Template {
 
 			$db->begin();
 
-
 			$order = ORM::factory('Order')
 						->where("key","=",$key)
+						->where("state","=",0)
 						->find();
 			$order_loaded = $order->loaded();
 
 			$order->key = $key;
 			$order->user_id = $user->id;
 			$order->state = 0;
-			$order->sum = $sum;
+			$order->sum = 0;
 			$order->params = ($order->params) ? $order->params : "{}";
 			$order->save();
 
@@ -380,18 +371,7 @@ class Controller_Cart extends Controller_Template {
 			//return balance of goods if edit cart
 			if ($order_loaded)
 			{
-				$orderItems = ORM::factory('Order_Item')
-											->where("order_id", "=", $order_id )
-											->find_all();
-				foreach ($orderItems as $orderItem)
-				{
-					$params = new Obj(json_decode($orderItem->params));
-					if ($params->type == "object")
-					{
-						ORM::factory('Object')->increase_balance($orderItem->object_id, $params->quantity);
-					}
-				}
-
+				$order->return_reserve();
 				ORM::factory('Order_Item')
 						->where("order_id","=",$order_id)
 						->delete_all();
@@ -400,7 +380,8 @@ class Controller_Cart extends Controller_Template {
 			$tempItems = ORM::factory('Order_ItemTemp')
 									->where("key", "=", $key)
 									->find_all();
-				
+			$sum = 0;
+
 			foreach ($tempItems as $tempItem)
 			{
 				$params = new Obj(json_decode($tempItem->params));
@@ -456,19 +437,14 @@ class Controller_Cart extends Controller_Template {
 					"type" => $params->type
 				));
 				$realItem->save();
+
+				$realItem->reserve();
+
+				$sum += $params->quantity * $params->price;
 			}
 
-			$orderItems = ORM::factory('Order_Item')
-										->where("order_id", "=", $order_id )
-										->find_all();
-
-			//decrease balance of goods
-			foreach ($orderItems as $orderItem) {
-				$params = new Obj(json_decode($orderItem->params));
-				if ($params->type == "object") {
-					ORM::factory('Object')->decrease_balance($orderItem->object_id, $params->quantity);
-				}
-			}
+			$order->sum = $sum ;
+			$order->save();
 
 			$db->commit();
 
@@ -560,9 +536,7 @@ class Controller_Cart extends Controller_Template {
 		}
 		$payment_url = $robo->get_payment_url();
 
-		if ( in_array("cartKey", array_keys($_COOKIE)) ) {
-			unset($_COOKIE['cartKey']);
-		}
+		Cookie::delete('cartKey');
 		ORM::factory('Order_ItemTemp')->where("key", "=", $order->key)->delete_all();
 
 		$order->key = NULL;
@@ -649,9 +623,7 @@ class Controller_Cart extends Controller_Template {
 			"fake" => array("code_request" => $code)
 		));
 
-		if ( in_array("cartKey", array_keys($_COOKIE)) ) {
-			unset($_COOKIE['cartKey']);
-		}
+		Cookie::delete('cartKey');
 		ORM::factory('Order_ItemTemp')->where("key", "=", $order->key)->delete_all();
 
 		HTTP::redirect("/cart/order/".$order->id);
@@ -669,6 +641,9 @@ class Controller_Cart extends Controller_Template {
 			HTTP::redirect("/cart/order/".$order->id);
 			return;
 		}
+
+		Cookie::delete('cartKey');
+		ORM::factory('Order_ItemTemp')->where("key", "=", $order->key)->delete_all();
 
 		HTTP::redirect("/");
 	}

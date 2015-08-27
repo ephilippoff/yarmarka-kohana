@@ -116,4 +116,17 @@ class Service_Up extends Service
 
 		return self::set_balance($user, $balance - $count);
 	}
+
+	static function increase_balance($user, $count = 1)
+	{
+		if (!$user)
+			$user = Auth::instance()->get_user();
+
+		$balance = self::get_balance($user);
+
+		if ($balance == 0)
+			return FALSE;
+
+		return self::set_balance($user, $balance + $count);
+	}
 }

@@ -50,4 +50,33 @@ class Model_Order_Item extends ORM
 
 		return $orderItems;
 	}
+
+	function return_reserve()
+	{
+		if (!$this->loaded()) return;
+
+		$params = new Obj(json_decode($this->params));
+		if ($params->type == "object")
+		{
+			ORM::factory('Object')->increase_balance($this->object_id, $params->quantity);
+		} elseif ( in_array( $params->type, array("up", "premium") ) ) {
+			$service = Service::factory(Text::ucfirst($params->type));
+			$user = ORM::factory('User', $this->order_obj->user_id);
+			$service->increase_balance($user, $params->quantity);
+		}
+	}
+
+	function reserve()
+	{
+		if (!$this->loaded()) return;
+
+		$params = new Obj(json_decode($this->params));
+		if ($params->type == "object") {
+			ORM::factory('Object')->decrease_balance($this->object_id, $params->quantity);
+		} elseif ( in_array( $params->type, array("up", "premium") ) ) {
+			$service = Service::factory(Text::ucfirst($params->type));
+			$user = ORM::factory('User', $this->order_obj->user_id);
+			$service->decrease_balance($user, $params->quantity);
+		}
+	}
 }

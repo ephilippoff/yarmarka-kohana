@@ -65,16 +65,7 @@ class Model_Order extends ORM
 		if (!$this->loaded()) return;
 
 		//return goods to storage
-		$orderItems = ORM::factory('Order_Item')->get_items($this->id);
-		foreach ($orderItems as $orderItem)
-		{
-			if ($orderItem->object_id) {
-				$object = ORM::factory('Object', $orderItem->object_id);
-				if ($object->loaded()) {
-					$object->increase_balance($object->id, $orderItem->quantity);
-				}
-			}
-		}
+		$this->return_reserve();
 
 		$this->state = 3;
 		$this->save();
@@ -141,4 +132,16 @@ class Model_Order extends ORM
 		}
 	
 	}
+
+	function return_reserve()
+	{
+		if (!$this->loaded()) return;
+
+		$orderItems = ORM::factory('Order_Item')
+						->where("order_id", "=", $this->id )
+						->find_all();
+		foreach ($orderItems as $orderItem) $orderItem->return_reserve();
+	}
+	
+
 }

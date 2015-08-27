@@ -17,7 +17,7 @@ define([
     });
 
     var CartOrder = Backbone.Model.extend({
-        urlRoot: "cart/save"
+        urlRoot: "cart/saveorder"
     });
 
 
@@ -135,7 +135,7 @@ define([
             var s = this;
             e.preventDefault();
             this.recalcsum();
-            if (this.sum <= 0) return;
+
             s.showError("");
             var nextPage = s.ui.save.data("next-page");
             var cartListInJSON = this.cartList.toJSON();

@@ -125,6 +125,19 @@ class Service_Premium extends Service
 		return Service_Premium::set_balance($user, $balance - $count);
 	}
 
+	static function increase_balance($user, $count = 1)
+	{
+		if (!$user)
+			$user = Auth::instance()->get_user();
+
+		$balance = Service_Premium::get_balance($user);
+
+		if ($balance == 0)
+			return FALSE;
+
+		return Service_Premium::set_balance($user, $balance + $count);
+	}
+
 	static function get_already_buyed($user)
 	{
 		if (!$user)
