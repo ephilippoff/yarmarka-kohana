@@ -248,6 +248,7 @@ class Controller_Cart extends Controller_Template {
 
 		$orderItems = array();
 		$twig->sum = Model_Order::each_item($order_tems, function($service, $item, $model_item) use (&$orderItems) {
+
 			$orderItems[] = $item;
 			return $item;
 		});
@@ -351,8 +352,9 @@ class Controller_Cart extends Controller_Template {
 			$cart_tems = ORM::factory('Order_ItemTemp')
 									->where("key", "=", $key)
 									->order_by("id");
-
-			$sum = Model_Order::each_item($cart_tems, function($service, $item, $model_item) use ($order_id, $order_loaded) {
+			
+			$orderItems = array();
+			$sum = Model_Order::each_item($cart_tems, function($service, $item, $model_item) use (&$orderItems, $order_id, $order_loaded) {
 
 
 
@@ -385,6 +387,8 @@ class Controller_Cart extends Controller_Template {
 					$realItem->reserve();
 				}
 
+				
+				$orderItems[] = $item;
 				return $item;
 			});
 
@@ -407,6 +411,21 @@ class Controller_Cart extends Controller_Template {
 		} else {
 			$this->json["code"] = 400;
 		}
+
+		$goods_for_free = 0;
+		$counter = 0;
+		foreach ($orderItems as $item) {
+			if (in_array($item->service->discount_name, array("prepayed_premium", "free_up") )) {
+				$goods_for_free += 1;
+			}
+			$counter += 1;
+		}
+
+		if ($goods_for_free == $counter AND $sum == 0) {
+			$order->fake_command(100, 22);
+			$this->json["code"] = 300;
+		}
+
 
 		$this->json_response();
 
@@ -567,15 +586,7 @@ class Controller_Cart extends Controller_Template {
 			return;
 		}
 
-		$order->check_state($order->id, array(
-			"fake" => array("code_request" => $code),
-			"fake_state" => 222
-		));
-
-		Cart::clear($order->key);
-
-		$order->key = NULL;
-		$order->save();
+		$order->fake_command($code, 222);
 
 		HTTP::redirect("/cart/order/".$order->id);
 	}

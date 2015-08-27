@@ -8,6 +8,19 @@ class Model_Order extends ORM
 		'user_obj'			=> array('model' => 'User', 'foreign_key' => 'user_id'),
 	);
 
+	function fake_command($code, $state = 2)
+	{
+		$this->check_state($this->id, array(
+			"fake" => array("code_request" => $code),
+			"fake_state" => $state
+		));
+
+		Cart::clear($this->key);
+
+		$this->key = NULL;
+		$this->save();
+	}
+
 	function check_state($order_id = NULL, $params = array(), $callback = NULL) {
 
 		$params = new Obj($params);
@@ -90,7 +103,7 @@ class Model_Order extends ORM
 		});
 
 		// send email to user about successfull payment
-		if ($user->loaded() AND $user->email)
+		if ($user->loaded() AND $user->email AND $state == 2)
 		{				
 			
 			$subj = "Потверждение оплаты. Заказ №".$this->id;
@@ -127,14 +140,16 @@ class Model_Order extends ORM
 			return;
 		}
 
-	
-		$subj = "Уведомление администратору об оплате заказа с товарами. Заказ №".$this->id;
-		$msg = View::factory('emails/payment_success',
-				array('order' => $this,'orderItems' => $orderItems));
+		if ($state == 2)
+		{
+			$subj = "Уведомление администратору об оплате заказа с товарами. Заказ №".$this->id;
+			$msg = View::factory('emails/payment_success',
+					array('order' => $this,'orderItems' => $orderItems));
 
-		$configBilling = Kohana::$config->load("billing");
-		foreach ($configBilling["emails_for_notify"] as $email) {
-			Email::send($email, Kohana::$config->load('email.default_from'), $subj, $msg);
+			$configBilling = Kohana::$config->load("billing");
+			foreach ($configBilling["emails_for_notify"] as $email) {
+				Email::send($email, Kohana::$config->load('email.default_from'), $subj, $msg);
+			}
 		}
 	
 	}

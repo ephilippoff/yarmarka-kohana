@@ -150,6 +150,8 @@ define([
                     console.log(response)
                     if (response.code == 200) {
                         document.location = nextPage+response.order_id;
+                    } else if (response.code == 300) {
+                        document.location = "/cart/order/"+response.order_id;
                     } else {
                         s.showError(response.message);
                     }
