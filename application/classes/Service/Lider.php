@@ -70,7 +70,7 @@ class Service_Lider extends Service
 
 	public function apply($orderItem)
 	{
-		Service_Lider::apply_service($orderItem->object_id);
+		Service_Lider::apply_service($orderItem->object->id);
 		self::saveServiceInfoToCompiled($orderItem);
 	}
 

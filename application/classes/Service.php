@@ -184,10 +184,10 @@ class Service
 
         if ($params->service["name"] == "object")
         {
-            $params->title = "<a href='/detail/".$object_id."'>".$object_title."</a>";
+            $params->title = "".$object_title."";
         } else
         {
-            $params->title = "Услуга '".$params->service['title']."' для объявления <a href='/detail/".$object_id."'>'".$object_title."'</a>";
+            $params->title = "Услуга '".$params->service['title']."' для объявления '".$object_title."'";
         }
 
         $total_params = json_encode(array_merge( (array) $service_info, (array) $params) ) ;
@@ -202,7 +202,7 @@ class Service
                                         ->where("service_name","=", $params->service["name"])
                                         ->find();
         }
-        
+
         if ($order_item_temp->loaded()) {
             $order_item_temp->return_reserve();
         }
@@ -226,16 +226,16 @@ class Service
     public function saveServiceInfoToCompiled($orderItem)
     {
         $oc = ORM::factory('Object_Compiled')
-                ->where("object_id","=",$orderItem->object_id)
+                ->where("object_id","=",$orderItem->object->id)
                 ->find();
         $compiled = array();
         if ($oc->loaded()) {
             $compiled = unserialize($oc->compiled);
         }
 
-        $compiled = array_merge($compiled, Object_Compile::getServices($orderItem->object_id) );
+        $compiled = array_merge($compiled, Object_Compile::getServices($orderItem->object->id) );
 
-        $oc->object_id = $orderItem->object_id;
+        $oc->object_id = $orderItem->object->id;
         $oc->compiled = serialize($compiled);
         $oc->save();
         

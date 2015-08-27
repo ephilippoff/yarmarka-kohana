@@ -36,4 +36,10 @@ class Cart {
 				"summ" => 0
 		);
 	}
+
+	static function clear($key)
+	{
+		Cookie::delete('cartKey');
+		ORM::factory('Order_ItemTemp')->where("key", "=", $key)->delete_all();
+	}
 }

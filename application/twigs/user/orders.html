@@ -13,18 +13,20 @@
 	<div class="bg-color-whitesmoke p20">
 		<table class="orders-table table">
 			<tr>
-				<th class="col1">Наименование</th>
-				<th class="col2">Состояние</th>
-				<th class="col3">Сумма</th>
+				<th class="col1">Дата</th>
+				<th class="col2">Наименование</th>
+				<th class="col3">Состояние</th>
+				<th class="col4">Сумма</th>
 			</tr>
 
 			{% for order in orders %}
 				<tr>
-					<td class="col1"><a href="/cart/order/{{order.id}}">Заказ #{{order.id}} от {{order.created|date("d.m.Y H:m:s")}}</a></td> 
+					<td class="col1">{{ order.created|date("d.m.Y H:i") }}</td>
+					<td class="col1"><a href="/cart/order/{{order.id}}">Заказ #{{order.id}}</a></td> 
 					<td class="col2">
-						{# {{ getState(order.state) }} #}
-						{% if order.state == 3 %}
-							{{order.payment_date|date("d.m.Y H:i:s")}}
+						{{ order.state_name }}
+						{% if order.state == 2 %}
+							{{order.payment_date|date("d.m.Y H:i")}}
 						{% endif %}
 					</td> 
 					<td class="col3">{{ order.sum }} р.</td> 
@@ -39,7 +41,9 @@
 				</tr>
 			{% endfor %}
 		</table>
+		{{ pagination }}
 	</div>
+
 {% endblock content %}
 
 {% block rightside %}{% endblock rightside %}

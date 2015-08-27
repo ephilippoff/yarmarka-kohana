@@ -16,7 +16,7 @@
 		<td class="quantity">
 			<% var quantity  = 1; %>
 			<% if (is_edit) { 
-				quantity = edit_params.quantity;
+				quantity = edit_params.service.quantity;
 			} %>
 			<input class="js-quantity" type="number" value="<%=quantity%>" min="1" max="99">
 		</td>
@@ -25,7 +25,7 @@
 				<% if (!info.available) { %>
 					<%=info.service.price%> руб.
 				<% } else { %>
-					Бесплатно
+					<%=info.service.discount_reason%>
 				<% } %>
 			</span>
 		</td>

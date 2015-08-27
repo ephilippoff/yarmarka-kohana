@@ -61,7 +61,7 @@ class Service_Premium extends Service
 	 */
 	public function apply($orderItem)
 	{
-		self::apply_service($orderItem->object_id);
+		self::apply_service($orderItem->object->id);
 		self::saveServiceInfoToCompiled($orderItem);
 	}
 

@@ -112,35 +112,40 @@ class Controller_User_Service extends Controller_User_Profile {
         );
 
         $user = $this->user;
+        $page = (int) $this->request->query("page");
+        $page = ($page) ? $page : 1;
+        $limit = 10;
+        $offset = ($page - 1) * $limit;
 
-
-        $orders = ORM::factory('Order')->where("user_id","=",$this->user->id)
+        $orders = ORM::factory('Order')
+                ->where("user_id","=",$this->user->id)
                 ->order_by("created", "desc")
-                ->find_all();
+                ->offset($offset)
+                ->limit($limit)
+                ->getprepared_all();
 
-        $orderItems = array();
         foreach ($orders as $order) {
-            $orderItems[$order->id] = ORM::factory('Order_Item')->get_items($order->id);
-            
+            $order->state_name = Model_Order::get_state($order->state);
         }
-
         $twig->orders = $orders;
-        $twig->orderItems =$orderItems;
 
-        $twig->getState = function($stateId) {
-            if ($stateId == 0) {
-                $state = "Инициирован";
-            } elseif ($stateId == 1) {
-                $state = "В ожидании оплаты";
-            } elseif ($stateId == 2) {
-                $state = "Оплачен";
-            } elseif ($stateId == 3) {
-                $state = "Отменен";
-            } else {
-                $state = "Отменен";
-            }
-            return $state;
-        };
+        $pagination = Pagination::factory( array(
+            'current_page' => array('source' => 'query_string', 'key' => 'page'),
+            'total_items' => ORM::factory('Order')->where("user_id","=", $this->user->id)->count_all(),
+            'items_per_page' => $limit,
+            'auto_hide' => TRUE,
+            'view' => 'pagination/search',
+            'first_page_in_url' => FALSE,
+            'count_out' => 1,
+            'count_in' => 8,
+            'limits' => array()
+        ))->route_params(array(
+            'controller' => 'User',
+            'action' => 'orders',
+        ));;
+
+        $twig->pagination = $pagination;
+
         $this->response->body($twig);
     }
 

@@ -254,18 +254,7 @@ class Controller_Cart extends Controller_Template {
 
 		$state = "initial";
 
-		if ($order->state == 0) {
-			$state = "initial";
-		} elseif ($order->state == 1) {
-			$state = "notPaid";
-		} elseif ($order->state == 2) {
-			$state = "paid";
-		} elseif ($order->state == 3) {
-			$state = "cancelPayment";
-		} else {
-			$state = "cancelPayment";
-		}
-
+		$state = Model_Order::get_state($order->state, TRUE);
 		if ($state <> "initial")
 		{
 			$twig->crumbs = array(
@@ -496,8 +485,7 @@ class Controller_Cart extends Controller_Template {
 		}
 		$payment_url = $robo->get_payment_url();
 
-		Cookie::delete('cartKey');
-		ORM::factory('Order_ItemTemp')->where("key", "=", $order->key)->delete_all();
+		Cart::clear($order->key);
 
 		$order->key = NULL;
 		$order->state = 1;
@@ -580,11 +568,14 @@ class Controller_Cart extends Controller_Template {
 		}
 
 		$order->check_state($order->id, array(
-			"fake" => array("code_request" => $code)
+			"fake" => array("code_request" => $code),
+			"fake_state" => 222
 		));
 
-		Cookie::delete('cartKey');
-		ORM::factory('Order_ItemTemp')->where("key", "=", $order->key)->delete_all();
+		Cart::clear($order->key);
+
+		$order->key = NULL;
+		$order->save();
 
 		HTTP::redirect("/cart/order/".$order->id);
 	}
@@ -601,9 +592,6 @@ class Controller_Cart extends Controller_Template {
 			HTTP::redirect("/cart/order/".$order->id);
 			return;
 		}
-
-		Cookie::delete('cartKey');
-		ORM::factory('Order_ItemTemp')->where("key", "=", $order->key)->delete_all();
 
 		HTTP::redirect("/");
 	}

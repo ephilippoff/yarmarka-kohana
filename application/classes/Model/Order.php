@@ -41,7 +41,7 @@ class Model_Order extends ORM
 				}
 				elseif ($data['code_request'] == 100)
 				{
-					$order->success();
+					$order->success($params->fake_state);
 					if ($callback) {
 						$callback($order->id, "success");
 					}
@@ -71,17 +71,23 @@ class Model_Order extends ORM
 		$this->save();
 	}
 
-	function success() {
+	function success($state = NULL) {
 		if (!$this->loaded()) return;
 
-		$this->state = 2;
+		$this->state = ($state) ? $state : 2;
 		// reload invoice to get payment date
 		$this->payment_date = date("Y-m-d H:i:s");
 		$this->save();
 		
 		$user = ORM::factory('User', $this->user_id);
 
-		$orderItems = ORM::factory('Order_Item')->get_items($this->id);
+		$order_tems = ORM::factory('Order_Item')->where("order_id","=", $this->id)->order_by("id");
+
+		$orderItems = array();
+		$sum = Model_Order::each_item($order_tems, function($service, $item, $model_item) use (&$orderItems) {
+			$orderItems[] = $item;
+			return $item;
+		});
 
 		// send email to user about successfull payment
 		if ($user->loaded() AND $user->email)
@@ -104,11 +110,11 @@ class Model_Order extends ORM
 			//apply services
 			foreach ($orderItems as $orderItem)
 			{
-				if ($orderItem->type == "object") {
-					Service::factory("Object", $orderItem->object_id)->apply($orderItem);
-					array_push($objects, $orderItem->object_id);
+				if ($orderItem->service->name == "object") {
+					Service::factory("Object", $orderItem->object->id)->apply($orderItem);
+					array_push($objects, $orderItem->object->id);
 				} else {
-					Service::factory(Text::ucfirst($orderItem->type))->apply($orderItem);
+					Service::factory(Text::ucfirst($orderItem->service->name))->apply($orderItem);
 				}
 			}
 
@@ -150,7 +156,7 @@ class Model_Order extends ORM
 
 		foreach ($cart_items as $cart_item) {
 			$params = json_decode($cart_item->params);
-			$service = Service::factory(Text::ucfirst($params->type), $cart_item->object_id);
+			$service = Service::factory(Text::ucfirst($params->service->name), $cart_item->object_id);
 
 			$item = new Obj((array) $params);
 			$item->id = $cart_item->id;
@@ -162,6 +168,33 @@ class Model_Order extends ORM
 		}
 
 		return $sum;
+	}
+
+	static function get_state($stateId, $get_name = FALSE)
+	{
+		if ($stateId == 0) {
+			$state = "Инициирован";
+			$state_name = "initial";
+		} elseif ($stateId == 1) {
+			$state = "В ожидании оплаты";
+			$state_name = "notPaid";
+		} elseif ($stateId == 2) {
+			$state = "Оплачен";
+			$state_name = "paid";
+		} elseif ($stateId == 22) {
+			$state = "Активирован без оплаты";
+			$state_name = "activate";
+		} elseif ($stateId == 222) {
+			$state = "Активирован без оплаты Администратором";
+			$state_name = "adminActivate";
+		} elseif ($stateId == 3) {
+			$state = "Отменен";
+			$state_name = "cancelPayment";
+		} else {
+			$state = "Отменен";
+			$state_name = "cancelPayment";
+		}
+		return ($get_name) ? $state_name : $state;
 	}
 	
 

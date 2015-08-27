@@ -1,6 +1,6 @@
 <tr data-id="{{ cartItem.id }}" data-type="{{ cartItem.type }}" data-object-id="{{ cartItem.object.id }}" data-total="{{cartItem.service.price_total}}" class="js-cartitem">
 	<td>{{ i }}</td>
-	<td>{{ cartItem.title }}</td>
+	<td><a href="/detail/{{ cartItem.object.id }}">{{ cartItem.title }}</a></td>
 	<td>
 		<span class="js-params">{{cartItem.service.description}}</span>
 	</td>

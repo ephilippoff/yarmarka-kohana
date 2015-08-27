@@ -20,6 +20,7 @@ define([
         },
         changeQuantity: function() {
             var price = this.model.get("info").service.price;
+            var discount_reason = this.model.get("info").service.discount_reason;
             var available = this.model.get("info").available;
             var quantity = this.ui.quantity.val();
             var result = {
@@ -31,7 +32,7 @@ define([
                 this.ui.price.text(price * quantity + " руб.");
             } else {
                 if (available) {
-                    this.ui.price.text("Бесплатно");
+                    this.ui.price.text(discount_reason);
                 } else {
                     this.ui.price.text(price + " руб.");
                 }
@@ -57,6 +58,7 @@ define([
         },
         changeQuantity: function() {
             var price = parseFloat(this.model.get("info").service.price);
+            var discount_reason = this.model.get("info").service.discount_reason;
             var available = this.model.get("info").available;
             var quantity = parseInt(this.ui.quantity.val());
             var result = {
@@ -68,7 +70,7 @@ define([
                 this.ui.price.text(price * quantity + " руб.");
             } else {
                 if (available) {
-                    this.ui.price.text("Бесплатно");
+                    this.ui.price.text(discount_reason);
                 } else {
                     this.ui.price.text(price + " руб.");
                 }
