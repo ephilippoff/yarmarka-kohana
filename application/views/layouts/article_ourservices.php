@@ -37,13 +37,23 @@
 ?>
 </head>
 <body class="adaptiveoff ourservices-page <?=$article_name?>">
+	<div class="popup-layer"></div>
 	<?=View::factory('layouts/google_analytics')?>
+	<?=View::factory('block/_callback_request_window')->set('callback_key', 'reklamodatelyam')?>
 	<div class="wrapfix">
 			<?=View::factory('layouts/header')?>
 			<div class="m_content">
 			<?=$_content?>
 	        </div>
 	  </div>
+		<script type="text/javascript">
+			$(document).ready(function() {
+			$('.fn-callback-request').click(function(){
+				$('.popup-layer').fadeIn('fast');
+				$('.fn-callback-request-wrp').fadeIn('fast');
+			})
+		})
+		</script>	
       <div class="wrapfix footer-wrap">
 	  <?=View::factory('layouts/footer1')?>
       </div>

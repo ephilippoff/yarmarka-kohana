@@ -24,7 +24,9 @@
 					<div class="innerPage-cont">
 						<article class="iPage-article">
 							<h1 class="big" style="text-align: center;"><?=$article->title?></h1>
-							<div class="text-cont"><?=$article->text?></div>							
+							<div class="text-cont">
+								<?=$article->text?>
+							</div>							
 						</article>
 					
 					</div>
