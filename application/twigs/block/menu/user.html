@@ -12,6 +12,6 @@
 			<li class=""><a href="{{ url('user/objectload') }}">Массовая загрузка</a></li>
 		{% endif %}
 		<li class="divider bg-color-blue"></li>
-		<li class=""><a href="{{ url('user/logout') }}"><i class="fa fa-sign-out mr5"></i>Выход</a></li>
+		<li class=""><a href="{{ url('user/logout?return=' ~ strim(get_request_uri(), '/')) }}"><i class="fa fa-sign-out mr5"></i>Выход</a></li>
 	</ul>
 </div>	

@@ -267,11 +267,22 @@ class Controller_User_Auth extends Controller_Template {
 
     public function action_logout()
     {
+        $domain = Arr::get($_GET, 'domain', NULL);
+        if (!$domain)
+            $domain = URL::base('http');
+        else
+            $domain = "http://".Kohana::$config->load("common.main_domain");
+
+        $return_page = Arr::get($_GET, 'return', "");
+        if (!strrpos($return_page,"p://")) {
+            $return_page = $domain.$return_page;
+        }
+
         setcookie('user_id', '', time()-1, '/', Region::get_cookie_domain());
         setcookie('authautologin', '', time()-1, '/', Region::get_cookie_domain());
 
         Auth::instance()->logout(TRUE, TRUE);
 
-        $this->redirect('/');
+        $this->redirect(($return_page) ? $return_page : '/');
     }
 }

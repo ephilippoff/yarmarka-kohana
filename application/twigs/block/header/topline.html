@@ -12,7 +12,7 @@
 					<span class="menu-item"><i class="fa {% if user.org_type == 2 %}fa-group{% else %}fa-user{% endif %} mr3"></i>Личный кабинет<i class="fa fa-caret-down ml5"></i></span>
 					
 				{% else %}
-					<span class="menu-item"  onclick="window.location='/user/login'"><i class="fa fa-user mr3"></i>Вход в личный кабинет</span>
+					<span class="menu-item" onclick="window.location='/user/login?return={{ strim(get_request_uri(), '/') }}'"><i class="fa fa-user mr3"></i>Вход в личный кабинет</span>
 				{% endif %}
 			</div>
 			{% if user %}

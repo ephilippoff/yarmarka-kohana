@@ -13,22 +13,24 @@
 				</ul>
 
 			</div>
-		{% for col in 0..cols %}
-			<div class="col-md-3">
-				<ul>
-				{% for category in user_categories|slice(i, rows) %}
-					<li>
-						<a  class="{{ (category.url == category_url) ? 'active' }}" href="{{ url(canonical_url ~ (category.url ? '/' ~ category.url : '') )  ~ query_url_str }}" title="{{category.title}}">{{category.title}}</a>
-						{% if category.count > 0 %}
-							<span class="count">{{category.count}}</span>
-						{% else %}
-							<!-- <span class="count">?</span> -->
-						{% endif %}
-					</li>
-				{% endfor %}
-				</ul>
-			</div>
-			{% set i = i + rows %}
-		{% endfor %}
+		{% if (main_search_result|length) %}
+			{% for col in 0..cols %}
+				<div class="col-md-3">
+					<ul>
+					{% for category in user_categories|slice(i, rows) %}
+						<li>
+							<a  class="{{ (category.url == category_url) ? 'active' }}" href="{{ url(canonical_url ~ (category.url ? '/' ~ category.url : '') )  ~ query_url_str }}" title="{{category.title}}">{{category.title}}</a>
+							{% if category.count > 0 %}
+								<span class="count">{{category.count}}</span>
+							{% else %}
+								<!-- <span class="count">?</span> -->
+							{% endif %}
+						</li>
+					{% endfor %}
+					</ul>
+				</div>
+				{% set i = i + rows %}
+			{% endfor %}
+		{% endif %}
 	</div>
 </div>

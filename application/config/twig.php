@@ -26,6 +26,7 @@ return array(
 		'get_file' => array ('func' => array('Twig_Functions', 'get_file'), 'options' => array() ),
 		'get_date_diff' => array ('func' => array('Twig_Functions', 'get_date_diff'), 'options' => array() ),
 		'get_service_icon_info' => array ('func' => array('Twig_Functions', 'get_service_icon_info'), 'options' => array() ),
+		'get_request_uri'  => array ('func' => array('Twig_Functions', 'get_request_uri'), 'options' => array() ),
 	),
 	'filters' => array(
 		'contacthide' => array('Twig_Filters', 'contacthide'),

@@ -12,30 +12,17 @@
 {% endblock css%}
 
 
-{% block js %} 
-{% endblock js%}
+{% block js %}{% endblock js%}
 
 
 {% block title %} {{ seo_attributes.title }} {% endblock title%}
 {% block meta_description %}{% endblock meta_description%}
-
-{% block crumbs %} 
-	
-{% endblock crumbs %}
-
-
 {% block wrapperclass %}page-search{% endblock wrapperclass %}
 
 
-
-{% block subcategories %}
-
-{% endblock subcategories %}
-
-
-{% block filters %} 
-	
-{% endblock filters %}
+{% block crumbs %} {% endblock crumbs %}
+{% block subcategories %}{% endblock subcategories %}
+{% block filters %}{% endblock filters %}
 
 {% block content %}
 	{% if (main_search_result|length) %}
@@ -43,7 +30,7 @@
 		{% include 'search/user/result' %}
 		{% include 'search/paginator' %}
 	{% else %}
-		{{empty_text}}
+		{% include 'search/user/noresult' %}
 	{% endif %}
 {% endblock content%}
 
@@ -53,9 +40,7 @@
 {% endblock rightside %}
 
 
-{% block footertext %} 
-		
-{% endblock footertext %}
+{% block footertext %}{% endblock footertext %}
 
 {% block footer %} 
 	{{ parent() }}

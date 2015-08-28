@@ -50,7 +50,7 @@ class Twig_Functions
 
 	public static function file_exist($path)
 	{
-		return is_file($_SERVER['DOCUMENT_ROOT'].$path);
+		return is_file(URL::SERVER('DOCUMENT_ROOT').$path);
 	}
 
 	public static function strim($str, $param = NULL)
@@ -129,7 +129,7 @@ class Twig_Functions
 	public static function get_file($path)
 	{
 		$path = trim('/'.$path);
-		if (is_file($_SERVER['DOCUMENT_ROOT'].$path)) {
+		if (is_file(URL::SERVER('DOCUMENT_ROOT').$path)) {
 			return $path;
 		} else {
 			return "http://yarmarka.biz/".$path;
@@ -197,5 +197,10 @@ class Twig_Functions
 		}
 
 		return $result;
+	}
+
+	public static function get_request_uri()
+	{
+		return URL::SERVER('REQUEST_URI');
 	}
 }
