@@ -1,0 +1,23 @@
+<div class="blue-subtle-theme module ">
+	{% include 'block/header/navigationline/simple' %}
+	<div class="view-container brb2">
+		{% include 'cart/crumbs' %}
+
+		{% if state == "initial" %}
+			<p>Заказ на оформлении. <a href="/cart"><i class="fa fa-angle-double-left fa-lg mr5"></i>Вернуться к корзине</a></p>
+		{% elseif state == "notPaid" %}
+			<p>Заказ в ожидании оплаты</p>
+		{% elseif state == "paid" %}
+			<p>Заказ оплачен. В будущем вы можете вернуться к этой странице через <a href="/user/orders">историю заказов</a></p>
+		{% elseif state == "activate" %}
+			<p>Услуги активированы. В будущем вы можете вернуться к этой странице через <a href="/user/orders">историю заказов</a></p>
+		{% elseif state == "adminActivate" %}
+			<p>Услуги активированы. В будущем вы можете вернуться к этой странице через <a href="/user/orders">историю заказов</a></p>
+		{% elseif state == "paid" %}
+			<p>Заказ оплачен. В будущем вы можете вернуться к этой странице через <a href="/user/orders">историю заказов</a></p>
+		{% elseif state == "cancelPayment" %}
+			<p>Заказ отменен. Истекло время оплаты, либо отмена инициирована пользователем</p>
+		{% endif %}
+
+	</div><!--view-container1-->
+</div><!--skin-theme1-->

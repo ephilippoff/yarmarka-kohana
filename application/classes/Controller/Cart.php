@@ -92,16 +92,25 @@ class Controller_Cart extends Controller_Template {
 		$id = $this->request->param('id');
 		$user = Auth::instance()->get_user();
 		$errors = array();
+		$key = Cart::get_key();
 
-		if (!$user OR !$id) {
+		if (!$id) {
 			HTTP::redirect("/cart");
 			return;
 		}
 
-		$order = ORM::factory('Order')
+		if ($user) {
+			$order = ORM::factory('Order')
 					->where("user_id","=", $user->id)
 					->where("id","=", intval($id))
 					->find();
+		} else {
+			$order = ORM::factory('Order')
+					->where("key","=", $key)
+					->where("id","=", intval($id))
+					->find();
+		}
+		
 		if (!$order->loaded() or $order->state > 0) {
 			throw new HTTP_Exception_404;
 			return;
@@ -206,15 +215,30 @@ class Controller_Cart extends Controller_Template {
 		$session->delete("errors");
 		$session->delete("post");
 
-		if (!$user OR !$id) {
+		if (!$id) {
 			throw new HTTP_Exception_404;
 			return;
 		}
 
-		$order = ORM::factory('Order')
+		$key = Cart::get_key();
+
+		if (!$id) {
+			HTTP::redirect("/cart");
+			return;
+		}
+
+		if ($user) {
+			$order = ORM::factory('Order')
 					->where("user_id","=", $user->id)
 					->where("id","=", intval($id))
 					->find();
+		} else {
+			$order = ORM::factory('Order')
+					->where("key","=", $key)
+					->where("id","=", intval($id))
+					->find();
+		}
+
 		if (!$order->loaded()) {
 			throw new HTTP_Exception_404;
 			return;
@@ -285,12 +309,12 @@ class Controller_Cart extends Controller_Template {
 		$this->auto_render = FALSE;		
 		$user = Auth::instance()->get_user();
 
-		if (!$user) {
-			$this->json["message"] = "Требуется авторизация";
-			$this->json["code"] = 403;
-			$this->json_response();
-			return;
-		}
+		// if (!$user) {
+		// 	$this->json["message"] = "Требуется авторизация";
+		// 	$this->json["code"] = 403;
+		// 	$this->json_response();
+		// 	return;
+		// }
 
 		try {
 			$request = json_decode($this->request->body());
@@ -333,7 +357,7 @@ class Controller_Cart extends Controller_Template {
 			$order_loaded = $order->loaded();
 
 			$order->key = $key;
-			$order->user_id = $user->id;
+			$order->user_id = ($user) ? $user->id : NULL;
 			$order->state = 0;
 			$order->sum = 0;
 			$order->params = ($order->params) ? $order->params : "{}";
@@ -504,9 +528,8 @@ class Controller_Cart extends Controller_Template {
 		}
 		$payment_url = $robo->get_payment_url();
 
-		Cart::clear($order->key);
-
-		$order->key = NULL;
+		$order->key = ($order->user_id) ? NULL : $order->key;
+		Cart::clear($order->key, ($user) );
 		$order->state = 1;
 		$order->payment_url = $payment_url;
 		$order->save();
@@ -542,8 +565,7 @@ class Controller_Cart extends Controller_Template {
 		else
 		{
 			echo 'invoice already paid or refused';
-		}	
-		//HTTP::redirect("/cart");
+		}
 	}
 
 	public function action_success()

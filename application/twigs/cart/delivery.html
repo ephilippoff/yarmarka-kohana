@@ -1,5 +1,10 @@
 {% extends "layouts/cart" %}
 
+{% block header %}
+	{{ parent() }}
+	{% include 'cart/promo' %}
+{% endblock header %}
+
 
 {% block content %} 
 	<form action="/cart/delivery/{{ order.id }}" method="POST">

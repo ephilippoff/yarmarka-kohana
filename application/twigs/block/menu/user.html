@@ -1,14 +1,15 @@
 {% set user = get_user() %}
 <div class="proom-list iLight-cont js-usermenu border-color-blue popup-menu-cont right brb2">
+	<p class="pl10 pt10 pr10"><b>{{ user.email|e }}</b></p>
 	<ul>
-		<li><a href="{{ url('user/profile') }} "><i class="fa fa-user mr5"></i>Настройки пользователя</a></li>
-		<li><a href="{{ url('user/subscriptions') }}"><i class="fa fa-envelope mr5"></i>Подписки</a></li>
-		<li><a href="{{ url('user/orders') }}"><i class="fa fa-credit-card mr5"></i>Заказы</a></li>
-		<li class=""><a href="{{ url('user/password') }}"><i class="fa fa-wrench mr5"></i>Смена пароля</a></li>
+		<li><a href="{{ url('user/profile') }} ">Настройки пользователя</a></li>
+		<li><a href="{{ url('user/subscriptions') }}">Подписки</a></li>
+		<li><a href="{{ url('user/orders') }}">Заказы</a></li>
+		<li class=""><a href="{{ url('user/password') }}">Смена пароля</a></li>
 		{% if user.org_type == 2  %}
-			<li class=""><a href="{{ url('user/orginfo') }}"><i class="fa fa-cogs mr5"></i>Настройки компании</a></li>
-			<li class=""><a href="{{ url('user/employers') }}"><i class="fa fa-cogs mr5"></i>Сотрудники</a></li>
-			<li class=""><a href="{{ url('user/objectload') }}"><i class="fa fa-cogs mr5"></i>Массовая загрузка</a></li>
+			<li class=""><a href="{{ url('user/orginfo') }}">Настройки компании</a></li>
+			<li class=""><a href="{{ url('user/employers') }}">Сотрудники</a></li>
+			<li class=""><a href="{{ url('user/objectload') }}">Массовая загрузка</a></li>
 		{% endif %}
 		<li class="divider bg-color-blue"></li>
 		<li class=""><a href="{{ url('user/logout') }}"><i class="fa fa-sign-out mr5"></i>Выход</a></li>

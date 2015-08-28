@@ -9,20 +9,9 @@
 	
 	{% block header %} 
 		{{ parent() }}
-		{% include 'block/header/navigationline/simple' %}
 	{% endblock header %} 
 
-	{% block crumbs %}
-		<div class="breadcrumbs-cont module mt10">
-		{% for crumb in crumbs %}
-			{% if crumb.url %}
-				<a href="{{ url(crumb.url) }}">{{crumb.title}}</a> /
-			{% else  %}
-				<h1>{{crumb.title}}</h1>
-			{% endif %}
-		{% endfor %}
-		</div>
-	{% endblock crumbs %}
+	{% block crumbs %}{% endblock crumbs %}
 
 	<div class="row">
 		<div class="col-md-9">
@@ -31,15 +20,11 @@
 			{% endblock content %}
 		</div><!--col-->
 		<div class="col-md-3">
-			{% block rightside %} 
-				Правая сторона
-			{% endblock rightside %}
+			{% block rightside %} {% endblock rightside %}
 		</div><!--col-->
 	</div><!--row-->
 
-	{% block footer %} 
-		Футер
-	{% endblock footer %} 
+	{% block footer %}{% endblock footer %} 
 
 	{% block templates %}
 		{{ parent() }}
@@ -47,5 +32,7 @@
 			{{ requestblock('block_twig/mainmenu', {'city_id': city.id}) }}
 		</script>
 	{% endblock templates %}
-	{%block page_name%}cart{% endblock page_name %}
+
+	
 {% endblock body %} 
+{%block page_name%}cart{% endblock page_name %}

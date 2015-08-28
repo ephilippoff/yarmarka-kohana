@@ -197,7 +197,7 @@ class Service_Premium extends Service
 					->find();
 		if ($or->loaded())
 		{
-			$quantity += $or->count;
+			$quantity += $or->count - 1;
 		}
 		$or->count = $quantity;
 		$or->object_id = $object_id;

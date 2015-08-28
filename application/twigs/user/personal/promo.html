@@ -12,25 +12,25 @@
 		</div>
 		<div class="subcategories-cont module">
 			<div class="row">
-					<div class="col-md-3">
+					<div class="col-md-3 ml20">
 						<ul>
-							<li><a href="{{ url('user/userinfo') ~ query_url_str }}" class="{{ (canonical_url == 'user/userinfo') ? 'active' }}">Данные пользователя</a></li>
-							<li><a href="{{ url('user/orginfo') ~ query_url_str }}" class="{{ (canonical_url == 'user/orginfo') ? 'active' }}">Данные компании</a></li>
-							<li><a href="{{ url('user/password') ~ query_url_str }}" class="{{ (canonical_url == 'user/password') ? 'active' }}">Смена пароля</a></li>
-							<li><a href="{{ url('user/employers') ~ query_url_str }}" class="{{ (canonical_url == 'user/employers') ? 'active' }}">Сотрудники</a></li>
-						</ul>
-					</div>
-					<div class="col-md-3">
-						<ul>
-							<li><a href="{{ url('user/orders') ~ query_url_str }}" class="{{ (canonical_url == 'user/orders') ? 'active' }}">Заказы</a></li>
-							<li><a href="{{ url('user/objectload') ~ query_url_str }}" class="{{ (canonical_url == 'user/objectload') ? 'active' }}">Массовая загрузка</a></li>
-							<li><a href="{{ url('user/subscriptions') ~ query_url_str }}" class="{{ (canonical_url == 'user/subscriptions') ? 'active' }}">Подписки</a></li>
-						</ul>
-					</div>
-					<div class="col-md-3">
-						<ul>
-							<li><a href="{{ url('user/contacts') ~ query_url_str }}" class="{{ (canonical_url == 'user/contacts') ? 'active' }}">Управление контактами</a></li>
+							<li><a href="{{ url('user/userinfo') ~ query_url_str }}" class="{{ (canonical_url == 'user/userinfo') ? 'active' }}"><i class="fa fa-user mr7"></i>Данные пользователя</a></li>
+							<li><a href="{{ url('user/orders') ~ query_url_str }}" class="{{ (canonical_url == 'user/orders') ? 'active' }}"><i class="fa fa-credit-card mr7"></i>История заказов</a></li>
+							<li><a href="{{ url('user/subscriptions') ~ query_url_str }}" class="{{ (canonical_url == 'user/subscriptions') ? 'active' }}"><i class="fa fa-envelope mr7"></i>Подписки</a></li>
 							
+						</ul>
+					</div>
+					<div class="col-md-3">
+						<ul>
+							<li><a href="{{ url('user/password') ~ query_url_str }}" class="{{ (canonical_url == 'user/password') ? 'active' }}"><i class="fa fa-key mr7"></i>Смена пароля</a></li>
+							<li><a href="{{ url('user/contacts') ~ query_url_str }}" class="{{ (canonical_url == 'user/contacts') ? 'active' }}"><i class="fa fa-mobile-phone mr7"></i>Управление контактами</a></li>
+						</ul>
+					</div>
+					<div class="col-md-3">
+						<ul>
+							<li><a href="{{ url('user/orginfo') ~ query_url_str }}" class="{{ (canonical_url == 'user/orginfo') ? 'active' }}"><i class="fa fa-suitcase mr7"></i>Данные компании</a></li>
+							<li><a href="{{ url('user/employers') ~ query_url_str }}" class="{{ (canonical_url == 'user/employers') ? 'active' }}"><i class="fa fa-group mr7"></i>Сотрудники</a></li>
+							<li><a href="{{ url('user/objectload') ~ query_url_str }}" class="{{ (canonical_url == 'user/objectload') ? 'active' }}"><i class="fa fa-upload mr7"></i>Массовая загрузка</a></li>
 						</ul>
 					</div>
 			</div>

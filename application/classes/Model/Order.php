@@ -10,14 +10,16 @@ class Model_Order extends ORM
 
 	function fake_command($code, $state = 2)
 	{
+		$user = Auth::instance()->get_user();
+		
 		$this->check_state($this->id, array(
 			"fake" => array("code_request" => $code),
 			"fake_state" => $state
 		));
 
-		Cart::clear($this->key);
+		Cart::clear($this->key, ($user) );
 
-		$this->key = NULL;
+		$this->key = ($this->user_id) ? NULL : $this->key;
 		$this->save();
 	}
 

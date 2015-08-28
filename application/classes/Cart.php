@@ -37,9 +37,11 @@ class Cart {
 		);
 	}
 
-	static function clear($key)
+	static function clear($key, $clear_cookie = TRUE)
 	{
-		Cookie::delete('cartKey');
+		if ($clear_cookie) {
+			Cookie::set('cartKey', NULL, -1);
+		}
 		ORM::factory('Order_ItemTemp')->where("key", "=", $key)->delete_all();
 	}
 }

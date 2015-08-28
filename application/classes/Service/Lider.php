@@ -111,12 +111,12 @@ class Service_Lider extends Service
 				$find_exact_service = TRUE;
 				continue;
 			} else {
-				$quantity += $or_item->count;
+				$quantity += $or_item->count - 1;
 				$find_exact_service = FALSE;
 				break;
 			}
 		}
-		if ($find_exact_service) {
+		if ($find_exact_service OR !isset($or_item) ) {
 			$or_item = ORM::factory('Object_Service_Photocard');
 		}
 		$or_item->object_id = $object_id;

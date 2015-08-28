@@ -8,7 +8,7 @@ body h1 {font-size: 16px;font-weight: normal;display: inline;}
 /* css helpers */
 .bg-color-crimson{background-color:#D90000}.border-color-crimson{border-color:#D90000}
 .bg-color-blue{background-color: #2B587A;}.border-color-blue{border-color: #2B587A;}
-.border-color-gray{border-color:gray;}
+.bg-color-gray{background-color:gray;}.border-color-gray{border-color:gray;}
 .bg-color-lightgreen{background-color: #57A957}
 .bg-color-lightorange{background-color: #FFC700;}
 .bg-color-deepskyblue{background-color: deepskyblue}
@@ -32,10 +32,11 @@ body h1 {font-size: 16px;font-weight: normal;display: inline;}
 .fixed{position: fixed;top: 0px;}
 .pointer{cursor: pointer;}
 .strike{text-decoration: line-through;}
+.lh44{line-height: 44px;}
 /* css helpers end */
 
 /* mini-elements */
-.button {cursor:pointer; text-align:center; border:0;}
+.button {cursor:pointer; text-align:center; border:0;display:inline-block;}
 .button.bg-color-crimson:hover{background-color: #F98C8C;}
 .button.bg-color-blue:hover{background-color: #4381AF}
 .button.bg-color-lightgreen:hover{background-color: #74DC74}
@@ -128,7 +129,7 @@ select{background-color: #FFFFFF;border: 1px solid #89898c;color: #384354;paddin
 .menu-cont1 .cont1 .menu-item img{vertical-align: sub;}
 .menu-cont1 .cont2 .menu-item{float: right; margin-left: 20px;}
 .menu-cont1 .cont2 .menu-item-wrp{float: right; position: relative;}
-.menu-cont1 .proom-list {position: absolute;top: 100%;background: #fff;border-width: 1px; border-style: solid;white-space: nowrap;display: none;width: 175px;z-index: 1;}
+.menu-cont1 .proom-list {position: absolute;top: 100%;background: #fff;border-width: 1px; border-style: solid;white-space: nowrap;display: none;z-index: 1;}
 .menu-cont1 .proom-list ul {padding-top: 6px;}
 .menu-cont1 .proom-list li {margin-bottom: 4px;}
 .menu-cont1 .proom-list li a {font-size: 12px;border: 0 none;padding: 0; display: block;padding: 0px 10px;}
