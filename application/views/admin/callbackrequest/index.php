@@ -19,6 +19,7 @@
 				<a class="sort" href="/<?=Request::current()->uri().URL::query(array_merge($params, array('sort_by' => 'id', 'sort' => 'desc')), false) ?>">(по убыв.)</a>
 			<?php endif;?>
 		</th>
+		<th>Key</th>
 		<th>Заголовок</th>
 		<th>ФИО</th>
 		<th>Номер телефона</th>
@@ -40,10 +41,11 @@
 		</th>
 		<th>Коммент</th>
 	</tr>
-	<?php foreach ($kupon_requests as $element) : ?>		
+	<?php foreach ($requests as $element) : ?>		
 		<tr>			
 			<td><?=$element->id?></td>
-			<td><?=$element->object_title?> (#<?=$element->object_id?>)</td>
+			<td><?=$element->key?></td>
+			<td><?=$element->object_title?> <?php if ($element->object_id) : ?>(объявление #<?=$element->object_id?>)<?php endif; ?></td>
 			<td><?=$element->fio?></td>
 			<td><?=$element->phone?></td>
 			<td><?=$element->date_created?></td>

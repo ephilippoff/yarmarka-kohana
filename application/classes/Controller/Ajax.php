@@ -19,7 +19,7 @@ class Controller_Ajax extends Controller_Template
 		// only ajax request is allowed
 		if ( ! $this->request->is_ajax() AND Kohana::$environment !== Kohana::DEVELOPMENT)
 		{
-			if ($this->request->action() != 'kupon_request')//TODO:костыль
+			if ($this->request->action() != 'callback_request')//TODO:костыль
 				throw new HTTP_Exception_404;
 		}
 		// disable global layout for this controller
@@ -1337,7 +1337,7 @@ class Controller_Ajax extends Controller_Template
 		$this->json = array('status' => $status);		
 	}
 	
-	public function action_kupon_request()
+	public function action_callback_request()
 	{
 		$this->json = array();
 		$this->json['code'] = 200;
@@ -1346,18 +1346,20 @@ class Controller_Ajax extends Controller_Template
 		$fio	   = strip_tags($this->request->post('fio'));
 		$phone	   = strip_tags($this->request->post('phone'));
 		$comment   = strip_tags($this->request->post('comment'));
+		$key	   = strip_tags($this->request->post('key'));
 		
-		$kupon_request = ORM::factory('Object_Kupon_Requests');
-		$kupon_request->fio			 = $fio;
-		$kupon_request->phone		 = $phone;
-		$kupon_request->object_id	 = $object_id;
-		$kupon_request->comment		 = $comment;
-		$kupon_request->status		 = 0;
-		$kupon_request->date_created = date('Y-m-d H:i:s');		
+		$callback_request = ORM::factory('Callbackrequest');
+		$callback_request->fio			 = $fio;
+		$callback_request->phone		 = $phone;
+		$callback_request->object_id	 = $object_id;
+		$callback_request->comment		 = $comment;
+		$callback_request->status		 = 0;
+		$callback_request->key			 = $key;
+		$callback_request->date_created = date('Y-m-d H:i:s');		
 		
 		try
         {			
-            $kupon_request->save();					
+            $callback_request->save();					
         }
         catch (ORM_Validation_Exception $e)
         {
@@ -1372,9 +1374,9 @@ class Controller_Ajax extends Controller_Template
 		if ($this->json['code'] == 200)
 		{
 			Email::send( 
-					Kohana::$config->load('common.kupon_requests_sending'), 
+					Kohana::$config->load('common.callback_request_sending'), 
 					Kohana::$config->load('email.default_from'), 
-					'Поступила заявка на обратный звонок по купону №'.$object_id, 
+					'Поступила заявка №'.$callback_request->id.' на обратный звонок с ключом &laquo;'.$key.'&raquo;', 
 					"ФИО: {$fio}<br>Телефон: {$phone}<br>Комментарий: {$comment}" );		
 		}
 	}

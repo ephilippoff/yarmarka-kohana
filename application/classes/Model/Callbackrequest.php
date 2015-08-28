@@ -1,8 +1,8 @@
 <?php defined('SYSPATH') OR die('No direct script access.');
 
-class Model_Object_Kupon_Requests extends ORM
+class Model_Callbackrequest extends ORM
 {
-	protected $_table_name = 'object_kupon_requests';
+	protected $_table_name = 'callback_request';
 
 	protected $_belongs_to = array(
 		'object'	=> array('model' => 'Object', 'foreign_key' => 'object_id'),
@@ -52,7 +52,7 @@ class Model_Object_Kupon_Requests extends ORM
 	{
 		return $this->select(array('object.title', 'object_title'))
 			->join('object', 'left')
-			->on('object_kupon_requests.object_id', '=', 'object.id');
+			->on('callbackrequest.object_id', '=', 'object.id');
 	}
 	
 }

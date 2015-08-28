@@ -8,7 +8,7 @@ return array(
 	'days_count_between_service_up_by_cat'  => array(36 => 1),
 	'disallowed_email_domains' 				=> array('yopmail.com', 'asdasd.com'),
 	'admin_emails' 							=> array('a.vagapov@yarmarka.biz'),
-	'kupon_requests_sending'				=> array('v.kurkin@yarmarka.biz'), //рассылка уведомлений о поступившей заявке на купон
+	'callback_request_sending'				=> array('v.kurkin@yarmarka.biz'), //рассылка уведомлений о поступившей заявке на купон
 	'max_image_similarity' 					=> 0.97,
 	'check_image_similarity' 				=> FALSE,
 	'check_object_similarity' 				=> FALSE, //вкл выкл функционала проверки объявлений на похожесть (среди своих объяв)

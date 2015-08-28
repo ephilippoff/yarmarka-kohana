@@ -65,8 +65,8 @@
 							<ul class="dropdown-menu">
 								<li><a href="<?=Url::site('khbackend/objects/index')?>">Список</a></li>
 								<li><a href="<?=Url::site('khbackend/landing/index')?>">Landings</a></li>
-								<?php if (Auth::instance()->have_access_to('kuponrequests')) : ?>
-									<li><a href="<?=Url::site('khbackend/kuponrequests/index')?>">Заявки на купоны</a></li>
+								<?php if (Auth::instance()->have_access_to('callbackrequest')) : ?>
+									<li><a href="<?=Url::site('khbackend/callbackrequest/index')?>">Заявки на звонки</a></li>
 								<?php endif; ?>
 							</ul>
 						</li>

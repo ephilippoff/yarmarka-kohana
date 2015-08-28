@@ -1,8 +1,8 @@
 <?php defined('SYSPATH') OR die('No direct script access.');
 
-class Controller_Admin_Kuponrequests extends Controller_Admin_Template {
+class Controller_Admin_Callbackrequest extends Controller_Admin_Template {
 
-	protected $module_name = 'kuponrequests';
+	protected $module_name = 'callbackrequest';
 
 	public function action_index()
 	{
@@ -18,22 +18,22 @@ class Controller_Admin_Kuponrequests extends Controller_Admin_Template {
 		$sort_by = in_array($this->request->query('sort_by'), $sorting_fields) ? $this->request->query('sort_by') : 'id';		
 		//Фильтр показа только активных, либо всех
 			
-		$kupon_requests = ORM::factory('Object_Kupon_Requests')->with_objects();
+		$requests = ORM::factory('Callbackrequest')->with_objects();
 		
 		// количество общее
-		$clone_to_count = clone $kupon_requests;
+		$clone_to_count = clone $requests;
 		$count_all = $clone_to_count->count_all();
 		
 		if ($sort_by and $sort)
-			$kupon_requests->order_by($sort_by, $sort);		
+			$requests->order_by($sort_by, $sort);		
 
-		$kupon_requests->limit($limit)->offset($offset);
+		$requests->limit($limit)->offset($offset);
 		
 		// order
 //		$sort_by	= trim($this->request->query('sort_by')) ? trim($this->request->query('sort_by')) : 'real_date_created';
 //		$direction	= trim($this->request->query('direction')) ? trim($this->request->query('direction')) : 'desc';		
 
-		$this->template->kupon_requests = $kupon_requests->find_all();
+		$this->template->requests = $requests->find_all();
 		$this->template->sort	  = $sort;
 		$this->template->sort_by  = $sort_by;
 		
@@ -45,7 +45,7 @@ class Controller_Admin_Kuponrequests extends Controller_Admin_Template {
 				'auto_hide'      => TRUE,
 				'view'           => 'pagination/bootstrap',
 			))->route_params(array(
-				'controller' => 'kuponrequests',
+				'controller' => 'callbackrequest',
 				'action'     => 'index',
 			));		
 	}
