@@ -11,7 +11,7 @@ class Task_Orders extends Minion_Task
 	protected function _execute(array $params)
 	{
 		Minion::write("start","orders");
-		ORM::factory('Order')->check_state(NULL, function($order_id, $action){
+		ORM::factory('Order')->check_state(NULL, array(), function($order_id, $action){
 			Minion::write($action, $order_id);
 		});
 	}
