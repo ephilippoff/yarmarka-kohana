@@ -3,138 +3,138 @@
 
 class Twig_Functions
 {
-    public static function requestblock($path, $params = array())
-    {
-        return Request::factory($path)->post($params)->execute();
-    }
+	public static function requestblock($path, $params = array())
+	{
+		return Request::factory($path)->post($params)->execute();
+	}
 
-    public static function requestoldview($path, $params = array())
-    {
-        return View::factory($path, $params)->render();
-    }
+	public static function requestoldview($path, $params = array())
+	{
+		return View::factory($path, $params)->render();
+	}
 
-    public static function css($file)
-    {
-        return Assets::factory('main')->css($file);
-    }
+	public static function css($file)
+	{
+		return Assets::factory('main')->css($file);
+	}
 
-    public static function js($file)
-    {
-        return Assets::factory('main')->js($file);
-    }
+	public static function js($file)
+	{
+		return Assets::factory('main')->js($file);
+	}
 
-    public static function url($link)
-    {
-        return "/".$link;
-    }
+	public static function url($link)
+	{
+		return "/".$link;
+	}
 
-    public static function staticfile($file)
-    {
-        return "/static/develop/".$file;
-    }
+	public static function staticfile($file)
+	{
+		return "/static/develop/".$file;
+	}
 
-    public static function debug($param)
-    {
-        return Debug::vars($param);
-    }
+	public static function debug($param)
+	{
+		return Debug::vars($param);
+	}
 
-    public static function obj($array = array())
-    {
-        return new Obj($array);
-    }
+	public static function obj($array = array())
+	{
+		return new Obj($array);
+	}
 
-    public static function domain($domain_str, $url_str, $protocol_str = "http://")
-    {
-        return Domain::get_domain_by_city($domain_str, $url_str, $protocol_str);
-    }
+	public static function domain($domain_str, $url_str, $protocol_str = "http://")
+	{
+		return Domain::get_domain_by_city($domain_str, $url_str, $protocol_str);
+	}
 
-    public static function file_exist($path)
-    {
-        return is_file($_SERVER['DOCUMENT_ROOT'].$path);
-    }
+	public static function file_exist($path)
+	{
+		return is_file($_SERVER['DOCUMENT_ROOT'].$path);
+	}
 
-    public static function strim($str, $param = NULL)
-    {
-        if ($param) {
-            return trim($str, $param);
-        }
-        return trim($str);
-    }
+	public static function strim($str, $param = NULL)
+	{
+		if ($param) {
+			return trim($str, $param);
+		}
+		return trim($str);
+	}
 
-    public static function check_object_access($object, $action)
-    {
-        return Acl::check_object($object, $action);
-    }
+	public static function check_object_access($object, $action)
+	{
+		return Acl::check_object($object, $action);
+	}
 
 
-    public static function check_access($action)
-    {
-        return Acl::check($action);
-    }
+	public static function check_access($action)
+	{
+		return Acl::check($action);
+	}
 
-    public static function get_stat_cached_info($id)
-    {
-        return Cachestat::factory($id."insearch")->fetch();
-    }
+	public static function get_stat_cached_info($id)
+	{
+		return Cachestat::factory($id."insearch")->fetch();
+	}
 
-    public static function get_cart_info()
-    {
-        return Cart::get_info();
-    }
+	public static function get_cart_info()
+	{
+		return Cart::get_info();
+	}
 
-    public static function get_favorites_info()
-    {
-        return ORM::factory('Favourite')->get_list_by_cookie();
-    }
+	public static function get_favorites_info()
+	{
+		return ORM::factory('Favourite')->get_list_by_cookie();
+	}
 
-    public static function get_myobjects_info()
-    {
+	public static function get_myobjects_info()
+	{
 
-        $myobject_count = Search::searchquery(
-                array(
-                    "active" => TRUE,
-                    "published" =>TRUE,
-                    "user_id" => Auth::instance()->get_user()->id,
-                    "filters" => array()
-                ), 
-                array(), 
-                array("count" => TRUE)
-            )->cached(Date::HOUR)->execute()->get("count");
-        return $myobject_count;
-    }
+		$myobject_count = Search::searchquery(
+				array(
+					"active" => TRUE,
+					"published" =>TRUE,
+					"user_id" => Auth::instance()->get_user()->id,
+					"filters" => array()
+				), 
+				array(), 
+				array("count" => TRUE)
+			)->cached(Date::HOUR)->execute()->get("count");
+		return $myobject_count;
+	}
 
-    public static function get_form_element()
-    {
-        $arguments = func_get_args();
-        $name = $arguments[0];
-        array_shift($arguments);
-        return call_user_func_array("Form::".$name, $arguments);
-    }
+	public static function get_form_element()
+	{
+		$arguments = func_get_args();
+		$name = $arguments[0];
+		array_shift($arguments);
+		return call_user_func_array("Form::".$name, $arguments);
+	}
 
-    public static function get_config($path)
-    {
-        return Kohana::$config->load($path);
-    }
+	public static function get_config($path)
+	{
+		return Kohana::$config->load($path);
+	}
 
-    public static function get_user()
-    {
-        return Auth::instance()->get_user();
-    }
+	public static function get_user()
+	{
+		return Auth::instance()->get_user();
+	}
 
-    public static function get_image_paths($filename)
-    {
-        return Imageci::getSitePaths($filename);
-    }
+	public static function get_image_paths($filename)
+	{
+		return Imageci::getSitePaths($filename);
+	}
 
-    public static function get_file($path)
-    {
-        $path = trim('/'.$path);
-        if (is_file($_SERVER['DOCUMENT_ROOT'].$path)) {
-            return $path;
-        } else {
-            return "http://yarmarka.biz/".$path;
-        }
-    }
+	public static function get_file($path)
+	{
+		$path = trim('/'.$path);
+		if (is_file($_SERVER['DOCUMENT_ROOT'].$path)) {
+			return $path;
+		} else {
+			return "http://yarmarka.biz/".$path;
+		}
+	}
 	
 	public static function get_date_diff($date1, $date2)
 	{
@@ -157,5 +157,45 @@ class Twig_Functions
 		if ($diff->i) { $result .= $diff->format("%i мин. "); }
 
 		return $result;		
+	}
+
+	public static function get_service_icon_info($services = array(), $show_not_activated = FALSE)
+	{
+		$services = (array) $services;
+		$result = array();
+
+		foreach ($services as $name => $service_items) {
+			$result_item = array();
+
+			foreach ($service_items as $service_item) {
+				$service_item = new Obj($service_item);
+				$result_item["name"] = $name;
+				//if ( strtotime(date_add($service_item['date_created'], date_interval_create_from_date_string('7 days'))) > strtotime(date()) ) {
+				if ($name == "up" AND strtotime(date("Y-m-d H:i:s"). ' + 7 days') > strtotime(date("Y-m-d H:i:s")) ) {
+					$result_item["icon_class"] = "fa-angle-double-up";
+					$result_item["title"] = "Поднято ".date("Y-m-d H:i", strtotime($service_item->date_created));
+				}
+				if ($name == "premium" AND strtotime($service_item->date_expiration) > strtotime(date("Y-m-d H:i:s")) ) {
+					$result_item["icon_class"] = "fa-info-circle";
+					$result_item["title"] = "Текущая услуга 'Премиум' действует до ".date("Y-m-d H:i", strtotime($service_item->date_expiration));
+				}
+				if ($name == "lider" AND strtotime($service_item->date_expiration) > strtotime(date("Y-m-d H:i:s")) ) {
+					$result_item["icon_class"] = "fa-info-circle";
+					$result_item["title"] = "Текущая услуга 'Лидер' действует до ".date("Y-m-d H:i", strtotime($service_item->date_expiration));
+				}
+
+				if ( in_array($name, array("up","lider","premium")) AND $show_not_activated) {
+					$not_activated = $service_item->count - $service_item->activated;
+					if ($not_activated > 0) {
+						$result_item["icon_class"] .= " fa-pulse";
+						$result_item["title"] = "Осталось неактивированных ".$not_activated.". ".$result_item["title"];
+					}
+				}
+				$result[] = $result_item;
+			}
+			
+		}
+
+		return $result;
 	}
 }

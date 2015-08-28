@@ -66,24 +66,9 @@
 		{% endif %}
 	</td>
 	<td class="td td-icons" style="text-align:center;">
-	
-		{% if object.compiled.services.up|length  > 0 %}
-			{% set up = object.compiled.services.up[0] %}
-			{% if date(up.date_created)|date_modify("+7 day") > date() %}
-				<i class="fa fa-angle-double-up fa-lg" title="Поднято {{ up.date_created|date('H:i d.m.Y') }}" style="color:#D30000"></i>
-			{% endif %}
-		{% endif %}
-		{% if object.compiled.services.premium|length  > 0 %}
-			{% set premium = object.compiled.services.premium[0] %}
-			{% if date(premium.date_expiration) > date() %}
-				<i class="fa fa-info-circle fa-lg" title="Действует услуга 'Премиум' до {{ premium.date_expiration|date('H:i d.m.Y') }}" style="color:#D30000"></i>
-			{% endif %}
-		{% endif %}
-		{% if object.compiled.services.lider|length  > 0 %}
-			{% set lider = object.compiled.services.lider[0] %}
-			{% if date(lider.date_expiration) > date() %}
-				<i class="fa fa-info-circle fa-lg"  title="Действует услуга 'Лидер' до {{ lider.date_expiration|date('H:i d.m.Y') }}"  style="color:#D30000"></i>
-			{% endif %}
-		{% endif %}
+		{% set services = get_service_icon_info(object.compiled.services, check_access("object.moderate")) %}
+		{% for services in services %}
+			<i class="fa {{ services.icon_class }} fa-lg" title="{{services.title}}" style="color:#D30000"></i>
+		{% endfor %}
 	</td>
 </tr>

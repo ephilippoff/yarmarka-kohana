@@ -62,42 +62,10 @@
 		<span class="button w100p button-style1 bg-color-lightgreen mb3 ta-l js-ocontrol-edit" data-id="{{object.id}}"><i class="fa fa-edit pull-left fa-lg"></i>Редактировать</span>
 	</td>
 	<td class="td td-icons">
-		{% if object.compiled.services.up|length  > 0 %}
-			{% set up = object.compiled.services.up[0] %}
-			{% if date(up.date_created)|date_modify("+7 day") > date() %}
-				{% set pulse  = '' %}
-				{% set not_activated_text  = '' %}
-				{% set not_activated = up.count - up.activated %}
-				{% if not_activated > 0 %}
-					{% set pulse = 'fa-pulse' %}
-					{% set not_activated_text = 'Осталось ' ~ not_activated ~ ' поднятий.' %}
-				{% endif %}
-				<i class="fa fa-angle-double-up {{ pulse }} fa-lg" title="{{not_activated_text}} Поднято {{ up.date_created|date('H:i d.m.Y') }}" style="color:#D30000"></i>
-				
-			{% endif %}
-		{% endif %}
-		{% if object.compiled.services.premium|length  > 0 %}
-			{% set premium = object.compiled.services.premium[0] %}
-			{% set pulse =  '' %}
-			{% set not_activated_text  = '' %}
-			{% set not_activated = premium.count - premium.activated %}
-			{% if not_activated > 0 %}
-				{% set pulse = 'fa-pulse' %}
-				{% set not_activated_text = 'Осталось ' ~ not_activated ~ ' премиумов.' %}
-			{% endif %}
-			<i class="fa fa-info-circle {{ pulse }} fa-lg" title="{{not_activated_text}} Услуга 'Премиум' действует до {{ premium.date_expiration|date('H:m d.m.Y') }}" style="color:#D30000"></i>
-		{% endif %}
-		{% if object.compiled.services.lider|length  > 0%}
-			{% set lider = object.compiled.services.lider[0] %}
-			{% set pulse = '' %}
-			{% set not_activated_text  = '' %}
-			{% set not_activated = lider.count - lider.activated %}
-			{% if not_activated > 0 %}
-				{% set pulse = 'fa-pulse' %}
-				{% set not_activated_text = 'Осталось ' ~ not_activated ~ ' лидеров.' %}
-			{% endif %}
-			<i class="fa fa-info-circle {{ pulse }} fa-lg"  title="{{not_activated_text}} Услуга 'Лидер' действует до {{ lider.date_expiration|date('H:m d.m.Y') }}"  style="color:#D30000"></i>
-		{% endif %}
+		{% set services = get_service_icon_info(object.compiled.services, true) %}
+		{% for services in services %}
+			<i class="fa {{ services.icon_class }} fa-lg" title="{{services.title}}" style="color:#D30000"></i>
+		{% endfor %}
 	</td>
 	<td class="td-additional">
 		<div class="relative">
