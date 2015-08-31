@@ -8,18 +8,22 @@ class Controller_Admin_Callbackrequest extends Controller_Admin_Template {
 	{
 		$limit  = Arr::get($_GET, 'limit', 50);
 		$page   = $this->request->query('page');
-		$offset = ($page AND $page != 1) ? ($page-1) * $limit : 0;	
+		$offset = ($page AND $page != 1) ? ($page-1) * $limit : 0;
+		$s = trim(Arr::get($_GET, 's', ''));
 
 		//Возможные варианты сортировки
 		$sorting_types = array('asc', 'desc');
-		$sorting_fields   = array('date_created', 'status', 'id');
+		$sorting_fields   = array('date_created', 'status', 'id', 'key');
 		//Принимаем, сверяем параметры сортировки
 		$sort	 = in_array($this->request->query('sort'), $sorting_types) ? $this->request->query('sort') : 'desc';
 		$sort_by = in_array($this->request->query('sort_by'), $sorting_fields) ? $this->request->query('sort_by') : 'id';		
 		//Фильтр показа только активных, либо всех
 			
 		$requests = ORM::factory('Callbackrequest')->with_objects();
-		
+		if ($s) 
+		{	
+			$requests->where(DB::expr('lower(key)'), '=', mb_strtolower($s));	
+		}		
 		// количество общее
 		$clone_to_count = clone $requests;
 		$count_all = $clone_to_count->count_all();
@@ -29,13 +33,10 @@ class Controller_Admin_Callbackrequest extends Controller_Admin_Template {
 
 		$requests->limit($limit)->offset($offset);
 		
-		// order
-//		$sort_by	= trim($this->request->query('sort_by')) ? trim($this->request->query('sort_by')) : 'real_date_created';
-//		$direction	= trim($this->request->query('direction')) ? trim($this->request->query('direction')) : 'desc';		
-
 		$this->template->requests = $requests->find_all();
 		$this->template->sort	  = $sort;
 		$this->template->sort_by  = $sort_by;
+		$this->template->s		  = $s;
 		
 		$this->template->limit	  = $limit;
 		$this->template->pagination	= Pagination::factory(array(

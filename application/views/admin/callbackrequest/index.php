@@ -9,6 +9,16 @@
 	}	
 ?>
 
+<div class="control-group only2" >		
+	<form action="" class="navbar-form navbar-left" role="search">
+		<div class="form-group">			
+			<input value="<?=strip_tags($s)?>" type="text" class="form-control" placeholder="По ключу" name="s">
+			<input type="submit" class="btn btn-default" value="Искать">
+			<a href="/<?=Request::current()->uri()?>">Сбросить</a>
+		</div>
+	</form>	
+</div>
+
 <table class="table table-hover table-condensed promo">
 	<tr>
 		<th>
@@ -19,7 +29,13 @@
 				<a class="sort" href="/<?=Request::current()->uri().URL::query(array_merge($params, array('sort_by' => 'id', 'sort' => 'desc')), false) ?>">(по убыв.)</a>
 			<?php endif;?>
 		</th>
-		<th>Key</th>
+		<th>Key<br>
+			<?php if ($sort_by == 'key' and $sort == 'desc') : ?>
+				<a class="sort" href="/<?=Request::current()->uri().URL::query(array_merge($params, array('sort_by' => 'key', 'sort' => 'asc')), false) ?>">(по возр.)</a>
+			<?php else : ?>
+				<a class="sort" href="/<?=Request::current()->uri().URL::query(array_merge($params, array('sort_by' => 'key', 'sort' => 'desc')), false) ?>">(по убыв.)</a>
+			<?php endif;?>			
+		</th>
 		<th>Заголовок</th>
 		<th>ФИО</th>
 		<th>Номер телефона</th>
