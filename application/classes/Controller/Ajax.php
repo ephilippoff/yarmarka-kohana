@@ -1376,7 +1376,7 @@ class Controller_Ajax extends Controller_Template
 			Email::send( 
 					Kohana::$config->load('common.callback_request_sending'), 
 					Kohana::$config->load('email.default_from'), 
-					'Поступила заявка №'.$callback_request->id.' на обратный звонок с ключом &laquo;'.$key.'&raquo;', 
+					'Поступила заявка №'.$callback_request->id.' на обратный звонок с ключом "'.$key.'"', 
 					"ФИО: {$fio}<br>Телефон: {$phone}<br>Комментарий: {$comment}" );		
 		}
 	}
