@@ -856,6 +856,7 @@ class Controller_User extends Controller_Template {
 		$this->template->service_promo_link_bg = ORM::factory('Service')->where('name', '=', 'promo_link_bg')->cached(DATE::WEEK, array("service", "myads"))->find();
 		$this->template->running_line_site_s = ORM::factory('Service')->where('name', '=', 'running_line_site_s')->cached(DATE::WEEK, array("service", "myads"))->find();
 		$this->template->service_premium 		= ORM::factory('Service')->where('name', '=', 'premium_ads')->cached(DATE::WEEK, array("service", "myads"))->find();
+		$this->template->ad_to_paper_locked_rubrics = Kohana::$config->load('billing.ad_to_paper_locked_rubrics');
 	}
 
 	public function action_myads()
