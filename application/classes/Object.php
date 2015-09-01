@@ -42,13 +42,13 @@ class Object
 			->init_object_and_mode()
 			->check_neccesaries()
 			->normalize_attributes()
+			->init_contacts()
 			->init_validation_rules()
 			->init_additional()
 			->init_validation_rules_for_attributes()
-			->init_contacts()
 			->exec_validation()
-			->check_signature()
-			->check_signature_for_union();
+			->check_signature();
+			//->check_signature_for_union();
 
 		if ( ! $add->errors)
 		{
@@ -72,7 +72,6 @@ class Object
 					->save_generated()
 					->save_contacts()
 					->save_signature()
-					->save_union()
 					->save_additional()
 					->save_compile_object();
 
@@ -126,10 +125,10 @@ class Object
 			->init_object_and_mode()
 			->check_neccesaries()
 			->normalize_attributes()
+			->init_contacts()
 			->init_validation_rules()
 			->init_additional()
 			//->init_validation_rules_for_attributes()
-			->init_contacts()
 			->exec_validation();
 
 		if ( ! $add->errors)
@@ -200,12 +199,12 @@ class Object
 			->init_object_and_mode()
 			->check_neccesaries()
 			->normalize_attributes()
+			->init_contacts()
 			->init_validation_rules()
 			//->init_validation_rules_for_attributes()
-			->init_contacts()
 			->exec_validation()
-			->check_signature()
-			->check_signature_for_union();
+			->check_signature();
+			//->check_signature_for_union();
 
 		if ( ! $add->errors)
 		{
@@ -229,7 +228,6 @@ class Object
 					->save_generated()
 					->save_contacts()
 					->save_signature()
-					->save_union()
 					->save_compile_object();
 
 				$db->commit();
@@ -310,8 +308,8 @@ class Object
 		$add->init_input_params($input_params)
 			->init_instances()
 			->init_object_and_mode()
-			->check_signature()
-			->check_signature_for_union();
+			->check_signature();
+			//->check_signature_for_union();
 
 		if ((int) $add->object->is_union >0)
 			return $json;
@@ -328,8 +326,7 @@ class Object
 				$db->begin();
 
 				$add->save_object()
-					->save_signature()
-					->save_union();
+					->save_signature();
 
 				$db->commit();
 			}
@@ -371,9 +368,9 @@ class Object
 			->init_instances()
 			->init_object_and_mode()
 			->check_neccesaries()
+			->init_contacts()
 			->init_validation_rules()
 			->init_validation_rules_for_attributes()
-			->init_contacts()
 			->exec_validation();
 
 		if ( ! $add->errors){

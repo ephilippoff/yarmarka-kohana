@@ -169,7 +169,7 @@ class Model_User extends Model_Auth_User {
 		return $query->find_all();
 	}
 
-	public function add_contact($contact_type_id, $contact_str, $moderate = 0, $skip_linking = 0)
+	public function add_contact($contact_type_id, $contact_str, $is_moderate = FALSE, $skip_linking = FALSE)
 	{
 		if ( ! $this->loaded())
 		{
@@ -179,12 +179,12 @@ class Model_User extends Model_Auth_User {
 		$contact = ORM::factory('Contact');
 		$contact->contact_type_id	= intval($contact_type_id);
 		$contact->contact			= trim($contact_str);
-		$contact->moderate 			= intval($moderate);
+		$contact->moderate 			= intval($is_moderate);
 		$contact->show 				= 1;
 		$contact = $contact->create();
 
-		//Привязывать контакт или нет
-		if ($skip_linking == 0)//Если пропуск отключен
+		//Привязывать контакт к пользователю или нет
+		if (!$skip_linking)//Если пропуск отключен
 			if ( ! $contact->has('users', $this->id))
 			{
 				$contact->add('users', $this->id);
@@ -193,7 +193,7 @@ class Model_User extends Model_Auth_User {
 		return $contact;
 	}
 
-	public function add_verified_contact($contact_type_id, $contact_str, $moderate = 0)
+	public function add_verified_contact($contact_type_id, $contact_str, $is_moderate = FALSE, $skip_linking = FALSE)
 	{
 		if ( ! $this->loaded())
 		{
@@ -210,12 +210,14 @@ class Model_User extends Model_Auth_User {
 		}
 
 		// create contact if not exists
-		$contact = $this->add_contact($contact_type_id, $contact_str, $moderate);
+		$contact = $this->add_contact($contact_type_id, $contact_str, $is_moderate, $skip_linking);
+
 		// remove contact from other users
 		DB::delete('user_contacts')
 			->where('contact_id', '=', $contact->id)
 			->where('user_id', '!=', $this->id)
 			->execute();
+
 		// unpublish objects with that contact
 		if ($this->id != $contact->verified_user_id)
 		{
@@ -233,8 +235,12 @@ class Model_User extends Model_Auth_User {
 				$object->remove('contacts', $contact);
 			}
 		}
-		// set contact verified for current user
-		$contact->verified_user_id = $this->id;
+
+		if (!$is_moderate) {
+			// set contact verified for current user
+			$contact->verified_user_id = $this->id;
+		}
+
 		$contact->save();
 
 		return $contact;

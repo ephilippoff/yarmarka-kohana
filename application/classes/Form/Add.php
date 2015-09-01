@@ -675,7 +675,6 @@ class Form_Add  {
 		$errors		= $this->errors;
 		$contact_person = "";
 		$contacts = Array();
-		$contact_types = ORM::factory('Contact_Type')->cached(DATE::WEEK, array("contact", "add"))->find_all();
 
 		$user_id = NULL;
 		if ($user = Auth::instance()->get_user())
@@ -684,49 +683,33 @@ class Form_Add  {
 		if ($object->loaded() AND !$this->is_post)
 		{	
 			self::parse_object_contact($object_id, $user_id, function($id, $value, $type, $verified) use (&$contacts){
-				$contacts[] = Array("id" => $id, "type"  => $type,"value" => $value, "verified" => $verified);
+				$contacts[$type] = Array("id" => $id, "value" => $value, "verified" => $verified);
 			});
 			$contact_person = $object->contact;
 		}
 		elseif ($this->is_post)
 		{			
 			self::parse_post_contact($this->params, $user_id, function($id, $value, $type, $verified) use (&$contacts){
-				$contacts[] = Array("id" => $id, "type"  => $type,"value" => $value, "verified" => $verified);
+				$contacts[$type] = Array("id" => $id, "value" => $value, "verified" => $verified);
 			});
-
-			if (!count($contacts))
-				$contacts[] = Array("id" => "000", "type"  => 1,"value" => "", "verified" => false);
 
 			$contact_person = $this->params["contact"];
 		} elseif ($user_id)
 		{
-			$phone_exists = FALSE;
-			$email_exists = FALSE;
-			self::parse_user_contact($user_id, function($id, $value, $type, $verified) use (&$contacts, &$phone_exists, &$email_exists){
-				$contacts[] = Array("id" => $id, "type"  => $type,"value" => $value, "verified" => $verified);
-				if ($type == 1 OR $type == 2) $phone_exists = TRUE;
-				if ($type == 5) $email_exists = TRUE;
+			self::parse_user_contact($user_id, function($id, $value, $type, $verified) use (&$contacts){
+				$contacts[$type] = Array("id" => $id, "value" => $value, "verified" => $verified);
 			});
 
-			if (!$phone_exists)
-				$contacts[] = Array("id" => "000", "type"  => 1,"value" => "", "verified" => false);
-
-			if (!$email_exists)
-				$contacts[] = Array("id" => "001", "type"  => 5,"value" => "", "verified" => false);
-
 			$contact_person = $user->fullname;
-		} else
-		{
-			$contacts[] = Array("id" => "000", "type"  => 1,"value" => "", "verified" => false);
-			$contacts[] = Array("id" => "001", "type"  => 5,"value" => "", "verified" => false);
-		}
+		} 
 
-		$this->_data->contacts = array(	"contacts" 			=> $contacts , 
-										"contact_types" 	=> $contact_types, 
-										"max_count_contacts"=> self::MAX_COUNT_CONTACTS,
+		$this->_data->contacts = array(	"contacts" 			=> $contacts, 
 										"contact_person" 	=> $contact_person,
 										"contact_error" 	=> $errors->contact,
-										"contacts_error" 	=> $errors->contacts);
+										"contacts_error" 	=> $errors->contacts,
+										"contact_mobile_error" 	=> $errors->contact_mobile,
+										"contact_phone_error" 	=> $errors->contact_phone,
+										"contact_email_error" 	=> $errors->contact_email);
 		return $this;
 	}
 	
@@ -903,58 +886,92 @@ class Form_Add  {
 						->on("contact_id","=","contacts.id")
 					->where("contacts.verified_user_id","=",$user_id)
 					->where("user_id","=",$user_id)
-					->limit(3)
+					->order_by("user_contact.id","asc")
 					->find_all();
 		foreach($oc as $contact)
 		{
-			$callback($contact->id, $contact->contact->contact, $contact->contact->contact_type_id, TRUE);
+			$type = Model_Contact_Type::get_type_name($contact->contact->contact_type_id);
+			$callback($contact->id, $contact->contact->contact, $type, TRUE);
 		}
 	}
 
 	static private function parse_object_contact($object_id, $user_id, $callback)
 	{
+		$session_id 		= session_id();
 		$oc = ORM::factory('Object_Contacts')->where("object_id","=",$object_id)->find_all();
 		foreach($oc as $contact)
 		{
 			$verified = FALSE;
-			if ($user_id)
-			{
-				$con = ORM::factory('Contact')
-						->where("verified_user_id","=",$user_id)
-						->where("contact_clear","=",$contact->contact->contact_clear)
-						->find();
-				if ($con->loaded())
-					$verified = TRUE;
+			
+			$contact = $contact->contact;
+			$contact_value = $contact->contact_clear;
+			$type_id = $contact->contact_type_id;
+			$contact = ORM::factory('Contact')->by_contact_and_type($contact_value, $type_id)->find();
+
+			if ($contact->loaded()) {
+				$verify_validation = $contact->check_verify_contact();
+				$verified = $verify_validation->check();
 			}
-			$callback($contact->id, $contact->contact->contact, $contact->contact->contact_type_id, $verified);
+
+			$type = Model_Contact_Type::get_type_name($type_id);
+			$callback($contact->id, $contact_value, $type, $verified);
 		}
 	}
 
 	static private function parse_post_contact($params, $user_id, $callback)
 	{
-		foreach((array) $params as $key=>$value){
-			if (preg_match('/^contact_([0-9]*)_value/', $key, $matches))
+		$params = new Obj($params);
+		if ($params->contact_mobile) {
+			$verified = FALSE;
+			$id = "";
+
+			$value = Text::clear_phone_number($params->contact_mobile);
+
+			$contact = ORM::factory('Contact')->by_contact_and_type($value, Model_Contact_Type::MOBILE)->find();
+
+			if ($contact->loaded())
 			{
-				$id = $matches[1];
-				$value = trim($params['contact_'.$matches[1].'_value']);
-				$type = $params['contact_'.$matches[1].'_type'];
-
-				$verified = FALSE;
-				if ($user_id)
-				{
-					if ($type <> "5")
-						$value = Text::clear_phone_number($value);
-
-					$con = ORM::factory('Contact')
-							->where("verified_user_id","=", $user_id)
-							->where("contact_clear","=", $value)
-							->find();
-					if ($con->loaded())
-						$verified = TRUE;
-				}
-
-				$callback($id, $value, $type, $verified);
+				$verify_validation = $contact->check_verify_contact();
+				$verified = $verify_validation->check();
+				$id = $contact->id;
 			}
+
+			$callback($id, $value, "mobile", $verified);
+		}
+
+		if ($params->contact_phone) {
+			$verified = FALSE;
+			$id = "";
+
+			$value = Text::clear_phone_number($params->contact_phone);
+
+			$contact = ORM::factory('Contact')->by_contact_and_type($value, Model_Contact_Type::PHONE)->find();
+
+			if ($contact->loaded())
+			{
+				$verify_validation = $contact->check_verify_contact();
+				$verified = $verify_validation->check();
+				$id = $contact->id;
+			}
+
+			$callback($id, $value, "phone", $verified);
+		}
+
+
+		if ($params->contact_email) {
+			$verified = FALSE;
+			$id = "";
+			$value = $params->contact_email;
+
+			$contact = ORM::factory('Contact')->by_contact_and_type($value, Model_Contact_Type::EMAIL)->find();
+
+			if ($contact->loaded())
+			{
+				$verify_validation = $contact->check_verify_contact();
+				$verified = $verify_validation->check();
+				$id = $contact->id;
+			}
+			$callback($id, $value, "email", $verified);
 		}
 	}
 

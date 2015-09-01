@@ -173,7 +173,7 @@ class Model_Contact extends ORM {
 
 	public function is_blocked()
 	{
-		return (bool) intval($this->blocked);
+		return ($this->blocked) ? FALSE : TRUE;
 	}
 	
 	public function increase_visits($object_id)
@@ -190,6 +190,66 @@ class Model_Contact extends ORM {
 		}
 
 		
+	}
+
+	public function check_verify_contact($session_id = NULL)
+	{
+		$session_id = ($session_id) ? $session_id : session_id();
+
+		$validation = Validation::factory(array(
+			"contact_".Model_Contact_Type::get_type_name($this->contact_type_id) => $this->contact_clear
+		));
+
+		$validation->rules('contact_mobile', array(
+			array('mobile_verified', array(':value', $session_id, $this) )
+		));
+
+		$validation->rules('contact_phone', array(
+			array('phone_verified', array(':value', $session_id, $this) )
+		));
+
+		$validation->rules('contact_email', array(
+			array('email_verified', array(':value', $session_id, $this) )
+		));
+
+		return $validation;
+	}
+
+	public function check_contact($session_id = NULL, $check_sms = FALSE)
+	{
+		$session_id = ($session_id) ? $session_id : session_id();
+
+		$validation = Validation::factory(array(
+			"contact_".Model_Contact_Type::get_type_name($this->contact_type_id) => $this->contact_clear
+		));
+
+		$validation->rules('contact_mobile', array(
+			array('contact_blocked', array(':value', $this) )
+		));
+
+		if ($check_sms)
+		{
+			$validation->rule('contact_mobile', 'mobile_sms_sessionmax', array(':value', $session_id, $this));
+			$validation->rule('contact_mobile', 'mobile_sms_phonemax', array(':value', $session_id, $this));
+		}
+
+		$validation->rules('contact_phone', array(
+			array('contact_blocked', array(':value', $this) )
+		));
+
+		$validation->rules('contact_email', array(
+			array('contact_blocked', array(':value', $this) )
+		));
+
+		if ($this->loaded() AND $this->verified_user_id)
+		{
+			$email = ORM::factory('User', $this->verified_user_id)->email;
+			$validation->rule('contact_mobile', 'contact_already_verified', array(':value', $this, $email));
+			$validation->rule('contact_phone', 'contact_already_verified', array(':value', $this, $email));
+			$validation->rule('contact_email', 'contact_already_verified', array(':value', $this, $email));
+		}
+
+		return $validation;
 	}
 }
 

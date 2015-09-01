@@ -2,45 +2,41 @@
 
 class Lib_PlacementAds_AddEditByModerator extends Lib_PlacementAds_AddEdit {
 
-	//раскомментить затычку если проверяем в локале, если нет базы кладра по соседству
-	/*function save_city_and_addrress()
+	//исключаем проверку контактов модератору
+	function init_validation_rules()
 	{
-		$city = &$this->city;
-		$location = &$this->location;
+		$category = &$this->category;
+		$validation = &$this->validation;
+		$params = &$this->params;
+		$category_settings  = new Obj((array) $this->category_settings);
 
-		$city = new stdClass();
-		$city->id = 1947;
+		$validation = Validation::factory((array) $this->params)
+			->rule('city_id', 'not_empty', array(':value', "Город"))
+			->rule('rubricid', 'not_empty', array(':value', "Раздел"))
+			->rule('rubricid', 'not_category_0', array(':value', "Раздел"));
 
-		$location = ORM::factory('Location');
-
-		return $this;
-	}*/
-
-	function init_contacts()
-	{
-		$contacts = &$this->contacts;
-		foreach((array) $this->params as $key=>$value){
-			if (preg_match('/^contact_([0-9]*)_value/', $key, $matches))
-			{
-				$value = trim($this->params->{'contact_'.$matches[1].'_value'});
-				$type = $this->params->{'contact_'.$matches[1].'_type'};
-				if ($value)
-				{
-					$contact_type 	= ORM::factory('Contact_Type', $type );
-
-					if ($contact_type->loaded())
-					{
-						$contacts[] = array(
-							'value' 		=> $value,
-							'type' 			=> $contact_type->id,
-							'type_name' 	=> $contact_type->name,
-						);
-					}
-				}
-			}
+		if ($category)
+		{
+			$validation->rule('contact', 'not_empty', array(':value', "Контактное лицо"));
 		}
+
+		if ($category AND !$category->title_auto_fill AND !$params->itis_massload)
+		{
+			$validation->rules('title_adv', array(
+				array('not_empty', array(':value', "Заголовок")),
+				array('min_length', array(':value', 10, "Заголовок")),
+			));
+		}
+
+		if ($category AND $category->text_required)
+		{
+			$validation->rules('user_text_adv', array(
+				array('not_empty_html', array(':value', "Текст объявления")),
+				array('max_length', array(':value', 15000, "Текст объявления")),
+			));
+		}
+
 		return $this;
-				
 	}
 
 	function save_contacts()
@@ -57,14 +53,17 @@ class Lib_PlacementAds_AddEditByModerator extends Lib_PlacementAds_AddEdit {
 
 		foreach ($contacts as $contact)
 		{
-			// сохраняем контакты для модератора но не привязываем к учетке
-			$user->add_contact($contact['type'], $contact['value'], 0, 1);
+			// сохраняем контакты для пользователя
+			$user->add_verified_contact($contact['type_id'], $contact['value'], TRUE, TRUE);
+
 			// сохраянем новые контакты для объявления
-			$object->add_contact($contact['type'], $contact['value']);
+			$object->add_contact($contact['type_id'], $contact['value']);
 		}
 
 		return $this;
 	}
+
+
 
 	function exec_validation()
 	{
@@ -83,7 +82,7 @@ class Lib_PlacementAds_AddEditByModerator extends Lib_PlacementAds_AddEdit {
 		// указаны ли контакты
 		if ( ! count($this->contacts))
 		{
-			$errors['contacts'] = Kohana::message('validation/object_form', 'empty_contacts');
+			$errors['contact_mobile'] = "Необходимо добавить хотя бы один верифицированный контакт для связи (Мобильный телефон)";
 		}
 
 		return $this;

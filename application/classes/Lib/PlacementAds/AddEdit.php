@@ -150,11 +150,9 @@ class Lib_PlacementAds_AddEdit {
 			$params->{"param_".$item->reference} = $item->value;
 
 		$oc = ORM::factory('Object_Contact')->where('object_id', '=', $object->id)->find_all();
-		$i = 0;
+
 		foreach ($oc as $item){
-			$params->{"contact_".$i."_value"} = $item->contact_obj->contact;
-			$params->{"contact_".$i."_type"} = $item->contact_obj->contact_type_id;
-			$i++;
+			$params->{"contact_".Model_Contact_Type::get_type_name($item->contact_obj->contact_type_id)} = $item->contact_obj->contact;
 		}
 	}
 
@@ -256,6 +254,7 @@ class Lib_PlacementAds_AddEdit {
 		$category = &$this->category;
 		$validation = &$this->validation;
 		$params = &$this->params;
+		$category_settings  = new Obj((array) $this->category_settings);
 
 		$validation = Validation::factory((array) $this->params)
 			->rule('city_id', 'not_empty', array(':value', "Город"))
@@ -275,11 +274,6 @@ class Lib_PlacementAds_AddEdit {
 			));
 		}
 
-		/*if ($category AND $category->address_required)
-		{
-			$validation->rule('address', 'not_empty', array(':value', "Адрес"));
-		}*/ //теперь настраивается через обязательность атрибута
-
 		if ($category AND $category->text_required)
 		{
 			$validation->rules('user_text_adv', array(
@@ -287,6 +281,31 @@ class Lib_PlacementAds_AddEdit {
 				array('max_length', array(':value', 15000, "Текст объявления")),
 			));
 		}
+
+		// верифицированы ли контакты
+		if ($category)
+		{
+
+			$validation->rules('contact_mobile', array(
+				array('mobile_verified', array(':value', $params->session_id) )
+			));
+
+			$validation->rules('contact_phone', array(
+				array('phone_verified', array(':value', $params->session_id) )
+			));
+
+			$validation->rules('contact_email', array(
+				array('email_verified', array(':value', $params->session_id) )
+			));
+
+		} 
+		elseif ($category AND $category_settings->one_mobile_phone AND !$params->itis_massload)
+		{
+			$validation->rules('contact_mobile', array(
+				array('mobile_verified', array(':value', $params->session_id) )
+			));
+		}
+
 		return $this;
 	}
 
@@ -335,30 +354,22 @@ class Lib_PlacementAds_AddEdit {
 
 		if (!$category OR !$user) return $this;
 
-		foreach((array) $this->params as $key=>$value){
-			if (preg_match('/^contact_([0-9]*)_value/', $key, $matches))
-			{
-				$value = trim($this->params->{'contact_'.$matches[1].'_value'});
-				$type = $this->params->{'contact_'.$matches[1].'_type'};
-				if ($value)
-				{
-					$contact_type 	= ORM::factory('Contact_Type', $type );
-					$contact 		= ORM::factory('Contact')->by_contact_and_type($value, $contact_type->id)
-						->find();
-					if ($contact_type->loaded() AND $contact->is_verified($this->params->session_id))
-					{
-						$contacts[$contact->id] = array(
-							'contact_obj' 	=> $contact,
-							'value' 		=> $value,
-							'type' 			=> $contact_type->id,
-							'type_name' 	=> $contact_type->name,
-						);
-					}
-				}
-			}
+		$params = $this->params;
+
+		foreach (array("mobile","phone","email") as $type_name) {
+			$type_id = Model_Contact_Type::get_type_id($type_name);
+			$value = $params->{"contact_".$type_name};
+			if (!$value) continue;
+			$contact = ORM::factory('Contact')->by_contact_and_type($value, $type_id)->find();
+			
+			$contacts[] = array(
+				'contact_obj' 	=> $contact,
+				'value' 		=> $value,
+				'type_id' 	=> $type_id
+			);
 		}
+
 		return $this;
-				
 	}
 
 	function check_signature()
@@ -436,120 +447,120 @@ class Lib_PlacementAds_AddEdit {
 		return $this;
 	}
 
-	function check_signature_for_union()
-	{
-		$params = &$this->params;
-		$object = &$this->object;
-		$errors = &$this->errors;
-		$category = &$this->category;
-		$user     = &$this->user;
+	// function check_signature_for_union()
+	// {
+	// 	$params = &$this->params;
+	// 	$object = &$this->object;
+	// 	$errors = &$this->errors;
+	// 	$category = &$this->category;
+	// 	$user     = &$this->user;
 
-		if (!$category OR !$user) return $this;
+	// 	if (!$category OR !$user) return $this;
 
-		if ($this->is_union_enabled() AND $this->is_union_enabled_by_category($category->id) AND !$this->union_cancel)
-		{
-			$max_similarity = Kohana::$config->load('common.max_object_similarity');
-			$similarity 	= ORM::factory('Object_Signature')->get_similarity($max_similarity, $this->signature, $this->options_exlusive_union, $params->object_id);
+	// 	if ($this->is_union_enabled() AND $this->is_union_enabled_by_category($category->id) AND !$this->union_cancel)
+	// 	{
+	// 		$max_similarity = Kohana::$config->load('common.max_object_similarity');
+	// 		$similarity 	= ORM::factory('Object_Signature')->get_similarity($max_similarity, $this->signature, $this->options_exlusive_union, $params->object_id);
 
-			if ($similarity["sm"] >= $max_similarity){
+	// 		if ($similarity["sm"] >= $max_similarity){
 
-				$valid = $this->validate_between_parameters($category->id, $this->list_ids, $similarity["object_id"]);
-				if (!$valid)
-				{
-					$this->destroy_union = TRUE;
-					return $this;
-				}
+	// 			$valid = $this->validate_between_parameters($category->id, $this->list_ids, $similarity["object_id"]);
+	// 			if (!$valid)
+	// 			{
+	// 				$this->destroy_union = TRUE;
+	// 				return $this;
+	// 			}
 
-				$parent_id = (int) ORM::factory('Object', $similarity["object_id"])->parent_id;
-				if ($parent_id == 0)
-				{
-					$this->create_union = TRUE;
-					$this->object_without_parent_id = $similarity["object_id"];
-				} else {
-					$this->edit_union = TRUE;
-					$this->parent_id = $parent_id;
-				}				
-			} 
-				else if ($this->is_edit AND $object->parent_id)
-			{
-				$this->destroy_union = TRUE;
-			}
-		}
+	// 			$parent_id = (int) ORM::factory('Object', $similarity["object_id"])->parent_id;
+	// 			if ($parent_id == 0)
+	// 			{
+	// 				$this->create_union = TRUE;
+	// 				$this->object_without_parent_id = $similarity["object_id"];
+	// 			} else {
+	// 				$this->edit_union = TRUE;
+	// 				$this->parent_id = $parent_id;
+	// 			}				
+	// 		} 
+	// 			else if ($this->is_edit AND $object->parent_id)
+	// 		{
+	// 			$this->destroy_union = TRUE;
+	// 		}
+	// 	}
 
-		return $this;
-	}
+	// 	return $this;
+	// }
 
-	function save_union()
-	{
-		$params = &$this->params;
-		$object = &$this->object;
-		$errors = &$this->errors;
-		$category = &$this->category;
-		$user     = &$this->user;
+	// function save_union()
+	// {
+	// 	$params = &$this->params;
+	// 	$object = &$this->object;
+	// 	$errors = &$this->errors;
+	// 	$category = &$this->category;
+	// 	$user     = &$this->user;
 
-		if (!$category OR !$user) return $this;
+	// 	if (!$category OR !$user) return $this;
 
-		if ($this->is_union_enabled() AND $this->is_union_enabled_by_category($category->id))
-		{ 
-			$parent_id = 0;
+	// 	if ($this->is_union_enabled() AND $this->is_union_enabled_by_category($category->id))
+	// 	{ 
+	// 		$parent_id = 0;
 
-			if ($this->destroy_union)
-			{
-				$union_object = ORM::factory('Object', $object->parent_id);
-				if ($union_object->loaded())
-				{
-					$this->parent_id = $union_object->id;
-					if ($union_object->is_union <= 2)
-					{
-						ORM::factory('Object')
-							->where('parent_id','=', $union_object->id)
-							->set('parent_id',  DB::expr('NULL'))
-							->update_all();
-						DB::delete('object')->where("id","=",$union_object->id)->execute();						
-					}
-					else if ($union_object->is_union > 2)
-					{
-						ORM::factory('Object')
-							->where('id','=', $object->id)
-							->set('parent_id',  DB::expr('NULL'))
-							->update_all();
-						$this->edit_union = TRUE;		
-					}
-				}
-			}
+	// 		if ($this->destroy_union)
+	// 		{
+	// 			$union_object = ORM::factory('Object', $object->parent_id);
+	// 			if ($union_object->loaded())
+	// 			{
+	// 				$this->parent_id = $union_object->id;
+	// 				if ($union_object->is_union <= 2)
+	// 				{
+	// 					ORM::factory('Object')
+	// 						->where('parent_id','=', $union_object->id)
+	// 						->set('parent_id',  DB::expr('NULL'))
+	// 						->update_all();
+	// 					DB::delete('object')->where("id","=",$union_object->id)->execute();						
+	// 				}
+	// 				else if ($union_object->is_union > 2)
+	// 				{
+	// 					ORM::factory('Object')
+	// 						->where('id','=', $object->id)
+	// 						->set('parent_id',  DB::expr('NULL'))
+	// 						->update_all();
+	// 					$this->edit_union = TRUE;		
+	// 				}
+	// 			}
+	// 		}
 
-			if ($this->create_union OR $this->edit_union)
-			{
-				//ry {
-					$this->original_params["object_id"] = $this->parent_id;
-					$this->original_params["rubricid"]  = $category->id;
-					$this->original_params["city_id"]   = $object->city_id;
+	// 		if ($this->create_union OR $this->edit_union)
+	// 		{
+	// 			//ry {
+	// 				$this->original_params["object_id"] = $this->parent_id;
+	// 				$this->original_params["rubricid"]  = $category->id;
+	// 				$this->original_params["city_id"]   = $object->city_id;
 
-					$objects_for_union = Array(
-							"initial_object" 		 => $this->object_without_parent_id,
-							"current_object_source"  => $object->id
-						);
+	// 				$objects_for_union = Array(
+	// 						"initial_object" 		 => $this->object_without_parent_id,
+	// 						"current_object_source"  => $object->id
+	// 					);
 
-					$parent_id = (int) Object::PlacementAds_Union($this->original_params, $objects_for_union, $this->edit_union, $this->destroy_union);
-				//}
-				//catch (Exception $e) {
-				// 	$errors['union_error'] = $e->getMessage();
-				//}
+	// 				$parent_id = (int) Object::PlacementAds_Union($this->original_params, $objects_for_union, $this->edit_union, $this->destroy_union);
+	// 			//}
+	// 			//catch (Exception $e) {
+	// 			// 	$errors['union_error'] = $e->getMessage();
+	// 			//}
 					
-			}
+	// 		}
 			
-			if ($parent_id >0 )	
-				$this->parent_id = $parent_id;
+	// 		if ($parent_id >0 )	
+	// 			$this->parent_id = $parent_id;
 
-			if ($this->destroy_union)	
-				$this->parent_id = NULL;
+	// 		if ($this->destroy_union)	
+	// 			$this->parent_id = NULL;
 			
 
-		}		
+	// 	}		
 
-		return $this;
+	// 	return $this;
 
-	}
+	// }
 	/**
 	 * [normalize_attributes Приведение пользовательских данных в порядок, trim, replace и прочее]
 	 * @return [this]
@@ -694,34 +705,18 @@ class Lib_PlacementAds_AddEdit {
 			$errors['not_autorized'] =  Kohana::message('validation/object_form', 'not_autorized');
 		}
 
-		// указаны ли контакты
-		if ( !count($this->contacts))
+		if ($category AND count($this->contacts) == 0)
 		{
-			$errors['contacts'] = Kohana::message('validation/object_form', 'empty_contacts');
-		} 
-		elseif ($category_settings->one_mobile_phone)
+			$errors['contact_mobile'] = "Необходимо добавить хотя бы один верифицированный контакт для связи";
+		}
+		elseif ($category AND !$category_settings->phone_or_mobile_notrequired AND !$params->itis_massload AND !$params->contact_mobile AND !$params->contact_phone)
 		{
-			$mobile = array_filter(array_values($this->contacts), function($v){
-				return ($v["type"] == 1);
-			});
-			if (!count($mobile))
-			{
-				$errors['contacts'] = "В эту рубрику необходимо указать и подтвердить хотябы один мобильный телефон";
-			}
-		} elseif ( $category AND Kohana::$config->load("common.add_phone_required") AND !$params->itis_massload)
+			$errors['contact_mobile'] = "Для этой рубрики, необходимо обязательно указать телефон";
+			$errors['contact_phone'] = "Для этой рубрики, необходимо обязательно указать телефон";
+		}
+		elseif ($category AND $category_settings->one_mobile_phone AND !$params->itis_massload AND $params->contact_mobile)
 		{
-			
-			$exclusion = Kohana::$config->load("common.add_phone_required_exlusion");
-			if (!in_array($category->id, $exclusion))
-			{
-				$mobile = array_filter(array_values($this->contacts), function($v){
-					return ($v["type"] == 1 OR $v["type"] == 2);
-				});
-				if (!count($mobile))
-				{
-					$errors['contacts'] = "В эту рубрику необходимо указать и подтвердить хотябы один телефон";
-				}
-			}
+			$errors['contact_mobile'] = "Для этой рубрики, необходимо обязательно указать мобильный телефон";
 		}
 
 		//если пользователь привязан к компании и подает объявления как от компании то не проверяем количество поданных
@@ -1350,12 +1345,11 @@ class Lib_PlacementAds_AddEdit {
 
 		foreach ($contacts as $contact)
 		{
-
 			// сохраняем контакты для пользователя
-			$user->add_verified_contact($contact['type'], $contact['value']);
+			$user->add_verified_contact($contact['type_id'], $contact['value']);
 
 			// сохраянем новые контакты для объявления
-			$object->add_contact($contact['type'], $contact['value']);
+			$object->add_contact($contact['type_id'], $contact['value']);
 		}
 
 		return $this;

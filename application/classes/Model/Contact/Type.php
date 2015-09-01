@@ -9,6 +9,15 @@ class Model_Contact_Type extends ORM {
 	const MOBILE	= 1;
 	const OTHER		= 0;
 
+	protected static $types = array(
+		0 => "other",
+		1 => "mobile",
+		2 => "phone",
+		3 => "skype",
+		4 => "icq",
+		5 => "email",
+	);
+
 	protected $_table_name = 'contact_type';
 
 	protected $_has_many = array(
@@ -50,6 +59,18 @@ class Model_Contact_Type extends ORM {
 		return array(
 			self::EMAIL, self::PHONE, self::MOBILE
 		);
+	}
+
+	public static function get_type_name($type)
+	{
+		return self::$types[$type];
+	}
+
+	public static function get_type_id($name)
+	{
+		$types = array_flip(self::$types);
+
+		return $types[$name];
 	}
 }
 

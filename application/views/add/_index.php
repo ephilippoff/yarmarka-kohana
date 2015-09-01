@@ -450,40 +450,61 @@
 		</div>
 
 		<? if (property_exists($form_data, 'contacts')): ?>
+			
+			<? foreach (array(
+					"mobile" => array("name"=>"Мобильный телефон", "icon" => "<i class='fa fa-mobile-phone'></i>", "placeholder" => "Введите код из смс"),
+					"phone" => array("name"=>"Городской телефон", "icon" => "<i class='fa fa-phone'></i>", "placeholder" => "Введите код"),
+					"email"=> array("name"=>"Email", "icon" => "<i class='fa fa-envelope-o'></i>", "placeholder" => "Введите код из письма")) as $type => $type_params): ?>
+				
+				<div class="row mb20">
+					<div class="col-md-3 labelcont">
+						<label><?=$type_params["name"]?>:</label>
+					</div>
+					<div class="col-md-9">
+						<div class="row js-contact" data-type="<?=$type?>">
+							<div class="col-md-8 inp-cont <? if ($form_data->contacts["contact_".$type."_error"]) echo "error"; ?>">
+								<?
+									$contact = (isset($form_data->contacts['contacts'][$type])) ? new Obj($form_data->contacts['contacts'][$type]) : new Obj();
+								?>
+								<div class="input-group w100p">
+									<span class="input-group-addon bg-color-whitesmoke brl3" title="<?=$type_params["name"]?>"><?=$type_params["icon"]?></span>
+									<input class="form-control js-contact-value" type="text" name="contact_<?=$type?>" value="<?=$contact->value?>">
+									<? if ($contact->value): ?>
+										<? if ($contact->verified): ?>
+											<span class="input-group-addon button bg-color-lightgreen white pl5 pr5 brr3 js-contact-ok"><i class="fa fa-check"></i></span>
+										<? else: ?>
+											<span class="input-group-addon button bg-color-crimson white pl5 pr5 brr3 js-contact-ok" data-state="ready">Нажмите чтобы подтвердить</span>
+										<? endif; ?>
+									<? else: ?>
+										<span class="input-group-addon button bg-color-gray white pl5 pr5 brr3 js-contact-ok"><i class="fa fa-question"></i></span>
+									<? endif; ?>
+								</div>
+								<? if ($form_data->contacts AND $form_data->contacts["contact_".$type."_error"]): ?>
+									<span class="inform">
+										<?= $form_data->contacts["contact_".$type."_error"] ?>
+									</span>
+								<? endif; ?>
+							</div>
+							<div class="col-md-4 inp-cont error">
+								<div class="input-group w100p hidden js-contact-code">
+									<input class="form-control w100 js-contact-code-value" type="text" placeholder="<?=$type_params["placeholder"]?>">
+									<span class="input-group-addon button bg-color-crimson white pl5 pr5 brr3 js-contact-code-ok">ок</span>
+								</div>
+								<span class="inform hidden js-contact-code-description"></span>
+								<div class="input-group w100p hidden js-contact-description"></div>
+							</div>
+						</div>
+					</div>
+				</div>
 
-			<div class="row mb20" id="div_contacts">
-				<div class="col-md-3 labelcont">
-					<label>Контакты:</label>
-				</div>
-				<div class="col-md-9">
-					<div id="contacts2" class="contacts-cont fn-contacts-container">
-						<?=
-						View::factory('add/block/contacts', array("data" => new Obj($form_data->contacts),
-							"_class" => "",
-							"name" => "",
-							"id" => "",
-							"attributes" => ""
-						));
-						?>					
-					</div>				
-				</div>
-			</div>	
-
-			<div class="row mb20">
-				<div class="col-md-3 labelcont">
-					<label></label>
-				</div>
-				<div class="col-md-9">
-					<span title="Добавить контакт" class="add-contact span-link fn-add-contact-button-text"><i class="ico plus-ico17 mr7"></i>Добавить еще телефон или email</span>				
-				</div>
-			</div>	
+			<? endforeach; ?>
 
 			<div class="row mb10">
 				<div class="col-md-3 col-xs-4 labelcont">
 					<label>Контактное лицо:</label>
 				</div>
 				<div class="col-md-9 col-xs-8">
-					<div class="row">
+					<div class="row"  data-type="email">
 						<div class="col-md-6">
 							<div id="contacts">	                  			
 								<div class="inp-cont <? if ($form_data->contacts["contact_error"]) echo "error"; ?>">

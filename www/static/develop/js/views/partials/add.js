@@ -2,11 +2,12 @@
 define([
     "marionette",
     "templates/set/add",
+    "views/partials/behaviors/contacts",
     "fileupload",
     "nicEdit",
     "maskedInput",
     "ymap"
-], function (Marionette, templates) {
+], function (Marionette, templates, ContactsBehavior) {
     "use strict";
 
     var photoList = Backbone.Collection.extend({
@@ -845,7 +846,9 @@ define([
             this.category_id = this.control.val();
             if (this.category_id && this.category_id != 0){
                 this.data = data[this.category_id];
-                _.extend(this.settings, this.data[0]);
+                if (this.data) {
+                    _.extend(this.settings, this.data[0]);
+                }
             }
             this.app.descriptions = data["descriptions"];
         },
@@ -1215,6 +1218,12 @@ define([
             'click #submit_button' : 'submitForm'
         },
 
+        behaviors: {
+            ContactsBehavior: {
+                behaviorClass: ContactsBehavior
+            },
+        },
+
         initialize : function (options) {
             _.extend(this, options);
             var self = this;
@@ -1234,8 +1243,8 @@ define([
                                                 app : this
                                             });
                 this.photo    = new photoControlView({app : this});
-                this.contacts = new contactListView({app : this});
-                this.contacts.render();
+                // this.contacts = new contactListView({app : this});
+                // this.contacts.render();
             }
             this.address_precision = null;
             this.precision_error = null;

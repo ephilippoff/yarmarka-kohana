@@ -99,7 +99,7 @@ class Controller_Detail extends Controller_Template {
 
     }	
 	
-    public function action_type100() {
+    public function action_type201() {
 		$start = microtime(true);
         $object = $this->request->param("object");
         $url = $this->request->param("url");

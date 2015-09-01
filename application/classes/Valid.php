@@ -160,4 +160,81 @@ class Valid extends Kohana_Valid {
 		$value = mb_strtolower( trim($value) );
 		return Captcha::valid($value);
 	}
+
+	public static function mobile_verified($value, $session_id, $contact = NULL)
+	{
+		$type_id = Model_Contact_Type::get_type_id("mobile");
+
+		if (!$contact) {
+			$contact = ORM::factory('Contact')->by_contact_and_type($value, $type_id)->find();
+		}
+
+		return $contact->is_verified($session_id);
+	}
+
+	public static function phone_verified($value, $session_id, $contact = NULL)
+	{
+		$type_id = Model_Contact_Type::get_type_id("phone");
+		if (!$contact) {
+			$contact = ORM::factory('Contact')->by_contact_and_type($value, $type_id)->find();
+		}
+
+		return $contact->is_verified($session_id);
+	}
+
+	public static function email_verified($value, $session_id, $contact = NULL)
+	{
+		$type_id = Model_Contact_Type::get_type_id("email");
+		if (!$contact) {
+			$contact = ORM::factory('Contact')->by_contact_and_type($value, $type_id)->find();
+		}
+		return $contact->is_verified($session_id);
+	}
+
+	public static function contact_blocked($value, $contact = NULL)
+	{
+		$type_id = Model_Contact_Type::get_type_id("email");
+		if (!$contact) {
+			$contact = ORM::factory('Contact')->by_contact_and_type($value, $type_id)->find();
+		}
+		return $contact->is_blocked();
+	}
+
+	public static function mobile_sms_phonemax($value, $session_id, $contact = NULL, $max_value = 2)
+	{
+		$type_id = Model_Contact_Type::get_type_id("email");
+		if (!$contact) {
+			$contact = ORM::factory('Contact')->by_contact_and_type($value, $type_id)->find();
+		}
+
+		$sms_count = ORM::factory('Sms')->cnt_by_phone($contact->contact_clear, $session_id);
+
+		return ($sms_count + 1 < $max_value);
+	}
+
+	public static function mobile_sms_sessionmax($value, $session_id, $contact = NULL, $max_value = 10)
+	{
+		$type_id = Model_Contact_Type::get_type_id("email");
+		if (!$contact) {
+			$contact = ORM::factory('Contact')->by_contact_and_type($value, $type_id)->find();
+		}
+
+		$sms_count = ORM::factory('Sms')->cnt_by_session_id($session_id);
+
+		return ($sms_count + 1 < $max_value);
+	}
+
+	public static function contact_already_verified($value, $contact, $email = "")
+	{
+		$current_user 		= Auth::instance()->get_user();
+
+		if ($current_user AND $contact->verified_user_id AND $contact->verified_user_id <> $current_user->id)
+		{
+			return FALSE;
+		} elseif (!$current_user AND $contact->verified_user_id) {
+			return FALSE;
+		}
+
+		return TRUE;
+	}
 }
