@@ -350,12 +350,8 @@ class Lib_PlacementAds_AddEdit {
 	{
 		$contacts = &$this->contacts;
 		$category = &$this->category;
-		$user     = &$this->user;
-
-		if (!$category OR !$user) return $this;
 
 		$params = $this->params;
-
 		foreach (array("mobile","phone","email") as $type_name) {
 			$type_id = Model_Contact_Type::get_type_id($type_name);
 			$value = $params->{"contact_".$type_name};
@@ -367,6 +363,7 @@ class Lib_PlacementAds_AddEdit {
 				'value' 		=> $value,
 				'type_id' 	=> $type_id
 			);
+
 		}
 
 		return $this;
