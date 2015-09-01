@@ -193,32 +193,18 @@ class Valid extends Kohana_Valid {
 
 	public static function contact_blocked($value, $contact = NULL)
 	{
-		$type_id = Model_Contact_Type::get_type_id("email");
-		if (!$contact) {
-			$contact = ORM::factory('Contact')->by_contact_and_type($value, $type_id)->find();
-		}
 		return $contact->is_blocked();
 	}
 
-	public static function mobile_sms_phonemax($value, $session_id, $contact = NULL, $max_value = 2)
+	public static function mobile_sms_phonemax($value, $session_id, $max_value = 2)
 	{
-		$type_id = Model_Contact_Type::get_type_id("email");
-		if (!$contact) {
-			$contact = ORM::factory('Contact')->by_contact_and_type($value, $type_id)->find();
-		}
-
-		$sms_count = ORM::factory('Sms')->cnt_by_phone($contact->contact_clear, $session_id);
+		$sms_count = ORM::factory('Sms')->cnt_by_phone($value, $session_id);
 
 		return ($sms_count + 1 < $max_value);
 	}
 
-	public static function mobile_sms_sessionmax($value, $session_id, $contact = NULL, $max_value = 10)
+	public static function mobile_sms_sessionmax($value, $session_id, $max_value = 10)
 	{
-		$type_id = Model_Contact_Type::get_type_id("email");
-		if (!$contact) {
-			$contact = ORM::factory('Contact')->by_contact_and_type($value, $type_id)->find();
-		}
-
 		$sms_count = ORM::factory('Sms')->cnt_by_session_id($session_id);
 
 		return ($sms_count + 1 < $max_value);
@@ -236,5 +222,23 @@ class Valid extends Kohana_Valid {
 		}
 
 		return TRUE;
+	}
+
+	public static function is_mobile_contact($value)
+	{
+		$value = trim(strtolower(Text::clear_phone_number($value)));
+		return (bool) preg_match('/^79\d{9}$/', $value);
+	}
+
+	public static function is_city_contact($value)
+	{
+		$value = trim(strtolower(Text::clear_phone_number($value)));
+		return (!Valid::is_mobile_contact($value) AND preg_match('/^7\d{10}$/', $value));
+	}
+
+	public static function is_email_contact($value)
+	{
+		$value = trim(strtolower($value));
+		return Valid::email($value);
 	}
 }

@@ -20,14 +20,17 @@ class Sms
 
 		$sms_pilot = new Smspilot(Kohana::$config->load('sms.api_key'), FALSE, Kohana::$config->load('sms.from'));
 		
+		$result = FALSE;
 		if ($sms_pilot->send($number, $text))
 		{
-			$sms_record->set_success($sms_pilot->success);
+			$result = $sms_record->set_success($sms_pilot->success);
 		}
 		else
 		{
-			$sms_record->set_error($sms_pilot->error);
+			$result = $sms_record->set_error($sms_pilot->error);
 		}
+
+		return $result;
 	}
 }
 

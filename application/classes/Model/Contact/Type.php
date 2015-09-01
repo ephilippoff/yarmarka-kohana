@@ -30,13 +30,16 @@ class Model_Contact_Type extends ORM {
 	}
 
 	// @todo проверяет только email, мобильный и домашний телефон
-	public static function detect_contact_type($contact)
+	public static function detect_contact_type($value)
 	{
-		if (strpos($contact, '79') === 0)
-			return self::MOBILE;
+		if (!$value) return FALSE;
+		$value = trim(strtolower($value));
 
-		if (Valid::email($contact))
+		if (Valid::email($value))
 			return self::EMAIL;
+
+		if (strpos($value, '79') === 0)
+			return self::MOBILE;
 
 		return self::PHONE;
 	}

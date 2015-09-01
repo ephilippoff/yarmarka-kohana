@@ -360,7 +360,7 @@ class Lib_PlacementAds_AddEdit {
 			$type_id = Model_Contact_Type::get_type_id($type_name);
 			$value = $params->{"contact_".$type_name};
 			if (!$value) continue;
-			$contact = ORM::factory('Contact')->by_contact_and_type($value, $type_id)->find();
+			$contact = ORM::factory('Contact')->by_value($value)->find();
 			
 			$contacts[] = array(
 				'contact_obj' 	=> $contact,
@@ -705,11 +705,21 @@ class Lib_PlacementAds_AddEdit {
 			$errors['not_autorized'] =  Kohana::message('validation/object_form', 'not_autorized');
 		}
 
-		if ($category AND count($this->contacts) == 0)
+		if (count($this->contacts) == 0)
 		{
 			$errors['contact_mobile'] = "Необходимо добавить хотя бы один верифицированный контакт для связи";
+		} else {
+			foreach ($this->contacts as $contact_item) {
+				$contact = $contact_item["contact_obj"];
+				$contact_validation = $contact->check_contact($params->session_id, $contact_item["value"], $contact_item["type_id"], FALSE, TRUE);
+				if (!$contact_validation->check())
+				{	
+					$errors = array_merge($errors, $contact_validation->errors('validation/object_form'));
+				}
+			}
 		}
-		elseif ($category AND !$category_settings->phone_or_mobile_notrequired AND !$params->itis_massload AND !$params->contact_mobile AND !$params->contact_phone)
+		
+		if ($category AND !$category_settings->phone_or_mobile_notrequired AND !$params->itis_massload AND !$params->contact_mobile AND !$params->contact_phone)
 		{
 			$errors['contact_mobile'] = "Для этой рубрики, необходимо обязательно указать телефон";
 			$errors['contact_phone'] = "Для этой рубрики, необходимо обязательно указать телефон";

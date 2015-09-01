@@ -67,6 +67,19 @@ class Model_Contact extends ORM {
 		return ! (bool) $query->count_all();
 	}
 
+	public function by_value($value)
+	{
+		$value = trim(strtolower($value));
+		if ( !Valid::email($value) ) {
+			$value = Text::clear_phone_number($value);
+			return $this->where('contact_type_id', 'IN', array(Model_Contact_Type::MOBILE, Model_Contact_Type::PHONE))
+				->where('contact_clear', '=', $value);
+		} else {
+			return $this->where('contact_type_id', '=', Model_Contact_Type::EMAIL)
+				->where('contact_clear', '=', $value);
+		}
+	}
+
 	public function by_phone_number($contact_clear)
 	{
 		return $this->where('contact_type_id', 'IN', array(Model_Contact_Type::MOBILE, Model_Contact_Type::PHONE))
@@ -215,38 +228,59 @@ class Model_Contact extends ORM {
 		return $validation;
 	}
 
-	public function check_contact($session_id = NULL, $check_sms = FALSE)
+	public function check_contact($session_id = NULL, $contact_value = NULL, $type_id = NULL, $check_sms = FALSE, $correct = FALSE)
 	{
 		$session_id = ($session_id) ? $session_id : session_id();
 
+		$type_id = $type_id;
+		$type_name = Model_Contact_Type::get_type_name($type_id);
+		$contact_value = $contact_value;
+
+		if ($type_id <> Model_Contact_Type::EMAIL) {
+			$contact_value = Text::clear_phone_number($contact_value);
+		}
+
 		$validation = Validation::factory(array(
-			"contact_".Model_Contact_Type::get_type_name($this->contact_type_id) => $this->contact_clear
+			"contact_".$type_name => $contact_value
 		));
 
-		$validation->rules('contact_mobile', array(
-			array('contact_blocked', array(':value', $this) )
-		));
+		$contact_mobile_rules = array();
+		$contact_phone_rules = array();
+		$contact_email_rules = array();
+
+		$contact_mobile_rules[] = array('is_mobile_contact', array(':value'));
+		$contact_phone_rules[] = array('is_city_contact', array(':value'));
+		$contact_email_rules[] = array('is_email_contact', array(':value'));
 
 		if ($check_sms)
 		{
-			$validation->rule('contact_mobile', 'mobile_sms_sessionmax', array(':value', $session_id, $this));
-			$validation->rule('contact_mobile', 'mobile_sms_phonemax', array(':value', $session_id, $this));
+			$contact_mobile_rules[] = array('mobile_sms_sessionmax', array(':value', $session_id));
+			$contact_mobile_rules[] = array('mobile_sms_phonemax', array(':value', $session_id));
 		}
 
-		$validation->rules('contact_phone', array(
-			array('contact_blocked', array(':value', $this) )
-		));
+		if ($this->loaded()) {
 
-		$validation->rules('contact_email', array(
-			array('contact_blocked', array(':value', $this) )
-		));
+			$contact_mobile_rules[] = array('contact_blocked', array(':value', $this));
+			$contact_phone_rules[] = array('contact_blocked', array(':value', $this));
+			$contact_email_rules[] = array('contact_blocked', array(':value', $this));
 
-		if ($this->loaded() AND $this->verified_user_id)
-		{
-			$email = ORM::factory('User', $this->verified_user_id)->email;
-			$validation->rule('contact_mobile', 'contact_already_verified', array(':value', $this, $email));
-			$validation->rule('contact_phone', 'contact_already_verified', array(':value', $this, $email));
-			$validation->rule('contact_email', 'contact_already_verified', array(':value', $this, $email));
+			if ($this->verified_user_id)
+			{
+				$email = ORM::factory('User', $this->verified_user_id)->email;
+
+				$contact_mobile_rules[] = array('contact_already_verified', array(':value', $this, $email));
+				$contact_phone_rules[] = array('contact_already_verified', array(':value', $this, $email));
+				$contact_email_rules[] = array('contact_already_verified', array(':value', $this, $email));
+			}
+		}
+
+		$validation->rules("contact_mobile", $contact_mobile_rules);
+		$validation->rules("contact_phone", $contact_phone_rules);
+		$validation->rules("contact_email", $contact_email_rules);
+
+		if ($this->loaded() AND $type_id <> $this->contact_type_id AND $correct) {
+			$this->contact_type_id = $type_id;
+			$this->save();
 		}
 
 		return $validation;

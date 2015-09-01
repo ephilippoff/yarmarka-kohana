@@ -1,5 +1,5 @@
 <?php defined('SYSPATH') or die('No direct script access.');
-/* SMS Pilot.Class API/PHP v1.8.5
+/* SMS Pilot.Class API/PHP v1.9.10
  * SEE: http://www.smspilot.ru/apikey.php
 
  Example (send):
@@ -12,8 +12,8 @@
 	$sms = new SMSPilot( 'XXXXXXXXXXXXYYYYYYYYYYYYZZZZZZZZXXXXXXXXXXXXYYYYYYYYYYYYZZZZZZZZ', 'WINDOWS-1251' );
  	if ($sms->send('79121234512','Завтра контрольная!', 'SCHOOL_N2')) {
 		echo 'Сообщение успешно отправлено<br />';
-		echo 'Цена='.$sms->cost.' кредитов<br />';
-		echo 'Баланс='.$sms->balance.' кредитов<br />';
+		echo 'Цена='.$sms->cost.' руб.<br />';
+		echo 'Баланс='.$sms->balance.' руб.<br />';
 	} else
 		echo 'Ошибка! '.$sms->error;
 
@@ -21,8 +21,8 @@
  	require_once('smspilot.class.php');
 	$sms = new SMSPilot( 'XXXXXXXXXXXXYYYYYYYYYYYYZZZZZZZZXXXXXXXXXXXXYYYYYYYYYYYYZZZZZZZZ' );
 	$sms->send('79087964781', 'Novy zakaz http://www.smspilot.ru!');
-	print_r( $sms->status[0] ); // Array ( [id] => 94 [phone] => 79087964781 [zone] => 2 [status] => 0 )
-	print_r( $sms->statusByPhone( '79087964781' ) ); // // Array ( [id] => 94 [phone] => 79087964781 [zone] => 2 [status] => 0 )
+	print_r( $sms->status[0] ); // Array ( [id] => 94 [phone] => 79087964781 [price] => 0.29 [status] => 0 )
+	print_r( $sms->statusByPhone( '79087964781' ) ); // // Array ( [id] => 94 [phone] => 79087964781 [price] => 0.29 [status] => 0 )
 
   Example 4: (указываем что наша кодировка Windows-1251, проверяем автозамену 89.. получателя)
   	require_once('smspilot.class.php');
@@ -37,7 +37,7 @@
         (
             [id] => 129
             [phone] => 79087964781
-            [zone] => 2
+            [price] => 0.60
             [status] => 0
         )
 )
@@ -56,7 +56,7 @@
         (
             [id] => 94
             [phone] => 79087964781
-            [zone] => 2
+            [price] => 2
             [status] => 2
         )
 
@@ -64,7 +64,7 @@
         (
             [id] => 95
             [phone] => 79087964781
-            [zone] => 2
+            [price] => 2
             [status] => -1
         )
 
@@ -73,10 +73,10 @@
   Example 6 ( balance  ):
  	require_once('smspilot.class.php');
 	$sms = new SMSPilot( 'XXXXXXXXXXXXYYYYYYYYYYYYZZZZZZZZXXXXXXXXXXXXYYYYYYYYYYYYZZZZZZZZ' );
-	echo $sms->balance(); // 23004
+	echo $sms->balance().' руб.'; // 1680.25 руб.
 
 */
-class Smspilot {
+class SMSPilot {
 	public $api = 'http://smspilot.ru/api.php';
 	public $apikey = 'XXXXXXXXXXXXYYYYYYYYYYYYZZZZZZZZXXXXXXXXXXXXYYYYYYYYYYYYZZZZZZZZ';
 	public $charset = 'UTF-8';
@@ -112,7 +112,6 @@ class Smspilot {
 		
 		if (defined('SMSPILOT_API'))
 			$this->api = SMSPILOT_API;
-
 		
 	}
 	// send sms via smspilot.ru
@@ -154,7 +153,7 @@ class Smspilot {
 				
 				$this->success = substr($result,8,($p = strpos($result,"\n"))-8);
 				
-				if (preg_match('~(\d+)/(\d+)~', $this->success, $matches )) {
+				if (preg_match('~([0-9.]+)/([0-9.]+)~', $this->success, $matches )) { // 1.9.10
 					$this->cost = $matches[1]; // new in 1.8
 					$this->balance = $matches[2]; // new in 1.8
 				}
@@ -167,7 +166,7 @@ class Smspilot {
 					$this->status[] = array(
 						'id' => $s[0],
 						'phone' => $s[1],
-						'zone' => $s[2],
+						'price' => $s[2],
 						'status' => $s[3]
 					);
 				}				
@@ -213,7 +212,7 @@ class Smspilot {
 					$this->status[] = array(
 						'id' => $s[0],
 						'phone' => $s[1],
-						'zone' => $s[2],
+						'price' => $s[2],
 						'status' => $s[3]
 					);
 				}
@@ -234,7 +233,7 @@ class Smspilot {
 
 		return false;
 	}
-	public function balance( $currency = 'sms' ) {
+	public function balance( $currency = 'rur' ) {
 		
 		$result = $this->http_post($this->api, array(
 			'balance' => $currency,
@@ -344,8 +343,10 @@ class Smspilot {
 			
 			// read headers				
 			while ($line = fgets($fp)) {
-				
-				if (preg_match('~Content-Length: (\d+)~i', $line, $matches)) {	
+				if ( preg_match('/^HTTP\/[^\s]*\s(.*?)\s/',$line, $m) && $m[1] != 200) {
+					fclose($fp);
+					return false;
+				} else if (preg_match('~Content-Length: (\d+)~i', $line, $matches)) {	
 					$content_length = (int) $matches[1];
 				} else if (preg_match('~Transfer-Encoding: chunked~i', $line)) {
 					$chunked = true;
@@ -396,3 +397,5 @@ class Smspilot {
 		}
 	}
 }
+
+?>

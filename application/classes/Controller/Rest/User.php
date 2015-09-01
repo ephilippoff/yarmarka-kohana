@@ -12,8 +12,9 @@ class Controller_Rest_User extends Controller_Rest {
 	 */
 	public function action_check_contact()
 	{
+		$session_id 		= session_id();
 		$contact = (string) $this->post->value;
-		$contact = trim(strtolower($contact));
+		$contact_value = trim(strtolower($contact));
 		$type = (string) $this->post->type;
 
 		if (!$contact or !$type) {
@@ -23,21 +24,20 @@ class Controller_Rest_User extends Controller_Rest {
 		}
 
 		$type_id = Model_Contact_Type::get_type_id($type);
-		$contact = ORM::factory('Contact')->by_contact_and_type($contact, $type_id)->find();
+		$contact = ORM::factory('Contact')->by_value($contact_value)->find();
+
+		$validation = $contact->check_contact($session_id, $contact_value, $type_id);
+
+		if (!$validation->check())
+		{
+			$this->json["code"] = 400;
+			$this->json['text'] = join(", ", $validation->errors('validation/object_form')) ;
+			return;
+		}
 
 		if ($contact->loaded())
 		{
-
-			$validation = $contact->check_contact($contact, TRUE);
-
-			if (!$validation->check())
-			{
-				$this->json["code"] = 400;
-				$this->json['text'] = join(", ", $validation->errors('validation/object_form')) ;
-				return;
-			}
-
-			$verify_validation = $contact->check_verify_contact($contact);
+			$verify_validation = $contact->check_verify_contact($session_id);
 
 			if (!$verify_validation->check())
 			{
@@ -77,20 +77,20 @@ class Controller_Rest_User extends Controller_Rest {
 		}
 
 		$type_id = Model_Contact_Type::get_type_id($type);
-		$contact = ORM::factory('Contact')->by_contact_and_type($contact_value, $type_id)->find();
+		$contact = ORM::factory('Contact')->by_value($contact_value)->find();
+
+		$validation = $contact->check_contact($session_id, $contact_value, $type_id, TRUE, TRUE);
+
+		if (!$validation->check())
+		{
+			$this->json["code"] = 400;
+			$this->json['text'] = join(", ", $validation->errors('validation/object_form')) ;
+			return;
+		}
 
 		if ($contact->loaded())
 		{
-			$validation = $contact->check_contact($contact, TRUE);
-
-			if (!$validation->check())
-			{
-				$this->json["code"] = 400;
-				$this->json['text'] = join(", ", $validation->errors('validation/object_form')) ;
-				return;
-			}
-
-			$verify_validation = $contact->check_verify_contact($contact);
+			$verify_validation = $contact->check_verify_contact($session_id);
 
 			if ($verify_validation->check())
 			{
@@ -116,8 +116,26 @@ class Controller_Rest_User extends Controller_Rest {
 
 			if ($type_id == Model_Contact_Type::MOBILE)
 			{
-				// высылаем код в смс
-				Sms::send($contact->contact_clear, 'Код проверки телефона: '.$code, $session_id);
+				//высылаем код в смс
+				$sms = Sms::send($contact->contact_clear, 'Код проверки телефона: '.$code, $session_id);
+				$response = $sms->response;
+				$status = $sms->status;
+				if ($status == "ERROR")
+				{
+					$error_code = explode(":", $response);
+					$error_code = ( isset($error_code[0]) ) ? intval($error_code[0]) : 600;
+					if ($error_code >= 600) {
+						$this->json["code"] = 400;
+						$this->json["text"] = "Невозможно отправить смс на ваш номер";
+						return;
+					}
+
+					$this->json["code"] = 400;
+					$this->json["text"] = "Невозможно отправить смс на ваш номер по техническим причинам. Письмо с ошибкой отправлено администратору";
+					$exception_message = "Смс на номер: ".$contact->contact_clear." не отправлено, по причине: ".$response;
+					Email::send(Kohana::$config->load('common.admin_emails'), Kohana::$config->load('email.default_from'), 'Ошибка отправки смс', $exception_message);
+					return;
+				}
 			}
 			elseif ($type_id == Model_Contact_Type::PHONE)
 			{
