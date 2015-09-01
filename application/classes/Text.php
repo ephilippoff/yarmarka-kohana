@@ -146,4 +146,9 @@ class Text extends Kohana_Text {
 
 		return $result;
 	}
+	
+	public static function format_kupon_number($number)
+	{
+		return substr($number, 0, 2).'-'.substr($number, 2, 2).'-'.substr($number, 4);
+	}
 }
