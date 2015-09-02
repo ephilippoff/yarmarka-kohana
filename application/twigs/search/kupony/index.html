@@ -23,8 +23,6 @@
 
 {% block wrapperclass %}page-search{% endblock wrapperclass %}
 
-
-
 {% block subcategories %}
 	{% if sphinx_category_childs|length > 0%}
 		{% include 'search/sphinxcategories' %}
@@ -36,9 +34,7 @@
 {% endblock subcategories %}
 
 
-{% block filters %} 
-	
-{% endblock filters %}
+{% block filters %}{% endblock filters %}
 
 {% block content %} 
 	{% include 'search/control' %}
@@ -59,8 +55,5 @@
 		{{ seo_attributes.footer }}
 {% endblock footertext %}
 
-{% block footer %} 
-		Время генерации php {{ php_time }}
-{% endblock footer %}
-
+{% block footer %}{{ parent() }}{% endblock footer %}
 {% block templates %}{{ parent() }}{% endblock templates %}

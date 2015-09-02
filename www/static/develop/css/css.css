@@ -54,6 +54,8 @@ a{text-decoration: none;}
 a:hover, .span-link:hover{ color: #D30000; -webkit-transition: color 0.3s;-moz-transition: color 0.3s;-o-transition: color 0.3s;transition: color 0.3s;}
 body h1 {font-family: 'pt_sans_captionregular', Verdana, sans-serif; font-size: 18px;font-weight: normal;display: inline;}
 
+.min-content-height{min-height: 500px;}
+
 .bold {font-family: 'pt_sansbold', Verdana, sans-serif;}
 .caption {font-family: 'pt_sans_captionregular', Verdana, sans-serif;}
 .captionbold {font-family: 'pt_sans_captionbold', Verdana, sans-serif;}

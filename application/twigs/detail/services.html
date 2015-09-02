@@ -2,17 +2,17 @@
 	<div class="block-title">
 		<span>Хотите получить отклик быстрее? Воспользуйтесь услугами</span>
 	</div>
-	<div class="body row">
-		<div class="col-md-12">
-			{% set statInfo = get_stat_cached_info(object.id) %}
-				{% if statInfo %}
-				{{ statInfo }} <br>
-				Для увеличения количества просмотров, предлагаем слудющие услуги:
-			{% endif %}
+	{% set statInfo = get_stat_cached_info(object.id) %}
+	{% if statInfo %}
+		<div class="row p10">
+			<div class="col-md-12">
+					{{ statInfo }} <br>
+					Для увеличения количества просмотров, предлагаем слудющие услуги:
+			</div>
 		</div>
-	</div>
-	<div class="body row">
-		<div class="list list1 col-md-12">
+	{% endif %}
+	<div class="row p10">
+		<div class="col-md-12">
 			<p class="button js-service-up button-style1 bg-color-lightgreen mb3" data-id="{{object.id}}">
 				<i class="fa fa-angle-double-up fa-lg mr5"></i>Поднять
 			</p>
@@ -22,9 +22,6 @@
 			<p class="button js-service-lider button-style1 bg-color-lightgreen mb3" data-id="{{object.id}}">
 				<i class="fa fa-question-circle fa-lg mr5"></i>Лидер
 			</p>
-		</div>
-		<div class="list list2 col-md-6">
-			
 		</div>
 	</div>
 </div>

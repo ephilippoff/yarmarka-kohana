@@ -67,8 +67,11 @@
 						<div class="row">
 							<div class="col-md-6">
 								<div class="inp-cont {% if error.login %}error{% endif%}">
-									<span class="required-star">*</span>																		
-									<input class="w100p" type="text" name="login" value="{% if params.login %} {{params.login}} {% endif%}"/>
+									<span class="required-star">*</span>
+									<div class="input-group w100p">
+											<span class="input-group-addon bg-color-whitesmoke"><i class="fa fa-envelope-o"></i></span>
+										<input class="w100p" type="text" name="login" value="{% if params.login %} {{params.login}} {% endif%}"/>
+									</div>
 									{% if error.login %} 
 									<span class="inform fn-error">
 										{{error.login}}
@@ -92,8 +95,11 @@
 						<div class="row">
 							<div class="col-md-6">
 								<div class="inp-cont {% if error.pass %}error{% endif%}">
-									<span class="required-star">*</span>																		
-									<input class="w100p" type="password" name="pass" value="{% if params.pass %} {{params.pass}} {% endif%}" autocomplete="off"/>
+									<span class="required-star">*</span>
+									<div class="input-group w100p">
+										<span class="input-group-addon bg-color-whitesmoke"><i class="fa fa-lock"></i></span>
+										<input class="w100p" type="password" name="pass" value="{% if params.pass %} {{params.pass}} {% endif%}" autocomplete="off"/>
+									</div>
 
 									{% if error.pass %} 
 									<span class="inform fn-error">
@@ -118,8 +124,11 @@
 						<div class="row">
 							<div class="col-md-6">
 								<div class="inp-cont {% if error.pass2 %}error{% endif%}">
-									<span class="required-star">*</span>																		
-									<input class="w100p" type="password" name="pass2" value="{% if params.pass2 %} {{params.pass2}} {% endif%}" autocomplete="off"/>
+									<span class="required-star">*</span>
+									<div class="input-group w100p">
+										<span class="input-group-addon bg-color-whitesmoke"><i class="fa fa-lock"></i></span>
+										<input class="w100p" type="password" name="pass2" value="{% if params.pass2 %} {{params.pass2}} {% endif%}" autocomplete="off"/>
+									</div>
 
 									{% if error.pass2 %} 
 									<span class="inform fn-error">

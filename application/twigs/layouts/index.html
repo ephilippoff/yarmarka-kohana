@@ -7,7 +7,7 @@
 		{{ parent() }}
 	{% endblock header %} 
 	
-	<div class="row">
+	<div class="row min-content-height">
 		{% block content %}
 		{% endblock content %}
 	</div>
@@ -17,7 +17,7 @@
 	{% endblock footertext %}
 
 	{% block footer %} 
-		Время генерации php {{ php_time }}
+		{{ parent() }}
 	{% endblock footer %} 
 
 	{% block templates %}{{ parent() }}{% endblock templates %}

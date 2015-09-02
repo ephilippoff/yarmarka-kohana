@@ -41,7 +41,7 @@
 										<span class="required-star">*</span>
 										<div class="input-group w100p">
 											<span class="input-group-addon bg-color-whitesmoke"><i class="fa fa-envelope-o"></i></span>
-											<input class="w100p" type="text" name="login" value="{% if params.login %} {{params.login}} {% endif%}"/>
+											<input class="w100p" type="text" name="login" value="{% if params.login %} {{params.login|trim}} {% endif%}"/>
 										</div>
 									</div>
 								</div>
@@ -60,7 +60,7 @@
 										<span class="required-star">*</span>
 										<div class="input-group w100p">
 											<span class="input-group-addon bg-color-whitesmoke"><i class="fa fa-lock"></i></span>
-											<input class="w100p" type="password" name="pass" value="{% if params.pass %} {{params.pass}} {% endif%}"/>
+											<input class="w100p" type="password" name="pass" value="{% if params.pass %} {{params.pass|trim}} {% endif%}"/>
 										</div>
 
 										{% if error %} 
