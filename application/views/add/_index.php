@@ -13,8 +13,11 @@
 					<div class="row">
 						<div class="col-md-6">
 							<div class="inp-cont <? if ($form_data->login["login_error"]) echo "error"; ?>">
-								<span class="required-star">*</span>																		
-								<input class="w100p" type="text" name="login" value="<? if ($params->login) echo $params->login; ?>"/>	
+								<span class="required-star">*</span>
+								<div class="input-group w100p">
+									<span class="input-group-addon bg-color-whitesmoke"><i class="fa fa-envelope-o"></i></span>
+									<input class="w100p" type="text" name="login" value="<? if ($params->login) echo $params->login; ?>"/>
+								</div>
 								<? if ($form_data->login["login_error"]): ?>
 									<span class="inform fn-error">
 										<?= $form_data->login["login_error"] ?>
@@ -34,8 +37,11 @@
 					<div class="row">
 						<div class="col-md-6">
 							<div class="inp-cont <? if ($form_data->login["pass_error"]) echo "error"; ?>">
-								<span class="required-star">*</span>																		
-								<input class="w100p" type="password" name="pass" value="<? if ($params->pass) echo $params->pass; ?>"/>	
+								<span class="required-star">*</span>
+								<div class="input-group w100p">
+									<span class="input-group-addon bg-color-whitesmoke"><i class="fa fa-lock"></i></span>
+									<input class="w100p" type="password" name="pass" value="<? if ($params->pass) echo $params->pass; ?>"/>
+								</div>
 								<? if ($form_data->login["pass_error"]): ?>
 									<span class="inform fn-error">
 										<?= $form_data->login["pass_error"] ?>
@@ -48,6 +54,8 @@
 					</div>				
 				</div>
 			</div>		
+
+			<hr class="dib mb30 w100p">
 		<? endif; ?>
 
 		<? if (property_exists($form_data, 'linked_company')) : ?>
@@ -365,7 +373,7 @@
 		<? if (property_exists($form_data, 'photo')): ?>
 			<hr class="dib mb30 w100p">
 		<? endif; ?>
-	
+
 		<div id="div_photo">
 			<? if (property_exists($form_data, 'photo')): ?>
 				<div class="row mb10">

@@ -153,7 +153,7 @@ class Controller_Add extends Controller_Template {
 		if (!$object_id OR !$object->loaded())
 			throw new HTTP_Exception_404;
 
-		if ($object->author <> $user->id AND !in_array($user->role, array(1,9,3)))
+		if (!$user OR ($object->author <> $user->id AND !in_array($user->role, array(1,9,3))) )
 			throw new HTTP_Exception_404;
 
 		$is_post = ($_SERVER['REQUEST_METHOD']=='POST');

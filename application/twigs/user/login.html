@@ -38,8 +38,11 @@
 							<div class="row">
 								<div class="col-md-6">
 									<div class="inp-cont ">
-										<span class="required-star">*</span>																		
-										<input class="w100p" type="text" name="login" value="{% if params.login %} {{params.login}} {% endif%}"/>					
+										<span class="required-star">*</span>
+										<div class="input-group w100p">
+											<span class="input-group-addon bg-color-whitesmoke"><i class="fa fa-envelope-o"></i></span>
+											<input class="w100p" type="text" name="login" value="{% if params.login %} {{params.login}} {% endif%}"/>
+										</div>
 									</div>
 								</div>
 							</div>				
@@ -54,8 +57,11 @@
 							<div class="row">
 								<div class="col-md-6">
 									<div class="inp-cont {% if params.login %}error{% endif%}">
-										<span class="required-star">*</span>																		
-										<input class="w100p" type="password" name="pass" value="{% if params.pass %} {{params.pass}} {% endif%}"/>
+										<span class="required-star">*</span>
+										<div class="input-group w100p">
+											<span class="input-group-addon bg-color-whitesmoke"><i class="fa fa-lock"></i></span>
+											<input class="w100p" type="password" name="pass" value="{% if params.pass %} {{params.pass}} {% endif%}"/>
+										</div>
 
 										{% if error %} 
 										<span class="inform fn-error">
