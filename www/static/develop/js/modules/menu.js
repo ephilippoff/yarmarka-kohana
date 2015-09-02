@@ -56,7 +56,7 @@ define([
 
         closeMenu: function() {
             if (this.activateTimer) clearTimeout(this.activateTimer);
-            $(this.getOption("menuClass")).hide();
+            $(this.getOption("menuClass")).fadeOut();
         }
     });
 
@@ -95,7 +95,7 @@ define([
                 submenuId = $row.data("submenu-id"), 
                 $submenu = $("#" + submenuId);
 
-            $submenu.css("display", "none");
+            $submenu.fadeOut();
         }
     });
 

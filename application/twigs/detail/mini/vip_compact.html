@@ -3,10 +3,10 @@
 		<img alt="{{ vip_object.title|e }}"  src="{{ get_file(vip_object.compiled.images.main_photo['272x203']) }}">
 		<span class="photos-count">{{vip_object.compiled.images.local_photo|length + vip_object.compiled.images.remote_photo|length}}</span>
 	</div>
-	<a rel="nofollow" href="{{ vip_object.compiled.url }}" title="{{ vip_object.title|e }}" class="object-caption bold">
+	<a rel="nofollow" href="{{ vip_object.compiled.url }}" title="{{ vip_object.title|e }}" class="dib object-caption bold">
 		
 		{{ vip_object.title|e }}
 	</a>
-	<div class="line2">{{ vip_object.price|number_format(0, ' ', ' ') }} руб.</div>
-	<p class="line1">{{ vip_object.date_created|date("d.m") }} {{ vip_object.compiled.city }}</p>
+	<p class="amount">{{ vip_object.price|number_format(0, ' ', ' ') }} руб.</p>
+	<p class="line1">{{ vip_object.date_created|date("d.m") }} / {{ vip_object.compiled.city }}</p>
 </div>
