@@ -22,7 +22,19 @@
 {% endblock crumbs %} 
 
 {% block content %}
-	<div class="obj-control-head clearfix brt2">&nbsp;</div>
+
+	<div class="obj-control-head clearfix brt2">
+		<div class="col-md-6 left clearfix">
+		</div>
+		<div class="col-md-6 right clearfix">
+			{% if params.form_data.login %}
+				<a class="item" href="/user/registration">Регистрация</a>
+				<a class="item" href="/user/forgot_password">Забыли пароль?</a>
+			{% else %}
+				&nbsp;
+			{% endif %}
+		</div>
+	</div>
 	<div class="bg-color-whitesmoke p20">
 		{% set problem = get_config("common.add_problem") %}
 		{% if problem %}

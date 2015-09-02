@@ -36,11 +36,11 @@
 
 @font-face {
     font-family: 'pt_sans_captionregular';
-    src: url('PTC55F-webfont.eot');
-    src: url('PTC55F-webfont.eot?#iefix') format('embedded-opentype'),
-         url('PTC55F-webfont.woff') format('woff'),
-         url('PTC55F-webfont.ttf') format('truetype'),
-         url('PTC55F-webfont.svg#pt_sans_captionregular') format('svg');
+    src: url('/static/develop/fonts/PTC55F-webfont.eot');
+    src: url('/static/develop/fonts/PTC55F-webfont.eot?#iefix') format('embedded-opentype'),
+         url('/static/develop/fonts/PTC55F-webfont.woff') format('woff'),
+         url('/static/develop/fonts/PTC55F-webfont.ttf') format('truetype'),
+         url('/static/develop/fonts/PTC55F-webfont.svg#pt_sans_captionregular') format('svg');
     font-weight: normal;
     font-style: normal;
 
@@ -51,6 +51,8 @@ body{font-family: 'pt_sansregular', Verdana, sans-serif;font-size:14px;color:#33
 a:link, a:visited, a:active, .span-link{color: #2a76a1;}
 .span-link{cursor: pointer;}
 a{text-decoration: none;}
+a.object-caption:visited {color:gray;}
+a.object-caption:visited:hover {color: #D30000; -webkit-transition: color 0.3s;-moz-transition: color 0.3s;-o-transition: color 0.3s;transition: color 0.3s;}
 a:hover, .span-link:hover{ color: #D30000; -webkit-transition: color 0.3s;-moz-transition: color 0.3s;-o-transition: color 0.3s;transition: color 0.3s;}
 body h1 {font-family: 'pt_sans_captionregular', Verdana, sans-serif; font-size: 18px;font-weight: normal;display: inline;}
 

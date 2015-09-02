@@ -48,8 +48,6 @@
 									</span>
 								<? endif; ?>
 							</div>
-							<p><a target="_blank" href="http://<?= Kohana::$config->load('common.main_domain') ?>/user/registration">Зарегистрироваться</a></p>
-							<p><a target="_blank" href="/user/forgot_password">Напомнить/сменить пароль</a></p>							
 						</div>
 					</div>				
 				</div>

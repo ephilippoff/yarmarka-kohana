@@ -38,7 +38,7 @@ define([
     var MenuView = Marionette.ItemView.extend({
         events: {
             "mouseover" : "showMenu",
-            "mouseout" : "closeMenu"
+            "mouseleave" : "closeMenu"
         },
         initialize: function(options) {
             this.$el.append($(options.templateClass).html());
@@ -46,10 +46,16 @@ define([
         },
 
         showMenu: function() {
-            $(this.getOption("menuClass")).show();
+            var s = this;
+            if (this.activateTimer) clearTimeout(this.activateTimer);
+            this.activateTimer = setTimeout(function(){
+                $(s.getOption("menuClass")).fadeIn();
+            }, 200)
+            
         },
 
         closeMenu: function() {
+            if (this.activateTimer) clearTimeout(this.activateTimer);
             $(this.getOption("menuClass")).hide();
         }
     });
@@ -71,13 +77,20 @@ define([
 
         },
         activateSubmenu: function(row) {
-            var $row = $(row), 
-                submenuId = $row.data("submenu-id"), 
-                $submenu = $("#" + submenuId);
+            var s = this;
+            if (this.submenuActivateTimer) clearTimeout(this.submenuActivateTimer);
 
-            $submenu.css("display", "block");
+            this.submenuActivateTimer = setTimeout(function(){
+               var $row = $(row), 
+                  submenuId = $row.data("submenu-id"), 
+                  $submenu = $("#" + submenuId);
+
+              $submenu.fadeIn();
+            }, 200)
+           
         },
         deactivateSubmenu: function(row) {
+            if (this.submenuActivateTimer) clearTimeout(this.submenuActivateTimer);
             var $row = $(row), 
                 submenuId = $row.data("submenu-id"), 
                 $submenu = $("#" + submenuId);
