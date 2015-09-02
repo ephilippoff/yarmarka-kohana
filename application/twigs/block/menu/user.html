@@ -1,6 +1,6 @@
 {% set user = get_user() %}
 <div class="proom-list iLight-cont js-usermenu border-color-blue popup-menu-cont right brb2">
-	<p class="pl10 pt10 pr10"><b>{{ user.email|e }}</b></p>
+	<p class="pl10 pt10 pr10 bold">{{ user.email|e }}</p>
 	<ul>
 		<li><a href="{{ url('user/profile') }} ">Настройки пользователя</a></li>
 		<li><a href="{{ url('user/subscriptions') }}">Подписки</a></li>

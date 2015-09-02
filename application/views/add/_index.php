@@ -71,41 +71,46 @@
 				</div>
 			</div>		
 		<? endif; ?>
-
-		<? if (property_exists($form_data, 'advert_type')): ?>
-			<div id="div_advert_type" class="row mb10">
-				<div class="col-md-3 col-xs-4 labelcont">
-					<label>Тип объявления:</label>
-				</div>
-				<div class="col-md-9 col-xs-8">
-					<div class="row">
-						<div class="col-md-6">
-							<div class="inp-cont ">
-								<span class="required-star">*</span>																		
-								<?= Form::select("obj_type", $form_data->advert_type['type_list'], $form_data->advert_type['value'], array('class' => 'w100p')); ?>					
+		
+		<? if (Acl::check("object.add.type")) : ?>
+			<p class="p20 red"><i class="fa fa-eye fa-lg mr5"></i>Вы авторизованы с ролью модератора, будьте осторожнее</p>
+			<? if (property_exists($form_data, 'advert_type')): ?>
+				<div id="div_advert_type" class="row mb10">
+					<div class="col-md-3 col-xs-4 labelcont">
+						<label>Тип объявления:</label>
+					</div>
+					<div class="col-md-9 col-xs-8">
+						<div class="row">
+							<div class="col-md-6">
+								<div class="inp-cont ">
+									<span class="required-star">*</span>																		
+									<?= Form::select("obj_type", $form_data->advert_type['type_list'], $form_data->advert_type['value'], array('class' => 'w100p')); ?>					
+								</div>
 							</div>
 						</div>
 					</div>
-				</div>
-			</div>			
-		<? endif; ?>
-
-		<? if (property_exists($form_data, 'user_type')): ?>
-			<div id="div_advert_type" class="row mb10">
-				<div class="col-md-3 col-xs-4 labelcont">
-					<label>Тип пользователя:</label>
-				</div>
-				<div class="col-md-9 col-xs-8">
-					<div class="row">
-						<div class="col-md-6">
-							<div class="inp-cont ">
-								<span class="required-star">*</span>
-								<?= Form::select("user_type", $form_data->user_type['user_type_list'], $form_data->user_type['value'], array('class' => 'w100p')); ?>					
+				</div>			
+			<? endif; ?>
+			
+			<? if (property_exists($form_data, 'user_type')): ?>
+				<div id="div_advert_type" class="row mb10">
+					<div class="col-md-3 col-xs-4 labelcont">
+						<label>Тип пользователя:</label>
+					</div>
+					<div class="col-md-9 col-xs-8">
+						<div class="row">
+							<div class="col-md-6">
+								<div class="inp-cont ">
+									<span class="required-star">*</span>
+									<?= Form::select("user_type", $form_data->user_type['user_type_list'], $form_data->user_type['value'], array('class' => 'w100p')); ?>					
+								</div>
 							</div>
 						</div>
 					</div>
-				</div>
-			</div>			
+				</div>			
+			<? endif; ?>
+
+			<hr class="dib mb30 w100p">
 		<? endif; ?>
 
 		<? if (property_exists($form_data, 'city')): ?>
@@ -357,6 +362,10 @@
 			<? endif; ?>
 		</div>
 
+		<? if (property_exists($form_data, 'photo')): ?>
+			<hr class="dib mb30 w100p">
+		<? endif; ?>
+	
 		<div id="div_photo">
 			<? if (property_exists($form_data, 'photo')): ?>
 				<div class="row mb10">
@@ -450,7 +459,7 @@
 		</div>
 
 		<? if (property_exists($form_data, 'contacts')): ?>
-			
+			<hr class="dib mb30 w100p">
 			<? foreach (array(
 					"mobile" => array("name"=>"Мобильный телефон", "icon" => "<i class='fa fa-mobile-phone'></i>", "placeholder" => "Введите код из смс"),
 					"phone" => array("name"=>"Городской телефон", "icon" => "<i class='fa fa-phone'></i>", "placeholder" => "Введите код"),
@@ -521,6 +530,8 @@
 					</div>				
 				</div>
 			</div>		
+
+			<hr class="dib mb30 w100p">
 		<? endif; ?>
 
 
