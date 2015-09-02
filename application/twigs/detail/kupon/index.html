@@ -38,10 +38,10 @@
 				</div>
 				
 				{% if object.compiled.attributes.site.value %}
-					<div class="button bg-color-crimson white pt15 pb15 fs20 mb5" onclick="window.location.href='{{ object.compiled.attributes.site.value }}'">Наш сайт</div>
+					<div class="button bg-color-crimson white pt15 pb15 fs20 mb5 w100p" onclick="window.location.href='{{ object.compiled.attributes.site.value }}'">Наш сайт</div>
 				{% endif %}
 				
-				<div class="button bg-color-lightgreen white pt15 pb15 fs20 mb10 fn-kupon-callback">Заказать обратный звонок</div>
+				<div class="button bg-color-lightgreen white pt15 pb15 fs20 mb10 fn-kupon-callback w100p">Заказать обратный звонок</div>
 				
 				{% include 'detail/kupon/buy_items' %}
 				{% include 'detail/kupon/contacts' %}
