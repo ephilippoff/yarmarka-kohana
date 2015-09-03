@@ -2,7 +2,7 @@
 	<div class="row">
 		<div class="col-md-2 col-xs-6 clearfix">
 			<div class="menu-item-wrp iLight fn-menu-item-wrp"><!--main-page-style iLight-disable-->
-				<span class="choose iLight-nav menu-item left"><span class="caret mr5"></span>выбрать рубрику</span>
+				<span class="choose iLight-nav menu-item menu-item-categories"><span class="caret mr5"></span>выбрать рубрику</span>
 				<?= Request::factory('block/header_left_menu')->execute() ?>
 			</div>
 		</div>
