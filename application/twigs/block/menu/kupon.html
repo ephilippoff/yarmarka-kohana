@@ -1,6 +1,6 @@
 {% set categories = requestmethod('Controller_Block_Twig','kupon_categories', {}) %}
-<div class="cont iLight-cont border-color-krayola js-kuponmenu">
-	<div class="left border-color-krayola brb2">
+<div class="cont iLight-cont js-kuponmenu">
+	<div class="left brb2">
 		<ul class="top" role="menu">
 			{% for element in categories %}
 				<li class="js-submenu-item" data-submenu-id="section{{element.id}}" class="section{{element.id}}">
@@ -20,7 +20,7 @@
 			{% endfor %}
 		</ul>
 	</div>
-	<div class="right border-color-krayola brb2">
+	<div class="right brb2">
 		{% for element in categories %}
 			{% set divWidth = (banners[element.id] is defined and banners[element.id].menu_width) ? banners[element.id].menu_width : 250 %}
 			{% set ulWidth = 191 %}
