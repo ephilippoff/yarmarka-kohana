@@ -36,11 +36,11 @@
 
 @font-face {
     font-family: 'pt_sans_captionregular';
-    src: url('PTC55F-webfont.eot');
-    src: url('PTC55F-webfont.eot?#iefix') format('embedded-opentype'),
-         url('PTC55F-webfont.woff') format('woff'),
-         url('PTC55F-webfont.ttf') format('truetype'),
-         url('PTC55F-webfont.svg#pt_sans_captionregular') format('svg');
+    src: url('/static/develop/fonts/PTC55F-webfont.eot');
+    src: url('/static/develop/fonts/PTC55F-webfont.eot?#iefix') format('embedded-opentype'),
+         url('/static/develop/fonts/PTC55F-webfont.woff') format('woff'),
+         url('/static/develop/fonts/PTC55F-webfont.ttf') format('truetype'),
+         url('/static/develop/fonts/PTC55F-webfont.svg#pt_sans_captionregular') format('svg');
     font-weight: normal;
     font-style: normal;
 
@@ -244,6 +244,11 @@ select{background-color: #FFFFFF;border: 1px solid #C3C3C3;padding:2px 10px;heig
 .menu-cont2 .menu-item.crimson-theme .popup-menu-cont li a:hover {background-color: #F98C8C;text-decoration: none;}
 .menu-cont2 .menu-item.crimson-theme .popup-menu-cont{border:1px solid #D90000}
 
+.menu-cont2 .menu-item.gray-theme{background-color: gray;}
+.menu-cont2 .menu-item.gray-theme:hover{background-color: #b7b7b7;}
+.menu-cont2 .menu-item.gray-theme .popup-menu-cont li a:hover {background-color: #b7b7b7;text-decoration: none;}
+.menu-cont2 .menu-item.gray-theme .popup-menu-cont{border:1px solid gray}
+
 .menu-cont2  .popup-menu-cont2l{display: none; box-shadow: 3px 3px 5px #AAAAAA; position:absolute; top:100%; left:0px; border-width: 1px; border-style: solid; background: url(/static/develop/images/shadow.png) repeat-y 197px 0 #fff; }
 .menu-cont2  .popup-menu-cont2l .left{padding:7px 0;width: 197px;float:left; box-sizing: border-box;}
 .menu-cont2  .popup-menu-cont2l .left a{text-decoration:none;padding:0 13px;display:block;}
@@ -356,6 +361,9 @@ select{background-color: #FFFFFF;border: 1px solid #C3C3C3;padding:2px 10px;heig
 .view-container1 .breadcrumbs-cont a{color: #fff;}
 /* view-container1 end */
 
+.footer-container{padding: 10px;min-height: 200px;}
+.footer-container ul li{line-height: 25px;}
+
 /* skin-theme1 */
 .realty-theme{color:white}
 .realty-theme .subcategories-cont ul li a{color: #fff;}
@@ -427,9 +435,17 @@ select{background-color: #FFFFFF;border: 1px solid #C3C3C3;padding:2px 10px;heig
 /*crimson-theme*/
 .crimson-theme .menu-cont2{background-color: #D90000;}
 .crimson-theme .menu-item:hover{background-color: #F98C8C;-webkit-transition: background-color 0.2s;-moz-transition: background-color 0.2s;-o-transition: background-color 0.2s;transition: background-color 0.2s;}
-.crimson-theme .popup-menu-cont li a:hover {background-color: #D90000;text-decoration: none;}
+.crimson-theme .popup-menu-cont li a:hover {background-color: #F98C8C;text-decoration: none;}
 .crimson-theme .popup-menu-cont{border: 1px solid #D90000}
 /*crimson-theme end*/
+
+/*gray-theme*/
+.gray-theme .menu-cont2{background-color: gray;}
+.gray-theme .menu-item:hover{background-color: #b7b7b7;-webkit-transition: background-color 0.2s;-moz-transition: background-color 0.2s;-o-transition: background-color 0.2s;transition: background-color 0.2s;}
+.gray-theme .popup-menu-cont li a:hover {background-color: #b7b7b7;text-decoration: none;}
+.gray-theme .popup-menu-cont{border: 1px solid gray}
+.gray-theme .footer-container{background-color: whitesmoke;}
+/*gray-theme end*/
 
 /* skin-theme6 */
 .main-theme .view-container{color: white}
