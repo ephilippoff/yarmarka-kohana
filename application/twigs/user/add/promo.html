@@ -4,26 +4,14 @@
 		<div class="row">
 			<div class="col-md-6 items-cont">
 				<div class="breadcrumbs-cont module">
-				{% for crumb in crumbs %}
-					{% if crumb.url %}
-						<a href="{{ url(crumb.url) }}"  class="captionbold">{{crumb.title}}</a> /
-					{% else  %}
-						<h1 class="caption">{{crumb.title}}</h1>
-					{% endif %}
-				{% endfor %}
-				</div>
-				{% if params.form_data.org_info %}
-					<p class="mb10">Компания: {{ params.form_data.org_info.title }}</p>
-					<p class="mb10">
-						
-						{% if params.form_data.org_info.logo %}
-							{% set logo = get_image_paths(params.form_data.org_info.logo) %}
-							<img src="{{ logo['120x90'] }}" class="fl mr5 mb5">
+					{% for crumb in crumbs %}
+						{% if crumb.url %}
+							<a href="{{ url(crumb.url) }}"  class="captionbold">{{crumb.title}}</a> /
+						{% else  %}
+							<h1 class="caption">{{crumb.title}}</h1>
 						{% endif %}
-						<span class="mb10">{{ params.form_data.org_info.about }}...</span>
-					</p>
-					<p>Изменить информацию о компании можно <a href="/user/orginfo">здесь</a></p>
-				{% endif %}
+					{% endfor %}
+				</div>
 			</div>
 		</div>
 	</div><!--view-container1-->

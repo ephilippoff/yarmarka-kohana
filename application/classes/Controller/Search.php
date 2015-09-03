@@ -6,6 +6,7 @@ class Controller_Search extends Controller_Template {
 
     public function before()
     {
+
         $this->performance = Performance::factory(Acl::check('profiler'));
         $this->performance->add("Search","start");
         parent::before();
@@ -14,7 +15,7 @@ class Controller_Search extends Controller_Template {
         $this->auto_render = FALSE;
         $this->cached_search_info = FALSE;
 
-        if ($search_info = $this->get_search_info_from_cache()) {
+        if ($search_info = $this->get_search_info_from_cache() AND 1==0) {
             $this->cached_search_info = unserialize($search_info->params);
             Cookie::set('search_hash', $search_info->hash, strtotime( '+14 days' ));
         } else {

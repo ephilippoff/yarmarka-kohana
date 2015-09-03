@@ -54,7 +54,7 @@
 			</div>
 		{% endif %}
 
-		{% if expired_orginfo  %}
+		{% if params.expired_orginfo  %}
 			<div class="fl100  pt16 pb15">
 				<div class="smallcont pb10">
 					<div class="labelcont">
@@ -64,7 +64,7 @@
 						<div class="">
 							<div class="inp-cont" style=" font-size:16px;">
 								<span style="color:red;">Для продолжения работы с сайтом, пожалуйста, поделитесь с нами информацией о Вашей компании <a href="/user/orginfo">здесь</a></span>.
-								Если сейчас у Вас нет возможности заполнить форму, сделайте это в любое удобное время, но не позднее чем {{expired_orginfo}}
+								Если сейчас у Вас нет возможности заполнить форму, сделайте это в любое удобное время, но не позднее чем {{params.expired_orginfo|date("d.m.Y H:i")}}
 					  		</div>
 						</div>
 					</div>
@@ -77,6 +77,31 @@
 {% endblock content %}
 
 {% block rightside %} 
+	
+	{% if params.form_data.org_info %}
+		<div class="info-block-cont theme3 module">
+			<div class="block-title">
+				<span>Объявление от компании</span>
+			</div>						
+			<div class="bg-color-whitesmoke p20">
+
+				{% if params.form_data.org_info.logo %}
+					<div class="p5">
+						{% set logo = get_image_paths(params.form_data.org_info.logo) %}
+						<img src="{{ logo['120x90'] }}" class="">
+					</div>
+				{% endif %}
+				<div class="p5">
+					<ul>
+						<li><span class="bold">{{ params.form_data.org_info.title }}</span></li>
+						<li><span>{{ params.form_data.org_info.org_post_address }}</span></li>
+						<li><span>{{ params.form_data.org_info.org_phone }}</span></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	{% endif %}
+
 	<div class="info-block-cont theme3 module">
 		<div class="block-title">
 			<span>Информация</span>
@@ -85,6 +110,7 @@
 			<img class="mb30" src="{{staticfile('images/cat200x300.gif')}}">
 		</div>
 	</div>
+
 	{% if form_data.last_news|length > 0 %}
 		<div class="info-block-cont theme3 module">
 			<div class="block-title">

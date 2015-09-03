@@ -1,8 +1,46 @@
-<div class="popup-menu-cont iLight-cont js-kuponmenu border-color-krayola brb2 w160">
-	<ul>
-		<li><a href="{{ url('user/profile') }} "><i class="fa fa-user mr5"></i>Авто</a></li>
-		<li><a href="{{ url('user/profile') }} "><i class="fa fa-user mr5"></i>Недвижимость</a></li>
-		<li class="divider bg-color-krayola"></li>
-		<li><a href="{{ url('user/profile') }} "><i class="fa fa-user mr5"></i>Все</a></li>
-	</ul>
-</div>	
+{% set categories = requestmethod('Controller_Block_Twig','kupon_categories', {}) %}
+<div class="cont iLight-cont border-color-krayola js-kuponmenu">
+	<div class="left border-color-krayola brb2">
+		<ul class="top" role="menu">
+			{% for element in categories %}
+				<li class="js-submenu-item" data-submenu-id="section{{element.id}}" class="section{{element.id}}">
+					<span class="span-link" onclick="window.location = 'http://{{ s_host ~ '/' ~ element.category_url ~ '/' ~ element.seo_name }}'">
+						<span class="name">{{element.title}}</span>
+						{% if element.count > 0 %}
+							<span class="count">{{element.count}}</span>
+						{% else %}
+							<span class="count">?</span>
+						{% endif %}
+					</span>
+				</li>
+			{% else %}
+				<li>
+					Скидок и купонов этом городе пока нет :(
+				</li>
+			{% endfor %}
+		</ul>
+	</div>
+	<div class="right border-color-krayola brb2">
+		{% for element in categories %}
+			{% set divWidth = (banners[element.id] is defined and banners[element.id].menu_width) ? banners[element.id].menu_width : 250 %}
+			{% set ulWidth = 191 %}
+			<div class="section section{{element.id}} p10" id="section{{element.id}}" style="width: {{divWidth}}px; display: none;">
+				{#{% if banners[element.id] is defined and file_exist('/uploads/banners/menu/' ~ banners[element.id].image) %}
+					<img hidefocus="true" style="position: absolute;right:{{banners[element.id].x}}px ; bottom:{{banners[element.id].y}}px;" usemap="#map{{element.id}}" src="/uploads/banners/menu/{{banners[element.id].image}}"/>
+
+					<map name="map{{element.id}}" id="map{{element.id}}">
+						<area shape="poly" coords="{{banners[element.id].map_params}}" class="" href="/redirect/ref_cb?id={{banners[element.id].id}}" target="_blank" />
+					</map>
+				{% elseif file_exist(element.main_menu_image) %}
+					<span class="">
+						<img  hidefocus="true"  src="http://yarmarka.dev/uploads/341x256/d2/b1/1d/d2b11da73ceb5928d27a8c163d9fb1c8.jpg">
+					</span>
+				{% endif %}#}
+				<span class="bold" style="width: 165px">{{element.title}}</span><br>
+				<span class="">
+					<img  hidefocus="true"  src="http://yarmarka.dev/uploads/341x256/d2/b1/1d/d2b11da73ceb5928d27a8c163d9fb1c8.jpg" height="120">
+				</span>
+			</div>
+		{% endfor %}
+	</div>
+</div>

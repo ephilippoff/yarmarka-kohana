@@ -180,6 +180,7 @@ class Task_Clear extends Minion_Task
 
             $elements = ORM::factory('Attribute_Element')
                             ->get_elements_with_published_objects($category->id, $city->id)
+                            ->cached(Date::DAY)
                             ->find_all();
 
             foreach ($elements as $element) {

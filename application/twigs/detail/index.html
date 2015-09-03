@@ -40,6 +40,11 @@
 				{% include 'detail/contacts' %}
 			</div>
 		</div>
+		<div class="row">
+			<div class="col-md-12">
+				{% include 'detail/info' %}
+			</div>
+		</div>
 
 		{% if (category.show_map) %}
 			<div class="row">
@@ -55,8 +60,8 @@
 {% block rightside %}
 	<div class="col-md-5">
 		<aside>
-			{% include 'detail/services' %}
 			{% include 'detail/controls' %}
+			{% include 'detail/services' %}
 			{% include 'detail/similar' %}
 
 			{#{% include 'detail/comments' %}#}

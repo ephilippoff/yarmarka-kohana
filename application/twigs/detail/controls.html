@@ -5,26 +5,7 @@
 		{% endif %}
 	</div>					
 	<div class="row p10">
-		<div class="service-block-cont col-md-5">
-			<div class="line js-favourite red pointer" data-id="{{object.id}}">
-				{% set is_favourite = 'fa-heart-o' %}
-				{% if object.id in favourites %}
-					{% set is_favourite = 'fa-heart' %}
-				{% endif %}
-				<i class="fa {{is_favourite}} fa-lg mr5 js-favourite-ico"></i> <span class="js-favourite-caption">{{is_favourite == 'fa-heart' ? 'В избранном': 'В избранное'}}</span>
-			</div>
-			{% if object.is_published == 0 %}
-				<div class="line red js-object-state-{{object.id}}">Объявление снято</div>
-			{% elseif object.is_published == 1 %}
-				<div class="line js-object-state-{{object.id}}">Объявление опубликовано</div>
-			{% endif %}
-			<div class="line">Код объявления: {{ object.id }}</div>
-			<div class="line">Обновлено: {{ object.date_created|date('H:i d.m.Y') }}</div>
-			{% if check_object_access(object, 'object.control') %}
-				<div class="line">Просмотров: {{ object.visits }}</div>
-			{% endif %}
-		</div>
-		<div class="list list1 col-md-7">
+		<div class="list list1 col-md-12">
 			{% if check_object_access(object, 'object.control') %}
 				<p class="button js-ocontrol-publish button-style1 bg-color-lightgreen mb3" data-id="{{object.id}}">
 						{% if object.is_published %} 
@@ -37,7 +18,7 @@
 					<i class="fa fa-edit fa-lg mr5"></i>Редактировать
 				</p>
 			{% else %}
-				<p class="p5">Это ваше объявление? <span class="link" onclick="document.location='/user/login?return={{object.compiled.url}}'">Авторизуйтесь</span> для управления</p>
+				<p class="p5">Это ваше объявление? <span class="span-link" onclick="document.location='/user/login?return={{object.compiled.url}}'">Авторизуйтесь</span> для управления</p>
 			{% endif %}
 		</div>
 	</div>

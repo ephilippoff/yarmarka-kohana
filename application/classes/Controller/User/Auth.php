@@ -149,7 +149,9 @@ class Controller_User_Auth extends Controller_Template {
             $token = $post_data->csrf;
             $validation = Validation::factory((array) $post_data)
                     ->rule('csrf', 'not_empty', array(':value', "CSRF"))
-                    ->rule('csrf', 'Security::check');
+                    ->rule('csrf', 'Security::check')
+                    ->rule('login', 'not_empty', array(':value', 'Логин (E-mail)') )
+                    ->rule('pass', 'not_empty', array(':value', 'Пароль') );
 
 
             if ( !$validation->check())
@@ -166,7 +168,6 @@ class Controller_User_Auth extends Controller_Template {
                     $error = $e->getMessage();
 
                 } 
-
                 if (!$error)
                 {
                     $this->redirect($return_page);

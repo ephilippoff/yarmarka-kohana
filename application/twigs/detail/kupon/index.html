@@ -9,6 +9,15 @@
 
 {% block wrapperclass %}page-detail{% endblock wrapperclass %}
 
+{% block header %} 
+		{{ requestblock('block_twig/topline', {'favourites':favourites}) }}
+		{% include 'block/header/logoline' %}
+		{% include 'search/kupony/promo' %}
+		{% set theme_class = 'light-blue-theme' %}
+		{{ requestblock('block_twig/adslinkline',{'city_id': city.id, 'category_id': category.id, 'theme': theme_class}) }}
+{% endblock header %} 
+
+
 {% block crumbs %} 
 	{% include 'detail/crumbs' %}
 {% endblock crumbs %}
@@ -33,6 +42,12 @@
 	{% block rightside %}
 		<div class="col-md-4">
 			<aside>
+				{% if check_object_access(object, 'object.moderate') %}
+					<div class="module">
+						{% include 'detail/kupon/controls' %}
+					</div>
+				{% endif %}
+				
 				<div class="module">
 					{% include 'detail/kupon/coupon_info' %}
 				</div>

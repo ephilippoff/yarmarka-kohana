@@ -64,7 +64,7 @@ define([
         initialize: function(options) {
             MenuView.prototype.initialize.call(this, options);
             var s = this;
-            var $menu = this.$el.find(".js-mainmenu ul.top");
+            var $menu = this.$el.find(this.getOption("menuClass")+ " ul.top");
             if ($menu.size() > 0){
                 $menu.menuAim({
                     activate: this.activateSubmenu, 
@@ -137,7 +137,7 @@ define([
             }
 
             if (_.contains(menusToload, "kupon")) {
-                this.kupon = new MenuView({
+                this.kupon = new MainmenuView({
                     el: kuponMenuSettings.controlClass,
                     templateClass: kuponMenuSettings.menuTemplate,
                     menuClass: kuponMenuSettings.menuClass,

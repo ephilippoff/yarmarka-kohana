@@ -132,12 +132,12 @@ class Controller_Detail extends Controller_Template {
             $twig->{$key} = $item;
         }
 
-		//декодируем json-атрибут price-params
-		$price_params = json_decode($twig->object->compiled['attributes']['price-params']['value']);		
-		if ($price_params and json_last_error() == JSON_ERROR_NONE)
-			$twig->price_params_decoded = $price_params;
-		else
-			$twig->price_params_decoded = array();
+		// //декодируем json-атрибут price-params
+		// $price_params = json_decode($twig->object->compiled['attributes']['price-params']['value']);		
+		// if ($price_params and json_last_error() == JSON_ERROR_NONE)
+		// 	$twig->price_params_decoded = $price_params;
+		// else
+		// 	$twig->price_params_decoded = array();
 		
 		$twig->request_uri = $_SERVER['REQUEST_URI'];
 

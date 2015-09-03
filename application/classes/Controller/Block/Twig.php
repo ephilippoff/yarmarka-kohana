@@ -103,4 +103,43 @@ class Controller_Block_Twig extends Controller_Block
         return $reklama->getprepared_all();
     }
 
+    public static function kupon_categories($params = NULL)
+    {
+        
+        $elements = array();
+
+        $domain = new Domain();
+        $city = $domain->get_city_by_subdomain($domain->get_subdomain());
+
+        $category_name = "kupony";
+        $category =  ORM::factory('Category')
+                        ->where("seo_name","=",$category_name)
+                        ->cached(Date::WEEK)
+                        ->find();
+
+        if (!$category->loaded())
+        {
+            return $elements;
+        }
+
+        $_elements = ORM::factory('Attribute_Element')
+                        ->get_elements_with_published_objects($category->id, ($city) ? $city->id : NULL)
+                        ->select("attribute_element.*", array("attribute.seo_name","attribute_seo_name"), array("category.url","category_url"))
+                        ->join('category')
+                            ->on("reference.category","=","category.id")
+                        ->cached(Date::DAY)
+                        ->getprepared_all();
+
+        foreach ($_elements as $item) {
+            $item->attribute = true;
+            $item->url = $item->seo_name;
+            $elements[] = $item;
+        }
+        $link_counters = new Obj(Search_Url::getcounters($domain->get_domain(), $category_name, $elements ));
+        foreach ($elements as $item) {
+           $item->count = $link_counters->{$domain->get_domain()."/$category_name/".$item->url};
+        }
+        return $elements;
+    }
+
 }

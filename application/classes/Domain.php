@@ -19,7 +19,12 @@ class Domain
         return $this;
     }
 
-    private static function get_city_by_subdomain($subdomain) {
+    public function init()
+    {
+        return $this->is_domain_incorrect();
+    }
+
+    public static function get_city_by_subdomain($subdomain) {
         $city = ORM::factory('City')
                 ->where("seo_name", "=", $subdomain)
                 ->find();

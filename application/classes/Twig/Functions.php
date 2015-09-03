@@ -8,6 +8,11 @@ class Twig_Functions
 		return Request::factory($path)->post($params)->execute();
 	}
 
+	public static function requestmethod($classname, $actionname, $params = array())
+	{
+		return forward_static_call(array($classname, $actionname), $params);
+	}
+
 	public static function requestoldview($path, $params = array())
 	{
 		return View::factory($path, $params)->render();

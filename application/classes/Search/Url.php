@@ -401,7 +401,7 @@ class Search_Url
                 $_ae = $_ae->where("attribute_element.parent_element", "=", $_ae_id);
             }
 
-            $_ae->find();
+            $_ae->cached(Date::DAY)->find();
 
             if ($_ae->loaded()) {
                 $_parent_ae = $_ae->parent_element;

@@ -1,18 +1,41 @@
-<div class="menu-cont3 module">
+<div class="menu-cont3">
 	<div class="row">
 		<div class="col-md-10">
 			<a href="/" class="catalog-title">
 				<div class="ico"></div>Категории<div class="separator"></div>
 			</a>
 			<div class="subs-links-cont">
-				{% for element in category_childs_elements %}					
-					<a href="{{ url(category_url ~ '/' ~ element.url) }}" title="{{element.title}}">{{element.title}}</a>
+				{% set categories = requestmethod('Controller_Block_Twig','kupon_categories', {'s_host': s_host, 'category_url': category_url}) %}
+				{% for element in categories %}
+					<a href="{{ url(element.category_url ~ '/' ~ element.seo_name) }}" title="{{element.title}}">{{element.title}}
+						{% if element.count > 0 %}
+							<span class="">{{element.count}}</span>
+						{% else %}
+							<span class="">?</span>
+						{% endif %}
+					</a>
 					<div class="separator"></div>
-				{% endfor %}				
-			</div>			
+				{% endfor %}
+			</div>
 		</div>
 		<div class="col-md-2">
-			<a href="/" class="other-link">Все акции (767) <span>></span></a>			
+			<span class="span-link other-link" onclick="document.location='{{ url(category_url) }}'">Все купоны и акции</span>
+		</div>
+	</div>
+</div>
+
+<div class="{{theme_class}} obj-control-head clearfix brb2">
+	<div class="row">
+		<div class="col-md-6 left clearfix">
+		</div>
+		<div class="col-md-6 right clearfix">
+			{% if small_pagination.next %}
+				<a class="item" href="{{small_pagination.next_url}}">Далее</a>
+			{% endif %}
+			<span class="caption">{{ small_pagination.current }}/{{ small_pagination.total }}</span>
+			{% if small_pagination.prev %}
+				<a class="item" href="{{small_pagination.prev_url}}">Назад</a>
+			{% endif %}
 		</div>
 	</div>
 </div>

@@ -361,13 +361,14 @@ select{background-color: #FFFFFF;border: 1px solid #C3C3C3;padding:2px 10px;heig
 
 /* skin-theme3 */
 .light-blue-theme {color:black}
-.light-blue-theme .subcategories-cont ul li a{color: #0C4E74;}
-.light-blue-theme .subcategories-cont ul li a.active{ color:#F23817;}
+.light-blue-theme .view-container a{color: #0C4E74;}
+.light-blue-theme .view-container a:hover{ color: #E96F4F; -webkit-transition: color 0.3s;-moz-transition: color 0.3s;-o-transition: color 0.3s;transition: color 0.3s;}
+.light-blue-theme .view-container a.active{ color:#F23817;}
 .light-blue-theme .menu-cont2{background-color: #12B0EC;}
 .light-blue-theme .view-container{background: url(http://www.free-patterns.info/wp-content/uploads/2015/04/light-blue-mixed-squares-v27315.png);}
 .light-blue-theme .subcategories-cont ul li span {color: black;}
-.light-blue-theme a{color: #0C4E74; }
 .light-blue-theme.obj-control-head {background-color: #12B0EC;}
+.light-blue-theme.reklama-cont {  background: url(http://www.free-patterns.info/wp-content/uploads/2015/04/light-blue-mixed-squares-v27315.png);}
 .light-blue-theme .menu-item:hover{background-color: #68CCF2;-webkit-transition: background-color 0.2s;-moz-transition: background-color 0.2s;-o-transition: background-color 0.2s;transition: background-color 0.2s;}
 /* skin-theme3 end */
 

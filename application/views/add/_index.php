@@ -79,7 +79,7 @@
 		<? endif; ?>
 		
 		<? if (Acl::check("object.add.type")) : ?>
-			<p class="p20 red"><i class="fa fa-eye fa-lg mr5"></i>Вы авторизованы с ролью модератора, будьте осторожнее</p>
+			<p class="p20 red"><i class="fa fa-eye fa-lg mr5"></i>Вы авторизованы с ролью модератора, будьте внимательны</p>
 			<? if (property_exists($form_data, 'advert_type')): ?>
 				<div id="div_advert_type" class="row mb10">
 					<div class="col-md-3 col-xs-4 labelcont">
