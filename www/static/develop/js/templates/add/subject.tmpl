@@ -5,7 +5,7 @@
 	<div class="col-md-9 col-xs-8">
 		<div class="inp-cont <% if (error) {%> error <%}%>">
 			<span class="required-star">*</span>																		
-			<input class="w100p" type="text" maxlength="75"  id="title_adv" name="title_adv" value="<%=value%>"/>	
+			<input class="w100p" type="text" maxlength="<%=maxlength%>"  id="title_adv" name="title_adv" value="<%=value%>"/>	
 
 			<% if (error) { %>
 			<span class="inform">

@@ -1,5 +1,13 @@
 <div class="form-cont">
-	<form method="POST"  id="element_list">	
+	<form method="POST"  id="element_list" >
+		<? if ( Acl::check("object.add.type") ): ?>
+			<script id="moderate" type="text/template">
+				var moderate_data;
+				moderate_data = {
+					subject_max_length : 500
+				}
+			</script>
+		<? endif; ?>
 		<?= Form::hidden('csrf', $token) ?>		
 		<input type="hidden" name="object_id" id="object_id" value="<?= $params->object_id ?>">
 		<input type="hidden" name="session_id" value="<?= session_id() ?>">
@@ -318,7 +326,8 @@
 								"_class" => "",
 								"name" => "title_adv",
 								"id" => "title_adv",
-								"attributes" => ""
+								"attributes" => "",
+								"max_length" => $form_data->subject["max_length"]
 							));
 							?>							
 							<? if ($form_data->subject AND $form_data->subject["subject_error"]): ?>

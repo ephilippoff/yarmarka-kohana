@@ -529,12 +529,17 @@ class Form_Add  {
 		if ($category->loaded())
 			$title_auto_fill = $category->title_auto_fill;
 
+		$max_length = 75;
+		if ( Acl::check("object.add.type") ) {
+			$max_length = 500;
+		}
 
 		if ((!$title_auto_fill AND !$edit) OR (!$title_auto_fill AND $edit))
 			$this->_data->subject = array( 'value' => $value, 
 											'edit' => $edit,
 											'title_auto_fill' => $title_auto_fill,
-											'subject_error' => $errors->title_adv);
+											'subject_error' => $errors->title_adv,
+											'max_length' => $max_length);
 
 		return $this;
 	}

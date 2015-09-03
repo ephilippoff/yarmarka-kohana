@@ -554,6 +554,7 @@ define([
             _.extend(this, options);
             this.bind("destroy", this.destroy);
             this.control = this.$el.find("input");
+            this.maxlength = (this.app.settings.subject_max_length) ? this.app.settings.subject_max_length : 75;
             this.inform = this.$el.find(".inform");
             this.value = this.control.val();
             this.error = this.inform.html();
@@ -562,8 +563,8 @@ define([
                         this.render();        
         },
 
-        render: function(){    
-            var html     =  _.template(this.template)({ value : this.value, error : this.error });
+        render: function(){
+            var html     =  _.template(this.template)({ value : this.value, error : this.error, maxlength: this.maxlength });
             this.$el.html(html);
             return this;
         },
@@ -1228,7 +1229,8 @@ define([
             _.extend(this, options);
             var self = this;
             self.is_edit = ($("#object_id").val());
-
+            
+            this.settings = ($("#moderate").text()) ? eval($("#moderate").text()) : {};
             if (this.reinit_after_change) 
                 this._destroy_controls();
 
