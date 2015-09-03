@@ -1,5 +1,5 @@
-<div class="cont iLight-cont border-color-crimson js-mainmenu">
-	<div class="left mh-style1 border-color-crimson brb2">
+<div class="popup-menu-cont popup-menu-cont2l iLight-cont js-mainmenu">
+	<div class="left mh-style1 brb2">
 		<ul class="top" role="menu">
 			{% for category in categories1l %}
 				<li class="js-submenu-item" data-submenu-id="section{{category.id}}" class="section{{category.id}}">
@@ -10,7 +10,7 @@
 			{% endfor %}
 		</ul>
 	</div> 
-	<div class="right mh-style1 border-color-crimson brb2">
+	<div class="right mh-style1 brb2">
 		{% for category in categories1l %}
 			{% set divWidth = (banners[category.id] is defined and banners[category.id].menu_width) ? banners[category.id].menu_width : 341 %}
 			{% set ulWidth = 191 %}
