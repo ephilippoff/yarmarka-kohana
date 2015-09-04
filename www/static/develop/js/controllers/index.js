@@ -25,6 +25,7 @@ function (Marionette, templates, utils, IndexPage, SearchPage, DetailPage,
 
         start_indexSection : function() {
             console.log("index start");
+             app.menu.init(["kupon", "news"]);
             new IndexPage({
                 el: "body"
             });
@@ -65,7 +66,6 @@ function (Marionette, templates, utils, IndexPage, SearchPage, DetailPage,
 
         start_cartSection : function() {
             console.log("cart start");
-
             app.menu.init(["main", "kupon", "news"]);
             app.favourite.init(["list"]);
             new CartPage({
@@ -84,13 +84,12 @@ function (Marionette, templates, utils, IndexPage, SearchPage, DetailPage,
 
         start_userSection : function() {
             console.log("user start");
-
             app.menu.init(["main", "kupon", "news"]);
         },
 
         start_articleSection : function() {
             console.log("article start");
-
+            app.menu.init(["main", "kupon", "news"]);
             new ArticlePage({
                 el: "body"
             });

@@ -1,26 +1,28 @@
 {% extends "layouts/article" %}
 
 {% set theme_class = 'green-dense-theme' %}
+
 {% block header %} 
 		{{ requestblock('block_twig/topline', {'favourites':favourites}) }}
 		{% include 'block/header/logoline' %}
-		{% include 'article/index/promo' %}
-		{% set theme = 'green-dense-theme' %}
+		{% include 'block/header/navigationline/article' %}
 		{{ requestblock('block_twig/adslinkline',{'city_id': city.id, 'theme_class': theme_class}) }}
 {% endblock header %} 
 
 {% block crumbs %}{% endblock crumbs %}
 
 {% block content %}
-	<div class="green-dense-theme obj-control-head clearfix brt2">
-		<div class="col-md-6 left clearfix">
-			<span class="caption"><i class="fa fa-globe mr3"></i>{{newsone.start_date|date('H:i, d.m.Y')}}</span>
+	<div class="{{theme_class}}">
+		<div class="menu-cont2 clearfix brt2">
+			<div class="col-md-6 left clearfix">
+				<span class="caption left"><i class="fa fa-globe mr3"></i>{{newsone.start_date|date('H:i, d.m.Y')}}</span>
+			</div>
+			{% if check_access("news.edit") %}
+			<div class="col-md-6 right clearfix">
+				<a class="menu-item right" href="/khbackend/articles/edit/{{newsone.id}}">Редактировать</a>
+			</div>
+			{% endif %}
 		</div>
-		{% if check_access("news.edit") %}
-		<div class="col-md-6 right clearfix">
-			<a class="item" href="/khbackend/articles/edit/{{newsone.id}}">Редактировать</a>
-		</div>
-		{% endif %}
 	</div>
 	<article class="bg-color-whitesmoke p20">
 		<h1 class="big">{{newsone.title}}</h1>
