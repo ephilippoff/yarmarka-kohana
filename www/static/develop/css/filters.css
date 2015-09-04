@@ -20,7 +20,7 @@
 .tab-filter  input.submit.main-submit:hover{background-color:#74B8D3}
 .tab-filter .checkbox  input{vertical-align: middle;}
 .tab-filter .multiselect .checkbox{padding:5px;cursor:auto}
-.tab-filter .group{color: #5D666E;font-size: 12px;font-weight: bold;border-bottom: 1px solid #F1F1F1;padding-bottom:5px;}
+.tab-filter .group{color: #5D666E;font-size: 14px;border-bottom: 1px solid #F1F1F1;padding-bottom:5px;}
 .tab-filter .multiselect .cont{height:39px;background:url("/static/develop/images/multisel.png") no-repeat scroll left -39px;}
 .tab-filter .param{border-radius: 4px;float: left;margin: 0 7px 16px;position: relative;height:39px;background-color: #FFFFFF;padding: 0 5px;}
 .tab-filter .multiselect.active{background-position:right -156px;box-shadow: 0 0 5px #4FAAE3;}
@@ -42,7 +42,7 @@
 .multiselect:hover .cont{background-position: 0 -78px;}
 .multiselect.active .cont{background-position: 0 -130px;}
 .multiselect span{line-height: 24px}
-.multiselect .name{font-size:12px;color:#5D666E;font-weight:bold;margin-right:6px;}.multiselect .info{font-size:10px;color:#808080;}
+.multiselect .name{font-size:14px;color:#5D666E;margin-right:6px;}.multiselect .info{font-size:12px;color:#808080;}
 .multiselect .info.a{background: url(/static/develop/images/plus_03.jpg) right  no-repeat;padding-right:19px;}
 .multiselect .checkbox{position:absolute;top:105%;left:0;background:#fff;padding:3px 0px;border:1px solid #989898;box-shadow: 0 4px 5px rgba(0, 0, 0, 0.15);border-radius:4px;display:none;white-space: nowrap;}
 .multiselect .checkbox label{float:left;clear:both;line-height: 14px;margin:  5px }
