@@ -170,26 +170,28 @@ class Twig_Functions
 		$result = array();
 
 		foreach ($services as $name => $service_items) {
-			$result_item = array();
+			
 
 			foreach ($service_items as $service_item) {
 				$service_item = new Obj($service_item);
-				$result_item["name"] = $name;
-				//if ( strtotime(date_add($service_item['date_created'], date_interval_create_from_date_string('7 days'))) > strtotime(date()) ) {
+				$result_item = array();
 				if ($name == "up" AND strtotime(date("Y-m-d H:i:s"). ' + 7 days') > strtotime(date("Y-m-d H:i:s")) ) {
+					$result_item["name"] = $name;
 					$result_item["icon_class"] = "fa-angle-double-up";
 					$result_item["title"] = "Поднято ".date("Y-m-d H:i", strtotime($service_item->date_created));
 				}
-				if ($name == "premium" AND strtotime($service_item->date_expiration) > strtotime(date("Y-m-d H:i:s")) ) {
+				elseif ($name == "premium" AND strtotime($service_item->date_expiration) > strtotime(date("Y-m-d H:i:s")) ) {
+					$result_item["name"] = $name;
 					$result_item["icon_class"] = "fa-info-circle";
 					$result_item["title"] = "Текущая услуга 'Премиум' действует до ".date("Y-m-d H:i", strtotime($service_item->date_expiration));
 				}
-				if ($name == "lider" AND strtotime($service_item->date_expiration) > strtotime(date("Y-m-d H:i:s")) ) {
+				elseif ($name == "lider" AND strtotime($service_item->date_expiration) > strtotime(date("Y-m-d H:i:s")) ) {
+					$result_item["name"] = $name;
 					$result_item["icon_class"] = "fa-info-circle";
 					$result_item["title"] = "Текущая услуга 'Лидер' действует до ".date("Y-m-d H:i", strtotime($service_item->date_expiration));
 				}
 
-				if ( in_array($name, array("up","lider","premium")) AND $show_not_activated) {
+				if ( in_array(Arr::get($result_item, "name"), array("up","lider","premium")) AND $show_not_activated) {
 					$not_activated = $service_item->count - $service_item->activated;
 					if ($not_activated > 0) {
 						$result_item["icon_class"] .= " fa-pulse";

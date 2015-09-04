@@ -50,6 +50,9 @@ define([
             if (this.activateTimer) clearTimeout(this.activateTimer);
             this.activateTimer = setTimeout(function(){
                 $(s.getOption("menuClass")).fadeIn();
+                $("#popup-layer").fadeIn();
+                console.log(s.getOption("controlClass"))
+                $(s.getOption("controlClass")).addClass("z301");
             }, 200)
             
         },
@@ -57,6 +60,8 @@ define([
         closeMenu: function() {
             if (this.activateTimer) clearTimeout(this.activateTimer);
             $(this.getOption("menuClass")).fadeOut();
+             $("#popup-layer").fadeOut();
+             $(this.getOption("controlClass")).removeClass("z301");
         }
     });
 
@@ -107,6 +112,7 @@ define([
                 el: userMenuSettings.controlClass,
                 templateClass: userMenuSettings.menuTemplate,
                 menuClass: userMenuSettings.menuClass,
+                controlClass: userMenuSettings.controlClass,
             });
         },
         init: function (menusToload) {
@@ -117,6 +123,7 @@ define([
                     el: mainMenuSettings.controlClass,
                     templateClass: mainMenuSettings.menuTemplate,
                     menuClass: mainMenuSettings.menuClass,
+                    controlClass: mainMenuSettings.controlClass,
                 });
             }
 
@@ -125,6 +132,7 @@ define([
                     el: cityMenuSettings.controlClass,
                     templateClass: cityMenuSettings.menuTemplate,
                     menuClass: cityMenuSettings.menuClass,
+                    controlClass: cityMenuSettings.controlClass,
                 });
             }
 
@@ -133,6 +141,7 @@ define([
                     el: newsMenuSettings.controlClass,
                     templateClass: newsMenuSettings.menuTemplate,
                     menuClass: newsMenuSettings.menuClass,
+                    controlClass: newsMenuSettings.controlClass,
                 });
             }
 
@@ -141,6 +150,7 @@ define([
                     el: kuponMenuSettings.controlClass,
                     templateClass: kuponMenuSettings.menuTemplate,
                     menuClass: kuponMenuSettings.menuClass,
+                    controlClass: kuponMenuSettings.controlClass,
                 });
             }
         },

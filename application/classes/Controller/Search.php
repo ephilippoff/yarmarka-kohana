@@ -215,10 +215,6 @@ class Controller_Search extends Controller_Template {
             
         }
         //save search settings cache end
-
-
-        
-
         
         $this->performance->add("Search","additional");
         //favourites

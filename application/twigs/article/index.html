@@ -1,11 +1,12 @@
 {% extends "layouts/article" %}
 
+{% set theme_class = 'green-dense-theme' %}
 {% block header %} 
 		{{ requestblock('block_twig/topline', {'favourites':favourites}) }}
 		{% include 'block/header/logoline' %}
 		{% include 'article/index/promo' %}
 		{% set theme = 'green-dense-theme' %}
-		{{ requestblock('block_twig/adslinkline',{'city_id': city.id, 'theme': theme}) }}
+		{{ requestblock('block_twig/adslinkline',{'city_id': city.id, 'theme_class': theme_class}) }}
 {% endblock header %} 
 
 {% block crumbs %}{% endblock crumbs %}

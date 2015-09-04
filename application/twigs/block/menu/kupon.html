@@ -1,5 +1,5 @@
 {% set categories = requestmethod('Controller_Block_Twig','kupon_categories', {}) %}
-<div class="popup-menu-cont popup-menu-cont2l iLight-cont js-kuponmenu">
+<div class="popup-menu-cont popup-menu-cont2l iLight-cont js-kuponmenu z300">
 	<div class="left brb2">
 		<ul class="top" role="menu">
 			{% for element in categories %}
@@ -33,12 +33,12 @@
 					</map>
 				{% elseif file_exist(element.main_menu_image) %}
 					<span class="">
-						<img  hidefocus="true"  src="http://yarmarka.dev/uploads/341x256/d2/b1/1d/d2b11da73ceb5928d27a8c163d9fb1c8.jpg">
+						<img  hidefocus="true"  src="http://yarmarka.biz/uploads/banners/menu/5sllpgxnndnadcwkhpyl.png">
 					</span>
 				{% endif %}#}
 				<span class="bold" style="width: 165px">{{element.title}}</span><br>
 				<span class="">
-					<img  hidefocus="true"  src="http://yarmarka.dev/uploads/341x256/d2/b1/1d/d2b11da73ceb5928d27a8c163d9fb1c8.jpg" height="120">
+					<img  hidefocus="true"  src="http://yarmarka.biz/uploads/banners/menu/5sllpgxnndnadcwkhpyl.png" width="250">
 				</span>
 			</div>
 		{% endfor %}

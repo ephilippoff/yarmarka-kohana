@@ -1,5 +1,7 @@
 {% extends "layouts/detail" %}
 
+{% set theme_class = 'light-blue-theme' %}
+
 {% block css %} 
 	{{ parent() }}
 {% endblock css%}
@@ -13,10 +15,8 @@
 		{{ requestblock('block_twig/topline', {'favourites':favourites}) }}
 		{% include 'block/header/logoline' %}
 		{% include 'search/kupony/promo' %}
-		{% set theme_class = 'light-blue-theme' %}
-		{{ requestblock('block_twig/adslinkline',{'city_id': city.id, 'category_id': category.id, 'theme': theme_class}) }}
+		{{ requestblock('block_twig/adslinkline',{'city_id': city.id, 'category_id': category.id, 'theme_class': theme_class}) }}
 {% endblock header %} 
-
 
 {% block crumbs %} 
 	{% include 'detail/crumbs' %}

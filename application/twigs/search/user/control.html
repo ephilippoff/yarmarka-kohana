@@ -1,13 +1,15 @@
-<div class="blue-subtle-theme obj-control-head clearfix brt2">
-	<div class="row">
-		<div class="col-md-12 right clearfix">
-			{% if small_pagination.next %}
-				<a class="item" href="{{small_pagination.next_url}}">Далее</a>
-			{% endif %}
-			<span class="caption">{{ small_pagination.current }}/{{ small_pagination.total }}</span>
-			{% if small_pagination.prev %}
-				<a class="item" href="{{small_pagination.prev_url}}">Назад</a>
-			{% endif %}
+<div class="{{theme_class}} ">
+	<div class="menu-cont2 clearfix brt2">
+		<div class="row">
+			<div class="col-md-12 right clearfix">
+				{% if small_pagination.next %}
+					<a class="menu-item right" href="{{small_pagination.next_url}}">Далее</a>
+				{% endif %}
+				<span class="caption right">{{ small_pagination.current }}/{{ small_pagination.total }}</span>
+				{% if small_pagination.prev %}
+					<a class="menu-item right" href="{{small_pagination.prev_url}}">Назад</a>
+				{% endif %}
+			</div>
 		</div>
 	</div>
 </div>

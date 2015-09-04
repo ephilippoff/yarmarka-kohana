@@ -1,5 +1,7 @@
 {% extends "layouts/search" %}
 
+{% set theme_class = 'light-blue-theme' %}
+
 {% block css %} 
 	{{ parent() }}
 {% endblock css%}
@@ -9,7 +11,6 @@
 	{{ parent() }}
 {% endblock js%}
 
-
 {% block title %} {{ seo_attributes.title }} {% endblock title%}
 {% block meta_description %} {{ seo_attributes.description }} {% endblock meta_description%}
 
@@ -17,8 +18,7 @@
 		{{ requestblock('block_twig/topline', {'favourites':favourites}) }}
 		{% include 'block/header/logoline' %}
 		{% include 'search/kupony/promo' %}
-		{% set theme_class = 'light-blue-theme' %}
-		{{ requestblock('block_twig/adslinkline',{'city_id': city.id, 'category_id': category.id, 'theme': theme_class}) }}
+		{{ requestblock('block_twig/adslinkline',{'city_id': city.id, 'category_id': category.id, 'theme_class': theme_class}) }}
 {% endblock header %} 
 
 {% block crumbs %} {% include 'search/kupony/crumbs' %} {% endblock crumbs %}

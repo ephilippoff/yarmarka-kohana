@@ -1,13 +1,13 @@
 {% extends "layouts/main_with_header" %}
 
-
+{% set theme_class = 'crimson-theme' %}
 
 {% block body %}
 	
 	{% block header %} 
 		{{ parent() }}
 		{% include 'block/header/navigationline' %}
-		{{ requestblock('block_twig/adslinkline',{'city_id': city.id, 'category_id': category.id}) }}
+		{{ requestblock('block_twig/adslinkline',{'city_id': city.id, 'category_id': category.id, 'theme_class': theme_class}) }}
 	{% endblock header %} 
 
 	{% block crumbs %} 

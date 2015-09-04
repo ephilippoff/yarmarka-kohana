@@ -12,7 +12,7 @@ define([
 
     return Marionette.LayoutView.extend({
         template: templates.components.windows.service,
-        className: "popup-wrp z1500",
+        className: "popup-wrp z400",
         errors: {},
         ui: {
             close: ".js-close",

@@ -22,58 +22,57 @@
 {% endblock crumbs %} 
 
 {% block content %}
-
-	<div class="obj-control-head clearfix brt2">
-		<div class="col-md-6 left clearfix">
+		<div class="{{theme_class}}">
+			<div class="menu-cont2 clearfix brt2">
+				<div class="col-md-12 right clearfix">
+					{% if params.form_data.login %}
+						<a class="menu-item right" href="/user/registration">Регистрация</a>
+						<a class="menu-item right" href="/user/forgot_password">Забыли пароль?</a>
+					{% else %}
+						&nbsp;
+					{% endif %}
+				</div>
+			</div>
 		</div>
-		<div class="col-md-6 right clearfix">
-			{% if params.form_data.login %}
-				<a class="item" href="/user/registration">Регистрация</a>
-				<a class="item" href="/user/forgot_password">Забыли пароль?</a>
-			{% else %}
-				&nbsp;
-			{% endif %}
-		</div>
-	</div>
-	<div class="bg-color-whitesmoke p20">
-		{% set problem = get_config("common.add_problem") %}
-		{% if problem %}
-			<div class="fl100  pt16 pb15">
-					<div class="smallcont">
-						<div class="labelcont">
-							<label><span style="color:red;">!</span></label>
-						</div>
-						<div class="fieldscont">
-							<div class="inp-cont-short">
-								<div class="inp-cont"  style="color:red;">
-									{{problem}}
+		<div class="bg-color-whitesmoke p20">
+			{% set problem = get_config("common.add_problem") %}
+			{% if problem %}
+				<div class="fl100  pt16 pb15">
+						<div class="smallcont">
+							<div class="labelcont">
+								<label><span style="color:red;">!</span></label>
+							</div>
+							<div class="fieldscont">
+								<div class="inp-cont-short">
+									<div class="inp-cont"  style="color:red;">
+										{{problem}}
+									</div>
 								</div>
 							</div>
 						</div>
-					</div>
-			</div>
-		{% endif %}
+				</div>
+			{% endif %}
 
-		{% if params.expired_orginfo  %}
-			<div class="fl100  pt16 pb15">
-				<div class="smallcont pb10">
-					<div class="labelcont">
-						<label><span></span></label>
-					</div>
-					<div class="fieldscont">										
-						<div class="">
-							<div class="inp-cont" style=" font-size:16px;">
-								<span style="color:red;">Для продолжения работы с сайтом, пожалуйста, поделитесь с нами информацией о Вашей компании <a href="/user/orginfo">здесь</a></span>.
-								Если сейчас у Вас нет возможности заполнить форму, сделайте это в любое удобное время, но не позднее чем {{params.expired_orginfo|date("d.m.Y H:i")}}
-					  		</div>
+			{% if params.expired_orginfo  %}
+				<div class="fl100  pt16 pb15">
+					<div class="smallcont pb10">
+						<div class="labelcont">
+							<label><span></span></label>
+						</div>
+						<div class="fieldscont">										
+							<div class="">
+								<div class="inp-cont" style=" font-size:16px;">
+									<span style="color:red;">Для продолжения работы с сайтом, пожалуйста, поделитесь с нами информацией о Вашей компании <a href="/user/orginfo">здесь</a></span>.
+									Если сейчас у Вас нет возможности заполнить форму, сделайте это в любое удобное время, но не позднее чем {{params.expired_orginfo|date("d.m.Y H:i")}}
+						  		</div>
+							</div>
 						</div>
 					</div>
 				</div>
-			</div>
-		{% endif %}
+			{% endif %}
 
-		{{ requestoldview(block_name, params) }}
-	</div>
+			{{ requestoldview(block_name, params) }}
+		</div>
 {% endblock content %}
 
 {% block rightside %} 

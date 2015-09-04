@@ -1,18 +1,19 @@
 {% extends "layouts/search" %}
 
-{% block header %} 
-		{{ requestblock('block_twig/topline', {'favourites':favourites}) }}
-		{% include 'block/header/logoline' %}
-		{% include 'search/user/promo' %}
-{% endblock header %} 
+{% set theme_class = 'blue-subtle-theme' %}
 
 {% block css %} 
 	{{ parent() }}
 	{{ css("comments.css") }}
 {% endblock css%}
 
-
 {% block js %}{% endblock js%}
+
+{% block header %} 
+		{{ requestblock('block_twig/topline', {'favourites':favourites}) }}
+		{% include 'block/header/logoline' %}
+		{% include 'search/user/promo' %}
+{% endblock header %} 
 
 
 {% block title %} {{ seo_attributes.title }} {% endblock title%}
