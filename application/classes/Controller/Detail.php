@@ -32,7 +32,6 @@ class Controller_Detail extends Controller_Template {
 	}
 
 	public function action_index() {
-		$start = microtime(true);
 		$object = $this->request->param("object");
 		$url = $this->request->param("url");
 
@@ -53,6 +52,7 @@ class Controller_Detail extends Controller_Template {
 		$detail_info = Detailpage::factory("Default", $object)
 						->get_messages()
 						->get_similar()
+						->get_crumbs()
 						->get();
 
 		foreach ((array) $detail_info as $key => $item) {
@@ -73,7 +73,6 @@ class Controller_Detail extends Controller_Template {
 	}
 
 	public function action_type201() {
-		$start = microtime(true);
 		$object = $this->request->param("object");
 		$url = $this->request->param("url");
 
@@ -90,7 +89,7 @@ class Controller_Detail extends Controller_Template {
 		$twig->domain      = $this->domain;
 		$twig->city        = $this->domain->get_city();
 
-		$detail_info = Detailpage::factory("Kupon", $object)->get();
+		$detail_info = Detailpage::factory("Kupon", $object)->get_crumbs()->get();
 
 		foreach ((array) $detail_info as $key => $item) {
 			$twig->{$key} = $item;

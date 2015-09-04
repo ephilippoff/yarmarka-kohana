@@ -33,5 +33,8 @@ return array(
 		'contacthide' => array('Twig_Filters', 'contacthide'),
 		'values' => array('Twig_Filters', 'values'),
 		'formatphone' => array('Twig_Filters', 'formatphone'),
+		'phoneico' => array('Twig_Filters', 'phoneico'),
+		'mobilephoneico' => array('Twig_Filters', 'mobilephoneico'),
+		'emailico' => array('Twig_Filters', 'emailico'),
 	),
 );

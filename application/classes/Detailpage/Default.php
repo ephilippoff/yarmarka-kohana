@@ -21,7 +21,6 @@ class Detailpage_Default
 		$info['object'] = $object->get_row_as_obj();
 		$info['category'] = ORM::factory('Category', $object->category)->get_row_as_obj();
 		$info['object']->compiled =  Search::getresultrow((array) $info['object']);
-		//$info->crumbs      = Search_Url::get_category_crubms($object->category);
 
 		return $info;
 	}
@@ -38,6 +37,17 @@ class Detailpage_Default
 		$user        = Auth::instance()->get_user();
 		$info['user'] = ($user) ? $user->get_row_as_obj() : NULL;
 		return $info;
+	}
+	
+	public function get_crumbs()
+	{
+		$object = $this->_orm_object;
+		$info = array();
+
+		$info['crumbs'] = Search_Url::get_category_crubms($object->category);
+
+		$this->_info = array_merge($this->_info, $info);
+		return $this;
 	}
 
 	public function get_messages()

@@ -11,6 +11,12 @@
 	{% block crumbs %} 
 		Крошки
 	{% endblock crumbs %}
+
+	<div class="row module">
+		<div class="col-md-12">
+			<h1 class="captionbold fs22 js-object-title-{{object.id}} {% if object.is_published == 0 %} red strike {% endif %}">{{ object.title|e|capitalize }}</h1>
+		</div>
+	</div>
 	
 	<div class="row min-content-height">
 		{% block leftside %} 

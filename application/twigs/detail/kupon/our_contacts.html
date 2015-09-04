@@ -1,0 +1,20 @@
+<div class="info-block-cont theme2 contacts-cont module">
+	<div class="block-title">
+		<span>Задайте вопросы по телефону:</span>
+	</div>					
+	<div class="body">
+		<div class="row">
+			<div class="col-md-12 col-sm-12">
+				<div class="contacts-list-cont js-contact-list">
+					{% for contact in object.compiled.contacts %}
+						{% if contact.type == 1 or contact.type == 2 %}
+							<p>{{ contact.value|formatphone|phoneico }}</p>
+						{% else %}
+							<p>{{ contact.value|emailico }}</p>
+						{% endif %}
+					{% endfor %}
+				</div>
+			</div>
+		</div>
+	</div>					
+</div>

@@ -22,45 +22,47 @@
 	{% include 'detail/crumbs' %}
 {% endblock crumbs %}
 
-	{% block leftside %}
-		<div class="col-md-8">
-			<article>
-				{% include 'search/kupony/subfilters' %}
-				{% if (object.compiled.images.main_photo|length != 0) %}
-					{% include 'detail/kupon/main_photo' %}
-				{% endif %}
-				<div class="text-cont module">
-					{{ object.user_text }}
-				</div>
-				{% include 'detail/kupon/photo' %}
-			</article>
-		</div>
-	{% endblock %}	
+{% block leftside %}
+	<div class="col-md-8">
+		<article>
+			{% if (object.compiled.images.main_photo|length != 0) %}
+				{% include 'detail/kupon/main_photo' %}
+			{% endif %}
+			<div class="text-cont module">
+				{{ object.user_text }}
+			</div>
+			{% include 'detail/kupon/photo' %}
+		</article>
+	</div>
+{% endblock %}	
 
-	{% block rightside %}
-		<div class="col-md-4">
-			<aside>
-				{% if check_object_access(object, 'object.moderate') %}
-					<div class="module">{% include 'detail/kupon/controls' %}</div>
-				{% endif %}
-				
-				<div class="module">{% include 'detail/kupon/coupon_info' %}</div>
-				
-				{% if object.compiled.attributes.site.value %}
-					<div class="button bg-color-crimson white pt15 pb15 fs20 mb5 w100p" onclick="window.location.href='{{ object.compiled.attributes.site.value }}'">Наш сайт</div>
-				{% endif %}
-				
-				<div class="button bg-color-lightgreen white pt15 pb15 fs20 mb10 fn-kupon-callback w100p">Заказать обратный звонок</div>
-				
-				{% include 'detail/kupon/buy_items' %}
-				{% include 'detail/kupon/contacts' %}
-				
-				{% if (category.show_map) %}
-					{% include 'detail/map' %}
-				{% endif %}	
-			</aside>
-		</div>
-	{% endblock rightside %}
+{% block rightside %}
+	<div class="col-md-4">
+		<aside>
+			{% if check_object_access(object, 'object.moderate') %}
+				<div class="module">{% include 'detail/kupon/controls' %}</div>
+			{% endif %}
+			
+			<div class="module">{% include 'detail/kupon/coupon_info' %}</div>
+
+			{% if object.compiled.attributes.site.value %}
+				<div class="button bg-color-crimson white pt15 pb15 fs20 mb5 w100p" onclick="window.location.href='{{ object.compiled.attributes.site.value }}'">Наш сайт</div>
+			{% endif %}
+			
+			{% if object.is_published != 0 %}
+				<div class="button bg-color-lightgreen white pt15 pb15 fs20 mb10 w100p">Заказать обратный звонок</div>
+				<div class="button bg-color-lightgreen white pt15 pb15 fs20 mb10 w100p">Купить</div>
+				{% include 'detail/kupon/our_contacts' %}
+			{% else %}
+				<div class="p20">Акция завершена</div>
+			{% endif %}
+			
+			{% if (category.show_map) %}
+				{% include 'detail/map' %}
+			{% endif %}	
+		</aside>
+	</div>
+{% endblock rightside %}
 
 {% block templates %}
 	{{ parent() }}
