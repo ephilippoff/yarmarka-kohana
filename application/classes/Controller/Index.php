@@ -27,8 +27,7 @@ class Controller_Index extends Controller_Template {
     }
 
     public function action_index() {
-        $start = microtime(true);
-        
+
         $twig = Twig::factory('index/index');
 
         $twig->lastnews  = ORM::factory('Article')
@@ -47,6 +46,29 @@ class Controller_Index extends Controller_Template {
             $twig->{$key} = $item;
         }
 
+        $premium_kupons = Search::searchquery(
+            array(
+                "active" => TRUE,
+                "published" =>TRUE,
+                "premium" => TRUE,
+                "category_id" => array(173),
+            ),
+            array("limit" => 2)
+        );
+
+        $twig->premium_kupons = Search::getresult($premium_kupons->execute()->as_array());
+
+        $kupons = Search::searchquery(
+            array(
+                "active" => TRUE,
+                "published" =>TRUE,
+                "category_id" => array(173),
+            ),
+            array("limit" => 5)
+        );
+
+        $twig->kupons = Search::getresult($kupons->execute()->as_array());
+
         $attachments = ORM::factory('Object_Attachment')
                             ->order_by("id","desc")
                             ->limit(3)
@@ -54,41 +76,8 @@ class Controller_Index extends Controller_Template {
         $promo_thumbnails = array_map(function($item){
             return Imageci::getSavePaths($item->filename);
         }, $attachments);
-
         $twig->promo_thumbnails = $promo_thumbnails;
-        $twig->php_time = microtime(true) - $start;
-        $this->response->body($twig);
-    }
 
-    public function action_city() {
-        $start = microtime(true);
-        $twig = Twig::factory('index/index_city');
-
-
-        // $twig->categories = ORM::factory('Category')->get_categories_extend(array(
-        //     "with_child" => TRUE, 
-        //     "with_ads" => TRUE, 
-        //     "city_id" => $twig->city->id
-        // ));
-
-        // $twig->theme = new Obj(array(
-        //     "theme_class" => $this->theme_class,
-        //     "theme_img" => $this->theme_img
-        // ));
-
-        // $twig->lastnews  = ORM::factory('Article')
-        //                         ->get_lastnews($twig->city->id , NULL, 5)
-        //                         ->getprepared_all();
-
-        // $twig->companies  = ORM::factory('User')
-        //                         ->get_good_companies($twig->city->id)
-        //                         ->getprepared_all();
-        
-        $index_info = $this->get_index_info();
-        foreach ((array) $index_info as $key => $item) {
-            $twig->{$key} = $item;
-        }
-        $twig->php_time = microtime(true) - $start;
         $this->response->body($twig);
     }
 

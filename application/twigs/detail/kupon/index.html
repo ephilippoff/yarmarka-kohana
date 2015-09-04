@@ -22,18 +22,16 @@
 	{% include 'detail/crumbs' %}
 {% endblock crumbs %}
 
-	{% block leftside %} 
+	{% block leftside %}
 		<div class="col-md-8">
 			<article>
-
+				{% include 'search/kupony/subfilters' %}
 				{% if (object.compiled.images.main_photo|length != 0) %}
 					{% include 'detail/kupon/main_photo' %}
-				{% endif %}				
-				
+				{% endif %}
 				<div class="text-cont module">
 					{{ object.user_text }}
 				</div>
-				
 				{% include 'detail/kupon/photo' %}
 			</article>
 		</div>
@@ -43,14 +41,10 @@
 		<div class="col-md-4">
 			<aside>
 				{% if check_object_access(object, 'object.moderate') %}
-					<div class="module">
-						{% include 'detail/kupon/controls' %}
-					</div>
+					<div class="module">{% include 'detail/kupon/controls' %}</div>
 				{% endif %}
 				
-				<div class="module">
-					{% include 'detail/kupon/coupon_info' %}
-				</div>
+				<div class="module">{% include 'detail/kupon/coupon_info' %}</div>
 				
 				{% if object.compiled.attributes.site.value %}
 					<div class="button bg-color-crimson white pt15 pb15 fs20 mb5 w100p" onclick="window.location.href='{{ object.compiled.attributes.site.value }}'">Наш сайт</div>
@@ -65,7 +59,7 @@
 					{% include 'detail/map' %}
 				{% endif %}	
 			</aside>
-		</div>		
+		</div>
 	{% endblock rightside %}
 
 {% block templates %}

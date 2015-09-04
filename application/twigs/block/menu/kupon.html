@@ -4,7 +4,7 @@
 		<ul class="top" role="menu">
 			{% for element in categories %}
 				<li class="js-submenu-item" data-submenu-id="section{{element.id}}" class="section{{element.id}}">
-					<span class="span-link" onclick="window.location = 'http://{{ s_host ~ '/' ~ element.category_url ~ '/' ~ element.seo_name }}'">
+					<span class="span-link" onclick="window.location = '{{ '/' ~ element.category_url ~ '/' ~ element.seo_name }}'">
 						<span class="name">{{element.title}}</span>
 						{% if element.count > 0 %}
 							<span class="count">{{element.count}}</span>

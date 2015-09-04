@@ -23,19 +23,3 @@
 		</div>
 	</div>
 </div>
-
-<div class="{{theme_class}} obj-control-head clearfix brb2">
-	<div class="row">
-		<div class="col-md-6 left clearfix">
-		</div>
-		<div class="col-md-6 right clearfix">
-			{% if small_pagination.next %}
-				<a class="item" href="{{small_pagination.next_url}}">Далее</a>
-			{% endif %}
-			<span class="caption">{{ small_pagination.current }}/{{ small_pagination.total }}</span>
-			{% if small_pagination.prev %}
-				<a class="item" href="{{small_pagination.prev_url}}">Назад</a>
-			{% endif %}
-		</div>
-	</div>
-</div>

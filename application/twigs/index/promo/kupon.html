@@ -18,12 +18,11 @@
 		<div class="row">
 			<div class="col-md-6 items-cont">
 				<ul>
-					{% for news in lastnews|slice(0,2) %}
+					{% for object in premium_kupons %}
 						<li>
 							<div  style="width:250px;height:200px;float:left;padding:10px;overflow:hidden;position:relative;">
-								{% set image = get_image_paths(news.photo) %}
-								<img src="http://yarmarka.biz/uploads/272x203/59/6d/22/596d22a7cb09a1ce38dc7b7f6851cf8b.png" alt="" width="100%">
-								<p style="position:relative;top:-30px;background:white;padding:10px;"><a href="news/{{ news.id ~ '-' ~ news.seo_name}}">Чистка зубов -50%</a></p>
+								<img src="{{ get_file(object.compiled.images.main_photo['272x203']) }}" alt="" width="100%">
+								<p style="position:relative;top:-30px;background:white;padding:10px;">{{object.compiled.city}}<a href="{{object.compiled.url}}">{{object.title}}</a></p>
 							</div>
 						</li>
 					{% endfor %}
@@ -31,10 +30,10 @@
 			</div>
 			<div class="col-md-6 items-cont">
 				<ul>
-					{% for news in lastnews %}
-					<li>
-						<p class="mt10"><a href="news/{{ news.id ~ '-' ~ news.seo_name}}">{{news.title}}</a></p>
-					</li>
+					{% for object in kupons %}
+						<li>
+							<p class="mt10">{{object.compiled.city}} <a href="{{object.compiled.url}}">{{object.title}}</a></p>
+						</li>
 					{% endfor %}
 				</ul>
 			</div>

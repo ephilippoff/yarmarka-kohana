@@ -283,7 +283,7 @@ class Lib_PlacementAds_AddEdit {
 		}
 
 		// верифицированы ли контакты
-		if ($category)
+		if ($category AND !$params->just_check)
 		{
 
 			$validation->rules('contact_mobile', array(
@@ -299,7 +299,7 @@ class Lib_PlacementAds_AddEdit {
 			));
 
 		} 
-		elseif ($category AND $category_settings->one_mobile_phone AND !$params->itis_massload)
+		elseif ($category AND $category_settings->one_mobile_phone AND !$params->itis_massload  AND !$params->just_check)
 		{
 			$validation->rules('contact_mobile', array(
 				array('mobile_verified', array(':value', $params->session_id) )
@@ -706,12 +706,14 @@ class Lib_PlacementAds_AddEdit {
 		{
 			$errors['contact_mobile'] = "Необходимо добавить хотя бы один верифицированный контакт для связи";
 		} else {
-			foreach ($this->contacts as $contact_item) {
-				$contact = $contact_item["contact_obj"];
-				$contact_validation = $contact->check_contact($params->session_id, $contact_item["value"], $contact_item["type_id"], FALSE, TRUE);
-				if (!$contact_validation->check())
-				{	
-					$errors = array_merge($errors, $contact_validation->errors('validation/object_form'));
+			if (!$params->just_check) {
+				foreach ($this->contacts as $contact_item) {
+					$contact = $contact_item["contact_obj"];
+					$contact_validation = $contact->check_contact($params->session_id, $contact_item["value"], $contact_item["type_id"], FALSE, TRUE);
+					if (!$contact_validation->check())
+					{	
+						$errors = array_merge($errors, $contact_validation->errors('validation/object_form'));
+					}
 				}
 			}
 		}

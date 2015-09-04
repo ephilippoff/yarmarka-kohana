@@ -48,7 +48,6 @@ class Object
 			->init_validation_rules_for_attributes()
 			->exec_validation()
 			->check_signature();
-			//->check_signature_for_union();
 
 		if ( ! $add->errors)
 		{
@@ -204,7 +203,6 @@ class Object
 			//->init_validation_rules_for_attributes()
 			->exec_validation()
 			->check_signature();
-			//->check_signature_for_union();
 
 		if ( ! $add->errors)
 		{
@@ -267,39 +265,6 @@ class Object
 		return $json;
 	}
 
-	static function PlacementAds_Union($input_params, $objects_for_union, $edit = FALSE, $remove_from_union = FALSE)
-	{
-
-		$json = array();
-		
-		$add = new Lib_PlacementAds_AddUnion($objects_for_union);
-		$add->init_input_params($input_params)
-			->init_instances()
-			->init_object_and_mode()
-			->check_neccesaries();
-
-		if (!$remove_from_union) {
-			if (!$edit) {
-				$add->prepare_object();
-				$add->save_object();
-			}
-
-			$add->copy_photo()
-				->copy_attributes();
-
-			$add->update_union_objects()
-				->save_aditional_info();
-		} else {
-			$add->delete_union_data()
-				->save_aditional_info();
-		}
-
-		
-
-		return $add->object->id;
-
-	}
-
 	static function PlacementAds_JustRunTriggers($input_params)
 	{		
 		$json = array();
@@ -309,7 +274,6 @@ class Object
 			->init_instances()
 			->init_object_and_mode()
 			->check_signature();
-			//->check_signature_for_union();
 
 		if ((int) $add->object->is_union >0)
 			return $json;
@@ -363,7 +327,12 @@ class Object
 
 		$input_params["just_check"] = 1;
 
-		$add = new Lib_PlacementAds_AddEdit();
+		if ( Acl::check("object.add.type") )
+		{
+			$add = new Lib_PlacementAds_AddEditByModerator();
+		} else {
+			$add = new Lib_PlacementAds_AddEdit();
+		}
 		$add->init_input_params($input_params)
 			->init_instances()
 			->init_object_and_mode()

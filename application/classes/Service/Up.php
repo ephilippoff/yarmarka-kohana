@@ -90,7 +90,12 @@ class Service_Up extends Service
 
 		$balance = ($balance) ? $balance : self::get_balance($user);
 		if (!isset($balance)) {
-			$balance = (int) self::set_balance($user, Service_Up::$_free_count);
+			if ( Acl::check("object.add.type") )
+			{
+				$balance = (int) self::set_balance($user, 500);
+			} else {
+				$balance = (int) self::set_balance($user, Service_Up::$_free_count);
+			}
 		}
 
 		if ($balance >= 0 AND $balance - intval($quantity) >= 0) {

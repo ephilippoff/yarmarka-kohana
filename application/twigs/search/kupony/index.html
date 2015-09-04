@@ -37,8 +37,8 @@
 {% block filters %}{% endblock filters %}
 
 {% block content %} 
-	{% set theme_class = 'light-blue-theme' %}
 	{% include 'search/kupony/subfilters' %}
+	{% include 'search/kupony/control' %}
 	{% include 'search/kupony/result' %}
 	{% include 'search/paginator' %}
 {% endblock content%}
