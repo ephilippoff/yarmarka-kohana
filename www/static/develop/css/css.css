@@ -466,7 +466,7 @@ select{background-color: #FFFFFF;border: 1px solid #C3C3C3;padding:2px 10px;heig
 .crimson-theme .reklama-line a:hover{ color: #E96F4F; -webkit-transition: color 0.3s;-moz-transition: color 0.3s;-o-transition: color 0.3s;transition: color 0.3s;}
 .crimson-theme .view-container a.active, 
 .crimson-theme .reklama-line a.active{ color:#E96F4F;}
-.crimson-theme .reklama-cont {  background: url(http://www.free-patterns.info/wp-content/uploads/2015/08/subtle-red-scratched-wall-221614.png);}
+.crimson-theme.reklama-cont {  background: url(http://www.free-patterns.info/wp-content/uploads/2015/08/subtle-red-scratched-wall-221614.png);}
 /*crimson-theme end*/
 
 /*gray-theme*/
@@ -488,7 +488,7 @@ select{background-color: #FFFFFF;border: 1px solid #C3C3C3;padding:2px 10px;heig
 .main-theme .subcategories-cont ul li span {color: gray;}
 
 .main-theme .menu-cont2{background-color: #D30000;}
-.main-theme .reklama-cont {  background: url(http://www.free-patterns.info/wp-content/uploads/2015/08/subtle-red-scratched-wall-221614.png);}
+.main-theme.reklama-cont {  background: url(http://www.free-patterns.info/wp-content/uploads/2015/08/subtle-red-scratched-wall-221614.png);}
 .main-theme .banners a{color:white;}
 /* skin-theme6 end */
 
