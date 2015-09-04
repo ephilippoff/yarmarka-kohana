@@ -14,14 +14,14 @@ class Controller_User extends Controller_Template {
 			if (!in_array(Request::current()->action(), 
 					array('userpage','registration','account_verification','login','logout','forgot_password','forgot_password_link','message')))
 			{
-				$this->redirect(Url::site('user/login?return='.$this->request->uri()));
+				$this->redirect(URL::site('user/login?return='.$this->request->uri()));
 			}
 		} else {
 			$this->user->reload();
 			if ($this->user->is_blocked == 1 AND !in_array(Request::current()->action(), 
 					array('userpage','login','logout','forgot_password','forgot_password_link','message')))
 			{
-				$this->redirect(Url::site('user/message?message=userblock'));
+				$this->redirect(URL::site('user/message?message=userblock'));
 			}
 		}
 

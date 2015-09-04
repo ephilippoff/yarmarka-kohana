@@ -12,7 +12,7 @@ class Controller_Add extends Controller_Template {
 			$user->reload();
 			if ($user->is_blocked == 1)
 			{
-				$this->redirect(Url::site('user/message?message=userblock'));
+				$this->redirect(URL::site('user/message?message=userblock'));
 			}
 
 			if (!$user->is_valid_orginfo()
