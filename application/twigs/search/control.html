@@ -2,16 +2,16 @@
 	<div class="menu-cont2 clearfix brt2">
 			<div class="row">
 				<div class="col-md-6 clearfix">
-				<span class="menu-item left" onclick="window.location='/add/{{ category.id }}'">Добавить</span>
-				<span class="menu-item  left js-search-extend"><i class="fa fa-spinner fa-spin fa-lg mr3 js-search-extend-spinner"></i>Расширенный поиск</span>
+				<span class="menu-item left" onclick="window.location='/add/{{ category.id }}'"><span class="menu-item-cont">Добавить</span></span>
+				<span class="menu-item  left js-search-extend"><span class="menu-item-cont"><i class="fa fa-spinner fa-spin fa-lg mr3 js-search-extend-spinner"></i>Расширенный поиск</span></span>
 			</div>
 			<div class="col-md-6 clearfix">
 				{% if small_pagination.next %}
-					<a class="menu-item right" href="{{small_pagination.next_url}}">Далее</a>
+					<a class="menu-item right" href="{{small_pagination.next_url}}"><span class="menu-item-cont">Далее</span></a>
 				{% endif %}
-				<span class="caption right">{{ small_pagination.current }}/{{ small_pagination.total }}</span>
+				<span class="caption-item right">{{ small_pagination.current }}/{{ small_pagination.total }}</span>
 				{% if small_pagination.prev %}
-					<a class="menu-item right" href="{{small_pagination.prev_url}}">Назад</a>
+					<a class="menu-item right" href="{{small_pagination.prev_url}}"><span class="menu-item-cont">Назад</span></a>
 				{% endif %}
 			</div>
 		</div>

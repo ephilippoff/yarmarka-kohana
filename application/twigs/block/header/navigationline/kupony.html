@@ -3,22 +3,22 @@
 		<div class="row">
 			<div class="col-md-2 col-xs-6 clearfix">
 				<div class="menu-item ta-c w100p left iLight js-kuponmenu-dropdown"><!--main-page-style iLight-disable-->
-					Купоны и скидки<i class="fa fa-caret-down ml3"></i>
+					<span class="menu-item-cont">Купоны и скидки<i class="fa fa-caret-down ml3"></i></span>
 				</div>
 			</div>
 			<div class="col-md-3 col-xs-6 clearfix">
 				<div class="menu-item left crimson-theme js-mainmenu-dropdown">
-					Объявления<i class="fa fa-caret-down ml3"></i> +1
+					<span class="menu-item-cont">Объявления<i class="fa fa-caret-down ml3"></i> +1</span>
 				</div>
 				<div class="menu-item left green-dense-theme js-newsmenu-dropdown">
-					Новости<i class="fa fa-caret-down ml3"></i> +1
+					<span class="menu-item-cont">Новости<i class="fa fa-caret-down ml3"></i> +1</span>
 				</div>
 			</div>
 			<div class="col-md-7 col-xs-6 clearfix">
 				{% for key, _city in  {'nizhnevartovsk':'г. Нижневартовск','surgut':'г. Сургут','tyumen':'г. Тюмень'} if key != city.seo_name %}
 					{% set count = link_counters[domain(key, canonical_url, '')] %}
 					{% if count is empty or count > 0 %}
-						<a class="menu-item right" href="{{ domain(key, '') ~ s_suri }}">{{ _city }} <span class="count">{{count}}</span></a>
+						<a class="menu-item right" href="{{ domain(key, '') ~ s_suri }}"><span class="menu-item-cont">{{ _city }} <span class="count">{{count}}</span></span></a>
 					{% endif %}
 				{% endfor %}
 			</div>	
