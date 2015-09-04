@@ -1290,7 +1290,7 @@ class Lib_PlacementAds_AddEdit {
 	{
 		$object = &$this->object;
 		// сохраняем запись для короткого урла *.ya24.biz
-		$object->send_to_db_dns();
+		Model_Object::send_to_db_dns($object->id);
 
 		if ( ! $this->is_edit) 
 		{

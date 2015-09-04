@@ -583,14 +583,9 @@ class Model_Object extends ORM {
 		return $this->save();
 	}
 
-	public function send_to_db_dns()
+	public static function send_to_db_dns($id)
 	{
-		if ( ! $this->loaded())
-		{
-			return FALSE;
-		}
-
-		return Model::factory('Dbdns')->add_record($this->id);
+		return Model::factory('Dbdns')->add_record($id);
 	}
 
 	public function send_to_terrasoft()
