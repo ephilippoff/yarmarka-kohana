@@ -233,7 +233,7 @@ class Lib_PlacementAds_AddEdit {
 			if ($object->loaded())
 			{
 				$this->is_edit = TRUE;
-				if (!$params->just_check AND !Acl::check_object($object, "object.control"))
+				if (!$params->just_check AND !Acl::check_object($object, "object.edit"))
 				{
 					$this->raise_error('user can\'t edit this ad');
 				}
