@@ -13,7 +13,7 @@
 		<tr>			
 			<td><a href="<?=Url::site('kupon/'.$item->id)?>"><?=$item->id?></a></td>
 			<td><?=$item->code?></td>
-			<td><a href="<?=Url::site('detail/'.$item->object_id)?>"><?=$item->object_title?> (<?=$item->object_id?>)</a></td>
+			<td><a href="<?=URL::prep_url(Kohana::$config->load('common.main_domain')).Url::site('detail/'.$item->object_id)?>"><?=$item->object_title?> (<?=$item->object_id?>)</a></td>
 			<td><?=$item->price?></td>
 			<td><?=$item->invoice_id?></td>
 			<td><?=$item->count?></td>
