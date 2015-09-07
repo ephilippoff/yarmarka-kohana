@@ -68,6 +68,9 @@
 								<?php if (Auth::instance()->have_access_to('callbackrequest')) : ?>
 									<li><a href="<?=Url::site('khbackend/callbackrequest/index')?>">Заявки на звонки</a></li>
 								<?php endif; ?>
+								<?php if (Auth::instance()->have_access_to('kupon')) : ?>
+									<li><a href="<?=Url::site('khbackend/kupons/index')?>">Купоны</a></li>
+								<?php endif; ?>									
 							</ul>
 						</li>
 						<?php endif; ?>
