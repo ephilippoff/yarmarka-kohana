@@ -65,6 +65,9 @@
 							<ul class="dropdown-menu">
 								<li><a href="<?=URL::site('khbackend/objects/index')?>">Список</a></li>
 								<li><a href="<?=URL::site('khbackend/landing/index')?>">Landings</a></li>
+								<?php if (Auth::instance()->have_access_to('attribute')) : ?>
+									<li><a href="<?=URL::site('khbackend/attributes/index')?>">Атрибуты</a></li>
+								<?php endif?>								
 							</ul>
 						</li>
 						<?php endif; ?>
