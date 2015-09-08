@@ -119,7 +119,10 @@
 								<li><a href="<?=URL::site('khbackend/settings/cache')?>">Cache</a></li>
 								<?php if (Auth::instance()->have_access_to('coreredirect')) : ?>
 									<li><a href="<?=URL::site('khbackend/coreredirects/index')?>">Core redirects</a></li>
-								<?php endif?>								
+								<?php endif?>
+								<?php if (Auth::instance()->have_access_to('seopattern')) : ?>
+									<li><a href="<?=URL::site('khbackend/seopatterns/index')?>">Seo patterns</a></li>
+								<?php endif?>									
 							</ul>
 						</li>
 						<?php endif; ?>
