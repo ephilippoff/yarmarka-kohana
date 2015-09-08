@@ -114,6 +114,9 @@
 							<ul class="dropdown-menu">
 								<li><a href="<?=URL::site('khbackend/settings/index')?>">Index</a></li>
 								<li><a href="<?=URL::site('khbackend/settings/cache')?>">Cache</a></li>
+								<?php if (Auth::instance()->have_access_to('coreredirect')) : ?>
+									<li><a href="<?=URL::site('khbackend/coreredirects/index')?>">Core redirects</a></li>
+								<?php endif?>								
 							</ul>
 						</li>
 						<?php endif; ?>

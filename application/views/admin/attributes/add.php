@@ -136,7 +136,7 @@
 	</div>
 	
 	<div class="control-group">
-		<label class="control-label">seo_name:</label>
+		<label class="control-label"></label>
 		<div class="controls">
 			<p>
 				<a href="/khbackend/attributes/index" >Вернуться в список</a>
