@@ -135,7 +135,7 @@
 		</div>
 	</div>
 	
-	<div class="control-group <?=Arr::get($errors, 'seo_name') ? 'error' : ''?>">
+	<div class="control-group">
 		<label class="control-label"></label>
 		<div class="controls">
 			<a href="/khbackend/attributes/index" >Вернуться в список</a>

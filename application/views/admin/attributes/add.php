@@ -134,8 +134,13 @@
 			<!--<button type="reset"  class="btn">Reset</button>-->
 		</div>
 	</div>
+	
+	<div class="control-group">
+		<label class="control-label">seo_name:</label>
+		<div class="controls">
+			<p>
+				<a href="/khbackend/attributes/index" >Вернуться в список</a>
+			</p>
+		</div>
+	</div>	
 </form>
-
-<p>
-	<a href="/khbackend/attributes/index" >Вернуться в список</a>
-</p>

@@ -67,7 +67,10 @@
 								<li><a href="<?=URL::site('khbackend/landing/index')?>">Landings</a></li>
 								<?php if (Auth::instance()->have_access_to('attribute')) : ?>
 									<li><a href="<?=URL::site('khbackend/attributes/index')?>">Атрибуты</a></li>
-								<?php endif?>								
+								<?php endif?>	
+								<?php if (Auth::instance()->have_access_to('reference')) : ?>
+									<li><a href="<?=URL::site('khbackend/references/index')?>">Reference</a></li>
+								<?php endif?>									
 							</ul>
 						</li>
 						<?php endif; ?>
