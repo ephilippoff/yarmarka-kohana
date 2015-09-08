@@ -75,15 +75,6 @@ public function action_edit()
 			throw new HTTP_Exception_404;
 		}
 
-		$this->template->categories = ORM::factory('Category')
-				->where('is_ready', '=', 1)
-				->order_by('title')
-				->find_all();
-		
-		$this->template->attributes = ORM::factory('Attribute')
-				->order_by('title')
-				->find_all();			
-		
 		if (HTTP_Request::POST === $this->request->method()) 
 		{
 			try
@@ -100,6 +91,15 @@ public function action_edit()
 				$this->template->errors = $e->errors('validation');
 			}
 		}
+		
+		$this->template->categories = ORM::factory('Category')
+				->where('is_ready', '=', 1)
+				->order_by('title')
+				->find_all();
+		
+		$this->template->attributes = ORM::factory('Attribute')
+				->order_by('title')
+				->find_all();		
 
 		$this->template->item = $item;
 	}	
