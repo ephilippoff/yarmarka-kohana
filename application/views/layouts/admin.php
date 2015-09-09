@@ -32,6 +32,9 @@
 									<hr>
 									<li><a href="<?=URL::site('khbackend/users/add_settings')?>">Все настройки</a></li>
 									<li><a href="<?=URL::site('khbackend/users/moderation')?>">Модерация компаний</a></li>
+									<?php if (Auth::instance()->have_access_to('sms')) : ?>
+										<li><a href="<?=URL::site('khbackend/sms/index')?>">SMS</a></li>
+									<?php endif?>									
 								</ul>
 							</li>
 						<?php endif; ?>
