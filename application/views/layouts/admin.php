@@ -76,6 +76,9 @@
 								<?php endif?>
 								<?php if (Auth::instance()->have_access_to('object_reason')) : ?>
 									<li><a href="<?=URL::site('khbackend/object_reasons/index')?>">Причины блокировки</a></li>
+								<?php endif?>	
+								<?php if (Auth::instance()->have_access_to('subscription')) : ?>
+									<li><a href="<?=URL::site('khbackend/subscriptions/index')?>">Подписки</a></li>
 								<?php endif?>									
 							</ul>
 						</li>
