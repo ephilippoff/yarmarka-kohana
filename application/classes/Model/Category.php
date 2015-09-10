@@ -12,6 +12,50 @@
 class Model_Category extends ORM {
 
 	protected $_table_name = 'category';
+	
+	public function rules()
+	{
+		return array(
+			'title' => array(array('not_empty'),),
+			'parent_id' => array(array('digit'), array('not_empty'),),
+			'sinonim' => array(array('not_empty'),),
+			'seo_name' => array(array('not_empty'),),
+			'url' => array(array('not_empty'),),
+		);
+	}
+
+	public function filters()
+	{
+		return array(
+			'title' => array(array('trim'),),
+			'is_ready' => array(array('intval'),),
+			'weight' => array(array('intval'),),
+			'template' => array(array('trim'),),
+			'use_template' => array(array('intval'),),
+			'is_main' => array(array('intval'),),
+			'main_menu_icon' => array(array('trim'),),
+			'sinonim' => array(array('trim'),),
+			'seo_name' => array(array('trim'),),
+			'description' => array(array('trim'),),
+			'max_count_for_user' => array(array('intval'),),
+			'max_count_for_contact' => array(array('intval'),),
+			'is_main_for_seo' => array(array('intval'),),
+			'title_auto_fill' => array(array('intval'),),
+			'text_required' => array(array('intval'),),
+			'nophoto' => array(array('intval'),),
+			'novideo' => array(array('intval'),),
+			'main_menu_image' => array(array('trim'),),
+			'submenu_template' => array(array('trim'),),
+			'caption' => array(array('trim'),),
+			'text_name' => array(array('trim'),),
+			'rule' => array(array('trim'),),
+			'show_map' => array(array('intval'),),
+			'address_required' => array(array('intval'),),
+			'plan_name' => array(array('trim'),),
+			'through_weight' => array(array('intval'),),
+			'url' => array(array('trim'),),
+		);
+	}	
 
 	protected $_has_many = array(
 		'sub_categories' => array('model' => 'Category', 'foreign_key' => 'parent_id'),
