@@ -1,24 +1,36 @@
+<?php $status = array('1' => 'Непогашен', '2' => 'Погашен', '3' => 'Возврат') ?>
+
 <table class="table table-hover table-condensed promo">
 	<tr>
 		<th>Id</th>
 		<th>Код</th>
+		<th>Дата создания</th>
 		<th>Объявление</th>		
-		<th>Цена</th>		
+		<th>Цена</th>
+		<th>Цена(номинал)</th>
 		<th>№ счета</th>
 		<th>Количество</th>
 		<th>Номер</th>
 		<th>Текст</th>
+		<th>Статус</th>
+		<th></th>
 	</tr>
 	<?php foreach ($kupons as $item) : ?>		
 		<tr>			
 			<td><a href="<?=Url::site('kupon/'.$item->id)?>"><?=$item->id?></a></td>
 			<td><?=$item->code?></td>
+			<td><?=$item->date_created?></td>
 			<td><a href="<?=URL::prep_url(Kohana::$config->load('common.main_domain')).Url::site('detail/'.$item->object_id)?>"><?=$item->object_title?> (<?=$item->object_id?>)</a></td>
-			<td><?=$item->price?></td>
+			<td><?=$item->price?>р.</td>
+			<td><?=$item->oldprice?>р.</td>
 			<td><?=$item->invoice_id?></td>
 			<td><?=$item->count?></td>
 			<td><?=$item->number?></td>
 			<td><?=$item->text?></td>
+			<td><?=$status[$item->status]?></td>
+			<td>
+				<a href="<?=Url::site('khbackend/kupons/edit/'.$item->id)?>" class="icon-pencil"></a>
+			</td>			
 		</tr>
 	<?php endforeach; ?>
 </table>

@@ -16,7 +16,7 @@ class Controller_Admin_Kupons extends Controller_Admin_Template {
 		$clone_to_count = clone $kupons;
 		$count_all = $clone_to_count->count_all();		
 		
-		$this->template->kupons = $kupons->find_all();
+		$this->template->kupons = $kupons->order_by('id', 'desc')->find_all();
 		$this->template->limit	  = $limit;
 		$this->template->pagination	= Pagination::factory(array(
 				'current_page'   => array('source' => 'query_string', 'key' => 'page'),
@@ -29,4 +29,34 @@ class Controller_Admin_Kupons extends Controller_Admin_Template {
 				'action'     => 'index',
 			));		
 	}
+	
+	public function action_edit()
+	{	
+		$this->template->errors = array();
+		
+		$ad_element = ORM::factory('Kupon', $this->request->param('id'));
+		if ( ! $ad_element->loaded())
+		{
+			throw new HTTP_Exception_404;
+		}			
+
+		if (HTTP_Request::POST === $this->request->method()) 
+		{
+			try 
+			{				
+				$post = $_POST;									
+				
+				$ad_element->values($post)->save();				
+
+				$this->redirect('khbackend/kupons/index');
+			} 
+			catch (ORM_Validation_Exception $e) 
+			{
+				$this->template->errors = $e->errors('validation');
+			}
+		}
+
+		$this->template->ad_element = $ad_element;		
+	}
+	
 }
