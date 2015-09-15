@@ -9,15 +9,26 @@ class Controller_Admin_Kupons extends Controller_Admin_Template {
 		$limit  = Arr::get($_GET, 'limit', 50);
 		$page   = $this->request->query('page');
 		$offset = ($page AND $page != 1) ? ($page-1) * $limit : 0;		
+		$s = trim(Arr::get($_GET, 's', ''));
 		
 		$kupons = ORM::factory('Kupon')
 				->with_objects();
+		
+		//Поиск
+		if ($s) 
+		{	
+			$kupons->where_open()
+				->where(DB::expr('lower(kupon.text)'), 'like', '%'.mb_strtolower($s).'%')
+				->or_where(DB::expr('lower(kupon.number)'), 'like', '%'.mb_strtolower($s).'%')
+			->where_close();			
+		}		
 		
 		$clone_to_count = clone $kupons;
 		$count_all = $clone_to_count->count_all();		
 		
 		$this->template->kupons = $kupons->order_by('id', 'desc')->find_all();
 		$this->template->limit	  = $limit;
+		$this->template->s		  = $s;
 		$this->template->pagination	= Pagination::factory(array(
 				'current_page'   => array('source' => 'query_string', 'key' => 'page'),
 				'total_items'    => $count_all,

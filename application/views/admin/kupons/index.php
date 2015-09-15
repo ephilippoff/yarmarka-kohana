@@ -1,5 +1,15 @@
 <?php $status = array('1' => 'Непогашен', '2' => 'Погашен', '3' => 'Возврат') ?>
 
+<div class="control-group only2" >		
+	<form action="" class="navbar-form navbar-left" role="search">
+		<div class="form-group">			
+			<input value="<?=strip_tags($s)?>" type="text" class="form-control" placeholder="По номерам и тексту" name="s">
+			<input type="submit" class="btn btn-default" value="Искать">
+			<a href="/<?=Request::current()->uri()?>">Сбросить</a>
+		</div>
+	</form>	
+</div>
+
 <table class="table table-hover table-condensed promo">
 	<tr>
 		<th>Id</th>
