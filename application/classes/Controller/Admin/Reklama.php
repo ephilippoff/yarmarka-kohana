@@ -269,9 +269,11 @@ class Controller_Admin_Reklama extends Controller_Admin_Template {
 					$post['cities'] = '{'.join(',', $post['cities']).'}';	
 				}
 				
+				$post['category_id'] = ($post['menu_name'] == 'main') ? $post['category_id'] : $post['kupon_category_id'];
+				
 				ORM::factory('Category_Banners')->values($post)->save();
 				
-				//Сбрасываем кеш по ключам: state, city_id
+				//Сбрасываем кеш по ключам
 				if ($_POST['state'] == 1)
 					foreach ($_POST['cities'] as $city) 				
 						Cache::instance()->set("getBannersForCategories:{$city}", NULL, 0);							
@@ -284,11 +286,22 @@ class Controller_Admin_Reklama extends Controller_Admin_Template {
 			}
 		}
 				
+		$this->template->menu_names = array('main' => 'Рубрики объявлений', 'kupon' => 'Рубрики купонов');
 		$this->template->categories = ORM::factory('Category')->where('parent_id', '=', 1)->find_all()->as_array('id', 'title');
+		$this->template->kupon_categories = ORM::factory('Attribute_Element')
+                        ->select('id', 'title')
+						->where('attribute', '=', 
+								DB::select('id')
+								->from('attribute')
+								->where('seo_name', '=', 'category_1')
+								->order_by('title')
+								->limit(1))
+                        ->find_all()
+						->as_array('id', 'title');
 			
 	}
 	
-public function action_edit_menu_banner()
+	public function action_edit_menu_banner()
 	{	
 		$this->template->errors = array();
 		
@@ -318,6 +331,8 @@ public function action_edit_menu_banner()
 					$post['cities'] = '{'.join(',', $post['cities']).'}';	
 				}								
 				
+				$post['category_id'] = ($post['menu_name'] == 'main') ? $post['category_id'] : $post['kupon_category_id'];
+				
 				$ad_element->values($post)->save();
 				
 				//Сбрасываем кеш по ключам: state, city_id
@@ -336,6 +351,17 @@ public function action_edit_menu_banner()
 
 		$this->template->ad_element = $ad_element;		
 		$this->template->categories = ORM::factory('Category')->where('parent_id', '=', 1)->find_all()->as_array('id', 'title');
+		$this->template->menu_names = array('main' => 'Рубрики объявлений', 'kupon' => 'Рубрики купонов');
+		$this->template->kupon_categories = ORM::factory('Attribute_Element')
+                        ->select('id', 'title')
+						->where('attribute', '=', 
+								DB::select('id')
+								->from('attribute')
+								->where('seo_name', '=', 'category_1')
+								->order_by('title')
+								->limit(1))
+                        ->find_all()
+						->as_array('id', 'title');		
 	}
 	
 	public function action_delete_menu_banner()
@@ -446,8 +472,8 @@ public function action_edit_menu_banner()
 		$sorting_types = array('asc', 'desc');
 		$sorting_fields   = array('date_expired', 'id');
 		//Принимаем, сверяем параметры сортировки
-		$sort	 = in_array($this->request->query('sort'), $sorting_types) ? $this->request->query('sort') : '';
-		$sort_by = in_array($this->request->query('sort_by'), $sorting_fields) ? $this->request->query('sort_by') : '';		
+		$sort	 = in_array($this->request->query('sort'), $sorting_types) ? $this->request->query('sort') : 'desc';
+		$sort_by = in_array($this->request->query('sort_by'), $sorting_fields) ? $this->request->query('sort_by') : 'id';		
 		//Фильтр показа только активных, либо всех
 //		$only_active = isset($_GET['only_active']) ? 1 : 0;
 			

@@ -40,6 +40,7 @@
 		<th>X</th>
 		<th>Y</th>
 		<th>Ширина меню</th>
+		<th>Высота меню</th>
 		<th>Дата старта</th>
 		<th>
 			Дата окончания<br>
@@ -52,6 +53,7 @@
 		<th>Визиты</th>
 		<th>Ссылка</th>
 		<th>Статус</th>
+		<th>Меню</th>
 		<th></th>
 	</tr>
 	<?php foreach ($banners_list as $ads_element) : ?>		
@@ -66,7 +68,9 @@
 	
 		<tr>			
 			<td><?=$ads_element->id?></td>
-			<td><?=$ads_element->category->title?></td>
+			<td>
+				<?=($ads_element->menu_name == 'main') ? $ads_element->category->title : $ads_element->attr_element->title ?>
+			</td>
 			<td><?=trim($cities,', ')?></td>
 			<td class="td-banner">
 				<div style="position: relative;">
@@ -78,11 +82,13 @@
 			<td><?=$ads_element->x?></td>
 			<td><?=$ads_element->y?></td>
 			<td><?=$ads_element->menu_width?></td>
+			<td><?=$ads_element->menu_height?></td>
 			<td><?=$ads_element->date_start?></td>
 			<td><?=$ads_element->date_expired?></td>
 			<td><a target="_blank" href="<?=URL::site(Route::get('backend/reklama/menubannerstat')->uri(array('id' => $ads_element->id)))?>"><?=$ads_element->visits?></a></td>
 			<td><a href="http://<?=$ads_element->href?>"><?=$ads_element->href?></a></td>
-			<td><?=$states[$ads_element->state]?></td>			
+			<td><?=$states[$ads_element->state]?></td>
+			<td><?=$ads_element->menu_name?></td>
 			<td>				
 				<a href="<?=URL::site('khbackend/reklama/edit_menu_banner/'.$ads_element->id)?>" class="icon-pencil"></a>
 				<a href="<?=URL::site('khbackend/reklama/delete_menu_banner/'.$ads_element->id)?>" class="icon-trash delete_article"></a>

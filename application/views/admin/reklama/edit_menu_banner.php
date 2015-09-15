@@ -23,11 +23,27 @@ $(document).ready(function() {
 
 <form class="form-horizontal" method="post" enctype="multipart/form-data">
 	
+	<div class="control-group <?=Arr::get($errors, 'menu_name') ? 'error' : ''?>">
+		<label class="control-label">Меню:</label>
+		<div class="controls">
+			<?=Form::select('menu_name', $menu_names, Arr::get($_POST, 'menu_name', @$ad_element->menu_name)) ?>
+			<span class="help-inline"><?=Arr::get($errors, 'menu_name')?></span>
+		</div>	
+	</div>	
+	
 	<div class="control-group <?=Arr::get($errors, 'category_id') ? 'error' : ''?>">
 		<label class="control-label">Рубрика:</label>
 		<div class="controls">
 			<?=Form::select('category_id', $categories, Arr::get($_POST, 'category_id', @$ad_element->category_id), array( 'size' => 15)) ?>
 			<span class="help-inline"><?=Arr::get($errors, 'category_id')?></span>
+		</div>	
+	</div>	
+	
+	<div class="control-group <?=Arr::get($errors, 'kupon_category_id') ? 'error' : ''?>">
+		<label class="control-label">Рубрика купонов:</label>
+		<div class="controls">
+			<?=Form::select('kupon_category_id', $kupon_categories, Arr::get($_POST, 'kupon_category_id', @$ads_element->kupon_category_id)) ?>
+			<span class="help-inline"><?=Arr::get($errors, 'kupon_category_id')?></span>
 		</div>	
 	</div>	
 		
@@ -87,6 +103,13 @@ $(document).ready(function() {
 			<input type="text" class="input-small" placeholder="Введите значение в px" name="menu_width" value="<?=Arr::get($_POST, 'menu_width', @$ad_element->menu_width)?>">
 		</div>	
 	</div>
+	
+	<div class="control-group <?=Arr::get($errors, 'menu_height') ? 'error' : ''?>">
+		<label class="control-label">Высота меню:</label>
+		<div class="controls">
+			<input type="text" class="input" placeholder="Введите значение в px" name="menu_height" value="<?=Arr::get($_POST, 'menu_height', @$ad_element->menu_height)?>">
+		</div>	
+	</div>	
 	
 	<div class="control-group <?=Arr::get($errors, 'map_params') ? 'error' : ''?>">
 		<label class="control-label">Координаты:</label>

@@ -36,6 +36,7 @@ class Model_Category_Banners extends ORM {
 		
 	protected $_belongs_to = array(
 		'category'	=> array('model' => 'Category', 'foreign_key' => 'category_id'),
+		'attr_element'	=> array('model' => 'Attribute_Element', 'foreign_key' => 'category_id'),
 	);	
 
 	function increase_visits($id)
