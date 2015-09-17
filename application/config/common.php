@@ -22,5 +22,6 @@ return array(
 	'date_new_registration'					=> '2014-11-21',
 	'add_phone_required' 					=> TRUE,
 	'add_phone_required_exlusion' 			=> array(36,35),
-	'short_domain'							=> 'ya24.biz'
+	'short_domain'							=> 'ya24.biz',
+	'sync_prefix'							=> '_prod'
 );
