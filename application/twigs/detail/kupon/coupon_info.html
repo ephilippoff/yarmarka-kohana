@@ -1,21 +1,21 @@
 <div class="coupon-info-cont">
 	<div class="price-cont bg-color-deepskyblue">
-		<span class="price">от 1 250</span> <span class="rub">Р</span>
+		<span class="price">от {{ object.compiled.attributes.tsena.value }} <span class="rub">&#8399;</span></span>
 	</div>
 	<div class="discount-cont">
 		<table>
 			<tbody><tr>
 					<td>
 						<div class="top">Старая цена</div>
-						<span>{{ object.compiled.attributes['old-price'].value }}</span> <span class="rub">Р</span>
+						<span>{{ object.compiled.attributes['old-price'].value }} <span class="rub">&#8399;</span></span> 
 					</td>
 					<td>
 						<div class="top">Скидка</div>
-						<span>{{ object.compiled.attributes.skidka.value }}</span>%
+						<span>{{ object.compiled.attributes.skidka.value }}</span> %
 					</td>
 					<td class="last">
 						<div class="top">Экономия</div>
-						<span>{{ object.compiled.attributes.economy.value }}</span> <span class="rub">Р</span>
+						<span>{{ object.compiled.attributes.economy.value }} <span class="rub">&#8399;</span></span>
 					</td>
 				</tr>
 			</tbody></table>
