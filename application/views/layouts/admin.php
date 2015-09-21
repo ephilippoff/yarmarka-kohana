@@ -32,6 +32,9 @@
 									<hr>
 									<li><a href="<?=URL::site('khbackend/users/add_settings')?>">Все настройки</a></li>
 									<li><a href="<?=URL::site('khbackend/users/moderation')?>">Модерация компаний</a></li>
+									<?php if (Auth::instance()->have_access_to('sms')) : ?>
+										<li><a href="<?=URL::site('khbackend/sms/index')?>">SMS</a></li>
+									<?php endif?>									
 								</ul>
 							</li>
 						<?php endif; ?>
@@ -65,6 +68,18 @@
 							<ul class="dropdown-menu">
 								<li><a href="<?=URL::site('khbackend/objects/index')?>">Список</a></li>
 								<li><a href="<?=URL::site('khbackend/landing/index')?>">Landings</a></li>
+								<?php if (Auth::instance()->have_access_to('attribute')) : ?>
+									<li><a href="<?=URL::site('khbackend/attributes/index')?>">Атрибуты</a></li>
+								<?php endif?>	
+								<?php if (Auth::instance()->have_access_to('reference')) : ?>
+									<li><a href="<?=URL::site('khbackend/references/index')?>">Reference</a></li>
+								<?php endif?>
+								<?php if (Auth::instance()->have_access_to('object_reason')) : ?>
+									<li><a href="<?=URL::site('khbackend/object_reasons/index')?>">Причины блокировки</a></li>
+								<?php endif?>	
+								<?php if (Auth::instance()->have_access_to('subscription')) : ?>
+									<li><a href="<?=URL::site('khbackend/subscriptions/index')?>">Подписки</a></li>
+								<?php endif?>									
 							</ul>
 						</li>
 						<?php endif; ?>
@@ -98,6 +113,9 @@
 								<li><a href="<?=URL::site('khbackend/reklama/tickets')?>">Бегающие ссылки</a></li>								
 								<li><a href="<?=URL::site('khbackend/reklama/menu_banners')?>">Баннеры в меню</a></li>
 								<li><a href="<?=URL::site('khbackend/reklama/photocards')?>">Фото-объявления("Лидер")</a></li>
+								<?php if (Auth::instance()->have_access_to('invoice')) : ?>
+									<li><a href="<?=URL::site('khbackend/invoices/index')?>">Invoices</a></li>
+								<?php endif?>								
 							</ul>
 						</li>
 						<?php endif; ?>
@@ -108,6 +126,12 @@
 							<ul class="dropdown-menu">
 								<li><a href="<?=URL::site('khbackend/settings/index')?>">Index</a></li>
 								<li><a href="<?=URL::site('khbackend/settings/cache')?>">Cache</a></li>
+								<?php if (Auth::instance()->have_access_to('coreredirect')) : ?>
+									<li><a href="<?=URL::site('khbackend/coreredirects/index')?>">Core redirects</a></li>
+								<?php endif?>
+								<?php if (Auth::instance()->have_access_to('seopattern')) : ?>
+									<li><a href="<?=URL::site('khbackend/seopatterns/index')?>">Seo patterns</a></li>
+								<?php endif?>									
 							</ul>
 						</li>
 						<?php endif; ?>

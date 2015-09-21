@@ -14,6 +14,8 @@ class Controller_Admin_Category extends Controller_Admin_Template {
 
 	public function action_sub_categories()
 	{
+		$this->use_layout = false;
+		
 		$this->template->level 		= intval($this->request->query('level'))+1;
 		$this->template->parent_id 	= $this->request->param('id');
 		$this->template->categories = ORM::factory('Category')
@@ -21,6 +23,38 @@ class Controller_Admin_Category extends Controller_Admin_Template {
 			->order_by('title')
 			->find_all();
 	}
+	
+	public function action_add()
+	{
+		$this->template->errors = array();
+		
+		if (HTTP_Request::POST === $this->request->method())
+		{
+			try 
+			{				
+				$post = $_POST;																	
+				
+				$category = ORM::factory('Category')->values($post)->save();
+				
+				$category->add('business_types', $this->request->post('business_types'));
+				
+				$this->redirect('khbackend/category/index');
+			} 
+			catch (ORM_Validation_Exception $e) 
+			{
+				$this->template->errors = $e->errors('validation');
+			}
+		}
+
+		$this->template->categories = ORM::factory('Category')
+				->where('is_ready', '=', 1)
+				->order_by('title')
+				->find_all();
+		
+		$this->template->business_types = ORM::factory('Business_Type')
+			->find_all()
+			->as_array('id', 'title');
+	}	
 
 	public function action_edit()
 	{
@@ -29,26 +63,53 @@ class Controller_Admin_Category extends Controller_Admin_Template {
 			throw new HTTP_Exception_404;
 		}
 
+		$this->template->errors = array();
+		
 		if (HTTP_Request::POST === $this->request->method())
 		{
-			// @todo catch validation errors if would be more than title field to save
-			$category->title = $this->request->post('title');
-			$category->save();
+			try 
+			{
+				$post = $_POST;																	
+				
+				$category->values($post)
+					->save()
+					->remove('business_types')
+					->add('business_types', $this->request->post('business_types'));
 
-			$category->remove('business_types');
-			$category->add('business_types', $this->request->post('business_types'));
-
-			$this->redirect('khbackend/category');
+				$this->redirect('khbackend/category/index');
+			}
+			catch (ORM_Validation_Exception $e) 
+			{
+				$this->template->errors = $e->errors('validation');
+			}		
 		}
+		
+		$this->template->categories = ORM::factory('Category')
+				->where('is_ready', '=', 1)
+				->where('id', '<>', $category->id)
+				->order_by('title')
+				->find_all();		
 
 		$selected = $category->business_types->find_all()->as_array(NULL, 'id');
 
 		$this->template->category 		= $category;
 		$this->template->business_types = ORM::factory('Business_Type')
 			->find_all()
-			->as_array('id', 'title');
+			->as_array('id', 'title');		
 		$this->template->selected 		= $selected;
 	}
+	
+	public function action_delete()
+	{
+		$this->auto_render = FALSE;
+
+		$item = ORM::factory('Category', $this->request->param('id'))
+				->remove('business_types')
+				->delete();
+					
+		$this->redirect('khbackend/category/index');
+
+	}	
 
 	public function action_relations()
 	{

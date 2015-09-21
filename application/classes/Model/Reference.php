@@ -3,7 +3,37 @@
 class Model_Reference extends ORM {
 
 	protected $_table_name = 'reference';
+	
+	public function rules()
+	{
+		return array(
+			'category' => array(array('digit'), array('not_empty'),),
+			'attribute' => array(array('digit'), array('not_empty'),),
+			'weight' => array(array('digit'),),
+			'is_required' => array(array('digit'),),
+			'is_title' => array(array('digit'),),
+			'is_main' => array(array('digit'),),
+			'attribute_cols_count' => array(array('digit'),),
+			'is_seo_used' => array(array('digit'),),
+			'is_selectable' => array(array('digit'),),		
+		);
+	}
 
+	public function filters()
+	{
+		return array(
+			'category' => array(array('intval'),),
+			'attribute' => array(array('intval'),),
+			'weight' => array(array('intval'),),
+			'is_required' => array(array('intval'),),
+			'is_title' => array(array('intval'),),
+			'is_main' => array(array('intval'),),
+			'attribute_cols_count' => array(array('intval'),),
+			'is_seo_used' => array(array('intval'),),
+			'is_selectable' => array(array('intval'),),
+		);
+	}		
+	
 	protected $_has_many = array(
 		'form_elements' => array('model' => 'Form_Element', 'foreign_key' => 'reference'),
 	);
@@ -30,6 +60,21 @@ class Model_Reference extends ORM {
 						->on("reference.attribute","=","attribute.id")
 					->where("reference.id","=", $id);
 	}
+	
+	public function with_attributes()
+	{
+		return $this->select(array( "attribute.title",  "attribute_title"))
+					->join("attribute", "left")
+						->on("reference.attribute", "=", "attribute.id");
+	}	
+	
+	public function with_categories()
+	{
+		return $this->select(array( "category.title",  "category_title"))
+					->join("category", "left")
+						->on("reference.category", "=", "category.id");
+	}	
+	
 }
 
 /* End of file Reference.php */
