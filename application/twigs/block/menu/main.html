@@ -1,8 +1,9 @@
 <div class="popup-menu-cont popup-menu-cont2l iLight-cont js-mainmenu z300">
-	<div class="left mh-style1 brb2">
+	<div class="left brb2">
 		<ul class="top" role="menu">
 			{% for category in categories1l %}
-				<li class="js-submenu-item" data-submenu-id="section{{category.id}}" class="section{{category.id}}">
+				{% set menuHeight = (banners[category.id] is defined and banners[category.id].menu_height) ? banners[category.id].menu_height : '' %}
+				<li class="js-submenu-item" data-submenu-id="section{{category.id}}" class="section{{category.id}}" data-menu-height="{{menuHeight}}">
 					<span class="span-link" onclick="window.location = '/{{category.seo_name}}'">
 						<span class="name">{{category.title}}</span>
 					</span>
@@ -10,11 +11,12 @@
 			{% endfor %}
 		</ul>
 	</div> 
-	<div class="right mh-style1 brb2">
+	<div class="right brb2">
 		{% for category in categories1l %}
+			{% set menuHeight = (banners[category.id] is defined and banners[category.id].menu_height) ? banners[category.id].menu_height : 0 %}
 			{% set divWidth = (banners[category.id] is defined and banners[category.id].menu_width) ? banners[category.id].menu_width : 341 %}
 			{% set ulWidth = 191 %}
-			<div class="section section{{category.id}}" id="section{{category.id}}" style="width: {{divWidth}}px; display: none;">
+			<div class="section section{{category.id}}" id="section{{category.id}}" style="width: {{divWidth}}px; display: none;"  data-menu-height="{{menuHeight}}">
 				{% if banners[category.id] is defined and file_exist('/uploads/banners/menu/' ~ banners[category.id].image) and banners[category.id].menu_name == 'main' %}
 					<img hidefocus="true" style="position: absolute;right:{{banners[category.id].x}}px ; bottom:{{banners[category.id].y}}px;" usemap="#map{{category.id}}" src="/uploads/banners/menu/{{banners[category.id].image}}"/>
 
