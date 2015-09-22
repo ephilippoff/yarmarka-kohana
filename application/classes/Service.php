@@ -220,19 +220,19 @@ class Service
         
     }
 
-    public function saveServiceInfoToCompiled($orderItem)
+    public static function saveServiceInfoToCompiled($object_id)
     {
         $oc = ORM::factory('Object_Compiled')
-                ->where("object_id","=",$orderItem->object->id)
+                ->where("object_id","=",$object_id)
                 ->find();
         $compiled = array();
         if ($oc->loaded()) {
             $compiled = unserialize($oc->compiled);
         }
 
-        $compiled = array_merge($compiled, Object_Compile::getServices($orderItem->object->id) );
+        $compiled = array_merge($compiled, Object_Compile::getServices($object_id) );
 
-        $oc->object_id = $orderItem->object->id;
+        $oc->object_id = $object_id;
         $oc->compiled = serialize($compiled);
         $oc->save();
         

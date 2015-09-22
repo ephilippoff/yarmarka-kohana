@@ -1,3 +1,4 @@
+{% set services = get_service_icon_info(object.compiled.services, true) %}
 <tr class="tr" data-id="{{object.id}}">
 	<td class="td td-1">
 		<div class="img-cont">
@@ -10,10 +11,12 @@
 					<img class="img-frame" src="{{ staticfile('images/nophoto_estate136x107.png') }}">
 				{% endif %}
 			</div>
-
-			{% if object.is_premium %}
-				<span class="premium-tape"></span>
-			{% endif %}
+			
+			{% for service in services if service.name == 'premium'%}
+				{% if loop.first %}
+					<span class="premium-tape"></span>
+				{% endif %}
+			{% endfor %}
 		</div>
 	</td>
 	<td class="td td-2">
@@ -27,7 +30,9 @@
 				{{ object.title|e }}
 			</a>
 		</p>
-		<p class="style1"><span>{{ object.date_created|date("d.m") }}</span> / <span>{{ object.compiled.city }}</span> </p>
+		<p class="style1">
+			<span>Код: {{object.id}}</span> / <span>Обновлено: {{ object.date_created|date("d.m") }}</span> / <span>Просмотров: {{ object.visits }}</span>
+		</p>
 		{% if object.price > 0 %}
 			<p class="amount">{{ object.price|number_format(0, ' ', ' ') }} руб.</p>
 		{% endif %}
@@ -35,7 +40,11 @@
 	
 
 		<div class="js-object-services-{{object.id}} {% if object.is_published == 0 %} hidden {% endif %}">
-			<p class="pt10 pb10">Для увеличения отклика, предлагаем следующие услуги:</p>
+			{% set statInfo = get_stat_cached_info(object.id) %}
+			{% if statInfo %}
+				<p class="pt10 pb10">{{ statInfo }}</p>
+			{% endif %}
+			<p class="pb10">Для увеличения отклика, предлагаем следующие услуги:</p>
 			<span class="button button-style1 bg-color-blue mr3 mb3 js-service-up" data-id="{{object.id}}"><i class="fa fa-angle-double-up fa-lg mr5"></i><span>Поднять</span></span>
 			<span class="button button-style1 bg-color-blue mr3 mb3 js-service-premium" data-id="{{object.id}}"><i class="ico vkontakte-ico16 mr5"></i>Премиум</span>
 			<span class="button button-style1 bg-color-blue mr3 mb3 js-service-lider" data-id="{{object.id}}"><i class="ico vkontakte-ico16 mr5"></i>Лидер</span>
@@ -59,24 +68,9 @@
 		<span class="button w100p button-style1 bg-color-lightgreen mb3 ta-l js-ocontrol-edit" data-id="{{object.id}}"><i class="fa fa-edit pull-left fa-lg"></i>Редактировать</span>
 	</td>
 	<td class="td td-icons">
-		{% set services = get_service_icon_info(object.compiled.services, true) %}
 		{% for services in services %}
 			<i class="fa {{ services.icon_class }} fa-lg gray" title="{{services.title}}"></i>
 		{% endfor %}
 	</td>
-	<td class="td-additional">
-		<div class="relative">
-			<div class="additional-cont p20">
-				Код: {{object.id}} <br>
-				Обновлено: {{ object.date_created|date('d.m.Y') }} <br>
-				Просмотров: {{ object.visits }}
-
-				{% set statInfo = get_stat_cached_info(object.id) %}
-				{% if statInfo %}
-					<p class="pt10 pb10">{{ statInfo }}</p>
-				{% endif %}
-			</div>
-		</div>			
-	</td>	
 	
 </tr>

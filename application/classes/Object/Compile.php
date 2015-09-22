@@ -151,15 +151,15 @@ class Object_Compile
 			);
 		}
 
-		$photocards = ORM::factory('Object_Service_Up')
+		$ups = ORM::factory('Object_Service_Up')
 						->where("object_id","=",$object_id)
-						->where("object_service_up.date_created", ">", DB::expr("NOW() - interval '7 days'"))
+						//->where("count","<>",DB::expr("activated"))
 						->find_all();
-		foreach ($photocards as $photocard) {
+		foreach ($ups as $up) {
 			$result["services"]["up"][] = array(
-				"date_created" => $photocard->date_created,
-				"count" => $photocard->count,
-				"activated" => $photocard->activated
+				"date_created" => $up->date_created,
+				"count" => $up->count,
+				"activated" => $up->activated
 			);
 		}
 

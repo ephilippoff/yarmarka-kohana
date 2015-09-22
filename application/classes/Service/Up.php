@@ -53,7 +53,7 @@ class Service_Up extends Service
 		$quantity = $orderItem->service->quantity;
 
 		self::apply_service($orderItem->object->id, $quantity);
-		self::saveServiceInfoToCompiled($orderItem);
+		self::saveServiceInfoToCompiled($orderItem->object->id);
 	}
 
 	static function apply_service($object_id, $quantity)
@@ -70,9 +70,10 @@ class Service_Up extends Service
 					->find();
 		if ($or->loaded())
 		{
-			$quantity += $or->count - 1;
+			$or->activated = $or->activated + $quantity;
+		} else {
+			$or->count = $quantity;
 		}
-		$or->count = $quantity;
 		$or->object_id = $object_id;
 		$or->save();
 

@@ -116,5 +116,26 @@
 {% endblock content %}
 
 {% block rightside %} 
-	Правая сторона
+	<div class="info-block-cont theme3 module">
+		<div class="block-title">
+			<span>Состояние заказа</span>
+		</div>
+		<div class="p10">
+			{% if state == "initial" %}
+				<p>Заказ на оформлении. <br><a href="/cart"><i class="fa fa-angle-double-left fa-lg mr5"></i>Вернуться к корзине</a></p>
+			{% elseif state == "notPaid" %}
+				<p>Заказ в ожидании оплаты</p>
+			{% elseif state == "paid" %}
+				<p>Заказ оплачен. В будущем вы можете вернуться к этой странице через <a href="/user/orders">историю заказов</a></p>
+			{% elseif state == "activate" %}
+				<p>Услуги активированы. В будущем вы можете вернуться к этой странице через <a href="/user/orders">историю заказов</a></p>
+			{% elseif state == "adminActivate" %}
+				<p>Услуги активированы. В будущем вы можете вернуться к этой странице через <a href="/user/orders">историю заказов</a></p>
+			{% elseif state == "paid" %}
+				<p>Заказ оплачен. В будущем вы можете вернуться к этой странице через <a href="/user/orders">историю заказов</a></p>
+			{% elseif state == "cancelPayment" %}
+				<p>Заказ отменен. Истекло время оплаты, либо отмена инициирована пользователем</p>
+			{% endif %}
+		</div>
+	</div>
 {% endblock rightside %}

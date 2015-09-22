@@ -1,0 +1,29 @@
+/**
+ * [task Clear]
+ * [set_category_urls, set_attribute_element_urls, generate sitemap, clear_search_url_cache]
+ * @period [day - 3]
+ */
+
+sudo -u www-data /usr/bin/php index.php --task=Clear
+
+/**
+ * [task Orders]
+ * [update orders state]
+ * @period = [30 min]
+ */
+sudo -u www-data /usr/bin/php index.php --task=Orders
+
+/**
+ * [task Runstat]
+ * [update statistic of visits in object, check position of adverts]
+ * @period = [120 min]
+ */
+sudo -u www-data /usr/bin/php index.php --task=Runstat
+
+
+/**
+ * [task Object_Compiled]
+ * [generate compile info for object in object_compiled table]
+ * @period = not periodical
+ */
+sudo -u www-data /usr/bin/php index.php --task=Object_Compiled
