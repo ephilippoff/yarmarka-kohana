@@ -79,3 +79,5 @@ CREATE INDEX fki_kupon_group_fk
   (kupon_group_id);
 
 ALTER TABLE kupon ADD COLUMN access_key character varying(255);
+
+ALTER TABLE object_movement ADD COLUMN description character varying(500);

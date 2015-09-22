@@ -106,10 +106,10 @@ class Service_Kupon extends Service
 		$kupon->to_sold($oi->loaded() ? $oi->order_id : NULL);
 	}
 
-	public function return_reserve($id)
+	public function return_reserve($id, $description = NULL)
 	{
 		$kupon = ORM::factory('Kupon', $id);
-		$kupon->return_to_avail();
+		$kupon->return_to_avail($description);
 	}
 
 	public function reserve($id, $access_key = NULL)

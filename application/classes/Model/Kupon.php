@@ -60,7 +60,7 @@ class Model_Kupon extends ORM
 	}
 
 
-	function change_state($begin_state, $end_state, $order_id = NULL, $access_key = NULL)
+	function change_state($begin_state, $end_state, $order_id = NULL, $access_key = NULL, $description = NULL)
 	{
 		// if ($begin_state == self::SOLD) {
 		// 	return FALSE;
@@ -74,6 +74,7 @@ class Model_Kupon extends ORM
 		$om->kupon_id = $kupon_id;
 		$om->order_id = $order_id;
 		$om->count = 1;
+		$om->description = $description;
 		$om->save();
 
 		$this->access_key = $access_key;
@@ -112,6 +113,13 @@ class Model_Kupon extends ORM
 		return FALSE;
 	}
 
+	function get_last_operation()
+	{
+		if (!$this->loaded()) return FALSE;
+
+		return ORM::factory('Object_Movement')->where("kupon_id","=",$this->id)->order_by("date","desc")->find();
+	}
+
 	function get_avail($group_id)
 	{
 		return $this->where("kupon_group_id","=",$group_id)->where("state","IN", array(self::AVAIL));
@@ -127,9 +135,9 @@ class Model_Kupon extends ORM
 		return $this->change_state($this->state, self::RESERVE, $order_id, $access_key);
 	}
 
-	function return_to_avail()
+	function return_to_avail($description = NULL)
 	{
-		return $this->change_state($this->state, self::AVAIL);
+		return $this->change_state($this->state, self::AVAIL, NULL, NULL, $description);
 	}
 
 	function to_sold($order_id)

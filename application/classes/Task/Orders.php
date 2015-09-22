@@ -15,8 +15,27 @@ class Task_Orders extends Minion_Task
 			Minion::write($action, $order_id);
 		});
 
+		Minion::write("start","return reserved kupons");
+		$this->return_reserved_kupons();
+
 		Minion::write("start","activate services");
 		$this->activate_services();
+	}
+
+	function return_reserved_kupons()
+	{
+		$kupons = ORM::factory('Kupon')->where("state","=","reserve")->find_all();
+		foreach ($kupons as $kupon)
+		{
+			$operation = $kupon->get_last_operation();
+			if ($operation AND $operation->loaded())
+			{
+				if (strtotime(date('Y-m-d H:i:s')) > strtotime($operation->date) + 60*30) {
+					Minion::write($kupon->id,"Kupon reserve timeout exceeded");
+					$kupon->return_to_avail("Kupon reserve timeout exceeded");
+				}
+			}
+		}
 	}
 
 	function activate_services()
