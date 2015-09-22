@@ -98,7 +98,7 @@ class Controller_Rest_Service extends Controller_Rest {
 		}
 	}
 
-	public function action_check_buy_object()
+	public function action_check_kupon()
 	{
 		$object_id = intval($this->post->id);
 		$ad = ORM::factory('Object', $object_id);
@@ -107,16 +107,30 @@ class Controller_Rest_Service extends Controller_Rest {
 			throw new HTTP_Exception_404;
 		}
 
-		$service = Service::factory("Object", $object_id);
+		$groups = ORM::factory('Kupon_Group')->get_by_object($ad->id);
+		$available_count = 0;
+		$this->json['groups'] = array();		foreach ($groups as $group) {
+			
+			$service = Service::factory("Kupon", $group->id);
+			$available = $service->check_available(1);
 
-		$this->json['available'] = $service->check_available(1);
-		$this->json['service'] = $service->get();
+			if ($available !== TRUE) continue;
+			
+			$this->json['groups'][] = array(
+				"id" => $group->id,
+				"available" => TRUE,
+				"service" => $service->get()
+			);
+
+			$available_count = $available_count + 1;
+		}
+
 		$this->json['object'] = $ad->get_row_as_obj(array("id","title"));
 
-		if ($this->json['available'] !== TRUE)
+		if ($available_count == 0)
 		{
 			$this->json['code'] = 400;
-			$this->json['text'] = $this->json['available'];
+			$this->json['text'] = "Недоступен для заказа (отсутсвует)";
 		}
 	}
 
@@ -139,7 +153,7 @@ class Controller_Rest_Service extends Controller_Rest {
 		try {
 			$db->begin();
 
-			$orderItemTemp = Service::factory(Text::ucfirst($service_info->service["name"]), $service_info->object["id"])
+			$orderItemTemp = Service::factory(Text::ucfirst($service_info->service["name"]), $service_info->id)
 							->save($service_info, $result, $tempOrderItemId);
 			
 			$db->commit();

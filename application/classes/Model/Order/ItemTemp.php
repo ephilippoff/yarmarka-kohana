@@ -48,16 +48,18 @@ class Model_Order_ItemTemp extends ORM
 	function return_reserve()
 	{
 		$user = Auth::instance()->get_user();
-		if (!$this->loaded() OR !$user) return;
+		if (!$this->loaded()) return;
 		
 
 		$params = new Obj(json_decode($this->params));
-		if ($params->type == "object")
+		if ($params->service->name == "kupon")
 		{
-			//ORM::factory('Object')->increase_balance($this->object_id, $params->quantity);
-		} elseif ( in_array( $params->type, array("up", "premium") ) 
-					AND in_array(@$params->service->discount_name, array("free_up", "prepayed_premium") )) {
-			 $service = Service::factory(Text::ucfirst($params->type));
+			$service = Service::factory(Text::ucfirst($params->service->name), $params->service->group_id);
+			$service->return_reserve($params->service->id);
+
+		} elseif ( in_array( $params->service->name, array("up", "premium")) 
+					AND in_array(@$params->service->discount_name, array("free_up", "prepayed_premium") ) AND $user) {
+			 $service = Service::factory(Text::ucfirst($params->service->name));
 			 $service->increase_balance($user, $params->service->quantity);
 		}
 	}
@@ -65,14 +67,17 @@ class Model_Order_ItemTemp extends ORM
 	function reserve()
 	{
 		$user = Auth::instance()->get_user();
-		if (!$this->loaded() OR !$user) return;
+		if (!$this->loaded()) return;
 
 		$params = new Obj(json_decode($this->params));
-		if ($params->type == "object") {
-			//ORM::factory('Object')->decrease_balance($this->object_id, $params->quantity);
-		} elseif ( in_array( $params->type, array("up", "premium") ) 
-					AND in_array(@$params->service->discount_name, array("free_up", "prepayed_premium") )) {
-			 $service = Service::factory(Text::ucfirst($params->type));
+		if ($params->service->name == "kupon") {
+			$access_key = Cart::get_key();
+			$service = Service::factory(Text::ucfirst($params->service->name), $params->service->group_id);
+			$service->reserve($params->service->id, $access_key);
+
+		} elseif ( in_array( $params->service->name, array("up", "premium")) 
+					AND in_array(@$params->service->discount_name, array("free_up", "prepayed_premium") ) AND $user) {
+			 $service = Service::factory(Text::ucfirst($params->service->name));
 			 $service->decrease_balance($user, $params->service->quantity);
 		}
 	}

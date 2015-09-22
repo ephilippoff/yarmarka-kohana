@@ -67,7 +67,7 @@ class Service_Premium extends Service
 		self::saveServiceInfoToCompiled($orderItem);
 	}
 
-	public static function check_available($quantity, $balance = FALSE)
+	public function check_available($quantity, $balance = FALSE)
 	{
 		$result = FALSE;
 		$quantity = ($quantity) ? $quantity : 1;

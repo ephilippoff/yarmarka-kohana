@@ -117,8 +117,31 @@ define([
         }
     });
 
-    var ServiceBuyObjectView = Marionette.ItemView.extend({
-        template: templates.components.services.buyObject
+    var KuponView = Marionette.ItemView.extend({
+        template: templates.components.services.kupon,
+        ui: {
+            group: ".js-group",
+            price: ".js-price"
+        },
+        events: {
+            "change @ui.group": "changeGroup"
+        },
+        changeGroup: function(e) {
+            var groupId = parseInt($(e.currentTarget).val());
+            var group = _.findWhere(this.model.get("info").groups, {id:groupId});
+            console.log(groupId, group)
+            var result = {
+                quantity: 1,
+                sum: group.service.price,
+                id: groupId
+            }
+            _.extend(this.model.get("info"), group);
+            this.model.set("result", result);
+        },
+        onRender:function() {
+            this.bindUIElements();
+            this.ui.group.first().trigger("change");
+        }
     });
 
     return Marionette.Module.extend({
@@ -234,7 +257,7 @@ define([
                 }
             });
         },
-        object: function(id, options) {
+        buyObject: function(id, options) {
             
             var serviceModel = new ServiceModel();
             serviceModel.urlRoot = "/rest_service/check_buy_object";
@@ -247,7 +270,35 @@ define([
                     var resp = model.toJSON();
                     app.windows.vent.trigger("showWindow", "service", {
                         title: resp.object.title,
-                        serviceView : new ServiceBuyObjectView({
+                        serviceView : new KuponView({
+                            model: new ServiceModel({
+                                info: resp,
+                                is_edit: options.is_edit,
+                                edit_params: options.edit_params
+                            })
+                        }),
+                        code: resp.code,
+                        success: options.success,
+                        error: options.error,
+                        is_edit: options.is_edit
+                    });
+                }
+            });
+        },
+        kupon: function(id, options) {
+            
+            var serviceModel = new ServiceModel();
+            serviceModel.urlRoot = "/rest_service/check_kupon";
+            options.error = options.error || function() {};
+            options.success = options.success || function() {};
+            serviceModel.save({
+                id: id
+            }, {
+                success: function(model) {
+                    var resp = model.toJSON();
+                    app.windows.vent.trigger("showWindow", "service", {
+                        title: resp.object.title,
+                        serviceView : new KuponView({
                             model: new ServiceModel({
                                 info: resp,
                                 is_edit: options.is_edit,

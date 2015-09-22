@@ -21,6 +21,7 @@ define(function(require){
                 premium: require('lib/text!templates/services/premium.tmpl'),
                 lider: require('lib/text!templates/services/lider.tmpl'),
                 buyObject: require('lib/text!templates/services/buyObject.tmpl'),
+                kupon: require('lib/text!templates/services/kupon.tmpl'),
             },
             detail: {
                 baloon: require('lib/text!templates/detail/baloon.tmpl'), 

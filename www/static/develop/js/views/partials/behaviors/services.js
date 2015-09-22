@@ -8,14 +8,14 @@ define([
 	return Marionette.Behavior.extend({
         ui: {
             upService: ".js-service-up",
-            buyObjectService: ".js-service-buy-object",
+            kuponService: ".js-service-kupon",
             premiumService: ".js-service-premium",
             liderService: ".js-service-lider",
         },
 
         events: {
             "click @ui.upService": "upServiceClick",
-            "click @ui.buyObjectService": "buyObjectServiceClick",
+            "click @ui.kuponService": "kuponServiceClick",
             "click @ui.premiumService": "premiumServiceClick",
             "click @ui.liderService": "liderServiceClick"
         },
@@ -62,11 +62,11 @@ define([
             });
         },
 
-        buyObjectServiceClick: function(e) {
+        kuponServiceClick: function(e) {
             var s = this;
             e.preventDefault();
             var id = $(e.currentTarget).data("id");
-            app.services.buyObject(id, {
+            app.services.kupon(id, {
                 success: function(result) {
                     console.log(result);
                 },

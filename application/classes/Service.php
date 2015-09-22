@@ -177,14 +177,11 @@ class Service
         $this->set_params($user_result);
 
         $params->service =  $this->get($user_result);
-        // $params->quantity =  ($user_result->quantity) ? (int) $user_result->quantity : 1;
-        // $params->balance = ($params->balance) ? $params->balance : -1;
-        // $params->price = $params->service["price"];
         $params->type = $params->service["name"];
 
-        if ($params->service["name"] == "object")
+        if ($params->service["name"] == "kupon")
         {
-            $params->title = "".$object_title."";
+            $params->title = "".$service_info->service["title"]."";
         } else
         {
             $params->title = "Услуга '".$params->service['title']."' для объявления '".$object_title."'";
@@ -241,7 +238,7 @@ class Service
         
     }
 
-    public static function check_available($quantity)
+    public function check_available($quantity)
     {
         return FALSE;
     }
