@@ -41,7 +41,7 @@
 							<p class="p10">
 								{% if orderItem.params.service.name == 'kupon' %}
 									{% if order.state == 2 or order.state == 22 or order.state == 222 %}
-										<span><a href="/kupon/{{orderItem.params.service.id}}"><i class="fa fa-file-o mr5"></i>Купон. {{orderItem.params.service.title}}</a></span>
+										<span><a href="/kupon/print/{{orderItem.params.service.id}}"><i class="fa fa-file-o mr5"></i>Купон. {{orderItem.params.service.title}}</a></span>
 									{% else %}
 										<span>{{orderItem.params.service.title}}</span>
 									{% endif %}

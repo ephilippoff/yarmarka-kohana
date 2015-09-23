@@ -9,6 +9,11 @@ class Model_Kupon extends ORM
 	const RESERVE		= "reserve";
 	const SOLD		= "sold";
 
+	protected $_belongs_to = array(
+		'kupon_group_obj'	=> array('model' => 'Kupon_Group', 'foreign_key' => 'kupon_group_id'),
+		'order_obj'	=> array('model' => 'Order', 'foreign_key' => 'order_id'),
+	);
+
 	protected $_states = array(
 		"initial" => "исх", "avail" => "доступен", "reserve" => "в резерве", "sold" => "продан"
 	);
