@@ -40,10 +40,10 @@
 	
 
 		<div class="js-object-services-{{object.id}} {% if object.is_published == 0 %} hidden {% endif %}">
-			{% set statInfo = get_stat_cached_info(object.id) %}
+			{#{% set statInfo = get_stat_cached_info(object.id) %}
 			{% if statInfo %}
 				<p class="pt10 pb10">{{ statInfo }}</p>
-			{% endif %}
+			{% endif %}#}
 			<p class="pb10">Для увеличения отклика, предлагаем следующие услуги:</p>
 			<span class="button button-style1 bg-color-blue mr3 mb3 js-service-up" data-id="{{object.id}}"><i class="fa fa-angle-double-up fa-lg mr5"></i><span>Поднять</span></span>
 			<span class="button button-style1 bg-color-blue mr3 mb3 js-service-premium" data-id="{{object.id}}"><i class="ico vkontakte-ico16 mr5"></i>Премиум</span>
