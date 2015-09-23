@@ -58,26 +58,48 @@ class Controller_Rest_Object extends Controller_Rest {
 			$this->json["code"] = $twig->code;
 			$this->json["error"] = $twig->error;
 			$this->json["result"] = (string) $twig;
+	}
+
+	public function action_backcall() {
+		//$this->json["code"] = 200;
+
+		$cr = ORM::factory('Callback_Request');
+
+		$cr->key = $this->post->key;
+		$cr->fio = $this->post->name;
+		$cr->phone = $this->post->phone;
+		$cr->object_id = $this->post->object_id;
+		$cr->comment = $this->post->comment;
+
+		try {
+			$cr->save();
+		} catch(ORM_Validation_Exception $e)
+		{
+			$this->json["code"] = 400;
+			return;
 		}
 
-		private function show_contacts($object) {
-			$result = array();
-			
-			$contacts = $object->get_contacts();
-			
-			foreach ($contacts as $contact)
-			{	
-				$contact->increase_visits($object->id);
-			}
+		$this->json["code"] = 200;
+	}
 
-			$object->increase_stat_contacts_show();
-
-			
-			$result["code"] = 200;
-			$result["captcha"] = NULL;
-			$result["contacts"] = $contacts;
-
-			return $result;
+	private function show_contacts($object) {
+		$result = array();
+		
+		$contacts = $object->get_contacts();
+		
+		foreach ($contacts as $contact)
+		{	
+			$contact->increase_visits($object->id);
 		}
+
+		$object->increase_stat_contacts_show();
+
+		
+		$result["code"] = 200;
+		$result["captcha"] = NULL;
+		$result["contacts"] = $contacts;
+
+		return $result;
+	}
 
 }

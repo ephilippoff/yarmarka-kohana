@@ -1,0 +1,40 @@
+<div class="popup-window w500">	
+	<div class="header">
+		Обратный звонок
+		<div class="popup-window-close js-close">
+			<i class="ico close-ico16"></i>
+		</div>			
+	</div>					
+	<div class="cont">
+		<form class="js-form">
+			<div class="mt10">
+				ФИО<input type="text" name="name" value="<%=name%>">
+			</div>
+			<% if (getError("name")) { %>
+				<div class="pos-wrap">
+					<div class="msg"><%=getError("name")%></div>
+				</div>
+			<% } %>
+			<div class="mt10">
+				Телефон<input type="text" name="phone" value="<%=phone%>">
+			</div>
+			<% if (getError("phone")) { %>
+				<div class="pos-wrap">
+					<div class="msg"><%=getError("phone")%></div>
+				</div>
+			<% } %>
+			<div class="mt10">
+				Комментарий<textarea cols="30" rows="10" name="comment"><%=comment%></textarea>
+			</div>
+			<% if (getError("common")) { %>
+				<div class="mt10">
+					<%=getError("common")%>
+				</div>
+			<% } %>
+			<div class="row mt10">
+				<div class="col-md-6">&nbsp;</div>
+				<div class="col-md-6"><button class="w100 button button-style1 bg-color-blue white js-ok fr">OK</button></div>
+			</div>
+		</form>
+	</div>
+</div>

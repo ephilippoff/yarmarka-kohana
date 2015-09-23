@@ -3,6 +3,7 @@
 {% set i = 0 %}
 <div class="subcategories-cont module">
 	<div class="row">
+		{% set cancelButton = FALSE %}
 		{% for col in 0..cols %}
 			<div class="col-md-4">
 				<ul>
@@ -12,6 +13,10 @@
 						<span class="count">{{category.count}}</span>
 					</li>
 				{% endfor %}
+				{% if sphinx_category_childs|slice(i, rows)|length > 0 and not cancelButton %}
+					<li><a href="{{ url(category.url) }}" title="{{category.title}}" class="red">Отменить поиск</a></li>
+					{% set cancelButton = TRUE %}
+				{% endif %}
 				</ul>
 			</div>
 			{% set i = i + rows %}
