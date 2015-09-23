@@ -483,6 +483,15 @@ class Model_User extends Model_Auth_User {
 		$msg = View::factory('emails/register_success', array('activationCode' => $this->code));
 		Email::send($this->email, Kohana::$config->load('email.default_from'), 'Подтверждение регистрации на Ярмарке', $msg);
 	}
+	
+	public function send_register_data($data)
+	{
+		if (!$this->loaded())
+			return;
+
+		$msg = View::factory('emails/register_data', array('data' => $data));
+		Email::send($this->email, Kohana::$config->load('email.default_from'), 'Для вас создана учетная запись на сайте yarmarka.biz', $msg);
+	}	
 
 	private static function generate_code($str)
 	{
@@ -750,7 +759,8 @@ class Model_User extends Model_Auth_User {
 		
 		return $this->id;
 
-	}	
+	}
+	
 }
 
 /* End of file User.php */

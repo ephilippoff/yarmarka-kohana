@@ -1371,26 +1371,81 @@ class Controller_User extends Controller_Template {
 	public function action_login()
 	{
 		$this->layout = 'auth';
-		$is_post = ($_SERVER['REQUEST_METHOD']=='POST');
-		$post_data = new Obj($this->request->post());
-
+		
 		$return_page = Arr::get($_GET, 'return', "");
 		$domain = Arr::get($_GET, 'domain', NULL);
 		if (!$domain)
 			$domain = Url::base('http');
 		else
-			$domain = "http://".Kohana::$config->load("common.main_domain");
-
+			$domain = "http://".Kohana::$config->load("common.main_domain");		
 		
+		$ulogin_errors = '';
+		$ulogin = Ulogin::factory();		
+		$userdata = $ulogin->userdata();
+
+		if ($userdata)
+		{
+			if ($userdata['email'] and $userdata['verified_email'] == 1)
+			{
+				$redirect_to = $domain.$return_page;
+				
+				$user = ORM::factory('User')
+						->get_user_by_email($userdata['email'])
+						->find();
+
+				if ($user->loaded())
+				{
+					Auth::instance()->trueforcelogin($user);
+				}
+				else
+				{
+					try {
+						$password = Text::random('alnum', 7);
+
+						$new_user = ORM::factory('User');
+
+						$new_user->email = $userdata['email'];
+						$new_user->passw = $password;
+						$new_user->role = 2;
+						$new_user->code = $userdata['network'];
+						$new_user->ip_addr = $_SERVER["REMOTE_ADDR"];
+						$new_user->org_type = 1;	
+						
+						$new_user->save();	
+
+						$new_user->trigger_save_email($new_user->email);
+
+						Auth::instance()->trueforcelogin($new_user);
+
+						$new_user->send_register_data(array('login' => $user->email, 'passw' => $password));
+					} catch (Exception $e)
+					{
+						$ulogin_errors = "Произошла непредвиденная ошибка при создании учетной записи. Вы можете пройти регистрацию через стандартную форму на сайте. Приносим свои извинения за доставленное неудобство.";
+
+						Admin::send_error("Ошибка при регистрации пользователя из сервиса", array(
+								$e->getMessage(), Debug::vars($userdata), $e->getTraceAsString()
+						));
+					}					
+				}
+				if (!$ulogin_errors)
+					$this->redirect($redirect_to);
+			}
+			else
+				$ulogin_errors = 'Нет данных для авторизации с помощью сервиса. Попробуйте воспользоваться другим сервисом или авторизуйтесь через форму сайта.';
+		} //if ($userdata)
+
+		$is_post = ($_SERVER['REQUEST_METHOD']=='POST');
+		$post_data = new Obj($this->request->post());
+
 		$token = NULL;
 		$error = NULL;
 		$success = NULL;
-		if ($is_post){
+
+		if ($is_post and !$userdata){
 			$token = $post_data->csrf;
 			$validation = Validation::factory((array) $post_data)
 					->rule('csrf', 'not_empty', array(':value', "CSRF"))
 					->rule('csrf', 'Security::check');
-
 
 			if ( !$validation->check())
 			{
@@ -1399,7 +1454,7 @@ class Controller_User extends Controller_Template {
 				$auth = Auth::instance();
 				try {
 					$auth->login($post_data->login, $post_data->pass, TRUE);
-					
+
 				} 
 					catch (Exception $e)
 				{
@@ -1419,11 +1474,12 @@ class Controller_User extends Controller_Template {
 			}
 		}
 
+		$this->template->ulogin_errors = $ulogin_errors;
+		$this->template->ulogin_html = $ulogin->render();
 		$this->template->token = $token;
 		$this->template->user = $this->user; 
 		$this->template->params = $post_data;
 		$this->template->error = $error;
-
 	}
 
 	public function action_forgot_password()
