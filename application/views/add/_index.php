@@ -65,25 +65,29 @@
 		<? endif; ?>
 
 		<? if (property_exists($form_data, 'linked_company')) : ?>
-			<div class="row mb10">
-				<div class="col-md-3 col-xs-4 labelcont">
-					<label>От компании:</label>
+			<? $company = $form_data->linked_company["company"]; ?>
+			<? if ($company->org_moderate == 1 and $company->is_blocked == 0 and $company->org_type == 2): ?>
+				<div class="row mb10">
+					<div class="col-md-3 col-xs-4 labelcont">
+						<label>От компании:</label>
+					</div>
+					<div class="col-md-9 col-xs-8">
+						<input type="checkbox" name="link_to_company" id="from_company_check" <? if ($form_data->linked_company["value"] == "on") echo "checked"; ?>/>
+						<label for="from_company_check">
+						<?= $company->org_name ?> (<?= $company->email ?>)
+						<? if ($company->filename): ?>
+							<div class="p10">
+								<? $logo = Imageci::getSitePaths($company->filename); ?>
+								<img src="<?= $logo["120x90"] ?>">
+							</div>
+						<? endif; ?>
+						</label>
+						<span class="inform">
+							Вы можете отвязать свою учетную запись от этой компании <a href="/user/userinfo">здесь</a>
+						</span>			
+					</div>
 				</div>
-				<div class="col-md-9 col-xs-8">
-					<?= $company = $form_data->linked_company["company"]; ?>
-					<input type="checkbox" name="link_to_company" <? if ($form_data->linked_company["value"] == "on") echo "checked"; ?>/>  <?= $company->org_name ?>
-					<?= $company->org_name ?> (<?= $company->email ?>)
-					<? if ($company->filename): ?>
-						<div class="p10">
-							<? $logo = Imageci::getSitePaths($company->filename); ?>
-							<img src="<?= $logo["120x90"] ?>">
-						</div>
-					<? endif; ?>
-					<span class="inform">
-						Вы можете отвязать свою учетную запись от этой компании <a href="/user/userinfo">здесь</a>
-					</span>			
-				</div>
-			</div>		
+			<? endif;?>
 		<? endif; ?>
 		
 		<? if (Acl::check("object.add.type")) : ?>

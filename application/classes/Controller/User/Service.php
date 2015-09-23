@@ -16,6 +16,7 @@ class Controller_User_Service extends Controller_User_Profile {
         $twig = Twig::factory('user/objectload');
         $twig->city = $this->domain->get_city();
         $twig->canonical_url = "user/objectload";
+        $twig->user = $this->user;
         $twig->block_name = "user/_objectload";
         $twig->params = new Obj();
 
@@ -106,6 +107,7 @@ class Controller_User_Service extends Controller_User_Profile {
         $twig = Twig::factory('user/orders');
         $twig->city = $this->domain->get_city();
         $twig->canonical_url = "user/orders";
+        $twig->user = $this->user;
 
         $twig->crumbs = array(
             array("title" => "Личный кабинет - Заказы"),
@@ -124,19 +126,23 @@ class Controller_User_Service extends Controller_User_Profile {
                 ->limit($limit)
                 ->getprepared_all();
 
+        if (count($orders) > 0 )
+        {
+            $order_items = ORM::factory('Order_Item')
+                                ->where("order_id","IN", array_map(function($item){return $item->id;},  $orders))
+                                ->getprepared_all();
+                                
 
-        $order_items = ORM::factory('Order_Item')
-                            ->where("order_id","IN", array_map(function($item){return $item->id;},  $orders))
-                            ->getprepared_all();
-                            
-
-        foreach ($orders as $order) {
-            $order->state_name = Model_Order::get_state($order->state);
-            $order->items = array_filter($order_items, function($item) use ($order){ return ($order->id == $item->order_id);});
-            foreach ($order->items as $order_item) {
-                $order_item->params = json_decode($order_item->params);
+            foreach ($orders as $order) {
+                $order->state_name = Model_Order::get_state($order->state);
+                $order->items = array_filter($order_items, function($item) use ($order){ return ($order->id == $item->order_id);});
+                foreach ($order->items as $order_item) {
+                    $order_item->params = json_decode($order_item->params);
+                }
             }
         }
+
+       
         $twig->orders = $orders;
 
         $pagination = Pagination::factory( array(
@@ -165,6 +171,7 @@ class Controller_User_Service extends Controller_User_Profile {
         $twig = Twig::factory('user/subscriptions');
         $twig->city = $this->domain->get_city();
         $twig->canonical_url = "user/subscriptions";
+        $twig->user = $this->user;
 
         $twig->crumbs = array(
             array("title" => "Личный кабинет - Подписки"),

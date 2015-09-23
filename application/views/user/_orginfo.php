@@ -50,7 +50,7 @@
 			</div>
 			<div class="col-md-9 col-xs-8">
 						<div class="inp-cont">
-							<div class="pt4">
+							<div class="">
 								Вы выбрали тип учетной записи "Компания". Для завершения регистрации с этим типом, необходимо предоставить ИНН и загрузить его скан, а также заполнить другие обязательные поля отмеченные зведочкой <span style="color:red;">*</span>.
 							</div>
 				  		</div>
@@ -63,7 +63,7 @@
 			</div>
 			<div class="col-md-9 col-xs-8">
 						<div class="inp-cont">
-							<div class="pt4">
+							<div class="">
 								Если вы представитель компании, уже имеющей официальную учетную запись на нашем сайте, и хотите подавать объявления от ее лица, без ограничений, совершите привязку учетной записи к этой компании. (Т.е. компания, в своей учетной записи должна добавить Вашу учетную запись в разделе 'Сотрудники'). Свою учетную запись нужно сменить на тип "Частное лицо"
 				  			</div>
 				  		</div>
@@ -76,7 +76,7 @@
 			</div>
 			<div class="col-md-9 col-xs-8">
 						<div class="inp-cont">
-							<div class="pt4">
+							<div class="">
 								Вы можете не заполнять форму и сбросить тип учетной записи на "Частное лицо" если перейдете по <span class="link" style="cursor:pointer;" href="/user/reset_orgtype" onclick="reset_orgtype()">ссылке</span>. При этом будут применены ограничения на количество объявлений в некоторые рубрики (Продажа квартир и комнат, Аренда квартир и комнат, Вакансии)
 							</div>
 				  		</div>
@@ -89,7 +89,7 @@
 			</div>
 			<div class="col-md-9 col-xs-8">
 						<div class="inp-cont">
-							<div class="pt4">
+							<div class="">
 								Не забудьте нажать на кнопку "Сохранить", после заполнения формы!
 							</div>
 				  		</div>
@@ -107,7 +107,7 @@
 			</div>
 			<div class="col-md-9 col-xs-8">
 							<div class="inp-cont">
-								<div class="pt4">
+								<div class="">
 									<? if (count((array) $errors)): ?>
 										<span style="color:red;">
 											<? foreach((array) $errors as $error):?>
@@ -138,19 +138,22 @@
 		
 		
 		
-		
-			<div class="pb10 pt20" style="<?=$style?>">
+		<div style="<?=$style?>">
+			<div class="pb10 pt20">
 
-				<div class="row mb10" style="<?=$style?>">
+				<div class="row mb10">
 					<div class="col-md-3 col-xs-4 labelcont">
 						<label>Состояние модерации</label>
 					</div>
 					<div class="col-md-9 col-xs-8">
-									<div class="inp-cont">
-										<div class="pt4">
-											<?=$org_moderate_states[$inn_moderate["inn_moderate"]]?>
-										</div>
-									</div>
+							<div class="inp-cont">
+								<div class="">
+									<?=$org_moderate_states[$inn_moderate["inn_moderate"]]?>
+									<? if ($inn_moderate["inn_moderate"] <> 1): ?> 
+										(<a href="/user/orginfoinn_decline_user">сбросить/отменить</a>)
+									<? endif; ?>
+								</div>
+							</div>
 					</div>
 				</div>		
 				
@@ -161,7 +164,7 @@
 						</div>
 						<div class="col-md-9 col-xs-8">
 								<div class="inp-cont">
-									<div class="pt4">
+									<div class="">
 										<?=$inn_moderate["inn_moderate_reason"]?>
 									</div>
 						  		</div>
@@ -169,6 +172,7 @@
 					</div>											
 				<? endif; ?>
 			</div>
+		</div>
 			<hr/>
 		<? endif; ?>
 		<? if ($inn["inn"]): ?>
@@ -188,7 +192,7 @@
 			</div>
 			<div class="col-md-9 col-xs-8">
 							<div class="inp-cont">
-								<div class="pt4">
+								<div class="">
 									<?=$inn["org_full_name"]?>
 								</div>
 					  		</div>

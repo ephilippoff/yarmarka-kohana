@@ -1,5 +1,7 @@
 {% extends "layouts/user" %}
 
+{% block js %}{{ parent() }}{{ js("lib/ajaxupload.js") }}{% endblock js %}
+
 {% block header %} 
 		{{ requestblock('block_twig/topline', {'favourites':favourites}) }}
 		{% include 'block/header/logoline' %}
@@ -27,10 +29,25 @@
 {% block rightside %} 
 	<div class="info-block-cont theme3 module">
 		<div class="block-title">
-			<span>Что здесь?</span>
+			<span>Информация</span>
 		</div>						
 		<div class="bg-color-whitesmoke p20">
-			На этой странице отражаются...
+			Заполните информацию о Вашей компании. Загрузите отсканированную копию ИНН. Допустимые расширения файла .jpg, .png или .gif. Размер, не более 5 Мб.
 		</div>
+		<div class="bg-color-whitesmoke p20">
+			Корректно заполненная информация о компании, повышает доверие.
+		</div>
+		<div class="bg-color-whitesmoke p20">
+			Информация о компании проходит проверку модератором. Наиболее частые отказы в регистрации:
+			<ul>
+				<li class="p5">- вместо инн загружен файл, произвольного содержания</li>
+				<li class="p5">- инн не прошел проверку по базе ЕГРЮЛ, объявления не соотвествуют видам деятельности компании</li>
+				<li class="p5">- название компании не соответсвует действительности. Неправильно :"ИП", "Предприниматель", "Магазин" Правильно: "ИП Кирсанов В.П.", "Магазин 'Орхидея'"</li>
+			</ul>
+		</div>
+		<div class="bg-color-whitesmoke p20">
+			Многократное игнорирование сообщений от модератора, приводит к блокировке учетной записи и снятию объявлений.
+		</div>
+
 	</div>
 {% endblock rightside %}
