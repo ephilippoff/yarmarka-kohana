@@ -17,6 +17,7 @@
 				<th class="col2">Наименование</th>
 				<th class="col3">Состояние</th>
 				<th class="col4">Сумма</th>
+				<th class="col5"></th>
 			</tr>
 
 			{% for order in orders %}
@@ -29,16 +30,30 @@
 							{{order.payment_date|date("d.m.Y H:i")}}
 						{% endif %}
 					</td> 
-					<td class="col3">{{ order.sum }} р.</td> 
+					<td class="col3">{{ order.sum }} руб.</td>
+					<td><span class="span-link" onclick="$('.info_{{ order.id }}').toggle();"><i class="fa fa-arrow-down"></i></span></td>
 				</tr>
-				<tr style="display:none;" class="info_<?=$order->id?>">
-					<td colspan="3">
-						{% for orderItem in orderitems[order.id] %}
-							{{orderItem.title}}
-							{{orderItem.price * orderItem.quantity}} руб.
+				
+				<tr style="display:none;" class="info_{{ order.id }}">
+					<td colspan="5">
+						<p class="p10">Содержание заказа #{{ order.id }}</p>
+						{% for orderItem in order.items %}
+							<p class="p10">
+								{% if orderItem.params.service.name == 'kupon' %}
+									{% if order.state == 2 or order.state == 22 or order.state == 222 %}
+										<span><a href="/kupon/{{orderItem.params.service.id}}"><i class="fa fa-file-o mr5"></i>Купон. {{orderItem.params.service.title}}</a></span>
+									{% else %}
+										<span>{{orderItem.params.service.title}}</span>
+									{% endif %}
+								{% else %}
+									<span><a href="/detail/{{orderItem.params.object.id}}">Услуга "{{orderItem.params.service.title}}" для объявления {{orderItem.params.object.title}}</a></span>
+								{% endif %}
+								<br><span>{{orderItem.params.service.price}} руб</span>
+							</p>
 						{% endfor %}
 					</td>
 				</tr>
+				
 			{% endfor %}
 		</table>
 		{{ pagination }}

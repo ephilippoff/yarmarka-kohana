@@ -124,8 +124,18 @@ class Controller_User_Service extends Controller_User_Profile {
                 ->limit($limit)
                 ->getprepared_all();
 
+
+        $order_items = ORM::factory('Order_Item')
+                            ->where("order_id","IN", array_map(function($item){return $item->id;},  $orders))
+                            ->getprepared_all();
+                            
+
         foreach ($orders as $order) {
             $order->state_name = Model_Order::get_state($order->state);
+            $order->items = array_filter($order_items, function($item) use ($order){ return ($order->id == $item->order_id);});
+            foreach ($order->items as $order_item) {
+                $order_item->params = json_decode($order_item->params);
+            }
         }
         $twig->orders = $orders;
 
