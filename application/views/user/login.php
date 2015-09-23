@@ -7,8 +7,28 @@
 		</div><!--hheader-->
 
 		<?if ($user):?>
-			<div class="fl100 ta-c pt16 pb15">
-			Вы уже авторизованы
+			<div class="fl100 ta-c pt16 pb15 pl15 pr15" style="box-sizing: border-box;">
+				Вы авторизованы
+				<br><br>
+				Через несколько секунд произойдет автоматический переход на страницу оплаты. Если Вы не желаете ждать или по какой то причине переход не сработал, нажмите кнопку ниже.
+				<br><br>
+				
+				<?php if ($billing_params) : ?>			
+						<form id="billing_form" action="http://<?=Kohana::$config->load("common.main_domain")?>/billing/step_2" class="form-buy ta-c" method="POST">
+							<input type="hidden" name="object_id" value="<?=$billing_params->object_id?>">
+							<input type="hidden" name="services[]" value="<?=$billing_params->kupon_service_id?>">
+							<input type="hidden" name="user_id" value="<?=$user->id?>">
+							<input type="hidden" name="count[<?=$billing_params->kupon_service_id?>]" value="<?=$billing_params->quantity?>">
+							<input type="hidden" name="price" value="<?=$billing_params->price?>">
+							<input type="hidden" name="other_data" value="<?=$billing_params->oldprice?>">
+							<input type="hidden" name="text" value="<?=$billing_params->text?>">
+							<input class="btn-buy button white" type="submit" value="Продолжить">
+						</form>
+				<?php endif ?>				
+
+				<script>	
+					setInterval(function() { document.getElementById("billing_form").submit(); }, 3000);
+				</script>				
 			</div>
 		<? else: ?>
 		<form method="POST"  action="" id="element_list">			
@@ -90,7 +110,7 @@
 			</div>
 			<div class="fieldscont">
 				<div class="inp-cont-short">
-					<p>Или войти под учетной записью одного из сервисов:</p>
+					<p>Также Вы можете войти под учетной записью одного из сервисов:</p>
 					<br>
 					<?=$ulogin_html?>
 					<?php if ($ulogin_errors) : ?><div class="red mt10"><?=$ulogin_errors?></div><?php endif?>					

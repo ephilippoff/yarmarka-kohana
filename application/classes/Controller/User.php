@@ -1371,23 +1371,29 @@ class Controller_User extends Controller_Template {
 	public function action_login()
 	{
 		$this->layout = 'auth';
-		
+
 		$return_page = Arr::get($_GET, 'return', "");
 		$domain = Arr::get($_GET, 'domain', NULL);
+		
 		if (!$domain)
 			$domain = Url::base('http');
 		else
 			$domain = "http://".Kohana::$config->load("common.main_domain");		
 		
+		$billing_params = isset($_COOKIE['billing_params']) ? json_decode($_COOKIE['billing_params']) : array(); 
+		unset($_COOKIE['billing_params']);
+		$return_page = (!$this->user and $billing_params) ? URL::site('/user/login') : $return_page;
+
 		$ulogin_errors = '';
 		$ulogin = Ulogin::factory();		
 		$userdata = $ulogin->userdata();
+
 
 		if ($userdata)
 		{
 			if ($userdata['email'] and $userdata['verified_email'] == 1)
 			{
-				$redirect_to = $domain.$return_page;
+				$redirect_to = $domain.$return_page;				
 				
 				$user = ORM::factory('User')
 						->get_user_by_email($userdata['email'])
@@ -1427,6 +1433,7 @@ class Controller_User extends Controller_Template {
 						));
 					}					
 				}
+				
 				if (!$ulogin_errors)
 					$this->redirect($redirect_to);
 			}
@@ -1476,6 +1483,7 @@ class Controller_User extends Controller_Template {
 
 		$this->template->ulogin_errors = $ulogin_errors;
 		$this->template->ulogin_html = $ulogin->render();
+		$this->template->billing_params = $billing_params;
 		$this->template->token = $token;
 		$this->template->user = $this->user; 
 		$this->template->params = $post_data;
