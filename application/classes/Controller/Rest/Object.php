@@ -60,8 +60,28 @@ class Controller_Rest_Object extends Controller_Rest {
 			$this->json["result"] = (string) $twig;
 	}
 
+	public function action_callback() {
+
+		$oc = ORM::factory('Object_Callback');
+
+		$oc->reason = $this->post->reason;
+		$ids = $this->post->ids;
+
+		try {
+			foreach ($ids as $id) {
+				$oc->object_id = $id;
+				$oc->save();
+			}
+		} catch(ORM_Validation_Exception $e)
+		{
+			$this->json["code"] = 400;
+			return;
+		}
+
+		$this->json["code"] = 200;
+	}
+
 	public function action_backcall() {
-		//$this->json["code"] = 200;
 
 		$cr = ORM::factory('Callback_Request');
 
@@ -81,6 +101,7 @@ class Controller_Rest_Object extends Controller_Rest {
 
 		$this->json["code"] = 200;
 	}
+
 
 	public function action_group_publishun() {
 
@@ -108,6 +129,7 @@ class Controller_Rest_Object extends Controller_Rest {
 				$info = Object::canEdit(Array("object_id" => $object->id, "rubricid" => $object->category, "city_id" => $object->city_id));
 				if ($info["code"] == "error")
 				{
+					$this->json['text'] = $info["errors"];
 					$errors++;
 					continue;
 				}
@@ -115,6 +137,11 @@ class Controller_Rest_Object extends Controller_Rest {
 			} else {
 				$ids_to_action[] = $object->id;
 			}
+		}
+
+		if ($errors > 0) {
+			$this->json['code'] = 400;
+			return;
 		}
 
 		DB::update("object")

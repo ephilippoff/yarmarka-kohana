@@ -67,12 +67,14 @@ define([
         unpublishObjects: function(e) {
             e.preventDefault();
             var ids = this.get_objects_ids(true);
+            
             app.windows.vent.trigger("showWindow", "message", {
                 "title": "<i class='fa fa-spinner fa-spin fa-lg mr3'></i> Снятие объявлений с публикации",
                 "text": "Ожидайте окончания операции..",
                 "disableOk" : true
             });
             this.publishUnpublish(ids, false);
+            app.windows.vent.trigger("showWindow","object_callback",{ids: ids});
         },
 
         publishAllObjects: function(e) {
@@ -88,6 +90,9 @@ define([
 
         unpublishAllObjects: function(e) {
             e.preventDefault();
+            if (!confirm("Вы уверены что хотите снять с публикации все объявления?")) {
+                    return;
+            }
             var ids = this.get_objects_ids(true);
             app.windows.vent.trigger("showWindow", "message", {
                 "title": "<i class='fa fa-spinner fa-spin fa-lg mr3'></i> Снятие объявлений с публикации",
@@ -168,14 +173,15 @@ define([
                             }
                         });
                     }
-
-                    if (to_publish && result.errors) {
-                        alert("Несколько объявлений ("+result.errors+"), не удалось опубликовать по разным причинам");
+                    
+                    if (to_publish && result.code == 400) {
+                        alert("Несколько объявлений, не удалось опубликовать. Скорее всего не все поля заполнены");
                     }
                     app.windows.vent.trigger("closeWindow", "message");
                 },
                 error: function(result) {
                     errors ++;
+                    alert("Несколько объявлений, не удалось опубликовать. Скорее всего не все поля заполнены");
                     app.windows.vent.trigger("closeWindow", "message");
                 }
             });

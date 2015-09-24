@@ -33,6 +33,7 @@ define([
             controlModel.urlRoot = "/rest_object/group_publishun";
             options.error = options.error || function() {};
             options.success = options.success || function() {};
+            
             controlModel.save({ids: ids, to_publish: to_publish, all: all}, {
                 success: function(model) {
                     var resp = model.toJSON();
@@ -41,7 +42,6 @@ define([
                     } else {
                         options.error(resp);
                     }
-                    
                 }
             });
         },
