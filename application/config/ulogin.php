@@ -14,6 +14,7 @@ return array
 		'facebook',
 		'mailru',
 		'yandex',
+		'google',
 	),
 	
 	// Выводимые при наведении

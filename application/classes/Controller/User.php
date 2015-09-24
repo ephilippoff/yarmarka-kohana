@@ -1376,7 +1376,7 @@ class Controller_User extends Controller_Template {
 		$domain = Arr::get($_GET, 'domain', NULL);
 		
 		if (!$domain)
-			$domain = Url::base('http');
+			$domain = trim(Url::base('http'),'/');
 		else
 			$domain = "http://".Kohana::$config->load("common.main_domain");		
 		
@@ -1401,30 +1401,23 @@ class Controller_User extends Controller_Template {
 
 				if ($user->loaded())
 				{
-					Auth::instance()->trueforcelogin($user);
+					try 
+					{
+						$user->login_from_social();
+					}
+					catch (Exception $e)
+					{
+						$ulogin_errors = $e->getMessage();
+					}
 				}
 				else
 				{
-					try {
-						$password = Text::random('alnum', 7);
-
-						$new_user = ORM::factory('User');
-
-						$new_user->email = $userdata['email'];
-						$new_user->passw = $password;
-						$new_user->role = 2;
-						$new_user->code = $userdata['network'];
-						$new_user->ip_addr = $_SERVER["REMOTE_ADDR"];
-						$new_user->org_type = 1;	
-						
-						$new_user->save();	
-
-						$new_user->trigger_save_email($new_user->email);
-
-						Auth::instance()->trueforcelogin($new_user);
-
-						$new_user->send_register_data(array('login' => $new_user->email, 'passw' => $password));
-					} catch (Exception $e)
+					try 
+					{
+						$user_id = ORM::factory('User')
+									->registration_from_social($userdata);						
+					} 
+					catch (Exception $e)
 					{
 						$ulogin_errors = "Произошла непредвиденная ошибка при создании учетной записи. Вы можете пройти регистрацию через стандартную форму на сайте. Приносим свои извинения за доставленное неудобство.";
 
@@ -1432,8 +1425,6 @@ class Controller_User extends Controller_Template {
 								$e->getMessage(), Debug::vars($userdata), $e->getTraceAsString()
 						));
 					}
-					
-					
 				}
 				
 				if (!$ulogin_errors)
