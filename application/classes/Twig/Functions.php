@@ -104,7 +104,7 @@ class Twig_Functions
 				), 
 				array(), 
 				array("count" => TRUE)
-			)->cached(Date::HOUR)->execute()->get("count");
+			)->cached(Date::MINUTE * 10)->execute()->get("count");
 		return $myobject_count;
 	}
 

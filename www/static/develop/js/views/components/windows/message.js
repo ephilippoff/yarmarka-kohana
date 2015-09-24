@@ -19,7 +19,8 @@ define([
 
         templateHelpers: {
             getTitle: function () { return this.context.getOption("title");},
-            getText: function () { return this.context.getOption("text");}
+            getText: function () { return this.context.getOption("text");},
+            getDisableOk: function () { return this.context.getOption("disableOk");}
         },
 
         initialize: function(options) {

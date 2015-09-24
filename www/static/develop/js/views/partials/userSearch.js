@@ -5,13 +5,14 @@ define([
     "views/partials/behaviors/favourite",
     "views/partials/behaviors/search",
     "views/partials/behaviors/ocontrol",
-    "views/partials/behaviors/services"
-], function (Marionette, templates, FavouriteBehavior, SearchBehavior, OControlBehavior, ServicesBehavior) {
+    "views/partials/behaviors/services",
+    "views/partials/behaviors/groupcontrol"
+], function (Marionette, templates, FavouriteBehavior, SearchBehavior, OControlBehavior, ServicesBehavior, GroupControlBehavior) {
     "use strict";
 
     return Marionette.LayoutView.extend({
         ui: {
-            tr:"tr.tr"
+            tr:"tr.tr",
         },
         events: {
             "mouseover @ui.tr": function(e) {
@@ -22,6 +23,7 @@ define([
                  $(e.currentTarget).removeClass("hover");
             }
         },
+
         behaviors: {
             FavouriteBehavior: {
                 behaviorClass: FavouriteBehavior
@@ -34,6 +36,9 @@ define([
             },
             ServicesBehavior: {
                 behaviorClass: ServicesBehavior
+            },
+            GroupControlBehavior: {
+                behaviorClass: GroupControlBehavior
             }
         },
 

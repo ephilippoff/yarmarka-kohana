@@ -82,6 +82,51 @@ class Controller_Rest_Object extends Controller_Rest {
 		$this->json["code"] = 200;
 	}
 
+	public function action_group_publishun() {
+
+		$ids = $this->post->ids;
+		$publish = $this->post->to_publish;
+		$all = $this->post->all;
+		$user = Auth::instance()->get_user();
+
+		if (!$ids OR !count($ids) OR !$user) {
+			throw new HTTP_Exception_404;
+		}
+
+		$query = ORM::factory('Object')->where("author","=",$user->id);
+
+		if (!$all){
+			$query = $query->where("id","IN", $ids);
+		}
+						
+		$objects = $query->find_all();
+		$ids_to_action = array();
+		$errors = 0;
+		foreach ($objects as $object) {
+			$info = NULL;
+			if ($publish) {
+				$info = Object::canEdit(Array("object_id" => $object->id, "rubricid" => $object->category, "city_id" => $object->city_id));
+				if ($info["code"] == "error")
+				{
+					$errors++;
+					continue;
+				}
+				$ids_to_action[] = $object->id;
+			} else {
+				$ids_to_action[] = $object->id;
+			}
+		}
+
+		DB::update("object")
+			->where("id","IN", $ids_to_action)
+			->set(array("is_published" => ($publish) ? 1: 0))
+			->execute();
+
+		$this->json['code'] = 200;
+		$this->json['affected'] = $ids_to_action;
+		$this->json['errors'] = $errors;
+	}
+
 	private function show_contacts($object) {
 		$result = array();
 		

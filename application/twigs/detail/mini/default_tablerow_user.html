@@ -1,7 +1,8 @@
 {% set services = get_service_icon_info(object.compiled.services, true) %}
 <tr class="tr" data-id="{{object.id}}">
 	<td class="td td-1">
-		<div class="img-cont">
+		<div class="mb5"><input type="checkbox" id="check_{{object.id}}" class="js-select-object" data-id="{{object.id}}"><label for="check_{{object.id}}"><span></span></label></div>
+		<div class="img-cont js-hide-region-{{object.id}}">
 
 			<div class="img-wrapper">
 				{% if object.compiled.images.main_photo %}
@@ -20,6 +21,7 @@
 		</div>
 	</td>
 	<td class="td td-2">
+		
 		<p class="title">
 			{% set is_favourite = 'fa-heart-o' %}
 			{% if object.id in favourites %}
@@ -33,44 +35,48 @@
 		<p class="style1">
 			<span>Код: {{object.id}}</span> / <span>Обновлено: {{ object.date_created|date("d.m") }}</span> / <span>Просмотров: {{ object.visits }}</span>
 		</p>
-		{% if object.price > 0 %}
-			<p class="amount">{{ object.price|number_format(0, ' ', ' ') }} руб.</p>
-		{% endif %}
-		
-	
 
-		<div class="js-object-services-{{object.id}} {% if object.is_published == 0 %} hidden {% endif %}">
-			{#{% set statInfo = get_stat_cached_info(object.id) %}
-			{% if statInfo %}
-				<p class="pt10 pb10">{{ statInfo }}</p>
-			{% endif %}#}
-			<p class="pb10">Для увеличения отклика, предлагаем следующие услуги:</p>
-			<span class="button button-style1 bg-color-blue mr3 mb3 js-service-up" data-id="{{object.id}}"><i class="fa fa-angle-double-up fa-lg mr5"></i><span>Поднять</span></span>
-			<span class="button button-style1 bg-color-blue mr3 mb3 js-service-premium" data-id="{{object.id}}"><i class="ico vkontakte-ico16 mr5"></i>Премиум</span>
-			<span class="button button-style1 bg-color-blue mr3 mb3 js-service-lider" data-id="{{object.id}}"><i class="ico vkontakte-ico16 mr5"></i>Лидер</span>
+		<div class="js-hide-region-{{object.id}}">
+			{% if object.price > 0 %}
+				<p class="amount">{{ object.price|number_format(0, ' ', ' ') }} руб.</p>
+			{% endif %}
+			
+			<div class="js-object-services-{{object.id}} {% if object.is_published == 0 %} hidden {% endif %}">
+				{#{% set statInfo = get_stat_cached_info(object.id) %}
+				{% if statInfo %}
+					<p class="pt10 pb10">{{ statInfo }}</p>
+				{% endif %}#}
+				<p class="pb10">Для увеличения отклика, предлагаем следующие услуги:</p>
+				<span class="button button-style1 bg-color-blue mr3 mb3 js-service-up" data-id="{{object.id}}"><i class="fa fa-angle-double-up fa-lg mr5"></i><span>Поднять</span></span>
+				<span class="button button-style1 bg-color-blue mr3 mb3 js-service-premium" data-id="{{object.id}}"><i class="ico vkontakte-ico16 mr5"></i>Премиум</span>
+				<span class="button button-style1 bg-color-blue mr3 mb3 js-service-lider" data-id="{{object.id}}"><i class="ico vkontakte-ico16 mr5"></i>Лидер</span>
+			</div>
+			{% if object.is_published == 0 %}
+				<p class="pt10 pb10 js-object-state-{{object.id}} red">Объявление снято с публикации</p>
+			{% elseif object.is_published == 1 %}
+				<p class="pt10 pb10 js-object-state-{{object.id}}">Объявление опубликовано</p>
+			{% endif %}
 		</div>
-		{% if object.is_published == 0 %}
-			<p class="pt10 pb10 js-object-state-{{object.id}} red">Объявление снято с публикации</p>
-		{% elseif object.is_published == 1 %}
-			<p class="pt10 pb10 js-object-state-{{object.id}}">Объявление опубликовано</p>
-		{% endif %}
-		
 	</td>
 	<td class="td w190 p10 va-t">
-		<span class="button w100p button-style1 bg-color-lightgreen mb3 ta-l js-ocontrol-publish" data-id="{{object.id}}">
-			{% if object.is_published %} 
-				<i class="fa fa-trash pull-left fa-lg"></i><span>Снять с публикации</span>
-			{% else %}
-				<i class="fa fa-check pull-left fa-lg"></i><span>Опубликовать</span>
-			{% endif %}			
-		</span>		
+		<div class="js-hide-region-{{object.id}}">
+			<span class="button w100p button-style1 bg-color-lightgreen mb3 ta-l js-ocontrol-publish" data-id="{{object.id}}">
+				{% if object.is_published %} 
+					<i class="fa fa-trash pull-left fa-lg"></i><span>Снять с публикации</span>
+				{% else %}
+					<i class="fa fa-check pull-left fa-lg"></i><span>Опубликовать</span>
+				{% endif %}			
+			</span>		
 
-		<span class="button w100p button-style1 bg-color-lightgreen mb3 ta-l js-ocontrol-edit" data-id="{{object.id}}"><i class="fa fa-edit pull-left fa-lg"></i>Редактировать</span>
+			<span class="button w100p button-style1 bg-color-lightgreen mb3 ta-l js-ocontrol-edit" data-id="{{object.id}}"><i class="fa fa-edit pull-left fa-lg"></i>Редактировать</span>
+		</div>
 	</td>
 	<td class="td td-icons">
-		{% for services in services %}
-			<i class="fa {{ services.icon_class }} fa-lg gray" title="{{services.title}}"></i>
-		{% endfor %}
+		<div class="js-hide-region-{{object.id}}">
+			{% for services in services %}
+				<i class="fa {{ services.icon_class }} fa-lg gray" title="{{services.title}}"></i>
+			{% endfor %}
+		</div>
 	</td>
 	
 </tr>

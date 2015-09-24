@@ -4,11 +4,13 @@
 	</div>					
 	<div class="cont">
 		<div class="row mt10">
-			<div class="col-md-12"><%=getText()%></div>
+			<div class="col-md-12 p10"><%=getText()%></div>
 		</div>
-		<div class="row mt10">
-			<div class="col-md-6">&nbsp;</div>
-			<div class="col-md-6"><button class="w100 button button-style1 bg-color-blue white js-ok fr">OK</button></div>
-		</div>
+		<% if (!getDisableOk()) { %>
+			<div class="row mt10">
+				<div class="col-md-6">&nbsp;</div>
+				<div class="col-md-6"><button class="w100 button button-style1 bg-color-blue white js-ok fr">OK</button></div>
+			</div>
+		<% } %>
 	</div>
 </div>
