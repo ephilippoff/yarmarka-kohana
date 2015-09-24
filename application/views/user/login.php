@@ -10,10 +10,11 @@
 			<div class="fl100 ta-c pt16 pb15 pl15 pr15" style="box-sizing: border-box;">
 				Вы авторизованы
 				<br><br>
-				Через несколько секунд произойдет автоматический переход на страницу оплаты. Если Вы не желаете ждать или по какой то причине переход не сработал, нажмите кнопку ниже.
-				<br><br>
 				
-				<?php if ($billing_params) : ?>			
+				<?php if ($billing_params) : ?>		
+						Через несколько секунд произойдет автоматический переход на страницу оплаты. Если Вы не желаете ждать или по какой то причине переход не сработал, нажмите кнопку ниже.
+						<br><br>				
+				
 						<form id="billing_form" action="http://<?=Kohana::$config->load("common.main_domain")?>/billing/step_2" class="form-buy ta-c" method="POST">
 							<input type="hidden" name="object_id" value="<?=$billing_params->object_id?>">
 							<input type="hidden" name="services[]" value="<?=$billing_params->kupon_service_id?>">
@@ -24,11 +25,13 @@
 							<input type="hidden" name="text" value="<?=$billing_params->text?>">
 							<input class="btn-buy button white" type="submit" value="Продолжить">
 						</form>
+				
+						<script>	
+							setInterval(function() { document.getElementById("billing_form").submit(); }, 3000);
+						</script>				
 				<?php endif ?>				
 
-				<script>	
-					setInterval(function() { document.getElementById("billing_form").submit(); }, 3000);
-				</script>				
+				
 			</div>
 		<? else: ?>
 		<form method="POST"  action="" id="element_list">			

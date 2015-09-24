@@ -1381,8 +1381,8 @@ class Controller_User extends Controller_Template {
 			$domain = "http://".Kohana::$config->load("common.main_domain");		
 		
 		$billing_params = isset($_COOKIE['billing_params']) ? json_decode($_COOKIE['billing_params']) : array(); 
-		unset($_COOKIE['billing_params']);
-		$return_page = (!$this->user and $billing_params) ? URL::site('/user/login') : $return_page;
+
+		$return_page = (!$this->user and $billing_params) ? URL::site('user/login') : $return_page;
 
 		$ulogin_errors = '';
 		$ulogin = Ulogin::factory();		
@@ -1423,7 +1423,7 @@ class Controller_User extends Controller_Template {
 
 						Auth::instance()->trueforcelogin($new_user);
 
-						$new_user->send_register_data(array('login' => $user->email, 'passw' => $password));
+						$new_user->send_register_data(array('login' => $new_user->email, 'passw' => $password));
 					} catch (Exception $e)
 					{
 						$ulogin_errors = "Произошла непредвиденная ошибка при создании учетной записи. Вы можете пройти регистрацию через стандартную форму на сайте. Приносим свои извинения за доставленное неудобство.";
@@ -1431,7 +1431,9 @@ class Controller_User extends Controller_Template {
 						Admin::send_error("Ошибка при регистрации пользователя из сервиса", array(
 								$e->getMessage(), Debug::vars($userdata), $e->getTraceAsString()
 						));
-					}					
+					}
+					
+					
 				}
 				
 				if (!$ulogin_errors)
@@ -1488,6 +1490,12 @@ class Controller_User extends Controller_Template {
 		$this->template->user = $this->user; 
 		$this->template->params = $post_data;
 		$this->template->error = $error;
+		
+		if ($this->user)
+		{
+			setcookie ("billing_params", null, time() - 3600, '/', Kohana::$config->load('common.main_domain'));
+			unset($_COOKIE['billing_params']);			
+		}
 	}
 
 	public function action_forgot_password()
