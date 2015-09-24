@@ -4,97 +4,144 @@ class Controller_Rest_Service extends Controller_Rest {
 
 	public function action_check_freeup()
 	{
-		$object_id = $this->post->id;
+		$ids = ($this->post->ids) ? $this->post->ids: array($this->post->id);
 
-		$ad = ORM::factory('Object', intval($object_id));
-		if (!$ad->loaded() OR $ad->active == 0)
-		{
+		if (!$ids OR !count($ids)) {
 			throw new HTTP_Exception_404;
+		}
+
+		$objects = ORM::factory('Object')->where("id","IN", $ids)->where("active","=",1)->find_all();
+		$objects_to_action = array();
+		$services_to_action = array();
+		$errors = 0;
+		foreach ($objects as $object) {
+			$info = Object::canEdit(Array("object_id" => $object->id, "rubricid" => $object->category, "city_id" => $object->city_id));
+			if ( $info["code"] == "error" )
+			{
+				$this->json['code'] = 400;
+				$this->json['text'] = $info["errors"];
+				$errors = $errors + 1;
+				continue;
+			}
+			$objects_to_action[] = $object->get_row_as_obj(array("id","title"));
+			$services_to_action[] = Service::factory("Up")->get();
+		}
+
+		if ($errors > 0){
+			$this->json['text'] = "В выбранных объявлениях присуствуют ошибки. ". $this->json['text'];
+		}
+
+		if (count($objects_to_action) == 0 OR $this->json['code'] <> 200) {
+			$this->json['code'] = 400;
 		}
 
 		$this->json['count'] = Service::factory("Up")->get_balance();
 		$this->json['available'] = Service::factory("Up")->check_available(1);
-		$this->json['service'] = Service::factory("Up")->get();
-		$this->json['object'] = $ad->get_row_as_obj(array("id","title"));
+		$this->json['services'] = $services_to_action;
+		$this->json['objects'] = $objects_to_action;
 
-		$info = Object::canEdit(Array("object_id" => $ad->id, "rubricid" => $ad->category, "city_id" => $ad->city_id));
-
-		if ( $info["code"] == "error" )
-		{
-			$this->json['code'] = 400;
-			$this->json['text'] = $info["errors"];
-			return;
+		if (count($objects_to_action) == 1) {
+			$this->json['object'] = $objects_to_action[0];
+			$this->json['service'] = $services_to_action[0];
 		}
-		
-		// if ($ad->get_service_up_timestamp() > time())
-		// {
-		// 	$this->json['code'] = 300;
-		// 	$this->json['text'] = "Следующее бесплатное поднятие этого объявление будет доступно не ранее ". date("d.m Y H:i", $ad->get_service_up_timestamp());
-		// 	return;
-		// }
-
-		// echo Debug::vars( Service::factory("Premium")
-		// 	->city("tyumen")
-		// 	->category("legkovye-avtomobili")
-		// 	->get() );
 	}
 
 	public function action_check_premium()
 	{
-		$object_id = $this->post->id;
-		$params = ($this->post->params) ? (array) $this->post->params : array();
+		$ids = ($this->post->ids) ? $this->post->ids: array($this->post->id);
 
-		$ad = ORM::factory('Object', intval($object_id));
-		if (!$ad->loaded() OR $ad->active == 0)
-		{
+		if (!$ids OR !count($ids)) {
 			throw new HTTP_Exception_404;
 		}
 
-		$service = Service::factory("Premium", $ad->id);
-		$service->set_params($params);
+		$params = ($this->post->params) ? (array) $this->post->params : array();
+
+		$objects = ORM::factory('Object')->where("id","IN", $ids)->where("active","=",1)->find_all();
+		$objects_to_action = array();
+		$services_to_action = array();
+		$errors = 0;
+		foreach ($objects as $object) {
+			$info = Object::canEdit(Array("object_id" => $object->id, "rubricid" => $object->category, "city_id" => $object->city_id));
+			if ( $info["code"] == "error" )
+			{
+				$this->json['code'] = 400;
+				$this->json['text'] = $info["errors"];
+				$errors = $errors + 1;
+				continue;
+			}
+			$object =  $object->get_row_as_obj(array("id","title"));
+			$objects_to_action[] = $object;
+
+			$service = Service::factory("Premium", $object->id);
+			$service->set_params($params);
+			$services_to_action[] = $service->get();
+		}
+
+		if ($errors > 0){
+			$this->json['text'] = "В выбранных объявлениях присуствуют ошибки. ". $this->json['text'];
+		}
+
+		if (count($objects_to_action) == 0 OR $this->json['code'] <> 200) {
+			$this->json['code'] = 400;
+		}
 
 		$this->json['count'] = Service::factory("Premium")->get_balance();
 		$this->json['available'] = Service::factory("Premium")->check_available(1);
-		$this->json['service'] = $service->get();
-		$this->json['object'] = $ad->get_row_as_obj(array("id","title"));
+		$this->json['services'] = $services_to_action;
+		$this->json['objects'] = $objects_to_action;
 
-		$info = Object::canEdit(Array("object_id" => $ad->id, "rubricid" => $ad->category, "city_id" => $ad->city_id));
-
-		if ( $info["code"] == "error" )
-		{
-			$this->json['code'] = 400;
-			$this->json['text'] = $info["errors"];
-			return;
+		if (count($objects_to_action) == 1) {
+			$this->json['object'] = $objects_to_action[0];
+			$this->json['service'] = $services_to_action[0];
 		}
 	}
 
 	public function action_check_lider()
 	{
-		$object_id = $this->post->id;
-		$params = ($this->post->params) ? (array) $this->post->params : array();
+		$ids = ($this->post->ids) ? $this->post->ids: array($this->post->id);
 
-		$ad = ORM::factory('Object', intval($object_id));
-		if (!$ad->loaded() OR $ad->active == 0)
-		{
+		if (!$ids OR !count($ids)) {
 			throw new HTTP_Exception_404;
 		}
 
-		$service = Service::factory("Lider", $ad->id);
-		$service->set_params($params);
+		$params = ($this->post->params) ? (array) $this->post->params : array();
+
+		$objects = ORM::factory('Object')->where("id","IN", $ids)->where("active","=",1)->find_all();
+		$objects_to_action = array();
+		$services_to_action = array();
+		$errors = 0;
+		foreach ($objects as $object) {
+			$info = Object::canEdit(Array("object_id" => $object->id, "rubricid" => $object->category, "city_id" => $object->city_id));
+			if ( $info["code"] == "error" )
+			{
+				$this->json['code'] = 400;
+				$this->json['text'] = $info["errors"];
+				$errors = $errors + 1;
+				continue;
+			}
+			$object =  $object->get_row_as_obj(array("id","title"));
+			$objects_to_action[] = $object;
+
+			$service = Service::factory("Lider", $object->id);
+			$service->set_params($params);
+			$services_to_action[] = $service->get();
+		}
+
+		if ($errors > 0){
+			$this->json['text'] = "В выбранных объявлениях присуствуют ошибки. ". $this->json['text'];
+		}
+
+		if (count($objects_to_action) == 0 OR $this->json['code'] <> 200) {
+			$this->json['code'] = 400;
+		}
 
 		$this->json['count'] = 0;
 		$this->json['available'] = FALSE;
-		$this->json['service'] = $service->get();
-
-		$this->json['object'] = $ad->get_row_as_obj(array("id","title"));
-
-		$info = Object::canEdit(Array("object_id" => $ad->id, "rubricid" => $ad->category, "city_id" => $ad->city_id));
-
-		if ( $info["code"] == "error" )
-		{
-			$this->json['code'] = 400;
-			$this->json['text'] = $info["errors"];
-			return;
+		$this->json['services'] = $services_to_action;
+		$this->json['objects'] = $objects_to_action;
+		if (count($objects_to_action) == 1) {
+			$this->json['object'] = $objects_to_action[0];
+			$this->json['service'] = $services_to_action[0];
 		}
 	}
 
@@ -109,7 +156,9 @@ class Controller_Rest_Service extends Controller_Rest {
 
 		$groups = ORM::factory('Kupon_Group')->get_by_object($ad->id);
 		$available_count = 0;
-		$this->json['groups'] = array();		foreach ($groups as $group) {
+		$this->json['groups'] = array();		
+
+		foreach ($groups as $group) {
 			
 			$service = Service::factory("Kupon", $group->id);
 			$available = $service->check_available(1);
@@ -153,8 +202,30 @@ class Controller_Rest_Service extends Controller_Rest {
 		try {
 			$db->begin();
 
-			$orderItemTemp = Service::factory(Text::ucfirst($service_info->service["name"]), $service_info->id)
-							->save($service_info, $result, $tempOrderItemId);
+			$objects = $service_info->objects;
+			if ($objects) {
+				$services = $service_info->services;
+				unset($service_info->objects);
+				unset($service_info->services);
+				foreach ($objects as $key => $object_info) {
+
+					$service_info->object = $object_info;
+					$service_info->service = $services[$key];
+					$service_name = Text::ucfirst($service_info->service["name"]);
+					if (in_array($service_info->service["name"], array("premium","up"))) {
+						$service_info->count = Service::factory($service_name)->get_balance();
+						$service_info->available = Service::factory($service_name)->check_available(1);
+					}
+					$orderItemTemp = Service::factory($service_name, $service_info->object['id'])
+									->save($service_info, $result, $tempOrderItemId);
+				}
+			} else {
+				$service_name = Text::ucfirst($service_info->service["name"]);
+				$orderItemTemp = Service::factory($service_name, $service_info->id)
+								->save($service_info, $result, $tempOrderItemId);
+			}
+
+			
 			
 			$db->commit();
 		} catch (Kohana_Exception $e) {

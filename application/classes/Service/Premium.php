@@ -21,6 +21,7 @@ class Service_Premium extends Service
 
 	public function get($params = array())
 	{
+
 		$params = new Obj($params);
 		$quantity = $params->quantity = ($params->quantity) ? $params->quantity : 1;
 		$price = $price_total = $this->getPriceMultiple();

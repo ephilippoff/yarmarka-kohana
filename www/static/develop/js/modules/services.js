@@ -18,25 +18,65 @@ define([
         events: {
             "change @ui.quantity": "changeQuantity"
         },
+        templateHelpers: function() {
+            var s = this;
+            return {
+               getPrice: function() {
+                    var info = s.model.get("info");
+                    if (info.service) {
+                        if (!info.available) { 
+                            return info.service.price + " руб.";
+                        } else {
+                            return info.service.discount_reason;
+                        }
+                    } else if (info.services){
+
+                        return (info.services.length > info.count) ? "(?)" : "(бесплатно)";
+                    }
+                
+               },
+               getCount: function(){
+                 var info = s.model.get("info");
+                 if (info.object) {
+                     return 1;
+                 } else if (info.objects) {
+                     return info.objects.length;
+                 }
+               },
+               getTitle: function(){
+                    var info = s.model.get("info");
+                    if (info.object) {
+                        return "Услуга '" + info.service.title + "' для объявления '" + info.object.title + "'";
+                    } else if (info.objects) {
+                        return "Услуга 'Подъем' для "+info.objects.length+" объявлений(ия)";
+                    }
+               }
+            }
+        },
         changeQuantity: function() {
-            var price = this.model.get("info").service.price;
-            var discount_reason = this.model.get("info").service.discount_reason;
-            var available = this.model.get("info").available;
             var quantity = this.ui.quantity.val();
             var result = {
-                quantity: quantity,
-                sum: price * quantity
+                quantity: quantity
             }
-            this.model.set("result", result);
-            if (quantity > 1) {
-                this.ui.price.text(price * quantity + " руб.");
-            } else {
-                if (available) {
-                    this.ui.price.text(discount_reason);
+            if (this.model.get("info").service) {
+                var price = this.model.get("info").service.price;
+                var discount_reason = this.model.get("info").service.discount_reason;
+                var available = this.model.get("info").available;
+                
+                result.sum = price * quantity;
+
+                if (quantity > 1) {
+                    this.ui.price.text(price * quantity + " руб.");
                 } else {
-                    this.ui.price.text(price + " руб.");
+                    if (available) {
+                        this.ui.price.text(discount_reason);
+                    } else {
+                        this.ui.price.text(price + " руб.");
+                    }
                 }
             }
+            this.model.set("result", result);
+            
         },
         onRender:function() {
             this.bindUIElements();
@@ -56,25 +96,64 @@ define([
         events: {
             "change @ui.quantity": "changeQuantity"
         },
-        changeQuantity: function() {
-            var price = parseFloat(this.model.get("info").service.price);
-            var discount_reason = this.model.get("info").service.discount_reason;
-            var available = this.model.get("info").available;
-            var quantity = parseInt(this.ui.quantity.val());
-            var result = {
-                quantity: parseInt(quantity),
-                sum: parseFloat(price * quantity)
+        templateHelpers: function() {
+            var s = this;
+            return {
+                getPrice: function() {
+                    var info = s.model.get("info");
+                    if (info.service) {
+                        if (!info.available) { 
+                            return info.service.price + " руб.";
+                        } else {
+                            return info.service.discount_reason;
+                        }
+                    } else if (info.services){
+
+                        return (info.services.length > info.count) ? "(?)" : "(бесплатно)";
+                    }
+                
+               },
+               getCount: function(){
+                 var info = s.model.get("info");
+                 if (info.object) {
+                     return 1;
+                 } else if (info.objects) {
+                     return info.objects.length;
+                 }
+               },
+               getTitle: function(){
+                    var info = s.model.get("info");
+                    if (info.object) {
+                        return "Услуга '" + info.service.title + "' для объявления '" + info.object.title + "'";
+                    } else if (info.objects) {
+                        return "Услуга для "+info.objects.length+" объявлений(ия)";
+                    }
+               }
             }
-            this.model.set("result", result);
-            if (quantity > 1) {
-                this.ui.price.text(price * quantity + " руб.");
-            } else {
-                if (available) {
-                    this.ui.price.text(discount_reason);
+        },
+        changeQuantity: function() {
+            var quantity = this.ui.quantity.val();
+            var result = {
+                quantity: quantity
+            }
+            if (this.model.get("info").service) {
+                var price = parseFloat(this.model.get("info").service.price);
+                var discount_reason = this.model.get("info").service.discount_reason;
+                var available = this.model.get("info").available;
+               
+               result.sum = price * quantity;
+                
+                if (quantity > 1) {
+                    this.ui.price.text(price * quantity + " руб.");
                 } else {
-                    this.ui.price.text(price + " руб.");
+                    if (available) {
+                        this.ui.price.text(discount_reason);
+                    } else {
+                        this.ui.price.text(price + " руб.");
+                    }
                 }
             }
+            this.model.set("result", result);
         },
         onRender:function() {
             this.bindUIElements();
@@ -94,19 +173,62 @@ define([
         events: {
             "change @ui.quantity": "changeQuantity"
         },
+        templateHelpers: function() {
+            var s = this;
+            return {
+               getPrice: function() {
+                    var info = s.model.get("info");
+                    if (info.service) {
+                        return info.service.price + " руб.";
+                       
+                    } else if (info.services){
+                        return "(?)";
+                    }
+                
+               },
+               getCount: function(){
+                 var info = s.model.get("info");
+                 if (info.object) {
+                     return 1;
+                 } else if (info.objects) {
+                     return info.objects.length;
+                 }
+               },
+               getTitle: function(){
+                    var info = s.model.get("info");
+                    if (info.object) {
+                        return "Услуга '" + info.service.title + "' для объявления '" + info.object.title + "'";
+                    } else if (info.objects) {
+                        return "Услуга для "+info.objects.length+" объявлений(ия)";
+                    }
+               }
+            }
+        },
         changeQuantity: function() {
-            var price = this.model.get("info").service.price;
             var quantity = this.ui.quantity.val();
             var result = {
-                quantity: quantity,
-                sum: price * quantity
+                quantity: quantity
             }
+            
+            if (this.model.get("info").service) {
+
+                var price = this.model.get("info").service.price;
+                var quantity = this.ui.quantity.val();
+                var result = {
+                    quantity: quantity,
+                    sum: price * quantity
+                }
+
+                result.sum = price * quantity;
+               
+                if (quantity > 1) {
+                    this.ui.price.text(price * quantity + " руб.");
+                } else {
+                    this.ui.price.text(price + " руб.");
+                }
+            }
+
             this.model.set("result", result);
-            if (quantity > 1) {
-                this.ui.price.text(price * quantity + " руб.");
-            } else {
-                this.ui.price.text(price + " руб.");
-            }
         },
         onRender:function() {
             this.bindUIElements();
@@ -177,7 +299,8 @@ define([
             options.error = options.error || function() {};
             options.success = options.success || function() {};
             serviceModel.save({
-                id: id
+                id: id,
+                ids: options.ids
             }, {
                 success: function(model) {
                     var resp = model.toJSON();
@@ -206,7 +329,8 @@ define([
             options.error = options.error || function() {};
             options.success = options.success || function() {};
             serviceModel.save({
-                id: id
+                id: id,
+                ids: options.ids
             }, {
                 success: function(model) {
                     var resp = model.toJSON();
@@ -235,7 +359,8 @@ define([
             options.error = options.error || function() {};
             options.success = options.success || function() {};
             serviceModel.save({
-                id: id
+                id: id,
+                ids: options.ids
             }, {
                 success: function(model) {
                     var resp = model.toJSON();

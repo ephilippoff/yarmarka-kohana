@@ -25,7 +25,11 @@ define([
             "change @ui.selectObject": "selectObject",
             "click @ui.publish": "publishObjects",
             "click @ui.unpublish": "unpublishObjects",
-            "click @ui.unpublishall": "unpublishAllObjects"
+            "click @ui.unpublishall": "unpublishAllObjects",
+
+            "click @ui.up": "upObjects",
+            "click @ui.premium": "premiumObjects",
+            "click @ui.lider": "liderObjects"
         },
 
         selectObject: function(e) {
@@ -92,6 +96,48 @@ define([
             });
             this.publishUnpublish(ids, false, true);
         },
+
+        upObjects: function(e) {
+             e.preventDefault();
+             var ids = this.get_objects_ids(true);
+             app.services.up(null, {
+                 ids: ids,
+                 success: function(result) {
+                     console.log(result);
+                 },
+                 error: function(result) {
+                    console.log(result);
+                 }
+             });
+         },
+
+         premiumObjects: function(e) {
+             e.preventDefault();
+             var ids = this.get_objects_ids(true);
+             app.services.premium(null, {
+                 ids: ids,
+                 success: function(result) {
+                     console.log(result);
+                 },
+                 error: function(result) {
+                    console.log(result);
+                 }
+             });
+         },
+
+         liderObjects: function(e) {
+             e.preventDefault();
+             var ids = this.get_objects_ids(true);
+             app.services.lider(null, {
+                 ids: ids,
+                 success: function(result) {
+                     console.log(result);
+                 },
+                 error: function(result) {
+                    console.log(result);
+                 }
+             });
+         },
 
         get_objects_ids: function(checked) {
             var result = [];
