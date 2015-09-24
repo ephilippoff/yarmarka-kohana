@@ -96,7 +96,7 @@ define([
 
         whitespace : function(){
             if (this.model.get("options") == 'whitespace')
-                this.$el.closest(".inp-cont-short").addClass("whitespace");
+                this.$el.closest(".col-md-6").addClass("whitespace");
         },
 
         change : function(e) {

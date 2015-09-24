@@ -677,6 +677,7 @@ select{background-color: #FFFFFF;border: 1px solid #C3C3C3;padding:2px 10px;heig
 .form-cont .labelcont{text-align: right;}
 .form-cont .labelcont label{font-size: 14px;text-transform: uppercase;}
 .form-cont .inp-cont{min-height: 40px;position: relative;}
+.form-cont .textarea{background:white;}
 .form-cont .inp-cont.error input[type="text"],
 .form-cont .inp-cont.error input[type="password"]{border:1px solid #EF8680;}
 .form-cont .inp-cont.error select{border:1px solid #EF8680;}

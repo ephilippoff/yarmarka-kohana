@@ -1274,8 +1274,9 @@ class Lib_PlacementAds_AddEdit {
 	function save_compile_object()
 	{
 		$object = &$this->object;
+		$params = &$this->params;
 
-		$compiled = Object_Compile::saveObjectCompiled($this->object);
+		$compiled = Object_Compile::saveObjectCompiled($this->object, $params);
 
 		$object = ORM::factory('Object', $object->id)->get_row_as_obj();
 		$object->compiled = $compiled;

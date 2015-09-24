@@ -91,7 +91,7 @@ class Controller_User_Search extends Controller_Template {
         $this->performance->add("UserSearch","main_search_query");
         $main_search_query = Search::searchquery($this->search_filters, $search_params);
         $this->twig->main_search_result = Search::getresult($main_search_query->execute()->as_array());
-        
+
         $main_search_result_count = Search::searchquery($this->search_filters, array(), array("count" => TRUE))
                                                     ->execute()
                                                     ->get("count");
