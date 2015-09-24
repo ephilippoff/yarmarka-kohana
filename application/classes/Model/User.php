@@ -489,7 +489,7 @@ class Model_User extends Model_Auth_User {
 		if (!$this->loaded())
 			return;
 
-		$msg = View::factory('emails/register_data', array('data' => $data));
+		$msg = View::factory('emails/register_data', $data);
 		Email::send($this->email, Kohana::$config->load('email.default_from'), 'Для вас создана учетная запись на сайте yarmarka.biz', $msg);
 	}	
 
