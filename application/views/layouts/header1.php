@@ -54,8 +54,6 @@
 					</div>						
 				<?php endif ?>
 
-					<span onclick="window.location='/article/help'" class="man menu cur_p">Помощь</span>
-
 					<span onclick="window.location='http://feedback.yarmarka.biz/'" class="menu g1 cur_p">Техподдержка</span>
 					<span onclick="window.location='http://job.yarmarka.biz/'" class="menu g1 cur_p">Вакансии</span>
 					<span onclick="window.location='/ourservices/reklamodatelyam'" class="menu g1 cur_p">Рекламодателям</span>

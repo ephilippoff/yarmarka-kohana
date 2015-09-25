@@ -48,8 +48,6 @@
 						</div>
 					</div>										
 				<?php endif ?>
-
-					<span onclick="window.location='/article/help'" class="man menu cur_p">Помощь</span>
 					<span onclick="window.location='/article/pravila-razmeshcheniya-obyavlenii'" class="menu g1 cur_p">Правила</span>
 				</div>	
 				
