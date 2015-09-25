@@ -177,3 +177,9 @@ CREATE INDEX fki_kupon_group_fk
 ALTER TABLE kupon ADD COLUMN access_key character varying(255);
 
 ALTER TABLE object_movement ADD COLUMN description character varying(500);
+
+ALTER TABLE public.kupon_group
+  ADD COLUMN object_id INTEGER;
+
+ALTER TABLE public.kupon
+  ADD COLUMN order_id INTEGER;
