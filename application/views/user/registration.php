@@ -9,7 +9,7 @@
 		<?if ($auth): ?>
 			<div class="fl100  pt16 pb15">				
 				<div class="smallcont reg-msg-cont">
-					<p class="mb20">Вы уже зарегистрированы и авторизованы.</p>
+					<p class="mb20">Вы зарегистрированы и авторизованы.</p>
 					<p class="mb5">Перейти к:</p>
 					<ul>
 						<li><a href="/user/profile">Личные данные</a></li>
@@ -27,6 +27,24 @@
 			</div>
 
 		<?else: ?>
+		
+		<div class="smallcont pb20 pt20">
+			<div class="labelcont">
+				<label></label>
+			</div>
+			<div class="fieldscont">
+				<div class="inp-cont-short">
+					<p>Вы можете пройти регистрацию под учетной записью одного из сервисов:</p>
+					<br>
+					<?=$ulogin_html?>
+					<?php if ($ulogin_errors) : ?><div class="red mt10"><?=$ulogin_errors?></div><?php endif?>	
+					
+					<p class="pt20">Либо воспользоваться стандартной формой.</p>
+				</div>
+
+			</div>
+		</div>	
+		
 		<form method="POST"  action="" id="element_list">			
 			<?=Form::hidden('csrf', $token)?>
 			<div class="fl100  pt16 pb15">

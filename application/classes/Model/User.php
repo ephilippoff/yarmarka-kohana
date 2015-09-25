@@ -475,8 +475,9 @@ class Model_User extends Model_Auth_User {
 	public function registration_from_social($userdata)
 	{
 		$password = Text::random('alnum', 7);
-
-		$this->email = strtolower(trim($userdata['email']));
+		$email = strtolower(trim($userdata['email']));
+		
+		$this->email = $email;
 		$this->passw = $password;
 		$this->role = 2;
 		$this->code = '';
@@ -487,11 +488,11 @@ class Model_User extends Model_Auth_User {
 
 		$this->save();	
 
-		$this->trigger_save_email($this->email);
+		$this->trigger_save_email($email);
 
 		Auth::instance()->trueforcelogin($this);
 
-		$this->send_register_data(array('login' => $this->email, 'passw' => $password));		
+		$this->send_register_data(array('login' => $email, 'passw' => $password));		
 
 		return $this->id;
 	}	

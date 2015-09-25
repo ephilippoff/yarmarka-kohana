@@ -1280,12 +1280,51 @@ class Controller_User extends Controller_Template {
 	public function action_registration()
 	{
 		$this->layout = 'auth';
+		
+		$ulogin_errors = '';
+		$ulogin = Ulogin::factory();		
+		$userdata = $ulogin->userdata();		
+		
+		if ($userdata)
+		{
+			if ($userdata['email'] and $userdata['verified_email'] == 1)
+			{
+				try 
+				{
+					$email = strtolower(trim($userdata['email']));
+					
+					$user = ORM::factory('User')
+							->get_user_by_email($email)
+							->find();					
+
+					if (!$user->loaded())				
+						$user_id = ORM::factory('User')
+								->registration_from_social($userdata);
+					else
+						$ulogin_errors = "Присланный e-mail уже зарегестрирован на нашем сайте.";
+				} 
+				catch (Exception $e)
+				{
+					$ulogin_errors = "Произошла непредвиденная ошибка при создании учетной записи. Вы можете пройти регистрацию через стандартную форму на сайте. Приносим свои извинения за доставленное неудобство.";
+
+					echo $e->getMessage();
+					
+					Admin::send_error("Ошибка при регистрации пользователя из сервиса", array(
+							$e->getMessage(), Debug::vars($userdata), $e->getTraceAsString()
+					));
+				}
+			}
+			else
+				$ulogin_errors = 'Нет данных для авторизации с помощью сервиса. Попробуйте воспользоваться другим сервисом или авторизуйтесь через форму сайта.';
+		} //if ($userdata)		
+		
+		
 		$is_post = (HTTP_Request::POST === $this->request->method());
 		$post_data = new Obj($this->request->post());
 		$error = new Obj();
 		$success = FALSE;
 		$token = NULL;
-		if ($is_post)
+		if ($is_post and !$userdata)
 		{
 			$post_data->login = strtolower(trim($post_data->login));
 			$token = $post_data->csrf;
@@ -1320,6 +1359,8 @@ class Controller_User extends Controller_Template {
 					->cached(Date::DAY)
 					->find_all();
 
+		$this->template->ulogin_errors = $ulogin_errors;
+		$this->template->ulogin_html = $ulogin->render();		
 		$this->template->token = $token;
 		$this->template->limited_categories = $limited_categories;
 		$this->template->captcha = Captcha::instance()->render();

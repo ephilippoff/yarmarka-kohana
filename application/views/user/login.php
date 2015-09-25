@@ -34,9 +34,26 @@
 				
 			</div>
 		<? else: ?>
+		
+		<div class="smallcont pb20 pt20">
+			<div class="labelcont">
+				<label></label>
+			</div>
+			<div class="fieldscont">
+				<div class="inp-cont-short">
+					<p>Вы можете пройти авторизацию под учетной записью одного из сервисов:</p>
+					<br>
+					<?=$ulogin_html?>
+					<?php if ($ulogin_errors) : ?><div class="red mt10"><?=$ulogin_errors?></div><?php endif?>
+					<p class="pt20">Либо воспользоваться стандартной формой.</p>
+				</div>
+
+			</div>
+		</div>		
+		
 		<form method="POST"  action="" id="element_list">			
 			<?=Form::hidden('csrf', $token)?>
-			<div class="fl100  pt40 pb15">
+			<div class="fl100  pt20 pb15">
 				<div class="smallcont">
 					<div class="labelcont">
 						<label><span>Логин</span></label>
@@ -106,21 +123,6 @@
 				</div><!--smallcont-->	
 			</div>
 		</form>
-		
-		<div class="smallcont pb20">
-			<div class="labelcont">
-				<label></label>
-			</div>
-			<div class="fieldscont">
-				<div class="inp-cont-short">
-					<p>Также Вы можете войти под учетной записью одного из сервисов:</p>
-					<br>
-					<?=$ulogin_html?>
-					<?php if ($ulogin_errors) : ?><div class="red mt10"><?=$ulogin_errors?></div><?php endif?>					
-				</div>
-
-			</div>
-		</div>				
 		
 		<? endif;?>
 	</section>
