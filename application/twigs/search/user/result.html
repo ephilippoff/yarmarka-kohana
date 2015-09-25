@@ -1,6 +1,6 @@
 <table class="table-result-info">
 	{% for object in main_search_result%}
-		{% if object.author_company_id == user.id %}
+		{% if object.author == user.id %}
 			{% include 'detail/mini/default_tablerow_user' %}
 		{% else %}
 			{% include 'detail/mini/default_tablerow' %}

@@ -1,7 +1,7 @@
 <div class="breadcrumbs-cont module mt10">
 	{% for crumb in crumbs %}
 		{% if crumb.url %}
-			<a href="{{ url(crumb.url) }}">{{crumb.title}}</a> /
+			<a href="{{ url(crumb.url) }}" class="captionbold">{{crumb.title}}</a> /
 		{% else  %}
 			<h1>{{crumb.title}}</h1>
 		{% endif %}

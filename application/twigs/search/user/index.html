@@ -36,8 +36,9 @@
 {% endblock content%}
 
 {% block rightside %}
+	{% include 'search/user/group_operations' %}
 	{% include 'search/user/info' %}
-	{% include 'search/user/messages' %}
+	{#{% include 'search/user/messages' %}#}
 {% endblock rightside %}
 
 

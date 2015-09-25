@@ -1,0 +1,30 @@
+{% extends "layouts/user" %}
+
+{% block header %} 
+		{{ requestblock('block_twig/topline', {'favourites':favourites}) }}
+		{% include 'block/header/logoline' %}
+		{% include 'user/personal/promo' %}
+{% endblock header %} 
+
+{% block crumbs %}{% endblock crumbs %}
+
+{% block content %}
+	{{ parent() }}
+	<div class="bg-color-whitesmoke p20">
+		{{ requestoldview(block_name, params) }}
+	</div>
+{% endblock content %}
+
+{% block rightside %} 
+	<div class="info-block-cont theme3 module">
+		<div class="block-title">
+			<span>Информация</span>
+		</div>
+		<div class="bg-color-whitesmoke p20">
+			Привязав свою учетную запись к учетной записи компании вы можете создавать объявления от ее лица
+		</div>
+		<div class="bg-color-whitesmoke p20">
+			Чтобы ускорить процесс привязки, попросите владельца основной учетной записи этой компании, зайти в раздел "Сотрудники" и нажать кнопку "Добавить", напротив вашего email.
+		</div>
+	</div>
+{% endblock rightside %}

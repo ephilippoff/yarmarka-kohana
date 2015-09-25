@@ -89,7 +89,10 @@ class Controller_Detail extends Controller_Template {
 		$twig->domain      = $this->domain;
 		$twig->city        = $this->domain->get_city();
 
-		$detail_info = Detailpage::factory("Kupon", $object)->get_crumbs()->get();
+		$detail_info = Detailpage::factory("Kupon", $object)
+							->get_crumbs()
+							->get_kupon_info()
+							->get();
 
 		foreach ((array) $detail_info as $key => $item) {
 			$twig->{$key} = $item;
@@ -99,18 +102,9 @@ class Controller_Detail extends Controller_Template {
 		$twig->favourites = ORM::factory('Favourite')->get_list_by_cookie();
 		//end favourites
 
-		foreach ((array) $detail_info as $key => $item) {			
+		foreach ((array) $detail_info as $key => $item) {
 			$twig->{$key} = $item;
 		}
-
-		// //декодируем json-атрибут price-params
-		// $price_params = json_decode($twig->object->compiled['attributes']['price-params']['value']);		
-		// if ($price_params and json_last_error() == JSON_ERROR_NONE)
-		// 	$twig->price_params_decoded = $price_params;
-		// else
-		// 	$twig->price_params_decoded = array();
-		
-		$twig->request_uri = $_SERVER['REQUEST_URI'];
 		
 		$this->performance->add("Detail","end");
 		$twig->php_time = $this->performance->getProfilerStat();

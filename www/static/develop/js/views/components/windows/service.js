@@ -40,7 +40,9 @@ define([
         templateHelpers: function() {
             var s = this;
             return {
-               
+               getTitle: function(){
+                    return s.options.title;
+               }
             }
         },
 

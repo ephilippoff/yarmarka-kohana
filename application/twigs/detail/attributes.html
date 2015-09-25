@@ -7,7 +7,7 @@
 			<tbody>
 				<tr>
 					<td>Город</td>
-					<td>{{ object.compiled.city }}</td>
+					<td>{{ object.compiled.city }}, {{ object.compiled.address }}</td>
 				</tr>
 				{% for attr in object.compiled.attributes if attr.value and attr.seo_name in ['adres-raion']%}
 				<tr>

@@ -64,7 +64,7 @@ class Controller_Index extends Controller_Template {
                 "published" =>TRUE,
                 "category_id" => array(173),
             ),
-            array("limit" => 5)
+            array("limit" => 10)
         );
 
         $twig->kupons = Search::getresult($kupons->execute()->as_array());

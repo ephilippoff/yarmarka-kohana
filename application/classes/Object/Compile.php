@@ -2,7 +2,7 @@
 
 class Object_Compile
 {
-	static function saveObjectCompiled(ORM $item)
+	static function saveObjectCompiled(ORM $item, $params = NULL)
 	{
 		$oc = ORM::factory('Object_Compiled')
 				->where("object_id","=",$item->id)
@@ -10,11 +10,13 @@ class Object_Compile
 		$compiled = array();
 		if ($oc->loaded()) {
 			$compiled = unserialize($oc->compiled);
+			$params = ($params) ? $params : $compiled;
 		}
+		$params = (array) $params;
 		$compiled["url"] = $item->get_full_url();
 
 		$compiled["images"] = Object_Compile::getAttachments($item->id, $item->main_image_id);
-		$compiled = array_merge($compiled, Object_Compile::getAddress($item->location_id));
+		$compiled = array_merge($compiled, Object_Compile::getAddress($item->location_id, $params));
 		$compiled = array_merge($compiled, Object_Compile::getAttributes($item));
 		$compiled = array_merge($compiled, Object_Compile::getAuthor($item->author_company_id, $item->author));
 		$compiled = array_merge($compiled, Object_Compile::getContacts($item->id) );
@@ -55,7 +57,7 @@ class Object_Compile
 		return $result;
 	}
 
-	static function getAddress($location_id) {
+	static function getAddress($location_id, $params = NULL) {
 		$result = array();
 		$result["address"] = NULL;
 		$result["city"] = NULL;
@@ -66,6 +68,10 @@ class Object_Compile
 		$location = ORM::factory('Location')
 					->where('id', '=', $location_id)
 					->find();
+
+		if ($params["real_city"]) {
+			$result["real_city"] = $params["real_city"];
+		}
 
 		$result["address"] = $location->address;
 		$result["city"] = $location->city;
@@ -151,15 +157,15 @@ class Object_Compile
 			);
 		}
 
-		$photocards = ORM::factory('Object_Service_Up')
+		$ups = ORM::factory('Object_Service_Up')
 						->where("object_id","=",$object_id)
-						->where("object_service_up.date_created", ">", DB::expr("NOW() - interval '7 days'"))
+						//->where("count","<>",DB::expr("activated"))
 						->find_all();
-		foreach ($photocards as $photocard) {
+		foreach ($ups as $up) {
 			$result["services"]["up"][] = array(
-				"date_created" => $photocard->date_created,
-				"count" => $photocard->count,
-				"activated" => $photocard->activated
+				"date_created" => $up->date_created,
+				"count" => $up->count,
+				"activated" => $up->activated
 			);
 		}
 

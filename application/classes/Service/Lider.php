@@ -76,7 +76,7 @@ class Service_Lider extends Service
 		$categories = $orderItem->service->category;
 
 		Service_Lider::apply_service($object_id, $quantity, $cities, $categories);
-		self::saveServiceInfoToCompiled($orderItem);
+		self::saveServiceInfoToCompiled($object_id);
 	}
 
 	static function apply_service($object_id, $quantity, $cities = NULL, $categories = NULL)
@@ -111,7 +111,6 @@ class Service_Lider extends Service
 				$find_exact_service = TRUE;
 				continue;
 			} else {
-				$quantity += $or_item->count - 1;
 				$find_exact_service = FALSE;
 				break;
 			}
@@ -123,7 +122,14 @@ class Service_Lider extends Service
 		$or_item->cities = '{'.join(',', $cities).'}';
 		$or_item->categories = '{'.join(',', $categories).'}';
 		$or_item->active = 1;
-		$or_item->count = $quantity;
+
+		if ($or_item->loaded())
+		{
+			$or_item->activated = $or_item->activated + $quantity;
+		} else {
+			$or_item->count = $quantity;
+		}
+
 		$or_item->date_expiration = DB::expr("(NOW() + INTERVAL '".Service_Lider::LIDER_DAYS." days')");
 		$or_item->save();
 

@@ -38,6 +38,7 @@ class Controller_User_Profile extends Controller_Template {
         $twig = Twig::factory('user/orginfo');
         $twig->city = $this->domain->get_city();
         $twig->canonical_url = "user/orginfo";
+        $twig->user = $this->user;
         $twig->block_name = "user/_orginfo";
         $twig->params = new Obj();
 
@@ -51,6 +52,9 @@ class Controller_User_Profile extends Controller_Template {
             $this->redirect("/user/userinfo");
             return;
         }
+
+        
+
         // if ($user->linked_to_user) {
         //     $this->template = View::factory('user/ischilduser', array("company"=> ORM::factory('User', $user->linked_to_user),
         //                                                                 "name" => "Информация о компании"));
@@ -98,46 +102,75 @@ class Controller_User_Profile extends Controller_Template {
                     $this->redirect("/user/user_link_request?inn=".$data["INN"]);
             }
 
-            $form->save($data);
+            
+            try
+            {
+                $db = Database::instance();
+                $db->begin();
+                $form->save($data);
+                $db->commit();
+            }
+            catch(Exception $e)
+            {
+                $db->rollback();
+                Admin::send_error("Ошибка при сохранении формы компании", array(
+                        $e->getMessage(), Debug::vars($data), $e->getTraceAsString()
+                ));
+                return;
+            }
+
+
+
             if ($form->errors)
             {
-                $errors = new Obj($form->errors);   
+                $errors = new Obj($form->errors);
             } 
             else 
             {
-                if ( array_key_exists("INN", $data) )
+                try
                 {
-                    //прописываем инн, скан и юр имя организации в User
-                    $user->org_inn = $data["INN"];
-                    $user->org_inn_skan = $data["INN_photo"];
-                    $user->org_full_name = $data["org_full_name"];
-                    $user->org_moderate = 0;
+                    $db = Database::instance();
+                    $db->begin();
 
-                    //ставим на модерацию
-                    ORM::factory('User_Settings')
-                        ->update_or_save($user->id, "orginfo", "moderate", 0);
+                    if ( array_key_exists("INN", $data) )
+                    {
+                        //прописываем инн, скан и юр имя организации в User
+                        $user->org_inn = $data["INN"];
+                        $user->org_inn_skan = $data["INN_photo"];
+                        $user->org_full_name = $data["org_full_name"];
+                        $user->org_moderate = 0;
 
-                    //удаляем причину модерации, если она была проставлена ранее
-                    ORM::factory('User_Settings')
-                        ->_delete($user->id, "orginfo", "moderate-reason");
-                }
+                        //ставим на модерацию
+                        ORM::factory('User_Settings')
+                            ->update_or_save($user->id, "orginfo", "moderate", 0);
 
-                $user->org_name         = $data["org_name"];
-                $user->org_post_address = $data["mail_address"];
-                $user->org_phone        = $data["phone"];
-                $user->about = $data["commoninfo"];
-                $user->filename = ORM::factory('User_Settings')
-                                        ->where("user_id","=",$user->id)
-                                        ->where("name","=","logo")
-                                        ->where("type","=","orginfo")
-                                        ->find()
-                                        ->value;
-                try {
+                        //удаляем причину модерации, если она была проставлена ранее
+                        ORM::factory('User_Settings')
+                            ->_delete($user->id, "orginfo", "moderate-reason");
+                    }
+
+                    $user->org_name         = $data["org_name"];
+                    $user->org_post_address = $data["mail_address"];
+                    $user->org_phone        = $data["phone"];
+                    $user->about = $data["commoninfo"];
+                    $user->filename = ORM::factory('User_Settings')
+                                            ->where("user_id","=",$user->id)
+                                            ->where("name","=","logo")
+                                            ->where("type","=","orginfo")
+                                            ->find()
+                                            ->value;
                     $user->save();
-                } catch (Exception $e) {
+
+                    $db->commit();
+                }
+                catch(Exception $e)
+                {
+                    $db->rollback();
                     Admin::send_error("Ошибка при сохранении ИНН", array(
-                            $e->getMessage(), Debug::vars($data), $e->getTraceAsString()
+                            $e->getMessage(), Debug::vars($data), $e->getMessage()
                     ));
+                    $this->redirect('/user/orginfo?error=1');
+                    return;
                 }
 
                 $this->redirect('/user/orginfo?success=1');
@@ -145,7 +178,7 @@ class Controller_User_Profile extends Controller_Template {
         }
         else 
         {
-            $data = $form->get_data();      
+            $data = $form->get_data();
         }
 
         $twig->params->expired = $settings->{"date-expired"};
@@ -166,6 +199,7 @@ class Controller_User_Profile extends Controller_Template {
         $twig = Twig::factory('user/userinfo');
         $twig->city = $this->domain->get_city();
         $twig->canonical_url = "user/userinfo";
+        $twig->user = $this->user;
         $twig->block_name = "user/_userinfo";
         $twig->params = new Obj();
 
@@ -222,6 +256,7 @@ class Controller_User_Profile extends Controller_Template {
         $twig = Twig::factory('user/password');
         $twig->city = $this->domain->get_city();
         $twig->canonical_url = "user/password";
+        $twig->user = $this->user;
         $twig->block_name = "user/_password";
         $twig->params = new Obj();
 
@@ -237,6 +272,7 @@ class Controller_User_Profile extends Controller_Template {
         {
             $validation = Validation::factory($_POST)
                 ->rule('password', 'not_empty')
+                ->rule('password', 'min_length', array(':value', 6))
                 ->label('password', 'Пароль')
                 ->rule('password', 'matches', array(':validation', 'password', 'password_repeat'));
 
@@ -263,6 +299,7 @@ class Controller_User_Profile extends Controller_Template {
         $twig = Twig::factory('user/employers');
         $twig->city = $this->domain->get_city();
         $twig->canonical_url = "user/employers";
+        $twig->user = $this->user;
         $twig->block_name = "user/_employers";
         $twig->params = new Obj();
 
@@ -359,6 +396,7 @@ class Controller_User_Profile extends Controller_Template {
         $twig = Twig::factory('user/contacts');
         $twig->city = $this->domain->get_city();
         $twig->canonical_url = "user/contacts";
+        $twig->user = $this->user;
         $twig->block_name = "user/_contacts";
         $twig->params = new Obj();
 
@@ -379,5 +417,114 @@ class Controller_User_Profile extends Controller_Template {
         $twig->params->user           = $user;
         $twig->params = (array) $twig->params;
         $this->response->body($twig);
+    }
+
+    public function action_user_link_request()
+    {
+        $twig = Twig::factory('user/link_request');
+        $twig->block_name = "user/_link_request";
+        $twig->params = new Obj();
+
+        $user = Auth::instance()->get_user();
+
+        $method = $this->request->query("method");
+        $parentuser_inn = $this->request->query("inn");
+        $parentuser_email = $this->request->query("email");
+        
+        if ($method == "delete_request")
+        {
+            ORM::factory('User_Link_Request')
+                ->delete_requests($user->id);
+
+            $this->redirect("/user/userinfo");
+        }
+        if (!$parentuser_inn AND !$parentuser_email)
+            $this->redirect("/user/orginfo");
+
+        $request_type = NULL;
+        if ($parentuser_email)
+        {
+            $parentuser = ORM::factory('User')
+                                ->where("org_moderate","=",1)
+                                ->where("email","=",trim(mb_strtolower($parentuser_email)))
+                                ->where("id","<>",$user->id)
+                                ->find();
+            $request_type = "email";
+        } else {
+            $parentuser = ORM::factory('User')
+                                ->where("org_moderate","=",1)
+                                ->where("org_inn","=",$parentuser_inn)
+                                ->where("id","<>",$user->id)
+                                ->find();
+            $request_type = "inn";
+        }
+
+        if (!$parentuser->loaded())
+            $this->redirect("/user/userinfo");
+
+        $is_post = ($_SERVER['REQUEST_METHOD']=='POST');
+        $ulr = NULL;
+        if ($is_post) { 
+            $parentuser_id = $this->request->post("id");
+
+            $ulr = ORM::factory('User_Link_Request')
+                        ->where("linked_user_id","=",$user->id)
+                        ->find();
+            $ulr->user_id = $parentuser_id;
+            $ulr->linked_user_id = $user->id;
+            $ulr->save();
+
+            $msg = View::factory('emails/user_manage/request_to_link_company', 
+                array(
+                    'request_user' => $user,
+                )
+            );
+            Email::send($parentuser->email, Kohana::$config->load('email.default_from'), "Запрос на разрешение подачи объявлений от лица вашей компании", $msg);
+        } else {
+            $ulr = ORM::factory('User_Link_Request')
+                        ->where("linked_user_id","=",$user->id)
+                        ->find();
+        }
+
+        $twig->params->request_type = $request_type;
+        $twig->params->inn = $parentuser_inn;
+        $twig->params->email = $parentuser_email;
+        $twig->params->parentuser = $parentuser;
+        $twig->params->request = $ulr;
+        $twig->params = (array) $twig->params;
+        $this->response->body($twig);
+    }
+
+    public function action_orginfoinn_decline_user()
+    {
+        $this->auto_render = FALSE;
+        $json = array('code' => 400);
+
+        $user = $this->user;
+        if (!$user OR $user->org_moderate == 1)
+        {
+            throw new HTTP_Exception_404;
+        }
+
+        $user->org_inn       = NULL;
+        $user->org_inn_skan  = NULL;
+        $user->org_full_name = NULL;
+        $user->org_moderate = NULL;
+        $user->estimate = NULL;
+        $user->save();
+
+        $setting = ORM::factory('User_Settings')
+                        ->where("user_id","=",$user->id)
+                        ->where("name","=","moderate")
+                        ->where("type","=","orginfo")
+                        ->delete_all();
+
+        $setting = ORM::factory('User_Settings')
+                        ->where("user_id","=",$user->id)
+                        ->where("name","=","moderate-reason")
+                        ->where("type","=","orginfo")
+                        ->delete_all();
+
+        $this->redirect("/user/orginfo");
     }
 }

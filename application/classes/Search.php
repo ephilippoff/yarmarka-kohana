@@ -186,11 +186,11 @@ class Search {
 		}
 
 		if ($params->user_id) {
-			$object = $object->where("o.author_company_id", "=", $params->user_id);
+			$object = $object->where("o.author", "=", $params->user_id);
 		}
 
 		if ($params->not_user_id AND is_array($params->not_user_id)) {
-			$object = $object->where("o.author_company_id", "NOT IN", $params->not_user_id);
+			$object = $object->where("o.author", "NOT IN", $params->not_user_id);
 		}
 
 		if ( $params->category_id AND is_array($params->category_id) ) {

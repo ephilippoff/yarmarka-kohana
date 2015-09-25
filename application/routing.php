@@ -242,7 +242,7 @@ Route::set('user', 'user(/<action>(/<category_path>))', array(
 			return $params;
 		}
 
-		elseif ( in_array($params["action"], array("userinfo", "orginfo", "password", "employers", "contacts")) )
+		elseif ( in_array($params["action"], array("userinfo", "orginfo", "password", "employers", "contacts","user_link_request", "orginfoinn_decline_user")) )
 		{
 			$params["controller"] = 'User_Profile';
 			return $params;

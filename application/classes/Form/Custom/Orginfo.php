@@ -19,26 +19,11 @@ class Form_Custom_Orginfo extends Form_Custom {
 		if (!parent::save($data))
 			return FALSE;
 
-		$db = Database::instance();
-		try
-		{
-			$db->begin();
-			foreach ($this->_settings["fields"] as $fieldname => $settings) {
-				if (isset($data[$fieldname]))
-					$this->save_param($fieldname, $data[$fieldname]);
-			}
-			$db->commit();
+		foreach ($this->_settings["fields"] as $fieldname => $settings) {
+			if (isset($data[$fieldname]))
+				$this->save_param($fieldname, $data[$fieldname]);
 		}
-		catch(Exception $e)
-		{
-			$db->rollback();
-			Admin::send_error("Ошибка при отправке формы о компании", array(
-					$e->getMessage(), Debug::vars($data), $e->getTraceAsString()
-			));
-			return $e->getMessage();
-		}
-
-		return TRUE;		
+		return TRUE;
 	}
 
 	public function get_data()

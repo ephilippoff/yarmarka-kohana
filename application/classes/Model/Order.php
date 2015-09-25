@@ -66,10 +66,15 @@ class Model_Order extends ORM
 					}
 				}
 			} else {
+
 				if (strtotime(date('Y-m-d H:i:s')) > strtotime($order->created) + 60*30) {
 					$order->fail();
 					if ($callback) {
 						$callback($order->id, "cancel");
+					}
+				} else {
+					if ($callback) {
+						$callback($order->id, "wait");
 					}
 				}
 			}
@@ -173,7 +178,7 @@ class Model_Order extends ORM
 
 		foreach ($cart_items as $cart_item) {
 			$params = json_decode($cart_item->params);
-			$service = Service::factory(Text::ucfirst($params->service->name), $cart_item->object_id);
+			$service = Service::factory(Text::ucfirst($params->service->name), ($params->service->name == "kupon") ? $params->service->group_id: $cart_item->object_id);
 
 			$item = new Obj((array) $params);
 			$item->id = $cart_item->id;

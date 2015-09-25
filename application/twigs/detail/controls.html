@@ -1,46 +1,60 @@
-<div class="info-block-cont theme2 module">
-	<div class="block-title">
-		{% if check_object_access(object, 'object.control') %}
+{% if user and check_object_access(object, 'object.control') %}
+	<div class="info-block-cont theme2 module">
+		<div class="block-title">
 			<span>Управление объявлением</span>
-		{% endif %}
-	</div>					
-	<div class="row p10">
-		<div class="list list1 col-md-12">
-			{% if check_object_access(object, 'object.control') %}
-				<p class="button js-ocontrol-publish button-style1 bg-color-lightgreen mb3" data-id="{{object.id}}">
-						{% if object.is_published %} 
-							<i class="fa fa-trash fa-lg mr5"></i><span>Снять с публикации</span>
-						{% else %}
-							<i class="fa fa-check fa-lg mr5"></i><span>Опубликовать</span>
-						{% endif %}
-				</p><br>
-				<p class="button js-ocontrol-edit button-style1 bg-color-lightgreen mb3" data-id="{{object.id}}">
-					<i class="fa fa-edit fa-lg mr5"></i>Редактировать
-				</p>
-			{% else %}
-				<p class="p5">Это ваше объявление? <span class="span-link" onclick="document.location='/user/login?return={{object.compiled.url}}'">Авторизуйтесь</span> для управления</p>
-			{% endif %}
+		</div>
+
+		
+			<div class="row p10">
+				<div class="list list1 col-md-12">
+					<p class="button js-ocontrol-publish button-style1 bg-color-lightgreen mb3" data-id="{{object.id}}">
+							{% if object.is_published %} 
+								<i class="fa fa-trash fa-lg mr5"></i><span>Снять с публикации</span>
+							{% else %}
+								<i class="fa fa-check fa-lg mr5"></i><span>Опубликовать</span>
+							{% endif %}
+					</p>
+					<p class="button js-ocontrol-edit button-style1 bg-color-lightgreen mb3" data-id="{{object.id}}">
+						<i class="fa fa-edit fa-lg mr5"></i>Редактировать
+					</p>
+				</div>
+			</div>
+		
+	</div>
+{% endif %}
+
+{% if not user %}
+	<div class="info-block-cont theme2 module">
+		<p class="p5">Это ваше объявление? <span class="span-link" onclick="document.location='/user/login?return={{object.compiled.url}}'">Авторизуйтесь</span> для управления</p>
+	</div>
+{% endif %}
+
+{% if check_object_access(object, 'object.moderate') %}
+	<div class="info-block-cont theme2 module">
+		<div class="block-title">
+			<span>Функции администратора</span><i class="fa fa-eye fa-lg ml5" onclick="$('.js-admin-control-cont').toggleClass('hidden');"></i>
+		</div>
+		<div class="row">
+			<div class="list list1 col-md-12">
+				<div class="row p10 hidden js-admin-control-cont">
+					<div class="list list1 col-md-6">
+						<p class="button js-ocontrol-edit button-style1 bg-color-crimson mb3" data-id="{{object.id}}">
+							<i class="fa fa-edit fa-lg mr5"></i>Редактировать
+						</p>
+					</div>
+					<div class="list list1 col-md-6">
+						<p class="button js-ocontrol-block button-style1 bg-color-crimson mb3" data-id="{{object.id}}">
+							<i class="fa fa-edit fa-lg mr5"></i>Блок объявления
+						</p>
+						<p class="button js-ocontrol-block-user button-style1 bg-color-crimson mb3" data-id="{{object.id}}">
+							<i class="fa fa-edit fa-lg mr5"></i>Блок объяв. и польз.
+						</p>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
-	{% if check_object_access(object, 'object.moderate') %}
-		<div class="block-title">
-				<span>Функции администратора</span><i class="fa fa-eye fa-lg ml5" onclick="$('.js-admin-control-cont').toggleClass('hidden');"></i>
-		</div>
-		<div class="row p10 hidden js-admin-control-cont">
-			<div class="list list1 col-md-6">
-				<p class="button js-ocontrol-edit button-style1 bg-color-crimson mb3" data-id="{{object.id}}">
-					<i class="fa fa-edit fa-lg mr5"></i>Редактировать
-				</p>
-			</div>
-			<div class="list list1 col-md-6">
-				<p class="button js-ocontrol-block button-style1 bg-color-crimson mb3" data-id="{{object.id}}">
-					<i class="fa fa-edit fa-lg mr5"></i>Блок объявления
-				</p>
-				<p class="button js-ocontrol-block-user button-style1 bg-color-crimson mb3" data-id="{{object.id}}">
-					<i class="fa fa-edit fa-lg mr5"></i>Блок объяв. и польз.
-				</p>
-			</div>
-		</div>
+	<div class="info-block-cont theme2 module">
 		<div class="block-title mt10">
 				<span>Контакты для администратора</span><i class="fa fa-eye fa-lg ml5" onclick="$('.js-admin-contact-cont').toggleClass('hidden');"></i>
 		</div>
@@ -67,5 +81,5 @@
 				{% endif %}
 			</div>
 		</div>
-	{% endif %}
-</div>
+	</div>
+{% endif %}

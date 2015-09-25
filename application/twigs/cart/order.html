@@ -7,27 +7,28 @@
 
 
 {% block content %} 
-	<div class="" style="margin:auto;">
+	<div class="p20" style="margin:auto;">
 		{% set error = FALSE %}
-		<table class="table">
-			
-			{% set i = 1 %}
-			{% for item in orderItems  if item.type == 'object' %}
-				{% include 'cart/item/object' %}
-				{% set i = i +1 %}
-			{% endfor %}
-		</table>
-
-		<div class="mb10">
-			Услуги для объявлений
-		</div>
-		<table class="table">
+		<table class="table table-hover">
 			<tr>
 				<th>Наименование</th>
 				<th>Параметры</th>
 				<th>Цена</th>
 			</tr>
-			{% for item in orderItems  if item.type != 'object' %}
+
+			{% set i = 1 %}
+			{% for item in orderItems  if item.service.name == 'kupon' %}
+				{% if loop.first %}
+					<tr><td colspan="5">Купоны</td></tr>
+				{% endif %}
+				{% include 'cart/item/kupon' %}
+				{% set i = i +1 %}
+			{% endfor %}
+
+			{% for item in orderItems  if item.service.name != 'kupon' %}
+				{% if loop.first %}
+					<tr><td colspan="5">Услуги для объявлений</td></tr>
+				{% endif %}
 				{% include 'cart/item/other' %}
 				{% set i = i +1 %}
 			{% endfor %}
@@ -115,5 +116,26 @@
 {% endblock content %}
 
 {% block rightside %} 
-	Правая сторона
+	<div class="info-block-cont theme3 module">
+		<div class="block-title">
+			<span>Состояние заказа</span>
+		</div>
+		<div class="p10">
+			{% if state == "initial" %}
+				<p>Заказ на оформлении. <br><a href="/cart"><i class="fa fa-angle-double-left fa-lg mr5"></i>Вернуться к корзине</a></p>
+			{% elseif state == "notPaid" %}
+				<p>Заказ в ожидании оплаты</p>
+			{% elseif state == "paid" %}
+				<p>Заказ оплачен. В будущем вы можете вернуться к этой странице через <a href="/user/orders">историю заказов</a></p>
+			{% elseif state == "activate" %}
+				<p>Услуги активированы. В будущем вы можете вернуться к этой странице через <a href="/user/orders">историю заказов</a></p>
+			{% elseif state == "adminActivate" %}
+				<p>Услуги активированы. В будущем вы можете вернуться к этой странице через <a href="/user/orders">историю заказов</a></p>
+			{% elseif state == "paid" %}
+				<p>Заказ оплачен. В будущем вы можете вернуться к этой странице через <a href="/user/orders">историю заказов</a></p>
+			{% elseif state == "cancelPayment" %}
+				<p>Заказ отменен. Истекло время оплаты, либо отмена инициирована пользователем</p>
+			{% endif %}
+		</div>
+	</div>
 {% endblock rightside %}

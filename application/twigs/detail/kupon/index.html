@@ -50,16 +50,14 @@
 			{% endif %}
 			
 			{% if object.is_published != 0 %}
-				<div class="button bg-color-lightgreen white pt15 pb15 fs20 mb10 w100p">Заказать обратный звонок</div>
-				<div class="button bg-color-lightgreen white pt15 pb15 fs20 mb10 w100p">Купить</div>
+				<div class="button bg-color-lightgreen white pt15 pb15 fs20 mb10 w100p js-backcall-button"  data-id="{{ object.id }}">Заказать обратный звонок</div>
+				<div class="button bg-color-lightgreen white pt15 pb15 fs20 mb10 w100p js-service-kupon" data-id="{{ object.id }}">Купить</div>
 				{% include 'detail/kupon/our_contacts' %}
 			{% else %}
 				<div class="p20">Акция завершена</div>
 			{% endif %}
 			
-			{% if (category.show_map) %}
-				{% include 'detail/map' %}
-			{% endif %}	
+			{% include 'detail/map' %}
 		</aside>
 	</div>
 {% endblock rightside %}

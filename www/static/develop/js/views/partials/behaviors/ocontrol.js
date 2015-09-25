@@ -24,11 +24,6 @@ define([
             var s = this;
             e.preventDefault();
             var id = $(e.currentTarget).data("id");
-            // var $ico = $(e.currentTarget);
-            // var $icoCaption = $(e.currentTarget).find(s.ui.favouriteCaption);
-            // if (!$(e.currentTarget).hasClass("favorit-ico")) {
-            //     $ico = $ico.find(".favorit-ico");
-            // }
             app.ocontrol.publishUnpublish(id, {
                 success: function(result) {
                     if (result.is_published) {
@@ -43,6 +38,10 @@ define([
                         $(".js-object-services-"+id).addClass("hidden");
                         $(".js-object-contacts-"+id).text("Объявление снято с публикации, контактные данные не доступны.");
                         $(e.currentTarget).find("span").text("Опубликовать");
+
+                        app.windows.vent.trigger("showWindow","object_callback",{
+                                id: id
+                        });
                     }
                     console.log(result);
                 },

@@ -13,26 +13,23 @@
 	</div>
 	<div class="view-container brb2">
 		<div class="breadcrumbs-cont">						
-			<p class="white captionbold">Ярмарка - Купоны</p>
+			<p class="white captionbold">Ярмарка - Купоны и скидки</p>
 		</div>
 		<div class="row">
-			<div class="col-md-6 items-cont">
+			<div class="col-md-6 col-xs-6 items-cont">
 				<ul>
 					{% for object in premium_kupons %}
-						<li>
-							<div  style="width:250px;height:200px;float:left;padding:10px;overflow:hidden;position:relative;">
-								<img src="{{ get_file(object.compiled.images.main_photo['272x203']) }}" alt="" width="100%">
-								<p style="position:relative;top:-30px;background:white;padding:10px;">{{object.compiled.city}}<a href="{{object.compiled.url}}">{{object.title}}</a></p>
-							</div>
+						<li class="mt10">
+							{% include 'detail/mini/kupon' %}
 						</li>
 					{% endfor %}
 				</ul>
 			</div>
-			<div class="col-md-6 items-cont">
+			<div class="col-md-6 col-xs-6 items-cont">
 				<ul>
 					{% for object in kupons %}
 						<li>
-							<p class="mt10">{{object.compiled.city}} <a href="{{object.compiled.url}}">{{object.title}}</a></p>
+							<p class="mt10"><a href="{{object.compiled.url}}">{{object.title}}. {{object.compiled.city}}</a></p>
 						</li>
 					{% endfor %}
 				</ul>

@@ -108,7 +108,7 @@ body h1 {font-family: 'pt_sans_captionregular', Verdana, sans-serif; font-size: 
 .button.button-style2{font-size: 18px;font-weight: 700;height: 30px;}
 
 .clearfix:after{display: block;clear: both;height: 0;content: '';}
-.rub {display: inline-block;line-height: 5px;border-bottom: 1px solid;width: 0.4em;}
+.rub {}
 .link {color: #2a76a1;text-decoration: none;font-size: 14px;}
 .caret {display: inline-block;width: 0;height: 0;margin-left: 2px;vertical-align: middle;border-top: 4px solid;border-right: 4px solid transparent;border-left: 4px solid transparent;}
 
@@ -176,7 +176,7 @@ select{background-color: #FFFFFF;border: 1px solid #C3C3C3;padding:2px 10px;heig
 .discount-price-cont {display: block;height: 40px;box-sizing: border-box;padding: 8px 14px;font-size: 20px;box-shadow: 0px 2px 8px 0px gray;min-width: 150px;}
 .discount-price-cont .old{color:gray;text-decoration: line-through;}
 .discount-price-cont .new{font-weight: bold;}
-.discount-price-cont .rub{font-size: 18px;font-weight: normal;}
+.discount-price-cont .rub{}
 .no-photo-cont{padding: 40px 0;text-align: center;text-transform: uppercase;}
 
 /* mini-elements end */
@@ -208,14 +208,16 @@ select{background-color: #FFFFFF;border: 1px solid #C3C3C3;padding:2px 10px;heig
 .top-line .search-cont .view1 .col1 input.search{width: 100%;}
 .top-line .banner{max-width: 100%;max-height: 45px;}
 .top-line .search-cont{position: relative;}
-.top-line .search-cont input.search{border: 1px solid #D90000;color: gray;border-radius: 2px 0px 0px 2px;font-size: 14px;width: 100%;box-sizing: border-box;height: 45px; padding: 0px 10px;}
+.top-line .search-cont input.search{border: 1px solid #D90000;color: #D90000;border-radius: 2px 0px 0px 2px;font-size: 14px;width: 100%;box-sizing: border-box;height: 45px; padding: 0px 10px;text-transform: uppercase;}
 .top-line .search-cont .input-group-addon{border-color: #D90000;height: 45px; width: 45px; border-radius: 0px 2px 2px 0px;}
 .top-line .search-cont .input-group-addon .button{width: 100%; height: 43px;border:0;}
 .top-line .counter{font-size: 18px; color: gray;display: block; margin-top: 18px;}
 .top-line .search-cont .search-popup {display: none;box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.15), 0 8px 25px -5px rgba(0, 0, 0, 0.25);border-width: 1px; border-style: solid;line-height: 25px;font-size: 14px;background: white;overflow: hidden;position: absolute;width: 130%;}
 .top-line .search-cont .search-popup li.finded-header {color: #5d6b76;font-size: 10px;font-style: italic;background-color: #EAECEC;  padding: 0px 5px;}
 .top-line .search-cont .search-popup li.result-line {cursor: pointer;overflow: hidden;padding: 5px 10px;}
+.top-line .search-cont .search-popup li.result-line.mark {background: #F98C8C;color:white;}
 .top-line .search-cont .search-popup li .finded-title {float: left;margin-right: 10px;line-height: 15px;}
+
 .top-line .search-cont .search-popup li a, .top-line .search-cont .seach-bl .search-popup li .city {float: right;line-height: 15px;}
 .top-line .search-cont .input-group.focus {box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(217,0,0,.6);}
 
@@ -412,11 +414,11 @@ select{background-color: #FFFFFF;border: 1px solid #C3C3C3;padding:2px 10px;heig
 .light-blue-theme .menu-cont2 .popup-menu-cont2l .span-link:hover{background-color: #68CCF2; transition: background-color 0.2s, color 0.3s; color:white; }
 .light-blue-theme .view-container{color: white; background: url(http://www.free-patterns.info/wp-content/uploads/2015/04/light-blue-mixed-squares-v27315.png);}
 .light-blue-theme .view-container a, 
-.light-blue-theme .reklama-line a{color: white}
+.light-blue-theme .reklama-line a{color: #134A69}
+.light-blue-theme .coupon-item-cont a{color: #2a76a1;}
+.light-blue-theme .coupon-item-cont {color: black;}
 .light-blue-theme .view-container a:hover, 
-.light-blue-theme .reklama-line a:hover{ color: #E96F4F; -webkit-transition: color 0.3s;-moz-transition: color 0.3s;-o-transition: color 0.3s;transition: color 0.3s;}
-.light-blue-theme .view-container a.active, 
-.light-blue-theme .reklama-line a.active{ color:#E96F4F;}
+.light-blue-theme .reklama-line a:hover{ color: #D30000; -webkit-transition: color 0.3s;-moz-transition: color 0.3s;-o-transition: color 0.3s;transition: color 0.3s;}
 .light-blue-theme.reklama-cont { background: url(http://www.free-patterns.info/wp-content/uploads/2015/04/light-blue-mixed-squares-v27315.png);}
 /* light-blue-theme end */
 
@@ -511,7 +513,7 @@ select{background-color: #FFFFFF;border: 1px solid #C3C3C3;padding:2px 10px;heig
 .table-result-info .td-2 .style1{line-height: 25px;}
 .table-result-info .td-2 .style2{font-size: 14px; font-weight: bold;}
 .table-result-info .td-2 .amount{color: #D90000; line-height: 30px; font-size: 22px;}
-.table-result-info .td-2 .amount .rub{border-bottom: 1px solid #D90000;font-size: 22px;color: #D90000;font-weight: normal;}
+.table-result-info .td-2 .amount .rub{}
 .table-result-info .td-2 .table-details{margin: 5px 0px;}
 .table-result-info .td-2 .table-details .attr-title{padding-right: 10px;}
 .table-result-info .td-3{vertical-align: top;padding: 10px;width: 150px;}
@@ -557,7 +559,7 @@ select{background-color: #FFFFFF;border: 1px solid #C3C3C3;padding:2px 10px;heig
 .params-cont tr td:first-child{}
 .params-cont table tr td{line-height: 16px;padding-bottom: 3px;padding-right: 41px;}
 .params-cont .amount{font-size: 22px;color: #D90000;font-weight: normal;line-height: 1.2;}
-.params-cont .rub{font-size: 22px;color: #D90000;font-weight: normal;}
+.params-cont .rub{}
 
 .service-block-cont{background-color: #F5F5F5}
 .service-block-cont .line{padding: 5px 5px;margin-bottom: 5px;width: 100%;text-align: center;}
@@ -603,7 +605,7 @@ select{background-color: #FFFFFF;border: 1px solid #C3C3C3;padding:2px 10px;heig
 .other-objects-cont .items-cont .item .text {float: left;font-size: 14px;height: 32px;margin: 5px 0;overflow: hidden;width: 100%;}
 .other-objects-cont .items-cont .item .price {background: url("/static/develop/images/price-bg.png") no-repeat;color: #fff;float: left;width: 100%;}
 .other-objects-cont .items-cont .item .price .cont {color: #fff;display: block;font-size: 18px;padding: 5px;text-align: center;}
-.other-objects-cont .items-cont .item .price .cont .rub {border-bottom: 1px solid #ffffff;color: #ffffff;font-size: 14px;font-weight: normal;line-height: 5px;}
+.other-objects-cont .items-cont .item .price .cont .rub {}
 
 .items-list-cont ul{display: inline-block;padding: 0 20px;vertical-align: top;}
 .items-list-cont ul li {line-height: 25px;}
@@ -651,19 +653,19 @@ select{background-color: #FFFFFF;border: 1px solid #C3C3C3;padding:2px 10px;heig
 
 .coupon-info-cont .price-cont{height: 90px;padding: 24px 15px;position: relative;}
 .coupon-info-cont .price-cont .price{color: white;font-size: 34px;}
-.coupon-info-cont .price-cont .rub {color: #fff;font-size: 28px;border-color: #fff;font-weight: normal;line-height: 10px;}
+.coupon-info-cont .price-cont .rub {}
 .coupon-info-cont .discount-cont{padding: 7px 0 13px;}
 .coupon-info-cont .discount-cont table {width: 100%;}
 .coupon-info-cont .discount-cont td {padding: 0 10px; border-right: 1px solid gray;}
 .coupon-info-cont .discount-cont td:last-child{border:none;}
 .coupon-info-cont .discount-cont .top {padding-bottom: 10px;color: #9e9e9e;font-size: 14px;}
 .coupon-info-cont .discount-cont td span {color: #2f3842;font-size: 20px;}
-.coupon-info-cont .discount-cont .rub{font-size: 18px; line-height: 6px;}
+.coupon-info-cont .discount-cont .rub{}
 
 .buy-items-table{width: 100%;}
 .buy-items-table td{padding: 5px; text-align: center}
 .buy-items-table thead td{}
-.buy-items-table .rub{font-size: 14px;font-weight: normal;}
+.buy-items-table .rub{}
 
 .infographics-cont .cont{padding: 0 10px 10px 10px;}
 /*.infographics-cont .infografika-item {width: 310px;margin-top: 10px;display: inline-block;vertical-align: top;}*/
@@ -675,6 +677,7 @@ select{background-color: #FFFFFF;border: 1px solid #C3C3C3;padding:2px 10px;heig
 .form-cont .labelcont{text-align: right;}
 .form-cont .labelcont label{font-size: 14px;text-transform: uppercase;}
 .form-cont .inp-cont{min-height: 40px;position: relative;}
+.form-cont .textarea{background:white;}
 .form-cont .inp-cont.error input[type="text"],
 .form-cont .inp-cont.error input[type="password"]{border:1px solid #EF8680;}
 .form-cont .inp-cont.error select{border:1px solid #EF8680;}
@@ -709,7 +712,7 @@ select{background-color: #FFFFFF;border: 1px solid #C3C3C3;padding:2px 10px;heig
 .coupon-item-cont .slide-cont {width: 100%;height: 214px;position: absolute;bottom: -214px;left: 0;transition: all 0.5s ease-out;}
 .coupon-item-cont .geo-cont {color: #ffffff;position: absolute;bottom: 28px;background-color: #333;background: rgba(0, 0, 0, 0.4);width: 100%}
 .coupon-item-cont .geo-cont .geo-items {margin: 4px 0;overflow: hidden;}
-.coupon-item-cont .geo-cont .geo-items li {font-size: 10px;float: left;padding-left: 7px;margin: 0 3px 0 5px;line-height: 12px;position: relative;}
+.coupon-item-cont .geo-cont .geo-items li {font-size: 14px;float: left;padding-left: 7px;margin: 0 3px 0 5px;line-height: 12px;position: relative;}
 .coupon-item-cont .addr-item {width: 5px;height: 5px;border-radius: 10px;position: absolute;top: 3px;left: 0;}
 .coupon-item-cont .data-cont {color: #ffffff;height: 28px;position: absolute;bottom: 0px;background-color: #333;background: rgba(0, 0, 0, 0.6);width: 100%;}
 .coupon-item-cont .data-cont span {font-size: 14px;}
@@ -721,7 +724,7 @@ select{background-color: #FFFFFF;border: 1px solid #C3C3C3;padding:2px 10px;heig
 .coupon-item-cont .price {float: left;padding: 5px;font-size: 14px;padding: 7px 0 4px 20px;text-decoration: line-through;}
 .coupon-item-cont .separator {width: 9px;height: 27px;position: absolute;top: 0;left: 0;}
 .coupon-item-cont .discounted {float: right;font-size: 20px;color: #fff;background: #f6753e;padding: 2px 10px 0px 20px;text-align: right;height: 28px;width: 49%;position: relative;}
-.coupon-item-cont .discount-label span {font-size: 10px;position: relative;top: -3px;}
+.coupon-item-cont .discount-label span {font-size: 12px;position: relative;top: -3px;}
 .coupon-item-cont .description-cont {padding: 3px 8px 0;overflow: hidden;line-height: 17px;display: block;height: 40px; }
 
 

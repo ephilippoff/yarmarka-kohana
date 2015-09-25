@@ -12,7 +12,11 @@ define([
 
      return Marionette.LayoutView.extend({
         ui: {
-            map: "#map"
+            map: "#map",
+            backcallButton: ".js-backcall-button"
+        },
+        events: {
+            "click @ui.backcallButton": "backcallButtonClick"
         },
         behaviors: {
             FavouriteBehavior: {
@@ -72,6 +76,12 @@ define([
                     checkZoomRange: true
                 });
             });
+        },
+
+        backcallButtonClick: function(e) {
+            e.preventDefault();
+            var object_id = $(e.currentTarget).data("id");
+            app.windows.vent.trigger("showWindow","backcall", {object_id: object_id, key: "kupon"});
         }
     });
 });

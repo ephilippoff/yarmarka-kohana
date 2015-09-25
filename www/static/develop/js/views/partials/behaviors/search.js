@@ -57,6 +57,7 @@ define([
 
     var SearchPopup = Marionette.LayoutView.extend({
         template: templates.searchPopup,
+        className: "z400",
         regions: {
             objects: ".js-objects",
             pricerows: ".js-pricerows"

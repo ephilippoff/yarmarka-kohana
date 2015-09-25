@@ -18,7 +18,7 @@
 	</thead>
 	<tbody>
 	<tr>
-		<td class="service-title">"<%=info.service.title%>" для объявления "<%=info.object.title%>"</td>
+		<td class="service-title"><%=getTitle()%></td>
 		<td class="quantity">
 			<% var quantity  = 1; %>
 			<% if (is_edit) { 
@@ -28,11 +28,7 @@
 		</td>
 		<td class="price">
 			<span class="js-price">
-				<% if (!info.available) { %>
-					<%=info.service.price%> руб.
-				<% } else { %>
-					<%=info.service.discount_reason%>
-				<% } %>
+				<%=getPrice()%>
 			</span>
 		</td>
 	</tr>

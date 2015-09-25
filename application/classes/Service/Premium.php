@@ -21,6 +21,7 @@ class Service_Premium extends Service
 
 	public function get($params = array())
 	{
+
 		$params = new Obj($params);
 		$quantity = $params->quantity = ($params->quantity) ? $params->quantity : 1;
 		$price = $price_total = $this->getPriceMultiple();
@@ -64,10 +65,10 @@ class Service_Premium extends Service
 		$quantity = $orderItem->service->quantity;
 
 		self::apply_service($orderItem->object->id, $quantity);
-		self::saveServiceInfoToCompiled($orderItem);
+		self::saveServiceInfoToCompiled($orderItem->object->id);
 	}
 
-	public static function check_available($quantity, $balance = FALSE)
+	public function check_available($quantity, $balance = FALSE)
 	{
 		$result = FALSE;
 		$quantity = ($quantity) ? $quantity : 1;
@@ -197,9 +198,10 @@ class Service_Premium extends Service
 					->find();
 		if ($or->loaded())
 		{
-			$quantity += $or->count - 1;
+			$or->activated = $or->activated + $quantity;
+		} else {
+			$or->count = $quantity;
 		}
-		$or->count = $quantity;
 		$or->object_id = $object_id;
 		$or->city_id = $city_id;
 		$or->date_expiration = DB::expr("(NOW() + INTERVAL '".Service_Premium::PREMIUM_DAYS." days')");

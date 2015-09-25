@@ -1,8 +1,11 @@
 /*global define */
 define(['marionette',
     'templates',
-    'views/components/windows/service'
-], function (Marionette, templates, ServiceView) {
+    'views/components/windows/service',
+    'views/components/windows/backcall',
+    'views/components/windows/message',
+    'views/components/windows/object_callback'
+], function (Marionette, templates, ServiceView, BackcallView, MessageView, ObjectCallbackView) {
     'use strict';
 
     var ErrorWindow = Marionette.ItemView.extend({
@@ -30,19 +33,26 @@ define(['marionette',
         windows : [],
         windowView: {
             service: ServiceView,
+            backcall: BackcallView,
+            message: MessageView,
+            object_callback: ObjectCallbackView
             //error_register: ErrorWindow,
             //error_forbidden: ErrorWindow,
 
         },
         zIndex: {
-            service: "z150",
-            // gomonitor: "z250"
+            //service: "z150",
+            //backcall: "z150",
+            //message: "z150"
         },
         label: {
             //panel: {class:".s_panel_label", winclass:".leftsidecont", depency:[] },
         },
         blackLayer: {
             service : true,
+            backcall : true,
+            message : true,
+            object_callback: true
         },
         transparentLayer: {
             //galleryItem: "z151"

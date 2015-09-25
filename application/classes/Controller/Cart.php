@@ -41,16 +41,14 @@ class Controller_Cart extends Controller_Template {
 								->where("key","=", $key)
 								->order_by("id");
 
-			$sum = Model_Order::each_item($cart_tems, function($service, $item, $model_item) use (&$cartTempItems) {
+			$sum = Model_Order::each_item($cart_tems, function($service, $item, $model_item) use (&$cartTempItems, $key) {
 
-				//если заказан товар , проверяем доступность, и информацию по доставке
-				if ($item->service->name == "object") {
-					$available = $service->check_available($item->quantity);
-					$item->available = $available;
-					$balance = $service->get_balance();
-					if ($sale_type = $service->get_delivery_info())
+				//если заказан товар , проверяем доступность
+				if ($item->service->name == "kupon") {
+					$kupon = ORM::factory('Kupon', $item->service->id);
+					if ($kupon->loaded()) 
 					{
-						array_push($sale_types, $sale_type);
+						$item->available = $kupon->check_and_restore_reserve_if_possible($key);
 					}
 				} 
 
@@ -272,7 +270,6 @@ class Controller_Cart extends Controller_Template {
 
 		$orderItems = array();
 		$twig->sum = Model_Order::each_item($order_tems, function($service, $item, $model_item) use (&$orderItems) {
-
 			$orderItems[] = $item;
 			return $item;
 		});
@@ -378,27 +375,32 @@ class Controller_Cart extends Controller_Template {
 									->order_by("id");
 			
 			$orderItems = array();
-			$sum = Model_Order::each_item($cart_tems, function($service, $item, $model_item) use (&$orderItems, $order_id, $order_loaded) {
+			$error = FALSE;
+			$sum = Model_Order::each_item($cart_tems, function($service, $item, $model_item) use (&$orderItems, $order_id, $order_loaded, $key, &$error) {
 
-
-
-				if ($item->service->name == "object" )
-				{
-					if ($order_loaded)
+				if ($item->service->name == "kupon") {
+					$kupon = ORM::factory('Kupon', $item->service->id);
+					$available = FALSE;
+					if ($kupon->loaded()) 
 					{
-						$model_item->return_reserve();
-					}
-					$item->available = $service->check_available($item->quantity);
-					if ($item->available !== TRUE)
-					{
-						$db->rollback();
-						$this->json["message"] = "В заказе присутствуют недоступные позиции, удалите их прежде чем продолжить";
-						$this->json["code"] = 400;
-						$this->json_response();
-						return;
+						$available = $kupon->check_and_restore_reserve_if_possible($key);
 					}
 
+					if ($available !== TRUE)
+					{
+						$error = array(
+							"message" => "В заказе присутствуют недоступные позиции, удалите их прежде чем продолжить",
+							"code" => 400
+						);
+						return $item;
+					}
 				} 
+
+
+				if ($item->service->name == "kupon" AND $item->groups)
+				{
+					unset($item->groups);
+				}
 				
 				$realItem = ORM::factory('Order_Item');
 				$realItem->order_id = $order_id;
@@ -406,15 +408,18 @@ class Controller_Cart extends Controller_Template {
 				$realItem->params = json_encode((array) $item);
 				$realItem->save();
 
-				if ($item->service->name == "object" )
-				{
-					$realItem->reserve();
-				}
-
 				
 				$orderItems[] = $item;
 				return $item;
 			});
+
+			if ($error) 
+			{
+				$db->rollback();
+				$this->json = array_merge($this->json, $error);
+				$this->json_response();
+				return;
+			}
 
 			$order->sum = $sum;
 			$order->save();
@@ -490,6 +495,13 @@ class Controller_Cart extends Controller_Template {
 		$order_id = $this->request->post("id");
 
 		$order = ORM::factory('Order', $order_id);
+
+
+		if ($order->state == 3) {
+			$errors["cancelled_order"] = "Заказ отменен";
+			$this->return_with_errors("/cart/order/".$order_id, $this->request->post(), $errors);
+		}
+
 		$orderItems = ORM::factory('Order_Item')
 						->where("order_id", "=", $order_id)
 						->find_all();
@@ -503,15 +515,15 @@ class Controller_Cart extends Controller_Template {
 
 		foreach ($orderItems as $orderItem) {
 			$params = json_decode($orderItem->params);
-			if ($params->type == "object") {
-				$service = Service::factory("Object", $orderItem->object_id);
-				$available = $service->check_available(0);
-				if ($available !== TRUE) {
-					$errors["paid_or_refused"] = $available;
-					$this->return_with_errors("/cart/order/".$order_id, $this->request->post(), $errors);
-					return;
-				}
-			}
+			// if ($params->type == "object") {
+			// 	$service = Service::factory("Object", $orderItem->object_id);
+			// 	$available = $service->check_available(0);
+			// 	if ($available !== TRUE) {
+			// 		$errors["paid_or_refused"] = $available;
+			// 		$this->return_with_errors("/cart/order/".$order_id, $this->request->post(), $errors);
+			// 		return;
+			// 	}
+			// }
 		}
 
 		if ($order->state > 0) {

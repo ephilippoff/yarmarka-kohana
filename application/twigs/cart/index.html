@@ -10,22 +10,8 @@
 		{% if cartTempItems|length == 0 %}
 			<p class="msg" style="font-size:20px;">Ваша Корзина пуста</p>
 		{% else %}
-			
-			{#<div class="mb10">
-				Купоны
-			</div>
-			<table class="cart-table table">
-				{% set i = 1 %}
-				{% for cartItem in cartTempItems if cartItem.type == 'object' %}
-					{% include 'cart/temp_item/object' %}
-					{% set i = i + 1 %}
-				{% endfor %}
-			</table>#}
-			
-			<div class="mb10">
-				Услуги для объявлений
-			</div>
-			<table class="cart-table table">
+			{% set error = FALSE %}
+			<table class="cart-table table table-hover">
 				<tr>
 					<th>Наименование</th>
 					<th>Параметры</th>
@@ -33,7 +19,22 @@
 					<th></th>
 					<th></th>
 				</tr>
-				{% for cartItem in cartTempItems if cartItem.type != 'object' %}
+				
+				{% set i = 1 %}
+
+				{% for cartItem in cartTempItems if cartItem.service.name == 'kupon' %}
+					{% if loop.first %}
+						<tr><td colspan="5">Купоны</td></tr>
+					{% endif %}
+					{% include 'cart/temp_item/kupon' %}
+					{% set i = i + 1 %}
+				{% endfor %}
+
+			
+				{% for cartItem in cartTempItems if cartItem.service.name != 'kupon' %}
+					{% if loop.first %}
+						<tr><td colspan="5">Услуги для объявлений</td></tr>
+					{% endif %}
 					{% include 'cart/temp_item/other' %}
 					{% set i = i + 1 %}
 				{% endfor %}
