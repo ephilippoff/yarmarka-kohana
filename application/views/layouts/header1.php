@@ -46,8 +46,12 @@
 								<li class="last"><a href="<?=URL::site('user/logout')?>"><div class="img"><img src="<?=URL::site('images/pr3.png')?>" alt="" /></div>Выход</a></li>												
 							</ul>
 						</div>
-					</div>	
-
+					</div>
+					
+				<?php else : ?>	
+					<div class="lk menu">
+						<span class="link cur_p" onclick="window.location='/user/login?return=<?=$_SERVER['REQUEST_URI']?>&domain=main'">Войти</span>
+					</div>						
 				<?php endif ?>
 
 					<span onclick="window.location='/article/help'" class="man menu cur_p">Помощь</span>
