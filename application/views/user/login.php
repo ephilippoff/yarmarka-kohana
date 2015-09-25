@@ -27,7 +27,7 @@
 						</form>
 				
 						<script>	
-							setInterval(function() { document.getElementById("billing_form").submit(); }, 3000);
+							setInterval(function() { document.getElementById("billing_form").submit(); }, 6000);
 						</script>				
 				<?php endif ?>				
 
