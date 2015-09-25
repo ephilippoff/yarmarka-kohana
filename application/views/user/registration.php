@@ -2,7 +2,7 @@
 	<section class="main-cont">
 		<div class="hheader">
 			<h1 class="ta-c"><span><strong>
-			Регистрация на сайте бесплатных объявлений «Ярмарка»
+			Регистрация
 			</strong></span></h1>
 		</div><!--hheader-->
 

@@ -1298,7 +1298,7 @@ class Controller_User extends Controller_Template {
 							->find();					
 
 					if (!$user->loaded())				
-						$user_id = ORM::factory('User')
+						ORM::factory('User')
 								->registration_from_social($userdata);
 					else
 						$ulogin_errors = "Присланный e-mail уже зарегестрирован на нашем сайте.";
