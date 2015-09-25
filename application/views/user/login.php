@@ -41,11 +41,8 @@
 			</div>
 			<div class="fieldscont">
 				<div class="inp-cont-short">
-					<p>Вы можете пройти авторизацию под учетной записью одного из сервисов:</p>
-					<br>
 					<?=$ulogin_html?>
 					<?php if ($ulogin_errors) : ?><div class="red mt10"><?=$ulogin_errors?></div><?php endif?>
-					<p class="pt20">Либо воспользоваться стандартной формой.</p>
 				</div>
 
 			</div>

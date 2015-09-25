@@ -25,14 +25,11 @@
 <body class="adaptive page-addobj page-auth">
 	<div class="popup-layer"></div>
 	<?=View::factory('layouts/google_analytics')?>
-	<div class="wrapfix add">
-			<?=View::factory('layouts/header1')?>
+	<div class="wrapfix wrapfix-auth add">
+			<?=View::factory('layouts/header2')?>
 			<div class="m_content">
 			<?=$_content?>
 	        </div>
 	  </div>
-      <div class="wrapfix footer-wrap add">
-	  <?=View::factory('layouts/footer')?>
-      </div>
 </body>  
 </html>
