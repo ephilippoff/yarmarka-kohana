@@ -39,43 +39,45 @@ define([
         initialize: function() {
             this.bindUIElements();
 
-            var similarObjects = [];
-            try {
-                similarObjects = JSON.parse(app.settings.objects_for_map);
-            } catch (e) {
-                similarObjects = [];
-            }
-            var lat = +this.ui.map.data("lat");
-            var lon = +this.ui.map.data("lon");
-            var baloonTemplate = templates.components.detail.baloon;
-            app.map.getMap({ elid: "map", lat: lat, lon: lon, zoom: 12}, function(map){
-                var collection = new ymaps.GeoObjectCollection();
+            if (this.ui.map.length) {
+                var similarObjects = [];
+                try {
+                    similarObjects = JSON.parse(app.settings.objects_for_map);
+                } catch (e) {
+                    similarObjects = [];
+                }
+                var lat = +this.ui.map.data("lat");
+                var lon = +this.ui.map.data("lon");
+                var baloonTemplate = templates.components.detail.baloon;
+                app.map.getMap({ elid: "map", lat: lat, lon: lon, zoom: 12}, function(map){
+                    var collection = new ymaps.GeoObjectCollection();
 
-                collection.add( app.map.createPlacemark([lat,lon], {
-                    style: app.map.getIconSettings("house"),
-                    content: {
-                        hintContent: 'Расположение объекта'
-                    }
-                }));
-
-                _.each(similarObjects, function(item){
-                    if (!item.coords[0]) return;
-                    var placemark = app.map.createPlacemark([item.coords[0],item.coords[1]],{
-                        style: app.map.getIconSettings("defTwitter"),
+                    collection.add( app.map.createPlacemark([lat,lon], {
+                        style: app.map.getIconSettings("house"),
                         content: {
-                            hintContent: item.title,
-                            balloonContent: _.template(baloonTemplate)(item)
+                            hintContent: 'Расположение объекта'
                         }
-                    });
-                    collection.add(placemark);
-                });
+                    }));
 
-                map.geoObjects.add(collection);
-                
-                map.setBounds(collection.getBounds(), {
-                    checkZoomRange: true
+                    _.each(similarObjects, function(item){
+                        if (!item.coords[0]) return;
+                        var placemark = app.map.createPlacemark([item.coords[0],item.coords[1]],{
+                            style: app.map.getIconSettings("defTwitter"),
+                            content: {
+                                hintContent: item.title,
+                                balloonContent: _.template(baloonTemplate)(item)
+                            }
+                        });
+                        collection.add(placemark);
+                    });
+
+                    map.geoObjects.add(collection);
+                    
+                    map.setBounds(collection.getBounds(), {
+                        checkZoomRange: true
+                    });
                 });
-            });
+            }
         },
 
         backcallButtonClick: function(e) {

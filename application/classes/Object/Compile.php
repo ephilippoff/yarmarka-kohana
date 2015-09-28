@@ -34,7 +34,7 @@ class Object_Compile
 		$result["main_photo"] 	= NULL;
 		$attachments = ORM::factory('Object_Attachment')
 							->where('object_id', '=', $object_id)
-							->where('type','IN', array(0, 4))
+							->where('type','IN', array(0, 4, 2, 3))
 							->find_all();
 
 		foreach ($attachments as $attachment) {
@@ -48,9 +48,9 @@ class Object_Compile
 			} elseif ($attachment->type == 4){
 				$result["remote_photo"][] = $attachment->filename;
 			} elseif ($attachment->type == 2){
-				$result["youtube_video"][] = $attachment->filename;
+				$result["youtube_video"] = $attachment->filename;
 			} elseif ($attachment->type == 3){
-				$result["rutube_video"][] = $attachment->filename;
+				$result["rutube_video"] = $attachment->filename;
 			}
 		}
 

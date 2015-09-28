@@ -30,6 +30,8 @@ class Object_Compiled
 			}
 		}
 
+		$result["youtube_video"] = Arr::get($images, "youtube_video", NULL);
+
 		return $result;
 	}
 
