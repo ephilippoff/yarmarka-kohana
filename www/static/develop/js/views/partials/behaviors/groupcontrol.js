@@ -18,7 +18,8 @@ define([
 
             up: ".js-service-group-up",
             premium: ".js-service-group-premium",
-            lider: ".js-service-group-lider"
+            lider: ".js-service-group-lider",
+            newspaper: ".js-service-group-newspaper"
         },
 
         events: {
@@ -29,7 +30,8 @@ define([
 
             "click @ui.up": "upObjects",
             "click @ui.premium": "premiumObjects",
-            "click @ui.lider": "liderObjects"
+            "click @ui.lider": "liderObjects",
+            "click @ui.newspaper": "newspaperObjects"
         },
 
         selectObject: function(e) {
@@ -134,6 +136,20 @@ define([
              e.preventDefault();
              var ids = this.get_objects_ids(true);
              app.services.lider(null, {
+                 ids: ids,
+                 success: function(result) {
+                     console.log(result);
+                 },
+                 error: function(result) {
+                    console.log(result);
+                 }
+             });
+         },
+
+         newspaperObjects: function(e) {
+             e.preventDefault();
+             var ids = this.get_objects_ids(true);
+             app.services.newspaper(null, {
                  ids: ids,
                  success: function(result) {
                      console.log(result);

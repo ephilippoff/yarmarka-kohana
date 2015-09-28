@@ -55,7 +55,8 @@ define([
                 title: options.title,
                 code: options.code,
                 is_edit: options.is_edit,
-                edit_params: options.edit_params
+                edit_params: options.edit_params,
+                parentView: this.$el
             });
         },
 
@@ -72,9 +73,12 @@ define([
         save: function(e) {
             e.preventDefault();
             var s = this;
-
+            var view = this.service.currentView;
+            if (view.resultValid && !view.resultValid()) {
+                return;
+            }
             var serviceModel = new ServiceModel();
-            var serviceData = this.service.currentView.model.toJSON();
+            var serviceData = view.model.toJSON();
             if (this.getOption("is_edit")) {
                 serviceData.temp_order_item_id = this.getOption("is_edit");
             }

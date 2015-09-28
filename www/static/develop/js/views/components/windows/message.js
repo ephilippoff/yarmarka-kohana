@@ -33,6 +33,13 @@ define([
             return data;
         },
 
+        onDestroy: function()
+        {
+            if (this.getOption("success")) {
+                this.getOption("success")();
+            }
+        },
+
         ok: function (e) {
             e.preventDefault();
             app.windows.vent.trigger("closeWindow","message");

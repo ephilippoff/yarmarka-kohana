@@ -145,6 +145,49 @@ class Controller_Rest_Service extends Controller_Rest {
 		}
 	}
 
+	public function action_check_newspaper()
+	{
+		$ids = ($this->post->ids) ? $this->post->ids: array($this->post->id);
+
+		if (!$ids OR !count($ids)) {
+			throw new HTTP_Exception_404;
+		}
+
+		$params = ($this->post->params) ? (array) $this->post->params : array();
+
+		$objects = ORM::factory('Object')->where("id","IN", $ids)->where("active","=",1)->find_all();
+		$objects_to_action = array();
+		$services_to_action = array();
+		$errors = 0;
+		foreach ($objects as $object) {
+			$object =  $object->get_row_as_obj(array("id","title"));
+			$objects_to_action[] = $object;
+
+			$service = Service::factory("Newspaper", $object->id);
+			$service->set_params($params);
+			$service_info = $service->get();
+			
+			$services_to_action[] = $service_info;
+		}
+
+		if ($errors > 0){
+			$this->json['text'] = "В выбранных объявлениях присуствуют ошибки. ". $this->json['text'];
+		}
+
+		if (count($objects_to_action) == 0 OR $this->json['code'] <> 200) {
+			$this->json['code'] = 400;
+		}
+		$this->json["type_info"] = Service::factory("Newspaper")->get_info();
+		$this->json['count'] = 0;
+		$this->json['available'] = FALSE;
+		$this->json['services'] = $services_to_action;
+		$this->json['objects'] = $objects_to_action;
+		if (count($objects_to_action) == 1) {
+			$this->json['object'] = $objects_to_action[0];
+			$this->json['service'] = $services_to_action[0];
+		}
+	}
+
 	public function action_check_kupon()
 	{
 		$object_id = intval($this->post->id);
@@ -193,7 +236,7 @@ class Controller_Rest_Service extends Controller_Rest {
 			return;
 		}
 		
-		$service_info = new Obj($this->post->serviceData["info"]);
+		$info = new Obj($this->post->serviceData["info"]);
 		$result = new Obj($this->post->serviceData["result"]);
 		
 		$tempOrderItemId = ( isset($this->post->serviceData["temp_order_item_id"]) ) ? $this->post->serviceData["temp_order_item_id"] : NULL;
@@ -202,27 +245,29 @@ class Controller_Rest_Service extends Controller_Rest {
 		try {
 			$db->begin();
 
-			$objects = $service_info->objects;
+			$objects = $info->objects;
 			if ($objects) {
-				$services = $service_info->services;
-				unset($service_info->objects);
-				unset($service_info->services);
+				$services = $info->services;
+				unset($info->objects);
+				unset($info->services);
 				foreach ($objects as $key => $object_info) {
 
-					$service_info->object = $object_info;
-					$service_info->service = $services[$key];
-					$service_name = Text::ucfirst($service_info->service["name"]);
-					if (in_array($service_info->service["name"], array("premium","up"))) {
-						$service_info->count = Service::factory($service_name)->get_balance();
-						$service_info->available = Service::factory($service_name)->check_available(1);
-					}
-					$orderItemTemp = Service::factory($service_name, $service_info->object['id'])
-									->save($service_info, $result, $tempOrderItemId);
+
+					$service_info = $services[$key];
+					$service_name = Text::ucfirst($service_info["name"]);
+					// if (in_array($service_info->service["name"], array("premium","up"))) {
+					// 	$service_info->count = Service::factory($service_name)->get_balance();
+					// 	$service_info->available = Service::factory($service_name)->check_available(1);
+					// }
+					$service = Service::factory($service_name, $object_info['id']);
+					$service->set_params($result);
+					$orderItemTemp	=  $service->save($object_info, $tempOrderItemId);
 				}
 			} else {
-				$service_name = Text::ucfirst($service_info->service["name"]);
-				$orderItemTemp = Service::factory($service_name, $service_info->id)
-								->save($service_info, $result, $tempOrderItemId);
+				$service_name = Text::ucfirst($info->service["name"]);
+				$service = Service::factory($service_name, $info->id);
+				$service->set_params($result);
+				$orderItemTemp = $service->save($info->object, $tempOrderItemId);
 			}
 
 			

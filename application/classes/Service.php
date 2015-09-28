@@ -4,6 +4,7 @@ class Service
 {
     protected $_city = NULL;
     protected $_category = NULL;
+    protected $_quantity = NULL;
     protected $_object = NULL;
     protected $_price_config = NULL;
 
@@ -130,6 +131,13 @@ class Service
         return $this;
     }
 
+    public function quantity($quantity = NULL)
+    {
+        if (!$quantity) return $this->_quantity;
+        $this->_quantity = $quantity;
+        return $this;
+    }
+
     public function object($object = NULL)
     {
         if (!$object) return $this->_object;
@@ -158,6 +166,15 @@ class Service
         if ($params->city) {
             $this->city($params->city);
         }
+
+        if ($params->quantity) {
+            $this->quantity($params->quantity);
+        }
+    }
+
+    public function get_title($params)
+    {
+        return "Услуга '".$params->service['title']."' для объявления '".$params->object['title']."'";
     }
 
     /**
@@ -167,27 +184,20 @@ class Service
      * @param  [type] $tempOrderItemId [ID of record in Order_ItemTemp table, set if is edit]
      * @return [void]
      */
-    public function save($service_info, $user_result, $tempOrderItemId = NULL)
+    public function save($object_info, $tempOrderItemId = NULL)
     {
         $params = new Obj();
+        $params->service =  $this->get();
+        $params->object =  $object_info;
+        $params->title = $this->get_title($params);
+
+        return $this->save_to_cart($params, $tempOrderItemId);
+    }
+
+    protected function save_to_cart($params, $tempOrderItemId = NULL)
+    {
         $key = Cart::get_key();
-        $object_id = $service_info->object["id"];
-        $object_title = $service_info->object['title'];
-
-        $this->set_params($user_result);
-
-        $params->service =  $this->get($user_result);
-        $params->type = $params->service["name"];
-
-        if ($params->service["name"] == "kupon")
-        {
-            $params->title = "".$service_info->service["title"]."";
-        } else
-        {
-            $params->title = "Услуга '".$params->service['title']."' для объявления '".$object_title."'";
-        }
-
-        $total_params = json_encode(array_merge( (array) $service_info, (array) $params) ) ;
+        $object_id = $params->object["id"];
 
         if ($tempOrderItemId) {
             $order_item_temp = ORM::factory('Order_ItemTemp', $tempOrderItemId);
@@ -206,7 +216,7 @@ class Service
         $order_item_temp->object_id = $object_id;
         $order_item_temp->service_id = NULL;
         $order_item_temp->service_name = $params->service["name"];
-        $order_item_temp->params = $total_params;
+        $order_item_temp->params = json_encode( $params );
         $order_item_temp->key = $key;
         $order_item_temp->save();
 

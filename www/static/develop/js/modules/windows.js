@@ -36,14 +36,12 @@ define(['marionette',
             backcall: BackcallView,
             message: MessageView,
             object_callback: ObjectCallbackView
-            //error_register: ErrorWindow,
-            //error_forbidden: ErrorWindow,
 
         },
         zIndex: {
             //service: "z150",
             //backcall: "z150",
-            //message: "z150"
+            //message: "z200"
         },
         label: {
             //panel: {class:".s_panel_label", winclass:".leftsidecont", depency:[] },

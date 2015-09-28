@@ -19,23 +19,22 @@ class Service_Premium extends Service
 		$this->_initialize();
 	}
 
-	public function get($params = array())
+	public function get()
 	{
 
-		$params = new Obj($params);
-		$quantity = $params->quantity = ($params->quantity) ? $params->quantity : 1;
+		$quantity = ($this->quantity()) ? $this->quantity() : 1;
 		$price = $price_total = $this->getPriceMultiple();
 		$discount = 0;
 		$discount_reason = "";
 		$discount_name = FALSE;
-		$params->available = $this->check_available($quantity);
-		if ($params->available) {
+		$available = $this->check_available($quantity);
+		if ($available) {
 			$discount = $price * $quantity;
 			$discount_reason = " (предоплаченный)";
 			$discount_name = "prepayed_premium";
 		}
 		$price_total = $price * $quantity - $discount;
-		$description = $this->get_params_description($params).$discount_reason;
+		$description = $this->get_params_description().$discount_reason;
 
 		return array(
 			"name" => $this->_name,
@@ -50,9 +49,9 @@ class Service_Premium extends Service
 		);
 	}
 
-	public function get_params_description($params)
+	public function get_params_description($params = array())
 	{
-		return "Количество: ".$params->quantity;
+		return "Количество: ".(($this->quantity()) ? $this->quantity() : 1);
 	}
 
 	/**

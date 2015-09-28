@@ -25,9 +25,13 @@ define(function(require){
                 lider: require('lib/text!templates/services/lider.tmpl'),
                 buyObject: require('lib/text!templates/services/buyObject.tmpl'),
                 kupon: require('lib/text!templates/services/kupon.tmpl'),
+                newspaper: require('lib/text!templates/services/newspaper.tmpl'),
             },
             detail: {
                 baloon: require('lib/text!templates/detail/baloon.tmpl'), 
+            },
+            descriptions: {
+                newspaper: require('lib/text!templates/descriptions/newspaper.tmpl')
             }
         }
     };

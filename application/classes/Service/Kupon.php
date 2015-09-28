@@ -23,16 +23,15 @@ class Service_Kupon extends Service
 		}
 	}
 
-	public function get($params = array())
+	public function get()
 	{
-		$params = new Obj($params);
-		$quantity = $params->quantity = ($params->quantity) ? $params->quantity : 1;
+		$quantity = ($this->quantity()) ? $this->quantity() : 1;
 		$price = $price_total = $this->getPrice();
 		$discount = 0;
 		$discount_reason = "";
 		$discount_name = FALSE;
 		$price_total = $price * $quantity - $discount;
-		$description = $this->get_params_description($params).$discount_reason;
+		$description = $this->get_params_description().$discount_reason;
 		$kupon = $this->_kupon_group->get_kupon();
 		return array(
 			"group_id" => $this->_kupon_group->id,
@@ -49,9 +48,14 @@ class Service_Kupon extends Service
 		);
 	}
 
-	public function get_params_description($params)
+	public function get_title($params)
 	{
-		return $params->quantity." купон";
+		return $params->service["title"];
+	}
+
+	public function get_params_description($params =  array())
+	{
+		return (($this->quantity()) ? $this->quantity() : 1)." купон";
 	}
 
 	public function check_available($quantity)

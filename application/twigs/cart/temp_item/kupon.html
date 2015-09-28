@@ -1,4 +1,4 @@
-<tr data-id="{{ cartItem.id }}" data-type="{{ cartItem.type }}" data-object-id="{{ cartItem.object.id }}" data-total="{{cartItem.service.price_total}}" 
+<tr data-id="{{ cartItem.id }}" data-name="{{ cartItem.service.name }}" data-object-id="{{ cartItem.object.id }}" data-total="{{cartItem.service.price_total}}" 
 class="{% if cartItem.available %}warning{%else%}danger{% endif %} js-cartitem">
 	<td>
 		<a href="/detail/{{ cartItem.object.id }}">{{ cartItem.service.title }}</a>
