@@ -28,7 +28,7 @@ class Acl
         return $result;
     }
 
-    public static function check_kupon($kupon, $action)
+    public static function check_kupon($kupon, $action, $key = NULL)
     {
         $user =  Auth::instance()->get_user();
         $settings = Kohana::$config->load("acl.settings");
@@ -45,8 +45,9 @@ class Acl
                     $result = "by_owner";
                 }
             } else {
-                $key = Cart::get_key();
-                if ($order->key == $key)
+
+                $key = ($key) ? (string) $key : Cart::get_key();
+                if ($order->key == $key || $key == $kupon->access_key)
                 {
                     $result = "by_owner";
                 }

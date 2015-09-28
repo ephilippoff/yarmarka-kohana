@@ -19,6 +19,7 @@ class Controller_Kupon extends Controller_Template {
 		$twig = Twig::factory('detail/kupon/print');
 
 		$id = (int)$this->request->param('id');
+		$key = (int)$this->request->query('key');
 		
 		
 		$kupon = ORM::factory('Kupon', $id);
@@ -27,7 +28,7 @@ class Controller_Kupon extends Controller_Template {
 		if(!$kupon->loaded())
 			throw new HTTP_Exception_404;
 		
-		if (!Acl::check_kupon($kupon, "kupon"))
+		if (!Acl::check_kupon($kupon, "kupon", $key))
 			throw new HTTP_Exception_404;
 		
 		$twig->kupon = $kupon;

@@ -182,10 +182,11 @@ class Model_Order extends ORM
 			$params = json_decode($cart_item->params);
 			$service = Service::factory(Text::ucfirst($params->service->name), ($params->service->name == "kupon") ? $params->service->group_id: $cart_item->object_id);
 
+			$cart_item_obj = $cart_item->get_row_as_obj();
 			$item = new Obj((array) $params);
 			$item->id = $cart_item->id;
 			$item->available = FALSE;
-			$item->order_id = @$cart_item->order_id;
+			$item->order_id = @$cart_item_obj->order_id;
 
 			$item = $callback($service, new Obj($item), $cart_item);
 
@@ -220,6 +221,28 @@ class Model_Order extends ORM
 			$state_name = "cancelPayment";
 		}
 		return ($get_name) ? $state_name : $state;
+	}
+
+	function electronic_delivery($orderItem)
+	{
+		if (!$this->loaded()) return;
+
+		$params = ($this->params) ? $this->params : "{}";
+		$params = new Obj(json_decode($params));
+
+		//if ($params->delivery AND $params->delivery->type == "electronic" AND $orderItem->service->name == "kupon") {
+
+			$subj = "Вы приобрели купон на скидку. Заказ №".$this->id;
+			$msg = View::factory('emails/kupon_notify',
+					array(
+						'title' => $orderItem->service->title,
+						'id' => $orderItem->service->id,
+						'key' => $orderItem->kupon->access_key,
+						'order' => $this, 
+					));
+			
+			Email::send($params->delivery->email, Kohana::$config->load('email.default_from'), $subj, $msg);
+		//}
 	}
 	
 

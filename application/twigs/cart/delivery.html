@@ -9,10 +9,8 @@
 {% block content %} 
 	<form action="/cart/delivery/{{ order.id }}" method="POST">
 		<input type="hidden" name="id" value="{{ order.id }}">
-		<p class="mb10">Для некоторых из выбранных позиций, требуется оформить доставку</p>
-		<p class="mb10">Внимательно заполните поля формы</p>
 		<div class="ta-l mb10 field">
-			<p><b>Варианты:</b></p>
+			<p>Варианты:</p>
 			<input class="input fields js-delivery-type" type="radio" name="type" value="pickup" {% if post.type == "pickup" %} checked {% endif %}>Самовывоз
 			<input class="input fields js-delivery-type" type="radio" name="type" value="city-delivery" {% if post.type == "city-delivery" %} checked {% endif %}>Доставка по городу
 		</div>
@@ -67,5 +65,12 @@
 {% endblock content %}
 
 {% block rightside %} 
-	Правая сторона
+	<div class="info-block-cont theme3 module">
+		<div class="block-title">
+			<span>Информация</span>
+		</div>
+		<div class="bg-color-whitesmoke p10">
+			Внимательно заполните поля формы
+		</div>
+	</div>
 {% endblock rightside %}

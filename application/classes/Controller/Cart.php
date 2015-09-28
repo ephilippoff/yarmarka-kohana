@@ -21,7 +21,7 @@ class Controller_Cart extends Controller_Template {
 	{
 		$start = microtime(true);
 		$twig = Twig::factory('cart/index');
-
+		$twig->user = $user = Auth::instance()->get_user();
 		$cart = $cartTempItems = $sale_types = array();
 		$key = Cart::get_key();
 
@@ -34,6 +34,7 @@ class Controller_Cart extends Controller_Template {
 		$twig->city = $this->domain->get_city();
 
 		$sum = 0;
+		$need_delivery = FALSE;
 		//если корзина не пуста, т.е. есть ключ
 		if ($key) {
 
@@ -41,8 +42,12 @@ class Controller_Cart extends Controller_Template {
 								->where("key","=", $key)
 								->order_by("id");
 
-			$sum = Model_Order::each_item($cart_tems, function($service, $item, $model_item) use (&$cartTempItems, $key) {
+			$sum = Model_Order::each_item($cart_tems, function($service, $item, $model_item) use (&$cartTempItems, $key, &$need_delivery) {
 
+				if (!$need_delivery)
+				{
+					$need_delivery = Kohana::$config->load("billing.".$item->service->name.".delivery_type");
+				}
 				//если заказан товар , проверяем доступность
 				if ($item->service->name == "kupon") {
 					$kupon = ORM::factory('Kupon', $item->service->id);
@@ -66,8 +71,13 @@ class Controller_Cart extends Controller_Template {
 
 		
 
-		if (in_array("with-shipping", $sale_types)) {
-			$twig->next_page = "cart/delivery/";
+		if ($need_delivery) {
+			if ($need_delivery == "electronic") {
+				$twig->next_page = "cart/electronic_delivery/";
+			} else {
+				$twig->next_page = "cart/delivery/";
+			}
+			
 		} else {
 			$twig->next_page = "cart/order/";
 		}
@@ -75,9 +85,91 @@ class Controller_Cart extends Controller_Template {
 
 		$twig->cartTempItems = $cartTempItems;
 		$twig->sum = $sum;
-		$twig->user = $user = Auth::instance()->get_user();
+		
 
 		$twig->php_time = microtime(true) - $start;
+		$this->response->body($twig);
+	}
+
+	public function action_electronic_delivery()
+	{
+		$twig = Twig::factory('cart/electronic_delivery');
+		$twig->city = $this->domain->get_city();
+		$id = $this->request->param('id');
+		$twig->user = $user = Auth::instance()->get_user();
+		$errors = array();
+		$key = Cart::get_key();
+
+		if (!$id) {
+			HTTP::redirect("/cart");
+			return;
+		}
+
+		if ($user) {
+			$order = ORM::factory('Order')
+					->where("user_id","=", $user->id)
+					->where("id","=", intval($id))
+					->find();
+		} else {
+			$order = ORM::factory('Order')
+					->where("key","=", $key)
+					->where("id","=", intval($id))
+					->find();
+		}
+		
+		if (!$order->loaded() or $order->state > 0) {
+			throw new HTTP_Exception_404;
+			return;
+		}
+		$twig->order = $order;
+
+		$twig->crumbs = array(
+			array(
+				"title" => "Оформление заказа",
+				"url" => "cart"
+			),
+			array(
+				"title" => "Оформление доставки - электронная доставка"
+			)
+		);
+		
+		$params = ($order->params) ? $order->params : "{}";
+		$params = new Obj(json_decode($params));
+		if ($params->delivery)
+		{
+			$twig->post = $params->delivery;
+		}
+
+		$is_post = ($_SERVER['REQUEST_METHOD']=='POST');
+		if ($is_post)
+		{
+
+			$validation = Validation::factory((array) $this->request->post())
+					->rule('email', 'not_empty', array(':value', "E-mail"))
+					->rule('email', 'is_email_contact', array(':value', "E-mail"))
+					->rule('phone', 'not_empty', array(':value', "Телефон"));
+
+			if ( !$validation->check())
+			{
+				$errors = $validation->errors('validation/object_form');
+			}
+
+			$twig->errors = $errors;
+			$twig->post = $this->request->post();
+
+			if (!count($errors))
+			{
+				$params->delivery = array(
+					"type" => "electronic",
+					"email" => $this->request->post("email"),
+					"phone" => $this->request->post("phone")
+				);
+				$order->params = json_encode((array) $params);
+				$order->save();
+				HTTP::redirect("/cart/order/".$order->id);
+			}
+		}
+
 		$this->response->body($twig);
 	}
 
@@ -256,7 +348,7 @@ class Controller_Cart extends Controller_Template {
 
 			$twig->crumbs[] = array(
 				"title" => "Оформление доставки",
-				"url" => "cart/delivery/".$order->id
+				"url" => "cart/".$params->delivery->type."_delivery/".$order->id
 			);
 
 			$twig->delivery_info = $params->delivery;

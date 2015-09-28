@@ -2,5 +2,8 @@
 return array(
 	'emails_for_notify' => array("a.vagapov@yarmarka.biz"),
 	'operators_for_notify' => array("a.vagapov@yarmarka.biz"),
-	'managers_for_notify' => array("a.vagapov@yarmarka.biz")
+	'managers_for_notify' => array("a.vagapov@yarmarka.biz"),
+	'kupon' => array(
+		"delivery_type" => "electronic"
+	)
 );

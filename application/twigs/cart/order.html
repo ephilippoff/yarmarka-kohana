@@ -41,36 +41,18 @@
 		{% if delivery_info %}
 			<div class="messages-cont mb20">
 				<hr>
-				<p>Информация по доставке</p>
-				<div class="ta-l mb10 field">
-					<p><b>Тип доставки:</b></p>
-					<p>
-						{% if delivery_info.type == "pickup" %}
-							<span>Самовывоз</span>
-						{% elseif delivery_info.type == "city-delivery" %}
-							<span>Доставка по городу</span>
+				<p>Информация по доставке:</p>
+				<div class="ta-l field">
+					<p class="p10"><span class="bold">Тип доставки:</span>
+						{% if delivery_info.type == "electronic" %}
+							<span>Электронная доставка по электронной почте <span class="span-link">{{delivery_info.email}}</span></span>
 						{% endif %}
 					</p>
 				</div>
 
-				{% if delivery_info.address %}
-					<div class="ta-l mb10 field">
-						<p><b>Адрес:</b></p>
-						<p>{{delivery_info.address}}</p>
-					</div>
-				{% endif %}
-
 				{% if delivery_info.phone %}
-					<div class="ta-l mb10 field">
-						<p><b>Телефон:</b></p>
-						<p>{{delivery_info.phone}}</p>
-					</div>
-				{% endif %}
-
-				{% if delivery_info.comment %}
-					<div class="ta-l mb10 field">
-						<p><b>Комментарий:</b></p>
-						<p>{{delivery_info.comment}}</p>
+					<div class="ta-l field">
+						<p class="p10"><span class="bold">Телефон для связи:</span> {{delivery_info.phone}}</p>
 					</div>
 				{% endif %}
 			</div>
@@ -122,7 +104,12 @@
 		</div>
 		<div class="p10">
 			{% if state == "initial" %}
-				<p>Заказ на оформлении. <br><a href="/cart"><i class="fa fa-angle-double-left fa-lg mr5"></i>Вернуться к корзине</a></p>
+				<p class="p5">Заказ на оформлении. </p>
+				{% if delivery_info %}
+					<p class="p5"><a href="/cart/{{delivery_info.type}}_delivery/{{order.id}}">Изменить информацию о доставке</a></p>
+				{% endif %}
+				<p class="p5"><a href="/cart"><i class="fa fa-angle-double-left fa-lg mr5"></i>Вернуться к корзине</a></p>
+				
 			{% elseif state == "notPaid" %}
 				<p>Заказ в ожидании оплаты</p>
 			{% elseif state == "paid" %}
