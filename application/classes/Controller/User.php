@@ -1417,13 +1417,13 @@ class Controller_User extends Controller_Template {
 		$domain = Arr::get($_GET, 'domain', NULL);
 		
 		if (!$domain)
-			$domain = trim(Url::base('http'),'/');
+			$domain = Url::base('http');
 		else
 			$domain = "http://".Kohana::$config->load("common.main_domain");		
 		
 		$billing_params = isset($_COOKIE['billing_params']) ? json_decode($_COOKIE['billing_params']) : array(); 
 
-		$return_page = (!$this->user and $billing_params) ? URL::site('user/login') : $return_page;
+		$return_page = (!$this->user and $billing_params) ? trim(URL::site('user/login'),'/') : $return_page;
 
 		$ulogin_errors = '';
 		$ulogin = Ulogin::factory();		
