@@ -35,8 +35,6 @@ class Controller_Kupon extends Controller_Template {
 		$twig->kupon_number = $kupon->decrypt_number($twig->kupon->number);
 		$twig->kupon_group = $kupon_group;
 
-		echo Debug::vars($kupon->check_number("367651664"));
-
 		$object = ORM::factory('Object', $kupon_group->object_id);
 		if ($object->loaded())
 		{
