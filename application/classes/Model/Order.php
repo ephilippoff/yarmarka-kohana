@@ -149,11 +149,13 @@ class Model_Order extends ORM
 
 		if ($state == 2)
 		{
+			$configBilling = Kohana::$config->load("billing");
+
 			$subj = "Уведомление администратору об оплате заказа с товарами. Заказ №".$this->id;
 			$msg = View::factory('emails/payment_success',
 					array('order' => $this,'orderItems' => $orderItems));
 
-			$configBilling = Kohana::$config->load("billing");
+			
 			foreach ($configBilling["emails_for_notify"] as $email) {
 				Email::send($email, Kohana::$config->load('email.default_from'), $subj, $msg);
 			}
@@ -183,6 +185,7 @@ class Model_Order extends ORM
 			$item = new Obj((array) $params);
 			$item->id = $cart_item->id;
 			$item->available = FALSE;
+			$item->order_id = @$cart_item->order_id;
 
 			$item = $callback($service, new Obj($item), $cart_item);
 

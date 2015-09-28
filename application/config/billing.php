@@ -1,11 +1,6 @@
 <?php defined('SYSPATH') OR die('No direct access allowed.');
 return array(
-	'premium_enabled'		=> FALSE,
-	'premium_ads_categories'=> array(),
-	'premium_ads_price'		=> array(
-					3 	=> 3,
-					96 	=> 3,
-					36 	=> 2
-				),
-	'emails_for_notify' => array("a.vagapov@yarmarka.biz")
+	'emails_for_notify' => array("a.vagapov@yarmarka.biz"),
+	'operators_for_notify' => array("a.vagapov@yarmarka.biz"),
+	'managers_for_notify' => array("a.vagapov@yarmarka.biz")
 );

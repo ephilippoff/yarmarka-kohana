@@ -18,6 +18,12 @@ class Model_Object extends ORM {
 		'complaints'		=> array('model' => 'Complaint', 'foreign_key' => 'object_id'),
 	);
 
+	public function change_tablename($name)
+	{
+		$this->_table_name = $name;
+		return $this;
+	}
+
 	public function filters()
 	{
 		return array(

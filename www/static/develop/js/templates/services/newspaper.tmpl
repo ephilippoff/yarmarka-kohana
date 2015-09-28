@@ -25,8 +25,8 @@
 					<th class="service-title bold">Выберите тип объявления (можно несколько)<br>
 						(<span class="span-link js-service-description">подробнее о типах объявлений</span>)
 					</th>
-					<th class="quantity bold">Количество</th>
-					<th class="price bold">Цена</th>
+					<th class="quantity bold">Количество <br>публикаций</th>
+					<th class="price bold">Стоимость</th>
 				</thead>
 				<tbody>
 				<% var types = getTypes() %>
@@ -47,8 +47,8 @@
 						</td>
 						<td class="quantity">
 							<% var quantity  = 2; %>
-							<% if (type_key == "free") { quantity = 1; %>
-								1
+							<% if (type_key == "free") { quantity = 3; %>
+								3
 								<input class="js-quantity js-quantity_<%=type_key%> hidden" type="number" value="<%=quantity%>" min="1" max="99" data-type="<%=type_key%>">
 							<% } else { %>
 

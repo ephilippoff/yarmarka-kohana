@@ -43,9 +43,9 @@ define([
                getTitle: function(){
                     var info = s.model.get("info");
                     if (info.object) {
-                        return "Услуга '" + info.service.title + "' для объявления '" + info.object.title + "'";
+                        return "Услуга 'Подъем' для объявления '" + info.object.title + "'";
                     } else if (info.objects) {
-                        return "Услуга '" + info.service.title + "' для "+info.objects.length+" объявлений(ия)";
+                        return "Услуга 'Подъем' для "+info.objects.length+" объявлений(ия)";
                     }
                }
             }

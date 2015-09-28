@@ -136,12 +136,35 @@ class Service_NewsPaper extends Service
 
 	public function apply($orderItem)
 	{
-		$object_id = $orderItem->object->id;
-		self::saveServiceInfoToCompiled($object_id);
+		$types = array_keys((array) $orderItem->service->contents);
+		if ( $types == array("free") ) return;
+		$configBilling = Kohana::$config->load("billing");
+
+		$orderItems = array($orderItem);
+		$subj = "Оплата объявлений в газету (".$orderItem->service->price_total." руб). Заказ №".$orderItem->order_id;
+
+		$order = ORM::factory('Order', $orderItem->order_id);
+		$object = ORM::factory('Object', $orderItem->object->id);
+		$user = ORM::factory('User', $object->author);
+		$contacts = array();
+		$contacts = $object->contacts;
+
+		$msg = View::factory('emails/payment_success_apply_notify',
+				array(
+					'order' => $order, 
+					'orderItems' => $orderItems, 
+					'object' => $object,
+					'contacts' => $contacts,
+					'user'=> $user
+				));
+
+		foreach ($configBilling["operators_for_notify"] as $email) {
+			Email::send($email, Kohana::$config->load('email.default_from'), $subj, $msg);
+		}
 	}
 
-	static function apply_service($object_id, $quantity, $cities = NULL, $categories = NULL)
+	static function apply_service($object_id, $order_id, $description)
 	{
-		
+
 	}
 }
