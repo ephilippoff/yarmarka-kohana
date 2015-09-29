@@ -1,10 +1,10 @@
 <div class="thumbnails-cont module">
 	<div class="js-thumbnails">
 		{% for photo in object.compiled.images.local_photo %}
-			<img class="" alt="Объявление. {{object.compiled.city}}, {{object.title}}. Фото {{loop.index}}" src="{{ get_file(photo['120x90']) }}">
+			<div class="w120 dib pointer" onclick="$('body').scrollTop( $('#img{{loop.index}}').position().top );"><img class="" alt="Объявление. {{object.compiled.city}}, {{object.title}}. Фото {{loop.index}}" src="{{ get_file(photo['120x90']) }}"></div>
 		{% endfor %}
 		{% for photo in object.compiled.images.remote_photo %}
-			<img class="" alt="Объявление. {{object.compiled.city}}, {{object.title}}. Фото {{loop.index}}" src="{{ photo }}">
+			<div class="w120 dib pointer" onclick="$('body').scrollTop($('#img{{loop.index}}').position().top );"><img class="" alt="Объявление. {{object.compiled.city}}, {{object.title}}. Фото {{loop.index}}" src="{{ photo }}"></div>
 		{% endfor %}
 	</div>
 </div>
