@@ -11,7 +11,7 @@
 			{% endfor %}
 		</ul>
 	</div> 
-	<div class="right brb2">
+	<div class="right brb2 visible-lg">
 		{% for category in categories1l %}
 			{% set menuHeight = (banners[category.id] is defined and banners[category.id].menu_height) ? banners[category.id].menu_height : 0 %}
 			{% set divWidth = (banners[category.id] is defined and banners[category.id].menu_width) ? banners[category.id].menu_width : 341 %}
