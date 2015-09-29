@@ -11,7 +11,7 @@
 				Пожалуйста, отметьте причину снятия объявлений с публикации
 			</div>
 			<div class="mt10">
-				<% var reasons = {'sold_yarmarka':'Я продал на Ярмарке', 'sold_yarmarka_paper':'Я продал через газету', 'sold_somewhere':'Я продал гдето-еще', 'other':'Другая причина'}; %>
+				<% var reasons = {'sold_yarmarka':'Я продал на Ярмарке', 'sold_yarmarka_paper':'Я продал через газету', 'sold_somewhere':'Я продал где-то еще', 'other':'Другая причина'}; %>
 				<% _.each(reasons, function(value, key) {%>
 					<p class="p5">
 					<input type="radio" name="reason" value="<%=key%>" id="radio_<%=key%>"><label for="radio_<%=key%>" class="ml5 pointer"><%=value%></label>

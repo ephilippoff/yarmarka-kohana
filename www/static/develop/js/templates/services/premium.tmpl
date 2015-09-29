@@ -14,7 +14,7 @@
 	<thead>
 		<th class="service-title">Услуга</th>
 		<th class="quantity">Количество</th>
-		<th class="price">Цена</th>
+		<th class="price w150">Цена</th>
 	</thead>
 	<tbody>
 	<tr>
@@ -26,7 +26,7 @@
 			} %>
 			<input class="js-quantity" type="number" value="<%=quantity%>" min="1" max="99">
 		</td>
-		<td class="price">
+		<td class="price w150">
 			<span class="js-price">
 				<%=getPrice()%>
 			</span>
@@ -40,6 +40,6 @@
 <% } %>
 
 <% if (info.code >= 400) { %>
-	<p>Вы не можете воспользоваться этой услугой, потомучто объявление заполнено не полностью.</p>
+	<p>Вы не можете воспользоваться этой услугой, потому что объявление заполнено не полностью.</p>
 	<p><%=info.text%></p>
 <% } %>
