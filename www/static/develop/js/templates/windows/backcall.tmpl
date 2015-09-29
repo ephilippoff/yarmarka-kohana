@@ -5,32 +5,50 @@
 			<i class="ico close-ico16"></i>
 		</div>			
 	</div>					
-	<div class="cont">
+	<div class="cont form-cont">
 		<form class="js-form">
-			<div class="mt10">
-				ФИО<input type="text" name="name" value="<%=name%>">
-			</div>
-			<% if (getError("name")) { %>
-				<div class="pos-wrap">
-					<div class="msg"><%=getError("name")%></div>
+			<div class="row">
+				<div class="col-md-12">
+					<label><span class="red fs20">*</span> ФИО:</label>
 				</div>
-			<% } %>
-			<div class="mt10">
-				Телефон<input type="text" name="phone" value="<%=phone%>">
-			</div>
-			<% if (getError("phone")) { %>
-				<div class="pos-wrap">
-					<div class="msg"><%=getError("phone")%></div>
+				<div class="col-md-12">
+					<div class="inp-cont <% if (getError("name")) { %>error<% } %>">																								
+						<input class="w100p" type="text" name="name" value="<%=name%>">
+						<% if (getError("name")) { %>
+								<span class="inform"><%=getError("name")%></span>
+						<% } %>						
+					</div>
 				</div>
-			<% } %>
-			<div class="mt10">
-				Комментарий<textarea cols="30" rows="10" name="comment"><%=comment%></textarea>
 			</div>
-			<% if (getError("common")) { %>
-				<div class="mt10">
-					<%=getError("common")%>
+
+			<div class="row">
+				<div class="col-md-12">
+					<label><span class="red fs20">*</span> Телефон:</label>
 				</div>
-			<% } %>
+				<div class="col-md-12">
+					<div class="inp-cont <% if (getError("phone")) { %>error<% } %>">																		
+						<input class="w100p" type="text" name="phone" value="<%=phone%>">
+						<% if (getError("phone")) { %>
+								<span class="inform"><%=getError("phone")%></span>
+						<% } %>						
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-md-12">
+					<label>Комментарий:</label>
+				</div>
+				<div class="col-md-12">
+					<div class="inp-cont <% if (getError("comment")) { %>error<% } %>">																	
+						<textarea class="w100p" cols="30" rows="10" name="comment"><%=comment%></textarea>
+						<% if (getError("comment")) { %>
+								<span class="inform"><%=getError("comment")%></span>
+						<% } %>						
+					</div>
+				</div>
+			</div>
+
 			<div class="row mt10">
 				<div class="col-md-6">&nbsp;</div>
 				<div class="col-md-6"><button class="w100 button button-style1 bg-color-blue white js-ok fr">OK</button></div>
