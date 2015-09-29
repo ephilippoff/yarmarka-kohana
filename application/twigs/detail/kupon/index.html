@@ -46,7 +46,7 @@
 			<div class="module">{% include 'detail/kupon/coupon_info' %}</div>
 
 			{% if object.compiled.attributes.site.value %}
-				<div class="button bg-color-crimson white pt15 pb15 fs20 mb5 w100p" onclick="window.location.href='{{ object.compiled.attributes.site.value }}'">Наш сайт</div>
+				<div class="button bg-color-crimson white pt15 pb15 fs20 mb10 w100p" onclick="window.location.href='{{ object.compiled.attributes.site.value }}'">Наш сайт</div>
 			{% endif %}
 			
 			{% if object.is_published != 0 %}
