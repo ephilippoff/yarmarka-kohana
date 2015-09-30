@@ -49,6 +49,7 @@
 	</div>
 
 	{% block footer %} 
+		{{ parent() }}
 		{% if php_time %}
 			<div class="info-block-cont theme2 module">
 				<div class="block-title">

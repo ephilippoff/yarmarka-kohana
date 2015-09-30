@@ -4,8 +4,9 @@ define([
     "templates",
     "views/partials/behaviors/favourite",
     "views/partials/behaviors/search",
-    "views/partials/behaviors/ads"
-], function (Marionette, templates, FavouriteBehavior, SearchBehavior, AdsBehavior) {
+    "views/partials/behaviors/ads",
+    "base/utils"
+], function (Marionette, templates, FavouriteBehavior, SearchBehavior, AdsBehavior, utils) {
     "use strict";
 
     return Marionette.LayoutView.extend({
@@ -55,15 +56,26 @@ define([
                     this.fixBlock(this.ui.banners, this.ui.map.height(), this.ui.map.height() + 10);
                 }
             }
+
+            this.citySelect();
+        },
+
+        citySelect: function() {
+            var city_id = utils.getRemembedCity();
+
         },
 
         initMap: function() {
             var mapObjects = [];
-            try {
-                mapObjects = JSON.parse(app.settings.objects_for_map);
-            } catch (e) {
-                mapObjects = [];
+
+            if ($("#objects_for_map").length) {
+                try {
+                    mapObjects = JSON.parse($("#objects_for_map").text());
+                } catch (e) {
+                    mapObjects = [];
+                }
             }
+           
             var s = this;
             var lat = +this.ui.map.data("lat");
             var lon = +this.ui.map.data("lon");

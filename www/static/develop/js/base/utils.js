@@ -1,7 +1,8 @@
 /*global define, window */
 define([
         'jquery',
-        'underscore'
+        'underscore',
+        'jcookie'
         ], 
 function ($, _) {
     "use strict";
@@ -17,6 +18,14 @@ function ($, _) {
     };
 
     return {
+        getRemembedCity: function() {
+            var city_id = null;
+            var city_cookie = $.cookie("location_city_id");
+            if (city_cookie) {
+                city_id = parseInt(city_cookie.split('~')[1]);
+            }
+            return city_id;
+        },
         parseQueryString: function(queryString) {
             if (!_.isString(queryString)) {
                 return;

@@ -41,10 +41,12 @@ define([
 
             if (this.ui.map.length) {
                 var similarObjects = [];
-                try {
-                    similarObjects = JSON.parse(app.settings.objects_for_map);
-                } catch (e) {
-                    similarObjects = [];
+                if ($("#objects_for_map").length) {
+                    try {
+                        similarObjects = JSON.parse($("#objects_for_map").text());
+                    } catch (e) {
+                        similarObjects = [];
+                    }
                 }
                 var lat = +this.ui.map.data("lat");
                 var lon = +this.ui.map.data("lon");

@@ -64,6 +64,10 @@ class Controller_Search extends Controller_Template {
         $this->performance->add("Search","search_info");
         $search_info = $this->get_search_info();
 
+        if ($search_info->city_id) {
+            Cookie::set('location_city_id', $search_info->city_id, strtotime( '+31 days' ));
+        }
+
         $search_params = Search_Url::clean_reserved_query_params($this->request->query());
 
         //link counters
@@ -220,7 +224,7 @@ class Controller_Search extends Controller_Template {
         //favourites
         $twig->favourites = ORM::factory('Favourite')->get_list_by_cookie();
         //end favourites
-        
+
         if ($search_info->category->show_map or count($twig->vip_search_result) > 6) {
             if (count($objects_for_map) > 0 ) {
                 $twig->objects_for_map = json_encode($objects_for_map);

@@ -55,11 +55,13 @@
                 data: window.data, 
                 category_id: '{{category_id}}',
                 query_params: '{{query_params_for_js}}',
-                city_id: '{{city_id}}',
-                objects_for_map: '{{objects_for_map}}'
+                city_id: '{{city_id}}'
             };
         </script>
         <script data-main="/static/develop/js/main.js" src="/static/develop/js/lib/require.js"></script>
+        {% if (objects_for_map) %}
+            <script id="objects_for_map" type="text/template">{{objects_for_map}}</script>
+        {% endif %}
         <!-- endinject -->
     </body>
 </html>
