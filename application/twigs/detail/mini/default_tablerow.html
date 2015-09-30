@@ -69,6 +69,14 @@
 		{% set services = get_service_icon_info(object.compiled.services, check_access("object.moderate")) %}
 		{% for services in services %}
 			<i class="fa {{ services.icon_class }} fa-lg gray" title="{{services.title}}"></i>
-		{% endfor %}
+		{% endfor %}		
 	</td>
 </tr>
+
+{% if loop.index in banner_zone_positions|keys %}
+	<tr class="tr">
+		<td colspan="4">
+			<div class="banner {zoneID: {{banner_zone_positions[loop.index]}} }"></div>
+		</td>
+	</tr>	
+{% endif %}
