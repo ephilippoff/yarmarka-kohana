@@ -22,12 +22,14 @@
 
         {% block js %}
             {{ js("lib/jquery.js") }}
+			{{ js("lib/jquery.openxtag.min.js") }}
         {% endblock js%}
 
     </head>
     <body class="{% block bodyclass %}{% endblock bodyclass%}">
         <div id="popup-layer" class="z200" style="display: none;"></div>
         <div class="wrapper container {% block wrapperclass %}{% endblock wrapperclass %}">
+			<div class="banner module {zoneID: 42}"></div>			
             {% block body %}
                 {% block footer %} 
                     {% include 'block/footer/linkline' %}

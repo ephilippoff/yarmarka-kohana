@@ -4,7 +4,7 @@
 			{% if object.compiled.images.main_photo %}
 				<img class="img-frame" src="{{ get_file(object.compiled.images.main_photo['120x90']) }}" alt="{{ object.title|e }}" title="{{ object.title|e }}">
 			{% else %}
-				<img class="img-frame" src="{{staticfile('images/nophoto_estate136x107.png')}}">
+				<img class="img-frame" src="{{staticfile('images/nophoto136x107.png')}}">
 			{% endif %}
 		</div>
 	</td>

@@ -23,5 +23,6 @@ return array(
 	'add_phone_required' 					=> TRUE,
 	'add_phone_required_exlusion' 			=> array(36,35),
 	'short_domain'							=> 'ya24.biz',
-	'sync_prefix'							=> '_prod'
+	'sync_prefix'							=> '_prod',
+	'banner_zone_positions'					=> array(5 => 18, 10 => 19, 15 => 40, 20 => 52),
 );
