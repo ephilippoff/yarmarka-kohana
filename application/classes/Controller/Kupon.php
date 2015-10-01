@@ -30,6 +30,7 @@ class Controller_Kupon extends Controller_Template {
 		
 		$attributes_values = $object->get_attributes_values($kupon->object_id, NULL, 'seotitle');
 		
+		$this->template->set_global('title', $object->title);
 		$this->template->kupon = $kupon;
 		$this->template->object = $object;
 		$this->template->attributes_values = $attributes_values;
