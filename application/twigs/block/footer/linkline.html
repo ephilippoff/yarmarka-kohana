@@ -11,29 +11,32 @@
 				<a class="menu-item  left" target="_blank" href="/article/informatsiya-o-kompanii"><span class="menu-item-cont">О компании</span></a>
 			</div>
 		</div>
-	</div>	
+	</div>
+	{% set city_config = get_config("info") %}
 	<div class="footer-container">
 		<div class="row">
 			<div class="col-md-4 ">
 				<p class="bold">Редакция в Тюмени:</p>
 				<ul class="p5">
-					<li><i class="fa fa-phone mr5"></i>+7(3452)492-100</li>
-					<li><i class="fa fa-envelope mr5"></i>info@yarmarka.biz</li>
-					<li><i class="fa fa-map-marker mr5"></i>г. Тюмень, ул. 50 лет ВЛКСМ,49, оф.302</li>
+					<li><i class="fa fa-phone mr5"></i>{{city_config.tm.phone}}</li>
+					<li><i class="fa fa-envelope mr5"></i>{{city_config.tm.email}}</li>
+					<li><i class="fa fa-map-marker mr5"></i>{{city_config.tm.address}}</li>
 				</ul>
 			</div>
 			<div class="col-md-4 ">
 				<p class="bold">Редакция в Нижневартовске:</p>
 				<ul class="p5">
-					<li><i class="fa fa-phone mr5"></i>+7(3452)492-100</li>
-					<li><i class="fa fa-map-marker mr5"></i>г. Тюмень, ул. 50 лет ВЛКСМ,49, оф.302</li>
+					<li><i class="fa fa-phone mr5"></i>{{city_config.nv.phone}}</li>
+					<li><i class="fa fa-envelope mr5"></i>{{city_config.nv.email}}</li>
+					<li><i class="fa fa-map-marker mr5"></i>{{city_config.nv.address}}</li>
 				</ul>
 			</div>
 			<div class="col-md-4 ">
 				<p class="bold">Редакция в Сургуте:</p>
 				<ul class="p5">
-					<li><i class="fa fa-phone mr5"></i>+7(3452)492-100</li>
-					<li><i class="fa fa-map-marker mr5"></i>г. Тюмень, ул. 50 лет ВЛКСМ,49, оф.302</li>
+					<li><i class="fa fa-phone mr5"></i>{{city_config.sg.phone}}</li>
+					<li><i class="fa fa-envelope mr5"></i>{{city_config.sg.email}}</li>
+					<li><i class="fa fa-map-marker mr5"></i>{{city_config.sg.address}}</li>
 				</ul>
 			</div>
 		</div>

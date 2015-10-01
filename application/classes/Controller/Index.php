@@ -14,27 +14,35 @@ class Controller_Index extends Controller_Template {
             HTTP::redirect("http://".$proper_domain, 301);
         }
 
-        $this->theme_class = "default";
-        $this->theme_img = "themes/default.png";
+        $this->last_city_id = $this->domain->get_last_city_id();
 
-        $config = Kohana::$config->load("landing");
-        $config = $config["cities"];
-        $subdomain = $this->domain->get_subdomain();
-        if ( in_array( $subdomain,  array_keys((array) $config)) ) {
-            $this->theme_class = $config[$subdomain]["theme_class"];
-            $this->theme_img = $config[$subdomain]["theme_img"];
-        }
+        // $this->theme_class = "default";
+        // $this->theme_img = "themes/default.png";
+
+        // $config = Kohana::$config->load("landing");
+        // $config = $config["cities"];
+        // $subdomain = $this->domain->get_subdomain();
+        // if ( in_array( $subdomain,  array_keys((array) $config)) ) {
+        //     $this->theme_class = $config[$subdomain]["theme_class"];
+        //     $this->theme_img = $config[$subdomain]["theme_img"];
+        // }
     }
 
     public function action_index() {
 
         $twig = Twig::factory('index/index');
 
+        $twig->last_city_id = $this->last_city_id;
+        $last_city = NULL;
+        if ($twig->last_city_id) {
+            $twig->last_city = $last_city = ORM::factory('City', $twig->last_city_id)->get_row_as_obj();
+        }
+
         $twig->lastnews  = ORM::factory('Article')
-                                ->get_lastnews(NULL, NULL, 6)
+                                ->get_lastnews($this->last_city_id, NULL, 6)
                                 ->getprepared_all();
         
-        $index_info = $this->get_index_info();
+        $index_info = $this->get_index_info($last_city);
 
         $index_info->link_counters = Search_Url::getcounters($index_info->s_host, "", $index_info->categories["main"]);
         foreach (array("nizhnevartovsk","tyumen","surgut","nefteyugansk", FALSE) as $city_seo) {
@@ -52,6 +60,7 @@ class Controller_Index extends Controller_Template {
                 "published" =>TRUE,
                 "premium" => TRUE,
                 "category_id" => array(173),
+                "city_id" => ($this->last_city_id) ? array($this->last_city_id) : NULL,
             ),
             array("limit" => 2)
         );
@@ -63,6 +72,7 @@ class Controller_Index extends Controller_Template {
                 "active" => TRUE,
                 "published" =>TRUE,
                 "category_id" => array(173),
+                "city_id" => ($this->last_city_id) ? array($this->last_city_id) : NULL,
             ),
             array("limit" => 10)
         );
@@ -81,7 +91,7 @@ class Controller_Index extends Controller_Template {
         $this->response->body($twig);
     }
 
-    public function get_index_info() {
+    public function get_index_info($last_city = NULL) {
         $info = new Obj();
 
         $info->domain      = $this->domain;
@@ -91,7 +101,12 @@ class Controller_Index extends Controller_Template {
         $info->s_host = $_SERVER["HTTP_HOST"];
         $info->s_suri = $_SERVER["REQUEST_URI"];
 
-        
+        $info->cities = array(
+            'nizhnevartovsk'=>'Нижневартовск',
+            'surgut'=>'Сургут',
+            'tyumen'=>'Тюмень','
+            nefteyugansk'=>'Нефтеюганск'
+        );
 
         $info->categories = ORM::factory('Category')->get_categories_extend(array(
             "with_child" => TRUE, 
@@ -99,15 +114,28 @@ class Controller_Index extends Controller_Template {
             "city_id" => NULL
         ));
 
-        $info->categories["main"]= array_map(function($item){
-            $item->url = $item->seo_name;
+        $info->categories["main"]= array_map(function($item) use ($last_city){
+            if ($last_city) {
+                $item->url = Domain::get_domain_by_city($last_city->seo_name, $item->seo_name);
+            } else {
+                $item->url = $item->seo_name;
+            }
             return $item;
         }, $info->categories["main"] );
 
-        $info->theme = new Obj(array(
-            "theme_class" => $this->theme_class,
-            "theme_img" => $this->theme_img
-        ));
+        $info->categories["childs"]= array_map(function($item) use ($last_city){
+            if ($last_city) {
+                $item->url = Domain::get_domain_by_city($last_city->seo_name, $item->seo_name);
+            } else {
+                $item->url = $item->seo_name;
+            }
+            return $item;
+        }, $info->categories["childs"] );
+        
+        // $info->theme = new Obj(array(
+        //     "theme_class" => $this->theme_class,
+        //     "theme_img" => $this->theme_img
+        // ));
 
         return $info;
     }

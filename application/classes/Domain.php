@@ -3,7 +3,7 @@
 class Domain 
 {
     static $reserved_segments = array("c");
-
+    public $_city = NULL;
     public function __construct() {
         $this->_domain = URL::SERVER('HTTP_HOST');
         
@@ -12,10 +12,9 @@ class Domain
         $this->_main_category = $config["main_category"];
 
         $this->_subdomain = strtolower(trim( str_replace($this->_main_domain, "", $this->_domain), "."));
-        $this->_city = NULL;
+        $this->_city =  $this->get_city_by_subdomain($this->_subdomain);
+        $this->_last_city_id = Cookie::get('location_city_id');
         $this->_reserved_domain = NULL;
-        
-
         return $this;
     }
 
@@ -24,7 +23,11 @@ class Domain
         return $this->is_domain_incorrect();
     }
 
-    public static function get_city_by_subdomain($subdomain) {
+    public function get_city_by_subdomain($subdomain) {
+        if ($subdomain == $this->_subdomain AND $this->_city) {
+            return $this->_city;
+        }
+
         $city = ORM::factory('City')
                 ->where("seo_name", "=", $subdomain)
                 ->find();
@@ -39,8 +42,7 @@ class Domain
         if ( $this->_subdomain  AND in_array($this->_subdomain, self::$reserved_segments) ) {
             $this->_reserved_domain = $this->_subdomain;
             return FALSE;
-        } else if ( $this->_subdomain  AND $city = self::get_city_by_subdomain($this->_subdomain)) {
-            $this->_city = $city;
+        } else if ( $this->_subdomain  AND $city = $this->get_city_by_subdomain($this->_subdomain)) {
             return FALSE;
         } else if ( $this->_subdomain) {
             return $this->_main_domain;
@@ -51,6 +53,10 @@ class Domain
 
     public function get_city() {
         return $this->_city;
+    }
+
+    public function get_last_city_id() {
+        return $this->_last_city_id;
     }
 
     public function get_domain() {

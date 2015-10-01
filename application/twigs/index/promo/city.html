@@ -9,19 +9,30 @@
 	</div>
 	<div class="view-container brb2">
 		<div class="breadcrumbs-cont module">						
-			<h1 class="captionbold">Ярмарка - Бесплатные объявления</h1>
+			<h1 class="captionbold">Ярмарка - Бесплатные объявления {% if last_city %}({{ cities[last_city.seo_name] }}){% endif %}</h1>
 		</div>
 		<div class="subcategories-cont module">
 			<div class="row">
 				<div class="col-md-12 items-cont">
-				<ul>
-					{% for key, _city in  {'nizhnevartovsk':'Нижневартовске','surgut':'Сургуте','tyumen':'Тюмени','nefteyugansk':'Нефтеюганске'} if key != city.seo_name %}
+				<ul class="pl10">
+					{% if last_city %}
+						{% set count = link_counters[domain(last_city.seo_name, '', '')] %}
+						<li class="mb10">
+							<a class="fs20" href="{{ domain(last_city.seo_name, FALSE) }}" title="Газета бесплатных объявлений Ярмарка {{ last_city.title }}">{{ cities[last_city.seo_name] }}</a>
+							<span class="count">{{ count }}</span>
+						</li>
+					{% endif %}
+
+					{% for key, _city in  cities if key != last_city.seo_name %}
 						{% set count = link_counters[domain(key, '', '')] %}
-						<li>				
-							<a href="{{ domain(key, FALSE) }}" title="Газета бесплатных объявлений Ярмарка в {{ _city }}">в {{ _city }}</a>
+						<li class="fs10">				
+							<a href="{{ domain(key, FALSE) }}" title="Газета бесплатных объявлений Ярмарка в {{ _city }}">{{ _city }}</a>
 							<span class="count">{{ count }}</span>
 						</li>
 					{% endfor %}
+					<li class="fs10">				
+						<span class="span-link fs15 white">В других городах<i class="fa fa-caret-down ml5"></i></span>
+					</li>
 				</ul>
 				<br>
 				<ul>

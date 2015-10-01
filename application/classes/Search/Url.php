@@ -587,11 +587,13 @@ class Search_Url
         $suc = DB::select("count","url")->from("search_url_cache");
 
         $urls = array_map(function($value) use ($domain, $category_url) {
+            $url = "";
             if ($value->attribute) {
-                return $domain."/".$category_url."/".$value->url;
+                $url =  $domain."/".$category_url."/".$value->url;
             } else {
-                return $domain."/".$value->url;
+                $url =  $domain."/".$value->url;
             }
+            return trim(trim($url, '/'));
         }, $categories);
 
         if (count($urls) > 0) {

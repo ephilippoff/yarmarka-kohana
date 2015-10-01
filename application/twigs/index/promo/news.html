@@ -12,7 +12,7 @@
 	</div>
 	<div class="view-container brb2">
 		<div class="breadcrumbs-cont">						
-			<p class="captionbold">Ярмарка - Новости</p>
+			<p class="captionbold">Ярмарка - Новости {% if last_city %}({{ cities[last_city.seo_name] }}){% endif %}</p>
 		</div>
 		<div class="row">
 			<div class="col-md-12 items-cont">
