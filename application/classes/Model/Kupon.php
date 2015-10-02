@@ -23,5 +23,16 @@ class Model_Kupon extends ORM
 		return $this->select(array('invoices.user_id', 'user_id'))
 			->join('invoices', 'left')
 			->on('kupon.invoice_id', '=', 'invoices.id');
-	}	
+	}
+	
+	public function sum_by_field($field)
+	{
+		$query = DB::select('object_id', DB::expr('SUM('.$field.')'))
+				->from('kupon')
+				->group_by('object_id')
+				->as_object()
+				->execute();
+		
+		return $query;				
+	}
 }

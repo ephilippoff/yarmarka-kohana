@@ -70,6 +70,7 @@
 								<?php endif; ?>
 								<?php if (Auth::instance()->have_access_to('kupon')) : ?>
 									<li><a href="<?=Url::site('khbackend/kupons/index')?>">Купоны</a></li>
+									<li><a href="<?=Url::site('khbackend/kupons/groups')?>">Купоны/группы</a></li>
 								<?php endif; ?>									
 							</ul>
 						</li>
