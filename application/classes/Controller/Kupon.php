@@ -46,4 +46,12 @@ class Controller_Kupon extends Controller_Template {
 		$this->template->twig_template = $twig;
 		$this->template->set_global('title', $twig->kupon_group->title);
 	}
+
+	public function action_check()
+	{
+		$twig = Twig::factory('detail/kupon/check');
+
+		$this->template->twig_template = $twig;
+		$this->template->set_global('title', "Проверка номера купона");
+	}
 }
