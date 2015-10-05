@@ -242,4 +242,18 @@ class Model_Order extends ORM
 	}
 	
 
+	static function GetMyLastOrder()
+	{	
+		$key = Cookie::dget("cartKey");
+		if (!$key) return;
+
+		$last_order = ORM::factory('Order')
+				->where("key","=",$key)
+				->where("state","IN",array(0,1))
+				->order_by("id","desc")
+				->find();
+		if (!$last_order->loaded()) return;
+		return $last_order->get_row_as_obj();
+	}
+
 }

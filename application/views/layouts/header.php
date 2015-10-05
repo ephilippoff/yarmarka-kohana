@@ -57,9 +57,11 @@
 						<span class="link cur_p" onclick="window.location='/user/login?return=<?=$_SERVER['REQUEST_URI']?>&domain=main'">Войти</span>
 					</div>	
 				<?php endif ?>
-
+					<? $last_order =  Model_Order::GetMyLastOrder(); ?>
+					<? if ($last_order): ?>
+						<span class="menu g1 cur_p red" onclick="window.location='/cart/order/<?=$last_order->id?>'">К заказу</span>
+					<? endif; ?>
 					<span onclick="window.location='http://feedback.yarmarka.biz/'" class="menu g1 cur_p">Техподдержка</span>
-					<span onclick="window.location='http://job.yarmarka.biz/'" class="menu g1 cur_p">Вакансии</span>
 					<span onclick="window.location='/ourservices/reklamodatelyam'" class="menu g1 cur_p">Рекламодателям</span>
 					<span onclick="window.location='/article/pravila-razmeshcheniya-obyavlenii'" class="menu g1 cur_p">Правила</span>
 
