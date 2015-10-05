@@ -347,6 +347,11 @@ class Controller_Cart extends Controller_Template {
 			);
 
 			$twig->delivery_info = $params->delivery;
+		} else {
+			$delivery = Kohana::$config->load("billing.kupon.delivery_type");
+			if ($delivery) {
+				HTTP::redirect("/cart/".$delivery."_delivery/".$order->id);
+			}
 		}
 
 		$twig->crumbs[] = array(
@@ -617,8 +622,27 @@ class Controller_Cart extends Controller_Template {
 			return;
 		}
 
+		$key = Cart::get_key();
+
 		foreach ($orderItems as $orderItem) {
 			$params = json_decode($orderItem->params);
+
+			if ($params->service->name == "kupon") {
+					
+					$kupons = ORM::factory('Kupon')
+								->where("id","IN",$params->service->ids)
+								->find_all();
+
+					$available = FALSE;
+					foreach ($kupons as $kupon) {
+						$available = $kupon->check_and_restore_reserve_if_possible($key);
+						if ($available == FALSE) {
+							$errors["paid_or_refused"] = $available;
+							$this->return_with_errors("/cart/order/".$order_id, $this->request->post(), $errors);
+							return;
+						};
+					}
+			}
 			// if ($params->type == "object") {
 			// 	$service = Service::factory("Object", $orderItem->object_id);
 			// 	$available = $service->check_available(0);
