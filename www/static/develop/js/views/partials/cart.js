@@ -5,6 +5,10 @@ define([
 ], function (Marionette, templates) {
     "use strict";
 
+    var CheckNumberModel = Backbone.Model.extend({
+        urlRoot:"/rest_service/check_kupon_number",
+    });
+
     var CartItemModel = Backbone.Model.extend({
         urlRoot:"/rest_service/get_temp_item",
         sum: function() {
@@ -78,6 +82,10 @@ define([
         el : 'body',
         ui : {
             form: "#cart-form",
+            checkNumberform: "#check-number-form",
+            checkNumber: ".js-check-number",
+            checkNumberSubmit: ".js-check-number-submit",
+            messages: ".js-messages",
             endSum: ".js-endsum",
             comment: ".js-comment",
             save: ".js-save",
@@ -86,7 +94,8 @@ define([
         },
         events: {
             "click @ui.save": "saveOrder",
-            "change @ui.deliveryType": "changeDeliveryType"
+            "change @ui.deliveryType": "changeDeliveryType",
+            "click @ui.checkNumberSubmit": "checkNumberSubmit"
         },
         initialize: function() {
             this.bindUIElements();
@@ -176,6 +185,24 @@ define([
             console.log(value)
             $(".js-delivery-cont").hide();
             $(".js-"+value+"-cont").show();
+        },
+
+        checkNumberSubmit: function(e) {
+            e.preventDefault();
+            var s = this;
+            var model = new CheckNumberModel();
+            model.save({number: this.ui.checkNumber.val()}, {
+                success: function(result){
+                    var result = result.toJSON();
+                    if (result.code == "200") {
+                        s.ui.messages.html("<span class='green'>Купон действителен</span>");
+                    } else {
+                        s.ui.messages.html("<span class='red'>Купон недействителен</span>");
+                    }
+                    
+                }
+            });
+
         }
 
     });

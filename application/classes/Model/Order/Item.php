@@ -13,7 +13,7 @@ class Model_Order_Item extends ORM
 		if (!$this->loaded()) return;
 
 		$params = new Obj(json_decode($this->params));
-		if ($params->service->name == "kupon")
+		if ($params->service->name == "kupon" AND isset($params->service->ids) )
 		{
 			$service = Service::factory(Text::ucfirst($params->service->name), $params->service->group_id);
 			$service->return_reserve($params->service->ids);
@@ -31,7 +31,7 @@ class Model_Order_Item extends ORM
 
 		$params = new Obj(json_decode($this->params));
 		
-		if ($params->service->name == "kupon") {
+		if ($params->service->name == "kupon" AND isset($params->service->ids) ) {
 			$service = Service::factory(Text::ucfirst($params->service->name), $params->service->group_id);
 			$service->reserve($params->service->ids, $this->order_id);
 		} elseif ( in_array( $params->service->name, array("up", "premium") ) 
