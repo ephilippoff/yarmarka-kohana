@@ -22,9 +22,9 @@
 			<p>Заказ отменен. Истекло время оплаты, либо отмена инициирована пользователем</p>
 		{% endif %}
 	</div>
-	<div class="p20" style="margin:auto;">
+	<div class="p20">
 		{% set error = FALSE %}
-		<table class="table table-hover">
+		<table class="bs-table">
 			<tr>
 				<th class="w500">Наименование</th>
 				<th>Параметры</th>
@@ -77,13 +77,13 @@
 				<p class="mt20 fr">
 					<form id="order_form" class="ta-r" action="/cart/to_payment_system" method="POST">
 						<input type="hidden" name="id" value="{{ order.id }}">
-						<span class="button bg-color-blue p20 white br3" onclick="$('#order_form').submit();">Перейти к оплате<i class="fa fa-angle-double-right fa-lg ml5"></i></span>
+						<span class="button_v2 bg-color-blue p20 white br3" onclick="$('#order_form').submit();">Перейти к оплате<i class="fa fa-angle-double-right fa-lg ml5"></i></span>
 					</form>
 				</p>
 			{% elseif state == "notPaid" %}
 				<form id="order_form" class="ta-r" action="/cart/to_payment_system" method="POST">
 					<input type="hidden" name="id" value="{{ order.id }}">
-					<span class="button bg-color-blue p20 white br3" onclick="$('#order_form').submit();">Перейти к счету в платежной системе<i class="fa fa-angle-double-right fa-lg ml5"></i></span>
+					<span class="button_v2 bg-color-blue p20 white br3" onclick="$('#order_form').submit();">Перейти к счету в платежной системе<i class="fa fa-angle-double-right fa-lg ml5"></i></span>
 				</form>
 			{% endif %}
 
@@ -91,13 +91,13 @@
 				<form class="ta-r" action="/cart/to_admin_success" method="POST">
 					<input type="hidden" name="id" value="{{ order.id }}">
 					<input type="hidden" name="code" value="100">
-					<input type="submit" class="button button-style1 bg-color-crimson submit mt10" value="Оплатить счет (для администраторов)">
+					<input type="submit" class="button_v2 button-style1 bg-color-crimson submit mt10" value="Оплатить счет (для администраторов)">
 				</form>
 
 				<form class="ta-r" action="/cart/to_admin_success" method="POST">
 					<input type="hidden" name="id" value="{{ order.id }}">
 					<input type="hidden" name="code" value="10">
-					<input type="submit" class="button button-style1 bg-color-crimson submit mt10" value="Отменить счет (для администраторов)">
+					<input type="submit" class="button_v2 button-style1 bg-color-crimson submit mt10" value="Отменить счет (для администраторов)">
 				</form>
 			{% endif %}
 		</div>

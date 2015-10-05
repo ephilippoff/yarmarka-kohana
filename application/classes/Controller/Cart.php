@@ -12,6 +12,7 @@ class Controller_Cart extends Controller_Template {
 		// $this->auto_render = FALSE;
 
 		$this->domain = new Domain();
+		$this->assets->css('bs_grid.css');
 	}
 
 	public function action_index()
