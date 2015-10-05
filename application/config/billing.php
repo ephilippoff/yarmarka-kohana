@@ -9,6 +9,9 @@ return array(
 				),
 	//ad_to_paper запрет размещения в рубрики по городам
 	'ad_to_paper_locked_rubrics' => array(1979 => array(61, 65, 66, 67, 68, 69, 71, 72, 73, 74, 75), //Сургут
-										  1919 => array(66)) //Тюмень
+										  1919 => array(66)), //Тюмень
+	'kupon' => array(
+		'delivery_type' => 'electronic'
+	)
 
 );

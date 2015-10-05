@@ -1,0 +1,77 @@
+<form class="js-form">
+	<div class="row">
+		<div class="col-md-12 p10">
+			<p class="mb10">В какую газету Вы хотите разместить объявление?</p>
+			
+				<% _.each(getNewspaperCities(), function(value, key){ %>
+					<label for="city_<%=key%>">
+						<span class="p10 pointer">
+							<input type="radio" name="city" class="m10 js-city" value="<%=value[1]%>" id="city_<%=key%>" <% if (parseInt(city_id) == key || (is_edit && edit_params.service.city == value[1]) ) { %>checked<% } %>><span class="ml5 bold"><%=value[0]%></span>
+						</span>
+					</label>
+				<% }); %>
+			
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12 p10">
+			<%=getTitle()%>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12 p10">
+			<table class="table table-bordered">
+				<thead>
+					<th class="service-title bold">Выберите тип объявления (можно несколько)<br>
+						(<span class="span-link js-service-description">подробнее о типах объявлений</span>)
+					</th>
+					<th class="quantity bold">Количество <br>публикаций</th>
+					<th class="price bold">Стоимость</th>
+				</thead>
+				<tbody>
+				<% var types = getTypes() %>
+				<% _.each(types, function(type, type_key){ %>
+					<tr>
+						<td class="service-title">
+							<label for="type_n_<%=type_key%>">
+								<span style="display:block; cursor:pointer;">
+									<% if (is_edit) { %>
+										<input type="checkbox" name="type" value="<%=type_key%>" id="type_n_<%=type_key%>" class="js-type" <% if ( edit_params.service.contents[type_key] ){%>checked<%}%>>
+									<% } else { %>
+										<input type="checkbox" name="type" value="<%=type_key%>" id="type_n_<%=type_key%>" class="js-type">
+									<% } %>
+									
+									<span  class="ml5"><%=type%></span>
+								</span>
+							</label>
+						</td>
+						<td class="quantity">
+							<% var quantity  = 2; %>
+							<% if (type_key == "free") { quantity = 3; %>
+								3
+								<input class="js-quantity js-quantity_<%=type_key%> hidden" type="number" value="<%=quantity%>" min="1" max="99" data-type="<%=type_key%>">
+							<% } else { %>
+
+								<% if (is_edit) {
+									quantity = edit_params.service.contents[type_key] || quantity;
+								} %>
+								<input class="js-quantity js-quantity_<%=type_key%>" type="number" value="<%=quantity%>" min="1" max="99" data-type="<%=type_key%>">
+							<% } %>
+						</td>
+						<td class="price">
+							<span class="js-price js-price_<%=type_key%>">
+									<% if (info.service) { %>
+										<%=getPrice(type_key, info.service.city, quantity)%>
+									<% } else { %>
+										(?)
+									<% } %>
+							</span>
+						</td>
+					</tr>
+				<% }); %>
+				
+				</tbody>
+			</table>
+		</div>
+	</div>
+</form>

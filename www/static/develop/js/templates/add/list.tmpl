@@ -1,0 +1,17 @@
+<div class="col-md-6" id="div_<%=id%>">
+	<div class="inp-cont">
+		<% if (is_required) { %>
+			<span class="required-star">*</span>
+		<% } %>
+			<select id="<%=id%>" name="<%=id%>" class="w100p <%=classes%>">
+				<option value="">--<%=title%><%=(unit)?", "+unit:""%>--</option>
+				<% _.each(data, function(item, key){ %>
+					<% if (key == 0) return; %>
+					<%  if (typeof item == "object") item = item[0].title %>
+
+
+					<option value="<%=key%>"><%=item%></option>
+				<% }); %>
+			</select> 
+	</div>
+</div>

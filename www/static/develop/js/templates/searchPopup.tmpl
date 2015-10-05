@@ -1,0 +1,8 @@
+<% if (objects_found()) { %> 
+	<p>Найдено <%=objects_found()%> объявлений. Нажмите Enter чтобы посмотреть все</p>
+<% } %>
+<div class="js-objects"></div>
+<% if (pricerows_found()) { %> 
+	<p>Найдено <%=pricerows_found()%> позиций в прайс-листах</p>
+<% } %>
+<div  class="js-pricerows"></div>

@@ -73,11 +73,6 @@ Route::set('newsone', 'news/<id>-<seo_name>', array('id' => '\d+'))
 		'action'     => 'newsone',
 	));
 
-Route::set('kupon', 'kupon/<id>', array('id' => '\d+'))
-	->defaults(array(
-		'controller' => 'Kupon',
-		'action'     => 'index',
-	));
 
 Route::set('barcode', 'barcode/ean13/<code>')
 	->defaults(array(
@@ -133,6 +128,12 @@ Route::set('redirect/ref_cb', 'redirect/ref_cb')
 		'action'     => 'ref_cb',
 	));
 
+Route::set('cart', 'cart')
+	->defaults(array(
+		'controller' => 'Cart',
+		'action'     => 'index',
+	));
+	
 if (array_key_exists("HTTP_FROM", $_SERVER))
 {
 	if (strpos($_SERVER['REQUEST_URI'],"landing"))

@@ -1,0 +1,44 @@
+{% extends "layouts/cart" %}
+
+{% block header %}
+{% endblock header %}
+
+{% block content %}
+	<form id="cart-form">
+		<div class="p20" style="margin:auto;">
+			{% if cartTempItems|length == 0 %}
+				<p class="msg" style="font-size:20px;">Ваша Корзина пуста</p>
+			{% else %}
+				{% set error = FALSE %}
+				<table class="cart-table table table-hover">
+					<tr>
+						<th class="w500">Наименование</th>
+						<th>Параметры</th>
+						<th>Цена</th>
+						<th></th>
+						<th></th>
+					</tr>
+					
+					{% set i = 1 %}
+
+					{% for cartItem in cartTempItems if cartItem.service.name == 'kupon' %}
+						{% include 'cart/temp_item/kupon' %}
+						{% set i = i + 1 %}
+					{% endfor %}
+
+				</table>
+
+				<div class="ta-r mb20">
+					Итоговая стоимость <span>{{sum}} руб.</span>
+				</div>
+				<div class="ta-r mb20">
+					<span class="js-save button bg-color-blue p20 white br3" data-next-page="{{next_page}}">Оформить заказ<i class="fa fa-angle-double-right fa-lg ml5"></i></span>
+				</div>
+					
+				<div class="js-error errors-cont mb20 red"></div>
+			{% endif %}
+		</div>
+	</form>
+{% endblock content %}
+
+{% block rightside %}{% endblock rightside %}

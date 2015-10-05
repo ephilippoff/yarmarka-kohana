@@ -1,0 +1,17 @@
+<div class="row mb10" id="div_<%=id%>">
+	<div class="col-md-3 col-xs-4 labelcont">
+		<label><%=title%><%=(unit)?", "+unit+":":":"%></label>
+	</div>
+	<div class="col-md-9 col-xs-8">
+		<div class="row">
+			<div class="col-md-6">
+				<div class="inp-cont" data-condition="">
+					<% if (is_required) { %>
+						<span class="required-star">*</span>
+					<% } %>
+					<input  id="<%=id%>" name="<%=id%>" class="<%=classes%> w100p" type="text" value="<%=value%>"/>					
+				</div>
+			</div>
+		</div>				
+	</div>
+</div>

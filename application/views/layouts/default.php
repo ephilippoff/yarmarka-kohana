@@ -16,6 +16,7 @@
 	->css('jquery.jscrollpane.css')
 	->css('cusel.css')
 	->css('chosen.css')
+		->css('khcss/font-awesome.css')
 	->js('jquery.min.js')
 	->js('http://html5shiv.googlecode.com/svn/trunk/html5.js', array('condition' => 'lte IE 8'))
 	->js('http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js', array('condition' => 'lte IE 8'))

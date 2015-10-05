@@ -1,0 +1,54 @@
+.tab-filter{background-color:#F7F8F8;border-top: 2px solid #909EA5;padding-top: 7px;}
+.tab-filter .params-cont{padding-right: 100px;padding-left: 18px; position: relative;z-index:1;}
+.tab-filter .column-list{min-width:-webkit-min-content;}
+.tab-filter .multiselect .checkbox label{width:90%;}.tab-filter .filters-items, .tab-filter .filters-subitems{width:780px;overflow:hidden;}
+.tab-filter .filters-boolean{width:400px;overflow:hidden;}
+.tab-filter .filters-boolean .column-list{float:left;width:150px;}
+.tab-filter .filters-boolean .column-list span{white-space: normal;}
+.tab-filter .filters-default{width:auto;overflow:hidden;}
+.tab-filter .filters-items .column-list{width:150px;float:left;}
+.tab-filter .filters-items .column-list div{width:100%;float:left;min-height:22px}
+.tab-filter .filters-subitems .column-list{width:150px;float:left;}
+.tab-filter .column-list{margin-right:5px;}
+.tab-filter .filters-subitems .column-list div{width:100%;float:left;min-height:22px}
+.tab-filter  input.submit,
+.tab-filter  input.button{background:#F0F0F0;border:1px solid #E2E2E2;border-radius:2px;padding:auto;padding:3px;cursor:pointer;}
+.tab-filter  input.btn-clear{position: absolute;top: 5px; right: 15px;}
+.tab-filter  input[type="text"]{background-color: #FFFFFF;background-image: linear-gradient(#FFFFFF 20%, #F6F6F6 50%, #EEEEEE 52%, #F4F4F4 100%);border: 1px solid #AAAAAA;border-radius: 3px;box-shadow: 0 0 3px #FFFFFF inset, 0 1px 1px rgba(0, 0, 0, 0.1);color: #000000;font: 14px Verdana;height: 25px;padding: 0 6px;position: relative;width: 79px;}
+.tab-filter .multiselect{margin: 0 5px 10px;}
+.tab-filter  input.submit.main-submit{background-color:#53A9CB;height:39px;width:132px;color:#fff;margin: 0 5px 10px;float:left;} 
+.tab-filter  input.submit.main-submit:hover{background-color:#74B8D3}
+.tab-filter .checkbox  input{vertical-align: middle;}
+.tab-filter .multiselect .checkbox{padding:5px;cursor:auto}
+.tab-filter .group{color: #5D666E;font-size: 14px;border-bottom: 1px solid #F1F1F1;padding-bottom:5px;}
+.tab-filter .multiselect .cont{height:39px;background:url("/static/develop/images/multisel.png") no-repeat scroll left -39px;}
+.tab-filter .param{border-radius: 4px;float: left;margin: 0 7px 16px;position: relative;height:39px;background-color: #FFFFFF;padding: 0 5px;}
+.tab-filter .multiselect.active{background-position:right -156px;box-shadow: 0 0 5px #4FAAE3;}
+.tab-filter .multiselect.active .cont {background-position: 0 -195px;}
+.tab-filter .multiselect.active:hover{background-position:right -234px;box-shadow: 0 0 5px #4FAAE3;}
+.tab-filter .multiselect.active:hover .cont {background-position: 0 -273px;}
+.tab-filter .multiselect:hover{background-position: right -78px; box-shadow:0 0 5px #4faae3;}
+.tab-filter .multiselect:hover .cont{background-position: 0px -117px;}
+.tab-filter .multiselect span{line-height: 19px;}
+.tab-filter .multiselect .checkbox .column-list span{white-space: normal !important;width: 90%;}
+.tab-filter .close{background:url('/static/develop/images/link_arrow.png') no-repeat right center;padding-right:15px;}
+.tab-filter .open{background:url('/static/develop/images/link_arrow_open.png') no-repeat right center;padding-right:15px;}
+.tab-filter .operations-cont{margin: 10px 5px 10px 0px; text-align: right;clear: both;}
+
+.multiselect{float:left;background: url(/static/develop/images/multisel.png) no-repeat right top;border-radius: 4px;cursor:pointer;position:relative;margin:0 7px;margin-bottom:16px;}
+.multiselect:hover{background-position: right -52px; box-shadow:0 0 5px #4faae3;}
+.multiselect.active{background-position: right -104px; box-shadow:0 0 5px #4faae3;}
+.multiselect .cont{float:left;background: url(/static/develop/images/multisel.png) no-repeat left -26px;height: 26px;padding-right: 33px;padding-left:7px;}
+.multiselect:hover .cont{background-position: 0 -78px;}
+.multiselect.active .cont{background-position: 0 -130px;}
+.multiselect span{line-height: 24px}
+.multiselect .name{font-size:14px;color:#5D666E;margin-right:6px;}.multiselect .info{font-size:12px;color:#808080;}
+.multiselect .info.a{background: url(/static/develop/images/plus_03.jpg) right  no-repeat;padding-right:19px;}
+.multiselect .checkbox{position:absolute;top:105%;left:0;background:#fff;padding:3px 0px;border:1px solid #989898;box-shadow: 0 4px 5px rgba(0, 0, 0, 0.15);border-radius:4px;display:none;white-space: nowrap;}
+.multiselect .checkbox label{float:left;clear:both;line-height: 14px;margin:  5px }
+.multiselect .checkbox input{margin-top:1px;}
+.multiselect .checkbox .col{ display: inline-block;margin: 0 4px;vertical-align: top;}
+.multiselect .checkbox span{line-height:14px!important;padding:0; white-space: inherit!important;}
+
+.checkbox span{padding-left:28px;display: inline-block;line-height: 16px;}
+.checkbox input{display: inline-block;    margin: 3px 7px 0 0;  vertical-align:top;}

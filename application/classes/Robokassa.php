@@ -1,4 +1,4 @@
-<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php defined('SYSPATH') OR die('No direct script access.');
 
 class Robokassa
 {

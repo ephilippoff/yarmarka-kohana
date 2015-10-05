@@ -1,0 +1,29 @@
+<div class="multiselect">
+	<div class="cont js-filter-label">
+	<p><span class="name bold"><%=title%></span></p>
+	<p><span class="info js-filter-str-value">Не важно</span></p>
+</div>
+<div class="checkbox js-filter-values-cont" style="display: none;z-index:90;">
+	<div class="filters-range">
+		<div class="line">
+			<p class="mb5"><span><%=title%></span>,&nbsp;<span class=""><%=unit%></span></p>
+			<span class="range-l">от</span>
+			<select name="<%=seo_name%>[min]">
+				<option value="0">--</option>
+				<% _.each(values, function(option_value, key) { %>
+					<% var value_min = (value && value.min == option_value) ? "selected" : ""; %>
+					<option value="<%=key%>" <%=value_min%>><%=option_value%></option>
+				<% }); %>
+			</select>
+			<span class="range-l">до </span>
+			<select name="<%=seo_name%>[max]">
+				<option value="0">--</option>
+				<% _.each(values, function(option_value, key) { %>
+					<% var value_max = (value && value.max == option_value) ? "selected" : ""; %>
+					<option value="<%=key%>" <%=value_max%>><%=option_value%></option>
+				<% }); %>
+			</select>
+		</div>
+	</div>
+	<div class="operations-cont"><input class="js-filter-ok" type="button" value="ОК"></div>
+</div>

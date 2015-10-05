@@ -1,0 +1,8 @@
+<div class="cont">
+	<select name="<%=seo_name%>">
+		<option value="0"><%=title%></option>
+		<% _.each(values, function(value, key) { %>
+			<option value="<%=key%>"><%=value%></option>
+		<% }); %>
+	</select>
+</div>

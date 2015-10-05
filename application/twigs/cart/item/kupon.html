@@ -1,0 +1,14 @@
+<tr class="warning">
+	<td>
+		<a href="/detail/{{ item.object.id }}">{{ item.service.title }}</a>
+	</td>
+	<td>
+		{{ item.service.description }}<br>
+		{% if order.state == 2 or order.state == 22 or order.state == 222 %}
+			{% for id in item.service.ids %}
+				<a href="/kupon/print/{{ id }}" target="_blank"><i class="fa fa-file-o mr5"></i>Печать купона {{loop.index}}</a>
+			{% endfor %}
+		{% endif %}
+	</td>
+	<td>{{ item.service.price_total }} руб.</td>
+</tr>

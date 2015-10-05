@@ -1,0 +1,13 @@
+<div class="row mb10" id="div_<%=id%>">
+	<div class="col-md-3 col-xs-4 labelcont">
+		<label><%=title%></label>
+	</div>
+	<div class="col-md-9 col-xs-8">
+		<div class="inp-cont " data-condition="">
+				<% if (is_required) { %>
+					<span class="required-star">*</span>
+				<% } %>
+				<textarea id="<%=id%>" name="<%=id%>" class="<%=classes%> w100p"><%=value%></textarea>					
+		</div>
+	</div>
+</div>

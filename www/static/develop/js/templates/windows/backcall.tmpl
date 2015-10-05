@@ -1,0 +1,58 @@
+<div class="popup-window w500">	
+	<div class="header">
+		Обратный звонок
+		<div class="popup-window-close js-close">
+			<i class="ico close-ico16"></i>
+		</div>			
+	</div>					
+	<div class="cont form-cont">
+		<form class="js-form">
+			<div class="row">
+				<div class="col-md-12">
+					<label><span class="red fs20">*</span> ФИО:</label>
+				</div>
+				<div class="col-md-12">
+					<div class="inp-cont <% if (getError("name")) { %>error<% } %>">																								
+						<input class="w100p" type="text" name="name" value="<%=name%>">
+						<% if (getError("name")) { %>
+								<span class="inform"><%=getError("name")%></span>
+						<% } %>						
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-md-12">
+					<label><span class="red fs20">*</span> Телефон:</label>
+				</div>
+				<div class="col-md-12">
+					<div class="inp-cont <% if (getError("phone")) { %>error<% } %>">																		
+						<input class="w100p" type="text" name="phone" value="<%=phone%>">
+						<% if (getError("phone")) { %>
+								<span class="inform"><%=getError("phone")%></span>
+						<% } %>						
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-md-12">
+					<label>Комментарий:</label>
+				</div>
+				<div class="col-md-12">
+					<div class="inp-cont <% if (getError("comment")) { %>error<% } %>">																	
+						<textarea class="w100p" cols="30" rows="10" name="comment"><%=comment%></textarea>
+						<% if (getError("comment")) { %>
+								<span class="inform"><%=getError("comment")%></span>
+						<% } %>						
+					</div>
+				</div>
+			</div>
+
+			<div class="row mt10">
+				<div class="col-md-6">&nbsp;</div>
+				<div class="col-md-6"><button class="w100 button button-style1 bg-color-blue white js-ok fr">OK</button></div>
+			</div>
+		</form>
+	</div>
+</div>

@@ -123,6 +123,7 @@ Kohana::modules(array(
 	'captcha'	=> MODPATH.'captcha',
 	'unittest'   => MODPATH.'unittest',   // Unit testing
 	//'userguide'  => MODPATH.'userguide',  // User guide and API documentation
+	'twig'       => MODPATH.'kohana-twig',
 	));
 
 // set default cache driver

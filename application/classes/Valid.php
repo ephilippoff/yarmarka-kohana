@@ -155,4 +155,36 @@ class Valid extends Kohana_Valid {
 		$value = mb_strtolower( trim($value) );
 		return Captcha::valid($value);
 	}
+
+	public static function contact_already_verified($value, $contact, $email = "")
+	{
+		$current_user 		= Auth::instance()->get_user();
+
+		if ($current_user AND $contact->verified_user_id AND $contact->verified_user_id <> $current_user->id)
+		{
+			return FALSE;
+		} elseif (!$current_user AND $contact->verified_user_id) {
+			return FALSE;
+		}
+
+		return TRUE;
+	}
+
+	public static function is_mobile_contact($value)
+	{
+		$value = trim(strtolower(Text::clear_phone_number($value)));
+		return (bool) preg_match('/^79\d{9}$/', $value);
+	}
+
+	public static function is_city_contact($value)
+	{
+		$value = trim(strtolower(Text::clear_phone_number($value)));
+		return (!Valid::is_mobile_contact($value) AND preg_match('/^7\d{10}$/', $value));
+	}
+
+	public static function is_email_contact($value)
+	{
+		$value = trim(strtolower($value));
+		return Valid::email($value);
+	}
 }

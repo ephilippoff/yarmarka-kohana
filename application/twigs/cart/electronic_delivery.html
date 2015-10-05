@@ -1,0 +1,46 @@
+{% extends "layouts/cart" %}
+
+{% block header %}
+{% endblock header %}
+
+
+{% block content %}
+	<p class="p10">Укажите контактные данные, для связи с Вами. На указанный email будут отправлены купоны на приобретенные услуги</p>
+	<form action="/cart/electronic_delivery/{{ order.id }}" method="POST" id="js-electronic_delivery_form">
+
+		<div class="p20" style="margin:auto;">
+
+			<table class="cart-table table table-hover">
+				<tr><td>E-mail</td><td>
+					<div class="input-group w100p">
+						<span class="input-group-addon bg-color-whitesmoke"><i class="fa fa-envelope-o"></i></span>
+						{% if (user) %}
+							<input class="input fields w300" type="text" name="email" value="{{ user.email }}" >
+						{% else  %}
+							<input class="input fields w300" type="text" name="email" value="{{ post.email }}">
+						{% endif %}
+					</div>
+					
+				</td></tr>
+				<tr><td>Мобильный телефон</td><td>
+					<div class="input-group w100p">
+						<span class="input-group-addon bg-color-whitesmoke brl3" title="Телефон"><i class="fa fa-mobile-phone"></i></span>
+						<input class="input fields w300" type="text" name="phone" value="{{ post.phone }}">
+					</div>
+					</td></tr>
+			</table>
+			<div class="js-error errors-cont mb20 red">
+				{% if errors %}
+					{% set err_values = errors|values %}
+					{{ err_values|join("<br>") }}
+				{% endif %}
+			</div>
+			<div class="ta-r mb20">
+				<span class="button bg-color-blue p20 white br3" onclick="$('#js-electronic_delivery_form').submit();">Сохранить<i class="fa fa-angle-double-right fa-lg ml5"></i></span>
+			</div>
+		</div>
+	</form>
+{% endblock content %}
+
+{% block rightside %} 
+{% endblock rightside %}
