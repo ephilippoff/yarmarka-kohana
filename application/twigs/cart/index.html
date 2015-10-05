@@ -5,12 +5,12 @@
 
 {% block content %}
 	<form id="cart-form">
-		<div class="p20" style="margin:auto;">
+		<div>
 			{% if cartTempItems|length == 0 %}
 				<p class="msg" style="font-size:20px;">Ваша Корзина пуста</p>
 			{% else %}
 				{% set error = FALSE %}
-				<table class="cart-table table table-hover">
+				<table class="cart-table bs-table">
 					<tr>
 						<th class="w500">Наименование</th>
 						<th>Параметры</th>
@@ -32,7 +32,7 @@
 					Итоговая стоимость <span>{{sum}} руб.</span>
 				</div>
 				<div class="ta-r mb20">
-					<span class="js-save button bg-color-blue p20 white br3" data-next-page="{{next_page}}">Оформить заказ<i class="fa fa-angle-double-right fa-lg ml5"></i></span>
+					<span class="js-save button_v2 bg-color-blue button-style1 p20 white br3" data-next-page="{{next_page}}">Оформить заказ<i class="fa fa-angle-double-right fa-lg ml5"></i></span>
 				</div>
 					
 				<div class="js-error errors-cont mb20 red"></div>
