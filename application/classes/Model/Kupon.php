@@ -33,6 +33,17 @@ class Model_Kupon extends ORM
 			->on('kupon.invoice_id', '=', 'invoices.id');
 	}	
 
+	public function sum_by_field($field)
+	{
+		$query = DB::select('object_id', DB::expr('SUM('.$field.')'))
+				->from('kupon')
+				->group_by('object_id')
+				->as_object()
+				->execute();
+		
+		return $query;				
+	}
+
 	function get_balance_by_begin_state($kupon_id, $state = "avail", $order_id = NULL)
 	{
 		$query = DB::select(array(DB::expr('SUM("count")'), 'begin_count'))
@@ -249,4 +260,3 @@ class Model_Kupon extends ORM
 
 
 }
-

@@ -44,5 +44,6 @@ class Controller_Kupon extends Controller_Template {
 		}
 
 		$this->template->twig_template = $twig;
+		$this->template->set_global('title', $twig->kupon_group->title);
 	}
 }

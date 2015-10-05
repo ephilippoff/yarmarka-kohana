@@ -24,7 +24,9 @@ class Controller_Admin_Kupons extends Controller_Admin_Template {
 		}		
 		
 		$clone_to_count = clone $kupons;
-		$count_all = $clone_to_count->count_all();		
+		$count_all = $clone_to_count->count_all();
+		
+		$kupons->limit($limit)->offset($offset);
 		
 		$this->template->kupons = $kupons->order_by('id', 'desc')->find_all();
 		$this->template->limit	  = $limit;
@@ -39,6 +41,54 @@ class Controller_Admin_Kupons extends Controller_Admin_Template {
 				'controller' => 'kupons',
 				'action'     => 'index',
 			));		
+	}
+	
+	public function action_groups()
+	{
+		$limit  = Arr::get($_GET, 'limit', 50);
+		$page   = $this->request->query('page');
+		$offset = ($page AND $page != 1) ? ($page-1) * $limit : 0;		
+		
+		$kupon_objects = ORM::factory('Object')				
+				->with_attr_value('balance', 'integer')
+				->where('category', '=', 173);
+		
+		$clone_to_count = clone $kupon_objects;
+		$count_all = $clone_to_count->count_all();		
+		
+		$kupon_objects = $kupon_objects
+				->order_by('id', 'desc')
+				->limit($limit)
+				->offset($offset)				
+				->find_all();		
+		
+		$kupon_objects_sum = ORM::factory('Kupon')->sum_by_field('count');
+		$kupon_objects_sum = Dbhelper::convert_dbset_to_keyid_arr($kupon_objects_sum, 'object_id');
+		
+		$kupon_objects_ids = array_map(function($item){
+			return $item->id;
+		}, $kupon_objects->as_array());
+		
+		if ($kupon_objects_ids)
+		{
+			$kupon_details = ORM::factory('Kupon')->where('object_id', 'in', $kupon_objects_ids)->find_all();			
+			$kupon_details = Dbhelper::dbset_to_groups_arr($kupon_details, 'object_id');		
+		}
+		
+		$this->template->kupon_objects = $kupon_objects;
+		$this->template->kupon_details = $kupon_details;
+		$this->template->kupon_objects_sum = $kupon_objects_sum;
+		$this->template->limit	  = $limit;
+		$this->template->pagination	= Pagination::factory(array(
+				'current_page'   => array('source' => 'query_string', 'key' => 'page'),
+				'total_items'    => $count_all,
+				'items_per_page' => $limit,
+				'auto_hide'      => TRUE,
+				'view'           => 'pagination/bootstrap',
+			))->route_params(array(
+				'controller' => 'kupons',
+				'action'     => 'groups',
+			));				
 	}
 	
 	public function action_edit()

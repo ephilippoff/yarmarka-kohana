@@ -823,6 +823,21 @@ class Model_Object extends ORM {
 		}
 		
 	}
+	
+	public function with_attr_value($attr_seo_name, $data_type)
+	{
+		if (!$attr_seo_name or !$data_type) 
+		{
+			return FALSE;
+		}
+			
+		return $this->select(DB::expr('(select di.value_min from data_'.$data_type.' as di 
+										left join reference on di.reference = reference.id
+										left join attribute on di.attribute = attribute.id
+										where di.object = object.id and attribute.seo_name = \''.$attr_seo_name.'\'
+										) as '.$attr_seo_name));
+	}
+		
 }
 
 /* End of file Object.php */
