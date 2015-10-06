@@ -176,6 +176,17 @@ class ORM extends Kohana_ORM {
 		return new Obj($o["_object"]);
 	}
 
+	public function getprepared_all()
+	{
+		$result = array();
+
+		foreach ($this->find_all() as $item) {
+			$result[] = $item->get_row_as_obj();
+		}
+
+		return $result;
+	}
+
 	/* переопределение метода get  с кешированием связей*/
 	public function get($column)
 	{

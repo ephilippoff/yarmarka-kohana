@@ -17,6 +17,7 @@ class Controller_Cart extends Controller_Template {
 
 	public function action_index()
 	{
+		$this->layout = "cart";
 		$twig = Twig::factory('cart/index');
 		$twig->user = $user = Auth::instance()->get_user();
 		$cart = $cartTempItems = $sale_types = array();
@@ -91,6 +92,7 @@ class Controller_Cart extends Controller_Template {
 
 	public function action_electronic_delivery()
 	{
+		$this->layout = "cart";
 		$twig = Twig::factory('cart/electronic_delivery');
 		$twig->city = $this->domain->get_city();
 		$id = $this->request->param('id');
@@ -173,7 +175,7 @@ class Controller_Cart extends Controller_Template {
 
 	public function action_delivery()
 	{
-
+		$this->layout = "cart";
 		$twig = Twig::factory('cart/delivery');
 		$twig->city = $this->domain->get_city();
 		$id = $this->request->param('id');
@@ -288,6 +290,7 @@ class Controller_Cart extends Controller_Template {
 
 	public function action_order()
 	{
+		$this->layout = "cart";
 		$twig = Twig::factory('cart/order');
 		$twig->city = $this->domain->get_city();
 

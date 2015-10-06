@@ -120,13 +120,35 @@ class Service_Kupon extends Service
 		$kupons = ORM::factory('Kupon')
 					->where("id","IN",$orderItem->service->ids)
 					->find_all();
+
 		foreach ($kupons as $kupon) {
 			$kupon->to_sold($oi->loaded() ? $oi->order_id : NULL);
 			$orderItem->kupon = $kupon;
-			
 		}
 
 		$order->electronic_delivery($orderItem);
+
+		$contactForNotify = ORM::factory('Data_Text')
+			->select("seo_name")
+			->join("attribute")
+				->on("attribute.id","=","data_text.attribute")
+			->where("object","=",$orderItem->object->id)
+			->where("attribute.seo_name","IN",array("phone","email","support_emails"))
+			->getprepared_all();
+
+		$phone = $email = $support_emails = NULL;
+		if (count($contactForNotify) > 0 ) {
+
+			$phone = array_filter($contactForNotify, function($item){ return $item->seo_name == "phone"; });
+			$email = array_filter($contactForNotify, function($item){ return $item->seo_name == "email"; });
+			$support_emails = array_filter($contactForNotify, function($item){ return $item->seo_name == "support_emails"; });
+			$phone = (count($phone) > 0) ? (array) array_shift($phone) : NULL;
+			$email = (count($email) > 0) ? (array)  array_shift($email) : NULL;
+			$support_emails = (count($support_emails) > 0) ? (array) array_shift($support_emails) : NULL;
+		}
+
+		$order->supplier_delivery($orderItem, $phone['value'], $email['value'], ($support_emails) ? explode(",", $support_emails['value']) : NULL);
+
 	}
 
 	public function return_reserve($ids, $description = NULL)

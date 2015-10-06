@@ -234,10 +234,49 @@ class Model_Order extends ORM
 							'title' => $orderItem->service->title,
 							'ids' => $orderItem->service->ids,
 							'key' => $orderItem->kupon->access_key,
-							'order' => $this, 
+							'order' => $this,
+							'for_supplier' => FALSE
 						));
 				
 				Email::send($params->delivery->email, Kohana::$config->load('email.default_from'), $subj, $msg);
+		}
+	}
+
+	function supplier_delivery($orderItem, $phone, $email, $support_emails)
+	{
+		if (!$this->loaded()) return;
+
+		$params = ($this->params) ? $this->params : "{}";
+		$params = new Obj(json_decode($params));
+
+		if ($phone AND Valid::is_mobile_contact($phone)) {
+			Sms::send($phone, 'Приобретен купон: '.$orderItem->service->title, NULL);
+		}
+
+		$subj = "Приобретены купоны на скидку. Заказ №".$this->id;
+		$msg = View::factory('emails/kupon_notify',
+				array(
+					'title' => $orderItem->service->title,
+					'ids' => $orderItem->service->ids,
+					'key' => $orderItem->kupon->access_key,
+					'order' => $this,
+					'for_supplier' => TRUE,
+					'delivery' => $params->delivery
+				));
+
+		if ($email AND Valid::is_email_contact($email)) {
+			Email::send($email, Kohana::$config->load('email.default_from'), $subj, $msg);
+		}
+
+		try {
+			if ($support_emails  AND count($support_emails) > 0) {
+				foreach ($support_emails as $email) {
+					Email::send($email, Kohana::$config->load('email.default_from'), $subj, $msg);
+					
+				}
+			}
+		} catch (Exception $e) {
+			
 		}
 	}
 	

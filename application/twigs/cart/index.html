@@ -5,6 +5,7 @@
 
 {% block content %}
 	<form id="cart-form">
+		<p class="p10 fs16 ">Купоны зарезервированы за Вами. Необходимо произвести оплату в течении 30 минут</p>
 		<div>
 			<div style="font-size:18px;margin:30px auto;">
 				{% if cartTempItems|length == 0 %}
@@ -12,12 +13,12 @@
 				{% else %}
 					{% set error = FALSE %}
 					<table class="cart-table bs-table">
-						<tr>
-							<th class="">Наименование</th>
-							<th>Параметры</th>
-							<th>Цена</th>
-							<th></th>
-							<th></th>
+						<tr >
+							<th class="fs18">Наименование</th>
+							<th class="fs18">Параметры</th>
+							<th class="fs18">Цена</th>
+							<th class="fs18"></th>
+							<th class="fs18"></th>
 						</tr>
 						
 						{% set i = 1 %}
