@@ -51,12 +51,12 @@ function (app, $, Marionette, Backbone, _) {
         category_id: _globalSettings.category_id,
         city_id: _globalSettings.city_id,
         objects_for_map: _globalSettings.objects_for_map,
-        kohana_host: "c.yarmarka.dev",
-        mainHost: "yarmarka.dev"
+        kohana_host: _globalSettings.host,
+        mainHost: _globalSettings.mainHost
     };
 
     $.ajaxPrefilter( function( options, originalOptions, jqXHR ) {
-        if (!options.orinalHost) {
+        if (!options.orinalHost && app.settings.kohana_host) {
             options.crossDomain = true,
             options.url = "http://" + app.settings.kohana_host + options.url;
         }
