@@ -42,9 +42,15 @@
 						<tr><td colspan="2" style="line-height: 0;"><img src="data:image/gif;base64,R0lGODlhAQABAJEAAAAAAP///////wAAACH5BAEAAAIALAAAAAABAAEAAAICVAEAOw%3D%3D" height="9" alt="" title=""/></td></tr>
 						<tr><td colspan="2" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;line-height: 15px;">
 							<? if ($for_supplier == TRUE): ?>
+								<p style="padding:10px;">Контакты покупателя</p>
 								<table>
 									<tr><td>Email:</td><td><?=$delivery->email?></td></tr>
 									<tr><td>Телефон:</td><td><?=$delivery->phone?></td></tr>
+								</table>
+								<p style="padding:10px;">Информация об акции</p>
+								<table>
+									<tr><td>Продано:</td><td><?=$sold_balance?></td></tr>
+									<tr><td>Остаток:</td><td><?=$avail_balance?></td></tr>
 								</table>
 							<? else: ?>
 								<p style="padding:10px;"><a href="http://yarmarka.biz/cart/order/<?=$order->id?>">Перейти к заказу</a></p>

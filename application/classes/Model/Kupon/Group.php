@@ -23,7 +23,14 @@ class Model_Kupon_Group extends ORM {
 
 	function get_balance()
 	{
+		if (!$this->loaded()) return;
 		return ORM::factory('Kupon')->get_avail_count($this->id);
+	}
+
+	function get_sold_balance()
+	{
+		if (!$this->loaded()) return;
+		return ORM::factory('Kupon')->get_sold_count($this->id);
 	}
 
 } 

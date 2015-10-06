@@ -156,9 +156,19 @@ class Model_Kupon extends ORM
 		return $this->where("kupon_group_id","=",$group_id)->where("state","IN", array(self::AVAIL));
 	}
 
+	function get_sold($group_id)
+	{
+		return $this->where("kupon_group_id","=",$group_id)->where("state","IN", array(self::SOLD));
+	}
+
 	function get_avail_count($group_id)
 	{
 		return $this->get_avail($group_id)->count_all();
+	}
+
+	function get_sold_count($group_id)
+	{
+		return $this->get_sold($group_id)->count_all();
 	}
 
 	function reserve($order_id = NULL, $access_key = NULL)

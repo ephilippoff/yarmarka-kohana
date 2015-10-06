@@ -250,9 +250,9 @@ class Model_Order extends ORM
 		$params = new Obj(json_decode($params));
 
 		if ($phone AND Valid::is_mobile_contact($phone)) {
-			Sms::send($phone, 'Приобретен купон: '.$orderItem->service->title, NULL);
+			//Sms::send($phone, 'Приобретен купон: '.$orderItem->service->title, NULL);
 		}
-
+		$group = ORM::factory('Kupon_Group', $orderItem->service->group_id);
 		$subj = "Приобретены купоны на скидку. Заказ №".$this->id;
 		$msg = View::factory('emails/kupon_notify',
 				array(
@@ -261,7 +261,9 @@ class Model_Order extends ORM
 					'key' => $orderItem->kupon->access_key,
 					'order' => $this,
 					'for_supplier' => TRUE,
-					'delivery' => $params->delivery
+					'delivery' => $params->delivery,
+					'avail_balance' => $group->get_balance(),
+					'sold_balance' => $group->get_sold_balance()
 				));
 
 		if ($email AND Valid::is_email_contact($email)) {
