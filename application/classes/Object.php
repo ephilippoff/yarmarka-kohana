@@ -17,7 +17,7 @@ class Object
 			$json = Object::PlacementAds_Local($params);
 
 		} else {
-			if ($user AND in_array($user->role, array(3, 9))) 
+			if ($user AND in_array($user->role, array(1, 3, 9))) 
 			{
 				//убрана проверка контактов
 				//убрана проверка на максимальное количество объяв в рубрику

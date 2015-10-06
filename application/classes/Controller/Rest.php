@@ -29,6 +29,11 @@ class Controller_Rest extends Controller_Template
         $this->response->headers('Access-Control-Allow-Methods', 'OPTIONS, POST, GET, PUT, DELETE');
         $this->response->headers('Access-Control-Allow-Headers', 'X-HTTP-Method-Override, Content-Type');
         $this->response->headers('Access-Control-Allow-Origin', 'http://surgut.ci.yarmarka.dev');
+
+        $rest_domains =  Kohana::$config->load("common.cors_rest_domains");
+        if (in_array($this->request->headers("origin"), $rest_domains)) {
+            $this->response->headers('Access-Control-Allow-Origin', $this->request->headers("origin"));
+        }
         
         $this->response->headers('Access-Control-Allow-Credentials', 'true');
         

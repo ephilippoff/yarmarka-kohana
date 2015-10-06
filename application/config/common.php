@@ -22,5 +22,14 @@ return array(
 	'date_new_registration'					=> '2014-11-21',
 	'add_phone_required' 					=> TRUE,
 	'add_phone_required_exlusion' 			=> array(36,35),
-	'short_domain'							=> 'ya24.biz'
+	'short_domain'							=> 'ya24.biz',
+	'cors_rest_domains' => array(
+		'http://surgut.ci.yarmarka.dev',
+
+		'http://nizhnevartovsk.new.yarmarka.biz', 
+		'http://surgut.new.yarmarka.biz', 
+		'http://tyumen.new.yarmarka.biz', 
+		'http://nizhnevartovsk.yarmarka.biz',
+		'http://surgut.yarmarka.biz', 
+		'http://tyumen.yarmarka.biz')
 );
