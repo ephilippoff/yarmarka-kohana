@@ -250,7 +250,7 @@ class Model_Order extends ORM
 		$params = new Obj(json_decode($params));
 
 		if ($phone AND Valid::is_mobile_contact($phone)) {
-			//Sms::send($phone, 'Приобретен купон: '.$orderItem->service->title, NULL);
+			Sms::send($phone, 'Приобретен купон: '.$orderItem->service->title, NULL);
 		}
 		$group = ORM::factory('Kupon_Group', $orderItem->service->group_id);
 		$subj = "Приобретены купоны на скидку. Заказ №".$this->id;
