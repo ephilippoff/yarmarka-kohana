@@ -504,6 +504,7 @@ class Controller_Cart extends Controller_Template {
 						$service->set_params(array("quantity" => $quantity));
 						$item->service = new Obj($service->get());
 						$model_item->save_service_params($item->service);
+						$model_item->reserve($key);
 					}
 					
 					
