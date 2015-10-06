@@ -479,8 +479,26 @@ class Controller_Cart extends Controller_Template {
 			$sum = Model_Order::each_item($cart_tems, function($service, $item, $model_item) use (&$orderItems, $order_id, $order_loaded, $key, &$error, $params) {
 
 				if ($item->service->name == "kupon") {
+					$own_kupons = 0;
+
+					$kupons = ORM::factory('Kupon')
+								->where("id","IN",$item->service->ids)
+								->find_all();
+					
+					foreach ($kupons as $kupon) {
+						$kupon_is_mine = $kupon->check_and_restore_reserve_if_possible($key);
+						$own_kupons = $own_kupons +1;
+					}
+
+					$available = FALSE;
+					$avail_count = (int) ORM::factory('Kupon_Group', $item->service->group_id)->get_balance() + $own_kupons;
+					
 					$quantity = Arr::get((array) $params,"quantity".$item->service->group_id, 1);
-					if ($quantity <> $item->service->quantity ) {
+					if ($avail_count >= $quantity) {
+						$available = TRUE;
+					}
+
+					if ($quantity <> $item->service->quantity AND $available) {
 						$model_item->return_reserve();
 						$service = Service::factory("Kupon", $item->service->group_id);
 						$service->set_params(array("quantity" => $quantity));
@@ -488,20 +506,13 @@ class Controller_Cart extends Controller_Template {
 						$model_item->save_service_params($item->service);
 					}
 					
-					$kupons = ORM::factory('Kupon')
-								->where("id","IN",$item->service->ids)
-								->find_all();
+					
 
-					$available = FALSE;
-					foreach ($kupons as $kupon) {
-						$available = $kupon->check_and_restore_reserve_if_possible($key);
-						if ($available == FALSE) break;
-					}
 
 					if ($available !== TRUE)
 					{
 						$error = array(
-							"message" => "В заказе присутствуют недоступные позиции, удалите их прежде чем продолжить",
+							"message" => "Указанное количество купонов превышает их остаток, измените количество",
 							"code" => 400
 						);
 						return $item;
