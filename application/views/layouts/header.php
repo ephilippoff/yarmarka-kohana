@@ -44,7 +44,7 @@
 								<li><a style="color:red" href="<?=URL::site('user/objectload')?>" class="red"><div class="img"><!--<img src="" alt="" />--></div>Массовая загрузка</a></li>
 
 								<?php if (Request::current()->action() != 'userpage') : ?>
-									<?php if (Auth::instance()->get_user()->org_type == 2) : ?><li class="last"><a class="green" href="/users/<?=Auth::instance()->get_user()->login?>"><div class="img"><!--<img src="" alt="" />--></div>Страница компании</a></li><?php endif; ?>
+									<?php if (Auth::instance()->get_user() AND Auth::instance()->get_user()->org_type == 2) : ?><li class="last"><a class="green" href="/users/<?=Auth::instance()->get_user()->login?>"><div class="img"><!--<img src="" alt="" />--></div>Страница компании</a></li><?php endif; ?>
 								<?php endif; ?>
 
 								<li class="last"><a href="<?=URL::site('user/logout')?>"><div class="img"><img src="<?=URL::site('images/pr3.png')?>" alt="" /></div>Выход</a></li>												
