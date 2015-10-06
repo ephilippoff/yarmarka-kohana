@@ -5,7 +5,9 @@
 
 {% block content %}
 	<form id="cart-form">
-		<p class="p10 fs16 ">Купоны зарезервированы за Вами. Необходимо произвести оплату в течении 30 минут</p>
+		{% if cartTempItems|length > 0 %}
+			<p class="p10 fs16 ">Купоны зарезервированы за Вами. Необходимо произвести оплату в течении 30 минут</p>
+		{% endif %}
 		<div>
 			<div style="font-size:18px;margin:30px auto;">
 				{% if cartTempItems|length == 0 %}

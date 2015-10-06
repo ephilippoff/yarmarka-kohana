@@ -167,3 +167,6 @@ WITH (
 );
 ALTER TABLE object_movement
   OWNER TO yarmarka_biz;
+
+  update object 
+set type_tr=201 where category=173
