@@ -8,12 +8,12 @@
 	<p class="p10">Укажите контактные данные, для связи с Вами. На указанный email будут отправлены купоны на приобретенные услуги</p>
 	<form action="/cart/electronic_delivery/{{ order.id }}" method="POST" id="js-electronic_delivery_form">
 
-		<div class="p20" style="margin:auto;">
+		<div class="p20" style="font-size:18px;margin:30px auto;">
 
 			<table class="cart-table bs-table">
 				<tr><td><label>E-mail</label></td><td>
 					<div class="input-group w100p">
-						<span class="input-group-addon bg-color-whitesmoke"><i class="fa fa-envelope-o"></i></span>
+						<span class="input-group-addon bg-color-whitesmoke"></span>
 						{% if (user) %}
 							<input class="input fields w300" type="text" name="email" value="{{ user.email }}" >
 						{% else  %}
@@ -24,7 +24,7 @@
 				</td></tr>
 				<tr><td><label>Мобильный телефон</label></td><td>
 					<div class="input-group w100p">
-						<span class="input-group-addon bg-color-whitesmoke brl3" title="Телефон"><i class="fa fa-mobile-phone"></i></span>
+						<span class="input-group-addon bg-color-whitesmoke brl3" title="Телефон"></span>
 						<input class="input fields w300" type="text" name="phone" value="{{ post.phone }}">
 					</div>
 					</td></tr>

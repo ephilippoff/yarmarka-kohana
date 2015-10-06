@@ -244,14 +244,25 @@ class Model_Order extends ORM
 
 	static function GetMyLastOrder()
 	{	
-		$key = Cookie::dget("cartKey");
-		if (!$key) return;
+		$user = Auth::instance()->get_user();
+		if ($user) {
+			$last_order = ORM::factory('Order')
+					->where("user_id","=",$user->id)
+					->where("state","IN",array(0,1))
+					->order_by("id","desc")
+					->find();
+		} else {
+			$key = Cookie::dget("cartKey");
+			if (!$key) return;
+			$last_order = ORM::factory('Order')
+					->where("key","=",$key)
+					->where("state","IN",array(0,1))
+					->order_by("id","desc")
+					->find();
+		}
+		
 
-		$last_order = ORM::factory('Order')
-				->where("key","=",$key)
-				->where("state","IN",array(0,1))
-				->order_by("id","desc")
-				->find();
+		
 		if (!$last_order->loaded()) return;
 		return $last_order->get_row_as_obj();
 	}
