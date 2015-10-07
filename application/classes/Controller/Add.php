@@ -94,8 +94,11 @@ class Controller_Add extends Controller_Template {
 		elseif ($user AND $user->linked_to_user)
 			$form_data->LinkedUser();
 
-		if ($user AND $user->role == 9)
+		if ( Acl::check("object.add.type") )
 			$form_data ->AdvertType();
+
+		if ( Acl::check("object.add.type") )
+			$form_data ->UserType();
 		
 		$this->template->token = $token;
 		
