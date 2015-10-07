@@ -289,15 +289,14 @@ class Form_Add  {
 	function AdvertType()
 	{	
 		$object 		= $this->object;
-		/*<option <?php if ($type_tr == 88) : ?> selected <?php endif;?> value="88">Модульная реклама (88)</option>
-										<option <?php if ($type_tr == 89) : ?> selected <?php endif;?> value="89">Рекламное объявление (89)</option>
-										<option <?php if ($type_tr == 90) : ?> selected <?php endif;?> value="90">Рекламное объявление с фоном (90)</option>	
-										*/
 		$type = array(
 				0 => "---",
-				88 => "Модульная реклама (88)",
+				//88 => "Модульная реклама (88)",
 				89 => "Рекламное объявление (89)",
-				90 => "Рекламное объявление с фоном (90)"
+				//90 => "Рекламное объявление с фоном (90)",
+				101 => "Новость (101)",
+				102 => "Статья (102)",
+				201 => "Купон (201)"
 			);
 
 		$value = $object->type_tr;
@@ -306,6 +305,27 @@ class Form_Add  {
 
 		$this->_data->advert_type = array(
 											'type_list' => $type,
+											'value'		=> $value
+										);
+	}
+
+	function UserType()
+	{	
+		$object 		= $this->object;
+		$type = array(
+				"default" => "Обычный пользователь",
+				"moderator" => "Модератор",
+			);
+
+		$value = "default";
+		if ( Acl::check("object.add.type") ) {
+			$value = "moderator";
+		}
+		if ( array_key_exists("user_type", $this->params))
+			$value = $this->params['user_type'];
+
+		$this->_data->user_type = array(
+											'user_type_list' => $type,
 											'value'		=> $value
 										);
 	}

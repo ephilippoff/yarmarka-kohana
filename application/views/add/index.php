@@ -119,6 +119,43 @@
 			</div>
 			<? endif; ?>
 
+			<? if (Acl::check("object.add.type")) : ?>
+				<p class="p20 red"><i class="fa fa-eye fa-lg mr5"></i>Вы авторизованы с ролью модератора, будьте внимательны</p>
+				<? if (property_exists($form_data, 'advert_type')): ?>
+					<div id="div_advert_type" class="smallcont">
+						<div class="labelcont">
+							<label><span>Тип объявления:</span></label>
+						</div>
+						<div class="fieldscont">
+							<div class="inp-cont-short">
+								<div class="inp-cont">
+									<span class="required-label">*</span>
+									<?= Form::select("obj_type", $form_data->advert_type['type_list'], $form_data->advert_type['value'], array('class' => 'w100p')); ?>					
+								</div>
+							</div>
+						</div>									
+					</div>
+				<? endif; ?>
+				
+				<? if (property_exists($form_data, 'user_type')): ?>
+					<div id="div_user_type" class="smallcont">
+						<div class="labelcont">
+							<label><span>Тип пользователя:</span></label>
+						</div>
+						<div class="fieldscont">
+							<div class="inp-cont-short">
+								<div class="inp-cont">
+									<span class="required-label">*</span>
+									<?= Form::select("user_type", $form_data->user_type['user_type_list'], $form_data->user_type['value'], array('class' => 'w100p')); ?>					
+								</div>
+							</div>
+						</div>	
+					</div>
+				<? endif; ?>
+
+				<hr class="dib mb30 w100p">
+			<? endif; ?>
+
 			<? if ( property_exists($form_data, 'org_info') ): ?>
 			<div class="fl100  pt16 pb15"  id="div_org_info">
 					<div class="smallcont">
@@ -284,29 +321,6 @@
 				</div>
 			<? endif; ?>
 			</div>
-
-			<? if ( property_exists($form_data, 'advert_type') ): ?>
-
-			<div class="fl100" id="div_advert_type">
-				<div class="smallcont">
-					<div class="labelcont">
-						<label><span>Тип объявления:</span></label>
-					</div>
-					<div class="fieldscont">				 						
-						<div class="inp-cont-short">
-							<div class="inp-cont">
-								<span class="required-label">*</span>	
-								<?=Form::select("obj_type", $form_data->advert_type['type_list'], $form_data->advert_type['value']); ?>
-							</div> <!--inp-cont -->
-						</div> <!-- inp-cont-short -->
-
-
-					</div> <!-- fieldscont -->		
-				</div>	 <!-- smallcont --> 
-			</div>  <!-- fl100 -->
-				
-
-			<? endif; ?>
 
 			<? if ( property_exists($form_data, 'company_info') ): ?>
 
