@@ -329,7 +329,7 @@ class Controller_Ajax extends Controller_Template
 			throw new HTTP_Exception_404;
 		}
 
-		$info = Object::canEdit(Array("object_id" => $ad->id, "rubricid" => $ad->category));
+		$info = Object::canEdit(Array("object_id" => $ad->id, "rubricid" => $ad->category, "city_id" => $ad->city_id));
 
 		if ( $info["code"] == "error" )
 		{
@@ -366,7 +366,7 @@ class Controller_Ajax extends Controller_Template
 		$obj->parent_id = NULL;	
 		$obj->update();
 
-		$info = Object::canEdit(Array("object_id" => $object->id, "rubricid" => $object->category));
+		$info = Object::canEdit(Array("object_id" => $object->id, "rubricid" => $object->category, "city_id" => $object->city_id));
 
 		if ($info["code"] == "ok")
 		{
@@ -440,7 +440,7 @@ class Controller_Ajax extends Controller_Template
 			throw new HTTP_Exception_404;
 		}
 
-		$info = Object::canEdit(Array("object_id" => $object->id, "rubricid" => $object->category));
+		$info = Object::canEdit(Array("object_id" => $object->id, "rubricid" => $object->category, "city_id" => $object->city_id));
 
 		if ($object->is_published == 1) //если размещено и надо снять
 		{
