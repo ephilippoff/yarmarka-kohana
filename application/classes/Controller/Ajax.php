@@ -1379,6 +1379,13 @@ class Controller_Ajax extends Controller_Template
 					'Поступила заявка №'.$callback_request->id.' на обратный звонок с ключом "'.$key.'"', 
 					"ФИО: {$fio}<br>Телефон: {$phone}<br>Комментарий: {$comment}" );		
 		}
+		
+		if (strpos($_SERVER['HTTP_ORIGIN'], 'yarmarka.biz') !== false)
+		{
+			$this->response->headers('Access-Control-Allow-Methods', 'OPTIONS, POST, GET');
+			$this->response->headers('Access-Control-Allow-Headers', 'X-HTTP-Method-Override, Content-Type');
+			$this->response->headers('Access-Control-Allow-Origin', $_SERVER['HTTP_ORIGIN']);		
+		}
 	}
 
 	 
