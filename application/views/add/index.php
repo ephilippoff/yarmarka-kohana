@@ -322,29 +322,6 @@
 			<? endif; ?>
 			</div>
 
-			<? if ( property_exists($form_data, 'advert_type') ): ?>
-
-			<div class="fl100" id="div_advert_type">
-				<div class="smallcont">
-					<div class="labelcont">
-						<label><span>Тип объявления:</span></label>
-					</div>
-					<div class="fieldscont">				 						
-						<div class="inp-cont-short">
-							<div class="inp-cont">
-								<span class="required-label">*</span>	
-								<?=Form::select("obj_type", $form_data->advert_type['type_list'], $form_data->advert_type['value']); ?>
-							</div> <!--inp-cont -->
-						</div> <!-- inp-cont-short -->
-
-
-					</div> <!-- fieldscont -->		
-				</div>	 <!-- smallcont --> 
-			</div>  <!-- fl100 -->
-				
-
-			<? endif; ?>
-
 			<? if ( property_exists($form_data, 'company_info') ): ?>
 
 				<div class="fl100" id="div_company_info">
