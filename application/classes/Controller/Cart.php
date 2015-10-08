@@ -742,7 +742,7 @@ class Controller_Cart extends Controller_Template {
 	{
 		$this->auto_render = FALSE;
 
-		$order_id = $this->request->query("InvId");
+		$order_id = $this->request->post("InvId");
 		$sum = $this->request->post("OutSum");
 		$signature = $this->request->post("SignatureValue");
 		
@@ -815,9 +815,9 @@ class Controller_Cart extends Controller_Template {
 	{
 		$this->auto_render = FALSE;
 
-		$order_id = $this->request->query("InvId");
-		$sum = $this->request->query("OutSum");
-		$signature = $this->request->query("SignatureValue");
+		$order_id = $this->request->post("InvId");
+		$sum = $this->request->post("OutSum");
+		$signature = $this->request->post("SignatureValue");
 
 		$order = ORM::factory('Order', $order_id);
 
