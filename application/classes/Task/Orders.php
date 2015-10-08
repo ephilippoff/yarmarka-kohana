@@ -11,9 +11,18 @@ class Task_Orders extends Minion_Task
 	protected function _execute(array $params)
 	{
 		Minion::write("start","orders");
-		ORM::factory('Order')->check_state(NULL, array(), function($order_id, $action){
-			Minion::write($action, $order_id);
-		});
+
+		$orders = ORM::factory('Order')->where("state","in",array(0,1))->find_all();
+		foreach ($orders as $order) {
+			Minion::write(date('Y-m-d H:i:s'), $order->created);
+			if (strtotime(date('Y-m-d H:i:s')) > strtotime($order->created) + 60*30) {
+				ORM::factory('Order')->check_state($order->id, array(), function($order_id, $action){
+					Minion::write($action, $order_id);
+				});
+			}
+		}
+
+		
 
 		Minion::write("start","return reserved kupons");
 		$this->return_reserved_kupons();

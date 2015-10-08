@@ -11,6 +11,11 @@ class Valid extends Kohana_Valid {
 		return intval($value) !== 0;
 	}
 
+	public static function not_category_0($value)
+	{
+		return intval($value) !== 0;
+	}
+
 	public static function check_city_value($value, $dictionary)
 	{
 		if (array_key_exists("city_".$value, $dictionary)){

@@ -266,7 +266,8 @@ class Lib_PlacementAds_AddEdit {
 
 		$validation = Validation::factory((array) $this->params)
 			->rule('city_id', 'not_empty', array(':value', "Город"))
-			->rule('rubricid', 'not_empty', array(':value', "Раздел"));
+			->rule('rubricid', 'not_empty', array(':value', "Раздел"))
+			->rule('rubricid', 'not_category_0', array(':value', "Раздел"));
 
 		if ($category)
 		{

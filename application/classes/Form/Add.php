@@ -253,13 +253,14 @@ class Form_Add  {
 			}
 		}
 
+
 		$this->_data->city = array(	'city_list' => $city_array, 
 									'city_title' => $city_title,
 									'city_id' => $city_id,
 									'real_city' => $real_city, 
 									'real_city_exists' => $real_city_exists,
 									'edit' => $edit,
-									'city_error' => $errors->city_kladr_id,
+									'city_error' => $errors->city_id,
 									"lat" => $lat,
 									"lon" => $lon
 								);
