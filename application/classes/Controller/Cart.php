@@ -643,19 +643,29 @@ class Controller_Cart extends Controller_Template {
 			$params = json_decode($orderItem->params);
 
 			if ($params->service->name == "kupon") {
-					
+					$own_kupons = 0;
+
 					$kupons = ORM::factory('Kupon')
 								->where("id","IN",$params->service->ids)
 								->find_all();
+					
+					foreach ($kupons as $kupon) {
+						$kupon_is_mine = $kupon->check_and_restore_reserve_if_possible($key);
+						$own_kupons = $own_kupons +1;
+					}
 
 					$available = FALSE;
-					foreach ($kupons as $kupon) {
-						$available = $kupon->check_and_restore_reserve_if_possible($key);
-						if ($available == FALSE) {
-							$errors["paid_or_refused"] = $available;
-							$this->return_with_errors("/cart/order/".$order_id, $this->request->post(), $errors);
-							return;
-						};
+					$avail_count = (int) ORM::factory('Kupon_Group', $params->service->group_id)->get_balance() + $own_kupons;
+					
+					$quantity = Arr::get((array) $params,"quantity".$params->service->group_id, 1);
+					if ($avail_count >= $quantity) {
+						$available = TRUE;
+					}
+
+					if ($available == FALSE) {
+						$errors["paid_or_refused"] = $available;
+						$this->return_with_errors("/cart/order/".$order_id, $this->request->post(), $errors);
+						return;
 					}
 			}
 			// if ($params->type == "object") {
