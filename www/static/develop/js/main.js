@@ -8,6 +8,8 @@ require.config({
         jquery     : 'lib/jquery',
         //menuAim : 'lib/jquery.menu-aim',
         jcookie: 'lib/jquery.cookie',
+        jvalidity : 'lib/jquery.validity',
+        jvalidityrus : 'lib/jquery.validity.lang.rus',
         //iframeTransport: 'lib/vendor/jquery.iframe-transport',
         //fileupload: 'lib/vendor/jquery.fileupload',
         //nicEdit: 'lib/vendor/nicEdit',
@@ -40,7 +42,9 @@ require([ 'app',
           'jquery',
           'marionette',
           'backbone',
-          'underscore'
+          'underscore',
+          'jvalidity',
+          'jvalidityrus'
         ], 
 function (app, $, Marionette, Backbone, _) {
     "use strict";
