@@ -17,7 +17,7 @@ return array(
 	 */
 	'environment' => array(
 		'auto_reload'         => (Kohana::$environment == Kohana::DEVELOPMENT),
-		'autoescape'          => TRUE,
+		'autoescape'          => FALSE,
 		'base_template_class' => 'Twig_Template',
 		'cache'               => APPPATH.'cache/twig',
 		'charset'             => 'utf-8',
