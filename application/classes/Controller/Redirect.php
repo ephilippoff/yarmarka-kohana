@@ -21,5 +21,12 @@ class Controller_Redirect extends Controller_Template
 		
 		$this->redirect();
 	}
+
+	public function action_detail()
+	{
+		$config = Kohana::$config->load("common");
+		$main_domain = $config["main_domain"];
+		HTTP::redirect("http://".$main_domain."/detail/".$this->request->param("object_id"));
+	}
 	
 }

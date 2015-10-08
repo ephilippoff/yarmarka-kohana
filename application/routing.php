@@ -5,6 +5,12 @@ Route::set('admin', '<controller>(/<action>)', array('controller' => '(admin_.*|
 	throw new HTTP_Exception_404;
 });
 
+Route::set('detail','detail/<object_id>', array('object_id' => '\d+'))
+	->defaults(array(
+		'controller' => 'Redirect',
+		'action'     => 'detail',
+	));;
+
 Route::set('add', 'add/<rubricid>', array('rubricid' => '.*[0-9]'))
 	->defaults(array(
 		'controller' => 'Add',
@@ -60,6 +66,8 @@ Route::set('article', 'article/<seo_name>')
 		'controller' => 'Article',
 		'action'     => 'index',
 	));
+
+
 
 Route::set('ourservices', 'ourservices/<seo_name>')
 	->defaults(array(
