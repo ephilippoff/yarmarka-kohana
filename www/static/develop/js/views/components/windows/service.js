@@ -67,8 +67,8 @@ define([
 
         saveAndRedirect: function(e) {
             e.preventDefault();
-            this.save(e);
-            $(window).attr("location", "/cart");
+            var s = this;
+            s.save(e);
         },
 
         save: function(e) {
@@ -96,6 +96,7 @@ define([
                         app.services.updateCart();
                         app.windows.vent.trigger("closeWindow","service");
                         s.getOption("success")(model);
+                        $(window).attr("location", "/cart");
                     } else {
                         s.getOption("error")("Ошибка при сохранении услуги");
                         console.log("Ошибка при сохранении услуги");
