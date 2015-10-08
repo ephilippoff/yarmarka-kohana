@@ -395,7 +395,7 @@ class Controller_Cart extends Controller_Template {
 	{
 		if ( ! $this->request->is_ajax() AND Kohana::$environment !== Kohana::DEVELOPMENT)
 		{
-			throw new HTTP_Exception_404;
+			//throw new HTTP_Exception_404;
 		}
 		$this->auto_render = FALSE;
 		$user = Auth::instance()->get_user();
@@ -589,7 +589,7 @@ class Controller_Cart extends Controller_Template {
 	{
 		if ( ! $this->request->is_ajax() AND Kohana::$environment !== Kohana::DEVELOPMENT)
 		{
-			throw new HTTP_Exception_404;
+			//throw new HTTP_Exception_404;
 		}
 		$this->auto_render = FALSE;
 		$id = $this->request->param('id');
