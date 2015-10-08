@@ -711,6 +711,11 @@ class Controller_Cart extends Controller_Template {
 
 		$order = ORM::factory('Order', $order_id);
 
+		if (!$order->loaded()) {
+			$this->post_to_main_domain(array('InvId' => $order_id, 'OutSum' => $sum, 'SignatureValue' => $signature), "result");
+			return;
+		}
+
 		$robo = new Robokassa($order_id);
 		$robo->set_sum($order->sum);
 		$sample = strtoupper($robo->create_result_sign());
@@ -737,10 +742,18 @@ class Controller_Cart extends Controller_Template {
 	{
 		$this->auto_render = FALSE;
 
-		$order_id = $this->request->post("InvId");
+		$order_id = $this->request->query("InvId");
+		$sum = $this->request->post("OutSum");
+		$signature = $this->request->post("SignatureValue");
 		
 
+
 		$order = ORM::factory('Order', $order_id);
+		
+		if (!$order->loaded()) {
+			$this->post_to_main_domain(array('InvId' => $order_id, 'OutSum' => $sum, 'SignatureValue' => $signature), "success");
+			return;
+		}
 
 		if ($order->state == 1)
 		{
@@ -750,6 +763,26 @@ class Controller_Cart extends Controller_Template {
 		else
 		{
 			HTTP::redirect("/cart/order/".$order_id);
+		}
+	}
+
+	function post_to_main_domain($data, $action)
+	{
+		$main_domain = Kohana::$config->load("common.main_domain");
+		$url = "http://".$main_domain."/billing/".$action;
+		$options = array(
+			'http' => array(
+				'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+				'method'  => 'POST',
+				'content' => http_build_query($data),
+			),
+		);
+		try {
+			$context  = stream_context_create($options);
+			$result = file_get_contents($url, false, $context);
+			echo $result;
+		} catch (Exception $e) {
+			
 		}
 	}
 
@@ -782,9 +815,17 @@ class Controller_Cart extends Controller_Template {
 	{
 		$this->auto_render = FALSE;
 
-		$order_id = $this->request->post("InvId");
+		$order_id = $this->request->query("InvId");
+		$sum = $this->request->query("OutSum");
+		$signature = $this->request->query("SignatureValue");
 
 		$order = ORM::factory('Order', $order_id);
+
+		if (!$order->loaded()) {
+			$this->post_to_main_domain(array('InvId' => $order_id, 'OutSum' => $sum, 'SignatureValue' => $signature), "fail");
+			return;
+		}
+
 		if ($order->loaded()) {
 			$order->check_state($order->id);
 			HTTP::redirect("/cart/order/".$order->id);
