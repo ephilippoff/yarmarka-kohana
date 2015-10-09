@@ -1,0 +1,1 @@
+ALTER TABLE kupon ADD COLUMN external_number character varying(255);

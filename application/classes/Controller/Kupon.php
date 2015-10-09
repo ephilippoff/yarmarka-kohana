@@ -33,7 +33,7 @@ class Controller_Kupon extends Controller_Template {
 			throw new HTTP_Exception_404;
 		
 		$twig->kupon = $kupon;
-		$twig->kupon_number = ($kupon->external_number) ? $kupon->number : Text::format_kupon_number($kupon->decrypt_number($twig->kupon->number));
+		$twig->kupon_number = Text::format_kupon_number($kupon->decrypt_number($twig->kupon->number));
 		$twig->kupon_group = $kupon_group;
 
 		$object = ORM::factory('Object', $kupon_group->object_id);

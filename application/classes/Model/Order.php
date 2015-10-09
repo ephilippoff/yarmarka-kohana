@@ -110,7 +110,7 @@ class Model_Order extends ORM
 		});
 
 		// send email to user about successfull payment
-		if ($user->loaded() AND $user->email AND in_array($this->state, array(22,222,2)))
+		if ($user->loaded() AND $user->email AND in_array($this->state, array(2)))
 		{				
 			
 			$subj = "Потверждение оплаты. Заказ №".$this->id;
@@ -131,7 +131,7 @@ class Model_Order extends ORM
 			foreach ($orderItems as $orderItem)
 			{
 				if ($orderItem->service->name == "kupon") {
-					//Service::factory(Text::ucfirst($orderItem->service->name))->apply($orderItem);
+					Service::factory(Text::ucfirst($orderItem->service->name))->apply($orderItem);
 				}
 			}
 
@@ -144,7 +144,7 @@ class Model_Order extends ORM
 			return;
 		}
 
-		if ( in_array($this->state, array(22,222,2)) )
+		if ( in_array($this->state, array(2)) )
 		{
 			$configBilling = Kohana::$config->load("billing");
 
