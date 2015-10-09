@@ -36,10 +36,12 @@
 						Итоговая стоимость <span>{{sum}} руб.</span>
 					</div>
 					<div class="ta-r mb20">
+						{% if not error %}
 						<span class="js-save button_v2 bg-color-blue button-style1 p20 white br3" data-next-page="{{next_page}}">Оформить заказ<i class="fa fa-angle-double-right fa-lg ml5"></i></span>
+						{% endif %}
 					</div>
 						
-					<div class="js-error errors-cont mb20 red"></div>
+					<div class="js-error errors-cont mb20 red">{% if error %}{{error}}{% endif %}</div>
 				{% endif %}
 			</div>
 		</div>

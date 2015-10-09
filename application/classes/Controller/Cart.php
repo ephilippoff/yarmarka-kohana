@@ -316,10 +316,17 @@ class Controller_Cart extends Controller_Template {
 		}
 
 		if ($user) {
-			$order = ORM::factory('Order')
-					->where("user_id","=", $user->id)
-					->where("id","=", intval($id))
-					->find();
+			if (Acl::check("order")) {
+				$order = ORM::factory('Order')
+						->where("id","=", intval($id))
+						->find();
+			} else {
+				$order = ORM::factory('Order')
+						->where("user_id","=", $user->id)
+						->where("id","=", intval($id))
+						->find();
+			}
+			
 		} else {
 			$order = ORM::factory('Order')
 					->where("key","=", $key)

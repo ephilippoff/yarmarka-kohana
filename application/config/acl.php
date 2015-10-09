@@ -18,6 +18,7 @@ return array(
 			"edit" => array("auth", 1, 3)
 		),
 		"profiler" => array("auth", 1),
-		"kupon" => array("owner", 1, 9)
+		"kupon" => array("owner", 1, 9),
+		"order" => array("auth", 1, 9)
 	)
 );
