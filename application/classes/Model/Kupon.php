@@ -186,8 +186,10 @@ class Model_Kupon extends ORM
 	function to_sold($order_id)
 	{
 		if ($this->state == "sold") return;
-		$number = self::crypt_number(" ".self::generate_number());
-		$this->number = $number;
+		if (!$this->external_number) {
+			$number = self::crypt_number(" ".self::generate_number());
+			$this->number = $number;
+		}
 		return $this->change_state($this->state, self::SOLD, $order_id);
 	}
 
