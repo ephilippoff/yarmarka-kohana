@@ -195,11 +195,11 @@ define([
                 success: function(result){
                     var result = result.toJSON();
                     if (result.code == "200") {
-                        s.ui.messages.html("<span class='green'>Купон действителен</span>");
+                        s.ui.messages.html("<p class='ta-c green'>Купон действителен</p>");
                     } else if (result.code == "300") {
                         s.ui.messages.html(result.result);
                     } else {
-                        s.ui.messages.html("<span class='red'>Купон недействителен</span>");
+                        s.ui.messages.html("<p class='ta-c red'>Купон недействителен</p>");
                     }
                     
                 }

@@ -137,7 +137,7 @@ class Controller_Rest_Service extends Controller_Rest {
 
 		$shows_counter = $shows_counter + 1;
 		Cache::instance("memcache")->set($token, $shows_counter, Date::MINUTE);
-		if ($shows_counter > 1)
+		if ($shows_counter > 0)
 		{
 
 			$twig = Twig::factory('block/captcha/check_number');
