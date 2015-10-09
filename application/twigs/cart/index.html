@@ -24,9 +24,11 @@
 						</tr>
 						
 						{% set i = 1 %}
-
 						{% for cartItem in cartTempItems if cartItem.service.name == 'kupon' %}
 							{% include 'cart/temp_item/kupon' %}
+							{% if not cartItem.available %}
+								{% set error = "Удалите недоступные для продажи купоны чтобы продолжить" %}
+							{% endif %}
 							{% set i = i + 1 %}
 						{% endfor %}
 
@@ -37,7 +39,7 @@
 					</div>
 					<div class="ta-r mb20">
 						{% if not error %}
-						<span class="js-save button_v2 bg-color-blue button-style1 p20 white br3" data-next-page="{{next_page}}">Оформить заказ<i class="fa fa-angle-double-right fa-lg ml5"></i></span>
+							<span class="js-save button_v2 bg-color-blue button-style1 p20 white br3" data-next-page="{{next_page}}">Оформить заказ<i class="fa fa-angle-double-right fa-lg ml5"></i></span>
 						{% endif %}
 					</div>
 						

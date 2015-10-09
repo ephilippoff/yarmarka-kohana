@@ -3,7 +3,6 @@ class="{% if cartItem.available %}warning{%else%}danger{% endif %} js-cartitem">
 	<td>
 		<a href="/detail/{{ cartItem.object.id }}">{{ cartItem.service.title }}</a>
 		{% if not cartItem.available %}
-			{% set error = "Удалите недоступные для продажи купоны чтобы продолжить" %}
 			<br><span class="red">Истекло время на покупку, бронь отменена. Вернитесь на страницу покупки купона, и сформируйте заказ повторно</span>
 		{% endif %}
 	</td>
