@@ -49,6 +49,7 @@ class Controller_Kupon extends Controller_Template {
 
 	public function action_check()
 	{
+		$this->layout = "cart";
 		$twig = Twig::factory('detail/kupon/check');
 
 		$this->template->twig_template = $twig;
