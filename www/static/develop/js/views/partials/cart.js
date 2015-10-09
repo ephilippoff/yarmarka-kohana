@@ -191,11 +191,13 @@ define([
             e.preventDefault();
             var s = this;
             var model = new CheckNumberModel();
-            model.save({number: this.ui.checkNumber.val()}, {
+            model.save({number: this.ui.checkNumber.val(), captcha: $("#captcha_number").val()}, {
                 success: function(result){
                     var result = result.toJSON();
                     if (result.code == "200") {
                         s.ui.messages.html("<span class='green'>Купон действителен</span>");
+                    } else if (result.code == "300") {
+                        s.ui.messages.html(result.result);
                     } else {
                         s.ui.messages.html("<span class='red'>Купон недействителен</span>");
                     }

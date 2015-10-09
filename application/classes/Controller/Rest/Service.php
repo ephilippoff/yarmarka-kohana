@@ -120,23 +120,74 @@ class Controller_Rest_Service extends Controller_Rest {
 	public function action_check_kupon_number()
 	{
 		$number = $this->post->number;
+		$captcha = $this->post->captcha;
 
 		$number = preg_replace('/[^0-9]/', '', $number);
 		if (!$number) {
 			throw new HTTP_Exception_404;
 		}
-		
+
 		$number = " ".$number;
 		$crypt_number = Model_Kupon::crypt_number($number);
-		
-		$kupon = ORM::factory('Kupon')
-					->where("number","=",$crypt_number)
-					->find();
 
-		if ($kupon->loaded()) {
-			$this->json["code"] = 200;
+		$REMOTE_ADDR = URL::SERVER("REMOTE_ADDR");
+		$token = "check_kupon_number:{$REMOTE_ADDR}";
+		
+		$shows_counter = (Cache::instance("memcache")->get($token)) ? Cache::instance("memcache")->get($token) : 0;
+
+		$shows_counter = $shows_counter + 1;
+		Cache::instance("memcache")->set($token, $shows_counter, Date::MINUTE);
+		if ($shows_counter > 1)
+		{
+
+			$twig = Twig::factory('block/captcha/check_number');
+			
+			if (isset($captcha)) {
+				$validation = Validation::factory(array("captcha" => $captcha))
+						->rule('captcha', 'not_empty', array(':value', ""))
+						->rule('captcha', 'captcha', array(':value', ""));
+				if ( !$validation->check())
+				{
+
+					$twig->error = "Не правильный код";
+					$this->json["code"] = 300;
+					$twig->captcha = Captcha::instance()->render();
+					$this->json["result"] = (string) $twig;
+				} else {
+					$kupon = ORM::factory('Kupon')
+								->where("number","=",$crypt_number)
+								->find();
+
+					if ($kupon->loaded()) {
+						$this->json["code"] = 200;
+					} else {
+						$this->json["code"] = 400;
+						$this->json["error"] = "Купон отсуствует1";
+					}
+
+					Cache::instance("memcache")->delete($token);
+				}
+			} else {
+				$twig->error = "Введите капчу";
+				$this->json["code"] = 300;
+				$twig->captcha = Captcha::instance()->render();
+				$this->json["result"] = (string) $twig;
+			}
 		} else {
-			$this->json["code"] = 400;
+			$kupon = ORM::factory('Kupon')
+						->where("number","=",$crypt_number)
+						->find();
+
+			if ($kupon->loaded()) {
+				$this->json["code"] = 200;
+			} else {
+				$this->json["code"] = 400;
+				$this->json["error"] = "Купон отсуствует2";
+			}
 		}
+		
+		
+		
+		
 	}
 }
