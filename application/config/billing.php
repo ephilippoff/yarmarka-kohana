@@ -12,6 +12,7 @@ return array(
 										  1919 => array(66)), //Тюмень
 	'kupon' => array(
 		'delivery_type' => 'electronic'
-	)
+	),
+	'emails_for_notify' => array("a.vagapov@yarmarka.biz", "v.kurkin@yarmarka.biz", "a.saulyak@yarmarka.biz", "e.ermolaeva@yarmarka.biz", "m.evseeva@yarmarka.biz")
 
 );
