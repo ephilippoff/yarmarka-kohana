@@ -4,8 +4,9 @@ define(['marionette',
     'views/components/windows/service',
     'views/components/windows/backcall',
     'views/components/windows/message',
+    'views/components/windows/comment',
     'views/components/windows/object_callback'
-], function (Marionette, templates, ServiceView, BackcallView, MessageView, ObjectCallbackView) {
+], function (Marionette, templates, ServiceView, BackcallView, MessageView, CommentView, ObjectCallbackView) {
     'use strict';
 
     var ErrorWindow = Marionette.ItemView.extend({
@@ -35,7 +36,8 @@ define(['marionette',
             service: ServiceView,
             backcall: BackcallView,
             message: MessageView,
-            object_callback: ObjectCallbackView
+            object_callback: ObjectCallbackView,
+            comment: CommentView
 
         },
         zIndex: {
@@ -50,7 +52,8 @@ define(['marionette',
             service : true,
             backcall : true,
             message : true,
-            object_callback: true
+            object_callback: true,
+            comment: true
         },
         transparentLayer: {
             //galleryItem: "z151"

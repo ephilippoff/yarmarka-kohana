@@ -8,7 +8,7 @@ define([
    return Marionette.AppRouter.extend({
         routes: {
             "": "startSection",
-            "*notFound": "notFound"
+            "*notFound": "startSection"
         },
 
         onRoute: function(name, path, args){

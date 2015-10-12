@@ -7,9 +7,7 @@ require.config({
         localStorage : 'lib/backbone.localStorage',
         jquery     : 'lib/jquery',
         //menuAim : 'lib/jquery.menu-aim',
-        jcookie: 'lib/jquery.cookie',
-        jvalidity : 'lib/jquery.validity',
-        jvalidityrus : 'lib/jquery.validity.lang.rus',
+        jcookie: 'lib/jquery.cookie'
         //iframeTransport: 'lib/vendor/jquery.iframe-transport',
         //fileupload: 'lib/vendor/jquery.fileupload',
         //nicEdit: 'lib/vendor/nicEdit',
@@ -42,9 +40,7 @@ require([ 'app',
           'jquery',
           'marionette',
           'backbone',
-          'underscore',
-          'jvalidity',
-          'jvalidityrus'
+          'underscore'
         ], 
 function (app, $, Marionette, Backbone, _) {
     "use strict";
@@ -56,11 +52,12 @@ function (app, $, Marionette, Backbone, _) {
         city_id: _globalSettings.city_id,
         objects_for_map: _globalSettings.objects_for_map,
         kohana_host: _globalSettings.host,
-        mainHost: _globalSettings.mainHost
+        mainHost: _globalSettings.mainHost,
+        khQuery: true
     };
 
     $.ajaxPrefilter( function( options, originalOptions, jqXHR ) {
-        if (!options.orinalHost && app.settings.kohana_host) {
+        if (app.settings.khQuery && app.settings.kohana_host) {
             options.crossDomain = true,
             options.url = "http://" + app.settings.kohana_host + options.url;
         }
@@ -69,13 +66,13 @@ function (app, $, Marionette, Backbone, _) {
     var originalSync = Backbone.sync;
     Backbone.sync = function(method, model, options) {
         options.headers = options.headers || {};
-        if (!options.crossDomain) {options.crossDomain = true;}
+        if (app.settings.khQuery && !options.crossDomain) {options.crossDomain = true;}
         //if (!options.xhrFields) { options.xhrFields = {withCredentials:true};}
 
         originalSync.call(model, method, model, options);
     };
 
-    Backbone.emulateHTTP = true;
+    //Backbone.emulateHTTP = true;
     //Backbone.emulateJSON = true;
 
     Marionette.Behaviors.behaviorsLookup = function() {

@@ -14,6 +14,7 @@ define(function(require){
         components: {
             windows: {
                  service: require('lib/text!templates/windows/service.tmpl'),
+                 comment: require('lib/text!templates/windows/comment.tmpl'),
                 // backcall: require('lib/text!templates/windows/backcall.tmpl'),
                 // object_callback: require('lib/text!templates/windows/object_callback.tmpl'),
                 message: require('lib/text!templates/windows/message.tmpl'),

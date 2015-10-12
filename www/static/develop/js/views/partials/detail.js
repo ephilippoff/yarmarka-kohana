@@ -1,8 +1,9 @@
 /*global define */
 define([
     "templates",
-    "views/partials/behaviors/services"
-], function (templates, ServicesBehavior) {
+    "views/partials/behaviors/services",
+    "views/partials/behaviors/comments"
+], function (templates, ServicesBehavior, CommentsBehavior) {
     "use strict";
 
 
@@ -10,18 +11,20 @@ define([
         ui: {
         },
         events: {
-            "click @ui.backcallButton": "backcallButtonClick"
+            
         },
         behaviors: {
             ServicesBehavior: {
                 behaviorClass: ServicesBehavior
+            },
+            CommentsBehavior: {
+                behaviorClass: CommentsBehavior
             }
         },
 
         initialize: function() {
             this.bindUIElements();
 
-           
         },
     });
 });
