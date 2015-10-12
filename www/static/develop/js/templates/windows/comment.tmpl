@@ -1,23 +1,44 @@
-<div class="popup-window w650">	
+<div class="popup-window w500">	
 	<div class="header">
-		Новый отзыв
+		Новый комментарий
 		<div class="popup-window-close js-close">
 			<i class="ico close-ico16"></i>
 		</div>			
 	</div>					
 	<div class="cont input-style-v2">
-		<form class="js-form" method="post">
-			Ваше имя
-			<input maxlength="75" placeholder="" class="mcolor2" id="username" name="username" type="text"><br>
-			Коммент
-			<textarea maxlength="1000" class="mcolor2" id="text" name="text"></textarea>
-			<% if (getError("text")) { %>
-					<span class="inform"><%=getError("text")%></span>
-			<% } %>
-			<% if (getError("username")) { %>
-					<span class="inform"><%=getError("username")%></span>
-			<% } %>	
-			<span class="button blue send-comment js-ok"><span>Отправить</span></span>
+		<form class="js-form form-horizontal-cont" method="post">
+			<div class="group cf">
+				<div class="label-cont">
+					<span>Ваше имя:</span>
+				</div>
+				<div class="field-cont">
+					<input maxlength="75" placeholder="" class="w100p" id="username" name="username" type="text">
+					<span class="required">*</span>
+				</div>
+			</div>
+
+			<div class="group cf">
+				<div class="label-cont">
+					<span>Комментарий:</span>
+				</div>
+				<div class="field-cont">
+					<textarea rows="4" maxlength="1000" class="w100p" id="text" name="text"></textarea>
+					<span class="required">*</span>
+				</div>
+			</div>
+
+			<div class="errors-cont mb15">
+				<% if (getError("text")) { %>
+						<p><%=getError("text")%></p>
+				<% } %>
+				<% if (getError("username")) { %>
+						<p><%=getError("username")%></p>
+				<% } %>
+			</div>
+			
+			<div class="ta-r">
+				<span class="button_v2 bg-color-blue button-style1 send-comment js-ok">Отправить</span>
+			</div>
 		</form>
 	</div>
 </div>
