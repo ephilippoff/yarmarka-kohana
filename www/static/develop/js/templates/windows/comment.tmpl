@@ -12,8 +12,13 @@
 					<span>Ваше имя:</span>
 				</div>
 				<div class="field-cont">
-					<input maxlength="75" placeholder="" class="w100p" id="username" name="username" type="text">
 					<span class="required">*</span>
+					<input maxlength="75" placeholder="" class="w100p" id="username" name="username" type="text">
+					<% if (getError("username")) { %>
+						<span class="inform error">
+							<span><%=getError("username")%></span>
+						</span>
+					<% } %>													
 				</div>
 			</div>
 
@@ -22,18 +27,19 @@
 					<span>Комментарий:</span>
 				</div>
 				<div class="field-cont">
-					<textarea rows="4" maxlength="1000" class="w100p" id="text" name="text"></textarea>
 					<span class="required">*</span>
+					<textarea rows="4" maxlength="1000" class="w100p fl" id="text" name="text"></textarea>
+					<% if (getError("text")) { %>
+						<span class="inform error">
+							<span><%=getError("text")%></span>
+						</span>
+					<% } %>					
 				</div>
 			</div>
 
 			<div class="errors-cont mb15">
-				<% if (getError("text")) { %>
-						<p><%=getError("text")%></p>
-				<% } %>
-				<% if (getError("username")) { %>
-						<p><%=getError("username")%></p>
-				<% } %>
+
+
 			</div>
 			
 			<div class="ta-r">
