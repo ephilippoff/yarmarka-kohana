@@ -39,7 +39,8 @@ define([
             this.bindUIElements();
             this.model = new CommentModel({
                 objectId: options.object_id,
-                commentId: options.comment_id
+                commentId: options.comment_id,
+                email: options.email
             });
         },
 

@@ -58,14 +58,16 @@ define([
         newCommentClick: function(e) {
             e.preventDefault();
             app.windows.vent.trigger("showWindow", "comment", {
-                object_id: $(e.currentTarget).data("objectid")
+                object_id: $(e.currentTarget).data("objectid"),
+                email: $(e.currentTarget).data("email")
             });
         },
         answerCommentClick: function(e) {
             e.preventDefault();
             app.windows.vent.trigger("showWindow", "comment", {
                 object_id: $(e.currentTarget).data("objectid"),
-                comment_id: $(e.currentTarget).data("commentid")
+                comment_id: $(e.currentTarget).data("commentid"),
+                email: $(e.currentTarget).data("email")
             });
         },
         deleteCommentClick:function(e) {

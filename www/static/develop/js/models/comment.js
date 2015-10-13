@@ -9,10 +9,12 @@ function (Marionette, validation) {
         urlRoot: "/ajax/add_comment",
         settings: {
             username : ["require"],
+            email : ["require"],
             text : ["require"]
         },
         defaults: {
             username : null,
+            email : null,
             text : null
         },
 

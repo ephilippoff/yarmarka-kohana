@@ -21,6 +21,20 @@
 					<% } %>													
 				</div>
 			</div>
+			<div class="group cf">
+				<div class="label-cont">
+					<span>E-mail:</span>
+				</div>
+				<div class="field-cont">
+					<span class="required">*</span>
+					<input maxlength="75" placeholder="" class="w100p" id="email" name="email" type="text" value="<%=email%>">
+					<% if (getError("email")) { %>
+						<span class="inform error">
+							<span><%=getError("email")%></span>
+						</span>
+					<% } %>													
+				</div>
+			</div>
 
 			<div class="group cf">
 				<div class="label-cont">
