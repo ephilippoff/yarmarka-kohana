@@ -5,7 +5,7 @@ define([
 ], function (Marionette, templates) {
     'use strict';
 
-    var CommentDeleteModel = Backbone.Model.extend({
+    var CommentModel = Backbone.Model.extend({
         urlRoot: "/ajax/delete_comment",
         save: function (attributes, options) {
             options       = options || {};
@@ -45,13 +45,15 @@ define([
         ui: {
             newComment: ".js-new-comment",
             answerComment: ".js-answer-comment",
-            deleteComment: ".js-delete-comment"
+            deleteComment: ".js-delete-comment",
+            moderateComment: ".js-moderate-comment"
         },
 
         events: {
             "click @ui.newComment": "newCommentClick",
             "click @ui.answerComment": "answerCommentClick",
-            "click @ui.deleteComment": "deleteCommentClick"
+            "click @ui.deleteComment": "deleteCommentClick",
+            "click @ui.moderateComment": "moderateCommentClick"
         },
 
 
@@ -75,7 +77,31 @@ define([
             if (!confirm("Вы действительно хотите удалить комментарий?")){
                 return;
             }
-            var model = new CommentDeleteModel({comment: $(e.currentTarget).data("commentid")});
+            var parentId = $(e.currentTarget).data("parentid");
+            var commentId = $(e.currentTarget).data("commentid");
+
+            var model = new CommentModel({comment: commentId});
+            model.urlRoot = "/ajax/delete_comment";
+            
+            Backbone.emulateJSON = true;
+            app.settings.khQuery = false;
+            model.prepare({
+                params: {},
+                 success: function(model) {
+                     var resp = model.toJSON();
+                     if (!parentId) { 
+                        $(".li-cont"+commentId).remove();
+                     }
+                     $(e.currentTarget).closest(".li-cont").remove();
+                     Backbone.emulateJSON = false;
+                     app.settings.khQuery = true;
+                 }
+            });
+        },
+        moderateCommentClick:function(e) {
+            e.preventDefault();
+            var model = new CommentModel({comment: $(e.currentTarget).data("commentid"), show: true});
+            model.urlRoot = "/ajax/moderate_comment";
             var parentId = $(e.currentTarget).data("parentid");
             Backbone.emulateJSON = true;
             app.settings.khQuery = false;
@@ -83,11 +109,10 @@ define([
                 params: {},
                  success: function(model) {
                      var resp = model.toJSON();
-                     $(".li-cont"+parentId).remove();
-                     $(e.currentTarget).closest(".li-cont").remove();
+                     $(".li-cont"+parentId).removeClass("byellow");
+                     $(e.currentTarget).closest(".li-cont").removeClass("byellow");
                      Backbone.emulateJSON = false;
                      app.settings.khQuery = true;
-                     window.location.href = window.location.href.split("#")[0] + "#comments_place"
                  }
             });
         }

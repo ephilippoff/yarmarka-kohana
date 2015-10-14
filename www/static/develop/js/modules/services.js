@@ -195,10 +195,12 @@ define([
             serviceModel.urlRoot = "/rest_service/check_kupon";
             options.error = options.error || function() {};
             options.success = options.success || function() {};
+            app.settings.khQuery = true;
             serviceModel.save({
                 id: id
             }, {
                 success: function(model) {
+                    app.settings.khQuery = false;
                     var resp = model.toJSON();
                     app.windows.vent.trigger("showWindow", "service", {
                         title: resp.object.title,
@@ -214,6 +216,8 @@ define([
                         error: options.error,
                         is_edit: options.is_edit
                     });
+                }, error: function() {
+                    app.settings.khQuery = false;
                 }
             });
         }

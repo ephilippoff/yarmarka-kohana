@@ -89,8 +89,10 @@ define([
             if (this.getOption("is_edit")) {
                 serviceData.temp_order_item_id = this.getOption("is_edit");
             }
+            app.settings.khQuery = true;
             serviceModel.save({serviceData : serviceData, key : key},{
                 success: function(model) {
+                    app.settings.khQuery = false;
                     var resp = model.toJSON();
                     if (resp.code == 200) {
                         app.services.updateCart();
@@ -103,6 +105,7 @@ define([
                     }
                 }, 
                 error: function(text) {
+                    app.settings.khQuery = false;
                     s.getOption("error")("Ошибка при сохранении услуги");
                     console.log("Ошибка при сохранении услуги");
                 }

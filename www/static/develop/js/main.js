@@ -5,7 +5,7 @@ require.config({
         marionette : 'lib/backbone.marionette',
         //paginator  : 'lib/backbone.paginator',
         localStorage : 'lib/backbone.localStorage',
-        jquery     : 'lib/jquery',
+        jquery     : 'lib/jquery.min',
         //menuAim : 'lib/jquery.menu-aim',
         jcookie: 'lib/jquery.cookie'
         //iframeTransport: 'lib/vendor/jquery.iframe-transport',
@@ -53,7 +53,7 @@ function (app, $, Marionette, Backbone, _) {
         objects_for_map: _globalSettings.objects_for_map,
         kohana_host: _globalSettings.host,
         mainHost: _globalSettings.mainHost,
-        khQuery: true
+        khQuery: false
     };
 
     $.ajaxPrefilter( function( options, originalOptions, jqXHR ) {
