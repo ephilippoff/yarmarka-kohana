@@ -202,6 +202,7 @@ define([
                 success: function(model) {
                     app.settings.khQuery = false;
                     var resp = model.toJSON();
+                    options.success();
                     app.windows.vent.trigger("showWindow", "service", {
                         title: resp.object.title,
                         serviceView : new KuponView({
@@ -218,6 +219,7 @@ define([
                     });
                 }, error: function() {
                     app.settings.khQuery = false;
+                    options.error();
                 }
             });
         }

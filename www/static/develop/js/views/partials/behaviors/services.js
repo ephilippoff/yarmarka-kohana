@@ -84,12 +84,15 @@ define([
             var s = this;
             e.preventDefault();
             var id = $(e.currentTarget).data("id");
+            $(e.currentTarget).addClass("button-loader");
             app.services.kupon(id, {
                 success: function(result) {
                     console.log(result);
+                    $(e.currentTarget).removeClass("button-loader");
                 },
                 error: function(result) {
                     console.log(result);
+                    $(e.currentTarget).removeClass("button-loader");
                 }
             });
         }
