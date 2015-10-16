@@ -2,6 +2,7 @@
 define([
     "marionette",
     "templates",
+    "maskedInput"
 ], function (Marionette, templates) {
     "use strict";
 
@@ -130,6 +131,13 @@ define([
             this.cartList = cartList;
             this.cartOrder = new CartOrder();
             this.recalcsum();
+            if ($(".js-mobile-phone").length) {
+                $(".js-mobile-phone").mask("+7(999)999-99-99" , {  
+                    "completed": function(){
+
+                    }
+                });
+            }
         },
 
         recalcsum: function() {

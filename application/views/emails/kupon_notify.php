@@ -27,17 +27,17 @@
 			
 						<tr><td style="line-height: 0;" colspan="2">&nbsp;<img height="12" title="" alt="" src="data:image/gif;base64,R0lGODlhAQABAJEAAAAAAP///////wAAACH5BAEAAAIALAAAAAABAAEAAAICVAEAOw%3D%3D"></td></tr>	
 						<tr><td colspan="2" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;line-height: 15px;">
-								<p style="padding:10px;">Количество приобретенных купонов: <?=count($ids)?>.</p>
-								<? if ($for_supplier == TRUE): ?>
-									<?=$title?>
-								<? else: ?>
-									<p style="padding:10px;">Перейдите по ссылкам чтобы распечатать купоны:</p>
-									<? foreach ($ids as $id) : ?>
-										<p style="padding:10px;"><a href="http://yarmarka.biz/kupon/print/<?=$id?>?key=<?=$key?>"><?=$title?></a></p>
+							<p style="padding:10px;">Количество приобретенных купонов: <?=count($kupons)?>.</p>
+							<? if ($for_supplier == TRUE): ?>
+								<?=$title?>
+							<? else: ?>
+								<p style="padding:10px;display:inline-block;line-height:20px;"><?=$title?>: 
+									<? foreach ($kupons as $kupon) : ?>
+										<span><a href="http://yarmarka.biz/kupon/print/<?=$kupon->id?>?key=<?=$key?>">№<?=Text::format_kupon_number(Model_Kupon::decrypt_number($kupon->number))?></a></span>,
 									<? endforeach; ?>
-								<? endif;?>
-									
-								
+								</p>
+								<p style="padding:10px;">Вам необходимо предъявить эти номера, либо печатную версию купонов поставщику товара/услуги</p>
+							<? endif;?>
 						</td></tr>
 						<tr><td colspan="2" style="line-height: 0;"><img src="data:image/gif;base64,R0lGODlhAQABAJEAAAAAAP///////wAAACH5BAEAAAIALAAAAAABAAEAAAICVAEAOw%3D%3D" height="9" alt="" title=""/></td></tr>
 						<tr><td colspan="2" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;line-height: 15px;">

@@ -147,6 +147,7 @@ class Controller_Cart extends Controller_Template {
 			$validation = Validation::factory((array) $this->request->post())
 					->rule('email', 'not_empty', array(':value', "E-mail"))
 					->rule('email', 'is_email_contact', array(':value', "E-mail"))
+					->rule('name', 'not_empty', array(':value', "Имя"))
 					->rule('phone', 'not_empty', array(':value', "Телефон"));
 
 			if ( !$validation->check())
@@ -161,6 +162,7 @@ class Controller_Cart extends Controller_Template {
 			{
 				$params->delivery = array(
 					"type" => "electronic",
+					"name" => $this->request->post("name"),
 					"email" => $this->request->post("email"),
 					"phone" => $this->request->post("phone")
 				);

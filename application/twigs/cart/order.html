@@ -58,9 +58,15 @@
 						</p>
 					</div>
 
+					{% if delivery_info.name %}
+						<div class="ta-l field">
+							<p class="p10"><span class="bold">Имя:</span> {{delivery_info.name}} <span class="fs14 gray">(Имя и мобильный телефон у Вас может спросить поставщик услуги)</span></p>
+						</div>
+					{% endif %}
+
 					{% if delivery_info.phone %}
 						<div class="ta-l field">
-							<p class="p10"><span class="bold">Телефон для связи:</span> {{delivery_info.phone}}</p>
+							<p class="p10"><span class="bold">Мобильный телефон:</span> {{delivery_info.phone}} <span  class="fs14 gray">(вы получите смс сообщение с номером купона)</span></p>
 						</div>
 					{% endif %}
 				</div>

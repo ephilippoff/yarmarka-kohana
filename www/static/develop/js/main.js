@@ -7,11 +7,11 @@ require.config({
         localStorage : 'lib/backbone.localStorage',
         jquery     : 'lib/jquery.min',
         //menuAim : 'lib/jquery.menu-aim',
-        jcookie: 'lib/jquery.cookie'
+        jcookie: 'lib/jquery.cookie',
         //iframeTransport: 'lib/vendor/jquery.iframe-transport',
         //fileupload: 'lib/vendor/jquery.fileupload',
         //nicEdit: 'lib/vendor/nicEdit',
-        //maskedInput: 'lib/vendor/jquery.maskedinput',
+        maskedInput: 'lib/vendor/jquery.maskedinput',
         //ymap: "http://api-maps.yandex.ru/2.1/?load=package.full&lang=ru-RU",
         //isotope: 'lib/vendor/isotope.pkgd'
     },

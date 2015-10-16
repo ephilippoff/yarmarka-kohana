@@ -5,12 +5,12 @@
 
 
 {% block content %}
-	<p class="p10 fs16 ">Укажите контактные данные, для связи с Вами. На указанный email будут отправлены купоны на приобретенные услуги</p>
+	<p class="p10 fs16 ">Укажите контактные данные, для связи с Вами. </p>
 	<form action="/cart/electronic_delivery/{{ order.id }}" method="POST" id="js-electronic_delivery_form">
 
 		<div class="p20" style="font-size:18px;margin:30px auto;">
-
 			<table class="cart-table bs-table">
+				
 				<tr><td><label class="fs18">E-mail</label></td><td>
 					<div class="input-group w100p">
 						<span class="input-group-addon bg-color-whitesmoke"></span>
@@ -22,12 +22,21 @@
 					</div>
 					
 				</td></tr>
-				<tr><td><label class="fs18">Мобильный телефон</label></td><td>
+				<tr><td colspan="2">На указанный email будут отправлены купоны на приобретенные услуги</td></tr>
+			
+
+				
+				<tr><td><label class="fs18">Имя</label></td><td>
 					<div class="input-group w100p">
-						<span class="input-group-addon bg-color-whitesmoke brl3" title="Телефон"></span>
-						<input class="input fields w300" type="text" name="phone" value="{{ post.phone }}">
+						<input class="input fields w300" type="text" name="name" value="{{ post.name }}">
 					</div>
 					</td></tr>
+				<tr><td><label class="fs18">Мобильный телефон</label></td><td>
+					<div class="input-group w100p">
+						<input class="input fields w300 js-mobile-phone" type="text" name="phone" value="{{ post.phone }}">
+					</div>
+					</td></tr>
+				<tr><td colspan="2">На указанный мобильный телефона будет отправлен номер купона. Также, имя и мобильный телефон у Вас могут спросить в момент предъявления купона (или номера) поставщику услуги</td></tr>
 			</table>
 			<div class="js-error errors-cont mb20 red">
 				{% if errors %}

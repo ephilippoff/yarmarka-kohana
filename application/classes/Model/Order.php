@@ -220,7 +220,7 @@ class Model_Order extends ORM
 		return ($get_name) ? $state_name : $state;
 	}
 
-	function electronic_delivery($orderItem)
+	function electronic_delivery($orderItem, $kupons)
 	{
 		if (!$this->loaded()) return;
 
@@ -232,7 +232,7 @@ class Model_Order extends ORM
 				$msg = View::factory('emails/kupon_notify',
 						array(
 							'title' => $orderItem->service->title,
-							'ids' => $orderItem->service->ids,
+							'kupons' => $kupons,
 							'key' => $orderItem->kupon->access_key,
 							'order' => $this,
 							'for_supplier' => FALSE
@@ -242,7 +242,28 @@ class Model_Order extends ORM
 		}
 	}
 
-	function supplier_delivery($orderItem, $phone, $email, $support_emails)
+	function sms_delivery($orderItem, $kupons)
+	{
+		if (!$this->loaded()) return;
+
+		$params = ($this->params) ? $this->params : "{}";
+		$params = new Obj(json_decode($params));
+
+		if ($params->delivery AND $params->delivery->type == "electronic" AND $orderItem->service->name == "kupon" AND $params->delivery->phone) {
+
+			$phone = Text::clear_phone_number($params->delivery->phone);
+			if ($phone AND Valid::is_mobile_contact($phone)) {
+				$message = Kohana::$config->load('sms.messages.kupon_notify');
+				foreach ($kupons as $kupon) {
+					Sms::send($phone, sprintf($message, Text::format_kupon_number(Model_Kupon::decrypt_number($kupon->number))), NULL);
+				}
+				
+			}
+		}
+		
+	}
+
+	function supplier_delivery($orderItem, $kupons, $phone, $email, $support_emails)
 	{
 		if (!$this->loaded()) return;
 
@@ -250,14 +271,29 @@ class Model_Order extends ORM
 		$params = new Obj(json_decode($params));
 
 		if ($phone AND Valid::is_mobile_contact($phone)) {
-			Sms::send($phone, 'Приобретен купон: '.$orderItem->service->title, NULL);
+			$message = Kohana::$config->load('sms.messages.kupon_supplier_notify');
+			foreach ($kupons as $kupon) {
+				$number = Model_Kupon::decrypt_number($kupon->number);
+				$number =substr($number, count($number) - 4, 3);
+				Sms::send(
+					$phone,
+					sprintf(
+						$message, 
+						$orderItem->service->title,
+						( ($params->delivery AND $params->delivery->name) ? $params->delivery->name: "" ),//name,
+						( ($params->delivery AND $params->delivery->phone) ? $params->delivery->phone: "" ),//phone,
+						( ($number) ? "№ ***-***-".$number : "" )//last_digits
+					),
+					NULL
+				);
+			}
 		}
 		$group = ORM::factory('Kupon_Group', $orderItem->service->group_id);
 		$subj = "Приобретены купоны на скидку. Заказ №".$this->id;
 		$msg = View::factory('emails/kupon_notify',
 				array(
 					'title' => $orderItem->service->title,
-					'ids' => $orderItem->service->ids,
+					'kupons' => $orderItem->service->ids,
 					'key' => $orderItem->kupon->access_key,
 					'order' => $this,
 					'for_supplier' => TRUE,

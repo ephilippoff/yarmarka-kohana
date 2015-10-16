@@ -11,6 +11,8 @@ class Sms
 			$session_id = session_id();
 		}
 
+		$text = Text::rus2translit($text);
+		
 		$sms_record = ORM::factory('Sms');
 		$sms_record->phone 		= $number;
 		$sms_record->text 		= $text;

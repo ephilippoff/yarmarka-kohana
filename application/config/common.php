@@ -24,7 +24,7 @@ return array(
 	'add_phone_required_exlusion' 			=> array(36,35),
 	'short_domain'							=> 'ya24.biz',
 	'cors_rest_domains' => array(
-		'http://surgut.ci.yarmarka.dev',
+		'http://surgut.yarmarka.dev',
 
 		'http://nizhnevartovsk.new.yarmarka.biz', 
 		'http://surgut.new.yarmarka.biz', 

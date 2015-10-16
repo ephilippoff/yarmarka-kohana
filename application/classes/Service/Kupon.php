@@ -121,12 +121,15 @@ class Service_Kupon extends Service
 					->where("id","IN",$orderItem->service->ids)
 					->find_all();
 
+		$kuponsArray = array();
 		foreach ($kupons as $kupon) {
 			$kupon->to_sold($oi->loaded() ? $oi->order_id : NULL);
 			$orderItem->kupon = $kupon;
+			$kuponsArray[] = $kupon->get_row_as_obj();
 		}
 
-		$order->electronic_delivery($orderItem);
+		$order->electronic_delivery($orderItem, $kuponsArray);
+		$order->sms_delivery($orderItem, $kuponsArray);
 
 		$contactForNotify = ORM::factory('Data_Text')
 			->select("seo_name")
@@ -147,7 +150,7 @@ class Service_Kupon extends Service
 			$support_emails = (count($support_emails) > 0) ? (array) array_shift($support_emails) : NULL;
 		}
 
-		$order->supplier_delivery($orderItem, $phone['value'], $email['value'], ($support_emails) ? explode(",", $support_emails['value']) : NULL);
+		$order->supplier_delivery($orderItem, $kupons, $phone['value'], $email['value'], ($support_emails) ? explode(",", $support_emails['value']) : NULL);
 
 	}
 
