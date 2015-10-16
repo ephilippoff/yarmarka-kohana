@@ -29,7 +29,7 @@
 						<tr><td colspan="2" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;line-height: 15px;">
 							<p style="padding:10px;">Количество приобретенных купонов: <?=count($kupons)?>.</p>
 							<? if ($for_supplier == TRUE): ?>
-								<?=$title?>
+								<a href="http://yarmarka.biz/detail/<?=$object_id?>"><?=$title?></a>
 							<? else: ?>
 								<p style="padding:10px;display:inline-block;line-height:20px;"><?=$title?>: 
 									<? foreach ($kupons as $kupon) : ?>
@@ -45,6 +45,7 @@
 								<p style="padding:10px;">Контакты покупателя</p>
 								<table>
 									<tr><td>Email:</td><td><?=$delivery->email?></td></tr>
+									<tr><td>Имя:</td><td><?=$delivery->name?></td></tr>
 									<tr><td>Телефон:</td><td><?=$delivery->phone?></td></tr>
 								</table>
 								<p style="padding:10px;">Информация об акции</p>

@@ -235,6 +235,7 @@ class Model_Order extends ORM
 							'kupons' => $kupons,
 							'key' => $orderItem->kupon->access_key,
 							'order' => $this,
+							'object_id' => $orderItem->object->id,
 							'for_supplier' => FALSE
 						));
 				
@@ -296,6 +297,7 @@ class Model_Order extends ORM
 					'kupons' => $orderItem->service->ids,
 					'key' => $orderItem->kupon->access_key,
 					'order' => $this,
+					'object_id' => $orderItem->object->id,
 					'for_supplier' => TRUE,
 					'delivery' => $params->delivery,
 					'avail_balance' => $group->get_balance(),
