@@ -121,9 +121,11 @@ class Service_Kupon extends Service
 					->where("id","IN",$orderItem->service->ids)
 					->find_all();
 
+		$key = Cart::get_key();
 		$kuponsArray = array();
 		foreach ($kupons as $kupon) {
-			$kupon->to_sold($oi->loaded() ? $oi->order_id : NULL);
+
+			$kupon->to_sold($oi->loaded() ? $oi->order_id : NULL, $key);
 			$orderItem->kupon = $kupon;
 			$kuponsArray[] = $kupon->get_row_as_obj();
 		}

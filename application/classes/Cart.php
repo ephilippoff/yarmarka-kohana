@@ -39,9 +39,9 @@ class Cart {
 
 	static function clear($key, $clear_cookie = TRUE)
 	{
-		if ($clear_cookie) {
-			Cookie::dset('cartKey', NULL, -1);
-		}
+		// if ($clear_cookie) {
+		// 	Cookie::dset('cartKey', NULL, -1);
+		// }
 		ORM::factory('Order_ItemTemp')->where("key", "=", $key)->delete_all();
 	}
 }
