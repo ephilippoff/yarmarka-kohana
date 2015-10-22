@@ -18,7 +18,7 @@ class Task_Objectload extends Minion_Task
 
 		$ct = ORM::factory('Crontask')->begin("Objectload", $params);
 
-		try {
+		//try {
 			if ($user_id)
 			{
 				$this->load($params, $ct);
@@ -38,12 +38,12 @@ class Task_Objectload extends Minion_Task
 					$this->load($params, $ct);
 				}
 			}
-		} catch (Exception $e)
-		{
-			$ct->error($e->getMessage());
-			Minion::write("Error", $e->getMessage());
-			return;
-		}
+		// } catch (Exception $e)
+		// {
+		// 	$ct->error($e->getMessage());
+		// 	Minion::write("Error", $e->getMessage());
+		// 	return;
+		// }
 		$ct->end();
 	}
 
@@ -117,7 +117,7 @@ class Task_Objectload extends Minion_Task
 		Minion::write("Success", "Start...");
 
 		$ol->forEachRecord($filters, function($row, $category, $cc) use ($ol, $ct, $test){
-
+			
 			$ct->_update();
 			if (!$ct->_check($ct->id))
 				return 'break';

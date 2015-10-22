@@ -32,10 +32,12 @@ class Massload_Avito
 
 			$images = Array();
 			if (property_exists($row, "Images")){
-				foreach ($row->Images->Image as $image)
-				{
-					$attributes = $image->attributes();
-					$images[] = (string) $attributes["url"][0];
+				if (isset($row->Images->Image)) {
+					foreach ($row->Images->Image as $image)
+					{
+						$attributes = $image->attributes();
+						$images[] = (string) $attributes["url"][0];
+					}
 				}
 			}
 
@@ -154,9 +156,13 @@ class Massload_Avito
 	public static function clear_row($row)
 	{
 		foreach ($row as $key=>$value)
-		{ 
-			if ($key <> "images")
+		{
+			if ($key <> "images") {
+				if (is_array($value)) {
+					$value = $value[0];
+				}
 				$row->{$key} = strip_tags($value);
+			}
 		}
 		return $row;
 	}
