@@ -24,15 +24,12 @@
 					{% endif %}
 
 					{% for key, _city in  cities if key != last_city.seo_name %}
-						{% set count = link_counters[domain(key, '', '')] %}
+						{% set count = link_counters[domain(key, 'glavnaya-kategoriya', '')] %}
 						<li class="fs10">				
-							<a href="{{ domain(key, FALSE) }}" title="Газета бесплатных объявлений Ярмарка в {{ _city }}">{{ _city }}</a>
+							<a href="{{ domain(key, 'glavnaya-kategoriya') }}" title="Газета бесплатных объявлений Ярмарка в {{ _city }}">{{ _city }}</a>
 							<span class="count">{{ count }}</span>
 						</li>
 					{% endfor %}
-					<li class="fs10">				
-						<span class="span-link fs15 white">В других городах<i class="fa fa-caret-down ml5"></i></span>
-					</li>
 				</ul>
 				<br>
 				<ul>

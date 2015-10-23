@@ -14,7 +14,8 @@ class Controller_Index extends Controller_Template {
             HTTP::redirect("http://".$proper_domain, 301);
         }
 
-        $this->last_city_id = $this->domain->get_last_city_id();
+        //сургут
+        $this->last_city_id = 1979;//$this->domain->get_last_city_id();
 
         // $this->theme_class = "default";
         // $this->theme_img = "themes/default.png";
@@ -46,7 +47,7 @@ class Controller_Index extends Controller_Template {
 
         $index_info->link_counters = Search_Url::getcounters($index_info->s_host, "", $index_info->categories["main"]);
         foreach (array("nizhnevartovsk","tyumen","surgut","nefteyugansk", FALSE) as $city_seo) {
-            $city_counter = Search_Url::getcounters($this->domain->get_domain_by_city($city_seo, FALSE, ""), "", array( new Obj(array("url"=>"")) ) );
+            $city_counter = Search_Url::getcounters($this->domain->get_domain_by_city($city_seo, "glavnaya-kategoriya", ""), "", array( new Obj(array("url"=>"")) ) );
             $index_info->link_counters = array_merge($index_info->link_counters, $city_counter);
         }
 
