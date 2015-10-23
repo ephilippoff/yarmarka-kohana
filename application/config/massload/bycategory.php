@@ -210,10 +210,10 @@ return array(
 			'category' =>'commercial',
 			'fields'=>array(
 						'external_id' 	=> array('name' => 'external_id','required' => TRUE, 'type' => 'external_id', 'translate' => 'ID', 'maxlength' => 50),
-						'city' 			=> array('name' => 'city',		'required' => TRUE, 'type' => 'city', 		'translate' => 'Город', 'maxlength' => 30),
+						'city' 			=> array('name' => 'city',		'required' => TRUE, 'type' => 'city', 		'translate' => 'Город', 'maxlength' => 50),
 						'address'		=> array('name' => 'address',	'required' => FALSE, 'type' => 'address', 	'translate' => 'Адрес', 'maxlength' => 50),
-						'tip-sdelki3' 	=> array('name' => 'tip-sdelki3','required' => TRUE,'type' => 'dict', 		'translate' => 'Тип сделки', 'maxlength' => 30), 
-						'object-tip' 	=> array('name' => 'object-tip','required' => TRUE, 'type' => 'dict', 'translate' => 'Тип объекта', 'maxlength' => 30),
+						'tip-sdelki3' 	=> array('name' => 'tip-sdelki3','required' => TRUE,'type' => 'dict', 		'translate' => 'Тип сделки', 'maxlength' => 50), 
+						'object-tip' 	=> array('name' => 'object-tip','required' => TRUE, 'type' => 'dict', 'translate' => 'Тип объекта', 'maxlength' => 100),
 						'ploshchad' 	=> array('name' => 'ploshchad',	'required' => TRUE, 	'type' => 'integer', 	'translate' => 'Площадь', 'maxlength' => 5),	
 						'tsena' 		=> array('name' => 'tsena',		'required' => TRUE, 'type' => 'integer', 	'translate' => 'Цена', 'maxlength' => 9),
 						'user_text_adv' => array('name' => 'user_text_adv','required' => TRUE,'type' => 'textadv', 'translate' => 'Текст объявления', 'maxlength' => 15000),
