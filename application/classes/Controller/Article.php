@@ -94,6 +94,7 @@ class Controller_Article extends Controller_Template {
 			->where('is_category', '=', 0)
 			->order_by("start_date", "desc");
 
+		$twig->city = $this->city;
 		$city_id = ($this->city) ? $this->city->id : NULL;
 		if ($city_id) {
 			$articles = $articles->where(DB::expr($city_id), '=', DB::expr('ANY(cities)'));
