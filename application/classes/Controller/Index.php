@@ -15,7 +15,7 @@ class Controller_Index extends Controller_Template {
         }
 
         //сургут
-        $this->last_city_id = 1979;//$this->domain->get_last_city_id();
+        $this->last_city_id = $this->domain->get_last_city_id();
 
         // $this->theme_class = "default";
         // $this->theme_img = "themes/default.png";
@@ -39,13 +39,16 @@ class Controller_Index extends Controller_Template {
             $twig->last_city = $last_city = ORM::factory('City', $twig->last_city_id)->get_row_as_obj();
         }
 
+        $twig->months = Date::get_months_names();
+
         $twig->lastnews  = ORM::factory('Article')
-                                ->get_lastnews($this->last_city_id, NULL, 6)
+                                ->get_lastnews($this->last_city_id, NULL, 11)
                                 ->getprepared_all();
         
         $index_info = $this->get_index_info($last_city);
 
         $index_info->link_counters = Search_Url::getcounters($index_info->s_host, "", $index_info->categories["main"]);
+
         foreach (array("nizhnevartovsk","tyumen","surgut","nefteyugansk", FALSE) as $city_seo) {
             $city_counter = Search_Url::getcounters($this->domain->get_domain_by_city($city_seo, "glavnaya-kategoriya", ""), "", array( new Obj(array("url"=>"")) ) );
             $index_info->link_counters = array_merge($index_info->link_counters, $city_counter);

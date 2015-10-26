@@ -71,7 +71,7 @@ body h1 {font-family: 'pt_sans_captionregular', Verdana, sans-serif; font-size: 
 .bg-color-krayola{background-color: #12B0EC}.border-color-krayola{border-color: #12B0EC;}
 .p5{padding:5px}.p10{padding:10px}.p15{padding:15px}
 .white{color:white !important}.black{color:black !important}.red{color:red !important;}.green{color:green !important;}.gray{color:gray !important;}
-.dib{display: inline-block}
+.dib{display: inline-block}.db{display: block}
 .br2{border-radius: 2px}.brt2{border-radius: 2px 2px 0 0}.brb2{border-radius: 0 0 2px 2px}.brl2{border-radius: 2px 0 0 2px}.brr2{border-radius: 0 2px 2px 0}
 .br3{border-radius: 3px}.brt3{border-radius: 3px 3px 0 0}.brb3{border-radius: 0 0 3px 3px}.brl3{border-radius: 3px 0 0 3px}.brr3{border-radius: 0 3px 3px 0}
 .ta-r{text-align: right;}.ta-l{text-align: left !important}.ta-c{text-align: center;}
@@ -80,7 +80,7 @@ body h1 {font-family: 'pt_sans_captionregular', Verdana, sans-serif; font-size: 
 .relative{position: relative}
 .clear{clear: both;}
 .w100p{width: 100%;}
-.fs16{font-size: 18px}.fs20{font-size: 20px}
+.fs12{font-size:12px;}.fs16{font-size: 18px}.fs20{font-size: 20px}
 .p5{padding: 5px}.p10{padding:10px}.p15{padding:15px}.p20{padding:20px}
 .whitespace{clear: left;}
 .fixed{position: fixed;top: 0px;}
@@ -441,34 +441,35 @@ select{background-color: #FFFFFF;border: 1px solid #C3C3C3;padding:2px 10px;heig
 .green-dense-theme{color: black}
 .green-dense-theme .subcategories-cont ul li a{}
 .green-dense-theme .subcategories-cont ul li a.active{ color:#E96F4F;}
-.green-dense-theme .menu-cont2{background-color: #8EC745;}
-.green-dense-theme .view-container{background: url(http://www.free-patterns.info/wp-content/uploads/2014/08/green-dense-circle-wall-2911814.png);}
+.green-dense-theme .menu-cont2{background-color: #B9B9B9;}
+.green-dense-theme .view-container{background: url(http://www.free-patterns.info/wp-content/uploads/2015/03/white-subtle-wall-of-lines-21315.png);}
 .green-dense-theme .subcategories-cont ul li span {color: gray;}
 .green-dense-theme .view-container a{  }
-.green-dense-theme.reklama-cont {  background: url(http://www.free-patterns.info/wp-content/uploads/2014/08/green-dense-circle-wall-2911814.png);}
+.green-dense-theme.reklama-cont {  background: url(http://www.free-patterns.info/wp-content/uploads/2015/03/white-subtle-wall-of-lines-21315.png);}
 .green-dense-theme .menu-item:hover{background-color: #ABD673;-webkit-transition: background-color 0.2s;-moz-transition: background-color 0.2s;-o-transition: background-color 0.2s;transition: background-color 0.2s;}
 .green-dense-theme .popup-menu-cont li a:hover {background-color: #ABD673;text-decoration: none;}
-.green-dense-theme .popup-menu-cont{border: 1px solid #8EC745}
-.green-dense-theme .menu-cont2 .popup-menu-cont2l .left .span-link{border-left: 4px solid #8EC745;}
+.green-dense-theme .popup-menu-cont{border: 1px solid #B9B9B9}
+.green-dense-theme .menu-cont2 .popup-menu-cont2l .left .span-link{border-left: 4px solid #B9B9B9;}
 .green-dense-theme .menu-cont2 .popup-menu-cont2l .span-link:hover{background-color: #ABD673; transition: background-color 0.2s, color 0.3s; color:white; }
 /* skin-theme6 end */
 
 /*crimson-theme*/
-.crimson-theme .menu-cont2{background-color: #D90000;}
+.crimson-theme .menu-cont2{background-color: #313131;}
+.crimson-theme .subcategories-cont ul li span {color: #313131;}
 .crimson-theme .menu-item:hover{background-color: #F98C8C;-webkit-transition: background-color 0.2s;-moz-transition: background-color 0.2s;-o-transition: background-color 0.2s;transition: background-color 0.2s;}
 .crimson-theme .popup-menu-cont li a:hover {background-color: #F98C8C;text-decoration: none;}
-.crimson-theme .popup-menu-cont{border: 1px solid #D90000}
-.crimson-theme .menu-cont2 .popup-menu-cont2l .left .span-link{border-left: 4px solid #D90000;}
+.crimson-theme .popup-menu-cont{border: 1px solid #313131}
+.crimson-theme .menu-cont2 .popup-menu-cont2l .left .span-link{border-left: 4px solid #313131;}
 .crimson-theme .menu-cont2 .popup-menu-cont2l .span-link:hover{background-color: #F98C8C; transition: background-color 0.2s, color 0.3s; color:white; }
 .crimson-theme .view-container{color: white}
-.crimson-theme .view-container{background: url(http://www.free-patterns.info/wp-content/uploads/2015/08/subtle-red-scratched-wall-221614.png);}
+.crimson-theme .view-container{background: url(http://www.free-patterns.info/wp-content/uploads/2015/08/grey-subtle-dry-paint-v27715.png);}
 .crimson-theme .view-container a, 
 .crimson-theme .reklama-line a{color: white}
 .crimson-theme .view-container a:hover, 
 .crimson-theme .reklama-line a:hover{ color: #E96F4F; -webkit-transition: color 0.3s;-moz-transition: color 0.3s;-o-transition: color 0.3s;transition: color 0.3s;}
 .crimson-theme .view-container a.active, 
 .crimson-theme .reklama-line a.active{ color:#E96F4F;}
-.crimson-theme.reklama-cont {  background: url(http://www.free-patterns.info/wp-content/uploads/2015/08/subtle-red-scratched-wall-221614.png);}
+.crimson-theme.reklama-cont {  background: url(http://www.free-patterns.info/wp-content/uploads/2015/08/grey-subtle-dry-paint-v27715.png);}
 /*crimson-theme end*/
 
 /*gray-theme*/

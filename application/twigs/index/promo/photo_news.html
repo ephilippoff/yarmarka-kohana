@@ -1,0 +1,16 @@
+<div class="row">
+	<div class="col-md-12 items-cont">
+		<ul>
+			{% for news in lastnews %}
+				<li>
+					<div  style="width:110px;height:130px;float:left;padding:5px;overflow:hidden;">
+						{% set image = get_image_paths(news.photo) %}
+						<span class="mr3 fs12"><i class="fa fa-home mr3"></i>{{news.start_date|date('d/m, H:i')}} </span>
+						<img src="{{get_file(get_image_paths(news.photo)['original'])}}" alt="" width="100%">
+						<p><a href="news/{{ news.id ~ '-' ~ news.seo_name}}" class="fs12">{{news.title|slice(0,15)}}</a></p>
+					</div>
+				</li>
+			{% endfor %}
+		</ul>
+	</div>
+</div>

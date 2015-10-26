@@ -4,9 +4,18 @@ class Controller_Article extends Controller_Template {
 
 	public function before()
 	{
+		
+		parent::before();
+
 		$this->use_layout   = FALSE;
 		$this->auto_render  = FALSE;
-		parent::before();
+		
+
+		$this->domain = new Domain();
+        if ($proper_domain = $this->domain->is_domain_incorrect()) {
+            HTTP::redirect("http://".$proper_domain, 301);
+        }
+        $this->city = $this->domain->get_city();
 		
 
 		if ($client_email = trim($this->request->query('em_client_email')) 
@@ -63,7 +72,41 @@ class Controller_Article extends Controller_Template {
 				->find_all();
 
 		$twig->article = $article;
-		echo Debug::vars($twig);
+
+		$this->response->body($twig);
+	}
+
+	public function action_newsline()
+	{
+		$twig = Twig::factory('article/newsline');
+		$date = $this->request->param('date');
+
+		$date_from = date_create($date);
+		$date_to = date_create($date);
+		date_add($date_to, date_interval_create_from_date_string('1 day'));
+
+		$articles = ORM::factory('Article')
+			->where('start_date', '>=', date_format($date_from, 'Y-m-d'))
+			->where('start_date', '<', date_format($date_to, 'Y-m-d'))
+			->where('is_visible', '=', 1)
+			->where('text_type', '=', 2)
+			->where('parent_id', '<>', 0)
+			->where('is_category', '=', 0)
+			->order_by("start_date", "desc");
+
+		$city_id = ($this->city) ? $this->city->id : NULL;
+		if ($city_id) {
+			$articles = $articles->where(DB::expr($city_id), '=', DB::expr('ANY(cities)'));
+		}
+		$articles= $articles->getprepared_all();
+
+		$twig->months = Date::get_months_names();
+        $twig->lastnews  = ORM::factory('Article')
+                                ->get_lastnews($city_id, NULL, 30)
+                                ->getprepared_all();
+
+		$twig->date = date_format($date_from, 'Y-m-d');
+		$twig->articles = $articles;
 		$this->response->body($twig);
 	}
 	

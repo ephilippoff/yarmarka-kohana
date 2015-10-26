@@ -171,6 +171,12 @@ Route::set('newsone', 'news/<id>-<seo_name>', array('id' => '\d+'))
 		'action'     => 'newsone',
 	));
 
+Route::set('newsline', 'newsline/<date>', array('date' => '[0-9]{4}-[0-9]{2}-[0-9]{2}'))
+	->defaults(array(
+		'controller' => 'Article',
+		'action'     => 'newsline',
+	));
+
 Route::set('backend/news', 'articles/news')
 	->defaults(array(
 		'directory'  => 'Admin',

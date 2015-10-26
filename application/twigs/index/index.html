@@ -11,16 +11,36 @@
 {% endblock header %} 
 
 {% block content %}
-	<div class="col-md-6">
-		{% include 'index/promo/city' %}
-		<img class="banner module" src="/static/develop/images/banner1.gif" style="width:auto;max-width:600px;">
-		{% include 'index/categories' %}
+	<div class="col-md-12">
+		<ul>
+			<li class="dib ml10 mr10"><a href="" class="bold fs20">Работа</a></li>
+			<li class="dib ml10 mr10"><a href="" class="bold fs20">Авто</a></li>
+			<li class="dib ml10 mr10"><a href="" class="bold fs20">Недвижимость</a></li>
+			<li class="dib ml10 mr10"><a href="" class="bold fs20">Объявления</a></li>
+			<li class="dib ml10 mr10"><a href="" class="bold fs20">Компании</a></li>
+			<li class="dib ml10 mr10"><a href="" class="bold fs20">Афиша</a></li>
+			<li class="dib ml10 mr10"><a href="" class="bold fs20">Закон и порядок</a></li>
+		</ul>
 	</div>
-	<div class="col-md-6">
-		{% include 'index/promo/kupon' %}
-		<img class="banner module" src="/static/develop/images/banner1.gif" style="width:auto;max-width:600px;">
-		{% include 'index/promo/news' %}
+	<div class="col-md-12">
+		{% include 'index/promo/photo_news' %}
 	</div>
+	<div class="col-md-3">
+		{% include 'index/promo/left' %}
+	</div>
+	<div class="col-md-9">
+		<div class="row">
+			<div class="col-md-9">
+				{% include 'index/promo/news' %}
+				<img class="banner module" src="/static/develop/images/banner1.gif" style="width:auto;max-width:650px;">
+				{% include 'index/promo/kupon' %}
+			</div>
+			<div class="col-md-3">
+				{% include 'index/informers' %}
+			</div>
+		</div>
+	</div>
+	
 {% endblock content %}
 
 {% block footertext %}{% endblock %}

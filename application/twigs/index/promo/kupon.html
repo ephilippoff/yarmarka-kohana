@@ -16,24 +16,27 @@
 			<p class="white captionbold">Ярмарка - Купоны и скидки {% if last_city %}({{ cities[last_city.seo_name] }}){% endif %}</p>
 		</div>
 		<div class="row">
-			<div class="col-md-6 col-xs-6 items-cont">
-				<ul>
-					{% for object in premium_kupons %}
-						<li class="mt10">
-							{% include 'detail/mini/kupon' %}
-						</li>
-					{% endfor %}
-				</ul>
-			</div>
-			<div class="col-md-6 col-xs-6 items-cont">
+			{% if premium_kupons|length > 0 %}
+				<div class="col-md-6 col-xs-6 items-cont">
+					<ul>
+						{% for object in premium_kupons %}
+							<li class="mt10">
+								{% include 'detail/mini/kupon' %}
+							</li>
+						{% endfor %}
+					</ul>
+				</div>
+			{%endif%}
+			<div class="{% if premium_kupons|length > 0 %}col-md-6 col-xs-6{% else %}col-md-12{%endif%} items-cont">
 				<ul>
 					{% for object in kupons %}
 						<li>
-							<p class="mt10"><a href="{{object.compiled.url}}">{{object.title}}. {{object.compiled.city}}</a></p>
+							<p class="mt10"><span class="fs12">{{object.date_created|date('H:m')}}</span><a class="ml10" href="{{object.compiled.url}}">{{object.title}}. {{object.compiled.city}}</a></p>
 						</li>
 					{% endfor %}
 				</ul>
 			</div>
+
 		</div>
 	</div>
 </div>
