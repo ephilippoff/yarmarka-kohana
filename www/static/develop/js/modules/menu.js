@@ -51,7 +51,6 @@ define([
             this.activateTimer = setTimeout(function(){
                 $(s.getOption("menuClass")).fadeIn();
                 $("#popup-layer").fadeIn();
-                console.log(s.getOption("controlClass"))
                 $(s.getOption("controlClass")).addClass("z301");
             }, 200)
             

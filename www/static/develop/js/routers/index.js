@@ -8,8 +8,8 @@ define([
    
    return BaseRouter.extend({
         routes: {
-            "": "startSection",
-            "*notFound": "notFound"
+            "*found": "startSection",
+
         },
 
         onRoute: function(name, path, args){
@@ -29,7 +29,7 @@ define([
         },
 
         notFound: function() {
-
+            console.log(this)
         }
     });
 });
