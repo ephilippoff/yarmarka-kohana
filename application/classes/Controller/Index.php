@@ -14,8 +14,8 @@ class Controller_Index extends Controller_Template {
             HTTP::redirect("http://".$proper_domain, 301);
         }
 
-        //сургут
-        $this->last_city_id = $this->domain->get_last_city_id();
+        $this->city = $this->domain->get_city();
+        $this->last_city_id =( $this->city ) ?  $this->city->id : NULL;
 
         // $this->theme_class = "default";
         // $this->theme_img = "themes/default.png";

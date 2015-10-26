@@ -16,11 +16,14 @@
 				<div class="col-md-12 items-cont">
 				<ul class="pl10">
 					<li class="mb10">
-						<a class="fs20 bold" href="{{ url('glavnaya-kategoriya') }}">Все</a>
+						<a class="fs20 bold" href="{{ url('glavnaya-kategoriya') }}">Все объявления</a>
 						{% set count = link_counters[s_host ~ '/glavnaya-kategoriya'] %}
 						{% if (count) %}
 							<span class="count">{{count}}</span>
 						{% endif %}
+					</li>
+					<li class="mb10">
+						<a class="fs20 bold" href="{{ url('search_category') }}">Все категории</a>
 					</li>
 					<li class="mb5">
 						<a class="fs20 bold" href="{{ url('rabota') }}">Работа</a>

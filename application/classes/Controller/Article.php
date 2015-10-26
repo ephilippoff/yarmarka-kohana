@@ -172,26 +172,28 @@ class Controller_Article extends Controller_Template {
 		
 		if ($newsone->is_category == 0)
 		{
+			$twig->months = Date::get_months_names();
 			$other_news = ORM::factory('Article')
 					->where('text_type', '=', 2)
 					->where('is_category', '=', 0)
 					->where('is_visible', '=', 1)
 					->where('parent_id', '=', $newsone->parent_id)
-					->where('start_date', '<=', DB::expr('now()'))
-					->where('end_date', '>=', DB::expr('now()'))
+					//->where('start_date', '<=', DB::expr('now()'))
+					//->where('end_date', '>=', DB::expr('now()'))
 					->where('id', '<>', $newsone->id)
 					->order_by('created', 'desc')
 					->limit(6);
 			
-			if ($city_id and $parent_name != 'infografika')
-				$other_news->where (DB::expr($city_id), '=', DB::expr('ANY(cities)'));
-		
-			$other_news = $other_news->find_all(); 
+			$city_id = ($this->city) ? $this->city->id : NULL;
+			if ($city_id) {
+				$other_news = $other_news->where(DB::expr($city_id), '=', DB::expr('ANY(cities)'));
+			}
+			$other_news = $other_news->getprepared_all();
 		}
 		
 		$twig->set_global('is_news_page', 1);
 		$twig->other_news = $other_news;
-		$twig->count_other_news = ($other_news) ? $other_news->count() : 0;
+		$twig->count_other_news = count($other_news);
 		$twig->real_photo = $real_photo;
 		$twig->news_rubrics = ORM::factory('Article')->get_final_news_rubrics();			
 		$twig->newsone = $newsone;

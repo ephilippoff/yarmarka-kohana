@@ -1,3 +1,6 @@
+define('jquery', [], function() {
+    return jQuery;
+});
 require.config({
     paths : {
         underscore : 'lib/underscore',
@@ -5,7 +8,7 @@ require.config({
         marionette : 'lib/backbone.marionette',
         paginator  : 'lib/backbone.paginator',
         localStorage : 'lib/backbone.localStorage',
-        jquery     : 'lib/jquery',
+        //jquery     : 'lib/jquery',
         async      : 'lib/async',
         propertyParser: 'lib/propertyParser',
         menuAim : 'lib/jquery.menu-aim',

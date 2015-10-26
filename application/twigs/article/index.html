@@ -1,4 +1,4 @@
-{% extends "layouts/article" %}
+{% extends "layouts/newsline" %}
 
 {% set theme_class = 'green-dense-theme' %}
 
@@ -12,53 +12,56 @@
 {% block crumbs %}{% endblock crumbs %}
 
 {% block content %}
-	<div class="{{theme_class}}">
-		<div class="menu-cont2 clearfix brt2">
-			<div class="col-md-6 left clearfix">
-				<span class="caption left"><i class="fa fa-globe mr3"></i>{{newsone.start_date|date('H:i, d.m.Y')}}</span>
-			</div>
-			{% if check_access("news.edit") %}
-			<div class="col-md-6 right clearfix">
-				<a class="menu-item right" href="/khbackend/articles/edit/{{newsone.id}}">Редактировать</a>
-			</div>
-			{% endif %}
+	<div class="row">
+		<div class="col-md-9">
+			<article class="bg-color-whitesmoke p20 br2">
+				<h1 class="captionbold"><i class="fa fa-globe mr3"></i>{{newsone.start_date|date('d/m, H:i')}}<span class="fs22 ml10">{{newsone.title}}</span></h1>
+				<div class="photo-cont mt10">
+
+					<img class="news-photo" src="{{ get_file(get_image_paths(newsone.photo)['original']) }}" width="500">
+					<p>{{newsone.photo_comment}}</p>
+				</div>
+				<div class="text-cont mt10">{{newsone.text}}</div>
+					{% if newsone.is_category == 0 %}
+						<div id="hypercomments_widget"></div>
+						<script type="text/javascript">
+							_hcwp = window._hcwp || [];
+							_hcwp.push({widget:"Stream", widget_id:16227, callback: function(app, init){$('#hypercomments_widget .hc_count_user_online').remove();} });
+							(function() {
+								if("HC_LOAD_INIT" in window)return;
+								HC_LOAD_INIT = true;
+								var lang = (navigator.language || navigator.systemLanguage || navigator.userLanguage || "en").substr(0, 2).toLowerCase();
+								var hcc = document.createElement("script"); hcc.type = "text/javascript"; hcc.async = true;
+								hcc.src = ("https:" == document.location.protocol ? "https" : "http")+"://w.hypercomments.com/widget/hc/16227/"+lang+"/widget.js";
+								var s = document.getElementsByTagName("script")[0];
+								s.parentNode.insertBefore(hcc, s.nextSibling);
+							})();
+						</script>
+						<a href="http://hypercomments.com" class="hc-link" title="comments widget">comments powered by HyperComments</a>							
+					{% endif %}
+			</article>
+		</div>
+		<div class="col-md-3">
+			{% include 'index/informers' %}
 		</div>
 	</div>
-	<article class="bg-color-whitesmoke p20">
-		<h1 class="big">{{newsone.title}}</h1>
-		<div class="photo-cont mt10">
-
-			<img class="news-photo" src="{{ get_file(get_image_paths(newsone.photo)['original']) }}" width="500">
-			<p>{{newsone.photo_comment}}</p>
-		</div>
-		<div class="text-cont mt10">{{newsone.text}}</div>
-			{% if newsone.is_category == 0 %}
-				<div id="hypercomments_widget"></div>
-				<script type="text/javascript">
-					_hcwp = window._hcwp || [];
-					_hcwp.push({widget:"Stream", widget_id:16227, callback: function(app, init){$('#hypercomments_widget .hc_count_user_online').remove();} });
-					(function() {
-						if("HC_LOAD_INIT" in window)return;
-						HC_LOAD_INIT = true;
-						var lang = (navigator.language || navigator.systemLanguage || navigator.userLanguage || "en").substr(0, 2).toLowerCase();
-						var hcc = document.createElement("script"); hcc.type = "text/javascript"; hcc.async = true;
-						hcc.src = ("https:" == document.location.protocol ? "https" : "http")+"://w.hypercomments.com/widget/hc/16227/"+lang+"/widget.js";
-						var s = document.getElementsByTagName("script")[0];
-						s.parentNode.insertBefore(hcc, s.nextSibling);
-					})();
-				</script>
-				<a href="http://hypercomments.com" class="hc-link" title="comments widget">comments powered by HyperComments</a>							
-			{% endif %}
-	</article>
 {% endblock content %}
 
 {% block leftside %} 
-	<div class="info-block-cont theme3 module">
-		<div class="block-title">
-			<span>Последние новости</span>
-		</div>						
-		<div class="bg-color-whitesmoke p20">
-			
-		</div>
-	</div>
+	<ul class="hidden-xs">
+		{% set current_date = NULL %}
+		{% for news in other_news %}
+			{% if not current_date or current_date != news.start_date|date('d/m') %}
+				{% set current_date = news.start_date|date('d/m') %}
+				<li class="pl10 mb5">
+					<span class="bold">{{ news.start_date|date('d') ~ ' ' ~ months[news.start_date|date('m')] }}</span>
+				</li>
+			{% endif %}
+			<li class="pl10 mb5">
+				{% set image = get_image_paths(news.photo) %}
+				<img src="{{get_file(get_image_paths(news.photo)['original'])}}" alt="" width="100%">
+				<span class="fs12"><i class="fa fa-home mr3"></i> {{news.start_date|date('H:m')}}</span><a href="/news/{{news.id}}-{{news.seo_name}}" class="ml10">{{news.title|slice(0,70)}}</a>
+			</li>
+		{% endfor %}
+	</ul>
 {% endblock leftside %}

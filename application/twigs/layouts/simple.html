@@ -13,6 +13,10 @@
 	<div class="row mt10 min-content-height">
 		{% block content %} {% endblock content %}
 	</div><!--row-->
+	
+	{% block footer %} 
+		{{ parent() }}
+	{% endblock footer %}
 
 	{% block templates %}
 		{{ parent() }}

@@ -30,12 +30,18 @@
 			{% endblock content %}
 		</div><!--col-->
 	</div><!--row-->
+	
+	{% block footer %} 
+		{{ parent() }}
+	{% endblock footer %}
+
 	{% block templates %}
 		{{ parent() }}
 		<script id="template-mainmenu" type="text/template">
 			{{ requestblock('block_twig/mainmenu', {'city_id': city.id}) }}
 		</script>
 	{% endblock templates %}
+
 	
 {% endblock body %}
 {% block page_name%}article{% endblock page_name %}
