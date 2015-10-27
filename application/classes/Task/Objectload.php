@@ -46,7 +46,7 @@ class Task_Objectload extends Minion_Task
 						$this->load($params, $ct);
 					} catch (Exception $e)
 					{
-						$ct->error($e->getMessage());
+						//$ct->error($e->getMessage());
 						Minion::write("Error", $e->getMessage());
 						continue;
 					}
@@ -102,7 +102,19 @@ class Task_Objectload extends Minion_Task
 
 		if (!$objectload_id)
 		{
-			$ol->downloadLinks();
+			try {
+				$ol->downloadLinks();
+			} catch (Exception $e)
+			{
+				if ($ol->_objectload_id) {
+					$_ol = ORM::factory('Objectload', $ol->_objectload_id);
+						if ($_ol->loaded()) {
+							$_ol->set_state(99, "Ошибка при загрузке файла");
+						}
+				}
+				Minion::write("Error", "link filed");
+				throw $e;
+			}
 			Minion::write("Success", "Links loaded");
 
 			try {
@@ -218,7 +230,7 @@ class Task_Objectload extends Minion_Task
 		}
 
 		Minion::write("Success", 'End');
-
+		return $ol->_objectload_id;
 		//Temptable::delete_table($name);
 	}
 

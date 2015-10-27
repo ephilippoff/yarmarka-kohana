@@ -252,6 +252,9 @@
 			<td>
 				<? if ($item->state <> 1): ?>
 					<?=$states_ol[$item->state]?>
+					<? if ($item->state == 99): ?>
+						<span>.<?=$item->comment?></span>
+					<? endif; ?>
 				<? else: ?>
 					<a href="#comment" onclick="set_comment(<?=$item->id?>);" style="color:red">На мод. -> отклонить<span href="" class="icon-trash"></span></a>
 				<? endif; ?>
