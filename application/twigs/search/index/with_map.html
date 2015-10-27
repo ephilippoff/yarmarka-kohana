@@ -6,7 +6,8 @@
 {% endblock css%}
 
 
-{% block js %} 
+{% block js %}
+	{{ parent() }}
 	{% if data_file %}
 		{{ js(data_file) }}
 	{% endif %}

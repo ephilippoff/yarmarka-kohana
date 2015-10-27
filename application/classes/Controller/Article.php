@@ -80,26 +80,28 @@ class Controller_Article extends Controller_Template {
 	{
 		$twig = Twig::factory('article/newsline');
 		$date = $this->request->param('date');
+		$twig->city = $this->city;
+		$city_id = ($this->city) ? $this->city->id : NULL;
 
 		$date_from = date_create($date);
 		$date_to = date_create($date);
 		date_add($date_to, date_interval_create_from_date_string('1 day'));
 
-		$articles = ORM::factory('Article')
-			->where('start_date', '>=', date_format($date_from, 'Y-m-d'))
-			->where('start_date', '<', date_format($date_to, 'Y-m-d'))
-			->where('is_visible', '=', 1)
-			->where('text_type', '=', 2)
-			->where('parent_id', '<>', 0)
-			->where('is_category', '=', 0)
-			->order_by("start_date", "desc");
+		$search_query = Search::searchquery(
+		    array(
+		        "active" => TRUE,
+		        "published" =>TRUE,
+		        "city_id" => $city_id,
+		        "category_seo_name" => "novosti",
+		        "date_created" => array(
+		        	"from" => date_format($date_from, 'Y-m-d'),
+		        	"to" => date_format($date_to, 'Y-m-d'),
+		        )
+		    ),
+		    array("limit" => 20, "page" => 1)
+		);
+		$articles = Search::getresult($search_query->execute()->as_array());
 
-		$twig->city = $this->city;
-		$city_id = ($this->city) ? $this->city->id : NULL;
-		if ($city_id) {
-			$articles = $articles->where(DB::expr($city_id), '=', DB::expr('ANY(cities)'));
-		}
-		$articles= $articles->getprepared_all();
 
 		$twig->months = Date::get_months_names();
         $twig->lastnews  = ORM::factory('Article')

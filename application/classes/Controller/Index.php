@@ -41,9 +41,28 @@ class Controller_Index extends Controller_Template {
 
         $twig->months = Date::get_months_names();
 
-        $twig->lastnews  = ORM::factory('Article')
-                                ->get_lastnews($this->last_city_id, NULL, 11)
-                                ->getprepared_all();
+        $search_query = Search::searchquery(
+            array(
+                "active" => TRUE,
+                "published" =>TRUE,
+                "city_id" => $this->last_city_id,
+                "category_seo_name" => "novosti"
+            ),
+            array("limit" => 15, "page" => 1)
+        );
+        $twig->lastnews = Search::getresult($search_query->execute()->as_array());
+
+        $search_query = Search::searchquery(
+            array(
+                "premium" => TRUE,
+                "active" => TRUE,
+                "published" =>TRUE,
+                "city_id" => $this->last_city_id,
+                "category_seo_name" => "novosti"
+            ),
+            array("limit" => 5, "page" => 1)
+        );
+        $twig->premiumnews = Search::getresult($search_query->execute()->as_array());
         
         $index_info = $this->get_index_info($last_city);
 

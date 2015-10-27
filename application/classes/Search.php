@@ -199,6 +199,21 @@ class Search {
 			$object = $object->where("o.category", "=", $params->category_id);
 		}
 
+		if ($params->category_seo_name) {
+			$object = $object->join("category", "inner")
+								->on("category.id","=", "o.category");
+			$object = $object->where("category.seo_name", (is_array($params->category_seo_name)) ? "IN" : "=", $params->category_seo_name );
+		}
+
+		if ($params->date_created) { 
+			if (isset($params->date_created["from"])) {
+				$object = $object->where("o.date_created", ">=", $params->date_created["from"]);
+			}
+			if (isset($params->date_created["to"])) {
+				$object = $object->where("o.date_created", "<", $params->date_created["to"]);
+			}
+		}
+
 		if ( $params->city_id AND is_array($params->city_id) ) {
 			$object = $object->where("o.city_id", "IN", $params->city_id);
 		} elseif ($params->city_id) {

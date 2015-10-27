@@ -16,14 +16,14 @@
 		<div class="col-md-9">
 			<article class="bg-color-whitesmoke p20">
 				<h1 class="captionbold fs22">Все новости за {{ date|date('d.m.Y') }}</h1>
-			{% for newsone in articles %}
+			{% for object in articles %}
 				<div class="mt20">
-					<p class="fs18"><span>{{ newsone.start_date|date('h:i') }}</span> <a class="bold" href="/news/{{newsone.id ~ '-' ~  newsone.seo_name }}" name="{{newsone.id}}">{{newsone.title}}</a></p>
+					<p class="fs18"><span>{{ object.date_created|date('H:i') }}</span> <a class="bold" href="{{object.compiled.url}}" name="{{object.id}}">{{object.title}}</a></p>
 					<div class="photo-cont mt10">
-						<img class="news-photo" src="{{ get_file(get_image_paths(newsone.photo)['original']) }}" width="500">
-						<p>{{newsone.photo_comment}}</p>
+						<img class="news-photo" src="{{get_file(object.compiled.images.main_photo.original)}}" width="500">
+						<p>{{object.compiled.attributes['news-category'].value}}</p>
 					</div>
-					<div class="text-cont mt10">{{newsone.description}}</div>
+					<div class="text-cont mt10">{{object.user_text}}</div>
 				</div>
 			{% endfor%}
 			</article>
@@ -38,14 +38,14 @@
 	<ul class="mt40">
 		{% set current_date = NULL %}
 		{% for news in lastnews %}
-			{% if not current_date or current_date != news.start_date|date('d/m') %}
-				{% set current_date = news.start_date|date('d/m') %}
+			{% if not current_date or current_date != news.date_created|date('d/m') %}
+				{% set current_date = news.date_created|date('d/m') %}
 				<li class="pl10 mb5">
-					<span class="bold">{{ news.start_date|date('d') ~ ' ' ~ months[news.start_date|date('m')] }}</span>
+					<span class="bold">{{ news.date_created|date('d') ~ ' ' ~ months[news.date_created|date('m')] }}</span>
 				</li>
 			{% endif %}
 			<li class="pl10 mb5">
-				<span class="fs12">{{news.start_date|date('H:m')}}</span><a href="/news/{{news.id}}-{{news.seo_name}}" class="ml10">{{news.title|slice(0,70)}}</a>
+				<span class="fs12">{{news.date_created|date('H:m')}}</span><a href="/news/{{news.id}}-{{news.seo_name}}" class="ml10">{{news.title|slice(0,70)}}</a>
 			</li>
 		{% endfor %}
 	</ul>

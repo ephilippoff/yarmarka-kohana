@@ -159,6 +159,7 @@ class Form_Add  {
 			{
 				$category_array["Другие"][155] = "Каталог компаний";
 				$category_array["Другие"][173] = "Купоны";
+				$category_array["Другие"][167] = "Новости";
 			}
 
 		$value = $category->title;

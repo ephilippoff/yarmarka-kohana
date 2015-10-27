@@ -68,8 +68,43 @@ class Controller_Detail extends Controller_Template {
 		$this->response->body($twig);
 	}
 
-	public function action_type89() {
+	public function action_type101() {
+		$object = $this->request->param("object");
+		$url = $this->request->param("url");
 
+		if ($url <> $this->request->get_full_url()) {
+			HTTP::redirect($url, 301);
+		}
+
+		if ($object->active == 0) {
+		   throw new HTTP_Exception_404;
+		   return;
+		}
+
+		$twig = Twig::factory('detail/news/index');
+		$twig->domain      = $this->domain;
+		$twig->city        = $this->domain->get_city();
+
+		$detail_info = Detailpage::factory("Newsone", $object)
+							->get_crumbs()
+							->get_last_news(($twig->city) ? $twig->city->id : NULL)
+							->get();
+
+		foreach ((array) $detail_info as $key => $item) {
+			$twig->{$key} = $item;
+		}
+
+		//favourites
+		$twig->favourites = ORM::factory('Favourite')->get_list_by_cookie();
+		//end favourites
+
+		foreach ((array) $detail_info as $key => $item) {
+			$twig->{$key} = $item;
+		}
+		
+		$this->performance->add("Detail","end");
+		$twig->php_time = $this->performance->getProfilerStat();
+		$this->response->body($twig);
 	}
 
 	public function action_type201() {
