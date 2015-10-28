@@ -58,6 +58,23 @@ class Controller_Block_Twig extends Controller_Block
         $this->response->body($twig);
     }
 
+    public function action_links()
+    {
+        $city_id = $this->request->post("city_id");
+        $twig = Twig::factory('block/links');
+
+        $links = array(
+            "/" => "Главная",
+            "/search_category" => "Все объявления",
+            "/search_company" => "Все компании",
+            "/rabota/vakansii" => "Вакансии города"
+        );
+
+        $twig->links = $links;
+
+        $this->response->body($twig);
+    }
+
     public function action_mainmenu()
     {
         $city_id = $this->request->post("city_id");
@@ -139,6 +156,46 @@ class Controller_Block_Twig extends Controller_Block
         foreach ($elements as $item) {
            $item->count = $link_counters->{$domain->get_domain()."/$category_name/".$item->url};
         }
+        return $elements;
+    }
+
+    public static function news_categories($params = NULL)
+    {
+        
+        $elements = array();
+
+        $domain = new Domain();
+        $city = $domain->get_city_by_subdomain($domain->get_subdomain());
+
+        $category_name = "novosti";
+        $category =  ORM::factory('Category')
+                        ->where("seo_name","=",$category_name)
+                        ->cached(Date::WEEK)
+                        ->find();
+
+        if (!$category->loaded())
+        {
+            return $elements;
+        }
+
+        $_elements = ORM::factory('Attribute_Element')
+                        ->get_elements_with_published_objects($category->id, ($city) ? $city->id : NULL)
+                        ->select("attribute_element.*", array("attribute.seo_name","attribute_seo_name"), array("category.url","category_url"))
+                        ->join('category')
+                            ->on("reference.category","=","category.id")
+                        ->cached(Date::DAY)
+                        ->getprepared_all();
+
+        foreach ($_elements as $item) {
+            $item->attribute = true;
+            $item->url = $item->seo_name;
+            $elements[] = $item;
+        }
+        $link_counters = new Obj(Search_Url::getcounters($domain->get_domain(), $category_name, $elements ));
+        foreach ($elements as $item) {
+           $item->count = $link_counters->{$domain->get_domain()."/$category_name/".$item->url};
+        }
+
         return $elements;
     }
 

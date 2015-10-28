@@ -1,0 +1,27 @@
+{% extends "layouts/simple" %}
+
+
+{% block header %} 
+		{{ requestblock('block_twig/topline', {'favourites':favourites}) }}
+		{% include 'block/header/logoline' %}
+{% endblock header %} 
+
+{% block content %}
+	<div class="row">
+		<div class="col-md-12">
+			{{ requestblock('block_twig/links', {}) }}
+		</div>
+		<div class="col-md-12">
+			<article class="bg-color-whitesmoke p20 br2">
+				<h1 class="captionbold"><span class="fs22 ml10">Все компании города Сургута</span></h1>
+				<div class="mt20">
+					{% include 'index/2gis/surgut' %}
+				</div>
+				
+					
+			</article>
+		</div>
+	</div>
+{% endblock content %}
+
+{% block page_name%}user{% endblock page_name %}

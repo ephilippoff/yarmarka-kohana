@@ -136,7 +136,7 @@ define([
             }
 
             if (_.contains(menusToload, "news")) {
-                this.news = new MenuView({
+                this.news = new MainmenuView({
                     el: newsMenuSettings.controlClass,
                     templateClass: newsMenuSettings.menuTemplate,
                     menuClass: newsMenuSettings.menuClass,

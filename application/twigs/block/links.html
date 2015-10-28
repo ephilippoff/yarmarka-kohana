@@ -1,0 +1,6 @@
+<ul class="mb10">
+	{% set uri = get_request_uri() %}
+	{% for key, link in links if key != uri %}
+		<li class="dib ml10 mr10"><a href="{{ key }}" class="bold fs20">{{link}}</a></li>
+	{% endfor %}
+</ul>

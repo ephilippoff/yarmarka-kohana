@@ -1,8 +1,42 @@
-<div class="popup-menu-cont popup-menu-cont1l left iLight-cont js-newsmenu brb2 z300">
-	<ul>
-		<li><a href="{{ url('user/profile') }} "><i class="fa fa-user mr5"></i>Авто</a></li>
-		<li><a href="{{ url('user/profile') }} "><i class="fa fa-user mr5"></i>Недвижимость</a></li>
-		<li class="divider bg-color-yelgreen"></li>
-		<li><a href="{{ url('user/profile') }} "><i class="fa fa-user mr5"></i>Все</a></li>
-	</ul>
-</div>	
+{% set categories = requestmethod('Controller_Block_Twig','news_categories', {}) %}
+<div class="popup-menu-cont popup-menu-cont2l iLight-cont js-newsmenu z300">
+	<div class="left brb2">
+		<ul class="top" role="menu">
+			{% for element in categories %}
+				<li class="js-submenu-item" data-submenu-id="section{{element.id}}" class="section{{element.id}}">
+					<span class="span-link" onclick="window.location = '{{ '/' ~ element.category_url ~ '/' ~ element.seo_name }}'">
+						<span class="name">{{element.title}}</span>
+						{% if element.count > 0 %}
+							<span class="count">{{element.count}}</span>
+						{% else %}
+							<span class="count">?</span>
+						{% endif %}
+					</span>
+				</li>
+			{% endfor %}
+		</ul>
+	</div>
+	<div class="right brb2 visible-lg">
+		{% for element in categories %}
+			{% set divWidth = (banners[element.id] is defined and banners[element.id].menu_width) ? banners[element.id].menu_width : 250 %}
+			{% set ulWidth = 191 %}
+			<div class="section section{{element.id}} p10" id="section{{element.id}}" style="width: {{divWidth}}px; display: none;">
+				{#{% if banners[element.id] is defined and file_exist('/uploads/banners/menu/' ~ banners[element.id].image) and banners[category.id].menu_name == 'kupon' %}
+					<img hidefocus="true" style="position: absolute;right:{{banners[element.id].x}}px ; bottom:{{banners[element.id].y}}px;" usemap="#map{{element.id}}" src="/uploads/banners/menu/{{banners[element.id].image}}"/>
+
+					<map name="map{{element.id}}" id="map{{element.id}}">
+						<area shape="poly" coords="{{banners[element.id].map_params}}" class="" href="/redirect/ref_cb?id={{banners[element.id].id}}" target="_blank" />
+					</map>
+				{% elseif file_exist(element.main_menu_image) %}
+					<span class="">
+						<img  hidefocus="true"  src="http://yarmarka.biz/uploads/banners/menu/5sllpgxnndnadcwkhpyl.png">
+					</span>
+				{% endif %}#}
+				<span class="bold" style="width: 165px">{{element.title}}</span><br>
+				<span class="">
+					<img  hidefocus="true"  src="http://yarmarka.biz/uploads/banners/menu/5sllpgxnndnadcwkhpyl.png" width="250">
+				</span>
+			</div>
+		{% endfor %}
+	</div>
+</div>
