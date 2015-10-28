@@ -24,7 +24,8 @@
 								<p class="mt7"> <img src="{{get_file(news.compiled.images.main_photo['120x90'])}}" alt="" height="100"></p>
 							</div>
 							<div class="pt20 pl10 ml20 w400 dib">
-								<a href="/newsline/{{news.date_created|date('Y-m-d')}}#{{news.id}}" >{{news.title}}</a>
+								<p class="mb10"><a href="/newsline/{{news.date_created|date('Y-m-d')}}#{{news.id}}" >{{news.title}}</a></p>
+								<p>{{news.user_text|striptags|slice(0,200)}}...</p>
 							</div>
 						</li>
 					{% endfor %}
