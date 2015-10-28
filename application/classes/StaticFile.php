@@ -9,7 +9,7 @@ class StaticFile {
 
 	public $jspath = NULL;
 
-	const PATH = "../www/uploads/";
+	const PATH = "../www/static/develop/js/";
 
 	public function __construct($name, $filename)
 	{
