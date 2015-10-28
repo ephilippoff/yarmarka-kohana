@@ -98,11 +98,12 @@ class Controller_Add extends Controller_Template {
 		elseif ($user AND $user->linked_to_user)
 			$form_data->LinkedUser();
 
-		if ( Acl::check("object.add.type") )
+		if ( Acl::check("object.add.type") ) {
 			$form_data ->AdvertType();
-
-		if ( Acl::check("object.add.type") )
 			$form_data ->UserType();
+			$form_data ->Dates();
+		}
+
 
 		$twig->params->token = $token;
 		
@@ -198,11 +199,12 @@ class Controller_Add extends Controller_Template {
 					->Contacts()
 					->Additional();
 
-		if ( Acl::check("object.add.type") )
+		if ( Acl::check("object.add.type") ) {
 			$form_data ->AdvertType();
-
-		if ( Acl::check("object.add.type") )
 			$form_data ->UserType();
+			$form_data ->Dates();
+		}
+
 
 		if ($user AND $user->org_type == 2)
 			$form_data->OrgInfo();

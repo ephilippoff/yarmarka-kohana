@@ -274,6 +274,10 @@ class Search {
 			$object = $object->where("o.source_id", "=", (int) $params->source);
 		}
 
+		if ($params->expiration) {
+			$object = $object->where("o.date_expired", "<", DB::expr("NOW()"));
+		}
+
 		if ($params->is_favorite) {
 			$code = Cookie::get("code");
 			if (!$code) $code = "sdaf980sd6fgsdfg9sdfgsd89076";

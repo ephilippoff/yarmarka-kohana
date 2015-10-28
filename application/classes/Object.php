@@ -134,7 +134,8 @@ class Object
 		{
 			$add->save_address()
 				->prepare_object()
-				->save_typetr_object();
+				->save_typetr_object()
+				->save_dates_object();
 
 			$db = Database::instance();
 

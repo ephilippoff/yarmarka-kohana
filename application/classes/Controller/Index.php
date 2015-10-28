@@ -43,6 +43,7 @@ class Controller_Index extends Controller_Template {
 
         $search_query = Search::searchquery(
             array(
+                "expiration" => TRUE,
                 "active" => TRUE,
                 "published" =>TRUE,
                 "city_id" => $this->last_city_id,
@@ -54,6 +55,7 @@ class Controller_Index extends Controller_Template {
 
         $search_query = Search::searchquery(
             array(
+                "expiration" => TRUE,
                 "premium" => TRUE,
                 "active" => TRUE,
                 "published" =>TRUE,
@@ -81,6 +83,7 @@ class Controller_Index extends Controller_Template {
             array(
                 "active" => TRUE,
                 "published" =>TRUE,
+                "expiration" => TRUE,
                 "premium" => TRUE,
                 "category_id" => array(173),
                 "city_id" => ($this->last_city_id) ? array($this->last_city_id) : NULL,
@@ -94,6 +97,7 @@ class Controller_Index extends Controller_Template {
             array(
                 "active" => TRUE,
                 "published" =>TRUE,
+                "expiration" => TRUE,
                 "category_id" => array(173),
                 "city_id" => ($this->last_city_id) ? array($this->last_city_id) : NULL,
             ),

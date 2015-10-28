@@ -91,6 +91,7 @@ class Controller_Article extends Controller_Template {
 		    array(
 		        "active" => TRUE,
 		        "published" =>TRUE,
+		        "expiration" => TRUE,
 		        "city_id" => $city_id,
 		        "category_seo_name" => "novosti",
 		        "date_created" => array(
@@ -108,6 +109,7 @@ class Controller_Article extends Controller_Template {
 		    array(
 		        "active" => TRUE,
 		        "published" =>TRUE,
+		        "expiration" => TRUE,
 		        "city_id" => $city_id,
 		        "category_seo_name" => "novosti",
 		        // "date_created" => array(

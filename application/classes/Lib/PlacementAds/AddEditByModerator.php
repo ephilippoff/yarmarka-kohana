@@ -98,4 +98,28 @@ class Lib_PlacementAds_AddEditByModerator extends Lib_PlacementAds_AddEdit {
 		return $this;
 	}
 
+	function save_dates_object()
+	{
+		$params = &$this->params;
+		$object = &$this->object;
+		
+		$created = date_create($params->_date_created);
+		$time_created = date_create($params->_time_created);
+		date_time_set($created, (int)  date_format($time_created, 'H'), (int)  date_format($time_created, 'i'));
+
+		$expired = date_create($params->_date_expired); 
+		$time_expired = date_create($params->_time_expired);
+		date_time_set($expired, (int) date_format($time_expired, 'H'), (int) date_format($time_expired, 'i'));
+
+		$expiration = date_create($params->_date_expiration); 
+		$time_expiration = date_create($params->_time_expiration);
+		date_time_set($expiration, (int) date_format($time_expiration, 'H'), (int) date_format($time_expiration, 'i'));
+
+		$object->date_created = date_format($created, "Y-m-d H:i");
+		$object->date_expired = date_format($expired, "Y-m-d H:i");
+		$object->date_expiration = date_format($expiration, "Y-m-d H:i");
+
+		return $this;
+	}
+
 }

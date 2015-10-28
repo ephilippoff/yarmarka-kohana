@@ -2,8 +2,11 @@
 define([
     "templates",
     "views/partials/behaviors/favourite",
-    "views/partials/behaviors/ads"
-], function (templates, FavouriteBehavior, AdsBehavior) {
+    "views/partials/behaviors/ads",
+    "views/partials/behaviors/ocontrol",
+    "views/partials/behaviors/services",
+
+], function (templates, FavouriteBehavior, AdsBehavior, OControlBehavior, ServicesBehavior) {
     "use strict";
 
 
@@ -15,7 +18,13 @@ define([
             },
             AdsBehavior: {
                 behaviorClass: AdsBehavior
-            }
+            },
+            OControlBehavior: {
+                behaviorClass: OControlBehavior
+            },
+            ServicesBehavior: {
+                behaviorClass: ServicesBehavior
+            },
         },
 
         initialize: function() {

@@ -346,6 +346,53 @@ class Form_Add  {
 										);
 	}
 
+	function Dates()
+	{	
+		$object 		= $this->object;
+		$created = $expired = $expiration = date_create();
+		$dates = array(
+			"created" => NULL,
+			"expired" => NULL,
+			"expiration" => NULL
+		);
+
+		if ($object->loaded() AND !$this->is_post) {
+			$created = date_create($object->date_created);
+			$expired = date_create($object->date_expired);
+			$expiration = date_create($object->date_expiration);
+		} else if ($this->is_post) {
+			$created = date_create($this->params['_date_created']);
+			$time_created = date_create($this->params['_time_created']);
+			date_time_set($created, (int)  date_format($time_created, 'H'), (int)  date_format($time_created, 'i'));
+
+			$expired = date_create($this->params['_date_expired']); 
+			$time_expired = date_create($this->params['_time_expired']);
+			date_time_set($expired, (int) date_format($time_expired, 'H'), (int) date_format($time_expired, 'i'));
+
+			$expiration = date_create($this->params['_date_expiration']); 
+			$time_expiration = date_create($this->params['_time_expiration']);
+			date_time_set($expiration, (int) date_format($time_expiration, 'H'), (int) date_format($time_expiration, 'i'));
+			
+		}
+
+		$dates["created"] = array(
+			"date" => date_format($created, 'Y-m-d'),
+			"time" => date_format($created, 'H:i'),
+		);
+		$dates["expired"] = array(
+			"date" => date_format($expired, 'Y-m-d'),
+			"time" => date_format($expired, 'H:i'),
+		);
+		$dates["expiration"] = array(
+			"date" => date_format($expiration, 'Y-m-d'),
+			"time" => date_format($expiration, 'H:i'),
+		);
+
+		$this->_data->dates = array(
+							'dates' => $dates
+		);
+	}
+
 	function CompanyInfo()
 	{	
 		$object 		= $this->object;

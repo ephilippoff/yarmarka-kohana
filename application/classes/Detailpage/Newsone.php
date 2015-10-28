@@ -25,6 +25,7 @@ class Detailpage_Newsone extends Detailpage_Default
 	
 		$search_query = Search::searchquery(
 			array(
+				"expiration" => TRUE,
 				"active" => TRUE,
 				"published" =>TRUE,
 				"city_id" => $city_id,

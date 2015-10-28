@@ -128,6 +128,55 @@
 				</div>			
 			<? endif; ?>
 
+			<? if (property_exists($form_data, 'dates')): ?>
+				<div id="div_advert_type" class="row mb10">
+					<div class="col-md-3 col-xs-4 labelcont">
+						<label>Дата создания:</label>
+					</div>
+					<div class="col-md-9 col-xs-8">
+						<div class="row">
+							<div class="col-md-6">
+								<div class="inp-cont ">
+									<input type="date" name="_date_created" value="<?=$form_data->dates["dates"]["created"]["date"]?>">
+									<input type="time" name="_time_created" value="<?=$form_data->dates["dates"]["created"]["time"]?>">
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div id="div_advert_type" class="row mb10">
+					<div class="col-md-3 col-xs-4 labelcont">
+						<label>Дата начала показа:</label>
+					</div>
+					<div class="col-md-9 col-xs-8">
+						<div class="row">
+							<div class="col-md-6">
+								<div class="inp-cont ">
+									<input type="date"name="_date_expired" value="<?=$form_data->dates["dates"]["expired"]["date"]?>">
+									<input type="time"name="_time_expired" value="<?=$form_data->dates["dates"]["expired"]["time"]?>">
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div id="div_advert_type" class="row mb10">
+					<div class="col-md-3 col-xs-4 labelcont">
+						<label>Дата окончания показа:</label>
+					</div>
+					<div class="col-md-9 col-xs-8">
+						<div class="row">
+							<div class="col-md-6">
+								<div class="inp-cont ">
+									<input type="date"name="_date_expiration" value="<?=$form_data->dates["dates"]["expiration"]["date"]?>">
+									<input type="time"name="_time_expiration" value="<?=$form_data->dates["dates"]["expiration"]["time"]?>">
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			<? endif; ?>
 			<hr class="dib mb30 w100p">
 		<? endif; ?>
 
