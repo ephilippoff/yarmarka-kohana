@@ -16,18 +16,20 @@
 		</div>
 		<div class="row">
 			<div class="col-md-12 items-cont">
-				<ul>
+				<ul class="dib w100p mb10">
 					{% for news in premiumnews %}
-						<li class="p20">
-							<div class="photo m10 w150 fl">
+						<li class="pl10 pt10">
+							<div class="photo m10 w150 dib">
 								<span class="bg-color-lightorange mr3"><i class="fa fa-home mr3"></i>{{news.date_created|date('H:m:s, d/m')}}</span>
 								<p class="mt7"> <img src="{{get_file(news.compiled.images.main_photo['120x90'])}}" alt="" height="100"></p>
 							</div>
-							<div class="pt20 pl10 ml160"><a href="/newsline/{{news.date_created|date('Y-m-d')}}#{{news.id}}" >{{news.title}}</a></div>
+							<div class="pt20 pl10 ml20 w400 dib">
+								<a href="/newsline/{{news.date_created|date('Y-m-d')}}#{{news.id}}" >{{news.title}}</a>
+							</div>
 						</li>
 					{% endfor %}
 				</ul>
-				<ul class="mt40">
+				<ul class="dib w100p">
 					{% set current_date = NULL %}
 					{% for news in lastnews %}
 						{% if not current_date or current_date != news.date_created|date('d/m') %}

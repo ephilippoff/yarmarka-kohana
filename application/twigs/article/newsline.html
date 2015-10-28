@@ -45,7 +45,7 @@
 				</li>
 			{% endif %}
 			<li class="pl10 mb5">
-				<span class="fs12">{{news.date_created|date('H:m')}}</span><a href="/news/{{news.id}}-{{news.seo_name}}" class="ml10">{{news.title|slice(0,70)}}</a>
+				<span class="fs12">{{news.date_created|date('H:m')}}</span><a href="{{news.compiled.url}}" class="ml10">{{news.title|slice(0,70)}}</a>
 			</li>
 		{% endfor %}
 	</ul>
