@@ -68,13 +68,15 @@ define([
         initialize: function(options) {
             MenuView.prototype.initialize.call(this, options);
             var s = this;
+
             var $menu = this.$el.find(this.getOption("menuClass")+ " ul.top");
-            if ($menu.size() > 0){
-                $menu.menuAim({
+
+            if ($menu.length > 0){
+                $.fn.menuAim({
                     activate: this.activateSubmenu, 
                     deactivate: this.deactivateSubmenu,
                     rowSelector: ".js-submenu-item"
-                });
+                }).bind($menu);
             }
         },
         onRender: function() {
