@@ -104,10 +104,22 @@ class Controller_Article extends Controller_Template {
 
 
 		$twig->months = Date::get_months_names();
-        $twig->lastnews  = ORM::factory('Article')
-                                ->get_lastnews($city_id, NULL, 30)
-                                ->getprepared_all();
+		$search_query = Search::searchquery(
+		    array(
+		        "active" => TRUE,
+		        "published" =>TRUE,
+		        "city_id" => $city_id,
+		        "category_seo_name" => "novosti",
+		        // "date_created" => array(
+		        // 	"to" => date_format($date_from, 'Y-m-d'),
+		        // )
+		    ),
+		    array("limit" => 30, "page" => 1)
+		);
+		
+		$lastnews = Search::getresult($search_query->execute()->as_array());
 
+		$twig->lastnews = $lastnews;
 		$twig->date = date_format($date_from, 'Y-m-d');
 		$twig->articles = $articles;
 		$this->response->body($twig);
