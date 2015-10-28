@@ -17,8 +17,8 @@
 					<div class="group">
 						<div class="img"><img src="{{staticfile('images/min_auto.png')}}" alt=""></div>
 						<div class="text-cont">
-							<p class="text"><a href="{{ categories.main["avtotransport"].url }}">Автотранспорт</a></p>
-							{% set count = link_counters[categories.main["avtotransport"].url] %}
+							<p class="text"><a href="{{ url('avtotransport') }}">Автотранспорт</a></p>
+							{% set count = link_counters[s_host ~ '/avtotransport'] %}
 							{% if (count) %}
 								<span class="info">{{count}} объявлений</span>
 							{% endif %}
@@ -27,7 +27,11 @@
 
 					<p class="href-bl">
 						{% for category in categories.childs if category.parent_id == 14 %}
-							<span class="el mt3"><a href="{{ url('avtotransport/' ~ category.seo_name) }}">{{ category.title }}</a></span>
+							<span class="el mt3"><a href="{{ url(category.url) }}">{{ category.title }}</a></span>
+							{% set count = link_counters[s_host ~ '/' ~ category.url] %}
+							{% if (count) %}
+								<span class="info">{{count}} объявлений</span>
+							{% endif %}
 						{% endfor %}
 					</p>
 				</div>
@@ -46,7 +50,11 @@
 					</div>
 					<p class="href-bl">
 						{% for category in categories.childs if category.parent_id == 18 %}
-							<span class="el mt3"><a href="{{ url('sport-otdih-hobby/' ~ category.seo_name) }}">{{ category.title }}</a></span>
+							<span class="el mt3"><a href="{{ url(category.url) }}">{{ category.title }}</a></span>
+							{% set count = link_counters[s_host ~ '/' ~ category.url] %}
+							{% if (count) %}
+								<span class="info">{{count}} объявлений</span>
+							{% endif %}
 						{% endfor %}
 					</p>
 				</div>
@@ -66,7 +74,11 @@
 
 					<p class="href-bl">
 						{% for category in categories.childs if category.parent_id == 20 %}
-							<span class="el mt3"><a href="{{ url('znakomstvo-i-obshenie/' ~ category.seo_name) }}">{{ category.title }}</a></span>
+							<span class="el mt3"><a href="{{ url(category.url) }}">{{ category.title }}</a></span>
+							{% set count = link_counters[s_host ~ '/' ~ category.url] %}
+							{% if (count) %}
+								<span class="info">{{count}} объявлений</span>
+							{% endif %}
 						{% endfor %}
 					</p>
 				</div>
@@ -87,7 +99,11 @@
 					</div>
 					<p class="href-bl">
 						{% for category in categories.childs if category.parent_id == 70 %}
-							<span class="el mt3"><a href="{{ url('domashnie-zhivotnye-i-rasteniya/' ~ category.seo_name) }}">{{ category.title }}</a></span>
+							<span class="el mt3"><a href="{{ url(category.url) }}">{{ category.title }}</a></span>
+							{% set count = link_counters[s_host ~ '/' ~ category.url] %}
+							{% if (count) %}
+								<span class="info">{{count}} объявлений</span>
+							{% endif %}
 						{% endfor %}
 					</p>
 				</div>
@@ -109,7 +125,11 @@
 
 					<p class="href-bl">
 						{% for category in categories.childs if category.parent_id == 2 %}
-							<span class="el mt3"><a href="{{ url('nedvizhimost/' ~ category.seo_name) }}">{{ category.title }}</a></span>
+							<span class="el mt3"><a href="{{ url(category.url) }}">{{ category.title }}</a></span>
+							{% set count = link_counters[s_host ~ '/' ~ category.url] %}
+							{% if (count) %}
+								<span class="info">{{count}} объявлений</span>
+							{% endif %}
 						{% endfor %}
 					</p>
 				</div>
@@ -128,7 +148,11 @@
 
 					<p class="href-bl">
 						{% for category in categories.childs if category.parent_id == 171 %}
-							<span class="el mt3"><a href="{{ url('stroitelstvo-i-remont/' ~ category.seo_name) }}">{{ category.title }}</a></span>
+							<span class="el mt3"><a href="{{ url(category.url) }}">{{ category.title }}</a></span>
+							{% set count = link_counters[s_host ~ '/' ~ category.url] %}
+							{% if (count) %}
+								<span class="info">{{count}} объявлений</span>
+							{% endif %}
 						{% endfor %}
 					</p>
 				</div>
@@ -147,7 +171,11 @@
 
 					<p class="href-bl">
 						{% for category in categories.childs if category.parent_id == 159 %}
-							<span class="el mt3"><a href="{{ url('dlya-doma-i-dachi/' ~ category.seo_name) }}">{{ category.title }}</a></span>
+							<span class="el mt3"><a href="{{ url(category.url) }}">{{ category.title }}</a></span>
+							{% set count = link_counters[s_host ~ '/' ~ category.url] %}
+							{% if (count) %}
+								<span class="info">{{count}} объявлений</span>
+							{% endif %}
 						{% endfor %}
 					</p>
 				</div>
@@ -166,7 +194,11 @@
 
 					<p class="href-bl">
 						{% for category in categories.childs if category.parent_id == 160 %}
-							<span class="el mt3"><a href="{{ url('lichnie-veshi/' ~ category.seo_name) }}">{{ category.title }}</a></span>
+							<span class="el mt3"><a href="{{ url(category.url) }}">{{ category.title }}</a></span>
+							{% set count = link_counters[s_host ~ '/' ~ category.url] %}
+							{% if (count) %}
+								<span class="info">{{count}} объявлений</span>
+							{% endif %}
 						{% endfor %}
 					</p>
 				</div>
@@ -185,7 +217,11 @@
 					
 					<p class="href-bl">
 						{% for category in categories.childs if category.parent_id == 161 %}
-							<span class="el mt3"><a href="{{ url('bitovaya-elektronika/' ~ category.seo_name) }}">{{ category.title }}</a></span>
+							<span class="el mt3"><a href="{{ url(category.url) }}">{{ category.title }}</a></span>
+							{% set count = link_counters[s_host ~ '/' ~ category.url] %}
+							{% if (count) %}
+								<span class="info">{{count}} объявлений</span>
+							{% endif %}
 						{% endfor %}
 					</p>
 				</div>
@@ -206,7 +242,11 @@
 					</div>
 					<p class="href-bl">
 						{% for category in categories.childs if category.parent_id == 16 %}
-							<span class="el mt3"><a href="{{ url('rabota/' ~ category.seo_name) }}">{{ category.title }}</a></span>
+							<span class="el mt3"><a href="{{ url(category.url) }}">{{ category.title }}</a></span>
+							{% set count = link_counters[s_host ~ '/' ~ category.url] %}
+							{% if (count) %}
+								<span class="info">{{count}} объявлений</span>
+							{% endif %}
 						{% endfor %}
 					</p>
 				</div>
@@ -224,7 +264,11 @@
 					</div>
 					<p class="href-bl">
 						{% for category in categories.childs if category.parent_id == 121 %}
-							<span class="el mt3"><a href="{{ url('biznes/' ~ category.seo_name) }}">{{ category.title }}</a></span>
+							<span class="el mt3"><a href="{{ url(category.url) }}">{{ category.title }}</a></span>
+							{% set count = link_counters[s_host ~ '/' ~ category.url] %}
+							{% if (count) %}
+								<span class="info">{{count}} объявлений</span>
+							{% endif %}
 						{% endfor %}
 					</p>
 				</div>
@@ -242,7 +286,11 @@
 					</div>
 					<p class="href-bl">
 						{% for category in categories.childs if category.parent_id == 40 %}
-							<span class="el mt3"><a href="{{ url('uslugi/' ~ category.seo_name) }}">{{ category.title }}</a></span>
+							<span class="el mt3"><a href="{{ url(category.url) }}">{{ category.title }}</a></span>
+							{% set count = link_counters[s_host ~ '/' ~ category.url] %}
+							{% if (count) %}
+								<span class="info">{{count}} объявлений</span>
+							{% endif %}
 						{% endfor %}
 					</p>
 				</div>
@@ -260,7 +308,11 @@
 					</div>
 					<p class="href-bl">
 						{% for category in categories.childs if category.parent_id == 74 %}
-							<span class="el mt3"><a href="{{ url('prodovolstvennye-tovary/' ~ category.seo_name) }}">{{ category.title }}</a></span>
+							<span class="el mt3"><a href="{{ url(category.url) }}">{{ category.title }}</a></span>
+							{% set count = link_counters[s_host ~ '/' ~ category.url] %}
+							{% if (count) %}
+								<span class="info">{{count}} объявлений</span>
+							{% endif %}
 						{% endfor %}
 					</p>
 				</div>

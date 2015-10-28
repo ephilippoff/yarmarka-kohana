@@ -24,26 +24,13 @@ class Controller_Search_Category extends Controller_Template {
              "city_id" => NULL
          ));
 
-         $city = $this->city;
+        $city = $this->city;
+        $twig->s_host = $_SERVER["HTTP_HOST"];
 
-         $twig->categories["main"]= array_map(function($item) use ($city){
-             if ($city) {
-                 $item->url = Domain::get_domain_by_city($city->seo_name, $item->seo_name);
-             } else {
-                 $item->url = $item->seo_name;
-             }
-             return $item;
-         }, $twig->categories["main"] );
+        $counters_parents = Search_Url::getcounters($twig->s_host, "", $twig->categories["main"]);
+        $counters_childs = Search_Url::getcounters($twig->s_host, "", $twig->categories["childs"]);
 
-         $twig->categories["childs"]= array_map(function($item) use ($city){
-             if ($city) {
-                 $item->url = Domain::get_domain_by_city($city->seo_name, $item->seo_name);
-             } else {
-                 $item->url = $item->seo_name;
-             }
-             return $item;
-         }, $twig->categories["childs"] );
-
-         $this->response->body($twig);
+        $twig->link_counters = array_merge($counters_parents, $counters_childs);
+        $this->response->body($twig);
     }
 }
