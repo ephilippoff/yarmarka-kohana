@@ -154,12 +154,22 @@ class Form_Add  {
 			156 => "В хорошие руки"
 		);
 
+
+
 		if ($user = Auth::instance()->get_user())
 			if ($user->role == 9 OR $user->role == 1)
 			{
+
 				$category_array["Другие"][155] = "Каталог компаний";
 				$category_array["Другие"][173] = "Купоны";
-				$category_array["Другие"][167] = "Новости";
+
+				$news_category = ORM::factory('Category')
+									->where("seo_name","=","novosti")
+									->find();
+				if ($news_category->loaded()) {
+					$category_array["Другие"][$news_category->id] = $news_category->title;
+				}
+				
 			}
 
 		$value = $category->title;
