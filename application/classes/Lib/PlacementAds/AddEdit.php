@@ -1293,7 +1293,7 @@ class Lib_PlacementAds_AddEdit {
 		// сохраняем запись для короткого урла *.ya24.biz
 		Model_Object::send_to_db_dns($object->id);
 
-		if ( ! $this->is_edit) 
+		if ( ! $this->is_edit && !$object->type_tr) 
 		{
 			//пишем id объявления во временную таблицу для последующего обмена с terrasoft
 			$object->send_to_terrasoft();
