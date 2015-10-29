@@ -200,6 +200,7 @@ define([
             }, {
                 success: function(model) {
                     var resp = model.toJSON();
+                    options.success();
                     app.windows.vent.trigger("showWindow", "service", {
                         title: resp.object.title,
                         serviceView : new KuponView({
@@ -214,6 +215,8 @@ define([
                         error: options.error,
                         is_edit: options.is_edit
                     });
+                }, error: function() {
+                    options.error();
                 }
             });
         }

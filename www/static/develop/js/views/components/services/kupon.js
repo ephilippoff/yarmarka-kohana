@@ -18,7 +18,6 @@ define([
         changeGroup: function(e) {
             var groupId = parseInt($(e.currentTarget).val());
             var group = _.findWhere(this.model.get("info").groups, {id:groupId});
-            console.log(groupId, group)
             var result = {
                 quantity: 1,
                 sum: group.service.price,

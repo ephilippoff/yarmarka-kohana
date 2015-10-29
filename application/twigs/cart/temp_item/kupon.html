@@ -1,13 +1,12 @@
 <tr data-id="{{ cartItem.id }}" data-name="{{ cartItem.service.name }}" data-object-id="{{ cartItem.object.id }}" data-total="{{cartItem.service.price_total}}" 
 class="{% if cartItem.available %}warning{%else%}danger{% endif %} js-cartitem">
-	<td>
+	<td class="p10">
 		<a href="/detail/{{ cartItem.object.id }}">{{ cartItem.service.title }}</a>
 		{% if not cartItem.available %}
-			{% set error = "Удалите недоступные для продажи купоны чтобы продолжить" %}
-			<br><span class="red">К сожалению выбранный купон не доступен для продажи. Акция завершена</span>
+			<br><span class="red">Истекло время на покупку, бронь отменена. Вернитесь на страницу покупки купона, и сформируйте заказ повторно</span>
 		{% endif %}
 	</td>
-	<td></td>
+	<td><label for="quantity{{ cartItem.service.group_id }}">Количество:</label> <input type="number" id="quantity{{ cartItem.service.group_id }}" name="quantity{{ cartItem.service.group_id }}" value="{{cartItem.service.ids|length}}" min="1" max="{{cartItem.avail_count + 1}}"></td>
 	<td class="js-itemsum itemsum">{{cartItem.service.price_total}} руб.</td>
 	<td><span class="span-link js-edit"><i class="fa fa-pencil mr3"></i></span></td>
 	<td><span class="span-link js-delete"><i class="fa fa-trash mr3"></i></span></td>

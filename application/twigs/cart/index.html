@@ -5,51 +5,58 @@
 	{% include 'cart/promo' %}
 {% endblock header %}
 
-{% block content %} 
-	<div class="p20" style="margin:auto;">
-		{% if cartTempItems|length == 0 %}
-			<p class="msg" style="font-size:20px;">Ваша Корзина пуста</p>
-		{% else %}
-			{% set error = FALSE %}
-			<table class="cart-table table table-hover">
-				<tr>
-					<th class="w500">Наименование</th>
-					<th>Параметры</th>
-					<th>Цена</th>
-					<th></th>
-					<th></th>
-				</tr>
-				
-				{% set i = 1 %}
 
-				{% for cartItem in cartTempItems if cartItem.service.name == 'kupon' %}
-					{% if loop.first %}
-						<tr><td colspan="5">Купоны</td></tr>
-					{% endif %}
-					{% include 'cart/temp_item/kupon' %}
-					{% set i = i + 1 %}
-				{% endfor %}
+{% block content %}
+	<form id="cart-form">
+		<div>
+			<div class="fs18">
+				{% if cartTempItems|length == 0 %}
+					<p class="msg p20" style="font-size:20px;">Ваша Корзина пуста</p>
+				{% else %}
+					{% set error = FALSE %}
+					<table class="cart-table bs-table">
+						<tr >
+							<th class="bold">Наименование</th>
+							<th class="bold w200">Параметры</th>
+							<th class="bold w150">Цена</th>
+							<th class="bold w50"></th>
+							<th class="bold w50"></th>
+						</tr>
+						
+						{% set i = 1 %}
+						{% for cartItem in cartTempItems if cartItem.service.name == 'kupon' %}
+							{% if loop.first %}
+								<tr><td colspan="5">Купоны зарезервированы за Вами. Необходимо произвести оплату в течении 30 минут</td></tr>
+							{% endif %}
+							{% include 'cart/temp_item/kupon' %}
+							{% if not cartItem.available %}
+								{% set error = "Удалите недоступные для продажи купоны чтобы продолжить" %}
+							{% endif %}
+							{% set i = i + 1 %}
+						{% endfor %}
 
-			
-				{% for cartItem in cartTempItems if cartItem.service.name != 'kupon' %}
-					{% if loop.first %}
-						<tr><td colspan="5">Услуги для объявлений</td></tr>
-					{% endif %}
-					{% include 'cart/temp_item/other' %}
-					{% set i = i + 1 %}
-				{% endfor %}
-			</table>
+						{% for cartItem in cartTempItems if cartItem.service.name != 'kupon' %}
+							{% if loop.first %}
+								<tr><td colspan="5">Услуги для объявлений</td></tr>
+							{% endif %}
+							{% include 'cart/temp_item/other' %}
+							{% set i = i + 1 %}
+						{% endfor %}
 
-			<div class="ta-r mb20">
-				Итоговая стоимость <span>{{sum}} руб.</span>
+					</table>
+
+					<div class="ta-r mb20">
+						Итоговая стоимость <span>{{sum}} руб.</span>
+					</div>
+					<div class="ta-r mb20">
+						{% if not error %}
+							<span class="js-save button_v2 bg-color-blue button-style1 p20 white br3" data-next-page="{{next_page}}">Оформить заказ<i class="fa fa-angle-double-right fa-lg ml5"></i></span>
+						{% endif %}
+					</div>
+						
+					<div class="js-error errors-cont mb20 red">{% if error %}{{error}}{% endif %}</div>
+				{% endif %}
 			</div>
-			<div class="ta-r mb20">
-				<span class="js-save button bg-color-blue p20 white br3" data-next-page="{{next_page}}">Оформить заказ<i class="fa fa-angle-double-right fa-lg ml5"></i></span>
-			</div>
-				
-			<div class="js-error errors-cont mb20 red"></div>
-		{% endif %}
-	</div>
+		</div>
+	</form>
 {% endblock content %}
-
-{% block rightside %}{% endblock rightside %}

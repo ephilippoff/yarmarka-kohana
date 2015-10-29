@@ -9,14 +9,28 @@ class Model_Kupon_Group extends ORM {
 		return $this->where("object_id","=", $object_id)->find_all();
 	}
 
-	function get_kupon()
+	function get_kupon($quantity = 1)
 	{
-		return ORM::factory('Kupon')->get_avail($this->id)->find();
+		$kupons = ORM::factory('Kupon')->get_avail($this->id)->find_all();
+		$result = array();
+		foreach ($kupons as $kupon) {
+			$result[] = $kupon->id;
+			if (count($result) >= $quantity) break;
+		}
+
+		return $result;
 	}
 
 	function get_balance()
 	{
+		if (!$this->loaded()) return;
 		return ORM::factory('Kupon')->get_avail_count($this->id);
+	}
+
+	function get_sold_balance()
+	{
+		if (!$this->loaded()) return;
+		return ORM::factory('Kupon')->get_sold_count($this->id);
 	}
 
 } 

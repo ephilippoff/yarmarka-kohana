@@ -110,7 +110,7 @@ class Model_Order extends ORM
 		});
 
 		// send email to user about successfull payment
-		if ($user->loaded() AND $user->email AND $state == 2)
+		if ($user->loaded() AND $user->email AND in_array($this->state, array(2)))
 		{				
 			
 			$subj = "Потверждение оплаты. Заказ №".$this->id;
@@ -130,10 +130,7 @@ class Model_Order extends ORM
 			//apply services
 			foreach ($orderItems as $orderItem)
 			{
-				if ($orderItem->service->name == "object") {
-					Service::factory("Object", $orderItem->object->id)->apply($orderItem);
-					array_push($objects, $orderItem->object->id);
-				} else {
+				if ($orderItem->service->name == "kupon") {
 					Service::factory(Text::ucfirst($orderItem->service->name))->apply($orderItem);
 				}
 			}
@@ -147,7 +144,7 @@ class Model_Order extends ORM
 			return;
 		}
 
-		if ($state == 2)
+		if ( in_array($this->state, array(2)) )
 		{
 			$configBilling = Kohana::$config->load("billing");
 
@@ -223,27 +220,130 @@ class Model_Order extends ORM
 		return ($get_name) ? $state_name : $state;
 	}
 
-	function electronic_delivery($orderItem)
+	function electronic_delivery($orderItem, $kupons)
 	{
 		if (!$this->loaded()) return;
 
 		$params = ($this->params) ? $this->params : "{}";
 		$params = new Obj(json_decode($params));
 
-		//if ($params->delivery AND $params->delivery->type == "electronic" AND $orderItem->service->name == "kupon") {
+		if ($params->delivery AND $params->delivery->type == "electronic" AND $orderItem->service->name == "kupon") {
+				$subj = "Вы приобрели купоны на скидку. Заказ №".$this->id;
+				$msg = View::factory('emails/kupon_notify',
+						array(
+							'title' => $orderItem->service->title,
+							'kupons' => $kupons,
+							'key' => $orderItem->kupon->access_key,
+							'order' => $this,
+							'object_id' => $orderItem->object->id,
+							'for_supplier' => FALSE
+						));
+				
+				Email::send($params->delivery->email, Kohana::$config->load('email.default_from'), $subj, $msg);
+		}
+	}
 
-			$subj = "Вы приобрели купон на скидку. Заказ №".$this->id;
-			$msg = View::factory('emails/kupon_notify',
-					array(
-						'title' => $orderItem->service->title,
-						'id' => $orderItem->service->id,
-						'key' => $orderItem->kupon->access_key,
-						'order' => $this, 
-					));
+	function sms_delivery($orderItem, $kupons)
+	{
+		if (!$this->loaded()) return;
+
+		$params = ($this->params) ? $this->params : "{}";
+		$params = new Obj(json_decode($params));
+
+		if ($params->delivery AND $params->delivery->type == "electronic" AND $orderItem->service->name == "kupon" AND $params->delivery->phone) {
+
+			$phone = Text::clear_phone_number($params->delivery->phone);
+			if ($phone AND Valid::is_mobile_contact($phone)) {
+				$message = Kohana::$config->load('sms.messages.kupon_notify');
+				foreach ($kupons as $kupon) {
+					Sms::send($phone, sprintf($message, Text::format_kupon_number(Model_Kupon::decrypt_number($kupon->number))), NULL);
+				}
+				
+			}
+		}
+		
+	}
+
+	function supplier_delivery($orderItem, $kupons, $phone, $email, $support_emails)
+	{
+		if (!$this->loaded()) return;
+
+		$params = ($this->params) ? $this->params : "{}";
+		$params = new Obj(json_decode($params));
+
+		if ($phone AND Valid::is_mobile_contact($phone)) {
+			$message = Kohana::$config->load('sms.messages.kupon_supplier_notify');
+			foreach ($kupons as $kupon) {
+				$number = Model_Kupon::decrypt_number($kupon->number);
+				$number =substr($number, count($number) - 4, 3);
+				Sms::send(
+					$phone,
+					sprintf(
+						$message, 
+						$orderItem->service->title,
+						( ($params->delivery AND $params->delivery->name) ? $params->delivery->name: "" ),//name,
+						( ($params->delivery AND $params->delivery->phone) ? $params->delivery->phone: "" ),//phone,
+						( ($number) ? "№ ***-***-".$number : "" )//last_digits
+					),
+					NULL
+				);
+			}
+		}
+		$group = ORM::factory('Kupon_Group', $orderItem->service->group_id);
+		$subj = "Приобретены купоны на скидку. Заказ №".$this->id;
+		$msg = View::factory('emails/kupon_notify',
+				array(
+					'title' => $orderItem->service->title,
+					'kupons' => $orderItem->service->ids,
+					'key' => $orderItem->kupon->access_key,
+					'order' => $this,
+					'object_id' => $orderItem->object->id,
+					'for_supplier' => TRUE,
+					'delivery' => $params->delivery,
+					'avail_balance' => $group->get_balance(),
+					'sold_balance' => $group->get_sold_balance()
+				));
+
+		if ($email AND Valid::is_email_contact($email)) {
+			Email::send($email, Kohana::$config->load('email.default_from'), $subj, $msg);
+		}
+
+		try {
+			if ($support_emails  AND count($support_emails) > 0) {
+				foreach ($support_emails as $email) {
+					Email::send($email, Kohana::$config->load('email.default_from'), $subj, $msg);
+					
+				}
+			}
+		} catch (Exception $e) {
 			
-			Email::send($params->delivery->email, Kohana::$config->load('email.default_from'), $subj, $msg);
-		//}
+		}
 	}
 	
+
+	static function GetMyLastOrder()
+	{	
+		$user = Auth::instance()->get_user();
+		if ($user) {
+			$last_order = ORM::factory('Order')
+					->where("user_id","=",$user->id)
+					->where("state","IN",array(0,1))
+					->order_by("id","desc")
+					->find();
+		} else {
+			$key = Cookie::dget("cartKey");
+			if (!$key) return;
+			$last_order = ORM::factory('Order')
+					->where("key","=",$key)
+					->where("state","IN",array(0,1))
+					->order_by("id","desc")
+					->find();
+		}
+		
+
+		
+		if (!$last_order->loaded()) return;
+		return $last_order->get_row_as_obj();
+	}
 
 }

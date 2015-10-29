@@ -32,10 +32,10 @@ class Service_Kupon extends Service
 		$discount_name = FALSE;
 		$price_total = $price * $quantity - $discount;
 		$description = $this->get_params_description().$discount_reason;
-		$kupon = $this->_kupon_group->get_kupon();
+		$kupons = $this->_kupon_group->get_kupon($quantity);
 		return array(
 			"group_id" => $this->_kupon_group->id,
-			"id" => $kupon->id,
+			"ids" => $kupons,
 			"name" => $this->_name,
 			"title" => $this->_title,
 			"price" => $price,
@@ -48,6 +48,15 @@ class Service_Kupon extends Service
 		);
 	}
 
+	public function set_params($params = array())
+	{
+	    $params = new Obj($params);
+
+	    if ($params->quantity) {
+	        $this->quantity($params->quantity);
+	    }
+	}
+
 	public function get_title($params)
 	{
 		return $params->service["title"];
@@ -55,7 +64,7 @@ class Service_Kupon extends Service
 
 	public function get_params_description($params =  array())
 	{
-		return (($this->quantity()) ? $this->quantity() : 1)." купон";
+		return "Количество : ".(($this->quantity()) ? $this->quantity() : 1);
 	}
 
 	public function check_available($quantity)
@@ -106,24 +115,62 @@ class Service_Kupon extends Service
 	{
 		$oi = ORM::factory('Order_Item', $orderItem->id);
 
-		$kupon = ORM::factory('Kupon', $orderItem->service->id);
-		$kupon->to_sold($oi->loaded() ? $oi->order_id : NULL);
-
-		$orderItem->kupon = $kupon;
 		$order = ORM::factory('Order', $orderItem->order_id);
-		$order->electronic_delivery($orderItem);
+
+		$kupons = ORM::factory('Kupon')
+					->where("id","IN",$orderItem->service->ids)
+					->find_all();
+
+		$key = Cart::get_key();
+		$kuponsArray = array();
+		foreach ($kupons as $kupon) {
+
+			$kupon->to_sold($oi->loaded() ? $oi->order_id : NULL, $key);
+			$orderItem->kupon = $kupon;
+			$kuponsArray[] = $kupon->get_row_as_obj();
+		}
+
+		$order->electronic_delivery($orderItem, $kuponsArray);
+		$order->sms_delivery($orderItem, $kuponsArray);
+
+		$contactForNotify = ORM::factory('Data_Text')
+			->select("seo_name")
+			->join("attribute")
+				->on("attribute.id","=","data_text.attribute")
+			->where("object","=",$orderItem->object->id)
+			->where("attribute.seo_name","IN",array("phone","email","support_emails"))
+			->getprepared_all();
+
+		$phone = $email = $support_emails = NULL;
+		if (count($contactForNotify) > 0 ) {
+
+			$phone = array_filter($contactForNotify, function($item){ return $item->seo_name == "phone"; });
+			$email = array_filter($contactForNotify, function($item){ return $item->seo_name == "email"; });
+			$support_emails = array_filter($contactForNotify, function($item){ return $item->seo_name == "support_emails"; });
+			$phone = (count($phone) > 0) ? (array) array_shift($phone) : NULL;
+			$email = (count($email) > 0) ? (array)  array_shift($email) : NULL;
+			$support_emails = (count($support_emails) > 0) ? (array) array_shift($support_emails) : NULL;
+		}
+
+		$order->supplier_delivery($orderItem, $kupons, $phone['value'], $email['value'], ($support_emails) ? explode(",", $support_emails['value']) : NULL);
+
 	}
 
-	public function return_reserve($id, $description = NULL)
+	public function return_reserve($ids, $description = NULL)
 	{
-		$kupon = ORM::factory('Kupon', $id);
-		$kupon->return_to_avail($description);
+		foreach ($ids as $id) {
+			$kupon = ORM::factory('Kupon', $id);
+			$kupon->return_to_avail($description);
+		}
+		
 	}
 
-	public function reserve($id, $access_key = NULL)
+	public function reserve($ids, $access_key = NULL)
 	{
-		$kupon = ORM::factory('Kupon', $id);
-		$kupon->reserve(NULL, $access_key);
+		foreach ($ids as $id) {
+			$kupon = ORM::factory('Kupon', $id);
+			$kupon->reserve(NULL, $access_key);
+		}
 	}
 
 }

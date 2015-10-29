@@ -12,14 +12,12 @@ class Controller_Cart extends Controller_Template {
 		$this->auto_render = FALSE;
 
 		$this->domain = new Domain();
-		if ($proper_domain = $this->domain->is_domain_incorrect()) {
-			HTTP::redirect("http://".$proper_domain, 301);
-		}
+		//$this->assets->css('bs_grid.css');
 	}
 
 	public function action_index()
 	{
-		$start = microtime(true);
+
 		$twig = Twig::factory('cart/index');
 		$twig->user = $user = Auth::instance()->get_user();
 		$cart = $cartTempItems = $sale_types = array();
@@ -48,12 +46,16 @@ class Controller_Cart extends Controller_Template {
 				{
 					$need_delivery = Kohana::$config->load("billing.".$item->service->name.".delivery_type");
 				}
+				
 				//если заказан товар , проверяем доступность
 				if ($item->service->name == "kupon") {
-					$kupon = ORM::factory('Kupon', $item->service->id);
-					if ($kupon->loaded()) 
-					{
+					$kupons = ORM::factory('Kupon')
+								->where("id","IN",$item->service->ids)
+								->find_all();
+					foreach ($kupons as $kupon) {
 						$item->available = $kupon->check_and_restore_reserve_if_possible($key);
+						$item->avail_count = $kupon->get_avail_count($kupon->kupon_group_id);
+						if ($item->available == FALSE) break;
 					}
 				} 
 
@@ -86,8 +88,6 @@ class Controller_Cart extends Controller_Template {
 		$twig->cartTempItems = $cartTempItems;
 		$twig->sum = $sum;
 		
-
-		$twig->php_time = microtime(true) - $start;
 		$this->response->body($twig);
 	}
 
@@ -147,6 +147,7 @@ class Controller_Cart extends Controller_Template {
 			$validation = Validation::factory((array) $this->request->post())
 					->rule('email', 'not_empty', array(':value', "E-mail"))
 					->rule('email', 'is_email_contact', array(':value', "E-mail"))
+					->rule('name', 'not_empty', array(':value', "Имя"))
 					->rule('phone', 'not_empty', array(':value', "Телефон"));
 
 			if ( !$validation->check())
@@ -161,6 +162,7 @@ class Controller_Cart extends Controller_Template {
 			{
 				$params->delivery = array(
 					"type" => "electronic",
+					"name" => $this->request->post("name"),
 					"email" => $this->request->post("email"),
 					"phone" => $this->request->post("phone")
 				);
@@ -176,7 +178,6 @@ class Controller_Cart extends Controller_Template {
 	public function action_delivery()
 	{
 
-		$start = microtime(true);
 		$twig = Twig::factory('cart/delivery');
 		$twig->city = $this->domain->get_city();
 		$id = $this->request->param('id');
@@ -285,14 +286,12 @@ class Controller_Cart extends Controller_Template {
 			}
 		}
 
-		$twig->php_time = microtime(true) - $start;
 		$this->response->body($twig);
 	}
 
 
 	public function action_order()
 	{
-		$start = microtime(true);
 		$twig = Twig::factory('cart/order');
 		$twig->city = $this->domain->get_city();
 
@@ -318,10 +317,17 @@ class Controller_Cart extends Controller_Template {
 		}
 
 		if ($user) {
-			$order = ORM::factory('Order')
-					->where("user_id","=", $user->id)
-					->where("id","=", intval($id))
-					->find();
+			if (Acl::check("order")) {
+				$order = ORM::factory('Order')
+						->where("id","=", intval($id))
+						->find();
+			} else {
+				$order = ORM::factory('Order')
+						->where("user_id","=", $user->id)
+						->where("id","=", intval($id))
+						->find();
+			}
+			
 		} else {
 			$order = ORM::factory('Order')
 					->where("key","=", $key)
@@ -352,6 +358,11 @@ class Controller_Cart extends Controller_Template {
 			);
 
 			$twig->delivery_info = $params->delivery;
+		} else {
+			$delivery = Kohana::$config->load("billing.kupon.delivery_type");
+			if ($delivery) {
+				HTTP::redirect("/cart/".$delivery."_delivery/".$order->id);
+			}
 		}
 
 		$twig->crumbs[] = array(
@@ -385,7 +396,6 @@ class Controller_Cart extends Controller_Template {
 		$twig->errors = $errors;
 		$twig->errors_post = new Obj(($errors_post)?$errors_post:array());
 
-		$twig->php_time = microtime(true) - $start;
 		$this->response->body($twig);
 	}
 
@@ -393,9 +403,9 @@ class Controller_Cart extends Controller_Template {
 	{
 		if ( ! $this->request->is_ajax() AND Kohana::$environment !== Kohana::DEVELOPMENT)
 		{
-			throw new HTTP_Exception_404;
+			//throw new HTTP_Exception_404;
 		}
-		$this->auto_render = FALSE;		
+
 		$user = Auth::instance()->get_user();
 
 		// if (!$user) {
@@ -433,6 +443,12 @@ class Controller_Cart extends Controller_Template {
 		}
 		$order_id = -1;
 
+		try {
+			$params = json_decode($this->request->body());
+		} catch (Exception $e) {
+			$params = array();
+		}
+
 		$db = Database::instance();
 
 		try {
@@ -468,20 +484,44 @@ class Controller_Cart extends Controller_Template {
 			
 			$orderItems = array();
 			$error = FALSE;
-			$sum = Model_Order::each_item($cart_tems, function($service, $item, $model_item) use (&$orderItems, $order_id, $order_loaded, $key, &$error) {
+			$sum = Model_Order::each_item($cart_tems, function($service, $item, $model_item) use (&$orderItems, $order_id, $order_loaded, $key, &$error, $params) {
 
 				if ($item->service->name == "kupon") {
-					$kupon = ORM::factory('Kupon', $item->service->id);
-					$available = FALSE;
-					if ($kupon->loaded()) 
-					{
-						$available = $kupon->check_and_restore_reserve_if_possible($key);
+					$own_kupons = 0;
+
+					$kupons = ORM::factory('Kupon')
+								->where("id","IN",$item->service->ids)
+								->find_all();
+					
+					foreach ($kupons as $kupon) {
+						$kupon_is_mine = $kupon->check_and_restore_reserve_if_possible($key);
+						$own_kupons = $own_kupons +1;
 					}
+
+					$available = FALSE;
+					$avail_count = (int) ORM::factory('Kupon_Group', $item->service->group_id)->get_balance() + $own_kupons;
+					
+					$quantity = Arr::get((array) $params,"quantity".$item->service->group_id, 1);
+					if ($avail_count >= $quantity) {
+						$available = TRUE;
+					}
+
+					if ($quantity <> $item->service->quantity AND $available) {
+						$model_item->return_reserve();
+						$service = Service::factory("Kupon", $item->service->group_id);
+						$service->set_params(array("quantity" => $quantity));
+						$item->service = new Obj($service->get());
+						$model_item->save_service_params($item->service);
+						$model_item->reserve($key);
+					}
+					
+					
+
 
 					if ($available !== TRUE)
 					{
 						$error = array(
-							"message" => "В заказе присутствуют недоступные позиции, удалите их прежде чем продолжить",
+							"message" => "Указанное количество купонов превышает их остаток, измените количество",
 							"code" => 400
 						);
 						return $item;
@@ -557,9 +597,9 @@ class Controller_Cart extends Controller_Template {
 	{
 		if ( ! $this->request->is_ajax() AND Kohana::$environment !== Kohana::DEVELOPMENT)
 		{
-			throw new HTTP_Exception_404;
+			//throw new HTTP_Exception_404;
 		}
-		$this->auto_render = FALSE;
+
 		$id = $this->request->param('id');
 		$key = Cart::get_key();
 
@@ -580,7 +620,7 @@ class Controller_Cart extends Controller_Template {
 
 	public function action_to_payment_system()
 	{
-		$this->auto_render = FALSE;
+
 		$errors = array();
 
 		$user = Auth::instance()->get_user();
@@ -605,8 +645,37 @@ class Controller_Cart extends Controller_Template {
 			return;
 		}
 
+		$key = Cart::get_key();
+
 		foreach ($orderItems as $orderItem) {
 			$params = json_decode($orderItem->params);
+
+			if ($params->service->name == "kupon") {
+					$own_kupons = 0;
+
+					$kupons = ORM::factory('Kupon')
+								->where("id","IN",$params->service->ids)
+								->find_all();
+					
+					foreach ($kupons as $kupon) {
+						$kupon_is_mine = $kupon->check_and_restore_reserve_if_possible($key);
+						$own_kupons = $own_kupons +1;
+					}
+
+					$available = FALSE;
+					$avail_count = (int) ORM::factory('Kupon_Group', $params->service->group_id)->get_balance() + $own_kupons;
+					
+					$quantity = Arr::get((array) $params,"quantity".$params->service->group_id, 1);
+					if ($avail_count >= $quantity) {
+						$available = TRUE;
+					}
+
+					if ($available == FALSE) {
+						$errors["paid_or_refused"] = $available;
+						$this->return_with_errors("/cart/order/".$order_id, $this->request->post(), $errors);
+						return;
+					}
+			}
 			// if ($params->type == "object") {
 			// 	$service = Service::factory("Object", $orderItem->object_id);
 			// 	$available = $service->check_available(0);
@@ -642,14 +711,11 @@ class Controller_Cart extends Controller_Template {
 
 	public function action_result()
 	{
-		$this->auto_render = FALSE;
-
 		$sum = $this->request->query("OutSum");
 		$order_id = $this->request->query("InvId");
 		$signature = $this->request->query("SignatureValue");
 
 		$order = ORM::factory('Order', $order_id);
-
 		$robo = new Robokassa($order_id);
 		$robo->set_sum($order->sum);
 		$sample = strtoupper($robo->create_result_sign());
@@ -674,9 +740,10 @@ class Controller_Cart extends Controller_Template {
 
 	public function action_success()
 	{
-		$this->auto_render = FALSE;
 
 		$order_id = $this->request->post("InvId");
+		$sum = $this->request->post("OutSum");
+		$signature = $this->request->post("SignatureValue");
 		
 
 		$order = ORM::factory('Order', $order_id);
@@ -694,8 +761,6 @@ class Controller_Cart extends Controller_Template {
 
 	public function action_to_admin_success()
 	{
-		$this->auto_render = FALSE;
-
 		if (!Acl::check("pay_service")) {
 			throw new HTTP_Exception_404;
 			return;
@@ -719,9 +784,10 @@ class Controller_Cart extends Controller_Template {
 
 	public function action_fail()
 	{
-		$this->auto_render = FALSE;
 
 		$order_id = $this->request->post("InvId");
+		$sum = $this->request->post("OutSum");
+		$signature = $this->request->post("SignatureValue");
 
 		$order = ORM::factory('Order', $order_id);
 		if ($order->loaded()) {

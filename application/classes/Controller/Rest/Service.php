@@ -4,7 +4,7 @@ class Controller_Rest_Service extends Controller_Rest {
 
 	public function action_check_freeup()
 	{
-		$ids = ($this->post->ids) ? $this->post->ids: array($this->post->id);
+		$ids = ($this->param->ids) ? $this->param->ids: array($this->param->id);
 
 		if (!$ids OR !count($ids)) {
 			throw new HTTP_Exception_404;
@@ -48,13 +48,13 @@ class Controller_Rest_Service extends Controller_Rest {
 
 	public function action_check_premium()
 	{
-		$ids = ($this->post->ids) ? $this->post->ids: array($this->post->id);
+		$ids = ($this->param->ids) ? $this->param->ids: array($this->param->id);
 
 		if (!$ids OR !count($ids)) {
 			throw new HTTP_Exception_404;
 		}
 
-		$params = ($this->post->params) ? (array) $this->post->params : array();
+		$params = ($this->param->params) ? (array) $this->param->params : array();
 
 		$objects = ORM::factory('Object')->where("id","IN", $ids)->where("active","=",1)->find_all();
 		$objects_to_action = array();
@@ -98,13 +98,13 @@ class Controller_Rest_Service extends Controller_Rest {
 
 	public function action_check_lider()
 	{
-		$ids = ($this->post->ids) ? $this->post->ids: array($this->post->id);
+		$ids = ($this->param->ids) ? $this->param->ids: array($this->param->id);
 
 		if (!$ids OR !count($ids)) {
 			throw new HTTP_Exception_404;
 		}
 
-		$params = ($this->post->params) ? (array) $this->post->params : array();
+		$params = ($this->param->params) ? (array) $this->param->params : array();
 
 		$objects = ORM::factory('Object')->where("id","IN", $ids)->where("active","=",1)->find_all();
 		$objects_to_action = array();
@@ -147,13 +147,13 @@ class Controller_Rest_Service extends Controller_Rest {
 
 	public function action_check_newspaper()
 	{
-		$ids = ($this->post->ids) ? $this->post->ids: array($this->post->id);
+		$ids = ($this->param->ids) ? $this->param->ids: array($this->param->id);
 
 		if (!$ids OR !count($ids)) {
 			throw new HTTP_Exception_404;
 		}
 
-		$params = ($this->post->params) ? (array) $this->post->params : array();
+		$params = ($this->param->params) ? (array) $this->param->params : array();
 
 		$objects = ORM::factory('Object')->where("id","IN", $ids)->where("active","=",1)->find_all();
 		$objects_to_action = array();
@@ -190,7 +190,7 @@ class Controller_Rest_Service extends Controller_Rest {
 
 	public function action_check_kupon()
 	{
-		$object_id = intval($this->post->id);
+		$object_id = intval($this->param->id);
 		$ad = ORM::factory('Object', $object_id);
 		if (!$ad->loaded())
 		{
@@ -236,6 +236,7 @@ class Controller_Rest_Service extends Controller_Rest {
 			return;
 		}
 		
+		$key = Cart::get_key();
 		$info = new Obj($this->post->serviceData["info"]);
 		$result = new Obj($this->post->serviceData["result"]);
 		
@@ -250,10 +251,10 @@ class Controller_Rest_Service extends Controller_Rest {
 				$services = $info->services;
 				unset($info->objects);
 				unset($info->services);
-				foreach ($objects as $key => $object_info) {
+				foreach ($objects as $k => $object_info) {
 
 
-					$service_info = $services[$key];
+					$service_info = $services[$k];
 					$service_name = Text::ucfirst($service_info["name"]);
 					// if (in_array($service_info->service["name"], array("premium","up"))) {
 					// 	$service_info->count = Service::factory($service_name)->get_balance();
@@ -261,13 +262,13 @@ class Controller_Rest_Service extends Controller_Rest {
 					// }
 					$service = Service::factory($service_name, $object_info['id']);
 					$service->set_params($result);
-					$orderItemTemp	=  $service->save($object_info, $tempOrderItemId);
+					$orderItemTemp	=  $service->save($object_info, $key, $tempOrderItemId);
 				}
 			} else {
 				$service_name = Text::ucfirst($info->service["name"]);
 				$service = Service::factory($service_name, $info->id);
 				$service->set_params($result);
-				$orderItemTemp = $service->save($info->object, $tempOrderItemId);
+				$orderItemTemp = $service->save($info->object, $key, $tempOrderItemId);
 			}
 
 			
@@ -300,5 +301,79 @@ class Controller_Rest_Service extends Controller_Rest {
 		}
 
 		$this->json["code"] = 400;
+	}
+
+	public function action_check_kupon_number()
+	{
+		$number = $this->post->number;
+		$captcha = $this->post->captcha;
+
+		$number = preg_replace('/[^0-9]/', '', $number);
+		if (!$number) {
+			throw new HTTP_Exception_404;
+		}
+
+		$number = " ".$number;
+		$crypt_number = Model_Kupon::crypt_number($number);
+
+		$REMOTE_ADDR = URL::SERVER("REMOTE_ADDR");
+		$token = "check_kupon_number:{$REMOTE_ADDR}";
+		
+		$shows_counter = (Cache::instance("memcache")->get($token)) ? Cache::instance("memcache")->get($token) : 0;
+
+		$shows_counter = $shows_counter + 1;
+		Cache::instance("memcache")->set($token, $shows_counter, Date::MINUTE);
+		if ($shows_counter > 0)
+		{
+
+			$twig = Twig::factory('block/captcha/check_number');
+			
+			if (isset($captcha)) {
+				$validation = Validation::factory(array("captcha" => $captcha))
+						->rule('captcha', 'not_empty', array(':value', ""))
+						->rule('captcha', 'captcha', array(':value', ""));
+				if ( !$validation->check())
+				{
+
+					$twig->error = "Не правильный код";
+					$this->json["code"] = 300;
+					$twig->captcha = Captcha::instance()->render();
+					$this->json["result"] = (string) $twig;
+				} else {
+					$kupon = ORM::factory('Kupon')
+								->where("number","=",$crypt_number)
+								->find();
+
+					if ($kupon->loaded()) {
+						$this->json["code"] = 200;
+					} else {
+						$this->json["code"] = 400;
+						$this->json["error"] = "Купон отсуствует1";
+					}
+
+					Cache::instance("memcache")->delete($token);
+				}
+			} else {
+				$twig->error = "Введите капчу";
+				$this->json["code"] = 300;
+				$twig->captcha = Captcha::instance()->render();
+				$this->json["result"] = (string) $twig;
+			}
+		} else {
+			$kupon = ORM::factory('Kupon')
+						->where("number","=",$crypt_number)
+						->find();
+
+			if ($kupon->loaded()) {
+				$this->json["code"] = 200;
+			} else {
+				$this->json["code"] = 400;
+				$this->json["error"] = "Купон отсуствует2";
+			}
+		}
+		
+		
+		
+		
 	}
 }

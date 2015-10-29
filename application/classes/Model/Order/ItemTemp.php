@@ -32,7 +32,14 @@ class Model_Order_ItemTemp extends ORM
 		return $result;
 	}
 
-	
+	function save_service_params($new_service_params)
+	{
+		if (!$this->loaded()) return;
+		$params = json_decode($this->params);
+		$params->service = $new_service_params;
+		$this->params = json_encode($params);
+		$this->save();
+	}
 
 	function save_object_to_order_item_temp($object_id, $key, $params = array()) {
 
@@ -55,7 +62,7 @@ class Model_Order_ItemTemp extends ORM
 		if ($params->service->name == "kupon")
 		{
 			$service = Service::factory(Text::ucfirst($params->service->name), $params->service->group_id);
-			$service->return_reserve($params->service->id);
+			$service->return_reserve($params->service->ids);
 
 		} elseif ( in_array( $params->service->name, array("up", "premium")) 
 					AND in_array(@$params->service->discount_name, array("free_up", "prepayed_premium") ) AND $user) {
@@ -64,16 +71,15 @@ class Model_Order_ItemTemp extends ORM
 		}
 	}
 
-	function reserve()
+	function reserve($access_key = NULL)
 	{
 		$user = Auth::instance()->get_user();
 		if (!$this->loaded()) return;
 
 		$params = new Obj(json_decode($this->params));
 		if ($params->service->name == "kupon") {
-			$access_key = Cart::get_key();
 			$service = Service::factory(Text::ucfirst($params->service->name), $params->service->group_id);
-			$service->reserve($params->service->id, $access_key);
+			$service->reserve($params->service->ids, $access_key);
 
 		} elseif ( in_array( $params->service->name, array("up", "premium")) 
 					AND in_array(@$params->service->discount_name, array("free_up", "prepayed_premium") ) AND $user) {
