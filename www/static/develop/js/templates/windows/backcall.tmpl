@@ -1,6 +1,6 @@
 <div class="popup-window w500">	
 	<div class="header">
-		Обратный звонок
+		Введите ваши данные для обратной связи
 		<div class="popup-window-close js-close">
 			<i class="ico close-ico16"></i>
 		</div>			
@@ -9,7 +9,7 @@
 		<form class="js-form">
 			<div class="row">
 				<div class="col-md-12">
-					<label><span class="red fs20">*</span> ФИО:</label>
+					<label class="bold"><span class="red fs20">*</span> Как к Вам обращаться?</label>
 				</div>
 				<div class="col-md-12">
 					<div class="inp-cont <% if (getError("name")) { %>error<% } %>">																								
@@ -23,11 +23,12 @@
 
 			<div class="row">
 				<div class="col-md-12">
-					<label><span class="red fs20">*</span> Телефон:</label>
+					<label class="bold"><span class="red fs20">*</span> Номер телефона:</label>
 				</div>
 				<div class="col-md-12">
 					<div class="inp-cont <% if (getError("phone")) { %>error<% } %>">																		
 						<input class="w100p" type="text" name="phone" value="<%=phone%>">
+						<span class="inform">В формате 7(XXX)XXX-XX-XX</span>
 						<% if (getError("phone")) { %>
 								<span class="inform"><%=getError("phone")%></span>
 						<% } %>						
@@ -37,11 +38,12 @@
 
 			<div class="row">
 				<div class="col-md-12">
-					<label>Комментарий:</label>
+					<label class="bold">Комментарий:</label>
 				</div>
 				<div class="col-md-12">
 					<div class="inp-cont <% if (getError("comment")) { %>error<% } %>">																	
 						<textarea class="w100p" cols="30" rows="10" name="comment"><%=comment%></textarea>
+						<span class="inform">Например время, в которое вам удобно принять звонок</span>
 						<% if (getError("comment")) { %>
 								<span class="inform"><%=getError("comment")%></span>
 						<% } %>						

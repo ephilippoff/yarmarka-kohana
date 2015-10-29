@@ -38,7 +38,7 @@ define([
                 var lat = +this.ui.map.data("lat");
                 var lon = +this.ui.map.data("lon");
                 var baloonTemplate = templates.components.detail.baloon;
-                app.map.get2GisMap({ elid: "map", lat: lat, lon: lon, zoom: 12}, function(map){
+                app.map.get2GisMap({ elid: "map", lat: lat, lon: lon, zoom: 15}, function(map){
 
                     DG.marker([lat,lon]).addTo(map).bindPopup('Расположение объекта');
                     

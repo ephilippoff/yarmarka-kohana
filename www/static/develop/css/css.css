@@ -421,7 +421,7 @@ select{background-color: #FFFFFF;border: 1px solid #C3C3C3;padding:2px 10px;heig
 .light-blue-theme .reklama-line a:hover{ color: #D30000; -webkit-transition: color 0.3s;-moz-transition: color 0.3s;-o-transition: color 0.3s;transition: color 0.3s;}
 .light-blue-theme.reklama-cont { background: url(http://www.free-patterns.info/wp-content/uploads/2015/04/subtle-light-blue-polygon-v271153.png);}
 .light-blue-theme.detail-cont { background: url(http://www.free-patterns.info/wp-content/uploads/2015/04/subtle-light-blue-polygon-v271153.png);}
-.light-blue-theme.detail-cont .detail-cont-in { background: url(http://www.free-patterns.info/wp-content/uploads/2015/03/white-subtle-wall-of-lines-21315.png);}
+.light-blue-theme.detail-cont .detail-cont-in { padding:10px; background: url(http://www.free-patterns.info/wp-content/uploads/2015/03/white-subtle-wall-of-lines-21315.png);}
 /* light-blue-theme end */
 
 /* skin-theme4 */
