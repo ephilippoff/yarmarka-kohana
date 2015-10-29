@@ -729,6 +729,12 @@ select{background-color: #FFFFFF;border: 1px solid #C3C3C3;padding:2px 10px;heig
 .coupon-item-cont .discount-label span {font-size: 12px;position: relative;top: -3px;}
 .coupon-item-cont .description-cont {padding: 3px 8px 0;overflow: hidden;line-height: 17px;display: block;height: 40px; }
 
+.graytheme *{color: #3B3B3B; font-size: 12px; line-height: 1.5;}
+.graytheme p{padding-bottom: 10px;}
+.graytheme h2{font-size: 24px;  padding-bottom: 10px;}
+.graytheme h3{font-size: 20px;  padding-bottom: 10px;}
+.graytheme h4{font-size: 16px;  padding-bottom: 10px;}
+.graytheme ul li{border-top: 1px solid #e5e5e5; padding:10px;list-style:none;}
 
 
 /* layout */
