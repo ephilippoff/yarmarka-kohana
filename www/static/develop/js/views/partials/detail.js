@@ -5,7 +5,8 @@ define([
     "views/partials/behaviors/search",
     "views/partials/behaviors/ocontrol",
     "views/partials/behaviors/services",
-    "views/partials/behaviors/ads"
+    "views/partials/behaviors/ads",
+    "gisMap"
 ], function (templates, FavouriteBehavior, SearchBehavior, OControlBehavior, ServicesBehavior, AdsBehavior) {
     "use strict";
 
@@ -51,33 +52,36 @@ define([
                 var lat = +this.ui.map.data("lat");
                 var lon = +this.ui.map.data("lon");
                 var baloonTemplate = templates.components.detail.baloon;
-                app.map.getMap({ elid: "map", lat: lat, lon: lon, zoom: 12}, function(map){
-                    var collection = new ymaps.GeoObjectCollection();
+                app.map.get2GisMap({ elid: "map", lat: lat, lon: lon, zoom: 12}, function(map){
 
-                    collection.add( app.map.createPlacemark([lat,lon], {
-                        style: app.map.getIconSettings("house"),
-                        content: {
-                            hintContent: 'Расположение объекта'
-                        }
-                    }));
-
-                    _.each(similarObjects, function(item){
-                        if (!item.coords[0]) return;
-                        var placemark = app.map.createPlacemark([item.coords[0],item.coords[1]],{
-                            style: app.map.getIconSettings("defTwitter"),
-                            content: {
-                                hintContent: item.title,
-                                balloonContent: _.template(baloonTemplate)(item)
-                            }
-                        });
-                        collection.add(placemark);
-                    });
-
-                    map.geoObjects.add(collection);
+                    DG.marker([lat,lon]).addTo(map).bindPopup('Расположение объекта');
                     
-                    map.setBounds(collection.getBounds(), {
-                        checkZoomRange: true
-                    });
+                    // var collection = new ymaps.GeoObjectCollection();
+
+                    // collection.add( app.map.createPlacemark([lat,lon], {
+                    //     style: app.map.getIconSettings("house"),
+                    //     content: {
+                    //         hintContent: 'Расположение объекта'
+                    //     }
+                    // }));
+
+                    // _.each(similarObjects, function(item){
+                    //     if (!item.coords[0]) return;
+                    //     var placemark = app.map.createPlacemark([item.coords[0],item.coords[1]],{
+                    //         style: app.map.getIconSettings("defTwitter"),
+                    //         content: {
+                    //             hintContent: item.title,
+                    //             balloonContent: _.template(baloonTemplate)(item)
+                    //         }
+                    //     });
+                    //     collection.add(placemark);
+                    // });
+
+                    // map.geoObjects.add(collection);
+                    
+                    // map.setBounds(collection.getBounds(), {
+                    //     checkZoomRange: true
+                    // });
                 });
             }
         },

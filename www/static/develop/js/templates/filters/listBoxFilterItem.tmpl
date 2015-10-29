@@ -15,9 +15,7 @@
 			<div style="width:100%;float: left;"><label><input class="js-filter-anyinput" type="checkbox" disabled checked data-type="service"><span>Не важно</span></label></div>
 			<% _.each(_.range(cols), function(col) { %>
 				<div class="column-list">
-				<% console.log(values) %>
 					<% _.each(_.keys(values).slice(i, i + rows), function(key){ %>
-
 						<div><label><input type="checkbox" name="<%=seo_name%>[<%=key%>]" value="<%=clearValue(key)%>" data-str="<%=values[key]%>" <%=checked(key)%>><span><%=values[key]%></span></label></div>
 					<% }); %>
 				</div>

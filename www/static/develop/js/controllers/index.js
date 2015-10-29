@@ -25,7 +25,7 @@ function (Marionette, templates, utils, IndexPage, SearchPage, DetailPage,
 
         start_indexSection : function() {
             console.log("index start");
-             app.menu.init(["kupon", "news"]);
+            app.menu.init(["main", "city", "kupon", "news"]);
             new IndexPage({
                 el: "body"
             });

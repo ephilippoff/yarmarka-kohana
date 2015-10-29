@@ -72,11 +72,13 @@ define([
             var $menu = this.$el.find(this.getOption("menuClass")+ " ul.top");
 
             if ($menu.length > 0){
-                $.fn.menuAim({
-                    activate: this.activateSubmenu, 
-                    deactivate: this.deactivateSubmenu,
-                    rowSelector: ".js-submenu-item"
-                }).bind($menu);
+                try {
+                    $menu.menuAim({
+                        activate: this.activateSubmenu, 
+                        deactivate: this.deactivateSubmenu,
+                        rowSelector: ".js-submenu-item"
+                    });
+                } catch(e) {}
             }
         },
         onRender: function() {

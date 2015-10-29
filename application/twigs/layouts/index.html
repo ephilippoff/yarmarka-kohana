@@ -7,10 +7,9 @@
 		{{ parent() }}
 	{% endblock header %} 
 	
-	<div class="row min-content-height">
-		{% block content %}
-		{% endblock content %}
-	</div>
+	
+	{% block content %}
+	{% endblock content %}
 
 	{% block footertext %} 
 		сео текст в футере
@@ -20,7 +19,15 @@
 		{{ parent() }}
 	{% endblock footer %} 
 
-	{% block templates %}{{ parent() }}{% endblock templates %}
+	{% block templates %}
+		{{ parent() }}
+		<script id="template-mainmenu" type="text/template">
+			{{ requestblock('block_twig/mainmenu', {'city_id': city.id}) }}
+		</script>
+		<script id="template-citymenu" type="text/template">
+			{{ requestblock('block_twig/othercities', {'city_id': city.id}) }}
+		</script>
+	{% endblock templates %}
 	
 {% endblock body %}
 {%block page_name%}index{% endblock page_name %}

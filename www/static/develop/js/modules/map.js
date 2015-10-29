@@ -45,6 +45,24 @@ define([
             return iconSettings[name];
         },
 
+        get2GisMap: function(options, ready) {
+
+            var clusterer,
+                elid = options.elid,
+                lat = options.lat || 55.76,
+                lon = options.lon || 37.64,
+                zoom = options.zoom || 10,
+                settings = options.settings || {};
+
+            DG.then(function(){
+                var map = DG.map(elid, {
+                    center: [lat, lon],
+                    zoom: zoom
+                });
+                ready(map);
+            });
+        },
+
         getMap: function(options, ready) {
 
             var clusterer,

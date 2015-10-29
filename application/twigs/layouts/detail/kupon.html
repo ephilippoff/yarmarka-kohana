@@ -1,0 +1,43 @@
+{% extends "layouts/main_with_header" %}
+
+{% block body %}
+	
+	{% block header %} 
+		{{ parent() }}
+		{% include 'block/header/navigationline/simple' %}
+		{{ requestblock('block_twig/adslinkline', {'city_id': city.id, 'category_id': category.id, 'theme_class': theme_class}) }}
+	{% endblock header %}
+
+	{% block crumbs %} 
+		Крошки
+	{% endblock crumbs %}
+
+	<div class="row module">
+		<div class="col-md-12">
+			<h1 class="captionbold fs22 js-object-title-{{object.id}} {% if object.is_published == 0 %} red strike {% endif %}">{{ object.title|e|capitalize }}</h1>
+		</div>
+	</div>
+	
+	<div class="row min-content-height">
+		{% block leftside %} 
+			Левый
+		{% endblock leftside %}
+
+		{% block rightside %} 
+			Правый
+		{% endblock rightside %}
+	</div>
+
+	{% block footer %} 
+		{{ parent() }}
+	{% endblock footer %}
+	
+	{% block templates %}
+		{{ parent() }}
+		<script id="template-mainmenu" type="text/template">
+			{{ requestblock('block_twig/mainmenu', {'city_id': city.id}) }}
+		</script>
+	{% endblock templates %}
+{% endblock body %} 
+
+{%block page_name%}detail{% endblock page_name %}

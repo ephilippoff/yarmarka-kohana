@@ -8,7 +8,7 @@
 {% endblock css%}
 
 {% block title %} {{object.title|e}} {% endblock title%}
-{% block meta_description %} {{ object.user_text|e }} {% endblock meta_description%}
+{% block meta_description %} {{ object.user_text|e|slice(0, 200) }} {% endblock meta_description%}
 
 {% block wrapperclass %}page-detail{% endblock wrapperclass %}
 

@@ -20,26 +20,27 @@ Route::set('add', 'add/<rubricid>', array('rubricid' => '.*[0-9]'))
 
 Route::set('/','')
 	->filter(function($route, $params, $request){
-		// $domain = $_SERVER['HTTP_HOST'];
-		// $domain_segments = explode(".", $domain);
-		// $config = Kohana::$config->load("common");
-		// $main_domain = $config["main_domain"];
-		// $main_category = $config["main_category"];
-		// if ($domain <> $main_domain || $request->query("search")) {
-		// 	$config = Kohana::$config->load("landing");
-		// 	$config = $config["categories"];
-		// 	if ( in_array( $domain_segments[0],  array_keys((array) $config))) {
-		// 		$params['controller'] = $config[$domain_segments[0]][0];
-		// 		$params['action'] = $config[$domain_segments[0]][1];
-		// 	} else {
-		// 		$params['controller'] = 'Search';
-		// 		$params['action'] = 'index';
-		// 	}
-		// 	$params['category_path'] = $main_category;
-		// } else {
-		// 	$params['controller'] = 'Index';
-		// 	$params['action'] = 'index';
-		// }
+		$domain = $_SERVER['HTTP_HOST'];
+		$domain_segments = explode(".", $domain);
+		$config = Kohana::$config->load("common");
+		$main_domain = $config["main_domain"];
+		$main_category = $config["main_category"];
+		//if ($domain <> $main_domain || $request->query("search")) {
+		if ($request->query("search")) {
+			$config = Kohana::$config->load("landing");
+			$config = $config["categories"];
+			if ( in_array( $domain_segments[0],  array_keys((array) $config))) {
+				$params['controller'] = $config[$domain_segments[0]][0];
+				$params['action'] = $config[$domain_segments[0]][1];
+			} else {
+				$params['controller'] = 'Search';
+				$params['action'] = 'index';
+			}
+			$params['category_path'] = $main_category;
+		} else {
+			$params['controller'] = 'Index';
+			$params['action'] = 'index';
+		}
 		return $params;
 	})
 	->defaults(array(
