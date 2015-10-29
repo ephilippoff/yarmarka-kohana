@@ -36,7 +36,10 @@ class Detailpage_Kupon extends Detailpage_Default
 										->getprepared_all();
 
 		$info['kupon_info']["sold_count"] = array_sum(array_map(function($item){ return $item->sold_count; }, $info['kupon_info']["groups"]));
+		$info['kupon_info']["avail_count"] = array_sum(array_map(function($item){ return $item->avail_count; }, $info['kupon_info']["groups"]));
 
+
+		$info['kupons_buy_access'] = ($info['kupon_info']["avail_count"]) ? TRUE : FALSE;
 
 		$this->_info = array_merge($this->_info, $info);
 		return $this;

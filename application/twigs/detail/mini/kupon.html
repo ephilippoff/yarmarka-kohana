@@ -27,13 +27,21 @@
 				{{ object.title|e }}
 			</div>
 		</a>
-			<div class="price-cont">
-				<div class="price">
-					{{ object.compiled.attributes['old-price'].value }}	<span class="rub">&#8399;</span>
-				</div>
-				<div class="discounted">
-					<div class="separator"></div>
-					{{ object.compiled.attributes.tsena.value }} <span class="rub">&#8399;</span>
-				</div>
+		<div class="price-cont">
+			{% set actionIsActive = TRUE %}
+			{% if object.compiled.attributes['kupon_state'] and object.compiled.attributes['kupon_state'].value %}
+				{% set actionIsActive = FALSE %}
+			{% endif %}
+			<div class="price">
+				{{ object.compiled.attributes['old-price'].value }}	<span class="rub">&#8399;</span>
 			</div>
+			<div class="discounted" {% if not actionIsActive %}style='background:gray;'{% endif %}>
+				<div class="separator"></div>
+				{% if actionIsActive %}
+					{{ object.compiled.attributes.tsena.value }} <span class="rub">&#8399;</span>
+				{% else %}
+					Продано
+				{% endif %}
+			</div>
+		</div>
 	</div>
