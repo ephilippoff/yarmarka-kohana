@@ -15,7 +15,7 @@ class Auth_ORM extends Kohana_Auth_ORM {
 		// Get the user from the session
 		$user = $this->get_user();
 
-		if ($user->role == 1){
+		if ($user AND $user->role == 1){
 			return TRUE;
 		}
 

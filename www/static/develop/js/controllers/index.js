@@ -90,6 +90,7 @@ function (Marionette, templates, utils, IndexPage, SearchPage, DetailPage,
         start_articleSection : function() {
             console.log("article start");
             app.menu.init(["main", "kupon", "news"]);
+            app.module("map", MapModule);
             new ArticlePage({
                 el: "body"
             });

@@ -40,7 +40,7 @@
 							</li>
 						{% endif %}
 						<li class="pl10 mb5">
-							<span class="fs12">{{news.date_expired|date('H:i')}}</span><a href="/newsline/{{news.start_date|date('Y-m-d')}}#{{news.id}}" class="ml10">{{news.title|slice(0,70)}}...</a>
+							<span class="fs12">{{news.date_expired|date('H:i')}}</span><a href="/newsline/{{news.date_expired|date('Y-m-d')}}#{{news.id}}" class="ml10">{{news.title|slice(0,70)}}...</a>
 						</li>
 					{% endfor %}
 				</ul>

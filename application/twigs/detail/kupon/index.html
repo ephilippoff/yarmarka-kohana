@@ -1,4 +1,4 @@
-{% extends "layouts/detail" %}
+{% extends "layouts/detail/kupon" %}
 
 {% set theme_class = 'light-blue-theme' %}
 
@@ -22,6 +22,10 @@
 	{% include 'detail/crumbs' %}
 {% endblock crumbs %}
 
+{% macro map(object) %}
+    {% include 'detail/kupon/map' %}
+{% endmacro %}
+
 {% block leftside %}
 	<div class="col-md-8">
 		<article>
@@ -29,14 +33,34 @@
 				{% include 'detail/kupon/main_photo' %}
 			{% endif %}
 			<div class="text-cont module">
-				{{ object.user_text }}
+				<div class="text fl w100p" itemprop="description">
+				{% set text = NULL %}
+
+				{% if object.compiled.attributes['tekst-obyavleniya'] %}
+					{% set text = object.compiled.attributes['tekst-obyavleniya'].value %}
+				{% else %}
+					{% set text = object.user_text %}
+				{% endif %}
+
+				{% for image in object.compiled.images.local_photo %}
+					{% set vorig = '<img class="w100p" src="/' ~ image["original"] ~ '">' %}
+					{% set text = text|replace({'{image}':vorig}) %}
+				{% endfor %}
+
+				{% set text = text|replace({'{cardmap}': '<div id="cardmap" class="cardmap mb10">' ~ _self.map(object) ~ '</div>'}) %}
+				
+				{{ text }}
+				</div>
 			</div>
-			{% include 'detail/kupon/photo' %}
 		</article>
 	</div>
 {% endblock %}	
 
 {% block rightside %}
+	{% set actionIsActive = TRUE %}
+	{% if object.compiled.attributes['kupon_state'] and object.compiled.attributes['kupon_state'].value %}
+		{% set actionIsActive = FALSE %}
+	{% endif %}
 	<div class="col-md-4">
 		<aside>
 			{% if check_object_access(object, 'object.moderate') %}
@@ -44,20 +68,30 @@
 			{% endif %}
 			
 			<div class="module">{% include 'detail/kupon/coupon_info' %}</div>
+			
+			{% if object.is_published and actionIsActive %}
+				
+				{% if kupons_buy_access %}
+					<div class="button bg-color-crimson white p10 fs20 mb10 w100p js-service-kupon" data-id="{{ object.id }}">Купить</div>
+				{% endif %}
 
-			{% if object.compiled.attributes.site.value %}
-				<div class="button bg-color-crimson white pt15 pb15 fs20 mb10 w100p" onclick="window.location.href='{{ object.compiled.attributes.site.value }}'">Наш сайт</div>
-			{% endif %}
-			
-			{% if object.is_published != 0 %}
-				<div class="button bg-color-lightgreen white pt15 pb15 fs20 mb10 w100p js-backcall-button"  data-id="{{ object.id }}">Заказать обратный звонок</div>
-				<div class="button bg-color-lightgreen white pt15 pb15 fs20 mb10 w100p js-service-kupon" data-id="{{ object.id }}">Купить</div>
 				{% include 'detail/kupon/our_contacts' %}
+				<div class="button bg-color-lightgreen white p10 fs20 mb10 w100p js-backcall-button"  data-id="{{ object.id }}">Заказать обратный звонок</div>
+
 			{% else %}
-				<div class="p20">Акция завершена</div>
+				<p class="mt10 mb10 p10  fs16">
+					<span class="red">Акция завершена, все купоны проданы.</span>
+				</p>
+				<p class="mt10 mb10 p10  fs16">
+					Подпишитесь на нас Вконтакте, чтобы первыми узнать о появлении новых купонов!
+				</p>
 			{% endif %}
-			
-			{% include 'detail/map' %}
+
+			{% if kupons_buy_access and check_object_access(object, 'object.moderate') %}
+					<div class="button bg-color-crimson white p10 fs20 mb10 w100p js-service-kupon" data-id="{{ object.id }}">Купить (Адм)</div>
+			{% endif %}
+
+			{% include 'block/vk/group_surgut' %}
 		</aside>
 	</div>
 {% endblock rightside %}

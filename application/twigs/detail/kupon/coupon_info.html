@@ -1,6 +1,6 @@
 <div class="coupon-info-cont">
 	<div class="price-cont bg-color-deepskyblue">
-		<span class="price">от {{ object.compiled.attributes.tsena.value }} <span class="rub">&#8399;</span></span>
+		<span class="price">{% if kupon_info.kupon_group|length > 1 %}от {% endif %}{{ object.compiled.attributes.tsena.value }} <span class="rub">&#8399;</span></span>
 	</div>
 	<div class="discount-cont">
 		<table>
@@ -19,6 +19,8 @@
 					</td>
 				</tr>
 		</tbody></table>
-		<p class="pl10 pt10 fs20">Купили {{kupon_info.sold_count}} чел.</p>
+		{% if kupon_info.sold_count %}
+			<p class="pl10 pt10 fs20">Купили {{kupon_info.sold_count}} чел.</p>
+		{% endif %}
 	</div>	
 </div>

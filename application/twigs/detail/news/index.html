@@ -11,6 +11,10 @@
 
 {% block crumbs %}{% endblock crumbs %}
 
+{% macro map(object) %}
+    {% include 'detail/kupon/map' %}
+{% endmacro %}
+
 {% block content %}
 	<div class="row">
 		<div class="col-md-9">
@@ -20,7 +24,24 @@
 					<img class="news-photo" src="{{ get_file(object.compiled.images.main_photo.original) }}" width="500">
 					<p>{{ object.compiled.attributes['news-category'].value }}</p>
 				</div>
-				<div class="text-cont mt10">{{object.user_text}}</div>
+				<div class="text-cont mt10">
+					{% set text = object.user_text %}
+
+					{% for image in object.compiled.images.local_photo %}
+						{% set v120 = '<img src="/' ~ image["120x90"] ~ '">' %}
+						{% set v272 = '<img src="/' ~ image["272x203"] ~ '">' %}
+						{% set v341 = '<img src="/' ~ image["341x256"] ~ '">' %}
+						{% set vorig = '<img class="w100p" src="/' ~ image["original"] ~ '">' %}
+						{% set text = text|replace({'{image120}':v120}) %}
+						{% set text = text|replace({'{image272}':v272}) %}
+						{% set text = text|replace({'{image341}':v341}) %}
+						{% set text = text|replace({'{image}':vorig}) %}
+					{% endfor %}
+
+					{% set text = text|replace({'{cardmap}': '<div id="cardmap" class="cardmap mb10">' ~ _self.map(object) ~ '</div>'}) %}
+					
+					{{ text }}
+				</div>
 					{% if newsone.is_category == 0 %}
 						<div id="hypercomments_widget"></div>
 						<script type="text/javascript">
