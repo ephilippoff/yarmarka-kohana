@@ -30,7 +30,7 @@ class Twig_Functions
 
 	public static function js_asset($file)
 	{
-		return Assets::factory('main')->js($file, array("only_file_name" => TRUE));
+		return "/".Assets::factory('main')->js($file, array("only_file_name" => TRUE));
 	}
 
 	public static function url($link)
