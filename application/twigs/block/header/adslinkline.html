@@ -5,7 +5,7 @@
 		<div id="reklama_container" class="reklama-line banners js-adslink-graphic"></div>
 		<div class="js-ads-storage" style="display:none">
 			{% set length = (imagelinks|length > 11) ?  imagelinks|length : 11 %}
-			{% for i in 0..length %}
+			{% for i in 0..(length - 1) %}
 				{% set link = imagelinks|slice(i,1) %}
 				{% if link|length > 0 %}
 					{% set link = link|first %}
