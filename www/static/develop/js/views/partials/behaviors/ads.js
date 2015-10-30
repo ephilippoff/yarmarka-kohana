@@ -181,11 +181,13 @@ define([
                 }, 550);
             });
 
+             this.adsView = view;
+
             if (adCollection.where({empty:true}).length > 0){
                 return;
             };
 
-            this.adsView = view;
+            
 
             $(this.ui.container).on("mouseover", function(){
                 clearInterval(s.adsAnimationInterval);
