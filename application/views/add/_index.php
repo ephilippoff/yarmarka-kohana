@@ -453,7 +453,7 @@
 								));
 								?>
 							</div>
-							<input type="hidden" id="active_userfile" name="active_userfile" value="<?= $params->active_userfile ?>" />
+							<input type="hidden" id="active_userfile" name="active_userfile" value="<?= $form_data->photo["main_image_file"] ?>" />
 							<span class="inform">
 								<span class="fn-photo-hint"></span>
 							</span>

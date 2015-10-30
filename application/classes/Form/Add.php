@@ -640,7 +640,7 @@ class Form_Add  {
 			$oa = ORM::factory('Object_Attachment')
 					->where("object_id","=",$object_id)
 					->where("type","<>",2)
-					->order_by("id", "asc")
+					->order_by("id", "desc")
 					->find_all();
 			foreach($oa as $photo)
 			{
@@ -674,9 +674,18 @@ class Form_Add  {
 				$main_image_id = $this->params["active_userfile"];
 		}
 
+		$main_image_file = "";
+		if ($main_image_id) {
+			$oa = ORM::factory('Object_Attachment', $main_image_id);
+			if ($oa->loaded()) {
+				$main_image_file = $oa->filename;
+			}
+		}
+
 		$this->_data->photo = array( 'files' => $files,  
-											'main_image_id' => $main_image_id
-											);
+									'main_image_id' => $main_image_id,
+									'main_image_file' => $main_image_file
+									);
 
 		return $this;
 	}

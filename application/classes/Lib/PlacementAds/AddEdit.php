@@ -945,7 +945,7 @@ class Lib_PlacementAds_AddEdit {
 			{
 				$main_photo = $userphotos[0];
 			}
-
+			$userphotos = array_reverse($userphotos);
 			foreach ($userphotos as $file)
 			{
 				$attachment = ORM::factory('Object_Attachment');
