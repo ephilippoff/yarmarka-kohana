@@ -11,6 +11,8 @@ class Sms
 			$session_id = session_id();
 		}
 
+		$text = Text::rus2translit($text);
+		
 		$sms_record = ORM::factory('Sms');
 		$sms_record->phone 		= $number;
 		$sms_record->text 		= $text;
@@ -20,17 +22,14 @@ class Sms
 
 		$sms_pilot = new Smspilot(Kohana::$config->load('sms.api_key'), FALSE, Kohana::$config->load('sms.from'));
 		
-		$result = FALSE;
 		if ($sms_pilot->send($number, $text))
 		{
-			$result = $sms_record->set_success($sms_pilot->success);
+			$sms_record->set_success($sms_pilot->success);
 		}
 		else
 		{
-			$result = $sms_record->set_error($sms_pilot->error);
+			$sms_record->set_error($sms_pilot->error);
 		}
-
-		return $result;
 	}
 }
 

@@ -1,5 +1,7 @@
 {% extends "layouts/cart" %}
 
+{% set theme_class = 'blue-subtle-theme' %}
+
 {% block header %}
 	{{ parent() }}
 	{% include 'cart/promo' %}
@@ -9,12 +11,12 @@
 {% block content %}
 	<form id="cart-form">
 		<div>
-			<div class="fs18">
+			<div>
 				{% if cartTempItems|length == 0 %}
-					<p class="msg p20" style="font-size:20px;">Ваша Корзина пуста</p>
+					<p class="msg p20" >Ваша Корзина пуста</p>
 				{% else %}
 					{% set error = FALSE %}
-					<table class="cart-table bs-table">
+					<table class="cart-table table">
 						<tr >
 							<th class="bold">Наименование</th>
 							<th class="bold w200">Параметры</th>

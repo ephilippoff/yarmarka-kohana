@@ -130,9 +130,9 @@ class Model_Order extends ORM
 			//apply services
 			foreach ($orderItems as $orderItem)
 			{
-				if ($orderItem->service->name == "kupon") {
+				//if ($orderItem->service->name == "kupon") {
 					Service::factory(Text::ucfirst($orderItem->service->name))->apply($orderItem);
-				}
+				//}
 			}
 
 			$db->commit();

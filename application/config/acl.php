@@ -10,7 +10,7 @@ return array(
 			"edit" => array(1,3,9, "auth", "owner"),
 			"moderate" => array(1,3,9, "auth"),
 			"add" => array(
-				"type" => array(1, 9, "auth")
+				"type" => array(1,3,9, "auth")
 			)
 		),
 		"pay_service" => array("auth", 1),
@@ -18,6 +18,7 @@ return array(
 			"edit" => array("auth", 1, 3)
 		),
 		"profiler" => array("auth", 1),
-		"kupon" => array("owner", 1, 9)
+		"kupon" => array("owner", 1, 9),
+		"order" => array("auth", 1, 9)
 	)
 );

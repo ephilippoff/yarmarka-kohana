@@ -12,11 +12,37 @@ class Model_Kupon extends ORM
 	protected $_belongs_to = array(
 		'kupon_group_obj'	=> array('model' => 'Kupon_Group', 'foreign_key' => 'kupon_group_id'),
 		'order_obj'	=> array('model' => 'Order', 'foreign_key' => 'order_id'),
+		'invoice'	=> array('model' => 'Invoices', 'foreign_key' => 'invoice_id')
 	);
 
 	protected $_states = array(
 		"initial" => "исх", "avail" => "доступен", "reserve" => "в резерве", "sold" => "продан"
 	);
+
+	public function with_objects()
+	{
+		return $this->select(array('object.title', 'object_title'))
+			->join('object', 'left')
+			->on('kupon.object_id', '=', 'object.id');
+	}	
+	
+	public function with_invoices()
+	{
+		return $this->select(array('invoices.user_id', 'user_id'))
+			->join('invoices', 'left')
+			->on('kupon.invoice_id', '=', 'invoices.id');
+	}	
+
+	public function sum_by_field($field)
+	{
+		$query = DB::select('object_id', DB::expr('SUM('.$field.')'))
+				->from('kupon')
+				->group_by('object_id')
+				->as_object()
+				->execute();
+		
+		return $query;				
+	}
 
 	function get_balance_by_begin_state($kupon_id, $state = "avail", $order_id = NULL)
 	{
@@ -130,9 +156,19 @@ class Model_Kupon extends ORM
 		return $this->where("kupon_group_id","=",$group_id)->where("state","IN", array(self::AVAIL));
 	}
 
+	function get_sold($group_id)
+	{
+		return $this->where("kupon_group_id","=",$group_id)->where("state","IN", array(self::SOLD));
+	}
+
 	function get_avail_count($group_id)
 	{
 		return $this->get_avail($group_id)->count_all();
+	}
+
+	function get_sold_count($group_id)
+	{
+		return $this->get_sold($group_id)->count_all();
 	}
 
 	function reserve($order_id = NULL, $access_key = NULL)
@@ -142,14 +178,17 @@ class Model_Kupon extends ORM
 
 	function return_to_avail($description = NULL)
 	{
+		if ($this->state == "avail") return;
+		
 		return $this->change_state($this->state, self::AVAIL, NULL, NULL, $description);
 	}
 
-	function to_sold($order_id)
+	function to_sold($order_id, $access_key = NULL)
 	{
+		if ($this->state == "sold") return;
 		$number = self::crypt_number(" ".self::generate_number());
 		$this->number = $number;
-		return $this->change_state($this->state, self::SOLD, $order_id);
+		return $this->change_state($this->state, self::SOLD, $order_id, $access_key);
 	}
 
 	static function generate_number()
@@ -233,4 +272,3 @@ class Model_Kupon extends ORM
 
 
 }
-

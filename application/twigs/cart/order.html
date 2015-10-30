@@ -1,128 +1,128 @@
 {% extends "layouts/cart" %}
 
+{% set theme_class = 'blue-subtle-theme' %}
+
 {% block header %}
 	{{ parent() }}
 	{% include 'cart/promo' %}
 {% endblock header %}
 
 
-{% block content %} 
-	<div class="p20" style="margin:auto;">
-		{% set error = FALSE %}
-		<table class="table table-hover">
-			<tr>
-				<th class="w500">Наименование</th>
-				<th>Параметры</th>
-				<th>Цена</th>
-			</tr>
-
-			{% set i = 1 %}
-			{% for item in orderItems  if item.service.name == 'kupon' %}
-				{% if loop.first %}
-					<tr><td colspan="5">Купоны</td></tr>
-				{% endif %}
-				{% include 'cart/item/kupon' %}
-				{% set i = i +1 %}
-			{% endfor %}
-
-			{% for item in orderItems  if item.service.name != 'kupon' %}
-				{% if loop.first %}
-					<tr><td colspan="5">Услуги для объявлений</td></tr>
-				{% endif %}
-				{% include 'cart/item/other' %}
-				{% set i = i +1 %}
-			{% endfor %}
-		</table>
-
-		<div class="ta-r mb20">
-			Итоговая стоимость <span>{{sum}} руб.</span>
-		</div>
-		
-		{% if delivery_info %}
-			<div class="messages-cont mb20">
-				<hr>
-				<p>Информация по доставке:</p>
-				<div class="ta-l field">
-					<p class="p10"><span class="bold">Тип доставки:</span>
-						{% if delivery_info.type == "electronic" %}
-							<span>Электронная доставка по электронной почте <span class="span-link">{{delivery_info.email}}</span></span>
-						{% endif %}
-					</p>
-				</div>
-
-				{% if delivery_info.phone %}
-					<div class="ta-l field">
-						<p class="p10"><span class="bold">Телефон для связи:</span> {{delivery_info.phone}}</p>
-					</div>
-				{% endif %}
-			</div>
-		{% endif %}
-		
-		<div class="messages-cont mb20">
-			{% if error %}
-				<p>Некоторых товаров нет в наличии, сделайте корректировку заказа</p>
-				<p>
-					<a href="/cart">Вернуться к редактированию заказа</a>
-				</p>
-			{% endif %}
-			
+{% block content %}
+	<div>
+		<div class="p20">
 			{% if state == "initial" %}
-				<p class="mt20 fr">
-					<form id="order_form" class="ta-r" action="/cart/to_payment_system" method="POST">
-						<input type="hidden" name="id" value="{{ order.id }}">
-						<span class="button bg-color-blue p20 white br3" onclick="$('#order_form').submit();">Перейти к оплате<i class="fa fa-angle-double-right fa-lg ml5"></i></span>
-					</form>
-				</p>
-			{% elseif state == "notPaid" %}
-				<form id="order_form" class="ta-r" action="/cart/to_payment_system" method="POST">
-					<input type="hidden" name="id" value="{{ order.id }}">
-					<span class="button bg-color-blue p20 white br3" onclick="$('#order_form').submit();">Перейти к счету в платежной системе<i class="fa fa-angle-double-right fa-lg ml5"></i></span>
-				</form>
-			{% endif %}
-
-			{% if check_access("pay_service") %}
-				<form class="ta-r" action="/cart/to_admin_success" method="POST">
-					<input type="hidden" name="id" value="{{ order.id }}">
-					<input type="hidden" name="code" value="100">
-					<input type="submit" class="button button-style1 bg-color-crimson submit mt10" value="Оплатить счет (для администраторов)">
-				</form>
-
-				<form class="ta-r" action="/cart/to_admin_success" method="POST">
-					<input type="hidden" name="id" value="{{ order.id }}">
-					<input type="hidden" name="code" value="10">
-					<input type="submit" class="button button-style1 bg-color-crimson submit mt10" value="Отменить счет (для администраторов)">
-				</form>
-			{% endif %}
-		</div>
-	</div>
-{% endblock content %}
-
-{% block rightside %} 
-	<div class="info-block-cont theme3 module">
-		<div class="block-title">
-			<span>Состояние заказа</span>
-		</div>
-		<div class="p10">
-			{% if state == "initial" %}
-				<p class="p5">Заказ на оформлении. </p>
-				{% if delivery_info %}
-					<p class="p5"><a href="/cart/{{delivery_info.type}}_delivery/{{order.id}}">Изменить информацию о доставке</a></p>
-				{% endif %}
-				<p class="p5"><a href="/cart"><i class="fa fa-angle-double-left fa-lg mr5"></i>Вернуться к корзине</a></p>
-				
+				<p>Заказ на оформлении (<a href="/cart">изменить</a>)</p>
 			{% elseif state == "notPaid" %}
 				<p>Заказ в ожидании оплаты</p>
 			{% elseif state == "paid" %}
-				<p>Заказ оплачен. В будущем вы можете вернуться к этой странице через <a href="/user/orders">историю заказов</a></p>
+				<p>Заказ оплачен.</p>
 			{% elseif state == "activate" %}
-				<p>Услуги активированы. В будущем вы можете вернуться к этой странице через <a href="/user/orders">историю заказов</a></p>
+				<p>Услуги активированы.</p>
 			{% elseif state == "adminActivate" %}
-				<p>Услуги активированы. В будущем вы можете вернуться к этой странице через <a href="/user/orders">историю заказов</a></p>
+				<p>Услуги активированы.</p>
 			{% elseif state == "paid" %}
-				<p>Заказ оплачен. В будущем вы можете вернуться к этой странице через <a href="/user/orders">историю заказов</a></p>
+				<p>Заказ оплачен.</p>
 			{% elseif state == "cancelPayment" %}
 				<p>Заказ отменен. Истекло время оплаты, либо отмена инициирована пользователем</p>
 			{% endif %}
 		</div>
+		<div class="p20">
+			{% set error = FALSE %}
+			<table class="table">
+				<tr>
+					<th class="fs18">Наименование</th>
+					<th class="w200 fs18">Параметры</th>
+					<th class="w200 fs18">Цена</th>
+				</tr>
+
+				{% set i = 1 %}
+				{% for item in orderItems  if item.service.name == 'kupon' %}
+					{% if loop.first %}
+						<tr><td colspan="5">Купоны</td></tr>
+					{% endif %}
+					{% include 'cart/item/kupon' %}
+					{% set i = i +1 %}
+				{% endfor %}
+
+				{% for item in orderItems if item.service.name != 'kupon' %}
+					{% if loop.first %}
+						<tr><td colspan="5">Услуги для объявлений</td></tr>
+					{% endif %}
+					{% include 'cart/item/other' %}
+					{% set i = i + 1 %}
+				{% endfor %}
+			</table>
+
+			<div class="ta-r mb20">
+				Итоговая стоимость <span>{{sum}} руб.</span>
+			</div>
+			
+			{% if delivery_info %}
+				<div class="messages-cont mb20">
+					<hr>
+					<p>Информация по доставке {% if state == "initial" %}(<a href="/cart/electronic_delivery/{{ order.id }}">изменить</a>) {% endif %}</p>
+					<div class="ta-l field">
+						<p class="p10"><span class="bold">Тип доставки:</span>
+							{% if delivery_info.type == "electronic" %}
+								<span>Электронная доставка по электронной почте <span class="span-link">{{delivery_info.email}}</span></span>
+							{% endif %}
+						</p>
+					</div>
+
+					{% if delivery_info.name %}
+						<div class="ta-l field">
+							<p class="p10"><span class="bold">Имя:</span> {{delivery_info.name}} <span class="fs14 gray">(Имя и мобильный телефон у Вас может спросить поставщик услуги)</span></p>
+						</div>
+					{% endif %}
+
+					{% if delivery_info.phone %}
+						<div class="ta-l field">
+							<p class="p10"><span class="bold">Мобильный телефон:</span> {{delivery_info.phone}} <span  class="fs14 gray">(вы получите смс сообщение с номером купона)</span></p>
+						</div>
+					{% endif %}
+				</div>
+			{% endif %}
+			
+			<div class="messages-cont mb20">
+				{% if error %}
+					<p>Некоторых товаров нет в наличии, сделайте корректировку заказа</p>
+					<p>
+						<a href="/cart">Вернуться к редактированию заказа</a>
+					</p>
+				{% endif %}
+				
+				{% if state == "initial" %}
+					<p class="mt20 ta-r">
+						<form id="order_form" class="ta-r" action="/cart/to_payment_system" method="POST">
+							<input type="hidden" name="id" value="{{ order.id }}">
+							<span class="button_v2 bg-color-blue p20 white br3" onclick="$('#order_form').submit();">Перейти к оплате<i class="fa fa-angle-double-right fa-lg ml5"></i></span>
+						</form>
+					</p>
+				{% elseif state == "notPaid" %}
+					<form id="order_form" class="ta-r" action="/cart/to_payment_system" method="POST">
+						<input type="hidden" name="id" value="{{ order.id }}">
+						<span class="button_v2 bg-color-blue p20 white br3" onclick="$('#order_form').submit();">Перейти к счету в платежной системе<i class="fa fa-angle-double-right fa-lg ml5"></i></span>
+					</form>
+				{% endif %}
+
+				{% if check_access("pay_service") %}
+					<p class="mt10">
+						<form action="/cart/to_admin_success" method="POST">
+							<input type="hidden" name="id" value="{{ order.id }}">
+							<input type="hidden" name="code" value="100">
+							<input type="submit" class="button button-style1 bg-color-crimson submit mt10" value="Оплатить счет (для администраторов)">
+						</form>
+					</p>
+					<p class="mt10">
+						<form action="/cart/to_admin_success" method="POST">
+							<input type="hidden" name="id" value="{{ order.id }}">
+							<input type="hidden" name="code" value="10">
+							<input type="submit" class="button button-style1 bg-color-crimson submit mt10" value="Отменить счет (для администраторов)">
+						</form>
+					</p>
+				{% endif %}
+			</div>
+		</div>
 	</div>
-{% endblock rightside %}
+{% endblock content %}
