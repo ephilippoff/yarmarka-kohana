@@ -9,6 +9,7 @@ return array(
 		'requestoldview'  => array ('func' => array('Twig_Functions', 'requestoldview'), 'options' => array() ),
 		'css' 			=> array ('func' => array('Twig_Functions', 'css'), 'options' => array() ),
 		'js' 			=> array ('func' => array('Twig_Functions', 'js'), 'options' => array() ),
+		'js_asset' 			=> array ('func' => array('Twig_Functions', 'js_asset'), 'options' => array() ),
 		'url' 			=> array ('func' => array('Twig_Functions', 'url'), 'options' => array() ),
 		'staticfile' 	=> array ('func' => array('Twig_Functions', 'staticfile'), 'options' => array() ),
 		'file_exist' 	=> array ('func' => array('Twig_Functions', 'file_exist'), 'options' => array() ),
@@ -28,6 +29,7 @@ return array(
 		'get_service_icon_info' => array ('func' => array('Twig_Functions', 'get_service_icon_info'), 'options' => array() ),
 		'get_request_uri'  => array ('func' => array('Twig_Functions', 'get_request_uri'), 'options' => array() ),
 		'requestmethod'  => array ('func' => array('Twig_Functions', 'requestmethod'), 'options' => array() ),
+		'is_debug_mode'  => array ('func' => array('Twig_Functions', 'is_debug_mode'), 'options' => array() ),
 	),
 	'filters' => array(
 		'contacthide' => array('Twig_Filters', 'contacthide'),

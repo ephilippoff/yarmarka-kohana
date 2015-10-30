@@ -9,13 +9,16 @@ class StaticFile {
 
 	public $jspath = NULL;
 
-	const PATH = "../www/static/develop/js/";
+	static public function getStaticPath()
+	{
+		return "../www".Config::getStaticPath()."js/";
+	}
 
 	public function __construct($name, $filename)
 	{
 		$this->name = $name;
 		$this->filename = $filename;
-		$this->path = APPPATH.self::PATH.$filename;
+		$this->path = APPPATH.self::getStaticPath().$filename;
 		$this->jspath = $filename;
 
 		$user = Auth::instance()->get_user();

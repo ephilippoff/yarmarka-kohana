@@ -32,6 +32,9 @@ define([
                     }
                 
                },
+               getStaticPath: function() {
+                    return app.settings.staticPath;
+               },
                getCount: function(){
                  var info = s.model.get("info");
                  if (info.object) {

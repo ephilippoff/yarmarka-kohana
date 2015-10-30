@@ -17,9 +17,8 @@ require.config({
         fileupload: 'lib/vendor/jquery.fileupload',
         nicEdit: 'lib/vendor/nicEdit',
         maskedInput: 'lib/vendor/jquery.maskedinput',
-        ymap: "http://api-maps.yandex.ru/2.1/?load=package.full&lang=ru-RU",
-        gisMap: "http://maps.api.2gis.ru/2.0/loader.js?lazy=true"
-        //isotope: 'lib/vendor/isotope.pkgd'
+        ymap: 'http://api-maps.yandex.ru/2.1/?load=package.full&lang=ru-RU',
+        gisMap: 'http://maps.api.2gis.ru/2.0/loader.js?lazy=true'
     },
     shim : {
         localStorage : ['backbone'],
@@ -28,13 +27,10 @@ require.config({
         },
         backbone : {
             exports : 'Backbone',
-            deps : ['jquery', 'underscore']
+            deps : ['underscore']
         },
         marionette : {
             exports : 'Backbone.Marionette',
-            deps : ['backbone']
-        },
-        localStorage : {
             deps : ['backbone']
         },
         paginator : {
@@ -42,19 +38,10 @@ require.config({
             exports: 'Backbone.Paginator'
         },
         fileupload: {
-             deps : ['jquery', 'iframeTransport']
+             deps : ['iframeTransport']
         },
-        maskedInput: {
-            deps : ['jquery']
-        },
-        menuAim: {
-            deps : ['jquery']
-        },
-        jcookie: {
-            deps : ['jquery']
-        }
     },
-    deps : ['jquery', 'underscore']
+    deps : ['underscore']
 });
 
 require([ 'app',
@@ -64,7 +51,7 @@ require([ 'app',
           'underscore'
         ], 
 function (app, $, Marionette, Backbone, _) {
-    "use strict";
+    'use strict';
 
     app.settings = {
         page: _globalSettings.page,
@@ -73,8 +60,15 @@ function (app, $, Marionette, Backbone, _) {
         city_id: _globalSettings.city_id,
         objects_for_map: _globalSettings.objects_for_map,
         host: _globalSettings.host,
-        mainHost: "yarmarka.dev",
+        mainHost: 'yarmarka.dev',
+        debug: _globalSettings.debug,
     };
+
+    if (app.settings.debug) {
+        app.settings.staticPath = '/static/develop/';
+    } else {
+        app.settings.staticPath = '/static/develop/production/';
+    }
 
     try {
         app.settings.query_params = (_globalSettings.query_params) ? JSON.parse(_globalSettings.query_params) : {};
@@ -93,9 +87,9 @@ function (app, $, Marionette, Backbone, _) {
     Marionette.TemplateCache.prototype.loadTemplate = function(templateId) {
         var template = templateId;
         if (!template || template.length === 0){
-            var msg = "Could not find template: '" + templateId + "'";
+            var msg = 'Could not find template: "' + templateId + '"';
             var err = new Error(msg);
-            err.name = "NoTemplateError";
+            err.name = 'NoTemplateError';
             throw err;
         }
         return template;

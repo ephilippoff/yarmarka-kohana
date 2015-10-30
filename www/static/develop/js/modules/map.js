@@ -42,6 +42,9 @@ define([
         },
 
         getIconSettings: function(name) {
+            if (name == 'house') {
+                iconSettings[name] = app.settings.staticPath + 'images/house.png';
+            }
             return iconSettings[name];
         },
 

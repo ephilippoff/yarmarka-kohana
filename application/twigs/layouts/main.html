@@ -55,10 +55,16 @@
                 data: window.data, 
                 category_id: '{{category_id}}',
                 query_params: '{{query_params_for_js}}',
-                city_id: '{{city_id}}'
+                city_id: '{{city_id}}',
+                debug: '{{ is_debug_mode() }}'
             };
         </script>
-        <script data-main="/static/develop/js/main.js" src="/static/develop/js/lib/require.js"></script>
+        {% if is_debug_mode() %}
+            <script data-main="{{ staticfile('js/main.js') }}" src="{{ staticfile('js/lib/require.js') }}"></script>
+        {% else  %}
+            <script data-main="{{ js_asset('../production/js/build.js') }}" src="{{ js_asset('../production/js/require.js') }}"></script>
+        {% endif %}
+        
         {% if (objects_for_map) %}
             <script id="objects_for_map" type="text/template">{{objects_for_map}}</script>
         {% endif %}

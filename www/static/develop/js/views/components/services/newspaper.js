@@ -52,6 +52,9 @@ define([
                getNewspaperCities: function() {
                     return s.getNewspaperCities();
                },
+               getStaticPath: function() {
+                    return app.settings.staticPath;
+               },
                getTypes: function() {
                     return s.model.get("info").type_info.types;
                },

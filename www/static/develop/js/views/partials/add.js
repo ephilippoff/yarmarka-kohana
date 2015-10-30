@@ -586,7 +586,9 @@ define([
             this.value = this.control.val();  
             if (!this.control.length)  
                 this.render();
-            new nicEditor({iconsPath : '/static/develop/images/nicEditorIcons.gif'}).panelInstance('user_text_adv');
+
+            var staticPath = app.settings.staticPath;
+            new nicEditor({iconsPath : staticPath + 'images/nicEditorIcons.gif'}).panelInstance('user_text_adv');
         },
 
         render: function(){

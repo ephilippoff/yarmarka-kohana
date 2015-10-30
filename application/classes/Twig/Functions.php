@@ -28,14 +28,24 @@ class Twig_Functions
 		return Assets::factory('main')->js($file);
 	}
 
+	public static function js_asset($file)
+	{
+		return Assets::factory('main')->js($file, array("only_file_name" => TRUE));
+	}
+
 	public static function url($link)
 	{
 		return "/".$link;
 	}
 
-	public static function staticfile($file)
+	public static function staticfile($file, $set_version = FALSE)
 	{
-		return "/static/develop/".$file;
+		return Config::getStaticPath().$file;
+	}
+
+	public static function is_debug_mode()
+	{
+		return Config::is_debug_mode();
 	}
 
 	public static function debug($param)

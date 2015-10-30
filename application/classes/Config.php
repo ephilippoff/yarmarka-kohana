@@ -72,4 +72,21 @@ class Config extends Kohana_Config {
 
 		return $this->_groups[$group];
 	}
+
+	static function is_debug_mode()
+	{
+		return (Kohana::$environment === Kohana::DEVELOPMENT."");
+		
+	}
+
+
+	static function getStaticPath()
+	{
+		if (self::is_debug_mode()) {
+			return "/static/develop/";
+		} else {
+			return "/static/develop/production/";
+		}
+		
+	}
 }
