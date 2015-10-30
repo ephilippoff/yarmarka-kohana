@@ -1,0 +1,21 @@
+<div class="module">
+	<img alt="{{ object.title|e }}" src="{{ get_file(object.compiled.images.local_photo[0]['120x90']) }}">
+</div>
+<div class="module">
+	<p class="fs18">Контакты для связи:</p>
+	{% for contact in object.compiled.contacts %}
+		{% if contact.type == 1 or contact.type == 2 %}
+			<p class="fs22 mt10">{{ contact.value|formatphone|phoneico }}</p>
+		{% else %}
+			<p class="fs22 mt10">{{ contact.value|emailico }}</p>
+		{% endif %}
+	{% endfor %}
+</div>
+
+<div class="p5 dib js-favourite red pointer" data-id="{{object.id}}">
+	{% set is_favourite = 'fa-heart-o' %}
+	{% if object.id in favourites %}
+		{% set is_favourite = 'fa-heart' %}
+	{% endif %}
+	<i class="fa {{is_favourite}} fa-lg mr5 js-favourite-ico"></i> <span class="js-favourite-caption">{{is_favourite == 'fa-heart' ? 'В избранном': 'В избранное'}}</span>
+</div>

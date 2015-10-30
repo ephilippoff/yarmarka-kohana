@@ -1,0 +1,82 @@
+{% extends "layouts/detail/landing" %}
+
+{% set theme_class = 'light-blue-theme' %}
+
+{% block css %} 
+	{{ parent() }}
+{% endblock css%}
+
+{% block title %} {{object.title|e}} {% endblock title%}
+{% block meta_description %} {{ object.user_text|e }} {% endblock meta_description%}
+
+{% block wrapperclass %}page-detail{% endblock wrapperclass %}
+
+{% block header %} 
+		{{ requestblock('block_twig/topline', {'favourites':favourites}) }}
+		{% include 'block/header/logoline' %}
+		{% include 'search/kupony/promo' %}
+		{{ requestblock('block_twig/adslinkline',{'city_id': city.id, 'category_id': category.id, 'theme_class': theme_class}) }}
+{% endblock header %} 
+
+{% block crumbs %} 
+	{% include 'detail/crumbs' %}
+{% endblock crumbs %}
+
+{% macro map(object) %}
+    {% include 'detail/landing/map' %}
+{% endmacro %}
+
+{% block leftside %}
+	<div class="col-md-8">
+		<article>
+			{% if (object.compiled.images.main_photo|length != 0) %}
+				{% include 'detail/landing/main_photo' %}
+			{% endif %}
+			<div class="text-cont module">
+				<div class="text fl w100p" itemprop="description">
+				{% set text = NULL %}
+
+				{% if object.compiled.attributes['tekst-obyavleniya'] %}
+					{% set text = object.compiled.attributes['tekst-obyavleniya'].value %}
+				{% else %}
+					{% set text = object.user_text %}
+				{% endif %}
+
+				{% for image in object.compiled.images.local_photo %}
+					{% set vorig = '<img class="w100p" src="/' ~ image["original"] ~ '">' %}
+					{% set text = text|replace({'{image}':vorig}) %}
+				{% endfor %}
+
+				{% set text = text|replace({'{cardmap}': '<div id="cardmap" class="cardmap mb10">' ~ _self.map(object) ~ '</div>'}) %}
+				
+				{{ text }}
+				</div>
+			</div>
+			{% include 'detail/landing/photo' %}
+		</article>
+	</div>
+{% endblock %}	
+
+{% block rightside %}
+	{% set actionIsActive = TRUE %}
+	{% if object.compiled.attributes['kupon_state'] and object.compiled.attributes['kupon_state'].value %}
+		{% set actionIsActive = FALSE %}
+	{% endif %}
+	<div class="col-md-4">
+		<aside>
+			{% if check_object_access(object, 'object.moderate') %}
+				<div class="module">{% include 'detail/kupon/controls' %}</div>
+			{% endif %}
+			
+			<div class="module">{% include 'detail/landing/landing_info' %}</div>
+			
+		</aside>
+	</div>
+{% endblock rightside %}
+
+{% block templates %}
+	{{ parent() }}
+{% endblock templates %}
+
+
+

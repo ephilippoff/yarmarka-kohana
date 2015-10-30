@@ -4,7 +4,7 @@ class Task_Object_Compiled extends Minion_Task
 {
 
 	protected $_options = array(
-		'category_id'	=> 96,
+		'category_id'	=> 155,
 		'active'	=> TRUE,
 		'city_id'	=> NULL
 	);

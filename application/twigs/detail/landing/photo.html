@@ -1,0 +1,10 @@
+<div class="images-cont module">
+	{% for key, photo in object.compiled.images.local_photo if  key!= 0 %}
+
+		{% if (object.compiled.images.main_photo['original'] != photo['original']) %}
+			<div class="image-cont">
+				<img class="" alt="Объявление. {{object.compiled.city}}, {{object.title|e}}. Фото {{loop.index}}" src="{{ get_file(photo['original']) }}">
+			</div>
+		{% endif %}
+	{% endfor %}
+</div>
