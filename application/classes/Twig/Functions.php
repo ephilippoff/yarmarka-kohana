@@ -143,7 +143,7 @@ class Twig_Functions
 
 	public static function get_file($path)
 	{
-		$path = trim('/'.$path);
+		$path = trim($path);
 		if (is_file(URL::SERVER('DOCUMENT_ROOT').$path)) {
 			return $path;
 		} else {
