@@ -168,7 +168,7 @@ define([
             this.cartOrder.save(f,{
                 success: function(model, response, xhr) {
                     if (response.code == 200) {
-                        document.location = nextPage+response.order_id;
+                        document.location = "/cart/order/"+response.order_id;
                     } else if (response.code == 300) {
                         document.location = "/cart/order/"+response.order_id;
                     } else {

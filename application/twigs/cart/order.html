@@ -10,7 +10,7 @@
 
 {% block content %}
 	<div>
-		<div class="p20">
+		<div class="">
 			{% if state == "initial" %}
 				<p>Заказ на оформлении (<a href="/cart">изменить</a>)</p>
 			{% elseif state == "notPaid" %}
@@ -30,10 +30,10 @@
 		<div class="p20">
 			{% set error = FALSE %}
 			<table class="table">
-				<tr>
-					<th class="fs18">Наименование</th>
-					<th class="w200 fs18">Параметры</th>
-					<th class="w200 fs18">Цена</th>
+				<tr class="fs18">
+					<th class="">Наименование</th>
+					<th class="w200">Параметры</th>
+					<th class="w200">Цена</th>
 				</tr>
 
 				{% set i = 1 %}

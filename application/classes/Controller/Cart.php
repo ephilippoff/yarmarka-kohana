@@ -359,9 +359,11 @@ class Controller_Cart extends Controller_Template {
 
 			$twig->delivery_info = $params->delivery;
 		} else {
-			$delivery = Kohana::$config->load("billing.kupon.delivery_type");
-			if ($delivery) {
-				HTTP::redirect("/cart/".$delivery."_delivery/".$order->id);
+			if ($params->need_delivery) {
+				$delivery = Kohana::$config->load("billing.kupon.delivery_type");
+				if ($delivery) {
+					HTTP::redirect("/cart/".$delivery."_delivery/".$order->id);
+				}
 			}
 		}
 
@@ -484,7 +486,13 @@ class Controller_Cart extends Controller_Template {
 			
 			$orderItems = array();
 			$error = FALSE;
-			$sum = Model_Order::each_item($cart_tems, function($service, $item, $model_item) use (&$orderItems, $order_id, $order_loaded, $key, &$error, $params) {
+			$need_delivery = FALSE;
+			$sum = Model_Order::each_item($cart_tems, function($service, $item, $model_item) use (&$orderItems, $order_id, $order_loaded, $key, &$error, $params, &$need_delivery) {
+
+				if (!$need_delivery)
+				{
+					$need_delivery = Kohana::$config->load("billing.".$item->service->name.".delivery_type");
+				}
 
 				if ($item->service->name == "kupon") {
 					$own_kupons = 0;
@@ -553,6 +561,13 @@ class Controller_Cart extends Controller_Template {
 				return;
 			}
 
+			$params = json_decode($order->params);
+			if ($need_delivery) {
+				$params->need_delivery =  TRUE;
+			} else {
+				$params->need_delivery =  FALSE;
+			}
+			$order->params = json_encode($params);
 			$order->sum = $sum;
 			$order->save();
 
