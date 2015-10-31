@@ -11,7 +11,7 @@
 					{% set link = link|first %}
 					<img src="{{ '/./uploads/banners/' ~ link.image }}" data-link="{{ link.link }}" {% if link.type == '3' %} data-title="{{ link.title }}" {% endif %}/>
 				{% else %}
-					<img src="{{ staticfile('images/1.png') }}" data-link="sdf" data-empty="true"/>
+					<img src="{{ staticfile('images/1.png') }}" data-link="{{ info_link }}" data-empty="true"/>
 				{% endif %} 
 				
 			{% endfor  %}
@@ -26,7 +26,7 @@
 	{% endif %}
 
 	<span class="notice-bg reklama">реклама</span>
-	<span class="notice-bg how-to-buy">как купить</span>
+	<span class="notice-bg how-to-buy hidden">как купить</span>
 	{% endif %}
 </div><!--reklama-cont-->
 <!--/noindex-->

@@ -43,6 +43,7 @@ class Controller_Block_Twig extends Controller_Block
         $twig->imagelinks = $this->adslinkline($city_id, $category_id, "image");
         $twig->textlinks = $this->adslinkline($city_id, $category_id, "text");
         $twig->theme_class = $theme_class;
+        $twig->info_link = "/ourservices/kontekstnaya-reklama";
         $this->response->body($twig);
     }
 
