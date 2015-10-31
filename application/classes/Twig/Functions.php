@@ -221,4 +221,9 @@ class Twig_Functions
 	{
 		return URL::SERVER('REQUEST_URI');
 	}
+
+	public static function get_userecho_token()
+	{
+		return Userecho::get_sso_token(Auth::instance()->get_user());
+	}
 }
