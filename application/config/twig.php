@@ -28,6 +28,7 @@ return array(
 		'get_date_diff' => array ('func' => array('Twig_Functions', 'get_date_diff'), 'options' => array() ),
 		'get_service_icon_info' => array ('func' => array('Twig_Functions', 'get_service_icon_info'), 'options' => array() ),
 		'get_request_uri'  => array ('func' => array('Twig_Functions', 'get_request_uri'), 'options' => array() ),
+		'get_session_value'  => array ('func' => array('Twig_Functions', 'get_session_value'), 'options' => array() ),
 		'requestmethod'  => array ('func' => array('Twig_Functions', 'requestmethod'), 'options' => array() ),
 		'is_debug_mode'  => array ('func' => array('Twig_Functions', 'is_debug_mode'), 'options' => array() ),
 		'get_userecho_token'   => array ('func' => array('Twig_Functions', 'get_userecho_token'), 'options' => array() ),

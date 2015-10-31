@@ -6,6 +6,25 @@ Route::set('admin', '<controller>(/<action>)', array('controller' => '(admin_.*|
 	throw new HTTP_Exception_404;
 });
 
+Route::set('all','<addr>', array('addr' => '.*'))
+	->filter(function($route, $params, $request){
+		$site_disable = Kohana::$config->load("common.site_disable");
+
+		if ($site_disable) {
+			$white_ips = Kohana::$config->load("common.white_ips");
+			if (!in_array($_SERVER['REMOTE_ADDR'], $white_ips)) {
+				$params['controller'] = 'Redirect';
+				$params['action'] = 'maitenance';
+				return $params;
+			} else {
+				$_SESSION["site_disable"] = TRUE;
+				return FALSE;
+			}
+		}
+		$_SESSION["site_disable"] = FALSE;
+		return FALSE;
+	});
+
 Route::set('object_edit', 'edit/<object_id>', array('object_id' => '.*[0-9]'))
 	->defaults(array(
 		'controller' => 'Add',

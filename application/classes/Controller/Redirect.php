@@ -21,5 +21,13 @@ class Controller_Redirect extends Controller_Template
 		
 		$this->redirect();
 	}
+
+	public function action_maitenance()
+	{
+		$this->use_layout = FALSE;
+		$this->auto_render = FALSE;		
+
+		echo "Сайт в режиме обслуживания. Подождите немного и мы станем еще лучше";
+	}
 	
 }

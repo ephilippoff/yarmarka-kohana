@@ -27,6 +27,11 @@
 
     </head>
     <body class="{% block bodyclass %}{% endblock bodyclass%}">
+        {% if get_session_value('site_disable') %}
+            <div class="red">
+                <span class=" fs22 captionbold">Внимание! Сайт в режиме обслуживания.</span> Т.е. выключен для всех пользователей, кроме разрешенных IP адресов
+            </div>
+        {% endif %}
         <div id="popup-layer" class="z200" style="display: none;"></div>
         <div class="wrapper container {% block wrapperclass %}{% endblock wrapperclass %}">
 			<div class="banner module {zoneID: 42}"></div>			

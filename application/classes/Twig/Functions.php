@@ -222,6 +222,21 @@ class Twig_Functions
 		return URL::SERVER('REQUEST_URI');
 	}
 
+	public static function get_session_value($name)
+	{
+		if (!$name) {
+			return NULL;
+		}
+
+		if (isset($_SESSION[$name]) AND $_SESSION[$name]) {
+			return $_SESSION[$name];
+		}
+		
+		return NULL;
+	}
+
+	
+
 	public static function get_userecho_token()
 	{
 		return Userecho::get_sso_token(Auth::instance()->get_user());
