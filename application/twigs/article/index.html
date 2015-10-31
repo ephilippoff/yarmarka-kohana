@@ -1,67 +1,61 @@
-{% extends "layouts/newsline" %}
+{% extends "layouts/article" %}
 
-{% set theme_class = 'green-dense-theme' %}
+{% set theme_class = 'crimson-theme' %}
 
 {% block header %} 
 		{{ requestblock('block_twig/topline', {'favourites':favourites}) }}
 		{% include 'block/header/logoline' %}
-		{% include 'block/header/navigationline/article' %}
-		{{ requestblock('block_twig/adslinkline',{'city_id': city.id, 'theme_class': theme_class}) }}
+		{{ requestblock('block_twig/links', {}) }}
+		{% include 'block/header/navigationline/simple' %}
 {% endblock header %} 
 
 {% block crumbs %}{% endblock crumbs %}
 
 {% block content %}
 	<div class="row">
-		<div class="col-md-9">
+		<div class="col-md-12">
 			<article class="bg-color-whitesmoke p20 br2">
-				<h1 class="captionbold"><i class="fa fa-globe mr3"></i>{{newsone.start_date|date('d/m, H:i')}}<span class="fs22 ml10">{{newsone.title}}</span></h1>
-				<div class="photo-cont mt10">
+				<p class="gray fs14">{{article.updated|date('d.m.Y')}}</p>
+				<h1 class="captionbold fs22">{{article.title}}</h1>
 
-					<img class="news-photo" src="{{ get_file(get_image_paths(newsone.photo)['original']) }}" width="500">
-					<p>{{newsone.photo_comment}}</p>
-				</div>
-				<div class="text-cont mt10">{{newsone.text}}</div>
-					{% if newsone.is_category == 0 %}
-						<div id="hypercomments_widget"></div>
-						<script type="text/javascript">
-							_hcwp = window._hcwp || [];
-							_hcwp.push({widget:"Stream", widget_id:16227, callback: function(app, init){$('#hypercomments_widget .hc_count_user_online').remove();} });
-							(function() {
-								if("HC_LOAD_INIT" in window)return;
-								HC_LOAD_INIT = true;
-								var lang = (navigator.language || navigator.systemLanguage || navigator.userLanguage || "en").substr(0, 2).toLowerCase();
-								var hcc = document.createElement("script"); hcc.type = "text/javascript"; hcc.async = true;
-								hcc.src = ("https:" == document.location.protocol ? "https" : "http")+"://w.hypercomments.com/widget/hc/16227/"+lang+"/widget.js";
-								var s = document.getElementsByTagName("script")[0];
-								s.parentNode.insertBefore(hcc, s.nextSibling);
-							})();
-						</script>
-						<a href="http://hypercomments.com" class="hc-link" title="comments widget">comments powered by HyperComments</a>							
-					{% endif %}
+				{% if article.is_category %}
+					<ul class="pt20">
+						{% for subarticle in articles if not subarticle.is_category and subarticle.parent_id == article.id %}
+							
+							<li class="pl20 mb5">
+								<a href="/article/{{subarticle.seo_name}}" class="ml10 fs18">{{subarticle.title}}</a>
+							</li>
+						{% endfor %}
+					</ul>
+				{% else %}
+					<div class="text-cont pl20 pt10">{{article.text}}</div>
+				{% endif %}
 			</article>
-		</div>
-		<div class="col-md-3">
-			{% include 'index/informers' %}
 		</div>
 	</div>
 {% endblock content %}
 
 {% block leftside %} 
-	<ul class="hidden-xs">
-		{% set current_date = NULL %}
-		{% for news in other_news %}
-			{% if not current_date or current_date != news.start_date|date('d/m') %}
-				{% set current_date = news.start_date|date('d/m') %}
-				<li class="pl10 mb5">
-					<span class="bold">{{ news.start_date|date('d') ~ ' ' ~ months[news.start_date|date('m')] }}</span>
-				</li>
-			{% endif %}
+	<ul class="pt20">
+		{% for maincategory in articles if maincategory.is_category and maincategory.parent_id == 0 %}
 			<li class="pl10 mb5">
-				{% set image = get_image_paths(news.photo) %}
-				<img src="{{get_file(get_image_paths(news.photo)['original'])}}" alt="" width="100%">
-				<span class="fs12"><i class="fa fa-home mr3"></i> {{news.start_date|date('H:m')}}</span><a href="/news/{{news.id}}-{{news.seo_name}}" class="ml10">{{news.title|slice(0,70)}}</a>
+				<a class="fs18 bold" href="/article/{{maincategory.seo_name}}" class="ml10">{{maincategory.title}}</a>
 			</li>
+			{% for category in articles if category.parent_id == maincategory.id %}
+				<li class="pl20 mb5">
+					{% if category.is_category %}
+						<a class="fs18" href="#" onclick="$('.links{{category.id}}').toggle();return false;"><i class="fa fa-plus fa-fw mr3"></i>{{category.title}}</a>
+					{% else %}
+						<a class="fs18" href="/article/{{category.seo_name}}">{{category.title}}</a>
+					{% endif %}
+				</li>
+				{% for article in articles if article.parent_id == category.id %}
+					<li class="pl30 mb5 links{{category.id}}" style="display:none;">
+						<a href="/article/{{article.seo_name}}" class="ml10">{{article.title}}</a>
+					</li>
+
+				{% endfor %}
+			{% endfor %}
 		{% endfor %}
 	</ul>
 {% endblock leftside %}

@@ -51,7 +51,8 @@ class Controller_Article extends Controller_Template {
 	public function action_index()
 	{
 		$twig = Twig::factory('article/index');
-		
+		$twig->city = $this->city;
+
 		$article = ORM::factory('Article')
 			->where('seo_name', '=', $this->request->param('seo_name'))
 			->where('is_visible', '=', 1)
@@ -63,15 +64,16 @@ class Controller_Article extends Controller_Template {
 			throw new HTTP_Exception_404;
 		}	
 				
-		Seo::set_title($article->title.Seo::get_postfix());
-		Seo::set_description($article->get_meta_description());
 
 		$twig->articles = ORM::factory('Article')
 				->where('is_visible', '=', 1)
 				->where('text_type', '=', 1)
-				->find_all();
+				->getprepared_all();
+				
+		$twig->article = $article->get_row_as_obj();
 
-		$twig->article = $article;
+		$twig->seo_title = $article->title.Seo::get_postfix();
+		$twig->seo_description = $article->get_meta_description();
 
 		$this->response->body($twig);
 	}
