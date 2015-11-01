@@ -83,7 +83,7 @@ class Controller_User_Auth extends Controller_Template {
     {
         $twig = Twig::factory('user/account_verification');
         $twig->city = $this->domain->get_city();
-        $code =$this->request->param("id");
+        $code =$this->request->param("category_path");
         $user = ORM::factory('User')
                         ->where("code","=",trim($code))
                         ->where("is_blocked","=",2)->find();
@@ -248,7 +248,7 @@ class Controller_User_Auth extends Controller_Template {
 
     public function action_forgot_password_link()
     {
-        $code = trim($this->request->param('id'));
+        $code = trim($this->request->param('category_path'));
         if (!$code)
             throw new HTTP_Exception_404;
 
