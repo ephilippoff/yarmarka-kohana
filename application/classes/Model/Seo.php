@@ -14,7 +14,7 @@ class Model_Seo extends ORM
 
 	protected static $secret = 'secret_#ode123ocvxvhias0a!&sdf';
 
-	protected $_table_name = 'seo';
+	protected $_table_name = 'seo_surgut';
 
 	protected static $_cache = array();
 

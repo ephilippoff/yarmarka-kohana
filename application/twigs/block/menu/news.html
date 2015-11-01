@@ -21,7 +21,7 @@
 			{% set divWidth = (banners[element.id] is defined and banners[element.id].menu_width) ? banners[element.id].menu_width : 250 %}
 			{% set ulWidth = 191 %}
 			<div class="section section{{element.id}} p10" id="section{{element.id}}" style="width: {{divWidth}}px; display: none;">
-				{#{% if banners[element.id] is defined and file_exist('/uploads/banners/menu/' ~ banners[element.id].image) and banners[category.id].menu_name == 'kupon' %}
+				{% if banners[element.id] is defined and file_exist('/uploads/banners/menu/' ~ banners[element.id].image) and banners[category.id].menu_name == 'kupon' %}
 					<img hidefocus="true" style="position: absolute;right:{{banners[element.id].x}}px ; bottom:{{banners[element.id].y}}px;" usemap="#map{{element.id}}" src="/uploads/banners/menu/{{banners[element.id].image}}"/>
 
 					<map name="map{{element.id}}" id="map{{element.id}}">
@@ -31,11 +31,14 @@
 					<span class="">
 						<img  hidefocus="true"  src="http://yarmarka.biz/uploads/banners/menu/5sllpgxnndnadcwkhpyl.png">
 					</span>
-				{% endif %}#}
-				<span class="bold" style="width: 165px">{{element.title}}</span><br>
-				<span class="">
-					<img  hidefocus="true"  src="http://yarmarka.biz/uploads/banners/menu/5sllpgxnndnadcwkhpyl.png" width="250">
-				</span>
+				{% endif %}
+				
+				<ul style="width:{{ulWidth}}px">
+					<li class="li-title ml10"><span class="bold  black fs18" style="width: 165px">{{element.title}}</span></li>
+					<li>
+						<img  hidefocus="true"  src="http://yarmarka.biz/uploads/banners/menu/5sllpgxnndnadcwkhpyl.png" width="350">
+					</li>
+				</ul>
 			</div>
 		{% endfor %}
 	</div>
