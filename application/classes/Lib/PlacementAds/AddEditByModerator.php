@@ -122,4 +122,10 @@ class Lib_PlacementAds_AddEditByModerator extends Lib_PlacementAds_AddEdit {
 		return $this;
 	}
 
+	function init_validation_rules_for_attributes()
+	{
+
+		return $this;		
+	}
+
 }
