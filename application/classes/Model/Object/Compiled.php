@@ -2,7 +2,7 @@
 
 class Model_Object_Compiled extends ORM
 {
-	protected $_table_name = 'object_compiled';
+	protected $_table_name = 'object_compiled_surgut';
 
 
 	public function naming_attributes(Array $params)
