@@ -280,7 +280,7 @@ class Controller_User_Auth extends Controller_Template {
         }
 
         setcookie('user_id', '', time()-1, '/', Region::get_cookie_domain());
-        setcookie('authautologin', '', time()-1, '/', Region::get_cookie_domain());
+        setcookie('authautologin_s', '', time()-1, '/', Region::get_cookie_domain());
 
         Auth::instance()->logout(TRUE, TRUE);
 

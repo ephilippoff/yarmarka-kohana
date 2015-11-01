@@ -69,7 +69,7 @@ class Auth_ORM extends Kohana_Auth_ORM {
 		$token = $this->create_token($user);
 
 		// Set the autologin cookie
-		Cookie::set('authautologin', $token->token, $this->_config['lifetime']);
+		Cookie::set('authautologin_s', $token->token, $this->_config['lifetime']);
 
 		// Finish the login
 		$this->complete_login($user);
@@ -98,7 +98,7 @@ class Auth_ORM extends Kohana_Auth_ORM {
 			$token = $this->create_token($user);
 
 			// Set the autologin cookie
-			Cookie::set('authautologin', $token->token, $this->_config['lifetime']);
+			Cookie::set('authautologin_s', $token->token, $this->_config['lifetime']);
 		}
 
 		// Finish the login

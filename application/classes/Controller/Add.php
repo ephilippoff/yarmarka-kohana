@@ -41,7 +41,7 @@ class Controller_Add extends Controller_Template {
 		
 		$user = Auth::instance()->get_user();
 
-		if ($user AND !Cookie::get('authautologin'))
+		if ($user AND !Cookie::get('authautologin_s'))
 				Auth::instance()->trueforcelogin($user);
 		
 		$prefix = (@$_SERVER['HTTP_HOST'] === 'c.yarmarka.biz') ? "" : "dev_";

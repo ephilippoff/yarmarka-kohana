@@ -100,7 +100,7 @@ class Kohana_Auth_ORM extends Auth {
 							->create();
 
 				// Set the autologin cookie
-				Cookie::set('authautologin', $token->token, $this->_config['lifetime']);
+				Cookie::set('authautologin_s', $token->token, $this->_config['lifetime']);
 			}
 
 			// Finish the login
@@ -142,13 +142,13 @@ class Kohana_Auth_ORM extends Auth {
 	}
 
 	/**
-	 * Logs a user in, based on the authautologin cookie.
+	 * Logs a user in, based on the authautologin_s cookie.
 	 *
 	 * @return  mixed
 	 */
 	public function auto_login()
 	{
-		if ($token = Cookie::get('authautologin'))
+		if ($token = Cookie::get('authautologin_s'))
 		{
 			// Load the token and user
 			$token = ORM::factory('User_Token', array('token' => $token));
@@ -161,7 +161,7 @@ class Kohana_Auth_ORM extends Auth {
 					$token->save();
 
 					// Set the new token
-					Cookie::set('authautologin', $token->token, $token->expires - time());
+					Cookie::set('authautologin_s', $token->token, $token->expires - time());
 
 					// Complete the login with the found data
 					$this->complete_login($token->user);
@@ -211,10 +211,10 @@ class Kohana_Auth_ORM extends Auth {
 		// Set by force_login()
 		$this->_session->delete('auth_forced');
 
-		if ($token = Cookie::get('authautologin'))
+		if ($token = Cookie::get('authautologin_s'))
 		{
 			// Delete the autologin cookie to prevent re-login
-			Cookie::delete('authautologin');
+			Cookie::delete('authautologin_s');
 
 			// Clear the autologin token from the database
 			$token = ORM::factory('User_Token', array('token' => $token));
