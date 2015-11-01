@@ -43,8 +43,9 @@ class Task_Clear extends Minion_Task
         $categories = ORM::factory('Category')->find_all();
         foreach ($categories as $category) {
             $url = Search_Url::get_uri_category_segment($category->id);
-            $category->url = $url;
-            $category->save();
+            $_category = ORM::factory('Category',$category->id);
+            $_category->url = $url;
+            $_category->save();
         }
         
     }
