@@ -4,7 +4,7 @@
 class Model_Favourite extends ORM {
 
 	protected static $secret = 'secret_#ode123ocvxvhias0a!&sdf';
-	protected $_table_name = 'favorite_surgut';
+	protected $_table_name = 'favorite';
 
 	function saveget_by_cookie($id) {
 
