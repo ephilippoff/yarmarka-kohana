@@ -13,7 +13,7 @@ return array(
 				"type" => array(1,3,9, "auth")
 			)
 		),
-		"pay_service" => array("auth", 1),
+		"pay_service" => array("auth", 1, 9),
 		"news" => array(
 			"edit" => array("auth", 1, 3)
 		),
