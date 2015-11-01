@@ -1289,7 +1289,7 @@ class Lib_PlacementAds_AddEdit {
 
 	function send_external_integrations()
 	{
-		$object = &$this->object;
+		$object = ORM::factory('Object', $object->id);
 		// сохраняем запись для короткого урла *.ya24.biz
 		Model_Object::send_to_db_dns($object->id);
 
