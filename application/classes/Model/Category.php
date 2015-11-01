@@ -17,10 +17,10 @@ class Model_Category extends ORM {
 	{
 		return array(
 			'title' => array(array('not_empty'),),
-			'parent_id' => array(array('digit'), array('not_empty'),),
-			'sinonim' => array(array('not_empty'),),
+			//'parent_id' => array(array('digit'), array('not_empty'),),
+			//'sinonim' => array(array('not_empty'),),
 			'seo_name' => array(array('not_empty'),),
-			'url' => array(array('not_empty'),),
+			//'url' => array(array('not_empty'),),
 		);
 	}
 
