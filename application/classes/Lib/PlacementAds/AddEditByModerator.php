@@ -80,10 +80,10 @@ class Lib_PlacementAds_AddEditByModerator extends Lib_PlacementAds_AddEdit {
 		}
 
 		// указаны ли контакты
-		if ( ! count($this->contacts))
-		{
-			$errors['contact_mobile'] = "Необходимо добавить хотя бы один верифицированный контакт для связи (Мобильный телефон)";
-		}
+		// if ( ! count($this->contacts))
+		// {
+		// 	$errors['contact_mobile'] = "Необходимо добавить хотя бы один верифицированный контакт для связи (Мобильный телефон)";
+		// }
 
 		return $this;
 	}
