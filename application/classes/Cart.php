@@ -6,11 +6,11 @@ class Cart {
 	{
 		$session_id = session_id();
 
-		$key = Cookie::get("cartKey");
+		$key = Cookie::get("cartKeyS");
 		if (!$key)
 		{
 			$key = sha1($string.$session_id. microtime() .  md5($session_id . microtime() . 'sdf97xc65bvx8ckl;l;jsdf7vb45##!&&1'));
-			Cookie::set("cartKey", $key, strtotime( '+90 days' ));
+			Cookie::set("cartKeyS", $key, strtotime( '+90 days' ));
 		}
 
 		return $key;
@@ -18,7 +18,7 @@ class Cart {
 
 	static function get_info()
 	{
-		if (!Cookie::get("cartKey"))
+		if (!Cookie::get("cartKeyS"))
 		{
 			return array(
 				"count" => 0,
@@ -40,7 +40,7 @@ class Cart {
 	static function clear($key, $clear_cookie = TRUE)
 	{
 		if ($clear_cookie) {
-			Cookie::set('cartKey', NULL, -1);
+			Cookie::set('cartKeyS', NULL, -1);
 		}
 		ORM::factory('Order_ItemTemp')->where("key", "=", $key)->delete_all();
 	}

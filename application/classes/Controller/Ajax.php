@@ -1341,7 +1341,7 @@ class Controller_Ajax extends Controller_Template
 
 		$this->auto_render = FALSE;
 
-		$key = $_COOKIE['cartKey'];
+		$key = $_COOKIE['cartKeyS'];
 
 		$count = ORM::factory('Order_ItemTemp')->where("key","=",$key)->count_all();
 		$this->json["count"] = $count;

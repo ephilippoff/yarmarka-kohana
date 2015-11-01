@@ -331,7 +331,7 @@ class Model_Order extends ORM
 					->order_by("id","desc")
 					->find();
 		} else {
-			$key = Cookie::dget("cartKey");
+			$key = Cookie::dget("cartKeyS");
 			if (!$key) return;
 			$last_order = ORM::factory('Order')
 					->where("key","=",$key)
