@@ -250,7 +250,7 @@ class Model_Category extends ORM {
 		$states_str = implode(',', $states);
 
 		if ($cached)
-			$data = Cache::instance()->get("getBannersForCategories:$city_id");	
+			$data = Cache::instance()->get("s_getBannersForCategories:$city_id");	
 		
 		if (!$data)
 		{		
@@ -261,7 +261,7 @@ class Model_Category extends ORM {
 						->getprepared_all();
 			
 			if ($cached)
-				Cache::instance()->set("getBannersForCategories:{$city_id}", $data, 60*60);				
+				Cache::instance()->set("s_getBannersForCategories:{$city_id}", $data, 60*60);				
 		}
 		
 		return $data;		
