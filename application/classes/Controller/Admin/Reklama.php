@@ -289,16 +289,24 @@ class Controller_Admin_Reklama extends Controller_Admin_Template {
 		$this->template->menu_names = array('main' => 'Рубрики объявлений', 'kupon' => 'Рубрики купонов');
 		$this->template->categories = ORM::factory('Category')->where('parent_id', '=', 1)->find_all()->as_array('id', 'title');
 		$this->template->kupon_categories = ORM::factory('Attribute_Element')
-                        ->select('id',  'title' )
+                        ->select('attribute_element.id',  'attribute_element.title', array('attribute.id', 'attribute_title') )
+                        ->join("attribute")
+                        	->on("attribute.id","=","attribute_element.attribute")
 						->where('attribute', '=', 
 								DB::select('id')
 								->from('attribute')
 								->where('seo_name', 'IN', array('category_1', 'news-category') )
 								->order_by('title')
 								->limit(1))
-                        ->find_all()
-						->as_array('id', 'title');
-			
+                        ->getprepared_all();
+
+        $result = array();
+        $result[0] ="---";
+        foreach ($this->template->kupon_categories as $item) {
+        	$result[$item->id] =  $item->title."(".$item->attribute_title.")";
+        }
+
+        $this->template->kupon_categories = $result;
 	}
 	
 	public function action_edit_menu_banner()
