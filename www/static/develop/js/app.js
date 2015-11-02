@@ -15,8 +15,8 @@ function (Marionette, IndexRouter, IndexController, Windows, Mainmenu,
     Favourite, Ocontrol, Search, Services, Common) {
     "use strict";
     
-    if (!window.performance) {
-        window.performance = {now: function(){return 0;}}
+    if (!window.performance.now) {
+        window.performance.now = function(){return 0;}
     }
 
     var app = new Marionette.Application();
