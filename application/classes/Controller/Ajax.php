@@ -426,17 +426,19 @@ class Controller_Ajax extends Controller_Template
 	public function action_pub_toggle()
 	{
 		$object = ORM::factory('Object', intval($this->request->param('id')));
-		if ( ! $object->loaded() 
-				OR ! $object->category_obj->loaded() 
-				OR ! Auth::instance()->get_user() 
-				OR 
-				(	Auth::instance()->get_user()->id != $object->author
-					AND 
-					Auth::instance()->get_user()->id != $object->author_company_id
-				)
-			)
-		{
+		if ( ! $object->loaded() OR ! $object->category_obj->loaded() ) {
 			throw new HTTP_Exception_404;
+		}
+		
+		$user = Auth::instance()->get_user();
+		if (!Acl::check("object.moderate")) {
+			if (! $user OR 
+					($user->id != $object->author 
+							AND  $user->id != $object->author_company_id)
+				)
+			{
+				throw new HTTP_Exception_404;
+			}
 		}
 
 		$info = Object::canEdit(Array("object_id" => $object->id, "rubricid" => $object->category, "city_id" => $object->city_id));
