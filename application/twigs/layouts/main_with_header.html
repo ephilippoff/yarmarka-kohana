@@ -15,7 +15,7 @@
 			{% include "block/menu/news" %}
 		</script>
 		<script id="template-kuponmenu" type="text/template">
-			{% include "block/menu/kupon" %}
+			{{ requestblock('block_twig/kuponmenu', {'city_id': city.id}) }}
 		</script>
 	{% endblock templates %}
 {% endblock body %} 
