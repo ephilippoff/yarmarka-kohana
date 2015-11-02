@@ -358,6 +358,10 @@ class Form_Add  {
 			"expiration" => NULL
 		);
 
+		if ( !Acl::check("object.add.dates") ) {
+			return;
+		}
+
 		if (!$object->loaded()) {
 			date_add($expiration, date_interval_create_from_date_string('1 month'));
 		}
@@ -366,7 +370,7 @@ class Form_Add  {
 			$created = date_create($object->date_created);
 			$expired = date_create($object->date_expired);
 			$expiration = date_create($object->date_expiration);
-		} else if ($this->is_post) {
+		} else if ($this->is_post AND isset($this->params['_date_created'])) {
 			$created = date_create($this->params['_date_created']);
 			$time_created = date_create($this->params['_time_created']);
 			date_time_set($created, (int)  date_format($time_created, 'H'), (int)  date_format($time_created, 'i'));

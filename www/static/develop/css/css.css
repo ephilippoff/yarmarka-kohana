@@ -456,22 +456,22 @@ select{background-color: #FFFFFF;border: 1px solid #C3C3C3;padding:2px 10px;heig
 /* skin-theme6 end */
 
 /*crimson-theme*/
-.crimson-theme .menu-cont2{background-color: #313131;}
+.crimson-theme .menu-cont2{background-color: #313131; }
 .crimson-theme .subcategories-cont ul li span {color: #313131;}
 .crimson-theme .menu-item:hover{background-color: #F98C8C;-webkit-transition: background-color 0.2s;-moz-transition: background-color 0.2s;-o-transition: background-color 0.2s;transition: background-color 0.2s;}
 .crimson-theme .popup-menu-cont li a:hover {background-color: #F98C8C;text-decoration: none;}
 .crimson-theme .popup-menu-cont{border: 1px solid #313131}
 .crimson-theme .menu-cont2 .popup-menu-cont2l .left .span-link{border-left: 4px solid #313131;}
 .crimson-theme .menu-cont2 .popup-menu-cont2l .span-link:hover{background-color: #F98C8C; transition: background-color 0.2s, color 0.3s; color:white; }
-.crimson-theme .view-container{color: white}
-.crimson-theme .view-container{background: url(http://www.free-patterns.info/wp-content/uploads/2015/08/grey-subtle-dry-paint-v27715.png);}
+.crimson-theme .view-container{color: black}
+.crimson-theme .view-container{background: url(http://www.free-patterns.info/wp-content/uploads/2013/01/Soft-Dot-Mix-ver-10.png);}
 .crimson-theme .view-container a, 
-.crimson-theme .reklama-line a{color: white}
+.crimson-theme .reklama-line a{ }
 .crimson-theme .view-container a:hover, 
 .crimson-theme .reklama-line a:hover{ color: #E96F4F; -webkit-transition: color 0.3s;-moz-transition: color 0.3s;-o-transition: color 0.3s;transition: color 0.3s;}
 .crimson-theme .view-container a.active, 
 .crimson-theme .reklama-line a.active{ color:#E96F4F;}
-.crimson-theme.reklama-cont {  background: url(http://www.free-patterns.info/wp-content/uploads/2015/08/grey-subtle-dry-paint-v27715.png);}
+.crimson-theme.reklama-cont {  background: url(http://www.free-patterns.info/wp-content/uploads/2013/01/Soft-Dot-Mix-ver-10.png);}
 /*crimson-theme end*/
 
 /*gray-theme*/

@@ -26,6 +26,14 @@ class Asset extends Kohana_Asset {
 		}
 	}
 
+	public function compile($process = FALSE)
+	{
+		// Get file contents
+		$content = file_get_contents($this->source_file());
+		
+		return $content;
+	}
+
 	static function file_name($type, $file, $last_modified = NULL, $attributes = array())
 	{
 		if ($last_modified)

@@ -20,12 +20,24 @@ class Twig_Functions
 
 	public static function css($file)
 	{
-		return Assets::factory('main')->css($file);
+		try {
+			$return = @Assets::factory('main')->css($file);
+			$return = @$return."";
+		} catch (Exception $e) {
+			$return = "";
+		}
+		return $return;
 	}
 
 	public static function js($file)
 	{
-		return Assets::factory('main')->js($file);
+		try {
+			$return = @Assets::factory('main')->js($file);
+			$return = @$return."";
+		} catch (Exception $e) {
+			$return = "";
+		}
+		return $return;
 	}
 
 	public static function js_asset($file)
