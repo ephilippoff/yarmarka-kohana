@@ -118,11 +118,11 @@ class Task_Clear extends Minion_Task
 
             $sitemaps[] = $sitemap;
         }
-        $sitemaps[] = array(
-            "loc" => "http://yarmarka.biz/cities.sitemap.xml",
-            "changefreq" => "daily",
-            "priority" => "0.8"
-        );
+        // $sitemaps[] = array(
+        //     "loc" => "http://yarmarka.biz/cities.sitemap.xml",
+        //     "changefreq" => "daily",
+        //     "priority" => "0.8"
+        // );
         $twig->sitemaps = $sitemaps;
         $filedata = (string) $twig;
         $filename = APPPATH."../sitemaps/sitemap.xml";
