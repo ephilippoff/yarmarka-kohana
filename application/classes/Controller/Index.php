@@ -41,19 +41,7 @@ class Controller_Index extends Controller_Template {
 
         $twig->months = Date::get_months_names();
 
-        $search_query = Search::searchquery(
-            array(
-                "expiration" => TRUE,
-                "active" => TRUE,
-                "published" =>TRUE,
-                "city_id" => $this->last_city_id,
-                "category_seo_name" => "novosti"
-            ),
-            array("limit" => 15, "page" => 1)
-        );
-        $twig->lastnews = Search::getresult($search_query->execute()->as_array());
-
-        $search_query = Search::searchquery(
+         $search_query = Search::searchquery(
             array(
                 "expiration" => TRUE,
                 "premium" => TRUE,
@@ -66,6 +54,24 @@ class Controller_Index extends Controller_Template {
         );
         $twig->premiumnews = Search::getresult($search_query->execute()->as_array());
         
+        $premium_ids = array_map(function($item){
+            return $item["id"];
+        }, $twig->premiumnews);
+
+        $search_query = Search::searchquery(
+            array(
+                "expiration" => TRUE,
+                "active" => TRUE,
+                "published" =>TRUE,
+                "city_id" => $this->last_city_id,
+                "category_seo_name" => "novosti",
+                "not_id" => $premium_ids
+            ),
+            array("limit" => 15, "page" => 1)
+        );
+        $twig->lastnews = Search::getresult($search_query->execute()->as_array());
+
+       
         $index_info = $this->get_index_info($last_city);
 
         $index_info->link_counters = Search_Url::getcounters($index_info->s_host, "", $index_info->categories["main"]);
