@@ -333,10 +333,13 @@ class Model_Category extends ORM {
 		if ($params->with_ads) {
 			$city_id = ($params->city_id) ? $params->city_id : 1;
 			$banners = $this->get_banners($city_id, $states, $cached);
-
+			if (!$banners) {
+				$banners = array();
+			}
 			$categories_banners = array_map(function($value) {
 				return $value->category_id;
 			}, $banners);
+
 			if (count($banners) > 0) {
 				$result["banners"] = array_combine($categories_banners, $banners);
 			} else {
