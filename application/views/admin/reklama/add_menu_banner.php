@@ -38,7 +38,7 @@ $(document).ready(function() {
 	</div>
 	
 	<div class="control-group <?=Arr::get($errors, 'kupon_category_id') ? 'error' : ''?>">
-		<label class="control-label">Рубрика купонов:</label>
+		<label class="control-label">Рубрика:</label>
 		<div class="controls">
 			<?=Form::select('kupon_category_id', $kupon_categories, Arr::get($_POST, 'kupon_category_id')) ?>
 			<span class="help-inline"><?=Arr::get($errors, 'kupon_category_id')?></span>

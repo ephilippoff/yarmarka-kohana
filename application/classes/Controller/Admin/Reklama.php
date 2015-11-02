@@ -289,11 +289,11 @@ class Controller_Admin_Reklama extends Controller_Admin_Template {
 		$this->template->menu_names = array('main' => 'Рубрики объявлений', 'kupon' => 'Рубрики купонов');
 		$this->template->categories = ORM::factory('Category')->where('parent_id', '=', 1)->find_all()->as_array('id', 'title');
 		$this->template->kupon_categories = ORM::factory('Attribute_Element')
-                        ->select('id', 'title')
+                        ->select('id',  'title' )
 						->where('attribute', '=', 
 								DB::select('id')
 								->from('attribute')
-								->where('seo_name', '=', 'category_1')
+								->where('seo_name', 'IN', array('category_1', 'news-category') )
 								->order_by('title')
 								->limit(1))
                         ->find_all()
