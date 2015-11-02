@@ -29,5 +29,25 @@ class Controller_Redirect extends Controller_Template
 
 		echo "Сайт в режиме обслуживания. Подождите немного и мы станем еще лучше";
 	}
+
+	public function action_old_link()
+	{
+		$this->use_layout = FALSE;
+		$this->auto_render = FALSE;
+
+		$path = $this->request->param("category_path");
+		$path_segments = explode("/", $path);
+		array_shift($path_segments);
+
+		$path_detail_segments = explode("-", $path);
+		if ( $object_id = (int) $path_detail_segments[count($path_detail_segments)-1] ) {
+			HTTP::redirect("/detail/".$object_id, 301);
+			return;
+		} else {
+			HTTP::redirect("/".join("/",$path_segments), 301);
+		}
+		echo Debug::vars($path);
+
+	}
 	
 }

@@ -335,8 +335,21 @@ Route::set('search', '<category_path>', array(
 		$performance = Performance::factory(Acl::check('profiler'));
 		$performance->add("SearchRouting","start");
 		$segments = explode("/", $params["category_path"]);
+
+		$city = ORM::factory('City')
+			->where("seo_name","=", strtolower($segments[0]) )
+			->cached(Date::WEEK)
+			->find();
+
+		if ($city->loaded() OR $segments[0] == 'tyumenskaya-oblast') {
+			$params['controller'] = 'Redirect';
+			$params['action'] = 'old_link';
+			return $params;
+		}
+
 		$category = ORM::factory('Category')
 			->where("seo_name","=", strtolower($segments[0]) )
+			->cached(Date::WEEK)
 			->find();
 		
 		if ($category->loaded()) {
