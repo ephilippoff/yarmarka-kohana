@@ -103,6 +103,9 @@ class Lib_PlacementAds_AddEditByModerator extends Lib_PlacementAds_AddEdit {
 		$params = &$this->params;
 		$object = &$this->object;
 		
+		if (!$params->_date_created) {
+			return $this;
+		}
 		$created = date_create($params->_date_created);
 		$time_created = date_create($params->_time_created);
 		date_time_set($created, (int)  date_format($time_created, 'H'), (int)  date_format($time_created, 'i'));

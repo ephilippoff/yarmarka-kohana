@@ -101,6 +101,9 @@ class Controller_Add extends Controller_Template {
 		if ( Acl::check("object.add.type") ) {
 			$form_data ->AdvertType();
 			$form_data ->UserType();
+		}
+
+		if ( Acl::check("object.add.dates") ) {
 			$form_data ->Dates();
 		}
 
@@ -202,6 +205,9 @@ class Controller_Add extends Controller_Template {
 		if ( Acl::check("object.add.type") ) {
 			$form_data ->AdvertType();
 			$form_data ->UserType();
+		}
+
+		if ( Acl::check("object.add.dates") ) {
 			$form_data ->Dates();
 		}
 

@@ -349,12 +349,18 @@ class Form_Add  {
 	function Dates()
 	{	
 		$object 		= $this->object;
-		$created = $expired = $expiration = date_create();
+		$created = date_create();
+		$expired = date_create();
+		$expiration = date_create();
 		$dates = array(
 			"created" => NULL,
 			"expired" => NULL,
 			"expiration" => NULL
 		);
+
+		if (!$object->loaded()) {
+			date_add($expiration, date_interval_create_from_date_string('1 month'));
+		}
 
 		if ($object->loaded() AND !$this->is_post) {
 			$created = date_create($object->date_created);
@@ -369,8 +375,9 @@ class Form_Add  {
 			$time_expired = date_create($this->params['_time_expired']);
 			date_time_set($expired, (int) date_format($time_expired, 'H'), (int) date_format($time_expired, 'i'));
 
-			$expiration = date_create($this->params['_date_expiration']); 
+			$expiration = date_create($this->params['_date_expiration']);
 			$time_expiration = date_create($this->params['_time_expiration']);
+
 			date_time_set($expiration, (int) date_format($time_expiration, 'H'), (int) date_format($time_expiration, 'i'));
 			
 		}
