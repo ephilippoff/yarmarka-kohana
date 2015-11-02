@@ -5,8 +5,10 @@
 				<li>
 					<div  style="width:110px;height:150px;float:left;padding:5px;overflow:hidden;">
 						<span class="mr3 fs12"><i class="fa fa-home mr3"></i>{{news.date_created|date('d/m, H:i')}} </span>
-						<img src="{{get_file(news.compiled.images.main_photo['120x90'])}}" alt="" width="100%" style="max-height:80px;">
-						<p><a href="{{news.compiled.url}}" class="fs12">{{news.title|slice(0,25)}}...</a></p>
+						<a href="{{news.compiled.url}}" class="fs12">
+							<img src="{{get_file(news.compiled.images.main_photo['120x90'])}}" alt="" width="100%" style="max-height:80px;">
+							<p>{{news.title|slice(0,25)}}...</p>
+						</a>
 					</div>
 				</li>
 			{% endfor %}
