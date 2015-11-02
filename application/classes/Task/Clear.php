@@ -18,7 +18,7 @@ class Task_Clear extends Minion_Task
         Minion_CLI::write('set_attribute_element_urls');
         $this->set_attribute_element_urls();
 
-        $cities = ORM::factory('City')->where("is_visible","=",1)->find_all();
+        $cities = ORM::factory('City')->where("seo_name","=","surgut")->find_all();
         foreach ($cities as $city) {
             Minion_CLI::write('Create sitemap.xml for '.$city->seo_name);
             $this->sitemap_by_city($city->seo_name);
@@ -80,7 +80,7 @@ class Task_Clear extends Minion_Task
             array_map(function($item){ return @$item["date_created"]; }, $cities_modified)
         );
 
-        $cities = ORM::factory('City')->where("is_visible","=",1)->find_all();
+        $cities = ORM::factory('City')->where("seo_name","=","surgut")->find_all();
 
         foreach ($cities as $city) {
 
