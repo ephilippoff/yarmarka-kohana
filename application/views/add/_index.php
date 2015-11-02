@@ -528,11 +528,17 @@
 
 		<? if (property_exists($form_data, 'contacts')): ?>
 			<hr class="dib mb30 w100p">
+			<div class="row">
+				<div class="col-md-3">&nbsp;</div>
+				<div class="col-md-9 mb20">
+				! Внимательно заполните контактные данные. Ввод телефона следует начинать с кода оператора (для мобильного телефона), или с кода города.
+				</div>
+			</div>
 			<? foreach (array(
 					"mobile" => array("name"=>"Мобильный телефон", "icon" => "<i class='fa fa-mobile-phone'></i>", "placeholder" => "Введите код из смс"),
 					"phone" => array("name"=>"Городской телефон", "icon" => "<i class='fa fa-phone'></i>", "placeholder" => "Введите код"),
 					"email"=> array("name"=>"Email", "icon" => "<i class='fa fa-envelope-o'></i>", "placeholder" => "Введите код из письма")) as $type => $type_params): ?>
-				
+
 				<div class="row mb20">
 					<div class="col-md-3 labelcont">
 						<label><?=$type_params["name"]?>:</label>
