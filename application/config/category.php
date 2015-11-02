@@ -17,7 +17,7 @@ return array(
 		"description" => "vakancy_law",
 		"additional_fields" => array(
 			1 => array("additional_org_name", "additional_vakancy_org_type", "additional_commoninfo"),
-			2 => array("additional_vakancy_org_type"),
+			2 => array("additional_org_name", "additional_vakancy_org_type", "additional_commoninfo"),
 		),
 		"additional_saveas" => array(
 			"additional_org_name" => array("param_256","Компания")
