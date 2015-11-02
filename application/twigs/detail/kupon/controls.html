@@ -5,6 +5,13 @@
 	<p class="button js-ocontrol-edit button-style1 bg-color-crimson mb3" data-id="{{object.id}}">
 		<i class="fa fa-edit fa-lg mr5"></i>Редактировать
 	</p>
+	<p class="button js-ocontrol-publish button-style1 bg-color-lightgreen mb3" data-id="{{object.id}}">
+			{% if object.is_published %} 
+				<i class="fa fa-trash fa-lg mr5"></i><span>Снять с публикации</span>
+			{% else %}
+				<i class="fa fa-check fa-lg mr5"></i><span>Опубликовать</span>
+			{% endif %}
+	</p>
 	<p class="button js-service-up button-style1 bg-color-lightgreen mb3" data-id="{{object.id}}">
 		<i class="fa fa-angle-double-up fa-lg mr5"></i>Поднять
 	</p>

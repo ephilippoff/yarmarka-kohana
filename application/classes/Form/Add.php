@@ -683,7 +683,10 @@ class Form_Add  {
 
 		$main_image_file = "";
 		if ($main_image_id) {
-			$oa = ORM::factory('Object_Attachment', $main_image_id);
+
+			$oa = ORM::factory('Object_Attachment')
+					->where("filename","=",$main_image_id)
+					->find();
 			if ($oa->loaded()) {
 				$main_image_file = $oa->filename;
 			}
