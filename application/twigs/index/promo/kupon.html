@@ -4,7 +4,7 @@
 		<div class="menu-cont2 brt2">
 			<div class="row">
 				<div class="col-md-12 clearfix">
-					$nbsp;
+					&nbsp;
 					{#<div class="menu-item left js-kuponmenu-dropdown">
 						<span class="menu-item-cont">Категории<i class="fa fa-caret-down ml3"></i></span>
 					</div>
@@ -29,7 +29,7 @@
 							{% endfor %}
 						</ul>
 					</div>
-				{%endif%}
+				{% endif %}
 				<div class="{% if premium_kupons|length > 0 %}col-md-6 col-xs-6{% else %}col-md-12{%endif%} items-cont">
 					<ul>
 						{% for object in kupons %}

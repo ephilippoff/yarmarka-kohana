@@ -21,7 +21,7 @@ function (Marionette, IndexRouter, IndexController, Windows, Mainmenu,
 
     var app = new Marionette.Application();
 
-    var t0 = performance.now();
+    var t0 = window.performance.now();
     console.log("start app");
 
     app.addInitializer(function(){
@@ -40,7 +40,7 @@ function (Marionette, IndexRouter, IndexController, Windows, Mainmenu,
             controller : IndexController
         });
 
-        var t1 = performance.now();
+        var t1 = window.performance.now();
         console.log("dom ready " + (t1 - t0));
     });
     
