@@ -196,11 +196,11 @@ class Valid extends Kohana_Valid {
 		return $contact->is_blocked();
 	}
 
-	public static function mobile_sms_phonemax($value, $session_id, $max_value = 2)
+	public static function mobile_sms_phonemax($value, $session_id, $max_value = 4)
 	{
 		$sms_count = ORM::factory('Sms')->cnt_by_phone($value, $session_id);
 
-		return ($sms_count + 1 < $max_value);
+		return ($sms_count + 1 <= $max_value);
 	}
 
 	public static function mobile_sms_sessionmax($value, $session_id, $max_value = 10)
