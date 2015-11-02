@@ -104,13 +104,18 @@ define([
                 s.ui.tr.on("mouseover", function(e){
                     e.preventDefault();
                     var object_id = $(e.currentTarget).data("id");
-                    objects[object_id].options.set( app.map.getIconSettings("defTwitterActive") );
+
+                    if (objects[object_id] && objects[object_id].options) {
+                        objects[object_id].options.set( app.map.getIconSettings("defTwitterActive") );
+                    }
                 });
 
                 s.ui.tr.on("mouseleave", function(e){
                     e.preventDefault();
                     var object_id = $(e.currentTarget).data("id");
-                    objects[object_id].options.set( app.map.getIconSettings("defTwitter") );
+                    if (objects[object_id] && objects[object_id].options) {
+                        objects[object_id].options.set( app.map.getIconSettings("defTwitter") );
+                    }
                 });
             });
         },
