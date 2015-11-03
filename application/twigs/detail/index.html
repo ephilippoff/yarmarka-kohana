@@ -44,7 +44,16 @@
 				{% include 'detail/info' %}
 			</div>
 		</div>
-
+		<div class="row">
+			<div class="col-md-12">
+			{{ requestblock('block_twig/adslinkline', {'city_id': city.id, 'category_id': category.id, 'theme_class': theme_class}) }}
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+			<div class="banner module {zoneID: 18 }"></div>
+			</div>
+		</div>
 		{% if (category.show_map) %}
 			<div class="row">
 				<div class="col-md-12">
