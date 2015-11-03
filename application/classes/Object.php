@@ -363,7 +363,12 @@ class Object
 	{		
 		$json = array();
 
-		$add = new Lib_PlacementAds_AddEdit();
+		if ( Acl::check("object.add.type") )
+		{
+			$add = new Lib_PlacementAds_AddEditByModerator();
+		} else {
+			$add = new Lib_PlacementAds_AddEdit();
+		}
 		$add->init_input_params($input_params)
 			->init_instances()
 			->init_object_and_mode()
@@ -423,7 +428,12 @@ class Object
 
 		$input_params["just_check"] = 1;
 
-		$add = new Lib_PlacementAds_AddEdit();
+		if ( Acl::check("object.add.type") )
+		{
+			$add = new Lib_PlacementAds_AddEditByModerator();
+		} else {
+			$add = new Lib_PlacementAds_AddEdit();
+		}
 		$add->init_input_params($input_params)
 			->init_instances()
 			->init_object_and_mode()

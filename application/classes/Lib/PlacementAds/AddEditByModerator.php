@@ -82,10 +82,10 @@ class Lib_PlacementAds_AddEditByModerator extends Lib_PlacementAds_AddEdit {
 		}
 
 		// указаны ли контакты
-		if ( ! count($this->contacts))
-		{
-			$errors['contacts'] = Kohana::message('validation/object_form', 'empty_contacts');
-		}
+		// if ( ! count($this->contacts))
+		// {
+		// 	$errors['contacts'] = Kohana::message('validation/object_form', 'empty_contacts');
+		// }
 
 		return $this;
 	}
@@ -115,6 +115,12 @@ class Lib_PlacementAds_AddEditByModerator extends Lib_PlacementAds_AddEdit {
 		$object->full_text = $object->generate_full_text();
 		$object->save();
 		return $this;
-	}	
+	}
+
+	function init_validation_rules_for_attributes()
+	{
+
+		return $this;		
+	}
 
 }
