@@ -234,7 +234,10 @@ class Controller_Block_Twig extends Controller_Block
 
         $performance = Performance::factory(Acl::check('profiler'));
         $twig->info = $performance->getProfilerStat();
-
-        $this->response->body($twig);
+        if (Acl::check('profiler')) {
+            $this->response->body($twig);
+        } else {
+            $this->response->body("");
+        }
     }
 }
