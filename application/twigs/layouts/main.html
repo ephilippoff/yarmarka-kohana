@@ -11,14 +11,20 @@
         {% if show_canonical %}
             <link rel="canonical" href="{{ url(canonical_url) }}">
         {% endif %}
-
+        
         {% block css %}
-            {{ css("bootstrap.min.css") }}
-            {{ css("bootstrap.tables.min.css") }}
-            {{ css("font-awesome.css") }}
-            {{ css("iLight.css") }}
-            {{ css("css.css") }}
-        {% endblock css%}
+            {% if is_debug_mode() %}
+                    {{ css("bootstrap.min.css") }}
+                    {{ css("bootstrap.tables.min.css") }}
+                    {{ css("font-awesome.css") }}
+                    {{ css("iLight.css") }}
+                    {{ css("css.css") }}
+            {% else  %}
+                    {{ css("../production/css/appstyles.css") }}
+            {% endif %}
+        {% endblock css %}
+
+        
 
         {{ js("lib/jquery.js") }}
         {% block js %}

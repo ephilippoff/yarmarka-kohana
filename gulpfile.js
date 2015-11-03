@@ -82,6 +82,17 @@ gulp.task('buildcss', function() {
                 .pipe(gulp.dest('./www/static/develop/production/css/'));
 });
 
+gulp.task('buildconcatcss', function() {
+    return gulp.src(['./www/static/develop/css/bootstrap.min.css',
+                        './www/static/develop/css/bootstrap.tables.min.css',
+                            './www/static/develop/css/font-awesome.css',
+                            './www/static/develop/css/iLight.css',
+                            './www/static/develop/css/css.css'])
+                .pipe(concat('appstyles.css'))
+                .pipe(csso())
+                .pipe(gulp.dest('./www/static/develop/production/css/'));
+});
+
 
 gulp.task('buildfonts', function() {
     return gulp.src(['./www/static/develop/fonts/**/*'])
@@ -145,6 +156,7 @@ gulp.task('build', [
     'buildimages',
     'buildfonts', 
     'buildcss', 
+    'buildconcatcss',
     'buildjs',
     //'buildhtml', 
     //'injects'
