@@ -41,19 +41,20 @@ define([
             this.bindUIElements();
             if (this.ui.map.length) {
                 this.initMap();
-                var maxOffsetY = _.max([this.ui.banners.height(), this.ui.liders.height()]) + this.ui.map.height();
-                if (this.ui.liders.length == 0) {
-                    this.fixBlock(this.ui.map.parent(), 0, 0 );
-                } else {
-                    this.fixBlock(this.ui.map.parent(), maxOffsetY, 0 );
-                }
+                // var maxOffsetY = _.max([this.ui.banners.height(), this.ui.liders.height()]) + this.ui.map.height();
+                // if (this.ui.liders.length == 0) {
+                //     this.fixBlock(this.ui.map.parent(), 0, 0 );
+                // } else {
+                //     this.fixBlock(this.ui.map.parent(), maxOffsetY, 0 );
+                // }
             }
 
             if (this.ui.banners.length) {
+                var map_height = 0;//this.ui.map.height();
                 if (this.ui.liders.length == 0) {
-                    this.fixBlock(this.ui.banners, -this.ui.map.height() - 70, this.ui.map.height() + 10);
+                    this.fixBlock(this.ui.banners, -map_height - 70, map_height + 10);
                 } else {
-                    this.fixBlock(this.ui.banners, this.ui.map.height(), this.ui.map.height() + 10);
+                    this.fixBlock(this.ui.banners, map_height, map_height + 10);
                 }
             }
 
