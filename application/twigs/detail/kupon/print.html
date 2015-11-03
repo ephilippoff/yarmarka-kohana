@@ -5,15 +5,12 @@
 
 <div class="kupon-print-cont">
 	<div class="row mb30">
-		<div class="logo fl"><img src="{{ staticfile('images/black_logo.png') }}"></div>
+		<div class="logo fl"><img src="/images/black_logo.png"></div>
 		<div class="fr"></div>
 	</div>
-	<p class="tt-u ta-c fs20 fw-b mb5">Скидочный купон №{{kupon_number}}</p>
+	<p class="tt-u ta-c fs20 fw-b mb5">Скидочный купон №{{kupon_number}} {% if kupon.external_number and kupon.number %}({{kupon.external_number}}){% endif %}</p>
 	<p class="ta-c color-gray mb20">Предъявите этот купон на месте, чтобы получить услугу</p>
 	<hr class="mb10">
-	<p class="ta-c tt-u fs26 mb5">ПИН-КОД {{kupon.code}}</p>
-	<p class="ta-c tt-u color-gray mb15">Внимание! Не сообщайте пин-код до момента получения товара или услуги</p>
-	<hr class="mb20">
 	<p class="mb20 fs16 fw-b ta-c"><a href="/detail/{{kupon_group.object_id}}">{{kupon_group.title}}</a></p>
 	<hr class="mb10">
 	<div class="row mb10">
@@ -37,9 +34,22 @@
 		{{kupon_group.support_info}}
 	</div>
 	<hr class="mb15">
-	<p class="ta-c fs16 color-gray mb10">Служба поддержки Ярмарка-Скидки:</p>
-	<p class="ta-c fs16 color-gray">в Нижневартовске: +7(3466)29-28-77</p>
-	<p class="ta-c fs16 color-gray">в Сургуте: +7(3462)21-92-77</p>
-	<p class="ta-c fs16 color-gray">в Тюмени: +7(3452)49-21-21</p>
+	<p class="mb10">Информация для поставщика услуги:</p>
+	<div class="text-cont mb15">
+		Проверьте подлинность купона самостоятельно по адресу http:/c.yarmarka.biz/kupon/check<br>Либо свяжитесь со службой поддержки по телефону
+	</div>
+	<hr class="mb15">
+	{% if city == 'tyumen' %}
+		<p class="ta-c fs16 color-gray mb10">Служба поддержки Ярмарка-Скидки в Тюмени: +7(3452)49-21-21</p>
+	{% elseif city == 'surgut' %}
+		<p class="ta-c fs16 color-gray mb10">Служба поддержки Ярмарка-Скидки в Сургуте: +7(3462)21-92-77</p>
+	{% elseif city == 'nizhnevartovsk' %}
+		<p class="ta-c fs16 color-gray mb10">Служба поддержки Ярмарка-Скидки в Нижневартовске: +7(3466)29-28-77</p>
+	{% else %}
+		<p class="ta-c fs16 color-gray mb10">Служба поддержки Ярмарка-Скидки:</p>
+		<p class="ta-c fs16 color-gray">в Тюмени: +7(3452)49-21-21</p>
+		<p class="ta-c fs16 color-gray">в Сургуте: +7(3462)21-92-77</p>
+		<p class="ta-c fs16 color-gray">в Нижневартовске: +7(3466)29-28-77</p>
+	{% endif %}
 	<p class="ta-c fs16 color-gray">email: skidki@yarmarka.biz</p>
 </div>
