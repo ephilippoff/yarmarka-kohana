@@ -42,8 +42,16 @@ $(document).ready(function() {
 	<div class="control-group <?=Arr::get($errors, 'kupon_category_id') ? 'error' : ''?>">
 		<label class="control-label">Рубрика купонов:</label>
 		<div class="controls">
-			<?=Form::select('kupon_category_id', $kupon_categories, Arr::get($_POST, 'kupon_category_id', @$ads_element->kupon_category_id)) ?>
+			<?=Form::select('kupon_category_id', $kupon_categories, Arr::get($_POST, 'kupon_category_id', @$ad_element->category_id)) ?>
 			<span class="help-inline"><?=Arr::get($errors, 'kupon_category_id')?></span>
+		</div>	
+	</div>
+
+	<div class="control-group <?=Arr::get($errors, 'news_category_id') ? 'error' : ''?>">
+		<label class="control-label">Рубрика новостей:</label>
+		<div class="controls">
+			<?=Form::select('news_category_id', $news_categories, Arr::get($_POST, 'news_category_id', @$ad_element->category_id)) ?>
+			<span class="help-inline"><?=Arr::get($errors, 'news_category_id')?></span>
 		</div>	
 	</div>	
 		
