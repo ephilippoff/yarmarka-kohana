@@ -1,4 +1,3 @@
-{% set categories = requestmethod('Controller_Block_Twig','news_categories', {}) %}
 <div class="popup-menu-cont popup-menu-cont2l iLight-cont js-newsmenu z300">
 	<div class="left brb2">
 		<ul class="top" role="menu">
@@ -18,28 +17,17 @@
 	</div>
 	<div class="right brb2 visible-lg">
 		{% for element in categories %}
-			{% set divWidth = (banners[element.id] is defined and banners[element.id].menu_width) ? banners[element.id].menu_width : 250 %}
+			{% set menuHeight = (banners[element.id] is defined and banners[element.id].menu_height) ? banners[element.id].menu_height : 0 %}
+			{% set divWidth = (banners[element.id] is defined and banners[element.id].menu_width) ? banners[element.id].menu_width : 600 %}
 			{% set ulWidth = 191 %}
-			<div class="section section{{element.id}} p10" id="section{{element.id}}" style="width: {{divWidth}}px; display: none;">
-				{% if banners[element.id] is defined and file_exist('/uploads/banners/menu/' ~ banners[element.id].image) and banners[category.id].menu_name == 'kupon' %}
+			{% if banners[element.id] is defined and file_exist('/uploads/banners/menu/' ~ banners[element.id].image) and banners[element.id].menu_name == 'news' %}
+			<div class="section section{{element.id}} p10" id="section{{element.id}}" style="min-height:{{menuHeight}}px;width: {{divWidth}}px; display: none;" data-menu-height="{{menuHeight}}">
 					<img hidefocus="true" style="position: absolute;right:{{banners[element.id].x}}px ; bottom:{{banners[element.id].y}}px;" usemap="#map{{element.id}}" src="/uploads/banners/menu/{{banners[element.id].image}}"/>
-
 					<map name="map{{element.id}}" id="map{{element.id}}">
 						<area shape="poly" coords="{{banners[element.id].map_params}}" class="" href="/redirect/ref_cb?id={{banners[element.id].id}}" target="_blank" />
 					</map>
-				{% elseif file_exist(element.main_menu_image) %}
-					<span class="">
-						<img  hidefocus="true"  src="http://yarmarka.biz/uploads/banners/menu/5sllpgxnndnadcwkhpyl.png">
-					</span>
-				{% endif %}
-				
-				<ul style="width:{{ulWidth}}px">
-					<li class="li-title ml10"><span class="bold  black fs18" style="width: 165px">{{element.title}}</span></li>
-					<li>
-						<img  hidefocus="true"  src="http://yarmarka.biz/uploads/banners/menu/5sllpgxnndnadcwkhpyl.png" width="350">
-					</li>
-				</ul>
 			</div>
+			{% endif %}
 		{% endfor %}
 	</div>
 </div>
