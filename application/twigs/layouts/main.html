@@ -38,16 +38,7 @@
             {% block body %}
                 {% block footer %} 
                     {% include 'block/footer/linkline' %}
-                    {% if php_time %}
-                        <div class="info-block-cont theme2 module">
-                            <div class="block-title">
-                                    <span>Timing for admin</span><i class="fa fa-eye fa-lg ml5" onclick="$('.js-admin-control-cont').toggleClass('hidden');"></i>
-                            </div>
-                            <div class="hidden js-admin-control-cont">
-                                {{ php_time }}
-                            </div>
-                        </div>
-                    {% endif %}
+                    {{ requestblock('block_twig/debug_info', {}) }}
                 {% endblock footer %}
             {% endblock body%}
         </div>

@@ -34,9 +34,6 @@
 	
 	{% block templates %}
 		{{ parent() }}
-		<script id="template-mainmenu" type="text/template">
-			{{ requestblock('block_twig/mainmenu', {'city_id': city.id}) }}
-		</script>
 	{% endblock templates %}
 {% endblock body %} 
 

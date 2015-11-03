@@ -55,7 +55,7 @@ class Controller_Block_Twig extends Controller_Block
         $cities = ORM::factory('City')->where("is_visible","=",1);
         if ($city_id)
             $cities = $cities->where("id","<>",$city_id);
-        $twig->cities = $cities->getprepared_all();
+        $twig->cities = $cities->cached(Date::WEEK)->getprepared_all();
         $this->response->body($twig);
     }
 
@@ -116,7 +116,7 @@ class Controller_Block_Twig extends Controller_Block
 
         $reklama =  $reklama->where("type", "IN", $types[$type]);
 
-        return $reklama->getprepared_all();
+        return $reklama->cached(Date::HOUR)->getprepared_all();
     }
 
     public static function kupon_categories($params = NULL)
@@ -227,6 +227,14 @@ class Controller_Block_Twig extends Controller_Block
         $twig->banners    = $banners;
 
         $this->response->body($twig);
-    }   
+    } 
 
+    public function action_debug_info(){
+        $twig = Twig::factory('block/debug_info');
+
+        $performance = Performance::factory(Acl::check('profiler'));
+        $twig->info = $performance->getProfilerStat();
+
+        $this->response->body($twig);
+    }
 }

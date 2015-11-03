@@ -17,5 +17,11 @@
 		<script id="template-kuponmenu" type="text/template">
 			{{ requestblock('block_twig/kuponmenu', {'city_id': city.id}) }}
 		</script>
+		<script id="template-mainmenu" type="text/template">
+			{{ requestblock('block_twig/mainmenu', {'city_id': city.id}) }}
+		</script>
+		<script id="template-citymenu" type="text/template">
+			{{ requestblock('block_twig/othercities', {'city_id': city.id}) }}
+		</script>
 	{% endblock templates %}
 {% endblock body %} 
