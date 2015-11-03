@@ -31,7 +31,8 @@
 					<div class="col-md-9">
 						{% include 'index/promo/news' %}
 						{{ requestblock('block_twig/adslinkline', {'city_id': city.id, 'theme_class': theme_class}) }}
-						<img class="banner module" src="/static/develop/images/banner1.gif" style="width:auto;max-width:650px;">
+						<div class="banner module {zoneID: 18 }"></div>
+
 						{% include 'index/promo/kupon' %}
 						<div class="bg-color-whitesmoke p20 mb10 br2">
 							<p class="fs18 bold">Свежие предложения всегда под рукой: </p>
