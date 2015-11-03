@@ -49,17 +49,17 @@ define([
             var s = this;
             if (this.activateTimer) clearTimeout(this.activateTimer);
             this.activateTimer = setTimeout(function(){
-                $(s.getOption("menuClass")).fadeIn();
-                $("#popup-layer").fadeIn();
+                $(s.getOption("menuClass")).fadeIn(70);
+                $("#popup-layer").fadeIn(70);
                 $(s.getOption("controlClass")).addClass("z301");
-            }, 450)
+            }, 250)
             
         },
 
         closeMenu: function() {
             if (this.activateTimer) clearTimeout(this.activateTimer);
-            $(this.getOption("menuClass")).fadeOut();
-             $("#popup-layer").fadeOut();
+            $(this.getOption("menuClass")).fadeOut(70);
+             $("#popup-layer").fadeOut(70);
              $(this.getOption("controlClass")).removeClass("z301");
         }
     });
@@ -93,7 +93,7 @@ define([
                   submenuId = $row.data("submenu-id"), 
                   $submenu = $("#" + submenuId);
 
-              $submenu.fadeIn();
+              $submenu.fadeIn(70);
             }, 200)
            
         },
@@ -103,7 +103,7 @@ define([
                 submenuId = $row.data("submenu-id"), 
                 $submenu = $("#" + submenuId);
 
-            $submenu.fadeOut();
+            $submenu.fadeOut(70);
         }
     });
 
