@@ -1,5 +1,5 @@
 <div class="breadcrumbs-cont module">
-	<a href="http://{{ domain.get_domain() }}" rel="nofollow"  class="">{{ city.title }}</a>
+	<a href="http://{{ domain.get_domain() }}/glavnaya-kategoriya" rel="nofollow"  class="">Все объявления в {{ city.sinonim }}</a>
 	{% for crumb in crumbs %}
 			/ <a href="{{ url(crumb.uri) }}"  class="">{{crumb.title}}</a>
 	{% endfor %}

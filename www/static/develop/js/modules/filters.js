@@ -303,7 +303,6 @@ define([
         },
         initialize: function(options){
             var s = this;
-            console.log(this.model.toJSON())
             this.bindUIElements();
             ListFilterItem.prototype.initialize.call(this, options);
         },
