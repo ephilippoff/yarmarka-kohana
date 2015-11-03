@@ -85,7 +85,7 @@ return array(
 			"default" => 2
 		),
 		"default" => 2,
-		"base" => 20
+		"base" => 40
 	),
 	"premium" => array(
 		"tyumen" => array(
