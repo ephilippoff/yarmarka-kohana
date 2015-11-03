@@ -16,7 +16,6 @@ class Controller_Kupon extends Controller_Template {
 	
 	public function action_print()
 	{
-		$this->layout = "kupon";
 		$twig = Twig::factory('detail/kupon/print');
 
 		$id = (int) $this->request->param('id');
@@ -46,16 +45,13 @@ class Controller_Kupon extends Controller_Template {
 			$twig->city = Arr::get($cities, $object->city_id, NULL);
 		}
 
-		$this->template->twig_template = $twig;
-		$this->template->set_global('title', $twig->kupon_group->title);
+		$this->response->body($twig);
 	}
 
 	public function action_check()
 	{
-		$this->layout = "cart";
 		$twig = Twig::factory('detail/kupon/check');
 
-		$this->template->twig_template = $twig;
-		$this->template->set_global('title', "Проверка номера купона");
+		$this->response->body($twig);
 	}
 }

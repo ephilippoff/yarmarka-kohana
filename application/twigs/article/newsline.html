@@ -17,17 +17,17 @@
 		<div class="col-md-9">
 			<article class="bg-color-whitesmoke p20">
 				<h1 class="captionbold fs22">Все новости за {{ date|date('d.m.Y') }}</h1>
-			{% for object in articles %}
-				<div class="mt20">
-					<p class="fs18"><span>{{ object.date_expired|date('H:i') }}</span> <a class="bold" href="{{object.compiled.url}}" name="{{object.id}}">{{object.title}}</a></p>
-					<div class="photo-cont mt10">
-						<img class="news-photo" src="{{get_file(object.compiled.images.main_photo.original)}}" width="500">
-						<p>{{object.compiled.attributes['news-category'].value}}</p>
+				{% for object in articles %}
+					<div class="mt20">
+						<p class="fs18"><span>{{ object.date_expired|date('H:i') }}</span> <a class="bold" href="{{object.compiled.url}}" name="{{object.id}}">{{object.title}}</a></p>
+						<div class="photo-cont mt10">
+							<img class="news-photo" src="{{get_file(object.compiled.images.main_photo.original)}}" width="500">
+							<p>{{object.compiled.attributes['news-category'].value}}</p>
+						</div>
+						<div class="text-cont mt10">{{object.user_text}}</div>
 					</div>
-					<div class="text-cont mt10">{{object.user_text}}</div>
-				</div>
-			{% endfor%}
-			</article>
+				{% endfor%}
+				</article>
 		</div>
 		<div class="col-md-3">
 			{% include 'index/informers' %}

@@ -562,6 +562,7 @@ class Controller_Cart extends Controller_Template {
 			}
 
 			$params = json_decode($order->params);
+			$params->is_surgut =  TRUE;
 			if ($need_delivery) {
 				$params->need_delivery =  TRUE;
 			} else {

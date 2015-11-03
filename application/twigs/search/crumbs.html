@@ -1,9 +1,9 @@
 <div class="breadcrumbs-cont module">
 	{% if canonical_url and canonical_url != main_category %}
 		{% if city %}
-			<a href="/{{sphinx_search_query}}" rel="nofollow" class="">Все объявления в {{ city.sinonim }} </a>
+			<a href="/glavnaya-kategoriya{{sphinx_search_query}}" rel="nofollow" class="">Все объявления в {{ city.sinonim }} </a>
 		{% else %}
-			<a href="/{{sphinx_search_query}}" rel="nofollow" class="">Все объявления в России</a>
+			<a href="/glavnaya-kategoriya{{sphinx_search_query}}" rel="nofollow" class="">Все объявления в России</a>
 		{% endif %}
 	{% endif %}
 
