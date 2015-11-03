@@ -11,14 +11,20 @@
         {% if show_canonical %}
             <link rel="canonical" href="{{ url(canonical_url) }}">
         {% endif %}
-
+        
         {% block css %}
-            {{ css("bootstrap.min.css") }}
-            {{ css("bootstrap.tables.min.css") }}
-            {{ css("font-awesome.css") }}
-            {{ css("iLight.css") }}
-            {{ css("css.css") }}
-        {% endblock css%}
+            {% if is_debug_mode() %}
+                    {{ css("bootstrap.min.css") }}
+                    {{ css("bootstrap.tables.min.css") }}
+                    {{ css("font-awesome.css") }}
+                    {{ css("iLight.css") }}
+                    {{ css("css.css") }}
+            {% else  %}
+                    {{ css("../production/css/appstyles.css") }}
+            {% endif %}
+        {% endblock css %}
+
+        
 
         {{ js("lib/jquery.js") }}
         {% block js %}
@@ -38,16 +44,7 @@
             {% block body %}
                 {% block footer %} 
                     {% include 'block/footer/linkline' %}
-                    {% if php_time %}
-                        <div class="info-block-cont theme2 module">
-                            <div class="block-title">
-                                    <span>Timing for admin</span><i class="fa fa-eye fa-lg ml5" onclick="$('.js-admin-control-cont').toggleClass('hidden');"></i>
-                            </div>
-                            <div class="hidden js-admin-control-cont">
-                                {{ php_time }}
-                            </div>
-                        </div>
-                    {% endif %}
+                    {{ requestblock('block_twig/debug_info', {}) }}
                 {% endblock footer %}
             {% endblock body%}
         </div>

@@ -6,10 +6,6 @@ class Controller_Detail extends Controller_Template {
 	{
 		parent::before();
 
-		$this->performance = Performance::factory(Acl::check('profiler'));
-
-		$this->performance->add("Detail","start");
-
 		$this->use_layout = FALSE;
 		$this->auto_render = FALSE;
 
@@ -48,7 +44,7 @@ class Controller_Detail extends Controller_Template {
 		$twig->domain      = $this->domain;
 		$twig->city        = $this->domain->get_city();
 
-		$this->performance->add("Detail","info");
+
 		$detail_info = Detailpage::factory("Default", $object)
 						->get_messages()
 						->get_similar()
@@ -63,8 +59,6 @@ class Controller_Detail extends Controller_Template {
 		$twig->favourites = ORM::factory('Favourite')->get_list_by_cookie();
 		//end favourites
 
-		$this->performance->add("Detail","end");
-		$twig->php_time = $this->performance->getProfilerStat();
 		$this->response->body($twig);
 	}
 
@@ -102,8 +96,6 @@ class Controller_Detail extends Controller_Template {
 			$twig->{$key} = $item;
 		}
 		
-		$this->performance->add("Detail","end");
-		$twig->php_time = $this->performance->getProfilerStat();
 		$this->response->body($twig);
 	}
 
@@ -142,8 +134,6 @@ class Controller_Detail extends Controller_Template {
 			$twig->{$key} = $item;
 		}
 		
-		$this->performance->add("Detail","end");
-		$twig->php_time = $this->performance->getProfilerStat();
 		$this->response->body($twig);
 	}
 
@@ -182,8 +172,7 @@ class Controller_Detail extends Controller_Template {
 			$twig->{$key} = $item;
 		}
 		
-		$this->performance->add("Detail","end");
-		$twig->php_time = $this->performance->getProfilerStat();
+
 		$this->response->body($twig);
 	}
 

@@ -33,7 +33,7 @@ function (Marionette, templates, utils, IndexPage, SearchPage, DetailPage,
 
         start_detailSection : function() {
             console.log("detail start", "kupon", "news");
-            app.menu.init(["main", "kupon", "news"]);
+            app.menu.init(["main", "city", "kupon", "news"]);
             app.module("map", MapModule);
             new DetailPage({
                 el: "body"
@@ -57,7 +57,7 @@ function (Marionette, templates, utils, IndexPage, SearchPage, DetailPage,
         start_usersearchSection : function() {
             console.log("usersearch start");
 
-            app.menu.init(["main", "kupon", "news"]);
+            app.menu.init(["main", "city", "kupon", "news"]);
             app.favourite.init(["list"]);
             new UserSearchPage({
                 el: "body"
@@ -66,7 +66,7 @@ function (Marionette, templates, utils, IndexPage, SearchPage, DetailPage,
 
         start_cartSection : function() {
             console.log("cart start");
-            app.menu.init(["main", "kupon", "news"]);
+            app.menu.init(["main", "city", "kupon", "news"]);
             app.favourite.init(["list"]);
             new CartPage({
                 el: "body"
@@ -76,7 +76,7 @@ function (Marionette, templates, utils, IndexPage, SearchPage, DetailPage,
         start_addSection : function() {
             console.log("Add start");
             app.module("map", MapModule);
-            app.menu.init(["main", "kupon", "news"]);
+            app.menu.init(["main", "city", "kupon", "news"]);
             new AddPage({
                 el: "body"
             });
@@ -84,12 +84,12 @@ function (Marionette, templates, utils, IndexPage, SearchPage, DetailPage,
 
         start_userSection : function() {
             console.log("user start");
-            app.menu.init(["main", "kupon", "news"]);
+            app.menu.init(["main", "city", "kupon", "news"]);
         },
 
         start_articleSection : function() {
             console.log("article start");
-            app.menu.init(["main", "kupon", "news"]);
+            app.menu.init(["main", "city", "kupon", "news"]);
             app.module("map", MapModule);
             new ArticlePage({
                 el: "body"
@@ -97,7 +97,7 @@ function (Marionette, templates, utils, IndexPage, SearchPage, DetailPage,
         },
         
         notFound : function() {
-
+            
         }
     });
 });

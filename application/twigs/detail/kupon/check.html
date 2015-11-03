@@ -1,0 +1,56 @@
+{% extends "layouts/simple" %}
+
+{% set theme_class = 'light-blue-theme' %}
+
+{% block css %} 
+	{{ parent() }}
+{% endblock css%}
+
+{% block title %} {{object.title|e}} {% endblock title%}
+{% block meta_description %} {{ object.user_text|e }} {% endblock meta_description%}
+
+{% block wrapperclass %}page-detail{% endblock wrapperclass %}
+
+{% block header %} 
+		{{ requestblock('block_twig/topline', {'favourites':favourites}) }}
+		{% include 'block/header/logoline' %}
+		{% include 'search/kupony/promo' %}
+{% endblock header %} 
+
+{% block content %}
+	<div class="col-md-12 p10">
+		<h1 class="captionbold fs22">Проверка номера купона</h1>
+		<form id="check-number-form" action="post">
+			<div class="p20">
+				<table class="cart-table table">
+					<tr>
+						<td class="w250">
+							<label class="fs18">Введите номер для проверки купона</label></td><td>
+							
+						</td>
+						<td class="w300">
+							<div class="input-group w100p">
+								<input type="text" name="number" class="w100p js-check-number">
+							</div>
+						</td>
+						<td>
+							<button class="button_v2 bg-color-blue pl20 pr20 white br3 js-check-number-submit" type="submit">Проверить</button>
+						</td>
+					</tr>
+				</table>
+			</div>
+			
+		</form>
+	</div>
+{% endblock content%}	
+
+
+{% block templates %}
+	{{ parent() }}
+{% endblock templates %}
+
+
+
+
+
+

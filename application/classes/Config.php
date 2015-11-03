@@ -75,7 +75,7 @@ class Config extends Kohana_Config {
 
 	static function is_debug_mode()
 	{
-		return (Kohana::$environment === Kohana::DEVELOPMENT);
+		return Kohana::$config->load("common.site_disable");
 		
 	}
 

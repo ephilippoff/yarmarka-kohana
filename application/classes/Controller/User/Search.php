@@ -9,10 +9,6 @@ class Controller_User_Search extends Controller_Template {
     {
         parent::before();
 
-        $this->performance = Performance::factory(Acl::check('profiler'));
-
-        $this->performance->add("UserSearch","start");
-
         $this->use_layout = FALSE;
         $this->auto_render = FALSE;
         $this->domain = new Domain();
@@ -60,12 +56,10 @@ class Controller_User_Search extends Controller_Template {
         $this->child_categories_ids = $this->params_by_uri->get_category_childs_id();
         $this->twig->crumbs = $this->params_by_uri->get_category_crubms($this->category_id);
 
-        $this->performance->add("UserSearch","favourite");
         //favourites
         $this->twig->favourites = ORM::factory('Favourite')->get_list_by_cookie();
         //end favourites
         
-        $this->performance->add("UserSearch","messages");
         //messages
         if ($this->user)
         {
@@ -88,7 +82,7 @@ class Controller_User_Search extends Controller_Template {
             "page" => $this->params_by_uri->get_reserved_query_params("page"),
             "limit" => $this->params_by_uri->get_reserved_query_params("limit")
         );
-        $this->performance->add("UserSearch","main_search_query");
+        
         $main_search_query = Search::searchquery($this->search_filters, $search_params);
         $this->twig->main_search_result = Search::getresult($main_search_query->execute()->as_array());
 
@@ -132,7 +126,6 @@ class Controller_User_Search extends Controller_Template {
         //end pagination
 
         $this->search_filters["category_id"] = NULL;
-        $this->performance->add("UserSearch","user_categories_query");
         $user_categories = Search::searchquery($this->search_filters, array(), array("group_category" => TRUE))
                                                     ->execute()->as_array();
 
@@ -144,7 +137,6 @@ class Controller_User_Search extends Controller_Template {
         $this->twig->user_categories = $user_categories;
 
         //get balance for premium ads               
-        $this->performance->add("UserSearch","premium_balance");
         $premium_balance = (int) Service_Premium::get_balance($this->user);
         $this->twig->premium_balance = $premium_balance;
     }
@@ -221,8 +213,6 @@ class Controller_User_Search extends Controller_Template {
     public function after()
     {
         parent::after();
-        $this->performance->add("UserSearch","end");
-        $this->twig->php_time = $this->performance->getProfilerStat();
         $this->response->body($this->twig);
 
     }
