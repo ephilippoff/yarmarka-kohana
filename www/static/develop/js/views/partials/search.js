@@ -50,7 +50,7 @@ define([
             }
 
             if (this.ui.banners.length) {
-                var map_height = 0;//this.ui.map.height();
+                var map_height = this.ui.map.height();
                 if (this.ui.liders.length == 0) {
                     this.fixBlock(this.ui.banners, -map_height - 70, map_height + 10);
                 } else {
