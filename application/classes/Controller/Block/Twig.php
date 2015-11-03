@@ -221,7 +221,7 @@ class Controller_Block_Twig extends Controller_Block
             $banners = array_combine($categories_banners, $banners_all);
         }
         
-        $twig = Twig::factory('block/menu/kupon');      
+        $twig = Twig::factory('block/menu/kupon');
         
         $twig->categories = self::kupon_categories();
         $twig->banners    = $banners;
