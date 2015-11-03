@@ -253,4 +253,22 @@ class Twig_Functions
 	{
 		return Userecho::get_sso_token(Auth::instance()->get_user());
 	}
+
+	public static function get_current_city()
+	{
+		$domain = URL::SERVER('HTTP_HOST');
+		
+		$config = Kohana::$config->load("common");
+		$main_domain = $config["main_domain"];
+
+		$city_name = strtolower(trim( str_replace($main_domain, "", $domain), "."));
+		$cities = array(
+			"surgut" => "Сургут",
+			"tyumen" => "Тюмень",
+			"nizhnevartovsk" => "Нижневартовск"
+		);
+		return $cities[$city_name];
+	}
+
+	
 }

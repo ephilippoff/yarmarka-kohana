@@ -15,12 +15,7 @@
 				</div>
 			</div>
 			<div class="col-md-7 col-xs-6 clearfix">
-				<div class="menu-item right js-citymenu-dropdown">
-					<span class="menu-item-cont">
-						Другой город
-						<span class="caret mr3"></span>							
-					</span>
-				</div>
+				
 				{% for key, _city in  {'nefteyugansk':'г. Нефтеюганск','nizhnevartovsk':'г. Нижневартовск','surgut':'г. Сургут','tyumen':'г. Тюмень'} if key != city.seo_name %}
 					{% set count = link_counters[domain(key, canonical_url, '')] %}
 					{% if count is empty or count > 0 %}

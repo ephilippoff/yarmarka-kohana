@@ -32,6 +32,7 @@ return array(
 		'requestmethod'  => array ('func' => array('Twig_Functions', 'requestmethod'), 'options' => array() ),
 		'is_debug_mode'  => array ('func' => array('Twig_Functions', 'is_debug_mode'), 'options' => array() ),
 		'get_userecho_token'   => array ('func' => array('Twig_Functions', 'get_userecho_token'), 'options' => array() ),
+		'get_current_city'   => array ('func' => array('Twig_Functions', 'get_current_city'), 'options' => array() ),
 	),
 	'filters' => array(
 		'contacthide' => array('Twig_Filters', 'contacthide'),
