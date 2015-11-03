@@ -228,6 +228,37 @@ class Controller_Block_Twig extends Controller_Block
 
         $this->response->body($twig);
     } 
+	
+    public function action_newsmenu()
+    {
+        $city_id = $this->request->post("city_id");
+        $states = array(1);
+        $cached = TRUE; 
+        $banners = array();
+        
+        if (Auth::instance()->get_user() and in_array((int)Auth::instance()->get_user()->role, array(1, 9)))
+        {
+            $states = array(1, 2);
+            $cached = FALSE;
+        }       
+        
+        $banners_all = ORM::factory('Category')->get_banners($city_id, $states, $cached);
+
+        $categories_banners = array_map(function($value) {
+            return $value->category_id;
+        }, $banners_all);
+        
+        if (count($banners_all) > 0) {
+            $banners = array_combine($categories_banners, $banners_all);
+        }
+        
+        $twig = Twig::factory('block/menu/news');      
+        
+        $twig->categories = self::news_categories();
+        $twig->banners    = $banners;
+
+        $this->response->body($twig);
+    }	
 
     public function action_debug_info(){
         $twig = Twig::factory('block/debug_info');

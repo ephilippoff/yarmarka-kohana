@@ -269,7 +269,13 @@ class Controller_Admin_Reklama extends Controller_Admin_Template {
 					$post['cities'] = '{'.join(',', $post['cities']).'}';	
 				}
 				
-				$post['category_id'] = ($post['menu_name'] == 'main') ? $post['category_id'] : $post['kupon_category_id'];
+				if ($post['menu_name'] == 'main')
+					$post['category_id'] = $post['category_id'];
+				elseif ($post['menu_name'] == 'kupon')
+					$post['category_id'] = $post['kupon_category_id'];
+				elseif ($post['menu_name'] == 'news')
+					$post['category_id'] = $post['news_category_id'];
+				
 				
 				ORM::factory('Category_Banners')->values($post)->save();
 				
@@ -286,7 +292,10 @@ class Controller_Admin_Reklama extends Controller_Admin_Template {
 			}
 		}
 				
-		$this->template->menu_names = array('main' => 'Рубрики объявлений', 'kupon' => 'Рубрики купонов');
+		$this->template->menu_names = array('main'  => 'Рубрики объявлений', 
+											'kupon' => 'Рубрики купонов', 
+											'news'  => 'Рубрики новостей');
+
 		$this->template->categories = ORM::factory('Category')->where('parent_id', '=', 1)->find_all()->as_array('id', 'title');
 		$this->template->kupon_categories = ORM::factory('Attribute_Element')
                         ->select('attribute_element.id',  'attribute_element.title', array('attribute.id', 'attribute_title') )
@@ -295,18 +304,34 @@ class Controller_Admin_Reklama extends Controller_Admin_Template {
 						->where('attribute', '=', 
 								DB::select('id')
 								->from('attribute')
-								->where('seo_name', 'IN', array('category_1', 'news-category') )
+								->where('seo_name', 'IN', array('category_1') )
 								->order_by('title')
 								->limit(1))
-                        ->getprepared_all();
+								->find_all()
+						->as_array('id', 'title');
 
-        $result = array();
+		$this->template->news_categories = ORM::factory('Attribute_Element')
+                        ->select('attribute_element.id',  'attribute_element.title', array('attribute.id', 'attribute_title') )
+                        ->join("attribute")
+                        	->on("attribute.id","=","attribute_element.attribute")
+						->where('attribute', '=', 
+								DB::select('id')
+								->from('attribute')
+								->where('seo_name', 'IN', array('news-category') )
+								->order_by('title')
+								->limit(1))
+								->find_all()
+						->as_array('id', 'title');                        
+
+
+/*        $result = array();
         $result[0] ="---";
         foreach ($this->template->kupon_categories as $item) {
         	$result[$item->id] =  $item->title."(".$item->attribute_title.")";
         }
 
         $this->template->kupon_categories = $result;
+*/        
 	}
 	
 	public function action_edit_menu_banner()
@@ -339,7 +364,12 @@ class Controller_Admin_Reklama extends Controller_Admin_Template {
 					$post['cities'] = '{'.join(',', $post['cities']).'}';	
 				}								
 				
-				$post['category_id'] = ($post['menu_name'] == 'main') ? $post['category_id'] : $post['kupon_category_id'];
+				if ($post['menu_name'] == 'main')
+					$post['category_id'] = $post['category_id'];
+				elseif ($post['menu_name'] == 'kupon')
+					$post['category_id'] = $post['kupon_category_id'];
+				elseif ($post['menu_name'] == 'news')
+					$post['category_id'] = $post['news_category_id'];				
 				
 				$ad_element->values($post)->save();
 				
@@ -357,15 +387,26 @@ class Controller_Admin_Reklama extends Controller_Admin_Template {
 			}
 		}
 
-		$this->template->ad_element = $ad_element;		
+		$this->template->ad_element = $ad_element;	
+		
 		$this->template->categories = ORM::factory('Category')->where('parent_id', '=', 1)->find_all()->as_array('id', 'title');
-		$this->template->menu_names = array('main' => 'Рубрики объявлений', 'kupon' => 'Рубрики купонов');
+		$this->template->menu_names = array('main' => 'Рубрики объявлений', 'kupon' => 'Рубрики купонов', 'news' => 'Рубрики новостей');
 		$this->template->kupon_categories = ORM::factory('Attribute_Element')
                         ->select('id', 'title')
 						->where('attribute', '=', 
 								DB::select('id')
 								->from('attribute')
 								->where('seo_name', '=', 'category_1')
+								->order_by('title')
+								->limit(1))
+                        ->find_all()
+						->as_array('id', 'title');
+		$this->template->news_categories = ORM::factory('Attribute_Element')
+                        ->select('id', 'title')
+						->where('attribute', '=', 
+								DB::select('id')
+								->from('attribute')
+								->where('seo_name', '=', 'news-category')
 								->order_by('title')
 								->limit(1))
                         ->find_all()

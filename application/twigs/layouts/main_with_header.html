@@ -12,7 +12,7 @@
 			{% include "block/menu/user" %}
 		</script>
 		<script id="template-newsmenu" type="text/template">
-			{% include "block/menu/news" %}
+			{{ requestblock('block_twig/newsmenu', {'city_id': city.id}) }}
 		</script>
 		<script id="template-kuponmenu" type="text/template">
 			{{ requestblock('block_twig/kuponmenu', {'city_id': city.id}) }}
