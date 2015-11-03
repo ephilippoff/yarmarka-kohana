@@ -50,6 +50,7 @@ class Service
                 }, $parent_categories);
                 foreach ($parent_categories as $category) {
                     if (array_key_exists($category, $price_config)) {
+
                         return $price_config[$category];
                         break;
                     }
@@ -75,8 +76,12 @@ class Service
                         $category = array($category);
                     }
                     foreach ($category as $categoryItem) {
-                        $category_price_config = $this->getCategoryPrice($city_price_config, $categoryItem);
-                        $price += (( is_array($category_price_config) ) ? $category_price_config["default"] : $category_price_config ) * $price_base;
+                        if (isset($city_price_config[$cityItem])) {
+                            $category_price_config = $this->getCategoryPrice($city_price_config[$cityItem], $categoryItem);
+                        } else {
+                            $category_price_config = $this->getCategoryPrice($city_price_config, $categoryItem);;
+                        }
+                        $price += ( is_array($category_price_config) ? $category_price_config["default"] : $category_price_config ) * $price_base;
                     }
                 } else {
                     $price += (( is_array($city_price_config) ) ? $city_price_config["default"] : $city_price_config) * $price_base;
