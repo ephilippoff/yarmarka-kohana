@@ -263,6 +263,14 @@ select{background-color: #FFFFFF;border: 1px solid #C3C3C3;padding:2px 10px;heig
 .menu-cont2 .menu-item.crimson-theme .popup-menu-cont2l .left .span-link {border-left: 4px solid #D90000;}
 .menu-cont2 .menu-item.crimson-theme .popup-menu-cont2l .span-link:hover{background-color: #F98C8C;}
 
+.menu-cont2 .menu-item.purple-theme{background-color: #B451FF;}
+.menu-cont2 .menu-item.purple-theme:hover{background-color: #CD9BF3;}
+.menu-cont2 .menu-item.purple-theme .popup-menu-cont li a:hover {background-color: #CD9BF3;text-decoration: none;}
+.menu-cont2 .menu-item.purple-theme .popup-menu-cont{border:1px solid #B451FF}
+.menu-cont2 .menu-item.purple-theme .popup-menu-cont2l .left .span-link {border-left: 4px solid #B451FF;}
+.menu-cont2 .menu-item.purple-theme .popup-menu-cont2l .span-link:hover{background-color: #CD9BF3;}
+
+
 .menu-cont2 .menu-item.gray-theme{background-color: gray;}
 .menu-cont2 .menu-item.gray-theme:hover{background-color: #b7b7b7;}
 .menu-cont2 .menu-item.gray-theme .popup-menu-cont li a:hover {background-color: #b7b7b7;text-decoration: none;}

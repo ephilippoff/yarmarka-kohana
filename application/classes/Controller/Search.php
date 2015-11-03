@@ -234,8 +234,11 @@ class Controller_Search extends Controller_Template {
 		
 		$twig->banner_zone_positions = Kohana::$config->load('common.banner_zone_positions');
 		
-		if ($search_info->category->seo_name == 'kupony')
-			$twig->set_filename('search/kupony/index');		
+		if ($search_info->category->seo_name == 'kupony') {
+			$twig->set_filename('search/kupony/index');
+        } else if ($search_info->category->seo_name == 'novosti') {
+            $twig->set_filename('search/news/index');
+        }
 		
         $this->performance->add("Search","end");
         foreach ((array) $search_info as $key => $item) {

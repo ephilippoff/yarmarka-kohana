@@ -52,7 +52,7 @@ define([
                 $(s.getOption("menuClass")).fadeIn();
                 $("#popup-layer").fadeIn();
                 $(s.getOption("controlClass")).addClass("z301");
-            }, 200)
+            }, 450)
             
         },
 

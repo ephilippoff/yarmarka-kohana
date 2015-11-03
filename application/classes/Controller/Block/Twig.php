@@ -67,12 +67,10 @@ class Controller_Block_Twig extends Controller_Block
         $links = array(
             "/" => "Главная",
             "/search_category" => "Все объявления",
-            "/search_company" => "Все компании",
             "/rabota/vakansii" => "Вакансии города"
         );
 
         $twig->links = $links;
-
         $this->response->body($twig);
     }
 

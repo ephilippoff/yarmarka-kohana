@@ -1,28 +1,30 @@
 {% extends "layouts/search" %}
 
-{% set theme_class = 'crimson-theme' %}
+{% set theme_class = 'green-dense-theme' %}
 
 {% block css %} 
 	{{ parent() }}
-	{{ css("filters.css") }}
 {% endblock css%}
 
-
-{% block js %} 
+{% block js %}
 	{{ parent() }}
-	{% if data_file %}
-		{{ js(data_file) }}
-	{% endif %}
 {% endblock js%}
-
 
 {% block title %} {{ seo_attributes.title }} {% endblock title%}
 {% block meta_description %} {{ seo_attributes.description }} {% endblock meta_description%}
-{% block wrapperclass %}page-search{% endblock wrapperclass %}
 
-{% block crumbs %} 
-	{% include 'search/crumbs' %}
-{% endblock crumbs %}
+{% block header %} 
+		{{ requestblock('block_twig/topline', {'favourites':favourites}) }}
+		{% include 'block/header/logoline' %}
+		<div class="{{theme_class}}">
+			{% include 'block/header/navigationline/article' %}
+		</div><!--skin-theme1-->
+		{{ requestblock('block_twig/adslinkline',{'city_id': city.id, 'theme_class': theme_class}) }}
+{% endblock header %} 
+
+{% block crumbs %} {% include 'search/kupony/crumbs' %} {% endblock crumbs %}
+
+{% block wrapperclass %}page-search{% endblock wrapperclass %}
 
 {% block subcategories %}
 	{% if sphinx_category_childs|length > 0%}
@@ -38,28 +40,23 @@
 {% block filters %}{% endblock filters %}
 
 {% block content %} 
-	{% include 'search/control' %}
-	{% include 'search/filters' %}
-	{% include 'search/result' %}
+	{% include 'search/news/result' %}
 	{% include 'search/paginator' %}
 {% endblock content%}
 
+
 {% block rightside %} 
+	{% set half = TRUE %}
 	{% include 'search/vip' %}
 	{% include 'search/banner' %}
 {% endblock rightside %}
 
 
-{% block footertext %}
-	<div class="col-md-12 mb10">
-		{{ seo_attributes.footer }}
-	</div>
+{% block footertext %} 
+	{{ seo_attributes.footer }}
 {% endblock footertext %}
 
-{% block footer %} 
-	{{ parent() }}
-{% endblock footer %}
+{% block footer %}{{ parent() }}{% endblock footer %}
+{% block templates %}{{ parent() }}{% endblock templates %}
 
-{% block templates %}
-	{{ parent() }}
-{% endblock templates %}
+{%block page_name%}article{% endblock page_name %}
