@@ -44,7 +44,11 @@ class Controller_Redirect extends Controller_Template
 			HTTP::redirect("/detail/".$object_id, 301);
 			return;
 		} else {
-			HTTP::redirect("/".join("/",$path_segments), 301);
+			$query="";
+			if (isset($_SERVER['QUERY_STRING'])) {
+				$query = "?".$_SERVER['QUERY_STRING'];
+			}
+			HTTP::redirect("/".join("/",$path_segments).$query, 301);
 		}
 		echo Debug::vars($path);
 
