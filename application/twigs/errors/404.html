@@ -1,9 +1,9 @@
 {% extends "layouts/simple" %}
-
+{% set theme_class='crimson-theme' %}
 {% block header %} 
 		{{ requestblock('block_twig/topline', {'favourites':favourites}) }}
 		{% include 'block/header/logoline' %}
-		{% include 'block/header/navigationline/simple' %}
+		<div class="mb20">{% include 'block/header/navigationline/simple' %}</div>
 {% endblock header %} 
 
 {% block content %}
