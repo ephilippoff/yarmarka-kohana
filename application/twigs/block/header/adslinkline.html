@@ -20,7 +20,7 @@
 	{% if textlinks|length > 0 %}
 		<div class="reklama-line text-banners pt5">
 			{% for link in textlinks %}
-					<a rel="nofollow" target="_blank"  onclick="" href="{{ link.link }}" class="bold" >{{ link.title }}</a>
+					<a rel="nofollow" target="_blank"  onclick="" href="{{ link.link }}" class="bold {{ link.class }}" >{{ link.title }}</a>
 			{% endfor  %}
 		</div>
 	{% endif %}
