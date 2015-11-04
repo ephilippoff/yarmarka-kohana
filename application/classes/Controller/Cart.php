@@ -786,7 +786,7 @@ class Controller_Cart extends Controller_Template {
 
 			$params = json_decode($order->params);
 			if (isset($params->is_surgut)) {
-				$this->post_to_surgut_domain(array('InvId' => $order_id, 'OutSum' => $sum, 'SignatureValue' => $signature), "success");
+				$this->get_to_surgut_domain(array('InvId' => $order_id, 'OutSum' => $sum, 'SignatureValue' => $signature), "success");
 				HTTP::redirect($base."/cart/order/".$order_id);
 				return;
 			}
@@ -911,7 +911,7 @@ class Controller_Cart extends Controller_Template {
 		if ($order->loaded()) {
 			$params = json_decode($order->params);
 			if (isset($params->is_surgut)) {
-				$this->post_to_surgut_domain(array('InvId' => $order_id, 'OutSum' => $sum, 'SignatureValue' => $signature), "fail");
+				$this->get_to_surgut_domain(array('InvId' => $order_id, 'OutSum' => $sum, 'SignatureValue' => $signature), "fail");
 				HTTP::redirect($base."/cart/order/".$order_id);
 				return;
 			}
