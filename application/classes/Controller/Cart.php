@@ -767,11 +767,11 @@ class Controller_Cart extends Controller_Template {
 		if ($order->state == 1)
 		{
 			$order->check_state($order->id);
-			HTTP::redirect("/cart/order/".$order_id);
+			//HTTP::redirect("/cart/order/".$order_id);
 		}
 		else
 		{
-			HTTP::redirect("/cart/order/".$order_id);
+			//HTTP::redirect("/cart/order/".$order_id);
 		}
 	}
 
@@ -808,7 +808,7 @@ class Controller_Cart extends Controller_Template {
 		$order = ORM::factory('Order', $order_id);
 		if ($order->loaded()) {
 			$order->check_state($order->id);
-			HTTP::redirect("/cart/order/".$order->id);
+			//HTTP::redirect("/cart/order/".$order->id);
 			return;
 		}
 
