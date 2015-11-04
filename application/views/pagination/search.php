@@ -61,10 +61,10 @@ for ($i = $n7; $i <= $n8; $i++)
 		<div class="row">
 			<div class="col-md-12">
 				<?php if ($previous_page !== FALSE): ?>
-					<a class="prev" href="<?php echo HTML::chars($page->url($previous_page)) ?>" rel="prev">&leftarrow; Предыдущая страница </a> 
+					<a class="prev" href="<?php echo HTML::chars($page->url($previous_page)) ?>" rel="prev">← Предыдущая страница </a> 
 				<?php endif ?>
 				<?php if ($next_page !== FALSE): ?>
-					<a class="next" href="<?php echo HTML::chars($page->url($next_page)) ?>" rel="next">Следующая страница &rightarrow; </a>
+					<a class="next" href="<?php echo HTML::chars($page->url($next_page)) ?>" rel="next">Следующая страница → </a>
 				<?php endif ?>
 				
 			</div>
