@@ -757,9 +757,9 @@ class Controller_Cart extends Controller_Template {
 	public function action_success()
 	{
 
-		$order_id = $this->request->post("InvId");
-		$sum = $this->request->post("OutSum");
-		$signature = $this->request->post("SignatureValue");
+		$order_id = $this->request->query("InvId");
+		$sum = $this->request->query("OutSum");
+		$signature = $this->request->query("SignatureValue");
 		
 
 		$order = ORM::factory('Order', $order_id);
@@ -801,9 +801,9 @@ class Controller_Cart extends Controller_Template {
 	public function action_fail()
 	{
 
-		$order_id = $this->request->post("InvId");
-		$sum = $this->request->post("OutSum");
-		$signature = $this->request->post("SignatureValue");
+		$order_id = $this->request->query("InvId");
+		$sum = $this->request->query("OutSum");
+		$signature = $this->request->query("SignatureValue");
 
 		$order = ORM::factory('Order', $order_id);
 		if ($order->loaded()) {
