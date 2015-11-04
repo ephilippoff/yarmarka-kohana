@@ -725,6 +725,14 @@ class Controller_Cart extends Controller_Template {
 			return;
 		}
 
+		if ($order->loaded()) {
+			$params = json_decode($order->params);
+			if (isset($params->is_surgut)) {
+				$this->get_to_surgut_domain(array('InvId' => $order_id, 'OutSum' => $sum, 'SignatureValue' => $signature), "result");
+				return;
+			}
+		}
+
 		$robo = new Robokassa($order_id);
 		$robo->set_sum($order->sum);
 		$sample = strtoupper($robo->create_result_sign());
@@ -793,6 +801,24 @@ class Controller_Cart extends Controller_Template {
 				'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
 				'method'  => 'POST',
 				'content' => http_build_query($data),
+			),
+		);
+		try {
+			$context  = stream_context_create($options);
+			$result = file_get_contents($url, false, $context);
+			echo $result;
+		} catch (Exception $e) {
+			
+		}
+	}
+
+	function get_to_surgut_domain($data, $action)
+	{
+		$main_domain = Kohana::$config->load("common.main_domain");
+		$url = "http://surgut.".$main_domain."/cart/".$action."?".http_build_query($data);
+		$options = array(
+			'http' => array(
+				'method'  => 'GET'
 			),
 		);
 		try {
