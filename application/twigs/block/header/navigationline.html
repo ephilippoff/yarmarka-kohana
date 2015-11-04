@@ -22,7 +22,7 @@
 				{% for key, _city in  {'nefteyugansk':'г. Нефтеюганск','nizhnevartovsk':'г. Нижневартовск','surgut':'г. Сургут','tyumen':'г. Тюмень'} if key != city.seo_name %}
 					{% set count = link_counters[domain(key, canonical_url, '')] %}
 					{% if count is empty or count > 0 %}
-						<a class="menu-item right" href="{{ domain(key, '') ~ s_suri }}"><span class="menu-item-cont">{{ _city }} <span class="count">{{count}}</span></span></a>
+						<a class="menu-item right" href="{{ domain(key, '') }}"><span class="menu-item-cont">{{ _city }} <span class="count">{{count}}</span></span></a>
 					{% endif %}
 				{% endfor %}
 			</div>	

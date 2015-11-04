@@ -340,6 +340,10 @@ class Controller_Cart extends Controller_Template {
 			return;
 		}
 
+		if ($order->state == 1) {
+			$order->check_state($order->id);
+		}
+
 		$twig->crumbs = array(
 			array(
 				"title" => "Оформление заказа",

@@ -341,7 +341,7 @@ Route::set('search', '<category_path>', array(
 			->cached(Date::WEEK)
 			->find();
 
-		if ($city->loaded() OR $segments[0] == 'tyumenskaya-oblast') {
+		if ($city->loaded() OR $segments[0] == 'tyumenskaya-oblast' OR $segments[0] == 'obyavlenie') {
 			$params['controller'] = 'Redirect';
 			$params['action'] = 'old_link';
 			return $params;
