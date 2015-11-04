@@ -135,10 +135,10 @@ class Controller_Index extends Controller_Template {
         $info->s_suri = $_SERVER["REQUEST_URI"];
 
         $info->cities = array(
-            'nizhnevartovsk'=>'Нижневартовск',
-            'surgut'=>'Сургут',
-            'tyumen'=>'Тюмень','
-            nefteyugansk'=>'Нефтеюганск'
+            'nizhnevartovsk'=>'в Нижневартовске',
+            'surgut'=>'в Сургуте',
+            'tyumen'=>'в Тюмени','
+            nefteyugansk'=>'в Нефтеюганске'
         );
 
         $info->categories = ORM::factory('Category')->get_categories_extend(array(

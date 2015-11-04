@@ -3,14 +3,14 @@
 	<div class="menu-cont2 brt2">
 		<div class="row">
 			<div class="col-md-12 clearfix">
-			&nbsp;
+			<span class="menu-item left"><span class="menu-item-cont">Объявления</span></span>
 				{#<span class="menu-item right"><span class="menu-item-cont"><i class="fa fa-question-circle mr3"></i>Что нового?</span></span>#}
 			</div>
 		</div>			
 	</div>
 	<div class="view-container brb2">
 		<div class="breadcrumbs-cont module">						
-			<h1 class="captionbold">Бесплатные объявления {% if last_city %}({{ cities[last_city.seo_name] }}){% endif %}</h1>
+			<h1 class="captionbold">Бесплатные объявления {% if last_city %}{{ cities[last_city.seo_name] }}{% endif %}</h1>
 		</div>
 		<div class="subcategories-cont module">
 			<div class="row">
