@@ -99,7 +99,7 @@ Route::set('detail', '<path>/<object_seo_name>.html',  array('path' => '[a-zA-Z0
 		$params["url"] = $url;
 		$params["object"] = $object;
 
-		if ($object->type_tr) {
+		if ($object->type_tr AND in_array($object->type_tr, array(101,102,201,89))) {
 			$params["action"] = "type".$object->type_tr;
 		}
 		return $params;
