@@ -8,7 +8,7 @@
 
 {% block header %} 
 	{{ parent() }}
-
+	
 {% endblock header %} 
 
 {% block content %}
@@ -19,7 +19,7 @@
 				{{ requestblock('block_twig/links', {}) }}
 				
 				{% include 'block/header/navigationline' %}
-				{% include 'index/promo/photo_news' %}
+				{{ requestblock('block_twig/adslinkline', {'city_id': city.id, 'theme_class': theme_class}) }}
 			</div>
 		</div>
 		<div class="row">
@@ -30,9 +30,8 @@
 				<div class="row">
 					<div class="col-md-9">
 						{% include 'index/promo/news' %}
-						{{ requestblock('block_twig/adslinkline', {'city_id': city.id, 'theme_class': theme_class}) }}
 						<div class="banner module {zoneID: 18 }"></div>
-
+						{% include 'index/promo/photo_news' %}
 						{% include 'index/promo/kupon' %}
 						<div class="bg-color-whitesmoke p20 mb10 br2">
 							<p class="fs18 bold">Свежие предложения всегда под рукой: </p>
