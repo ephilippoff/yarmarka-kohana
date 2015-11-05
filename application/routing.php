@@ -69,7 +69,7 @@ Route::set('/','')
 
 Route::set('detail_work', 'detail/<object_id>',  array('object_id' => '[0-9]+'))
 	->filter(function($route, $params, $request){
-		$params["is_old"] = TRUE;
+		//$params["is_old"] = TRUE;
 		return $params;
 	})
 	->defaults(array(

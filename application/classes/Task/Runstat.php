@@ -20,6 +20,7 @@ class Task_Runstat extends Minion_Task
     function fetch_search()
     {
         Cachestat::factory("search")->fetch_search(function($data){
+            Minion_CLI::write('search:'.Debug::vars($data));
             foreach ($data["ids"] as $object_id) {
                 $pos = array_search($object_id, $data["ids"]) + 1;
                 $string = "~ ".($pos * $data["page"])." место в рубрике <a href='".$data["url"]."'>".$data["title"]."</a>";
@@ -34,6 +35,7 @@ class Task_Runstat extends Minion_Task
         $objects = Cachestat::factory("objects_in_visit_counter")->fetch_all(TRUE);
         if (!$objects) return;
         foreach ($objects as $object_id) {
+            Minion_CLI::write('detail:'.Debug::vars($object_id));
             $visits = Cachestat::factory($object_id."object_visit_counter")->fetch(TRUE);
             $object = ORM::factory('Object', $object_id);
             if ($object->loaded())
