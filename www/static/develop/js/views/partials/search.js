@@ -38,25 +38,52 @@ define([
         },
 
         initialize: function() {
+            var s = this;
             this.bindUIElements();
+            
+            
             if (this.ui.map.length) {
-                this.initMap();
-                var maxOffsetY = _.max([this.ui.banners.height(), this.ui.liders.height()]) + this.ui.map.height();
-                if (this.ui.liders.length == 0) {
-                    this.fixBlock(this.ui.map.parent(), 0, 0 );
-                } else {
-                    this.fixBlock(this.ui.map.parent(), maxOffsetY, 0 );
+                this.initMap(function(){
+                    var map_height = s.ui.map.height();
+                    var banners_height = s.ui.map.height();
+                    var liders_height = s.ui.liders.height();
+                    var commonHeight = map_height;
+                    var maxOffsetY = _.max([banners_height, liders_height]) + map_height;
+                    if (s.ui.liders.length == 0) {
+                        s.fixBlock(s.ui.map.parent(), 0, 0 );
+                    } else {
+                        commonHeight +=liders_height;
+                        s.fixBlock(s.ui.map.parent(), maxOffsetY, 0 );
+                    }
+
+                    if (s.ui.banners.length) {
+                        if (s.ui.liders.length == 0) {
+                            s.fixBlock(s.ui.banners, -map_height - 70, map_height + 20);
+                        } else {
+                            commonHeight +=banners_height;
+                            s.fixBlock(s.ui.banners, map_height, map_height + 20);
+                        }
+                    }
+                    s.commonHeight = commonHeight;
+
+                });
+                
+            } else {
+                var banners_height = s.ui.map.height();
+                var liders_height = s.ui.liders.height();
+                var commonHeight = banners_height;
+                if (s.ui.banners.length) {
+                    if (s.ui.liders.length == 0) {
+                        s.fixBlock(s.ui.banners, 70, 20);
+                    } else {
+                        commonHeight += liders_height;
+                        s.fixBlock(s.ui.banners, 0, 20);
+                    }
                 }
+                s.commonHeight = commonHeight;
             }
 
-            if (this.ui.banners.length) {
-                var map_height = this.ui.map.height();
-                if (this.ui.liders.length == 0) {
-                    this.fixBlock(this.ui.banners, -map_height - 70, map_height + 10);
-                } else {
-                    this.fixBlock(this.ui.banners, map_height, map_height + 10);
-                }
-            }
+            
 
             this.citySelect();
         },
@@ -66,9 +93,9 @@ define([
 
         },
 
-        initMap: function() {
+        initMap: function(success) {
             var mapObjects = [];
-
+            success = success || function(){};
             if ($("#objects_for_map").length) {
                 try {
                     mapObjects = JSON.parse($("#objects_for_map").text());
@@ -118,15 +145,21 @@ define([
                         objects[object_id].options.set( app.map.getIconSettings("defTwitter") );
                     }
                 });
+                success(map);
             });
         },
 
         fixBlock: function(elem, offsetY, topY) {
             if (elem.length == 0) return;
+            var s = this;
             var topFix = elem.offset().top;
+            var windowHeight = $(window).height();
+            var documentHeight = $(document).height();
 
             $(window).on('scroll', function(){
-                if ((topFix + offsetY - $(window).scrollTop()) <= 0) {
+                console.log($(window).scrollTop(), documentHeight, s.commonHeight);
+                if ((topFix + offsetY - $(window).scrollTop()) <= 0
+                    && $(window).scrollTop() < documentHeight - 1200) {
                     if (elem.css('position') != 'fixed') {
                         elem.hide().fadeIn();
                     }
