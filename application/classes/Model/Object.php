@@ -297,7 +297,7 @@ class Model_Object extends ORM {
 		}
 
 		//TODO костыль для Сургута с новой адресацией
-		if ($object->city_id == 1979) {
+		if ($this->city_id == 1979) {
 			array_push($url, $this->get_url());
 		} else {
 			array_push($url, $this->get_old_url());
