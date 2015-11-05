@@ -4,9 +4,10 @@ class Task_Object_Compiled extends Minion_Task
 {
 
 	protected $_options = array(
-		'category_id'	=> 155,
+		'category_id'	=> NULL,
 		'active'	=> TRUE,
-		'city_id'	=> NULL
+		'city_id'	=> NULL,
+		'rewrite'	=> FALSE
 	);
 
 	protected function _execute(array $params)
@@ -14,6 +15,7 @@ class Task_Object_Compiled extends Minion_Task
 		$category_id = $params['category_id'];
 		$city_id = $params['city_id'];
 		$active = $params['active'];
+		$rewrite = $params['rewrite'];
 		
 		$object = ORM::factory('Object');
 		
@@ -22,13 +24,20 @@ class Task_Object_Compiled extends Minion_Task
 		}
 
 		if ($city_id) {
-			$object = $object->where("city_id","=", $city_id);
+			$object = $object->where(DB::expr($city_id), "=", DB::expr("ANY(object.cities)"));
 		}
 
 		if ($active) {
 			$object = $object->where("active","=", 1)->where("is_published","=", 1);
 		}
 
+		if (!$rewrite) {
+			$sub = DB::select('object_compiled_surgut.id')->from('object_compiled_surgut')
+							->where("object_compiled_surgut.object_id","=",DB::expr("object.id"));
+
+			$object->where('','NOT EXISTS',$sub);
+		}
+		
 		$object->order_by("date_created", "desc");
 		$result = $object->find_all();
 
