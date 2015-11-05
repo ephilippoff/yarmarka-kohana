@@ -190,7 +190,7 @@ class Search {
 				$object = $object->where("o.author", "=", $params->user_id);
 			} else {
 				$object = $object->where("o.author_company_id", "=", $params->user_id);
-				$object = $object->where("o.compiled", "IS NOT", NULL);
+				//$object = $object->where("o.compiled", "IS NOT", NULL);
 			}
 		}
 
