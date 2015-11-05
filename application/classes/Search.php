@@ -186,14 +186,11 @@ class Search {
 		}
 
 		if ($params->user_id) {
-			$object = $object->where("o.author", "=", $params->user_id);
 			if (!$params->user_company_include) {
 				$object = $object->where("o.author", "=", $params->user_id);
 			} else {
-				$object = $object->where_open()
-							->where('author', '=', $params->user_id)
-							->or_where('author_company_id', '=', $params->user_id)
-							->where_close();
+				$object = $object->where("o.author_company_id", "=", $params->user_id);
+				$object = $object->where("o.compiled", "IS NOT", NULL);
 			}
 		}
 
