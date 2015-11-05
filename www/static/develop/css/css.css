@@ -569,6 +569,7 @@ select{background-color: #FFFFFF;border: 1px solid #C3C3C3;padding:2px 10px;heig
 
 .paginator-cont{padding: 10px 0px; box-sizing: border-box;}
 .paginator-cont a{font-size: 18px;padding: 0px 10px;}
+.paginator-cont .active{font-weight: bold;}
 .paginator-cont .common{margin-bottom: 10px;}
 .paginator-cont .right{text-align: right;}
 
