@@ -13,6 +13,7 @@ class Task_DeleteObjects extends Minion_Task
 		Minion_CLI::write('Delete inactive objects (active = 0)');
 		$objects = ORM::factory('Object')
 			->where('active', '=', 0)
+			->where('date_created','<',DB::expr("NOW() - interval '180 days'"))
 			->order_by("date_created", "desc")
 			->limit($limit)
 			->find_all();
