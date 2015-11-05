@@ -296,7 +296,13 @@ class Model_Object extends ORM {
 			array_push($url, $main_domain);
 		}
 
-		array_push($url, $this->get_url());
+		//TODO костыль для Сургута с новой адресацией
+		if ($object->city_id == 1979) {
+			array_push($url, $this->get_url());
+		} else {
+			array_push($url, $this->get_old_url());
+		}
+		
 
 		return implode("/", $url);
 	}
@@ -314,6 +320,23 @@ class Model_Object extends ORM {
 
 		array_push($url, $uri_category_segment);
 		array_push($url, $this->seo_name."-".$this->id.".html");
+
+		return implode("/", $url);
+	}
+
+	public function get_old_url($uri_category_segment = NULL)
+	{
+		if (!$this->loaded()) return;
+
+		
+		$url = array();
+
+		if (!$uri_category_segment) {
+			$uri_category_segment = ORM::factory('Category',$this->category)->url;
+		}
+		array_push($url, "obyavlenie");
+		array_push($url, $uri_category_segment);
+		array_push($url, $this->seo_name."-".$this->id);
 
 		return implode("/", $url);
 	}
