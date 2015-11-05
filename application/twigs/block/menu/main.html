@@ -1,7 +1,10 @@
 <div class="popup-menu-cont popup-menu-cont2l iLight-cont js-mainmenu z300">
 	<div class="left brb2">
 		<ul class="top" role="menu">
-			{% for category in categories1l %}
+			{% set true_categories = ['kupony','rabota','avtotransport','nedvizhimost','uslugi', 'stroitelstvo-i-remont', 
+									'biznes', 'lichnie-veshi', 'dlya-doma-i-dachi', 'bitovaya-elektronika', 'znakomstvo-i-obshenie',
+									'sport-otdih-hobby','domashnie-zhivotnye-i-rasteniya', 'v-horoshie-ruki', 'prodovolstvennye-tovary'] %}
+			{% for category in categories1l if category.seo_name in true_categories %}
 				{% set menuHeight = (banners[category.id] is defined and banners[category.id].menu_height) ? banners[category.id].menu_height : '' %}
 				<li class="js-submenu-item" data-submenu-id="section{{category.id}}" class="section{{category.id}}" data-menu-height="{{menuHeight}}">
 					<span class="span-link" onclick="window.location = '/{{category.seo_name}}'">
@@ -11,7 +14,7 @@
 			{% endfor %}
 		</ul>
 	</div> 
-	<div class="right brb2 visible-lg">
+	<div class="right brb2 visible-lg visible-md">
 		{% for category in categories1l %}
 			{% set menuHeight = (banners[category.id] is defined and banners[category.id].menu_height) ? banners[category.id].menu_height : 0 %}
 			{% set divWidth = (banners[category.id] is defined and banners[category.id].menu_width) ? banners[category.id].menu_width : 341 %}
