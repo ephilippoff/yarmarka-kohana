@@ -63,8 +63,6 @@ ini_set('unserialize_callback_func', 'spl_autoload_call');
  */
 I18n::lang('en-us');
 
-Kohana::$environment = (@$_SERVER['HTTP_HOST'] === 'surgut.yarmarka.biz') ? Kohana::PRODUCTION : Kohana::DEVELOPMENT;
-
 /**
  * Initialize Kohana, setting the default options.
  *
@@ -106,6 +104,8 @@ if (Kohana::$environment !== Kohana::PRODUCTION)
 Kohana::$config->attach(new Config_File);
 Kohana::$config->attach(new Config_File('config/local'));
 
+$is_disabled = Kohana::$config->load("common.site_disable");
+Kohana::$environment = (!$is_disabled) ? Kohana::PRODUCTION : Kohana::DEVELOPMENT;
 /**
  * Enable modules. Modules are referenced by a relative or absolute path.
  */
