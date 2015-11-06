@@ -83,6 +83,11 @@ class Text extends Kohana_Text {
 		return str_replace(array('!','#','$','%','&','\\','*','+','-','/','=','?','^','_','`','{','|','}','~','@','.','[',']',')','(',',', '"', "'"), '', $str);
 	}
 
+	public static function clear_symbols_for_seo_name($str)
+	{
+		return str_replace(array('!','#','$','%','&','\\','*','+','/','=','?','^','`','{','|','}','~','@','.','[',']',')','(',',', '"', "'"), '', $str);
+	}
+
 	public static function clear_usertext_tags($text)
 	{
 		$text = stripslashes($text); 
