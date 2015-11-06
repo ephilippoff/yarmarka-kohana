@@ -1,5 +1,5 @@
 <div class="images-cont module">
-	{% for key, photo in object.compiled.images.local_photo if  key!= 0 %}
+	{% for key, photo in object.compiled.images.local_photo if  key!= 0 and photo['original'] != main_photo['original'] and photo['original'] != logo_photo['original'] %}
 
 		{% if (object.compiled.images.main_photo['original'] != photo['original']) %}
 			<div class="image-cont">

@@ -29,15 +29,20 @@
 {% block leftside %}
 	<div class="col-md-8">
 		<article>
-			{% if (object.compiled.images.local_photo[0]) %}
-				<div class="images-cont module">
-					<div class="image-cont coupon-image-cont">
-						<div class="img-wrapper">
-							<img alt="{{ object.title|e }}" src="{{ get_file(object.compiled.images.local_photo[0]['original']) }}">
+			{% set main_photo = NULL %}
+			{% set logo_photo = object.compiled.images.main_photo %}
+			{% for photo in object.compiled.images.local_photo if logo_photo['original'] != photo['original']%}
+				{% if loop.index == 1 %}
+					{% set main_photo = photo %}
+					<div class="images-cont module">
+						<div class="image-cont coupon-image-cont">
+							<div class="img-wrapper">
+								<img alt="{{ object.title|e }}" src="{{ get_file(photo['original']) }}">
+							</div>
 						</div>
 					</div>
-				</div>
-			{% endif %}
+				{% endif %}
+			{% endfor %}
 			<div class="text-cont module">
 				<div class="text fl w100p" itemprop="description">
 				{% set text = NULL %}
