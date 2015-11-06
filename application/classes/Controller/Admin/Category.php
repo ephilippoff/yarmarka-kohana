@@ -228,6 +228,30 @@ class Controller_Admin_Category extends Controller_Admin_Template {
 		echo "OK";
 	}
 
+	public function action_clear_cache_all()
+	{
+		$this->use_layout = FALSE;
+		$this->auto_render = FALSE;
+		Cache::instance('memcache')->delete_all();
+		echo "OK";
+	}
+
+	public function action_clear_search_url()
+	{
+		$this->use_layout = FALSE;
+		$this->auto_render = FALSE;
+		ORM::factory('Search_Url_Cache')->delete_all();
+		echo "OK";
+	}
+
+	public function action_clear_search_seo()
+	{
+		$this->use_layout = FALSE;
+		$this->auto_render = FALSE;
+		ORM::factory('Seo')->delete_all();
+		echo "OK";
+	}
+
 }
 
 /* End of file Category.php */
