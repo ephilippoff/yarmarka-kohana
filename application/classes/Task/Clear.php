@@ -12,7 +12,7 @@ class Task_Clear extends Minion_Task
         $seo  = $params['seo'];
         if ($seo) {
             Minion_CLI::write('set_seo_names');
-            $this->set_attribute_element_seo_name($seo);
+            self::set_attribute_element_seo_name($seo);
             return;
         }
 
@@ -54,7 +54,7 @@ class Task_Clear extends Minion_Task
         
     }
 
-    function set_attribute_element_seo_name($id)
+    static function set_attribute_element_seo_name($id)
     {
         $aes = ORM::factory('Attribute_Element')
             ->where("attribute","=", $id)
@@ -100,14 +100,21 @@ class Task_Clear extends Minion_Task
 
             $ae->seo_name = $seo_name;
             $ae->save();
-            Minion_CLI::write($seo_name);
+            //Minion_CLI::write($seo_name);
         }
     
     }
 
-    function set_attribute_element_urls()
+    static function set_attribute_element_urls($attribute = NULL)
     {
-        $aes = ORM::factory('Attribute_Element')->find_all();
+
+        $aes = ORM::factory('Attribute_Element');
+
+        if ($attribute) {
+            $aes = $aes->where("attribute","=", $attribute);
+        }
+
+         $aes = $aes->find_all();
         foreach ($aes as $ae) {
             $url = Search_Url::get_seo_param_segment($ae->id);
             $ae->url = $url;

@@ -216,6 +216,18 @@ class Controller_Admin_Category extends Controller_Admin_Template {
 		$this->response->body(json_encode($relation->weight));
 	}
 
+	public function action_update_attribute()
+	{
+		$this->use_layout = FALSE;
+		$this->auto_render = FALSE;
+
+		$id =  (int)$this->request->param('id');
+		echo Debug::vars($id);
+		Task_Clear::set_attribute_element_seo_name($id);
+		Task_Clear::set_attribute_element_urls($id);
+		echo "OK";
+	}
+
 }
 
 /* End of file Category.php */
