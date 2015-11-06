@@ -21,7 +21,17 @@
                     {{ css("iLight.css") }}
                     {{ css("css.css") }}
             {% else  %}
-                    {{ css("../production/css/appstyles.css") }}
+					<!--[if IE 9]>
+						{{ css("bootstrap.min.css") }}
+						{{ css("bootstrap.tables.min.css") }}
+						{{ css("font-awesome.css") }}
+						{{ css("iLight.css") }}
+						{{ css("css.css") }}
+						{{ css("../css/css.css") }}
+					<![endif]-->
+					<!--[if !IE]><!-->
+						{{ css("../production/css/appstyles.css") }}
+					<!--<![endif]-->
             {% endif %}
         {% endblock css %}
 
