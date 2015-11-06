@@ -186,7 +186,12 @@ class Search {
 		}
 
 		if ($params->user_id) {
-			$object = $object->where("o.author", "=", $params->user_id);
+			if (!$params->user_company_include) {
+				$object = $object->where("o.author", "=", $params->user_id);
+			} else {
+				$object = $object->where("o.author_company_id", "=", $params->user_id);
+				//$object = $object->where("o.compiled", "IS NOT", NULL);
+			}
 		}
 
 		if ($params->not_user_id AND is_array($params->not_user_id)) {
