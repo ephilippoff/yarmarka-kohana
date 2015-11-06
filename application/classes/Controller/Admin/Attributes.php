@@ -16,7 +16,7 @@ class Controller_Admin_Attributes extends Controller_Admin_Template {
 		$clone_to_count = clone $list;
 		$count_all = $clone_to_count->count_all();		
 
-		$list->limit($limit)->offset($offset); 		
+		$list->order_by('seo_name','asc')->limit($limit)->offset($offset); 		
 		
 		$this->template->list = $list->find_all();
 		$this->template->limit	  = $limit;

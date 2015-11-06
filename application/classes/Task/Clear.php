@@ -4,17 +4,21 @@
 class Task_Clear extends Minion_Task
 {
     protected $_options = array(
-        'limit' => 1000,
-        'type'  => NULL,
+        'seo' => 0
     );
 
     protected function _execute(array $params)
     {
-        $limit  = $params['limit'];
-        $type   = $params['type'];
+        $seo  = $params['seo'];
+        if ($seo) {
+            Minion_CLI::write('set_seo_names');
+            self::set_attribute_element_seo_name($seo);
+            return;
+        }
 
         Minion_CLI::write('set_category_urls');
         $this->set_category_urls();
+        
         Minion_CLI::write('set_attribute_element_urls');
         $this->set_attribute_element_urls();
 
@@ -50,9 +54,67 @@ class Task_Clear extends Minion_Task
         
     }
 
-    function set_attribute_element_urls()
+    static function set_attribute_element_seo_name($id)
     {
-        $aes = ORM::factory('Attribute_Element')->find_all();
+        $aes = ORM::factory('Attribute_Element')
+            ->where("attribute","=", $id)
+            ->find_all();
+
+        foreach ($aes as $ae) {
+            $seo_name = $ae->title;
+            $seo_name = Text::rus2translit($seo_name);
+            $seo_name = Text::clear_symbols_for_seo_name($seo_name);
+            $seo_name = mb_strtolower($seo_name);
+            $seo_name =  str_replace(array(' '), '-', $seo_name);
+            $cat = ORM::factory('Category')
+                    ->where("seo_name","=", $seo_name);
+            $i = 1;
+            while ($cat->find()->loaded()) {
+
+                $cat = ORM::factory('Category')
+                    ->where("seo_name","=", $seo_name.$i);
+
+                $i++;
+            }
+            if ($i > 1) {
+                $seo_name = $seo_name.$i;
+            }
+
+            $k = 1;
+            $cat = ORM::factory('Attribute_Element')
+                    ->where("attribute","<>", $id)
+                    ->where("seo_name","=", $seo_name);
+
+            while ($cat->find()->loaded()) {
+
+                $cat = ORM::factory('Attribute_Element')
+                    ->where("attribute","<>", $id)
+                    ->where("seo_name","=", $seo_name.$k);
+
+                $k++;
+            }
+
+            if ($k > 1) {
+                $seo_name = $seo_name.$i;
+            }
+
+            $ae->seo_name = $seo_name;
+            $ae->save();
+            //Minion_CLI::write($seo_name);
+        }
+    
+    }
+
+    static function set_attribute_element_urls($attribute = NULL)
+    {
+
+        $aes = ORM::factory('Attribute_Element');
+
+        if ($attribute) {
+            $aes = $aes->where("attribute","=", $attribute);
+        }
+
+         $aes = $aes->find_all();
         foreach ($aes as $ae) {
             $url = Search_Url::get_seo_param_segment($ae->id);
             $ae->url = $url;

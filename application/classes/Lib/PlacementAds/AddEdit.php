@@ -723,7 +723,7 @@ class Lib_PlacementAds_AddEdit {
 			$errors['contact_mobile'] = "Для этой рубрики, необходимо обязательно указать телефон";
 			$errors['contact_phone'] = "Для этой рубрики, необходимо обязательно указать телефон";
 		}
-		elseif ($category AND $category_settings->one_mobile_phone AND !$params->itis_massload AND $params->contact_mobile)
+		elseif ($category AND $category_settings->one_mobile_phone AND !$params->itis_massload AND !$params->contact_mobile)
 		{
 			$errors['contact_mobile'] = "Для этой рубрики, необходимо обязательно указать мобильный телефон";
 		}

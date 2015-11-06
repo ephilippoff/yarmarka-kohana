@@ -1,5 +1,19 @@
 <a href="/khbackend/attributes/add" style="margin-bottom: 20px;display: inline-block;">Добавить атрибут</a>
+<script>
+	$(document).ready(function(){
 
+		$(".js-update").click(function(e){
+			e.preventDefault();
+			var $el = $(e.currentTarget);
+			var id = $el.data("id");
+			$.get('/khbackend/category/update_attribute/'+id, {}, function(result) {
+				console.log(result)
+			});
+		});
+
+	});
+	
+</script>
 <table class="table table-hover table-condensed articles">
 <tr>
 	<th>id</th>
@@ -43,6 +57,11 @@
 	<td>
 		<a href="<?=URL::site('khbackend/attributes/edit/'.$item->id)?>" class="icon-pencil"></a>
 		<a href="<?=URL::site('khbackend/attributes/delete/'.$item->id)?>" class="icon-trash"></a>
+	</td>
+	<td>
+		<? if ($item->type == 'list'): ?>
+			<a class="span-link js-update" data-id="<?=$item->id?>">Обновить сео</a>
+		<? endif; ?>
 	</td>
 </tr>
 <?php endforeach; ?>
