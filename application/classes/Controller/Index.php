@@ -180,7 +180,8 @@ class Controller_Index extends Controller_Template {
 
         $cities = $api->getCities();
         $selectedCityId = $cities['List'][0]['CityID'];
-        if (!empty($this->request->query('city'))) {
+        $tmpCity = $this->request->query('city');
+        if (!empty($tmpCity)) {
             //try to find city
             foreach($cities['List'] as $city) {
                 if ($city['CityID'] == $this->request->query('city')) {
@@ -196,7 +197,8 @@ class Controller_Index extends Controller_Template {
             //get all places for this city
             $places = $api->getPlaces($selectedCityId);
             $selectedPlaceId = $places['List'][0]['ObjectID'];
-            if (!empty($this->request->query('place'))) {
+            $tmpPlace = $this->request->query('place');
+            if (!empty($tmpPlace)) {
                 //try to find place
                 foreach($places['List'] as $place) {
                     if ($place['ObjectID'] == $this->request->query('place')) {
