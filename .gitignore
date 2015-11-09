@@ -25,4 +25,4 @@ application/config/database.php
 
 #amezhenny ignore
 /prepare.sh
-/node-modules
+/node_modules
