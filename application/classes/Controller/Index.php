@@ -217,7 +217,7 @@ class Controller_Index extends Controller_Template {
 
         //prepare widget attributes
         $widgetAttributes['classType'] = 'place';
-        $widgetAttributes['filter'] = '';
+        //$widgetAttributes['filter'] = '';
         $widgetAttributes['locale'] = '';
         if (!empty($selectedPlaceId)) {
             $widgetAttributes['objectID'] = $selectedPlaceId;
