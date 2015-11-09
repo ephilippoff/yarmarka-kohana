@@ -172,4 +172,9 @@ class Controller_Index extends Controller_Template {
 
         return $info;
     }
+
+    public function action_afisha() {
+        $twig = Twig::factory('index/afisha');
+        $this->response->body($twig);
+    }
 } // End Index

@@ -1,0 +1,23 @@
+{% extends "layouts/index" %}
+
+{% set theme_class = 'crimson-theme' %}
+{% block title %}Газета бесплатных объявлений Ярмарка{% endblock title%}
+{% block meta_description %}Газета бесплатных объявлений. Разделы сайта: работа, квартиры, дома, недвижимость, авто, ремонт и строительство, мебель, домашние животные. {% endblock meta_description%}
+
+{% block wrapperclass %}page-index{% endblock wrapperclass %}
+
+{% block header %} 
+	{{ parent() }}
+	
+{% endblock header %} 
+
+{% block content %}
+	
+	<!--Start Ticket widget-->
+	<rb:inline key="82d7a938-0b2a-44b2-a62e-6ae1b5c98b3b" classType="" objectID="" cityID="" locale="" xmlns:rb="http://kassa.rambler.ru"></rb:inline>
+	<!--End Ticket widget-->
+	<script type="text/javascript" src="http://s2.kassa.rl0.ru/widget/js/ticketmanager.js"></script>
+
+{% endblock content %}
+
+{% block footertext %}{% endblock %}
