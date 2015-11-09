@@ -175,6 +175,61 @@ class Controller_Index extends Controller_Template {
 
     public function action_afisha() {
         $twig = Twig::factory('index/afisha');
+        $api = RamblerApi::factory();
+        $widgetAttributes = array();
+
+        $cities = $api->getCities();
+        $selectedCityId = $cities['List'][0]['CityID'];
+        if (!empty($this->request->query('city'))) {
+            //try to find city
+            foreach($cities['List'] as $city) {
+                if ($city['CityID'] == $this->request->query('city')) {
+                    $selectedCityId = (int) $this->request->query('city');
+                    break;
+                }
+            }
+        }
+
+        $places = array();
+        $selectedPlaceId = NULL;
+        if (!empty($selectedCityId)) {
+            //get all places for this city
+            $places = $api->getPlaces($selectedCityId);
+            $selectedPlaceId = $places['List'][0]['ObjectID'];
+            if (!empty($this->request->query('place'))) {
+                //try to find place
+                foreach($places['List'] as $place) {
+                    if ($place['ObjectID'] == $this->request->query('place')) {
+                        $selectedPlaceId = (int) $this->request->query('place');
+                        break;
+                    }
+                }
+            }
+        }
+
+        //set twig data
+        $twig->cities = $cities;
+        $twig->places = $places;
+        $twig->selectedCityId = $selectedCityId;
+        $twig->selectedPlaceId = $selectedPlaceId;
+
+        //prepare widget attributes
+        $widgetAttributes['classType'] = 'place';
+        $widgetAttributes['filter'] = '';
+        $widgetAttributes['locale'] = '';
+        if (!empty($selectedPlaceId)) {
+            $widgetAttributes['objectID'] = $selectedPlaceId;
+        }
+        if (!empty($selectedCityId)) {
+            $widgetAttributes['cityID'] = $selectedCityId;
+        }
+        //process widget attributes
+        foreach($widgetAttributes as $key => $value) {
+            $widgetAttributes[$key] = $key . '="' . $value . '"';
+        }
+        //set widget attributes to twig
+        $twig->widgetAttributes = implode(' ', $widgetAttributes);
+
         $this->response->body($twig);
     }
 } // End Index
