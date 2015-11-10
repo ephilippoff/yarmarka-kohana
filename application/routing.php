@@ -290,30 +290,6 @@ Route::set('user', 'user(/<action>(/<category_path>))', array(
 //end user routing
 
 
-if (array_key_exists("HTTP_FROM", $_SERVER) && $_SERVER['HTTP_FROM'] !== 'googlebot(at)googlebot.com')
-{
-	if (strpos($_SERVER['REQUEST_URI'],"landing"))
-	{
-		Route::set('landing', 'landing(/<domain>(/<action>(/<id>)))')
-		->defaults(array(
-			'controller' => 'landing',
-			'action'     => 'index',
-		));
-	} else {
-		Route::set('/', '<action>(/<id>)')
-		->defaults(array(
-			'controller' => 'landing',
-			'action'     => 'index',
-		));
-	}
-} else {
-	Route::set('landing', 'landing(/<domain>(/<action>(/<id>)))')
-		->defaults(array(
-			'controller' => 'landing',
-			'action'     => 'index',
-		));
-}
-
 /**
  * Set the routes. Each route must have a minimum of a name, a URI and a set of
  * defaults for the URI.
