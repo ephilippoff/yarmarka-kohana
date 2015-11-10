@@ -22,3 +22,8 @@ application/config/database.php
 .gitignore
 /vendor
 /modules/kohana-twig/vendor
+
+#ignore node modules
+/node_modules
+#ignore init script
+/prepare.sh
