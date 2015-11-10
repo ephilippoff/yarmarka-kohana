@@ -8,7 +8,7 @@ define([
     "maskedInput",
     "ymap",
     //use cropper
-    '/bower/cropper/dist/cropper.js' //TODO - set minimal file in production
+    'lib/cropper.js'
 ], function (Marionette, templates, ContactsBehavior) {
     "use strict";
 
