@@ -232,6 +232,9 @@ class Controller_Index extends Controller_Template {
         //set widget attributes to twig
         $twig->widgetAttributes = implode(' ', $widgetAttributes);
 
+        //var_dump($api->getObjects('movie', 2));
+        //die;
+
         $this->response->body($twig);
     }
 } // End Index

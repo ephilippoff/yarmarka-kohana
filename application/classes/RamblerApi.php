@@ -48,6 +48,8 @@
 				$result[CURLOPT_HTTPHEADER] = $headers;
 			}
 
+			var_dump($result);
+
 			return $result;
 		}
 
@@ -86,9 +88,19 @@
 		}
 
 		public function getPlaces($cityId) {
-			return $this->exec('place/list', array(
-					'cityid' => $cityId
-				));
+			return $this->getObjects('place', $cityId);
+		}
+
+		public function getObjects($type, $cityId = NULL, $maxDate = NULL) {
+			$params = array();
+			if (!empty($cityId)) {
+				$params['cityid'] = $cityId;
+			}
+			if (!empty($maxDate)) {
+				$params['maxdate'] = $maxDate;
+			}
+
+			return $this->exec($type . '/list', $params);
 		}
 		/* api methods done */
 
