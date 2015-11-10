@@ -176,6 +176,11 @@ class Imageci {
 
 		$imageCreateFrom = "imagecreatefrom" . $this->filetype;
 		$src = $imageCreateFrom( $this->getOriginalPath( $this->image_filename ) );
+		$this->makeThumbnailByResource($src, $image_w, $image_h);
+		return $this->image_filename;
+	}
+
+	public function makeThumbnailByResource($src, $image_w, $image_h) {
 
 		foreach (self::$sizes as $name => $s) {
 
@@ -320,8 +325,6 @@ class Imageci {
 			$this->saveThumbnail($name);
 
 		}
-
-		return $this->image_filename;
 
 	}
 
@@ -680,6 +683,14 @@ class Imageci {
 	public function set_original_resize(Array $sizes)
 	{
 		$this->original_resize = $sizes;
+	}
+
+	public function setFileType($value) {
+		$this->filetype = $value;
+	}
+
+	public function setImageFileName($value) {
+		$this->image_filename = $value;
 	}
 	
 }

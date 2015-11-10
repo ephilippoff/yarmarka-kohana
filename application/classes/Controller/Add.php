@@ -337,6 +337,124 @@ class Controller_Add extends Controller_Template {
 		
 		$this->response->body(json_encode($this->json));
 	}
+
+	public function action_crop() {
+
+		$this->use_layout = FALSE;
+		$this->auto_render = FALSE;
+
+		//create crop data structure
+		$cropData = array();
+		$cropDataKeys = array( 'x', 'y', 'width', 'height', 'rotate', 'scaleX', 'scaleY', 'fileName' );
+		foreach($cropDataKeys as $key) {
+			if (!array_key_exists($key, $_REQUEST)) {
+				throw new Exception($key . ' required');
+			}
+			$value = $_REQUEST[$key];
+			if ($key != 'fileName') {
+				$value = (float) $value;
+				if ($key == 'rotate') {
+					//opposite css
+					$value = -$value;
+				}
+			} else {
+				$value = $_SERVER['DOCUMENT_ROOT'] . Imageci::getOriginalSitePath($value);
+				if (!is_file($value)) {
+					throw new Exception('Image not exists');
+				}
+			}
+			$cropData[$key] = $value;
+		}
+
+		//get image info
+		$cropData['imageType'] = exif_imagetype($cropData['fileName']);
+		$cropData['imageMime'] = image_type_to_mime_type($cropData['imageType']);
+		$cropData['imageSize'] = getimagesize($cropData['fileName']);
+		switch($cropData['imageType']) {
+			case IMAGETYPE_GIF:
+				$cropData['suffix'] = 'gif';
+				break;
+			case IMAGETYPE_JPEG:
+				$cropData['suffix'] = 'jpeg';
+				break;
+			case IMAGETYPE_PNG:
+				$cropData['suffix'] = 'png';
+				break;
+			default:
+				throw new Exception('Image format ' . $cropData['imageType'] . ' is not supported');
+		}
+
+		//construct image
+		$imgObj = NULL;
+		$imgConstructor = 'imagecreatefrom' . $cropData['suffix'];
+		$imgObj = $imgConstructor($cropData['fileName']);
+
+		//create background color for rotate
+		//transparent white color. Jpeg will have white background
+		$bgColor = imagecolorallocatealpha($imgObj, 255, 255, 255, 127);
+
+		//rotate
+		if ($cropData['rotate'] !== 0) {
+			$rotatedImg = imagerotate($imgObj, $cropData['rotate'], $bgColor);
+			//get new sizes
+			$rotatedSizeW = imagesx($rotatedImg);
+			$rotatedSizeH = imagesy($rotatedImg);
+			//replace image
+			imagedestroy($imgObj);
+			$imgObj = $rotatedImg;
+			$cropData['imageSize'] = array(
+					$rotatedSizeW,
+					$rotatedSizeH
+				);
+		}
+
+		//crop
+		$croppedImage = imagecreatetruecolor($cropData['width'], $cropData['height']);
+		imagefill($croppedImage, 0, 0, $bgColor);
+		imagecopyresampled(
+			$croppedImage, //dest image
+			$imgObj, //source image
+			0, 0, //dest start point
+			$cropData['x'], $cropData['y'], //source start point
+			$cropData['width'], $cropData['height'], //dest size
+			$cropData['width'], $cropData['height'] //source size
+		);
+		//replace images
+		imagedestroy($imgObj);
+		$imgObj = $croppedImage;
+		$cropData['imageSize'] = array(
+				$cropData['width'],
+				$cropData['height']
+			);
+
+		//debug output image
+		//header('Content-Type: ' . $cropData['imageMime']);
+		$imgOutput = 'image' . $cropData['suffix'];
+		//$imgOutput($imgObj);
+
+		//recreate thumbnails
+		$oldImageModule = new Imageci();
+		$oldImageModule->setFileType($cropData['suffix']);
+		$oldImageModule->setImageFileName(basename($cropData['fileName']));
+		$oldImageModule->makeThumbnailByResource(
+			$imgObj, $cropData['imageSize'][0], $cropData['imageSize'][1]);
+
+		//save image
+		$imgOutput($imgObj, $cropData['fileName']);
+
+		//clear resources
+		imagedestroy($imgObj);
+
+		//die;
+
+		//prepare answer
+		$cropData['fileName'] = basename($cropData['fileName']);
+		$cropData['thumbnails'] = Imageci::getSitePaths($cropData['fileName']);
+
+		$this->json['code'] = 200;
+
+		$this->response->body(json_encode(array_merge($this->json, $cropData)));
+	}
 }
 
 /* End of file Add.php */

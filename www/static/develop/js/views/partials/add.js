@@ -6,7 +6,9 @@ define([
     "fileupload",
     "nicEdit",
     "maskedInput",
-    "ymap"
+    "ymap",
+    //use cropper
+    '/bower/cropper/dist/cropper.js' //TODO - set minimal file in production
 ], function (Marionette, templates, ContactsBehavior) {
     "use strict";
 
@@ -635,6 +637,182 @@ define([
         }
     });
 
+    /* cropper view */
+    // extend photo item view
+    var photoViewBase = photoView;
+    photoView = photoView.extend({
+        //extend events
+        events: _.extend(photoViewBase.prototype.events, {
+            'click .fn-crop': 'showCropper'
+        })
+        //override initialize method
+        , initialize: function (options) {
+            //console.log('photoView[Cropper extension] initialize');
+
+            photoViewBase.prototype.initialize.call(this, options);
+        }
+        //initialize cropper view
+        , showCropper: function () {
+            //console.log('photoView[Cropper extension] showCropper');
+            console.log(this.model);
+            var me = this;
+            CropperViewFactory(this.model.get('original'))
+                .on('cropper_save', function (e) {
+                    me.saveCroppedPicture(this.cropBoxData);
+                })
+                .render();
+        }
+        //picture change processor
+        , saveCroppedPicture: function (data) {
+            var me = this;
+            $.ajax({
+                url: 'add/crop'
+                , dataType: 'json'
+                , method: 'GET'
+                , data: _.extend(data, {
+                    fileName: this.model.get('filename')
+                })
+                , success: function (answer) {
+                    var avoidCache = '?v=' + Math.random();
+                    me.model.set('filename', answer.fileName);
+                    me.model.set('filepath', answer.thumbnails['120x90'] + avoidCache);
+                    me.model.set('original', answer.thumbnails['original'] + avoidCache);
+                    me.$el.find('img').attr('src', answer.thumbnails['120x90'] + avoidCache);
+                }
+            });
+        }
+    });
+    //check prototype
+    //console.log(photoView.prototype);
+    /* cropper view */
+    var CropperView = Backbone.View.extend({
+        //cropper data
+        cropBoxData: null
+        , cropCanvasData: null
+        , cropperOptions: {}
+        //bind events
+        , events: {
+            'click [data-save]': 'save'
+            , 'click .js-close': 'destroy'
+            , 'click [data-rotate]': 'rotate'
+            , 'click [data-zoom]': 'zoom'
+            , 'click [data-refresh]': 'refresh'
+        }
+
+        , initialize: function (options) {
+            this.$image = this.$el.find('img');
+        }
+
+        , rotate: function (event) {
+            var degrees = +$(event.currentTarget).data('rotate');
+            this.$image.cropper('rotate', degrees);
+        }
+
+        , refresh: function (event) {
+            this.$image.cropper('reset');
+        }
+
+        , zoom: function (event) {
+            var level = +$(event.currentTarget).data('zoom');
+            this.$image.cropper('zoom', level);
+        }
+
+        , render: function () {
+            //append dom
+            $('#popup-layer').after(this.$el);
+
+            this.initCropper();
+        }
+
+        , initCropper: function () {
+            //init cropper
+            this.$image.cropper(_.extend(this.cropperOptions, {
+                //some defaults - TODO
+            }));
+            //set initial data
+            this.updateData();
+        }
+
+        , updateData: function () {
+            this.cropBoxData = this.$image.cropper('getData');
+            this.cropCanvasData = this.$image.cropper('getCanvasData');
+        }
+
+        , save: function () {
+            //save data
+            this.updateData();
+            //trigger done event
+            this.trigger('cropper_save');
+            this.destroy();
+        }
+
+        , destroy: function () {
+            //destroy cropper
+            this.$image.cropper('destroy');
+            //remove dom
+            this.$el.remove();
+        }
+    });
+    /* cropper view done */
+    //factory for cropper view
+    //simple creates bootstrap modal dialog
+    //TODO - export factory to usage in other modules
+    var CropperViewFactory = function (image) {
+        //markup
+        /* bootstrap version */
+        /*
+        var html = 
+            '<div class="modal fade">'
+                + '<div class="modal-dialog">'
+                    + '<div class="modal-content">'
+                        + '<div class="modal-body">'
+                            + '<img src="" />'
+                        + '</div>'
+                    + '</div>'
+                + '</div>'
+            + '</div>';
+        */
+        /* other version */
+        var html = 
+            '<div class="popup-wrp z400">'
+                + '<div class="popup-window w500">'
+                    + '<div class="header">'
+                        + 'Редактирование изображения'
+                        + '<div class="popup-window-close js-close">'
+                            + '<i class="ico close-ico16"></i>'
+                        + '</div>'
+                    + '</div>'
+                    + '<div class="cont">'
+                        + '<div class="cropper-image">'
+                            + '<img src="" />'
+                        + '</div>'
+                        + '<div class="cropper-actions row">'
+                            + '<button class="btn" data-rotate="10"><span class="fa fa-undo"></span></button>'
+                            + '<button class="btn" data-rotate="-10"><span class="fa fa-repeat"></span></button>'
+                            //+ '<button class="btn" data-zoom="0.1"><span class="fa fa-search-plus"></span></button>'
+                            //+ '<button class="btn" data-zoom="-0.1"><span class="fa fa-search-minus"></span></button>'
+                            + '<button class="btn" data-refresh><span class="fa fa-refresh"></span></button>'
+                            + '<button class="btn" data-save>Сохранить</button>'
+                        + '</div>'
+                    + '</div>'
+                + '</div>'
+            + '</div>';
+
+        //compile
+        var $compiled = $(html);
+
+        //push values
+        $compiled.find('img').attr('src', image);
+
+        //create view
+        var view = new CropperView({
+            el: $compiled
+        });
+
+        return view;
+    };
+    /* cropper feacture done */
+
     var photoControlView = Backbone.View.extend({
         el : '#div_photo', 
         photos : [],
@@ -712,6 +890,8 @@ define([
                             filename : result.filename,
                             filepath : result.filepaths['120x90'],
                             active : active
+                            //fix to use crop feature
+                            , original: result.filepaths.original
                         });
                         self.setError("");
                    } else

@@ -14,7 +14,8 @@
     "requirejs-text": "~2.0.13",
     "requirejs-plugins": "~1.0.3",
     "backbone.paginator": "~2.0.2",
-    "isotope": "~2.2.1"
+    "isotope": "~2.2.1",
+    "cropper": "~1.0.0"
   },
   "license": "MIT",
   "ignore": [
