@@ -2,17 +2,16 @@
 	<div class="menu-cont2 brt2">
 		<div class="row">
 			<div class="col-md-2 col-xs-6 clearfix">
-				<div class="menu-item left w100p {{theme_class}} iLight js-newsmenu-dropdown"><!--main-page-style iLight-disable-->
-					<span class="menu-item-cont" onclick="window.location='/novosti'">Категории новостей<i class="fa fa-caret-down ml3"></i></span>
-				</div>
+				<div class="menu-item left crimson-theme js-mainmenu-dropdown">
+					<span class="menu-item-cont">Объявления<i class="fa fa-caret-down ml3"></i></span>
+				</div>				
 			</div>
 			<div class="col-md-10 clearfix">
 				{#{% for rubric in news_rubrics%}
 					<span class="menu-item left">{{rubric.title}}</span>
 				{% endfor %}#}
-
-				<div class="menu-item left crimson-theme js-mainmenu-dropdown">
-					<span class="menu-item-cont">Объявления<i class="fa fa-caret-down ml3"></i></span>
+				<div class="menu-item left w100p {{theme_class}} iLight js-newsmenu-dropdown"><!--main-page-style iLight-disable-->
+					<span class="menu-item-cont" onclick="window.location='/novosti'">Категории новостей<i class="fa fa-caret-down ml3"></i></span>
 				</div>
 				<div class="menu-item left light-blue-theme js-kuponmenu-dropdown">
 					<span class="menu-item-cont ta-c" onclick="window.location='/kupony'">Купоны и скидки<i class="fa fa-caret-down ml3"></i></span>
