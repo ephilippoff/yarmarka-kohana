@@ -290,7 +290,7 @@ Route::set('user', 'user(/<action>(/<category_path>))', array(
 //end user routing
 
 
-if (array_key_exists("HTTP_FROM", $_SERVER))
+if (array_key_exists("HTTP_FROM", $_SERVER) && $_SERVER['HTTP_FROM'] !== 'googlebot(at)googlebot.com')
 {
 	if (strpos($_SERVER['REQUEST_URI'],"landing"))
 	{
