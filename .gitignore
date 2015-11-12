@@ -27,3 +27,4 @@ application/config/database.php
 /node_modules
 #ignore init script
 /prepare.sh
+ 
