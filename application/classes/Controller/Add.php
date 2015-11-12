@@ -358,10 +358,27 @@ class Controller_Add extends Controller_Template {
 					$value = -$value;
 				}
 			} else {
+				$value = $initialValue = str_replace('..', '', $value);
 				$value = $_SERVER['DOCUMENT_ROOT'] . Imageci::getOriginalSitePath($value);
 				if (!is_file($value)) {
 					throw new Exception('Image not exists');
 				}
+				$valuePathInfo = pathinfo($value);
+				$newFileName = str_replace('./', '/', Imageci::getNewFileName('.' . $valuePathInfo['extension']));
+				$newValue = $_SERVER['DOCUMENT_ROOT'] . $newFileName;
+
+				//copy original
+				if (!is_dir(dirname($newValue))) {
+					mkdir(dirname($newValue), 0777, true);
+				}
+				copy($value, $newValue);
+
+				//remove all others thumbnails
+				$toRemove = Imageci::getSitePaths($initialValue);
+				foreach($toRemove as $toRemoveKey => $toRemoveItem) {
+					unlink($_SERVER['DOCUMENT_ROOT'] . $toRemoveItem);
+				}
+				$value = $newValue;
 			}
 			$cropData[$key] = $value;
 		}

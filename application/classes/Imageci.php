@@ -388,12 +388,29 @@ class Imageci {
 	}
 
 
+	public static function getNewFileName($extension) {
+		$tgtfile = '';
+		do {
+
+			$filename = md5(uniqid(""));
+
+			$tgtfile   = self::getOriginalPath( $filename . $extension);
+
+			$folder1 = substr($filename, 0, 2);
+			$folder2 = substr($filename, 2, 2);
+			$folder3 = substr($filename, 4, 2);
+
+		} while (file_exists($tgtfile) || $folder1 == "ad" || $folder2 == "ad" || $folder3 == "ad");
+
+		return $tgtfile;
+	}
+
 	/**
 	 * Уменьшить и сохранить оригинал картинки
 	 */
 	private function saveOriginal() {
 
-		//Делаем уникальное имя файлу
+		//Делаем уникальное имя файлу - TODO - replace getNewFileName
 		do {
 
 			$filename = md5(uniqid(""));

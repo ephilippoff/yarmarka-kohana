@@ -674,12 +674,12 @@ define([
                     fileName: this.model.get('filename')
                 })
                 , success: function (answer) {
-                    var avoidCache = '?v=' + Math.random();
+                    //var avoidCache = '?v=' + Math.random();
                     me.model.set('filename', answer.fileName);
-                    me.model.set('filepath', answer.thumbnails['120x90'] + avoidCache);
-                    me.model.set('original', answer.thumbnails['original'] + avoidCache);
-                    me.$el.find('img').attr('src', answer.thumbnails['120x90'] + avoidCache);
-                    me.$el.find('input[type=hidden]').val(answer.fileName + avoidCache);
+                    me.model.set('filepath', answer.thumbnails['120x90']);
+                    me.model.set('original', answer.thumbnails['original']);
+                    me.$el.find('img').attr('src', answer.thumbnails['120x90']);
+                    me.$el.find('input[type=hidden]').val(answer.fileName);
                 }
             });
         }
