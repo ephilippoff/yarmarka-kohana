@@ -1,6 +1,6 @@
 <div class="item {% if half %}half{% endif %}" >
 	<div class="img-cont mt10 img-wrapper">
-		<img alt="{{ vip_object.title|e }}"  src="{{ get_file(vip_object.compiled.images.main_photo['272x203']) }}">
+		<img onclick="window.location = '{{ vip_object.compiled.url }}'" alt="{{ vip_object.title|e }}"  src="{{ get_file(vip_object.compiled.images.main_photo['272x203']) }}">
 		<span class="photos-count">{{vip_object.compiled.images.local_photo|length + vip_object.compiled.images.remote_photo|length}}</span>
 	</div>
 	<a rel="nofollow" href="{{ vip_object.compiled.url }}" title="{{ vip_object.title|e }}" class="dib object-caption bold">

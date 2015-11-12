@@ -149,7 +149,7 @@ class Controller_User_Search extends Controller_Template {
             "active" => TRUE,
             "published" =>TRUE,
             "user_id" => $this->user->id,
-            "user_company_include" => TRUE,
+            "user_company_include" => FALSE,
             "category_id" =>  (count($this->child_categories_ids) > 0) ? $this->child_categories_ids : $this->category_id,
             "filters" => array()
         );
