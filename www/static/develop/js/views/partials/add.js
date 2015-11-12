@@ -679,6 +679,7 @@ define([
                     me.model.set('filepath', answer.thumbnails['120x90'] + avoidCache);
                     me.model.set('original', answer.thumbnails['original'] + avoidCache);
                     me.$el.find('img').attr('src', answer.thumbnails['120x90'] + avoidCache);
+                    me.$el.find('input[type=hidden]').val(answer.fileName + avoidCache);
                 }
             });
         }
@@ -721,10 +722,18 @@ define([
 
             //this.$image.cropper({ center: false, autoCropArea: 0 })
             var cropBoxData = this.$image.cropper('getCropBoxData');
+            console.log(cropBoxData);
             this.setAspectRatio();
 
             var degrees = +$(event.currentTarget).data('rotate');
             this.$image.cropper('rotate', degrees);
+
+            //calc move offset
+            if (cropBoxData.width > cropBoxData.height) {
+                cropBoxData.top -= (cropBoxData.width - cropBoxData.height) * 0.5;
+            } else {
+                cropBoxData.left -= (cropBoxData.height - cropBoxData.width) * 0.5;
+            }
 
             //rotate crop box
             var temp = cropBoxData.width;
@@ -771,6 +780,7 @@ define([
                     };
                     
                     if (imageData.naturalWidth < imageData.naturalHeight) {
+                        me.setAspectRatio();
                         toSet.width = imageData.naturalWidth;
                         toSet.height = imageData.naturalWidth / me.oldAspectRatio;
                     } else {
@@ -842,7 +852,7 @@ define([
                             + '<img src="" />'
                         + '</div>'
                         + '<div class="cropper-actions row">'
-                            + '<button class="btn" data-rotate="10"><span class="fa fa-undo"></span></button>'
+                            + '<button class="btn" data-rotate="90"><span class="fa fa-undo"></span></button>'
                             //+ '<button class="btn" data-rotate="-10"><span class="fa fa-repeat"></span></button>'
                             + '<button class="btn" data-zoom="0.1"><span class="fa fa-search-plus"></span></button>'
                             + '<button class="btn" data-zoom="-0.1"><span class="fa fa-search-minus"></span></button>'
