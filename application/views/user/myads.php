@@ -394,7 +394,7 @@
 															<i class="ico premium"></i><span>Премиум</span>
 														</a></li>
 													<? endif; ?>
-													<li><a title="Бегущая строка на сайте" href="<?=CI::site('billing/pay_service/'.$running_line_site_s->id.'/'.$ad->id)?>" class="btn-pmenu "><i class="ico rs"></i><span>Бегущая строка</span></a></li>																																		
+													<?php if ($ad->city_id != 1979) : ?><li><a title="Бегущая строка на сайте" href="<?=CI::site('billing/pay_service/'.$running_line_site_s->id.'/'.$ad->id)?>" class="btn-pmenu "><i class="ico rs"></i><span>Бегущая строка</span></a></li><?php endif;?>																																		
 													<li><a title="Текстовая ссылка" href="<?=CI::site('billing/pay_service/'.$service_promo_link->id.'/'.$ad->id)?>" class="btn-pmenu "><i class="ico pl"></i><span>Текст. ссылка</span></a></li>
 													<li><a title="Графическая ссылка" href="<?=CI::site('billing/pay_service/'.$service_promo_link_bg->id.'/'.$ad->id)?>" class="btn-pmenu "><i class="ico plg"></i><span>Графич. ссылка</span></a></li>													
 													<?php ?>
