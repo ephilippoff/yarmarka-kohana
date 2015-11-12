@@ -8,7 +8,8 @@ define([
     "maskedInput",
     "ymap",
     //use cropper
-    'lib/cropper.js'
+    //'lib/cropper.js'
+    'cropper'
 ], function (Marionette, templates, ContactsBehavior) {
     "use strict";
 
@@ -654,7 +655,7 @@ define([
         //initialize cropper view
         , showCropper: function () {
             //console.log('photoView[Cropper extension] showCropper');
-            console.log(this.model);
+            //console.log(this.model);
             var me = this;
             CropperViewFactory(this.model.get('original'))
                 .on('cropper_save', function (e) {
@@ -703,13 +704,38 @@ define([
             this.$image = this.$el.find('img');
         }
 
+        , setAspectRatio: function () {
+            if (!this.oldAspectRatio) {
+                this.oldAspectRatio = 3 / 4;
+            }
+            if (this.oldAspectRatio < 1) {
+                this.oldAspectRatio = 4 / 3;
+            } else {
+                this.oldAspectRatio = 3 / 4;
+            }
+
+            this.$image.cropper('setAspectRatio', this.oldAspectRatio);
+        }
+
         , rotate: function (event) {
+
+            //this.$image.cropper({ center: false, autoCropArea: 0 })
+            var cropBoxData = this.$image.cropper('getCropBoxData');
+            this.setAspectRatio();
+
             var degrees = +$(event.currentTarget).data('rotate');
             this.$image.cropper('rotate', degrees);
+
+            //rotate crop box
+            var temp = cropBoxData.width;
+            cropBoxData.width = cropBoxData.height;
+            cropBoxData.height = temp;
+            this.$image.cropper('setCropBoxData', cropBoxData);
         }
 
         , refresh: function (event) {
-            this.$image.cropper('reset');
+            this.$image.cropper('destroy');
+            this.initCropper();
         }
 
         , zoom: function (event) {
@@ -725,9 +751,38 @@ define([
         }
 
         , initCropper: function () {
+            var me = this;
             //init cropper
             this.$image.cropper(_.extend(this.cropperOptions, {
                 //some defaults - TODO
+                aspectRatio: this.oldAspectRatio = 4/3,
+                //center: true,
+                //autoCropArea: 1
+                built: function () {
+                    var imageData = me.$image.cropper('getImageData');
+                    var toSet = {
+                        x: 0
+                        , y: 0
+                        , width: 0
+                        , height: 0
+                        , rotate: 0
+                        , scaleX: 1
+                        , scaleY: 1
+                    };
+                    
+                    if (imageData.naturalWidth < imageData.naturalHeight) {
+                        toSet.width = imageData.naturalWidth;
+                        toSet.height = imageData.naturalWidth / me.oldAspectRatio;
+                    } else {
+                        toSet.height = imageData.naturalHeight;
+                        toSet.width = imageData.naturalHeight * me.oldAspectRatio;
+                    }
+
+                    toSet.x = (imageData.naturalWidth - toSet.width) * 0.5;
+                    toSet.y = (imageData.naturalHeight - toSet.height) * 0.5;
+
+                    me.$image.cropper('setData', toSet);
+                }
             }));
             //set initial data
             this.updateData();
@@ -774,7 +829,7 @@ define([
         */
         /* other version */
         var html = 
-            '<div class="popup-wrp z400">'
+            '<div class="popup-wrp z400 cropper-popup">'
                 + '<div class="popup-window w500">'
                     + '<div class="header">'
                         + 'Редактирование изображения'
@@ -788,10 +843,10 @@ define([
                         + '</div>'
                         + '<div class="cropper-actions row">'
                             + '<button class="btn" data-rotate="10"><span class="fa fa-undo"></span></button>'
-                            + '<button class="btn" data-rotate="-10"><span class="fa fa-repeat"></span></button>'
-                            //+ '<button class="btn" data-zoom="0.1"><span class="fa fa-search-plus"></span></button>'
-                            //+ '<button class="btn" data-zoom="-0.1"><span class="fa fa-search-minus"></span></button>'
-                            + '<button class="btn" data-refresh><span class="fa fa-refresh"></span></button>'
+                            //+ '<button class="btn" data-rotate="-10"><span class="fa fa-repeat"></span></button>'
+                            + '<button class="btn" data-zoom="0.1"><span class="fa fa-search-plus"></span></button>'
+                            + '<button class="btn" data-zoom="-0.1"><span class="fa fa-search-minus"></span></button>'
+                            + '<button class="btn" data-refresh>Отменить</button>'
                             + '<button class="btn" data-save>Сохранить</button>'
                         + '</div>'
                     + '</div>'
