@@ -840,7 +840,7 @@ define([
         /* other version */
         var html = 
             '<div class="popup-wrp z400 cropper-popup">'
-                + '<div class="popup-window w500">'
+                + '<div class="popup-window mw500">'
                     + '<div class="header">'
                         + 'Редактирование изображения'
                         + '<div class="popup-window-close js-close">'
