@@ -860,7 +860,7 @@ define([
                         + '<div class="cropper-image">'
                             + '<img src="" />'
                         + '</div>'
-                        + '<div class="cropper-actions row">'
+                        + '<div class="cropper-actions">'
                             + '<button class="btn" data-rotate="90"><span class="fa fa-undo"></span></button>'
                             //+ '<button class="btn" data-rotate="-10"><span class="fa fa-repeat"></span></button>'
                             + '<button class="btn" data-zoom="0.1"><span class="fa fa-search-plus"></span></button>'
