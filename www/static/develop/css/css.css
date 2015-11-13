@@ -89,6 +89,7 @@ h3, h2, strong, .bold {font-family: 'pt_sansbold', Verdana, sans-serif;}
 .lh44{line-height: 44px;}
 .fs14{font-size: 14px;}.fs16{font-size: 16px;}.fs18{font-size: 18px;}.fs22{font-size: 22px;}
 .z1 {z-index: 1}.z2 {z-index: 2}.z100 {z-index: 100}.z101 {z-index: 101}.z200 {z-index: 200}.z201 {z-index: 201}.z300 {z-index: 300}.z301 {z-index: 301}.z400 {z-index: 400}.z401 {z-index: 401}.z500 {z-index: 500}.z501 {z-index: 501}z1000 {z-index: 1000}.z50 {z-index: 50}.z150 {z-index: 150}.z151 {z-index: 151}.z250 {z-index: 250}.z251 {z-index: 251}.z350 {z-index: 350}.z450 {z-index: 450}.z550 {z-index: 550}
+.mw500{max-width: 500px;}
 /*
     z200 = black layer
     z300 = menus
@@ -763,6 +764,8 @@ select{background-color: #FFFFFF;border: 1px solid #C3C3C3;padding:2px 10px;heig
 
 /* end pages */
 
+.cropper-actions{margin-top: 5px;}
+.cropper-actions .btn{margin-right: 5px;}
 
 @media (max-width: 992px){
 	.top-line{height: auto;}
