@@ -687,6 +687,7 @@ define([
     //check prototype
     //console.log(photoView.prototype);
     /* cropper view */
+    var CurrentCropperView = null; //singleton
     var CropperView = Backbone.View.extend({
         //cropper data
         cropBoxData: null
@@ -719,10 +720,10 @@ define([
         }
 
         , rotate: function (event) {
-
+            event.preventDefault();
             //this.$image.cropper({ center: false, autoCropArea: 0 })
             var cropBoxData = this.$image.cropper('getCropBoxData');
-            console.log(cropBoxData);
+            //console.log(cropBoxData);
             this.setAspectRatio();
 
             var degrees = +$(event.currentTarget).data('rotate');
@@ -743,19 +744,26 @@ define([
         }
 
         , refresh: function (event) {
+            event.preventDefault();
             this.$image.cropper('destroy');
             this.initCropper();
         }
 
         , zoom: function (event) {
+            event.preventDefault();
             var level = +$(event.currentTarget).data('zoom');
             this.$image.cropper('zoom', level);
         }
 
         , render: function () {
+            if (CurrentCropperView != this) {
+                if (CurrentCropperView != null) {
+                    CurrentCropperView.destroy();
+                }
+                CurrentCropperView = this;
+            }
             //append dom
-            $('#popup-layer').after(this.$el);
-
+            $('.cropper-cont').append(this.$el);
             this.initCropper();
         }
 
@@ -839,7 +847,7 @@ define([
         */
         /* other version */
         var html = 
-            '<div class="popup-wrp z400 cropper-popup">'
+            /*'<div class="popup-wrp z400 cropper-popup">'
                 + '<div class="popup-window mw500">'
                     + '<div class="header">'
                         + 'Редактирование изображения'
@@ -847,7 +855,8 @@ define([
                             + '<i class="ico close-ico16"></i>'
                         + '</div>'
                     + '</div>'
-                    + '<div class="cont">'
+            */
+                    '<div>'
                         + '<div class="cropper-image">'
                             + '<img src="" />'
                         + '</div>'
@@ -860,8 +869,10 @@ define([
                             + '<button class="btn" data-save>Сохранить</button>'
                         + '</div>'
                     + '</div>'
+            /*
                 + '</div>'
             + '</div>';
+            */
 
         //compile
         var $compiled = $(html);
