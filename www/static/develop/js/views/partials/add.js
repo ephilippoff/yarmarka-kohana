@@ -657,7 +657,7 @@ define([
             //console.log('photoView[Cropper extension] showCropper');
             //console.log(this.model);
             var me = this;
-            CropperViewFactory(this.model.get('original'))
+            CropperViewFactory(this.model.get('original'), { })
                 .on('cropper_save', function (e) {
                     me.saveCroppedPicture(this.cropBoxData);
                 })
@@ -700,10 +700,18 @@ define([
             , 'click [data-rotate]': 'rotate'
             , 'click [data-zoom]': 'zoom'
             , 'click [data-refresh]': 'refresh'
+            , 'click [data-destroy]': 'destroy'
         }
 
         , initialize: function (options) {
             this.$image = this.$el.find('img');
+
+            //console.log('Initialize cropper view with options: ');
+            //console.log(options);
+
+            if (options.width) {
+                this.$image.width(options.width);
+            }
         }
 
         , setAspectRatio: function () {
@@ -762,6 +770,10 @@ define([
                 }
                 CurrentCropperView = this;
             }
+
+            //scroll to me
+            $('.cropper-cont').get(0).scrollIntoView();
+
             //append dom
             $('.cropper-cont').append(this.$el);
             this.initCropper();
@@ -770,40 +782,44 @@ define([
         , initCropper: function () {
             var me = this;
             //init cropper
-            this.$image.cropper(_.extend(this.cropperOptions, {
-                //some defaults - TODO
-                aspectRatio: this.oldAspectRatio = 4/3,
-                //center: true,
-                //autoCropArea: 1
-                built: function () {
-                    var imageData = me.$image.cropper('getImageData');
-                    var toSet = {
-                        x: 0
-                        , y: 0
-                        , width: 0
-                        , height: 0
-                        , rotate: 0
-                        , scaleX: 1
-                        , scaleY: 1
-                    };
-                    
-                    if (imageData.naturalWidth < imageData.naturalHeight) {
-                        me.setAspectRatio();
-                        toSet.width = imageData.naturalWidth;
-                        toSet.height = imageData.naturalWidth / me.oldAspectRatio;
-                    } else {
-                        toSet.height = imageData.naturalHeight;
-                        toSet.width = imageData.naturalHeight * me.oldAspectRatio;
+            setTimeout(function () {
+                me.$image.cropper(_.extend(me.cropperOptions, {
+                    //some defaults - TODO
+                    aspectRatio: me.oldAspectRatio = 4/3,
+                    //center: true,
+                    //autoCropArea: 1
+                    built: function () {
+                        var imageData = me.$image.cropper('getImageData');
+                        var toSet = {
+                            x: 0
+                            , y: 0
+                            , width: 0
+                            , height: 0
+                            , rotate: 0
+                            , scaleX: 1
+                            , scaleY: 1
+                        };
+                        
+                        //console.log(imageData);
+
+                        if (imageData.naturalWidth < imageData.naturalHeight) {
+                            me.setAspectRatio();
+                            toSet.width = imageData.naturalWidth;
+                            toSet.height = imageData.naturalWidth / me.oldAspectRatio;
+                        } else {
+                            toSet.height = imageData.naturalHeight;
+                            toSet.width = imageData.naturalHeight * me.oldAspectRatio;
+                        }
+
+                        toSet.x = (imageData.naturalWidth - toSet.width) * 0.5;
+                        toSet.y = (imageData.naturalHeight - toSet.height) * 0.5;
+
+                        me.$image.cropper('setData', toSet);
+                        //set initial data
+                        me.updateData();
                     }
-
-                    toSet.x = (imageData.naturalWidth - toSet.width) * 0.5;
-                    toSet.y = (imageData.naturalHeight - toSet.height) * 0.5;
-
-                    me.$image.cropper('setData', toSet);
-                }
-            }));
-            //set initial data
-            this.updateData();
+                }));
+            }, 1);
         }
 
         , updateData: function () {
@@ -824,13 +840,14 @@ define([
             this.$image.cropper('destroy');
             //remove dom
             this.$el.remove();
+            $('#div_photo').get(0).scrollIntoView();
         }
     });
     /* cropper view done */
     //factory for cropper view
     //simple creates bootstrap modal dialog
     //TODO - export factory to usage in other modules
-    var CropperViewFactory = function (image) {
+    var CropperViewFactory = function (image, options) {
         //markup
         /* bootstrap version */
         /*
@@ -865,7 +882,8 @@ define([
                             //+ '<button class="btn" data-rotate="-10"><span class="fa fa-repeat"></span></button>'
                             + '<button class="btn" data-zoom="0.1"><span class="fa fa-search-plus"></span></button>'
                             + '<button class="btn" data-zoom="-0.1"><span class="fa fa-search-minus"></span></button>'
-                            + '<button class="btn" data-refresh>Отменить</button>'
+                            + '<button class="btn" data-refresh>Сбросить</button>'
+                            + '<button class="btn" data-destroy>Отменить</button>'
                             + '<button class="btn" data-save>Сохранить</button>'
                         + '</div>'
                     + '</div>'
@@ -881,9 +899,14 @@ define([
         $compiled.find('img').attr('src', image);
 
         //create view
-        var view = new CropperView({
-            el: $compiled
-        });
+        var view = new CropperView(_.extend(
+            {
+                width: $('.fn-cropper-cont').width()
+            }, 
+            options,
+            {
+                el: $compiled
+            }));
 
         return view;
     };
