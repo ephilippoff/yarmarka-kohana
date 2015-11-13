@@ -460,6 +460,14 @@
 							<div class="mb10 red" id="error_userfile1"></div>
 						</div>
 					</div>
+				</div>
+				<div class="row mb10">
+					<div class="col-md-3 col-xs-4 labelcont">
+						
+					</div>
+					<div class="col-md-9 col-xs-8">
+						<div class="cropper-cont fn-cropper-cont"></div>
+					</div>
 				</div>			
 			<? endif; ?>
 		</div>
