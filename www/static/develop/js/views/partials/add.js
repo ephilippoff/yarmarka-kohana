@@ -672,7 +672,7 @@ define([
         , saveCroppedPicture: function (data) {
             var me = this;
             $.ajax({
-                url: 'add/crop'
+                url: '/add/crop'
                 , dataType: 'json'
                 , method: 'GET'
                 , data: _.extend(data, {
