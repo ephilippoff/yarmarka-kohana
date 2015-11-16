@@ -153,7 +153,6 @@ class Controller_Block extends Controller_Template
 	{
 		$this->use_layout	= FALSE;
 		$this->auto_render	= FALSE;
-
 		$domain = new Domain();
 		if ($proper_domain = $domain->is_domain_incorrect()) {
 			HTTP::redirect("http://".$proper_domain, 301);
@@ -161,6 +160,7 @@ class Controller_Block extends Controller_Template
 
 		$twig = Twig::factory('errors/404');
 		$twig->city = $domain->get_city();
+		$twig->is_system_error = $this->request->post("is_system_error");
 
 		$twig->categories = ORM::factory('Category')->get_categories_extend(array(
 					"with_child" => TRUE, 

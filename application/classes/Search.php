@@ -210,6 +210,12 @@ class Search {
 			$object = $object->where("category.seo_name", (is_array($params->category_seo_name)) ? "IN" : "=", $params->category_seo_name );
 		}
 
+		if ($params->not_category_seo_name) {
+			$object = $object->join("category", "inner")
+								->on("category.id","=", "o.category");
+			$object = $object->where("category.seo_name", (is_array($params->not_category_seo_name)) ? "NOT IN" : "<>", $params->not_category_seo_name );
+		}
+
 		if ($params->date_created) { 
 			if (isset($params->date_created["from"])) {
 				$object = $object->where("o.date_created", ">=", $params->date_created["from"]);

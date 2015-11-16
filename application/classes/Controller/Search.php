@@ -113,7 +113,7 @@ class Controller_Search extends Controller_Template {
 
         //premium
         $premium_search_query = Search::searchquery(
-            array_merge($search_info->search_filters, array("premium" => TRUE)), 
+            array_merge($search_info->search_filters, array("premium" => TRUE, "not_category_seo_name" => array("novosti") )), 
             array_merge($search_params, array("limit" => 5))
         );
         $twig->premium_search_result = Search::getresult($premium_search_query->execute()->as_array());
@@ -222,6 +222,17 @@ class Controller_Search extends Controller_Template {
             }
         }
 		
+        if ($search_info->s_suri <> "/".$search_info->canonical_url) {
+            $search_info->show_canonical = TRUE;
+            $search_info->is_canonical = FALSE;
+        } else {
+             $search_info->is_canonical = TRUE;
+        }
+        if ($search_info->search_text) {
+            $search_info->show_canonical = FALSE;
+            $search_info->is_canonical = FALSE;
+        }
+
 		$twig->banner_zone_positions = Kohana::$config->load('common.banner_zone_positions');
 		
 		if ($search_info->category->seo_name == 'kupony') {
@@ -293,12 +304,7 @@ class Controller_Search extends Controller_Template {
         if ($info->canonical_url === $info->main_category) {
             $info->canonical_url = "";
         }
-        if ($info->s_suri <> "/".$info->canonical_url) {
-            $info->show_canonical = TRUE;
-            $info->is_canonical = FALSE;
-        } else {
-             $info->is_canonical = TRUE;
-        }
+       
 
         $info->category = $this->params_by_uri->get_category();
         $info->category_childs = $this->params_by_uri->get_category_childs(TRUE);
