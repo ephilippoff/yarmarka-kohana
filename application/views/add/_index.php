@@ -443,7 +443,7 @@
 					<div class="col-md-9 col-xs-8">
 						<div class="inp-cont">
 							<input id="fileupload" type="file" name="userfile1" data-url="/add/object_upload_file" multiple>
-							<div id="add-block" class="add-block fn-photo-list mt10 mb5 clearfix" data-max="8">
+							<div id="add-block" class="add-block fn-photo-list mt20 mb5 clearfix" data-max="8">
 								<?=
 								View::factory('add/block/photo', array("data" => new Obj($form_data->photo),
 									"_class" => "",
