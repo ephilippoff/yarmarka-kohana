@@ -1,0 +1,30 @@
+{% extends "layouts/index" %}
+
+{% set theme_class = 'crimson-theme' %}
+{% block title %}Газета бесплатных объявлений Ярмарка{% endblock title%}
+{% block meta_description %}Газета бесплатных объявлений. Разделы сайта: работа, квартиры, дома, недвижимость, авто, ремонт и строительство, мебель, домашние животные. {% endblock meta_description%}
+
+{% block wrapperclass %}page-index{% endblock wrapperclass %}
+{% block page_name %}afisha{% endblock page_name %}
+
+{% block header %} 
+	{{ parent() }}
+	
+{% endblock header %} 
+
+{% block css %}
+	<link rel="stylesheet" href="/bootstrap_full/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="/bootstrap_full/css/bootstrap-theme.min.css" />
+	{{ parent() }}
+{% endblock css %}
+
+{% block js %}
+	<script type="text/javascript" src="/bootstrap_full/js/bootstrap.min.js"></script>
+{% endblock js %}
+
+{% block content %}
+<div class="fn-afisha-container">
+</div>
+{% endblock content %}
+
+{% block footertext %}{% endblock %}
