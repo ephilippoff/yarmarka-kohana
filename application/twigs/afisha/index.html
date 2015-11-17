@@ -13,13 +13,18 @@
 {% endblock header %} 
 
 {% block css %}
-	<link rel="stylesheet" href="/bootstrap_full/css/bootstrap.min.css" />
-	<link rel="stylesheet" href="/bootstrap_full/css/bootstrap-theme.min.css" />
+	<link rel="stylesheet" href="/vendor/bootstrap/dist/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="/vendor/bootstrap/dist/css/bootstrap-theme.min.css" />
+	<link rel="stylesheet" href="/vendor/jquery-ui/themes/base/jquery-ui.min.css" />
+	<link rel="stylesheet" href="/vendor/chosen/chosen.min.css" />
 	{{ parent() }}
+	{{ css("afisha.css") }}
 {% endblock css %}
 
 {% block js %}
-	<script type="text/javascript" src="/bootstrap_full/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="/vendor/bootstrap/dist/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="/vendor/jquery-ui/jquery-ui.min.js"></script>
+	<script type="text/javascript" src="/vendor/chosen/chosen.jquery.min.js"></script>
 {% endblock js %}
 
 {% block content %}
