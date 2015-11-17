@@ -1,6 +1,6 @@
 body {font-family: Verdana, Geneva, sans-serif;font-size: 12px;color: #333;}
 
-.kupon-print-cont {width: 600px;margin: 0 auto;}
+.kupon-print-cont {width: 600px;margin: 0 auto;position:relative;}
 .fw-b {font-weight: bold;}
 .ta-c {text-align: center;}
 .tt-u {text-transform: uppercase;}
@@ -13,3 +13,4 @@ body {font-family: Verdana, Geneva, sans-serif;font-size: 12px;color: #333;}
 .fl {float: left;}
 .fr {float: right;}
 .text-cont {font-size: 10px;}
+#ean {position:absolute;top:0;right:0;}
