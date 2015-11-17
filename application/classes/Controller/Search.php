@@ -326,7 +326,10 @@ class Controller_Search extends Controller_Template {
             "org" => $this->params_by_uri->get_reserved_query_params("org"),
             "filters" => $clean_query_params
         );
-
+		//Для рубрики новостей включаем фильтр по дате старта показа
+		if ($info->category->seo_name == 'novosti') 
+			$info->search_filters["expiration"] = TRUE;
+		
         $info->seo_attributes = Seo::get_seo_attributes(
             $this->params_by_uri->get_proper_segments(),
             $info->search_filters["filters"],
