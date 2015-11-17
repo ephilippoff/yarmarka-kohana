@@ -46,6 +46,19 @@ class Controller_Kupon extends Controller_Template {
 			$twig->city = Arr::get($cities, $object->city_id, NULL);
 		}
 
+		$ean = $twig->kupon->external_number;
+		//debug
+		//$ean = '123';
+		//$ean = '123456789012345678';
+		//debug done
+		$eanDiff = 13 - strlen($ean);
+		if ($eanDiff < 0) {
+			$ean = substr($ean, abs($eanDiff));
+		} else if ($eanDiff > 0) {
+			$ean = str_repeat('0', $eanDiff) . $ean;
+		}
+
+		$twig->ean = $ean;
 		$this->template->twig_template = $twig;
 		$this->template->set_global('title', $twig->kupon_group->title);
 	}
