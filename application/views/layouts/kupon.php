@@ -8,7 +8,7 @@
 <meta name="viewport" id="viewport" content="width=device-width">
 <title><?=strip_tags($title)?></title>
 <?=Assets::factory('main')->css('iLight.css')?>
-<?=Assets::factory('main')->js('../ean13.min.js')?>
+<?=Assets::factory('main')->js('ean13.min.js')?>
 <style type="text/css">
 	body{font-family: Verdana, Geneva, sans-serif;font-size: 12px;color: #333;}
 	.fl{float:left}.fr{float:right;}
