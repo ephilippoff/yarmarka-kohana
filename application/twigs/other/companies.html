@@ -12,14 +12,22 @@
 {% block content %}
 
 		<div class="col-md-12">
-			<article class="bg-color-whitesmoke p20 br2">
-				<h1 class="captionbold"><span class="fs22 ml10">Все компании города Сургута</span></h1>
-				<div class="mt20">
-					{% include 'index/2gis/surgut' %}
+			<div class="row mt10 mb10">
+				<div class="col-md-3 col-xs-6 banner {zoneID: 55}"></div>
+				<div class="col-md-3 col-xs-6 banner {zoneID: 56}"></div>
+				<div class="col-md-3 col-xs-6 banner {zoneID: 57}"></div>
+				<div class="col-md-3 col-xs-6 banner {zoneID: 58}"></div>				
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<article class="bg-color-whitesmoke p20 br2">
+						<h1 class="captionbold"><span class="fs22 ml10">Все компании города Сургута</span></h1>
+						<div class="mt20">
+							{% include 'index/2gis/surgut' %}
+						</div>
+					</article>					
 				</div>
-				
-					
-			</article>
+			</div>			
 		</div>
 
 {% endblock content %}
