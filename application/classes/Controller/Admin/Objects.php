@@ -398,8 +398,8 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 		$sorting_types = array('asc', 'desc');
 		$sorting_fields   = array('id');
 		//Принимаем, сверяем параметры сортировки
-		$sort	 = in_array($this->request->query('sort'), $sorting_types) ? $this->request->query('sort') : '';
-		$sort_by = in_array($this->request->query('sort_by'), $sorting_fields) ? $this->request->query('sort_by') : '';		
+		$sort	 = in_array($this->request->query('sort'), $sorting_types) ? $this->request->query('sort') : 'desc';
+		$sort_by = in_array($this->request->query('sort_by'), $sorting_fields) ? $this->request->query('sort_by') : 'id';		
 			
 		$list = ORM::factory('Object_Moderation_Log')
 				->with_moderator();
