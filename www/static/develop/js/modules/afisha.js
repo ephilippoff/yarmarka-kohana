@@ -255,6 +255,7 @@ define([ 'backbone' ], function (Backbone) {
 		},
 
 		render: function () {
+			this.$comboBox.empty();
 			this.collection.forEach(this.add, this);
 			Afisha.Helpers.RebootChosen(this.$comboBox);
 		},
