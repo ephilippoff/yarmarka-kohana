@@ -737,7 +737,7 @@ select{background-color: #FFFFFF;border: 1px solid #C3C3C3;padding:2px 10px;heig
 .coupon-item-cont .addr-item {width: 5px;height: 5px;border-radius: 10px;position: absolute;top: 3px;left: 0;}
 .coupon-item-cont .data-cont {color: #ffffff;height: 28px;position: absolute;bottom: 0px;background-color: #333;background: rgba(0, 0, 0, 0.6);width: 100%;}
 .coupon-item-cont .data-cont span {font-size: 14px;}
-.coupon-item-cont .time-cont {float: left;padding: 6px 5px 4px 28px;}
+.coupon-item-cont .time-cont {float: left;padding: 6px 5px 4px 7px;}
 .coupon-item-cont .number-cont {float: right;padding: 6px 10px 4px 27px;}
 .coupon-item-cont .info-cont {position: absolute;bottom: 0;width: 100%;padding: 12px;overflow: hidden;background-color: #333;background: rgba(0, 0, 0, 0.8);}
 .coupon-item-cont .likes-cont {width: 33px;height: 31px;float: right;color: white;line-height: 32px;}
