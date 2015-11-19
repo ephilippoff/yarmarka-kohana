@@ -406,6 +406,28 @@ class Controller_Add extends Controller_Template {
 		$imgConstructor = 'imagecreatefrom' . $cropData['suffix'];
 		$imgObj = $imgConstructor($cropData['fileName']);
 
+		//validate new sizes - http://yarmarka.myjetbrains.com/youtrack/issue/yarmarka-316#comment=90-1078
+		if ($cropData['x'] < 0) {
+			$cropData['width'] += $cropData['x'];
+			$cropData['x'] = 0;
+		}
+		if ($cropData['y'] < 0) {
+			$cropData['height'] += $cropData['y'];
+			$cropData['y'] = 0;
+		}
+		if ($cropData['x'] + $cropData['width'] > $cropData['imageSize'][0]) {
+			$cropData['width'] = $cropData['imageSize'][0] - $cropData['x'];
+		}
+		if ($cropData['y'] + $cropData['height'] > $cropData['imageSize'][1]) {
+			$cropData['height'] = $cropData['imageSize'][1] - $cropData['y'];
+		}
+		if ($cropData['width'] > $cropData['imageSize'][0]) {
+			$cropData['width'] = $cropData['imageSize'][0];
+		}
+		if ($cropData['height'] > $cropData['imageSize'][1]) {
+			$cropData['height'] = $cropData['imageSize'][1];
+		}
+
 		//create background color for rotate
 		//transparent white color. Jpeg will have white background
 		$bgColor = imagecolorallocatealpha($imgObj, 255, 255, 255, 127);
