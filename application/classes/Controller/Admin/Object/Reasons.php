@@ -42,7 +42,7 @@ class Controller_Admin_Object_Reasons extends Controller_Admin_Template {
 			{				
 				$post = $_POST;																	
 				
-				ORM::factory('Object_reason')->values($post)->save();	
+				ORM::factory('Object_Reason')->values($post)->save();	
 				
 				$this->redirect('khbackend/object_reasons/index');
 			} 
@@ -57,7 +57,7 @@ class Controller_Admin_Object_Reasons extends Controller_Admin_Template {
 	{
 		$this->template->errors = array();
 
-		$item = ORM::factory('Object_reason', $this->request->param('id'));
+		$item = ORM::factory('Object_Reason', $this->request->param('id'));
 		
 		if ( ! $item->loaded())
 		{
@@ -88,7 +88,7 @@ class Controller_Admin_Object_Reasons extends Controller_Admin_Template {
 	{
 		$this->auto_render = FALSE;
 
-		$item = ORM::factory('Object_reason', $this->request->param('id'))->delete();
+		$item = ORM::factory('Object_Reason', $this->request->param('id'))->delete();
 					
 		$this->redirect('khbackend/object_reasons/index');
 
