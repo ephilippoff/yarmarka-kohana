@@ -10,7 +10,7 @@ class Controller_Admin_Object_Reasons extends Controller_Admin_Template {
 		$page   = $this->request->query('page');
 		$offset = ($page AND $page != 1) ? ($page-1) * $limit : 0;	
 		
-		$list = ORM::factory('Object_reason');
+		$list = ORM::factory('Object_Reason');
 		
 		// количество общее
 		$clone_to_count = clone $list;
