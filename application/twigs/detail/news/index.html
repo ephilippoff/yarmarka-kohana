@@ -29,10 +29,10 @@
 					{% set text = object.user_text %}
 
 					{% for image in object.compiled.images.local_photo %}
-						{% set v120 = loop.index ~ '<img src="/' ~ image["120x90"] ~ '">' %}
-						{% set v272 = loop.index ~ '<img src="/' ~ image["272x203"] ~ '">' %}
-						{% set v341 = loop.index ~ '<img src="/' ~ image["341x256"] ~ '">' %}
-						{% set vorig = loop.index ~ '<img class="w100p" src="/' ~ image["original"] ~ '">' %}
+						{% set v120 = '<img src="/' ~ image["120x90"] ~ '">' %}
+						{% set v272 = '<img src="/' ~ image["272x203"] ~ '">' %}
+						{% set v341 = '<img src="/' ~ image["341x256"] ~ '">' %}
+						{% set vorig = '<img class="w100p" src="/' ~ image["original"] ~ '">' %}
 						{% set text = text|replace({('{' ~ loop.index ~ 'image120}'):v120}) %}
 						{% set text = text|replace({('{' ~ loop.index ~ 'image272}'):v272}) %}
 						{% set text = text|replace({('{' ~ loop.index ~ 'image341}'):v341}) %}
