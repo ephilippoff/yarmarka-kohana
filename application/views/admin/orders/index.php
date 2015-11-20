@@ -70,7 +70,7 @@
 			<td><?=$o_item->order_id?></td>
 			<td><?=$o_item->object_id?></td>
 			<td><?=$o_item->service_id?></td>
-			<td colspan="7" style="word-break: break-all"><?=$o_item->params?></td>
+			<td colspan="7" style="word-break: break-all"><?php echo "<pre>";print_r(json_decode($o_item->params));echo "</pre>"; ?></td>
 		</tr>	
 	<?php endforeach;?>
 
