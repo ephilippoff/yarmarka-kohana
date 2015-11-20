@@ -12,10 +12,12 @@ define([
     "views/partials/article",
 
     "modules/filters",
-    "modules/map"
+    "modules/map",
+
+    'modules/afisha'
 ], 
 function (Marionette, templates, utils, IndexPage, SearchPage, DetailPage, 
-    UserSearchPage, CartPage, AddPage, ArticlePage, FiltersModule, MapModule) {
+    UserSearchPage, CartPage, AddPage, ArticlePage, FiltersModule, MapModule, Afisha) {
     "use strict";
     
     return Marionette.Controller.extend({
@@ -98,6 +100,13 @@ function (Marionette, templates, utils, IndexPage, SearchPage, DetailPage,
         
         notFound : function() {
             
+        },
+
+        start_afishaSection: function (action) {
+            if (action == 'afishaReset') {
+                return;
+            }
+            Afisha.factory();
         }
     });
 });

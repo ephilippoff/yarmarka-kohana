@@ -1,0 +1,35 @@
+{% extends "layouts/index" %}
+
+{% set theme_class = 'crimson-theme' %}
+{% block title %}Газета бесплатных объявлений Ярмарка{% endblock title%}
+{% block meta_description %}Газета бесплатных объявлений. Разделы сайта: работа, квартиры, дома, недвижимость, авто, ремонт и строительство, мебель, домашние животные. {% endblock meta_description%}
+
+{% block wrapperclass %}page-index{% endblock wrapperclass %}
+{% block page_name %}afisha{% endblock page_name %}
+
+{% block header %} 
+	{{ parent() }}
+	
+{% endblock header %} 
+
+{% block css %}
+	<link rel="stylesheet" href="/vendor/bootstrap/dist/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="/vendor/bootstrap/dist/css/bootstrap-theme.min.css" />
+	<link rel="stylesheet" href="/vendor/jquery-ui/themes/base/jquery-ui.min.css" />
+	<link rel="stylesheet" href="/vendor/chosen/chosen.min.css" />
+	{{ parent() }}
+	{{ css("afisha.css") }}
+{% endblock css %}
+
+{% block js %}
+	<script type="text/javascript" src="/vendor/bootstrap/dist/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="/vendor/jquery-ui/jquery-ui.min.js"></script>
+	<script type="text/javascript" src="/vendor/chosen/chosen.jquery.min.js"></script>
+{% endblock js %}
+
+{% block content %}
+<div class="fn-afisha-container">
+</div>
+{% endblock content %}
+
+{% block footertext %}{% endblock %}

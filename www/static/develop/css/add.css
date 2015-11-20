@@ -1,6 +1,8 @@
-.form-cont .add-block .img-b {float: left;width: 111px;}
-.form-cont .add-block .img {border: 1px solid #C8C8C8;cursor: pointer;display: table-cell;height: 105px;text-align: center;vertical-align: middle;width: 105px;}
+.form-cont .add-block .img-b {float: left;width: 111px;margin-bottom: 15px;}
+.form-cont .add-block .img {border: 1px solid #C8C8C8;cursor: pointer;display: table-cell;height: 105px;text-align: center;vertical-align: middle;width: 105px;position: relative;}
 .form-cont .add-block .img.active {border-color: #97D5EC;border-width: 3px;}
+.form-cont .add-block .img.active:after {content: 'Главное фото';position: absolute;top: -18px;left: 15px;font-size: 11px;color: gray;}
+
 .form-cont .add-block img {max-height: 80px;max-width: 80px;}
 .form-cont .add-block .href-bl {float: left;margin-top: 8px;text-align: center;width: 100%;}
 .form-cont .add-contact{font-size: 16px;}

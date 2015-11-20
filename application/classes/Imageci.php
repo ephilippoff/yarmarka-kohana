@@ -176,6 +176,11 @@ class Imageci {
 
 		$imageCreateFrom = "imagecreatefrom" . $this->filetype;
 		$src = $imageCreateFrom( $this->getOriginalPath( $this->image_filename ) );
+		$this->makeThumbnailByResource($src, $image_w, $image_h);
+		return $this->image_filename;
+	}
+
+	public function makeThumbnailByResource($src, $image_w, $image_h) {
 
 		foreach (self::$sizes as $name => $s) {
 
@@ -321,8 +326,6 @@ class Imageci {
 
 		}
 
-		return $this->image_filename;
-
 	}
 
 	/**
@@ -385,12 +388,29 @@ class Imageci {
 	}
 
 
+	public static function getNewFileName($extension) {
+		$tgtfile = '';
+		do {
+
+			$filename = md5(uniqid(""));
+
+			$tgtfile   = self::getOriginalPath( $filename . $extension);
+
+			$folder1 = substr($filename, 0, 2);
+			$folder2 = substr($filename, 2, 2);
+			$folder3 = substr($filename, 4, 2);
+
+		} while (file_exists($tgtfile) || $folder1 == "ad" || $folder2 == "ad" || $folder3 == "ad");
+
+		return $tgtfile;
+	}
+
 	/**
 	 * Уменьшить и сохранить оригинал картинки
 	 */
 	private function saveOriginal() {
 
-		//Делаем уникальное имя файлу
+		//Делаем уникальное имя файлу - TODO - replace getNewFileName
 		do {
 
 			$filename = md5(uniqid(""));
@@ -680,6 +700,14 @@ class Imageci {
 	public function set_original_resize(Array $sizes)
 	{
 		$this->original_resize = $sizes;
+	}
+
+	public function setFileType($value) {
+		$this->filetype = $value;
+	}
+
+	public function setImageFileName($value) {
+		$this->image_filename = $value;
 	}
 	
 }
