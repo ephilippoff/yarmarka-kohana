@@ -1,0 +1,30 @@
+application/logs/important/
+application/logs/notice/
+application/logs/debug/
+application/cache
+www/uploads
+www/assets
+www/css
+www/js
+www/img
+www/images
+www/font
+.idea
+*.vim
+*.sublime-project
+*.sublime-workspace
+application/config/local/*.php
+application/config/database.php
+/nbproject
+/.wakatime-project
+/application/config/user_message.php
+/application/config/robokassa.php
+.gitignore
+/vendor
+/modules/kohana-twig/vendor
+
+#ignore node modules
+/node_modules
+#ignore init script
+/prepare.sh
+ 
