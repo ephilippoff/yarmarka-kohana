@@ -33,10 +33,10 @@
 						{% set v272 = '<img src="/' ~ image["272x203"] ~ '">' %}
 						{% set v341 = '<img src="/' ~ image["341x256"] ~ '">' %}
 						{% set vorig = '<img class="w100p" src="/' ~ image["original"] ~ '">' %}
-						{% set text = text|replace({'{image120}':v120}) %}
-						{% set text = text|replace({'{image272}':v272}) %}
-						{% set text = text|replace({'{image341}':v341}) %}
-						{% set text = text|replace({'{image}':vorig}) %}
+						{% set text = text|replace({('{' ~ loop.index ~ 'image120}'):v120}) %}
+						{% set text = text|replace({('{' ~ loop.index ~ 'image272}'):v272}) %}
+						{% set text = text|replace({('{' ~ loop.index ~ 'image341}'):v341}) %}
+						{% set text = text|replace({('{' ~ loop.index ~ 'image}'):vorig}) %}
 					{% endfor %}
 
 					{% set text = text|replace({'{cardmap}': '<div id="cardmap" class="cardmap mb10">' ~ _self.map(object) ~ '</div>'}) %}
