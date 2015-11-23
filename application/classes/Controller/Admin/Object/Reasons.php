@@ -10,7 +10,7 @@ class Controller_Admin_Object_Reasons extends Controller_Admin_Template {
 		$page   = $this->request->query('page');
 		$offset = ($page AND $page != 1) ? ($page-1) * $limit : 0;	
 		
-		$list = ORM::factory('Object_reason');
+		$list = ORM::factory('Object_Reason');
 		
 		// количество общее
 		$clone_to_count = clone $list;
@@ -42,7 +42,7 @@ class Controller_Admin_Object_Reasons extends Controller_Admin_Template {
 			{				
 				$post = $_POST;																	
 				
-				ORM::factory('Object_reason')->values($post)->save();	
+				ORM::factory('Object_Reason')->values($post)->save();	
 				
 				$this->redirect('khbackend/object_reasons/index');
 			} 
@@ -57,7 +57,7 @@ class Controller_Admin_Object_Reasons extends Controller_Admin_Template {
 	{
 		$this->template->errors = array();
 
-		$item = ORM::factory('Object_reason', $this->request->param('id'));
+		$item = ORM::factory('Object_Reason', $this->request->param('id'));
 		
 		if ( ! $item->loaded())
 		{
@@ -88,7 +88,7 @@ class Controller_Admin_Object_Reasons extends Controller_Admin_Template {
 	{
 		$this->auto_render = FALSE;
 
-		$item = ORM::factory('Object_reason', $this->request->param('id'))->delete();
+		$item = ORM::factory('Object_Reason', $this->request->param('id'))->delete();
 					
 		$this->redirect('khbackend/object_reasons/index');
 
