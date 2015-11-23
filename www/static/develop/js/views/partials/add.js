@@ -6,7 +6,10 @@ define([
     "fileupload",
     "nicEdit",
     "maskedInput",
-    "ymap"
+    "ymap",
+    //use cropper
+    //'lib/cropper.js'
+    'cropper'
 ], function (Marionette, templates, ContactsBehavior) {
     "use strict";
 
@@ -635,6 +638,313 @@ define([
         }
     });
 
+    /* cropper view */
+    // extend photo item view
+    var photoViewBase = photoView;
+    photoView = photoView.extend({
+        //extend events
+        events: _.extend(photoViewBase.prototype.events, {
+            'click .fn-crop': 'showCropper'
+        })
+        //override initialize method
+        , initialize: function (options) {
+            //console.log('photoView[Cropper extension] initialize');
+
+            photoViewBase.prototype.initialize.call(this, options);
+        }
+        , remove: function () {
+            if (this.activeCropperView) {
+                this.activeCropperView.destroy();
+            }
+            photoViewBase.prototype.remove.call(this);
+        }
+        //initialize cropper view
+        , showCropper: function () {
+            //console.log('photoView[Cropper extension] showCropper');
+            //console.log(this.model);
+            var me = this;
+            me.activeCropperView = CropperViewFactory(this.model.get('original'), { })
+                .on('cropper_save', function (e) {
+                    me.saveCroppedPicture(this.cropBoxData);
+                });
+        }
+        //picture change processor
+        , saveCroppedPicture: function (data) {
+            var me = this;
+            $.ajax({
+                url: '/add/crop'
+                , dataType: 'json'
+                , method: 'GET'
+                , data: _.extend(data, {
+                    fileName: this.model.get('filename')
+                })
+                , success: function (answer) {
+                    //var avoidCache = '?v=' + Math.random();
+                    me.model.set('filename', answer.fileName);
+                    me.model.set('filepath', answer.thumbnails['120x90']);
+                    me.model.set('original', answer.thumbnails['original']);
+                    me.$el.find('img').attr('src', answer.thumbnails['120x90']);
+                    me.$el.find('input[type=hidden]').val(answer.fileName);
+                }
+            });
+        }
+    });
+    //check prototype
+    //console.log(photoView.prototype);
+    /* cropper view */
+    var CurrentCropperView = null; //singleton
+    var CropperView = Backbone.View.extend({
+        //cropper data
+        cropBoxData: null
+        , cropCanvasData: null
+        , cropperOptions: {}
+        //bind events
+        , events: {
+            'click [data-save]': 'save'
+            , 'click .js-close': 'destroy'
+            , 'click [data-rotate]': 'rotate'
+            , 'click [data-zoom]': 'zoom'
+            , 'click [data-refresh]': 'refresh'
+            , 'click [data-destroy]': 'destroy'
+        }
+
+        , initialize: function (options) {
+            this.$image = this.$el.find('img');
+
+            //console.log('Initialize cropper view with options: ');
+            //console.log(options);
+
+            if (options.width) {
+                this.$image.width(options.width);
+            }
+        }
+
+        , setAspectRatio: function () {
+            if (!this.oldAspectRatio) {
+                this.oldAspectRatio = 3 / 4;
+            }
+            if (this.oldAspectRatio < 1) {
+                this.oldAspectRatio = 4 / 3;
+            } else {
+                this.oldAspectRatio = 3 / 4;
+            }
+
+            this.$image.cropper('setAspectRatio', this.oldAspectRatio);
+        }
+
+        , rotate: function (event) {
+            event.preventDefault();
+            //this.$image.cropper({ center: false, autoCropArea: 0 })
+            var cropBoxData = this.$image.cropper('getCropBoxData');
+            //console.log(cropBoxData);
+            this.setAspectRatio();
+
+            var degrees = +$(event.currentTarget).data('rotate');
+            this.$image.cropper('rotate', degrees);
+
+            //set container dimensions
+            var moveY = this.$image.next().height() - this.$image.next().find('.cropper-canvas').height();
+            this.$image.next().css({
+                height: this.$image.next().find('.cropper-canvas').height() + 'px'
+            });
+            this.$image.data('cropper').container.height = this.$image.next().find('.cropper-canvas').height();
+            this.$image.data('cropper').limitCropBox(true, true);
+            this.$image.cropper('move', 0, -moveY / 2);
+            console.log(cropBoxData.top);
+            cropBoxData.top -= moveY / 2;
+
+            //rotate crop box
+            var temp = cropBoxData.width;
+            cropBoxData.width = cropBoxData.height;
+            cropBoxData.height = temp;
+
+            //calc move offset
+            cropBoxData.top += (cropBoxData.width - cropBoxData.height) * 0.5;
+            cropBoxData.left -= (cropBoxData.width - cropBoxData.height) * 0.5;
+
+            console.log(cropBoxData);
+            this.$image.cropper('setCropBoxData', cropBoxData);
+            //this.appendRotate(degrees);
+            console.log(this.$image.cropper('getCropBoxData'));
+        }
+/*
+        , rotateDegrees: 0
+        , appendRotate: function (degrees) {
+            this.rotateDegrees = (this.rotateDegrees + degrees) % 360;
+            this.$image.next().css({
+                transform: 'rotate(' + this.rotateDegrees + 'deg)'
+            });
+        }
+*/
+        , refresh: function (event) {
+            event.preventDefault();
+            this.$image.cropper('destroy');
+            this.initCropper();
+        }
+
+        , zoom: function (event) {
+            event.preventDefault();
+            var level = +$(event.currentTarget).data('zoom');
+            this.$image.cropper('zoom', level);
+        }
+
+        , render: function () {
+            if (CurrentCropperView != this) {
+                if (CurrentCropperView != null) {
+                    CurrentCropperView.destroy();
+                }
+                CurrentCropperView = this;
+            }
+
+            //scroll to me
+            $('.cropper-cont').get(0).scrollIntoView();
+
+            //append dom
+            $('.cropper-cont').append(this.$el);
+            this.initCropper();
+        }
+
+        , initCropper: function () {
+            var me = this;
+            //init cropper
+            setTimeout(function () {
+                console.log(me.$image.height());
+                me.$image.cropper(_.extend(me.cropperOptions, {
+                    //some defaults - TODO
+                    aspectRatio: me.oldAspectRatio = 4/3,
+                    strict: false,
+                    //center: true,
+                    //autoCropArea: 1
+                    built: function () {
+                        var imageData = me.$image.cropper('getImageData');
+                        var toSet = {
+                            x: 0
+                            , y: 0
+                            , width: 0
+                            , height: 0
+                            , rotate: 0
+                            , scaleX: 1
+                            , scaleY: 1
+                        };
+                        
+                        //console.log(imageData);
+
+                        if (imageData.naturalWidth < imageData.naturalHeight) {
+                            me.setAspectRatio();
+                            toSet.width = imageData.naturalWidth;
+                            toSet.height = imageData.naturalWidth / me.oldAspectRatio;
+                        } else {
+                            toSet.height = imageData.naturalHeight;
+                            toSet.width = imageData.naturalHeight * me.oldAspectRatio;
+                        }
+
+                        toSet.x = (imageData.naturalWidth - toSet.width) * 0.5;
+                        toSet.y = (imageData.naturalHeight - toSet.height) * 0.5;
+
+                        //console.log(toSet);
+
+                        me.$image.cropper('setData', toSet);
+                        //set initial data
+                        me.updateData();
+                    }
+                }));
+            }, 1);
+        }
+
+        , updateData: function () {
+            this.cropBoxData = this.$image.cropper('getData');
+            this.cropCanvasData = this.$image.cropper('getCanvasData');
+        }
+
+        , save: function () {
+            //save data
+            this.updateData();
+            //trigger done event
+            this.trigger('cropper_save');
+            this.destroy();
+        }
+
+        , destroy: function () {
+            //destroy cropper
+            this.$image.cropper('destroy');
+            //remove dom
+            this.$el.remove();
+            $('#div_photo').get(0).scrollIntoView();
+        }
+    });
+    /* cropper view done */
+    //factory for cropper view
+    //simple creates bootstrap modal dialog
+    //TODO - export factory to usage in other modules
+    var CropperViewFactory = function (image, options) {
+        //markup
+        /* bootstrap version */
+        /*
+        var html = 
+            '<div class="modal fade">'
+                + '<div class="modal-dialog">'
+                    + '<div class="modal-content">'
+                        + '<div class="modal-body">'
+                            + '<img src="" />'
+                        + '</div>'
+                    + '</div>'
+                + '</div>'
+            + '</div>';
+        */
+        /* other version */
+        var html = 
+            /*'<div class="popup-wrp z400 cropper-popup">'
+                + '<div class="popup-window mw500">'
+                    + '<div class="header">'
+                        + 'Редактирование изображения'
+                        + '<div class="popup-window-close js-close">'
+                            + '<i class="ico close-ico16"></i>'
+                        + '</div>'
+                    + '</div>'
+            */
+                    '<div>'
+                        + '<div class="cropper-image">'
+                            + '<img src="" />'
+                        + '</div>'
+                        + '<div class="cropper-actions">'
+                            + '<button class="btn" data-rotate="90"><span class="fa fa-undo"></span></button>'
+                            //+ '<button class="btn" data-rotate="-10"><span class="fa fa-repeat"></span></button>'
+                            + '<button class="btn" data-zoom="0.1"><span class="fa fa-search-plus"></span></button>'
+                            + '<button class="btn" data-zoom="-0.1"><span class="fa fa-search-minus"></span></button>'
+                            + '<button class="btn" data-refresh>Сбросить</button>'
+                            + '<button class="btn" data-destroy>Отменить</button>'
+                            + '<button class="btn" data-save>Сохранить</button>'
+                        + '</div>'
+                    + '</div>'
+            /*
+                + '</div>'
+            + '</div>';
+            */
+
+        //compile
+        var $compiled = $(html);
+
+        //create view
+        var view = new CropperView(_.extend(
+            {
+                width: $('.fn-cropper-cont').width()
+            }, 
+            options,
+            {
+                el: $compiled
+            }));
+
+        //continue only when image will be loaded
+        $compiled.find('img')[0].onload = function (e) {
+            view.render();
+        };
+        //push values
+        $compiled.find('img').attr('src', image);
+
+        return view;
+    };
+    /* cropper feacture done */
+
     var photoControlView = Backbone.View.extend({
         el : '#div_photo', 
         photos : [],
@@ -662,7 +972,8 @@ define([
                     id : $(item).attr("id"),
                     filename : $(item).find("input").val(),
                     filepath :  $(item).find("img").attr("src"),
-                    active : $(item).find(".img").hasClass("active")
+                    active : $(item).find(".img").hasClass("active"),
+                    original: $(item).find('img').data('original')
                 };
                 self.collection.add(params);
             });
@@ -712,6 +1023,8 @@ define([
                             filename : result.filename,
                             filepath : result.filepaths['120x90'],
                             active : active
+                            //fix to use crop feature
+                            , original: result.filepaths.original
                         });
                         self.setError("");
                    } else

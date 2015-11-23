@@ -35,6 +35,7 @@ class Object_Compile
 		$attachments = ORM::factory('Object_Attachment')
 							->where('object_id', '=', $object_id)
 							->where('type','IN', array(0, 4, 2, 3))
+							->order_by('id', 'desc')
 							->find_all();
 
 		foreach ($attachments as $attachment) {

@@ -1,0 +1,32 @@
+.fn-afisha-container { margin-top:20px; }
+.afisha-object { 
+	cursor: pointer;
+	padding-top:10px;
+	padding-bottom: 10px;
+	border:1px solid transparent;
+}
+.afisha-object:hover {
+	border-color: #aaa;
+}
+.afisha-object-image { 
+	height:400px; 
+	width:100%;
+	position: relative;
+}
+.afisha-object-image img { 
+	max-height:100%; 
+	max-width:100%;
+
+	position:absolute;
+	top:0;
+	left:0;
+	bottom:0;
+	right:0;
+	margin:auto;
+}
+.afisha-object-name {
+	height: 50px;
+}
+.afisha-select-objectTypeId {
+	display:none;
+}

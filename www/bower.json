@@ -1,0 +1,19 @@
+{
+  "name": "Yarmarka.biz v2.0",
+  "homepage": "https://github.com/ephilippoff/yarmarka-kohana",
+  "authors": [
+    "Alexey Mezhenny <amezhenny72@gmail.com>"
+  ],
+  "description": "Good site",
+  "main": "",
+  "moduleType": [
+    "amd"
+  ],
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "jquery-ui": "~1.11.4",
+    "bootstrap": "~3.3.5",
+    "chosen": "~1.4.2"
+  }
+}

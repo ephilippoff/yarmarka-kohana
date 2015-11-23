@@ -661,7 +661,8 @@ class Form_Add  {
 						'id' 		=> $photo->id,
 						'filename'  => $filename,
 						'filepath'  => $filepath["120x90"],
-						'active'	=> ($object->main_image_id == $photo->id) ? TRUE : FALSE
+						'active'	=> ($object->main_image_id == $photo->id) ? TRUE : FALSE,
+						'original'  => $filepath['original']
 					);
 			}
 
@@ -677,7 +678,8 @@ class Form_Add  {
 						'id' 		=> $i,
 						'filename'  => $filename,
 						'filepath'  => $filepath["120x90"],
-						'active'	=> ($this->params["active_userfile"] == $filename) ? TRUE : FALSE
+						'active'	=> ($this->params["active_userfile"] == $filename) ? TRUE : FALSE,
+						'original'  => $filepath['original']
 					);
 				$i++;
 			}

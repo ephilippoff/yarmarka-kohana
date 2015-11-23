@@ -443,7 +443,7 @@
 					<div class="col-md-9 col-xs-8">
 						<div class="inp-cont">
 							<input id="fileupload" type="file" name="userfile1" data-url="/add/object_upload_file" multiple>
-							<div id="add-block" class="add-block fn-photo-list mt20" data-max="8">
+							<div id="add-block" class="add-block fn-photo-list mt20 mb5 clearfix" data-max="8">
 								<?=
 								View::factory('add/block/photo', array("data" => new Obj($form_data->photo),
 									"_class" => "",
@@ -454,11 +454,17 @@
 								?>
 							</div>
 							<input type="hidden" id="active_userfile" name="active_userfile" value="<?= $form_data->photo["main_image_file"] ?>" />
-							<span class="inform">
-								<span class="fn-photo-hint"></span>
-							</span>
+							<div class="fn-photo-hint inform"></div>
 							<div class="mb10 red" id="error_userfile1"></div>
 						</div>
+					</div>
+				</div>
+				<div class="row mb10">
+					<div class="col-md-3 col-xs-4 labelcont">
+						
+					</div>
+					<div class="col-md-9 col-xs-8">
+						<div class="cropper-cont fn-cropper-cont"></div>
 					</div>
 				</div>			
 			<? endif; ?>

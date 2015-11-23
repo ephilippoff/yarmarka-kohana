@@ -19,8 +19,9 @@ class Controller_Landing extends Controller_Template {
 							->where_cached("domain", "=",$this->domain,0)
 							->find();
 
-		if (!$this->landing->loaded())
+		if (!$this->landing->loaded()) {
 			throw new HTTP_Exception_404;
+		}
 
 		if ($this->landing->object_id)
 		{
