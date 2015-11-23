@@ -10,7 +10,11 @@
         <meta name="robots" content="{% block meta_robots %}all{% endblock meta_robots%}">
         <link rel="shortcut icon" href="{{ staticfile("images/favicon.ico") }}">
         {% if show_canonical %}
-            <link rel="canonical" href="{{ url(canonical_url) }}">
+            {% if show_canonical_simple %}
+                <link rel="canonical" href="{{ canonical_url }}">
+            {% else %}
+                <link rel="canonical" href="{{ url(canonical_url) }}" />
+            {% endif %}
         {% endif %}
         
         {% block css %}
