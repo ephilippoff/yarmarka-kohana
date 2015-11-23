@@ -8,6 +8,29 @@
 
 <body  align="center">
 
+<?php
+
+	//output debug information
+	$sLogFileName = 'email.log';
+	$sLogFilePath = dirname($_SERVER['DOCUMENT_ROOT']) . DIRECTORY_SEPARATOR . $sLogFileName;
+	echo $sLogFilePath;
+	
+	$rFile = fopen($sLogFilePath, 'a+');
+
+	fwrite($rFile, "New email kupon_notify " . date('d.m.Y H:i:s') . "\n");
+	//display short open tag value
+	fwrite($rFile, "short_open_tag = " . ini_get('short_open_tag') . "\n");
+	//display php global arrays
+	$sGlobalsDump = '';
+	ob_start();
+	var_dump($GLOBALS);
+	$sGlobalsDump = ob_get_clean();
+	fwrite($rFile, "\$GLOBALS = " . $sGlobalsDump . "\n");
+	fwrite($rFile, "----------------------------------------------------------\n\n\n");
+
+	fclose($rFile);
+?>
+
  <table align="center" cellspacing="0" cellpadding="0" border="0" width="800" style="color:#000;font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;font-size: 14px;border-collapse: collapse;">
    
         <tbody style="color:#000;font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;font-size: 14px;">
