@@ -92,7 +92,8 @@
 							<a href="#"  class="dropdown-toggle" data-toggle="dropdown">Reports <b class="caret"></b></a>
 							<ul class="dropdown-menu">
 								<li><a href="<?=URL::site('khbackend/reports/operstat')?>">Количество модераций</a></li>
-								<li><a href="<?=URL::site('khbackend/reports/oper_objects_list')?>">Модерации</a></li>								
+								<li><a href="<?=URL::site('khbackend/reports/oper_objects_list')?>">Модерации</a></li>	
+								<li><a href="<?=URL::site('khbackend/orders/index')?>">Orders</a></li>
 							</ul>
 						</li>
 						<?php endif; ?>						
