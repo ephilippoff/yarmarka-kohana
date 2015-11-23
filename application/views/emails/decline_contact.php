@@ -13,7 +13,7 @@
         <tbody style="color:#000;font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;font-size: 14px;">
    
 		<tr style="color:#000;font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;font-size: 14px;background:#ECF3F7;">
-			<td width="180" style="padding: 10px 0 0 10px;"><img width="172" height="33" src="<?=URL::site('images/logo.png', 'http')?>" alt="Ярмарка" align="left" /></td>
+			<td width="180" style="padding: 10px 0 0 10px;"><img width="172" height="33" src="<?=URL::site('static/develop/production/images/logo.png', 'http')?>" alt="Ярмарка" align="left" /></td>
 			<td style="text-align: right;vertical-align: bottom;padding: 10px 10px 0px 0px;color:#616161;font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;font-size: 14px;"><span style="color:#D44234;font-size:24px;">yarmarka</span><span style="color:#5B6772;font-size:24px;">.biz</span></td>
 		</tr>
 		<tr style="color:#000;font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;font-size: 10px;background:#ECF3F7;">
@@ -24,7 +24,7 @@
 		<tr><td colspan="2">&nbsp;</td></tr>   
    
 		<tr>
-			<td width="180"><img src="<?=URL::site('images/4_165.jpg', 'http')?>" /></td>
+			<td width="180"><img src="<?=URL::site('static/develop/production/images/4_165.jpg', 'http')?>" /></td>
 			<td>
 				<table align="center" cellspacing="0" cellpadding="0" border="0" width="" style="color:#000;font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;border-collapse: collapse;">
 					<tbody>	
