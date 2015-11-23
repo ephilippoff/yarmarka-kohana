@@ -233,6 +233,17 @@ class Controller_Search extends Controller_Template {
             $search_info->is_canonical = FALSE;
         }
 
+        $iCurrentPage = (int) $this->request->query('page');
+
+        //https://support.google.com/webmasters/answer/139066?hl=ru#2
+        //if ($iCurrentPage > 1) {
+            $search_info->show_canonical = true;
+            $bIsHttps = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'];
+            $sCanonicalUrlPrefix = 'http' . ($bIsHttps ? 's' : '') . '://' . $_SERVER['HTTP_HOST'] . '/';
+            $search_info->canonical_url = $sCanonicalUrlPrefix . $search_info->canonical_url;
+            $search_info->show_canonical_simple = true;
+        //}
+
 		$twig->banner_zone_positions = Kohana::$config->load('common.banner_zone_positions');
 		
 		if ($search_info->category->seo_name == 'kupony') {
