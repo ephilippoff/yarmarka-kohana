@@ -84,6 +84,17 @@ class Controller_Search extends Controller_Template {
         $twig = Twig::factory('search/index');
         $twig->data_file = $staticfile->jspath;
 
+        /*
+            http://yarmarka.myjetbrains.com/youtrack/issue/yarmarka-347
+        */
+            $newsCategoryId = 174;
+            if ($search_info->category->id == $newsCategoryId) {
+                $search_params['expiration'] = true;
+            }
+        /*
+            done
+        */
+
         //main search
         $main_search_query = Search::searchquery($search_info->search_filters, $search_params);
 
