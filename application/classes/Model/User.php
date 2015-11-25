@@ -219,6 +219,7 @@ class Model_User extends Model_Auth_User {
 			->execute();
 
 		// unpublish objects with that contact
+		/* http://yarmarka.myjetbrains.com/youtrack/issue/yarmarka-295
 		if ($this->id != $contact->verified_user_id)
 		{
 			$objects = ORM::factory('Object')
@@ -235,6 +236,7 @@ class Model_User extends Model_Auth_User {
 				$object->remove('contacts', $contact);
 			}
 		}
+		*/
 
 		if (!$is_moderate) {
 			// set contact verified for current user
