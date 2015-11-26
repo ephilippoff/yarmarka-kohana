@@ -5,8 +5,9 @@ define([
     "views/partials/behaviors/favourite",
     "views/partials/behaviors/search",
     "views/partials/behaviors/ads",
-    "base/utils"
-], function (Marionette, templates, FavouriteBehavior, SearchBehavior, AdsBehavior, utils) {
+    "base/utils",
+    'views/partials/enhancedColumnsView'
+], function (Marionette, templates, FavouriteBehavior, SearchBehavior, AdsBehavior, utils, EnhancedColumnsView) {
     "use strict";
 
     return Marionette.LayoutView.extend({
@@ -86,6 +87,13 @@ define([
             
 
             this.citySelect();
+            this.initSubCategoriesView();
+        },
+
+        initSubCategoriesView: function () {
+            var subCategoriesView = new EnhancedColumnsView({
+                el: $('.subcategories-cont.module')
+            });
         },
 
         citySelect: function() {

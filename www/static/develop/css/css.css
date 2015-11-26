@@ -789,3 +789,22 @@ select{background-color: #FFFFFF;border: 1px solid #C3C3C3;padding:2px 10px;heig
 @media screen and (min-width: 993px) {
 	html {margin-left: calc(100vw - 100%);margin-right: 0;}
 }
+
+/* enhanced columns */
+.enc-columns-col {
+    display:inline-block;
+    vertical-align: top;
+}
+.enc-columns-row {
+
+}
+.enc-columns-link {
+    padding:0 5px;
+    box-sizing:border-box;
+}
+/* enhanced columns done */
+.subcategories-cont.module a {
+    display:inline-block;
+    padding:0 5px;
+    box-sizing:border-box;
+}
