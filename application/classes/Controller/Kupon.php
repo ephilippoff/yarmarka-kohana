@@ -46,7 +46,9 @@ class Controller_Kupon extends Controller_Template {
 			$twig->city = Arr::get($cities, $object->city_id, NULL);
 		}
 
-		$ean = empty($twig->kupon->external_number) ? $twig->kupon->number : $twig->kupon->external_number;
+		$ean = empty($twig->kupon->external_number) 
+			? preg_replace('/[^0-9]/', '', Text::format_kupon_number($kupon->decrypt_number($twig->kupon->number))) 
+			: $twig->kupon->external_number;
 		//debug
 		//$ean = '123';
 		//$ean = '123456789012345678';
