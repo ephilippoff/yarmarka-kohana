@@ -71,6 +71,35 @@ class Model_Object extends ORM {
 		return strip_tags($this->title).', '.strip_tags($user_text).', '.join(', ', $this->get_attributes_values(NULL, FALSE));
 	}
 
+	public function is_newspaper_object()
+	{
+		if ( ! $this->loaded())
+		{
+			return FALSE;
+		}
+
+		return ($this->source_id == 2);
+	}
+
+	public function generate_newspaper_object_title()
+	{
+		if ( ! $this->loaded())
+		{
+			return FALSE;
+		}
+
+		$title = $this->title;
+		$title = Text::rus2translit($title);
+		$title = Text::clear_symbols_for_seo_name($title);
+		$title = mb_strtolower($title);
+		$title = str_replace(array(' '), '-', $title);
+		$title = str_replace('--', '-', $title);
+		$title = trim($title,'-');
+		$this->seo_name = $title;
+		//$this->save();
+		return $title;
+	}
+
 	public function generate_title($template = NULL)
 	{
 		if (is_null($template))
