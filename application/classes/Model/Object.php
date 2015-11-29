@@ -96,7 +96,7 @@ class Model_Object extends ORM {
 		$title = str_replace('--', '-', $title);
 		$title = trim($title,'-');
 		$this->seo_name = $title;
-		//$this->save();
+		$this->save();
 		return $title;
 	}
 
