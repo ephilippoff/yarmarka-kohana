@@ -9,8 +9,8 @@
 				</header>
 				<div class="p_cont myadd myacc">
 					<header>
-						<div class="col col12"><span>Номер купона</span></div>
-						<div class="col2"><span>Заголовок</span></div>	
+						<div class="col col12"><span>Дата покупки</span></div>
+						<div class="col2"><span>Наименование купона</span></div>
 					</header>
 					<div class="cont ">   
 					<?php foreach ($kupons as $kupon) : ?>
@@ -19,14 +19,17 @@
 							<div class="top-bl">
 								<div class="col col12">
 									<p class="number">
-										<?=$kupon->id?>
+										<?= date_format ( date_create($kupon->payment_date), 'd.m.Y H:i')?>
 									</p>
 								</div>
 								<div class="col2">
 									<p class="kupon-title">
-										<a target="_blank" href="<?=Url::site('kupon/'.$kupon->id)?>"><?=$kupon->object_title?></a>
+										<a target="_blank" href="<?=Url::site('detail/'.$kupon->objectid)?>"><?=$kupon->kupon_title?></a>
 									</p>
-								</div>								
+									<p>
+										<a target="_blank" href="<?=Url::site('kupon/print/'.$kupon->id.'?key='.$kupon->access_key)?>">НА ПЕЧАТЬ</a>
+									</p>
+								</div>	
 							</div>			                    					                   					
 						</div>		                    				
 					</div>

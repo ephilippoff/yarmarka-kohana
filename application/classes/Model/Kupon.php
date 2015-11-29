@@ -21,16 +21,23 @@ class Model_Kupon extends ORM
 
 	public function with_objects()
 	{
-		return $this->select(array('object.title', 'object_title'))
+		return $this->select(array('object.title', 'object_title'), array('kupon_group.object_id', 'objectid'))
 			->join('object', 'left')
-			->on('kupon.object_id', '=', 'object.id');
+			->on('kupon_group.object_id', '=', 'object.id');
 	}	
 	
 	public function with_invoices()
 	{
-		return $this->select(array('invoices.user_id', 'user_id'))
+		return $this->select(array('invoices.user_id', 'user_id'), 'invoices.payment_date')
 			->join('invoices', 'left')
 			->on('kupon.invoice_id', '=', 'invoices.id');
+	}
+
+	public function with_kupon_group()
+	{
+		return $this->select(array('kupon_group.title','kupon_title'))
+			->join('kupon_group', 'left')
+			->on('kupon_group.id', '=', 'kupon.kupon_group_id');
 	}	
 
 	public function sum_by_field($field)

@@ -2025,7 +2025,8 @@ class Controller_User extends Controller_Template {
 
 		$kupons = ORM::factory('Kupon')
 			->with_invoices()
-			->with_objects()	
+			->with_kupon_group()
+			->with_objects()
 			->where('user_id', '=', $this->user->id);
 
 		$count = clone $kupons;
@@ -2033,7 +2034,7 @@ class Controller_User extends Controller_Template {
 
 		$kupons->limit($per_page)
 			->offset($per_page*($page-1))
-			->order_by('id', 'asc');
+			->order_by('payment_date', 'desc');
 
 	 	$this->template->pagination = Pagination::factory( array(
 			'current_page' => array('source' => 'query_string', 'key' => 'page'),
@@ -2049,7 +2050,7 @@ class Controller_User extends Controller_Template {
 			'action' => 'kupons',
 		));
 
-		$this->template->kupons = $kupons->find_all();
+		$this->template->kupons = $kupons->getprepared_all();
 	}	
 	
 	
