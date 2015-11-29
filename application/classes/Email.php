@@ -170,7 +170,10 @@ class Email {
 
 	public static function send_to_admin($subj, $msg)
 	{
-		Email::send( Kohana::$config->load('email.admin'), Kohana::$config->load('email.default_from'), $subj, $msg);
+		foreach (Kohana::$config->load('common.admin_emails') as $email) {
+			Email::send( $email, Kohana::$config->load('email.default_from'), $subj, $msg);
+		}
+		
 	}
 
 } // End email

@@ -7,7 +7,7 @@ return array(
 	'days_count_between_service_up' 		=> 3,
 	'days_count_between_service_up_by_cat'  => array(36 => 1),
 	'disallowed_email_domains' 				=> array('yopmail.com', 'asdasd.com'),
-	'admin_emails' 							=> array('a.vagapov@yarmarka.biz'),
+	'admin_emails' 							=> array('a.vagapov@yarmarka.biz', 'v.kurkin@yarmarka.biz', 'e.philippov@yarmarka.biz'),
 	'callback_request_sending'				=> array('a.saulyak@yarmarka.biz', 'v.kurkin@yarmarka.biz', 'l.vedernikova@yarmarka.biz', 'n.yahina@yarmarka.biz'), //рассылка уведомлений о поступившей заявке на купон
 	'max_image_similarity' 					=> 0.97,
 	'check_image_similarity' 				=> FALSE,
