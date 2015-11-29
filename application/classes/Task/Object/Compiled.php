@@ -65,6 +65,10 @@ class Task_Object_Compiled extends Minion_Task
 		if ($oc->loaded()) {
 			$compiled = unserialize($oc->compiled);
 		}
+		if ($item->is_newspaper_object() == 2) {
+			Minion_CLI::write('title: '.$item->generate_newspaper_object_title());
+		}
+		
 		$compiled["url"] = $item->get_full_url();
 
 		
@@ -73,9 +77,7 @@ class Task_Object_Compiled extends Minion_Task
 			Minion_CLI::write('url: '.$compiled["url"]);
 		}
 
-		if ($item->is_newspaper_object() == 2) {
-			Minion_CLI::write('title: '.$item->generate_newspaper_object_title());
-		}
+		
 		
 
 		$compiled["images"] = Object_Compile::getAttachments($item->id, $item->main_image_id);
