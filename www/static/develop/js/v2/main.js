@@ -1,7 +1,9 @@
 //namespaces
 var Yarmarka = {
     Modules:{},
-    UI:{},
+    UI:{
+        Columns: {}
+    },
     Instances:{},
     Helpers:{}
 };
@@ -25,19 +27,20 @@ var Yarmarka = {
     $.extend(Yarmarka.Helpers, Helpers);
 })();
 
-//Yarmarka.UI.EnhancedColumnsView
+//Yarmarka.UI.Columns.View
 (function () {
 	var EnhancedColumnsView = function (options) {
-        this.options = {
-            forceColumnsCount: false,
-            forceOneColumnMobile: false
-        };
         $.extend(this.options, options);
         this.$el = $(options.el);
         this.initialize(options);
     };
 
     $.extend(EnhancedColumnsView.prototype, {
+        options: {
+            forceColumnsCount: false,
+            forceOneColumnMobile: false
+        },
+
         initialize: function(options) {
             this.$el.addClass('enc-columns-table');
             //calculate only first time
@@ -77,12 +80,17 @@ var Yarmarka = {
             this.columnsCount = this.getColumnsCount();
             this.columnRows = this.getColumnRows();
             this.columnWidthPerc = this.getColumnWidthPerc();
+            this.itemsTable = this.getItemsTable(
+                this.items,
+                this.columnsCount,
+                this.columnRows);
 
+            this.draw();
+        },
+
+        draw: function () {
             //clear container
             this.$el.empty();
-
-            //debug
-            console.log('Enhanced columns view render: ', this);
 
             //build table
             this.build();
@@ -90,14 +98,22 @@ var Yarmarka = {
             //this.$el.trigger('resize');
         },
 
-        build: function() {
-            var me = this;
-            var rows = me.columnRows;
-            var colsToAppend1 = me.items.length - me.columnsCount * Math.floor(me.columnRows);
+        getItemsTable: function (items, columns, rows) {
+            var table = [];
+            //init table
+            for(var i = 0;i < columns;i++) {
+                var column = [];
+                for(var j = 0;j < Math.ceil(rows);j++) {
+                    column.push(null);
+                }
+                table.push(column);
+            }
+            
+            //fill
+            var colsToAppend1 = items.length - columns * Math.floor(rows);
             var col = 0;
             var rowIndex = 0;
-            var $column = null;
-            $.each(this.items, function (index, item) {
+            $.each(items, function (index, item) {
                 if (col == colsToAppend1) {
                     rows = Math.floor(rows);
                 }
@@ -105,17 +121,30 @@ var Yarmarka = {
                 if (rowIndex >= rows) {
                     col++;
                     rowIndex = 0;
-                    $column = null;
                 }
 
-                if ($column == null) {
-                    $column = me.buildColumn();
-                    me.addColumn($column);
-                }
-
-                $column.append(me.buildItem(item));
+                table[col][rowIndex] = item;
                 rowIndex++;
             });
+
+            return table;
+        },
+
+        build: function() {
+            for(var i = 0;i < this.itemsTable.length;i++) {
+                //create column
+                var $column = this.buildColumn();
+                this.addColumn($column);
+
+                for (var j = 0;j < this.itemsTable[i].length;j++) {
+                    if (this.itemsTable[i][j] === null) {
+                        continue;
+                    }
+
+                    var $row = this.buildItem(this.itemsTable[i][j]);
+                    $column.append($row);
+                }
+            }
         },
 
         addColumn: function($column) {
@@ -146,14 +175,19 @@ var Yarmarka = {
         },
 
         getItems: function() {
+            var me = this;
             return this.$el.find('a').map(function(index, item) {
-                return {
-                    link: $(item).attr('href'),
-                    title: $(item).attr('title'),
-                    html: $(item).html(),
-                    width: $(item).outerWidth()
-                };
+                return me.convertItem(item, index);
             }).toArray();
+        },
+
+        convertItem: function (domItem, index) {
+            return {
+                link: $(domItem).attr('href'),
+                title: $(domItem).attr('title'),
+                html: $(domItem).html(),
+                width: $(domItem).outerWidth()
+            };
         },
 
         getContainerWidth: function() {
@@ -177,7 +211,83 @@ var Yarmarka = {
         }
     });
 
-	Yarmarka.UI.EnhancedColumnsView = EnhancedColumnsView;
+	Yarmarka.UI.Columns.View = EnhancedColumnsView;
+})();
+
+//Yarmarka.UI.Columns.OrderedHeight
+// Using:
+// - Yarmarka.UI.AutoCollapse
+(function () {
+    var Base = Yarmarka.UI.Columns.View;
+    var Me = function (options) {
+        Base.apply(this, arguments);
+    };
+
+    $.extend(Me.prototype, Base.prototype, {
+        options: $.extend({
+            enableAutoCollapse: true,
+            autoCollapseOptions: {
+                allowedHeight: 100
+            }
+        }, Base.prototype.options),
+
+        initialize: function (options) {
+            if (this.options.enableAutoCollapse) {
+                this.options.autoCollapseOptions.el = this.$el;
+                this.autoCollapseObject = new Yarmarka.UI.AutoCollapse(options.autoCollapseOptions);
+            }
+
+            Base.prototype.initialize.apply(this, arguments);
+        },
+
+        draw: function () {
+            if (this.options.enableAutoCollapse) {
+                this.height = this.getItemHeight();
+                this.visibleRowsCount = Math.floor(this.options.autoCollapseOptions.allowedHeight / this.height);
+                this.visibleItemsCount = this.visibleRowsCount * this.columnsCount;
+
+                if (this.visibleItemsCount < this.items.length) {
+                    var visibleItemsTable = this.getItemsTable(
+                        this.takeItemsPart(0, this.visibleItemsCount), 
+                        this.columnsCount,
+                        this.visibleRowsCount);
+                    var hiddenItemsTable = this.getItemsTable(
+                        this.takeItemsPart(this.visibleItemsCount, this.items.length),
+                        this.columnsCount,
+                        this.columnRows - this.visibleRowsCount);
+                    this.itemsTable = $.merge(visibleItemsTable, hiddenItemsTable);
+                }
+            }
+            Base.prototype.draw.apply(this, arguments);
+        },
+
+        takeItemsPart: function (start, stop) {
+            var ret = [];
+            for(var i = start;i < stop;i++) {
+                ret.push(this.items[i]);
+            }
+            return ret;
+        },
+
+        getItemHeight: function () {
+            var items = this.getItems();
+            if (items.length) {
+                return items[0].height;
+            }
+            return 0;
+        },
+
+        convertItem: function(domItem, index) {
+            var ret = Base.prototype.convertItem.apply(this, arguments);
+            return $.extend(ret, {
+                height: $(domItem).outerHeight()
+                //debug
+                , html: ret.html + ' ' + index,
+            });
+        }
+    });
+
+    Yarmarka.UI.Columns.OrderedHeight = Me;
 })();
 
 //Yarmarka.UI.AutoCollapse
@@ -202,7 +312,6 @@ var Yarmarka = {
             this.$content = $(this.options.el);
             this.$content.wrap($('<div />').addClass(this.options.cssClass));
             this.$el = this.$content.parent();
-            console.log(this.$el);
             //append the expand button
             this.$expand = $('<a />')
                 .addClass(this.options.expandCssClass)
@@ -221,7 +330,6 @@ var Yarmarka = {
         },
 
         render: function () {
-            console.log('Render AutoCollapse');
             //calc content height
             this.updateContentHeight();
             //check if we need to collapse
@@ -280,7 +388,6 @@ var Yarmarka = {
         },
 
         run: function (height) {
-            console.log('AutoCollapse: animate height to', height);
             return this.$el.animate({ height: height + 'px' }, this.options.animateDuration);
         }
     });
