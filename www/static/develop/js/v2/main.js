@@ -282,7 +282,7 @@ var Yarmarka = {
             return $.extend(ret, {
                 height: $(domItem).outerHeight()
                 //debug
-                , html: ret.html + ' ' + index,
+                , html: ret.html,
             });
         }
     });
