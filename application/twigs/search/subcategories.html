@@ -1,7 +1,7 @@
 {% set cols = (category_childs|length > 4) ? 2 : 1 %}
 {% set rows = (category_childs|length/cols)|round %}
 {% set i = 0 %}
-<div class="subcategories-cont module">
+<div class="subcategories-cont module subcat-search">
 	<div class="row">
 		{% for col in 0..cols %}
 			<div class="col-md-4">
@@ -23,7 +23,7 @@
 </div>
 <script type="text/javascript">
 	new Yarmarka.UI.Columns.OrderedHeight({ 
-		el: '.subcategories-cont.module', 
+		el: '.subcategories-cont.module.subcat-search', 
 		forceOneColumnMobile: false,
 		enableAutoCollapse: true,
 		autoCollapseOptions: {

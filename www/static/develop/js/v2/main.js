@@ -296,6 +296,7 @@ var Yarmarka = {
         this.options = {
             cssClass: 'auto-collapse',
             expandCssClass: 'auto-collapse-expand',
+            expandWrapperCssClass: 'auto-collapse-expand-wrapper',
             el: '[data-auto-collapse]',
             expandLabel: 'Посмотреть все',
             animateDuration: 1500,
@@ -313,6 +314,9 @@ var Yarmarka = {
             this.$content.wrap($('<div />').addClass(this.options.cssClass));
             this.$el = this.$content.parent();
             //append the expand button
+            this.$expandWarpper = $('<div />')
+                .addClass(this.options.expandWrapperCssClass)
+                .appendTo(this.$el);
             this.$expand = $('<a />')
                 .addClass(this.options.expandCssClass)
                 .attr({ href: '#' })
@@ -320,7 +324,7 @@ var Yarmarka = {
                 //initially hidden
                 .hide()
                 //add to container
-                .appendTo(this.$el);
+                .appendTo(this.$expandWarpper);
 
             //call render
             this.render();
