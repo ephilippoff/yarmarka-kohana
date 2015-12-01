@@ -4,12 +4,18 @@
 	</div>					
 	<div class="body">
 		<div class="row js-object-contacts-{{object.id}}">
-			{% if object.is_published > 0 %}
+			{% if object.is_published > 0 or isAdmin %}
 				<div class="col-md-6 col-sm-6">
 					<span class="author-name">{{object.contact}}</span>
 					<div class="contacts-list-cont js-contact-list">
 						{% for contact in object.compiled.contacts %}
-							<p>{{ contact.value|contacthide }}</p>
+							<p>
+								{% if isAdmin %}
+									{{ contact.value }}
+								{% else %}
+									{{ contact.value|contacthide }}
+								{% endif %}
+							</p>
 						{% endfor %}
 					</div>
 					<span class="button dib bg-color-blue white p10 br2 js-contacts-show" data-id="{{object.id}}">Показать контакты</span>

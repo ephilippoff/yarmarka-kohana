@@ -59,6 +59,22 @@ class Controller_Detail extends Controller_Template {
 		$twig->favourites = ORM::factory('Favourite')->get_list_by_cookie();
 		//end favourites
 
+		$user = Auth::instance()->get_user();
+		$twig->isAdmin = $user && $user->role == 1;
+		if ($twig->object->is_published == 0 && $twig->isAdmin) {
+			//reload contacts from database for admin user
+			$model = ORM::factory('Object_Contacts');
+			$items = $model->where('object_id', ' = ', $object->id)->find_all();
+			
+			$twig->object->compiled['contacts'] = array();
+			foreach($items as $item) {
+				$twig->object->compiled['contacts'] []= array(
+						'type' => $item->contact->contact_type_id,
+						'value' => $item->contact->contact
+					);
+			}
+		}
+
 		$this->response->body($twig);
 	}
 
