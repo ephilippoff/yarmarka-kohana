@@ -4,12 +4,14 @@
 	{{ parent() }}
 	{{ css("add.css") }}
 	{{ css("cropper.min.css") }}
+	{{ css("jquery-ui.css") }}
 {% endblock css%}
 
 {% block js %} 
 	{{ parent() }}
 	{% if data_file %}
 		{{ js(data_file) }}
+		{{ js("jquery-ui.min.js") }}
 	{% endif %}
 {% endblock js%}
 

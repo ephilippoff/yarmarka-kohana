@@ -25,6 +25,6 @@ return array(
 	'short_domain'							=> 'ya24.biz',
 	'sync_prefix'							=> '_prod',
 	'banner_zone_positions'					=> array(5 => 18, 10 => 19, 15 => 40, 20 => 52),
-	'site_disable' => FALSE,
+	'site_disable' => TRUE,
 	'white_ips' => array("195.68.130.122", "127.0.0.1")
 );

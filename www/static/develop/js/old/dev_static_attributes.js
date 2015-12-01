@@ -1,1 +1,0 @@
-/home/avagapov/web/yarmarka/yarmarka/uploads/dev_static_attributes.js

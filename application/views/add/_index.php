@@ -66,7 +66,7 @@
 
 		<? if (property_exists($form_data, 'linked_company')) : ?>
 			<? $company = $form_data->linked_company["company"]; ?>
-			<? if ($company->org_moderate == 1 and $company->is_blocked == 0 and $company->org_type == 2): ?>
+			<? if (isset($company) && $company->org_moderate == 1 and $company->is_blocked == 0 and $company->org_type == 2): ?>
 				<div class="row mb10">
 					<div class="col-md-3 col-xs-4 labelcont">
 						<label>От компании:</label>
@@ -74,11 +74,15 @@
 					<div class="col-md-9 col-xs-8">
 						<input type="checkbox" name="link_to_company" id="from_company_check" <? if ($form_data->linked_company["value"] == "on") echo "checked"; ?>/>
 						<label for="from_company_check">
+						<?php if (isset($company)) { ?>
 						<?= $company->org_name ?> (<?= $company->email ?>)
+						<?php } ?>
 						<? if ($company->filename): ?>
 							<div class="p10">
 								<? $logo = Imageci::getSitePaths($company->filename); ?>
+								<?php if (isset($logo)) { ?>
 								<img src="<?= $logo["120x90"] ?>">
+								<?php } ?>
 							</div>
 						<? endif; ?>
 						</label>
@@ -278,18 +282,22 @@
 			<? endif; ?>
 		</div>
 
-		<? if (property_exists($form_data, 'company_info')): ?>
+		<? if (property_exists($form_data, 'company_info') && isset($form_data->company_info['info'])): ?>
 			<div id="div_company_info">
 				<? foreach ($form_data->company_info['info'] as $name => $field): ?>
 					<div class="row mb10" >
 						<div class="col-md-3 col-xs-4 labelcont">
+							<?php if (isset($name)) { ?>
 							<label><?= $name ?></label>
+							<?php } ?>
 						</div>
 						<div class="col-md-9 col-xs-8">
 							<div class="row">
 								<div class="col-md-6">
 									<div class="inp-cont ">
-										<?= $field ?>					
+										<?php if (isset($field)) { ?>
+										<?= $field ?>				
+										<?php } ?>	
 									</div>
 								</div>
 							</div>				
@@ -442,7 +450,10 @@
 					</div>
 					<div class="col-md-9 col-xs-8">
 						<div class="inp-cont">
-							<input id="fileupload" type="file" name="userfile1" data-url="/add/object_upload_file" multiple>
+							<label id="label-fileupload" for="fileupload">
+								<div>Загрузить фото</div>
+							</label>
+							<input id="fileupload" type="file" name="userfile1" data-url="/add/object_upload_file" multiple accept="image/jpeg,image/jpg,image/png,image/gif" style="display:none;">
 							<div id="add-block" class="add-block fn-photo-list mt20 mb5 clearfix" data-max="8">
 								<?=
 								View::factory('add/block/photo', array("data" => new Obj($form_data->photo),
