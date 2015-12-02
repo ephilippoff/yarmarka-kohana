@@ -338,6 +338,38 @@ class Controller_Add extends Controller_Template {
 		$this->response->body(json_encode($this->json));
 	}
 
+	public function action_set_order() {
+		$this->use_layout = FALSE;
+		$this->auto_render = FALSE;
+
+		if (!isset($_REQUEST['fileName']) || !is_array($_REQUEST['fileName'])) {
+			return;
+		}
+		$fileNames = $_REQUEST['fileName'];
+		//select items
+		$images = ORM::factory('Tmp_Img')
+			->select('*')
+			->where('name', 'in', $fileNames)
+			->find_all();
+
+		$data = array();
+		foreach($images as $image) {
+			$data[$image->name] = array_search($image->name, $fileNames);
+			$image->delete();
+		}
+		asort($data);
+
+		foreach($data as $key => $value) {
+			$img = ORM::factory('Tmp_Img');
+			$img->name = $key;
+			$img->save();
+		}
+
+		$this->json['code'] = 200;
+		$this->json['data'] = $data;
+		$this->response->body(json_encode($this->json));
+	}
+
 	public function action_crop() {
 
 		$this->use_layout = FALSE;
