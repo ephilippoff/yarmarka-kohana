@@ -626,11 +626,21 @@ var photoView  = Backbone.View.extend({
     },
 
     rotate : function(ev, deg){
-        var img = $(elem).closest('.curtain').prev('img'),
-            deg = $(img).attr('data-deg');
-        deg = +deg;
-        deg = deg+90;
-        if (deg == 360) deg = 0;
+        var me = this;
+        var img = $('<img />')[0];
+        img.onload = function () {
+            me.saveCroppedPicture({
+                x: 0,
+                y: 0,
+                width: img.naturalHeight,
+                height: img.naturalWidth,
+                rotate: 90,
+                scaleX: 1,
+                scaleY: 1,
+                disableRectValidate: true
+            });
+        };
+        img.src = me.model.get('original');
     },
 
 render : function(){
