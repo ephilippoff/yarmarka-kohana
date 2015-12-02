@@ -14,10 +14,10 @@
 
 		<? if (property_exists($form_data, 'login')): ?>
 			<div class="row mb10">
-				<div class="col-md-3 col-xs-4 labelcont">
+				<div class="col-md-3 col-xs-12 labelcont">
 					<label>Логин:</label>
 				</div>
-				<div class="col-md-9 col-xs-8">
+				<div class="col-md-9 col-xs-12">
 					<div class="row">
 						<div class="col-md-6">
 							<div class="inp-cont <? if ($form_data->login["login_error"]) echo "error"; ?>">
@@ -38,10 +38,10 @@
 			</div>	
 
 			<div class="row mb10">
-				<div class="col-md-3 col-xs-4 labelcont">
+				<div class="col-md-3 col-xs-12 labelcont">
 					<label>Пароль:</label>
 				</div>
-				<div class="col-md-9 col-xs-8">
+				<div class="col-md-9 col-xs-12">
 					<div class="row">
 						<div class="col-md-6">
 							<div class="inp-cont <? if ($form_data->login["pass_error"]) echo "error"; ?>">
@@ -68,10 +68,10 @@
 			<? $company = $form_data->linked_company["company"]; ?>
 			<? if (isset($company) && $company->org_moderate == 1 and $company->is_blocked == 0 and $company->org_type == 2): ?>
 				<div class="row mb10">
-					<div class="col-md-3 col-xs-4 labelcont">
+					<div class="col-md-3 col-xs-12 labelcont">
 						<label>От компании:</label>
 					</div>
-					<div class="col-md-9 col-xs-8">
+					<div class="col-md-9 col-xs-12">
 						<input type="checkbox" name="link_to_company" id="from_company_check" <? if ($form_data->linked_company["value"] == "on") echo "checked"; ?>/>
 						<label for="from_company_check">
 						<?php if (isset($company)) { ?>
@@ -98,10 +98,10 @@
 			<p class="p20 red"><i class="fa fa-eye fa-lg mr5"></i>Вы авторизованы с ролью модератора, будьте внимательны</p>
 			<? if (property_exists($form_data, 'advert_type')): ?>
 				<div id="div_advert_type" class="row mb10">
-					<div class="col-md-3 col-xs-4 labelcont">
+					<div class="col-md-3 col-xs-12 labelcont">
 						<label>Тип объявления:</label>
 					</div>
-					<div class="col-md-9 col-xs-8">
+					<div class="col-md-9 col-xs-12">
 						<div class="row">
 							<div class="col-md-6">
 								<div class="inp-cont ">
@@ -116,10 +116,10 @@
 			
 			<? if (property_exists($form_data, 'user_type')): ?>
 				<div id="div_advert_type" class="row mb10">
-					<div class="col-md-3 col-xs-4 labelcont">
+					<div class="col-md-3 col-xs-12 labelcont">
 						<label>Тип пользователя:</label>
 					</div>
-					<div class="col-md-9 col-xs-8">
+					<div class="col-md-9 col-xs-12">
 						<div class="row">
 							<div class="col-md-6">
 								<div class="inp-cont ">
@@ -134,10 +134,10 @@
 
 			<? if (property_exists($form_data, 'dates')): ?>
 				<div id="div_advert_type" class="row mb10">
-					<div class="col-md-3 col-xs-4 labelcont">
+					<div class="col-md-3 col-xs-12 labelcont">
 						<label>Дата создания:</label>
 					</div>
-					<div class="col-md-9 col-xs-8">
+					<div class="col-md-9 col-xs-12">
 						<div class="row">
 							<div class="col-md-6">
 								<div class="inp-cont ">
@@ -150,10 +150,10 @@
 				</div>
 
 				<div id="div_advert_type" class="row mb10">
-					<div class="col-md-3 col-xs-4 labelcont">
+					<div class="col-md-3 col-xs-12 labelcont">
 						<label>Дата начала показа:</label>
 					</div>
-					<div class="col-md-9 col-xs-8">
+					<div class="col-md-9 col-xs-12">
 						<div class="row">
 							<div class="col-md-6">
 								<div class="inp-cont ">
@@ -166,10 +166,10 @@
 				</div>
 
 				<div id="div_advert_type" class="row mb10">
-					<div class="col-md-3 col-xs-4 labelcont">
+					<div class="col-md-3 col-xs-12 labelcont">
 						<label>Дата окончания показа:</label>
 					</div>
-					<div class="col-md-9 col-xs-8">
+					<div class="col-md-9 col-xs-12">
 						<div class="row">
 							<div class="col-md-6">
 								<div class="inp-cont ">
@@ -187,10 +187,10 @@
 		<? if (property_exists($form_data, 'city')): ?>
 			<div id="div_city">
 				<div class="row mb10">
-					<div class="col-md-3 col-xs-4 labelcont">
+					<div class="col-md-3 col-xs-12 labelcont">
 						<label>Город публикации:</label>
 					</div>
-					<div class="col-md-9 col-xs-8">
+					<div class="col-md-9 col-xs-12">
 						<div class="row">
 							<div class="col-md-6">
 								<div class="inp-cont <? if ($form_data->city["city_error"]) echo "error"; ?>">
@@ -215,20 +215,20 @@
 				</div>		
 
 				<div class="row mb10">
-					<div class="col-md-3 col-xs-4 labelcont">
+					<div class="col-md-3 col-xs-12 labelcont">
 						<label></label>
 					</div>
-					<div class="col-md-9 col-xs-8">
+					<div class="col-md-9 col-xs-12">
 						<input type="checkbox" id="real_city_exists" name="real_city_exists" <? if ($form_data->city["real_city_exists"]) echo 'checked'; ?>>
 						<label for="real_city_exists">Товар/услуга/продукт/вакансия находится в другом городе</label>							
 					</div>
 				</div>		
 
 				<div class="row mb10 real_city_exists" <? if (!$form_data->city["real_city_exists"]) echo 'style="display:none;"'; ?>>
-					<div class="col-md-3 col-xs-4 labelcont">
+					<div class="col-md-3 col-xs-12 labelcont">
 						<label></label>
 					</div>
-					<div class="col-md-9 col-xs-8">
+					<div class="col-md-9 col-xs-12">
 						<div class="row">
 							<div class="col-md-6">
 								<div class="inp-cont ">
@@ -249,10 +249,10 @@
 		<div id="div_category">
 			<? if (property_exists($form_data, 'category')): ?>
 				<div class="row mb10">
-					<div class="col-md-3 col-xs-4 labelcont">
+					<div class="col-md-3 col-xs-12 labelcont">
 						<label>Раздел:</label>
 					</div>
-					<div class="col-md-9 col-xs-8">
+					<div class="col-md-9 col-xs-12">
 						<div class="row">
 							<div class="col-md-6">
 								<div class="inp-cont <? if ($form_data->category["category_error"]) echo "error"; ?>">
@@ -286,12 +286,12 @@
 			<div id="div_company_info">
 				<? foreach ($form_data->company_info['info'] as $name => $field): ?>
 					<div class="row mb10" >
-						<div class="col-md-3 col-xs-4 labelcont">
+						<div class="col-md-3 col-xs-12 labelcont">
 							<?php if (isset($name)) { ?>
 							<label><?= $name ?></label>
 							<?php } ?>
 						</div>
-						<div class="col-md-9 col-xs-8">
+						<div class="col-md-9 col-xs-12">
 							<div class="row">
 								<div class="col-md-6">
 									<div class="inp-cont ">
@@ -325,10 +325,10 @@
 				<div class="fn-parameters">
 					<? if (count($form_data->params['elements']) > 0): ?>
 						<div class="row">
-							<div class="col-md-3 col-xs-4 labelcont">
+							<div class="col-md-3 col-xs-12 labelcont">
 								<label>Параметры:</label>
 							</div>
-							<div class="col-md-9 col-xs-8">
+							<div class="col-md-9 col-xs-12">
 								<div class="row bg-color-whitesmoke pt15 mb20">
 									
 										<?=
@@ -359,10 +359,10 @@
 
 
 		<div class="row mb10 hidden" id="div_map">
-			<div class="col-md-3 col-xs-4 labelcont">
+			<div class="col-md-3 col-xs-12 labelcont">
 				<label><span class="label-geo">Укажите местоположение объекта на карте</span></label>
 			</div>
-			<div class="col-md-9 col-xs-8">
+			<div class="col-md-9 col-xs-12">
 				<div class="inp-cont ">
 					<div id="map_block_div" class="map_block_div add_form_info mb20">
 						<div class="map" id="map_block" style="height:250px;width:100%;">		
@@ -376,10 +376,10 @@
 		<div id="div_subject">
 			<? if (property_exists($form_data, 'subject')): ?>
 				<div class="row mb10" id="div_subject">
-					<div class="col-md-3 col-xs-4 labelcont">
+					<div class="col-md-3 col-xs-12 labelcont">
 						<label>Заголовок:</label>
 					</div>
-					<div class="col-md-9 col-xs-8">
+					<div class="col-md-9 col-xs-12">
 						<div class="inp-cont <? if ($form_data->subject["subject_error"]) echo "error"; ?>">
 							<span class="required-star">*</span>
 							<?=
@@ -409,10 +409,10 @@
 		<div id="div_textadv">
 			<? if (property_exists($form_data, 'text')): ?>
 				<div class="row mb10">
-					<div class="col-md-3 col-xs-4 labelcont">
+					<div class="col-md-3 col-xs-12 labelcont">
 						<label>Текст объявления:</label>
 					</div>
-					<div class="col-md-9 col-xs-8">
+					<div class="col-md-9 col-xs-12">
 						<div class="inp-cont <? if ($form_data->text["text_error"]) echo "error"; ?>">
 							<? if ($form_data->text_required): ?>
 								<span class="required-star">*</span>
@@ -445,10 +445,10 @@
 		<div id="div_photo">
 			<? if (property_exists($form_data, 'photo')): ?>
 				<div class="row mb10">
-					<div class="col-md-3 col-xs-4 labelcont">
+					<div class="col-md-3 col-xs-12 labelcont">
 						<label>Фото:</label>
 					</div>
-					<div class="col-md-9 col-xs-8">
+					<div class="col-md-9 col-xs-12">
 						<div class="inp-cont">
 							<label id="label-fileupload" for="fileupload">
 								<div>Загрузить фото</div>
@@ -471,10 +471,10 @@
 					</div>
 				</div>
 				<div class="row mb10">
-					<div class="col-md-3 col-xs-4 labelcont">
+					<div class="col-md-3 col-xs-12 labelcont">
 						
 					</div>
-					<div class="col-md-9 col-xs-8">
+					<div class="col-md-9 col-xs-12">
 						<div class="cropper-cont fn-cropper-cont"></div>
 					</div>
 				</div>			
@@ -484,10 +484,10 @@
 		<div id="div_video">
 			<? if (property_exists($form_data, 'video')): ?>
 				<div class="row mb10">
-					<div class="col-md-3 col-xs-4 labelcont">
+					<div class="col-md-3 col-xs-12 labelcont">
 						<label>Видео:</label>
 					</div>
-					<div class="col-md-9 col-xs-8">
+					<div class="col-md-9 col-xs-12">
 						<div class="row">
 							<div class="col-md-6">
 								<div class="inp-cont <? if ($form_data->video["video_error"]) echo "error"; ?>">
@@ -520,10 +520,10 @@
 		<div id="div_price" style="display:none;">
 			<? if (property_exists($form_data, 'price')): ?>
 				<div class="row mb10">
-					<div class="col-md-3 col-xs-4 labelcont">
+					<div class="col-md-3 col-xs-12 labelcont">
 						<label>Прайс-лист:</label>
 					</div>
-					<div class="col-md-9 col-xs-8">
+					<div class="col-md-9 col-xs-12">
 						<div class="row">
 							<div class="col-md-6">
 								<div class="inp-cont ">
@@ -600,10 +600,10 @@
 			<? endforeach; ?>
 
 			<div class="row mb10">
-				<div class="col-md-3 col-xs-4 labelcont">
+				<div class="col-md-3 col-xs-12 labelcont">
 					<label>Контактное лицо:</label>
 				</div>
-				<div class="col-md-9 col-xs-8">
+				<div class="col-md-9 col-xs-12">
 					<div class="row"  data-type="email">
 						<div class="col-md-6">
 							<div id="contacts">	                  			
@@ -632,10 +632,10 @@
 
 		<? if ($form_data->_edit): ?>
 			<div class="row mb10">
-				<div class="col-md-3 col-xs-4 labelcont">
+				<div class="col-md-3 col-xs-12 labelcont">
 					<label>Состояние объявления:</label>
 				</div>
-				<div class="col-md-9 col-xs-8">
+				<div class="col-md-9 col-xs-12">
 					<div class="row">
 						<div class="col-md-6">
 							<div class="inp-cont ">
@@ -693,10 +693,10 @@
 
 		<? if (!$form_data->_edit OR $prolongation_access): ?>
 			<div class="row mb10">
-				<div class="col-md-3 col-xs-4 labelcont">
+				<div class="col-md-3 col-xs-12 labelcont">
 					<label>Срок объявления:</label>
 				</div>
-				<div class="col-md-9 col-xs-8">
+				<div class="col-md-9 col-xs-12">
 					<div class="row">
 						<div class="col-md-6">
 							<div class="inp-cont ">
@@ -726,10 +726,10 @@
 
 
 		<div class="row mb10">
-			<div class="col-md-3 col-xs-4 labelcont">
+			<div class="col-md-3 col-xs-12 labelcont">
 				<label></label>
 			</div>
-			<div class="col-md-9 col-xs-8">
+			<div class="col-md-9 col-xs-12">
 				<div class="inp-cont ">
 					<label>
 						<input type="checkbox" name="block_comments" id="block_comments" value="1" <? if ($params->block_comments) echo "checked"; ?>></input>
