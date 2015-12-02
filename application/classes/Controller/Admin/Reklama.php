@@ -513,6 +513,66 @@ class Controller_Admin_Reklama extends Controller_Admin_Template {
 	
 	public function action_menu_banners()
 	{
+
+		//prepare filters
+		$filters = array(
+				'groups' => array(
+						'city' => array( 'label' => 'Город' ),
+						'status' => array( 'label' => 'Статус' ),
+						'category' => array( 'label' => 'Рубрика' )
+					)
+			);
+
+		//get filters items
+
+		//cities
+		$filters['groups']['city']['items'] = array();
+		$cities = ORM::factory('City')
+			->visible(true)
+			->order_by('title', 'asc')
+			->find_all();
+		foreach($cities as $city) {
+			$filters['groups']['city']['items'][$city->id] = array(
+					'id' => $city->id,
+					'title' => $city->title
+				);
+		}
+
+		//statuses
+		$filters['groups']['status']['items'] = array(
+				'1' => array( 'id' => 1, 'title' => 'Активные' )
+			);
+
+		//categories
+		$filters['groups']['category']['items'] = array();
+		$categories = ORM::factory('Category')
+			->order_by('title', 'asc')
+			->find_all();
+		foreach($categories as $category) {
+			$filters['groups']['category']['items'][$category->id] = array(
+					'id' => $category->id,
+					'title' => $category->title
+				);
+		}
+
+		//check which filters is selected
+		$filters['selected'] = array(
+				'city' => null,
+				'category' => null,
+				'status' => null
+			);
+		foreach($_REQUEST as $key => $value) {
+			if (!empty($value) && array_key_exists($key, $filters['selected']) && array_key_exists($value, $filters['groups'][$key]['items'])) {
+				$filters['selected'][$key] = $value;
+			}
+		}
+
+		//export filter data to template
+		$this->template->filters = $filters;
+		$this->template->filtersUrlPart = http_build_query($filters['selected']);
+
+		//prepare filters done
+
 		$limit  = Arr::get($_GET, 'limit', 50);
 		$page   = $this->request->query('page');
 		$offset = ($page AND $page != 1) ? ($page-1) * $limit : 0;		
@@ -528,7 +588,18 @@ class Controller_Admin_Reklama extends Controller_Admin_Template {
 			
 		$banners_list = ORM::factory('Category_Banners');
 		
-//		if ($only_active) $tickets_list->where('invoice_id', '>', 0);		
+//		if ($only_active) $tickets_list->where('invoice_id', '>', 0);	
+		
+		//push filters to query
+		if ($filters['selected']['category']) {
+			$banners_list->where('category_id', '=', $filters['selected']['category']);
+		}
+		if ($filters['selected']['city']) {
+			$banners_list->where(DB::expr($filters['selected']['city']),'=',DB::expr('any(cities)'));
+		}
+		if ($filters['selected']['status']) {
+			$banners_list->where('state', '=', 1);
+		} 
 				
 		// количество общее
 		$clone_to_count = clone $banners_list;
