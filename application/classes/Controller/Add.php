@@ -439,25 +439,27 @@ class Controller_Add extends Controller_Template {
 		$imgObj = $imgConstructor($cropData['fileName']);
 
 		//validate new sizes - http://yarmarka.myjetbrains.com/youtrack/issue/yarmarka-316#comment=90-1078
-		if ($cropData['x'] < 0) {
-			$cropData['width'] += $cropData['x'];
-			$cropData['x'] = 0;
-		}
-		if ($cropData['y'] < 0) {
-			$cropData['height'] += $cropData['y'];
-			$cropData['y'] = 0;
-		}
-		if ($cropData['x'] + $cropData['width'] > $cropData['imageSize'][0]) {
-			$cropData['width'] = $cropData['imageSize'][0] - $cropData['x'];
-		}
-		if ($cropData['y'] + $cropData['height'] > $cropData['imageSize'][1]) {
-			$cropData['height'] = $cropData['imageSize'][1] - $cropData['y'];
-		}
-		if ($cropData['width'] > $cropData['imageSize'][0]) {
-			$cropData['width'] = $cropData['imageSize'][0];
-		}
-		if ($cropData['height'] > $cropData['imageSize'][1]) {
-			$cropData['height'] = $cropData['imageSize'][1];
+		if (empty($_REQUEST['disableRectValidate']) || !$_REQUEST['disableRectValidate']) {
+			if ($cropData['x'] < 0) {
+				$cropData['width'] += $cropData['x'];
+				$cropData['x'] = 0;
+			}
+			if ($cropData['y'] < 0) {
+				$cropData['height'] += $cropData['y'];
+				$cropData['y'] = 0;
+			}
+			if ($cropData['x'] + $cropData['width'] > $cropData['imageSize'][0]) {
+				$cropData['width'] = $cropData['imageSize'][0] - $cropData['x'];
+			}
+			if ($cropData['y'] + $cropData['height'] > $cropData['imageSize'][1]) {
+				$cropData['height'] = $cropData['imageSize'][1] - $cropData['y'];
+			}
+			if ($cropData['width'] > $cropData['imageSize'][0]) {
+				$cropData['width'] = $cropData['imageSize'][0];
+			}
+			if ($cropData['height'] > $cropData['imageSize'][1]) {
+				$cropData['height'] = $cropData['imageSize'][1];
+			}
 		}
 
 		//create background color for rotate
@@ -502,6 +504,7 @@ class Controller_Add extends Controller_Template {
 		//header('Content-Type: ' . $cropData['imageMime']);
 		$imgOutput = 'image' . $cropData['suffix'];
 		//$imgOutput($imgObj);
+		//die;
 
 		//recreate thumbnails
 		$oldImageModule = new Imageci();
