@@ -30,6 +30,12 @@ class Controller_Add extends Controller_Template {
 		$this->auto_render  = FALSE;
 		$twig = Twig::factory('user/add');
 		$twig->params = new Obj();
+
+		/* layout parameters */
+		$twig->topMenuContainerClass = 'hidden-sm hidden-xs'; //hide on tablets and mobile
+		$twig->showCatalogMenuButtonAfterLogo = true;
+		$twig->catalogMenuAfterLogoButtonAdditionalClass = 'hidden-md hidden-lg'; //hide on desktops and laptops
+		/* layout parameters done */
 		
 		$prefix = (Kohana::$environment == Kohana::PRODUCTION) ? "" : "dev_";
 		$staticfile = new StaticFile("attributes", $prefix.'static_attributes.js');

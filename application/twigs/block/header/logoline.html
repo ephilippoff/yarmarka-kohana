@@ -7,6 +7,13 @@
 				</a>
 			</div>
 		</div>
+		{% if showCatalogMenuButtonAfterLogo %}
+		<div class="menu-cont2 col-xs-6 col-sm-3 col-md-2 {{ catalogMenuAfterLogoButtonAdditionalClass }}">
+			<div class="menu-item left crimson-theme w100p iLight js-mainmenu-dropdown"><!--main-page-style iLight-disable-->
+				<span class="menu-item-cont ta-c">Выбрать рубрику<i class="fa fa-caret-down ml3"></i></span>
+			</div>
+		</div>
+		{% endif %}
 		<div class="col-md-2 col-md-push-8 col-xs-6">
 			<span class="button w100p dib bg-color-crimson add-advert white ta-c pointer" onclick="window.location='/add'">Подать объявление</span>
 		</div>
