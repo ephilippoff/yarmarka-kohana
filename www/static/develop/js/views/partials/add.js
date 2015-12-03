@@ -784,7 +784,7 @@ define([
                     me.model.set('filepath', answer.thumbnails['120x90']);
                     me.model.set('original', answer.thumbnails['original']);
                     me.$el.find('img').attr('src', answer.thumbnails['120x90']);
-                    me.$el.find('input[type=hidden]').val(answer.filename);
+                    me.$el.find('input[type=hidden]').val(answer.fileName);
                 }
             });
         }
