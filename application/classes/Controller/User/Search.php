@@ -82,7 +82,17 @@ class Controller_User_Search extends Controller_Template {
             "page" => $this->params_by_uri->get_reserved_query_params("page"),
             "limit" => $this->params_by_uri->get_reserved_query_params("limit")
         );
+
+        if ( $this->request->query("photo") ) {
+            $this->search_filters["photo"] = TRUE;
+        }
+
+        if ( $this->request->query("text") ) {
+            $this->search_filters["user_text"] = $this->request->query("text");
+        }
         
+        $this->twig->search_filters = $this->search_filters;
+
         $main_search_query = Search::searchquery($this->search_filters, $search_params);
         $this->twig->main_search_result = Search::getresult($main_search_query->execute()->as_array());
 
