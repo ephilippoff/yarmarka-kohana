@@ -105,6 +105,25 @@ img.banner,
 	#label-fileupload {
 	    margin-top: 10px;
 	}
+
+	.js-contact {}
+	.js-contact .inp-cont.error {
+		min-height: 0;
+	}
+	.js-contact .inp-cont.error .js-contact-description {
+		height:0;
+		position:relative;
+		overflow:hidden;
+		display:block !important;
+		-webkit-transition: height 1000ms ease;
+		-moz-transition: height 1000ms ease;
+		-ms-transition: height 1000ms ease;
+		-o-transition: height 1000ms ease;
+		transition: height 1000ms ease;
+	}
+	.js-contact .inp-cont.error .js-contact-description.show {
+		height:auto;
+	}
 }
 
 .banner {display:none;}
