@@ -198,7 +198,7 @@ class Model_Category extends ORM {
 		$states_str = implode(',', $states);
 
 		if ($cached)
-			$data = Cache::instance()->get("getBannersForCategories:$city_id");	
+			$data = Cache::instance()->get("getBannersForCategories:{$city_id}");	
 		
 		if (!$data)
 		{		
