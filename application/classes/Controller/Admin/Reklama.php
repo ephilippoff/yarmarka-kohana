@@ -546,6 +546,7 @@ class Controller_Admin_Reklama extends Controller_Admin_Template {
 		//categories
 		$filters['groups']['category']['items'] = array();
 		$categories = ORM::factory('Category')
+			->where('parent_id', '=', 1)
 			->order_by('title', 'asc')
 			->find_all();
 		foreach($categories as $category) {
