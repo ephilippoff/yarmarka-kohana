@@ -38,7 +38,8 @@ var Yarmarka = {
     $.extend(EnhancedColumnsView.prototype, {
         options: {
             forceColumnsCount: false,
-            forceOneColumnMobile: false
+            forceOneColumnMobile: false,
+            elementSelector: 'a'
         },
 
         initialize: function(options) {
@@ -152,12 +153,8 @@ var Yarmarka = {
         },
 
         buildItem: function(options) {
-            var $link = $('<a />')
-                .addClass('enc-columns-link')
-                .attr({
-                    title: options.title,
-                    href: options.link
-                })
+            var $link = $('<div />')
+                .addClass('enc-columns-item')
                 .html(options.html);
             return $('<li />').addClass('enc-columns-row').append($link);
         },
@@ -176,15 +173,13 @@ var Yarmarka = {
 
         getItems: function() {
             var me = this;
-            return this.$el.find('a').map(function(index, item) {
+            return this.$el.find(this.options.elementSelector).map(function(index, item) {
                 return me.convertItem(item, index);
             }).toArray();
         },
 
         convertItem: function (domItem, index) {
             return {
-                link: $(domItem).attr('href'),
-                title: $(domItem).attr('title'),
                 html: $(domItem).html(),
                 width: $(domItem).outerWidth()
             };

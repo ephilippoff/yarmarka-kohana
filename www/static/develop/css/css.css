@@ -811,6 +811,9 @@ select{background-color: #FFFFFF;border: 1px solid #C3C3C3;padding:2px 10px;heig
 .subcategories-cont.module.subcat-search ul li {
     height:25px;
 }
+.subcategories-cont.module.subcat-search ul li div {
+    display:inline;
+}
 
 /* auto collapse module */
 .auto-collapse {
