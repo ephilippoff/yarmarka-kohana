@@ -24,12 +24,22 @@ class Controller_Add extends Controller_Template {
 		}
 	}
 
+	public function initAddForm($twig) {
+		$twig->topMenuContainerClass = 'hidden-sm hidden-xs'; //hide on tablets and mobile
+		$twig->showCatalogMenuButtonAfterLogo = true;
+		$twig->catalogMenuAfterLogoButtonAdditionalClass = 'hidden-md hidden-lg'; //hide on desktops and laptops
+		$twig->footerMenuAdditionalClass = 'hidden-xs'; //hide on mobile
+		$twig->footerAdditionalClass = 'hidden-xs hidden-md hidden-lg hidden-sm'; //hide on all devices
+	}
+
 	public function action_index()
 	{
 		$this->use_layout   = FALSE;
 		$this->auto_render  = FALSE;
 		$twig = Twig::factory('user/add');
 		$twig->params = new Obj();
+
+		$this->initAddForm($twig);
 		
 		$prefix = (Kohana::$environment == Kohana::PRODUCTION) ? "" : "dev_";
 		$staticfile = new StaticFile("attributes", $prefix.'static_attributes.js');
@@ -139,6 +149,8 @@ class Controller_Add extends Controller_Template {
 		$this->auto_render  = FALSE;
 		$twig = Twig::factory('user/add');
 		$twig->params = new Obj();
+
+		$this->initAddForm($twig);
 
 		$user = Auth::instance()->get_user();
 		
@@ -338,6 +350,38 @@ class Controller_Add extends Controller_Template {
 		$this->response->body(json_encode($this->json));
 	}
 
+	public function action_set_order() {
+		$this->use_layout = FALSE;
+		$this->auto_render = FALSE;
+
+		if (!isset($_REQUEST['fileName']) || !is_array($_REQUEST['fileName'])) {
+			return;
+		}
+		$fileNames = $_REQUEST['fileName'];
+		//select items
+		$images = ORM::factory('Tmp_Img')
+			->select('*')
+			->where('name', 'in', $fileNames)
+			->find_all();
+
+		$data = array();
+		foreach($images as $image) {
+			$data[$image->name] = array_search($image->name, $fileNames);
+			$image->delete();
+		}
+		asort($data);
+
+		foreach($data as $key => $value) {
+			$img = ORM::factory('Tmp_Img');
+			$img->name = $key;
+			$img->save();
+		}
+
+		$this->json['code'] = 200;
+		$this->json['data'] = $data;
+		$this->response->body(json_encode($this->json));
+	}
+
 	public function action_crop() {
 
 		$this->use_layout = FALSE;
@@ -407,25 +451,27 @@ class Controller_Add extends Controller_Template {
 		$imgObj = $imgConstructor($cropData['fileName']);
 
 		//validate new sizes - http://yarmarka.myjetbrains.com/youtrack/issue/yarmarka-316#comment=90-1078
-		if ($cropData['x'] < 0) {
-			$cropData['width'] += $cropData['x'];
-			$cropData['x'] = 0;
-		}
-		if ($cropData['y'] < 0) {
-			$cropData['height'] += $cropData['y'];
-			$cropData['y'] = 0;
-		}
-		if ($cropData['x'] + $cropData['width'] > $cropData['imageSize'][0]) {
-			$cropData['width'] = $cropData['imageSize'][0] - $cropData['x'];
-		}
-		if ($cropData['y'] + $cropData['height'] > $cropData['imageSize'][1]) {
-			$cropData['height'] = $cropData['imageSize'][1] - $cropData['y'];
-		}
-		if ($cropData['width'] > $cropData['imageSize'][0]) {
-			$cropData['width'] = $cropData['imageSize'][0];
-		}
-		if ($cropData['height'] > $cropData['imageSize'][1]) {
-			$cropData['height'] = $cropData['imageSize'][1];
+		if (empty($_REQUEST['disableRectValidate']) || !$_REQUEST['disableRectValidate']) {
+			if ($cropData['x'] < 0) {
+				$cropData['width'] += $cropData['x'];
+				$cropData['x'] = 0;
+			}
+			if ($cropData['y'] < 0) {
+				$cropData['height'] += $cropData['y'];
+				$cropData['y'] = 0;
+			}
+			if ($cropData['x'] + $cropData['width'] > $cropData['imageSize'][0]) {
+				$cropData['width'] = $cropData['imageSize'][0] - $cropData['x'];
+			}
+			if ($cropData['y'] + $cropData['height'] > $cropData['imageSize'][1]) {
+				$cropData['height'] = $cropData['imageSize'][1] - $cropData['y'];
+			}
+			if ($cropData['width'] > $cropData['imageSize'][0]) {
+				$cropData['width'] = $cropData['imageSize'][0];
+			}
+			if ($cropData['height'] > $cropData['imageSize'][1]) {
+				$cropData['height'] = $cropData['imageSize'][1];
+			}
 		}
 
 		//create background color for rotate
@@ -470,6 +516,7 @@ class Controller_Add extends Controller_Template {
 		//header('Content-Type: ' . $cropData['imageMime']);
 		$imgOutput = 'image' . $cropData['suffix'];
 		//$imgOutput($imgObj);
+		//die;
 
 		//recreate thumbnails
 		$oldImageModule = new Imageci();

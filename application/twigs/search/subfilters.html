@@ -1,7 +1,7 @@
 {% set cols = 3 %}
 {% set rows = (category_childs_elements|length/cols)|round %}
 {% set i = 0 %}
-<div class="subcategories-cont module">
+<div class="subcategories-cont module subcat-search">
 	<div class="row">
 		{% for col in 0..cols %}
 			<div class="col-md-{{ category_childs_elements_colsize ? category_childs_elements_colsize : 2 }}">
@@ -9,11 +9,12 @@
 				{% for element in category_childs_elements|slice(i, rows) %}
 					{% set count = link_counters[s_host ~ '/' ~ category_url ~ '/' ~ element.url] %}
 					<li>
-						<a href="{{ url(category_url ~ '/' ~ element.url) }}" title="{{element.title}}">{{element.title}}</a>
-						
-						{% if count > 0 %}
-							<span class="count">{{count}}</span>
-						{% endif %}
+						<div>
+							<a href="{{ url(category_url ~ '/' ~ element.url) }}" title="{{element.title}}">{{element.title}}</a>
+							{% if count > 0 %}
+								<span class="count">{{count}}</span>
+							{% endif %}
+						</div>
 					</li>
 				{% endfor %}
 				</ul>
@@ -22,3 +23,14 @@
 		{% endfor %}
 	</div>
 </div>
+<script type="text/javascript">
+	new Yarmarka.UI.Columns.OrderedHeight({ 
+		el: '.subcategories-cont.module.subcat-search', 
+		elementSelector: 'li>div', 
+		forceOneColumnMobile: false,
+		enableAutoCollapse: true,
+		autoCollapseOptions: {
+			allowedHeight: 100
+		}
+	});
+</script>

@@ -22,7 +22,8 @@
 	->js('http://api-maps.yandex.ru/2.0/?load=package.full&lang=ru-RU')
 	->js('old/ajaxupload.js')
 //	->js('old/jquery.inputmask.js')
-	->js('old/jquery.maskedinput.min.js')		
+	->js('old/jquery.maskedinput.min.js')	
+	->js('old/jquery-ui.min.js')	
 	.$_assets;
 	
 	echo Assets::factory('main')->js($jspath);

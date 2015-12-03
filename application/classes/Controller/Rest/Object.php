@@ -166,6 +166,16 @@ class Controller_Rest_Object extends Controller_Rest {
 
 		$object->increase_stat_contacts_show();
 
+		//get contacts from compiled obejct prior to 
+		// http://yarmarka.myjetbrains.com/youtrack/issue/yarmarka-363
+		$compiledEntry = ORM::factory('Object_Compiled')
+			->where('object_id', '=', $object->id)
+			->find();
+		$decompiledData = unserialize($compiledEntry->compiled);
+		$contacts = array();
+		foreach($decompiledData['contacts'] as $contact) {
+			$contacts []= array( 'contact' => $contact['value'] );
+		}
 		
 		$result["code"] = 200;
 		$result["captcha"] = NULL;
