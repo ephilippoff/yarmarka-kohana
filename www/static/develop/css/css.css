@@ -695,7 +695,7 @@ select{background-color: #FFFFFF;border: 1px solid #C3C3C3;padding:2px 10px;heig
 .infographics-cont .title {padding-bottom: 5px;}
 .infographics-cont .more-info {padding-top: 5px;text-align: right;}
 
-.form-cont .labelcont{text-align: right;}
+.form-cont .labelcont{text-align: left; margin-bottom: 10px;}
 .form-cont .labelcont label{font-size: 14px;text-transform: uppercase;}
 .form-cont .inp-cont{min-height: 40px;position: relative;}
 .form-cont .textarea{background:white;}

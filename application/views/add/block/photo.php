@@ -1,6 +1,6 @@
 <? foreach($data->files as $file): ?>
 	
-	<div class="img-b" id="img_<?=$file["id"]?>">
+	<div class="img-b" id="img_<?=$file["id"]?>" style="display:none;">
 		<div class="img ">
 			<img class="img <? if ($file["active"]) echo "active";?>" src="<?=$file['filepath']?>" data-original="<?= $file['original']; ?>"/>
 		</div>

@@ -10,7 +10,7 @@ define([
     //use cropper
     //'lib/cropper.js'
     'cropper'
-], function (Marionette, templates, ContactsBehavior) {
+], function(Marionette, templates, ContactsBehavior) {
     "use strict";
 
     var photoList = Backbone.Collection.extend({
@@ -18,26 +18,26 @@ define([
     });
 
     var paramList = Backbone.Collection.extend({
-        comparator: function( collection ){
-            return( collection.get('weight') );
+        comparator: function(collection) {
+            return (collection.get('weight'));
         }
     });
 
     var paramView = Backbone.View.extend({
-        tagName : 'div',
-        containers : {
-            "list" : '.fn-list-parameters',
-            "row"  : '.fn-rows-parameters'
+        tagName: 'div',
+        containers: {
+            "list": '.fn-list-parameters',
+            "row": '.fn-rows-parameters'
         },
-        events : {
-            'change' : 'change',
-            'keyup' : 'keyup'
+        events: {
+            'change': 'change',
+            'keyup': 'keyup'
         },
-        initialize : function (options) {
+        initialize: function(options) {
             _.extend(this, options);
-            this.$el = $("#"+this.model.get("id"));
+            this.$el = $("#" + this.model.get("id"));
 
-            if (!this.model.get("type")){
+            if (!this.model.get("type")) {
                 this.type = this.model.get("data")[0]["type"];
                 this.model.set("type", this.type);
             }
@@ -46,35 +46,37 @@ define([
                 this.render();
             else
                 this.model.set("value", this.$el.val());
-            
+
             var childs = this.initChilds();
             this.model.set("childs", childs);
         },
 
-        render: function(){
+        render: function() {
             var self = this;
 
             var template_name = this.model.get("type");
             if (this.model.get("custom"))
-                template_name = "custom"+this.model.get("custom");
+                template_name = "custom" + this.model.get("custom");
 
             var html = _.template(templates[template_name])(this.model.toJSON());
 
             /* вставляем элемент на свою позицию */
             this.appendToOwnPosition(this.model, html);
 
-            this.$el = $("#"+this.model.get("id"));
+            this.$el = $("#" + this.model.get("id"));
             /* элемент будет одиночным в строке если есть соответствующая настройка */
             this.whitespace();
-        
+
             return html;
         },
 
-        appendToOwnPosition : function(model, html){
+        appendToOwnPosition: function(model, html) {
             var container = $(this.containers[model.get("container")]);
 
             /* берем элементы уже находящиеся в контейнере */
-            var collection  = new paramList(this.collection.where({"container":model.get("container")}));
+            var collection = new paramList(this.collection.where({
+                "container": model.get("container")
+            }));
 
             /* определяем позицию нового элемента в коллекции */
             var index = collection.indexOf(this.model);
@@ -84,31 +86,31 @@ define([
                 /* если элемент не первый */
                 if (index) {
                     /* ищем предыдущую по порядку модель */
-                    var previousModel = collection.at(index-1);
+                    var previousModel = collection.at(index - 1);
                     /* размещаем элемент после него */
-                    $(html).insertAfter( "#div_"+previousModel.get("id") );
+                    $(html).insertAfter("#div_" + previousModel.get("id"));
                 } else {
                     var previousModel = collection.at(1);
-                    $(html).insertBefore( "#div_"+previousModel.get("id") );
+                    $(html).insertBefore("#div_" + previousModel.get("id"));
                 }
             } else {
                 /* если коллекция пуста, то размещаем новый элемент первым в контейнере */
                 container.append(html);
-            }          
+            }
         },
 
-        whitespace : function(){
+        whitespace: function() {
             if (this.model.get("options") == 'whitespace')
                 this.$el.closest(".col-md-6").addClass("whitespace");
         },
 
-        change : function(e) {
+        change: function(e) {
             this.removeChilds(this.model.get("childs"));
             this.model.set("value", $(e.target).val());
             var childs = this.initChilds();
             this.model.set("childs", childs);
-            var wrapper = "div_"+this.model.get("id");
-            if (this.model.get("value")){
+            var wrapper = "div_" + this.model.get("id");
+            if (this.model.get("value")) {
                 this.app.removeError(wrapper);
                 this.app.removeRequired(wrapper);
             } else {
@@ -117,10 +119,10 @@ define([
             this.paramsBlock.initAddressPrecision();
         },
 
-        keyup : function(e) {
+        keyup: function(e) {
             this.model.set("value", $(e.target).val());
-            var wrapper = "div_"+this.model.get("id");
-            if (this.model.get("value")){
+            var wrapper = "div_" + this.model.get("id");
+            if (this.model.get("value")) {
                 this.app.removeError(wrapper);
                 this.app.removeRequired(wrapper);
             } else {
@@ -128,34 +130,34 @@ define([
             }
         },
 
-        initChilds : function(){
+        initChilds: function() {
             var self = this,
                 d_attr = this.model.get("data"),
                 d_attr_childs = [];
 
             if (this.model.get("type") != "list")
                 return;
-            
-            if (_.isArray(this.model.get("value"))){
-                _.each(this.model.get("value"), function(item){
-                     d_attr_childs.push(d_attr[item]);   
+
+            if (_.isArray(this.model.get("value"))) {
+                _.each(this.model.get("value"), function(item) {
+                    d_attr_childs.push(d_attr[item]);
                 });
             } else {
-                d_attr_childs.push(d_attr[this.model.get("value")]);    
+                d_attr_childs.push(d_attr[this.model.get("value")]);
             }
 
             var childs = [];
 
-            _.each(d_attr_childs, function(dch){
-                if (_.isObject(dch)){
-                    _.each(dch, function(item, key){
+            _.each(d_attr_childs, function(dch) {
+                if (_.isObject(dch)) {
+                    _.each(dch, function(item, key) {
                         if (key == 0) return;
                         var param = {
-                            classes : "fn-param",
-                            value : "",
-                            data : item,                   
-                            added : 1,
-                            parent_id : self.model.get("id")
+                            classes: "fn-param",
+                            value: "",
+                            data: item,
+                            added: 1,
+                            parent_id: self.model.get("id")
                         }
                         _.extend(param, item[0]);
                         self.collection.add(param);
@@ -167,23 +169,23 @@ define([
             return childs;
         },
 
-        removeChilds : function(childs){
+        removeChilds: function(childs) {
             var self = this;
-            _.each(childs, function(item){
+            _.each(childs, function(item) {
 
-               if (self.collection.get(item).get("childs"))
+                if (self.collection.get(item).get("childs"))
                     self.removeChilds(self.collection.get(item).get("childs"));
-                
-                self.collection.remove( self.collection.get(item) );
+
+                self.collection.remove(self.collection.get(item));
             });
         }
 
     });
 
     var paramsView = Backbone.View.extend({
-        el : '#div_params',
-        template : templates.parameters,
-        initialize : function (options) {
+        el: '#div_params',
+        template: templates.parameters,
+        initialize: function(options) {
             var self = this;
             _.extend(this, options);
 
@@ -200,88 +202,94 @@ define([
             this.collection.on('add', this.addItem, this);
             this.collection.on('remove', this.removeItem, this);
 
-            _.each(d_cat, function(item_data, key){  
-                if (key == 0) return;          
+            _.each(d_cat, function(item_data, key) {
+                if (key == 0) return;
 
-                    var elem = $('#'+item_data[0].id);
-                    var cl = elem.attr("class");
-                    var val = elem.val();
+                var elem = $('#' + item_data[0].id);
+                var cl = elem.attr("class");
+                var val = elem.val();
 
-                    var param = {
-                        classes : (cl) ? cl : "fn-param",
-                        value   : (val) ? val : "",
-                        data    : item_data,                   
-                        added   : (elem.length) ? 1 : 0
-                    }
-                    _.extend(param, item_data[0]);
-                    self.collection.add(param);
+                var param = {
+                    classes: (cl) ? cl : "fn-param",
+                    value: (val) ? val : "",
+                    data: item_data,
+                    added: (elem.length) ? 1 : 0
+                }
+                _.extend(param, item_data[0]);
+                self.collection.add(param);
             });
 
             this.initAddressPrecision();
         },
 
-        render : function() {
-            var params = { lists : 0 };        
-            var html     =  _.template(this.template)({});
+        render: function() {
+            var params = {
+                lists: 0
+            };
+            var html = _.template(this.template)({});
             this.$el.html(html);
             return this;
         },
 
-        addItem: function(item){
+        addItem: function(item) {
             item.set("container", this.getContainer(item));
             if (item.get("type") == "text" && item.get("is_textarea"))
                 item.set("type", "textarea");
             if (item.get("type") == "ilist")
                 item.set("type", "list");
-            new paramView({model : item, collection : this.collection, app : this.app, paramsBlock : this});
+            new paramView({
+                model: item,
+                collection: this.collection,
+                app: this.app,
+                paramsBlock: this
+            });
 
             if (item.get("custom") == "address")
-                this.app._init_map( item.get("id") );
+                this.app._init_map(item.get("id"));
         },
 
-        removeItem: function(item){
+        removeItem: function(item) {
             if (item.get("custom") == "address")
-                this.app.cmap.trigger("disable");        
+                this.app.cmap.trigger("disable");
 
-            $("#div_"+item.get("id")).remove();
+            $("#div_" + item.get("id")).remove();
         },
 
-        getContainer : function(model){
+        getContainer: function(model) {
             var type = model.get("type");
             var custom = model.get("custom");
-            if (_.contains(["list","ilist"], type) > 0 && custom != 'multiselect')
+            if (_.contains(["list", "ilist"], type) > 0 && custom != 'multiselect')
                 return "list";
-            else 
+            else
                 return "row";
         },
-        
-        destroy: function(){
-          this.$el.empty();
-          this.stopListening();
-          return this;
+
+        destroy: function() {
+            this.$el.empty();
+            this.stopListening();
+            return this;
         },
 
-        initAddressPrecision : function(){
+        initAddressPrecision: function() {
             if (!this.address_precisions)
                 return;
             var self = this,
                 _filter = null;
 
-            _.each(this.address_precisions, function(item){
+            _.each(this.address_precisions, function(item) {
                 _filter = item.filters;
-                
+
                 delete _filter["rubricid"];
 
-                if (_.keys(_filter).length){
-                    _.each(_filter, function(filter, name){
+                if (_.keys(_filter).length) {
+                    _.each(_filter, function(filter, name) {
 
-                        if (self.collection.get(name) 
-                                && _.indexOf(filter, +self.collection.get(name).get("value").replace("_","")) != -1){
+                        if (self.collection.get(name) && _.indexOf(filter, +self.collection.get(name).get("value").replace("_", "")) != -1) {
                             self.app.address_precision = item.precision;
                             self.app.precision_error = item.error_text;
                             if (self.app.cmap.mapcontrol)
                                 self.app.cmap.mapcontrol.setMessage(item.error_text, "blue");
-                        }                
+                        }
                     });
                 } else {
                     self.app.address_precision = item.precision;
@@ -289,7 +297,7 @@ define([
                     if (self.app.cmap.mapcontrol)
                         self.app.cmap.mapcontrol.setMessage(item.error_text, "blue");
                 }
-                
+
             });
         }
 
@@ -297,16 +305,16 @@ define([
 
     var cityView = Backbone.View.extend({
         el: '#div_city',
-        events : {
-            'change select' : 'change',
-            'click #real_city_exists' : 'setRealCity',
-            'keyup #real_city' : 'changeRealCity'
+        events: {
+            'change select': 'change',
+            'click #real_city_exists': 'setRealCity',
+            'keyup #real_city': 'changeRealCity'
         },
-        initialize: function(options){
+        initialize: function(options) {
             _.extend(this, options);
             this.control = this.$el.find("select");
-            if (!this.control.length)  {
-                this.control = this.$el.find("input");  
+            if (!this.control.length) {
+                this.control = this.$el.find("input");
                 this.value = this.control.val();
                 this.title = this.control.data("title");
             } else {
@@ -315,38 +323,38 @@ define([
             }
             this.init_real_city();
         },
-        init_real_city : function(){
+        init_real_city: function() {
             this.app.real_city_exists = $("#real_city_exists").prop("checked");
             this.app.real_city = this.app.real_city_exists ?
-                                        $("#real_city").val() :
-                                            "";
+                $("#real_city").val() :
+                "";
         },
-        change : function(){
+        change: function() {
             this.value = this.control.val();
             this.title = this.control.find('option:selected').text();
             this.setLatLon();
             if (this.app.cmap.mapcontrol)
                 this.app.cmap.mapcontrol.keyup();
             var wrapper = "div_city";
-            if (this.value){
+            if (this.value) {
                 this.app.removeError(wrapper);
                 this.app.removeRequired(wrapper);
             } else {
                 this.app.addRequired(wrapper);
             }
         },
-        setLatLon : function(){
+        setLatLon: function() {
             var option = this.control.find('option:selected');
             this.control.attr("data-lon", option.attr("lon"));
             this.control.attr("data-lat", option.attr("lat"));
         },
-        setRealCity : function(event){
+        setRealCity: function(event) {
             $(".real_city_exists").toggle();
             this.changeRealCity();
         },
-        changeRealCity : function(e){
+        changeRealCity: function(e) {
             this.init_real_city();
-            if (this.app.cmap.mapcontrol){
+            if (this.app.cmap.mapcontrol) {
                 this.app.cmap.mapcontrol.setMessage("");
                 this.app.cmap.mapcontrol.keyup(e);
             }
@@ -355,31 +363,31 @@ define([
 
     var mapView = Backbone.View.extend({
         el: '#div_map',
-        initialize: function(options){
+        initialize: function(options) {
             _.extend(this, options);
             this.bind("enable", this.on);
             this.bind("disable", this.off);
         },
-        on : function(options){
+        on: function(options) {
             var self = this;
             _.extend(self, options);
 
             self.$el.removeClass("hidden");
-           
-            ymaps.ready(function(){
-           
+
+            ymaps.ready(function() {
+
                 var coords = $('#object_coordinates').val();
                 var default_lat = $('#city_id').data("lat");
                 var default_lon = $('#city_id').data("lon");
                 var default_coords = [default_lat, default_lon];
-                var default_zoom   = 10;
+                var default_zoom = 10;
                 var zoom = null;
-                if (!default_lat){
-                    default_coords = [57.140738,65.573836];//Тюмень
+                if (!default_lat) {
+                    default_coords = [57.140738, 65.573836]; //Тюмень
                     default_zoom = 7;
                 }
 
-                if (!coords){
+                if (!coords) {
                     coords = default_coords;
                     zoom = default_zoom;
                 } else {
@@ -388,32 +396,40 @@ define([
                 }
 
                 self.map = new ymaps.Map('map_block', {
-                        center: coords,
-                        zoom: zoom,
-                        controls: ['smallMapDefaultSet']
-                    });
+                    center: coords,
+                    zoom: zoom,
+                    controls: ['smallMapDefaultSet']
+                });
 
-                
 
-                 self.placemark = app.map.createPlacemark(coords, {
-                    style: _.extend(app.map.getIconSettings("house"), {draggable: true})
+
+                self.placemark = app.map.createPlacemark(coords, {
+                    style: _.extend(app.map.getIconSettings("house"), {
+                        draggable: true
+                    })
                 })
 
                 self.map.geoObjects.add(self.placemark);
 
-                self.placemark.events.add('dragend', function (e) {
+                self.placemark.events.add('dragend', function(e) {
                     $('#object_coordinates').val(self.placemark.geometry.getCoordinates());
                 });
 
-                self.map.events.add('click', function (e) {
+                self.map.events.add('click', function(e) {
                     placemark.geometry.setCoordinates(e.get('coordPosition'));
                     $('#object_coordinates').val(self.placemark.geometry.getCoordinates());
                 });
 
-                self.mapcontrol = new mapcontrolView({app : self.app, city : self.city, address_field : self.address_field, map : self.map, placemark : self.placemark});
+                self.mapcontrol = new mapcontrolView({
+                    app: self.app,
+                    city: self.city,
+                    address_field: self.address_field,
+                    map: self.map,
+                    placemark: self.placemark
+                });
             });
         },
-        off : function(){
+        off: function() {
             this.$el.addClass("hidden");
             if (this.map)
                 this.map.destroy();
@@ -423,23 +439,27 @@ define([
 
     var mapcontrolView = Backbone.View.extend({
         events: {
-            'keyup' : 'keyup',
+            'keyup': 'keyup',
             'focusout': 'keyup',
             'paste': 'keyup'
         },
 
-        precisions : { 'other' : 1, 'street' : 2 ,  'exact' : 3},
-
-        initialize: function(options){
-           
-            _.extend(this, options);
-            this.$el = $('#'+this.address_field);
-
-            //if (this.app.is_edit)
-                this.keyup();
+        precisions: {
+            'other': 1,
+            'street': 2,
+            'exact': 3
         },
 
-        keyup: function(){
+        initialize: function(options) {
+
+            _.extend(this, options);
+            this.$el = $('#' + this.address_field);
+
+            //if (this.app.is_edit)
+            this.keyup();
+        },
+
+        keyup: function() {
             var self = this;
             var city = null;
 
@@ -448,10 +468,10 @@ define([
             else if (self.city.value)
                 city = self.city.title;
 
-            if (city){
-                self.search = city+', '+this.$el.val();
+            if (city) {
+                self.search = city + ', ' + this.$el.val();
                 window.clearTimeout(self.timeout);
-                self.timeout = setTimeout(function(){
+                self.timeout = setTimeout(function() {
                     self.kladr_autocomplete();
                     self.geoCoder();
                 }, 500);
@@ -460,47 +480,48 @@ define([
             }
         },
 
-        setMessage : function(message, color) {
-            var cmessage = $('#div_'+this.address_field).find(".inform");
-            if (message){
+        setMessage: function(message, color) {
+            var cmessage = $('#div_' + this.address_field).find(".inform");
+            if (message) {
                 cmessage.html(message);
                 cmessage.css("color", color);
                 if (color == 'red')
-                    $('#div_'+this.address_field).find(".inp-cont").addClass("error");
-                else 
-                    $('#div_'+this.address_field).find(".inp-cont").removeClass("error");
+                    $('#div_' + this.address_field).find(".inp-cont").addClass("error");
+                else
+                    $('#div_' + this.address_field).find(".inp-cont").removeClass("error");
             } else {
                 cmessage.html("Например: ул. Мельникайте, д. 44, корп. 2");
-                $('#div_'+this.address_field).find(".inp-cont").removeClass("error");
+                $('#div_' + this.address_field).find(".inp-cont").removeClass("error");
             }
         },
 
-        geoCoder : function() {
+        geoCoder: function() {
             var self = this;
             var zoom = 14;
-            var myGeocoder = ymaps.geocode(self.search, { results: 1, json: true });
+            var myGeocoder = ymaps.geocode(self.search, {
+                results: 1,
+                json: true
+            });
             myGeocoder.then(
                 function(res) {
                     if (res.GeoObjectCollection.featureMember.length == 0) {
                         $('#object_coordinates').val('');
                         self.setMessage("Адрес не найден, видимо он не существует.", "red");
-                    }
-                    else {
+                    } else {
                         self.setMessage();
                         var gobj = res.GeoObjectCollection.featureMember[0].GeoObject;
                         var points = gobj.Point.pos.split(" ");
                         self.placemark.geometry.setCoordinates([Number(points[1]), Number(points[0])]);
                         self.map.setCenter([Number(points[1]), Number(points[0])], zoom);
                         $('#object_coordinates').val(self.placemark.geometry.getCoordinates());
-                       
-                       var precision =  self.precisions[gobj.metaDataProperty.GeocoderMetaData.precision];
 
-                        if (self.app.address_precision 
-                                && self.precisions[self.app.address_precision] <= precision && self.app.precision_error)
-                            self.setMessage("Адрес введен верно. "+self.app.precision_error, "gray");
-                        else 
-                            if (self.app.precision_error)
-                                self.setMessage("Адрес не найден. "+self.app.precision_error, "red");
+                        var precision = self.precisions[gobj.metaDataProperty.GeocoderMetaData.precision];
+
+                        if (self.app.address_precision && self.precisions[self.app.address_precision] <= precision && self.app.precision_error)
+                            self.setMessage("Адрес введен верно. " + self.app.precision_error, "gray");
+                        else
+                        if (self.app.precision_error)
+                            self.setMessage("Адрес не найден. " + self.app.precision_error, "red");
                     }
 
                 },
@@ -510,50 +531,50 @@ define([
             );
         },
 
-        kladr_autocomplete : function() {
+        kladr_autocomplete: function() {
             /*$('#'+this.address_field).autocomplete({
-                source: function( request, response ) {
-                    request.parent_id = $('#city_kladr_id').val();
-                    request.address_required = 0;
+            	source: function( request, response ) {
+            		request.parent_id = $('#city_kladr_id').val();
+            		request.address_required = 0;
 
-                    $.getJSON( "/ajax/kladr_address_autocomplete", request, function( data, status, xhr ) {
-                        response( data );
-                    });
-                },
-                minLength: 1,
-                autoFocus: true,
-                select: function( event, ui ) {
-                    $('#address_kladr_id').val(ui.item.id);
-                    $('#map_block_div').show();
+            		$.getJSON( "/ajax/kladr_address_autocomplete", request, function( data, status, xhr ) {
+            			response( data );
+            		});
+            	},
+            	minLength: 1,
+            	autoFocus: true,
+            	select: function( event, ui ) {
+            		$('#address_kladr_id').val(ui.item.id);
+            		$('#map_block_div').show();
 
-                    $('#error_address').hide();
-                    $('#error_address').parents('div.input').removeClass('error');
-                    setTimeout(function(){
-                        GetCoordinates();
-                    }, 100);
-                },
-                change: function( event, ui ) {
-                    if (ui.item == null) {
-                        // $('#city_kladr_id').val('');
-                        // $('#address_selector').val('');
-                        $('#address_kladr_id').val('');
-                        GetCoordinates();
-                        $('#map_block_div').show();
-                    }
-                }
+            		$('#error_address').hide();
+            		$('#error_address').parents('div.input').removeClass('error');
+            		setTimeout(function(){
+            			GetCoordinates();
+            		}, 100);
+            	},
+            	change: function( event, ui ) {
+            		if (ui.item == null) {
+            			// $('#city_kladr_id').val('');
+            			// $('#address_selector').val('');
+            			$('#address_kladr_id').val('');
+            			GetCoordinates();
+            			$('#map_block_div').show();
+            		}
+            	}
             }).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
-                return $( "<li>" )
-                .append( "<a>" + item.label + "</a>" )
-                .appendTo( ul );
-            };  */     
+            	return $( "<li>" )
+            	.append( "<a>" + item.label + "</a>" )
+            	.appendTo( ul );
+            };  */
         }
 
     });
 
     var subjectView = Backbone.View.extend({
-        template : templates.subject,
-        tagName : 'div',
-        initialize: function(options){
+        template: templates.subject,
+        tagName: 'div',
+        initialize: function(options) {
             _.extend(this, options);
             this.bind("destroy", this.destroy);
             this.control = this.$el.find("input");
@@ -561,81 +582,157 @@ define([
             this.inform = this.$el.find(".inform");
             this.value = this.control.val();
             this.error = this.inform.html();
-            if (!this.title_auto && !this.app.is_edit
-                    || !this.title_auto && this.app.is_edit) // 
-                        this.render();        
+            if (!this.title_auto && !this.app.is_edit || !this.title_auto && this.app.is_edit) // 
+                this.render();
         },
 
-        render: function(){
-            var html     =  _.template(this.template)({ value : this.value, error : this.error, maxlength: this.maxlength });
+        render: function() {
+            var html = _.template(this.template)({
+                value: this.value,
+                error: this.error,
+                maxlength: this.maxlength
+            });
             this.$el.html(html);
             return this;
         },
-        
-        destroy: function(){
-          this.$el.empty();
-          this.stopListening();
-          return this;
+
+        destroy: function() {
+            this.$el.empty();
+            this.stopListening();
+            return this;
         }
     });
 
     var textView = Backbone.View.extend({
-        template : templates.textadv,
-        tagName : 'div',
-        initialize: function(options){
+        template: templates.textadv,
+        tagName: 'div',
+        initialize: function(options) {
             _.extend(this, options);
             this.bind("destroy", this.destroy);
-            this.control = this.$el.find("textarea");    
-            this.value = this.control.val();  
-            if (!this.control.length)  
+            this.control = this.$el.find("textarea");
+            this.value = this.control.val();
+            if (!this.control.length)
                 this.render();
 
             var staticPath = app.settings.staticPath;
-            new nicEditor({iconsPath : staticPath + 'images/nicEditorIcons.gif'}).panelInstance('user_text_adv');
+            new nicEditor({
+                iconsPath: staticPath + 'images/nicEditorIcons.gif'
+            }).panelInstance('user_text_adv');
         },
 
-        render: function(){
+        render: function() {
 
-            var html     =  _.template(this.template)({ value : this.value, text_required : this.text_required });
+            var html = _.template(this.template)({
+                value: this.value,
+                text_required: this.text_required
+            });
             this.$el.html(html);
             return this;
         },
-                        
-        destroy: function(){
 
-            
-          this.$el.empty().off();
-          this.stopListening();
-          return this;
+        destroy: function() {
+
+
+            this.$el.empty().off();
+            this.stopListening();
+            return this;
         }
     });
 
-    var photoView  = Backbone.View.extend({
-        tagName : "div",
-        className : "img-b",
-        template : templates.photo,
-        events : {
-            'click .fn-remove' : 'remove',
-            'click .img' : 'setActive'
+    var photoView = Backbone.View.extend({
+        tagName: "div",
+        className: "img-b",
+        template: templates.photo,
+        events: {
+            'click .fn-remove': 'remove',
+            'dblclick .img': 'setActive',
+            'click span.rotate': 'rotate'
         },
-        initialize : function(options){        
+        initialize: function(options) {
             _.extend(this, options);
             this.render();
+            this.$image = this.$el.find('img');
         },
 
-        render : function(){
-            var html     =  _.template(this.template)(this.model.toJSON());
+        rotate: function(ev, deg) {
+            var me = this;
+            var img = $('<img />')[0];
+            img.onload = function() {
+                me.saveCroppedPicture({
+                    x: 0,
+                    y: 0,
+                    width: img.naturalHeight,
+                    height: img.naturalWidth,
+                    rotate: 90,
+                    scaleX: 1,
+                    scaleY: 1,
+                    disableRectValidate: true
+                });
+            };
+            img.src = me.model.get('original');
+        },
+
+        render: function() {
+            var html = _.template(this.template)(this.model.toJSON());
             this.container.append(this.$el.html(html));
+            $('#add-block').sortable({
+                revert: true,
+                revert: 300,
+                start: function(event, ui) {
+                    clearInterval(this.interval);
+                },
+                stop: function(event, ui) {
+                    var self = this;
+                    var i = 1;
+                    this.interval = setInterval(function() {
+                        increment();
+                    }, 1000);
+
+                    function increment() {
+                        console.log(i);
+                        i++;
+                        if (i >= 3) {
+                            clearInterval(self.interval);
+                            data_save();
+                        };
+                    }
+
+                    function data_save() {
+                        var i = 0;
+                        var fileNames = [i];
+                        var img = $(self).children('.img-b');
+                        var i = $(img).each(function() {
+                            var userfile = $(this).children('input').val();
+                            fileNames[i] = userfile;
+                            console.log(userfile);
+                            i++;
+                        });
+                        console.log(fileNames);
+                        $.ajax({
+                            url: '/add/set_order',
+                            dataType: 'json',
+                            method: 'GET',
+                            data: {
+                                fileName: fileNames
+                            },
+                            success: function(answer) {
+
+                            }
+                        });
+                    }
+                }
+
+            });
             return this;
         },
 
-        remove : function(){
+        remove: function() {
             this.collection.remove(this.model);
-        }, 
+        },
 
-        setActive : function(){
+        setActive: function() {
             this.model.set("active", true);
-        }
+        },
     });
 
     /* cropper view */
@@ -644,41 +741,44 @@ define([
     photoView = photoView.extend({
         //extend events
         events: _.extend(photoViewBase.prototype.events, {
-            'click .fn-crop': 'showCropper'
-        })
-        //override initialize method
-        , initialize: function (options) {
+                'click .fn-crop': 'showCropper'
+            })
+            //override initialize method
+            ,
+        initialize: function(options) {
             //console.log('photoView[Cropper extension] initialize');
 
             photoViewBase.prototype.initialize.call(this, options);
-        }
-        , remove: function () {
-            if (this.activeCropperView) {
-                this.activeCropperView.destroy();
+        },
+        remove: function() {
+                if (this.activeCropperView) {
+                    this.activeCropperView.destroy();
+                }
+                photoViewBase.prototype.remove.call(this);
             }
-            photoViewBase.prototype.remove.call(this);
-        }
-        //initialize cropper view
-        , showCropper: function () {
-            //console.log('photoView[Cropper extension] showCropper');
-            //console.log(this.model);
-            var me = this;
-            me.activeCropperView = CropperViewFactory(this.model.get('original'), { })
-                .on('cropper_save', function (e) {
-                    me.saveCroppedPicture(this.cropBoxData);
-                });
-        }
-        //picture change processor
-        , saveCroppedPicture: function (data) {
+            //initialize cropper view
+            ,
+        showCropper: function() {
+                //console.log('photoView[Cropper extension] showCropper');
+                //console.log(this.model);
+                var me = this;
+                me.activeCropperView = CropperViewFactory(this.model.get('original'), {})
+                    .on('cropper_save', function(e) {
+                        me.saveCroppedPicture(this.cropBoxData);
+                    });
+            }
+            //picture change processor
+            ,
+        saveCroppedPicture: function(data) {
             var me = this;
             $.ajax({
-                url: '/add/crop'
-                , dataType: 'json'
-                , method: 'GET'
-                , data: _.extend(data, {
+                url: '/add/crop',
+                dataType: 'json',
+                method: 'GET',
+                data: _.extend(data, {
                     fileName: this.model.get('filename')
-                })
-                , success: function (answer) {
+                }),
+                success: function(answer) {
                     //var avoidCache = '?v=' + Math.random();
                     me.model.set('filename', answer.fileName);
                     me.model.set('filepath', answer.thumbnails['120x90']);
@@ -695,20 +795,22 @@ define([
     var CurrentCropperView = null; //singleton
     var CropperView = Backbone.View.extend({
         //cropper data
-        cropBoxData: null
-        , cropCanvasData: null
-        , cropperOptions: {}
+        cropBoxData: null,
+        cropCanvasData: null,
+        cropperOptions: {}
         //bind events
-        , events: {
-            'click [data-save]': 'save'
-            , 'click .js-close': 'destroy'
-            , 'click [data-rotate]': 'rotate'
-            , 'click [data-zoom]': 'zoom'
-            , 'click [data-refresh]': 'refresh'
-            , 'click [data-destroy]': 'destroy'
+        ,
+        events: {
+            'click [data-save]': 'save',
+            'click .js-close': 'destroy',
+            'click [data-rotate]': 'rotate',
+            'click [data-zoom]': 'zoom',
+            'click [data-refresh]': 'refresh',
+            'click [data-destroy]': 'destroy'
         }
 
-        , initialize: function (options) {
+        ,
+        initialize: function(options) {
             this.$image = this.$el.find('img');
 
             //console.log('Initialize cropper view with options: ');
@@ -719,7 +821,8 @@ define([
             }
         }
 
-        , setAspectRatio: function () {
+        ,
+        setAspectRatio: function() {
             if (!this.oldAspectRatio) {
                 this.oldAspectRatio = 3 / 4;
             }
@@ -732,63 +835,67 @@ define([
             this.$image.cropper('setAspectRatio', this.oldAspectRatio);
         }
 
-        , rotate: function (event) {
-            event.preventDefault();
-            //this.$image.cropper({ center: false, autoCropArea: 0 })
-            var cropBoxData = this.$image.cropper('getCropBoxData');
-            //console.log(cropBoxData);
-            this.setAspectRatio();
+        ,
+        rotate: function(event) {
+                event.preventDefault();
+                //this.$image.cropper({ center: false, autoCropArea: 0 })
+                var cropBoxData = this.$image.cropper('getCropBoxData');
+                //console.log(cropBoxData);
+                this.setAspectRatio();
 
-            var degrees = +$(event.currentTarget).data('rotate');
-            this.$image.cropper('rotate', degrees);
+                var degrees = +$(event.currentTarget).data('rotate');
+                this.$image.cropper('rotate', degrees);
 
-            //set container dimensions
-            var moveY = this.$image.next().height() - this.$image.next().find('.cropper-canvas').height();
-            this.$image.next().css({
-                height: this.$image.next().find('.cropper-canvas').height() + 'px'
-            });
-            this.$image.data('cropper').container.height = this.$image.next().find('.cropper-canvas').height();
-            this.$image.data('cropper').limitCropBox(true, true);
-            this.$image.cropper('move', 0, -moveY / 2);
-            console.log(cropBoxData.top);
-            cropBoxData.top -= moveY / 2;
+                //set container dimensions
+                var moveY = this.$image.next().height() - this.$image.next().find('.cropper-canvas').height();
+                this.$image.next().css({
+                    height: this.$image.next().find('.cropper-canvas').height() + 'px'
+                });
+                this.$image.data('cropper').container.height = this.$image.next().find('.cropper-canvas').height();
+                this.$image.data('cropper').limitCropBox(true, true);
+                this.$image.cropper('move', 0, -moveY / 2);
+                console.log(cropBoxData.top);
+                cropBoxData.top -= moveY / 2;
 
-            //rotate crop box
-            var temp = cropBoxData.width;
-            cropBoxData.width = cropBoxData.height;
-            cropBoxData.height = temp;
+                //rotate crop box
+                var temp = cropBoxData.width;
+                cropBoxData.width = cropBoxData.height;
+                cropBoxData.height = temp;
 
-            //calc move offset
-            cropBoxData.top += (cropBoxData.width - cropBoxData.height) * 0.5;
-            cropBoxData.left -= (cropBoxData.width - cropBoxData.height) * 0.5;
+                //calc move offset
+                cropBoxData.top += (cropBoxData.width - cropBoxData.height) * 0.5;
+                cropBoxData.left -= (cropBoxData.width - cropBoxData.height) * 0.5;
 
-            console.log(cropBoxData);
-            this.$image.cropper('setCropBoxData', cropBoxData);
-            //this.appendRotate(degrees);
-            console.log(this.$image.cropper('getCropBoxData'));
-        }
-/*
-        , rotateDegrees: 0
-        , appendRotate: function (degrees) {
-            this.rotateDegrees = (this.rotateDegrees + degrees) % 360;
-            this.$image.next().css({
-                transform: 'rotate(' + this.rotateDegrees + 'deg)'
-            });
-        }
-*/
-        , refresh: function (event) {
+                console.log(cropBoxData);
+                this.$image.cropper('setCropBoxData', cropBoxData);
+                //this.appendRotate(degrees);
+                console.log(this.$image.cropper('getCropBoxData'));
+            }
+            /*
+            , rotateDegrees: 0
+            , appendRotate: function (degrees) {
+            	this.rotateDegrees = (this.rotateDegrees + degrees) % 360;
+            	this.$image.next().css({
+            		transform: 'rotate(' + this.rotateDegrees + 'deg)'
+            	});
+            }
+            */
+            ,
+        refresh: function(event) {
             event.preventDefault();
             this.$image.cropper('destroy');
             this.initCropper();
         }
 
-        , zoom: function (event) {
+        ,
+        zoom: function(event) {
             event.preventDefault();
             var level = +$(event.currentTarget).data('zoom');
             this.$image.cropper('zoom', level);
         }
 
-        , render: function () {
+        ,
+        render: function() {
             if (CurrentCropperView != this) {
                 if (CurrentCropperView != null) {
                     CurrentCropperView.destroy();
@@ -804,29 +911,30 @@ define([
             this.initCropper();
         }
 
-        , initCropper: function () {
+        ,
+        initCropper: function() {
             var me = this;
             //init cropper
-            setTimeout(function () {
+            setTimeout(function() {
                 console.log(me.$image.height());
                 me.$image.cropper(_.extend(me.cropperOptions, {
                     //some defaults - TODO
-                    aspectRatio: me.oldAspectRatio = 4/3,
+                    aspectRatio: me.oldAspectRatio = 4 / 3,
                     strict: false,
                     //center: true,
                     //autoCropArea: 1
-                    built: function () {
+                    built: function() {
                         var imageData = me.$image.cropper('getImageData');
                         var toSet = {
-                            x: 0
-                            , y: 0
-                            , width: 0
-                            , height: 0
-                            , rotate: 0
-                            , scaleX: 1
-                            , scaleY: 1
+                            x: 0,
+                            y: 0,
+                            width: 0,
+                            height: 0,
+                            rotate: 0,
+                            scaleX: 1,
+                            scaleY: 1
                         };
-                        
+
                         //console.log(imageData);
 
                         if (imageData.naturalWidth < imageData.naturalHeight) {
@@ -851,12 +959,14 @@ define([
             }, 1);
         }
 
-        , updateData: function () {
+        ,
+        updateData: function() {
             this.cropBoxData = this.$image.cropper('getData');
             this.cropCanvasData = this.$image.cropper('getCanvasData');
         }
 
-        , save: function () {
+        ,
+        save: function() {
             //save data
             this.updateData();
             //trigger done event
@@ -864,7 +974,8 @@ define([
             this.destroy();
         }
 
-        , destroy: function () {
+        ,
+        destroy: function() {
             //destroy cropper
             this.$image.cropper('destroy');
             //remove dom
@@ -876,48 +987,37 @@ define([
     //factory for cropper view
     //simple creates bootstrap modal dialog
     //TODO - export factory to usage in other modules
-    var CropperViewFactory = function (image, options) {
+    var CropperViewFactory = function(image, options) {
         //markup
         /* bootstrap version */
         /*
         var html = 
-            '<div class="modal fade">'
-                + '<div class="modal-dialog">'
-                    + '<div class="modal-content">'
-                        + '<div class="modal-body">'
-                            + '<img src="" />'
-                        + '</div>'
-                    + '</div>'
-                + '</div>'
-            + '</div>';
-        */
+        	'<div class="modal fade">'
+        		+ '<div class="modal-dialog">'
+        			+ '<div class="modal-content">'
+        				+ '<div class="modal-body">'
+        					+ '<img src="" />'
+        				+ '</div>'
+        			+ '</div>'
+        		+ '</div>'
+        	+ '</div>';
+        	*/
         /* other version */
-        var html = 
+        var html =
             /*'<div class="popup-wrp z400 cropper-popup">'
-                + '<div class="popup-window mw500">'
-                    + '<div class="header">'
-                        + 'Редактирование изображения'
-                        + '<div class="popup-window-close js-close">'
-                            + '<i class="ico close-ico16"></i>'
-                        + '</div>'
-                    + '</div>'
-            */
-                    '<div>'
-                        + '<div class="cropper-image">'
-                            + '<img src="" />'
-                        + '</div>'
-                        + '<div class="cropper-actions">'
-                            + '<button class="btn" data-rotate="90"><span class="fa fa-undo"></span></button>'
-                            //+ '<button class="btn" data-rotate="-10"><span class="fa fa-repeat"></span></button>'
-                            + '<button class="btn" data-zoom="0.1"><span class="fa fa-search-plus"></span></button>'
-                            + '<button class="btn" data-zoom="-0.1"><span class="fa fa-search-minus"></span></button>'
-                            + '<button class="btn" data-refresh>Сбросить</button>'
-                            + '<button class="btn" data-destroy>Отменить</button>'
-                            + '<button class="btn" data-save>Сохранить</button>'
-                        + '</div>'
-                    + '</div>'
+            	+ '<div class="popup-window mw500">'
+            		+ '<div class="header">'
+            			+ 'Редактирование изображения'
+            			+ '<div class="popup-window-close js-close">'
+            				+ '<i class="ico close-ico16"></i>'
+            			+ '</div>'
+            		+ '</div>'
+            		*/
+            '<div>' + '<div class="cropper-image">' + '<img src="" />' + '</div>' + '<div class="cropper-actions">' + '<button class="btn" data-rotate="90"><span class="fa fa-undo"></span></button>'
+            //+ '<button class="btn" data-rotate="-10"><span class="fa fa-repeat"></span></button>'
+            + '<button class="btn" data-zoom="0.1"><span class="fa fa-search-plus"></span></button>' + '<button class="btn" data-zoom="-0.1"><span class="fa fa-search-minus"></span></button>' + '<button class="btn" data-refresh>Сбросить</button>' + '<button class="btn" data-destroy>Отменить</button>' + '<button class="btn" data-save>Сохранить</button>' + '</div>' + '</div>'
             /*
-                + '</div>'
+            	+ '</div>'
             + '</div>';
             */
 
@@ -925,17 +1025,15 @@ define([
         var $compiled = $(html);
 
         //create view
-        var view = new CropperView(_.extend(
-            {
+        var view = new CropperView(_.extend({
                 width: $('.fn-cropper-cont').width()
-            }, 
-            options,
-            {
+            },
+            options, {
                 el: $compiled
             }));
 
         //continue only when image will be loaded
-        $compiled.find('img')[0].onload = function (e) {
+        $compiled.find('img')[0].onload = function(e) {
             view.render();
         };
         //push values
@@ -946,16 +1044,16 @@ define([
     /* cropper feacture done */
 
     var photoControlView = Backbone.View.extend({
-        el : '#div_photo', 
-        photos : [],
-        maxLength : 10,
+        el: '#div_photo',
+        photos: [],
+        maxLength: 10,
         hints: {
-            main: "Главным по умолчанию является первое фото, щелкните по любому фото, чтобы сделать его главным<br>До 10 фотографий с расширениями jpg, png, gif, не более 5мб",
+            main: "Главным по умолчанию является первое фото, дважды щелкните по любому фото, чтобы сделать его главным<br>До 10 фотографий с расширениями jpg, png, gif, не более 5мб",
             requires: "До 10 фотографий с расширениями jpg, png, gif, не более 5мб. Фото можно перетащить в эту зону мышкой."
         },
-        initialize : function(options){
+        initialize: function(options) {
             var self = this;
-            _.extend(this, options);    
+            _.extend(this, options);
 
             this._init_ajax_upload();
 
@@ -967,15 +1065,15 @@ define([
             this.collection.on("remove", this.removeItem, this);
             this.collection.on("change:active", this.changeActive, this);
 
-            _.each(this.$el.find(".img-b"), function(item){
+            _.each(this.$el.find(".img-b"), function(item) {
                 var params = {
-                    id : $(item).attr("id"),
-                    filename : $(item).find("input").val(),
-                    filepath :  $(item).find("img").attr("src"),
-                    active : $(item).find(".img").hasClass("active"),
+                    filename: $(item).find("input").val(),
+                    filepath: $(item).find("img").attr("src"),
+                    active: $(item).find(".img").hasClass("active"),
                     original: $(item).find('img').data('original')
                 };
                 self.collection.add(params);
+                $(item).remove();
             });
             this.renderHint();
         },
@@ -988,7 +1086,7 @@ define([
             }
         },
 
-        _init_ajax_upload : function(){
+        _init_ajax_upload: function() {
             var self = this;
             // new AjaxUpload('userfile_upload', {
             //     action: '/add/object_upload_file',
@@ -1006,58 +1104,59 @@ define([
                 // disableImageResize: /Android(?!.*Chrome)|Opera/
                 //             .test(window.navigator.userAgent),
                 dataType: 'json',
-                success: function(result, data){
+                success: function(result, data) {
                     if (self.collection.length >= self.maxLength) {
                         self.setError("Можно загрузить не более 10 фотографий");
                         return;
                     }
-                   if (result.filename) {
+                    if (result.filename) {
 
                         var active = false;
-                        if (self.collection.length == 0){
+                        if (self.collection.length == 0) {
                             $("#active_userfile").val(data.filename);
                             active = true;
                         }
 
                         self.collection.add({
-                            filename : result.filename,
-                            filepath : result.filepaths['120x90'],
-                            active : active
-                            //fix to use crop feature
-                            , original: result.filepaths.original
+                            filename: result.filename,
+                            filepath: result.filepaths['120x90'],
+                            active: active
+                                //fix to use crop feature
+                                ,
+                            original: result.filepaths.original
                         });
                         self.setError("");
-                   } else
-                   if (result.error) {
+                    } else
+                    if (result.error) {
                         self.renderHint();
                         self.setError(result.error);
-                   } else {
+                    } else {
                         self.setError('Произошла непредвиденная ошибка');
-                   }
+                    }
                 },
                 // error: function(e, data){
                 //     alert("Ошибка при загрузке фото");
                 // }
-            }).on("fileuploadadd", function(e, data){
+            }).on("fileuploadadd", function(e, data) {
                 var jqXHR = data.submit();
                 if (self.collection.length >= self.maxLength) {
                     self.setError("Можно загрузить не более 10 фотографий");
                     jqXHR.abort();
                 }
                 this.jqXHR = jqXHR;
-            }).on("fileuploaddone", function(e, data){
+            }).on("fileuploaddone", function(e, data) {
                 if (self.collection.length >= self.maxLength) {
                     self.setError("Можно загрузить не более 10 фотографий");
                     if (!this.jqXHR) {
                         this.jqXHR.errorThrown = "Можно загрузить не более 10 фотографий";
                         this._trigger('fail', e, data);
-                      } else {
+                    } else {
                         this.jqXHR.abort();
-                      }
+                    }
                 }
-            }).on("fileuploadfail", function(e, data){
+            }).on("fileuploadfail", function(e, data) {
                 self.renderHint();
-            }).on('fileuploadprogressall', function (e, data) {
+            }).on('fileuploadprogressall', function(e, data) {
                 var progress = parseInt(data.loaded / data.total * 100, 10);
                 if (progress == 100) {
                     $('.fn-photo-hint').html("Файл загружен. Идет сохранение...");
@@ -1067,33 +1166,38 @@ define([
             });
         },
 
-        addItem : function(item){
+        addItem: function(item) {
             var container = this.$el.find(".fn-photo-list");
             var el = undefined;
             if (item.get("id"))
-                el = $('#'+item.get("id"));
-            this.photos[item.cid] = new photoView({el : el, model : item, collection : this.collection, container : container});
+                el = $('#' + item.get("id"));
+            this.photos[item.cid] = new photoView({
+                el: el,
+                model: item,
+                collection: this.collection,
+                container: container
+            });
             if (this.collection.length > 0) {
                 $(".fn-photo-hint").text();
             }
             this.renderHint();
         },
 
-        removeItem : function(item){
+        removeItem: function(item) {
             this.photos[item.cid].unbind();
             this.photos[item.cid].$el.remove();
-            if(this.collection.length && item.get("active")){
+            if (this.collection.length && item.get("active")) {
                 this.collection.at(0).set("active", true);
             }
             this.setError("");
             this.renderHint();
         },
 
-        changeActive : function(main_item){
+        changeActive: function(main_item) {
             var photo_cont = this.photos[main_item.cid].$el.find(".img");
-            if (main_item.get("active")){            
+            if (main_item.get("active")) {
                 photo_cont.addClass("active");
-                this.collection.each(function(item){
+                this.collection.each(function(item) {
                     if (item.cid != main_item.cid)
                         item.set("active", false);
                 });
@@ -1103,64 +1207,64 @@ define([
             }
         },
 
-        onSubmit: function(file, doc){
+        onSubmit: function(file, doc) {
             var self = this._settings.data.context;
-            self.setError("");      
+            self.setError("");
         },
 
-        onComplete: function(file, data){
+        onComplete: function(file, data) {
             var self = this._settings.data.context;
 
-            if (data) 
+            if (data)
                 data = $.parseJSON(data);
 
-            if( data === null || !data.filename) {
+            if (data === null || !data.filename) {
                 self.setError('Произошла непредвиденная ошибка');
                 return;
-            } else if(data.error) {
+            } else if (data.error) {
                 self.setError(data.error);
                 return;
-            }    
+            }
             var active = false;
-            if (self.collection.length == 0){
+            if (self.collection.length == 0) {
                 $("#active_userfile").val(data.filename);
                 active = true;
             }
 
             self.collection.add({
-                filename : data.filename,
-                filepath : data.filepaths['120x90'],
-                active : active
-            });         
-                        
+                filename: data.filename,
+                filepath: data.filepaths['120x90'],
+                active: active
+            });
+
         },
 
-        setError : function(text){
+        setError: function(text) {
             $("#error_userfile1").html(text);
         }
 
     });
 
     var categoryView = Backbone.View.extend({
-        el : '#div_category',
-        events : {
-            'change select' : 'change'
+        el: '#div_category',
+        events: {
+            'change select': 'change'
         },
 
-        initialize : function (options) {
-            _.extend(this, options); 
-            this.control = this.$el.find("select"); 
-            if (!this.control.length)   
-                this.control = this.$el.find("#fn-category");  
-            this._init_data(); 
-            this._init_description();  
+        initialize: function(options) {
+            _.extend(this, options);
+            this.control = this.$el.find("select");
+            if (!this.control.length)
+                this.control = this.$el.find("#fn-category");
+            this._init_data();
+            this._init_description();
             this._init_price();
         },
 
-        _init_data : function() {
+        _init_data: function() {
             this.settings = {};
             this.category_id = this.control.val();
-            if (this.category_id && this.category_id != 0){
+            if (this.category_id && this.category_id != 0) {
                 this.data = data[this.category_id];
                 if (this.data) {
                     _.extend(this.settings, this.data[0]);
@@ -1169,24 +1273,28 @@ define([
             this.app.descriptions = data["descriptions"];
         },
 
-        change : function(e) {
+        change: function(e) {
             this.value = $(e.target).val();
             this._init_data();
-            this.app.initialize({reinit_after_change : true});
+            this.app.initialize({
+                reinit_after_change: true
+            });
             var wrapper = "div_category";
-            if (this.value){
+            if (this.value) {
                 this.app.removeError(wrapper);
                 this.app.removeRequired(wrapper);
             } else {
                 this.app.addRequired(wrapper);
-            }  
-            this._init_description();  
+            }
+            this._init_description();
             this._init_price();
         },
 
         _init_description: function() {
             if (this.app.descriptions)
-                new categoryDescriptionView({text : this.app.descriptions[this.settings.description]});
+                new categoryDescriptionView({
+                    text: this.app.descriptions[this.settings.description]
+                });
         },
 
         _init_price: function() {
@@ -1198,19 +1306,21 @@ define([
     });
 
     var categoryDescriptionView = Backbone.View.extend({
-        el : '#div_category_description',
+        el: '#div_category_description',
         className: "row mb10",
-        template : templates.description,
+        template: templates.description,
 
-        initialize : function (options) {
+        initialize: function(options) {
             _.extend(this, options);
-            this.render();     
+            this.render();
         },
 
-        render : function(){
+        render: function() {
 
-            if (this.text){
-                var html     =  _.template(this.template)({text: this.text});
+            if (this.text) {
+                var html = _.template(this.template)({
+                    text: this.text
+                });
                 this.$el.html(html);
             } else {
                 this.$el.html("");
@@ -1219,9 +1329,9 @@ define([
     });
 
     var additionalView = Backbone.View.extend({
-        el : '#div_additional',
+        el: '#div_additional',
 
-        initialize : function (options) {
+        initialize: function(options) {
             var self = this;
             _.extend(this, options);
             if (!this.app.org_type)
@@ -1231,106 +1341,108 @@ define([
             this.render();
         },
 
-        render : function(){
+        render: function() {
             var self = this;
-            this.$el.find(".fn-additional").each(function(key, item){
+            this.$el.find(".fn-additional").each(function(key, item) {
                 _.indexOf(self.additional_fields, $(item).attr("id")) >= 0 ? $(item).show() : $(item).hide();
             });
         }
     });
 
     var verifyWindowView = Backbone.View.extend({
-        tagName : "div",
-        className : "popup enter-popup fn-verify-contact-win",
-        template : templates.verifyContactWindow,
-        events : {
-            'click .fn-verify-contact-win-close' : 'close',
-            'click .fn-verify-contact-win-submit' : 'doVerifyCode'
+        tagName: "div",
+        className: "popup enter-popup fn-verify-contact-win",
+        template: templates.verifyContactWindow,
+        events: {
+            'click .fn-verify-contact-win-close': 'close',
+            'click .fn-verify-contact-win-submit': 'doVerifyCode'
         },
-        initialize : function (options){
+        initialize: function(options) {
             _.extend(this, options);
             this.render();
 
             if (this.model.get("type") == "1" ||
-                    this.model.get("type") == "5")
+                this.model.get("type") == "5")
                 this.sendSms();
-            else 
+            else
                 this.showVerificationCode();
         },
-        render : function(){
-            var html     =  _.template(this.template)(this.model.toJSON());
+        render: function() {
+            var html = _.template(this.template)(this.model.toJSON());
             $('body').append(this.$el.html(html));
             $('body').find('.popup-layer').fadeIn();
             this.$el.fadeIn();
             return this;
         },
-        close : function(){        
+        close: function() {
             this.unbind();
-            this.remove(); 
+            this.remove();
             $('body').find('.popup-layer').fadeOut();
         },
-        doVerifyCode : function(){
+        doVerifyCode: function() {
             if (this.model.get("type") == "1" ||
-                    this.model.get("type") == "5")
+                this.model.get("type") == "5")
                 this.checkCode();
-            else 
+            else
                 this.checkHomePhoneCode();
 
         },
-        sendSms : function(force){
+        sendSms: function(force) {
             var self = this;
-            var params = {   
-                    contact_type_id : this.model.get("type"), 
-                    force : force
-                };
-            if (this.model.get("type") == "5" )
+            var params = {
+                contact_type_id: this.model.get("type"),
+                force: force
+            };
+            if (this.model.get("type") == "5")
                 params.email = this.model.get("value");
             else
                 params.phone = this.model.get("value");
-            $.post('/ajax/sent_verification_code', params, 
-                function(json){
+            $.post('/ajax/sent_verification_code', params,
+                function(json) {
                     self.responseSms(json, self);
-                }, 
-            'json');
+                },
+                'json');
         },
-        responseSms : function(json, context){
+        responseSms: function(json, context) {
             var self = context;
             self.contact_id = json.contact_id;
-            switch (+json.code){
-                case 200: 
+            switch (+json.code) {
+                case 200:
                     self.setError("Сообщение с кодом отправлено");
-                break;
+                    break;
                 case 303:
                     self.setError("Сообщение с кодом уже отправлено вам ранее");
-                break;
+                    break;
                 case 301:
                     //уже верифицирован
                     self.model.set("status", 'verified');
                     self.close();
-                break;
+                    break;
                 case 302:
                     //"Контакт принадлежит другому пользователю"
                     self.setError(json.msg);
-                break;
+                    break;
                 case 304:
                     self.setError("Вы исчерпали лимит SMS на сегодня");
-                break;
+                    break;
                 case 305:
                     self.setError('Контакт в черном списке');
-                break;
-                case 401 :
+                    break;
+                case 401:
                     self.setError('Это не мобильный телефон, выберите "городской"');
-                break;
+                    break;
             }
         },
-        checkCode : function(){
+        checkCode: function() {
             var self = this;
             var code = this.$el.find(".fn-input-code").val();
 
             if (!self.contact_id)
                 return;
-            
-            $.post('/ajax/check_contact_code/'+self.contact_id, {code:code}, function(json) {
+
+            $.post('/ajax/check_contact_code/' + self.contact_id, {
+                code: code
+            }, function(json) {
                 if (json.code == 200) {
                     self.model.set("status", 'verified');
                     self.close();
@@ -1339,68 +1451,70 @@ define([
                 }
             }, 'json');
         },
-        checkHomePhoneCode : function(){
+        checkHomePhoneCode: function() {
             var self = this;
             var code = this.$el.find(".fn-input-code").val();
             if (code == this.verificationCode) {
-             $.post('/ajax/verify_home_phone', {contact : self.model.get("value")}, 
-                function(json){
-                    if (json.code == 200) {
-                        self.model.set("status", 'verified');
-                        self.close();
-                    } else {
-                        self.setError(json.msg);
-                    }
-                }, 'json');
+                $.post('/ajax/verify_home_phone', {
+                        contact: self.model.get("value")
+                    },
+                    function(json) {
+                        if (json.code == 200) {
+                            self.model.set("status", 'verified');
+                            self.close();
+                        } else {
+                            self.setError(json.msg);
+                        }
+                    }, 'json');
             } else {
                 self.setError("Неправильный код");
             }
         },
-        showVerificationCode : function() {
-            this.verificationCode = this.generateVerificationCode(); 
-            this.setError('Этот номер телефона пройдет проверку. Подтвердите что вы согласны, введите код:'+this.verificationCode);
+        showVerificationCode: function() {
+            this.verificationCode = this.generateVerificationCode();
+            this.setError('Этот номер телефона пройдет проверку. Подтвердите что вы согласны, введите код:' + this.verificationCode);
         },
-        generateVerificationCode : function() {
+        generateVerificationCode: function() {
             var verificationCode = _.random(1000, 9999);
             return verificationCode;
         },
-        setError : function(text){
+        setError: function(text) {
             this.$el.find(".fn-error-block").html(text);
         }
 
     });
 
     var contactModel = Backbone.Model.extend({
-        defaults : {
-            type : 1,
-            value : "",
-            status : "clear"
+        defaults: {
+            type: 1,
+            value: "",
+            status: "clear"
         }
     });
 
     var contactList = Backbone.Collection.extend({
-        model : contactModel
+        model: contactModel
     });
 
     var contactView = Marionette.ItemView.extend({
-        tagName : "div",
-        className : "contact-cont fn-contact",
-        template : templates.contact,
+        tagName: "div",
+        className: "contact-cont fn-contact",
+        template: templates.contact,
         ui: {
             delete: ".fn-contact-delete-button",
             verify: ".fn-contact-verify-button",
             type: ".fn-contact-type",
             value: ".fn-contact-value"
         },
-        events : {
-            'click @ui.delete' : 'remove',
-            'click @ui.verify' : 'doVerify',
-            'change @ui.type' : 'changeType'
+        events: {
+            'click @ui.delete': 'remove',
+            'click @ui.verify': 'doVerify',
+            'change @ui.type': 'changeType'
         },
-        initialize : function (options){
+        initialize: function(options) {
             _.extend(this, options);
         },
-        _init_inputs : function(){
+        _init_inputs: function() {
             this.contact = this.$el.find(".fn-contact-value");
             this.type = this.$el.find(".fn-contact-type");
             this.format = this.type.find("option:selected").data("format");
@@ -1408,75 +1522,78 @@ define([
 
             this.setValues();
         },
-        _init_mask : function(){
+        _init_mask: function() {
             var self = this;
-            if (this.model.get("type") != 5)
-            {
-                $(this.contact).mask(this.format , {  
-                    "completed": function(){
+            if (this.model.get("type") != 5) {
+                $(this.contact).mask(this.format, {
+                    "completed": function() {
                         self.model.set("status", "valided");
                         self.setValues();
                     }
                 });
             } else {
                 //$(this.contact).val("");
-                $(this.contact).unbind();       
+                $(this.contact).unbind();
             }
         },
-        setValues : function(){
+        setValues: function() {
             this.model.set("value", this.contact.val());
             this.model.set("type", this.type.val());
         },
-        onRender : function(){
+        onRender: function() {
             // var html     =  _.template(this.template, this.model.toJSON());
             // this.container.append(this.$el.html(html));
             this._init_inputs();
             this._init_mask();
             // return this;
         },
-        remove : function(){
+        remove: function() {
             console.log(this.model)
             this.model.collection.remove(this.model);
         },
-        changeType : function(){
+        changeType: function() {
             this._init_inputs();
             this._init_mask();
         },
-        doVerify : function(){
+        doVerify: function() {
             this.setValues();
-            this.window = new verifyWindowView({model: this.model});
+            this.window = new verifyWindowView({
+                model: this.model
+            });
         },
 
-        changeStatus : function(){
+        changeStatus: function() {
             this.$el.removeClass("verified");
             this.$el.removeClass("noverified");
-            this.$el.find(".fn-contact-inform").html(""); 
+            this.$el.find(".fn-contact-inform").html("");
 
-            if (this.model.get("status") == "clear"){
-                
+            if (this.model.get("status") == "clear") {
+
             } else
-            if (this.model.get("status") == "valided"){
-                
+            if (this.model.get("status") == "valided") {
+
             } else
-            if (this.model.get("status") == "verified"){
+            if (this.model.get("status") == "verified") {
                 this.$el.addClass("verified");
                 this.$el.find(".fn-contact-inform").html("Контакт подтвержден");
-            }  else
-            if (this.model.get("status") == "noverified"){
+            } else
+            if (this.model.get("status") == "noverified") {
                 this.$el.addClass("noverified");
-            }  
+            }
         },
 
     });
 
     var contactListView = Marionette.CollectionView.extend({
-        el : "#div_contacts",
-        contacts : [],
+        el: "#div_contacts",
+        contacts: [],
         childView: contactView,
-        buildChildView: function(child, ChildViewClass, childViewOptions){
-            var options = _.extend({model: child}, childViewOptions);
-            if ($('#contact_'+child.id).length) {
-                options.$el = $('#contact_'+child.id);
+        buildChildView: function(child, ChildViewClass, childViewOptions) {
+            var options = _.extend({
+                model: child
+            }, childViewOptions);
+            if ($('#contact_' + child.id).length) {
+                options.$el = $('#contact_' + child.id);
             }
             var view = new ChildViewClass(options);
             return view;
@@ -1485,11 +1602,11 @@ define([
             "addContact": ".fn-add-contact-button-text",
             "contacts": ".contact-cont"
         },
-        events : {
-            'click @ui.addContact' : 'addContact'
+        events: {
+            'click @ui.addContact': 'addContact'
         },
 
-        initialize : function (options) {
+        initialize: function(options) {
             _.extend(this, options);
             var self = this;
             this.bindUIElements();
@@ -1499,7 +1616,7 @@ define([
             // this.collection.on("remove", this.removeItem, this);
             this.collection.on("change:status", this.changeStatus, this);
 
-             _.each(this.ui.contacts, function(item){
+            _.each(this.ui.contacts, function(item) {
                 var status = "clear",
                     $item = $(item);
                 if ($item.hasClass("verified"))
@@ -1508,20 +1625,22 @@ define([
                     status = "noverified";
 
                 var params = {
-                    id : $item.data("item-id"),
-                    value : $item.find(".fn-contact-value").val(),
-                    type :  $item.find(".fn-contact-type").val(),
-                    status : status
+                    id: $item.data("item-id"),
+                    value: $item.find(".fn-contact-value").val(),
+                    type: $item.find(".fn-contact-type").val(),
+                    status: status
                 };
                 self.collection.add(params);
             });
         },
 
-        addContact : function(){
-            this.collection.add({id:this.collection.length+1});
+        addContact: function() {
+            this.collection.add({
+                id: this.collection.length + 1
+            });
         },
 
-        changeStatus : function(item){
+        changeStatus: function(item) {
             this.contacts[item.cid].changeStatus();
         }
 
@@ -1529,9 +1648,9 @@ define([
 
 
     return Marionette.ItemView.extend({
-        form_id : 'element_list',
-        events : {
-            'click #submit_button' : 'submitForm'
+        form_id: 'element_list',
+        events: {
+            'click #submit_button': 'submitForm'
         },
 
         behaviors: {
@@ -1540,95 +1659,103 @@ define([
             },
         },
 
-        initialize : function (options) {
+        initialize: function(options) {
             _.extend(this, options);
             var self = this;
             self.is_edit = ($("#object_id").val());
-            
+
             this.settings = ($("#moderate").text()) ? eval($("#moderate").text()) : {};
-            if (this.reinit_after_change) 
+            if (this.reinit_after_change)
                 this._destroy_controls();
 
             self._init_controls();
         },
 
-        _init_controls : function(){
+        _init_controls: function() {
             if (!this.reinit_after_change) {
-                this.category = new categoryView({app : this});
-                this.city     = new cityView({      
-                                                category_id : this.category.category_id, 
-                                                app : this
-                                            });
-                this.photo    = new photoControlView({app : this});
+                this.category = new categoryView({
+                    app: this
+                });
+                this.city = new cityView({
+                    category_id: this.category.category_id,
+                    app: this
+                });
+                this.photo = new photoControlView({
+                    app: this
+                });
                 // this.contacts = new contactListView({app : this});
                 // this.contacts.render();
             }
             this.address_precision = null;
             this.precision_error = null;
-            this.cmap     = new mapView({      
-                                            category_id : this.category.category_id, 
-                                            app : this
-                                        });
-            this.params   = new paramsView({
-                                            category_id : this.category.category_id, 
-                                            data : this.category.data,
-                                            address_precisions : this.category.settings.address_precisions,
-                                            app : this
-                                        });    
-            this.subject  = new subjectView({
-                                            el : "#div_subject",
-                                            category_id : this.category.category_id, 
-                                            title_auto : this.category.settings.title_auto,
-                                            app : this
-                                        });
-            this.text     = new textView({  el : "#div_textadv",
-                                            category_id : this.category.category_id, 
-                                            text_required : this.category.settings.text_required,
-                                            app : this
-                                        });
-            this.additional   = new additionalView({  el : "#div_additional",
-                                            category_id : this.category.category_id, 
-                                            app : this,
-                                            additional_fields : this.category.settings.additional_fields,
-                                        });
+            this.cmap = new mapView({
+                category_id: this.category.category_id,
+                app: this
+            });
+            this.params = new paramsView({
+                category_id: this.category.category_id,
+                data: this.category.data,
+                address_precisions: this.category.settings.address_precisions,
+                app: this
+            });
+            this.subject = new subjectView({
+                el: "#div_subject",
+                category_id: this.category.category_id,
+                title_auto: this.category.settings.title_auto,
+                app: this
+            });
+            this.text = new textView({
+                el: "#div_textadv",
+                category_id: this.category.category_id,
+                text_required: this.category.settings.text_required,
+                app: this
+            });
+            this.additional = new additionalView({
+                el: "#div_additional",
+                category_id: this.category.category_id,
+                app: this,
+                additional_fields: this.category.settings.additional_fields,
+            });
 
         },
 
-        _destroy_controls : function(){
-            this.params.trigger("destroy");        
+        _destroy_controls: function() {
+            this.params.trigger("destroy");
             this.subject.trigger("destroy");
-            this.text.trigger("destroy");  
-            this.cmap.trigger("disable");      
+            this.text.trigger("destroy");
+            this.cmap.trigger("disable");
         },
 
-        _init_map : function(field_address_id){
+        _init_map: function(field_address_id) {
             if (this.cmap)
-                this.cmap.trigger("enable", {city : this.city, address_field : field_address_id});
+                this.cmap.trigger("enable", {
+                    city: this.city,
+                    address_field: field_address_id
+                });
         },
 
-        removeError : function(el){
-            var wrapper = $("#"+el);
+        removeError: function(el) {
+            var wrapper = $("#" + el);
             wrapper.find(".fn-error").remove();
             wrapper.find(".inp-cont").removeClass("error");
 
         },
 
-        removeRequired : function(el){
-            var wrapper = $("#"+el);
+        removeRequired: function(el) {
+            var wrapper = $("#" + el);
             wrapper.find(".required-label").html("");
         },
 
-        addRequired : function(el){
-            var wrapper = $("#"+el);
+        addRequired: function(el) {
+            var wrapper = $("#" + el);
             wrapper.find(".required-label").html("*");
         },
 
-        submitForm : _.once(function(){
-            if (this.text)
-            {
+        submitForm: _.once(function() {
+            if (this.text) {
                 nicEditors.findEditor('user_text_adv').saveContent();
             }
-            $('#'+this.form_id).submit();
+            $('#' + this.form_id).submit();
         })
 
     });
