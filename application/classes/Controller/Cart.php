@@ -714,7 +714,7 @@ class Controller_Cart extends Controller_Template {
 								break;
 							}
 						}
-						if ($reservedCouponItem == NULL) {
+						if ($reservedCoupon == NULL) {
 							//not found!
 							continue;
 						}
