@@ -176,11 +176,11 @@ class Model_Kupon extends ORM
 		return $this->change_state($this->state, self::RESERVE, $order_id, $access_key);
 	}
 
-	function return_to_avail($description = NULL)
+	function return_to_avail($description = NULL, $orderId = NULL)
 	{
 		if ($this->state == "avail") return;
 		
-		return $this->change_state($this->state, self::AVAIL, NULL, NULL, $description);
+		return $this->change_state($this->state, self::AVAIL, $orderId, NULL, $description);
 	}
 
 	function to_sold($order_id, $access_key = NULL)

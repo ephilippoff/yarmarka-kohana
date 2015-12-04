@@ -237,9 +237,12 @@ class Controller_Rest_Service extends Controller_Rest {
 		}
 		
 		$key = Cart::get_key();
+		$order = ORM::factory('Order')
+					->where("key","=",$key)
+					->where("state","=",0)
+					->find();
 		$info = new Obj($this->post->serviceData["info"]);
 		$result = new Obj($this->post->serviceData["result"]);
-		
 		$tempOrderItemId = ( isset($this->post->serviceData["temp_order_item_id"]) ) ? $this->post->serviceData["temp_order_item_id"] : NULL;
 
 		$db = Database::instance();
@@ -262,13 +265,13 @@ class Controller_Rest_Service extends Controller_Rest {
 					// }
 					$service = Service::factory($service_name, $object_info['id']);
 					$service->set_params($result);
-					$orderItemTemp	=  $service->save($object_info, $key, $tempOrderItemId);
+					$orderItemTemp	=  $service->save($object_info, $key, $tempOrderItemId, $order->id);
 				}
 			} else {
 				$service_name = Text::ucfirst($info->service["name"]);
 				$service = Service::factory($service_name, $info->id);
 				$service->set_params($result);
-				$orderItemTemp = $service->save($info->object, $key, $tempOrderItemId);
+				$orderItemTemp = $service->save($info->object, $key, $tempOrderItemId, $order->id);
 			}
 
 			

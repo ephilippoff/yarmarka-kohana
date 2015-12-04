@@ -9,6 +9,21 @@
 
 
 {% block content %}
+
+	{% if errors.coupon_reserve_timeout|length > 0 %}
+		<div class="common-error">
+			<p>С момента бронирования следующих купонов прошло более 30 минут.</p>
+			<p>Необходимо повторить их покупку и оплатить в течении 30 минут.</p>
+			<ul>
+				{% for item in errors.coupon_reserve_timeout %}
+					<li>
+						<a href="/detail/{{ item.object.id }}" target="_blank">{{ item.service.title }}</a>
+					</li>
+				{% endfor %}
+			</ul>
+		</div>
+	{% endif %}
+
 	<div>
 		<div class="">
 			{% if state == "initial" %}
