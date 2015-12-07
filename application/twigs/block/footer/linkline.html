@@ -1,5 +1,5 @@
 <div class="gray-theme">
-	<div class="menu-cont2">
+	<div class="menu-cont2 {{ footerMenuAdditionalClass }}">
 		<div class="row">
 			<div class="col-md-12 brt3">
 				<span class="menu-item left"><span onclick="window.location='/add'" class="menu-item-cont">Подать объявление</span></span>
@@ -12,7 +12,7 @@
 		</div>
 	</div>
 	{% set city_config = get_config("info") %}
-	<div class="footer-container">
+	<div class="footer-container {{ footerAdditionalClass }}">
 		<div class="row">
 			<div class="col-md-4 ">
 				<p class="bold">Редакция в Тюмени:</p>

@@ -24,12 +24,22 @@ class Controller_Add extends Controller_Template {
 		}
 	}
 
+	public function initAddForm($twig) {
+		$twig->topMenuContainerClass = 'hidden-sm hidden-xs'; //hide on tablets and mobile
+		$twig->showCatalogMenuButtonAfterLogo = true;
+		$twig->catalogMenuAfterLogoButtonAdditionalClass = 'hidden-md hidden-lg'; //hide on desktops and laptops
+		$twig->footerMenuAdditionalClass = 'hidden-xs'; //hide on mobile
+		$twig->footerAdditionalClass = 'hidden-xs hidden-md hidden-lg hidden-sm'; //hide on all devices
+	}
+
 	public function action_index()
 	{
 		$this->use_layout   = FALSE;
 		$this->auto_render  = FALSE;
 		$twig = Twig::factory('user/add');
 		$twig->params = new Obj();
+
+		$this->initAddForm($twig);
 		
 		$prefix = (Kohana::$environment == Kohana::PRODUCTION) ? "" : "dev_";
 		$staticfile = new StaticFile("attributes", $prefix.'static_attributes.js');
@@ -139,6 +149,8 @@ class Controller_Add extends Controller_Template {
 		$this->auto_render  = FALSE;
 		$twig = Twig::factory('user/add');
 		$twig->params = new Obj();
+
+		$this->initAddForm($twig);
 
 		$user = Auth::instance()->get_user();
 		

@@ -83,12 +83,14 @@ img.banner,
 	display: none;
 }
 
+/*
 .menu-cont2>.row>.col-md-2>.menu-item{
 	position: relative;
     left: 207px;
     bottom: 50px;
     line-height: 34px;
 }
+*/
 
 .right .section{
 	max-width: 700px !important;
@@ -103,4 +105,27 @@ img.banner,
 	#label-fileupload {
 	    margin-top: 10px;
 	}
+
+	.js-contact {}
+	.js-contact .inp-cont.error {
+		min-height: 0;
+	}
+	.js-contact .inp-cont.error .js-contact-description {
+		height:0;
+		position:relative;
+		overflow:hidden;
+		display:block !important;
+		-webkit-transition: height 1000ms ease;
+		-moz-transition: height 1000ms ease;
+		-ms-transition: height 1000ms ease;
+		-o-transition: height 1000ms ease;
+		transition: height 1000ms ease;
+	}
+	.js-contact .inp-cont.error .js-contact-description.show {
+		height:auto;
+	}
 }
+
+.banner {display:none;}
+.top-menu-container .menu-item:not(.js-mainmenu-dropdown) {display:none;}
+.top-menu-container>.menu-cont2>.row {height:0;}

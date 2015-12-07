@@ -188,6 +188,12 @@ define([
         submitContact: function(e)
         {
             e.preventDefault();
+
+            if (this.ui.contactDescription.text().trim().length && /android|iphone|iemobile|opera mini/.test(navigator.userAgent.toLowerCase())) {
+                this.ui.contactDescription.toggleClass('show');
+                return;
+            }
+
             var s = this;
             var state = $(e.currentTarget).data("state");
             $(e.currentTarget).attr("data-state", false);
