@@ -645,7 +645,7 @@ define([
         template: templates.photo,
         events: {
             'click .fn-remove': 'remove',
-            'dblclick .img': 'setActive',
+            'click .fn-main': 'setActive',
             'click span.rotate': 'rotate',
         },
         initialize: function(options) {

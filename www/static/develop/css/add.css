@@ -1,6 +1,7 @@
 .form-cont .add-block .img-b {float: left;width: 125px;margin-bottom: 15px;}
 .form-cont .add-block .img {border: 1px solid #C8C8C8;cursor: pointer;display: table-cell;height: 125px;text-align: center;vertical-align: middle;width: 125px;position: relative;}
 .form-cont .add-block .img.active {border-color: #97D5EC;border-width: 3px;}
+.form-cont .add-block .img.active+.href-bl .fn-main {opacity: 0;}
 .form-cont .add-block .img.active:after {content: 'Главное фото';position: absolute;top: -18px;left: 15px;font-size: 11px;color: gray;}
 
 .form-cont .add-block img {max-height: 100px;max-width: 100px;}
