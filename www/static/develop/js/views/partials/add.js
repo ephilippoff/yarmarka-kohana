@@ -646,7 +646,7 @@ define([
         events: {
             'click .fn-remove': 'remove',
             'dblclick .img': 'setActive',
-            'click span.rotate': 'rotate'
+            'click span.rotate': 'rotate',
         },
         initialize: function(options) {
             _.extend(this, options);
@@ -678,6 +678,12 @@ define([
             $('#add-block').sortable({
                 revert: true,
                 revert: 300,
+                over : function(){
+                   if (!$('html').hasClass('desktop')) {
+                        $(this).find('.img-b .curtain').css('opacity', '0');
+                        $(this).find('.ui-sortable-helper .curtain').css('opacity', '1');
+                   };
+                },
                 start: function(event, ui) {
                     clearInterval(this.interval);
                 },
