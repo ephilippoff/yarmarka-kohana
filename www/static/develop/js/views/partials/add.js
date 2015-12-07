@@ -647,6 +647,7 @@ define([
             'click .fn-remove': 'remove',
             'click .fn-main': 'setActive',
             'click span.rotate': 'rotate',
+            'click .img': 'openCurtain'
         },
         initialize: function(options) {
             _.extend(this, options);
@@ -672,18 +673,20 @@ define([
             img.src = me.model.get('original');
         },
 
+        openCurtain: function(){
+            if (!$('html').hasClass('desktop')) {
+                $('.img-b .curtain').css('opacity', '0');
+                this.$el.find('.curtain').css('opacity', '1');
+            };
+           
+        },
+
         render: function() {
             var html = _.template(this.template)(this.model.toJSON());
             this.container.append(this.$el.html(html));
             $('#add-block').sortable({
                 revert: true,
                 revert: 300,
-                over : function(){
-                   if (!$('html').hasClass('desktop')) {
-                        $(this).find('.img-b .curtain').css('opacity', '0');
-                        $(this).find('.ui-sortable-helper .curtain').css('opacity', '1');
-                   };
-                },
                 start: function(event, ui) {
                     clearInterval(this.interval);
                 },
