@@ -1,6 +1,5 @@
 <div class="fn-rows-parameters">
 	<? foreach ($data->rows as $element): ?>
-
 		<?
 		$parameters = array(
 			'id' => $element["name"],
@@ -12,11 +11,16 @@
 			'is_required' => $element['is_required']
 		);
 		?>
+
 		<? if ($element["custom"]): ?>	
 			<? $parameters["errors"] = $data->errors->{$element["name"]}; ?>						
 		<?= View::factory("add/element/_" . $element["custom"], $parameters); ?>
 	<? else: ?>
-
+			<?php 
+				if ($element['name'] == 'param_1000') {
+					$parameters['class'] .= ' ckeditor';
+				}
+			?>
 			<div class="row mb10" id="div_<?= $element["name"] ?>">
 				<div class="col-md-3 col-xs-4 labelcont">
 					<label><?= $element["title"] ?><?= ($element["unit"] ? ", " . $element["unit"] . ":" : ":") ?></label>
