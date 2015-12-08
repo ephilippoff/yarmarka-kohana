@@ -11,7 +11,7 @@
 					{% set link = link|first %}
 					<img src="{{ '/./uploads/banners/' ~ link.image }}" data-link="{{ link.link }}" {% if link.type == '3' %} data-title="{{ link.title }}" {% endif %}/>
 				{% else %}
-					<img src="{{ staticfile('images/empty_ads.png') }}" data-link="{{ info_link }}" data-empty="true"/>
+					<img src="{{ staticfile('images/empty_ads.png') }}" data-link="http://c.yarmarka.biz/{{ info_link }}" data-empty="true"/>
 				{% endif %} 
 				
 			{% endfor  %}
