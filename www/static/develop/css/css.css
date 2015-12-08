@@ -840,3 +840,8 @@ a.auto-collapse-expand {
     font-size: 20px;
     color: red;
 }
+.common-error {
+    color:red;
+    font-size:14px;
+    margin:20px 0;
+}

@@ -6,6 +6,7 @@ class Service_Kupon extends Service
 	protected $_kupon_group = NULL;
 	protected $_title = NULL;
 	protected $_is_multiple = FALSE;
+	protected $_orderId = NULL;
 
 	public function __construct($kupon_group_id)
 	{
@@ -156,20 +157,20 @@ class Service_Kupon extends Service
 
 	}
 
-	public function return_reserve($ids, $description = NULL)
+	public function return_reserve($ids, $description = NULL, $orderId = NULL)
 	{
 		foreach ($ids as $id) {
 			$kupon = ORM::factory('Kupon', $id);
-			$kupon->return_to_avail($description);
+			$kupon->return_to_avail($description, $orderId);
 		}
 		
 	}
 
-	public function reserve($ids, $access_key = NULL)
+	public function reserve($ids, $access_key = NULL, $orderId = NULL)
 	{
 		foreach ($ids as $id) {
 			$kupon = ORM::factory('Kupon', $id);
-			$kupon->reserve(NULL, $access_key);
+			$kupon->reserve($orderId, $access_key);
 		}
 	}
 

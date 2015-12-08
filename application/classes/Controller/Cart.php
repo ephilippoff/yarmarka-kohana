@@ -695,6 +695,57 @@ class Controller_Cart extends Controller_Template {
 						$this->return_with_errors("/cart/order/".$order_id, $this->request->post(), $errors);
 						return;
 					}
+
+					// search kupons dates
+					// validate dates
+					$reservedCoupons = ORM::factory('Object_Movement')
+						->where('order_id', '=', $order_id)
+						->where('begin_state', '=', 'avail')
+						->where('end_state', '=', 'reserve')
+						->find_all();
+					$badCoupons = array();
+					$timeToCheckSec = 30 * 60;
+					foreach($kupons as $coupon) {
+						//find in resered
+						$reservedCoupon = NULL;
+						foreach($reservedCoupons as $reservedCouponItem) {
+							if ($coupon->id == $reservedCouponItem->kupon_id) {
+								$reservedCoupon = $reservedCouponItem;
+								break;
+							}
+						}
+						if ($reservedCoupon == NULL) {
+							//not found!
+							continue;
+						}
+
+						$time = strtotime($reservedCoupon->date);
+						if (time() - $time > $timeToCheckSec) {
+							$badCoupons []= $coupon;
+						}
+					}
+					if (count($badCoupons) > 0) {
+						//prepare data
+						$data = array();
+						$orderItems = ORM::factory('Order_Item')
+							->where("order_id","=", $order->id)
+							->find_all();
+						foreach($orderItems as $orderItem) {
+							$orderItemParams = json_decode($orderItem->params);
+							if ($orderItemParams->service->name != 'kupon') {
+								continue;
+							}
+							foreach($badCoupons as $badCoupon) {
+								if (in_array($badCoupon->id, $orderItemParams->service->ids)) {
+									$data []= $orderItemParams;
+								}
+							}
+						}
+						//notify user with bad coupons
+						$errors['coupon_reserve_timeout'] = $data;
+						$this->return_with_errors('/cart/order/' . $order_id, $this->request->post(), $errors);
+						return;
+					}
 			}
 			// if ($params->type == "object") {
 			// 	$service = Service::factory("Object", $orderItem->object_id);
