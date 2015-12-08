@@ -113,6 +113,7 @@ class Search {
      *       "city_id" => array(1919),//"city_id" => 1919,
      *       "category_id" => 96,//"category_id" => array(96),
      *       "user_id" => 327190,
+     *       "user_text" => "Тратата "
      *       "source" => 1,
      *       "photo" => TRUE,
      *       "video" => TRUE,
@@ -183,6 +184,10 @@ class Search {
 
 		if ($params->not_id AND is_array($params->not_id)) {
 			$object = $object->where("o.id", "NOT IN", $params->not_id);
+		}
+
+		if ($params->user_text) {
+			$object = $object->where(DB::expr("w_lower(o.full_text)"), "like", "%".mb_strtolower($params->user_text)."%");
 		}
 
 		if ($params->user_id) {

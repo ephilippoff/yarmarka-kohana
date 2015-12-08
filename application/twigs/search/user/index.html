@@ -5,6 +5,7 @@
 {% block css %} 
 	{{ parent() }}
 	{{ css("comments.css") }}
+	{{ css("filters.css") }}
 {% endblock css%}
 
 {% block js %}{% endblock js%}
@@ -28,9 +29,12 @@
 {% block content %}
 	{% if (main_search_result|length) %}
 		{% include 'search/user/control' %}
+		{% include 'search/user/filters' %}
 		{% include 'search/user/result' %}
 		{% include 'search/paginator' %}
 	{% else %}
+		{% include 'search/user/control' %}
+		{% include 'search/user/filters' %}
 		{% include 'search/user/noresult' %}
 	{% endif %}
 {% endblock content%}
