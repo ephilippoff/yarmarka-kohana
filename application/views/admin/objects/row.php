@@ -49,7 +49,7 @@
 			<div id="gallery" data-toggle="modal-gallery" data-target="#modal-gallery">
 			<?php if (isset($compiled['images']['main_photo'])) : ?>
 				<a href="<?=$compiled['images']['main_photo']['original']?>" data-gallery="gallery">
-					<img align="right" style="margin-top: -20px;" src="<?=$compiled['images']['main_photo']['120x90']?>" />
+					<img align="right" style="margin-top: -20px;" src="/<?=$compiled['images']['main_photo']['120x90']?>" />
 				</a>
 			<?php endif; ?>
 			</div>
