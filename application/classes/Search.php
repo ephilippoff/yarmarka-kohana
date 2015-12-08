@@ -108,6 +108,7 @@ class Search {
 	 * @param  array  $params array(
      *       "premium" => TRUE,
      *       "id" => 3570644,//"id" => array(3570644),
+     *       "email" => "xxx@xxx.ru" by user.email
      *       "active" => TRUE,
      *       "published" =>TRUE,
      *       "city_id" => array(1919),//"city_id" => 1919,
@@ -186,6 +187,40 @@ class Search {
 			$object = $object->where("o.id", "NOT IN", $params->not_id);
 		}
 
+		if ($params->email) {
+			$useremail_subquery = DB::select("useremail.id")
+										->from(array("user","useremail") )
+										->where("o.author","=","useremail.id")
+										->where(DB::expr("w_lower(useremail.email)"),"LIKE", "%".$params->email."%")
+										->limit(1);
+			$object = $object->where(DB::expr('exists'), DB::expr(''), $useremail_subquery);
+		}
+
+		if ($params->contact) {
+			$object = $object
+							->where_open()
+								->where('', 'EXISTS', DB::expr('(SELECT oc.id FROM object_contacts as oc 
+											JOIN contacts as c ON c.id = oc.contact_id 
+											WHERE oc.object_id=o.id AND c.contact LIKE \'%'.$params->contact.'%\')'))
+								->or_where('o.contact', 'LIKE', '%'.$params->contact.'%')
+							->where_close();
+		}
+
+		if ( isset($params->moder_state) ) { 
+			$object = $object->where('o.moder_state', '=', $params->moder_state);
+		}
+
+		if ($params->compile_exists AND $table_name == "vw_objectcompiled") {
+			$object = $object->where("o.compiled", "IS NOT", NULL);
+		}
+
+		if ($params->complaint_exists) {
+			$object = $object->where('', 'EXISTS', DB::expr('(SELECT cmpl.id FROM complaints as cmpl 
+					WHERE cmpl.object_id=o.id)'));
+		}
+
+		
+
 		if ($params->user_text) {
 			$object = $object->where(DB::expr("w_lower(o.full_text)"), "like", "%".mb_strtolower($params->user_text)."%");
 		}
@@ -195,7 +230,7 @@ class Search {
 				$object = $object->where("o.author", "=", $params->user_id);
 			} else {
 				$object = $object->where("o.author_company_id", "=", $params->user_id);
-				//$object = $object->where("o.compiled", "IS NOT", NULL);
+				
 			}
 		}
 
@@ -227,6 +262,15 @@ class Search {
 			}
 			if (isset($params->date_created["to"])) {
 				$object = $object->where("o.date_created", "<", $params->date_created["to"]);
+			}
+		}
+
+		if ($params->real_date_created) { 
+			if (isset($params->real_date_created["from"])) {
+				$object = $object->where("o.real_date_created", ">=", $params->real_date_created["from"]);
+			}
+			if (isset($params->real_date_created["to"])) {
+				$object = $object->where("o.real_date_created", "<", $params->real_date_created["to"]);
 			}
 		}
 

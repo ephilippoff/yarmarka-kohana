@@ -4,46 +4,38 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 
 	protected $module_name = 'object';
 
+	 public function before()
+	{
+		parent::before();
+
+		$this->domain = new Domain();
+
+	}
+
 	public function action_index()
 	{
-		set_time_limit(60);
-		ini_set('memory_limit', '512M');
+		// set_time_limit(60);
+		// ini_set('memory_limit', '512M');
 		// Kohana::$profiling = TRUE; // @todo
 
-		$limit  = Arr::get($_GET, 'limit', 50);
-		$page   = $this->request->query('page');
-		$offset = ($page AND $page != 1) ? ($page-1)*$limit : 0;
-
-		$objects = ORM::factory('Object')
-			->with('user')
-			->with('city_obj')
-			->with('category_obj')
-			->with('location_obj')
-			->with_main_photo()
-			->with_used_service(41)
-			->with_used_premium()
-			->with_used_lider()
-			->with_used_reklama()
-			->with_used_ticket()				
-			->with_selection()
-			->where('source_id', '=', 1)
-			->where('active', '=', 1)
-			->where('is_union','IS', NULL)
-			->where_open()
-				->where('type_tr', 'IS', NULL)
-				->or_where('type_tr', '=', 1)
-			->where_close();
-
-		/**
-		 * Filters
-		 */
+		// $limit  = Arr::get($_GET, 'limit', 50);
+		// $page   = $this->request->query('page');
+		// $offset = ($page AND $page != 1) ? ($page-1)*$limit : 0;
+		
 		$filters_enable = TRUE;
+
+
+		$search_filters = array(
+			"active" => TRUE,
+			"compile_exists" => TRUE,
+			"source" => 1
+		);
 
 		if ($user_id = intval($this->request->query('user_id')))
 		{
 			$filters_enable = FALSE;
 			$this->template->author = ORM::factory('User', $user_id);
-			$objects->where('author', '=', $user_id);
+			$search_filters["user_id"] = $user_id;
 		}
 
 		if ($filters_enable AND $email = trim(mb_strtolower($this->request->query('email'))))
@@ -51,95 +43,153 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 			if (is_numeric($email)) // can be email or object id
 			{
 				$filters_enable = FALSE;
-				$objects->where('object.id', '=', $email);
+				$search_filters["id"] = $email;
 			}
 			else
 			{
-				$objects->where('email', 'LIKE', '%'.$email.'%');
+				$search_filters["email"] = $email;
 			}
 		}
 
 		if ($filters_enable AND $contact = trim(mb_strtolower($this->request->query('contact'))))
 		{
-			$objects
-				->where_open()
-					->where('', 'EXISTS', DB::expr('(SELECT oc.id FROM object_contacts as oc 
-								JOIN contacts as c ON c.id = oc.contact_id 
-								WHERE oc.object_id=object.id AND c.contact LIKE \'%'.$contact.'%\')'))
-					->or_where('object.contact', 'LIKE', '%'.$contact.'%')
-				->where_close();
+			$search_filters["contact"] = $contact;
 		}
 
 		if ($filters_enable AND $date = $this->request->query('date') AND !$contact AND !$email)
 		{
-			$field = $this->request->query('date_field');
+			//$field = $this->request->query('date_field');
+			$search_filters["date_created"] = array();
 			if ($from_time = strtotime($date['from']))
 			{
-				$objects->where(DB::expr("date($field)"), '>=', DB::expr("date '".date('Y-m-d', $from_time)."'"));
+				$search_filters["date_created"]["from"] = date('Y-m-d', $from_time);
 			}
 
 			if ($to_time = strtotime($date['to']))
 			{
-				$objects->where(DB::expr("date($field)"), '<=', DB::expr("date '".date('Y-m-d', $to_time)."'"));
+				$search_filters["date_created"]["to"] = date('Y-m-d', $to_time);
 			}
 		}
 		elseif ($filters_enable  AND !$contact AND !$email)
 		{
-			$objects->where(DB::expr('date(real_date_created)'), '>', DB::expr("date '".date('Y-m-d', strtotime('-3 days'))."'"));
-		}
+			$search_filters["real_date_created"] = array();
+			$search_filters["real_date_created"]["from"] = date('Y-m-d', strtotime('-7 days'));		}
 
 		if ($filters_enable AND $category_id = intval($this->request->query('category_id')))
 		{
-			$objects->where('object.category', '=', $category_id);
+			$search_filters["category_id"] = $category_id;
 		}
+
+		if ($filters_enable AND $city_id = intval($this->request->query('city_id')))
+		{
+			$search_filters["city_id"] = $city_id;
+		}
+
 
 		if ($filters_enable AND '' !== ($moder_state = Arr::get($_GET, 'moder_state', '0'))  AND !$contact AND !$email)
 		{
 			if ($moder_state == 3)
 			{
-				$objects->where('', 'EXISTS', DB::expr('(SELECT cmpl.id FROM complaints as cmpl 
-					WHERE cmpl.object_id=object.id)'));
+				$search_filters["complaint_exists"] = TRUE;
 			}
 			else
 			{
-				$objects->where('object.moder_state', '=', $moder_state);
+				$search_filters["moder_state"] = $moder_state;
 			}
+			
 		}
 
-		// count all objects
-		$clone_to_count = clone $objects;
-		$count_all = $clone_to_count->count_all();
+		$search_params = array(
+			"page" => $this->request->query('page') ? $this->request->query('page') : 1,
+			"limit" => $this->request->query('limit') ? $this->request->query('limit') : 30,
+			"order" => trim($this->request->query('sort_by')) ? trim($this->request->query('sort_by')) : 'date_created',
+			"order_direction" => trim($this->request->query('direction')) ? trim($this->request->query('direction')) : 'desc'
+		);
 
-		$objects->limit($limit)
-			->offset($offset);
+		$sort_by =  $search_params["order"];
+		$direction =  $search_params["order_direction"];
+		$limit =  $search_params["limit"];
 
-		// order
-		$sort_by	= trim($this->request->query('sort_by')) ? trim($this->request->query('sort_by')) : 'real_date_created';
-		$direction	= trim($this->request->query('direction')) ? trim($this->request->query('direction')) : 'desc';
+		$main_search_query = Search::searchquery($search_filters, $search_params);
+		$main_search_result = Search::getresult($main_search_query->execute()->as_array());
+		$ids = array_map(function($item){
+			return $item["id"];
+		}, $main_search_result);
+		if (count($ids) == 0) $ids = array(0);
 
-		$objects->order_by('to_forced_moderation', 'desc');
-		$objects->order_by($sort_by, $direction);
+		$author_ids = array_map(function($item){
+			return $item["author"];
+		}, $main_search_result);
+		if (count($author_ids) == 0) $author_ids = array(0);
+		
+		$main_search_result_count = Search::searchquery($search_filters, array(), array("count" => TRUE))
+													->execute()
+													->get("count");
+		
+		
+		$this->template->objects = ORM::factory('Object')->where("id","IN", $ids)->find_all();
+		$this->template->object_compiled	= array();
+
+		foreach ($main_search_result as $key => $value) {
+			$this->template->object_compiled[$value["id"]] = $value;
+		}
+
+		//pagination
+		$this->template->pagination	= Pagination::factory( array(
+			'current_page' => array('source' => 'query_string', 'key' => 'page'),
+			'total_items' => $main_search_result_count,
+			'items_per_page' => $search_params['limit'],
+			'auto_hide' => TRUE,
+			'view'           => 'pagination/bootstrap',
+		))->route_params(array(
+			'controller' => 'objects',
+			'action'     => 'index'
+		));
 
 		$this->template->sort_by 	= $sort_by;
 		$this->template->direction 	= $direction;
+		$this->template->limit = $limit;
 
-		$this->template->objects 	= $objects->find_all();
+		$object_contacts = ORM::factory('Object_Contact')
+			->select(array("contact","contact_value"), 'contact_clear','contact_type_id' )
+			->join("contacts")
+				->on("object_contact.contact_id","=","contacts.id")
+			->where("object_id", "IN", $ids )
+			->find_all();
+
+		$_contacts = array();
+		foreach ($object_contacts as $contact) {
+			if ( !isset($_contacts[$contact->object_id]) ) {
+				$_contacts[$contact->object_id] = array();
+			}
+
+			$_contacts[$contact->object_id][] = $contact->get_row_as_obj();
+		}
+		$this->template->object_contacts = $_contacts;
+
+		$this->template->complaints = ORM::factory('Complaint')
+			->where("object_id", "IN", $ids )
+			->find_all()
+			->as_array("id");
+
+		$this->template->users = ORM::factory('User')
+			->where("id", "IN", $author_ids )
+			->find_all()
+			->as_array('id', 'email');
 
 		$this->template->categories = ORM::factory('Category')
 			->order_by('title')
+			->cached(Date::WEEK)
 			->find_all()
 			->as_array('id', 'title');
-		$this->template->limit = $limit;
-		$this->template->pagination	= Pagination::factory(array(
-				'current_page'   => array('source' => 'query_string', 'key' => 'page'),
-				'total_items'    => $count_all,
-				'items_per_page' => $limit,
-				'auto_hide'      => TRUE,
-				'view'           => 'pagination/bootstrap',
-			))->route_params(array(
-				'controller' => 'objects',
-				'action'     => 'index',
-			));
+
+		$this->template->cities = ORM::factory('City')
+			->where('is_visible',"=",1)
+			->order_by('title')
+			->cached(Date::WEEK)
+			->find_all()
+			->as_array('id', 'title');
+
 	}
 
 	public function action_ajax_change_moder_state()

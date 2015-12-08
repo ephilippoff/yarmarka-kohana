@@ -134,10 +134,11 @@ function obj_selection(src, obj_id)
 			</ul>
 		</div>		
 		<input type="hidden" name="date_field" value="<?=Arr::get($_GET, 'date_field', 'real_date_created')?>" />
-		<input type="text" class="input-small dp" placeholder="date from" name="date[from]" value="<?=Arr::get(@$_GET['date'], 'from', date('Y-m-d', strtotime('-3 days')))?>">
+		<input type="text" class="input-small dp" placeholder="date from" name="date[from]" value="<?=Arr::get(@$_GET['date'], 'from', date('Y-m-d', strtotime('-7 days')))?>">
 		<input type="text" class="input-small dp" placeholder="date to" name="date[to]" value="<?=Arr::get(@$_GET['date'], 'to')?>">
 	</div>
 	<?=Form::select('category_id', array('' => 'Все рубрики')+$categories, Arr::get($_GET, 'category_id'), array('class' => 'span2'))?>
+	<?=Form::select('city_id', array('' => 'Все города')+$cities, Arr::get($_GET, 'city_id'), array('class' => 'span2'))?>
 	<?=Form::select('moder_state', 
 		array(
 			'' => 'Все объвления',
@@ -172,7 +173,21 @@ function obj_selection(src, obj_id)
 		<th></th>
 	</tr>
 	<?php foreach ($objects as $object) : ?>
-		<?=View::factory('admin/objects/object_row', array('object' => $object))?>
+		<?php
+			$compiled = $object_compiled[$object->id]['compiled'];
+			if ($compiled) {
+				echo View::factory('admin/objects/row', array(
+					'object' => $object, 
+					'compiled' => $compiled, 
+					'categories' => $categories, 
+					'cities' => $cities,
+					'users' => $users,
+					'complaints' => $complaints,
+					'object_contacts' => $object_contacts
+				));
+			}
+		?>
+		
 	<?php endforeach; ?>
 </table>
 
