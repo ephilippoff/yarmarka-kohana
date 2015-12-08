@@ -85,6 +85,13 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 			$search_filters["city_id"] = $city_id;
 		}
 
+		if ($filters_enable AND $role_id = intval($this->request->query('role_id')))
+		{
+			$search_filters["user_role"] = $role_id;
+		} else {
+			$search_filters["user_role"] = 2;
+		}
+
 
 		if ($filters_enable AND '' !== ($moder_state = Arr::get($_GET, 'moder_state', '0'))  AND !$contact AND !$email)
 		{
@@ -98,6 +105,8 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 			}
 			
 		}
+
+		
 
 		$search_params = array(
 			"page" => $this->request->query('page') ? $this->request->query('page') : 1,
@@ -175,7 +184,11 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 		$this->template->users = ORM::factory('User')
 			->where("id", "IN", $author_ids )
 			->find_all()
-			->as_array('id', 'email');
+			->as_array('id', 'email','role');
+
+		$this->template->roles = ORM::factory('Role')
+			->find_all()
+			->as_array('id', 'name');
 
 		$this->template->categories = ORM::factory('Category')
 			->order_by('title')

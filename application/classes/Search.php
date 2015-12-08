@@ -219,7 +219,10 @@ class Search {
 					WHERE cmpl.object_id=o.id)'));
 		}
 
-		
+		if ($params->user_role) {
+			$object = $object->where('', 'EXISTS', DB::expr('(SELECT id FROM "user" as usr
+					WHERE usr.id=o.author and usr.role='.$params->user_role.')'));
+		}
 
 		if ($params->user_text) {
 			$object = $object->where(DB::expr("w_lower(o.full_text)"), "like", "%".mb_strtolower($params->user_text)."%");

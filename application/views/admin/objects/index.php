@@ -139,6 +139,7 @@ function obj_selection(src, obj_id)
 	</div>
 	<?=Form::select('category_id', array('' => 'Все рубрики')+$categories, Arr::get($_GET, 'category_id'), array('class' => 'span2'))?>
 	<?=Form::select('city_id', array('' => 'Все города')+$cities, Arr::get($_GET, 'city_id'), array('class' => 'span2'))?>
+	<?=Form::select('role_id', array('' => 'Все пользователи')+$roles, Arr::get($_GET, 'role_id', 2), array('class' => 'span2'))?>
 	<?=Form::select('moder_state', 
 		array(
 			'' => 'Все объвления',
@@ -183,7 +184,8 @@ function obj_selection(src, obj_id)
 					'cities' => $cities,
 					'users' => $users,
 					'complaints' => $complaints,
-					'object_contacts' => $object_contacts
+					'object_contacts' => $object_contacts,
+					'roles' => $roles
 				));
 			}
 		?>
