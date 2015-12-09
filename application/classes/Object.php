@@ -74,7 +74,8 @@ class Object
 					->save_signature()
 					->save_union()
 					->save_additional()
-					->save_compile_object();
+					->save_compile_object()
+					->save_compile_surgut_object();
 
 				$db->commit();
 			}
@@ -149,7 +150,8 @@ class Object
 					->save_contacts()
 					->save_service_fields()
 					->save_additional()
-					->save_compile_object();
+					->save_compile_object()
+					->save_compile_surgut_object();
 
 
 			$add//->send_external_integrations()
@@ -211,7 +213,8 @@ class Object
 					->save_contacts()
 					->save_service_fields()
 					->save_additional()
-					->save_compile_object();
+					->save_compile_object()
+					->save_compile_surgut_object();
 
 				$db->commit();
 			}
@@ -287,7 +290,8 @@ class Object
 					->save_contacts()
 					->save_signature()
 					->save_union()
-					->save_compile_object();
+					->save_compile_object()
+					->save_compile_surgut_object();
 
 				$db->commit();
 			}

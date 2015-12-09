@@ -22,6 +22,20 @@ class Model_Data_List extends Data
 
 		return $result;
 	}
+
+	public function get_compile_surgut()
+	{
+		if (!$this->loaded())
+			return;
+
+		$result = $this->as_array();
+
+		$result["_attribute"] 	= $this->attribute_obj->as_array("id","title");
+		$result["_element"] 	= $this->attribute_element_obj->as_array("id","title");
+		$result["_type"] = "List";
+
+		return $result;
+	}
 }
 
 /* End of file List.php */

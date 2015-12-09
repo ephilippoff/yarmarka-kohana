@@ -837,7 +837,105 @@ class Model_Object extends ORM {
 										where di.object = object.id and attribute.seo_name = \''.$attr_seo_name.'\'
 										) as '.$attr_seo_name));
 	}
+
+	public function get_nurl($uri_category_segment = NULL)
+	{
+		if (!$this->loaded()) return;
+
 		
+		$url = array();
+
+		if (!$uri_category_segment) {
+			$uri_category_segment = ORM::factory('Category',$this->category)->url;
+		}
+
+		array_push($url, $uri_category_segment);
+		array_push($url, $this->seo_name."-".$this->id.".html");
+
+		return implode("/", $url);
+	}
+
+	public function get_old_url($uri_category_segment = NULL)
+	{
+		if (!$this->loaded()) return;
+
+		
+		$url = array();
+
+		if (!$uri_category_segment) {
+			$uri_category_segment = ORM::factory('Category',$this->category)->url;
+		}
+		array_push($url, "obyavlenie");
+		array_push($url, $uri_category_segment);
+		array_push($url, $this->seo_name."-".$this->id);
+
+		return implode("/", $url);
+	}
+
+	public function get_full_url($city_seo_name = NULL)
+	{
+		if (!$this->loaded()) return;
+		
+		$config = Kohana::$config->load("common");
+        $main_domain = $config["main_domain"];
+
+		$url = array("http:/");
+
+		$city = ORM::factory('City')
+					->where("id","=", (int) $this->city_id)
+					->where("is_visible","=", 1)
+					->find();
+		if ($city->loaded()) {
+			array_push($url, $city->seo_name.".".$main_domain);
+		} else {
+
+			array_push($url, $main_domain);
+		}
+
+		$new_engine_cities = Kohana::$config->load("common.new_engine_cities");
+		if (!$new_engine_cities) {
+			$new_engine_cities = array(1979);
+		}
+		//TODO костыль для Сургута с новой адресацией
+		if (in_array($this->city_id, $new_engine_cities)) {
+			array_push($url, $this->get_nurl());
+		} else {
+			array_push($url, $this->get_old_url());
+		}
+		
+
+		return implode("/", $url);
+	}
+
+	public function is_newspaper_object()
+	{
+		if ( ! $this->loaded())
+		{
+			return FALSE;
+		}
+
+		return ($this->source_id == 2);
+	}
+
+	
+	public function generate_newspaper_object_title()
+	{
+		if ( ! $this->loaded())
+		{
+			return FALSE;
+		}
+
+		$title = $this->title;
+		$title = Text::rus2translit($title);
+		$title = Text::clear_symbols_for_seo_name($title);
+		$title = mb_strtolower($title);
+		$title = str_replace(array(' '), '-', $title);
+		$title = str_replace('--', '-', $title);
+		$title = trim($title,'-');
+		$this->seo_name = $title;
+		$this->save();
+		return $title;
+	}
 }
 
 /* End of file Object.php */

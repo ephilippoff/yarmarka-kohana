@@ -88,7 +88,7 @@ class Form_Add  {
 		if ($this->_edit OR $this->is_post)		
 			$this->city = ORM::factory('City', $city_id)->cached(DATE::WEEK, array("city", "add"));
 		elseif (!$this->is_post AND isset($_COOKIE["location_city_id"]) AND $_COOKIE["location_city_id"])
-			$this->city = ORM::factory('City', $_COOKIE["location_city_id"])->cached(DATE::WEEK, array("city", "add"));
+			$this->city = ORM::factory('City', (int) Arr::get($_COOKIE, "location_city_id", 0))->cached(DATE::WEEK, array("city", "add"));
 		
 		if ($this->city->loaded())
 			$this->city_id = $this->city->id;

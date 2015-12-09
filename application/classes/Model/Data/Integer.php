@@ -53,6 +53,19 @@ class Model_Data_Integer extends Data
 
 		return $result;
 	}
+
+	public function get_compile_surgut()
+	{
+		if (!$this->loaded())
+			return;
+
+		$result = $this->as_array();
+
+		$result["_attribute"] 	= $this->attribute_obj->select_array(array("id","title","seo_name","type"));
+		$result["_type"] = "Integer";
+
+		return $result;
+	}
 }
 
 /* End of file Integer.php */

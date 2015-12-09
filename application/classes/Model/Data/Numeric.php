@@ -32,6 +32,19 @@ class Model_Data_Numeric extends Data
 
 		return $result;
 	}
+
+	public function get_compile_surgut()
+	{
+		if (!$this->loaded())
+			return;
+
+		$result = $this->as_array();
+
+		$result["_attribute"] 	= $this->attribute_obj->select_array(array("id","title","seo_name","type"));
+		$result["_type"] = "Numeric";
+
+		return $result;
+	}
 }
 
 /* End of file Numeric.php */

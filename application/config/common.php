@@ -23,6 +23,7 @@ return array(
 	'add_phone_required' 					=> TRUE,
 	'add_phone_required_exlusion' 			=> array(36,35),
 	'short_domain'							=> 'ya24.biz',
+	'new_engine_cities' => array(1979),
 	'cors_rest_domains' => array(
 		'http://surgut.yarmarka.dev',
 

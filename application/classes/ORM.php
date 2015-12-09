@@ -298,4 +298,25 @@ class ORM extends Kohana_ORM {
 					->cached($cached);
 	}
 
+	public function select_array($columns = array())
+	{
+		$object = array();
+
+		foreach ($this->_object as $column => $value)
+		{
+			if (count($columns) AND !in_array($column, $columns)) continue;
+			// Call __get for any user processing
+			$object[$column] = $this->__get($column);
+		}
+
+		foreach ($this->_related as $column => $model)
+		{
+			if (count($columns) AND !in_array($column, $columns)) continue;
+			// Include any related objects that are already loaded
+			$object[$column] = $model->as_array();
+		}
+
+		return $object;
+	}
+
 }

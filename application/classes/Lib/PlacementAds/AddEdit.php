@@ -1393,6 +1393,19 @@ class Lib_PlacementAds_AddEdit {
 		return $this;
 	}
 
+	function save_compile_surgut_object()
+	{
+		$object = &$this->object;
+		$params = &$this->params;
+
+		$compiled = Object_Compile::saveObjectCompiled($this->object, $params);
+
+		$object = ORM::factory('Object', $object->id)->get_row_as_obj();
+		$object->compiled = $compiled;
+		
+		return $this;
+	}
+
 	function send_external_integrations()
 	{
 		$object = &$this->object;

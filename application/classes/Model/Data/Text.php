@@ -21,6 +21,19 @@ class Model_Data_Text extends Data
 		return $result;
 	}
 
+	public function get_compile_surgut()
+	{
+		if (!$this->loaded())
+			return;
+
+		$result = $this->as_array();
+
+		$result["_attribute"] 	= $this->attribute_obj->select_array(array("id","title","seo_name","type"));
+		$result["_type"] = "Text";
+
+		return $result;
+	}
+
 	public function save(Validation $validation = NULL)
 	{
 		$this->value = Text::ucfirst($this->value);

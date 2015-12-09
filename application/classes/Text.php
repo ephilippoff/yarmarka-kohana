@@ -151,6 +151,11 @@ class Text extends Kohana_Text {
 	{
 		return substr($number, 0, 4).'-'.substr($number, 4, 3).'-'.substr($number, 7);
 	}
+	
+	public static function clear_symbols_for_seo_name($str)
+	{
+		return str_replace(array('!','#','$','%','&','\\','*','+','/','=','?','^','`','{','|','}','~','@','.','[',']',')','(',',', '"', "'"), '', $str);
+	}
 
 	public static function rus2translit($string) {
 	    $converter = array(
