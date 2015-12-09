@@ -190,20 +190,16 @@ class Search {
 		if ($params->email) {
 			$useremail_subquery = DB::select("useremail.id")
 										->from(array("user","useremail") )
-										->where("o.author","=","useremail.id")
+										->where("o.author","=",DB::expr("useremail.id") )
 										->where(DB::expr("w_lower(useremail.email)"),"LIKE", "%".$params->email."%")
 										->limit(1);
 			$object = $object->where(DB::expr('exists'), DB::expr(''), $useremail_subquery);
 		}
 
 		if ($params->contact) {
-			$object = $object
-							->where_open()
-								->where('', 'EXISTS', DB::expr('(SELECT oc.id FROM object_contacts as oc 
+			$object = $object->where('', 'EXISTS', DB::expr('(SELECT oc.id FROM object_contacts as oc 
 											JOIN contacts as c ON c.id = oc.contact_id 
-											WHERE oc.object_id=o.id AND c.contact LIKE \'%'.$params->contact.'%\')'))
-								->or_where('o.contact', 'LIKE', '%'.$params->contact.'%')
-							->where_close();
+											WHERE oc.object_id=o.id AND c.contact_clear LIKE \'%'.$params->contact['clear'].'%\')'));
 		}
 
 		if ( isset($params->moder_state) ) { 
@@ -333,7 +329,7 @@ class Search {
 			}
 		}
 
-		if ($params->source) {
+		if ( $params->source ) {
 			$object = $object->where("o.source_id", "=", (int) $params->source);
 		}
 

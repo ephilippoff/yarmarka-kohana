@@ -27,22 +27,23 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 
 		$search_filters = array(
 			"active" => TRUE,
-			"compile_exists" => TRUE,
-			"source" => 1
+			"compile_exists" => TRUE
 		);
 
 		if ($user_id = intval($this->request->query('user_id')))
 		{
 			$filters_enable = FALSE;
+
 			$this->template->author = ORM::factory('User', $user_id);
 			$search_filters["user_id"] = $user_id;
 		}
 
 		if ($filters_enable AND $email = trim(mb_strtolower($this->request->query('email'))))
 		{
+			$filters_enable = FALSE;
+
 			if (is_numeric($email)) // can be email or object id
 			{
-				$filters_enable = FALSE;
 				$search_filters["id"] = $email;
 			}
 			else
@@ -53,7 +54,12 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 
 		if ($filters_enable AND $contact = trim(mb_strtolower($this->request->query('contact'))))
 		{
-			$search_filters["contact"] = $contact;
+			$filters_enable = FALSE;
+
+			$search_filters["contact"] = array(
+				"clear" => ( Valid::email( $contact ) ) ? $contact : Text::clear_phone_number($contact),
+				"raw" => $contact
+			);
 		}
 
 		if ($filters_enable AND $date = $this->request->query('date') AND !$contact AND !$email)
@@ -92,6 +98,9 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 			$search_filters["user_role"] = 2;
 		}
 
+		
+
+
 
 		if ($filters_enable AND '' !== ($moder_state = Arr::get($_GET, 'moder_state', '0'))  AND !$contact AND !$email)
 		{
@@ -104,6 +113,15 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 				$search_filters["moder_state"] = $moder_state;
 			}
 			
+		}
+
+		if ($source_id = intval($this->request->query('source_id')))
+		{
+			unset($search_filters["moder_state"]);
+			unset($search_filters["user_role"]);
+			$search_filters["source"] = $source_id;
+		} else if ($filters_enable){
+			//$search_filters["source"] = 1;
 		}
 
 		
@@ -202,6 +220,8 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 			->cached(Date::WEEK)
 			->find_all()
 			->as_array('id', 'title');
+
+		$this->template->search_filters = $search_filters;
 
 	}
 

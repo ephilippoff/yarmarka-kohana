@@ -39,7 +39,7 @@
 		<b><?=$object->contact?></b><br />
 		<?=implode(", ", $contacts)?>
 		<br />
-		<a href="" title="Показать только объявления этого пользователя" onClick="return set_query('user_id=<?=$object->author?>')"><?=$users[$object->author]?></a>
+		<a href="" title="Показать только объявления этого пользователя" onClick="return set_query('user_id=<?=$object->author?>')"><?=@$users[$object->author]?></a>
 	</td>
 	<td>
 		<b><a href="<?=CI::site('detail/'.$object->id)?>" target="_blank"><?=strip_tags($object->title)?></a></b>

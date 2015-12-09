@@ -108,49 +108,68 @@ function obj_selection(src, obj_id)
 </script>
 <a href="/add" target="_blank">Подать объявление</a>
 <form class="form-inline">
-	<div class="input-prepend">
-		<span class="add-on"><i class="icon-envelope"></i></span>
-		<input class="span2" id="prependedInput" type="text" placeholder="User email or object id" name="email" value="<?=Arr::get($_GET, 'email')?>">
-    </div>
-	<div class="input-prepend">
-		<span class="add-on">Contact</span>
-		<input class="span2" id="prependedInput" type="text" placeholder="User contact or name" name="contact" value="<?=Arr::get($_GET, 'contact')?>">
-    </div>
-	<div class="input-prepend">
-		<div class="btn-group">
-			<button class="btn dropdown-toggle" data-toggle="dropdown">
-				<span id="date_field">
-					<?php if (Arr::get($_GET, 'date_field') == 'date_created') : ?>
-						С учетом поднятия
-					<?php else : ?>
-						Реальная дата
-					<?php endif; ?>
-				</span>
-				<span class="caret"></span>
-			</button>
-			<ul class="dropdown-menu">
-				<li><a href="#" data-field="real_date_created" class="date_field">Реальная дата</a></li>
-				<li><a href="#" data-field="date_created" class="date_field">С учетом поднятия</a></li>
-			</ul>
-		</div>		
-		<input type="hidden" name="date_field" value="<?=Arr::get($_GET, 'date_field', 'real_date_created')?>" />
-		<input type="text" class="input-small dp" placeholder="date from" name="date[from]" value="<?=Arr::get(@$_GET['date'], 'from', date('Y-m-d', strtotime('-7 days')))?>">
-		<input type="text" class="input-small dp" placeholder="date to" name="date[to]" value="<?=Arr::get(@$_GET['date'], 'to')?>">
-	</div>
-	<?=Form::select('category_id', array('' => 'Все рубрики')+$categories, Arr::get($_GET, 'category_id'), array('class' => 'span2'))?>
-	<?=Form::select('city_id', array('' => 'Все города')+$cities, Arr::get($_GET, 'city_id'), array('class' => 'span2'))?>
-	<?=Form::select('role_id', array('' => 'Все пользователи')+$roles, Arr::get($_GET, 'role_id', 2), array('class' => 'span2'))?>
-	<?=Form::select('moder_state', 
-		array(
-			'' => 'Все объвления',
-			'0' => 'На модерации',
-			'1' => 'Прошло модерацию',
-			'3' => 'Есть жалобы',
-		), 
-		Arr::get($_GET, 'moder_state', '0'), array('class' => 'span2'))
-	?>
+	
+	<?php if ( !array_intersect(array_keys($search_filters), array('user_id','contact','id') ) ): ?>
+		<div class="input-prepend">
+			<span class="add-on"><i class="icon-envelope"></i></span>
+			<input class="span2" id="prependedInput" type="text" placeholder="User email or object id" name="email" value="<?=Arr::get($_GET, 'email')?>">
+	    </div>
+    <?php endif; ?>
+	
+	<?php if ( !array_intersect(array_keys($search_filters), array('user_id','email','id') ) ): ?>
+		<div class="input-prepend">
+			<span class="add-on">Contact</span>
+			<input class="span2" id="prependedInput" type="text" placeholder="User contact or name" name="contact" value="<?=Arr::get($_GET, 'contact')?>">
+	    </div>
+    <?php endif; ?>
+    <?=Form::select('source_id', 
+    	array(
+    		'' => 'Все (из газеты и сайта)',
+    		'1' => 'Подано на сайт',
+    		'2' => 'Подано в газету'
+    	), 
+    	Arr::get($_GET, 'source_id', '1'), array('class' => 'span2'))
+    ?>
+	<?php if ( !array_intersect(array_keys($search_filters), array('user_id','email','id','contact') ) ): ?>
+		<div class="input-prepend">
+			<div class="btn-group">
+				<button class="btn dropdown-toggle" data-toggle="dropdown">
+					<span id="date_field">
+						<?php if (Arr::get($_GET, 'date_field') == 'date_created') : ?>
+							С учетом поднятия
+						<?php else : ?>
+							Реальная дата
+						<?php endif; ?>
+					</span>
+					<span class="caret"></span>
+				</button>
+				<ul class="dropdown-menu">
+					<li><a href="#" data-field="real_date_created" class="date_field">Реальная дата</a></li>
+					<li><a href="#" data-field="date_created" class="date_field">С учетом поднятия</a></li>
+				</ul>
+			</div>		
+			<input type="hidden" name="date_field" value="<?=Arr::get($_GET, 'date_field', 'real_date_created')?>" />
+			<input type="text" class="input-small dp" placeholder="date from" name="date[from]" value="<?=Arr::get(@$_GET['date'], 'from', date('Y-m-d', strtotime('-7 days')))?>">
+			<input type="text" class="input-small dp" placeholder="date to" name="date[to]" value="<?=Arr::get(@$_GET['date'], 'to')?>">
+		</div>
+
+		<?=Form::select('category_id', array('' => 'Все рубрики')+$categories, Arr::get($_GET, 'category_id'), array('class' => 'span2'))?>
+		<?=Form::select('city_id', array('' => 'Все города')+$cities, Arr::get($_GET, 'city_id'), array('class' => 'span2'))?>
+		<?=Form::select('role_id', array('' => 'Все пользователи')+$roles, Arr::get($_GET, 'role_id', 2), array('class' => 'span2'))?>
+		<?=Form::select('moder_state', 
+			array(
+				'' => 'Все объвления',
+				'0' => 'На модерации',
+				'1' => 'Прошло модерацию',
+				'3' => 'Есть жалобы',
+			), 
+			Arr::get($_GET, 'moder_state', '0'), array('class' => 'span2'))
+		?>
+		
+
+	<?php endif; ?>
 	<input type="submit" name="" value="Filter" class="btn btn-primary">
-	<input type="reset" name="" value="Clear" class="btn">
+	<input type="reset" name="" value="Clear" class="btn" onclick="document.location='/khbackend/objects';">
 </form>
 
 <?php if (isset($author) AND $author->loaded()) : ?>
