@@ -1400,8 +1400,8 @@ class Lib_PlacementAds_AddEdit {
 
 		$compiled = Object_Compile::saveObjectCompiled($this->object, $params);
 
-		$object = ORM::factory('Object', $object->id)->get_row_as_obj();
-		$object->compiled = $compiled;
+		// $_object = ORM::factory('Object', $object->id)->get_row_as_obj();
+		// $_object->compiled = $compiled;
 		
 		return $this;
 	}
