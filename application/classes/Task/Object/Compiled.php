@@ -30,11 +30,11 @@ class Task_Object_Compiled extends Minion_Task
 		}
 
 		if ($active) {
-			$object = $object->where("active","=", 1)->where("is_published","=", 1);
+			$object = $object->where("active","=", 1)->where("date_created",">=", DB::expr("NOW() - interval '6 months'"));
 		}
 
 		if ($newspaper) {
-			$object = $object->where("source_id","=", 2)->where("is_published","=", 1);
+			$object = $object->where("source_id","=", 2)->where("date_created",">=", DB::expr("NOW() - interval '6 months'"));
 		}
 
 		if (!$rewrite) {
