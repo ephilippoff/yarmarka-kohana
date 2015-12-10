@@ -1253,7 +1253,7 @@ class Lib_PlacementAds_AddEdit {
 		{
 			$object->title = $object->generate_title();
 		} else {
-			$object->title = Text::ucfirst(mb_strtolower($object->title));
+			$object->title = strip_tags($object->title);
 		}
 
 		$object->full_text = $object->generate_full_text();

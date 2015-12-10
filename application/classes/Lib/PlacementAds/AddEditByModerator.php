@@ -131,21 +131,4 @@ class Lib_PlacementAds_AddEditByModerator extends Lib_PlacementAds_AddEdit {
 		return $this;		
 	}
 
-	function save_generated()
-	{
-		$object = &$this->object;
-		$params = &$this->params;
-
-		if ($object->category_obj->title_auto_fill)
-		{
-			$object->title = $object->generate_title();
-		} else {
-			$object->title = $object->title;
-		}
-
-		$object->full_text = $object->generate_full_text();
-		$object->save();
-		return $this;
-	}
-
 }
