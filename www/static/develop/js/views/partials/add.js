@@ -685,7 +685,6 @@ define([
             var html = _.template(this.template)(this.model.toJSON());
             this.container.append(this.$el.html(html));
             $('#add-block').sortable({
-                revert: true,
                 revert: 300,
                 start: function(event, ui) {
                     clearInterval(this.interval);
