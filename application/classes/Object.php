@@ -91,12 +91,11 @@ class Object
 				throw $e;
 			}
 
+			$add->send_to_forced_moderation();
+
 			if (!$is_local) {
 				$add->send_external_integrations()
-					->send_to_forced_moderation()
 					->send_message();
-			} else {
-				$add->send_to_forced_moderation();
 			}
 
 			$json['object_id'] = $add->object->id;
@@ -246,8 +245,8 @@ class Object
 				throw $e;
 			}
 
-			$add//->send_external_integrations()
-				->send_to_forced_moderation();
+			//$add//->send_external_integrations()
+				//->send_to_forced_moderation();
 				//->send_message();
 
 			$json['object_id'] = $add->object->id;
@@ -364,6 +363,19 @@ class Object
 	{
 		$check = self::PlacementAds_Validate($input_params, TRUE);
 		$error = $check["error"];
+		
+		if (isset($check['add_obj']->object->moder_state) AND $check['add_obj']->object->moder_state  == 1) {
+			if (!$error) {
+				$error = array();
+			}
+			if ($check['add_obj']->object->is_bad  == 1) {
+				$error["common"] => "Объявление было снято модератором. Исправьте объявление для того, чтобы его разместить (мы автоматически переведем вас на страницу редактирования) ";
+			} elseif ($check['add_obj']->object->is_bad  == 2) {
+				$error["common"] => "Объявление было заблокирвоано модератором окончательно.";
+			}
+			
+		} 
+
 		if ($error)
 		{
 			$errors = array_values($error);

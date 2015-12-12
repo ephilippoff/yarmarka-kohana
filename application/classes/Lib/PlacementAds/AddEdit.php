@@ -1278,11 +1278,11 @@ class Lib_PlacementAds_AddEdit {
 
 		$compiled = Object_Compile::saveObjectCompiled($this->object, $params);
 
-		$object = ORM::factory('Object', $object->id)->get_row_as_obj();
-		$object->compiled = $compiled;
+		$_object = ORM::factory('Object', $object->id)->get_row_as_obj();
+		$_object->compiled = $compiled;
 
-		Cache::instance('object')->delete($object->id);
-		Cache::instance('object')->set($object->id, (array) $object, 3600);
+		Cache::instance('object')->delete($_object->id);
+		Cache::instance('object')->set($_object->id, (array) $_object, 3600);
 		
 		return $this;
 	}

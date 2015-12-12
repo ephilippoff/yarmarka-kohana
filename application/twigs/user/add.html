@@ -104,6 +104,22 @@
 		</div>
 	{% endif %}
 
+	{% if params.moder_messages|length > 0 %}
+		<div class="info-block-cont theme3 module">
+			<div class="block-title">
+				<span>Модерация</span>
+			</div>						
+			<div class="bg-color-whitesmoke p20">
+				<ul>
+					{% for message in params.moder_messages %} 
+						<li class="mb20 p5"><span class="bold db">{{ message.createdOn|date('d.m H:i') }}</span> <span class="red">{{ message.text }}</span></li>
+					{% endfor %}
+				</ul>
+				
+			</div>
+		</div>
+	{% endif %}
+
 	<div class="info-block-cont theme3 module hidden-sm">
 		<div class="block-title">
 			<span>Информация</span>
