@@ -171,6 +171,8 @@ class Object
 				throw $e;
 			}
 
+			$add->send_to_forced_moderation();
+
 			if (!$is_local) {
 				$add->send_external_integrations();
 			}
