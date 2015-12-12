@@ -246,11 +246,15 @@ class Controller_Add extends Controller_Template {
 		}
 
 
-		$twig->params->moder_messages = ORM::factory('User_Messages')
-		                        ->get_messages_from_admins($object_id)
-		                        ->order_by("createdOn", "desc")
-		                        ->limit(3)
-		                        ->getprepared_all();
+		if ($object->is_bad) {
+			$twig->params->moder_messages = ORM::factory('User_Messages')
+			                        ->get_messages_from_admins($object_id)
+			                        ->order_by("createdOn", "desc")
+			                        ->limit(3)
+			                        ->getprepared_all();
+		} else {
+			$twig->params->moder_messages = array();
+		}
 
 		$twig->params->expired_orginfo = $expired;
 		$twig->params = (array) $twig->params;
