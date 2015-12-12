@@ -1,16 +1,11 @@
 <div class="breadcrumbs-cont module">
-	{% if canonical_url and canonical_url != main_category %}
-		{% if city %}
-			<a href="/glavnaya-kategoriya{{sphinx_search_query}}" rel="nofollow" class="captionbold">Объявления в {{ city.sinonim }} </a>
-		{% else %}
-			<a href="/glavnaya-kategoriya{{sphinx_search_query}}" rel="nofollow" class="captionbold">Объявления в России</a>
-		{% endif %}
-	{% endif %}
+	<a href="/{{sphinx_search_query}}" rel="nofollow" class="">Главная</a>
 
 	{% for crumb in crumbs %}
-		{% if crumb.uri != canonical_url and canonical_url %}
-			/ <a href="{{ url(crumb.uri ~ crumb.query) }}" class="captionbold">{{crumb.title}}</a>
+		{% if 'http://' ~ s_host ~ '/' ~crumb.uri != canonical_url and canonical_url %}
+			/ <a href="{{ url(crumb.uri ~ crumb.query) }}" class="">{{crumb.title}}</a>
 		{% endif %}
 	{% endfor %}
+
 	/ <h1>{{ seo_attributes.h1 ? seo_attributes.h1: category.title }}</h1> <span class="count">{{ link_counters[s_host ~ s_suri] }}</span>
 </div>
