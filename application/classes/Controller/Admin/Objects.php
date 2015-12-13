@@ -375,23 +375,81 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 		$this->response->body(json_encode($json));
 	}
 
-	public function action_object_row()
+	public function action_row()
 	{
 		$this->use_layout = FALSE;
 
-		$object = ORM::factory('Object')
-			->where('object.id', '=', $this->request->param('id'))
-			->with('user')
-			->with('city_obj')
-			->with('category_obj')
-			->with_main_photo()
-			->find();
-		if ( ! $object->loaded())
-		{
-			throw new HTTP_Exception_404;
-		}
 
-		$this->template->object = $object;
+		$main_search_query = Search::searchquery(array("id" => $this->request->param('id')), array());
+		$main_search_result = Search::getresult($main_search_query->execute()->as_array());
+		$ids = array_map(function($item){
+			return $item["id"];
+		}, $main_search_result);
+
+		$author_ids = array_map(function($item){
+			return $item["author"];
+		}, $main_search_result);
+
+		if (count($author_ids) == 0) $author_ids = array(0);
+
+		$this->template->object = ORM::factory('Object')->where("id","IN", $ids)->find();
+		$this->template->compiled = $main_search_result[0]['compiled'];
+
+		$object_contacts = ORM::factory('Object_Contact')
+			->select(array("contact","contact_value"), 'contact_clear','contact_type_id' )
+			->join("contacts")
+				->on("object_contact.contact_id","=","contacts.id")
+			->where("object_id", "IN", $ids )
+			->find_all();
+
+		$_contacts = array();
+		foreach ($object_contacts as $contact) {
+			if ( !isset($_contacts[$contact->object_id]) ) {
+				$_contacts[$contact->object_id] = array();
+			}
+
+			$_contacts[$contact->object_id][] = $contact->get_row_as_obj();
+		}
+		$this->template->object_contacts = $_contacts[$this->template->object->id];
+
+		$this->template->complaints = ORM::factory('Complaint')
+			->where("object_id", "IN", $ids )
+			->find_all()
+			->as_array("id");
+
+		$this->template->users = ORM::factory('User')
+			->where("id", "IN", $author_ids )
+			->find_all()
+			->as_array('id', 'email','role');
+
+		$this->template->roles = ORM::factory('Role')
+			->find_all()
+			->as_array('id', 'name');
+
+		$this->template->categories = ORM::factory('Category')
+			->order_by('title')
+			->cached(Date::WEEK)
+			->find_all()
+			->as_array('id', 'title');
+
+		$this->template->cities = ORM::factory('City')
+			->where('is_visible',"=",1)
+			->order_by('title')
+			->cached(Date::WEEK)
+			->find_all();
+
+		// $params = array(
+		// 	'object' => $object, 
+		// 	'compiled' => $compiled, 
+		// 	'categories' => $categories, 
+		// 	'cities' => $cities,
+		// 	'users' => $users,
+		// 	'complaints' => $complaints,
+		// 	'object_contacts' => $object_contacts,
+		// 	'roles' => $roles
+		// );
+
+		// $this->template->object = $object;
 	}
 
 	public function action_edit()

@@ -84,7 +84,7 @@ function reload_row(object_id, moder_state) {
 			window.location.reload();
 		}
 	} else {
-		$.post('/khbackend/objects/object_row/'+object_id, {moder_state:moder_state}, function(html){
+		$.post('/khbackend/objects/row/'+object_id, {moder_state:moder_state}, function(html){
 			var old_row = $('#'+object_id);
 			old_row.after(html);
 			old_row.remove();
