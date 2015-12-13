@@ -109,33 +109,34 @@ function obj_selection(src, obj_id)
 <a href="/add" target="_blank">Подать объявление</a>
 <form class="form-inline">
 	
-	<?php if ( !array_intersect(array_keys($search_filters), array('user_id','contact','id') ) ): ?>
+	<?php if ( !array_intersect(array_keys($search_filters), array('user_id','contact') ) ): ?>
 		<div class="input-prepend">
 			<span class="add-on"><i class="icon-envelope"></i></span>
-			<input class="span2" id="prependedInput" type="text" placeholder="User email or object id" name="email" value="<?=Arr::get($_GET, 'email')?>">
+			<input class="span2" id="prependedInput" type="text" placeholder="User email or object id" name="email" value="<?=Arr::get($search_filters, 'email',Arr::get($search_filters, 'id'))?>">
 	    </div>
     <?php endif; ?>
 	
 	<?php if ( !array_intersect(array_keys($search_filters), array('user_id','email','id') ) ): ?>
 		<div class="input-prepend">
 			<span class="add-on">Contact</span>
-			<input class="span2" id="prependedInput" type="text" placeholder="User contact or name" name="contact" value="<?=Arr::get($_GET, 'contact')?>">
+			<input class="span2" id="prependedInput" type="text" placeholder="User contact or name" name="contact" value="<?=Arr::get(@$search_filters['contact'], 'raw')?>">
 	    </div>
     <?php endif; ?>
-    <?=Form::select('source_id', 
-    	array(
-    		'' => 'Все (из газеты и сайта)',
-    		'1' => 'Подано на сайт',
-    		'2' => 'Подано в газету'
-    	), 
-    	Arr::get($_GET, 'source_id', '1'), array('class' => 'span2'))
-    ?>
+  
 	<?php if ( !array_intersect(array_keys($search_filters), array('user_id','email','id','contact') ) ): ?>
+		<?=Form::select('source', 
+			array(
+				'' => 'Все (из газеты и сайта)',
+				'1' => 'Подано на сайт',
+				'2' => 'Подано в газету'
+			), 
+			Arr::get($search_filters, 'source'), array('class' => 'span2'))
+		?>
 		<div class="input-prepend">
 			<div class="btn-group">
 				<button class="btn dropdown-toggle" data-toggle="dropdown">
 					<span id="date_field">
-						<?php if (Arr::get($_GET, 'date_field') == 'date_created') : ?>
+						<?php if (Arr::get($search_filters, 'date_field') == 'date_created') : ?>
 							С учетом поднятия
 						<?php else : ?>
 							Реальная дата
@@ -148,14 +149,14 @@ function obj_selection(src, obj_id)
 					<li><a href="#" data-field="date_created" class="date_field">С учетом поднятия</a></li>
 				</ul>
 			</div>		
-			<input type="hidden" name="date_field" value="<?=Arr::get($_GET, 'date_field', 'real_date_created')?>" />
-			<input type="text" class="input-small dp" placeholder="date from" name="date[from]" value="<?=Arr::get(@$_GET['date'], 'from', date('Y-m-d', strtotime('-7 days')))?>">
-			<input type="text" class="input-small dp" placeholder="date to" name="date[to]" value="<?=Arr::get(@$_GET['date'], 'to')?>">
+			<input type="hidden" name="date_field" value="<?=Arr::get($search_filters, 'date_field', 'real_date_created')?>" />
+			<input type="text" class="input-small dp" placeholder="date from" name="date[from]" value="<?=Arr::get(@$search_filters['date_created'], 'from', Arr::get(@$search_filters['real_date_created'], 'from' ) )?>">
+			<input type="text" class="input-small dp" placeholder="date to" name="date[to]" value="<?=Arr::get(@$search_filters['date_created'], 'to', Arr::get(@$search_filters['real_date_created'], 'to' ) )?>">
 		</div>
 
-		<?=Form::select('category_id', array('' => 'Все рубрики')+$categories, Arr::get($_GET, 'category_id'), array('class' => 'span2'))?>
-		<?=Form::select('city_id', array('' => 'Все города')+$cities, Arr::get($_GET, 'city_id'), array('class' => 'span2'))?>
-		<?=Form::select('role_id', array('' => 'Все пользователи')+$roles, Arr::get($_GET, 'role_id', 2), array('class' => 'span2'))?>
+		<?=Form::select('category_id', array('' => 'Все рубрики')+$categories, Arr::get($search_filters, 'category_id'), array('class' => 'span2'))?>
+		<?=Form::select('city_id', array('' => 'Все города')+$cities, Arr::get($search_filters, 'city_id'), array('class' => 'span2'))?>
+		<?=Form::select('user_role', array('' => 'Все пользователи')+$roles, Arr::get($search_filters, 'user_role'), array('class' => 'span2'))?>
 		<?=Form::select('moder_state', 
 			array(
 				'' => 'Все объвления',
@@ -163,7 +164,7 @@ function obj_selection(src, obj_id)
 				'1' => 'Прошло модерацию',
 				'3' => 'Есть жалобы',
 			), 
-			Arr::get($_GET, 'moder_state', '0'), array('class' => 'span2'))
+			Arr::get($search_filters, 'moder_state'), array('class' => 'span2'))
 		?>
 		
 

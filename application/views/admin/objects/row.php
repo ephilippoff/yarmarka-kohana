@@ -42,13 +42,13 @@
 		<a href="" title="Показать только объявления этого пользователя" onClick="return set_query('user_id=<?=$object->author?>')"><?=@$users[$object->author]?></a>
 	</td>
 	<td>
-		<b><a href="<?=CI::site('detail/'.$object->id)?>" target="_blank"><?=strip_tags($object->title)?></a></b>
+		<b>(<?=($object->is_published) ? "Опубликовано":"Снято"?>) <a href="<?=CI::site('detail/'.$object->id)?>" target="_blank"><?=strip_tags($object->title)?></a></b>
 		<a href="<?=URL::site('khbackend/objects/edit/'.$object->id)?>" class="icon-pencil" style="margin-left: 15px;" title="Редактировать текст объявления" data-toggle="modal" data-target="#myModal"></a>
 		<br />
 		<p>
 			<div id="gallery" data-toggle="modal-gallery" data-target="#modal-gallery">
 			<?php if (isset($compiled['images']['main_photo'])) : ?>
-				<a href="<?=$compiled['images']['main_photo']['original']?>" data-gallery="gallery">
+				<a href="/<?=$compiled['images']['main_photo']['original']?>" data-gallery="gallery">
 					<img align="right" style="margin-top: -20px;" src="/<?=$compiled['images']['main_photo']['120x90']?>" />
 				</a>
 			<?php endif; ?>

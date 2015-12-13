@@ -14,21 +14,30 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 
 	public function action_index()
 	{
-		// set_time_limit(60);
-		// ini_set('memory_limit', '512M');
-		// Kohana::$profiling = TRUE; // @todo
 
-		// $limit  = Arr::get($_GET, 'limit', 50);
-		// $page   = $this->request->query('page');
-		// $offset = ($page AND $page != 1) ? ($page-1)*$limit : 0;
-		
+		if ($user = Auth::instance()->get_user() AND $user->role == 1) {
+			Kohana::$profiling = TRUE;
+		} else {
+			Kohana::$profiling = FALSE;
+		}
+
 		$filters_enable = TRUE;
-
 
 		$search_filters = array(
 			"active" => TRUE,
 			"compile_exists" => TRUE
 		);
+
+
+		if (count($this->request->query()) == 0) 
+		{
+			$search_filters["source"] = 1;
+			$search_filters["moder_state"] = 0;
+			$search_filters["user_role"] = 2;
+
+			$search_filters["real_date_created"] = array();
+			$search_filters["real_date_created"]["from"] = date('Y-m-d', strtotime('-7 days'));
+		}
 
 		if ($user_id = intval($this->request->query('user_id')))
 		{
@@ -36,9 +45,8 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 
 			$this->template->author = ORM::factory('User', $user_id);
 			$search_filters["user_id"] = $user_id;
-		}
-
-		if ($filters_enable AND $email = trim(mb_strtolower($this->request->query('email'))))
+		} 
+		elseif ($filters_enable AND $email = trim(mb_strtolower($this->request->query('email'))))
 		{
 			$filters_enable = FALSE;
 
@@ -50,9 +58,8 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 			{
 				$search_filters["email"] = $email;
 			}
-		}
-
-		if ($filters_enable AND $contact = trim(mb_strtolower($this->request->query('contact'))))
+		} 
+		elseif ($filters_enable AND $contact = trim(mb_strtolower($this->request->query('contact'))))
 		{
 			$filters_enable = FALSE;
 
@@ -62,24 +69,35 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 			);
 		}
 
-		if ($filters_enable AND $date = $this->request->query('date') AND !$contact AND !$email)
+		if ($filters_enable AND $date = $this->request->query('date'))
 		{
-			//$field = $this->request->query('date_field');
-			$search_filters["date_created"] = array();
-			if ($from_time = strtotime($date['from']))
-			{
-				$search_filters["date_created"]["from"] = date('Y-m-d', $from_time);
-			}
+			$field = $this->request->query('date_field');
+			if ($field == 'date_created') {
 
-			if ($to_time = strtotime($date['to']))
-			{
-				$search_filters["date_created"]["to"] = date('Y-m-d', $to_time);
+				$search_filters["date_created"] = array();
+				if ($from_time = strtotime($date['from']))
+				{
+					$search_filters["date_created"]["from"] = date('Y-m-d', $from_time);
+				}
+
+				if ($to_time = strtotime($date['to']))
+				{
+					$search_filters["date_created"]["to"] = date('Y-m-d', $to_time);
+				} 
+			}
+			else {
+				$search_filters["real_date_created"] = array();
+				if ($from_time = strtotime($date['from']))
+				{
+					$search_filters["real_date_created"]["from"] = date('Y-m-d', $from_time);
+				}
+
+				if ($to_time = strtotime($date['to']))
+				{
+					$search_filters["real_date_created"]["to"] = date('Y-m-d', $to_time);
+				} 
 			}
 		}
-		elseif ($filters_enable  AND !$contact AND !$email)
-		{
-			$search_filters["real_date_created"] = array();
-			$search_filters["real_date_created"]["from"] = date('Y-m-d', strtotime('-7 days'));		}
 
 		if ($filters_enable AND $category_id = intval($this->request->query('category_id')))
 		{
@@ -91,45 +109,35 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 			$search_filters["city_id"] = $city_id;
 		}
 
-		if ($filters_enable AND $role_id = intval($this->request->query('role_id')))
+		if ($filters_enable AND $user_role = $this->request->query('user_role'))
 		{
-			$search_filters["user_role"] = $role_id;
-		} else {
-			$search_filters["user_role"] = 2;
+			$search_filters["user_role"] = $user_role;
 		}
 
-		
-
-
-
-		if ($filters_enable AND '' !== ($moder_state = Arr::get($_GET, 'moder_state', '0'))  AND !$contact AND !$email)
+		if ($filters_enable AND $this->request->query('moder_state') != "")
 		{
+			$moder_state = intval($this->request->query('moder_state'));
+
 			if ($moder_state == 3)
 			{
 				$search_filters["complaint_exists"] = TRUE;
-			}
-			else
+			} 
+			else 
 			{
 				$search_filters["moder_state"] = $moder_state;
 			}
 			
 		}
 
-		if ($source_id = intval($this->request->query('source_id')))
+		if ($filters_enable AND $source = intval($this->request->query('source')) )
 		{
-			unset($search_filters["moder_state"]);
-			unset($search_filters["user_role"]);
-			$search_filters["source"] = $source_id;
-		} else if ($filters_enable){
-			//$search_filters["source"] = 1;
+			$search_filters["source"] = $source;
 		}
-
-		
 
 		$search_params = array(
 			"page" => $this->request->query('page') ? $this->request->query('page') : 1,
 			"limit" => $this->request->query('limit') ? $this->request->query('limit') : 30,
-			"order" => trim($this->request->query('sort_by')) ? trim($this->request->query('sort_by')) : 'date_created',
+			"order" => trim($this->request->query('sort_by')) ? trim($this->request->query('sort_by')) : $this->request->query('date_field'),
 			"order_direction" => trim($this->request->query('direction')) ? trim($this->request->query('direction')) : 'desc'
 		);
 
@@ -222,7 +230,6 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 			->as_array('id', 'title');
 
 		$this->template->search_filters = $search_filters;
-
 	}
 
 	public function action_ajax_change_moder_state()
