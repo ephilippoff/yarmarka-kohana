@@ -4,6 +4,24 @@
 	}
 </style>
 
+<? $user_role_admin = FALSE; ?>
+<? $user_role = Auth::instance()->get_user()->role; ?>
+
+<? if (in_array($user_role, array(1,5,9))): ?>
+	<? $user_role_admin = TRUE; ?>
+	<style type="text/css" media="screen">
+		* {
+			font-size: 14px;
+		}
+	</style>
+	<?=HTML::style('/static/develop/css/iLight.css')?>
+	<?=HTML::style('/static/develop/css/css.css')?>
+
+<? endif; ?>
+
+<?=HTML::style('bootstrap/datepicker/css/datepicker.css')?>
+
+
 <?=HTML::script('bootstrap/datepicker/js/bootstrap-datepicker.js')?>
 <?=HTML::style('bootstrap/datepicker/css/datepicker.css')?>
 
@@ -24,6 +42,7 @@
 <?=HTML::script('bootstrap/image-gallery/js/load-image.js')?>
 <?=HTML::script('bootstrap/image-gallery/js/bootstrap-image-gallery.js')?>
 <?=HTML::style('bootstrap/image-gallery/css/bootstrap-image-gallery.css')?>
+
 
 <script type="text/javascript" src="/bootstrap/tinymce/tinymce.min.js"></script>
 <script type="text/javascript" src="/bootstrap/tinymce/jquery.tinymce.min.js"></script>
@@ -106,6 +125,8 @@ function obj_selection(src, obj_id)
 	
 }
 </script>
+ <div id="popup-layer" class="z200" style="display: none;"></div>
+ <div class="wrapper container page-search" style="margin-top:50px;">
 <a href="/add" target="_blank">Подать объявление</a>
 <form class="form-inline">
 	
@@ -209,7 +230,26 @@ function obj_selection(src, obj_id)
 				));
 			}
 		?>
-		
+		<? if ($user_role_admin): ?>
+			<tr><td colspan="6">
+				
+				<div class="row p20">
+					<div class="col-md-12">
+						<p class="button js-service-up button-style1 bg-color-lightgreen mb3" data-id="<?=$object->id?>">
+							<i class="fa fa-angle-double-up fa-lg mr5"></i>Поднять
+						</p>
+						<p class="button js-service-premium button-style1 bg-color-lightgreen mb3" data-id="<?=$object->id?>">
+							<i class="fa fa-check-circle  fa-lg mr5"></i>Премиум
+						</p>
+						<p class="button js-service-lider button-style1 bg-color-lightgreen mb3" data-id="<?=$object->id?>">
+							<i class="fa fa-check-circle fa-lg mr5"></i>Лидер
+						</p>
+						<p class="button button-style1 bg-color-blue mr3 mb3 js-service-newspaper" data-id="<?=$object->id?>" data-city="<?=$object->city_id?>">
+							<i class="fa fa-check-circle fa-lg mr5"></i>В газету</p>
+					</div>
+				</div>
+			</td></tr>
+		<? endif; ?>
 	<?php endforeach; ?>
 </table>
 
@@ -229,7 +269,20 @@ function obj_selection(src, obj_id)
 	</div>
 </div>
 <?php endif; ?>
-
+</div>
 <!-- Modal -->
 <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 </div>
+<div id="windows"></div>
+<script>
+  var _globalSettings =  { 
+        host: 'surgut.yarmarka.biz', 
+        page: 'usersearch', 
+        data: window.data, 
+        category_id: '',
+        query_params: '',
+        city_id: '',
+        debug: '1'
+    };
+</script>
+<script data-main="/static/develop/js/main.js" src="/static/develop/js/lib/require.js"></script>

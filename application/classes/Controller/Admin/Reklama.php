@@ -633,7 +633,40 @@ class Controller_Admin_Reklama extends Controller_Admin_Template {
 			));		
 	}
 	
-	
+	public function action_photocards_edit()
+	{
+		$ad_element = ORM::factory('Object_Service_Photocard', $this->request->param('id'));
+		if ( ! $ad_element->loaded())
+		{
+			throw new HTTP_Exception_404;
+		}
+
+		$this->template->categories = ORM::factory('Category')
+			->order_by('title')
+			->cached(Date::WEEK)
+			->find_all()
+			->as_array('id', 'title');
+
+		if (HTTP_Request::POST === $this->request->method()) 
+		{
+			try 
+			{				
+				$post = $_POST;	
+				
+				$ad_element->values($post)->save();	
+
+				$this->redirect('khbackend/reklama/photocards');
+			} 
+			catch (ORM_Validation_Exception $e) 
+			{
+				$this->template->errors = $e->errors('validation');
+			}
+		}
+
+		$this->template->ad_element = $ad_element;		
+
+	}
+
 	public function action_photocards()
 	{
 		$limit  = Arr::get($_GET, 'limit', 50);
