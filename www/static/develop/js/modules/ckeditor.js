@@ -20,7 +20,12 @@ define([ 'ckeditor', 'ckeditorJqueryAdapter' ], function () {
 			var config = {};
 			CKEDITOR.editorConfig(config);
 			$('.ckeditor').each(function (index, item) {
-				$(item).ckeditor(config);
+				var append = {};
+				if ($(item).data('fileupload')) {
+					append.filebrowserBrowseUrl = '/files',
+    				append.filebrowserUploadUrl = '/files'
+				}
+				$(item).ckeditor($.extend(config, append));
 			});
 		}
 	});

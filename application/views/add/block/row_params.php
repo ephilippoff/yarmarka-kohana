@@ -8,7 +8,8 @@
 			'class' => "fn-param",
 			'values' => $element['values'],
 			'value' => $element['value'],
-			'is_required' => $element['is_required']
+			'is_required' => $element['is_required'],
+			'custom' => ''
 		);
 		?>
 
@@ -19,6 +20,7 @@
 			<?php 
 				if ($element['name'] == 'param_1000') {
 					$parameters['class'] .= ' ckeditor';
+					$parameters['custom'] = 'data-fileupload="true"';
 				}
 			?>
 			<div class="row mb10" id="div_<?= $element["name"] ?>">
