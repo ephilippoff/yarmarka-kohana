@@ -56,10 +56,16 @@ class Model_Order extends ORM
 				}
 				elseif ($data['code_request'] == 100)
 				{
-					$order->success($params->fake_state);
+					if ($params->fake) {
+						$order->success($params->fake_state);
+					} else {
+						$order->success();
+					}
+					
 					if ($callback) {
 						$callback($order->id, "success");
 					}
+
 				} else {
 					if ($callback) {
 						$callback($order->id, "wait");
@@ -130,14 +136,16 @@ class Model_Order extends ORM
 			//apply services
 			foreach ($orderItems as $orderItem)
 			{
-				if ($orderItem->service->name == "kupon") {
+				//if ($orderItem->service->name == "kupon") {
 					Service::factory(Text::ucfirst($orderItem->service->name))->apply($orderItem);
-				}
+				//}
+				Kohana::$log->add(Log::NOTICE, Debug::vars($orderItem));
 			}
 
 			$db->commit();
 
 		} catch (Kohana_Exception $e) {
+			Kohana::$log->add(Log::NOTICE, Debug::vars("Ошибка применения заказа ".$e->getMessage()));
 			$db->rollback();
 			$message =  "Ошибка применения заказа ".$e->getMessage();
 			Email::send_to_admin("Ошибка применения заказа #".$this->id, $message);
