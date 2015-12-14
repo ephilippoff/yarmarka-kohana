@@ -40,7 +40,7 @@
 						<tr style="" class="ol_<?=$item->id?>">			
 							<td></td>
 							<td></td>
-							<td><a target="_blank" href="/user/massload_conformities/<?=$file->category?>"><?=$config[$file->category]['name']?> (?)</a></td>	
+							<td><a target="_blank" href="http://c.yarmarka.biz/user/massload_conformities/<?=$file->category?>"><?=$config[$file->category]['name']?> (?)</a></td>	
 							<td id="stat_<?=$file->id?>_<?=$file->category?>">
 								<?=$file->statistic_str?>					
 							</td>
@@ -64,7 +64,7 @@
 					<div class="massload-controlsrow">
 						<ul>
 							<? foreach($categories as $key=>$value): ?>
-								<li key="<?=$key?>"><a href="/user/massload_conformities/<?=$key?>"><?=$value?></a></li>
+								<li key="<?=$key?>"><a href="http://c.yarmarka.biz/user/massload_conformities/<?=$key?>"><?=$value?></a></li>
 							<? endforeach; ?>
 						</ul>	
 					</div>
