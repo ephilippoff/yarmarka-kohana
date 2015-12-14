@@ -75,6 +75,11 @@ class Controller_Detail extends Controller_Template {
 			}
 		}
 
+		//add to last views
+		LastViews::instance()
+			->set($object->id)
+			->commit();
+
 		$this->response->body($twig);
 	}
 

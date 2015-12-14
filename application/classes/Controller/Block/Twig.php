@@ -271,4 +271,55 @@ class Controller_Block_Twig extends Controller_Block
             $this->response->body("");
         }
     }
+
+    public function action_last_views() {
+        $ids = LastViews::instance()->get();
+
+        //get objects from database
+        $objects = ORM::factory('Object')
+            ->where('object.id', 'in', $ids)
+            ->with_main_photo()
+            ->find_all();
+
+        //process db data
+        $viewData = array();
+        foreach($objects as $object) {
+            //prepare image
+            $image = array(
+                    'url' => URL::site('images/photo/no-photo.jpg'),
+                    'width' => 80,
+                    'height' => 80,
+                    'alt' => 'photo',
+                    'title' => ''
+                );
+            if ($object->main_image_filename) {
+                list($width, $height) = Uploads::get_optimized_file_sizes($object->main_image_filename, '120x90', '106x106');
+                $image = array(
+                        'url' => Uploads::get_file_path($object->main_image_filename, '120x90'),
+                        'width' => $width,
+                        'height' => $height,
+                        'alt' => '',
+                        'title' => $object->main_image_title
+                    );
+            }
+
+            //build item
+            $item = array(
+                    'position' => array_search($object->id, $ids),
+                    'title' => $object->title,
+                    'image' => $image,
+                    'url' => $object->get_url()
+                );
+
+            $viewData []= $item;
+        }
+
+        //reverse
+        usort($viewData, function ($a, $b) { return $b['position'] - $a['position']; });
+
+        //initialize view
+        $twig = Twig::factory('block/last_views');
+        $twig->items = $viewData;
+        $this->response->body($twig);
+    }
 }
