@@ -133,7 +133,7 @@
 		}
 
 		protected static function ls($path) {
-			$ret = [];
+			$ret = array();
 			foreach(scandir($path) as $item) {
 				if ($item == '..' || $item == '.') {
 					continue;
