@@ -22,8 +22,8 @@ define([ 'ckeditor', 'ckeditorJqueryAdapter' ], function () {
 			$('.ckeditor').each(function (index, item) {
 				var append = {};
 				if ($(item).data('fileupload')) {
-					append.filebrowserBrowseUrl = '/files',
-    				append.filebrowserUploadUrl = '/files'
+					append.filebrowserBrowseUrl = '/files';
+    				//append.filebrowserUploadUrl = '/files'
 				}
 				$(item).ckeditor($.extend(config, append));
 			});

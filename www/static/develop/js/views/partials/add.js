@@ -615,9 +615,11 @@ define([
                 this.render();
 
             var staticPath = app.settings.staticPath;
-            new nicEditor({
-                iconsPath: staticPath + 'images/nicEditorIcons.gif'
-            }).panelInstance('user_text_adv');
+            if (!$('#user_text_adv').is('.ckeditor')) {
+                new nicEditor({
+                    iconsPath: staticPath + 'images/nicEditorIcons.gif'
+                }).panelInstance('user_text_adv');
+            }
         },
 
         render: function() {
