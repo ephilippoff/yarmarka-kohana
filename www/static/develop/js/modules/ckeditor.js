@@ -1,4 +1,3 @@
-window.CKEDITOR_BASEPATH = '/static/develop/js/lib/ckeditor/';
 define([ 'ckeditor', 'ckeditorJqueryAdapter' ], function () {
 
 	//config
