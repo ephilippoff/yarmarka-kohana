@@ -19,7 +19,9 @@ require.config({
         maskedInput: 'lib/vendor/jquery.maskedinput',
         ymap: 'http://api-maps.yandex.ru/2.1/?load=package.full&lang=ru-RU',
         cropper: 'lib/cropper',
-        gisMap: 'http://maps.api.2gis.ru/2.0/loader.js?lazy=true'
+        gisMap: 'http://maps.api.2gis.ru/2.0/loader.js?lazy=true',
+        ckeditor: 'lib/ckeditor/ckeditor',
+        ckeditorJqueryAdapter: 'lib/ckeditor/adapters/jquery'
     },
     shim : {
         localStorage : ['backbone'],
@@ -41,6 +43,9 @@ require.config({
         fileupload: {
              deps : ['iframeTransport']
         },
+        ckeditorJqueryAdapter: {
+            deps: [ 'ckeditor' ]
+        }
     },
     deps : ['underscore']
 });

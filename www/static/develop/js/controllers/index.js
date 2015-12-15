@@ -14,12 +14,16 @@ define([
     "modules/filters",
     "modules/map",
 
-    'modules/afisha'
+    'modules/afisha',
+    'modules/ckeditor'
 ], 
 function (Marionette, templates, utils, IndexPage, SearchPage, DetailPage, 
-    UserSearchPage, CartPage, AddPage, ArticlePage, FiltersModule, MapModule, Afisha) {
+    UserSearchPage, CartPage, AddPage, ArticlePage, FiltersModule, MapModule, Afisha, CkEditor) {
     "use strict";
     
+    //init ckeditor
+    var ckeditor = new CkEditor();
+
     return Marionette.Controller.extend({
         before: function() {
 
