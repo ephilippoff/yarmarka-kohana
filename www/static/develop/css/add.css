@@ -1,6 +1,7 @@
 .form-cont .add-block .img-b {float: left;width: 125px;margin-bottom: 15px;}
 .form-cont .add-block .img {border: 1px solid #C8C8C8;cursor: pointer;display: table-cell;height: 125px;text-align: center;vertical-align: middle;width: 125px;position: relative;}
 .form-cont .add-block .img.active {border-color: #97D5EC;border-width: 3px;}
+.form-cont .add-block .img.active+.href-bl .fn-main {opacity: 0;}
 .form-cont .add-block .img.active:after {content: 'Главное фото';position: absolute;top: -18px;left: 15px;font-size: 11px;color: gray;}
 
 .form-cont .add-block img {max-height: 100px;max-width: 100px;}
@@ -121,9 +122,83 @@ img.banner,
 		-o-transition: height 1000ms ease;
 		transition: height 1000ms ease;
 	}
+
+	.menu-block{
+		background-color: #2a76a1;
+		width: 100%;
+		border-radius: 3px;
+		line-height: 30px;
+		border: 1px solid #c3c3c3;
+		top: 25px;
+		-webkit-transition: all 0.25s ease;
+		-o-transition: all 0.25s ease;
+		transition: all 0.25s ease;
+	}
+
+	.menu-block .span-link{
+		color: #fff;
+		padding-right: 15px;
+	}
+
 	.js-contact .inp-cont.error .js-contact-description.show {
 		height:auto;
 	}
+
+	.menu-cont1{
+		border-bottom: none;
+	}
+
+	.menu-cont2 .menu-item .menu-item-cont{
+		padding-left: 0;
+		padding-right: 15px;
+		text-align: right;
+		line-height: 30px;
+	}
+
+	.menu-button{
+		border-radius: 3px;
+		border: 1px solid #c3c3c3;
+		margin-top: 30px;
+	}
+
+	.menu-button .fa,
+	.menu-block .span-link .fa{
+		font-size: 18px;
+		position: absolute;
+		top: 0;
+		line-height: 32px;
+		display: block;
+		height: 100%;
+		left: 15px;
+		border-right: 1px solid #c3c3c3;
+    	padding-right: 15px;
+	}
+
+	.view-container {
+	    padding: 15px 0px 5px 20px;
+	}
+
+	.menu-block:hover{
+		background-color: #54A6D4;
+	}
+
+}
+
+@media only screen and (max-width : 480px) {
+
+	.menu-button .fa,
+	.menu-block .span-link .fa{
+		font-size: 16px;
+		left: 7px;
+		border-right: 1px solid #c3c3c3;
+    	padding-right: 7px;
+	}
+
+	.menu-block .span-link,
+	.menu-cont2 .menu-item .menu-item-cont{
+		padding-right: 7px;
+	}
+
 }
 
 .banner {display:none;}

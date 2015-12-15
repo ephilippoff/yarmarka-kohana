@@ -645,8 +645,9 @@ define([
         template: templates.photo,
         events: {
             'click .fn-remove': 'remove',
-            'dblclick .img': 'setActive',
-            'click span.rotate': 'rotate'
+            'click .fn-main': 'setActive',
+            'click span.rotate': 'rotate',
+            'click .img': 'openCurtain'
         },
         initialize: function(options) {
             _.extend(this, options);
@@ -672,11 +673,22 @@ define([
             img.src = me.model.get('original');
         },
 
+        openCurtain: function(){
+            if (!$('html').hasClass('desktop')) {
+                $('.img-b .curtain').css('opacity', '0');
+                this.$el.find('.curtain').css('opacity', '1');
+            };
+           
+        },
+
         render: function() {
             var html = _.template(this.template)(this.model.toJSON());
             this.container.append(this.$el.html(html));
             $('#add-block').sortable({
+<<<<<<< HEAD
                 //revert: true,
+=======
+>>>>>>> index_surgut_issue_yarmarka_340
                 revert: 300,
                 start: function(event, ui) {
                     clearInterval(this.interval);
