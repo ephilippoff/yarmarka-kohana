@@ -6662,7 +6662,7 @@ For licensing, see LICENSE.md or http://ckeditor.com/license
                 }, !1 !== CKEDITOR.fire("inline", d) && CKEDITOR.inline(a, d.config))
         };
         CKEDITOR.domReady(function() {
-            !CKEDITOR.disableAutoInline && CKEDITOR.inlineAll()
+            //!CKEDITOR.disableAutoInline && CKEDITOR.inlineAll()
         })
     })();
     CKEDITOR.replaceClass = "ckeditor";

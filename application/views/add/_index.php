@@ -504,7 +504,7 @@
 							<div class="textarea user_text_adv_wrp">
 								<?=
 								View::factory('add/block/text', array("data" => new Obj($form_data->text),
-									"_class" => "user_text_adv",
+									"_class" => "user_text_adv" . ($isAdmin ? ' ckeditor' : ''),
 									"name" => "user_text_adv",
 									"id" => "user_text_adv",
 									"attributes" => ""
