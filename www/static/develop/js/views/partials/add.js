@@ -685,10 +685,6 @@ define([
             var html = _.template(this.template)(this.model.toJSON());
             this.container.append(this.$el.html(html));
             $('#add-block').sortable({
-<<<<<<< HEAD
-                //revert: true,
-=======
->>>>>>> index_surgut_issue_yarmarka_340
                 revert: 300,
                 start: function(event, ui) {
                     clearInterval(this.interval);
