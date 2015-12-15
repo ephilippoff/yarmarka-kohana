@@ -1765,7 +1765,7 @@ define([
         },
 
         submitForm: _.once(function() {
-            if (this.text) {
+            if (this.text && nicEditors.findEditor('user_text_adv')) {
                 nicEditors.findEditor('user_text_adv').saveContent();
             }
             $('#' + this.form_id).submit();
