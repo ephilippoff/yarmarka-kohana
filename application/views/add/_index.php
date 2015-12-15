@@ -599,6 +599,10 @@
 
 			<? endforeach; ?>
 
+			<div class="row" id="additional_contacts" data-contacts='<?php echo json_encode($form_data->contacts['contactsAdditional']); ?>'>
+				
+			</div>
+
 			<div class="row mb10">
 				<div class="col-md-3 col-xs-12 labelcont">
 					<label>Контактное лицо:</label>

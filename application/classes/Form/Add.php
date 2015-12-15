@@ -770,35 +770,43 @@ class Form_Add  {
 		$errors		= $this->errors;
 		$contact_person = "";
 		$contacts = Array();
+		$contactsAdditional = array();
 
 		$user_id = NULL;
 		if ($user = Auth::instance()->get_user())
 			$user_id = $user->id;
 
+		$callback = function($id, $value, $type, $verified) use (&$contacts, &$contactsAdditional) {
+			if (isset($contacts[$type]) || !in_array($type, array( 'mobile', 'phone', 'email' ))) {
+				$contactsAdditional []= array(
+						'type' => $type,
+						'value' => $value,
+						'index' => count($contactsAdditional)
+					);
+			} else {
+				$contacts[$type] = Array("id" => $id, "value" => $value, "verified" => $verified);
+			}
+		};
+
 		if ($object->loaded() AND !$this->is_post)
 		{	
-			self::parse_object_contact($object_id, $user_id, function($id, $value, $type, $verified) use (&$contacts){
-				$contacts[$type] = Array("id" => $id, "value" => $value, "verified" => $verified);
-			});
+			self::parse_object_contact($object_id, $user_id, $callback);
 			$contact_person = $object->contact;
 		}
 		elseif ($this->is_post)
 		{			
-			self::parse_post_contact($this->params, $user_id, function($id, $value, $type, $verified) use (&$contacts){
-				$contacts[$type] = Array("id" => $id, "value" => $value, "verified" => $verified);
-			});
+			self::parse_post_contact($this->params, $user_id, $callback);
 
 			$contact_person = $this->params["contact"];
 		} elseif ($user_id)
 		{
-			self::parse_user_contact($user_id, function($id, $value, $type, $verified) use (&$contacts){
-				$contacts[$type] = Array("id" => $id, "value" => $value, "verified" => $verified);
-			});
+			self::parse_user_contact($user_id, $callback);
 
 			$contact_person = $user->fullname;
 		} 
 
-		$this->_data->contacts = array(	"contacts" 			=> $contacts, 
+		$this->_data->contacts = array(	'contactsAdditional' => $contactsAdditional,
+										"contacts" 			=> $contacts, 
 										"contact_person" 	=> $contact_person,
 										"contact_error" 	=> $errors->contact,
 										"contacts_error" 	=> $errors->contacts,
@@ -993,7 +1001,7 @@ class Form_Add  {
 	static private function parse_object_contact($object_id, $user_id, $callback)
 	{
 		$session_id 		= session_id();
-		$oc = ORM::factory('Object_Contacts')->where("object_id","=",$object_id)->find_all();
+		$oc = ORM::factory('Object_Contacts')->where("object_id","=",$object_id)->order_by('id')->find_all();
 		foreach($oc as $contact)
 		{
 			$verified = FALSE;

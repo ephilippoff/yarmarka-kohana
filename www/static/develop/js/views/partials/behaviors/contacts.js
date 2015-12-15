@@ -281,7 +281,8 @@ define([
 
 	return Marionette.Behavior.extend({
         ui: {
-            contacts: $(".js-contact")
+            contacts: $(".js-contact"),
+            addContactButton: $('.js-contact-add')
         },
 
         events: {

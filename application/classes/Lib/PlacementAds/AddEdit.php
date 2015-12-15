@@ -366,6 +366,24 @@ class Lib_PlacementAds_AddEdit {
 
 		}
 
+		//append additional contacts
+		$this->init_additional_contacts();
+
+		return $this;
+	}
+
+	function init_additional_contacts() {
+		foreach($this->params->additional_contacts as $contact) {
+			if (empty($contact['value'])) {
+				continue;
+			}
+			$this->contacts []= array(
+					'value' => $contact['value'],
+					'type_id' => $contact['type'],
+					'contact_obj' => ORM::factory('Contact')->by_value($contact['value'])->find()
+				);
+		}
+
 		return $this;
 	}
 
