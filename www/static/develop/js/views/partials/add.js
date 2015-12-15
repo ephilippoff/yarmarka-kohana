@@ -9,13 +9,16 @@ define([
     "ymap",
     //use cropper
     //'lib/cropper.js'
-    'cropper'
-], function(Marionette, templates, ContactsBehavior) {
+    'cropper',
+    'views/partials/add/additional_contacts'
+], function(Marionette, templates, ContactsBehavior, fileupload, nicEdit, maskedInput, ymap, cropper, AdditionalContacts) {
     "use strict";
 
     var photoList = Backbone.Collection.extend({
 
     });
+
+    var additionalContactsController = new AdditionalContacts.Controller({});
 
     var paramList = Backbone.Collection.extend({
         comparator: function(collection) {

@@ -265,6 +265,11 @@
 				</div>
 
 			<? endforeach; ?>	
+
+			<div class="row" id="additional_contacts" data-contacts='<?php echo json_encode($form_data->contacts['contactsAdditional']); ?>'>
+				
+			</div>
+
 			<hr class="dib mb30 w100p">
 			
 		<? endif; ?>
@@ -627,7 +632,6 @@
 				</div>			
 			<? endif; ?>
 		</div>
-
 
 		<?
 		$prolongation_access = FALSE;

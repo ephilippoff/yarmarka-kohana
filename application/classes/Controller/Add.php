@@ -127,7 +127,7 @@ class Controller_Add extends Controller_Template {
 		$twig->params->errors = (array) $errors;
 		$twig->params->assets = $this->assets;
 		$twig->params->user = ($user AND $user->loaded()) ? $user->org_type : "undefined";
-		$twig->params->isAdmin = $user->role == 1;
+		$twig->params->isAdmin = $user && $user->role == 1;
 
 		$expired = NULL;
 		if ($user AND !$user->is_valid_orginfo()
@@ -237,7 +237,7 @@ class Controller_Add extends Controller_Template {
 		$twig->params->errors = (array) $errors;
 		$twig->params->assets = $this->assets;
 		$twig->params->user = ($user AND $user->loaded()) ? $user->org_type : "undefined";
-		$twig->params->isAdmin = $user->role == 1;
+		$twig->params->isAdmin = $user && $user->role == 1;
 
 		$expired = NULL;
 		if (!$user->is_valid_orginfo())
