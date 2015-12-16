@@ -9,8 +9,9 @@ define([
     "ymap",
     //use cropper
     //'lib/cropper.js'
-    'cropper'
-], function(Marionette, templates, ContactsBehavior) {
+    'cropper',
+    'modules/ckeditor'
+], function(Marionette, templates, ContactsBehavior, jqueryFileUpload, nicEdit, maskedInput, ymap, cropper, CkEditor) {
     "use strict";
 
     var photoList = Backbone.Collection.extend({
@@ -615,10 +616,15 @@ define([
                 this.render();
 
             var staticPath = app.settings.staticPath;
-            if (!$('#user_text_adv').is('.ckeditor')) {
+
+            if (!_globalSettings.isAdmin) {
                 new nicEditor({
                     iconsPath: staticPath + 'images/nicEditorIcons.gif'
                 }).panelInstance('user_text_adv');
+            } else {
+                CkEditor.replaceOne('#user_text_adv', {
+                    fileUpload: true
+                });
             }
         },
 
@@ -1754,7 +1760,7 @@ define([
         },
 
         submitForm: _.once(function() {
-            if (this.text) {
+            if (this.text && nicEditors.findEditor('user_text_adv')) {
                 nicEditors.findEditor('user_text_adv').saveContent();
             }
             $('#' + this.form_id).submit();
