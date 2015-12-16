@@ -431,6 +431,7 @@
 
 					<?=
 					View::factory('add/block/row_params', array("data" => new Obj($form_data->params),
+						'isAdmin' => $isAdmin,
 						"_class" => "",
 						"name" => "",
 						"id" => "",
@@ -504,10 +505,10 @@
 							<div class="textarea user_text_adv_wrp">
 								<?=
 								View::factory('add/block/text', array("data" => new Obj($form_data->text),
-									"_class" => "user_text_adv" . ($isAdmin ? ' ckeditor' : ''),
+									"_class" => "user_text_adv",
 									"name" => "user_text_adv",
 									"id" => "user_text_adv",
-									"attributes" => ""
+									"attributes" => "",
 								));
 								?>	
 							</div>
