@@ -47,9 +47,66 @@ define([ 'backbone' ], function (backbone) {
 	//contact model
 	Root.Models.Contact = Backbone.Model.extend({
 		defaults: {
-			type: 1,
+			type: '1',
 			value: '',
-			index: 0
+			index: 0,
+			typeCode: 'mobile',
+			typeLabel: 'Мобильный телефон'
+		},
+
+		initialize: function () {
+			this.listenTo(this, 'change:type', this.onTypeChanged);
+		},
+
+		onTypeChanged: function () {
+			var typeObject = Root.Data.Types[this.get('type')];
+			if (!typeObject) {
+				throw new Error('undefined type id');
+			}
+			this.set('typeCode', typeObject.code);
+			this.set('typeLabel', typeObject.label);
+		}
+	});
+	//validation model
+	Root.Models.Validation = Backbone.Model.extend({
+		defaults: {
+			type: '1',
+			value: '',
+			code: 300,
+			text: '',
+			step: 1,
+			state: 'initial'
+		},
+
+		save: function (attributes, options) {
+			var me = this;
+			this.set('state', 'loading');
+			Backbone.Model.prototype.save.apply(this, arguments);
+		},
+
+		parse: function (response, options) {
+			switch(response.code) {
+				case 400:
+					this.set('state', 'error');
+					break;
+				case 300:
+					this.set('state', 'success');
+					break;
+				default:
+					this.set('state', 'initial');
+					break;
+			}
+
+			return Backbone.Model.prototype.parse.apply(this, arguments);
+		},
+
+		urlRoot: function () {
+			switch (this.get('step')) {
+				case 1:
+					return '/rest_user/check_contact';
+				default:
+					throw new Error('No any url for step == ' + step);
+			}
 		}
 	});
 
@@ -77,6 +134,7 @@ define([ 'backbone' ], function (backbone) {
 			+ '</select>'
 			+ '<input type="text" value="<%= value %>" name="additional_contacts[<%= index %>][value]" data-role="value" />'
 			+ '<a href="#" data-role="delete-contact">Удалить</a>'
+			+ '<span data-role="validation-icon"></span>'
 			+ '<span data-role="validation-message"></span>'
 		+ '</div>';
 
@@ -132,11 +190,61 @@ define([ 'backbone' ], function (backbone) {
 
 		template: _.template(Root.Templates.Contact),
 
+		validationIconClasses: { 
+			success: 'contact-validation-ok', 
+			error: 'contact-validation-error',
+			loading: 'contact-validation-loading',
+			initial: 'contact-validation-initial'
+		},
+
 		initialize: function (options) {
 			this.rendered = false;
 
+			//define other models
+			this.validationModel = new Root.Models.Validation();
+
 			//bind model events
-			this.model.on('change:type', this.initInputMask, this);
+			this.listenTo(this.model, 'change:type', this.initInputMask);
+			this.listenTo(this.validationModel, 'change:state change:text', this.onValidationChanged);
+		},
+
+		onValidationAfterSave: function () {
+			
+		},
+
+		onValidationChanged: function () {
+			this.updateValidationIconState();
+			this.updateValidationMessage();
+		},
+
+		updateValidationIconState: function () {
+			var code = this.validationModel.get('state');
+			if (!this.validationIconClasses[code]) {
+				throw new Error('No ui class for code == ' + code);
+			}
+			var currentClassCode = this.validationIconClasses[code];
+
+			//remove all classes
+			var allClasses = _.values(this.validationIconClasses).join(' ');
+			this.$validationIcon.removeClass(allClasses);
+
+			//append current class
+			this.$validationIcon.addClass(currentClassCode);
+		},
+
+		updateValidationMessage: function () {
+			if (this.validationModel.get('code') == 300) {
+				this.$validationMessage.empty();
+			} else {
+				this.$validationMessage.html(this.validationModel.get('text'));
+			}
+		},
+
+		syncValidationModel: function () {
+			this.validationModel.set({
+				value: this.model.get('value'),
+				type: this.model.get('typeCode')
+			});
 		},
 
 		render: function () {
@@ -146,6 +254,7 @@ define([ 'backbone' ], function (backbone) {
 			this.$valueTextBox = this.$el.find('[data-role=value]');
 			this.$typesComboBox = this.$el.find('[data-role=types-combobox]');
 			this.$validationMessage = this.$el.find('[data-role=validation-message]');
+			this.$validationIcon = this.$el.find('[data-role=validation-icon]');
 
 			//update types combobox values
 			var me = this;
@@ -181,9 +290,11 @@ define([ 'backbone' ], function (backbone) {
 
 			if (currentMask === null) {
 				//destroy mask widget
+				console.log('unmask');
 				this.$valueTextBox.unmask();
 			} else {
 				//enable mask widget
+				console.log('mask');
 				var maskOptions = {
 
 				};
@@ -192,7 +303,6 @@ define([ 'backbone' ], function (backbone) {
 		},
 
 		submitAfterWait:function () {
-			this.clearValidation();
 			if (this.waitSubmitTimer) {
 				clearTimeout(this.waitSubmitTimer);
 			}
@@ -200,28 +310,8 @@ define([ 'backbone' ], function (backbone) {
 		},
 
 		submit: function () {
-			var validationResult = this.validateLocal();
-			this.clearValidation();
-			if (!validationResult.res) {
-				this.$validationMessage.html(validationResult.message);
-			}
-
-			//validate on server
-		},
-
-		clearValidation: function () {
-			this.$validationMessage.html('');
-		},
-
-		validateLocal: function () {
-			var currentType = this.$typesComboBox.val();
-			var validation = Root.Validators[currentType];
-
-			if (validation !== null && !validation.regex.test(this.$valueTextBox.val())) {
-				return { res: false, message: validation.message };
-			}			
-
-			return { res: true };
+			this.syncValidationModel();
+			this.validationModel.save();
 		},
 
 		userToModel: function () {
@@ -235,6 +325,7 @@ define([ 'backbone' ], function (backbone) {
 		destroy: function (e) {
 			e.preventDefault();
 			this.undelegateEvents();
+			this.stopListening();
 			this.$el.remove();
 			this.trigger('destroy');
 		}
