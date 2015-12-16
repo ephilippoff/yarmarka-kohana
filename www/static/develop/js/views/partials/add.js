@@ -10,8 +10,9 @@ define([
     //use cropper
     //'lib/cropper.js'
     'cropper',
-    'views/partials/add/additional_contacts'
-], function(Marionette, templates, ContactsBehavior, fileupload, nicEdit, maskedInput, ymap, cropper, AdditionalContacts) {
+    'views/partials/add/additional_contacts',
+    'modules/ckeditor'
+], function(Marionette, templates, ContactsBehavior, jqueryFileUpload, nicEdit, maskedInput, ymap, cropper, AdditionalContacts, CkEditor) {
     "use strict";
 
     var photoList = Backbone.Collection.extend({
@@ -618,10 +619,15 @@ define([
                 this.render();
 
             var staticPath = app.settings.staticPath;
-            if (!$('#user_text_adv').is('.ckeditor')) {
+
+            if (!_globalSettings.isAdmin) {
                 new nicEditor({
                     iconsPath: staticPath + 'images/nicEditorIcons.gif'
                 }).panelInstance('user_text_adv');
+            } else {
+                CkEditor.replaceOne('#user_text_adv', {
+                    fileUpload: true
+                });
             }
         },
 

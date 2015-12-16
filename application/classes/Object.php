@@ -112,13 +112,12 @@ class Object
 	{
 		$json = array();
 		$user = Auth::instance()->get_user();
-		
+
 		$add = new Lib_PlacementAds_AddEditByModerator();
 		$add->init_input_params($input_params);
 
 		if (!$user)
 			$add->login();		
-
 		$add->init_instances()
 			->init_object_and_mode()
 			->check_neccesaries()
