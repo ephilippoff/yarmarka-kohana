@@ -373,6 +373,10 @@ class Lib_PlacementAds_AddEdit {
 	}
 
 	function init_additional_contacts() {
+		if (!is_array($this->params->additional_contacts)) {
+			return $this;
+		}
+		
 		foreach($this->params->additional_contacts as $contact) {
 			if (empty($contact['value'])) {
 				continue;
