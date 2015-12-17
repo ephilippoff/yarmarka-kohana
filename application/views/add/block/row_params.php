@@ -18,7 +18,7 @@
 		<?= View::factory("add/element/_" . $element["custom"], $parameters); ?>
 	<? else: ?>
 			<?php 
-				if ($isAdmin && $element['name'] == 'param_1000') {
+				if ($allowCkEditor && $element['name'] == 'param_1000') {
 					$parameters['custom'] = 'data-fileupload="true"';
 					$parameters['class'] .= ' ckeditor';
 				}

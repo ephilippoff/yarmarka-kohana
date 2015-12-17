@@ -92,7 +92,7 @@
                     query_params: '{{query_params_for_js}}',
                     city_id: '{{city_id}}',
                     debug: '{{ is_debug_mode() }}',
-                    isAdmin: {% if isAdmin %}true{% else %}false{% endif %}
+                    allowCkEditor: {% if allowCkEditor %}true{% else %}false{% endif %}
                 };
             </script>
             {% if is_debug_mode() %}

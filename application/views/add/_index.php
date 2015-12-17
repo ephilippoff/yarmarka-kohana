@@ -436,7 +436,7 @@
 
 					<?=
 					View::factory('add/block/row_params', array("data" => new Obj($form_data->params),
-						'isAdmin' => $isAdmin,
+						'allowCkEditor' => $allowCkEditor,
 						"_class" => "",
 						"name" => "",
 						"id" => "",

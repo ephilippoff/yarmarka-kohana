@@ -620,7 +620,7 @@ define([
 
             var staticPath = app.settings.staticPath;
 
-            if (!_globalSettings.isAdmin) {
+            if (!_globalSettings.allowCkEditor) {
                 new nicEditor({
                     iconsPath: staticPath + 'images/nicEditorIcons.gif'
                 }).panelInstance('user_text_adv');
