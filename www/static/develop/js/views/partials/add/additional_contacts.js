@@ -586,9 +586,9 @@ define([ 'backbone' ], function (backbone) {
 	Root.Views.Contact = Backbone.View.extend({
 
 		template: _.template(
-				'<div class="col-md-4 labelcont" data-role="type-container">'
+				'<div class="col-md-3 labelcont" data-role="type-container">'
 				+ '</div>'
-				+ '<div class="col-md-8">'
+				+ '<div class="col-md-9">'
 					+ '<div class="row js-contact">'
 						+ '<div class="col-md-8 inp-cont">'
 							+ '<div class="input-group w100p" data-role="value-container">'
