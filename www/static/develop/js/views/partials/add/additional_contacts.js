@@ -7,8 +7,8 @@ define([ 'backbone' ], function (backbone) {
 	//contact types
 	Root.Data.Types = [ 
 		{ 'code': 'other', 'label': 'Другой' },
-		{ 'code': 'mobile', 'label': 'Мобильный телефон' }, 
-		{ 'code': 'phone', 'label': 'Городской телефон' }, 
+		{ 'code': 'mobile', 'label': 'Моб. телефон' }, 
+		{ 'code': 'phone', 'label': 'Гор. телефон' }, 
 		{ 'code': 'skype', 'label': 'Skype' },
 		{ 'code': 'icq', 'label': 'ICQ' },
 		{ 'code': 'email', 'label': 'Email' }
@@ -586,9 +586,9 @@ define([ 'backbone' ], function (backbone) {
 	Root.Views.Contact = Backbone.View.extend({
 
 		template: _.template(
-				'<div class="col-md-4 col-lg-3 labelcont" data-role="type-container">'
+				'<div class="col-md-4 labelcont" data-role="type-container">'
 				+ '</div>'
-				+ '<div class="col-md-8 col-lg-9">'
+				+ '<div class="col-md-8">'
 					+ '<div class="row js-contact">'
 						+ '<div class="col-md-8 inp-cont">'
 							+ '<div class="input-group w100p" data-role="value-container">'
@@ -676,7 +676,7 @@ define([ 'backbone' ], function (backbone) {
 			//render child views
 			this.$valueContainer.append(this.childViews.icon.render());
 			this.$valueContainer.append(this.childViews.value.render());
-			this.$valueContainer.append(this.childViews.validationIcon.render());
+			//this.$valueContainer.append(this.childViews.validationIcon.render());
 			this.$valueContainer.append(this.childViews.remove.render());
 
 			this.$typeContainer.append(this.childViews.typeSelect.render());
