@@ -97,6 +97,11 @@ img.banner,
 	max-width: 700px !important;
 }
 
+@media only screen and (max-width: 1024px) {
+	.js-contact .inp-cont.error {
+		min-height: 0;
+	}
+}
 @media only screen and (max-width : 767px) {
 	.info-block-cont,
 	.ue-tab-container{

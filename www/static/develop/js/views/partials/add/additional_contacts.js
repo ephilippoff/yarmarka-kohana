@@ -556,13 +556,39 @@ define([ 'backbone' ], function (backbone) {
 			}
 		}
 	});
+	//delete button 
+	Root.Views.Remove = Backbone.View.extend({
+
+		tagName: 'span',
+
+		className: 'input-group-addon button bg-color-crimson white pl5 pr5 brr3 js-contact-ok',
+
+		template: _.template('<i class="fa fa-remove"></i>'),
+
+		events: {
+			'click': 'onUserClick'
+		},
+
+		onUserClick: function () {
+			this.trigger('remove');
+		},
+
+		initialize: function () {
+
+		},
+
+		render: function () {
+			this.$el.html(this.template());
+			return this.$el;
+		}
+	});
 	//contact layout view
 	Root.Views.Contact = Backbone.View.extend({
 
 		template: _.template(
-				'<div class="col-md-3 labelcont" data-role="type-container">'
+				'<div class="col-md-4 col-lg-3 labelcont" data-role="type-container">'
 				+ '</div>'
-				+ '<div class="col-md-9">'
+				+ '<div class="col-md-8 col-lg-9">'
 					+ '<div class="row js-contact">'
 						+ '<div class="col-md-8 inp-cont">'
 							+ '<div class="input-group w100p" data-role="value-container">'
@@ -578,8 +604,6 @@ define([ 'backbone' ], function (backbone) {
 
 		className: 'row mb20',
 
-		childViews: {},
-
 		remove: function () {
 			_.each(this.childViews, function (item) {
 				if (typeof(item.remove) == 'function') {
@@ -590,6 +614,7 @@ define([ 'backbone' ], function (backbone) {
 		},
 
 		initialize: function () {
+			this.childViews = {};
 			//initialize models
 			this.validationModel = new Root.Models.Validation({
 				type: this.model.get('type'),
@@ -632,8 +657,12 @@ define([ 'backbone' ], function (backbone) {
 				model: this.validationModel
 			});
 
+			//remove button
+			this.childViews.remove = new Root.Views.Remove();
+
 			//bind child view events
 			this.listenTo(this.childViews.validationIcon, 'countdown:done', this.onCountDownDone);
+			this.listenTo(this.childViews.remove, 'remove', this.remove);
 		},
 
 		render: function () {
@@ -648,6 +677,7 @@ define([ 'backbone' ], function (backbone) {
 			this.$valueContainer.append(this.childViews.icon.render());
 			this.$valueContainer.append(this.childViews.value.render());
 			this.$valueContainer.append(this.childViews.validationIcon.render());
+			this.$valueContainer.append(this.childViews.remove.render());
 
 			this.$typeContainer.append(this.childViews.typeSelect.render());
 
@@ -676,7 +706,6 @@ define([ 'backbone' ], function (backbone) {
 			this.validationModel.set('step', 2);
 		}
 		// event handlers done
-
 	});
 
 	//controller default options
