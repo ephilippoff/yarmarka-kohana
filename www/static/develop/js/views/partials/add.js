@@ -697,7 +697,6 @@ define([
                     }, 1000);
 
                     function increment() {
-                        console.log(i);
                         i++;
                         if (i >= 3) {
                             clearInterval(self.interval);
@@ -712,10 +711,8 @@ define([
                         var i = $(img).each(function() {
                             var userfile = $(this).children('input').val();
                             fileNames[i] = userfile;
-                            console.log(userfile);
                             i++;
                         });
-                        console.log(fileNames);
                         $.ajax({
                             url: '/add/set_order',
                             dataType: 'json',
@@ -1056,7 +1053,7 @@ define([
         photos: [],
         maxLength: 10,
         hints: {
-            main: "Главным по умолчанию является первое фото, дважды щелкните по любому фото, чтобы сделать его главным<br>До 10 фотографий с расширениями jpg, png, gif, не более 5мб",
+            main: "Внимание! Первое фото в списке является главным.<br>До 10 фотографий с расширениями jpg, png, gif, не более 5мб",
             requires: "До 10 фотографий с расширениями jpg, png, gif, не более 5мб. Фото можно перетащить в эту зону мышкой."
         },
         initialize: function(options) {
