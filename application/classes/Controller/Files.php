@@ -20,7 +20,7 @@
 			//check user role
 			//only admins can use file manager
 			$this->_user = Auth::instance()->get_user();
-			if (!$this->_user || $this->_user->role != 1) {
+			if (!$this->_user || ($this->_user->role != 1 && $this->_user->role != 9)) {
 				throw new HTTP_Exception_403;
 			}
 
