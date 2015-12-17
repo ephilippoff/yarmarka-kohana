@@ -326,7 +326,7 @@ define([ 'backbone' ], function (backbone) {
 
 		tagName: 'span',
 
-		className: 'input-group-addon button white pl5 pr5 brr3 js-contact-ok',
+		className: 'input-group-addon button white pl5 pr5 brr3 js-contact-ok hidden',
 
 		elClasses: { 
 			success: 'bg-color-lightgreen', 
@@ -676,7 +676,7 @@ define([ 'backbone' ], function (backbone) {
 			//render child views
 			this.$valueContainer.append(this.childViews.icon.render());
 			this.$valueContainer.append(this.childViews.value.render());
-			//this.$valueContainer.append(this.childViews.validationIcon.render());
+			this.$valueContainer.append(this.childViews.validationIcon.render());
 			this.$valueContainer.append(this.childViews.remove.render());
 
 			this.$typeContainer.append(this.childViews.typeSelect.render());
