@@ -107,17 +107,18 @@ define([ 'backbone' ], function (backbone) {
 				case 300:
 					if (currentStep == 1) {
 						this.set('state', 'next');
-						if (currentType == 'mobile' || currentType == 'email' || currentType == 'phone') {
-							this.nextStep();	
-							this.set('text', '');	
-						} else {
+						//if (currentType == 'mobile' || currentType == 'email' || currentType == 'phone') {
+						//	this.nextStep();	
+						//	this.set('text', '');	
+						//} else {
 							this.set('step', 4);
 							this.set('state', 'success');
-						}
+						//}
 					} else if (currentStep == 2) {
 						this.set('step', 4);
 						this.set('state', 'success');
 					}
+					this.set('text', '');
 					break;
 				case 200:
 					if (currentStep == 1 || currentStep == 3) {
