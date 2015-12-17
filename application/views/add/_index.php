@@ -266,7 +266,7 @@
 
 			<? endforeach; ?>	
 
-			<div class="row" id="additional_contacts" data-contacts='<?php echo json_encode($form_data->contacts['contactsAdditional']); ?>'>
+			<div id="additional_contacts" data-contacts='<?php echo json_encode($form_data->contacts['contactsAdditional']); ?>'>
 				
 			</div>
 

@@ -23,25 +23,6 @@ define([ 'backbone' ], function (backbone) {
 		null
 	];
 
-	//validators
-	Root.Validators = [
-		null,
-		{
-			message: 'Не верный формат номера, введите номер мобильного телефона +7(9xx)xxx-xx-xx',
-			regex: /^\+7\(9\d{2}\)\d{3}-\d{2}-\d{2}$/
-		},
-		{
-			message: 'Не верный формат городского номера',
-			regex: /^\+7\(\d{4}\)\d{2}-\d{2}-\d{2}$/
-		},
-		null,
-		null,
-		{
-			message: 'Не верный формат Email адреса',
-			regex: /^\w+@\w+\.\w{2,}$/
-		}
-	];
-
 	//declare models
 	Root.Models = {};
 	//contact model
@@ -75,22 +56,78 @@ define([ 'backbone' ], function (backbone) {
 			code: 300,
 			text: '',
 			step: 1,
-			state: 'initial'
+			state: 'initial',
+			checkCode: ''
 		},
 
-		save: function (attributes, options) {
-			var me = this;
+		saveTimer: null,
+
+		saveTimerDuration: 500,
+
+		initialize: function () {
+			this.listenTo(this, 'change:value', this.onValueChanged);
+			this.listenTo(this, 'change:checkCode', this.onCheckCodeChanged);
+		},
+
+		onValueChanged: function (model, newValue) {
+			this.resetStep();
+			this.save();
+		},
+
+		onCheckCodeChanged: function (model, newCheckCode) {
+			if (this.get('step') == 3) {
+				this.saveNow();
+			}
+		},
+
+		saveNow: function () {
 			this.set('state', 'loading');
 			Backbone.Model.prototype.save.apply(this, arguments);
 		},
 
+		save: function (attributes, options) {
+			var me = this;
+			var myArguments = arguments;
+			if (this.saveTimer) {
+				clearTimeout(this.saveTimer);
+			}
+			this.set('state', 'loading');
+			this.saveTimer = setTimeout(function () {
+				Backbone.Model.prototype.save.apply(me, myArguments);
+			}, this.saveTimerDuration);
+		},
+
 		parse: function (response, options) {
+			var currentStep = this.get('step');
+			var currentType = this.get('type');
 			switch(response.code) {
 				case 400:
 					this.set('state', 'error');
 					break;
 				case 300:
-					this.set('state', 'success');
+					if (currentStep == 1) {
+						this.set('state', 'next');
+						if (currentType == 'mobile' || currentType == 'email' || currentType == 'phone') {
+							this.nextStep();	
+							this.set('text', '');	
+						} else {
+							this.set('step', 4);
+							this.set('state', 'success');
+						}
+					} else if (currentStep == 2) {
+						this.set('step', 4);
+						this.set('state', 'success');
+					}
+					break;
+				case 200:
+					if (currentStep == 1 || currentStep == 3) {
+						this.set('state', 'success');
+						this.set('step', 4);
+					} else if (currentStep == 2) {
+						this.set('state', 'wait');
+						this.nextStep();
+					}
+					this.set('text', '');
 					break;
 				default:
 					this.set('state', 'initial');
@@ -104,9 +141,23 @@ define([ 'backbone' ], function (backbone) {
 			switch (this.get('step')) {
 				case 1:
 					return '/rest_user/check_contact';
+				case 2:
+					return '/rest_user/sent_code';
 				default:
-					throw new Error('No any url for step == ' + step);
+					return '/rest_user/check_code';
 			}
+		},
+
+		nextStep: function () {
+			var currentStep = this.get('step');
+			if (currentStep > 2) {
+				throw new Error('No next step');
+			}
+			this.set('step', currentStep + 1);
+		},
+
+		resetStep: function () {
+			this.set('step', 1);
 		}
 	});
 
@@ -117,27 +168,6 @@ define([ 'backbone' ], function (backbone) {
 		model: Root.Models.Contact
 	});
 
-	//declare templates
-	Root.Templates = {};
-	//layout template
-	Root.Templates.Layout = 
-		'<div data-role="container">'
-			+ ''
-		+ '</div>'
-		+ '<div data-role="buttons">'
-			+ '<a href="#" data-role="create-contact">Добавить контакт</a>'
-		+ '</div>';
-	//contact view template
-	Root.Templates.Contact = 
-		'<div data-role="contact">'
-			+ '<select data-role="types-combobox" name="additional_contacts[<%= index %>][type]">'
-			+ '</select>'
-			+ '<input type="text" value="<%= value %>" name="additional_contacts[<%= index %>][value]" data-role="value" />'
-			+ '<a href="#" data-role="delete-contact">Удалить</a>'
-			+ '<span data-role="validation-icon"></span>'
-			+ '<span data-role="validation-message"></span>'
-		+ '</div>';
-
 	//declare views
 	Root.Views = {};
 	//contacts full view (layout)
@@ -147,7 +177,13 @@ define([ 'backbone' ], function (backbone) {
 			'click [data-role=create-contact]': 'create'
 		},
 
-		template: _.template(Root.Templates.Layout),
+		template: _.template(
+				'<div data-role="container">'
+				+ '</div>'
+				+ '<div data-role="buttons">'
+					+ '<a href="#" data-role="create-contact">Добавить контакт</a>'
+				+ '</div>'
+			),
 
 		initialize: function (options) {
 			this.collection.on('add', this.add, this);
@@ -176,159 +212,468 @@ define([ 'backbone' ], function (backbone) {
 			}, this);
 			this.$container.append(view.render());
 		}
-
 	});
-	//contact view
-	Root.Views.Contact = Backbone.View.extend({
-		events: {
-			'keyup [data-role=value]': 'userToModel',
-			'change [data-role=types-combobox]': 'userToModel',
-			'click [data-role=delete-contact]': 'destroy'
-		},
+	//input icon view
+	Root.Views.ValueIcon = Backbone.View.extend({
 
-		tagName: 'div',
+		template: _.template('<i class="fa"></i>'),
 
-		template: _.template(Root.Templates.Contact),
+		tagName: 'span',
 
-		validationIconClasses: { 
-			success: 'contact-validation-ok', 
-			error: 'contact-validation-error',
-			loading: 'contact-validation-loading',
-			initial: 'contact-validation-initial'
-		},
+		className: 'input-group-addon bg-color-whitesmoke brl3',
+
+		iconsMap: [
+			null,
+			'mobile-phone',
+			'phone',
+			'skype',
+			null,
+			'envelope'
+		],
 
 		initialize: function (options) {
-			this.rendered = false;
-
-			//define other models
-			this.validationModel = new Root.Models.Validation();
-
-			//bind model events
-			this.listenTo(this.model, 'change:type', this.initInputMask);
-			this.listenTo(this.validationModel, 'change:state change:text', this.onValidationChanged);
-		},
-
-		onValidationAfterSave: function () {
-			
-		},
-
-		onValidationChanged: function () {
-			this.updateValidationIconState();
-			this.updateValidationMessage();
-		},
-
-		updateValidationIconState: function () {
-			var code = this.validationModel.get('state');
-			if (!this.validationIconClasses[code]) {
-				throw new Error('No ui class for code == ' + code);
-			}
-			var currentClassCode = this.validationIconClasses[code];
-
-			//remove all classes
-			var allClasses = _.values(this.validationIconClasses).join(' ');
-			this.$validationIcon.removeClass(allClasses);
-
-			//append current class
-			this.$validationIcon.addClass(currentClassCode);
-		},
-
-		updateValidationMessage: function () {
-			if (this.validationModel.get('code') == 300) {
-				this.$validationMessage.empty();
-			} else {
-				this.$validationMessage.html(this.validationModel.get('text'));
-			}
-		},
-
-		syncValidationModel: function () {
-			this.validationModel.set({
-				value: this.model.get('value'),
-				type: this.model.get('typeCode')
-			});
+			//bind events
+			this.listenTo(this.model, 'change:type', this.onTypeChanged);
 		},
 
 		render: function () {
-			this.$el.html(this.template(this.model.toJSON()));
+			//append to dom
+			this.$el.html(this.template());
 
-			//update references to ui elements
-			this.$valueTextBox = this.$el.find('[data-role=value]');
-			this.$typesComboBox = this.$el.find('[data-role=types-combobox]');
-			this.$validationMessage = this.$el.find('[data-role=validation-message]');
-			this.$validationIcon = this.$el.find('[data-role=validation-icon]');
+			//set references to ui elements
+			this.$icon = this.$el.find('i');
 
-			//update types combobox values
-			var me = this;
-			_.each(Root.Data.Types, function (item, index) {
-				var attr = {
-					'value': index
-				};
-				if (index == me.model.get('type')) {
-					attr.selected = 'selected';
-				}
-				me.$typesComboBox.append($('<option />')
-					.attr(attr)
-					.html(item.label));
-			});
-
-			//set rendered flag
-			this.rendered = true;
-
-			//init widgets
-			this.initInputMask();
+			//initialy call onTypeChanged
+			this.onTypeChanged(this.model, this.model.get('type'));
 
 			return this.$el;
 		},
 
-		initInputMask: function () {
-			//only if we render view at least once
-			if (!this.rendered) {
-				return;
+		onTypeChanged: function (model, newType) {
+			var newType = this.model.get('type');
+			if (typeof(this.iconsMap[newType]) == 'undefined') {
+				throw new Error('Cannot find icon for type == ' + newType);
 			}
 
-			var currentType = this.$typesComboBox.val();
-			var currentMask = Root.Data.Masks[currentType];
+			this.$icon.removeClass();
+			if (this.iconsMap[newType]) {
+				this.$icon.addClass('fa fa-' + this.iconsMap[newType]);
+			}
+		}
+	});
+	//contact value view
+	Root.Views.Value = Backbone.View.extend({
+
+		tagName: 'input',
+
+		className: 'form-control js-contact-value',
+
+		events: {
+			'keyup': 'onUserKeyUp'
+		},
+
+		initialize: function () {
+			//bind events
+			this.listenTo(this.model, 'change:type', this.onTypeChanged);
+			this.listenTo(this.model, 'change:value', this.onValueChanged);
+			this.listenTo(this.model, 'change:index', this.onIndexChanged);
+		},
+
+		render: function () {
+			this.$el.attr('type', 'text');
+			//initially call on type changed event
+			this.onTypeChanged(this.model, this.model.get('type'));
+			//initialy call on index changed event handler
+			this.onIndexChanged(this.model, this.model.get('index'));
+			//return dom element
+			return this.$el;
+		},
+
+		onIndexChanged: function (model, newIndex) {
+			this.$el.attr('name', 'additional_contacts[' + newIndex + '][value]');
+		},
+
+		onTypeChanged: function (model, newType) {
+			var currentMask = Root.Data.Masks[newType];
 
 			if (currentMask === null) {
 				//destroy mask widget
-				console.log('unmask');
-				this.$valueTextBox.unmask();
+				this.$el.unmask();
 			} else {
 				//enable mask widget
-				console.log('mask');
 				var maskOptions = {
 
 				};
-				this.$valueTextBox.mask(currentMask, maskOptions);
+				this.$el.mask(currentMask, maskOptions);
 			}
 		},
 
-		submitAfterWait:function () {
-			if (this.waitSubmitTimer) {
-				clearTimeout(this.waitSubmitTimer);
-			}
-			this.waitSubmitTimer = setTimeout(this.submit.bind(this), 500);
-		},
-
-		submit: function () {
-			this.syncValidationModel();
-			this.validationModel.save();
-		},
-
-		userToModel: function () {
-			this.model.set('value', this.$valueTextBox.val());
-			this.model.set('type', this.$typesComboBox.val());
-
-			//run submit timer
-			this.submitAfterWait();
-		},
-
-		destroy: function (e) {
-			e.preventDefault();
+		onValueChnaged: function (model, newValue) {
 			this.undelegateEvents();
-			this.stopListening();
-			this.$el.remove();
-			this.trigger('destroy');
+			this.$el.val(newValue);
+			this.delegateEvents();
+		},
+
+		onUserKeyUp: function () {
+			this.model.set('value', this.$el.val());
 		}
+	});
+	//validation icon view
+	Root.Views.ValidationIcon = Backbone.View.extend({
+
+		tagName: 'span',
+
+		className: 'input-group-addon button white pl5 pr5 brr3 js-contact-ok',
+
+		elClasses: { 
+			success: 'bg-color-lightgreen', 
+			error: 'bg-color-crimson',
+			next: 'bg-color-crimson',
+			loading: 'bg-color-gray',
+			initial: 'bg-color-gray',
+			wait: 'bg-color-gray'
+		},
+
+		iconClasses: {
+			success: 'fa-check',
+			error: 'fa-remove',
+			loading: 'fa-spinner fa-spin',
+			initial: 'fa-question',
+			next: 'fa-check',
+			wait: 'fa-spinner fa-spin'
+		},
+
+		template: _.template('<i></i><span></span>'),
+
+		events: {
+			'click': 'onUserClick'
+		},
+
+		countDownSec: 10,
+
+		countDownTimer: null,
+
+		initialize: function () {
+			//bind events
+			this.listenTo(this.model, 'change:state', this.onStateChanged);
+			this.listenTo(this.model, 'change:step', this.onStepChanged);
+			this.listenTo(this, 'countdown:change', this.onCountDownChanged);
+		},
+
+		render: function () {
+			this.$el.html(this.template());
+			//set references to ui elements
+			this.$icon = this.$el.find('i');
+			this.$label = this.$el.find('span');
+			//initially call on state changed event handler
+			this.onStateChanged(this.model, this.model.get('state'));
+			//intiialy run on step changed event
+			this.onStepChanged(this.model, this.model.get('step'));
+			//return dom element
+			return this.$el;
+		},
+
+		onCountDownChanged: function (sec) {
+			this.$label.html(' До повторной отправки осталось (' + sec + ')');
+		},
+
+		onStateChanged: function (model, newState) {
+			//update el classes
+			//remove all classes
+			this.$el.removeClass(_.values(this.elClasses).join(' '));
+			//get current class
+			var currentClass = this.elClasses[newState];
+			if (!currentClass) {
+				throw new Error('No el class for state == ' + newState);
+			}
+			this.$el.addClass(currentClass);
+
+			//update icon classes
+			this.$icon.removeClass('fa');
+			this.$icon.removeClass(_.values(this.iconClasses).join(' '));
+			currentClass = this.iconClasses[newState];
+			if (!currentClass) {
+				throw new Error('No icon class for state == ' + newState);
+			}
+			this.$icon.addClass('fa ' + currentClass);
+		},
+
+		onStepChanged: function (model, newStep) {
+			this.stopCountDown();
+			switch(newStep) {
+				case 1:
+					this.$icon.show();
+					this.$label.hide();
+					break;
+				case 2:
+					this.$label.show();
+					this.$icon.hide();
+					this.$label.html('Нажмите чтобы подтвердить');
+					break;
+				case 3:
+					this.$icon.show();
+					this.$label.show();
+					this.startCountDown();
+				case 4:
+					this.$icon.show();
+					this.$label.hide();
+				default:
+					break;
+			}
+		},
+
+		stopCountDown: function () {
+			if (this.countDownTimer) {
+				clearTimeout(this.countDownTimer);
+			}
+		},
+
+		startCountDown: function (sec) {
+			if (arguments.length == 0) {
+				sec = this.countDownSec;
+			}
+			if (sec == 0) {
+				this.trigger('countdown:done');
+				return;
+			}
+			this.trigger('countdown:change', sec);
+			me = this;
+			this.countDownTimer = setTimeout(function () {
+				me.startCountDown(sec - 1);
+			}, 1000);
+		},
+
+		onUserClick: function () {
+			var currentStep = this.model.get('step');
+
+			if (currentStep == 2) {
+				this.model.saveNow();
+			}
+		}
+	});
+	//type selector view
+	Root.Views.TypeSelector = Backbone.View.extend({
+
+		tagName: 'select',
+
+		events: {
+			'change': 'onUserSelect'
+		},
+
+		initialize: function () {
+			//bind events
+			this.listenTo(this.model, 'change:index', this.onIndexChanged);
+		},
+
+		render: function () {
+			var me = this;
+			this.$el.empty();
+			_.each(Root.Data.Types, function (item, index) {
+				var attrs = {
+					value: index
+				};
+				if (index == me.model.get('type')) {
+					attrs.selected = 'selected';
+				}
+				me.$el.append($('<option />').attr(attrs).html(item.label));
+			});
+
+			//initialy run on index changed event handler
+			this.onIndexChanged(this.model, this.model.get('index'));
+
+			return this.$el;
+		},
+
+		onUserSelect: function () {
+			var currentValue = this.$el.val();
+			this.model.set('type', currentValue);
+		},
+
+		onIndexChanged: function (model, newIndex) {
+			this.$el.attr('name', 'additional_contacts[' + newIndex + '][type]');
+		}
+	});
+	//validation message view
+	Root.Views.ValidationMessage = Backbone.View.extend({
+
+		tagName: 'div',
+
+		className: 'input-group w100p js-contact-description',
+
+		initialize: function () {
+			this.listenTo(this.model, 'change:text', this.onTextChanged);
+		},
+
+		render: function () {
+			//initialy run on text changed event handler
+			this.onTextChanged(this.model, this.model.get('text'));
+			return this.$el;
+		},
+
+		onTextChanged: function (mode, newText) {
+			this.$el.html(newText);
+		}
+	});
+	//validation code view
+	Root.Views.Code = Backbone.View.extend({
+
+		tagName: 'div',
+
+		className: 'input-group w100p js-contact-code',
+
+		template: _.template(
+			'<input class="form-control w100 js-contact-code-value" type="text" placeholder="Введите код">'
+			+ '<span class="input-group-addon button bg-color-crimson white pl5 pr5 brr3 js-contact-code-ok">ок</span>'),
+
+		initialize: function () {
+			this.listenTo(this.model, 'change:step', this.onStepChanged);
+		},
+
+		render: function () {
+			this.$el.html(this.template());
+
+			this.$input = this.$el.find('input');
+
+			//initialy call on step changed event handler
+			this.onStepChanged(this.model, this.model.get('step'));
+
+			return this.$el;
+		},
+
+		onUserClick: function () {
+			this.model.set('checkCode', this.$input.val());
+		},
+
+		onStepChanged: function (model, newStep) {
+			if (newStep == 3) {
+				this.$el.show();
+			}
+			if (newStep == 1 || newStep == 4) {
+				this.$el.hide();
+			}
+		}
+	});
+	//contact layout view
+	Root.Views.Contact = Backbone.View.extend({
+
+		template: _.template(
+				'<div class="col-md-3 labelcont" data-role="type-container">'
+				+ '</div>'
+				+ '<div class="col-md-9">'
+					+ '<div class="row js-contact">'
+						+ '<div class="col-md-8 inp-cont">'
+							+ '<div class="input-group w100p" data-role="value-container">'
+							+ '</div>'
+						+ '</div>'
+						+ '<div class="col-md-4 inp-cont error" data-role="error-container">'
+						+ '</div>'
+					+ '</div>'
+				+ '</div>'
+			),
+
+		tagName: 'div',
+
+		className: 'row mb20',
+
+		childViews: {},
+
+		remove: function () {
+			_.each(this.childViews, function (item) {
+				if (typeof(item.remove) == 'function') {
+					item.remove();
+				}
+			});
+			Backbone.View.prototype.remove.apply(this, arguments);
+		},
+
+		initialize: function () {
+			//initialize models
+			this.validationModel = new Root.Models.Validation({
+				type: this.model.get('type'),
+				value: this.model.get('value')
+			});
+
+			//bind events
+			this.listenTo(this.model, 'change:type', this.onTypeChanged);
+			this.listenTo(this.model, 'change:value', this.onValueChanged);
+
+			//initialize child views
+
+			//contact icon view
+			this.childViews.icon = new Root.Views.ValueIcon({
+				model: this.model
+			});
+
+			//contact value view
+			this.childViews.value = new Root.Views.Value({
+				model: this.model
+			});
+
+			//validation icon view
+			this.childViews.validationIcon = new Root.Views.ValidationIcon({
+				model: this.validationModel
+			});
+
+			//type selector
+			this.childViews.typeSelect = new Root.Views.TypeSelector({
+				model: this.model
+			});
+
+			//validation message view
+			this.childViews.validationMessage = new Root.Views.ValidationMessage({
+				model: this.validationModel
+			});
+
+			//code form
+			this.childViews.code = new Root.Views.Code({
+				model: this.validationModel
+			});
+
+			//bind child view events
+			this.listenTo(this.childViews.validationIcon, 'countdown:done', this.onCountDownDone);
+		},
+
+		render: function () {
+			this.$el.append(this.template(this.model.toJSON()));
+
+			//set references to ui elements
+			this.$typeContainer = this.$el.find('[data-role=type-container]');
+			this.$valueContainer = this.$el.find('[data-role=value-container]');
+			this.$errorContainer = this.$el.find('[data-role=error-container]');
+
+			//render child views
+			this.$valueContainer.append(this.childViews.icon.render());
+			this.$valueContainer.append(this.childViews.value.render());
+			this.$valueContainer.append(this.childViews.validationIcon.render());
+
+			this.$typeContainer.append(this.childViews.typeSelect.render());
+
+			this.$errorContainer.append(this.childViews.validationMessage.render());
+			this.$errorContainer.append(this.childViews.code.render());
+
+			//initialy run on type changed event
+			this.onTypeChanged(this.model, this.model.get('type'));
+
+			return this.$el;
+		},
+
+		// event handlers
+		onTypeChanged: function (model, newType) {
+			//from contact model to validation model
+			this.validationModel.set('type', model.get('typeCode'));
+		},
+
+		onValueChanged: function (model, newValue) {
+			//from contact model to validation model
+			this.validationModel.set('value', newValue);
+		},
+
+		onCountDownDone: function () {
+			this.validationModel.set('state', 'next');
+			this.validationModel.set('step', 2);
+		}
+		// event handlers done
+
 	});
 
 	//controller default options
