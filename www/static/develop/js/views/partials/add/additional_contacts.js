@@ -282,6 +282,8 @@ define([ 'backbone' ], function (backbone) {
 
 		render: function () {
 			this.$el.attr('type', 'text');
+			//set initial value
+			this.$el.val(this.model.get('value'));
 			//initially call on type changed event
 			this.onTypeChanged(this.model, this.model.get('type'));
 			//initialy call on index changed event handler
