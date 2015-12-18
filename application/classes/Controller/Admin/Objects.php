@@ -28,17 +28,6 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 			"compile_exists" => TRUE
 		);
 
-
-		if (count($this->request->query()) == 0) 
-		{
-			$search_filters["source"] = 1;
-			$search_filters["moder_state"] = 0;
-			$search_filters["user_role"] = 2;
-
-			$search_filters["real_date_created"] = array();
-			$search_filters["real_date_created"]["from"] = date('Y-m-d', strtotime('-7 days'));
-		}
-
 		if ($user_id = intval($this->request->query('user_id')))
 		{
 			$filters_enable = FALSE;
@@ -67,13 +56,27 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 				"clear" => ( Valid::email( $contact ) ) ? $contact : Text::clear_phone_number($contact),
 				"raw" => $contact
 			);
+		} else {
+			$query = $this->request->query();
+
+			unset($query["page"]);
+			unset($query["limit"]);
+			if (count($query) == 0) 
+			{
+				$search_filters["source"] = 1;
+				$search_filters["moder_state"] = 0;
+				$search_filters["user_role"] = 2;
+
+				$search_filters["real_date_created"] = array();
+				$search_filters["real_date_created"]["from"] = date('Y-m-d', strtotime('-7 days'));
+			}
 		}
 
 		if ($filters_enable AND $date = $this->request->query('date'))
 		{
 			$field = $this->request->query('date_field');
 			if ($field == 'date_created') {
-
+				unset($search_filters["real_date_created"]);
 				$search_filters["date_created"] = array();
 				if ($from_time = strtotime($date['from']))
 				{
@@ -86,6 +89,7 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 				} 
 			}
 			else {
+				unset($search_filters["date_created"]);
 				$search_filters["real_date_created"] = array();
 				if ($from_time = strtotime($date['from']))
 				{
