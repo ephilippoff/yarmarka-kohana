@@ -209,7 +209,7 @@ select{background-color: #FFFFFF;border: 1px solid #C3C3C3;padding:2px 10px;heig
 .city_change+.proom-list{right:0;}
 .menu-cont1 .proom-list{left: 0;}
 .user-dropdown .proom-list{min-width: 180px; width: auto; right: 0 !important; left:auto; }
-.top_menu_icon{background-color: #2a76a1; font-size: 20px; color: #fff;display: block;padding: 0px 15px;border-radius: 3px;float: right;margin-bottom: 20px;height: 35px;line-height: 35px;}
+.top_menu_icon{background-color: #2a76a1; font-size: 20px; color: #fff;display: block;padding: 0px 15px;border-radius: 3px;float: right;height: 35px;line-height: 35px;}
 .menu-cont1 .proom-list ul, .city_change+.proom-list ul{padding-top: 6px;}
 .menu-cont1 .proom-list li, .city_change+.proom-list li{margin-bottom: 4px;}
 .menu-cont1 .proom-list li a, .city_change+.proom-list ul li a{font-size: 14px;border: 0 none;padding: 0; display: block;padding: 0px 10px;}
@@ -779,10 +779,7 @@ select{background-color: #FFFFFF;border: 1px solid #C3C3C3;padding:2px 10px;heig
 .cropper-actions .btn{margin: 3px 3px 3px 0px;}
 
 @media (max-width: 1200px){
-    .banner{
-        height: auto;
-        max-height: 100px;  
-    }
+
 }
 @media (max-width: 992px){
     .menu-cont2 .menu-item.right{float: left;}
@@ -798,12 +795,15 @@ select{background-color: #FFFFFF;border: 1px solid #C3C3C3;padding:2px 10px;heig
 	.popup-window .required-label .msg{position: static}
 	.popup-window .required-label .msg:after{display: none;}
 	.coupons-cont .coupon-item-cont{width: 48%;}
+    .main_menu{/*border-bottom:1px solid #313131;*/ padding: 10px; margin-bottom: 20px;}
     .main_menu .menu-item{width: 100%; padding: 5px 0;}
-    .main_menu .menu-item.js-mainmenu-dropdown{width: 50%; display: block; margin-bottom: 20px;}
+    .main_menu .menu-item.js-newsmenu-dropdown{margin-top: 10px;}
+    .main_menu .menu-item.js-mainmenu-dropdown{width: 50%; display: block;}
     .js-newsmenu-dropdown, .js-kuponmenu-dropdown, .city-companies{display: none;}
     .ue-tab-container{display: none;}
     .crimson-theme .menu-cont2{background-color: transparent;}
     .topline.banner{ height: auto; }
+    .menu-cont1 .cont1 .menu-item{margin-right: 0;}
 
 }
 
@@ -812,7 +812,7 @@ select{background-color: #FFFFFF;border: 1px solid #C3C3C3;padding:2px 10px;heig
     .search-cont{margin-top: 10px;}
     .usearch_menu{margin-top: 0 !important;}
     .usearch_menu li{display: block;}
-    .main_menu .menu-item.js-newsmenu-dropdown{width: 70%;}
+    .main_menu .menu-item.js-mainmenu-dropdown{width: 70%;}
 }
 
 @media screen and (min-width: 993px) {

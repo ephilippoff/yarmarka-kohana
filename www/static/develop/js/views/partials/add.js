@@ -645,7 +645,6 @@ define([
         template: templates.photo,
         events: {
             'click .fn-remove': 'remove',
-            'click .fn-main': 'setActive',
             'click span.rotate': 'rotate',
             'click .img': 'openCurtain'
         },
@@ -682,6 +681,7 @@ define([
         },
 
         render: function() {
+            var ctx = this;
             var html = _.template(this.template)(this.model.toJSON());
             this.container.append(this.$el.html(html));
             $('#add-block').sortable({
@@ -713,6 +713,14 @@ define([
                             fileNames[i] = userfile;
                             i++;
                         });
+                        if (fileNames.length) {
+                            var firstModel = ctx.collection.where({
+                                filename: fileNames[0]
+                            });
+                            if (firstModel.length) {
+                                firstModel[0].set('active', true);
+                            }
+                        }
                         $.ajax({
                             url: '/add/set_order',
                             dataType: 'json',
@@ -733,12 +741,6 @@ define([
 
         remove: function() {
             this.collection.remove(this.model);
-        },
-
-        setActive: function() {
-            this.model.set("active", true);
-            var attrs = this.model.toJSON();
-            console.log(attrs);
         },
     });
 
