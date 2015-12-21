@@ -798,15 +798,18 @@ class Controller_Cart extends Controller_Template {
 			exit;
 		}
 
-		if ($order->state == 1)
-		{
-			$order->success();
-			echo "OK".$order->id;
-		}
-		else
-		{
-			echo 'invoice already paid or refused';
-		}
+		$order->check_state($order->id);
+		return;
+
+		// if ($order->state == 1)
+		// {
+		// 	$order->check_state($order->id);
+		// 	echo "OK".$order->id;
+		// }
+		// else
+		// {
+		// 	echo 'invoice already paid or refused';
+		// }
 	}
 
 	public function action_success()
