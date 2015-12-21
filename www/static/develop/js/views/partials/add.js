@@ -656,7 +656,6 @@ define([
         template: templates.photo,
         events: {
             'click .fn-remove': 'remove',
-            'click .fn-main': 'setActive',
             'click span.rotate': 'rotate',
             'click .img': 'openCurtain'
         },
@@ -693,6 +692,7 @@ define([
         },
 
         render: function() {
+            var ctx = this;
             var html = _.template(this.template)(this.model.toJSON());
             this.container.append(this.$el.html(html));
             $('#add-block').sortable({
@@ -708,7 +708,6 @@ define([
                     }, 1000);
 
                     function increment() {
-                        console.log(i);
                         i++;
                         if (i >= 3) {
                             clearInterval(self.interval);
@@ -723,10 +722,16 @@ define([
                         var i = $(img).each(function() {
                             var userfile = $(this).children('input').val();
                             fileNames[i] = userfile;
-                            console.log(userfile);
                             i++;
                         });
-                        console.log(fileNames);
+                        if (fileNames.length) {
+                            var firstModel = ctx.collection.where({
+                                filename: fileNames[0]
+                            });
+                            if (firstModel.length) {
+                                firstModel[0].set('active', true);
+                            }
+                        }
                         $.ajax({
                             url: '/add/set_order',
                             dataType: 'json',
@@ -747,10 +752,6 @@ define([
 
         remove: function() {
             this.collection.remove(this.model);
-        },
-
-        setActive: function() {
-            this.model.set("active", true);
         },
     });
 
@@ -1067,7 +1068,7 @@ define([
         photos: [],
         maxLength: 10,
         hints: {
-            main: "Главным по умолчанию является первое фото, дважды щелкните по любому фото, чтобы сделать его главным<br>До 10 фотографий с расширениями jpg, png, gif, не более 5мб",
+            main: "Внимание! Первое фото в списке является главным.<br>До 10 фотографий с расширениями jpg, png, gif, не более 5мб",
             requires: "До 10 фотографий с расширениями jpg, png, gif, не более 5мб. Фото можно перетащить в эту зону мышкой."
         },
         initialize: function(options) {
