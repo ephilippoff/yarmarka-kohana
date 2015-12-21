@@ -208,7 +208,8 @@ select{background-color: #FFFFFF;border: 1px solid #C3C3C3;padding:2px 10px;heig
 .menu-cont1 .proom-list, .city_change+.proom-list {position: absolute;top: 100%;background: #fff;border-width: 1px; border-style: solid;white-space: nowrap;display: none;}
 .city_change+.proom-list{right:0;}
 .menu-cont1 .proom-list{left: 0;}
-.top_menu_icon{background-color: #2a76a1; font-size: 30px; color: #fff;display: block;padding: 0px 15px;border-radius: 3px;float: right;margin-bottom: 20px;}
+.user-dropdown .proom-list{min-width: 180px; width: auto; right: 0 !important; left:auto; }
+.top_menu_icon{background-color: #2a76a1; font-size: 20px; color: #fff;display: block;padding: 0px 15px;border-radius: 3px;float: right;margin-bottom: 20px;height: 35px;line-height: 35px;}
 .menu-cont1 .proom-list ul, .city_change+.proom-list ul{padding-top: 6px;}
 .menu-cont1 .proom-list li, .city_change+.proom-list li{margin-bottom: 4px;}
 .menu-cont1 .proom-list li a, .city_change+.proom-list ul li a{font-size: 14px;border: 0 none;padding: 0; display: block;padding: 0px 10px;}
@@ -241,7 +242,7 @@ select{background-color: #FFFFFF;border: 1px solid #C3C3C3;padding:2px 10px;heig
 /* catalog menu */
 .menu-cont2 {line-height: 25px; box-sizing: border-box;}
 .menu-cont2 .menu-item{color: white;text-decoration: none;line-height: 25px;position: relative} 
-.menu-cont2 .menu-item span{text-align: center;}
+.menu-cont2 .menu-item>span{text-align: center;}
 .menu-cont2 .menu-item.city_change{padding:0 10px; text-align: center;;}
 .menu-cont2 .menu-item.city_change .fa{margin-right: 10px;}
 .menu-cont2 .menu-item .menu-item-cont{display: block;cursor: pointer;width: 100%;padding: 0px 20px;}
@@ -797,16 +798,21 @@ select{background-color: #FFFFFF;border: 1px solid #C3C3C3;padding:2px 10px;heig
 	.popup-window .required-label .msg{position: static}
 	.popup-window .required-label .msg:after{display: none;}
 	.coupons-cont .coupon-item-cont{width: 48%;}
-    .main_menu .menu-item{width: 100% !important; padding: 5px 0;}
-    .main_menu{display: none;}
+    .main_menu .menu-item{width: 100%; padding: 5px 0;}
+    .main_menu .menu-item.js-mainmenu-dropdown{width: 50%; display: block; margin-bottom: 20px;}
+    .js-newsmenu-dropdown, .js-kuponmenu-dropdown, .city-companies{display: none;}
+    .ue-tab-container{display: none;}
+    .crimson-theme .menu-cont2{background-color: transparent;}
+    .topline.banner{ height: auto; }
+
 }
 
 @media (max-width: 500px){
 	.coupons-cont .coupon-item-cont{width: auto;}
-    .top_menu_icon{position: relative; top: 15px;}
     .search-cont{margin-top: 10px;}
     .usearch_menu{margin-top: 0 !important;}
     .usearch_menu li{display: block;}
+    .main_menu .menu-item.js-newsmenu-dropdown{width: 70%;}
 }
 
 @media screen and (min-width: 993px) {
@@ -822,5 +828,5 @@ select{background-color: #FFFFFF;border: 1px solid #C3C3C3;padding:2px 10px;heig
 }
 
 @media screen and (min-width: 768px) {
-    .main_menu{display: block !important;}
+    .js-newsmenu-dropdown, .js-kuponmenu-dropdown, .city-companies{display: block !important;}
 }

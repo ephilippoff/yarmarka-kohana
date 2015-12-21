@@ -21,7 +21,6 @@
 .contact-cont .cont-right{float: left; width: 30%;text-align: center;}
 .contact-cont .cont-right .apply{min-height: 25px;    padding: 5px 10px;}
 .contact-cont .cont-right .cansel{font-size: 12px;display: inline-block;padding-top: 5px;}
-
 #label-fileupload{
 	display: inline-block;
 	padding: 5px 15px;
@@ -96,6 +95,9 @@ img.banner,
 }
 
 @media only screen and (max-width : 992px) {
+
+	.js-mainmenu-dropdown{display: block !important;}
+
 	.info-block-cont,
 	.ue-tab-container{
 		display: none;
@@ -197,6 +199,11 @@ img.banner,
 		padding-right: 7px;
 	}
 
+	.menu-cont1 .col-xxs-8,
+	.menu-cont1 .col-xxs-4{
+		width: 50%;
+	}
+
 }
 
 @media only screen and (max-width : 400px) and (min-width: 300px) {
@@ -211,5 +218,5 @@ img.banner,
 }
 
 .banner {display:none;}
-.top-menu-container .menu-item:not(.js-mainmenu-dropdown) {display:none;}
+.top-menu-container .menu-item:not(.js-mainmenu-dropdown) {display:none !important;}
 .top-menu-container>.menu-cont2>.row {height:0;}

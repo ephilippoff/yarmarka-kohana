@@ -737,6 +737,8 @@ define([
 
         setActive: function() {
             this.model.set("active", true);
+            var attrs = this.model.toJSON();
+            console.log(attrs);
         },
     });
 

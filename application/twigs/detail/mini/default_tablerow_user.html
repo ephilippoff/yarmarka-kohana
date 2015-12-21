@@ -1,5 +1,11 @@
 {% set services = get_service_icon_info(object.compiled.services, true) %}
-<tr class="tr" data-id="{{object.id}}">
+{% for service in services if service.name == 'premium'%}
+	{% if loop.first %}
+		<tr class="tr premium_tr" data-id="{{object.id}}">
+	{% else %}
+		<tr class="tr" data-id="{{object.id}}">
+	{% endif %}
+{% endfor %}
 	<td class="td td-1">
 		<div class="mb5"><input type="checkbox" id="check_{{object.id}}" class="js-select-object" data-id="{{object.id}}"><label for="check_{{object.id}}"><span></span></label></div>
 		<div class="img-cont js-hide-region-{{object.id}}">
