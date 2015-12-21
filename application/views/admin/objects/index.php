@@ -190,6 +190,37 @@ function obj_selection(src, obj_id)
 		
 
 	<?php endif; ?>
+
+	<!-- filters from http://yarmarka.myjetbrains.com/youtrack/issue/yarmarka-353 -->
+	<!-- object type filter -->
+	<div class="input-prepend">
+		<span class="add-on"><?php echo $additionalFilters['obj_type']['label']; ?></span>
+		<select name="additional[obj_type]" class="span3">
+			<?php foreach($additionalFilters['obj_type']['items'] as $item) { ?>
+				<?php $selected = $item['value'] == $additionalFilters['obj_type']['value'] ? 'selected="selected"' : ''; ?>
+				<option value="<?php echo $item['value']; ?>" <?php echo $selected; ?> ><?php echo $item['label']; ?></option>
+			<?php } ?>
+		</select>
+	</div>
+	<!-- object type filter done -->
+
+	<!-- object text filter -->
+	<div class="input-prepend">
+		<span class="add-on"><?php echo $additionalFilters['text']['label']; ?></span>
+		<textarea class="span2" name="additional[text]" rows="1"><?php echo $additionalFilters['text']['value']; ?></textarea>
+	</div>
+	<!-- object text filter done -->
+
+	<!-- expired filter -->
+	<div class="input-prepend">
+		<label style="font-size:14px;">
+			<?php echo $additionalFilters['expired']['label']; ?>
+			<input type="checkbox" value="1" <?php echo $additionalFilters['expired']['value'] == 1 ? 'checked="checked"' : ''; ?> name="additional[expired]" />
+		</label>
+	</div>
+	<!-- expired filter done -->
+	<!-- filters done -->
+
 	<input type="submit" name="" value="Filter" class="btn btn-primary">
 	<input type="reset" name="" value="Clear" class="btn" onclick="document.location='/khbackend/objects';">
 </form>

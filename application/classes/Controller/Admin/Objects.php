@@ -138,6 +138,44 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 			$search_filters["source"] = $source;
 		}
 
+		//additional filters
+
+		//generate schema
+		$additionalFilters = array(
+				'obj_type' => array(
+						'label' => 'Тип объекта',
+						'value' => NULL,
+						'pushProperty' => 'type_tr',
+						'items' => array(
+								array( 'label' => 'Все', 'value' => '' ),
+								array( 'label' => 'Рекламное объявление', 'value' => 89 ),
+								array( 'label' => 'Новость', 'value' => 101 ),
+								array( 'label' => 'Статья', 'value' => 102 ),
+								array( 'label' => 'Купон', 'value' => 201 ),
+							)
+					),
+				'text' => array( 'label' => 'Текст', 'value' => '', 'pushProperty' => 'user_text' ),
+				'expired' => array( 'label' => 'Отложенные', 'value' => NULL, 'pushProperty' => 'expirationInverse' )
+			);
+
+		//process user values
+		if (array_key_exists('additional', $_REQUEST)) {
+			foreach($_REQUEST['additional'] as $key => $value) {
+				if (!array_key_exists($key, $additionalFilters)) {
+					continue;
+				}
+
+				$additionalFilters[$key]['value'] = $value;
+				if (!empty($value)) {
+					$search_filters[$additionalFilters[$key]['pushProperty']] = $value;
+				}
+			}
+		}
+
+		//save filters to template
+		$this->template->additionalFilters = $additionalFilters;
+		// additional filters done
+
 		$search_params = array(
 			"page" => $this->request->query('page') ? $this->request->query('page') : 1,
 			"limit" => $this->request->query('limit') ? $this->request->query('limit') : 30,
