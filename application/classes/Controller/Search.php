@@ -86,11 +86,12 @@ class Controller_Search extends Controller_Template {
 
         /*
             http://yarmarka.myjetbrains.com/youtrack/issue/yarmarka-347
+            http://yarmarka.myjetbrains.com/youtrack/issue/yarmarka-352
         */
-            $newsCategoryId = 174;
-            if ($search_info->category->id == $newsCategoryId) {
+            //$newsCategoryId = 174;
+            //if (in_array($search_info->category->id, $categoriesToFilterExpiration)) {
                 $search_params['expiration'] = true;
-            }
+            //}
         /*
             done
         */
