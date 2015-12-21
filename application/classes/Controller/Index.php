@@ -67,7 +67,7 @@ class Controller_Index extends Controller_Template {
                 "category_seo_name" => "novosti",
                 "not_id" => $premium_ids
             ),
-            array("limit" => 15, "page" => 1)
+            array("limit" => 15, "page" => 1, "order" => "date_expired")
         );
         $twig->lastnews = Search::getresult($search_query->execute()->as_array());
 
