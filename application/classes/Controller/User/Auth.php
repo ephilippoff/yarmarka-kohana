@@ -215,7 +215,7 @@ class Controller_User_Auth extends Controller_Template {
                     $error = "Этот email не зарегистрирован";
                 } elseif ($user->is_blocked == 1)
                 {
-                    $error = "Этот email заблокирован, за нарушение правил сайта";
+                    $error = "Этот email заблокирован за нарушение правил сайта";
                 }
                 else 
                 {
