@@ -7,6 +7,8 @@
 	{{ css("comments.css") }}
 {% endblock css%}
 
+
+
 {% block title %} {{object.title|e}} {% endblock title%}
 {% block meta_description %} {{ object.user_text|e|slice(0, 200) }} {% endblock meta_description%}
 
@@ -35,8 +37,13 @@
 		</div>
 
 		<div class="row">
-			<div class="col-md-12">
+			<div class="col-md-12 sadasd">
 				{% include 'detail/contacts' %}
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				{% include 'block/vk/group_surgut' %}
 			</div>
 		</div>
 		<div class="row">

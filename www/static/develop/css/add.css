@@ -102,6 +102,11 @@ img.banner,
 
 @media only screen and (max-width : 992px) {
 
+	.tech{
+		display: none;
+	}
+
+
 	.js-mainmenu-dropdown{display: block !important;}
 
 	.info-block-cont,
@@ -129,13 +134,13 @@ img.banner,
 		transition: height 1000ms ease;
 	}
 
-	.menu-block{
+	.user-dropdown{
 		background-color: #2a76a1;
 		width: 100%;
 		border-radius: 3px;
 		line-height: 30px;
-		border: 1px solid #c3c3c3;
 		top: 25px;
+		border: 1px solid #c3c3c3;
 		-webkit-transition: all 0.25s ease;
 		-o-transition: all 0.25s ease;
 		transition: all 0.25s ease;
