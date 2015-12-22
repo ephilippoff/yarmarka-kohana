@@ -1,4 +1,10 @@
-define([ 'ckeditor', 'ckeditorJqueryAdapter' ], function () {
+define([ 
+	//used as parameters
+	'templates/ckeditor/loader',
+	//not used as parameters
+	'ckeditor', 
+	'ckeditorJqueryAdapter'
+], function (moduleTemplates) {
 
 	//config
 	CKEDITOR.editorConfig = function( config ) {
@@ -6,7 +12,19 @@ define([ 'ckeditor', 'ckeditorJqueryAdapter' ], function () {
 		config.contentsCss = '/assets/css/css.css';
 		config.toolbarCanCollapse = true;
 		config.stylesSet = [];
+		config.templates = 'customTemplates';
 	};
+
+	//add custom templates to ckeditor
+	CKEDITOR.addTemplates('customTemplates', {
+		imagesPath : CKEDITOR.getUrl( CKEDITOR.plugins.getPath( 'templates' ) + 'templates/images/' ),
+		templates: [
+			{
+				title: 'Купон',
+				html: moduleTemplates.kupon
+			}
+		]
+	});
 
 	//plugins
 

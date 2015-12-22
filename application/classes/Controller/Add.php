@@ -148,10 +148,10 @@ class Controller_Add extends Controller_Template {
 
 	public function action_edit_ad()
 	{
-		$twig->onPageBlock = 'add';
 		$this->use_layout   = FALSE;
 		$this->auto_render  = FALSE;
 		$twig = Twig::factory('user/add');
+		$twig->onPageBlock = 'add';
 		$twig->params = new Obj();
 
 		$this->initAddForm($twig);
