@@ -44,7 +44,8 @@ define([
     var MenuView = Marionette.ItemView.extend({
         events: {
             "mouseover" : "showMenu",
-            "mouseleave" : "closeMenu"
+            "mouseleave" : "closeMenu",
+            "click" : "showMenu"
         },
         initialize: function(options) {
             this.$el.append($(options.templateClass).html());
