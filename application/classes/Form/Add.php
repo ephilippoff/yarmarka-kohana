@@ -157,7 +157,7 @@ class Form_Add  {
 
 
 		if ($user = Auth::instance()->get_user())
-			if ($user->role == 9 OR $user->role == 1)
+			if (\Yarmarka\Models\User::current()->isAdminOrModerator())
 			{
 
 				$category_array["Другие"][155] = "Каталог компаний";
@@ -628,8 +628,10 @@ class Form_Add  {
 		if ($category->loaded())
 			$text_required = $category->text_required;
 
-		if ($value)
+		$isModerator = \Yarmarka\Models\User::current()->isAdminOrModerator();
+		if ($value && !$isModerator) {
 			$value = Text::clear_usertext_tags($value);
+		}
 
 		$this->_data->text = array( 'value' 		=> $value,
 									'text_required' => $text_required,

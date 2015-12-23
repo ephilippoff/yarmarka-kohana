@@ -914,7 +914,7 @@ class Lib_PlacementAds_AddEdit {
 			$object->author 			= $user->id;
 		}
 		//filter text only if user is not admin
-		if ($user->role != 1 && $user->role != 9) {
+		if (!\Yarmarka\Models\User::current()->isAdminOrModerator()) {
 			$object->user_text 			= Text::clear_usertext_tags($params->user_text_adv);
 		} else {
 			$object->user_text = $params->user_text_adv;
