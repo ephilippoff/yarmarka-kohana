@@ -32,7 +32,7 @@
 			{% if (object.compiled.images.main_photo|length != 0) %}
 				{% include 'detail/kupon/main_photo' %}
 			{% endif %}
-			<div class="text-cont module">
+			<div class="text-cont module clearfix">
 				<div class="text fl w100p" itemprop="description">
 				{% set text = NULL %}
 
@@ -52,6 +52,7 @@
 				{{ text }}
 				</div>
 			</div>
+			{% include 'block/vk/comments_surgut' %}
 		</article>
 	</div>
 {% endblock %}	

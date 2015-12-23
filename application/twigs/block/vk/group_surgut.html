@@ -1,12 +1,9 @@
 {% if city.seo_name == 'surgut' %}
-
-<script type="text/javascript" src="//vk.com/js/api/openapi.js?121"></script>
-
-<script type="text/javascript">
-  VK.init({apiId: 5197401, onlyWidgets: true});
-</script>
-	<div id="vk_comments"></div>
-<script type="text/javascript">
-VK.Widgets.Comments("vk_comments", {limit: 10, width: "665", attach: "*"});
-</script>
+	<div class="vk-widget-cont mb5">
+		<!-- VK Widget -->
+		<div id="vk_groups"></div>
+		<script type="text/javascript">
+		VK.Widgets.Group("vk_groups", {mode: 0, width: "auto", height: "400"}, 101519186);
+		</script>	
+	</div>
 {% endif %}
