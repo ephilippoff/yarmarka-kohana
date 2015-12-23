@@ -43,6 +43,7 @@ class Controller_Detail extends Controller_Template {
 		$twig = Twig::factory('detail/index');
 		$twig->domain      = $this->domain;
 		$twig->city        = $this->domain->get_city();
+		$twig->onPageFlag = 'detail';
 
 
 		$detail_info = Detailpage::factory("Default", $object)

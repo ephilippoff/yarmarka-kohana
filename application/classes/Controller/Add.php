@@ -39,7 +39,7 @@ class Controller_Add extends Controller_Template {
 		$this->auto_render  = FALSE;
 		$twig = Twig::factory('user/add');
 		$twig->params = new Obj();
-
+		$twig->onPageFlag = 'add';
 		$this->initAddForm($twig);
 		
 		$prefix = (Kohana::$environment == Kohana::PRODUCTION) ? "" : "dev_";
@@ -151,7 +151,7 @@ class Controller_Add extends Controller_Template {
 		$this->use_layout   = FALSE;
 		$this->auto_render  = FALSE;
 		$twig = Twig::factory('user/add');
-		$twig->onPageBlock = 'add';
+		$twig->onPageFlag = 'add';
 		$twig->params = new Obj();
 
 		$this->initAddForm($twig);

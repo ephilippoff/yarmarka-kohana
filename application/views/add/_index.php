@@ -769,10 +769,10 @@
 				<div class="col-md-9 ta-r">
 					<? if ($form_data->_edit): ?>	
 						<? if ($object->is_bad <> 2): ?>	
-							<span id="submit_button" class="button button-style1 bg-color-blue btn-next"><i class="ico ico15 white-right-arrow-ico mr3"></i>Далее</span>							
+							<span id="submit_button" class="button button-style1 bg-color-blue btn-next">Далее <i class="fa fa-arrow-right"></i></span>							
 						<? endif; ?>
 					<? else: ?>
-						<span id="submit_button" class="button button-style1 bg-color-blue btn-next"><i class="ico ico15 white-right-arrow-ico mr3"></i>Далее</span>							
+						<span id="submit_button" class="button button-style1 bg-color-blue btn-next">Далее <i class="fa fa-arrow-right"></i></span>							
 					<? endif; ?>				
 				</div>
 			</div>			

@@ -19,10 +19,9 @@
 {% endblock crumbs %}
 
 {% block leftside %} 
-	<div class="col-md-7">
-		
+	<div class="col-md-7 col-sm-7">
 		<div class="row">
-			<div class="col-md-8">
+			<div class="col-md-12 col-lg-8">
 				<article>
 					{% if (object.compiled.images.local_photo|length == 0 and object.compiled.images.remote_photo|length == 0) %}
 						{% include 'detail/nophoto' %}
@@ -31,8 +30,8 @@
 					{% include 'detail/attributes' %}
 				</article>
 			</div>
-			<div class="col-md-4">
-				<div class="banner module {zoneID: 45}"></div>
+			<div class="col-lg-4">
+				<div class="banner hidden-sm hidden-xs hidden-md module {zoneID: 45}"></div>
 			</div>
 		</div>
 
@@ -51,9 +50,9 @@
 			{{ requestblock('block_twig/adslinkline', {'city_id': city.id, 'category_id': category.id, 'theme_class': theme_class}) }}
 			</div>
 		</div>
-		<div class="row">
+		<div class="row hidden-md hidden-sm hidden-xs">
 			<div class="col-md-12">
-			<div class="banner module {zoneID: 18 }"></div>
+				<div class="banner module {zoneID: 18 }"></div>
 			</div>
 		</div>
 		{% if (category.show_map) %}
@@ -68,13 +67,12 @@
 {% endblock %}
 
 {% block rightside %}
-	<div class="col-md-5">
+	<div class="col-md-5 col-sm-5">
 		<aside>
 			{% include 'detail/controls' %}
 			{% include 'detail/services' %}
+			{% include 'block/vk/group_surgut' %}
 			{% include 'detail/similar' %}
-
-			{#{% include 'detail/comments' %}#}
 		</aside>
 	</div>
 {% endblock rightside %}
