@@ -58,8 +58,7 @@ define([
 			if (options.fileUpload) {
 				append.filebrowserBrowseUrl = '/files';
 			}
-			var itemName = $(item).attr('name');
-			if (CKEDITOR.instances[itemName]) {
+			if ($(item).data('_ckeditorInstanceLock')) {
 				return;
 			}
 			$(item).ckeditor($.extend(this.config, append));
