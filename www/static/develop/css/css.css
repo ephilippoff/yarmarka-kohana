@@ -886,3 +886,13 @@ a.auto-collapse-expand {
 @media screen and (min-width: 768px) {
     .js-newsmenu-dropdown, .js-kuponmenu-dropdown, .city-companies{display: block !important;}
 }
+
+.kupon-contact {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    display:block;
+}
+.kupon-contact, .kupon-contact:link {
+    color:black;
+}
