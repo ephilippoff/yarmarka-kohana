@@ -1,9 +1,11 @@
-@media screen and (min-width: 768px) and (max-width:991px) {
+@media screen and (max-width:991px) {
 
 	/* todo - add styles */
 
-	.menu-cont1 .cont2 .menu-item.tech {
-		margin-left:0;
-	}
+	.menu-cont1 .cont2 .menu-item.tech {margin-left:0;}
+
+	.control-menu{margin: 15px 0;}
+	.table-result-info .tr{border-bottom: 1px solid #ccc; margin-bottom: 10px;}
+	.table-result-info .banner_tr{border-bottom: none;}
 
 }
