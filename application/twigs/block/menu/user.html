@@ -2,7 +2,9 @@
 <div class="proom-list iLight-cont js-usermenu border-color-blue popup-menu-cont right brb2 z300">
 	<p class="pl10 pt10 pr10 bold">{{ user.email|e }}</p>
 	<ul>
-		<li><a href="{{ url('user/') }}">Мои объявления <span>~{{get_myobjects_info()}}</span></span>
+		{% if user %}
+			<li><a href="{{ url('user/') }}">Мои объявления <span>~{{get_myobjects_info()}}</span></span>
+		{% endif %}
 		<li><a href="{{ url('user/favorites') }} ">Избранные <i class="fa fa-heart"></i></a></li>
 		<li><a href="{{ url('user/profile') }} ">Настройки пользователя</a></li>
 		<li><a href="{{ url('user/subscriptions') }}">Подписки</a></li>
