@@ -58,6 +58,9 @@ define([
 			if (options.fileUpload) {
 				append.filebrowserBrowseUrl = '/files';
 			}
+			if ($(item).data('_ckeditorInstanceLock')) {
+				return;
+			}
 			$(item).ckeditor($.extend(this.config, append));
 		}
 	});

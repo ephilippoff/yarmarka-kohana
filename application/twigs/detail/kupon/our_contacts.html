@@ -2,9 +2,9 @@
 	<p class="fs18">Ваши вопросы вы можете задать по телефону:</p>
 	{% for contact in object.compiled.contacts %}
 		{% if contact.type == 1 or contact.type == 2 %}
-			<p class="fs22 mt10">{{ contact.value|formatphone|phoneico }}</p>
+			<a href="tel:{{ contact.value }}" class="fs22 mt10 kupon-contact">{{ contact.value|formatphone|phoneico }}</a>
 		{% else %}
-			<p class="fs22 mt10">{{ contact.value|emailico }}</p>
+			<a href="mailto:{{ contact.value }}" class="fs22 mt10 kupon-contact">{{ contact.value|emailico }}</a>
 		{% endif %}
 	{% endfor %}
 

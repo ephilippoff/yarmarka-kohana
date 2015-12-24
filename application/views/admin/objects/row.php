@@ -133,6 +133,8 @@
 		<?=Date::formatted_time($object->real_date_created, 'd.m.Y H:i')?>
 		/
 		<?=Date::formatted_time($object->date_created, 'd.m.Y H:i')?>
+		<br />
+		Показывать с: <?php echo Date::formatted_time($object->date_expired, 'd.m.Y H:i'); ?>
 	</td>
 
 	<td>

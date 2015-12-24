@@ -128,7 +128,7 @@ class Controller_Add extends Controller_Template {
 		$twig->params->errors = (array) $errors;
 		$twig->params->assets = $this->assets;
 		$twig->params->user = ($user AND $user->loaded()) ? $user->org_type : "undefined";
-		$twig->params->allowCkEditor = $user && ($user->role == 1 || $user->role == 9);
+		$twig->params->allowCkEditor = \Yarmarka\Models\User::current()->isAdminOrModerator();
 		$twig->allowCkEditor = $twig->params->allowCkEditor;
 
 		$expired = NULL;
@@ -240,7 +240,7 @@ class Controller_Add extends Controller_Template {
 		$twig->params->errors = (array) $errors;
 		$twig->params->assets = $this->assets;
 		$twig->params->user = ($user AND $user->loaded()) ? $user->org_type : "undefined";
-		$twig->params->allowCkEditor = $user && ($user->role == 1 || $user->role == 9);
+		$twig->params->allowCkEditor = \Yarmarka\Models\User::current()->isAdminOrModerator();
 		$twig->allowCkEditor = $twig->params->allowCkEditor;
 
 		$expired = NULL;
