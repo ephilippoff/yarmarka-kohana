@@ -19,7 +19,7 @@
 				{% endif %}
 			</div>
 			{% if user %}
-				<span class="menu-item span-link hidden-sm hidden-xs" onclick="window.location='/user'">Мои объявления <span>~{{get_myobjects_info()}}</span></span>
+				<!--<span class="menu-item span-link hidden-sm hidden-xs" onclick="window.location='/user'">Мои объявления <span>~{{get_myobjects_info()}}</span></span>-->
 			{% endif %}
 			<span class="menu-item span-link js-favourite-counter fav" onclick="window.location='/user/favorites'"><i class="fa fa-heart mr3"></i><span>{{ get_favorites_info()|length }}</span></span>
 			{% set cart_info = get_cart_info() %}
