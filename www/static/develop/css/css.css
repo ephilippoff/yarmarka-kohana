@@ -896,3 +896,6 @@ a.auto-collapse-expand {
 .kupon-contact, .kupon-contact:link {
     color:black;
 }
+.graytheme .kupon-info-phone {
+    color:#3B3B3B;
+}
