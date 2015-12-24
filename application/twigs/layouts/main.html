@@ -21,7 +21,6 @@
             {% if is_debug_mode() %}
                     {{ css("bootstrap.min.css") }}
                     {{ css("bootstrap.tables.min.css") }}
-                    {{ css("bootstrap-xxs.css") }}
                     {{ css("font-awesome.css") }}
                     {{ css("iLight.css") }}
                     {{ css("css.css") }}
@@ -38,11 +37,13 @@
 						{{ css("../production/css/appstyles.css") }}
 					<!--<![endif]-->
             {% endif %}
+            {{ css("bootstrap-xxs.css") }}
         {% endblock css %}
 
         {{ js("lib/jquery.js") }}
         {{ js("lib/jquery.metadata.js") }}
         {{ js("lib/jquery.openxtag.min.js") }}
+        
         {{ js("v2/main.js") }}
         <script type="text/javascript">
           var _gaq = _gaq || [];
