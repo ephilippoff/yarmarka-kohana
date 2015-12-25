@@ -861,14 +861,14 @@ a.auto-collapse-expand {
     font-size: 16px;
 }
 
-<<<<<<< HEAD
 #wcomments_posts_wrap{
     border-bottom: 1px solid #DAE1E8;
 }
 
 #vk_comments{
     margin-bottom: 20px;
-=======
+}
+
 .kupon-contact {
     text-overflow: ellipsis;
     overflow: hidden;
@@ -880,5 +880,4 @@ a.auto-collapse-expand {
 }
 .graytheme .kupon-info-phone {
     color:#3B3B3B;
->>>>>>> 65e72fda1c31e337b28970cbbdacd52ad27e9b3d
 }

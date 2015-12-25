@@ -1,11 +1,11 @@
 <div class="breadcrumbs-cont module">
-	<a href="/{{sphinx_search_query}}" rel="nofollow" class="">Главная</a>
-
+	<a href="/{{sphinx_search_query}}" rel="nofollow" class="hidden-xs">Главная</a>
+	<a href="/{{sphinx_search_query}}" rel="nofollow" class="hidden-lg hidden-sm hidden-md home-a"><i class="fa fa-home"></i></a>
 	{% for crumb in crumbs %}
 		{% if 'http://' ~ s_host ~ '/' ~crumb.uri != canonical_url and canonical_url %}
-			/ <a href="{{ url(crumb.uri ~ crumb.query) }}" class="">{{crumb.title}}</a>
+			 <span class="hidden-xs">/</span> <a href="{{ url(crumb.uri ~ crumb.query) }}" class="crumbs-item"><span>{{crumb.title}}</span></a>
 		{% endif %}
 	{% endfor %}
 
-	/ <h1>{{ seo_attributes.h1 ? seo_attributes.h1: category.title }}</h1> <span class="count">{{ link_counters[s_host ~ s_suri] }}</span>
+	 <span class="hidden-xs">/</span> <h1 class="breadcrumb-h1"><span>{{ seo_attributes.h1 ? seo_attributes.h1: category.title }}</span></h1> <span class="count">{{ link_counters[s_host ~ s_suri] }}</span>
 </div>

@@ -7,8 +7,9 @@
 			</div>
 			<div class="col-md-6 col-sm-6 clearfix">
 				{% if small_pagination.next %}
-					<a class="menu-item right" href="{{small_pagination.next_url}}"><span class="menu-item-cont">Далее</span></a>
+					
 				{% endif %}
+				<a class="menu-item right" href="{{small_pagination.next_url}}"><span class="menu-item-cont">Далее</span></a>
 				<span class="caption-item right">{{ small_pagination.current }}/{{ small_pagination.total }}</span>
 				{% if small_pagination.prev %}
 					<a class="menu-item right" href="{{small_pagination.prev_url}}"><span class="menu-item-cont">Назад</span></a>

@@ -24,6 +24,12 @@
 	.control-menu .control-item:first-child{border-right: 1px solid #ccc;}
 	.menu-cont2 .menu-item.right, .menu-cont2 .caption-item.right{float: right; width: 33.33333%; margin: 0; text-align: center; padding: 5px 0;}
 
+	.breadcrumbs-cont {font-size: 0;}
+	.breadcrumbs-cont a{color: #fff; padding: 7px 10px; font-size: 16px;}
+	.breadcrumbs-cont .home-a{border-top-left-radius: 3px; border-bottom-left-radius: 3px; background-color: #2a76a1; padding: 7px 25px 7px 10px;}
+	.breadcrumbs-cont .crumbs-item, body h1.breadcrumb-h1{max-height: 34px; padding: 7px 10px; color: #fff; top: 3px; max-width: 30%; border-left: 1px solid #ccc; position: relative; transform: skew(25deg); background-color: #2a76a1; display: inline-block; right: 10px;}
+	.breadcrumbs-cont .crumbs-item span, body h1.breadcrumb-h1 span{transform: skew(-25deg); display: inline-block; width: 100%; -ms-text-overflow: ellipsis;text-overflow: ellipsis; overflow: hidden; white-space: nowrap; font-size: 15px !important;}
+	h1.breadcrumb-h1{background-color: #D90000 !important;}
 }
 
 @media (max-width: 500px){
@@ -33,6 +39,8 @@
     .usearch_menu{margin-top: 0 !important;}
     .usearch_menu li{display: block;}
     .main_menu .menu-item.top-razdel{width: 70%;}
+
+    .control-menu .control-item{width: 100%; border-right: none !important;}
 
 }
 
