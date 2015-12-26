@@ -21,9 +21,15 @@
             {% if is_debug_mode() %}
                     {{ css("bootstrap.min.css") }}
                     {{ css("bootstrap.tables.min.css") }}
+                    {{ css("bootstrap-xxs.css") }}
                     {{ css("font-awesome.css") }}
                     {{ css("iLight.css") }}
                     {{ css("css.css") }}
+
+                    {{ css("adaptive/extra-small-phones.css") }}
+                    {{ css("adaptive/small-tablets.css") }}
+                    {{ css("adaptive/medium-desktops.css") }}
+                    {{ css("adaptive/large-desktops.css") }}
             {% else  %}
 					<!--[if IE 9]>
 						{{ css("bootstrap.min.css") }}
@@ -72,7 +78,7 @@
         {% endif %}
         <div id="popup-layer" class="z200" style="display: none;"></div>
         <div class="wrapper container {% block wrapperclass %}{% endblock wrapperclass %}">
-			<div class="banner {zoneID: 42}" style="max-height: 100px;"></div>			
+			<div class="banner topline {zoneID: 42}"></div>			
             {% block body %}
                 {% block footer %} 
                     {% include 'block/footer/linkline' %}
@@ -91,7 +97,8 @@
                     category_id: '{{category_id}}',
                     query_params: '{{query_params_for_js}}',
                     city_id: '{{city_id}}',
-                    debug: '{{ is_debug_mode() }}'
+                    debug: '{{ is_debug_mode() }}',
+                    allowCkEditor: {% if allowCkEditor %}true{% else %}false{% endif %}
                 };
             </script>
             {% if is_debug_mode() %}

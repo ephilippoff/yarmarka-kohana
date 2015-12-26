@@ -119,6 +119,7 @@ class Search {
      *       "photo" => TRUE,
      *       "video" => TRUE,
      *      	"private" => TRUE,
+     *		 "type_tr" => 123,
      *       "org" => TRUE,
      *       "filters" =>array(
      *                    'tip-sdelki5' => 3250,
@@ -335,6 +336,14 @@ class Search {
 
 		if ($params->expiration) {
 			$object = $object->where("o.date_expired", "<", DB::expr("NOW()"));
+		}
+
+		if ($params->expirationInverse) {
+			$object = $object->where("o.date_expired", ">", DB::expr("NOW()"));
+		}
+
+		if ($params->type_tr) {
+			$object = $object->where('o.type_tr', '=', (int) $params->type_tr);
 		}
 
 		if ($params->is_favorite) {

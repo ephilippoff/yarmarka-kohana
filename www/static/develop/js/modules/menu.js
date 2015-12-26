@@ -19,7 +19,13 @@ define([
 
     var cityMenuSettings = {
         controlClass: ".js-citymenu-dropdown",
-        menuClass: ".js-citymenu",
+        menuClass: ".citymenu1",
+        menuTemplate: "#template-citymenu"
+    }
+
+    var cityMenuSettingsRight = {
+        controlClass: ".js-citymenu-dropdown-right",
+        menuClass: ".citymenu2",
         menuTemplate: "#template-citymenu"
     }
 
@@ -34,15 +40,24 @@ define([
         menuClass: ".js-kuponmenu",
         menuTemplate: "#template-kuponmenu"
     }
-
+    
     var MenuView = Marionette.ItemView.extend({
         events: {
             "mouseover" : "showMenu",
-            "mouseleave" : "closeMenu"
+            "mouseleave" : "closeMenu",
+            "click" : "showMenu"
         },
         initialize: function(options) {
             this.$el.append($(options.templateClass).html());
-            $(options.templateClass).remove();
+            if (!options.doNotRemove) {
+                $(options.templateClass).remove();
+            }
+            //Разделение меню городов по ID;
+            var id = 1;
+            $('.js-citymenu').each(function(){
+                $(this).addClass('citymenu'+id);
+                id++;
+            });
         },
 
         showMenu: function() {
@@ -136,6 +151,16 @@ define([
                     templateClass: cityMenuSettings.menuTemplate,
                     menuClass: cityMenuSettings.menuClass,
                     controlClass: cityMenuSettings.controlClass,
+                    doNotRemove: true
+                });
+            }
+
+            if (_.contains(menusToload, "city")) {
+                this.city1 = new MenuView({
+                    el: cityMenuSettingsRight.controlClass,
+                    templateClass: cityMenuSettingsRight.menuTemplate,
+                    menuClass: cityMenuSettingsRight.menuClass,
+                    controlClass: cityMenuSettingsRight.controlClass,
                 });
             }
 

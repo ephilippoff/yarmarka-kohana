@@ -19,7 +19,7 @@ define([
 function (Marionette, templates, utils, IndexPage, SearchPage, DetailPage, 
     UserSearchPage, CartPage, AddPage, ArticlePage, FiltersModule, MapModule, Afisha) {
     "use strict";
-    
+
     return Marionette.Controller.extend({
         before: function() {
 

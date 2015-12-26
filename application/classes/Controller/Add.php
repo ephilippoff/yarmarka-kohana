@@ -25,6 +25,7 @@ class Controller_Add extends Controller_Template {
 	}
 
 	public function initAddForm($twig) {
+
 		$twig->topMenuContainerClass = 'hidden-sm hidden-xs'; //hide on tablets and mobile
 		$twig->showCatalogMenuButtonAfterLogo = true;
 		$twig->catalogMenuAfterLogoButtonAdditionalClass = 'hidden-md hidden-lg'; //hide on desktops and laptops
@@ -127,6 +128,8 @@ class Controller_Add extends Controller_Template {
 		$twig->params->errors = (array) $errors;
 		$twig->params->assets = $this->assets;
 		$twig->params->user = ($user AND $user->loaded()) ? $user->org_type : "undefined";
+		$twig->params->allowCkEditor = \Yarmarka\Models\User::current()->isAdminOrModerator();
+		$twig->allowCkEditor = $twig->params->allowCkEditor;
 
 		$expired = NULL;
 		if ($user AND !$user->is_valid_orginfo()
@@ -148,6 +151,7 @@ class Controller_Add extends Controller_Template {
 		$this->use_layout   = FALSE;
 		$this->auto_render  = FALSE;
 		$twig = Twig::factory('user/add');
+		$twig->onPageBlock = 'add';
 		$twig->params = new Obj();
 
 		$this->initAddForm($twig);
@@ -236,6 +240,8 @@ class Controller_Add extends Controller_Template {
 		$twig->params->errors = (array) $errors;
 		$twig->params->assets = $this->assets;
 		$twig->params->user = ($user AND $user->loaded()) ? $user->org_type : "undefined";
+		$twig->params->allowCkEditor = \Yarmarka\Models\User::current()->isAdminOrModerator();
+		$twig->allowCkEditor = $twig->params->allowCkEditor;
 
 		$expired = NULL;
 		if (!$user->is_valid_orginfo())

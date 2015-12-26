@@ -88,12 +88,14 @@
 						<div class="col-md-9">	
 							<div class="row">
 								<div class="col-md-6 ta-r">
-									<span onclick="$('#element_list').submit()" class="button button-style1 bg-color-blue btn-next"><i class="ico ico15 white-right-arrow-ico mr3"></i>Вход</span>
+									<button type="submit" onclick="$('#element_list').submit()" class="button button-style1 bg-color-blue btn-next"><i class="ico ico15 white-right-arrow-ico mr3"></i>Вход</button>
 								</div>				
 							</div>
 						</div>
 					</div>			
-
+					<!-- enable teddyid -->
+					{{ js("teddypass.js") }}
+					<!-- /enable teddyid -->
 				</form>
 			</div>
 			{% endif %}

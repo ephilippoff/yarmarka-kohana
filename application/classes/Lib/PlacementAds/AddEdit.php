@@ -366,6 +366,28 @@ class Lib_PlacementAds_AddEdit {
 
 		}
 
+		//append additional contacts
+		$this->init_additional_contacts();
+
+		return $this;
+	}
+
+	function init_additional_contacts() {
+		if (!is_array($this->params->additional_contacts)) {
+			return $this;
+		}
+		
+		foreach($this->params->additional_contacts as $contact) {
+			if (empty($contact['value'])) {
+				continue;
+			}
+			$this->contacts []= array(
+					'value' => $contact['value'],
+					'type_id' => $contact['type'],
+					'contact_obj' => ORM::factory('Contact')->by_value($contact['value'])->find()
+				);
+		}
+
 		return $this;
 	}
 
@@ -891,7 +913,12 @@ class Lib_PlacementAds_AddEdit {
 			// при редактировании автора не меняем
 			$object->author 			= $user->id;
 		}
-		$object->user_text 			= Text::clear_usertext_tags($params->user_text_adv);
+		//filter text only if user is not admin
+		if (!\Yarmarka\Models\User::current()->isAdminOrModerator()) {
+			$object->user_text 			= Text::clear_usertext_tags($params->user_text_adv);
+		} else {
+			$object->user_text = $params->user_text_adv;
+		}
 		if ( ! $this->is_edit)
 		{
 			$object->date_expiration	= $this->lifetime_to_date($params->lifetime);

@@ -1,11 +1,11 @@
 <div class="{{theme_class}} ">
 	<div class="menu-cont2 clearfix brt2">
 			<div class="row">
-				<div class="col-md-6 clearfix">
+				<div class="col-md-6 col-xs-6 clearfix">
 				<span class="menu-item left" onclick="window.location='/add/{{ category.id }}'"><span class="menu-item-cont">Добавить</span></span>
 				<span class="menu-item  left js-search-extend"><span class="menu-item-cont"><i class="fa fa-spinner fa-spin fa-lg mr3 js-search-extend-spinner"></i>Расширенный поиск</span></span>
 			</div>
-			<div class="col-md-6 clearfix">
+			<div class="col-md-6 col-xs-6 clearfix">
 				{% if small_pagination.next %}
 					<a class="menu-item right" href="{{small_pagination.next_url}}"><span class="menu-item-cont">Далее</span></a>
 				{% endif %}
