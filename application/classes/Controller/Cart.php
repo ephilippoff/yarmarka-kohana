@@ -341,6 +341,15 @@ class Controller_Cart extends Controller_Template {
 			return;
 		}
 
+		$main_domain = Kohana::$config->load("common.main_domain");
+		$params = json_decode($order->params);
+		if (isset($params->is_surgut)) {
+			$base = "http://surgut.".$main_domain;
+			HTTP::redirect($base."/cart/order/".$order->id);
+		}
+		
+
+
 		$twig->crumbs = array(
 			array(
 				"title" => "Оформление заказа",
