@@ -62,8 +62,8 @@ $(document).ready(function() {
 <?php 
 	$text_type = (@$article->text_type == 2 or @$text_type_default == 2 or @$_POST['text_type'] == 2) ? 2 : 1;
 		
-	$start_date = isset($article->start_date) ? $article->start_date : Arr::get($_POST, 'start_date', date('Y-m-d'));	
-	$end_date   = isset($article->end_date)   ? $article->end_date   : Arr::get($_POST, 'end_date',   date('Y-m-d', strtotime('+3 days')));
+	$start_date = isset($article->start_date) ? $article->start_date : Arr::get($_POST, 'start_date', date('Y-m-d H:i:s'));	
+	$end_date   = isset($article->end_date)   ? $article->end_date   : Arr::get($_POST, 'end_date',   date('Y-m-d H:i:s', strtotime('+3 days')));
 	$img_url	= isset($article->img_url)   ? $article->img_url   : Arr::get($_POST, 'img_url', '');
 ?>
 
