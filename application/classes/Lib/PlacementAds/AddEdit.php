@@ -810,14 +810,6 @@ class Lib_PlacementAds_AddEdit {
 		$city = &$this->city;
 		$location = &$this->location;
 		$object = &$this->object;
-		
-		$object_compile = &$this->object_compile;
-		$object_compile["address"] = NULL;
-		$object_compile["city"] = NULL;
-		$object_compile["region"] = NULL;
-		$object_compile["lat"] = NULL;
-		$object_compile["lon"] = NULL;
-		$object_compile["real_city"] = NULL;
 
 		if (!$city->loaded()) {
 			$this->raise_error('При сохранении, не указан город');
@@ -829,7 +821,7 @@ class Lib_PlacementAds_AddEdit {
 		$address = trim($params->address);
 
 		if ($params->real_city_exists) {
-			$city_title = $object_compile["real_city"] = $params->real_city;
+			$city_title = $params->real_city;
 		}
 
 		@list($lat, $lon) = explode(',', $params->object_coordinates);
@@ -841,35 +833,13 @@ class Lib_PlacementAds_AddEdit {
 			@list($lon, $lat) = $coords;
 		}
 
-		if ($address)
-		{
-			$loc_count = 0;
-			if ($object->location_id)
-				$loc_count = ORM::factory('Object')->where("location_id","=", $object->location_id)->count_all();
+		$location->region 	= $region_title;
+		$location->city 	= $city_title;
+		$location->address 	= $address;
+		$location->lat 		= $lat;
+		$location->lon 		= $lon;
+		$location->save();
 
-			if ($loc_count == 1 AND $object->location_id <> $city->location_id)
-				$location = $location->where("id","=",$object->location_id)->find();
-
-			$location->region 	= $region_title;
-			$location->city 	= $city_title;
-			$location->address 	= $address;
-			$location->lat 		= $lat;
-			$location->lon 		= $lon;
-			$location->save();
-		}
-
-		// если не нашли адрес, то берем location города
-		if ( ! $location->loaded() )
-			$location = $city->location;
-
-		if ( $location->loaded() )
-		{
-			$object_compile["address"] = $location->address;
-			$object_compile["city"] = $location->city;
-			$object_compile["region"] = $location->region;
-			$object_compile["lat"] = $location->lat;
-			$object_compile["lon"] = $location->lon;
-		}
 
 		return $this;
 	}
