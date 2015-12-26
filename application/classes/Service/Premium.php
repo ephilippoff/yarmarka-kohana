@@ -65,6 +65,8 @@ class Service_Premium extends Service
 
 		self::apply_service($orderItem->object->id, $quantity);
 		self::saveServiceInfoToCompiled($orderItem->object->id);
+		
+		ORM::factory('Order_Log')->write($orderItem->order_id, "notice", vsprintf("Активация услуги Премиум: № %s", array( $orderItem->order_id ) ) );
 	}
 
 	public function check_available($quantity, $balance = FALSE)

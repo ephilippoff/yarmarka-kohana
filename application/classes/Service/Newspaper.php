@@ -143,6 +143,8 @@ class Service_NewsPaper extends Service
 		$orderItems = array($orderItem);
 		$subj = "Оплата объявлений в газету (".$orderItem->service->price_total." руб). Заказ №".$orderItem->order_id;
 
+		ORM::factory('Order_Log')->write($orderItem->order_id, "notice", $subj );
+
 		$order = ORM::factory('Order', $orderItem->order_id);
 		$object = ORM::factory('Object', $orderItem->object->id);
 		$user = ORM::factory('User', $object->author);
@@ -157,6 +159,8 @@ class Service_NewsPaper extends Service
 					'contacts' => $contacts,
 					'user'=> $user
 				));
+
+		ORM::factory('Order_Log')->write($orderItem->order_id, "notice", vsprintf("Отправка уведомелния операторам на размещение в  газету: %s", array(join(", ",$configBilling["operators_for_notify"])) ) );
 
 		foreach ($configBilling["operators_for_notify"] as $email) {
 			Email::send($email, Kohana::$config->load('email.default_from'), $subj, $msg);

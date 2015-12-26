@@ -25,13 +25,21 @@ class Model_Order extends ORM
 
 	function check_state($order_id = NULL, $params = array(), $callback = NULL) {
 
+		$return = "!";
+
 		$params = new Obj($params);
 		$robo = new Robokassa;
 
 		if ($order_id) {
 			$orders = ORM::factory('Order')->where("id","=", $order_id)->find_all();
+			ORM::factory('Order_Log')->write($order_id, "notice", vsprintf("Запрашиваем состояние оплаты заказа у ПС.  № %s", array($order_id) ) );
 		} else {
 			$orders = ORM::factory('Order')->where("state","in",array(0,1))->find_all();
+			$ids = array();
+			foreach ($orders as $order) {
+				$ids[] = $order->id;
+			}
+			ORM::factory('Order_Log')->write(NULL, "notice", vsprintf("Запрашиваем состояние оплаты заказов (выставленных но не оплаченных) у ПС: %s", array( join(",", $ids) ) ) );
 		}
 		
 		foreach ($orders as $order) {
@@ -49,6 +57,8 @@ class Model_Order extends ORM
 			{
 				if ($data['code_request'] == 10 OR $data['code_request'] == 60)
 				{
+					$return = 'FAIL';
+					ORM::factory('Order_Log')->write($order->id, "notice", vsprintf("Оплата заказа отменена. № %s", array($order->id) ) );
 					$order->fail();
 					if ($callback) {
 						$callback($order->id, "cancel");
@@ -56,28 +66,51 @@ class Model_Order extends ORM
 				}
 				elseif ($data['code_request'] == 100)
 				{
-					$order->success($params->fake_state);
+					if ($params->fake) {
+						$return = 'ADMIN';
+						ORM::factory('Order_Log')->write($order->id, "warning", vsprintf("!! Заказ оплачен Администратором с помощью специальнйо кнопки. № %s", array($order->id) ) );
+						$order->success($params->fake_state);
+					} else {
+						$return = 'OK';
+						ORM::factory('Order_Log')->write($order->id, "notice", vsprintf("Заказ оплачен. № %s", array($order->id) ) );
+						$order->success();
+					}
+
 					if ($callback) {
 						$callback($order->id, "success");
 					}
 				} else {
+					$return = 'WAIT';
+					ORM::factory('Order_Log')->write($order->id, "notice", vsprintf("Заказ в ожидании оплаты. № %s", array($order->id) ) );
 					if ($callback) {
 						$callback($order->id, "wait");
 					}
 				}
 			} else {
 
+				ORM::factory('Order_Log')->write($order->id, "notice", vsprintf("Проверка истечения времени оплаты заказа ", array($order->id) ) );
+
 				if (strtotime(date('Y-m-d H:i:s')) > strtotime($order->created) + 60*30) {
+					$return = 'FAIL';
+					ORM::factory('Order_Log')->write($order->id, "notice", vsprintf("Время оплаты заказа истекло. Отменяем ", array($order->id) ) );
 					$order->fail();
 					if ($callback) {
 						$callback($order->id, "cancel");
 					}
 				} else {
+					$return = 'WAIT';
+					ORM::factory('Order_Log')->write($order->id, "notice", vsprintf("Заказ в ожидании оплаты ", array($order->id) ) );
 					if ($callback) {
 						$callback($order->id, "wait");
 					}
 				}
 			}
+
+			
+		}
+
+		if ($order_id) {
+			return $return;
 		}
 	}
 
@@ -112,7 +145,8 @@ class Model_Order extends ORM
 		// send email to user about successfull payment
 		if ($user->loaded() AND $user->email AND in_array($this->state, array(2)))
 		{				
-			
+			ORM::factory('Order_Log')->write($this->id, "notice", vsprintf("Отправка письма пользователю о успехе оплаты. email: %s,  № %s", array($user->email, $this->id) ) );
+
 			$subj = "Потверждение оплаты. Заказ №".$this->id;
 			$msg = View::factory('emails/payment_success',
 					array('order' => $this,'orderItems' => $orderItems));
@@ -139,6 +173,7 @@ class Model_Order extends ORM
 
 		} catch (Kohana_Exception $e) {
 			$db->rollback();
+			ORM::factory('Order_Log')->write($this->id, "error", vsprintf("Ошибка активации услуг : %s, заказ № %s", array($e->getMessage(), $this->id) ) );
 			$message =  "Ошибка применения заказа ".$e->getMessage();
 			Email::send_to_admin("Ошибка применения заказа #".$this->id, $message);
 			return;
@@ -152,6 +187,7 @@ class Model_Order extends ORM
 			$msg = View::factory('emails/payment_success',
 					array('order' => $this,'orderItems' => $orderItems));
 
+			ORM::factory('Order_Log')->write($this->id, "notice", vsprintf("Отправка уведомления администраторам об оплате заказа с товарами. emailы: %s,  № %s", array( join(", ", $configBilling["emails_for_notify"]), $this->id) ) );
 			
 			foreach ($configBilling["emails_for_notify"] as $email) {
 				Email::send($email, Kohana::$config->load('email.default_from'), $subj, $msg);
@@ -238,6 +274,8 @@ class Model_Order extends ORM
 							'object_id' => $orderItem->object->id,
 							'for_supplier' => FALSE
 						));
+
+				ORM::factory('Order_Log')->write($this->id, "notice", vsprintf("Электронная доставка купона. email: %s,  № %s", array($params->delivery->email, $this->id) ) );
 				
 				Email::send($params->delivery->email, Kohana::$config->load('email.default_from'), $subj, $msg);
 		}
@@ -251,6 +289,8 @@ class Model_Order extends ORM
 		$params = new Obj(json_decode($params));
 
 		if ($params->delivery AND $params->delivery->type == "electronic" AND $orderItem->service->name == "kupon" AND $params->delivery->phone) {
+
+			ORM::factory('Order_Log')->write($this->id, "notice", vsprintf("Смс клиенту, с номером купона. Телефон: %s,  № %s", array($params->delivery->phone, $this->id) ) );
 
 			$phone = Text::clear_phone_number($params->delivery->phone);
 			if ($phone AND Valid::is_mobile_contact($phone)) {
@@ -273,6 +313,9 @@ class Model_Order extends ORM
 
 		if ($phone AND Valid::is_mobile_contact($phone)) {
 			$message = Kohana::$config->load('sms.messages.kupon_supplier_notify');
+
+			ORM::factory('Order_Log')->write($this->id, "notice", vsprintf("Смс поставщику, Телефон: %s,  № %s", array($phone, $this->id) ) );
+
 			foreach ($kupons as $kupon) {
 				$number = Model_Kupon::decrypt_number($kupon->number);
 				$number =substr($number, count($number) - 4, 3);
@@ -305,11 +348,17 @@ class Model_Order extends ORM
 				));
 
 		if ($email AND Valid::is_email_contact($email)) {
+
+			ORM::factory('Order_Log')->write($this->id, "notice", vsprintf("Email поставщику: %s,  № %s", array($email, $this->id) ) );
+
 			Email::send($email, Kohana::$config->load('email.default_from'), $subj, $msg);
 		}
 
 		try {
 			if ($support_emails  AND count($support_emails) > 0) {
+
+				ORM::factory('Order_Log')->write($this->id, "notice", vsprintf("Уведомления сотрудникам: %s,  № %s", array( join(", ", $support_emails) , $this->id) ) );
+
 				foreach ($support_emails as $email) {
 					Email::send($email, Kohana::$config->load('email.default_from'), $subj, $msg);
 					

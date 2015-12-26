@@ -52,6 +52,10 @@ class Service_Up extends Service
 
 		self::apply_service($orderItem->object->id, $quantity);
 		self::saveServiceInfoToCompiled($orderItem->object->id);
+
+		if ($quantity > 1) {
+			ORM::factory('Order_Log')->write($orderItem->order_id, "notice", vsprintf("Активация услуги Подъем * %s: № %s", array( $quantity, $orderItem->order_id ) ) );
+		}
 	}
 
 	static function apply_service($object_id, $quantity)
