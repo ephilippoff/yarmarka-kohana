@@ -124,10 +124,12 @@ class Service_Kupon extends Service
 		$key = Cart::get_key();
 		$kuponsArray = array();
 		foreach ($kupons as $kupon) {
-
+			
 			$kupon->to_sold($oi->loaded() ? $oi->order_id : NULL, $key);
 			$orderItem->kupon = $kupon;
 			$kuponsArray[] = $kupon->get_row_as_obj();
+
+			ORM::factory('Order_Log')->write($orderItem->order_id, "notice", vsprintf("Активация купона: %s, № %s", array($kupon->id, $orderItem->order_id) ) );
 		}
 
 		$order->electronic_delivery($orderItem, $kuponsArray);
@@ -158,6 +160,8 @@ class Service_Kupon extends Service
 
 	public function return_reserve($ids, $description = NULL)
 	{
+		ORM::factory('Order_Log')->write(NULL, "notice", vsprintf("Возврат купонов из резерва: %s", array(join(", ",$ids)) ) );
+
 		foreach ($ids as $id) {
 			$kupon = ORM::factory('Kupon', $id);
 			$kupon->return_to_avail($description);
@@ -167,6 +171,8 @@ class Service_Kupon extends Service
 
 	public function reserve($ids, $access_key = NULL)
 	{
+		ORM::factory('Order_Log')->write(NULL, "notice", vsprintf("Резерв купонов: %s", array(join(", ",$ids)) ) );
+
 		foreach ($ids as $id) {
 			$kupon = ORM::factory('Kupon', $id);
 			$kupon->reserve(NULL, $access_key);

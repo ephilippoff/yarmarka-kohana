@@ -719,8 +719,9 @@ class Controller_Cart extends Controller_Template {
 		$signature = $this->request->query("SignatureValue");
 
 		$order = ORM::factory('Order', $order_id);
-
 		if (!$order->loaded()) {
+			
+			ORM::factory('Order_Log')->write($order_id, "notice", vsprintf("Поступило уведомление о платеже по заказу № %s. На сумму %s. Счет выставлен в старом движке Codeigniter", array($order_id, $sum) ) );
 			$this->post_to_main_domain(array('InvId' => $order_id, 'OutSum' => $sum, 'SignatureValue' => $signature), "result");
 			return;
 		}
@@ -728,10 +729,13 @@ class Controller_Cart extends Controller_Template {
 		if ($order->loaded()) {
 			$params = json_decode($order->params);
 			if (isset($params->is_surgut)) {
+				ORM::factory('Order_Log')->write($order_id, "notice", vsprintf("Поступило уведомление о платеже по заказу № %s. На сумму %s. Счет выставлен в новом движке surgut.yarmarka.biz", array($order_id, $sum) ) );
 				$this->get_to_surgut_domain(array('InvId' => $order_id, 'OutSum' => $sum, 'SignatureValue' => $signature), "result");
 				return;
 			}
 		}
+
+		ORM::factory('Order_Log')->write($order_id, "notice", vsprintf("Поступило уведомление о платеже по заказу № %s. На сумму %s. Счет выставлен в старом движке c.yarmarka.biz", array($order_id, $sum) ) );
 
 		$robo = new Robokassa($order_id);
 		$robo->set_sum($order->sum);
@@ -739,20 +743,25 @@ class Controller_Cart extends Controller_Template {
 
 		if ($signature !== $sample OR !$order->loaded() OR $sum <> $order->sum)
 		{
+			ORM::factory('Order_Log')->write($order_id, "error", vsprintf("!! Не верно сформирована подпись уведомления о платеже (возможно ктото пытается взломать систему). Заказ №%s.", array($order_id) ) );
 			header("HTTP/1.0 404 Not Found");
 			echo "bad sign";
 			exit;
 		}
 
-		if ($order->state == 1)
-		{
-			$order->success();
-			echo "OK".$order->id;
-		}
-		else
-		{
-			echo 'invoice already paid or refused';
-		}
+		$result = $order->check_state($order->id);
+		echo $result.$order->id;
+		ORM::factory('Order_Log')->write($order_id, "notice", vsprintf("Конец обработки. Результат: %s", array($result.$order->id) ) );
+
+		// if ($order->state == 1)
+		// {
+		// 	$order->success();
+		// 	echo "OK".$order->id;
+		// }
+		// else
+		// {
+		// 	echo 'invoice already paid or refused';
+		// }
 	}
 
 	public function action_success()
@@ -763,7 +772,7 @@ class Controller_Cart extends Controller_Template {
 		$sum = $this->request->post("OutSum");
 		$signature = $this->request->post("SignatureValue");
 		
-
+		ORM::factory('Order_Log')->write($order_id, "notice", vsprintf("Пользователь перешел на страницу успеха оплаты. № %s", array($order_id) ) );
 
 		$order = ORM::factory('Order', $order_id);
 		
@@ -779,25 +788,30 @@ class Controller_Cart extends Controller_Template {
 			if (isset($params->is_surgut)) {
 				$base = "http://surgut.".$main_domain;
 			}
-		}
-
-		if ($order->state == 1)
-		{
-
-			$params = json_decode($order->params);
-			if (isset($params->is_surgut)) {
-				$this->get_to_surgut_domain(array('InvId' => $order_id, 'OutSum' => $sum, 'SignatureValue' => $signature), "success");
-				HTTP::redirect($base."/cart/order/".$order_id);
-				return;
-			}
-
-			$order->check_state($order->id);
 			HTTP::redirect($base."/cart/order/".$order_id);
 		}
-		else
-		{
-			HTTP::redirect($base."/cart/order/".$order_id);
-		}
+
+		
+
+		// if ($order->state == 1)
+		// {
+
+		// 	$params = json_decode($order->params);
+		// 	if (isset($params->is_surgut)) {
+		// 		$this->get_to_surgut_domain(array('InvId' => $order_id, 'OutSum' => $sum, 'SignatureValue' => $signature), "success");
+		// 		HTTP::redirect($base."/cart/order/".$order_id);
+		// 		return;
+		// 	}
+
+		// 	$order->check_state($order->id);
+		// 	HTTP::redirect($base."/cart/order/".$order_id);
+		// }
+		// else
+		// {
+		// 	HTTP::redirect($base."/cart/order/".$order_id);
+		// }
+
+		HTTP::redirect($base."/");
 	}
 
 	function post_to_main_domain($data, $action)
@@ -849,13 +863,10 @@ class Controller_Cart extends Controller_Template {
 				'method'  => 'GET'
 			),
 		);
-		try {
-			$context  = stream_context_create($options);
-			$result = file_get_contents($url, false, $context);
-			echo $result;
-		} catch (Exception $e) {
-			
-		}
+
+		$context  = stream_context_create($options);
+		$result = file_get_contents($url, false, $context);
+		echo $result;
 	}
 
 	public function action_to_admin_success()
@@ -891,6 +902,8 @@ class Controller_Cart extends Controller_Template {
 		$sum = $this->request->post("OutSum");
 		$signature = $this->request->post("SignatureValue");
 
+		ORM::factory('Order_Log')->write($order_id, "notice", vsprintf("Пользователь перешел на страницу НЕ успеха оплаты. № %s", array($order_id) ) );
+
 		$order = ORM::factory('Order', $order_id);
 
 		if (!$order->loaded()) {
@@ -909,13 +922,13 @@ class Controller_Cart extends Controller_Template {
 
 
 		if ($order->loaded()) {
-			$params = json_decode($order->params);
-			if (isset($params->is_surgut)) {
-				$this->get_to_surgut_domain(array('InvId' => $order_id, 'OutSum' => $sum, 'SignatureValue' => $signature), "fail");
-				HTTP::redirect($base."/cart/order/".$order_id);
-				return;
-			}
-			$order->check_state($order->id);
+			// $params = json_decode($order->params);
+			// if (isset($params->is_surgut)) {
+			// 	$this->get_to_surgut_domain(array('InvId' => $order_id, 'OutSum' => $sum, 'SignatureValue' => $signature), "fail");
+			// 	HTTP::redirect($base."/cart/order/".$order_id);
+			// 	return;
+			// }
+			// $order->check_state($order->id);
 			HTTP::redirect($base."/cart/order/".$order->id);
 			return;
 		}
