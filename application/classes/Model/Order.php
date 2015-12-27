@@ -47,7 +47,7 @@ class Model_Order extends ORM
 			{
 				$data = $params->fake;
 				if ($params->fake_state == 22) {
-					ORM::factory('Order_Log')->write($order->id, "notice", vsprintf("Дана команда активации заказа без оплаты (100% скидка).  № %s", array($order->id) ) );
+					ORM::factory('Order_Log')->write($order->id, "notice", vsprintf("Дана команда активации заказа без оплаты (100 проц. скидка).  № %s", array($order->id) ) );
 				} else if ($params->fake_state == 222) {
 					ORM::factory('Order_Log')->write($order->id, "notice", vsprintf("Дана команда активации заказа без оплаты (АДМИН).  № %s", array($order->id) ) );
 				}
