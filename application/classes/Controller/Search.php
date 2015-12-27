@@ -90,7 +90,7 @@ class Controller_Search extends Controller_Template {
         */
             //$newsCategoryId = 174;
             //if (in_array($search_info->category->id, $categoriesToFilterExpiration)) {
-                $search_params['expiration'] = true;
+                $search_info->search_filters['expiration'] = true;
             //}
         /*
             done
