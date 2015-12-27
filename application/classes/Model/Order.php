@@ -32,7 +32,6 @@ class Model_Order extends ORM
 
 		if ($order_id) {
 			$orders = ORM::factory('Order')->where("id","=", $order_id)->find_all();
-			ORM::factory('Order_Log')->write($order_id, "notice", vsprintf("Запрашиваем состояние оплаты заказа у ПС.  № %s", array($order_id) ) );
 		} else {
 			$orders = ORM::factory('Order')->where("state","in",array(0,1))->find_all();
 			$ids = array();
@@ -47,9 +46,15 @@ class Model_Order extends ORM
 			if ($params->fake)
 			{
 				$data = $params->fake;
+				if ($params->fake_state == 22) {
+					ORM::factory('Order_Log')->write($order->id, "notice", vsprintf("Дана команда активации заказа без оплаты (100% скидка).  № %s", array($order->id) ) );
+				} else if ($params->fake_state == 222) {
+					ORM::factory('Order_Log')->write($order->id, "notice", vsprintf("Дана команда активации заказа без оплаты (АДМИН).  № %s", array($order->id) ) );
+				}
 			}
 			else
 			{
+				ORM::factory('Order_Log')->write($order->id, "notice", vsprintf("Запрашиваем состояние оплаты заказа у ПС.  № %s", array($order->id) ) );
 				$data = $robo->get_invoice_state($order->id);
 			}
 			
@@ -68,7 +73,11 @@ class Model_Order extends ORM
 				{
 					if ($params->fake) {
 						$return = 'ADMIN';
-						ORM::factory('Order_Log')->write($order->id, "warning", vsprintf("!! Заказ оплачен Администратором с помощью специальнйо кнопки. № %s", array($order->id) ) );
+						if ($params->fake_state == 22) {
+							ORM::factory('Order_Log')->write($order->id, "notice", vsprintf("Заказ активирован (100% скидка).  № %s", array($order->id) ) );
+						} else if ($params->fake_state == 222) {
+							ORM::factory('Order_Log')->write($order->id, "warning", vsprintf("Активирован с помощью спец кнопки (АДМИН).  № %s", array($order->id) ) );
+						}
 						$order->success($params->fake_state);
 					} else {
 						$return = 'OK';
