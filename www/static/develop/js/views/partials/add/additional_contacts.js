@@ -605,12 +605,16 @@ define([ 'backbone' ], function (backbone) {
 		className: 'row mb20',
 
 		remove: function () {
-			_.each(this.childViews, function (item) {
+			that = this;
+			this.$el.slideUp(300);
+			setTimeout(function () {
+				_.each(this.childViews, function (item) {
 				if (typeof(item.remove) == 'function') {
 					item.remove();
 				}
 			});
-			Backbone.View.prototype.remove.apply(this, arguments);
+			Backbone.View.prototype.remove.apply(that, arguments);
+			}, 300);
 		},
 
 		initialize: function () {
@@ -666,8 +670,9 @@ define([ 'backbone' ], function (backbone) {
 		},
 
 		render: function () {
+			this.$el.hide();
 			this.$el.append(this.template(this.model.toJSON()));
-
+			this.$el.delay(100).slideDown(300);
 			//set references to ui elements
 			this.$typeContainer = this.$el.find('[data-role=type-container]');
 			this.$valueContainer = this.$el.find('[data-role=value-container]');
@@ -680,13 +685,11 @@ define([ 'backbone' ], function (backbone) {
 			this.$valueContainer.append(this.childViews.remove.render());
 
 			this.$typeContainer.append(this.childViews.typeSelect.render());
-
 			this.$errorContainer.append(this.childViews.validationMessage.render());
 			this.$errorContainer.append(this.childViews.code.render());
 
 			//initialy run on type changed event
 			this.onTypeChanged(this.model, this.model.get('type'));
-
 			return this.$el;
 		},
 

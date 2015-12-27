@@ -26,4 +26,16 @@
 				Для подтверждения потребуется загрузить скан оригинала или копии ИНН.</span>
 		</div>
 	</div>
+
+	{% if user.org_type == 2 %}
+	<div class="info-block-cont theme3 module">
+		<div class="block-title">
+			<span>Массовая загрузка</span>
+		</div>						
+		<div class="bg-color-whitesmoke p20">
+			<span>
+			Ознакомиться с условиями использования и узнать как подключить услугу Вы можете, перейдя по <a href="{{ url('user/objectload') ~ query_url_str }}">ссылке</a>.</span>
+		</div>
+	</div>
+	{% endif %}
 {% endblock rightside %}

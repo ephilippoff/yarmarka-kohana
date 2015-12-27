@@ -1,5 +1,5 @@
 <div class="description-cont">
-	<img class="fr ml10 mb5" src="<%=getStaticPath()%>images/content/11.jpg">
+	<img class="fr ml10 hidden-xs mb5" src="<%=getStaticPath()%>images/content/11.jpg">
 	<p><strong>Премиум-объявление</strong> в течение 7 дней отображается в специальном блоке на сайте. Этот блок располагается на самом видимом месте - сверху, над обычными объявлениями в поисковой выдаче:</p>
 	<p>Услуга также предусматривает поднятие объявления на первое место страницы поиска в момент применения.</p>
 	<p>На каждой странице рубрики в премиум-блоке размещается не более 5 объявлений. Объявления выводятся в соответствии с запросами посетителей сайта, в хронологическом порядке. По мере добавления новых премиум-объявлений, остальные объявления смещаются на следующие страницы. Таким образом, выше всегда будут находиться наиболее актуальные предложения.</p>
@@ -8,17 +8,18 @@
 	<p>Если вы приобретаете <strong>сразу несколько премиумов</strong> для одного объявления, услуга активируется автоматически купленное количество раз каждые 7 дней, выводя объявление вверх списка каждые 7 дней</p>
 </div>
 <% if (info.count && info.count > 0) { %>
-	<div class="p10">Осталось бесплатных: <%=info.count%></div>
+	<p>Осталось бесплатных: <%=info.count%></p>
 <% } %>
+<h3 class="hidden-lg hidden-sm hidden-md"><%=getTitle()%></h3>
 <table class="table table-bordered">
 	<thead>
-		<th class="service-title">Услуга</th>
+		<th class="service-title hidden-xs">Услуга</th>
 		<th class="quantity">Количество</th>
 		<th class="price w150">Цена</th>
 	</thead>
 	<tbody>
 	<tr>
-		<td class="service-title"><%=getTitle()%></td>
+		<td class="service-title hidden-xs"><%=getTitle()%></td>
 		<td class="quantity">
 			<% var quantity  = 1; %>
 			<% if (is_edit) { 

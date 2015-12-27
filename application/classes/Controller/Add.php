@@ -21,6 +21,8 @@ class Controller_Add extends Controller_Template {
 				if ($user->is_expired_date_validation())
 					HTTP::redirect("/user/orginfo?from=another");
 			}
+		}else{
+			$this->redirect(URL::site('user/login?return=add'));
 		}
 	}
 

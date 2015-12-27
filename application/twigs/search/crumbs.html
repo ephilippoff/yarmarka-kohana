@@ -9,3 +9,15 @@
 
 	 <span class="hidden-xs">/</span> <h1 class="breadcrumb-h1"><span>{{ seo_attributes.h1 ? seo_attributes.h1: category.title }}</span></h1> <span class="count">{{ link_counters[s_host ~ s_suri] }}</span>
 </div>
+
+<script>
+	var hrefs = $('.crumbs-item').length,
+		hrefsWidth = 40 / hrefs;
+	if (hrefs == 0) {
+		$('.breadcrumb-h1').css('max-width', '70%');
+	};
+	
+	$('.crumbs-item').each(function(){
+		$(this).css('max-width', hrefsWidth+'%');
+	});
+</script>
