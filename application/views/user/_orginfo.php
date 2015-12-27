@@ -326,7 +326,7 @@
 					<label></label>
 				</div>
 				<div class="col-md-9 ta-r">	
-					<span onclick="$('#orginfo').submit()" class="button button-style1 bg-color-blue btn-next">Сохранить</span>
+					<span onclick="$('#orginfo').submit()" class="button button-style1 bg-color-blue btn-next">Сохранить <i class="fa fa-arrow-right"></i></span>
 				</div>
 			</div>			
 			

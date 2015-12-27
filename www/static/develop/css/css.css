@@ -170,7 +170,7 @@ select{background-color: #FFFFFF;border: 1px solid #C3C3C3;padding:2px 10px;heig
     transition: display 0.2s;
 }
 .popup-wrp {left: 0;margin: auto;position: fixed;top: 70px;width: 100%;}
-.popup-window {position: relative;background-color: #f9f9f9;margin: auto;padding: 5px;box-sizing: border-box;}
+.popup-window {position: relative;background-color: #f9f9f9;margin: auto;padding: 5px;box-sizing: border-box; width: 60%;}
 .popup-window .header {font-size: 17px;position: relative;min-height: 40px;padding: 5px 40px 5px 5px;box-sizing: border-box;line-height: 1.5;}
 .popup-window .cont{padding: 5px;}
 .popup-window .popup-window-close {height: 30px;width: 30px;background: #ccc;position: absolute;top: 5px;right: 5px;cursor: pointer;text-align: center;}

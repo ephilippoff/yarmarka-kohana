@@ -37,7 +37,7 @@ var snowingzone=1
 
 // Do not edit below this line
 var snow=new Array()
-var marginbottom
+var marginbottom 
 var marginright
 var timer
 var i_snow=0
@@ -47,8 +47,8 @@ var lftrght=new Array();
 var browserinfos=navigator.userAgent
 var ie5=document.all&&document.getElementById&&!browserinfos.match(/Opera/)
 var ns6=document.getElementById&&!document.all
-var opera=browserinfos.match(/Opera/)
-var browserok=ie5||ns6||opera
+var myOpera=browserinfos.match(/Opera/)
+var browserok=ie5||ns6||myOpera
 
 function randommaker(range) {
         rand=Math.floor(range*Math.random())
@@ -56,7 +56,7 @@ function randommaker(range) {
 }
 
 function initsnow() {
-        if (ie5 || opera) {
+        if (ie5 || myOpera) {
                 marginbottom = document.body.scrollHeight
                 marginright = document.body.clientWidth-15
         }

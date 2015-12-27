@@ -40,7 +40,7 @@ define([
         menuClass: ".js-kuponmenu",
         menuTemplate: "#template-kuponmenu"
     }
-    
+    console.log('init');
     var MenuView = Marionette.ItemView.extend({
         events: {
             "mouseover" : "showMenu",
