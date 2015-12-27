@@ -74,7 +74,7 @@ class Model_Order extends ORM
 					if ($params->fake) {
 						$return = 'ADMIN';
 						if ($params->fake_state == 22) {
-							ORM::factory('Order_Log')->write($order->id, "notice", vsprintf("Заказ активирован (100% скидка).  № %s", array($order->id) ) );
+							ORM::factory('Order_Log')->write($order->id, "notice", vsprintf("Заказ активирован (100 проц. скидка).  № %s", array($order->id) ) );
 						} else if ($params->fake_state == 222) {
 							ORM::factory('Order_Log')->write($order->id, "warning", vsprintf("Активирован с помощью спец кнопки (АДМИН).  № %s", array($order->id) ) );
 						}
