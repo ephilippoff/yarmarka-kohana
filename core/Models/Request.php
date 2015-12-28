@@ -19,7 +19,7 @@
 
 		/* setters */
 		public function setUrl($value) {
-			$this->_url = $value;
+			$this->_url = ltrim($value, '/');
 		}
 
 		/* current instance */
