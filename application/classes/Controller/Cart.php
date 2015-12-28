@@ -750,12 +750,14 @@ class Controller_Cart extends Controller_Template {
 		$robo->set_sum($order->sum);
 		$sample = strtoupper($robo->create_result_sign());
 
-		if ($signature !== $sample OR !$order->loaded() OR $sum <> $order->sum)
+		ORM::factory('Order_Log')->write($order_id, "notice", vsprintf("Сравнение подписи. Подпись ПС: %s, Подпись лок: %s; Сумма ПС: %s, Сумма лок: %s", array($signature, $sample, $sum, $order->sum) ) );
+		
+		if ($signature !== $sample OR !$order->loaded() OR (int) $sum <> (int) $order->sum)
 		{
 			ORM::factory('Order_Log')->write($order_id, "error", vsprintf("!! Не верно сформирована подпись уведомления о платеже (возможно ктото пытается взломать систему). Заказ №%s.", array($order_id) ) );
-			header("HTTP/1.0 404 Not Found");
-			echo "bad sign";
-			exit;
+			// header("HTTP/1.0 404 Not Found");
+			// echo "bad sign";
+			// exit;
 		}
 
 		$result = $order->check_state($order->id);
