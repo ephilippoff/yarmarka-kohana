@@ -340,10 +340,6 @@ class Controller_Cart extends Controller_Template {
 			return;
 		}
 
-		if ($order->state == 1) {
-			$order->check_state($order->id);
-		}
-
 		$twig->crumbs = array(
 			array(
 				"title" => "Оформление заказа",
@@ -793,12 +789,15 @@ class Controller_Cart extends Controller_Template {
 
 		if ($signature !== $sample OR !$order->loaded() OR $sum <> $order->sum)
 		{
-			header("HTTP/1.0 404 Not Found");
+			ORM::factory('Order_Log')->write($order_id, "error", vsprintf("!! Не верно сформирована подпись уведомления о платеже (возможно ктото пытается взломать систему). Заказ №%s.", array($order_id) ) );
 			echo "bad sign";
+			header("HTTP/1.0 404 Not Found");
 			exit;
 		}
 
-		$order->check_state($order->id);
+		$result = $order->check_state($order->id);
+		echo $result.$order->id;
+		ORM::factory('Order_Log')->write($order_id, "notice", vsprintf("Конец обработки. Сформирован ответ для платежной системы: %s", array($result.$order->id) ) );
 		return;
 
 		// if ($order->state == 1)
@@ -822,15 +821,17 @@ class Controller_Cart extends Controller_Template {
 
 		$order = ORM::factory('Order', $order_id);
 
-		if ($order->state == 1)
-		{
-			$order->check_state($order->id);
-			//HTTP::redirect("/cart/order/".$order_id);
-		}
-		else
-		{
-			//HTTP::redirect("/cart/order/".$order_id);
-		}
+		HTTP::redirect("/cart/order/".$order_id);
+
+		// if ($order->state == 1)
+		// {
+		// 	$order->check_state($order->id);
+		// 	//HTTP::redirect("/cart/order/".$order_id);
+		// }
+		// else
+		// {
+		// 	//HTTP::redirect("/cart/order/".$order_id);
+		// }
 	}
 
 	public function action_to_admin_success()
@@ -863,14 +864,16 @@ class Controller_Cart extends Controller_Template {
 		$sum = $this->request->query("OutSum");
 		$signature = $this->request->query("SignatureValue");
 
-		$order = ORM::factory('Order', $order_id);
-		if ($order->loaded()) {
-			$order->check_state($order->id);
-			//HTTP::redirect("/cart/order/".$order->id);
-			return;
-		}
+		HTTP::redirect("/cart/order/".$order_id);
+		
+		// $order = ORM::factory('Order', $order_id);
+		// if ($order->loaded()) {
+		// 	$order->check_state($order->id);
+		// 	//HTTP::redirect("/cart/order/".$order->id);
+		// 	return;
+		// }
 
-		HTTP::redirect("/");
+		// HTTP::redirect("/");
 	}
 
 	private function return_with_errors($uri, $post, $errors) {

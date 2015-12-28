@@ -76,6 +76,9 @@ class Service_Lider extends Service
 
 		Service_Lider::apply_service($object_id, $quantity, $cities, $categories);
 		self::saveServiceInfoToCompiled($object_id);
+
+		ORM::factory('Order_Log')->write($orderItem->order_id, "notice", vsprintf("Активация услуги Лидер: № %s", array( $orderItem->order_id ) ) );
+
 	}
 
 	static function apply_service($object_id, $quantity, $cities = NULL, $categories = NULL)

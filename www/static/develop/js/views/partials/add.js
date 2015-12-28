@@ -68,6 +68,14 @@ define([
                 this.appendToOwnPosition(this.model, html);
 
                 this.$el = $("#" + this.model.get("id"));
+
+                //init ckeditor on kupon text
+                if ((this.model.get('id') == 'param_1000' || this.model.get('id') == 'param_1003') &&
+                    _globalSettings.allowCkEditor) {
+
+                    CkEditor.replaceOne(this.$el, { fileUpload: true });
+                }
+
                 /* элемент будет одиночным в строке если есть соответствующая настройка */
                 this.whitespace();
 

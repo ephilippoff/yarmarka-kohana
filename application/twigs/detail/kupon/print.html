@@ -12,33 +12,37 @@
 		    Your browser does not support canvas-elements.
 		</canvas>
 	</div>
-	<p class="tt-u ta-c fs20 fw-b mb5">Скидочный купон №{{kupon_number}} {% if kupon.external_number and kupon.number %}({{kupon.external_number}}){% endif %}</p>
+	<p class="tt-u ta-c fs20 fw-b mb5 title">Скидочный купон №{{kupon_number}} {% if kupon.external_number and kupon.number %}({{kupon.external_number}}){% endif %}</p>
 	<p class="ta-c color-gray mb20">Предъявите этот купон на месте, чтобы получить услугу</p>
 	<hr class="mb10">
-	<p class="mb20 fs16 fw-b ta-c"><a href="/detail/{{kupon_group.object_id}}">{{kupon_group.title}}</a></p>
+	<p class="mb20 fs16 fw-b ta-c">
+		<a href="/detail/{{kupon_group.object_id}}" class="link">{{kupon_group.title}}</a><br />
+		Воспользоваться купоном можно до <span class="bold">{{ kupon_group.expiration_date|date("d.m.Y") }}</span>
+	</p>
 	<hr class="mb10">
-	<div class="row mb10">
-		<div class="fl w49p">
+	<div class="row">
+		<div class="fl w49p text">
+			<img src="https://static-maps.yandex.ru/1.x/?ll={{location}}&z=16&l=map&pt={{location}},pm2lbl" alt="" height="200" class="map">
 			<p class="fw-b mb20">{{ kupon_group.description }}</p>
 				<p>Контакты: {{ kupon_group.contacts }}</p>
 				<p>Адрес: {{ kupon_group.address }}</p>
 			<p class="mb20">{{ kupon_group.address_details }}</p>
-			<p>Воспользоваться купоном можно до <span class="bold">{{ kupon_group.expiration_date|date("d.m.Y") }}</span></p>
-
+			{{ kupon_group_description }}
 		</div>
+		<!--
 		<div class="fr w49p">
 			<div style="width: 100%; height: 200px;">
 				<img src="https://static-maps.yandex.ru/1.x/?ll={{location}}&z=16&l=map&pt={{location}},pm2lbl" alt="" height="200">
 			</div>
 		</div>
+		-->
 	</div>
-	<hr>
-	<p class="mb10">Дополнительная информация:</p>
+	<h3>Дополнительная информация:</h3>
 	<div class="text-cont mb15">
 		{{kupon_group.support_info}}
 	</div>
 	<hr class="mb15">
-	<p class="mb10">Информация для поставщика услуги:</p>
+	<h3>Информация для поставщика услуги:</h3>
 	<div class="text-cont mb15">
 		Проверьте подлинность купона самостоятельно по адресу http:/c.yarmarka.biz/kupon/check<br>Либо свяжитесь со службой поддержки по телефону
 	</div>
