@@ -75,6 +75,10 @@ class Twig_Functions
 		return Domain::get_domain_by_city($domain_str, $url_str, $protocol_str);
 	}
 
+	public static function sameUrlOnAnotherDomain($domain, $protocol_str = "http://") {
+		return Domain::get_domain_by_city($domain, Yarmarka\Models\Request::current()->getUrl(), $protocol_str);
+	}
+
 	public static function file_exist($path)
 	{
 		return is_file(URL::SERVER('DOCUMENT_ROOT').$path);

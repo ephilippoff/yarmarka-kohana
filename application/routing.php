@@ -329,7 +329,6 @@ Route::set('search', '<category_path>', array(
 			->find();
 		
 		if ($category->loaded()) {
-
 			$config = Kohana::$config->load("landing");
 			$config = $config["categories"];
 			if ( in_array( $category->seo_name,  array_keys((array) $config)) 
