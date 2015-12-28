@@ -60,6 +60,8 @@ class Controller_Search extends Controller_Template {
 
         $search_info = $this->get_search_info();
 
+        Yarmarka\Models\Request::current()->setUrl($search_info->category->url);
+
         if ($search_info->city_id) {
             Cookie::set('location_city_id', $search_info->city_id, strtotime( '+31 days' ));
         }
@@ -259,8 +261,24 @@ class Controller_Search extends Controller_Template {
 		$twig->banner_zone_positions = Kohana::$config->load('common.banner_zone_positions');
 		
 		if ($search_info->category->seo_name == 'kupony') {
+            if (isset($search_info->search_filters['filters']) && isset($search_info->search_filters['filters']['kupony-category'])) {
+                $attribute = ORM::factory('Attribute_Element')
+                    ->where('id', '=', $search_info->search_filters['filters']['kupony-category'])
+                    ->find();
+                if ($attribute->loaded()) {
+                    \Yarmarka\Models\Request::current()->setUrl(implode('/', array($search_info->category->url, $attribute->seo_name)));
+                }
+            }
 			$twig->set_filename('search/kupony/index');
         } else if ($search_info->category->seo_name == 'novosti') {
+            if (isset($search_info->search_filters['filters']) && isset($search_info->search_filters['filters']['news-category'])) {
+                $attribute = ORM::factory('Attribute_Element')
+                    ->where('id', '=', $search_info->search_filters['filters']['news-category'])
+                    ->find();
+                if ($attribute->loaded()) {
+                    \Yarmarka\Models\Request::current()->setUrl(implode('/', array($search_info->category->url, $attribute->seo_name)));
+                }
+            }
             $twig->set_filename('search/news/index');
         }
 		

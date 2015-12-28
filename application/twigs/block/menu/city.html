@@ -7,7 +7,7 @@
 		<ul class="fl">
 			{% for city in cities|slice(i, rows) %}
 				<li>
-					<a href="{{ domain(city.seo_name, FALSE) }}" class="{% if city.seo_name in main_cities %}bold{% endif %}">{{ city.title}}</a>
+					<a href="{{ sameUrlOnAnotherDomain(city.seo_name) }}" class="{% if city.seo_name in main_cities %}bold{% endif %}">{{ city.title}}</a>
 				</li>
 			{% endfor %}
 		</ul>
