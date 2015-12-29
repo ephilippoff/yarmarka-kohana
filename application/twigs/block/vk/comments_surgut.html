@@ -2,6 +2,14 @@
 
 <script type="text/javascript" src="//vk.com/js/api/openapi.js?121"></script>
 
+<script>
+	$('#vk_comments').each(function(){
+		var i = 1;
+		$(this).attr('id', 'vk_comments'+i);
+		i++;
+	});
+</script>
+
 <script type="text/javascript">
   VK.init({apiId: 5197401, onlyWidgets: true});
 </script>
