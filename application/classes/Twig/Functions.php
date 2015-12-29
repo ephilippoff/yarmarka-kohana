@@ -62,7 +62,12 @@ class Twig_Functions
 
 	public static function debug($param)
 	{
-		return Debug::vars($param);
+		//return Debug::vars($param);
+		$text = '<pre>';
+		$text .= var_export($param, true);
+		$text .= '</pre>';
+
+		return $text;
 	}
 
 	public static function obj($array = array())

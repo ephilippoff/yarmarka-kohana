@@ -60,6 +60,47 @@ class Controller_Rest_Object extends Controller_Rest {
 			$this->json["result"] = (string) $twig;
 	}
 
+	public function action_write_to_author() {
+
+		/* validate request fields */
+		$require = array( 'object_id', 'message' );
+		foreach($require as $key) {
+			if (!property_exists($this->post, $key) || empty($this->post->{$key})) {
+				throw new Exception($key);
+			}
+		}
+
+		/* check object */
+		$object = ORM::factory('Object_Compiled')
+			->where('object_id', '=', $this->post->object_id)
+			->find();
+
+		if (!$object->loaded()) {
+			throw new Exception('Bad object_id');
+		}
+		$object = unserialize($object->compiled);
+
+		/* get current user */
+		$user = Auth::instance()->get_user();
+
+		if (!$user) {
+			throw new Exception('Unauthorized');
+		}
+
+		/* prepare message text */
+		$message = 'Вам было отправлено сообщение по объявлению: ' . $object['url'] . "\r\n";
+		$message .= 'Текст сообщения:' . "\r\n";
+		$message .= '------------------------------------' . "\r\n";
+		$message .= htmlspecialchars($this->post->message) . "\r\n";
+		$message .= '------------------------------------' . "\r\n";
+		$message .= 'Email отправителя: ' . $user->email;
+
+		/* prepare subject */
+		$subject = 'Новое сообщение';
+
+		Email::send( $object['author']['email'], Kohana::$config->load('email.default_from'), $subject, $message, false);
+	}
+
 	public function action_callback() {
 
 		$oc = ORM::factory('Object_Callback');
@@ -174,6 +215,9 @@ class Controller_Rest_Object extends Controller_Rest {
 		$decompiledData = unserialize($compiledEntry->compiled);
 		$contacts = array();
 		foreach($decompiledData['contacts'] as $contact) {
+			if ($contact['type'] == 5) {
+				continue;
+			}
 			$contacts []= array( 'contact' => $contact['value'] );
 		}
 		
