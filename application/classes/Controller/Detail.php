@@ -74,6 +74,8 @@ class Controller_Detail extends Controller_Template {
 					);
 			}
 		}
+		$twig->isGuest = \Yarmarka\Models\User::current()->getIsGuest();
+		$twig->currentUri = $this->request->uri();
 
 		$this->response->body($twig);
 	}
