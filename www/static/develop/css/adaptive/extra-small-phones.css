@@ -35,6 +35,15 @@
 	.popup-window{width: 90%;}
 	.popup-window table td{ width: 50%;}
 	.popup-window h3{margin: 20px 0;}
+
+	.reg_forgot_block .menu-item{
+		width: 50% !important; 
+	}
+
+	.form-cont .btn-next{
+		width: 170px;
+		line-height: 30px;
+	}
 }
 
 @media (max-width: 500px){

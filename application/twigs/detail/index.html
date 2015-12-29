@@ -55,6 +55,13 @@
 				<div class="banner module {zoneID: 18 }"></div>
 			</div>
 		</div>
+		<div class="row">
+			<div class="col-lg-12 hidden-lg hidden-md hidden-sm">
+				{% include 'detail/controls' %}
+				{% include 'detail/services' %}
+				{% include 'block/vk/comments_surgut' %}
+			</div>
+		</div>
 		{% if (category.show_map) %}
 			<div class="row">
 				<div class="col-md-12">
@@ -69,8 +76,10 @@
 {% block rightside %}
 	<div class="col-md-5 col-sm-5">
 		<aside>
-			{% include 'detail/controls' %}
-			{% include 'detail/services' %}
+			<div class="hidden-xs">
+				{% include 'detail/controls' %}
+				{% include 'detail/services' %}
+			</div>
 			{% include 'block/vk/comments_surgut' %}
 			{% include 'detail/similar' %}
 		</aside>
