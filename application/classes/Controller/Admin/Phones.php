@@ -7,6 +7,126 @@ class Controller_Admin_Phones extends Controller_Admin_Template {
 		$this->redirect('khbackend/phones/list');
 	}
 
+	public function action_get_users() {
+
+		/* enable ajax mode */
+		$this->auto_render = false;
+
+		/* set pagination schema */
+		$pagination = array(
+				'page' => 1,
+				'perPage' => 20
+			);
+
+		/* get pagination parameters from query */
+		foreach($pagination as $key => $value) {
+			if (isset($_REQUEST[$key])) {
+				$pagination[$key] = (int) $_REQUEST[$key];
+			}
+		}
+
+		/* calc offset and limit from pagination */
+		$offset = ($pagination['page'] - 1) * $pagination['perPage'];
+		$limit = $pagination['perPage'];
+
+		/* query database */
+		$query = ORM::factory('User');
+		if (!empty($_REQUEST['s'])) {
+			$query = $query
+				->where_open()
+				->where('email', 'like', '%' . $_REQUEST['s'] . '%')
+				->or_where('', '',
+					DB::expr(
+						'exists('
+							. 'select *'
+							. ' from user_contacts a'
+							. ' inner join contacts c on c.id = a.contact_id'
+							. ' where'
+								. ' a.user_id = "user".id'
+								. ' and ('
+									. ' c.contact like \'%' . $_REQUEST['s'] . '%\''
+									. ' or c.contact_clear like \'%' . $_REQUEST['s'] . '%\''
+								. ')'
+						. ')'
+					))
+				->where_close();
+		}
+		$queryCopy = clone $query;
+		/* calculate count */
+		$pagination['totalItems'] = $query->count_all();
+		$pagination['totalPages'] = ceil($pagination['totalItems'] / $pagination['perPage']);
+
+		$queryRes = $queryCopy
+			->offset($offset)
+			->limit($limit)
+			->find_all();
+		$items = array();
+		foreach($queryRes as $item) {
+			$items []= $item->as_array();
+		}
+
+		/* prepare answer */
+		$answer = array(
+				'pagination' => $pagination,
+				'items' => $items,
+				'offset' => $offset,
+				'limit' => $limit,
+				//'query' => Database::instance()->last_query
+			);
+
+		$this->response->body(json_encode($answer));
+	}
+
+	public function action_bind() {
+
+		/* enable ajax mode */
+		$this->auto_render = false;
+
+		/* validate parameters */
+		$required = array( 'user_id', 'contact_id' );
+		foreach($required as $key) {
+			if (empty($_REQUEST[$key])) {
+				throw new Exception($key);
+			}
+			$_REQUEST[$key] = (int) $_REQUEST[$key];
+		}
+
+		/* search user */
+		$user = ORM::factory('User')
+			->where('id', '=', $_REQUEST['user_id'])
+			->find();
+
+		if (!$user->loaded()) {
+			throw new Exception('Bad user_id');
+		}
+
+		/* search contact */
+		$contact = ORM::factory('Contact')
+			->where('id', '=', $_REQUEST['contact_id'])
+			->find();
+
+		if (!$contact->loaded()) {
+			throw new Exception('Bad contact_id');
+		}
+
+		/* drop link if exists */
+		DB::delete('user_contacts')
+			->where('contact_id', '=', $contact->id)
+			->execute();
+
+		/* append link */
+		DB::insert('user_contacts', array( 'contact_id', 'user_id' ))
+			->values(array( $_REQUEST['contact_id'], $_REQUEST['user_id'] ))
+			->execute();
+
+		/* set contact verified user id */
+		$contact->verified_user_id = $user->id;
+		$contact->save();
+
+		/* output */
+		$this->response->body(json_encode(array( 'res' => true )));
+	}
+
 	public function action_list()
 	{
 		$limit  = 50;
