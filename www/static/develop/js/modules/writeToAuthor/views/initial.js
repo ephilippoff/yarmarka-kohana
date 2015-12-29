@@ -4,7 +4,7 @@ define([ 'jquery', 'underscore', 'backbone' ], function ($, _, Backbone) {
 
 		tagName: 'button',
 
-		className: '',
+		className: 'button dib bg-color-blue white p10 br2 mt10',
 
 		template: _.template('Написать автору'),
 

@@ -7,12 +7,12 @@ define([ 'underscore', 'backbone' ], function (_, Backbone) {
 		className: 'container-fluid',
 
 		template: _.template(
-				'<div class="row">'
+				'<div class="row mt10">'
 					+ '<div class="col-md-12">'
 						+ '<textarea data-role="message"></textarea>'
 					+ '</div>'
-					+ '<button data-role="send">Отправить</button>'
-					+ '<button data-role="reset">Отменить</button>'
+					+ '<button data-role="send" class="button dib bg-color-blue white p10 br2 mr10">Отправить</button>'
+					+ '<button data-role="reset" class="button dib bg-color-blue white p10 br2">Отменить</button>'
 				+ '</div>'
 			),
 

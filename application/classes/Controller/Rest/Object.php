@@ -215,6 +215,9 @@ class Controller_Rest_Object extends Controller_Rest {
 		$decompiledData = unserialize($compiledEntry->compiled);
 		$contacts = array();
 		foreach($decompiledData['contacts'] as $contact) {
+			if ($contact['type'] == 5) {
+				continue;
+			}
 			$contacts []= array( 'contact' => $contact['value'] );
 		}
 		

@@ -10,13 +10,7 @@
 					<div class="contacts-list-cont js-contact-list">
 						{% for contact in object.compiled.contacts %}
 							{% if contact.type == '5' %}
-								{% if isGuest %}
-									<div class="write-to-author unauthorized">
-										Чтобы отправить сообщение автору нужно <a href="/user/login?return={{ currentUri }}">Авторизоваться</a>
-									</div>
-								{% else %}
-									<div data-role="writeToAuthor" data-id="{{ object.id }}" class="write-to-author"></div>
-								{% endif %}
+								
 							{% else %}
 								<p>
 									{% if isAdmin %}
@@ -29,6 +23,13 @@
 						{% endfor %}
 					</div>
 					<span class="button dib bg-color-blue white p10 br2 js-contacts-show" data-id="{{object.id}}">Показать контакты</span>
+					{% if isGuest %}
+						<div class="write-to-author unauthorized">
+							Чтобы отправить сообщение автору нужно <a href="/user/login?return={{ currentUri }}">Авторизоваться</a>
+						</div>
+					{% else %}
+						<div data-role="writeToAuthor" data-id="{{ object.id }}" class="write-to-author"></div>
+					{% endif %}
 				</div>
 				<div class="col-md-6 col-sm-6">
 					{% if object.compiled.author.org_type == 2 %}

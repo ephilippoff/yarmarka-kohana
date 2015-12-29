@@ -899,3 +899,14 @@ a.auto-collapse-expand {
 .graytheme .kupon-info-phone {
     color:#3B3B3B;
 }
+
+.write-to-author {
+    display:inline;
+}
+.write-to-author textarea {
+    width:100%;
+    height: 60px;
+}
+.write-to-author .row {
+    text-align: center;
+}
