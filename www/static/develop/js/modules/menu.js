@@ -42,6 +42,7 @@ define([
     }
     var MenuView = Marionette.ItemView.extend({
         events: {
+            "click" : "showMenu",
             "mouseover" : "showMenu",
             "mouseleave" : "closeMenu"
         },
