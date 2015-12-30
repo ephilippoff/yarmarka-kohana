@@ -1230,10 +1230,13 @@ class Lib_PlacementAds_AddEdit {
 			}
 
 			// удаляем старые значения
+			$old = Text::ucfirst($reference->attribute_obj->type);
+			if (!empty($old)) {
 			ORM::factory('Data_'.Text::ucfirst($reference->attribute_obj->type))
 				->where('object', '=', $object->id)
 				->where('reference', '=', $reference->id)
 				->delete_all();
+			}
 
 			// проверяем есть ли значение
 			if (is_array($value)) 

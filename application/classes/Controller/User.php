@@ -1801,6 +1801,13 @@ class Controller_User extends Controller_Template {
 		if (!$object_id OR !$object->loaded())
     		throw new HTTP_Exception_404;
 
+//var_dump($object->as_array());die;
+		if ($object->category == 173 && in_array($this->user->role, array(1,9,3))) {
+			$this->auto_render = false;
+			$this->redirect('http://surgut.yarmarka.biz/edit/' . $object->id);
+			return;
+		}
+
     	if ($object->author <> $this->user->id AND !in_array($this->user->role, array(1,9,3)))
     		throw new HTTP_Exception_404;
 
