@@ -88,4 +88,25 @@ class Model_Order_ItemTemp extends ORM
 		}
 	}
 
+	function check_reserve()
+	{
+		if (!$this->loaded()) return;
+		$result = TRUE;
+		$params = new Obj(json_decode($this->params));
+
+		if ($params->service->name == "kupon") {
+			
+			foreach ($params->service->ids as $id) {
+				$kupon = ORM::factory('Kupon', $id);
+				if ( in_array($kupon->state, array( Model_Kupon::SOLD ) ) ) {
+					$result = FALSE;
+					break;
+				}
+			}
+
+		}
+
+		return $result;
+	}
+
 }

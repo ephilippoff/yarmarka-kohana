@@ -516,7 +516,33 @@ class Controller_Cart extends Controller_Template {
 						$available = TRUE;
 					}
 
-					if ($quantity <> $item->service->quantity AND $available) {
+					//если заказанного количества нет на складе выдаем ошибку
+					if ($available !== TRUE)
+					{
+						$error = array(
+							"message" => "Указанное количество купонов превышает их остаток, измените количество в меньшую сторону",
+							"code" => 400
+						);
+						return $item;
+					}
+
+					$in_reserve = TRUE;
+					//проверка купонов в резерве, вдруг проданы уже
+					if (!$model_item->check_reserve()) {
+						$in_reserve = FALSE;
+					}
+
+					if ($in_reserve !== TRUE)
+					{
+						$error = array(
+							"message" => "Ошибка при оформлении заказа, возможно купоны в корзине уже проданы. Удалите купоны из корзины, добавьте их повторно, и повторите оформление заказа.",
+							"code" => 400
+						);
+						return $item;
+					}
+
+
+					if ($quantity <> $item->service->quantity) {
 						$model_item->return_reserve();
 						$service = Service::factory("Kupon", $item->service->group_id);
 						$service->set_params(array("quantity" => $quantity));
@@ -525,17 +551,6 @@ class Controller_Cart extends Controller_Template {
 						$model_item->reserve($key);
 					}
 					
-					
-
-
-					if ($available !== TRUE)
-					{
-						$error = array(
-							"message" => "Указанное количество купонов превышает их остаток, измените количество",
-							"code" => 400
-						);
-						return $item;
-					}
 				} 
 
 
