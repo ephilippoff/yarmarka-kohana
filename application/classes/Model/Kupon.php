@@ -153,7 +153,7 @@ class Model_Kupon extends ORM
 
 	function get_avail($group_id)
 	{
-		return $this->where("kupon_group_id","=",$group_id)->where("state","IN", array(self::AVAIL));
+		return $this->where("kupon_group_id","=",$group_id)->where("state","IN", array(self::AVAIL))->order_by("id");
 	}
 
 	function get_sold($group_id)
@@ -163,7 +163,7 @@ class Model_Kupon extends ORM
 
 	function get_avail_count($group_id)
 	{
-		return $this->get_avail($group_id)->count_all();
+		return $this->where("kupon_group_id","=",$group_id)->where("state","IN", array(self::AVAIL))->count_all();
 	}
 
 	function get_sold_count($group_id)
