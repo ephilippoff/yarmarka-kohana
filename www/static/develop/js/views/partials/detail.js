@@ -6,8 +6,9 @@ define([
     "views/partials/behaviors/ocontrol",
     "views/partials/behaviors/services",
     "views/partials/behaviors/ads",
-    "gisMap"
-], function (templates, FavouriteBehavior, SearchBehavior, OControlBehavior, ServicesBehavior, AdsBehavior) {
+    "gisMap",
+    'modules/writeToAuthor/main'
+], function (templates, FavouriteBehavior, SearchBehavior, OControlBehavior, ServicesBehavior, AdsBehavior, gisMap, WriteToAuthor) {
     "use strict";
 
 
@@ -83,6 +84,14 @@ define([
                     //     checkZoomRange: true
                     // });
                 });
+            }
+
+            /* initialize write to author widget */
+            var $temp = this.$el.find('[data-role=writeToAuthor]');
+            if ($temp.length) {
+                new WriteToAuthor({
+                    el: $temp
+                }).render();
             }
         },
 

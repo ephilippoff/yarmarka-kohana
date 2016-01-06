@@ -10,7 +10,7 @@
 
 {% block content %}
 	<div class="{{theme_class}}">
-		<div class="menu-cont2 clearfix brt2">
+		<div class="menu-cont2 clearfix reg_forgot_block brt2">
 			<div class="col-md-12 right clearfix">
 				<a class="menu-item right" href="/user/login"><span class="menu-item-cont">Вход</span></a>
 				<a class="menu-item right" href="/user/forgot_password"><span class="menu-item-cont">Забыли пароль?</span></a>
@@ -21,12 +21,12 @@
 
 		{% if auth %}
 			<div class="row mb10">
-				<div class="col-md-3 col-xs-4 labelcont">
+				<div class="col-md-3 col-sm-3 col-xs-12 labelcont">
 					<label></label>
 				</div>
-				<div class="col-md-9 col-xs-8">
+				<div class="col-md-9 col-sm-9 col-xs-12">
 					<div class="row">
-						<div class="col-md-6">
+						<div class="col-md-10">
 							<p class="mb20">Вы уже зарегистрированы и авторизованы.</p>
 							<p class="mb5">Перейти к:</p>
 							<ul>
@@ -40,12 +40,12 @@
 			</div>
 		{% elseif success %}
 			<div class="row mb10">
-				<div class="col-md-3 col-xs-4 labelcont">
+				<div class="col-md-3 col-sm-3 col-xs-12 labelcont">
 					<label></label>
 				</div>
-				<div class="col-md-9 col-xs-8">
+				<div class="col-md-9 col-sm-9 col-xs-12">
 					<div class="row">
-						<div class="col-md-6">
+						<div class="col-md-10">
 							На email, который вы указали, отправлено письмо с информацией о завершении регистрации. Вы можете закрыть эту страницу или перейти на <a href='/'>главную</a>.
 						</div>
 					</div>				
@@ -57,12 +57,12 @@
 				{{ get_form_element('hidden','csrf', token) }}
 
 				<div class="row mb10">
-					<div class="col-md-3 col-xs-4 labelcont">
+					<div class="col-md-3 col-sm-3 col-xs-12 labelcont">
 						<label>Email</label>
 					</div>
-					<div class="col-md-9 col-xs-8">
+					<div class="col-md-9 col-sm-9 col-xs-12">
 						<div class="row">
-							<div class="col-md-6">
+							<div class="col-md-10">
 								<div class="inp-cont {% if error.login %}error{% endif%}">
 									<span class="required-star">*</span>
 									<div class="input-group w100p">
@@ -85,12 +85,12 @@
 				</div>			
 
 				<div class="row mb10">	
-					<div class="col-md-3 col-xs-4 labelcont">
+					<div class="col-md-3 col-sm-3 col-xs-12 labelcont">
 						<label>Пароль</label>
 					</div>
-					<div class="col-md-9 col-xs-8">
+					<div class="col-md-9 col-sm-9 col-xs-12">
 						<div class="row">
-							<div class="col-md-6">
+							<div class="col-md-10">
 								<div class="inp-cont {% if error.pass %}error{% endif%}">
 									<span class="required-star">*</span>
 									<div class="input-group w100p">
@@ -114,12 +114,12 @@
 				</div>	
 
 				<div class="row mb10">
-					<div class="col-md-3 col-xs-4 labelcont">
+					<div class="col-md-3 col-sm-3 col-xs-12 labelcont">
 						<label></label>
 					</div>
-					<div class="col-md-9 col-xs-8">
+					<div class="col-md-9 col-sm-9 col-xs-12">
 						<div class="row">
-							<div class="col-md-6">
+							<div class="col-md-10">
 								<div class="inp-cont {% if error.pass2 %}error{% endif%}">
 									<span class="required-star">*</span>
 									<div class="input-group w100p">
@@ -143,12 +143,12 @@
 				</div>			
 
 				<div class="row mb10">
-					<div class="col-md-3 col-xs-4 labelcont">
+					<div class="col-md-3 col-sm-3 col-xs-12 labelcont">
 						<label>Тип</label>
 					</div>
-					<div class="col-md-9 col-xs-8">
+					<div class="col-md-9 col-sm-9 col-xs-12">
 						<div class="row">
-							<div class="col-md-6">
+							<div class="col-md-10">
 								<div class="inp-cont {% if error.type %}error{% endif%}">
 									<span class="required-star">*</span>																		
 									<input name="type" type="radio" id="type_fl" value="1" {% if params.type == "1" %}checked{% endif%}/><label for="type_fl">Частное лицо</label>
@@ -181,12 +181,12 @@
 
 
 				<div class="row mb10">
-					<div class="col-md-3 col-xs-4 labelcont">
+					<div class="col-md-3 col-sm-3 col-xs-12 labelcont">
 						<label>Введите слово с картинки</label>
 					</div>
-					<div class="col-md-9 col-xs-8">
+					<div class="col-md-9 col-sm-9 col-xs-12">
 						<div class="row">
-							<div class="col-md-6">
+							<div class="col-md-10">
 								<div class="inp-cont {% if error.captcha %}error{% endif%}">
 									<span class="required-star">*</span>
 									{{captcha}}
@@ -207,12 +207,12 @@
 				</div>			
 
 				<div class="row mb10">
-					<div class="col-md-3 col-xs-4 labelcont">
+					<div class="col-md-3 col-sm-3 col-xs-12 labelcont">
 						<label>Правила</label>
 					</div>
-					<div class="col-md-9 col-xs-8">
+					<div class="col-md-9 col-sm-9 col-xs-12">
 						<div class="row">
-							<div class="col-md-6">
+							<div class="col-md-10">
 								<div class="inp-cont accept">
 									Нажимая на кнопку "Далее", Вы принимаете <a href="/article/usloviya-ispolzovaniya-saita-yarmarka" target="_blank">условия использования</a> и <a href="/article/pravila-razmeshcheniya-obyavlenii" target="_blank">правила размещения объявлений</a> на сайте "Ярмарка".													
 								</div>
@@ -226,12 +226,12 @@
 				{% if error.csrf %} 
 
 				<div class="row mb10">
-					<div class="col-md-3 col-xs-4 labelcont">
+					<div class="col-md-3 col-sm-3 col-xs-12 labelcont">
 						<label>Заголовок:</label>
 					</div>
-					<div class="col-md-9 col-xs-8">
+					<div class="col-md-9 col-sm-9 col-xs-12">
 						<div class="row">
-							<div class="col-md-6">
+							<div class="col-md-10">
 								<div class="inp-cont accept">
 									<span style="color:red">{{error.csrf}}</span>					
 								</div>
@@ -244,13 +244,13 @@
 
 
 				<div class="row mb20">
-					<div class="col-md-3 labelcont">
+					<div class="col-md-3 col-sm-3 labelcont">
 						<label></label>
 					</div>
-					<div class="col-md-9">	
+					<div class="col-md-9 col-sm-9">	
 						<div class="row">
-							<div class="col-md-6 ta-r">
-								<span onclick="$('#element_list').submit()" class="button button-style1 bg-color-blue btn-next"><i class="ico ico15 white-right-arrow-ico mr3"></i>Далее</span>
+							<div class="col-md-10 ta-r">
+								<button type="submit" onclick="$('#element_list').submit()" class="button button-style1 bg-color-blue btn-next">Далее <i class="fa fa-arrow-right"></i></button>
 							</div>				
 						</div>
 					</div>

@@ -7,18 +7,33 @@
 			{% if object.is_published > 0 or isAdmin %}
 				<div class="col-md-6 col-sm-6">
 					<span class="author-name">{{object.contact}}</span>
+
+					<form action="">
+						
 					<div class="contacts-list-cont js-contact-list">
 						{% for contact in object.compiled.contacts %}
-							<p>
-								{% if isAdmin %}
-									{{ contact.value }}
-								{% else %}
-									{{ contact.value|contacthide }}
-								{% endif %}
-							</p>
+							{% if contact.type == '5' %}
+								
+							{% else %}
+								<p>
+									{% if isAdmin %}
+										{{ contact.value }}
+									{% else %}
+										{{ contact.value|contacthide }}
+									{% endif %}
+								</p>
+							{% endif %}
 						{% endfor %}
 					</div>
-					<span class="button dib bg-color-blue white p10 br2 js-contacts-show" data-id="{{object.id}}">Показать контакты</span>
+					<button type="submit" class="button dib bg-color-blue white p10 br2 js-contacts-show" data-id="{{object.id}}">Показать контакты</button>
+					</form>
+					{% if isGuest %}
+						<div class="write-to-author unauthorized">
+							Чтобы отправить сообщение автору нужно <a href="/user/login?return={{ currentUri }}">Авторизоваться</a>
+						</div>
+					{% else %}
+						<div data-role="writeToAuthor" data-id="{{ object.id }}" data-email="{{ userEmail }}" class="write-to-author"></div>
+					{% endif %}
 				</div>
 				<div class="col-md-6 col-sm-6">
 					{% if object.compiled.author.org_type == 2 %}

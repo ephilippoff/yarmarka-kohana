@@ -6,7 +6,7 @@
 		<tr class="tr" data-id="{{object.id}}">
 	{% endif %}
 {% endfor %}
-	<td class="td td-1">
+	<td class="td td-1 hidden-xs">
 		<div class="mb5"><input type="checkbox" id="check_{{object.id}}" class="js-select-object" data-id="{{object.id}}"><label for="check_{{object.id}}"><span></span></label></div>
 		<div class="img-cont js-hide-region-{{object.id}}">
 
@@ -94,7 +94,7 @@
 			</div>
 		{% endif %}
 	</td>
-	<td class="td td-icons">
+	<td class="td td-icons hidden-xs">
 		<div class="js-hide-region-{{object.id}}">
 			{% for services in services %}
 				<i class="fa {{ services.icon_class }} fa-lg gray" title="{{services.title}}"></i>

@@ -67,7 +67,9 @@
 			{% if check_object_access(object, 'object.moderate') %}
 				<div class="module">{% include 'detail/kupon/controls' %}</div>
 			{% endif %}
-			
+			{% if testKuponLink %}
+				<a href="{{ testKuponLink }}">Тестовая версия для печати</a>
+			{% endif %}
 			<div class="module">{% include 'detail/kupon/coupon_info' %}</div>
 			
 			{% if object.is_published and actionIsActive %}

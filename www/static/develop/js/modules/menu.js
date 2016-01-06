@@ -40,14 +40,14 @@ define([
         menuClass: ".js-kuponmenu",
         menuTemplate: "#template-kuponmenu"
     }
-    
     var MenuView = Marionette.ItemView.extend({
         events: {
+            "click" : "showMenu",
             "mouseover" : "showMenu",
-            "mouseleave" : "closeMenu",
-            "click" : "showMenu"
+            "mouseleave" : "closeMenu"
         },
         initialize: function(options) {
+            this.visible = 0;
             this.$el.append($(options.templateClass).html());
             if (!options.doNotRemove) {
                 $(options.templateClass).remove();
@@ -61,9 +61,13 @@ define([
         },
 
         showMenu: function() {
+            if (this.visible && this.$('[data-link]').length) {
+                window.location = this.$('[data-link]').data('link');
+            }
             var s = this;
             if (this.activateTimer) clearTimeout(this.activateTimer);
             this.activateTimer = setTimeout(function(){
+                s.visible = 1;
                 $(s.getOption("menuClass")).fadeIn(70);
                 $("#popup-layer").fadeIn(70);
                 $(s.getOption("controlClass")).addClass("z301");
@@ -76,6 +80,8 @@ define([
             $(this.getOption("menuClass")).fadeOut(70);
              $("#popup-layer").fadeOut(70);
              $(this.getOption("controlClass")).removeClass("z301");
+             this.visible = 0;
+             console.log('hide');
         }
     });
 
