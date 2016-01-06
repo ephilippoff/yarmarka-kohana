@@ -32,7 +32,7 @@
 							Чтобы отправить сообщение автору нужно <a href="/user/login?return={{ currentUri }}">Авторизоваться</a>
 						</div>
 					{% else %}
-						<div data-role="writeToAuthor" data-id="{{ object.id }}" class="write-to-author"></div>
+						<div data-role="writeToAuthor" data-id="{{ object.id }}" data-email="{{ userEmail }}" class="write-to-author"></div>
 					{% endif %}
 				</div>
 				<div class="col-md-6 col-sm-6">

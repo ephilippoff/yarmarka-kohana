@@ -13,7 +13,8 @@ define([ 'underscore', 'backbone', './models/state', './views/initial', './views
 
 			/* initialize models */
 			this.appState = new AppStateModel({
-				object_id: this.$el.data('id')
+				object_id: this.$el.data('id'),
+				email: this.$el.data('email')
 			});
 
 			/* bind model events */

@@ -14,7 +14,8 @@ define([ 'underscore', 'backbone' ], function (_, Backbone) {
 
 		defaults: {
 			state: 'initial',
-			message: ''
+			message: '',
+			email: ''
 		},
 
 		url: '/rest_object/write_to_author',
