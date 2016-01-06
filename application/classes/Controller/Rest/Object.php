@@ -96,7 +96,7 @@ class Controller_Rest_Object extends Controller_Rest {
 		$message .= 'Email отправителя: ' . $user->email;
 
 		/* prepare subject */
-		$subject = 'Новое сообщение';
+		$subject = 'У Вас сообщение на «Ярмарка-онлайн»';
 
 		Email::send( $object['author']['email'], Kohana::$config->load('email.default_from'), $subject, $message, false);
 	}
