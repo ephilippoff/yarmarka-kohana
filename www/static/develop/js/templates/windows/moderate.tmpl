@@ -1,0 +1,69 @@
+<div class="popup-window w500">	
+	<div class="header">
+		Модерация объявлений
+		<div class="popup-window-close js-close">
+			<i class="ico close-ico16"></i>
+		</div>			
+	</div>					
+	<div class="cont form-cont">
+		<form class="js-form">
+			<div class="row">
+				<div class="col-md-12">
+					<label class="bold"><span class="red fs20">*</span> Вид блокировки</label>
+				</div>
+				<div class="col-md-12">
+					<div class="inp-cont">
+						<input id="block_first" type="radio" name="type" value="block_edit" checked><label for="block_first">Блокировка объявления для исправления</label><br>
+						<input id="block_object" type="radio" name="type" value="block_object"><label for="block_object">Блокировка объявления окончательная</label><br>
+						<input id="block_full" type="radio" name="type"  value="block_full"><label for="block_full">Блокировка пользователя и удаление всех его объявлений</label>
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-md-12">
+					<label class="bold"><span class="red fs20">*</span> Выбор причины блокирвоки:</label>
+				</div>
+				<div class="col-md-12">
+					<div class="inp-cont">
+						<select class="w300 js-reason">
+						<% _.each(reasons, function(item) { %>
+							<option id="<%=item.id%>"><%=item.full_text%></option>
+						<% }); %>
+						</select>
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-md-12">
+					<label class="bold">Комментарий:</label>
+				</div>
+				<div class="col-md-12">
+					<div class="inp-cont <% if (getError("comment")) { %>error<% } %>">
+						<textarea class="w100p js-comment" cols="30" rows="10" name="comment"><%=comment%></textarea>
+						<% if (getError("comment")) { %>
+								<span class="inform"><%=getError("comment")%></span>
+						<% } %>						
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-md-12">
+					<label class="bold"><span class="red fs20">*</span> Отправить письмо автору?</label>
+				</div>
+				<div class="col-md-12">
+					<div class="inp-cont">
+						<input id="send_email" type="checkbox" name="send_email"><label for="send_email">Отправить письмо автору?</label>
+					</div>
+				</div>
+			</div>
+
+			<div class="row mt10">
+				<div class="col-md-6">&nbsp;</div>
+				<div class="col-md-6"><button class="w100 button button-style1 bg-color-blue white js-ok fr">OK</button></div>
+			</div>
+		</form>
+	</div>
+</div>

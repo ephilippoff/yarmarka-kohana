@@ -11,13 +11,15 @@ define([
             publishControlCaption: ".js-ocontrol-publish > span",
             editControl: ".js-ocontrol-edit",
             contactsShow: ".js-contacts-show",
-            contactList: ".js-contact-list"
+            contactList: ".js-contact-list",
+            moderateControl: ".js-moderate-action"
         },
 
         events: {
             "click @ui.publishControl": "publishControlClick",
             "click @ui.editControl": "editControlClick",
-            "click @ui.contactsShow": "showContacts"
+            "click @ui.contactsShow": "showContacts",
+            "click @ui.moderateControl": "moderateControlClick",
         },
 
         publishControlClick: function(e) {
@@ -57,6 +59,14 @@ define([
             e.preventDefault();
             var id = $(e.currentTarget).data("id");
             app.ocontrol.edit(id);
+        },
+
+        moderateControlClick: function(e) {
+            var s = this;
+            e.preventDefault();
+            var id = $(e.currentTarget).data("id");
+            var user = $(e.currentTarget).data("user");
+            app.ocontrol.moderateAction(id, {type:"block", user: user});
         },
 
         showContacts: function(e) {
