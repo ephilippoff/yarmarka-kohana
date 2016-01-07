@@ -788,7 +788,6 @@ class Lib_PlacementAds_AddEdit {
 		$city = &$this->city;
 		$location = &$this->location;
 		$object = &$this->object;
-		
 
 		if (!$city->loaded()) {
 			$this->raise_error('При сохранении, не указан город');
@@ -804,7 +803,7 @@ class Lib_PlacementAds_AddEdit {
 		}
 
 		@list($lat, $lon) = explode(',', $params->object_coordinates);
-		if ( ! $lat OR ! $lon OR $params->real_city_exists)
+		if ( ! $lat OR ! $lon)
 		{
 			// если координаты не пришли, запрашиваем координаты по адресу
 			@list($coords, $region_title, $address) = Ymaps::instance()->get_coord_by_name($city_title.', '.$address);
@@ -812,29 +811,17 @@ class Lib_PlacementAds_AddEdit {
 			@list($lon, $lat) = $coords;
 		}
 
-		if ($address)
-		{
-			$loc_count = 0;
-			if ($object->location_id)
-				$loc_count = ORM::factory('Object')->where("location_id","=", $object->location_id)->count_all();
+		$location->region 	= $region_title;
+		$location->city 	= $city_title;
+		$location->address 	= $address;
+		$location->lat 		= $lat;
+		$location->lon 		= $lon;
+		$location->save();
 
-			if ($loc_count == 1 AND $object->location_id <> $city->location_id)
-				$location = $location->where("id","=",$object->location_id)->find();
-
-			$location->region 	= $region_title;
-			$location->city 	= $city_title;
-			$location->address 	= $address;
-			$location->lat 		= $lat;
-			$location->lon 		= $lon;
-			$location->save();
-		}
-
-		// если не нашли адрес, то берем location города
-		if ( ! $location->loaded() )
-			$location = $city->location;
 
 		return $this;
 	}
+
 
 	function save_many_cities()
 	{
