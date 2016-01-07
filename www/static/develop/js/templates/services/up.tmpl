@@ -2,20 +2,21 @@
 	<p>Если вы приобретаете <strong>сразу несколько подъемов</strong> для одного объявления, услуга активируется автоматически купленное количество раз каждый  день, выводя объявление вверх списка. Услуга платная</p>
 </div>
 <% if (info.count && info.count > 0) { %>
-	<div class="p10">Каждый день начисляется 3 бесплатных подъема</div>
-	<div class="p10">Осталось бесплатных: <%=info.count%></div>
+	<p>Каждый день начисляется 3 бесплатных подъема</p>
+	<p>Осталось бесплатных: <%=info.count%></p>
 <% } else { %>
-	<div class="p10">Бесплатные подъемы использованы.</div>
+	<p>Бесплатные подъемы использованы.</p>
 <% } %>
+<h3 class="hidden-lg hidden-sm hidden-md"><%=getTitle()%></h3>
 <table class="table table-bordered">
 	<thead>
-		<th class="service-title">Услуга</th>
+		<th class="hidden-xs service-title">Услуга</th>
 		<th class="quantity">Количество</th>
 		<th class="price">Цена</th>
 	</thead>
 	<tbody>
 	<tr>
-		<td class="service-title"><%=getTitle()%></td>
+		<td class="hidden-xs service-title"><%=getTitle()%></td>
 		<td class="quantity">
 			<% var quantity  = 1; %>
 			<% if (is_edit) { 

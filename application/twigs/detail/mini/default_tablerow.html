@@ -3,7 +3,7 @@
 {% else %}
 	<tr class="tr" data-id="{{object.id}}">
 {% endif %}
-		<td class="td td-1">
+		<td class="td td-1 hidden-xs"><!-- Секция фото -->
 			<div class="img-cont">
 				<div class="img-wrapper">
 					{% if object.compiled.images.main_photo %}
@@ -18,7 +18,7 @@
 				{% endif %}
 			</div>
 		</td>
-		<td class="td td-2">
+		<td class="td td-2"><!-- Секция контент -->
 			<p class="title">
 				{% set is_favourite = 'fa-heart-o' %}
 				{% if object.id in favourites %}
@@ -58,7 +58,7 @@
 				<p class="pt10 pb10 js-object-state-{{object.id}} red">Объявление снято с публикации</p>
 				{% endif %}
 			</td>		
-			<td class="td td-company-info">
+			<td class="td td-company-info hidden-xs"><!-- Секция о компании -->
 				{% if object.compiled.author.org_type == 2 %}
 				{% if object.compiled.author.logo %}
 				<div class="img-cont">
@@ -69,7 +69,7 @@
 				{#<div class="state mt5 red" style="font-size:10px;">Компания не проверена<i class="fa fa-question-circle fa-lg ml3"></i></div>#}
 				{% endif %}
 			</td>
-			<td class="td td-icons" style="text-align:center;">
+			<td class="td td-icons hidden-xs" style="text-align:center;">
 				{% set services = get_service_icon_info(object.compiled.services, check_access("object.moderate")) %}
 				{% for services in services %}
 				<i class="fa {{ services.icon_class }} fa-lg gray" title="{{services.title}}"></i>
@@ -78,7 +78,7 @@
 		</tr>
 
 		{% if loop.index in banner_zone_positions|keys %}
-		<tr class="tr">
+		<tr class="tr banner_tr">
 			<td colspan="4">
 				<div class="banner {zoneID: {{banner_zone_positions[loop.index]}} }"></div>
 			</td>

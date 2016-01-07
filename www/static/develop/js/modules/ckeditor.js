@@ -61,7 +61,11 @@ define([
 			if ($(item).data('_ckeditorInstanceLock')) {
 				return;
 			}
-			$(item).ckeditor($.extend(this.config, append));
+			try {
+				$(item).ckeditor($.extend(this.config, append));
+			} catch (e) {
+				//empty
+			}
 		}
 	});
 

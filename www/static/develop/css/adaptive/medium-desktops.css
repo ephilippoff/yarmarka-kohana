@@ -1,5 +1,5 @@
-@media screen and (min-width: 992px) and (max-width:1199px) {
+@media screen and (max-width:1199px) {
 
-	/* todo - add styles */
+	.popup-window .service-cont{overflow-y:auto; max-height: 60vh;}
 
 }

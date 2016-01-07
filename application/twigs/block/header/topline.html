@@ -1,6 +1,6 @@
 <div class="menu-cont menu-cont1 module">
 	<div class="row">
-		<div class="cont1 col-md-3 col-xs-6 col-xxs-6 clearfix">
+		<div class="cont1 col-md-3 {% if onPageFlag == add %}col-sm-6 {% else %}col-sm-4 {% endif %}col-xs-6 col-xxs-6 clearfix">
 			<div class="menu-item-wrp js-citymenu-dropdown" style="float: left;position: relative;">
 				<span class="menu-item span-link city_change">
 					{% set current_city = get_current_city() %}
@@ -8,7 +8,7 @@
 				</span>
 			</div>
 		</div>
-		<div class="cont2 col-md-9 col-xs-6 col-xxs-6 clearfix">
+		<div class="cont2 col-md-9 {% if onPageFlag == add %}col-sm-6 {% else %}col-sm-8 {% endif %} col-xs-6 col-xxs-6 clearfix">
 			<div class="menu-item-wrp menu-block {% if user %}js-usermenu-dropdown{% endif %} user-dropdown">
 				{% if user %}
 					<span class="menu-item span-link hidden-xxs lk"><i class="fa {% if user.org_type == 2 %}fa-group{% else %}fa-user{% endif %} mr3"></i>Личный кабинет<i class="fa fa-caret-down ml5 hidden-sm hidden-xs"></i></span>

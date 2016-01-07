@@ -6,3 +6,4 @@
 
 	/* Bad -> enumerate all includes */
 	require_once YARMARKA_CORE_PATH . implode(DIRECTORY_SEPARATOR, array( 'Models', 'User.php' ));
+	require_once YARMARKA_CORE_PATH . implode(DIRECTORY_SEPARATOR, array( 'Models', 'Request.php' ));

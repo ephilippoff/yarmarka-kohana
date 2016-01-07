@@ -43,6 +43,7 @@ class Controller_Detail extends Controller_Template {
 		$twig = Twig::factory('detail/index');
 		$twig->domain      = $this->domain;
 		$twig->city        = $this->domain->get_city();
+		$twig->onPageFlag = 'detail';
 
 
 		$detail_info = Detailpage::factory("Default", $object)
@@ -74,6 +75,15 @@ class Controller_Detail extends Controller_Template {
 					);
 			}
 		}
+		$cUser = \Yarmarka\Models\User::current();
+		$twig->isGuest = $cUser->getIsGuest();
+		$twig->currentUri = $this->request->uri();
+		$twig->userEmail = $cUser->getEmail();
+
+		//add to last views
+		LastViews::instance()
+			->set($object->id)
+			->commit();
 
 		$this->response->body($twig);
 	}
@@ -186,7 +196,23 @@ class Controller_Detail extends Controller_Template {
 		foreach ((array) $detail_info as $key => $item) {
 			$twig->{$key} = $item;
 		}
-		
+
+		$twig->testKuponLink = NULL;
+		//get kupon group
+		$kuponGroup = ORM::factory('Kupon_Group')
+			->where('object_id', '=', $object->id)
+			->find();
+		if ($kuponGroup->loaded()) {
+			//get first kupon
+			$kupon = ORM::factory('Kupon')
+				->where('kupon_group_id', '=', $kuponGroup->id)
+				->find();
+			if ($kupon->loaded()) {
+				$twig->testKuponLink = \Yarmarka\Models\User::current()->isAdminOrModerator()
+					? '/kupon/print/' . $kupon->id
+					: NULL;
+			}
+		}
 
 		$this->response->body($twig);
 	}

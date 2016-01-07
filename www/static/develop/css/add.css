@@ -7,7 +7,6 @@
 .form-cont .add-block img {max-height: 100px;max-width: 100px;}
 .form-cont .add-block .href-bl {float: left;margin-top: 8px;text-align: center;width: 100%;}
 .form-cont .add-contact{font-size: 16px;}
-.form-cont .btn-next{line-height: 47px;position: relative;width: 207px;font-weight: bold;}
 .form-cont textarea{height: 170px;}
 .form-cont .form-errors-cont{font-size: 16px; color: red;}
 
@@ -88,6 +87,10 @@ img.banner,
 .add-advert,
 .search-cont{
 	display: none;
+}
+
+.menu-item.lk {
+	font-size:14px;
 }
 
 .right .section{

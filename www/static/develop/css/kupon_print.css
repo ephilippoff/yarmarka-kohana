@@ -14,3 +14,39 @@ body {font-family: Verdana, Geneva, sans-serif;font-size: 12px;color: #333;}
 .fr {float: right;}
 .text-cont {font-size: 10px;}
 #ean {position:absolute;top:0;right:0;}
+
+/* http://yarmarka.myjetbrains.com/youtrack/issue/yarmarka-422 */
+.kupon-print-cont * {
+	font-size:10px;
+	color:black;
+}
+.kupon-print-cont .title {
+	font-size:20px;
+}
+.kupon-print-cont .link {
+	color:rgb(0, 0, 238);
+}
+.kupon-print-cont .text {
+	float: none;
+	width:100%;
+}
+.kupon-print-cont .map {
+	float:right;
+	padding-left:10px;
+	padding-bottom: 10px;
+	background: white;
+}
+.kupon-print-cont h3 {
+	font-size:15px;
+	font-weight: bold;
+	padding:5px 0;
+}
+.kupon-print-cont li {
+	list-style: none;
+}
+.kupon-print-cont ul li:after {
+	content:'';
+	display:block;
+	border:1px inset;
+	margin:10px 0;
+}

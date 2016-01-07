@@ -60,6 +60,8 @@ class Controller_Search extends Controller_Template {
 
         $search_info = $this->get_search_info();
 
+        Yarmarka\Models\Request::current()->setUrl($search_info->s_suri);
+
         if ($search_info->city_id) {
             Cookie::set('location_city_id', $search_info->city_id, strtotime( '+31 days' ));
         }
