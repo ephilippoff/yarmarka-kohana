@@ -62,5 +62,7 @@
 @media (min-width: 768px){
 
 	.js-newsmenu-dropdown, .js-kuponmenu-dropdown, .city-companies{display: block !important;}
+	.brb2 .js-mainmenu-dropdown{border-bottom-left-radius: 2px;}
+	.br2 .js-mainmenu-dropdown{border-bottom-left-radius: 2px; border-top-left-radius: 2px;}
 
 }

@@ -9,8 +9,8 @@
 	
 	{% block header %} 
 		{{ parent() }}
-		{% include 'block/header/navigationline/simple' %}
 		{{ requestblock('block_twig/adslinkline', {'city_id': city.id, 'category_id': category.id, 'theme_class': theme_class}) }}
+		{% include 'block/header/navigationline/simple' %}
 	{% endblock header %}
 
 	<div class="light-blue-theme detail-cont brt2">

@@ -8,8 +8,8 @@
 	
 	{% block header %}
 		{{ parent() }}
-		{% include 'block/header/navigationline' %}
 		{{ requestblock('block_twig/adslinkline',{'city_id': city.id, 'category_id': category.id, 'theme_class': theme_class}) }}
+		{% include 'block/header/navigationline' %}
 	{% endblock header %} 
 
 	{% block crumbs %} 
