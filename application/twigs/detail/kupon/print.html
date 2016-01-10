@@ -23,12 +23,15 @@
 	<div class="row">
 		<div class="fl w49p text">
 			<img src="https://static-maps.yandex.ru/1.x/?ll={{location}}&z=16&l=map&pt={{location}},pm2lbl" alt="" height="200" class="map">
-			<p><strong>{{kupon_group.title}}</strong></p>
-			<!--<p class="fw-b mb20">{{ kupon_group.description }}</p>
+			{% if kupon_group_description %}
+				<p><strong>{{kupon_group.title}}</strong></p>
+				{{ kupon_group_description }}
+			{% else %}
+				<p class="fw-b mb20">{{ kupon_group.description }}</p>
 				<p>Контакты: {{ kupon_group.contacts }}</p>
 				<p>Адрес: {{ kupon_group.address }}</p>
-			<p class="mb20">{{ kupon_group.address_details }}</p>-->
-			{{ kupon_group_description }}
+				<p class="mb20">{{ kupon_group.address_details }}</p>
+			{% endif %}
 		</div>
 		<!--
 		<div class="fr w49p">

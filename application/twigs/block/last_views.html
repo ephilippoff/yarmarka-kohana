@@ -1,0 +1,21 @@
+<div class="last-views">
+	<div class="title">Вы недавно смотрели</div>
+	<div class="items">
+	{% for item in items %}
+		<div class="item">
+			<p>
+				<a href="{{ item.url }}">
+					<img 
+						src="{{ item.image.url }}"
+						width="{{ item.image.width }}"
+						height="{{ item.image.height }}"
+						alt="{{ item.image.alt }}"
+						title="{{ item.image.title }}" />
+				</a>
+			</p>
+			<span>{{ item.price|number_format(0, ' ', ' ') }} Р</span>
+			<a href="{{ item.url }}">{{ item.shortTitle }}</a>
+		</div>
+	{% endfor %}
+	</div>
+</div>

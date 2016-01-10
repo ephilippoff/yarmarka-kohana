@@ -8,6 +8,8 @@
 		const MODERATOR_ROLE = 9;
 
 		private $_role;
+		private $_isGuest;
+		private $_email;
 
 		public function __construct() {
 			$this->_role = NULL;
@@ -15,8 +17,16 @@
 
 		/* getters */
 
+		public function getEmail() {
+			return $this->_email;
+		}
+
 		public function getRole() {
 			return $this->_role;
+		}
+
+		public function getIsGuest() {
+			return $this->_isGuest;
 		}
 
 		/* role checks */
@@ -45,6 +55,11 @@
 			$kohanaUserInstance = \Auth::instance()->get_user();
 			if ($kohanaUserInstance) {
 				$instance->_role = $kohanaUserInstance->role;
+				$instance->_isGuest = false;
+				$instance->_email = $kohanaUserInstance->email;
+			} else {
+				$instance->_isGuest = true;
+				$instance->_email = NULL;
 			}
 			return $instance;
 		}

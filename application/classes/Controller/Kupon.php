@@ -69,7 +69,7 @@ class Controller_Kupon extends Controller_Template {
 			throw new Exception('Object for kupon group not found!');
 		}
 		$decompiled = unserialize($object->compiled);
-		$userText = $object->user_text;
+		$userText = NULL;
 		foreach($decompiled['attributes'] as $attribute) {
 			if ($attribute['reference'] == 1003) {
 				$userText = $attribute['value'];

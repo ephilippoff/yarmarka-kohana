@@ -41,7 +41,9 @@ class Lib_PlacementAds_AddEdit {
 			foreach((array) $this->params as $key=>$value){
 				if (preg_match('/^param_([0-9]*)/', $key, $matches))
 				{
-					$this->params->{$key} = str_replace("_", "", $this->params->{$key});
+					$this->params->{$key} = preg_match('/_[0-9]+/', $this->params->{$key}) 
+						? str_replace("_", "", $this->params->{$key})
+						: $this->params->{$key};
 					$data_params[] = explode("_", $key);
 				}
 			}
@@ -1193,10 +1195,13 @@ class Lib_PlacementAds_AddEdit {
 			}
 
 			// удаляем старые значения
+			$old = Text::ucfirst($reference->attribute_obj->type);
+			if (!empty($old)) {
 			ORM::factory('Data_'.Text::ucfirst($reference->attribute_obj->type))
 				->where('object', '=', $object->id)
 				->where('reference', '=', $reference->id)
 				->delete_all();
+			}
 
 			// проверяем есть ли значение
 			if (is_array($value)) 

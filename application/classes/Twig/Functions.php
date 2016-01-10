@@ -62,7 +62,12 @@ class Twig_Functions
 
 	public static function debug($param)
 	{
-		return Debug::vars($param);
+		//return Debug::vars($param);
+		$text = '<pre>';
+		$text .= var_export($param, true);
+		$text .= '</pre>';
+
+		return $text;
 	}
 
 	public static function obj($array = array())
@@ -76,7 +81,7 @@ class Twig_Functions
 	}
 
 	public static function sameUrlOnAnotherDomain($domain, $protocol_str = "http://") {
-		return Domain::get_domain_by_city($domain, Yarmarka\Models\Request::current()->getUrl(), $protocol_str);
+		return Domain::get_domain_by_city($domain, $domain . '\\' . Yarmarka\Models\Request::current()->getUrl(), $protocol_str);
 	}
 
 	public static function file_exist($path)

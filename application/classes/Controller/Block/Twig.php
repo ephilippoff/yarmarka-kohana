@@ -271,4 +271,65 @@ class Controller_Block_Twig extends Controller_Block
             $this->response->body("");
         }
     }
+
+    public function action_last_views() {
+        $ids = LastViews::instance()->get();
+
+        //get objects from database
+        $objects = count($ids)
+            ? ORM::factory('Object')
+                ->where('object.id', 'in', $ids)
+                ->with_main_photo()
+                ->find_all()
+            : array();
+
+        //process db data
+        $viewData = array();
+        $shortTitleLength = 40;
+        $afterShortTitle = '...';
+        $top = 5;
+        foreach($objects as $index => $object) {
+            if ($index >= $top) {
+                break;
+            }
+            //prepare image
+            $image = array(
+                    'url' => URL::site('/static/develop/images/nophoto136x107.png'),
+                    'alt' => 'photo',
+                    'title' => ''
+                );
+            if ($object->main_image_filename) {
+                list($width, $height) = Uploads::get_optimized_file_sizes($object->main_image_filename, '208x208', '120x90', '106x106');
+                $image = array(
+                        'url' => 'http://yarmarka.biz' . Uploads::get_file_path($object->main_image_filename, '208x208'),
+                        'width' => $width,
+                        'height' => $height,
+                        'alt' => '',
+                        'title' => $object->main_image_title
+                    );
+            }
+
+            //build item
+            $item = array(
+                    'position' => array_search($object->id, $ids),
+                    'title' => $object->title,
+                    'shortTitle' => mb_strlen($object->title) > $shortTitleLength 
+                        ? (mb_substr($object->title, 0, $shortTitleLength - strlen($afterShortTitle)) . $afterShortTitle)
+                        : $object->title,
+                    'image' => $image,
+                    'price' => $object->price,
+                    'url' => $object->get_url()
+                );
+
+            $viewData []= $item;
+        }
+
+        //reverse
+        usort($viewData, function ($a, $b) { return $b['position'] - $a['position']; });
+
+        //initialize view
+        $twig = Twig::factory('block/last_views');
+        $twig->items = $viewData;
+        $this->response->body($twig);
+    }
 }
