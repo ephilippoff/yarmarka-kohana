@@ -900,19 +900,20 @@ a.auto-collapse-expand {
 
 }
 .last-views .items {
-    text-align: justify;
+    
 }
 .last-views .items:after {
-    width:100%;
     content:'';
-    display:inline-block;
+    display:block;
+    clear: both;
 }
 .last-views .item {
-    display:inline-block;
+    float:left;
     width:19%;
     border:1px solid black;
     box-sizing: border-box;
     padding:0;
+    margin-left:1%;
 }
 .last-views .item:first-child {
     margin-left:0;
