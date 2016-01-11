@@ -146,7 +146,8 @@ class Form_Add  {
 		}
 
 		$category_array["Другие"] = array(
-			156 => "В хорошие руки"
+			156 => "В хорошие руки",
+			72 => "Товары для детей"
 		);
 
 		if ($user = Auth::instance()->get_user())
