@@ -1341,9 +1341,6 @@ class Lib_PlacementAds_AddEdit {
 						'obj' => $object, 'city' => $city, 'category' => $category, 'subdomain' => Region::get_domain_by_city($city->id), 
 						'contacts' => $contacts, 'address' => $params->address_str));
 
-			var_dump((string)$msg);
-			die;
-
 			Email::send($user->email, Kohana::$config->load('email.default_from'), $subj, $msg);
 		}	
 
