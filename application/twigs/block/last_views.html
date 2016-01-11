@@ -14,7 +14,7 @@
 				</a>
 			</p>
 			<span>{{ item.price|number_format(0, ' ', ' ') }} Р</span>
-			<a href="{{ item.url }}">{{ item.shortTitle }}</a>
+			<a href="{{ item.url }}" rel="nofollow">{{ item.shortTitle }}</a>
 		</div>
 	{% endfor %}
 	</div>
