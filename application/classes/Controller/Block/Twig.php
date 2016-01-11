@@ -13,6 +13,10 @@
 class Controller_Block_Twig extends Controller_Block
 {
 
+    protected $forceAllow = array(
+            'last_views'
+        );
+
     public function before()
     {
         parent::before();
