@@ -1,6 +1,6 @@
-<div class="last-views">
+<div class="last-views" {% if showMore %}data-showmore="true" data-pages="{{ pagination.totalPages }}" {% endif %}>
 	<div class="title">Вы недавно смотрели</div>
-	<div class="items">
+	<div class="items" data-role="container">
 	{% for item in items %}
 		<div class="item">
 			<p>
@@ -18,4 +18,9 @@
 		</div>
 	{% endfor %}
 	</div>
+	{% if showMore %}
+	<div class="show-more-container" data-role="button-container">
+		<button class="show-more" data-role="button">Еще...</button>
+	</div>
+	{% endif %}
 </div>

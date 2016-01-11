@@ -44,7 +44,7 @@
 	{% include 'search/filters' %}
 	{% include 'search/result' %}
 	{% include 'search/paginator' %}
-	{{ requestblock('block_twig/last_views', {}) }}
+	{{ requestblock('block_twig/last_views', { mode: 'twig', 'page': 1, 'perPage': 5 }) }}
 {% endblock content%}
 
 

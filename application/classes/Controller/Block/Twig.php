@@ -273,7 +273,25 @@ class Controller_Block_Twig extends Controller_Block
     }
 
     public function action_last_views() {
-        $ids = LastViews::instance()->get();
+        $ids = array_reverse(LastViews::instance()->get());
+
+        $requestData = $this->request->is_ajax()
+            ? json_decode($this->request->body(), true)
+            : $this->request->post();
+
+        /* pagination */
+        $pagination = array(
+                'page' => (int) Arr::get($requestData, 'page', 1),
+                'perPage' => (int) Arr::get($requestData, 'perPage', 5),
+                'total' => count($ids)
+            );
+        $pagination['totalPages'] = ceil($pagination['total'] / $pagination['perPage']);
+        /* calculate offset and limit */
+        $offset = ($pagination['page'] - 1) * $pagination['perPage'];
+        $limit = $pagination['perPage'];
+
+        /* accept pagination */
+        $ids = array_slice($ids, $offset, $limit);
 
         //get objects from database
         $objects = count($ids)
@@ -287,11 +305,7 @@ class Controller_Block_Twig extends Controller_Block
         $viewData = array();
         $shortTitleLength = 40;
         $afterShortTitle = '...';
-        $top = 5;
         foreach($objects as $index => $object) {
-            if ($index >= $top) {
-                break;
-            }
             //prepare image
             $image = array(
                     'url' => URL::site('/static/develop/images/nophoto136x107.png'),
@@ -325,11 +339,25 @@ class Controller_Block_Twig extends Controller_Block
         }
 
         //reverse
-        usort($viewData, function ($a, $b) { return $b['position'] - $a['position']; });
+        usort($viewData, function ($a, $b) { return $a['position'] - $b['position']; });
 
         //initialize view
-        $twig = Twig::factory('block/last_views');
-        $twig->items = $viewData;
-        $this->response->body($twig);
+        /* get mode parameter */
+        $mode = Arr::get($requestData, 'mode', 'twig');
+        if ($mode == 'twig') {
+            $twig = Twig::factory('block/last_views');
+            $twig->showMore = Arr::get($requestData, 'showMore', false) && $pagination['totalPages'] > 1;
+            $twig->items = $viewData;
+            $twig->pagination = $pagination;
+            $this->response->body($twig);
+        } else if ($mode == 'json') {
+            $this->response->body(json_encode(array(
+                    'result' => array(
+                            'items' => $viewData,
+                            'pagination' => $pagination
+                        ),
+                    'code' => 200
+                )));
+        }
     }
 }

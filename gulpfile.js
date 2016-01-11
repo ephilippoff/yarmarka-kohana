@@ -92,7 +92,9 @@ gulp.task('buildconcatcss', function() {
                             './www/static/develop/css/adaptive/extra-small-phones.css',
                             './www/static/develop/css/adaptive/small-tablets.css',
                             './www/static/develop/css/adaptive/medium-desktops.css',
-                            './www/static/develop/css/adaptive/large-desktops.css'
+                            './www/static/develop/css/adaptive/large-desktops.css',
+                            //all blocks
+                            './www/static/develop/css/blocks/**/*.css'
                             ])
                 .pipe(concat('appstyles.css'))
                 .pipe(csso())

@@ -7,8 +7,9 @@ define([
     "views/partials/behaviors/services",
     "views/partials/behaviors/ads",
     "gisMap",
-    'modules/writeToAuthor/main'
-], function (templates, FavouriteBehavior, SearchBehavior, OControlBehavior, ServicesBehavior, AdsBehavior, gisMap, WriteToAuthor) {
+    'modules/writeToAuthor/main',
+    'modules/lastViews/main',
+], function (templates, FavouriteBehavior, SearchBehavior, OControlBehavior, ServicesBehavior, AdsBehavior, gisMap, WriteToAuthor, LastViewsMainView) {
     "use strict";
 
 
@@ -40,6 +41,15 @@ define([
 
         initialize: function() {
             this.bindUIElements();
+
+            /* initialize last views module */
+
+            if ($('.last-views').length) {
+                this.lastViewsModule = new LastViewsMainView({
+                    el: $('.last-views')
+                });
+            }
+            /* initialize last views module done */
 
             if (this.ui.map.length) {
                 var similarObjects = [];
