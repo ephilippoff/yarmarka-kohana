@@ -23,14 +23,14 @@
 		<div class="row">
 			<div class="col-md-3">
 				{% include 'index/promo/left' %}
+				{% include 'index/promo/kupon' %}
 			</div>
 			<div class="col-md-9">
 				<div class="row">
 					<div class="col-md-9">
-						{% include 'index/promo/news' %}
-						<div class="banner module {zoneID: 18 }"></div>
 						{% include 'index/promo/photo_news' %}
-						{% include 'index/promo/kupon' %}
+						
+						<div class="banner module {zoneID: 18 }"></div>
 						<div class="bg-color-whitesmoke p20 mb10 br2">
 							<p class="fs18 bold">Свежие предложения всегда под рукой: </p>
 							<a href="http://www.yandex.ru/?add=112883&amp;from=promocode" target="_blank" class="big_link_with_underlina_dotted" rel="nofollow">Легковые авто</a>&nbsp;&nbsp;&nbsp;
@@ -41,6 +41,7 @@
 						</div>
 					</div>
 					<div class="col-md-3">
+						{% include 'index/promo/news' %}
 						{% include 'index/informers' %}
 					</div>
 				</div>

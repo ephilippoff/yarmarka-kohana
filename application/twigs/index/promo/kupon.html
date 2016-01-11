@@ -1,45 +1,31 @@
-{% set theme_class = 'light-blue-theme' %}
+{# set theme_class = 'light-blue-theme' #}
 {% if kupons|length > 0 or premium_kupons|length > 0 %}
-	<div class="{{theme_class}} module br2" >
-		<div class="menu-cont2 brt2">
-			<div class="row">
-				<div class="col-md-12 clearfix">
-					<span class="menu-item left"><span class="menu-item-cont">Купоны</span></span>
-					{#<div class="menu-item left js-kuponmenu-dropdown">
-						<span class="menu-item-cont">Категории<i class="fa fa-caret-down ml3"></i></span>
-					</div>
-					<span class="menu-item right"><span class="menu-item-cont"><i class="fa fa-question-circle mr3"></i>Условия</span></span>
-					<span class="menu-item right"><span class="menu-item-cont"><i class="fa fa-question-circle mr3"></i>Что такое купон?</span></span>
-					#}
-				</div>
-			</div>			
+	<div class="module br2" >
+		<div class="menu-cont2 brt2">		
 		</div>
-		<div class="view-container brb2">
-			<div class="breadcrumbs-cont">						
-				<p class="captionbold">Купоны и скидки {% if last_city %}{{ cities[last_city.seo_name] }}{% endif %}</p>
-			</div>
+		<div class="brb2">
 			<div class="row">
 				{% if premium_kupons|length > 0 %}
-					<div class="col-md-6 col-xs-6 items-cont">
+					<div class="col-md-12 items-cont">
 						<ul>
 							{% for object in premium_kupons %}
-								<li class="mt10">
+								<li class="mt10 clearfix">
+									{% include 'detail/mini/kupon' %}
+								</li>
+							{% endfor %}
+						</ul>
+					</div>
+				{% else %}
+					<div class="col-md-12">
+						<ul>
+							{% for object in kupons %}
+								<li class="mt10 clearfix">
 									{% include 'detail/mini/kupon' %}
 								</li>
 							{% endfor %}
 						</ul>
 					</div>
 				{% endif %}
-				<div class="{% if premium_kupons|length > 0 %}col-md-6 col-xs-6{% else %}col-md-12{%endif%} items-cont">
-					<ul>
-						{% for object in kupons %}
-							<li>
-								<p class="mt10"><span class="fs12">{{object.date_created|date('d/m H:i')}}</span><a class="ml10" href="{{object.compiled.url}}">{{object.title}}</a></p>
-							</li>
-						{% endfor %}
-					</ul>
-				</div>
-
 			</div>
 		</div>
 	</div>
