@@ -20,10 +20,15 @@
 		Фильтры
 	{% endblock filters %}
 	<div class="row">
-		<div class="col-md-8 search_wrap">
-			{% block content %}
-				контент
-			{% endblock content %}
+		<div class="col-md-8">
+			<div class="search_wrap">
+				{% block content %}
+					контент
+				{% endblock content %}
+			</div>
+			{% block last_views %}
+				Последние просмотренные
+			{% endblock last_views %}
 		</div><!--col-->
 		<div class="col-md-4 right-side">
 			<div class="row">

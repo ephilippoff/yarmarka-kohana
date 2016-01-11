@@ -38,12 +38,35 @@
 
 	.reg_forgot_block .menu-item{
 		width: 50% !important; 
+		padding: 0;
 	}
 
 	.form-cont .btn-next{
 		width: 170px;
 		line-height: 30px;
 	}
+
+	.last-views .title{
+	    margin-bottom: 10px;
+	}
+
+	.last-views .items .item{
+		width: 50%;
+		border: none;
+	}
+
+	.last-views .items .item:nth-child(odd){
+		border-right: 1px solid #ccc;
+	}
+
+	.last-views .items .item:nth-child(2),
+	.last-views .items .item:nth-child(1){
+		border-bottom: 1px solid #ccc;
+	}
+
+	.last-views .item:nth-child(4){
+		border: none !important;
+	} 
 }
 
 @media (max-width: 500px){

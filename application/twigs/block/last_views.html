@@ -1,5 +1,5 @@
 <div class="last-views">
-	<div class="title">Вы недавно смотрели</div>
+	<div class="title brt2">Вы недавно смотрели</div>
 	<div class="items">
 	{% for item in items %}
 		<div class="item">
@@ -13,8 +13,8 @@
 						title="{{ item.image.title }}" />
 				</a>
 			</p>
-			<span>{{ item.price|number_format(0, ' ', ' ') }} Р</span>
 			<a href="{{ item.url }}" rel="nofollow">{{ item.shortTitle }}</a>
+			<span>{{ item.price|number_format(0, ' ', ' ') }} <i class="fa fa-rub"></i></span>
 		</div>
 	{% endfor %}
 	</div>

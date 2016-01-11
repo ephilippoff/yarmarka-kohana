@@ -897,8 +897,19 @@ a.auto-collapse-expand {
 
 /* last_views block */
 .last-views {
-
+    margin-bottom: 20px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
 }
+
+.last-views .title{
+    font-size: 14px;
+    color: #fff;
+    background-color: #2b587a;
+    padding: 2px 10px;
+}
+
 .last-views .items {
     
 }
@@ -909,14 +920,20 @@ a.auto-collapse-expand {
 }
 .last-views .item {
     float:left;
-    width:19%;
-    border:1px solid black;
+    width:20%;
+    border-left:1px solid #ccc;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
     box-sizing: border-box;
-    padding:0;
-    margin-left:1%;
+    padding:0 15px;
 }
-.last-views .item:first-child {
-    margin-left:0;
+
+.last-views .item:hover{
+    background-color: #f0f0f0;
+}
+
+.last-views .item:last-child {
+    border-right:1px solid #ccc;
 }
 .last-views .item p {
     width:100%;
@@ -943,16 +960,19 @@ a.auto-collapse-expand {
 .last-views .item>a {
     display: block;
     height: 35px;
-    margin-bottom: 10px;
     overflow: hidden;
     padding:0 5px;
 }
 .last-views .item span {
-    background:#D8D9D9;
     padding:5px;
-    font-size:16px;
+    font-size:14px;
+    font-weight: bold;
     display:block;
     margin-bottom: 10px;
+}
+
+.last-views .item span i{
+    font-size: 13px;
 }
 /* last_views block done */
 
@@ -970,4 +990,8 @@ a.auto-collapse-expand {
     border-bottom: none;
     padding-bottom: 0;
     margin-bottom: 0;
+}
+
+.page-search .text-cont{
+    padding: 0 10px;
 }

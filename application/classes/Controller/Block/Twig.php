@@ -289,7 +289,7 @@ class Controller_Block_Twig extends Controller_Block
         $afterShortTitle = '...';
         $top = 5;
         foreach($objects as $index => $object) {
-            if ($index >= $top) {
+            if ($index > $top) {
                 break;
             }
             //prepare image

@@ -9,4 +9,8 @@
 	.table-result-info .banner_tr{border-bottom: none;}
 
 	.popup-window{width: 75%;}
+
+	.right-side{
+		position: static !important;
+	}
 }

@@ -2,4 +2,16 @@
 
 	.popup-window .service-cont{overflow-y:auto; max-height: 60vh;}
 
+	.last-views .item{
+		width: 25%;
+	}
+
+	.last-views .item:nth-child(5){
+		display: none;
+	}
+
+	.last-views .item:nth-child(4){
+		border-right: 1px solid #ccc;
+	}
+
 }

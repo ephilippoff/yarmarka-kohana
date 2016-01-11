@@ -150,7 +150,7 @@ define([
         },
 
         fixBlock: function(elem, offsetY, topY) {
-            if (elem.length == 0) return;
+            // if (elem.length == 0) return;
             var windowHeight = $(window).height(),
                 documentHeight = $(document).height(),
                 sidebar = $('.right-side'),
