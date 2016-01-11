@@ -93,6 +93,7 @@ class Object
 
 			$add->send_to_forced_moderation();
 
+			$add->send_message();
 			if (!$is_local) {
 				$add->send_external_integrations()
 					->send_message();
