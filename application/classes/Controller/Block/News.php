@@ -11,7 +11,7 @@
 		public function action_main_page() {
 
 			/* settings */
-			$shortTextLength = 100;
+			$shortTextLength = 150;
 			$shortTextAfter = '...';
 			$itemsPerCategory = 5;
 

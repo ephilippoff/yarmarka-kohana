@@ -1,12 +1,39 @@
-{% for item in data %}
-	<h1>{{ item.title }}</h1>
-	<ul>
-	{% for innerItem in item.items %}
-		<li>
-			{{ innerItem.date|date('d.m.Y') }}
-			<img src="{{ innerItem.image }}" />
-			<a href="{{ innerItem.url }}">{{ innerItem.title }}</a>
-		</li>
+<div class="title_block brt2 module">Новости</div>
+
+<div class="news_cat_block">
+	{% for item in data %}
+		<div class="row">
+			<div class="col-md-12">
+				<h2>{{ item.title }}</h2>
+				<div class="row">
+					{% for innerItem in item.items %}
+						{% if loop.index == 1 %}
+							<div class="col-md-6 clearfix main_cat_news">
+								<img src="{{ innerItem.image }}" />
+								<span class="date fs12">{{ innerItem.date|date('d.m') }}</span>
+								<a href="{{ innerItem.url }}">{{ innerItem.title|slice(0,80)}}...</a><br><br>
+								{{ innerItem.short_text }}
+								<div class="read_more">
+									<a href="{{ innerItem.url }}">Читать далее</a>
+								</div>
+							</div>
+						{% endif %}
+					{% endfor %}
+					<div class="col-md-6">
+						<div class="row">
+							{% for innerItem in item.items %}
+								{% if loop.index != 1 %}
+									<div class="col-md-12 other_cat_news">
+										<span class="date fs12">{{ innerItem.date|date('d.m') }}</span>
+										<a href="{{ innerItem.url }}">{{ innerItem.title|slice(0,80)}}...</a>
+									</div>
+								{% endif %}
+							{% endfor %}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<hr>
 	{% endfor %}
-	</ul>
-{% endfor %}
+</div>

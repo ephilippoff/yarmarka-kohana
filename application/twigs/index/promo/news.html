@@ -18,7 +18,7 @@
 					{% set current_date = NULL %}
 					{% for news in lastnews %}
 						<li>
-							<span class="fs12">{{news.date_expired|date('H:i')}}</span><a href="/newsline/{{news.date_expired|date('Y-m-d')}}#{{news.id}}" class="ml10">{{news.title|slice(0,60)}}...</a>
+							<span class="date fs12">{{news.date_expired|date('H:i')}}</span><a href="/newsline/{{news.date_expired|date('Y-m-d')}}#{{news.id}}" class="ml10">{{news.title|slice(0,60)}}...</a>
 						</li>
 					{% endfor %}
 				</ul>
