@@ -762,7 +762,7 @@ class Controller_Cart extends Controller_Template {
 		ORM::factory('Order_Log')->write($order_id, "notice", vsprintf("Поступило уведомление о платеже по заказу № %s. На сумму %s. Счет выставлен в старом движке c.yarmarka.biz", array($order_id, $sum) ) );
 
 		$robo = new Robokassa($order_id);
-		$robo->set_sum($order->sum);
+		$robo->set_sum($sum);
 		$sample = strtoupper($robo->create_result_sign());
 
 		ORM::factory('Order_Log')->write($order_id, "notice", vsprintf("Сравнение подписи. Подпись ПС: %s, Подпись лок: %s; Сумма ПС: %s, Сумма лок: %s", array($signature, $sample, $sum, $order->sum) ) );
