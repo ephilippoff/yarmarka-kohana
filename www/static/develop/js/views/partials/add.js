@@ -416,9 +416,9 @@ var mapView = Backbone.View.extend({
 
 
                 self.placemark = app.map.createPlacemark(coords, {
-                    style: _.extend(app.map.getIconSettings("house"), {
-                        draggable: true
-                    })
+                    style: _.extend(app.map.getIconSettings("house1"), {
+                       draggable: true
+                    }),
                 })
 
                 self.map.geoObjects.add(self.placemark);

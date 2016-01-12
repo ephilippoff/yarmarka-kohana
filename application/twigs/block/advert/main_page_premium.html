@@ -1,0 +1,9 @@
+<ul>
+{% for item in data %}
+	<li>
+		{{ item.price|number_format(0, ' ', ' ') }} Р
+		<img src="{{ item.image }}" />
+		<a href="{{ item.url }}">{{ item.title }}</a>
+	</li>
+{% endfor %}
+</ul>

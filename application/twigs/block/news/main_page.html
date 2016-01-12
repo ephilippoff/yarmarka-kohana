@@ -1,0 +1,12 @@
+{% for item in data %}
+	<h1>{{ item.title }}</h1>
+	<ul>
+	{% for innerItem in item.items %}
+		<li>
+			{{ innerItem.date|date('d.m.Y') }}
+			<img src="{{ innerItem.image }}" />
+			<a href="{{ innerItem.url }}">{{ innerItem.title }}</a>
+		</li>
+	{% endfor %}
+	</ul>
+{% endfor %}

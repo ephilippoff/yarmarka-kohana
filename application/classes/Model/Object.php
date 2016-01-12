@@ -16,6 +16,7 @@ class Model_Object extends ORM {
 		'contacts'			=> array('model' => 'Contact', 'through' => 'object_contacts'),
 		'user_messages'		=> array('model' => 'User_Messages', 'foreign_key' => 'object_id'),
 		'complaints'		=> array('model' => 'Complaint', 'foreign_key' => 'object_id'),
+		'data_list' => array('model' => 'Data_List', 'foreign_key' => 'object'),
 	);
 
 	public function change_tablename($name)
@@ -975,6 +976,47 @@ class Model_Object extends ORM {
 			$_balance->value_min = $_balance->value_min + intval($count);
 			$_balance->save();
 		}
+	}
+
+	public function moderate_ban_for_edit() {
+		if (!$this->loaded()) {
+			return;
+		}
+
+		$this->is_bad = 1;
+		$this->is_published = 0;
+		$this->moder_state = 1;
+		$this->save();
+
+	}
+
+	public function moderate_ban() {
+		if (!$this->loaded()) {
+			return;
+		}
+
+		$this->is_bad = 2;
+		$this->is_published = 0;
+		$this->moder_state = 1;
+		$this->save();
+
+	}
+
+	public function moderate_full_ban() {
+		if (!$this->loaded()) {
+			return;
+		}
+
+		$author = $this->author;
+		if (!$author) {
+			return;
+		}
+
+		DB::update('object')
+			->set(array('is_bad' => 2, 'active' => 0, 'is_published' => 0))
+			->where('id', 'IN', DB::select("id")->from("object")->where("author","=",$author) )
+			->execute();
+
 	}
 }
 

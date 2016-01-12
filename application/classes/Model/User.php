@@ -692,7 +692,10 @@ class Model_User extends Model_Auth_User {
 
 		ORM::factory('Object')
 				->where("author","=",$this->id)
-				->set("is_published", 0)
+				->set('is_bad', 2)
+				->set('active', 0)
+				->set('is_published', 0)
+				->set('moder_state', 1)
 				->update_all();
 	}
 
