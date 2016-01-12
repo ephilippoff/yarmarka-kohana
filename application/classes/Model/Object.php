@@ -16,6 +16,7 @@ class Model_Object extends ORM {
 		'contacts'			=> array('model' => 'Contact', 'through' => 'object_contacts'),
 		'user_messages'		=> array('model' => 'User_Messages', 'foreign_key' => 'object_id'),
 		'complaints'		=> array('model' => 'Complaint', 'foreign_key' => 'object_id'),
+		'data_list' => array('model' => 'Data_List', 'foreign_key' => 'object'),
 	);
 
 	public function change_tablename($name)

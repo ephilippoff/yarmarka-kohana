@@ -47,6 +47,10 @@ abstract class Controller_Template extends Controller {
 
 	public $body_class = '';
 
+	protected function debug($var) {
+		echo '<pre>'; var_dump($var); echo '</pre>';
+	}
+
     public function before()
 	{
 		parent::before();
@@ -107,6 +111,10 @@ abstract class Controller_Template extends Controller {
 		}
 
 		parent::after();
+	}
+
+	public function getService($name) {
+		return Services_Factory::instance($name);
 	}
 
 } // End template
