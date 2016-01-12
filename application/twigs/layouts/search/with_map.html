@@ -59,7 +59,13 @@
 	{% block templates %}
 		{{ parent() }}
 	{% endblock templates %}
-	
+	<script>
+	var mainBlockBottomY = $(document).height() - ($('.search_wrap').offset().top + $('.search_wrap').outerHeight());
+		$('.right-side').hcSticky({
+		stickTo: document,
+		bottomEnd: mainBlockBottomY
+	});
+	</script>
 {% endblock body %}
 
 {%block page_name%}search{% endblock page_name %}

@@ -151,68 +151,68 @@ define([
 
         fixBlock: function(elem, offsetY, topY) {
             // if (elem.length == 0) return;
-            var windowHeight = $(window).height(),
-                documentHeight = $(document).height(),
-                sidebar = $('.right-side'),
-                sidebarHeight = sidebar.height(),
-                sidebarTopY = sidebar.offset().top,
-                sidebarRightX = sidebar.offset().left,
-                sidebarWidth = sidebar.outerWidth(),
-                mainBlockBottomY = documentHeight - ($('.search_wrap').offset().top + $('.search_wrap').outerHeight()),
-                mainBlockTopY = $('.search_wrap').offset().top + $('.search_wrap').outerHeight(),
-                scrollBottom,
-                y0 = 0,
-                myScreen = window.innerWidth;
+            // var windowHeight = $(window).height(),
+            //     documentHeight = $(document).height(),
+            //     sidebar = $('.right-side'),
+            //     sidebarHeight = sidebar.height(),
+            //     sidebarTopY = sidebar.offset().top,
+            //     sidebarRightX = sidebar.offset().left,
+            //     sidebarWidth = sidebar.outerWidth(),
+            //     mainBlockBottomY = documentHeight - ($('.search_wrap').offset().top + $('.search_wrap').outerHeight()),
+            //     mainBlockTopY = $('.search_wrap').offset().top + $('.search_wrap').outerHeight(),
+            //     scrollBottom,
+            //     y0 = 0,
+            //     myScreen = window.innerWidth;
 
 
-            if (myScreen => 993) { // Если экран больше мобильного
-                $(window).on('scroll', function(){
-                    var y = $(document).scrollTop();
-                    scrollBottom = documentHeight - $(window).scrollTop() - windowHeight;
-                        if (y > y0) { //Если листаем вниз
-                            if (documentHeight - (sidebarTopY + sidebarHeight) >= scrollBottom) {
-                                if (sidebar.css('top') != 'auto' && sidebar.css('top') != '0px' && sidebar.css('position') == 'absolute') {
-                                    var sidebarTopY2 = sidebar.offset().top;
-                                    console.log(sidebarTopY2);
-                                    sidebar.css({
-                                        'position' : 'absolute',
-                                        'top' : sidebarTopY2+'px'
-                                    });
-                                }
-                                sidebar.css({
-                                    'position' : 'fixed',
-                                    'bottom' : '0px',
-                                    'top' : 'auto',
-                                    'left' : sidebarRightX+'px',
-                                    'width' : sidebarWidth+'px'
-                                });
-                                y0 = y;
-                                if (scrollBottom <= mainBlockBottomY) {
-                                    sidebar.css({'position' : 'absolute', 'bottom' : -(mainBlockTopY - windowHeight)+'px'});
-                                }
-                            }
-                        }
-                        else{ //Если листаем вверх
-                            if (y >= sidebarTopY) {
-                                var sidebarTopY1 = $('.right-side').offset().top;
-                                sidebar.css({
-                                    'position' : 'absolute',
-                                    'bottom' : 'auto',
-                                    'top' : sidebarTopY1+'px'
-                                });
-                                y0 = y;
-                                if (y <= sidebarTopY1) {
-                                    sidebar.css({
-                                        'position' : 'fixed',
-                                        'top' : '0px'
-                                    });
-                                }
-                            }else{
-                                sidebar.css('position', 'static');
-                            }
-                        }
-               });
-            }
+            // if (myScreen => 993) { // Если экран больше мобильного
+            //     $(window).on('scroll', function(){
+            //         var y = $(document).scrollTop();
+            //         scrollBottom = documentHeight - $(window).scrollTop() - windowHeight;
+            //             if (y > y0) { //Если листаем вниз
+            //                 if (documentHeight - (sidebarTopY + sidebarHeight) >= scrollBottom) {
+            //                     if (sidebar.css('top') != 'auto' && sidebar.css('top') != '0px' && sidebar.css('position') == 'absolute') {
+            //                         var sidebarTopY2 = sidebar.offset().top;
+            //                         console.log(sidebarTopY2);
+            //                         sidebar.css({
+            //                             'position' : 'absolute',
+            //                             'top' : sidebarTopY2+'px'
+            //                         });
+            //                     }
+            //                     sidebar.css({
+            //                         'position' : 'fixed',
+            //                         'bottom' : '0px',
+            //                         'top' : 'auto',
+            //                         'left' : sidebarRightX+'px',
+            //                         'width' : sidebarWidth+'px'
+            //                     });
+            //                     y0 = y;
+            //                     if (scrollBottom <= mainBlockBottomY) {
+            //                         sidebar.css({'position' : 'absolute', 'bottom' : -(mainBlockTopY - windowHeight)+'px'});
+            //                     }
+            //                 }
+            //             }
+            //             else{ //Если листаем вверх
+            //                 if (y >= sidebarTopY) {
+            //                     var sidebarTopY1 = $('.right-side').offset().top;
+            //                     sidebar.css({
+            //                         'position' : 'absolute',
+            //                         'bottom' : 'auto',
+            //                         'top' : sidebarTopY1+'px'
+            //                     });
+            //                     y0 = y;
+            //                     if (y <= sidebarTopY1) {
+            //                         sidebar.css({
+            //                             'position' : 'fixed',
+            //                             'top' : '0px'
+            //                         });
+            //                     }
+            //                 }else{
+            //                     sidebar.css('position', 'static');
+            //                 }
+            //             }
+            //    });
+            // }
         }
     });
 });
