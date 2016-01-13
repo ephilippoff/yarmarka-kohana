@@ -7,8 +7,9 @@ define([
     "views/partials/behaviors/services",
     "views/partials/behaviors/ads",
     "gisMap",
-    'modules/writeToAuthor/main'
-], function (templates, FavouriteBehavior, SearchBehavior, OControlBehavior, ServicesBehavior, AdsBehavior, gisMap, WriteToAuthor) {
+    'modules/writeToAuthor/main',
+    'modules/complain/main'
+], function (templates, FavouriteBehavior, SearchBehavior, OControlBehavior, ServicesBehavior, AdsBehavior, gisMap, WriteToAuthor, Complain) {
     "use strict";
 
 
@@ -90,6 +91,14 @@ define([
             var $temp = this.$el.find('[data-role=writeToAuthor]');
             if ($temp.length) {
                 new WriteToAuthor({
+                    el: $temp
+                }).render();
+            }
+
+            /* initialize complain widget */
+            $temp = this.$el.find('[data-role=complain]');
+            if ($temp.length) {
+                new Complain({
                     el: $temp
                 }).render();
             }
