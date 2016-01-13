@@ -61,9 +61,9 @@ define([
         },
 
         showMenu: function() {
-            if (this.visible && this.$('[data-link]').length) {
-                window.location = this.$('[data-link]').data('link');
-            }
+            // if (this.visible && this.$('[data-link]').length) {
+            //     window.location = this.$('[data-link]').data('link');
+            // }
             var s = this;
             if (this.activateTimer) clearTimeout(this.activateTimer);
             this.activateTimer = setTimeout(function(){
