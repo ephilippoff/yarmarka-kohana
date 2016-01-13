@@ -4,12 +4,12 @@
 
 		protected function getSubjects() {
 			return array(
-					array( 'id' => 0, 'title' => 'Неправильные контакты' ),
-					array( 'id' => 1, 'title' => 'Объявление устарело' ),
-					array( 'id' => 2, 'title' => 'Оскорбительное содержание' ),
-					array( 'id' => 3, 'title' => 'Мошенничество' ),
-					array( 'id' => 4, 'title' => 'Нарушение закона' ),
-					array( 'id' => 5, 'title' => 'Другое' ),
+					array( 'id' => 1, 'title' => 'Неправильные контакты' ),
+					array( 'id' => 2, 'title' => 'Объявление устарело' ),
+					array( 'id' => 3, 'title' => 'Оскорбительное содержание' ),
+					array( 'id' => 4, 'title' => 'Мошенничество' ),
+					array( 'id' => 5, 'title' => 'Нарушение закона' ),
+					array( 'id' => 6, 'title' => 'Другое' ),
 				);
 		}
 
