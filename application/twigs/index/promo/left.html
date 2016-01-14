@@ -1,84 +1,39 @@
-{% set theme_class = 'crimson-theme' %}
-<div class="{{theme_class}} module br2" >
-	<div class="menu-cont2 brt2">
-		<div class="row">
-			<div class="col-md-12 clearfix">
-			<span class="menu-item left"><span class="menu-item-cont nobg">Объявления</span></span>
-				{#<span class="menu-item right"><span class="menu-item-cont"><i class="fa fa-question-circle mr3"></i>Что нового?</span></span>#}
+<div class="row">
+	<div class="col-md-12 col-sm-7 col-xs-12 left_block">
+		{% set theme_class = 'crimson-theme' %}
+		<div class="{{theme_class}} module br2 view-container" >
+			<div class="menu-cont2 brt2">
+				<div class="row">
+					<div class="col-md-12 clearfix">
+						<span class="menu-item left hidden-xs"><span class="menu-item-cont nobg">Объявления</span></span>
+						<!-- Другой текст для мобильных -->
+						<span class="menu-item left hidden-sm hidden-lg hidden-md"><span class="menu-item-cont nobg">Купоны</span></span>
+					</div>
+				</div>			
 			</div>
-		</div>			
-	</div>
-	<div class="view-container brb2">
-		<div class="breadcrumbs-cont module">						
-			<h1 class="captionbold">Бесплатные объявления {% if last_city %}{{ cities[last_city.seo_name] }}{% endif %}</h1>
-		</div>
-		<div class="subcategories-cont module">
-			<div class="row">
-				<div class="col-md-12 items-cont">
-				<ul class="pl10">
-					<li class="mb10">
-						<a class="fs20 bold" href="{{ url('glavnaya-kategoriya') }}">Все объявления</a>
-						{% set count = link_counters[s_host ~ '/glavnaya-kategoriya'] %}
-						{% if (count) %}
-							<span class="count">{{count}}</span>
-						{% endif %}
-					</li>
-					<li class="mb5">
-						<a class="fs20 bold" href="{{ url('rabota') }}">Работа</a>
-						{% set count = link_counters[s_host ~ '/rabota'] %}
-						{% if (count) %}
-							<span class="count">{{count}}</span>
-						{% endif %}
-					</li>
-					{% for category in categories.childs if category.parent_id == 16 %}
-						<li class="mb5 pl20">
-						<a href="{{ url('rabota/' ~ category.seo_name) }}">{{ category.title }}</a>
-						</li>
-					{% endfor %}
-					<li class="mb5">
-						<a class="fs20 bold" href="{{ url('avtotransport') }}">Авто</a>
-						{% set count = link_counters[s_host ~ '/avtotransport'] %}
-						{% if (count) %}
-							<span class="count">{{count}}</span>
-
-						{% endif %}
-					</li>
-					{% for category in categories.childs if category.parent_id == 14 %}
-						<li class="mb5 pl20">
-							<a href="{{ url('avtotransport/' ~ category.seo_name) }}">{{ category.title }}</a>
-						</li>
-					{% endfor %}
-					
-					<li class="mb5">
-						<a class="fs20 bold" href="{{ url('nedvizhimost') }}">Недвижимость</a>
-						{% set count = link_counters[s_host ~ '/nedvizhimost'] %}
-						{% if (count) %}
-							<span class="count">{{count}}</span>
-						{% endif %}
-					</li>
-
-					{% for category in categories.childs if category.parent_id == 2 %}
-						<li class="mb5 pl20">
-							<a href="{{ url('nedvizhimost/' ~ category.seo_name) }}">{{ category.title }}</a>
-						</li>
-					{% endfor %}
-
-					<li class="mb10">
-						<a class="fs20 bold" href="/search_category">Все категории</a>
-					</li>
-				</ul>
-				<br>
-				{#
-				<ul>
-					<li>
-						Горячая линия приема бесплатных объявлений: <br><span class="fs20">8 800 200-77-49</span>
-					</li>
-					<li>
-						По вопросам рекламы: <br><span class="fs20">8 800 200-77-49</span>
-					</li>
-				</ul>#}
-			</div>
-		</div>
+			{% if staticMainMenu %}
+				{{ requestblock('block_twig/mainmenu', {'city_id': city.id, 'staticMainMenu': staticMainMenu}) }}
+			{% endif %}
 		</div>
 	</div>
+	{% include 'index/promo/kupon' %}
 </div>
+
+<script>
+	$().ready(function(){
+		if ($(window).innerWidth() <= 992 && $(window).innerWidth() > 768) {
+			var height = $('.kupons_block').height();
+			height+=2;
+			$('.left_block>.view-container').css({
+				'min-height':height+'px',
+				'background': 'url(/static/develop/images/themes/crimson-theme/Soft-Dot-Mix-ver-10.png)',
+				'padding': '0px'
+			});
+		}else{
+			$('.left_block>.view-container').css({
+				'background': 'url(/static/develop/images/themes/crimson-theme/Soft-Dot-Mix-ver-10.png)',
+				'padding': '0px'
+			});
+		}
+	});
+</script>

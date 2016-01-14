@@ -82,6 +82,9 @@
 				{% include 'block/vk/comments_surgut' %}
 			</div>
 			{% include 'detail/similar' %}
+			<div class="detail_last_views">
+				{{ requestblock('block_twig/last_views', {}) }}
+			</div>
 		</aside>
 	</div>
 {% endblock rightside %}

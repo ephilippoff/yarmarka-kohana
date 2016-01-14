@@ -38,6 +38,8 @@ class Controller_Index extends Controller_Template {
             $twig->last_city = $last_city = ORM::factory('City', $twig->last_city_id)->get_row_as_obj();
         }
 
+        $twig->staticMainMenu = TRUE;
+
         $twig->months = Date::get_months_names();
 
          $search_query = Search::searchquery(
@@ -69,7 +71,6 @@ class Controller_Index extends Controller_Template {
             array("limit" => 7, "page" => 1, "order" => "date_expired")
         );
         $twig->lastnews = Search::getresult($search_query->execute()->as_array());
-
        
         $index_info = $this->get_index_info($last_city);
 
@@ -119,7 +120,6 @@ class Controller_Index extends Controller_Template {
             return Imageci::getSavePaths($item->filename);
         }, $attachments);
         $twig->promo_thumbnails = $promo_thumbnails;
-
         $this->response->body($twig);
     }
 

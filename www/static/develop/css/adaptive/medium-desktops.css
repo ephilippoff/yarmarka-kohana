@@ -14,4 +14,21 @@
 		border-right: 1px solid #ccc;
 	}
 
+	.photo_news_wrap{
+	    width: 25%;
+	}
+
+	ul li:last-child .photo_news_wrap{
+		display: none;
+	}
+
+	.third_cat_block .category-block{
+		width: 50%;
+		float: left;
+	}
+
+	.third_cat_block .category-block:nth-child(2n){
+		padding-left: 10px;
+	}
+
 }

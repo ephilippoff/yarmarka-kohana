@@ -78,7 +78,6 @@ class Controller_Block_Twig extends Controller_Block
     {
         $city_id = $this->request->post("city_id");
         $twig = Twig::factory('block/menu/main');
-
         $categories = ORM::factory('Category')->get_categories_extend(array(
             "with_child" => TRUE, 
             "with_ads" => TRUE, 
@@ -89,6 +88,7 @@ class Controller_Block_Twig extends Controller_Block
         $twig->categories2l = $categories["childs"];
         $twig->parents_ids  = $categories["main_ids"];
         $twig->banners      = $categories["banners"];
+        $twig->staticMainMenu = $this->request->post("staticMainMenu");
 
         $this->response->body($twig);
     }
@@ -289,7 +289,7 @@ class Controller_Block_Twig extends Controller_Block
         $afterShortTitle = '...';
         $top = 5;
         foreach($objects as $index => $object) {
-            if ($index > $top) {
+            if ($index >= $top) {
                 break;
             }
             //prepare image

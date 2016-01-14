@@ -13,4 +13,32 @@
 	.right-side{
 		position: static !important;
 	}
+
+	.main_cat_news{
+		margin-bottom: 20px;
+	}
+
+	.kupon_wrap:last-child{
+		margin-bottom: 0;
+	}
+
+	.photo_news_wrap{
+	   display: none;
+	}
+
+	.table-result-info.style1 .td-1{
+		display: none;
+	}
+
+	.detail_last_views .last-views .item{
+	    width: 50%;
+	}
+
+	.detail_last_views .last-views .item:nth-child(n+3){
+	    display: none;
+	}
+
+	.last-views .item:nth-child(2){
+		border-right: 1px solid #ccc;
+	}
 }
