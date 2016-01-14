@@ -27,12 +27,18 @@
 					</div>
 					<button type="submit" class="button dib bg-color-blue white p10 br2 js-contacts-show" data-id="{{object.id}}">Показать контакты</button>
 					</form>
-					{% if isGuest %}
-						<div class="write-to-author unauthorized">
-							Чтобы отправить сообщение автору нужно <a href="/user/login?return={{ currentUri }}">Авторизоваться</a>
+					{% if object.source_id == 1 %}
+						{% if isGuest %}
+							<div class="write-to-author unauthorized">
+								Чтобы отправить сообщение автору нужно <a href="/user/login?return={{ currentUri }}">Авторизоваться</a>
+							</div>
+						{% else %}
+							<div data-role="writeToAuthor" data-id="{{ object.id }}" data-email="{{ userEmail }}" class="write-to-author"></div>
+						{% endif %}
+					{% elseif object.source_id == 2 %}
+						<div class="write-to-author impossible">
+							Объявление подано в печатную версию, связаться можно только по указанному телефону
 						</div>
-					{% else %}
-						<div data-role="writeToAuthor" data-id="{{ object.id }}" data-email="{{ userEmail }}" class="write-to-author"></div>
 					{% endif %}
 				</div>
 				<div class="col-md-6 col-sm-6">
