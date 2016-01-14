@@ -10,9 +10,14 @@ define([ 'underscore', 'backbone' ], function (_, Backbone) {
 				'<div class="mt10">Напишите автору объявления</div>'
 				+ '<div class="row">'
 					+ '<div class="col-md-12">'
-						+ '<textarea data-role="message"></textarea>'
+						+ '<textarea data-role="message"><%= message %></textarea>'
 					+ '</div>'
 				+ '</div>'
+				+ '<% if (is_job_vacancy) { %>'
+					+ '<div class="is-job-vacancy">'
+						+ 'Прикрепите свое <a href="#" data-role="select-cv">резюме</a> или <a href="#" data-role="create-cv">создайте</a> его на Ярмарке'
+					+ '</div>'
+				+ '<% } %>'
 				+ '<div>'
 					+ '<span style="white-space:nowrap;">Указанный при регистрации электронный адрес:</span><br />'
 					+ '<a href="#" data-role="email"></a><br />'
@@ -41,16 +46,23 @@ define([ 'underscore', 'backbone' ], function (_, Backbone) {
 		render: function () {
 
 			/* render template */
-			this.$el.html(this.template());
+			this.$el.html(this.template(this.model.toJSON()));
 
 			/* save references to ui elements */
 			this.$message = this.$('[data-role=message]');
 			this.$emailLink = this.$('[data-role=email]');
 
+			this.$('[data-role=create-cv]').attr('href', this.prepareCvUrl('create'));
+			this.$('[data-role=select-cv]').attr('href', this.prepareCvUrl('select'));
+
 			this.setUiEmail(this.model.get('email'));
 
 			return this.$el;
 
+		},
+
+		prepareCvUrl: function (mode) {
+			return '/detail/' + mode + '_cv?object_id=' + this.model.get('object_id'); 
 		},
 
 		/* api */

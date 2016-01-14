@@ -71,6 +71,9 @@ class Controller_Add extends Controller_Template {
 				$errors = new Obj($errors->error);
 			else {
 				$object_id = $errors->object_id;
+				if (Session::instance()->get('cv_mode') && $post_data['rubricid'] == 35 && isset($_GET['cv_mode']) && $_GET['cv_mode'] == 1) {
+					$this->redirect('/detail/use_cv?object_id=' . $object_id);
+				}
 				$this->redirect('/detail/'.$object_id."?afteradd=1");
 			}
 
@@ -85,6 +88,13 @@ class Controller_Add extends Controller_Template {
 				//'object_id'		=> (int)$this->request->query('object_id'),
 				'city_id'		=> (int)$this->request->param('city_id')
 			);
+		}
+
+		if (Session::instance()->get('cv_mode') == 1 && isset($_GET['cv_mode']) && $_GET['cv_mode'] == 1) {
+			if (!isset($params)) {
+				$params = array();
+			}
+			$params['rubricid'] = 35;
 		}
 
 		$form_data = new Form_Add($params, $is_post, $errors);
