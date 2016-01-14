@@ -26,7 +26,7 @@
 
 		protected function get_referer() {
 			//debug
-			return 'http://surgut.local.yarmarka.biz/avtotransport/legkovye-avtomobili/prodazha-acura-el-1977gv-akpp-vnedorozhnik-4036745.html';
+			//return 'http://surgut.local.yarmarka.biz/avtotransport/legkovye-avtomobili/prodazha-acura-el-1977gv-akpp-vnedorozhnik-4036745.html';
 
 			return $_SERVER['HTTP_REFERER'];
 		}
