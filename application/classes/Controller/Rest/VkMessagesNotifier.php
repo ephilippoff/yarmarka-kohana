@@ -44,43 +44,48 @@
 
 		public function action_submit() {
 
-			$this->check_params();
-			$this->check_sign();
+			try {
+				$this->check_params();
+				$this->check_sign();
 
-			$object_id = $this->get_object_id();
+				$object_id = $this->get_object_id();
 
-			/* search object */
-			$object = ORM::factory('Object', $object_id);
-			if (!$object->loaded()) {
-				throw new Exception('Object not found!');
+				/* search object */
+				$object = ORM::factory('Object', $object_id);
+				if (!$object->loaded()) {
+					throw new Exception('Object not found!');
+				}
+
+				/* get author */
+				$author = ORM::factory('User', $object->author);
+				if (!$author->loaded()) {
+					throw new Exception('Author not found!');
+				}
+
+				/* send email */
+				if (!$author->email) {
+					throw new Exception('Author have no email!');
+				}
+				
+
+				$message = "По вашему объявлению был добавлен новый комментарий вконтакте. \r\n";
+				$message .= "Ссылка на объявление: " . $object->get_full_url() . "\r\n";
+				$message .= "Дата коментария: " . date('d.m.Y H:i:s', strtotime($this->post->date)) . "\r\n";
+				$message .= 'Текст комментария:' . "\r\n";
+				$message .= '-----------------------------------------' . "\r\n";
+				$message .= htmlspecialchars($this->post->last_comment) . "\r\n";
+				$message .= '-----------------------------------------' . "\r\n";
+
+				/* prepare subject */
+				$subject = 'У Вас сообщение на «Ярмарка-онлайн»';
+
+				Email::send( $author->email, Kohana::$config->load('email.default_from'), $subject, $message, false);
+
+				$this->json = $this->post;
+			} catch (Exception $e) {
+				var_dump($e->getMessage());
+				die;
 			}
-
-			/* get author */
-			$author = ORM::factory('User', $object->author);
-			if (!$author->loaded()) {
-				throw new Exception('Author not found!');
-			}
-
-			/* send email */
-			if (!$author->email) {
-				throw new Exception('Author have no email!');
-			}
-			
-
-			$message = "По вашему объявлению был добавлен новый комментарий вконтакте. \r\n";
-			$message .= "Ссылка на объявление: " . $object->get_full_url() . "\r\n";
-			$message .= "Дата коментария: " . date('d.m.Y H:i:s', strtotime($this->post->date)) . "\r\n";
-			$message .= 'Текст комментария:' . "\r\n";
-			$message .= '-----------------------------------------' . "\r\n";
-			$message .= htmlspecialchars($this->post->last_comment) . "\r\n";
-			$message .= '-----------------------------------------' . "\r\n";
-
-			/* prepare subject */
-			$subject = 'У Вас сообщение на «Ярмарка-онлайн»';
-
-			Email::send( $author->email, Kohana::$config->load('email.default_from'), $subject, $message, false);
-
-			$this->json = $this->post;
 
 		}
 
