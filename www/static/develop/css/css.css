@@ -199,7 +199,7 @@ select{background-color: #FFFFFF;border: 1px solid #C3C3C3;padding:2px 10px;heig
 .yashare-auto-init .b-share__link{box-sizing:content-box}
 /* end hacks */
 
-.menu-cont1{line-height: 25px; border-bottom: 1px solid #2D5169;}
+.menu-cont1{line-height: 25px; border-bottom: 1px solid #ccc;}
 .menu-cont1 .menu-item{}
 .menu-cont1 .menu-item:hover{ }
 .menu-cont1 .cont1 .menu-item{float: left; margin-right: 40px;}

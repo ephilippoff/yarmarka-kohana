@@ -9,7 +9,6 @@
 		}
 
 		public function action_main_page() {
-
 			/* settings */
 			$shortTextLength = 150;
 			$shortTextAfter = '...';
@@ -72,6 +71,8 @@
 						'url' => '/novosti/' . $item['seo_name'] . '-' . $item['id'] . '.html'
 					);
 			}
+
+			
 
 			//echo '<pre>'; var_dump($newsGroups); echo '</pre>';
 

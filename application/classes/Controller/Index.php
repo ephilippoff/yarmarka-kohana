@@ -31,7 +31,7 @@ class Controller_Index extends Controller_Template {
 
     public function action_index() {
         $twig = Twig::factory('index/index');
-
+        
         $twig->last_city_id = $this->last_city_id;
         $last_city = NULL;
         if ($twig->last_city_id) {

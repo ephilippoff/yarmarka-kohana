@@ -20,12 +20,16 @@
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-md-3">
+			<div class="col-md-3 col-md-push-9">
+				{% include 'index/promo/news' %}
+				{% include 'index/informers' %}
+			</div>
+			<div class="col-md-3 col-md-pull-3">
 				{% include 'index/promo/left' %}
 			</div>
-			<div class="col-md-9">
+			<div class="col-md-6 col-md-pull-3">
 				<div class="row">
-					<div class="col-md-9">
+					<div class="col-md-12">
 						{% include 'index/promo/photo_news' %}
 						{{ requestblock('block_news/main_page') }}
 						<div class="banner module {zoneID: 18 }"></div>
@@ -41,10 +45,6 @@
 						<div class="bg-color-whitesmoke p20 br2">
 							Сайт «Ярмарка в Сургуте» — онлайн версия газеты бесплатных объявлений «Ярмарка-Сургут». Найти свой автомобиль, квартиру или работу из тысяч предложений как никогда легко и просто! Воспользуйтесь поисковыми возможностями для выбора только тех предложений, которые интересны Вам. Разместив информацию о своем товаре или услуге Вы мгновенно донесете её до тысяч посетителей сайта. Здесь Вы также найдете объявления, которые были опубликованы газете “Ярмарка-Сургут”, а это более 10000 объявлений еженедельно.
 						</div>
-					</div>
-					<div class="col-md-3">
-						{% include 'index/promo/news' %}
-						{% include 'index/informers' %}
 					</div>
 				</div>
 				<div class="row">

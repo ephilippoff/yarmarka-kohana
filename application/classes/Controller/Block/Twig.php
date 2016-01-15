@@ -194,7 +194,6 @@ class Controller_Block_Twig extends Controller_Block
         foreach ($elements as $item) {
            $item->count = $link_counters->{$domain->get_domain()."/$category_name/".$item->url};
         }
-
         return $elements;
     }
 

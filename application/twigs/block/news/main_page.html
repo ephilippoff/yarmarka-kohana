@@ -13,9 +13,6 @@
 								<span class="date fs12">{{ innerItem.date|date('d.m') }}</span>
 								<a href="{{ innerItem.url }}">{{ innerItem.title|slice(0,80)}}...</a><br><br>
 								{{ innerItem.short_text }}
-								<div class="read_more">
-									<a href="{{ innerItem.url }}">Читать далее</a>
-								</div>
 							</div>
 						{% endif %}
 					{% endfor %}
@@ -30,6 +27,7 @@
 								{% endif %}
 							{% endfor %}
 						</div>
+						<a href="/{{ item.url }}" class="hidden">Читать далее</a>
 					</div>
 				</div>
 			</div>
