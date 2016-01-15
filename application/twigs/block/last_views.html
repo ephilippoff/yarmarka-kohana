@@ -1,21 +1,57 @@
+{% if horizontalView %}
+<div class="module">
+	<div class="title_block brt2">
+		<span>Вы просматривали</span>
+	</div>
+	<!-- Первые три -->
+	<table class="table-result-info style1 last_views_table">
+		<tbody>
+			{% for item in items %}
+				{% if loop.index <= 3 %}
+					{% include 'detail/mini/default_tablerow_last_views' %}
+				{% endif %}
+			{% endfor %}
+		</tbody>
+	</table>
+	<!-- Остальные -->
+	<table class="table-result-info style1 last_views_table more_views" style="display:none;">
+		<tbody>
+			{% for item in items %}
+				{% if loop.index > 3 %}
+					{% include 'detail/mini/default_tablerow_last_views' %}
+				{% endif %}
+			{% endfor %}
+		</tbody>
+	</table>
+	<!-- кнопка еще -->
+	<div class="title_block more_button brb2" style="text-align:center;" onclick="$('.more_views').fadeIn(600); $(this).hide();">
+		<i class="fa fa-chevron-down"></i>
+	</div>
+</div>
+{% else %}
 <div class="last-views">
 	<div class="title_block brt2">Вы недавно смотрели</div>
 	<div class="items">
-	{% for item in items %}
-		<div class="item">
-			<p>
-				<a href="{{ item.url }}" rel="nofollow">
-					<img 
+		{% for item in items %}
+			{% if loop.index <= 5 %}
+			<div class="item">
+				<p>
+					<a href="{{ item.url }}" rel="nofollow">
+						<img 
 						src="{{ item.image.url }}"
 						width="{{ item.image.width }}"
 						height="{{ item.image.height }}"
 						alt="{{ item.image.alt }}"
 						title="{{ item.image.title }}" />
-				</a>
-			</p>
-			<a href="{{ item.url }}" rel="nofollow">{{ item.shortTitle }}</a>
-			<span>{{ item.price|number_format(0, ' ', ' ') }} <i class="fa fa-rub"></i></span>
-		</div>
-	{% endfor %}
+					</a>
+				</p>
+				<a href="{{ item.url }}" rel="nofollow">{{ item.shortTitle }}</a>
+				{% if item.price > 0 %}
+					<span>{{ item.price|number_format(0, ' ', ' ') }} <i class="fa fa-rub"></i></span>
+				{% endif %}
+			</div>
+			{% endif %}
+		{% endfor %}
 	</div>
 </div>
+{% endif %}

@@ -287,7 +287,7 @@ class Controller_Block_Twig extends Controller_Block
         $viewData = array();
         $shortTitleLength = 40;
         $afterShortTitle = '...';
-        $top = 5;
+        $top = 8;
         foreach($objects as $index => $object) {
             if ($index >= $top) {
                 break;
@@ -318,7 +318,8 @@ class Controller_Block_Twig extends Controller_Block
                         : $object->title,
                     'image' => $image,
                     'price' => $object->price,
-                    'url' => $object->get_url()
+                    'url' => $object->get_url(),
+                    'category' => $object->category
                 );
 
             $viewData []= $item;
@@ -330,6 +331,7 @@ class Controller_Block_Twig extends Controller_Block
         //initialize view
         $twig = Twig::factory('block/last_views');
         $twig->items = $viewData;
+        $twig->horizontalView = $this->request->post("horizontalView");
         $this->response->body($twig);
     }
 }
