@@ -15,10 +15,10 @@
 		protected function check_sign() {
 
 			//debug
-			return;
+			//return;
 
 			$app_secret = Kohana::$config->load('common.vk_app_secret');
-			$signCalculated = md5(implode('', array( $app_secret, $date, $num, $last_comment )));
+			$signCalculated = md5(implode('', array( $app_secret, $this->post->date, $this->post->num, $this->post->last_comment )));
 			if ($signCalculated != $this->post->sign) {
 				throw new Exception('Bad sign');
 			}
