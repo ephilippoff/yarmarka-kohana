@@ -1,5 +1,8 @@
 <div class="filters-cont tab-filter clearfix module js-filters" style="display:none;">
 	<form method="GET" action="{{category_url}}" class="js-filters-form">
+		{% if search_text %}
+			<input type="hidden" name="search" value="{{ search_text }}" />
+		{% endif %}
 		<div class="js-filters-cont"></div>
 		<div class="param js-filters-static">
 			<div class="mt10">
