@@ -5,8 +5,9 @@ define([
     "views/partials/behaviors/favourite",
     "views/partials/behaviors/search",
     "views/partials/behaviors/ads",
-    "base/utils"
-], function (Marionette, templates, FavouriteBehavior, SearchBehavior, AdsBehavior, utils) {
+    "base/utils",
+    'modules/subscription/main'
+], function (Marionette, templates, FavouriteBehavior, SearchBehavior, AdsBehavior, utils, SubscriptionModule) {
     "use strict";
 
     return Marionette.LayoutView.extend({
@@ -86,6 +87,14 @@ define([
             
 
             this.citySelect();
+
+            /* initialize subscriptions module */
+            var $temp = $('[data-role=subscription-module]');
+            if ($temp.length) {
+                new SubscriptionModule({
+                    el: $temp
+                });
+            }
         },
 
         citySelect: function() {
