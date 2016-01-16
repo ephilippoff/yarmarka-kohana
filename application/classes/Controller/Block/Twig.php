@@ -40,7 +40,7 @@ class Controller_Block_Twig extends Controller_Block
         $theme_class = $this->request->post("theme_class");
 
         $twig = Twig::factory('block/header/adslinkline');
-        $twig->imagelinks = $this->adslinkline($city_id, $category_id, "image");
+        $twig->imagelinks = $this->adslinkline($city_id, $category_id, "image", 4);
         $twig->textlinks = $this->adslinkline($city_id, $category_id, "text");
         $twig->theme_class = $theme_class;
         $twig->info_link = "/ourservices/kontekstnaya-reklama";
@@ -95,7 +95,7 @@ class Controller_Block_Twig extends Controller_Block
 
     ////// Реализация содержимого блоков
 
-    public function adslinkline($city_id = NULL, $category_id = NULL, $type = "image")
+    public function adslinkline($city_id = NULL, $category_id = NULL, $type = "image", $count = NULL)
     {
         $reklama = ORM::factory('Reklama')
                         ->where(DB::expr('CURRENT_DATE'), '>=', DB::expr('start_date') )
@@ -114,9 +114,23 @@ class Controller_Block_Twig extends Controller_Block
             "image" => array(2,3)
         );
 
-        $reklama =  $reklama->where("type", "IN", $types[$type]);
+        $reklama = $reklama->where("type", "IN", $types[$type]);
+        $reklama =  $reklama->cached(Date::HOUR)->getprepared_all();
 
-        return $reklama->cached(Date::HOUR)->getprepared_all();
+        if ($count) {
+
+            foreach ($reklama as $item) {
+                $item->k = (($item->priority) ? $item->priority : 1) * rand(2, 100);
+
+            }
+            uasort($reklama, function($a,$b) {
+                return $a->k < $b->k;
+            });
+
+          
+        }
+
+        return $reklama;
     }
 
     public static function kupon_categories($params = NULL)
