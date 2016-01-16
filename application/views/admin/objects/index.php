@@ -221,10 +221,12 @@ function obj_selection(src, obj_id)
 	<!-- expired filter done -->
 	<!-- filters done -->
 
+	<?=Form::select('without_attribute_id', array('' => '--')+$attributes, Arr::get($search_filters, 'without_attribute'), array('class' => 'span2'))?>
+
 	<input type="submit" name="" value="Filter" class="btn btn-primary">
 	<input type="reset" name="" value="Clear" class="btn" onclick="document.location='/khbackend/objects';">
 </form>
-
+<?php echo Debug::vars($attributes);?>
 <?php if (isset($author) AND $author->loaded()) : ?>
 <div class="alert">
 	Объявления отфильтрованы по пользователю <strong><?=$author->fullname?></strong>

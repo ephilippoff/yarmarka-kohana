@@ -133,6 +133,11 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 			
 		}
 
+		if ($filters_enable AND $without_attribute_id = intval($this->request->query('without_attribute_id')))
+		{
+			$search_filters["without_attribute"] = $without_attribute_id;
+		}
+
 		if ($filters_enable AND $source = intval($this->request->query('source')) )
 		{
 			$search_filters["source"] = $source;
@@ -155,7 +160,7 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 							)
 					),
 				'text' => array( 'label' => 'Текст', 'value' => '', 'pushProperty' => 'user_text' ),
-				'expired' => array( 'label' => 'Отложенные', 'value' => NULL, 'pushProperty' => 'expirationInverse' )
+				'expired' => array( 'label' => 'Отложенные', 'value' => NULL, 'pushProperty' => 'expirationInverse' ),
 			);
 
 		//process user values
@@ -270,6 +275,15 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 			->cached(Date::WEEK)
 			->find_all()
 			->as_array('id', 'title');
+
+		$this->template->attributes = ORM::factory('Attribute')
+			->where('type',"=","list")
+			->order_by('seo_name')
+			->cached(Date::WEEK)
+			->find_all()
+			->as_array('id', 'seo_name');
+
+
 
 		$this->template->search_filters = $search_filters;
 	}
