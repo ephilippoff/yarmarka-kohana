@@ -797,6 +797,7 @@ class Form_Add  {
 
 	function Additional()
 	{
+		$object 	= $this->object;
 		$category_id 	= $this->category_id;
 		$errors 		= $this->errors;
 		$user = Auth::instance()->get_user();
@@ -822,7 +823,7 @@ class Form_Add  {
 			if ($user)
 			{
 				$orginfo_data = ORM::factory('User_Settings')
-								->get_group($user->id, "orginfo");
+								->get_group(($this->_edit) ? $object->author_company_id: $user->id, "orginfo");
 				foreach ($orginfo_data as $key => $data) {
 					$values["additional_".$key] = $data;
 				}
