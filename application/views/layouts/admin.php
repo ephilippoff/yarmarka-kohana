@@ -104,6 +104,7 @@
 							<ul class="dropdown-menu">
 								<li><a href="<?=URL::site('khbackend/category/index')?>">List</a></li>
 								<li><a href="<?=URL::site('khbackend/category/relations')?>">Настройка атрибутов</a></li>
+								<li><a href="<?=URL::site('khbackend/category/structure')?>">Настройка меню</a></li>
 							</ul>
 						</li>
 						<?php endif; ?>
