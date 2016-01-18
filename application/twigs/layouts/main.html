@@ -11,7 +11,7 @@
         <link rel="shortcut icon" href="{{ staticfile("images/favicon.ico") }}">
         {% if show_canonical %}
             {% if show_canonical_simple %}
-                <link rel="canonical" href="{{ canonical_url }}">
+                <link rel="canonical" href="{{ full_canonical_url }}">
             {% else %}
                 <link rel="canonical" href="{{ url(canonical_url) }}" />
             {% endif %}

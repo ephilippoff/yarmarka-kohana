@@ -254,7 +254,7 @@ class Controller_Search extends Controller_Template {
             $search_info->show_canonical = true;
             $bIsHttps = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'];
             $sCanonicalUrlPrefix = 'http' . ($bIsHttps ? 's' : '') . '://' . $_SERVER['HTTP_HOST'] . '/';
-            $search_info->canonical_url = $sCanonicalUrlPrefix . $search_info->canonical_url;
+            $search_info->full_canonical_url = $sCanonicalUrlPrefix.$search_info->canonical_url;
             $search_info->show_canonical_simple = true;
         //}
 

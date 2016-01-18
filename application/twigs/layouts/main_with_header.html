@@ -21,7 +21,7 @@
 			{{ requestblock('block_twig/mainmenu', {'city_id': city.id}) }}
 		</script>
 		<script id="template-citymenu" type="text/template">
-			{{ requestblock('block_twig/othercities', {'city_id': city.id}) }}
+			{{ requestblock('block_twig/othercities', {'city_id': city.id, 'canonical_url': canonical_url}) }}
 		</script>
 	{% endblock templates %}
 {% endblock body %} 

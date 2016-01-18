@@ -75,9 +75,9 @@ class Twig_Functions
 		return new Obj($array);
 	}
 
-	public static function domain($domain_str, $url_str, $protocol_str = "http://")
+	public static function domain($domain_str, $url_str, $protocol_str = "http://", $old = FALSE)
 	{
-		return Domain::get_domain_by_city($domain_str, $url_str, $protocol_str);
+		return ($old) ? Domain::get_domain_by_city_old($domain_str, $url_str, $protocol_str) : Domain::get_domain_by_city($domain_str, $url_str, $protocol_str);
 	}
 
 	public static function sameUrlOnAnotherDomain($domain, $protocol_str = "http://") {

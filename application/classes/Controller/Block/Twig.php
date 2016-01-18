@@ -56,6 +56,7 @@ class Controller_Block_Twig extends Controller_Block
         if ($city_id)
             $cities = $cities->where("id","<>",$city_id);
         $twig->cities = $cities->cached(Date::WEEK)->getprepared_all();
+        $twig->canonical_url = $this->request->post("canonical_url");
         $this->response->body($twig);
     }
 
