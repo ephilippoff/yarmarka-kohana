@@ -7,8 +7,9 @@ define([
     "views/partials/behaviors/services",
     "views/partials/behaviors/ads",
     "gisMap",
-    'modules/writeToAuthor/main'
-], function (templates, FavouriteBehavior, SearchBehavior, OControlBehavior, ServicesBehavior, AdsBehavior, gisMap, WriteToAuthor) {
+    'modules/writeToAuthor/main',
+    'modules/vkMessagesNotifier/main'
+], function (templates, FavouriteBehavior, SearchBehavior, OControlBehavior, ServicesBehavior, AdsBehavior, gisMap, WriteToAuthor, VkMessagesNotifier) {
     "use strict";
 
 
@@ -92,6 +93,11 @@ define([
                 new WriteToAuthor({
                     el: $temp
                 }).render();
+            }
+
+            /* initialize vk messages notifier */
+            if (typeof(VK) !== 'undefined') {
+                new VkMessagesNotifier();
             }
         },
 
