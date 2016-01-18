@@ -109,6 +109,7 @@ define([
             /* initialize vk messages notifier */
             if (typeof(VK) !== 'undefined') {
                 new VkMessagesNotifier();
+            }
 
             /* initialize complain widget */
             $temp = this.$el.find('[data-role=complain]');
