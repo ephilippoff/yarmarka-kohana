@@ -19,14 +19,17 @@
 
 		public function action_save_confirm() {
 
+			if (Auth::instance()->get_user() == NULL) {
+				throw new Exception('get_user() == NULL');
+			}
+
 			$parsed_referer = $this->get_parsed_referer();
 			$parsed_query = array();
 			parse_str($parsed_referer['query'], $parsed_query);
 
-			$info = Subscription_Manage::get_subscription_info_by_url($parsed_referer['path'], $parsed_query);
+			$this->post->info = Subscription_Manage::get_subscription_info_by_url($parsed_referer['path'], $parsed_query);
 
 			$this->json = $this->post;
-			$this->json->info = $info;
 			
 		}
 

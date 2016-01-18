@@ -1,7 +1,8 @@
-define([ 'jquery', 'underscore', 'backbone', './models/state', './views/initial' ], function ($, _, Backbone, StateModel, InitialView) {
+define([ 'jquery', 'underscore', 'backbone', './models/state', './views/initial', './views/saveConfirm' ], function ($, _, Backbone, StateModel, InitialView, SaveConfirmView) {
 
 	var state2viewCtor = {
-		'initial': InitialView
+		'initial': InitialView,
+		'saveConfirm': SaveConfirmView
 	};
 
 	return Backbone.View.extend({
