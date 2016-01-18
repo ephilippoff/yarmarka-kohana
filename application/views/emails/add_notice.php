@@ -39,11 +39,11 @@
 			</td></tr>			
 			
 			<tr><td style="line-height: 0;" colspan="2">&nbsp;<img height="10" title="" alt="" src="data:image/gif;base64,R0lGODlhAQABAJEAAAAAAP///////wAAACH5BAEAAAIALAAAAAABAAEAAAICVAEAOw%3D%3D"></td></tr>
-			<tr><td colspan="2" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;"><a style="color: #d44234;" href="<?=$object->get_url()?>">Посмотреть объявление</a></td></tr>
+			<tr><td colspan="2" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;"><a style="color: #d44234;" href="<?=$object->get_full_url()?>">Посмотреть объявление</a></td></tr>
 			
 			<tr><td style="line-height: 0;" colspan="2">&nbsp;<img height="10" title="" alt="" src="data:image/gif;base64,R0lGODlhAQABAJEAAAAAAP///////wAAACH5BAEAAAIALAAAAAABAAEAAAICVAEAOw%3D%3D"></td></tr>
 	
-			<tr><td colspan="2" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;"><a style="color: #d44234;" href="<?=CI::site('user/edit_ad/'.$object->id)?>">Редактировать объявление</a></td></tr>			
+			<tr><td colspan="2" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;"><a style="color: #d44234;" href="<?=$object->get_edit_url()?>">Редактировать объявление</a></td></tr>			
 			<tr><td style="line-height: 0;" colspan="2">&nbsp;<img height="10" title="" alt="" src="data:image/gif;base64,R0lGODlhAQABAJEAAAAAAP///////wAAACH5BAEAAAIALAAAAAABAAEAAAICVAEAOw%3D%3D"></td></tr>
 						
 			<tr><td colspan="2" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;line-height: 15px;">Рекомендуем воспользоваться сервисами, чтобы сделать объявление более эффективным.</td></tr>	
