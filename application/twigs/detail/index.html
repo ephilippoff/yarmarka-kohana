@@ -70,7 +70,6 @@
 			</div>
 		{% endif %}
 		{% include 'detail/photo' %}
-		{{ requestblock('block_twig/last_views', {}) }}
 	</div>
 {% endblock %}
 
@@ -83,6 +82,7 @@
 			</div>
 			{% include 'block/vk/comments_surgut' %}
 			{% include 'detail/similar' %}
+			{{ requestblock('block_twig/last_views', { mode:'twig', 'page':1, 'perPage':5, 'showMore': true }) }}
 		</aside>
 	</div>
 {% endblock rightside %}

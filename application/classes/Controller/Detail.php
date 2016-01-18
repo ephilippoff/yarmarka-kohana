@@ -81,11 +81,9 @@ class Controller_Detail extends Controller_Template {
 		$twig->userEmail = $cUser->getEmail();
 
 		//add to last views
-		LastViews::instance()
-			->set($object->id)
-			->commit();
-
+		LastViews::instance()->set($object->id);
 		$this->response->body($twig);
+		LastViews::instance()->commit();
 	}
 
 	public function action_type89() {

@@ -13,6 +13,10 @@
 class Controller_Block_Twig extends Controller_Block
 {
 
+    protected $forceAllow = array(
+            'last_views'
+        );
+
     public function before()
     {
         parent::before();
@@ -273,29 +277,49 @@ class Controller_Block_Twig extends Controller_Block
     }
 
     public function action_last_views() {
-        $ids = LastViews::instance()->get();
+        $ids = array_reverse(LastViews::instance()->get());
+
+        $requestData = $this->request->is_ajax()
+            ? json_decode($this->request->body(), true)
+            : $this->request->post();
+
+        /* pagination */
+        $pagination = array(
+                'page' => (int) Arr::get($requestData, 'page', 1),
+                'perPage' => (int) Arr::get($requestData, 'perPage', 5),
+                'total' => count($ids)
+            );
+        $pagination['totalPages'] = ceil($pagination['total'] / $pagination['perPage']);
+        /* calculate offset and limit */
+        $offset = ($pagination['page'] - 1) * $pagination['perPage'];
+        $limit = $pagination['perPage'];
+
+        /* accept pagination */
+        $ids = array_slice($ids, $offset, $limit);
 
         //get objects from database
-        $objects = ORM::factory('Object')
-            ->where('object.id', 'in', $ids)
-            ->with_main_photo()
-            ->find_all();
+        $objects = count($ids)
+            ? ORM::factory('Object')
+                ->where('object.id', 'in', $ids)
+                ->with_main_photo()
+                ->find_all()
+            : array();
 
         //process db data
         $viewData = array();
-        foreach($objects as $object) {
+        $shortTitleLength = 40;
+        $afterShortTitle = '...';
+        foreach($objects as $index => $object) {
             //prepare image
             $image = array(
-                    'url' => URL::site('images/photo/no-photo.jpg'),
-                    'width' => 80,
-                    'height' => 80,
+                    'url' => URL::site('/static/develop/images/nophoto136x107.png'),
                     'alt' => 'photo',
                     'title' => ''
                 );
             if ($object->main_image_filename) {
-                list($width, $height) = Uploads::get_optimized_file_sizes($object->main_image_filename, '120x90', '106x106');
+                list($width, $height) = Uploads::get_optimized_file_sizes($object->main_image_filename, '208x208', '120x90', '106x106');
                 $image = array(
-                        'url' => Uploads::get_file_path($object->main_image_filename, '120x90'),
+                        'url' => 'http://yarmarka.biz' . Uploads::get_file_path($object->main_image_filename, '208x208'),
                         'width' => $width,
                         'height' => $height,
                         'alt' => '',
@@ -307,7 +331,11 @@ class Controller_Block_Twig extends Controller_Block
             $item = array(
                     'position' => array_search($object->id, $ids),
                     'title' => $object->title,
+                    'shortTitle' => mb_strlen($object->title) > $shortTitleLength 
+                        ? (mb_substr($object->title, 0, $shortTitleLength - strlen($afterShortTitle)) . $afterShortTitle)
+                        : $object->title,
                     'image' => $image,
+                    'price' => $object->price,
                     'url' => $object->get_url()
                 );
 
@@ -315,11 +343,25 @@ class Controller_Block_Twig extends Controller_Block
         }
 
         //reverse
-        usort($viewData, function ($a, $b) { return $b['position'] - $a['position']; });
+        usort($viewData, function ($a, $b) { return $a['position'] - $b['position']; });
 
         //initialize view
-        $twig = Twig::factory('block/last_views');
-        $twig->items = $viewData;
-        $this->response->body($twig);
+        /* get mode parameter */
+        $mode = Arr::get($requestData, 'mode', 'twig');
+        if ($mode == 'twig') {
+            $twig = Twig::factory('block/last_views');
+            $twig->showMore = Arr::get($requestData, 'showMore', false) && $pagination['totalPages'] > 1;
+            $twig->items = $viewData;
+            $twig->pagination = $pagination;
+            $this->response->body($twig);
+        } else if ($mode == 'json') {
+            $this->response->body(json_encode(array(
+                    'result' => array(
+                            'items' => $viewData,
+                            'pagination' => $pagination
+                        ),
+                    'code' => 200
+                )));
+        }
     }
 }

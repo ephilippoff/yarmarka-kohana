@@ -8,8 +8,9 @@ define([
     "views/partials/behaviors/ads",
     "gisMap",
     'modules/writeToAuthor/main',
-    'modules/vkMessagesNotifier/main'
-], function (templates, FavouriteBehavior, SearchBehavior, OControlBehavior, ServicesBehavior, AdsBehavior, gisMap, WriteToAuthor, VkMessagesNotifier) {
+    'modules/vkMessagesNotifier/main',
+    'modules/lastViews/main',
+], function (templates, FavouriteBehavior, SearchBehavior, OControlBehavior, ServicesBehavior, AdsBehavior, gisMap, WriteToAuthor, VkMessagesNotifier, LastViewsMainView) {
     "use strict";
 
 
@@ -41,6 +42,15 @@ define([
 
         initialize: function() {
             this.bindUIElements();
+
+            /* initialize last views module */
+
+            if ($('.last-views').length) {
+                this.lastViewsModule = new LastViewsMainView({
+                    el: $('.last-views')
+                });
+            }
+            /* initialize last views module done */
 
             if (this.ui.map.length) {
                 var similarObjects = [];
