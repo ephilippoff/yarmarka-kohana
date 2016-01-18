@@ -269,6 +269,7 @@ class Controller_Search extends Controller_Template {
         foreach ((array) $search_info as $key => $item) {
             $twig->{$key} = $item;
         }        
+
         $this->cache_stat($twig, $search_params);
         $this->response->body($twig);
 
@@ -375,11 +376,13 @@ class Controller_Search extends Controller_Template {
                 $clean_query_params
             )
         );
+
         return $info;
     }
 
     public function get_search_info_by_sphinx($search_text)
     {
+        $clean_query_params = array_merge($this->params_by_uri->get_clean_query_params(), $this->params_by_uri->get_seo_filters());
         $info = new Obj();
 
         $info->search_text = $search_text;
@@ -423,12 +426,20 @@ class Controller_Search extends Controller_Template {
             "city_id" => $info->city_id,
             "category_id" => (count($info->child_categories_ids) > 0) ? $info->child_categories_ids : $info->category_id,
 
+            "user_id" => $this->params_by_uri->get_reserved_query_params("user_id"),
+            "source" => $this->params_by_uri->get_reserved_query_params("source"),
+            "photo" => $this->params_by_uri->get_reserved_query_params("photo"),
+            "video" => $this->params_by_uri->get_reserved_query_params("video"),
+            "private" => $this->params_by_uri->get_reserved_query_params("private"),
+            "org" => $this->params_by_uri->get_reserved_query_params("org"),
+            "filters" => $clean_query_params,
+
             //TODO фильтр по фото
             //"user_id" => $this->params_by_uri->get_reserved_query_params("user_id"),
             //"photo" => $this->params_by_uri->get_reserved_query_params("photo"),
 
             "search_text" => $info->search_text,
-            "filters" => array()
+            //"filters" => array()
         );
 
         $info->seo_attributes = Seo::get_seo_attributes(
@@ -436,6 +447,13 @@ class Controller_Search extends Controller_Template {
             $info->search_filters["filters"],
             $this->params_by_uri->get_category(),
             $this->domain->get_city()
+        );
+
+        $info->query_params_for_js = json_encode(
+            array_merge(
+                $this->params_by_uri->get_query_params_without_reserved($this->request->query()),
+                $clean_query_params
+            )
         );
 
         
