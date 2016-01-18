@@ -10,7 +10,8 @@ define([
     'modules/writeToAuthor/main',
     'modules/vkMessagesNotifier/main',
     'modules/lastViews/main',
-], function (templates, FavouriteBehavior, SearchBehavior, OControlBehavior, ServicesBehavior, AdsBehavior, gisMap, WriteToAuthor, VkMessagesNotifier, LastViewsMainView) {
+    'modules/complain/main'
+], function (templates, FavouriteBehavior, SearchBehavior, OControlBehavior, ServicesBehavior, AdsBehavior, gisMap, WriteToAuthor, VkMessagesNotifier, LastViewsMainView, Complain) {
     "use strict";
 
 
@@ -108,6 +109,13 @@ define([
             /* initialize vk messages notifier */
             if (typeof(VK) !== 'undefined') {
                 new VkMessagesNotifier();
+
+            /* initialize complain widget */
+            $temp = this.$el.find('[data-role=complain]');
+            if ($temp.length) {
+                new Complain({
+                    el: $temp
+                }).render();
             }
         },
 
