@@ -279,5 +279,46 @@ class Twig_Functions
 		return $cities[$city_name];
 	}
 
+	public static function custommenu($root)
+	{
+		$structure = ORM::factory('Structure')
+			->where("url","=",$root)
+			->find();
+
+		$result = array();
+
+		Twig_Functions::get_customenu_three($structure, $result);
+
+		return $result;
+	}
+
+	public static function get_customenu_three($structure, &$result)
+	{
+		$user = Auth::instance()->get_user();
+
+		$result["root"] = $structure->as_array();
+		$result["childs"] = array();
+		$subs = ORM::factory('Structure')
+				->where("parent_id","=", $structure->id)
+				->find_all();
+		foreach ($subs as $sub) {
+			if ($sub->for_admin AND !Acl::check("object.add.type")) {
+				continue;
+			}
+			
+			$c = ORM::factory('Structure')
+				->where("parent_id","=", $sub->id)
+				->count_all();
+			if ($c > 0) {
+				$tmp = array();
+				
+				Twig_Functions::get_customenu_three($sub, $tmp);
+				$result["childs"][] = $tmp;
+			} else {
+				$result["childs"][] = $sub->as_array();
+			}
+		}
+	}
+
 	
 }

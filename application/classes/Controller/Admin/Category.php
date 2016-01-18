@@ -23,6 +23,119 @@ class Controller_Admin_Category extends Controller_Admin_Template {
 			->order_by('title')
 			->find_all();
 	}
+
+	public function action_structure()
+	{
+		$this->template->categories = ORM::factory('Structure')
+			->where('parent_id', 'IS', NULL)
+			->order_by('weight')
+			->order_by('title')
+			->find_all();
+	}
+
+	public function action_sub_structure()
+	{
+		$this->use_layout = false;
+		
+		$this->template->level 		= intval($this->request->query('level'))+1;
+		$this->template->parent_id 	= $this->request->param('id');
+		$this->template->categories = ORM::factory('Structure')
+			->where('parent_id', '=', $this->request->param('id'))
+			->order_by('weight')
+			->order_by('title')
+			->find_all();
+	}
+
+	public function action_addstructure()
+	{
+		$this->template->errors = array();
+		
+		if (HTTP_Request::POST === $this->request->method())
+		{
+			try 
+			{				
+				$post = $_POST;																	
+				
+				if ($post['parent_id'] == 0) {
+					unset($post['parent_id']);
+				}
+
+				if (@$post['for_admin']) {
+					$post['for_admin'] = TRUE;
+				} else {
+					$post['for_admin'] = FALSE;
+				}
+
+				$category = ORM::factory('Structure')->values($post)->save();
+				
+				$this->redirect('khbackend/category/structure');
+			} 
+			catch (ORM_Validation_Exception $e) 
+			{
+				$this->template->errors = $e->errors('validation');
+			}
+		}
+
+		$this->template->categories = ORM::factory('Structure')
+				->order_by('parent_id')
+				->order_by('weight')
+				->find_all();
+
+		$this->template->parent_id = $this->request->query('parent_id');
+		
+	}
+
+	public function action_editstructure()
+	{
+		if ( ! $category = ORM::factory('Structure', $this->request->param('id')))
+		{
+			throw new HTTP_Exception_404;
+		}
+
+		$this->template->errors = array();
+		
+		if (HTTP_Request::POST === $this->request->method())
+		{
+			try 
+			{
+				$post = $_POST;																	
+				
+				if ($post['parent_id'] == 0) {
+					unset($post['parent_id']);
+				}
+
+				if (@$post['for_admin']) {
+					$post['for_admin'] = TRUE;
+				} else {
+					$post['for_admin'] = FALSE;
+				}
+
+				$category->values($post)->save();
+
+				$this->redirect('khbackend/category/structure');
+			}
+			catch (ORM_Validation_Exception $e) 
+			{
+				$this->template->errors = $e->errors('validation');
+			}		
+		}
+
+		$this->template->categories = ORM::factory('Structure')
+				->order_by(array('parent_id','weight'))
+				->find_all();
+		
+		$this->template->category = $category;
+	}
+
+	public function action_deletestructure()
+	{
+		$this->auto_render = FALSE;
+
+		$item = ORM::factory('Structure', $this->request->param('id'))->delete();
+					
+		$this->redirect('khbackend/category/structure');
+
+	}	
 	
 	public function action_add()
 	{

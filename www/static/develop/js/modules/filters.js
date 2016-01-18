@@ -501,7 +501,6 @@ define([
         initialize: function() {
             this.data = app.settings.data;
             this.queryParams = app.settings.query_params;
-
             
         },
         initFilters: function(category_id) {

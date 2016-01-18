@@ -121,6 +121,7 @@ class Form_Add  {
 
 		$category_array = array();
 		$category_list = ORM::factory('Category')
+								->where("parent_id","=",1)
 								->where("is_ready", "=", 1)
 								->order_by("through_weight")
 								->cached(DATE::WEEK, array("category", "add"))
@@ -145,13 +146,14 @@ class Form_Add  {
 						$childs_array[$child->id] = $child->title;
 					}
 				}
-
 				$category_array[$item->title] = $childs_array;
 			}
+			
 		}
 
 		$category_array["Другие"] = array(
-			156 => "В хорошие руки"
+			156 => "В хорошие руки",
+			72 => "Товары для детей"
 		);
 
 
@@ -888,6 +890,7 @@ class Form_Add  {
 
 	function Additional()
 	{
+		$object 	= $this->object;
 		$category_id 	= $this->category_id;
 		$errors 		= $this->errors;
 		$user = Auth::instance()->get_user();
@@ -913,7 +916,7 @@ class Form_Add  {
 			if ($user)
 			{
 				$orginfo_data = ORM::factory('User_Settings')
-								->get_group($user->id, "orginfo");
+								->get_group(($this->_edit) ? $object->author_company_id: $user->id, "orginfo");
 				foreach ($orginfo_data as $key => $data) {
 					$values["additional_".$key] = $data;
 				}

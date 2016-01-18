@@ -12,10 +12,12 @@
  */
 class Controller_Block extends Controller_Template
 {
+	protected $forceAllow = array();
+
 	public function before()
 	{
 		// only sub requests is allowed
-		if ($this->request->is_initial() AND Kohana::$environment !== Kohana::DEVELOPMENT)
+		if (!in_array($this->request->action(), $this->forceAllow) && $this->request->is_initial() AND Kohana::$environment !== Kohana::DEVELOPMENT)
 		{
 			throw new HTTP_Exception_404;
 		}

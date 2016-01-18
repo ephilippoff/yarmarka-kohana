@@ -397,6 +397,14 @@ class Search {
 			$object = $object->where(DB::expr('exists'), DB::expr(''), $orgtype_subquery);
 		}
 
+		if ($params->without_attribute) {
+			$without_attribute_subquery = DB::select("list.id")
+										->from(array("data_list","list") )
+										->where("list.object","=", DB::expr("o.id"))
+										->where("list.attribute", "=", (int) $params->without_attribute);
+			$object = $object->where(DB::expr('not exists'), DB::expr(''), $without_attribute_subquery);
+		}
+
 		
 		$filters = self::get_filters_by_params($params->filters, "o");
 		foreach ($filters as $filter)

@@ -14,7 +14,10 @@ define([ 'underscore', 'backbone', './models/state', './views/initial', './views
 			/* initialize models */
 			this.appState = new AppStateModel({
 				object_id: this.$el.data('id'),
-				email: this.$el.data('email')
+				email: this.$el.data('email'),
+				is_job_vacancy: this.$el.data('is-job-vacancy') == 1,
+				message: this.$el.data('text'),
+				state: this.$el.data('state') || 'initial'
 			});
 
 			/* bind model events */

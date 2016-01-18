@@ -893,6 +893,7 @@ a.auto-collapse-expand {
 }
 .write-to-author .row {
     text-align: center;
+<<<<<<< HEAD
 }
 
 /* last_views block */
@@ -1146,4 +1147,6 @@ img.category-icon{
 
 .kupon_wrap {
     width: 100%;
+=======
+>>>>>>> 72d1271c48f01bb616f4b606c9023d4c7ba2a003
 }

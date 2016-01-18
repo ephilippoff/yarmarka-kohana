@@ -799,7 +799,7 @@ class Controller_Cart extends Controller_Template {
 
 		$order = ORM::factory('Order', $order_id);
 		$robo = new Robokassa($order_id);
-		$robo->set_sum($order->sum);
+		$robo->set_sum($sum);
 		$sample = strtoupper($robo->create_result_sign());
 
 		ORM::factory('Order_Log')->write($order_id, "notice", vsprintf("Сравнение подписи. Подпись ПС: %s, Подпись лок: %s; Сумма ПС: %s, Сумма лок: %s", array($signature, $sample, $sum, $order->sum) ) );
