@@ -15,10 +15,10 @@ class Lib_PlacementAds_AddEditByModerator extends Lib_PlacementAds_AddEdit {
 			->rule('rubricid', 'not_empty', array(':value', "Раздел"))
 			->rule('rubricid', 'not_category_0', array(':value', "Раздел"));
 
-		if ($category)
-		{
-			$validation->rule('contact', 'not_empty', array(':value', "Контактное лицо"));
-		}
+		// if ($category)
+		// {
+		// 	$validation->rule('contact', 'not_empty', array(':value', "Контактное лицо"));
+		// }
 
 		if ($category AND !$category->title_auto_fill AND !$params->itis_massload)
 		{
