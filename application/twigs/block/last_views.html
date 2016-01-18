@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 {% if horizontalView %}
 <div class="module">
 	<div class="title_block brt2">
@@ -39,7 +39,7 @@
 				<p>
 					<a href="{{ item.url }}" rel="nofollow">
 						<img 
-=======
+
 <div class="last-views" {% if showMore %}data-showmore="true" data-pages="{{ pagination.totalPages }}" {% endif %}>
 	<div class="title">Вы недавно смотрели</div>
 	<div class="items" data-role="container">
@@ -48,7 +48,7 @@
 			<p>
 				<a href="{{ item.url }}" rel="nofollow">
 					<img 
->>>>>>> 72d1271c48f01bb616f4b606c9023d4c7ba2a003
+
 						src="{{ item.image.url }}"
 						width="{{ item.image.width }}"
 						height="{{ item.image.height }}"
@@ -64,14 +64,14 @@
 			{% endif %}
 		{% endfor %}
 	</div>
-<<<<<<< HEAD
+
 </div>
 {% endif %}
-=======
+
 	{% if showMore %}
 	<div class="show-more-container" data-role="button-container">
 		<button class="show-more" data-role="button">Еще...</button>
 	</div>
 	{% endif %}
 </div>
->>>>>>> 72d1271c48f01bb616f4b606c9023d4c7ba2a003
+

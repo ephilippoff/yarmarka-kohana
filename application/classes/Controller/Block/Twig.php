@@ -308,10 +308,7 @@ class Controller_Block_Twig extends Controller_Block
         $viewData = array();
         $shortTitleLength = 40;
         $afterShortTitle = '...';
-<<<<<<< HEAD
         $top = 8;
-=======
->>>>>>> 72d1271c48f01bb616f4b606c9023d4c7ba2a003
         foreach($objects as $index => $object) {
             //prepare image
             $image = array(
@@ -350,12 +347,11 @@ class Controller_Block_Twig extends Controller_Block
         usort($viewData, function ($a, $b) { return $a['position'] - $b['position']; });
 
         //initialize view
-<<<<<<< HEAD
+
         $twig = Twig::factory('block/last_views');
         $twig->items = $viewData;
         $twig->horizontalView = $this->request->post("horizontalView");
         $this->response->body($twig);
-=======
         /* get mode parameter */
         $mode = Arr::get($requestData, 'mode', 'twig');
         if ($mode == 'twig') {
@@ -373,6 +369,5 @@ class Controller_Block_Twig extends Controller_Block
                     'code' => 200
                 )));
         }
->>>>>>> 72d1271c48f01bb616f4b606c9023d4c7ba2a003
     }
 }
