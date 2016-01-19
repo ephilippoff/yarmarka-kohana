@@ -30,16 +30,6 @@
 	</div>
 </div>
 {% else %}
-<div class="last-views">
-	<div class="title_block brt2">Вы недавно смотрели</div>
-	<div class="items">
-		{% for item in items %}
-			{% if loop.index <= 5 %}
-			<div class="item">
-				<p>
-					<a href="{{ item.url }}" rel="nofollow">
-						<img 
-
 <div class="last-views" {% if showMore %}data-showmore="true" data-pages="{{ pagination.totalPages }}" {% endif %}>
 	<div class="title">Вы недавно смотрели</div>
 	<div class="items" data-role="container">
@@ -61,17 +51,13 @@
 					<span>{{ item.price|number_format(0, ' ', ' ') }} <i class="fa fa-rub"></i></span>
 				{% endif %}
 			</div>
-			{% endif %}
 		{% endfor %}
 	</div>
-
 </div>
-{% endif %}
 
 	{% if showMore %}
 	<div class="show-more-container" data-role="button-container">
 		<button class="show-more" data-role="button">Еще...</button>
 	</div>
 	{% endif %}
-</div>
-
+{% endif %}
