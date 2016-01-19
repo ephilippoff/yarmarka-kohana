@@ -362,15 +362,16 @@ class Controller_Block_Twig extends Controller_Block
 
         //initialize view
 
-        $twig = Twig::factory('block/last_views');
-        $twig->items = $viewData;
-        $twig->horizontalView = $this->request->post("horizontalView");
-        $this->response->body($twig);
+        //$twig = Twig::factory('block/last_views');
+        //$twig->items = $viewData;
+
+        //$this->response->body($twig);
         /* get mode parameter */
         $mode = Arr::get($requestData, 'mode', 'twig');
         if ($mode == 'twig') {
             $twig = Twig::factory('block/last_views');
             $twig->showMore = Arr::get($requestData, 'showMore', false) && $pagination['totalPages'] > 1;
+            $twig->horizontalView = $this->request->post("horizontalView");
             $twig->items = $viewData;
             $twig->pagination = $pagination;
             $this->response->body($twig);

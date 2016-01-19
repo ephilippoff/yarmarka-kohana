@@ -82,13 +82,9 @@
 				{% include 'block/vk/comments_surgut' %}
 			</div>
 			{% include 'detail/similar' %}
-
 			<div class="detail_last_views">
 				{{ requestblock('block_twig/last_views', {'horizontalView': horizontalView}) }}
 			</div>
-
-			{{ requestblock('block_twig/last_views', { mode:'twig', 'page':1, 'perPage':5, 'showMore': true }) }}
-
 		</aside>
 	</div>
 {% endblock rightside %}

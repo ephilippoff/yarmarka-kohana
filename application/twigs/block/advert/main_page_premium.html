@@ -9,7 +9,11 @@
 				</a>
 			</p>
 			<a href="{{ item.url }}">{{ item.title }}</a>
-			<span>{{ item.price|number_format(0, ' ', ' ') }} <i class="fa fa-rub"></i></span>
+			{% if item.price > 0 %}
+				<span>{{ item.price|number_format(0, ' ', ' ') }} <i class="fa fa-rub"></i></span>
+			{% else %}
+				<span style="min-height:28px;"></span>
+			{% endif %}
 		</div>
 	{% endfor %}
 	</div>
