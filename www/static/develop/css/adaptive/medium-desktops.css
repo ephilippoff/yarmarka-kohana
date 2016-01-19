@@ -33,11 +33,13 @@
 
 	#reklama_container a{
 	    text-align: center;
+	    max-height: 200px;
 	}
 
 	#reklama_container img{
 	    float: none !important;
-	    max-height: auto;
+	    display: block;
+    	margin: auto;
 	}
 
 	#reklama_container a span{
