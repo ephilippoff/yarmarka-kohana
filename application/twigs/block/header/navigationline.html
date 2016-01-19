@@ -18,12 +18,12 @@
 				{% endfor %}
 			</div>
 			<div class="col-lg-7 col-md-9 col-sm-12 col-xs-12 col-lg-pull-5 col-md-pull-3 clearfix main_menu">
-				<div class="menu-item w25p left iLight crimson-theme {% if staticMainMenu == false %} js-mainmenu-dropdown {% else %} hidden-xs {% endif %} top-razdel"><!--main-page-style iLight-disable-->
+				<div class="menu-item w25p left iLight crimson-theme {% if staticMainMenu == false %} js-mainmenu-dropdown {% else %} hidden-sm hidden-xs{% endif %} top-razdel"><!--main-page-style iLight-disable-->
 					<span class="menu-item-cont ta-c">{% if staticMainMenu %}Объявления{% else %}Выбрать рубрику<i class="fa fa-caret-down ml3"></i>{% endif %}</span>
 				</div>
 				<!-- Если меню статично, то на мобильных скрываем статичное меню и возвращаем его в привычное состояние-->
 				{% if staticMainMenu %}
-				<div class=" hidden-lg hidden-md hidden-sm menu-item w25p left iLight crimson-theme js-mainmenu-dropdown top-razdel">
+				<div class=" hidden-lg hidden-md menu-item w25p left iLight crimson-theme js-mainmenu-dropdown top-razdel">
 					<span class="menu-item-cont ta-c">Выбрать рубрику<i class="fa fa-caret-down ml3"></i></span>
 				</div>
 				{% endif %}
