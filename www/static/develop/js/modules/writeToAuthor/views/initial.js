@@ -6,7 +6,7 @@ define([ 'jquery', 'underscore', 'backbone' ], function ($, _, Backbone) {
 
 		className: 'button dib bg-color-blue white p10 br2 mt10',
 
-		template: _.template('Написать автору'),
+		template: _.template('<% if (is_job_vacancy) { %>Откликнуться на вакансию<% } else { %>Написать автору<% } %>'),
 
 		events: {
 			'click': 'onUserClick'
@@ -17,7 +17,7 @@ define([ 'jquery', 'underscore', 'backbone' ], function ($, _, Backbone) {
 		},
 
 		render: function () {
-			this.$el.html(this.template());
+			this.$el.html(this.template(this.model.toJSON()));
 			return this.$el;
 		},
 
