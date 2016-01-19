@@ -27,7 +27,10 @@
 				->find_all();
 			$categories = array();
 			foreach($items as $item) {
-				$categories[$item->id] = $item->title;
+				$categories[$item->id] = array(
+						'title' => $item->title,
+						'url' => '/novosti/' . $item->url
+					);
 			}
 
 			/* load news */
@@ -43,7 +46,8 @@
 				$sci = $item['data_list_value'];
 				if (!array_key_exists($sci, $newsGroups)) {
 					$newsGroups[$sci] = array(
-							'title' => $categories[$sci],
+							'title' => $categories[$sci]['title'],
+							'url' => $categories[$sci]['url'],
 							'items' => array()
 						);
 				}
@@ -74,7 +78,7 @@
 			}
 
 			//echo '<pre>'; var_dump($newsGroups); echo '</pre>';
-
+			
 			/* push view data */
 			$view->data = $newsGroups;
 
