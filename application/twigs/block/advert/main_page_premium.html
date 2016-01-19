@@ -1,9 +1,16 @@
-<ul>
-{% for item in data %}
-	<li>
-		{{ item.price|number_format(0, ' ', ' ') }} Р
-		<img src="{{ item.image }}" />
-		<a href="{{ item.url }}">{{ item.title }}</a>
-	</li>
-{% endfor %}
-</ul>
+<div class="last-views">
+	<div class="title_block brt2">Последние объявления</div>
+	<div class="items">
+	{% for item in data %}
+		<div class="item">
+			<p>
+				<a href="{{ item.url }}">
+					<img src="{{ item.image }}" />
+				</a>
+			</p>
+			<a href="{{ item.url }}">{{ item.title }}</a>
+			<span>{{ item.price|number_format(0, ' ', ' ') }} <i class="fa fa-rub"></i></span>
+		</div>
+	{% endfor %}
+	</div>
+</div>

@@ -3,7 +3,7 @@
 		<ul>
 			{% for news in lastnews|slice(0,5) %}
 				<li>
-					<div class="w135" style="height:150px;float:left;padding:5px;overflow:hidden;">
+					<div class="photo_news_wrap" style="height:150px;float:left;padding:5px;overflow:hidden;">
 						<span class="mr3 fs12"><i class="fa fa-home mr3"></i>{{news.date_created|date('d/m, H:i')}} </span>
 						<a href="{{news.compiled.url}}" class="fs12">
 							<img src="{{get_file(news.compiled.images.main_photo['120x90'])}}" alt="" width="100%" style="max-height:80px;">

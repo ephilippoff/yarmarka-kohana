@@ -12,36 +12,39 @@
 {% endblock header %} 
 
 {% block content %}
-	
 	<div class="min-content-height">
 		<div class="row">
 			<div class="col-md-12">
-				{% include 'block/header/navigationline' %}
 				{{ requestblock('block_twig/adslinkline', {'city_id': city.id, 'theme_class': theme_class}) }}
+				{% include 'block/header/navigationline' %}
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-md-3">
+			<div class="col-md-3 col-md-push-9">
+				{% include 'index/promo/news' %}
+				{% include 'index/informers' %}
+			</div>
+			<div class="col-md-3 col-md-pull-3">
 				{% include 'index/promo/left' %}
 			</div>
-			<div class="col-md-9">
+			<div class="col-md-6 col-md-pull-3">
 				<div class="row">
-					<div class="col-md-9">
-						{% include 'index/promo/news' %}
-						<div class="banner module {zoneID: 18 }"></div>
+					<div class="col-md-12">
 						{% include 'index/promo/photo_news' %}
-						{% include 'index/promo/kupon' %}
+						{{ requestblock('block_news/main_page') }}
+						<div class="banner module {zoneID: 18 }"></div>
+						{{ requestblock('block_advert/main_page_premium') }}
 						<div class="bg-color-whitesmoke p20 mb10 br2">
 							<p class="fs18 bold">Свежие предложения всегда под рукой: </p>
 							<a href="http://www.yandex.ru/?add=112883&amp;from=promocode" target="_blank" class="big_link_with_underlina_dotted" rel="nofollow">Легковые авто</a>&nbsp;&nbsp;&nbsp;
 							<a href="http://www.yandex.ru/?add=112884&amp;from=promocode" target="_blank" class="big_link_with_underlina_dotted" rel="nofollow">Продажа квартир и комнат</a>&nbsp;&nbsp;&nbsp;
 						</div>
+						<div class="hidden-xs hidden-sm">
+							{{ requestblock('block_category/main_page') }}
+						</div>
 						<div class="bg-color-whitesmoke p20 br2">
 							Сайт «Ярмарка в Сургуте» — онлайн версия газеты бесплатных объявлений «Ярмарка-Сургут». Найти свой автомобиль, квартиру или работу из тысяч предложений как никогда легко и просто! Воспользуйтесь поисковыми возможностями для выбора только тех предложений, которые интересны Вам. Разместив информацию о своем товаре или услуге Вы мгновенно донесете её до тысяч посетителей сайта. Здесь Вы также найдете объявления, которые были опубликованы газете “Ярмарка-Сургут”, а это более 10000 объявлений еженедельно.
 						</div>
-					</div>
-					<div class="col-md-3">
-						{% include 'index/informers' %}
 					</div>
 				</div>
 				<div class="row">

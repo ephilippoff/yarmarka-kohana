@@ -52,11 +52,11 @@ define([
             if (!options.doNotRemove) {
                 $(options.templateClass).remove();
             }
-            //Разделение меню городов по ID;
-            var id = 1;
+            //Разделение меню городов по Class;
+            var cityClass = 1;
             $('.js-citymenu').each(function(){
-                $(this).addClass('citymenu'+id);
-                id++;
+                $(this).addClass('citymenu'+cityClass);
+                cityClass++;
             });
         },
 
@@ -81,7 +81,6 @@ define([
              $("#popup-layer").fadeOut(70);
              $(this.getOption("controlClass")).removeClass("z301");
              this.visible = 0;
-             console.log('hide');
         }
     });
 

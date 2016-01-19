@@ -6,8 +6,8 @@
 	
 	{% block header %} 
 		{{ parent() }}
-		{% include 'block/header/navigationline' %}
 		{{ requestblock('block_twig/adslinkline',{'city_id': city.id, 'category_id': category.id, 'theme_class': theme_class}) }}
+		{% include 'block/header/navigationline' %}
 	{% endblock header %} 
 
 	{% block crumbs %} 
@@ -19,14 +19,18 @@
 	{% block filters %} 
 		Фильтры
 	{% endblock filters %}
-
 	<div class="row">
 		<div class="col-md-8">
-			{% block content %}
-				контент
-			{% endblock content %}
+			<div class="search_wrap">
+				{% block content %}
+					контент
+				{% endblock content %}
+			</div>
+			{% block last_views %}
+				Последние просмотренные
+			{% endblock last_views %}
 		</div><!--col-->
-		<div class="col-md-4">
+		<div class="col-md-4 right-side">
 			<div class="row">
 				<div class="col-md-12">
 					{% block map %}Карта{% endblock map %}
@@ -55,7 +59,13 @@
 	{% block templates %}
 		{{ parent() }}
 	{% endblock templates %}
-	
+	<script>
+	var mainBlockBottomY = $(document).height() - ($('.search_wrap').offset().top + $('.search_wrap').outerHeight());
+		$('.right-side').hcSticky({
+		stickTo: document,
+		bottomEnd: mainBlockBottomY
+	});
+	</script>
 {% endblock body %}
 
 {%block page_name%}search{% endblock page_name %}
