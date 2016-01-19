@@ -7,15 +7,14 @@ define([ 'jquery', 'underscore', 'backbone'], function ($, _, Backbone) {
 		},
 
 		itemTemplate: _.template(
-			'<div class="item">'
-				+ '<p>'
-					+ '<a href="<%= url %>" rel="nofollow">'
-						+ '<img src="<%= image.url %>" alt="<%= image.alt %>" title="<%= image.title %>" />'
-					+ '</a>'
-				+ '</p>'
-				+ '<span><%= price %> Р</span>'
-				+ '<a href="<%= url %>" rel="nofollow"><%= shortTitle %></a>'
-			+ '</div>'),
+			'<div class="last-wrap clearfix">'
+				+'<a href="<%= url %>" rel="nofollow" class="object-caption bold">'
+					+'<%= shortTitle %>'
+				+'</a>'
+				+'<% if (price > 0) { %>'
+				+'<span class="amount fs14"><%= price %> <i class="fa fa-rub"></i></span>'
+				+'<% } %>'
+			+'</div>'),
 
 		initialize: function () {
 

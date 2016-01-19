@@ -17,7 +17,7 @@
 		<div class="p5 dib">Просмотров: {{ object.visits }}</div>
 	{% endif %}
 
-	<div data-role="complain" data-object-id="{{ object.id }}" data-is-guest="{{ isGuest }}">
+	<div data-role="complain" data-object-id="{{ object.id }}" data-is-guest="{{ isGuest }}" class="hidden">
 		<a href="#" data-role="start">Пожаловаться</a>
 	</div>
 </div>

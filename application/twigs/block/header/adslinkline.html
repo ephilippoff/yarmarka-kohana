@@ -2,13 +2,13 @@
 <div class="{{ theme_class }} reklama-cont brt2 hidden-xs">
 {% if imagelinks|length > 0 or textlinks|length > 0%}
  	{% if imagelinks|length > 0 %}
-		<div id="reklama_container" class="reklama-line banners js-adslink-graphic">
+		<div id="reklama_container" class="reklama-line banners js-adslink-graphic clearfix">
 			{% set length = (imagelinks|length > 4) ?  imagelinks|length : 4 %}
 			{% for i in 0..(length - 1) %}
 				{% set link = imagelinks|slice(i,1) %}
 				{% if link|length > 0 %}
 					{% set link = link|first %}
-					<a class="w23p dib va-t clearfix" href="{{ link.link }}"  style="height:50px; overflow:hidden;">
+					<a class="w23p dib va-t clearfix" href="{{ link.link }}">
 						<img src="{{ '/./uploads/banners/' ~ link.image }}" class="fl"/>
 						<span class="ml10 fs12 fl w50p h50 oh" style="height:50px;">{{ link.title }}</span>
 					</a>
