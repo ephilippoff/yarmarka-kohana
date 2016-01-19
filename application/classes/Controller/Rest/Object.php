@@ -71,14 +71,21 @@ class Controller_Rest_Object extends Controller_Rest {
 		}
 
 		/* check object */
-		$object = ORM::factory('Object_Compiled')
-			->where('object_id', '=', $this->post->object_id)
+		$object = ORM::factory('Object')
+			->where('id', '=', $this->post->object_id)
 			->find();
 
 		if (!$object->loaded()) {
 			throw new Exception('Bad object_id');
 		}
-		$object = unserialize($object->compiled);
+		
+		/* get author */
+		$author = ORM::factory('User')
+			->where('id', '=', $object->author)
+			->find();
+		if (!$author->loaded()) {
+			throw new Exception('No author');
+		}
 
 		/* get current user */
 		$user = Auth::instance()->get_user();
@@ -88,7 +95,7 @@ class Controller_Rest_Object extends Controller_Rest {
 		}
 
 		/* prepare message text */
-		$message = 'Вам было отправлено сообщение по объявлению: ' . $object['url'] . "\r\n";
+		$message = 'Вам было отправлено сообщение по объявлению: ' . $object->get_full_url() . "\r\n";
 		$message .= 'Текст сообщения:' . "\r\n";
 		$message .= '------------------------------------' . "\r\n";
 		$message .= htmlspecialchars($this->post->message) . "\r\n";
@@ -96,9 +103,9 @@ class Controller_Rest_Object extends Controller_Rest {
 		$message .= 'Email отправителя: ' . $user->email;
 
 		/* prepare subject */
-		$subject = 'Новое сообщение';
+		$subject = 'У Вас сообщение на «Ярмарка-онлайн»';
 
-		Email::send( $object['author']['email'], Kohana::$config->load('email.default_from'), $subject, $message, false);
+		Email::send( $author->email, Kohana::$config->load('email.default_from'), $subject, $message, false);
 	}
 
 	public function action_callback() {
