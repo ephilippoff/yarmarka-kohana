@@ -41,4 +41,8 @@
 	.last-views .item:nth-child(2){
 		border-right: 1px solid #ccc;
 	}
+
+	.kupons_block .kupon_wrap:nth-child(3){
+		display: none;
+	}
 }
