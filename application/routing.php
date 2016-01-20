@@ -343,6 +343,8 @@ Route::set('search', '<category_path>', array(
 			return $params;
 
 		} else {
+			echo 'qwe';
+			die;
 			return FALSE;
 		}
 	});

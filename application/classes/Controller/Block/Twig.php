@@ -13,6 +13,10 @@
 class Controller_Block_Twig extends Controller_Block
 {
 
+    protected $forceAllow = array(
+            'last_views'
+        );
+
     public function before()
     {
         parent::before();
@@ -40,7 +44,7 @@ class Controller_Block_Twig extends Controller_Block
         $theme_class = $this->request->post("theme_class");
 
         $twig = Twig::factory('block/header/adslinkline');
-        $twig->imagelinks = $this->adslinkline($city_id, $category_id, "image");
+        $twig->imagelinks = $this->adslinkline($city_id, $category_id, "image", 4);
         $twig->textlinks = $this->adslinkline($city_id, $category_id, "text");
         $twig->theme_class = $theme_class;
         $twig->info_link = "/ourservices/kontekstnaya-reklama";
@@ -79,7 +83,6 @@ class Controller_Block_Twig extends Controller_Block
     {
         $city_id = $this->request->post("city_id");
         $twig = Twig::factory('block/menu/main');
-
         $categories = ORM::factory('Category')->get_categories_extend(array(
             "with_child" => TRUE, 
             "with_ads" => TRUE, 
@@ -90,13 +93,14 @@ class Controller_Block_Twig extends Controller_Block
         $twig->categories2l = $categories["childs"];
         $twig->parents_ids  = $categories["main_ids"];
         $twig->banners      = $categories["banners"];
+        $twig->staticMainMenu = $this->request->post("staticMainMenu");
 
         $this->response->body($twig);
     }
 
     ////// Реализация содержимого блоков
 
-    public function adslinkline($city_id = NULL, $category_id = NULL, $type = "image")
+    public function adslinkline($city_id = NULL, $category_id = NULL, $type = "image", $count = NULL)
     {
         $reklama = ORM::factory('Reklama')
                         ->where(DB::expr('CURRENT_DATE'), '>=', DB::expr('start_date') )
@@ -115,9 +119,23 @@ class Controller_Block_Twig extends Controller_Block
             "image" => array(2,3)
         );
 
-        $reklama =  $reklama->where("type", "IN", $types[$type]);
+        $reklama = $reklama->where("type", "IN", $types[$type]);
+        $reklama =  $reklama->cached(Date::HOUR)->getprepared_all();
 
-        return $reklama->cached(Date::HOUR)->getprepared_all();
+        if ($count) {
+
+            foreach ($reklama as $item) {
+                $item->k = (($item->priority) ? $item->priority : 1) * rand(2, 100);
+
+            }
+            uasort($reklama, function($a,$b) {
+                return $a->k < $b->k;
+            });
+
+            $reklama = array_splice($reklama, $count);
+        }
+
+        return $reklama;
     }
 
     public static function kupon_categories($params = NULL)
@@ -195,7 +213,6 @@ class Controller_Block_Twig extends Controller_Block
         foreach ($elements as $item) {
            $item->count = $link_counters->{$domain->get_domain()."/$category_name/".$item->url};
         }
-
         return $elements;
     }
 
@@ -274,29 +291,50 @@ class Controller_Block_Twig extends Controller_Block
     }
 
     public function action_last_views() {
-        $ids = LastViews::instance()->get();
+        $ids = array_reverse(LastViews::instance()->get());
+
+        $requestData = $this->request->is_ajax()
+            ? json_decode($this->request->body(), true)
+            : $this->request->post();
+
+        /* pagination */
+        $pagination = array(
+                'page' => (int) Arr::get($requestData, 'page', 1),
+                'perPage' => (int) Arr::get($requestData, 'perPage', 5),
+                'total' => count($ids)
+            );
+        $pagination['totalPages'] = ceil($pagination['total'] / $pagination['perPage']);
+        /* calculate offset and limit */
+        $offset = ($pagination['page'] - 1) * $pagination['perPage'];
+        $limit = $pagination['perPage'];
+
+        /* accept pagination */
+        $ids = array_slice($ids, $offset, $limit);
 
         //get objects from database
-        $objects = ORM::factory('Object')
-            ->where('object.id', 'in', $ids)
-            ->with_main_photo()
-            ->find_all();
+        $objects = count($ids)
+            ? ORM::factory('Object')
+                ->where('object.id', 'in', $ids)
+                ->with_main_photo()
+                ->find_all()
+            : array();
 
         //process db data
         $viewData = array();
-        foreach($objects as $object) {
+        $shortTitleLength = 40;
+        $afterShortTitle = '...';
+        $top = 8;
+        foreach($objects as $index => $object) {
             //prepare image
             $image = array(
-                    'url' => URL::site('images/photo/no-photo.jpg'),
-                    'width' => 80,
-                    'height' => 80,
+                    'url' => URL::site('/static/develop/images/nophoto136x107.png'),
                     'alt' => 'photo',
                     'title' => ''
                 );
             if ($object->main_image_filename) {
-                list($width, $height) = Uploads::get_optimized_file_sizes($object->main_image_filename, '120x90', '106x106');
+                list($width, $height) = Uploads::get_optimized_file_sizes($object->main_image_filename, '208x208', '120x90', '106x106');
                 $image = array(
-                        'url' => Uploads::get_file_path($object->main_image_filename, '120x90'),
+                        'url' => 'http://yarmarka.biz' . Uploads::get_file_path($object->main_image_filename, '208x208'),
                         'width' => $width,
                         'height' => $height,
                         'alt' => '',
@@ -308,19 +346,44 @@ class Controller_Block_Twig extends Controller_Block
             $item = array(
                     'position' => array_search($object->id, $ids),
                     'title' => $object->title,
+                    'shortTitle' => mb_strlen($object->title) > $shortTitleLength 
+                        ? (mb_substr($object->title, 0, $shortTitleLength - strlen($afterShortTitle)) . $afterShortTitle)
+                        : $object->title,
                     'image' => $image,
-                    'url' => $object->get_url()
+                    'price' => $object->price,
+                    'url' => $object->get_url(),
+                    'category' => $object->category
                 );
 
             $viewData []= $item;
         }
 
         //reverse
-        usort($viewData, function ($a, $b) { return $b['position'] - $a['position']; });
+        usort($viewData, function ($a, $b) { return $a['position'] - $b['position']; });
 
         //initialize view
-        $twig = Twig::factory('block/last_views');
-        $twig->items = $viewData;
-        $this->response->body($twig);
+
+        //$twig = Twig::factory('block/last_views');
+        //$twig->items = $viewData;
+
+        //$this->response->body($twig);
+        /* get mode parameter */
+        $mode = Arr::get($requestData, 'mode', 'twig');
+        if ($mode == 'twig') {
+            $twig = Twig::factory('block/last_views');
+            $twig->showMore = Arr::get($requestData, 'showMore', false) && $pagination['totalPages'] > 1;
+            $twig->horizontalView = $this->request->post("horizontalView");
+            $twig->items = $viewData;
+            $twig->pagination = $pagination;
+            $this->response->body($twig);
+        } else if ($mode == 'json') {
+            $this->response->body(json_encode(array(
+                    'result' => array(
+                            'items' => $viewData,
+                            'pagination' => $pagination
+                        ),
+                    'code' => 200
+                )));
+        }
     }
 }

@@ -44,6 +44,10 @@
 	{% include 'search/paginator' %}
 {% endblock content%}
 
+{% block last_views %}
+	{{ requestblock('block_twig/last_views', {}) }}
+{% endblock last_views %}
+
 {% block rightside %} 
 	{% include 'search/vip' %}
 	{% include 'search/banner' %}

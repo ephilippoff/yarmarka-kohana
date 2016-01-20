@@ -16,10 +16,18 @@ $(document).ready(function() {
 
 <form class="form-horizontal" method="post" enctype="multipart/form-data">
 	<div class="control-group <?=Arr::get($errors, 'title') ? 'error' : ''?>">
-		<label class="control-label">Заголовок:</label>
+		<label class="control-label">Текст ссылки:</label>
 		<div class="controls">
 			<input type="text" value="<?=Arr::get($_POST, 'title')?>" class="input-block-level" name="title" id="title"  />
 			<span class="help-inline"><?=Arr::get($errors, 'title')?></span>
+		</div>
+	</div>
+
+	<div class="control-group <?=Arr::get($errors, 'priority') ? 'error' : ''?>">
+		<label class="control-label">Приоритет:</label>
+		<div class="controls">
+			<input type="number" value="<?=Arr::get($_POST, 'priority', @$ad_element->priority)?>" class="input-block-level" name="priority" id="priority"  />
+			<span class="help-inline"><?=Arr::get($errors, 'priority')?></span>
 		</div>
 	</div>
 

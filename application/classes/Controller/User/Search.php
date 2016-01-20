@@ -181,6 +181,11 @@ class Controller_User_Search extends Controller_Template {
         }
 
         $this->get_user_search_page("");
+        $this->twig->is_cv_mode = 
+            Session::instance()->get('cv_mode') == 1 &&
+            isset($_GET['cv_mode']) &&
+            $_GET['cv_mode'] == 1 &&
+            $this->category->seo_name == 'spetsialisty';
     }
 
     public function action_unpublished()

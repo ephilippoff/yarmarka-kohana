@@ -45,11 +45,6 @@
 				{% include 'detail/info' %}
 			</div>
 		</div>
-		<div class="row">
-			<div class="col-md-12">
-			{{ requestblock('block_twig/adslinkline', {'city_id': city.id, 'category_id': category.id, 'theme_class': theme_class}) }}
-			</div>
-		</div>
 		<div class="row hidden-md hidden-sm hidden-xs">
 			<div class="col-md-12">
 				<div class="banner module {zoneID: 18 }"></div>
@@ -70,7 +65,6 @@
 			</div>
 		{% endif %}
 		{% include 'detail/photo' %}
-		{{ requestblock('block_twig/last_views', {}) }}
 	</div>
 {% endblock %}
 
@@ -80,9 +74,12 @@
 			<div class="hidden-xs">
 				{% include 'detail/controls' %}
 				{% include 'detail/services' %}
+				{% include 'block/vk/comments_surgut' %}
 			</div>
-			{% include 'block/vk/comments_surgut' %}
 			{% include 'detail/similar' %}
+			<div class="detail_last_views">
+				{{ requestblock('block_twig/last_views', { mode:'twig', 'page':1, 'perPage':5, 'showMore': true, 'horizontalView': horizontalView}) }}
+			</div>
 		</aside>
 	</div>
 {% endblock rightside %}

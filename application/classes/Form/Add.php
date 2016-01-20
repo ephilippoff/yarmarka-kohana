@@ -989,6 +989,8 @@ class Form_Add  {
 
 	static private function parse_user_contact($user_id, $callback)
 	{
+		/* http://yarmarka.myjetbrains.com/youtrack/issue/yarmarka-448 */
+		/*
 		$oc = ORM::factory('User_Contact')
 					->join("contacts","left")
 						->on("contact_id","=","contacts.id")
@@ -996,10 +998,16 @@ class Form_Add  {
 					->where("user_id","=",$user_id)
 					->order_by("user_contact.id","asc")
 					->find_all();
+		*/
+
+		$oc = ORM::factory('Contact')
+			->where('verified_user_id', '=', $user_id)
+			->find_all();
+
 		foreach($oc as $contact)
 		{
-			$type = Model_Contact_Type::get_type_name($contact->contact->contact_type_id);
-			$callback($contact->id, $contact->contact->contact, $type, TRUE);
+			$type = Model_Contact_Type::get_type_name($contact->contact_type_id);
+			$callback($contact->id, $contact->contact, $type, TRUE);
 		}
 	}
 
