@@ -10,7 +10,7 @@
 
 		public function action_main_page() {
 			/* settings */
-			$shortTextLength = 150;
+			$shortTextLength = 250;
 			$shortTextAfter = '...';
 			$itemsPerCategory = 5;
 
