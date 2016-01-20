@@ -100,7 +100,7 @@ define([
             if ($menu.length > 0){
                 try {
                     $menu.menuAim({
-                        activate: this.activateSubmenu, 
+                        activate: this.activateSubmenu.bind(this), 
                         deactivate: this.deactivateSubmenu,
                         rowSelector: ".js-submenu-item"
                     });
@@ -114,6 +114,7 @@ define([
             var s = this;
             if (this.submenuActivateTimer) clearTimeout(this.submenuActivateTimer);
 
+            this.activeRow = row;
             this.submenuActivateTimer = setTimeout(function(){
                var $row = $(row), 
                   submenuId = $row.data("submenu-id"), 
@@ -125,6 +126,9 @@ define([
         },
         deactivateSubmenu: function(row) {
             if (this.submenuActivateTimer) clearTimeout(this.submenuActivateTimer);
+            if (!row) {
+                row = this.activeRow;
+            }
             var $row = $(row), 
                 submenuId = $row.data("submenu-id"), 
                 $submenu = $("#" + submenuId);
@@ -162,6 +166,11 @@ define([
                     menuOptions.el = '.left_menu';
                     menuOptions.menuClass = '.top_level_menu';
                     menuOptions.doNotUseTemplate = true;
+
+                    var me = this;
+                    $(menuOptions.el).on('mouseleave', function (e) {
+                        me.main.deactivateSubmenu();
+                    });
                 }
 
                 this.main = new MainmenuView(menuOptions);
