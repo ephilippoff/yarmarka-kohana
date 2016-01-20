@@ -1124,16 +1124,16 @@ img.category-icon{
     background-color: #D0CDCD;
     color: #fff;
 }
-
 .left_menu .right>.section{
     /*display: block !important;*/
     background-color: #fff;
+    height: 100%;
+    box-shadow: 0px 2px 3px #313131;
     position: absolute;
     top: 0;
     left: 97%;
     z-index: 300;
-    height: 100%;
-    box-shadow: 0px 2px 3px #313131;
+    height:100%;
 }
 
 .left_menu .right>.section img{
@@ -1141,7 +1141,6 @@ img.category-icon{
     bottom: 0;
     right: 0;
 }
-
 .kupon_wrap {
     width: 100%;
 }
