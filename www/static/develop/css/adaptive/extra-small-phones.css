@@ -94,6 +94,10 @@
 	.detail_last_views .last-views .item:nth-child(n+5){
 	    display: none;
 	}
+
+	.w100xs{
+		width: 100% !important;
+	}
 }
 
 @media (max-width: 500px){
