@@ -132,7 +132,7 @@ class Controller_Block_Twig extends Controller_Block
                 return $a->k < $b->k;
             });
 
-            $reklama = $count < count($reklama) ? array_splice($reklama, $count) : $reklama;
+            $reklama = array_slice($reklama, 0, $count);
         }
 
         return $reklama;
