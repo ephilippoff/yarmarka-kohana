@@ -246,7 +246,7 @@ select{background-color: #FFFFFF;border: 1px solid #C3C3C3;padding:2px 10px;heig
 .menu-cont2 .menu-item>span{text-align: center;}
 .menu-cont2 .menu-item.city_change{padding:0 10px; text-align: center;;}
 .menu-cont2 .menu-item.city_change .fa{margin-right: 10px;}
-.menu-cont2 .menu-item .menu-item-cont{display: block;cursor: pointer;width: 100%;padding: 0px 20px;}
+.menu-cont2 .menu-item .menu-item-cont{display: block;cursor: pointer;width: 100%;padding: 0px 15px;}
 .menu-cont2 .caption-item {color: white;padding: 0 20px;text-decoration: none;line-height: 25px;}
 .menu-cont2 .menu-item.right {float: right;margin-left: 5px;}
 .menu-cont2 .menu-item.left {float: left;/*margin-right: 5px;*/}
