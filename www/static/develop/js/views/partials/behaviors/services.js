@@ -12,6 +12,7 @@ define([
             premiumService: ".js-service-premium",
             liderService: ".js-service-lider",
             newspaperService: ".js-service-newspaper",
+            citiesService: ".js-service-cities"
         },
 
         events: {
@@ -19,7 +20,8 @@ define([
             "click @ui.kuponService": "kuponServiceClick",
             "click @ui.premiumService": "premiumServiceClick",
             "click @ui.liderService": "liderServiceClick",
-            "click @ui.newspaperService": "newspaperServiceClick"
+            "click @ui.newspaperService": "newspaperServiceClick",
+            "click @ui.citiesService": "citiesServiceClick",
         },
 
         upServiceClick: function(e) {
@@ -70,6 +72,22 @@ define([
             var id = $(e.currentTarget).data("id");
             var city_id = $(e.currentTarget).data("city");
             app.services.newspaper(id, {
+                city_id: city_id,
+                success: function(result) {
+                    console.log(result);
+                },
+                error: function(result) {
+                    console.log(result);
+                }
+            });
+        },
+
+        citiesServiceClick: function(e) {
+            var s = this;
+            e.preventDefault();
+            var id = $(e.currentTarget).data("id");
+            var city_id = $(e.currentTarget).data("city");
+            app.services.cities(id, {
                 city_id: city_id,
                 success: function(result) {
                     console.log(result);

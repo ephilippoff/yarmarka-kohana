@@ -47,6 +47,7 @@ define([
             var serviceName = this.model.get("name");
             var id = this.model.get("id");
             var object_id = this.model.get("object_id");
+            var city_id = this.model.get("city_id");
             this.model.fetch({
                 data:{id: id},
                 success: function(resp){
@@ -54,6 +55,7 @@ define([
                     app.services[serviceName](object_id, {
                         is_edit: id,
                         edit_params: orderItem.params,
+                        city_id: city_id,
                         success: function(result) {
                             location.reload();
                             console.log(result);
@@ -122,6 +124,7 @@ define([
                 cartList.add({
                     id: $(item).data("id"),
                     object_id: $(item).data("object-id"),
+                    city_id: $(item).data("city"),
                     name: $(item).data("name"),
                     total: $(item).data("total"),
                     $item: item
