@@ -117,12 +117,6 @@
 
 @media (max-width: 480px){
 
-	.third_cat_block .category-block{
-		width: 100%;
-		float: none;
-		padding: 0 !important;
-	}
-
 	img.category-icon{
 	    position: static;
 	    float: left;

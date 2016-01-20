@@ -1087,10 +1087,6 @@ span.date{
     width: 20%;
 }
 
-.category-block{
-    margin-bottom: 20px;
-}
-
 .category-title{
     text-transform: uppercase;
     color: #333;
@@ -1166,4 +1162,10 @@ img.category-icon{
 
 #reklama_container a span{
     width: 50%;
+}
+
+.category-block{
+    width: 33%;
+    float: left;
+    margin-bottom: 20px;
 }
