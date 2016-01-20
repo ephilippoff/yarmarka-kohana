@@ -1129,10 +1129,10 @@ class Lib_PlacementAds_AddEdit {
 
 				if (!$value)
 					ORM::factory('User_Settings')
-						->_delete($user, "orginfo", $name);
+						->_delete($user->id, "orginfo", $name);
 				
 				ORM::factory('User_Settings')
-						->update_or_save($user, "orginfo", $name, $value);
+						->update_or_save($user->id, "orginfo", $name, $value);
 			}
 		}
 
