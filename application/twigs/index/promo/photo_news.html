@@ -1,7 +1,7 @@
 <div class="row mb10">
 	<div class="col-md-12 items-cont">
 		<ul>
-			{% for news in lastnews|slice(0,5) %}
+			{% for news in premiumnews|slice(0,5) %}
 				<li>
 					<div class="photo_news_wrap" style="height:150px;float:left;padding:5px;overflow:hidden;">
 						<span class="mr3 fs12"><i class="fa fa-home mr3"></i>{{news.date_expired|date('d/m, H:i')}} </span>
