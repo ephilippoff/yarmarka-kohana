@@ -18,7 +18,6 @@
 		{{ requestblock('block_twig/topline', {'favourites':favourites}) }}
 		{% include 'block/header/logoline' %}
 		{% include 'search/kupony/promo' %}
-		{{ requestblock('block_twig/adslinkline',{'city_id': city.id, 'category_id': category.id, 'theme_class': theme_class}) }}
 {% endblock header %} 
 
 {% block crumbs %} {% include 'search/kupony/crumbs' %} {% endblock crumbs %}

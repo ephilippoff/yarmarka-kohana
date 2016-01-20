@@ -1,0 +1,34 @@
+<tr class="tr">
+	<td class="td td-1">
+		<div class="img-cont">
+			<img 
+				src="{{ item.image.url }}"
+				width="{{ item.image.width }}"
+				height="{{ item.image.height }}"
+				alt="{{ item.image.alt }}"
+				title="{{ item.image.title }}"
+				class="img-frame" />
+		</div>
+	</td>
+	<td class="td td-2">
+		<p class="title">
+			<a href="{{ item.url }}" rel="nofollow" class="object-caption bold">
+				{{ item.shortTitle }}
+			</a>
+		</p>
+		{% if item.price > 0 %}
+			<p class="amount" style="font-size:14px;">{{ item.price|number_format(0, ' ', ' ') }} <i class="fa fa-rub"></i></p>
+		{% endif %}
+		{% if object.compiled.attributes|length > 0 %}
+			<table class="table-details">			
+				<tbody>
+					{% for attr in object.compiled.attributes|slice(0, 2) if attr.value %}
+					<tr>
+						<td class="attr-title">{{ attr.title }}</td>
+						<td class="value">{{ attr.value|e }}</td>
+					</tr>
+					{% endfor %}
+			</tbody></table>
+		{% endif %}
+	</td>				
+</tr>

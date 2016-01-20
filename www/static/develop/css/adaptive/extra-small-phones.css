@@ -17,7 +17,7 @@
     .main_menu .menu-item.top-razdel{width: 50%; display: block;}
     .main_menu .menu-item:not(.top-razdel){display: none;}
     .ue-tab-container{display: none;}
-    .crimson-theme .menu-cont2{background-color: transparent;}
+    .crimson-theme .menu-cont2.trn{background-color: transparent;}
     .crimson-theme .control-menu.menu-cont2{background-color: #313131;}
     .menu-cont1 .cont1 .menu-item{margin-right: 0;}
 	.control-menu .control-item{width: 49.5%; padding: 10px 20px; border-bottom: 1px solid #ccc;}
@@ -38,11 +38,61 @@
 
 	.reg_forgot_block .menu-item{
 		width: 50% !important; 
+		padding: 0;
 	}
 
 	.form-cont .btn-next{
 		width: 170px;
 		line-height: 30px;
+	}
+
+	.last-views .title{
+	    margin-bottom: 10px;
+	}
+
+	.last-views .items .item{
+		width: 50%;
+		border: none;
+	}
+
+	.last-views .items .item:nth-child(odd){
+		border-right: 1px solid #ccc;
+	}
+
+	.last-views .items .item:nth-child(2),
+	.last-views .items .item:nth-child(1){
+		border-bottom: 1px solid #ccc;
+	}
+
+	.last-views .item:nth-child(4){
+		border: none !important;
+	} 
+
+	.kupon_wrap{
+		width: 50%;
+		float: left;
+		padding-right: 5px;
+	}
+
+	.kupon_wrap:nth-child(even){
+		padding-right: 0;
+		padding-left: 5px;
+	}
+
+	.kupon_wrap:last-child{
+		display: none;
+	}
+
+	.left_block>.module{
+		margin-bottom: 0;
+	}
+
+	.detail_last_views .last-views .item:nth-child(n+3){
+	    display: block;
+	}
+
+	.detail_last_views .last-views .item:nth-child(n+5){
+	    display: none;
 	}
 }
 
@@ -55,6 +105,46 @@
     .main_menu .menu-item.top-razdel{width: 70%;}
 
     .control-menu .control-item{width: 100%; border-right: none !important;}
+	
+	.photo_news_wrap{
+	    width: 50%;
+	}
+}
+
+@media (max-width: 480px){
+
+	.third_cat_block .category-block{
+		width: 100%;
+		float: none;
+		padding: 0 !important;
+	}
+
+	img.category-icon{
+	    position: static;
+	    float: left;
+	}
+}
+
+@media (max-width: 400px){
+
+	.kupon_wrap{
+		width: 100%;
+		padding: 0;
+	}
+
+	.kupon_wrap:nth-child(2){
+		display: none;
+	}
+
+	.kupon_wrap .coupon-item-cont {
+	    float: none;
+	    display: block;
+	    max-width: 100%;
+	}
+
+	.kupon_wrap .coupon-item-cont img{
+		width: 100%;
+	}
 
 }
 
@@ -62,5 +152,7 @@
 @media (min-width: 768px){
 
 	.js-newsmenu-dropdown, .js-kuponmenu-dropdown, .city-companies{display: block !important;}
+	.brb2 .js-mainmenu-dropdown{border-bottom-left-radius: 2px;}
+	.br2 .js-mainmenu-dropdown{border-bottom-left-radius: 2px; border-top-left-radius: 2px;}
 
 }

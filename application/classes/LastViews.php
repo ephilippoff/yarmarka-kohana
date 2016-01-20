@@ -28,7 +28,8 @@
 		}
 
 		public function get() {
-			return $this->data;
+			$temp = $this->session->get('last_views');
+			return $temp != NULL ? $temp : array();
 		}
 
 		public function commit() {

@@ -44,7 +44,7 @@ class Controller_Detail extends Controller_Template {
 		$twig->domain      = $this->domain;
 		$twig->city        = $this->domain->get_city();
 		$twig->onPageFlag = 'detail';
-
+		$twig->horizontalView = TRUE;
 
 		$detail_info = Detailpage::factory("Default", $object)
 						->get_messages()
@@ -54,6 +54,17 @@ class Controller_Detail extends Controller_Template {
 
 		foreach ((array) $detail_info as $key => $item) {
 			$twig->{$key} = $item;
+		}
+
+		$twig->isJobVacancy = $detail_info->category->seo_name == 'vakansii';
+		if ($twig->isJobVacancy && isset($_GET['cv'])) {
+			$cv_object = ORM::factory('Object', $_GET['cv']);
+			if ($cv_object->loaded()) {
+				$cv_object_category = ORM::factory('Category', $cv_object->category);
+				if ($cv_object_category->loaded() && $cv_object_category->seo_name == 'spetsialisty') {
+					$twig->cvAttachedUrl = $cv_object->get_full_url();
+				}
+			}
 		}
 
 		//favourites
@@ -81,11 +92,60 @@ class Controller_Detail extends Controller_Template {
 		$twig->userEmail = $cUser->getEmail();
 
 		//add to last views
-		LastViews::instance()
-			->set($object->id)
-			->commit();
-
+		LastViews::instance()->set($object->id);
 		$this->response->body($twig);
+		LastViews::instance()->commit();
+	}
+
+	protected function validate_cv_mode($categorySeoName) {
+		$object = ORM::factory('Object', $_GET['object_id']);
+		if (!$object->loaded()) {
+			throw new HTTP_Exception_404;
+		}
+		$category = ORM::factory('Category', $object->category);
+		if (!$category->loaded() || $category->seo_name != $categorySeoName) {
+			throw new HTTP_Exception_404;
+		}
+
+		return $object;
+	}
+
+	public function enable_cv_mode() {
+		$object = $this->validate_cv_mode('vakansii');
+		$session = Session::instance();
+		$session->set('cv_mode', 1);
+		$session->set('cv_mode_parent', $object->id);
+		return $object;
+	}
+
+	public function disable_cv_mode() {
+		$object = $this->validate_cv_mode('spetsialisty');
+		$session = Session::instance();
+		$session->set('cv_mode', 0);
+		$parent_object = ORM::factory('Object', $session->get('cv_mode_parent'));
+		if (!$parent_object->loaded()) {
+			throw new Exception('parent_object not found!');
+		}
+		$session->set('cv_mode_parent', NULL);
+		return $parent_object;
+	}
+
+	public function action_select_cv() {
+		$this->enable_cv_mode();
+		$this->redirect('/user/published/rabota/spetsialisty?cv_mode=1');
+		die;
+	}
+
+	public function action_create_cv() {
+		$this->enable_cv_mode();
+		$this->redirect('/add?cv_mode=1');
+		die;
+	}
+
+	public function action_use_cv() {
+		$object = $this->disable_cv_mode();
+		$this->redirect($object->get_full_url() . '?cv=' . (int) $_GET['object_id']);
+		die;
 	}
 
 	public function action_type89() {

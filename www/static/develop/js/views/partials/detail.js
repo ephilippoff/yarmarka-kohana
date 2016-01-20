@@ -7,8 +7,11 @@ define([
     "views/partials/behaviors/services",
     "views/partials/behaviors/ads",
     "gisMap",
-    'modules/writeToAuthor/main'
-], function (templates, FavouriteBehavior, SearchBehavior, OControlBehavior, ServicesBehavior, AdsBehavior, gisMap, WriteToAuthor) {
+    'modules/writeToAuthor/main',
+    'modules/vkMessagesNotifier/main',
+    'modules/lastViews/main',
+    'modules/complain/main'
+], function (templates, FavouriteBehavior, SearchBehavior, OControlBehavior, ServicesBehavior, AdsBehavior, gisMap, WriteToAuthor, VkMessagesNotifier, LastViewsMainView, Complain) {
     "use strict";
 
 
@@ -40,6 +43,15 @@ define([
 
         initialize: function() {
             this.bindUIElements();
+
+            /* initialize last views module */
+
+            if ($('.last-views').length) {
+                this.lastViewsModule = new LastViewsMainView({
+                    el: $('.last-views')
+                });
+            }
+            /* initialize last views module done */
 
             if (this.ui.map.length) {
                 var similarObjects = [];
@@ -90,6 +102,19 @@ define([
             var $temp = this.$el.find('[data-role=writeToAuthor]');
             if ($temp.length) {
                 new WriteToAuthor({
+                    el: $temp
+                }).render();
+            }
+
+            /* initialize vk messages notifier */
+            if (typeof(VK) !== 'undefined') {
+                new VkMessagesNotifier();
+            }
+
+            /* initialize complain widget */
+            $temp = this.$el.find('[data-role=complain]');
+            if ($temp.length) {
+                new Complain({
                     el: $temp
                 }).render();
             }

@@ -1,4 +1,4 @@
-<div class="popup-menu-cont popup-menu-cont2l iLight-cont js-mainmenu z300">
+<div class="popup-menu-cont2l iLight-cont {% if staticMainMenu %}left_menu hidden-xs {% else %}js-mainmenu popup-menu-cont{% endif %} z300">
 	<div class="left brb2">
 		<ul class="top" role="menu">
 			{% set true_categories = ['kupony','rabota','avtotransport','nedvizhimost','uslugi', 'stroitelstvo-i-remont', 
@@ -7,9 +7,7 @@
 			{% for category in categories1l if category.seo_name in true_categories %}
 				{% set menuHeight = (banners[category.id] is defined and banners[category.id].menu_height) ? banners[category.id].menu_height : '' %}
 				<li class="js-submenu-item" data-submenu-id="section{{category.id}}" class="section{{category.id}}" data-menu-height="{{menuHeight}}">
-					<span class="span-link" onclick="window.location = '/{{category.seo_name}}'">
-						<span class="name">{{category.title}}</span>
-					</span>
+					<a class="span-link" href="/{{category.seo_name}}">{{category.title}}</a>
 				</li>
 			{% endfor %}
 		</ul>
@@ -36,8 +34,7 @@
 					<li class="li-title ml10"><span class="bold  black fs18" style="width: 165px">{{category.title}}</span></li>
 					{% for subcategory in categories2l if subcategory.parent_id == category.id %}
 						<li class="ml20">
-							<span class="span-link" onclick="window.location = '/{{category.seo_name}}/{{subcategory.seo_name}}'">
-							<span class="name2">{{subcategory.title}}</span>
+							<a href="/{{category.seo_name}}/{{subcategory.seo_name}}">{{subcategory.title}}</a>
 						</span></li>
 					{% endfor %}
 				</ul>
@@ -45,3 +42,25 @@
 		{% endfor %}
 	</div>
 </div>
+
+{% if staticMainMenu %}
+
+<script>
+	$('.left_menu .left ul li, .right .section').mouseover(function(){
+		var dataID = $(this).attr('data-submenu-id');
+		console.log(dataID);
+		$('.right .section').each(function(){
+			if ($(this).attr('id') == dataID) {
+				$(this).show();
+			}
+		});
+	}).mouseleave(function(){
+		$('.right .section').hide();
+	});
+
+	$('.right .section').mouseover(function(){
+		$(this).show();
+	});
+</script>
+
+{% endif %}

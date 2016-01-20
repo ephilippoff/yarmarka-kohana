@@ -1,5 +1,5 @@
 <div class="{{ theme_class }}">
-	<div class="menu-cont2 brt2">
+	<div class="menu-cont2 trn brb2 module">
 		<div class="row">
 			<div class="col-lg-5 col-md-3 col-sm-12 hidden-xs col-lg-push-7 col-md-push-9 clearfix">
 				<div class="menu-item-wrp js-citymenu-dropdown-right" style="float: right;position: relative;">
@@ -18,9 +18,16 @@
 				{% endfor %}
 			</div>
 			<div class="col-lg-7 col-md-9 col-sm-12 col-xs-12 col-lg-pull-5 col-md-pull-3 clearfix main_menu">
-				<div class="menu-item w25p left iLight crimson-theme js-mainmenu-dropdown top-razdel"><!--main-page-style iLight-disable-->
+				<div class="menu-item w25p left iLight crimson-theme {% if staticMainMenu == false %} js-mainmenu-dropdown {% else %} hidden-sm hidden-xs{% endif %} top-razdel"><!--main-page-style iLight-disable-->
+					<span class="menu-item-cont ta-c">{% if staticMainMenu %}Объявления{% else %}Выбрать рубрику<i class="fa fa-caret-down ml3"></i>{% endif %}</span>
+				</div>
+				<!-- Если меню статично, то на мобильных скрываем статичное меню и возвращаем его в привычное состояние-->
+				{% if staticMainMenu %}
+				<div class=" hidden-lg hidden-md menu-item w25p left iLight crimson-theme js-mainmenu-dropdown top-razdel">
 					<span class="menu-item-cont ta-c">Выбрать рубрику<i class="fa fa-caret-down ml3"></i></span>
 				</div>
+				{% endif %}
+				<!-- КОнец блока -->
 				<div class="hidden-lg hidden-md hidden-sm top_menu_icon crimson-theme" onclick="$('.js-newsmenu-dropdown, .js-kuponmenu-dropdown, .city-companies').slideToggle();">
 					<i class="fa fa-bars"></i>
 				</div>

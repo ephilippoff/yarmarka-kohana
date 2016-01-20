@@ -27,16 +27,30 @@
 					</div>
 					<button type="submit" class="button dib bg-color-blue white p10 br2 js-contacts-show" data-id="{{object.id}}">Показать контакты</button>
 					</form>
-					{% if isGuest %}
-						<div class="write-to-author unauthorized">
-							Чтобы отправить сообщение автору нужно <a href="/user/login?return={{ currentUri }}">Авторизоваться</a>
+					{% if object.source_id == 1 %}
+						{% if isGuest %}
+							<div class="write-to-author unauthorized">
+								Чтобы отправить сообщение автору нужно <a href="/user/login?return={{ currentUri }}">Авторизоваться</a>
+							</div>
+						{% else %}
+							<div 
+								data-role="writeToAuthor" 
+								data-id="{{ object.id }}" 
+								data-email="{{ userEmail }}" 
+								data-is-job-vacancy="{{ isJobVacancy }}"
+								{% if cvAttachedUrl %}data-text="Мое резюме на Ярмарке: {{ cvAttachedUrl }}. " data-state="compose"{% endif %}
+								class="write-to-author"></div>
+						{% endif %}
+					{% elseif object.source_id == 2 %}
+						<div class="write-to-author impossible">
+							Объявление подано в печатную версию, связаться можно только по указанному телефону
 						</div>
 					{% else %}
-						<div data-role="writeToAuthor" data-id="{{ object.id }}" data-email="{{ userEmail }}" class="write-to-author"></div>
+						
 					{% endif %}
 				</div>
 				<div class="col-md-6 col-sm-6">
-					{% if object.compiled.author.org_type == 2 %}
+					{% if object.compiled.author.org_type == 2 and object.compiled.author.role != 9 %}
 						<p><span class="moreinfo span-link" onclick='document.location="/user?id={{object.author_company_id}}"'>{{ object.compiled.author.org_name }}</span></p>
 						{% if object.compiled.author.logo %}
 							<div class="img-cont"><img src="{{  get_file(object.compiled.author.logo['120x90']) }}"></div>

@@ -70,7 +70,6 @@
 			</div>
 		{% endif %}
 		{% include 'detail/photo' %}
-		{{ requestblock('block_twig/last_views', {}) }}
 	</div>
 {% endblock %}
 
@@ -80,9 +79,12 @@
 			<div class="hidden-xs">
 				{% include 'detail/controls' %}
 				{% include 'detail/services' %}
+				{% include 'block/vk/comments_surgut' %}
 			</div>
-			{% include 'block/vk/comments_surgut' %}
 			{% include 'detail/similar' %}
+			<div class="detail_last_views">
+				{{ requestblock('block_twig/last_views', {'horizontalView': horizontalView}) }}
+			</div>
 		</aside>
 	</div>
 {% endblock rightside %}

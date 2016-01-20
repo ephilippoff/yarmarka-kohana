@@ -136,11 +136,11 @@ define([
             'container': $(".js-adslink-graphic")
         },
         initialize: function() {
-            var s = this;
-            this.initAds();
-            if (this.adsView) {
-                this.startAnimationAds();
-            }
+            // var s = this;
+            // this.initAds();
+            // if (this.adsView) {
+            //     this.startAnimationAds();
+            // }
 
         },
         initAds: function() {
