@@ -1,5 +1,5 @@
 <!--noindex-->
-<div class="{{ theme_class }} reklama-cont brt2 hidden-xs">
+<div class="reklama-cont brt2 hidden-xs">
 {% if imagelinks|length > 0 or textlinks|length > 0%}
  	{% if imagelinks|length > 0 %}
 		<div id="reklama_container" class="reklama-line banners js-adslink-graphic clearfix">
@@ -9,12 +9,12 @@
 				{% if link|length > 0 %}
 					{% set link = link|first %}
 					<a class="w23p dib va-t clearfix" href="{{ link.link }}" target="_blank">
-						<img src="{{ '/./uploads/banners/' ~ link.image }}" class="fl"/>
+						<img src="{{ '/./uploads/banners/' ~ link.image }}" class="fl hidden-md hidden-sm"/>
 						<span class="ml10 fs12 fl w50p h50 oh">{{ link.title }}</span>
 					</a>
 				{% else %}
 					<a class="w23p dib va-t clearfix" href="http://c.yarmarka.biz{{ info_link }}" style="height:50px; overflow:hidden;"  target="_blank">
-						<img src="{{ staticfile('images/empty_ads.png') }}" class="fl"/>
+						<img src="{{ staticfile('images/empty_ads.png') }}" class="fl hidden-md hidden-sm"/>
 						<span class="ml10 fs12 fl w50p oh">Рекламное место свободно</span>
 					</a>
 				{% endif %} 

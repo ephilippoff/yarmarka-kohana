@@ -45,4 +45,8 @@
 	.kupons_block .kupon_wrap:nth-child(3){
 		display: none;
 	}
+
+	#reklama_container a span{
+		font-size: 14px;
+	}
 }

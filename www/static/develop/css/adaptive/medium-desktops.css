@@ -46,6 +46,12 @@
 	    width: 100%;
 	    float: none !important;
 	    padding: 10px 0;
+	    font-size: 13px;
+	}
+
+	.reklama-cont .banners{
+		height: auto;
+		padding: 15px 0;
 	}
 
 }
