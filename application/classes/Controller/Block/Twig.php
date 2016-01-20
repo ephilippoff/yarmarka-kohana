@@ -120,7 +120,10 @@ class Controller_Block_Twig extends Controller_Block
         );
 
         $reklama = $reklama->where("type", "IN", $types[$type]);
-        $reklama =  $reklama->cached(Date::HOUR)->getprepared_all();
+        $reklama =  $reklama->getprepared_all(); //$reklama->cached(Date::HOUR)->getprepared_all();
+
+        //var_dump(count($reklama));
+        //die;
 
         if ($count) {
 
@@ -132,7 +135,7 @@ class Controller_Block_Twig extends Controller_Block
                 return $a->k < $b->k;
             });
 
-            $reklama = array_splice($reklama, $count);
+            $reklama = $count < count($reklama) ? array_splice($reklama, $count) : $reklama;
         }
 
         return $reklama;
