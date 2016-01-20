@@ -8,12 +8,12 @@
 				{% set link = imagelinks|slice(i,1) %}
 				{% if link|length > 0 %}
 					{% set link = link|first %}
-					<a class="w23p dib va-t clearfix" href="{{ link.link }}">
+					<a class="w23p dib va-t clearfix" href="{{ link.link }}" target="_blank">
 						<img src="{{ '/./uploads/banners/' ~ link.image }}" class="fl"/>
 						<span class="ml10 fs12 fl w50p h50 oh">{{ link.title }}</span>
 					</a>
 				{% else %}
-					<a class="w23p dib va-t clearfix" href="http://c.yarmarka.biz{{ info_link }}" style="height:50px; overflow:hidden;">
+					<a class="w23p dib va-t clearfix" href="http://c.yarmarka.biz{{ info_link }}" style="height:50px; overflow:hidden;"  target="_blank">
 						<img src="{{ staticfile('images/empty_ads.png') }}" class="fl"/>
 						<span class="ml10 fs12 fl w50p oh">Рекламное место свободно</span>
 					</a>
