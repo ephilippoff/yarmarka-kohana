@@ -31,4 +31,21 @@
 		padding-left: 10px;
 	}
 
+	#reklama_container a{
+	    text-align: center;
+	    max-height: 200px;
+	}
+
+	#reklama_container img{
+	    float: none !important;
+	    display: block;
+    	margin: auto;
+	}
+
+	#reklama_container a span{
+	    width: 100%;
+	    float: none !important;
+	    padding: 10px 0;
+	}
+
 }
