@@ -66,12 +66,11 @@ class Controller_Index extends Controller_Template {
                 "published" =>TRUE,
                 "city_id" => $this->last_city_id,
                 "category_seo_name" => "novosti",
-                "not_id" => $premium_ids,
-                'premium' => true
+                "not_id" => $premium_ids
             ),
             array("limit" => 7, "page" => 1, "order" => "date_expired")
         );
-        $twig->lastnews = Search::getresult($search_query->execute()->as_array());
+        $twig->lastnews = array_merge($twig->premiumnews, Search::getresult($search_query->execute()->as_array()));
        
         $index_info = $this->get_index_info($last_city);
 
