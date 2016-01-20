@@ -1,8 +1,8 @@
 <div class="row mb10 fn-additional" id="additional_org_name" style="<?= ($settings->additional_org_name ? '' : 'display:none') ?>">
-	<div class="col-md-3 col-xs-4 labelcont">
+	<div class="col-md-3 labelcont">
 		<label>Название компании</label>
 	</div>
-	<div class="col-md-9 col-xs-8">
+	<div class="col-md-9">
 		<div class="inp-cont <? if ($errors->additional_org_name) echo "error"; ?>">
 			<span class="required-star">*</span>																		
 			<?= Form::input("additional_org_name", $values->additional_org_name, array('class' => 'w100p')) ?>
@@ -19,10 +19,10 @@
 </div>
 
 <div class="row mb10 fn-additional" id="additional_vakancy_org_type" style="<?= ($settings->additional_vakancy_org_type ? '' : 'display:none') ?>">
-	<div class="col-md-3 col-xs-4 labelcont">
+	<div class="col-md-3 labelcont">
 		<label>Тип компании</label>
 	</div>
-	<div class="col-md-9 col-xs-8">
+	<div class="col-md-9">
 		<div class="inp-cont <? if ($errors->additional_vakancy_org_type) echo "error"; ?>">
 			<span class="required-star">*</span>																		
 			<?= Form::select("additional_vakancy_org_type", $vakancy_org_type, $values->additional_vakancy_org_type, array('class' => 'w100p')) ?>
@@ -36,10 +36,10 @@
 </div>
 
 <div class="row mb10 fn-additional" id="additional_commoninfo" style="<?= ($settings->additional_commoninfo ? '' : 'display:none') ?>">
-	<div class="col-md-3 col-xs-4 labelcont">
+	<div class="col-md-3 labelcont">
 		<label>О компании</label>
 	</div>
-	<div class="col-md-9 col-xs-8">
+	<div class="col-md-9">
 		<div class="inp-cont <? if ($errors->additional_commoninfo) echo "error"; ?>">
 			<span class="required-star">*</span>																		
 			<?= Form::textarea("additional_commoninfo", $values->additional_commoninfo, array('class' => 'w100p')) ?>
