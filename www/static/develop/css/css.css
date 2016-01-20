@@ -1156,16 +1156,19 @@ img.category-icon{
     width: 25%;
     display: block;
     float: left;
-    overflow: hidden;
     padding: 0 20px;
 }
 
 #reklama_container a span{
     width: 50%;
+<<<<<<< HEAD
 }
 
 .category-block{
     width: 33%;
     float: left;
     margin-bottom: 20px;
+=======
+    word-break: break-all;
+>>>>>>> ab06b91b92d9a10ac0813b7477d21ca1a8d52286
 }
