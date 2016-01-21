@@ -150,7 +150,7 @@ class Object
 					->save_attributes()
 					->save_generated()
 					->save_contacts()
-					//->save_additional()
+					->save_additional()
 					->save_compile_object();
 
 				$db->commit();

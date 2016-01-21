@@ -45,7 +45,7 @@ class Controller_Block_Twig extends Controller_Block
 
         $twig = Twig::factory('block/header/adslinkline');
         $twig->imagelinks = $this->adslinkline($city_id, $category_id, "image", 4);
-        $twig->textlinks = $this->adslinkline($city_id, $category_id, "text");
+        $twig->textlinks = array();//$this->adslinkline($city_id, $category_id, "text");
         $twig->theme_class = $theme_class;
         $twig->info_link = "/ourservices/kontekstnaya-reklama";
         $this->response->body($twig);
@@ -120,7 +120,7 @@ class Controller_Block_Twig extends Controller_Block
         );
 
         $reklama = $reklama->where("type", "IN", $types[$type]);
-        $reklama =  $reklama->cached(Date::HOUR)->getprepared_all();
+        $reklama =  $reklama->getprepared_all(); //$reklama->cached(Date::HOUR)->getprepared_all();
 
         if ($count) {
 
@@ -132,7 +132,7 @@ class Controller_Block_Twig extends Controller_Block
                 return $a->k < $b->k;
             });
 
-            $reklama = array_splice($reklama, $count);
+            $reklama = array_slice($reklama, 0, $count);
         }
 
         return $reklama;

@@ -22,17 +22,7 @@
 		display: none;
 	}
 
-	.third_cat_block .category-block{
-		width: 50%;
-		float: left;
-	}
-
-	.third_cat_block .category-block:nth-child(2n){
-		padding-left: 10px;
-	}
-
 	#reklama_container a{
-	    text-align: center;
 	    max-height: 200px;
 	}
 
@@ -45,7 +35,16 @@
 	#reklama_container a span{
 	    width: 100%;
 	    float: none !important;
-	    padding: 10px 0;
+	    font-size: 13px;
+	}
+
+	.reklama-cont .banners{
+		height: auto;
+		padding: 15px 0;
+	}
+
+	.category-block{
+		width: 50%;
 	}
 
 }

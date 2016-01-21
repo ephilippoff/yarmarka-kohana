@@ -9,7 +9,7 @@ define([
         controlClass: ".js-mainmenu-dropdown",
         menuClass: ".js-mainmenu",
         menuTemplate: "#template-mainmenu"
-    }
+    };
 
     var userMenuSettings = {
         controlClass: ".js-usermenu-dropdown",
@@ -48,9 +48,12 @@ define([
         },
         initialize: function(options) {
             this.visible = 0;
-            this.$el.append($(options.templateClass).html());
-            if (!options.doNotRemove) {
-                $(options.templateClass).remove();
+
+            if (!options.doNotUseTemplate) {
+                this.$el.append($(options.templateClass).html());
+                if (!options.doNotRemove) {
+                    $(options.templateClass).remove();
+                }
             }
             //Разделение меню городов по Class;
             var cityClass = 1;
@@ -61,9 +64,9 @@ define([
         },
 
         showMenu: function() {
-            // if (this.visible && this.$('[data-link]').length) {
-            //     window.location = this.$('[data-link]').data('link');
-            // }
+            if (this.getOption('alwaysVisibleMenu')) {
+                return;
+            }
             var s = this;
             if (this.activateTimer) clearTimeout(this.activateTimer);
             this.activateTimer = setTimeout(function(){
@@ -76,11 +79,14 @@ define([
         },
 
         closeMenu: function() {
+            if (this.getOption('alwaysVisibleMenu')) {
+                return;
+            }
             if (this.activateTimer) clearTimeout(this.activateTimer);
             $(this.getOption("menuClass")).fadeOut(70);
-             $("#popup-layer").fadeOut(70);
-             $(this.getOption("controlClass")).removeClass("z301");
-             this.visible = 0;
+            $("#popup-layer").fadeOut(70);
+            $(this.getOption("controlClass")).removeClass("z301");
+            this.visible = 0;
         }
     });
 
@@ -94,7 +100,7 @@ define([
             if ($menu.length > 0){
                 try {
                     $menu.menuAim({
-                        activate: this.activateSubmenu, 
+                        activate: this.activateSubmenu.bind(this), 
                         deactivate: this.deactivateSubmenu,
                         rowSelector: ".js-submenu-item"
                     });
@@ -108,6 +114,7 @@ define([
             var s = this;
             if (this.submenuActivateTimer) clearTimeout(this.submenuActivateTimer);
 
+            this.activeRow = row;
             this.submenuActivateTimer = setTimeout(function(){
                var $row = $(row), 
                   submenuId = $row.data("submenu-id"), 
@@ -119,6 +126,9 @@ define([
         },
         deactivateSubmenu: function(row) {
             if (this.submenuActivateTimer) clearTimeout(this.submenuActivateTimer);
+            if (!row) {
+                row = this.activeRow;
+            }
             var $row = $(row), 
                 submenuId = $row.data("submenu-id"), 
                 $submenu = $("#" + submenuId);
@@ -142,12 +152,28 @@ define([
             menusToload = menusToload || [];
 
             if (_.contains(menusToload, "main")) {
-                this.main = new MainmenuView({
+                var menuOptions = {
                     el: mainMenuSettings.controlClass,
                     templateClass: mainMenuSettings.menuTemplate,
                     menuClass: mainMenuSettings.menuClass,
-                    controlClass: mainMenuSettings.controlClass,
-                });
+                    controlClass: mainMenuSettings.controlClass
+                };
+
+                if (_globalSettings.page == 'index') {
+                    //override some settings
+                    menuOptions.alwaysVisibleMenu = true;
+                    menuOptions.doNotRemove = true;
+                    menuOptions.el = '.left_menu';
+                    menuOptions.menuClass = '.top_level_menu';
+                    menuOptions.doNotUseTemplate = true;
+
+                    var me = this;
+                    $(menuOptions.el).on('mouseleave', function (e) {
+                        me.main.deactivateSubmenu();
+                    });
+                }
+
+                this.main = new MainmenuView(menuOptions);
             }
 
             if (_.contains(menusToload, "city")) {

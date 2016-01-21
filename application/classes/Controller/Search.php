@@ -100,6 +100,7 @@ class Controller_Search extends Controller_Template {
 
         //main search
         $main_search_query = Search::searchquery($search_info->search_filters, $search_params);
+        //$main_search_query->where('o.source_id', '<>', 2);
 
         $twig->main_search_result = Search::getresult($main_search_query->execute()->as_array());
         if (!$search_info->main_search_result_count) {
