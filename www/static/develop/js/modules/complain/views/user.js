@@ -4,10 +4,14 @@ define([ 'jquery', 'underscore', 'backbone' ], function ($, _, Backbone) {
 		tagName: 'div',
 
 		template: _.template(
-				'<label>Имя</label>'
-				+ '<input type="text" data-role="name" />'
-				+ '<label>Email</label>'
-				+ '<input type="text" data-role="email" />'
+				'<div class="clearfix module contact_form">'
+					+'<label class="mr5">Имя</label>'
+					+ '<input type="text" data-role="name" />'
+				+ '</div>'
+				+ '<div class="clearfix module contact_form">'
+					+ '<label class="mr5">Email</label>'
+					+ '<input type="text" data-role="email" />'
+				+ '</div>'
 			),
 
 		initialize: function () {

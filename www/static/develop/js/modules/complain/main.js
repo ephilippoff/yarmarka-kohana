@@ -25,7 +25,7 @@ define(
 		return Backbone.View.extend({
 
 			events: {
-				'click [data-role=start]': 'onStartButtonClick'
+				'click [data-role=start]': 'onStartButtonClick',
 			},
 
 			initialize: function () {
@@ -36,9 +36,9 @@ define(
 				this.subjectsView = new SubjectsView({ collection: this.subjects });
 				this.$el.append(this.subjectsView.render());
 				this.writeView = new WriteView({ model: this.model });
-				this.$el.append(this.writeView.render());
+				$('.dialog_window').append(this.writeView.render());
 				this.thanksView = new ThanksView({ model: this.model });
-				this.$el.append(this.thanksView.render());
+				$('.dialog_window').append(this.thanksView.render());
 				
 				this.listenTo(this.subjects, 'add', this.onCollectionAdd);
 				this.listenTo(this.model, 'change:state', this.onModelStateChanged);

@@ -1161,14 +1161,94 @@ img.category-icon{
 
 #reklama_container a span{
     width: 50%;
-<<<<<<< HEAD
 }
 
 .category-block{
     width: 33%;
     float: left;
     margin-bottom: 20px;
-=======
     word-break: break-all;
->>>>>>> ab06b91b92d9a10ac0813b7477d21ca1a8d52286
+}
+
+#complain{
+    position: relative;
+}
+
+#complain.active{
+    background: #fff;
+}
+
+#complain>a{
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding: 5px 20px;
+}
+
+#complain ul{
+    background: #fff;
+    position: absolute;
+    bottom: 120%;
+    left: 0;
+    width: 240px;
+    z-index: 2;
+    box-shadow: 0px 0px 10px #ccc;
+}
+
+#complain ul a{
+    display: block;
+    padding: 5px 12px;
+    z-index: 3;
+
+}
+
+#complain ul a:hover{
+    background-color: #ccc;
+}
+
+.dialog_window{
+    margin-top: -10px;
+    border: 1px solid #ccc;
+    border-top: none;
+}
+
+.dialog_window>div{
+    padding: 20px;
+    width: 50%;
+    display: none;
+}
+
+.dialog_window textarea{
+    display: block;
+    width: 100%;
+    border-radius: 2px;
+    border: 1px solid #ccc;
+    box-shadow: 0px 1px 2px #ccc;
+    margin: 15px 0;
+    height: 100px;
+}
+
+.dialog_window button{
+    background: #2B587A;
+    border: none;
+    padding: 5px 0;
+    color: #fff;
+    border-radius: 2px;
+    width: 60%;
+    -webkit-transition: all 0.15s ease-in;
+    -o-transition: all 0.15s ease-in;
+    transition: all 0.15s ease-in;
+}
+
+.dialog_window button:last-child{
+    width: 30%;
+    float: right;
+}
+
+.dialog_window button:hover{
+    background-color: #487EA6;
+}
+
+.dialog_window .contact_form input{
+    float: right;
 }

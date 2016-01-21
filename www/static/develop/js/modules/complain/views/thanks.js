@@ -5,8 +5,8 @@ define([ 'jquery', 'underscore', 'backbone' ], function ($, _, Backbone) {
 		tagName: 'div',
 
 		template: _.template(
-				'<%= userName %>, Ваше обращение отправлено.<br />' + 
-				'Спасибо за то, что Вы помогаете сделать "Ярмарку" лучше.<br />' + 
+				'Спасибо, <%= userName %>, Ваше обращение отправлено.<br />' + 
+				'Благодарим вас за то, что Вы помогаете сделать "Ярмарку" лучше.<br />' + 
 				'Наш специалист сообщит Вам о рассмотрении Вашего обращения в ближайшее время.'
 			),
 
@@ -19,9 +19,9 @@ define([ 'jquery', 'underscore', 'backbone' ], function ($, _, Backbone) {
 			return this.$el;
 		},
 
-		show: function () { this.$el.show(); }, 
+		show: function () { this.$el.slideDown(); }, 
 
-		hide: function () { this.$el.hide(); }
+		hide: function () { this.$el.slideUp(); }
 
 	});
 
