@@ -45,7 +45,7 @@ class Controller_Block_Twig extends Controller_Block
 
         $twig = Twig::factory('block/header/adslinkline');
         $twig->imagelinks = $this->adslinkline($city_id, $category_id, "image", 4);
-        $twig->textlinks = $this->adslinkline($city_id, $category_id, "text");
+        $twig->textlinks = array();//$this->adslinkline($city_id, $category_id, "text");
         $twig->theme_class = $theme_class;
         $twig->info_link = "/ourservices/kontekstnaya-reklama";
         $this->response->body($twig);
