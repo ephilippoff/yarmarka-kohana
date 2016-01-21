@@ -103,3 +103,15 @@ function (app, $, Marionette, Backbone, _) {
 
     app.start();
 });
+
+//Прилипающий сайдбар на страницах
+
+$(document).ready(function(){
+    if ($('div').is('.right-side')) {
+        var mainBlockBottomY = $(document).height() - ($('.main_block').offset().top + $('.main_block').outerHeight());
+        $('.right-side').hcSticky({
+            stickTo: document,
+            bottomEnd: mainBlockBottomY
+        });
+    }
+});
