@@ -130,6 +130,7 @@ class Object_Compile
 		$result["services"] = array();
 		$result["services"]["premium"] = array();
 		$result["services"]["lider"] = array();
+		$result["services"]["cities"] = array();
 
 		$premiums = ORM::factory('Object_Rating')
 						->where("object_id","=",$object_id)
@@ -170,6 +171,10 @@ class Object_Compile
 			);
 		}
 
+		$object = ORM::factory('Object', $object_id);
+		if (count($object->get_cities()) > 1) {
+			$result["services"]["cities"] = $object->get_cities();
+		}
 		return $result;
 	}
 

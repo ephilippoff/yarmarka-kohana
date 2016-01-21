@@ -7,8 +7,9 @@ define([
     "views/components/services/premium",
     "views/components/services/lider",
     "views/components/services/kupon",
-    "views/components/services/newspaper"
-], function (Marionette, Backbone, templates, ServiceUpView, ServicePremiumView, ServiceLiderView, KuponView, NewspaperView) {
+    "views/components/services/newspaper",
+    "views/components/services/cities"
+], function (Marionette, Backbone, templates, ServiceUpView, ServicePremiumView, ServiceLiderView, KuponView, NewspaperView, CitiesView) {
     'use strict';
 
     var CartModel = Backbone.Model.extend({});
@@ -146,6 +147,37 @@ define([
                     app.windows.vent.trigger("showWindow", "service", {
                         title: "Услуга - Объявление в газету",
                         serviceView : new NewspaperView({
+                            model: new ServiceModel({
+                                info: resp,
+                                is_edit: options.is_edit,
+                                edit_params: options.edit_params,
+                                city_id: options.city_id
+                            })
+                        }),
+                        code: resp.code,
+                        success: options.success,
+                        error: options.error,
+                        is_edit: options.is_edit
+                    });
+                }
+            });
+        },
+        cities: function(id, options) {
+            
+            var serviceModel = new ServiceModel();
+            serviceModel.urlRoot = "/rest_service/check_cities";
+            options.error = options.error || function() {};
+            options.success = options.success || function() {};
+            serviceModel.save({
+                id: id,
+                ids: options.ids
+            }, {
+                success: function(model) {
+                    var resp = model.toJSON();
+
+                    app.windows.vent.trigger("showWindow", "service", {
+                        title: "Услуга - В несколько городов",
+                        serviceView : new CitiesView({
                             model: new ServiceModel({
                                 info: resp,
                                 is_edit: options.is_edit,
