@@ -25,11 +25,11 @@ define(
 			},
 
 			show: function () {
-				this.$el.show();
+				this.$el.fadeIn(300);
 			},
 
 			hide: function () {
-				this.$el.hide();
+				this.$el.fadeOut(300);
 			}
 
 		});

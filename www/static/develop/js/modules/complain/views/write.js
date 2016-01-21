@@ -8,8 +8,8 @@ define([ 'jquery', 'underscore', 'backbone', './user' ], function ($, _, Backbon
 				'<div data-role="validation-container"></div>'
 				+ '<div data-role="user-view-container"></div>'
 				+ '<div>'
-					+ '<label data-role="label"></label>'
-					+ '<textarea data-role="message"></textarea>'
+					+ 'Причина для жалобы: <label data-role="label"></label>'
+					+ '<textarea data-role="message" placeholder="Дополнительная информация (необязательно)"></textarea>'
 					+ '<button data-role="submit">Отправить</button>'
 					+ '<button data-role="cancel">Отменить</button>'
 				+ '</div>'
@@ -27,7 +27,6 @@ define([ 'jquery', 'underscore', 'backbone', './user' ], function ($, _, Backbon
 
 		render: function () {
 			this.$el.html(this.template(this.model.toJSON()));
-
 			this.$userViewContainer = this.$('[data-role=user-view-container]');
 			if (!this.userView) {
 				this.userView = new UserView({ model: this.model });
@@ -42,7 +41,8 @@ define([ 'jquery', 'underscore', 'backbone', './user' ], function ($, _, Backbon
 		},
 
 		show: function () {
-			this.$el.show();
+			this.$el.slideDown();
+			$('#complain').addClass('active');
 			if (this.model.get('isGuest')) {
 				this.userView.show();
 			} else {
@@ -51,7 +51,8 @@ define([ 'jquery', 'underscore', 'backbone', './user' ], function ($, _, Backbon
 		},
 
 		hide: function () {
-			this.$el.hide();
+			this.$el.slideUp();
+			$('#complain').removeClass('active');
 		},
 
 		onSubmitButtonClick: function (e) {

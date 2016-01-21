@@ -51,4 +51,8 @@
 	    float: none !important;
 		font-size: 14px;
 	}
+
+	.dialog_window>div{
+		width: 100%;
+	}
 }
