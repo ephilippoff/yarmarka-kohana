@@ -44,7 +44,6 @@ class Controller_Detail extends Controller_Template {
 		$twig->domain      = $this->domain;
 		$twig->city        = $this->domain->get_city();
 		$twig->onPageFlag = 'detail';
-		$twig->horizontalView = TRUE;
 
 		$detail_info = Detailpage::factory("Default", $object)
 						->get_messages()
@@ -90,6 +89,8 @@ class Controller_Detail extends Controller_Template {
 		$twig->isGuest = $cUser->getIsGuest();
 		$twig->currentUri = $this->request->uri();
 		$twig->userEmail = $cUser->getEmail();
+
+		
 
 		//add to last views
 		LastViews::instance()->set($object->id);
@@ -203,6 +204,10 @@ class Controller_Detail extends Controller_Template {
 		$twig->domain      = $this->domain;
 		$twig->city        = $this->domain->get_city();
 
+		$twig->horizontalView = TRUE;
+		$twig->staticMainMenu = TRUE;
+		$twig->reverse = TRUE;
+
 		$detail_info = Detailpage::factory("Newsone", $object)
 							->get_crumbs()
 							->get_last_news(($twig->city) ? $twig->city->id : NULL)
@@ -211,6 +216,42 @@ class Controller_Detail extends Controller_Template {
 		foreach ((array) $detail_info as $key => $item) {
 			$twig->{$key} = $item;
 		}
+
+		$premium_kupons = Search::searchquery(
+            array(
+                "active" => TRUE,
+                "published" =>TRUE,
+                "expiration" => TRUE,
+                "premium" => TRUE,
+                "category_id" => array(173),
+                "city_id" => ($twig->city->id) ? array($twig->city->id) : NULL,
+            ),
+            array("limit" => 3, "order" => "date_expired")
+        );
+
+        $twig->premium_kupons = Search::getresult($premium_kupons->execute()->as_array());
+
+        $kupons = Search::searchquery(
+            array(
+                "active" => TRUE,
+                "published" =>TRUE,
+                "expiration" => TRUE,
+                "category_id" => array(173),
+                "city_id" => ($twig->city->id) ? array($twig->city->id) : NULL,
+            ),
+            array("limit" => 3, "order" => "date_expired")
+        );
+
+        $twig->kupons = Search::getresult($kupons->execute()->as_array());
+
+        $attachments = ORM::factory('Object_Attachment')
+                            ->order_by("id","desc")
+                            ->limit(3)
+                            ->getprepared_all();
+        $promo_thumbnails = array_map(function($item){
+            return Imageci::getSavePaths($item->filename);
+        }, $attachments);
+        $twig->promo_thumbnails = $promo_thumbnails;
 
 		//favourites
 		$twig->favourites = ORM::factory('Favourite')->get_list_by_cookie();
