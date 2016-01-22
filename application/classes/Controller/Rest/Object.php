@@ -248,7 +248,7 @@ class Controller_Rest_Object extends Controller_Rest {
 		$id = $this->post->object_id;
 		$type = $this->post->type;
 		$comment = $this->post->comment;
-		$send_mail = $this->post->send_mail;
+		$send_mail = $this->post->send_email;
 
 		if (!$type OR !$id OR !Acl::check("object.moderate")) {
 			throw new HTTP_Exception_404;
