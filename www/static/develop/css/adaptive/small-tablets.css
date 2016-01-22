@@ -12,6 +12,8 @@
 
 	.right-side{
 		position: static !important;
+		width: 100% !important;
+		height: auto !important;
 	}
 
 	.main_cat_news{
@@ -49,4 +51,10 @@
 	#reklama_container a span{
 		font-size: 14px;
 	}
+
+	.wrapper-sticky.sticky-active{
+		width: 100% !important;
+		height: auto !important;
+	}
+
 }
