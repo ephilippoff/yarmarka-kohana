@@ -121,7 +121,7 @@ class Form_Add  {
 
 		$category_array = array();
 		$category_list = ORM::factory('Category')
-								->where("parent_id","=",1)
+								->where("through_weight","IS NOT",NULL)
 								->where("is_ready", "=", 1)
 								->order_by("through_weight")
 								->cached(DATE::WEEK, array("category", "add"))

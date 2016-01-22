@@ -788,6 +788,63 @@ class Model_User extends Model_Auth_User {
 				"filename", "about", "last_visit_date", "org_moderate"
 		));
 	}
+
+	public function login_from_social()
+	{
+		if ($this->is_blocked == 2)
+		{
+			$this->is_blocked = 0;
+			$this->save();
+		}
+
+		if ($this->is_blocked == 1)
+		{						
+			if ($this->block_reason)
+			{
+				throw new Exception("Ваша учетная запись заблокирована. Причина: ".$this->block_reason,301);
+			}
+			else
+			{
+				throw new Exception("Ваша учетная запись заблокирована.",302);
+			}
+		}
+		else
+			Auth::instance()->trueforcelogin($this);		
+	}
+
+	public function registration_from_social($userdata)
+	{
+		$password = Text::random('alnum', 7);
+		$email = strtolower(trim($userdata['email']));
+		
+		$this->email = $email;
+		$this->passw = $password;
+		$this->role = 2;
+		$this->code = '';
+		$this->ip_addr = $_SERVER["REMOTE_ADDR"];
+		$this->org_type = 1;
+		$this->network = $userdata['network'];
+		$this->social_profile = $userdata['profile'];
+
+		$this->save();	
+
+		$this->trigger_save_email($email);
+
+		Auth::instance()->trueforcelogin($this);
+
+		$this->send_register_data(array('login' => $email, 'passw' => $password));		
+
+		return $this->id;
+	}
+
+	public function send_register_data($data)
+	{
+		if (!$this->loaded())
+			return;
+
+		$msg = View::factory('emails/register_data', $data);
+		Email::send($this->email, Kohana::$config->load('email.default_from'), 'Для вас создана учетная запись на сайте yarmarka.biz', $msg);
+	}	
 }
 
 /* End of file User.php */

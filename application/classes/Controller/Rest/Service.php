@@ -226,6 +226,49 @@ class Controller_Rest_Service extends Controller_Rest {
 		}
 	}
 
+	public function action_check_cities()
+	{
+
+		$ids = ($this->param->ids) ? $this->param->ids: array($this->param->id);
+
+		if (!$ids OR !count($ids)) {
+			throw new HTTP_Exception_404;
+		}
+
+		$params = ($this->param->params) ? (array) $this->param->params : array();
+
+		$objects = ORM::factory('Object')->where("id","IN", $ids)->where("active","=",1)->find_all();
+		$objects_to_action = array();
+		$services_to_action = array();
+		$errors = 0;
+		foreach ($objects as $object) {
+			$object =  $object->get_row_as_obj(array("id","title"));
+			$objects_to_action[] = $object;
+
+			$service = Service::factory("Cities", $object->id);
+			$service->set_params($params);
+			$service_info = $service->get();
+			
+			$services_to_action[] = $service_info;
+		}
+
+		if ($errors > 0){
+			$this->json['text'] = "В выбранных объявлениях присуствуют ошибки. ". $this->json['text'];
+		}
+
+		if (count($objects_to_action) == 0 OR $this->json['code'] <> 200) {
+			$this->json['code'] = 400;
+		}
+		$this->json["cities_info"] = Service::factory("Cities", $object->id)->get_info();
+		$this->json['count'] = 0;
+		$this->json['services'] = $services_to_action;
+		$this->json['objects'] = $objects_to_action;
+		if (count($objects_to_action) == 1) {
+			$this->json['object'] = $objects_to_action[0];
+			$this->json['service'] = $services_to_action[0];
+		}
+	}
+
 	
 
 	public function action_save()

@@ -124,7 +124,7 @@ class Object
 			->normalize_attributes()
 			->init_contacts()
 			->init_validation_rules()
-			//->init_additional()
+			->init_additional()
 			//->init_validation_rules_for_attributes()
 			->exec_validation();
 

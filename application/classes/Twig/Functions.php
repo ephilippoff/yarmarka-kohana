@@ -202,35 +202,49 @@ class Twig_Functions
 		$result = array();
 
 		foreach ($services as $name => $service_items) {
-			
 
-			foreach ($service_items as $service_item) {
-				$service_item = new Obj($service_item);
-				$result_item = array();
-				if ($name == "up" AND strtotime(date("Y-m-d H:i:s"). ' + 7 days') > strtotime(date("Y-m-d H:i:s")) ) {
-					$result_item["name"] = $name;
-					$result_item["icon_class"] = "fa-angle-double-up";
-					$result_item["title"] = "Поднято ".date("Y-m-d H:i", strtotime($service_item->date_created));
-				}
-				elseif ($name == "premium" AND strtotime($service_item->date_expiration) > strtotime(date("Y-m-d H:i:s")) ) {
-					$result_item["name"] = $name;
-					$result_item["icon_class"] = "fa-info-circle";
-					$result_item["title"] = "Текущая услуга 'Премиум' действует до ".date("Y-m-d H:i", strtotime($service_item->date_expiration));
-				}
-				elseif ($name == "lider" AND strtotime($service_item->date_expiration) > strtotime(date("Y-m-d H:i:s")) ) {
-					$result_item["name"] = $name;
-					$result_item["icon_class"] = "fa-info-circle";
-					$result_item["title"] = "Текущая услуга 'Лидер' действует до ".date("Y-m-d H:i", strtotime($service_item->date_expiration));
-				}
-
-				if ( in_array(Arr::get($result_item, "name"), array("up","lider","premium")) AND $show_not_activated) {
-					$not_activated = $service_item->count - $service_item->activated;
-					if ($not_activated > 0) {
-						$result_item["icon_class"] .= " fa-pulse";
-						$result_item["title"] = "Осталось неактивированных ".$not_activated.". ".$result_item["title"];
+			if (in_array($name, array('up','premium','lider'))) {
+				foreach ($service_items as $service_item) {
+					$service_item = new Obj($service_item);
+					$result_item = array();
+					if ($name == "up" AND strtotime(date("Y-m-d H:i:s"). ' + 7 days') > strtotime(date("Y-m-d H:i:s")) ) {
+						$result_item["name"] = $name;
+						$result_item["icon_class"] = "fa-angle-double-up";
+						$result_item["title"] = "Поднято ".date("Y-m-d H:i", strtotime($service_item->date_created));
 					}
+					elseif ($name == "premium" AND strtotime($service_item->date_expiration) > strtotime(date("Y-m-d H:i:s")) ) {
+						$result_item["name"] = $name;
+						$result_item["icon_class"] = "fa-info-circle";
+						$result_item["title"] = "Текущая услуга 'Премиум' действует до ".date("Y-m-d H:i", strtotime($service_item->date_expiration));
+					}
+					elseif ($name == "lider" AND strtotime($service_item->date_expiration) > strtotime(date("Y-m-d H:i:s")) ) {
+						$result_item["name"] = $name;
+						$result_item["icon_class"] = "fa-info-circle";
+						$result_item["title"] = "Текущая услуга 'Лидер' действует до ".date("Y-m-d H:i", strtotime($service_item->date_expiration));
+					}
+					elseif ($name == "cities") {
+						$result_item["name"] = $name;
+						$result_item["icon_class"] = "fa-info-circle";
+						$result_item["title"] = "Приобретена услуга 'В несколько городов'";
+					}
+
+					if ( in_array(Arr::get($result_item, "name"), array("up","lider","premium")) AND $show_not_activated) {
+						$not_activated = $service_item->count - $service_item->activated;
+						if ($not_activated > 0) {
+							$result_item["icon_class"] .= " fa-pulse";
+							$result_item["title"] = "Осталось неактивированных ".$not_activated.". ".$result_item["title"];
+						}
+					}
+					$result[] = $result_item;
 				}
-				$result[] = $result_item;
+			} elseif (in_array($name, array('cities'))) {
+				if ($name == "cities") {
+					$result_item["name"] = $name;
+					$result_item["icon_class"] = "fa-info-circle";
+					$result_item["title"] = vsprintf("Объявление размещено в %d городах", array(count($service_items)));
+					$result[] = $result_item;
+				}
+
 			}
 			
 		}

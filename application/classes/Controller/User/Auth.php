@@ -142,6 +142,55 @@ class Controller_User_Auth extends Controller_Template {
             $return_page = $domain.$return_page;
         }
 
+        $ulogin_errors = '';
+        $ulogin = Ulogin::factory();
+        $userdata = $ulogin->userdata();
+
+        if ($userdata)
+        {
+            if ($userdata['email'] and $userdata['verified_email'] == 1)
+            {
+                $redirect_to = $return_page;                
+                
+                $user = ORM::factory('User')
+                        ->get_user_by_email($userdata['email'])
+                        ->find();
+
+                if ($user->loaded())
+                {
+                    try 
+                    {
+                        $user->login_from_social();
+                    }
+                    catch (Exception $e)
+                    {
+                        $ulogin_errors = $e->getMessage();
+                    }
+                }
+                else
+                {
+                    try 
+                    {
+                        $user_id = ORM::factory('User')
+                                    ->registration_from_social($userdata);                      
+                    } 
+                    catch (Exception $e)
+                    {
+                        $ulogin_errors = "Произошла непредвиденная ошибка при создании учетной записи. Вы можете пройти регистрацию через стандартную форму на сайте. Приносим свои извинения за доставленное неудобство.";
+
+                        Admin::send_error("Ошибка при регистрации пользователя из сервиса", array(
+                                $e->getMessage(), Debug::vars($userdata), $e->getTraceAsString()
+                        ));
+                    }
+                }
+                
+                if (!$ulogin_errors)
+                    $this->redirect($redirect_to);
+            }
+            else
+                $ulogin_errors = 'Нет данных для авторизации с помощью сервиса. Попробуйте воспользоваться другим сервисом или авторизуйтесь через форму сайта.';
+        } 
+
         $token = NULL;
         $error = NULL;
         $success = NULL;
@@ -183,6 +232,8 @@ class Controller_User_Auth extends Controller_Template {
             }
         }
 
+        $twig->ulogin_errors = $ulogin_errors;
+        $twig->ulogin_html = $ulogin->render();
         $twig->token = $token;
         $twig->user = $this->user; 
         $twig->params = $post_data;
