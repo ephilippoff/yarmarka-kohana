@@ -54,15 +54,16 @@
 		font-size: 14px;
 	}
 
-<<<<<<< HEAD
+
 	.dialog_window>div{
 		width: 100%;
 	}
-=======
-	.wrapper-sticky.sticky-active{
+
+	.wrapper-sticky{
 		width: 100% !important;
 		height: auto !important;
+		position: static !important;
 	}
 
->>>>>>> b009b0c424e210e832cbe1857b753f6a43a287e6
+
 }
