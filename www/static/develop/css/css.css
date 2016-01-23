@@ -1026,6 +1026,14 @@ a.auto-collapse-expand {
     margin-right: 5px;
 }
 
+.one_cat_news img{
+    height: 122px;
+    margin-right: 5px;
+    display: block;
+    width: auto;
+    margin: 10px auto;
+}
+
 span.date{
     color: #E96F4F;
 }
@@ -1164,7 +1172,7 @@ img.category-icon{
 }
 
 .category-block{
-    width: 33%;
+    width: 50%;
     float: left;
     margin-bottom: 20px;
     word-break: break-all;
@@ -1252,3 +1260,16 @@ img.category-icon{
 .dialog_window .contact_form input{
     float: right;
 }
+
+.detail_news ul li:nth-child(n+7){
+    display: none;
+}
+
+.news_info .cat{
+    float: right;
+}
+
+article img{
+    width: 60%;
+}
+
