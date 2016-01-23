@@ -8,7 +8,7 @@
 				{% set link = imagelinks|slice(i,1) %}
 				{% if link|length > 0 %}
 					{% set link = link|first %}
-					<a class="w23p dib va-t clearfix" href="{{ link.link }}" target="_blank">
+					<a class="w23p dib va-t clearfix" href="{{ link.link }}" target="_blank" data-id="{{ link.id }}">
 						<img src="{{ '/./uploads/banners/' ~ link.image }}" class="fl hidden-md hidden-sm"/>
 						<span class="ml10 fs12 fl w50p h50 oh">{{ link.title }}</span>
 					</a>

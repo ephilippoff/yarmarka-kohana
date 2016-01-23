@@ -1,0 +1,57 @@
+<form class="js-form">
+	<div class="row">
+		<div class="col-md-12 p10">
+			<%=getTitle()%>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12 p10">
+			<table class="table table-bordered">
+				<thead>
+					<th class="service-title bold">Выберите города размещения</th>
+					<th class="price bold">Стоимость</th>
+				</thead>
+				<tbody>
+				<% var cities = getCities() %>
+				<% _.each(cities, function(city, city_key){ %>
+					<% if (existsCity(city_key)) { %>
+						<tr>
+							<td class="service-title">
+									<span style="display:block;">
+										<span  class="ml5"><%=city%></span>
+									</span>
+							</td>
+							<td class="price">
+								<span class="js-price js-price_<%=city_key%>">размещено</span>
+							</td>
+						</tr>
+					<% } else { %>
+						<tr>
+							<td class="service-title">
+								<label for="type_n_<%=city_key%>">
+									<span style="display:block; cursor:pointer;">
+										<% if (is_edit) { %>
+											<input type="checkbox" name="city" value="<%=city_key%>" id="type_n_<%=city_key%>" class="js-city" <% if ( _.contains(edit_params.service.cities, +city_key) ){%>checked<%}%>>
+										<% } else { %>
+											<input type="checkbox" name="city" value="<%=city_key%>" id="type_n_<%=city_key%>" class="js-city">
+										<% } %>
+										
+										<span  class="ml5"><%=city%></span>
+									</span>
+								</label>
+							</td>
+							<td class="price">
+								<span class="js-price js-price_<%=city_key%>">
+										<%=getPrice()%>
+								</span>
+							</td>
+						</tr>
+					<% } %>
+					
+				<% }); %>
+				
+				</tbody>
+			</table>
+		</div>
+	</div>
+</form>

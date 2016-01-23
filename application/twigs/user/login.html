@@ -27,6 +27,27 @@
 				<form method="POST"  action="" id="element_list">			
 					{{ get_form_element('hidden','csrf', token) }}
 
+
+					<div class="row mb10">
+						<div class="col-md-3 col-sm-93 col-xs-12 labelcont">
+							<label></label>
+						</div>
+						<div class="col-md-9 col-sm-9 col-xs-12">
+							<div class="row">
+								<div class="col-md-10">
+									<div class="inp-cont">
+										{{ ulogin_html }}
+										{% if ulogin_errors %} 
+											<span class="inform fn-error">
+												{{ulogin_errors}}
+											</span>
+										{% endif %}
+									</div>
+								</div>
+							</div>				
+						</div>
+					</div>	
+
 					<div class="row mb10">
 						<div class="col-md-3 col-sm-93 col-xs-12 labelcont">
 							<label>Логин</label>
