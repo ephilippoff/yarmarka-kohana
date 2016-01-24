@@ -822,7 +822,6 @@ class Form_Add  {
 		} else {
 			if ($user)
 			{
-				if ()
 				$orginfo_data = ORM::factory('User_Settings')
 								->get_group(($this->_edit) ? $object->author: $user->id, "orginfo");
 				foreach ($orginfo_data as $key => $data) {
