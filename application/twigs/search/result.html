@@ -8,7 +8,7 @@
 	{% endfor %}
 </table>
 <table class="table-result-info">
-	{% for object in main_search_result %}
+	{% for object in main_search_result if object.compiled.url %}
 		{% include mini_cart_path %}
 	{% else %}
 		{% include 'search/noresult' %}
