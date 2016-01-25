@@ -44,6 +44,7 @@ class Controller_Detail extends Controller_Template {
 		$twig->domain      = $this->domain;
 		$twig->city        = $this->domain->get_city();
 		$twig->onPageFlag = 'detail';
+		$twig->horizontalView = TRUE;
 
 		$detail_info = Detailpage::factory("Default", $object)
 						->get_messages()
