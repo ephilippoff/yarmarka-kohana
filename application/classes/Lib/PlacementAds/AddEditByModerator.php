@@ -174,21 +174,25 @@ class Lib_PlacementAds_AddEditByModerator extends Lib_PlacementAds_AddEdit {
 
 		if ($object->category AND $settings = Kohana::$config->load("category.".$object->category.".additional_fields.2"))
 		{
+			$additional = array();
 			foreach ($settings as $setting) {
 				$name = str_replace("additional_", "", $setting);
 				$value = $params->{$setting};
 
-				if ($this->is_edit AND $this->user_id) {
+				// if ($this->is_edit AND $this->user_id) {
 
-					if (!$value)
-						ORM::factory('User_Settings')
-							->_delete($this->user_id, "orginfo", $name);
+				// 	if (!$value)
+				// 		ORM::factory('User_Settings')
+				// 			->_delete($this->user_id, "orginfo", $name);
 					
-					ORM::factory('User_Settings')
-							->update_or_save($this->user_id, "orginfo", $name, $value);
+				// 	ORM::factory('User_Settings')
+				// 			->update_or_save($this->user_id, "orginfo", $name, $value);
 
-				}
+				// }
+
+				$additional[$setting] = $value;
 			}
+			$additional = ORM::factory('Data_Additional')->set_additional($object->id, $additional);
 		}
 
 		return $this;
