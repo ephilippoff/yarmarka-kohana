@@ -5,5 +5,6 @@
  	created timestamp not null,
  	user_id int not null,
  	query text,
- 	path text
+ 	path text,
+ 	enabled int not null default 0
  )

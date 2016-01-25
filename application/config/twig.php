@@ -34,6 +34,7 @@ return array(
 		'get_userecho_token'   => array ('func' => array('Twig_Functions', 'get_userecho_token'), 'options' => array() ),
 		'get_current_city'   => array ('func' => array('Twig_Functions', 'get_current_city'), 'options' => array() ),
 		'sameUrlOnAnotherDomain'  		=> array ('func' => array('Twig_Functions', 'sameUrlOnAnotherDomain'), 'options' => array() ),
+		'pluk'   => array ('func' => array('Twig_Functions', 'pluk'), 'options' => array() ),
 	),
 	'filters' => array(
 		'contacthide' => array('Twig_Filters', 'contacthide'),

@@ -279,5 +279,17 @@ class Twig_Functions
 		return $cities[$city_name];
 	}
 
+	public static function pluk($arr, $property, $is_obj = false) {
+		$res = array();
+		foreach($arr as $item) {
+			if ($is_obj) {
+				$res []= $item->{$property};
+			} else {
+				$res []= $item[$property];
+			}
+		}
+		return $res;
+	}
+
 	
 }
