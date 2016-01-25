@@ -12,13 +12,13 @@
 			/* settings */
 			$shortTextLength = 250;
 			$shortTextAfter = '...';
-			$itemsPerCategory = 5;
 
 			$view = Twig::factory('block/news/main_page');
 
 			$view->catTitle = $this->request->post("catTitle");
 			$view->reverse = $this->request->post("reverse");
 			$view->newsTitle = $this->request->post("newsTitle");
+			$itemsPerCategory = $this->request->post("itemsPerCategory");
 
 			/* get services instances */
 			$attribitesService = $this->getService('Attributes');

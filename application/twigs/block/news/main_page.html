@@ -86,10 +86,10 @@
 						<div class="row" style="padding-bottom:15px;">
 							{% for innerItem in item.items %}
 								{% if innerItem.title != newsTitle %}
-									<div class="col-md-6 clearfix one_cat_news">
-										<a href="{{ innerItem.url }}"><img src="{{ innerItem.image }}"/></a>
+									<div class="col-md-6 col-sm-6 clearfix one_cat_news">
+										<a href="{{ innerItem.url }}" class="clearfix image-block"><img src="{{ innerItem.image }}"/></a>
 										<span class="date fs12">{{ innerItem.date|date('d.m') }}</span>
-										<a href="{{ innerItem.url }}">{{ innerItem.title}}</a><br><br>
+										<a href="{{ innerItem.url }}">{{ innerItem.title|slice(0,80)}}...</a><br><br>
 									</div>
 								{% endif %}
 							{% endfor %}
