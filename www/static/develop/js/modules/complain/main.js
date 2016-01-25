@@ -58,19 +58,16 @@ define(
 				if (value == 'initial') {
 					this.subjectsView.hide();
 					this.writeView.hide();
-					this.thanksView.hide();
 				}
 
 				if (value == 'select') {
 					this.subjectsView.show();
-					this.writeView.hide();
-					this.thanksView.hide();
 				}
 
 				if (value == 'write') {
 					this.subjectsView.hide();
-					this.writeView.show();
 					this.thanksView.hide();
+					this.writeView.show();
 				}
 
 				if (value == 'thanks') {

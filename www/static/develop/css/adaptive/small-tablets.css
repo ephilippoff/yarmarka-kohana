@@ -52,7 +52,12 @@
 		font-size: 14px;
 	}
 
-	.dialog_window>div{
-		width: 100%;
+	.dialog_window button{
+	    width: 40%;
 	}
+
+	.dialog_window button:last-child{
+	    width: 20%;
+	}
+
 }
