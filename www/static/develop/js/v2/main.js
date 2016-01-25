@@ -39,7 +39,8 @@ var Yarmarka = {
         options: {
             forceColumnsCount: false,
             forceOneColumnMobile: false,
-            elementSelector: 'a'
+            elementSelector: 'a',
+            itemWidthSelector: null
         },
 
         initialize: function(options) {
@@ -182,9 +183,10 @@ var Yarmarka = {
         },
 
         convertItem: function (domItem, index) {
+            console.log(this.options.itemWidthSelector);
             return {
                 html: $(domItem).html(),
-                width: $(domItem).outerWidth()
+                width: this.options.itemWidthSelector ? $(domItem).find(this.options.itemWidthSelector).outerWidth() : $(domItem).outerWidth()
             };
         },
 

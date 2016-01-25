@@ -823,6 +823,7 @@ select{background-color: #FFFFFF;border: 1px solid #C3C3C3;padding:2px 10px;heig
 .subcategories-cont.module.subcat-search ul li div {
     /*display:inline;*/
     height:25px;
+    white-space: nowrap;
 }
 
 /* auto collapse module */
