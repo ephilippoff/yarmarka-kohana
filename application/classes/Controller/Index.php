@@ -46,7 +46,7 @@ class Controller_Index extends Controller_Template {
          $search_query = Search::searchquery(
             array(
                 "expiration" => TRUE,
-                "premium" => false,
+                "premium" => TRUE,
                 "active" => TRUE,
                 "published" =>TRUE,
                 "city_id" => $this->last_city_id,
