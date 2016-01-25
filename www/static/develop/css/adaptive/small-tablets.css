@@ -54,20 +54,12 @@
 		font-size: 14px;
 	}
 
-<<<<<<< HEAD
-
-	.dialog_window>div{
-		width: 100%;
-	}
-
 	.wrapper-sticky{
 		width: 100% !important;
 		height: auto !important;
 		position: static !important;
 	}
 
-
-=======
 	.dialog_window button{
 	    width: 40%;
 	}
@@ -75,6 +67,3 @@
 	.dialog_window button:last-child{
 	    width: 20%;
 	}
-
->>>>>>> aa6928069b5204f78ba224293996b1e2ea3c0b3a
-}

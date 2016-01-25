@@ -1281,7 +1281,7 @@ img.category-icon{
     float: right;
 }
 
-<<<<<<< HEAD
+
 .detail_news ul li:nth-child(n+7){
     display: none;
 }
@@ -1294,7 +1294,7 @@ article img{
     width: 60%;
 }
 
-=======
+
 .dialog_window .relative .close{
     position: absolute;
     top: 0; right: 0;
@@ -1305,4 +1305,4 @@ article img{
 .dialog_window .relative .close:hover{
     border-bottom: 1px dotted #333;
 }
->>>>>>> aa6928069b5204f78ba224293996b1e2ea3c0b3a
+
