@@ -275,6 +275,8 @@ class Controller_Block_Twig extends Controller_Block
         $twig->categories = self::news_categories();
         $twig->banners    = $banners;
 
+        $twig->staticMainMenu = $this->request->post("staticMainMenu");
+
         $this->response->body($twig);
     }	
 

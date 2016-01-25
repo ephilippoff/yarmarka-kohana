@@ -24,10 +24,10 @@
 				}
 			?>
 			<div class="row mb10" id="div_<?= $element["name"] ?>">
-				<div class="col-md-3 col-xs-4 labelcont">
+				<div class="col-md-3 labelcont">
 					<label><?= $element["title"] ?><?= ($element["unit"] ? ", " . $element["unit"] . ":" : ":") ?></label>
 				</div>
-				<div class="col-md-9 col-xs-8">
+				<div class="col-md-9">
 
 					<div class="row">
 

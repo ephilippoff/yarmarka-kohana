@@ -12,6 +12,8 @@
 
 	.right-side{
 		position: static !important;
+		width: 100% !important;
+		height: auto !important;
 	}
 
 	.main_cat_news{
@@ -51,4 +53,17 @@
 	    float: none !important;
 		font-size: 14px;
 	}
+
+
+	.dialog_window>div{
+		width: 100%;
+	}
+
+	.wrapper-sticky{
+		width: 100% !important;
+		height: auto !important;
+		position: static !important;
+	}
+
+
 }
