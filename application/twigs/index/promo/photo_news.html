@@ -9,7 +9,7 @@
 								<img src="{{get_file(news.compiled.images.main_photo['120x90'])}}">
 							</div>
 							<div>
-								<span class="date fs12"><i class="fa fa-clock-o"></i> {{news.date_expired|date('d/m, H:i')}}</span>
+								<span class="date fs12">{{news.date_expired|date('d.m, H:i')}}</span>
 							</div>
 							<p>{{news.title|slice(0,50)}}...</p>
 						</a>
