@@ -26,11 +26,30 @@ define([ 'jquery', 'underscore', 'backbone' ], function ($, _, Backbone) {
 					+ '<% if (info.only_private) { %><li><b>Только частные: </b>Да</li><% } %>'
 				+ '</ul>'
 				+ '<div>На электронную почту <a href="mailto:<%= info.email %>"><%= info.email %></a></div>'
+				+ '<div>'
+					+ '<button data-role="save">Сохранить</button>'
+					+ '<button data-role="cancel">Отменить</button>'
+				+ '</div>'
 			),
+
+		events: {
+			'click [data-role=save]': 'onSaveButtonClick',
+			'click [data-role=cancel]': 'onCancelButtonClick'
+		},
 
 		render: function () {
 			this.$el.html(this.template(this.model.toJSON()));
 			return this.$el;
+		},
+
+		onSaveButtonClick: function (e) {
+			e.preventDefault();
+			this.model.setStateSave();
+		},
+
+		onCancelButtonClick: function (e) {
+			e.preventDefault();
+			this.model.set('state', 'initial');
 		}
 
 	});

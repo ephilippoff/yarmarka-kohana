@@ -9,11 +9,6 @@
 			$domain = new Domain();
 			$reserved_query_params = $search_url->get_reserved_query_params();
 
-			//var_dump($clean_query_params);
-			//var_dump($search_url);
-			//var_dump($reserved_query_params);
-			//die;
-
 			$seo_data = Seo::get_seo_attributes($path, $clean_query_params, $search_url->get_category(), $domain->get_city());
 
 			$category = $search_url->get_category();
@@ -40,11 +35,15 @@
 
 		public static function get_attribites_meta($attribites) {
 
+			if (empty($attribites)) {
+				return array();
+			}
+
 			/* get attributes */
 			$attributesRaw = ORM::factory('Attribute')
 				->where('seo_name', 'in', array_keys($attribites))
 				->find_all();
-			$attributes = array();
+			$attributesMeta = array();
 			foreach($attributesRaw as $attribute) {
 				$attributesMeta[$attribute->seo_name] = array(
 						'title' => $attribute->title,

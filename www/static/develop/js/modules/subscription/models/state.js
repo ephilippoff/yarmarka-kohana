@@ -3,7 +3,8 @@ define([ 'underscore', 'backbone' ], function (_, Backbone) {
 		defaults: {
 			fields: null,
 			state: null,
-			method: null
+			method: null,
+			error: null
 		},
 
 		url: function () {
@@ -11,9 +12,19 @@ define([ 'underscore', 'backbone' ], function (_, Backbone) {
 		},
 
 		setStateSaveConfirm: function () {
-			this.save({ method: 'save_confirm' }, {
+			this.setState('save_confirm', 'saveConfirm');
+		},
+
+		setStateSave: function () {
+			this.setState('save', 'save');
+		},
+
+		setState: function (method, state) {
+			this.save({ method: method }, {
 				success: function (model, response, options) {
-					model.set('state', 'saveConfirm');
+					if (!model.get('error')) {
+						model.set('state', state);
+					} 
 				}
 			});
 		}

@@ -1,23 +1,32 @@
-define([ 'jquery', 'underscore', 'backbone', './models/state', './views/initial', './views/saveConfirm' ], function ($, _, Backbone, StateModel, InitialView, SaveConfirmView) {
+define([ 'jquery', 'underscore', 'backbone', './models/state', './views/initial', './views/saveConfirm', './views/save' ], function ($, _, Backbone, StateModel, InitialView, SaveConfirmView, SaveView) {
 
 	var state2viewCtor = {
 		'initial': InitialView,
-		'saveConfirm': SaveConfirmView
+		'saveConfirm': SaveConfirmView,
+		'save': SaveView
 	};
 
 	return Backbone.View.extend({
 
 		childView: null,
+		templated: null,
+
+		template: _.template('<div data-role="error" style="color:red;"><%= error %></div>'),
 
 		initialize: function () {
 			this.model = new StateModel();
 
 			this.listenTo(this.model, 'change:state', this.onModelStateChanged);
+			this.listenTo(this.model, 'change:error', this.onModelErrorChanged);
 
 			this.model.set('state', 'initial');
 		},
 
 		render: function () {
+			this.releaseTemplated();
+			this.$templated = $(this.template(this.model.toJSON()));
+			this.$el.append(this.$templated);
+
 			var state = this.model.get('state');
 			this.releaseChildView();
 			this.setChildView(this.childViewFactory(state));
@@ -27,6 +36,13 @@ define([ 'jquery', 'underscore', 'backbone', './models/state', './views/initial'
 			if (this.childView) {
 				this.childView.remove();
 				this.childView = null;
+			}
+		},
+
+		releaseTemplated: function () {
+			if (this.$templated) {
+				this.$templated.remove();
+				this.$templated = null;
 			}
 		},
 
@@ -51,6 +67,10 @@ define([ 'jquery', 'underscore', 'backbone', './models/state', './views/initial'
 		},
 
 		onModelStateChanged: function (model, value) {
+			this.render();
+		},
+
+		onModelErrorChanged: function (model, value) {
 			this.render();
 		}
 
