@@ -270,6 +270,7 @@ class Controller_Search extends Controller_Template {
         foreach ((array) $search_info as $key => $item) {
             $twig->{$key} = $item;
         }        
+        $twig->isGuest = Auth::instance()->get_user() == NULL;
 
         $this->cache_stat($twig, $search_params);
         $this->response->body($twig);
