@@ -109,9 +109,32 @@
 	    float: none;
 	    margin-top: 10px;
 	}
+
 	
 	.dialog_window .relative .close{
 		font-size: 18px;
+	}
+
+	.one_cat_news{
+	    height: auto;
+	    border-bottom: 1px solid #ccc;
+	    padding: 10px 0;
+	}
+
+	.image-block{
+		float: left;
+		margin: 0;
+		margin-right: 5px;
+		margin-bottom: 10px;
+		width: 210px;
+		height: auto;
+	}
+
+	.image-block img{
+		width: 100%;
+		height: 100%;
+		margin: 0;
+
 	}
 }
 
@@ -132,6 +155,10 @@
 	#complain ul{
 		left: auto;
 		right: 0;
+	}
+
+	.image-block{
+		width: 30%;
 	}
 }
 

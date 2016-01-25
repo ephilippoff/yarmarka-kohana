@@ -25,20 +25,12 @@
 </div>
 
 <script>
-	// $(document).ready(function(){
-	// 	if ($(window).innerWidth() <= 992 && $(window).innerWidth() > 768) {
-	// 		var height = $('.kupons_block').height();
-	// 		height+=2;
-	// 		$('.left_block>.view-container').css({
-	// 			'min-height':height+'px',
-	// 			'background': 'url(/static/develop/images/themes/crimson-theme/Soft-Dot-Mix-ver-10.png)',
-	// 			'padding': '0px'
-	// 		});
-	// 	}else{
-	// 		$('.left_block>.view-container').css({
-	// 			'background': 'url(/static/develop/images/themes/crimson-theme/Soft-Dot-Mix-ver-10.png)',
-	// 			'padding': '0px'
-	// 		});
-	// 	}
-	// });
+	$(document).ready(function(){
+		tablet(function(){
+			if ($('div').is('.kupons_block')) {
+				var height = $('.kupons_block').height();
+				$('.left_menu').css('height', height - 35);
+			};
+		});
+	});
 </script>
