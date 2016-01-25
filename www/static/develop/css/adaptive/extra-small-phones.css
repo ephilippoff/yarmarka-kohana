@@ -109,11 +109,11 @@
 	    float: none;
 	    margin-top: 10px;
 	}
-<<<<<<< HEAD
+
 	
 	.dialog_window .relative .close{
 		font-size: 18px;
-=======
+	}
 
 	.one_cat_news{
 	    height: auto;
@@ -134,7 +134,7 @@
 		width: 100%;
 		height: 100%;
 		margin: 0;
->>>>>>> aa3dcc939809f95ba38c6a675756f730f9a07504
+
 	}
 }
 
