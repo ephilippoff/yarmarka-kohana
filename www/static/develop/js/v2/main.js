@@ -68,6 +68,9 @@ var Yarmarka = {
 
         render: function() {
             this.containerWidth = this.getContainerWidth();
+            this.containerHeight = this.getContainerHeight();
+            this.itemHeight = this.getItemHeight();
+            console.log(this.itemHeight);
 
             //process forceOneColumnMobile
             if (this.options.forceOneColumnMobile && Yarmarka.Helpers.detectMobile()) {
@@ -183,6 +186,14 @@ var Yarmarka = {
                 html: $(domItem).html(),
                 width: $(domItem).outerWidth()
             };
+        },
+
+        getItemHeight: function () {
+            return this.$el.find(this.options.elementSelector).height();
+        },
+
+        getContainerHeight: function () {
+            return this.$el.parent().height();
         },
 
         getContainerWidth: function() {
