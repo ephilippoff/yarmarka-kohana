@@ -3,11 +3,15 @@
 		<ul>
 			{% for news in premiumnews|slice(0,5) %}
 				<li>
-					<div class="photo_news_wrap" style="height:150px;float:left;padding:5px;overflow:hidden;">
-						<span class="mr3 fs12"><i class="fa fa-home mr3"></i>{{news.date_expired|date('d/m')}} </span>
+					<div class="photo_news_wrap">
 						<a href="{{news.compiled.url}}" class="fs12">
-							<img src="{{get_file(news.compiled.images.main_photo['120x90'])}}" alt="" width="100%" style="max-height:80px;">
-							<p><span class="date fs12">{{news.date_expired|date('H:i')}}</span> {{news.title|slice(0,34)}}...</p>
+							<div class="photo_news_img">
+								<img src="{{get_file(news.compiled.images.main_photo['120x90'])}}">
+							</div>
+							<div>
+								<span class="date fs12"><i class="fa fa-clock-o"></i> {{news.date_expired|date('d/m, H:i')}}</span>
+							</div>
+							<p>{{news.title|slice(0,50)}}...</p>
 						</a>
 					</div>
 				</li>

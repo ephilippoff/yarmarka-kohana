@@ -46,13 +46,13 @@ class Controller_Index extends Controller_Template {
          $search_query = Search::searchquery(
             array(
                 "expiration" => TRUE,
-                "premium" => TRUE,
+                "premium" => false,
                 "active" => TRUE,
                 "published" =>TRUE,
                 "city_id" => $this->last_city_id,
                 "category_seo_name" => "novosti"
             ),
-            array("limit" => 5, "page" => 1)
+            array("limit" => 4, "page" => 1)
         );
         $twig->premiumnews = Search::getresult($search_query->execute()->as_array());
         
