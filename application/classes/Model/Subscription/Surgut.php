@@ -20,6 +20,23 @@
 
 		}
 
+		public function get_not_enabled() {
+			if ($this->loaded()) {
+				return !$this->enabled;
+			} else {
+				return 0;
+			}
+		}
+
+		public function check_is_mine() {
+			$user = Auth::instance()->get_user();
+			if ($this->loaded() && $user != NULL) {
+				return $user->id == $this->user_id;
+			} else {
+				return false;
+			}
+		}
+
 		public function find_by_user($id) {
 			return $this->where('user_id', '=', $id);
 		}
