@@ -272,9 +272,60 @@ class Controller_Search extends Controller_Template {
         }        
         $twig->isGuest = Auth::instance()->get_user() == NULL;
 
+        foreach($twig->category_childs_elements as &$value) {
+            $k = $twig->s_host . '/' . $twig->category_url . '/' . $value->url;
+            if (!array_key_exists($k, $twig->link_counters)) {
+                $value->count = 0;
+            } else {
+                $value->count = $twig->link_counters[$k];
+            }
+        }
+
+        foreach($twig->category_childs as &$value) {
+            $k = $twig->s_host . '/' . $value->url;
+            if (!array_key_exists($k, $twig->link_counters)) {
+                $value->count = 0;
+            } else {
+                $value->count = $twig->link_counters[$k];
+            }
+        }
+        
+        $this->process_child_categories($twig->category_childs_elements);
+        $this->process_child_categories($twig->category_childs);
+        //var_dump($twig->category_childs_elements);die;
+
         $this->cache_stat($twig, $search_params);
         $this->response->body($twig);
 
+    }
+
+    protected function process_child_categories(&$arr) {
+        usort($arr, function ($a, $b) {
+
+            //1. by count desc
+            $count_a = (int) $a->count;
+            $count_b = (int) $b->count;
+
+            if ($count_a != $count_b) {
+                return $count_b - $count_a;
+            }
+
+            //2. by title
+            $title_a = $a->title;
+            $title_b = $b->title;
+
+            if ($title_a != $title_b) {
+                return $title_a < $title_b ? -1 : 1;
+            }
+
+            //3. by weight
+            $weight_a = (int) $a->weight;
+            $weight_b = (int) $b->weight;
+
+            return $weight_b - $weight_a;
+
+        });
+        return $arr;
     }
 
     public function cache_stat($info, $search_params)
