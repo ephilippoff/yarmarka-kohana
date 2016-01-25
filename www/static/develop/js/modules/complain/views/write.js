@@ -7,7 +7,7 @@ define([ 'jquery', 'underscore', 'backbone', './user' ], function ($, _, Backbon
 		template: _.template(
 				'<div data-role="validation-container"></div>'
 				+ '<div data-role="user-view-container"></div>'
-				+ '<div>'
+				+ '<div class="clearfix">'
 					+ 'Причина для жалобы: <label data-role="label"></label>'
 					+ '<textarea data-role="message" placeholder="Дополнительная информация (необязательно)"></textarea>'
 					+ '<button data-role="submit">Отправить</button>'
