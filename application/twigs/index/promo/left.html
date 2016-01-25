@@ -1,39 +1,44 @@
 <div class="row">
 	<div class="col-md-12 col-sm-7 col-xs-12 left_block">
-		{% set theme_class = 'crimson-theme' %}
-		<div class="{{theme_class}} module br2 view-container" >
+		<div class="crimson-theme module br2" >
 			<div class="menu-cont2 brt2">
 				<div class="row">
 					<div class="col-md-12 clearfix">
-						<span class="menu-item left hidden-xs"><span class="menu-item-cont nobg">Объявления</span></span>
+						<span class="menu-item left hidden-xs"><span class="menu-item-cont nobg">{% if menuName == 'mainmenu' %}Объявления{% else %}Разделы новостей{% endif %}</span></span>
 						<!-- Другой текст для мобильных -->
 						<span class="menu-item left hidden-sm hidden-lg hidden-md"><span class="menu-item-cont nobg"><a href="/kupony" style="color:inherit;">Купоны</a></span></span>
 					</div>
 				</div>			
 			</div>
-			{% if staticMainMenu %}
-				{{ requestblock('block_twig/mainmenu', {'city_id': city.id, 'staticMainMenu': staticMainMenu}) }}
-			{% endif %}
+			<div style="border:1px solid #ccc;">
+				{% if staticMainMenu %}
+					{% if menuName == 'mainmenu' %}
+						{{ requestblock('block_twig/mainmenu', {'city_id': city.id, 'staticMainMenu': staticMainMenu}) }}
+					{% else %}
+						{{ requestblock('block_twig/newsmenu', {'city_id': city.id, 'staticMainMenu': staticMainMenu}) }}
+					{% endif %}
+				{% endif %}
+			</div>
 		</div>
 	</div>
 	{% include 'index/promo/kupon' %}
 </div>
 
 <script>
-	$(document).ready(function(){
-		if ($(window).innerWidth() <= 992 && $(window).innerWidth() > 768) {
-			var height = $('.kupons_block').height();
-			height+=2;
-			$('.left_block>.view-container').css({
-				'min-height':height+'px',
-				'background': 'url(/static/develop/images/themes/crimson-theme/Soft-Dot-Mix-ver-10.png)',
-				'padding': '0px'
-			});
-		}else{
-			$('.left_block>.view-container').css({
-				'background': 'url(/static/develop/images/themes/crimson-theme/Soft-Dot-Mix-ver-10.png)',
-				'padding': '0px'
-			});
-		}
-	});
+	// $(document).ready(function(){
+	// 	if ($(window).innerWidth() <= 992 && $(window).innerWidth() > 768) {
+	// 		var height = $('.kupons_block').height();
+	// 		height+=2;
+	// 		$('.left_block>.view-container').css({
+	// 			'min-height':height+'px',
+	// 			'background': 'url(/static/develop/images/themes/crimson-theme/Soft-Dot-Mix-ver-10.png)',
+	// 			'padding': '0px'
+	// 		});
+	// 	}else{
+	// 		$('.left_block>.view-container').css({
+	// 			'background': 'url(/static/develop/images/themes/crimson-theme/Soft-Dot-Mix-ver-10.png)',
+	// 			'padding': '0px'
+	// 		});
+	// 	}
+	// });
 </script>

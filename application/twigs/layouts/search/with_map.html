@@ -21,7 +21,7 @@
 	{% endblock filters %}
 	<div class="row">
 		<div class="col-md-8">
-			<div class="search_wrap">
+			<div class="search_wrap main_block">
 				{% block content %}
 					контент
 				{% endblock content %}
@@ -59,13 +59,6 @@
 	{% block templates %}
 		{{ parent() }}
 	{% endblock templates %}
-	<script>
-	var mainBlockBottomY = $(document).height() - ($('.search_wrap').offset().top + $('.search_wrap').outerHeight());
-		$('.right-side').hcSticky({
-		stickTo: document,
-		bottomEnd: mainBlockBottomY
-	});
-	</script>
 {% endblock body %}
 
 {%block page_name%}search{% endblock page_name %}

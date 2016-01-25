@@ -6,7 +6,8 @@ define([ 'jquery', 'underscore', 'backbone' ], function ($, _, Backbone) {
 		template: _.template('<a href="#" data-role="select"><%= title %></a>'),
 
 		events: {
-			'click [data-role=select]': 'onSelectButtonClick'
+			'click [data-role=select]': 'onSelectButtonClick',
+			
 		},
 
 		initialize: function () {
