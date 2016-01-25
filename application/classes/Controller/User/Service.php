@@ -179,12 +179,30 @@ class Controller_User_Service extends Controller_User_Profile {
 
         $user = $this->user;
 
+        if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action'])) {
+            if ($_POST['action'] == 'enable') {
+                $model = ORM::factory('Subscription_Surgut', $_POST['id']);
+                if ($model->loaded() && $model->check_is_mine()) {
+                    $model->enabled = $model->get_not_enabled();
+                    $model->save();
+                }
+            }
+
+            if ($_POST['action'] == 'remove') {
+                $model = ORM::factory('Subscription_Surgut', $_POST['id']);
+                if ($model->loaded() && $model->check_is_mine()) {
+                    $model->delete();
+                }
+            }
+
+            $this->redirect('/user/subscriptions');
+        }
 
         // pagination settings
         $per_page   = 20;
         $page       = (int) Arr::get($_GET, 'page', 1);
 
-        $subscriptions = ORM::factory('Subscription')
+        $subscriptions = ORM::factory('Subscription_Surgut')
             ->where('user_id', '=', $user->id);
 
         $count = clone $subscriptions;
