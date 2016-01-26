@@ -913,12 +913,20 @@ class Form_Add  {
 				$values[$field] = $this->params[$field];
 			}
 		} else {
-			if ($user)
-			{
-				$orginfo_data = ORM::factory('User_Settings')
-								->get_group(($this->_edit) ? $object->author_company_id: $user->id, "orginfo");
-				foreach ($orginfo_data as $key => $data) {
-					$values["additional_".$key] = $data;
+			if ($this->_edit) {
+				$additional = ORM::factory('Data_Additional')->get_additional($object->id);
+				if ( $additional AND array_values($additional) > 0 ) {
+					$values = array_merge($values, $additional);
+				}
+			} else {
+				if ($user)
+				{
+					
+					$orginfo_data = ORM::factory('User_Settings')
+									->get_group(($this->_edit) ? $object->author: $user->id, "orginfo");
+					foreach ($orginfo_data as $key => $data) {
+						$values["additional_".$key] = $data;
+					}
 				}
 			}
 		}

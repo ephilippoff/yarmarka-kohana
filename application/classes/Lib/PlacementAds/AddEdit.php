@@ -1123,6 +1123,7 @@ class Lib_PlacementAds_AddEdit {
 
 		if ($user AND $object->category AND $settings = Kohana::$config->load("category.".$object->category.".additional_fields.".$user->org_type))
 		{
+			$additional = array();
 			foreach ($settings as $setting) {
 				$name = str_replace("additional_", "", $setting);
 				$value = $params->{$setting};
@@ -1133,7 +1134,11 @@ class Lib_PlacementAds_AddEdit {
 				
 				ORM::factory('User_Settings')
 						->update_or_save($user->id, "orginfo", $name, $value);
+
+				$additional[$setting] = $value;
 			}
+
+			$additional = ORM::factory('Data_Additional')->set_additional($object->id, $additional);
 		}
 
 		return $this;
