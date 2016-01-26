@@ -1096,6 +1096,7 @@ span.date{
 }
 
 .kupon_wrap{
+    width: 100%;
     margin-bottom: 10px;
 }
 
@@ -1171,9 +1172,6 @@ img.category-icon{
     position: absolute;
     bottom: 0;
     right: 0;
-}
-.kupon_wrap {
-    width: 100%;
 }
 
 .last-wrap{
@@ -1293,7 +1291,7 @@ img.category-icon{
     float: right;
 }
 
-article img{
+article img.news-photo{
     width: 60%;
 }
 
