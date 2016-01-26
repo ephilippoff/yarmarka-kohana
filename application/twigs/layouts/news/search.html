@@ -1,0 +1,41 @@
+{% extends "layouts/main_with_header" %}
+
+{% block body %}
+	
+	{% block header %}
+		{{ parent() }}
+	{% endblock header %} 
+
+	{% block crumbs %} 
+		Крошки
+	{% endblock crumbs %}
+
+	<div class="row min-content-height">
+		<div class="col-md-3">
+			{% block leftside %} 
+				<div class="obj-control-head clearfix brt2">&nbsp;</div>
+			{% endblock leftside %}
+		</div><!--col-->
+		<div class="col-md-6">
+			{% block content %} 
+				<div class="obj-control-head clearfix brt2">&nbsp;</div>
+			{% endblock content %}
+		</div><!--col-->
+		<div class="col-md-3">
+			{% block rightside %} 
+				<div class="obj-control-head clearfix brt2">&nbsp;</div>
+			{% endblock rightside %}
+		</div><!--col-->
+	</div><!--row-->
+
+	{% block footer %} 
+		{{ parent() }}
+	{% endblock footer %}
+
+	{% block templates %}
+		{{ parent() }}
+	{% endblock templates %}
+
+{% endblock body %}
+
+{% block page_name%}news_search{% endblock page_name %}

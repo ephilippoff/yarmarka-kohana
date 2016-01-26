@@ -126,6 +126,25 @@ class Controller_Search extends Controller_Template {
         }
         //end main search
 
+        //premium news
+        $search_query = Search::searchquery(
+            array(
+                "expiration" => TRUE,
+                "premium" => TRUE,
+                "active" => TRUE,
+                "published" =>TRUE,
+                "city_id" => $search_info->city_id,
+                "category_seo_name" => "novosti"
+            ),
+            array("limit" => 4, "page" => 1)
+        );
+        $twig->premiumnews = Search::getresult($search_query->execute()->as_array());
+        
+        $premium_ids = array_map(function($item){
+            return $item["id"];
+        }, $twig->premiumnews);
+        //premium news end
+
         //premium
         $premium_search_query = Search::searchquery(
             array_merge($search_info->search_filters, array("premium" => TRUE, "not_category_seo_name" => array("novosti") )), 
@@ -182,6 +201,50 @@ class Controller_Search extends Controller_Template {
             $objects_for_map = array_merge($objects_for_map, $vip_search_coords);
         }
         //vip end
+
+        //lastnews
+        $search_query = Search::searchquery(
+            array(
+                "expiration" => TRUE,
+                "active" => TRUE,
+                "published" =>TRUE,
+                "city_id" => $search_info->city_id,
+                "category_seo_name" => "novosti",
+                    
+            ),
+            array("limit" => 7, "page" => 1, "order" => "date_expired")
+        );
+        $twig->lastnews = Search::getresult($search_query->execute()->as_array());
+        //lastnews end
+
+        //kupons
+         $premium_kupons = Search::searchquery(
+            array(
+                "active" => TRUE,
+                "published" =>TRUE,
+                "expiration" => TRUE,
+                "premium" => TRUE,
+                "category_id" => array(173),
+                "city_id" => ($search_info->city_id) ? array($search_info->city_id) : NULL,
+            ),
+            array("limit" => 3, "order" => "date_expired")
+        );
+
+        $twig->premium_kupons = Search::getresult($premium_kupons->execute()->as_array());
+
+        $kupons = Search::searchquery(
+            array(
+                "active" => TRUE,
+                "published" =>TRUE,
+                "expiration" => TRUE,
+                "category_id" => array(173),
+                "city_id" => ($search_info->city_id) ? array($search_info->city_id) : NULL,
+            ),
+            array("limit" => 3, "order" => "date_expired")
+        );
+
+        $twig->kupons = Search::getresult($kupons->execute()->as_array());
+        //kupons end
 
         //pagination
         $pagination = Pagination::factory( array(
@@ -266,7 +329,7 @@ class Controller_Search extends Controller_Template {
         } else if ($search_info->category->seo_name == 'novosti') {
             $twig->set_filename('search/news/index');
         }
-		
+
         foreach ((array) $search_info as $key => $item) {
             $twig->{$key} = $item;
         }        
@@ -293,6 +356,8 @@ class Controller_Search extends Controller_Template {
         $this->process_child_categories($twig->category_childs_elements);
         $this->process_child_categories($twig->category_childs);
         //var_dump($twig->category_childs_elements);die;
+
+        $twig->staticMainMenu = TRUE;
 
         $this->cache_stat($twig, $search_params);
         $this->response->body($twig);

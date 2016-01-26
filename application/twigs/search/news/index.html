@@ -1,4 +1,4 @@
-{% extends "layouts/search" %}
+{% extends "layouts/news/search" %}
 
 {% set theme_class = 'green-dense-theme' %}
 
@@ -8,7 +8,7 @@
 
 {% block js %}
 	{{ parent() }}
-{% endblock js%}
+{% endblock js %}
 
 {% block title %} {{ seo_attributes.title }} {% endblock title%}
 {% block meta_description %} {{ seo_attributes.description }} {% endblock meta_description%}
@@ -24,31 +24,32 @@
 
 {% block crumbs %} {% include 'search/kupony/crumbs' %} {% endblock crumbs %}
 
-{% block wrapperclass %}page-search{% endblock wrapperclass %}
 
-{% block subcategories %}
-	{% if sphinx_category_childs|length > 0%}
-		{% include 'search/sphinxcategories' %}
-	{% elseif category_childs|length > 0 %}
-		{% include 'search/subcategories' %}
-	{% elseif category_childs_elements|length > 0 %}
-		{% include 'search/subfilters' %}
-	{% endif %}
-{% endblock subcategories %}
+{% block leftside %} 
+	{% include 'index/promo/left' %}
+{% endblock leftside %}
 
-
-{% block filters %}{% endblock filters %}
-
-{% block content %} 
-	{% include 'search/news/result' %}
-	{% include 'search/paginator' %}
+{% block content %}
+	<div class="row main_block">
+		<div class="col-lg-12">
+			{% include 'index/promo/photo_news' %}
+			{% include 'index/promo/news' with {'newsNumber' : 1} %}
+			{{ requestblock('block_news/main_page', {'itemsPerCategory' : 6}) }}
+		</div>
+	</div>
 {% endblock content%}
 
 
 {% block rightside %} 
-	{% set half = TRUE %}
-	{% include 'search/vip' %}
-	{% include 'search/banner' %}
+	<div class="right-side hidden-sm hidden-xs">
+		<div class="detail_news">
+			{% include 'index/promo/news' with {'newsNumber' : 6} %}
+		</div>
+		{% if check_object_access(object, 'object.moderate') %}
+			<div class="module">{% include 'detail/kupon/controls' %}</div>
+		{% endif %}
+		{% include 'index/informers' %}
+	</div>
 {% endblock rightside %}
 
 
