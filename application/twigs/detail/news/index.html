@@ -65,7 +65,7 @@
 {% block rightside %}
 	<div class="right-side hidden-sm hidden-xs">
 		<div class="detail_news">
-			{% include 'index/promo/news' %}
+			{% include 'index/promo/news' with {'newsNumber' : 6} %}
 		</div>
 		{% if check_object_access(object, 'object.moderate') %}
 			<div class="module">{% include 'detail/kupon/controls' %}</div>

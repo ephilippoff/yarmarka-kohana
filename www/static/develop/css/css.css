@@ -982,6 +982,7 @@ a.auto-collapse-expand {
     border-bottom: 1px solid #ccc;
     padding: 0 10px 10px 10px;
     margin-bottom: 10px;
+    word-break: break-all;
 }
 
 .last_news_ul li:last-child{
@@ -1286,11 +1287,6 @@ img.category-icon{
     width: 70%;
 }
 
-
-.detail_news ul li:nth-child(n+7){
-    display: none;
-}
-
 .news_info .cat{
     float: right;
 }
@@ -1311,3 +1307,7 @@ article img{
     border-bottom: 1px dotted #333;
 }
 
+.main_last_news{
+    padding: 20px 0 10px;
+    border-top: 1px solid #ccc;
+}

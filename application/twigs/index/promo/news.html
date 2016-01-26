@@ -1,4 +1,25 @@
 {% set theme_class = 'crimson-theme' %}
+
+{% if newsNumber is empty %}
+	{% set newsNumber = 7 %}
+{% endif %}
+
+{% if newsNumber == 1 %}
+<div class="clearfix main_last_news module">
+	{% set current_date = NULL %}
+	{% for news in lastnews %}
+		{%  if loop.index <= newsNumber %}
+			<div class="image_block fl mr10">
+				<img src="{{get_file(news.compiled.images.main_photo['208x208'])}}" alt="">
+			</div>
+			<div class="news_info">
+				<span class="date fs12">{{news.date_expired|date('H:i')}}</span><a href="/newsline/{{news.date_expired|date('Y-m-d')}}#{{news.id}}" class="ml10">{{news.title}}</a><br>
+				{{news.user_text|striptags|slice(0,230)}}...
+			</div>
+		{% endif %}
+	{% endfor %}
+</div>
+{% else %}
 <div class="{{theme_class}} module br2" >
 	<div class="menu-cont2 brt2">
 		<div class="row">
@@ -16,12 +37,15 @@
 				<ul class="dib w100p last_news_ul">
 					{% set current_date = NULL %}
 					{% for news in lastnews %}
-						<li>
-							<span class="date fs12">{{news.date_expired|date('H:i')}}</span><a href="/newsline/{{news.date_expired|date('Y-m-d')}}#{{news.id}}" class="ml10">{{news.title|slice(0,60)}}...</a>
-						</li>
+						{%  if loop.index <= newsNumber %}
+							<li>
+								<span class="date fs12">{{news.date_expired|date('H:i')}}</span><a href="/newsline/{{news.date_expired|date('Y-m-d')}}#{{news.id}}" class="ml10">{{news.title|slice(0,60)}}...</a>
+							</li>
+						{% endif %}
 					{% endfor %}
 				</ul>
 			</div>
 		</div>
 	</div>
 </div>
+{% endif %}
