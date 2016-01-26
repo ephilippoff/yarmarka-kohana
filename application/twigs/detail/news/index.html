@@ -55,7 +55,7 @@
 					{{ text }}
 				</div>
 				{% include 'block/vk/comments_surgut' %}
-				{{ requestblock('block_news/main_page', {'catTitle': object.compiled.attributes['news-category'].value, 'newsTitle' : object.title, 'itemsPerCategory' : 11}) }}
+				{{ requestblock('block_news/main_page', {'catTitle': object.compiled.attributes['news-category'].value, 'newsTitle' : object.title, 'itemsPerCategory' : 10}) }}
 				{{ requestblock('block_news/main_page', {'catTitle': object.compiled.attributes['news-category'].value, 'reverse': reverse, 'itemsPerCategory' : 6}) }}
 			</article>
 		</div>
@@ -65,7 +65,7 @@
 {% block rightside %}
 	<div class="right-side hidden-sm hidden-xs">
 		<div class="detail_news">
-			{% include 'index/promo/news' with {'newsNumber' : 6} %}
+			{% include 'index/promo/news' %}
 		</div>
 		{% if check_object_access(object, 'object.moderate') %}
 			<div class="module">{% include 'detail/kupon/controls' %}</div>
