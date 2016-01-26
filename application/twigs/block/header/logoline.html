@@ -7,11 +7,18 @@
 				</a>
 			</div>
 		</div>
+		{% if showCatalogMenuButtonAfterLogo %}
+		<div class="menu-cont2 col-xs-6 col-sm-6 col-md-2 {{ catalogMenuAfterLogoButtonAdditionalClass }}">
+			<div class="menu-item menu-button left crimson-theme w100p iLight js-mainmenu-dropdown"><!--main-page-style iLight-disable-->
+				<span class="menu-item-cont ta-c"><i class="fa fa-bars hidden-md hidden-lg"></i>Выбрать рубрику<i class="fa fa-caret-down ml3 hidden-sm hidden-xs"></i></span>
+			</div>
+		</div>
+		{% endif %}
 		<div class="col-md-2 col-md-push-8 col-xs-6">
 			<span class="button w100p dib bg-color-crimson add-advert white ta-c pointer" onclick="window.location='/add'">Подать объявление</span>
 		</div>
 		<div class="clearfix visible-xs visible-sm"></div>
-		<div class="col-md-4 col-md-pull-2">
+		<div class="col-md-8 col-md-pull-2">
 			<!--/noindex-->
 			<div class="search-cont">
 				<div class="seach-bl">														
@@ -33,10 +40,10 @@
 			</div>
 			<!--/noindex-->
 		</div>
-		<div class="col-md-4 col-md-pull-2">
+		<!-- <div class="col-md-4 col-md-pull-2">
 			<a href="/" target="_blank">
 				<img class="banner" src="{{ staticfile('images/banner1.gif') }}" width="1280" height="100" alt="" title="" border="0">
 			</a>						
-		</div>	
+		</div>	 -->
 	</div>
 </div>

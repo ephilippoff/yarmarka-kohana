@@ -1,6 +1,5 @@
 <div class="fn-rows-parameters">
 	<? foreach ($data->rows as $element): ?>
-
 		<?
 		$parameters = array(
 			'id' => $element["name"],
@@ -9,19 +8,26 @@
 			'class' => "fn-param",
 			'values' => $element['values'],
 			'value' => $element['value'],
-			'is_required' => $element['is_required']
+			'is_required' => $element['is_required'],
+			'custom' => ''
 		);
 		?>
+
 		<? if ($element["custom"]): ?>	
 			<? $parameters["errors"] = $data->errors->{$element["name"]}; ?>						
 		<?= View::factory("add/element/_" . $element["custom"], $parameters); ?>
 	<? else: ?>
-
+			<?php 
+				if ($allowCkEditor && ($element['name'] == 'param_1000' || $element['name'] == 'param_1003')) {
+					$parameters['custom'] = 'data-fileupload="true"';
+					$parameters['class'] .= ' ckeditor';
+				}
+			?>
 			<div class="row mb10" id="div_<?= $element["name"] ?>">
-				<div class="col-md-3 col-xs-4 labelcont">
+				<div class="col-md-3 labelcont">
 					<label><?= $element["title"] ?><?= ($element["unit"] ? ", " . $element["unit"] . ":" : ":") ?></label>
 				</div>
-				<div class="col-md-9 col-xs-8">
+				<div class="col-md-9">
 
 					<div class="row">
 

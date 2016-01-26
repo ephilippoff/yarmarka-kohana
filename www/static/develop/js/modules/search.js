@@ -27,7 +27,7 @@ define([
         },
 
         searchAdverts: function(text, options) {
-            console.log(text)
+            
             var search = new SearchModel();
             options.error = options.error || function() {};
             options.success = options.success || function() {};

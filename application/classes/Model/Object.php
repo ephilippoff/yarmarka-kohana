@@ -16,6 +16,7 @@ class Model_Object extends ORM {
 		'contacts'			=> array('model' => 'Contact', 'through' => 'object_contacts'),
 		'user_messages'		=> array('model' => 'User_Messages', 'foreign_key' => 'object_id'),
 		'complaints'		=> array('model' => 'Complaint', 'foreign_key' => 'object_id'),
+		'data_list' => array('model' => 'Data_List', 'foreign_key' => 'object'),
 	);
 
 	public function change_tablename($name)
@@ -69,6 +70,35 @@ class Model_Object extends ORM {
 		}
 
 		return strip_tags($this->title).', '.strip_tags($user_text).', '.join(', ', $this->get_attributes_values(NULL, FALSE));
+	}
+
+	public function is_newspaper_object()
+	{
+		if ( ! $this->loaded())
+		{
+			return FALSE;
+		}
+
+		return ($this->source_id == 2);
+	}
+
+	public function generate_newspaper_object_title()
+	{
+		if ( ! $this->loaded())
+		{
+			return FALSE;
+		}
+
+		$title = $this->title;
+		$title = Text::rus2translit($title);
+		$title = Text::clear_symbols_for_seo_name($title);
+		$title = mb_strtolower($title);
+		$title = str_replace(array(' '), '-', $title);
+		$title = str_replace('--', '-', $title);
+		$title = trim($title,'-');
+		$this->seo_name = $title;
+		$this->save();
+		return $title;
 	}
 
 	public function generate_title($template = NULL)
@@ -274,6 +304,29 @@ class Model_Object extends ORM {
 	public function is_moderate()
 	{
 		return (bool) $this->moder_state;
+	}
+
+	public function get_edit_url($city_seo_name = NULL) {
+		if (!$this->loaded()) return;
+		
+		$config = Kohana::$config->load("common");
+        $main_domain = $config["main_domain"];
+
+		$url = array("http:/");
+
+		$city = ORM::factory('City')
+					->where("id","=", (int) $this->city_id)
+					->where("is_visible","=", 1)
+					->find();
+		if ($city->loaded()) {
+			array_push($url, $city->seo_name.".".$main_domain);
+		} else {
+			array_push($url, $main_domain);
+		}
+
+		$url []= 'edit';
+		$url []= $this->id;
+		return implode('/', $url);
 	}
 
 	public function get_full_url($city_seo_name = NULL)
@@ -946,6 +999,47 @@ class Model_Object extends ORM {
 			$_balance->value_min = $_balance->value_min + intval($count);
 			$_balance->save();
 		}
+	}
+
+	public function moderate_ban_for_edit() {
+		if (!$this->loaded()) {
+			return;
+		}
+
+		$this->is_bad = 1;
+		$this->is_published = 0;
+		$this->moder_state = 1;
+		$this->save();
+
+	}
+
+	public function moderate_ban() {
+		if (!$this->loaded()) {
+			return;
+		}
+
+		$this->is_bad = 2;
+		$this->is_published = 0;
+		$this->moder_state = 1;
+		$this->save();
+
+	}
+
+	public function moderate_full_ban() {
+		if (!$this->loaded()) {
+			return;
+		}
+
+		$author = $this->author;
+		if (!$author) {
+			return;
+		}
+
+		DB::update('object')
+			->set(array('is_bad' => 2, 'active' => 0, 'is_published' => 0))
+			->where('id', 'IN', DB::select("id")->from("object")->where("author","=",$author) )
+			->execute();
+
 	}
 }
 

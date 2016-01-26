@@ -84,6 +84,22 @@ class Domain
             return $protocol_str.$domain_str.$main_domain.self::url($url_str);
         }
     }
+
+     public static function get_domain_by_city_old($domain_str, $url_str, $protocol_str = "http://")
+    {
+        $config = Kohana::$config->load("common");
+        $main_domain = $config["main_domain"];
+        $city = $domain_str;
+        if (!$url_str){ $city = "";}
+        if ($domain_str) {
+            $domain_str .= ".";
+        }
+        if (!$url_str) {
+            return $protocol_str.$domain_str.$main_domain."/".$city;
+        } else {
+            return $protocol_str.$domain_str.$main_domain."/".$city.self::url($url_str);
+        }
+    }
     
     public static function url($link)
     {

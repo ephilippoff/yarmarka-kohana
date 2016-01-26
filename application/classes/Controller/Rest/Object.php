@@ -60,6 +60,54 @@ class Controller_Rest_Object extends Controller_Rest {
 			$this->json["result"] = (string) $twig;
 	}
 
+	public function action_write_to_author() {
+
+		/* validate request fields */
+		$require = array( 'object_id', 'message' );
+		foreach($require as $key) {
+			if (!property_exists($this->post, $key) || empty($this->post->{$key})) {
+				throw new Exception($key);
+			}
+		}
+
+		/* check object */
+		$object = ORM::factory('Object')
+			->where('id', '=', $this->post->object_id)
+			->find();
+
+		if (!$object->loaded()) {
+			throw new Exception('Bad object_id');
+		}
+		
+		/* get author */
+		$author = ORM::factory('User')
+			->where('id', '=', $object->author)
+			->find();
+		if (!$author->loaded()) {
+			throw new Exception('No author');
+		}
+
+		/* get current user */
+		$user = Auth::instance()->get_user();
+
+		if (!$user) {
+			throw new Exception('Unauthorized');
+		}
+
+		/* prepare message text */
+		$message = 'Вам было отправлено сообщение по объявлению: ' . $object->get_full_url() . "\r\n";
+		$message .= 'Текст сообщения:' . "\r\n";
+		$message .= '------------------------------------' . "\r\n";
+		$message .= htmlspecialchars($this->post->message) . "\r\n";
+		$message .= '------------------------------------' . "\r\n";
+		$message .= 'Email отправителя: ' . $user->email;
+
+		/* prepare subject */
+		$subject = 'У Вас сообщение на «Ярмарка-онлайн»';
+
+		Email::send( $author->email, Kohana::$config->load('email.default_from'), $subject, $message, false);
+	}
+
 	public function action_callback() {
 
 		$oc = ORM::factory('Object_Callback');
@@ -166,12 +214,79 @@ class Controller_Rest_Object extends Controller_Rest {
 
 		$object->increase_stat_contacts_show();
 
+		//get contacts from compiled obejct prior to 
+		// http://yarmarka.myjetbrains.com/youtrack/issue/yarmarka-363
+		$compiledEntry = ORM::factory('Object_Compiled')
+			->where('object_id', '=', $object->id)
+			->find();
+		$decompiledData = unserialize($compiledEntry->compiled);
+		$contacts = array();
+		foreach($decompiledData['contacts'] as $contact) {
+			if ($contact['type'] == 5) {
+				continue;
+			}
+			$contacts []= array( 'contact' => $contact['value'] );
+		}
 		
 		$result["code"] = 200;
 		$result["captcha"] = NULL;
 		$result["contacts"] = $contacts;
 
 		return $result;
+	}
+
+	public function action_moderate_reasons() {
+
+		$this->json["result"] = ORM::factory('Object_Reason')->getprepared_all();
+
+		$this->json["code"] = 200;
+	}
+
+	public function action_moderate() {
+
+		$user = Auth::instance()->get_user();
+		$id = $this->post->object_id;
+		$type = $this->post->type;
+		$comment = $this->post->comment;
+		$send_mail = $this->post->send_email;
+
+		if (!$type OR !$id OR !Acl::check("object.moderate")) {
+			throw new HTTP_Exception_404;
+		}
+
+		$object = ORM::factory('Object', $id);
+
+		if (!$object->loaded()) {
+			throw new HTTP_Exception_404;
+		}
+
+		$auhor = ORM::factory('User', $object->author);
+
+		if ($type == "block_edit") {
+			$object->moderate_ban_for_edit();
+		} else if ($type == "block_object") {
+			$object->moderate_ban();
+		}  else if ($type == "block_full" AND $auhor->loaded()) {
+			$auhor->ban($comment);
+			//$object->moderate_full_ban();
+		}
+
+		ORM::factory('User_Messages')->add_msg_to_object($id, $comment);
+
+		if ($send_mail AND $auhor->loaded() AND $auhor->email)
+		{
+			$msg = View::factory('emails/manage_object', 
+				array(
+					'UserName' => $auhor->fullname ? $auhor->fullname : $auhor->login,
+					'actions' => array(
+						$comment . ' ('.HTML::anchor($object->get_url(), $object->title).')',
+					),
+				)
+			)->render();
+			Email::send(trim($auhor->email), Kohana::$config->load('email.default_from'), "Сообщение от модератора сайта", $msg);
+		}
+
+		$this->json["code"] = 200;
 	}
 
 }

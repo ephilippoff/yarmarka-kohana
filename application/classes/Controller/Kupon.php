@@ -45,7 +45,9 @@ class Controller_Kupon extends Controller_Template {
 			$twig->city = Arr::get($cities, $object->city_id, NULL);
 		}
 
-		$ean = empty($twig->kupon->external_number) ? $twig->kupon->number : $twig->kupon->external_number;
+		$ean = empty($twig->kupon->external_number) 
+			? preg_replace('/[^0-9]/', '', $twig->kupon_number) 
+			: $twig->kupon->external_number;
 		//debug
 		//$ean = '123';
 		//$ean = '123456789012345678';
@@ -58,6 +60,23 @@ class Controller_Kupon extends Controller_Template {
 		}
 
 		$twig->ean = $ean;
+
+		//get kupon object
+		$object = ORM::factory('Objectcompiled')
+			->where('id', '=', $kupon_group->object_id)
+			->find();
+		if (!$object->loaded()) {
+			throw new Exception('Object for kupon group not found!');
+		}
+		$decompiled = unserialize($object->compiled);
+		$userText = NULL;
+		foreach($decompiled['attributes'] as $attribute) {
+			if ($attribute['reference'] == 1003) {
+				$userText = $attribute['value'];
+				break;
+			}
+		}
+		$twig->kupon_group_description = $userText;
 
 		$this->response->body($twig);
 	}

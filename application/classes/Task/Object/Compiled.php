@@ -7,7 +7,8 @@ class Task_Object_Compiled extends Minion_Task
 		'category_id'	=> NULL,
 		'active'	=> TRUE,
 		'city_id'	=> NULL,
-		'rewrite'	=> FALSE
+		'rewrite'	=> FALSE,
+		'newspaper' => FALSE
 	);
 
 	protected function _execute(array $params)
@@ -16,6 +17,7 @@ class Task_Object_Compiled extends Minion_Task
 		$city_id = $params['city_id'];
 		$active = $params['active'];
 		$rewrite = $params['rewrite'];
+		$newspaper = $params['newspaper'];
 		
 		$object = ORM::factory('Object');
 		
@@ -28,7 +30,11 @@ class Task_Object_Compiled extends Minion_Task
 		}
 
 		if ($active) {
-			$object = $object->where("active","=", 1)->where("is_published","=", 1);
+			$object = $object->where("active","=", 1)->where("date_created",">=", DB::expr("NOW() - interval '6 months'"));
+		}
+
+		if ($newspaper) {
+			$object = $object->where("source_id","=", 2)->where("date_created",">=", DB::expr("NOW() - interval '6 months'"));
 		}
 
 		if (!$rewrite) {
@@ -59,11 +65,19 @@ class Task_Object_Compiled extends Minion_Task
 		if ($oc->loaded()) {
 			$compiled = unserialize($oc->compiled);
 		}
+		if ($item->is_newspaper_object() == 2) {
+			Minion_CLI::write('title: '.$item->generate_newspaper_object_title());
+		}
+		
 		$compiled["url"] = $item->get_full_url();
+
+		
 		if ($show_hint)
 		{
 			Minion_CLI::write('url: '.$compiled["url"]);
 		}
+
+		
 		
 
 		$compiled["images"] = Object_Compile::getAttachments($item->id, $item->main_image_id);

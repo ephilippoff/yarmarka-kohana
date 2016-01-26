@@ -15,10 +15,10 @@ class Lib_PlacementAds_AddEditByModerator extends Lib_PlacementAds_AddEdit {
 			->rule('rubricid', 'not_empty', array(':value', "Раздел"))
 			->rule('rubricid', 'not_category_0', array(':value', "Раздел"));
 
-		if ($category)
-		{
-			$validation->rule('contact', 'not_empty', array(':value', "Контактное лицо"));
-		}
+		// if ($category)
+		// {
+		// 	$validation->rule('contact', 'not_empty', array(':value', "Контактное лицо"));
+		// }
 
 		if ($category AND !$category->title_auto_fill AND !$params->itis_massload)
 		{
@@ -131,20 +131,70 @@ class Lib_PlacementAds_AddEditByModerator extends Lib_PlacementAds_AddEdit {
 		return $this;		
 	}
 
-	function save_generated()
+	function init_additional()
 	{
-		$object = &$this->object;
+		$category = &$this->category;
+		$validation = &$this->validation;
 		$params = &$this->params;
 
-		if ($object->category_obj->title_auto_fill)
+		if ($category AND $settings = Kohana::$config->load("category.".$category->id.".additional_fields.2"))
 		{
-			$object->title = $object->generate_title();
-		} else {
-			$object->title = $object->title;
+
+			$titles =  Kohana::$config->load("dictionaries.additional_fields.2");
+			foreach ($settings as $setting) {
+				$validation->rules($setting, array(
+						array('not_empty', array(':value', $titles[$setting]))
+					)
+				);
+			}
 		}
 
-		$object->full_text = $object->generate_full_text();
-		$object->save();
+		if ($category AND $saveas = Kohana::$config->load("category.".$category->id.".additional_saveas"))
+		{
+			if (!$saveas)
+				$saveas = array();
+
+			foreach ($saveas as $field => $_saveas) {
+
+					$param = $saveas[$field][0];
+					$value = trim($params->{$field});
+					if ($value)
+						$params->{$param} = $value;
+					else
+						$params->{$param} = $saveas[$field][1];
+			}
+		}
+		return $this;
+	}
+
+	function save_additional()
+	{
+		$params = &$this->params;
+		$object = &$this->object;
+
+		if ($object->category AND $settings = Kohana::$config->load("category.".$object->category.".additional_fields.2"))
+		{
+			$additional = array();
+			foreach ($settings as $setting) {
+				$name = str_replace("additional_", "", $setting);
+				$value = $params->{$setting};
+
+				// if ($this->is_edit AND $this->user_id) {
+
+				// 	if (!$value)
+				// 		ORM::factory('User_Settings')
+				// 			->_delete($this->user_id, "orginfo", $name);
+					
+				// 	ORM::factory('User_Settings')
+				// 			->update_or_save($this->user_id, "orginfo", $name, $value);
+
+				// }
+
+				$additional[$setting] = $value;
+			}
+			$additional = ORM::factory('Data_Additional')->set_additional($object->id, $additional);
+		}
+
 		return $this;
 	}
 

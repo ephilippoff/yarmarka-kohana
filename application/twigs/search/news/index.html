@@ -16,10 +16,10 @@
 {% block header %} 
 		{{ requestblock('block_twig/topline', {'favourites':favourites}) }}
 		{% include 'block/header/logoline' %}
+		{{ requestblock('block_twig/adslinkline',{'city_id': city.id, 'theme_class': theme_class}) }}
 		<div class="{{theme_class}}">
 			{% include 'block/header/navigationline/article' %}
 		</div><!--skin-theme1-->
-		{{ requestblock('block_twig/adslinkline',{'city_id': city.id, 'theme_class': theme_class}) }}
 {% endblock header %} 
 
 {% block crumbs %} {% include 'search/kupony/crumbs' %} {% endblock crumbs %}

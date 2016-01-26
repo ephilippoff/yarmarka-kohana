@@ -1,11 +1,4 @@
 <div class="service-block-cont module">
-	<div class="p5 dib js-favourite red pointer" data-id="{{object.id}}">
-		{% set is_favourite = 'fa-heart-o' %}
-		{% if object.id in favourites %}
-			{% set is_favourite = 'fa-heart' %}
-		{% endif %}
-		<i class="fa {{is_favourite}} fa-lg mr5 js-favourite-ico"></i> <span class="js-favourite-caption">{{is_favourite == 'fa-heart' ? 'В избранном': 'В избранное'}}</span>
-	</div>
 	{% if object.is_published == 0 %}
 		<div class="p5 dib red js-object-state-{{object.id}}">Объявление снято</div>
 	{% elseif object.is_published == 1 %}
@@ -16,4 +9,17 @@
 	{% if check_object_access(object, 'object.control') %}
 		<div class="p5 dib">Просмотров: {{ object.visits }}</div>
 	{% endif %}
+	<div class="actions_block">
+		<div class="p5 dib js-favourite pointer red" data-id="{{object.id}}" id="favourite">
+			{% set is_favourite = 'fa-heart-o' %}
+			{% if object.id in favourites %}
+				{% set is_favourite = 'fa-heart' %}
+			{% endif %}
+			<i class="fa {{is_favourite}} fa-lg mr5 js-favourite-ico"></i> <span class="js-favourite-caption">{{is_favourite == 'fa-heart' ? 'В избранном': 'В избранное'}}</span>
+		</div>
+		<div data-role="complain" data-object-id="{{ object.id }}" data-is-guest="{{ isGuest }}" class="dib" id="complain">
+			<a href="#" data-role="start"><i class="fa fa-exclamation-triangle mr5 fa-lg"></i> Пожаловаться</a>
+		</div>
+	</div>
 </div>
+<div class="dialog_window module"></div>

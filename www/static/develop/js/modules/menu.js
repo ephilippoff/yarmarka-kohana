@@ -9,7 +9,7 @@ define([
         controlClass: ".js-mainmenu-dropdown",
         menuClass: ".js-mainmenu",
         menuTemplate: "#template-mainmenu"
-    }
+    };
 
     var userMenuSettings = {
         controlClass: ".js-usermenu-dropdown",
@@ -19,7 +19,13 @@ define([
 
     var cityMenuSettings = {
         controlClass: ".js-citymenu-dropdown",
-        menuClass: ".js-citymenu",
+        menuClass: ".citymenu1",
+        menuTemplate: "#template-citymenu"
+    }
+
+    var cityMenuSettingsRight = {
+        controlClass: ".js-citymenu-dropdown-right",
+        menuClass: ".citymenu2",
         menuTemplate: "#template-citymenu"
     }
 
@@ -34,21 +40,37 @@ define([
         menuClass: ".js-kuponmenu",
         menuTemplate: "#template-kuponmenu"
     }
-
     var MenuView = Marionette.ItemView.extend({
         events: {
+            "click" : "showMenu",
             "mouseover" : "showMenu",
             "mouseleave" : "closeMenu"
         },
         initialize: function(options) {
-            this.$el.append($(options.templateClass).html());
-            $(options.templateClass).remove();
+            this.visible = 0;
+
+            if (!options.doNotUseTemplate) {
+                this.$el.append($(options.templateClass).html());
+                if (!options.doNotRemove) {
+                    $(options.templateClass).remove();
+                }
+            }
+            //Разделение меню городов по Class;
+            var cityClass = 1;
+            $('.js-citymenu').each(function(){
+                $(this).addClass('citymenu'+cityClass);
+                cityClass++;
+            });
         },
 
         showMenu: function() {
+            if (this.getOption('alwaysVisibleMenu')) {
+                return;
+            }
             var s = this;
             if (this.activateTimer) clearTimeout(this.activateTimer);
             this.activateTimer = setTimeout(function(){
+                s.visible = 1;
                 $(s.getOption("menuClass")).fadeIn(70);
                 $("#popup-layer").fadeIn(70);
                 $(s.getOption("controlClass")).addClass("z301");
@@ -57,10 +79,14 @@ define([
         },
 
         closeMenu: function() {
+            if (this.getOption('alwaysVisibleMenu')) {
+                return;
+            }
             if (this.activateTimer) clearTimeout(this.activateTimer);
             $(this.getOption("menuClass")).fadeOut(70);
-             $("#popup-layer").fadeOut(70);
-             $(this.getOption("controlClass")).removeClass("z301");
+            $("#popup-layer").fadeOut(70);
+            $(this.getOption("controlClass")).removeClass("z301");
+            this.visible = 0;
         }
     });
 
@@ -74,7 +100,7 @@ define([
             if ($menu.length > 0){
                 try {
                     $menu.menuAim({
-                        activate: this.activateSubmenu, 
+                        activate: this.activateSubmenu.bind(this), 
                         deactivate: this.deactivateSubmenu,
                         rowSelector: ".js-submenu-item"
                     });
@@ -88,6 +114,7 @@ define([
             var s = this;
             if (this.submenuActivateTimer) clearTimeout(this.submenuActivateTimer);
 
+            this.activeRow = row;
             this.submenuActivateTimer = setTimeout(function(){
                var $row = $(row), 
                   submenuId = $row.data("submenu-id"), 
@@ -99,6 +126,9 @@ define([
         },
         deactivateSubmenu: function(row) {
             if (this.submenuActivateTimer) clearTimeout(this.submenuActivateTimer);
+            if (!row) {
+                row = this.activeRow;
+            }
             var $row = $(row), 
                 submenuId = $row.data("submenu-id"), 
                 $submenu = $("#" + submenuId);
@@ -122,12 +152,28 @@ define([
             menusToload = menusToload || [];
 
             if (_.contains(menusToload, "main")) {
-                this.main = new MainmenuView({
+                var menuOptions = {
                     el: mainMenuSettings.controlClass,
                     templateClass: mainMenuSettings.menuTemplate,
                     menuClass: mainMenuSettings.menuClass,
-                    controlClass: mainMenuSettings.controlClass,
-                });
+                    controlClass: mainMenuSettings.controlClass
+                };
+
+                if (_globalSettings.page == 'index') {
+                    //override some settings
+                    menuOptions.alwaysVisibleMenu = true;
+                    menuOptions.doNotRemove = true;
+                    menuOptions.el = '.left_menu';
+                    menuOptions.menuClass = '.top_level_menu';
+                    menuOptions.doNotUseTemplate = true;
+
+                    var me = this;
+                    $(menuOptions.el).on('mouseleave', function (e) {
+                        me.main.deactivateSubmenu();
+                    });
+                }
+
+                this.main = new MainmenuView(menuOptions);
             }
 
             if (_.contains(menusToload, "city")) {
@@ -136,6 +182,16 @@ define([
                     templateClass: cityMenuSettings.menuTemplate,
                     menuClass: cityMenuSettings.menuClass,
                     controlClass: cityMenuSettings.controlClass,
+                    doNotRemove: true
+                });
+            }
+
+            if (_.contains(menusToload, "city")) {
+                this.city1 = new MenuView({
+                    el: cityMenuSettingsRight.controlClass,
+                    templateClass: cityMenuSettingsRight.menuTemplate,
+                    menuClass: cityMenuSettingsRight.menuClass,
+                    controlClass: cityMenuSettingsRight.controlClass,
                 });
             }
 

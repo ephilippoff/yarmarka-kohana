@@ -4,12 +4,16 @@
 	{{ parent() }}
 	{{ css("add.css") }}
 	{{ css("cropper.min.css") }}
+	{{ css("jquery-ui.css") }}
 {% endblock css%}
 
 {% block js %} 
 	{{ parent() }}
 	{% if data_file %}
 		{{ js(data_file) }}
+		{{ js("jquery-ui.min.js") }}
+		{{ js("jquery.ui.touch-punch.min.js") }}
+		{{ js("device.min.js") }}
 	{% endif %}
 {% endblock js%}
 
@@ -71,7 +75,7 @@
 					</div>
 				</div>
 			{% endif %}
-
+			
 			{{ requestoldview(block_name, params) }}
 		</div>
 {% endblock content %}
@@ -102,7 +106,23 @@
 		</div>
 	{% endif %}
 
-	<div class="info-block-cont theme3 module">
+	{% if params.moder_messages|length > 0 %}
+		<div class="info-block-cont theme3 module">
+			<div class="block-title">
+				<span>Модерация</span>
+			</div>						
+			<div class="bg-color-whitesmoke p20">
+				<ul>
+					{% for message in params.moder_messages %} 
+						<li class="mb20 p5"><span class="bold db">{{ message.createdOn|date('d.m H:i') }}</span> <span class="red">{{ message.text }}</span></li>
+					{% endfor %}
+				</ul>
+				
+			</div>
+		</div>
+	{% endif %}
+
+	<div class="info-block-cont theme3 module hidden-sm">
 		<div class="block-title">
 			<span>Информация</span>
 		</div>						

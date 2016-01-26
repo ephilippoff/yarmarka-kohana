@@ -19,7 +19,9 @@ require.config({
         maskedInput: 'lib/vendor/jquery.maskedinput',
         ymap: 'http://api-maps.yandex.ru/2.1/?load=package.full&lang=ru-RU',
         cropper: 'lib/cropper',
-        gisMap: 'http://maps.api.2gis.ru/2.0/loader.js?lazy=true'
+        gisMap: 'http://maps.api.2gis.ru/2.0/loader.js?lazy=true',
+        ckeditor: 'lib/ckeditor/ckeditor',
+        ckeditorJqueryAdapter: 'lib/ckeditor/adapters/jquery'
     },
     shim : {
         localStorage : ['backbone'],
@@ -41,6 +43,9 @@ require.config({
         fileupload: {
              deps : ['iframeTransport']
         },
+        ckeditorJqueryAdapter: {
+            deps: [ 'ckeditor' ]
+        }
     },
     deps : ['underscore']
 });
@@ -97,4 +102,16 @@ function (app, $, Marionette, Backbone, _) {
     };
 
     app.start();
+});
+
+//Прилипающий сайдбар на страницах
+
+$(document).ready(function(){
+    if ($('div').is('.right-side')) {
+        var mainBlockBottomY = $(document).height() - ($('.main_block').offset().top + $('.main_block').outerHeight());
+        $('.right-side').hcSticky({
+            stickTo: document,
+            bottomEnd: mainBlockBottomY
+        });
+    }
 });

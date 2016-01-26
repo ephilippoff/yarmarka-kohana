@@ -4,6 +4,7 @@
 	
 	{% block header %} 
 		{{ parent() }}
+		{{ requestblock('block_twig/adslinkline', {'city_id': city.id, 'category_id': category.id, 'theme_class': theme_class}) }}
 		{% include 'block/header/navigationline/simple' %}
 	{% endblock header %}
 
@@ -13,7 +14,12 @@
 
 	<div class="row module">
 		<div class="col-md-12">
-			<h1 class="captionbold fs22 js-object-title-{{object.id}} {% if object.is_published == 0 %} red strike {% endif %}">{{ object.title|e|capitalize }}</h1>
+			<div class="row hidden-lg">
+				<div class="col-md-7 col-sm-7">
+					<div class="banner module {zoneID: 18 }"></div>
+				</div>
+			</div>
+			<h1 class="captionbold fs22 js-object-title-{{object.id}} {% if object.is_published == 0 %} red strike {% endif %}">{{ object.title|e }}</h1>
 		</div>
 	</div>
 	

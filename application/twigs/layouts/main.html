@@ -11,7 +11,7 @@
         <link rel="shortcut icon" href="{{ staticfile("images/favicon.ico") }}">
         {% if show_canonical %}
             {% if show_canonical_simple %}
-                <link rel="canonical" href="{{ canonical_url }}">
+                <link rel="canonical" href="{{ full_canonical_url }}">
             {% else %}
                 <link rel="canonical" href="{{ url(canonical_url) }}" />
             {% endif %}
@@ -24,6 +24,13 @@
                     {{ css("font-awesome.css") }}
                     {{ css("iLight.css") }}
                     {{ css("css.css") }}
+
+                    {{ css("adaptive/large-desktops.css") }}
+
+                    {{ css("adaptive/medium-desktops.css") }}
+                    {{ css("adaptive/small-tablets.css") }}
+                    {{ css("adaptive/extra-small-phones.css") }}
+
             {% else  %}
 					<!--[if IE 9]>
 						{{ css("bootstrap.min.css") }}
@@ -37,11 +44,16 @@
 						{{ css("../production/css/appstyles.css") }}
 					<!--<![endif]-->
             {% endif %}
+            {{ css("bootstrap-xxs.css") }}
         {% endblock css %}
 
         {{ js("lib/jquery.js") }}
+        {{ js("lib/sticky.js") }}
         {{ js("lib/jquery.metadata.js") }}
         {{ js("lib/jquery.openxtag.min.js") }}
+        {{ js("v2/main.js") }}
+        {{ js("lib/masonry.js") }}
+        {{ js("lib/adaptive.js") }}
         <script type="text/javascript">
           var _gaq = _gaq || [];
           _gaq.push(['_setAccount', 'UA-33375349-1']);
@@ -58,6 +70,7 @@
 
     </head>
     <body class="{% block bodyclass %}{% endblock bodyclass%}">
+
 		<!--[if lte IE 8]>
 			<div class="for-ie-msg-cont">
 				Ваш браузер устарел, установите более современный. Например <a style="font-size:20px;" target="_blank" href="https://www.google.ru/chrome/browser/desktop/">Google Chrome</a>
@@ -71,7 +84,7 @@
         {% endif %}
         <div id="popup-layer" class="z200" style="display: none;"></div>
         <div class="wrapper container {% block wrapperclass %}{% endblock wrapperclass %}">
-			<div class="banner {zoneID: 42}" style="max-height: 100px;"></div>			
+			<div class="banner topline {zoneID: 42}"></div>			
             {% block body %}
                 {% block footer %} 
                     {% include 'block/footer/linkline' %}
@@ -90,7 +103,8 @@
                     category_id: '{{category_id}}',
                     query_params: '{{query_params_for_js}}',
                     city_id: '{{city_id}}',
-                    debug: '{{ is_debug_mode() }}'
+                    debug: '{{ is_debug_mode() }}',
+                    allowCkEditor: {% if allowCkEditor %}true{% else %}false{% endif %}
                 };
             </script>
             {% if is_debug_mode() %}

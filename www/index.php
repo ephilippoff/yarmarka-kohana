@@ -101,6 +101,9 @@ if ( ! defined('KOHANA_START_MEMORY'))
 // Bootstrap the application
 require APPPATH.'bootstrap'.EXT;
 
+//load yarmarka logic
+require realpath('..') . DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, array( 'core', 'autoload.php' ));
+
 if (PHP_SAPI == 'cli') // Try and load minion
 {
 	class_exists('Minion_Task') OR die('Please enable the Minion module for CLI support.');

@@ -48,6 +48,16 @@ class Model_User_Messages extends ORM {
 					 ->order_by("createdOn", "desc");
 	}
 
+	public function get_messages_from_admins($object_id) {
+		$query = $this->join('user', 'left')
+				->on('user_messages.user_id', '=', 'user.id');
+
+		$query = $query->where('user.role', 'IN', array(1,3));
+
+		return $query->where('object_id', '=', $object_id)
+					 ->order_by("createdOn", "desc");
+	}
+
 	public function get_messages_user_objects($user_id, $from_moderators = FALSE) {
 		$query = $this->join('user', 'left')
 				->on('user_messages.user_id', '=', 'user.id');

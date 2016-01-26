@@ -340,10 +340,6 @@ class Controller_Cart extends Controller_Template {
 			return;
 		}
 
-		if ($order->state == 1) {
-			$order->check_state($order->id);
-		}
-
 		$twig->crumbs = array(
 			array(
 				"title" => "Оформление заказа",
@@ -513,12 +509,38 @@ class Controller_Cart extends Controller_Template {
 					$available = FALSE;
 					$avail_count = (int) ORM::factory('Kupon_Group', $item->service->group_id)->get_balance() + $own_kupons;
 					
+					//проверка наличия количества заказаных купонов на складе
 					$quantity = Arr::get((array) $params,"quantity".$item->service->group_id, 1);
 					if ($avail_count >= $quantity) {
 						$available = TRUE;
 					}
 
-					if ($quantity <> $item->service->quantity AND $available) {
+					//если заказанного количества нет на складе выдаем ошибку
+					if ($available !== TRUE)
+					{
+						$error = array(
+							"message" => "Указанное количество купонов превышает их остаток, измените количество в меньшую сторону",
+							"code" => 400
+						);
+						return $item;
+					}
+
+					$in_reserve = TRUE;
+					//проверка купонов в резерве, вдруг проданы уже
+					if (!$model_item->check_reserve()) {
+						$in_reserve = FALSE;
+					}
+
+					if ($in_reserve !== TRUE)
+					{
+						$error = array(
+							"message" => "Ошибка при оформлении заказа, возможно купоны в корзине уже проданы. Удалите купоны из корзины, добавьте их повторно, и повторите оформление заказа.",
+							"code" => 400
+						);
+						return $item;
+					}
+
+					if ($quantity <> $item->service->quantity) {
 						$model_item->return_reserve();
 						$service = Service::factory("Kupon", $item->service->group_id);
 						$service->set_params(array("quantity" => $quantity));
@@ -526,18 +548,7 @@ class Controller_Cart extends Controller_Template {
 						$model_item->save_service_params($item->service);
 						$model_item->reserve($key);
 					}
-					
-					
 
-
-					if ($available !== TRUE)
-					{
-						$error = array(
-							"message" => "Указанное количество купонов превышает их остаток, измените количество",
-							"code" => 400
-						);
-						return $item;
-					}
 				} 
 
 
@@ -695,6 +706,57 @@ class Controller_Cart extends Controller_Template {
 						$this->return_with_errors("/cart/order/".$order_id, $this->request->post(), $errors);
 						return;
 					}
+
+					// search kupons dates
+					// validate dates
+					$reservedCoupons = ORM::factory('Object_Movement')
+						->where('order_id', '=', $order_id)
+						->where('begin_state', '=', 'avail')
+						->where('end_state', '=', 'reserve')
+						->find_all();
+					$badCoupons = array();
+					$timeToCheckSec = 30 * 60;
+					foreach($kupons as $coupon) {
+						//find in resered
+						$reservedCoupon = NULL;
+						foreach($reservedCoupons as $reservedCouponItem) {
+							if ($coupon->id == $reservedCouponItem->kupon_id) {
+								$reservedCoupon = $reservedCouponItem;
+								break;
+							}
+						}
+						if ($reservedCoupon == NULL) {
+							//not found!
+							continue;
+						}
+
+						$time = strtotime($reservedCoupon->date);
+						if (time() - $time > $timeToCheckSec) {
+							$badCoupons []= $coupon;
+						}
+					}
+					if (count($badCoupons) > 0) {
+						//prepare data
+						$data = array();
+						$orderItems = ORM::factory('Order_Item')
+							->where("order_id","=", $order->id)
+							->find_all();
+						foreach($orderItems as $orderItem) {
+							$orderItemParams = json_decode($orderItem->params);
+							if ($orderItemParams->service->name != 'kupon') {
+								continue;
+							}
+							foreach($badCoupons as $badCoupon) {
+								if (in_array($badCoupon->id, $orderItemParams->service->ids)) {
+									$data []= $orderItemParams;
+								}
+							}
+						}
+						//notify user with bad coupons
+						$errors['coupon_reserve_timeout'] = $data;
+						$this->return_with_errors('/cart/order/' . $order_id, $this->request->post(), $errors);
+						return;
+					}
 			}
 			// if ($params->type == "object") {
 			// 	$service = Service::factory("Object", $orderItem->object_id);
@@ -737,25 +799,33 @@ class Controller_Cart extends Controller_Template {
 
 		$order = ORM::factory('Order', $order_id);
 		$robo = new Robokassa($order_id);
-		$robo->set_sum($order->sum);
+		$robo->set_sum($sum);
 		$sample = strtoupper($robo->create_result_sign());
 
-		if ($signature !== $sample OR !$order->loaded() OR $sum <> $order->sum)
+		ORM::factory('Order_Log')->write($order_id, "notice", vsprintf("Сравнение подписи. Подпись ПС: %s, Подпись лок: %s; Сумма ПС: %s, Сумма лок: %s", array($signature, $sample, $sum, $order->sum) ) );
+
+		if ($signature !== $sample OR !$order->loaded() OR (int) $sum <> (int) $order->sum)
 		{
-			header("HTTP/1.0 404 Not Found");
-			echo "bad sign";
-			exit;
+			ORM::factory('Order_Log')->write($order_id, "error", vsprintf("!! Не верно сформирована подпись уведомления о платеже (возможно ктото пытается взломать систему). Заказ №%s.", array($order_id) ) );
+			// echo "bad sign";
+			// header("HTTP/1.0 404 Not Found");
+			// exit;
 		}
 
-		if ($order->state == 1)
-		{
-			$order->success();
-			echo "OK".$order->id;
-		}
-		else
-		{
-			echo 'invoice already paid or refused';
-		}
+		$result = $order->check_state($order->id);
+		echo $result.$order->id;
+		ORM::factory('Order_Log')->write($order_id, "notice", vsprintf("Конец обработки. Сформирован ответ для платежной системы: %s", array($result.$order->id) ) );
+		return;
+
+		// if ($order->state == 1)
+		// {
+		// 	$order->check_state($order->id);
+		// 	echo "OK".$order->id;
+		// }
+		// else
+		// {
+		// 	echo 'invoice already paid or refused';
+		// }
 	}
 
 	public function action_success()
@@ -768,15 +838,17 @@ class Controller_Cart extends Controller_Template {
 
 		$order = ORM::factory('Order', $order_id);
 
-		if ($order->state == 1)
-		{
-			$order->check_state($order->id);
-			//HTTP::redirect("/cart/order/".$order_id);
-		}
-		else
-		{
-			//HTTP::redirect("/cart/order/".$order_id);
-		}
+		HTTP::redirect("/cart/order/".$order_id);
+
+		// if ($order->state == 1)
+		// {
+		// 	$order->check_state($order->id);
+		// 	//HTTP::redirect("/cart/order/".$order_id);
+		// }
+		// else
+		// {
+		// 	//HTTP::redirect("/cart/order/".$order_id);
+		// }
 	}
 
 	public function action_to_admin_success()
@@ -809,14 +881,16 @@ class Controller_Cart extends Controller_Template {
 		$sum = $this->request->query("OutSum");
 		$signature = $this->request->query("SignatureValue");
 
-		$order = ORM::factory('Order', $order_id);
-		if ($order->loaded()) {
-			$order->check_state($order->id);
-			//HTTP::redirect("/cart/order/".$order->id);
-			return;
-		}
+		HTTP::redirect("/cart/order/".$order_id);
+		
+		// $order = ORM::factory('Order', $order_id);
+		// if ($order->loaded()) {
+		// 	$order->check_state($order->id);
+		// 	//HTTP::redirect("/cart/order/".$order->id);
+		// 	return;
+		// }
 
-		HTTP::redirect("/");
+		// HTTP::redirect("/");
 	}
 
 	private function return_with_errors($uri, $post, $errors) {

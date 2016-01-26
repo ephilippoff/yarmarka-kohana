@@ -41,7 +41,9 @@ class Lib_PlacementAds_AddEdit {
 			foreach((array) $this->params as $key=>$value){
 				if (preg_match('/^param_([0-9]*)/', $key, $matches))
 				{
-					$this->params->{$key} = str_replace("_", "", $this->params->{$key});
+					$this->params->{$key} = preg_match('/_[0-9]+/', $this->params->{$key}) 
+						? str_replace("_", "", $this->params->{$key})
+						: $this->params->{$key};
 					$data_params[] = explode("_", $key);
 				}
 			}
@@ -364,6 +366,28 @@ class Lib_PlacementAds_AddEdit {
 				'type_id' 	=> $type_id
 			);
 
+		}
+
+		//append additional contacts
+		$this->init_additional_contacts();
+
+		return $this;
+	}
+
+	function init_additional_contacts() {
+		if (!is_array($this->params->additional_contacts)) {
+			return $this;
+		}
+		
+		foreach($this->params->additional_contacts as $contact) {
+			if (empty($contact['value'])) {
+				continue;
+			}
+			$this->contacts []= array(
+					'value' => $contact['value'],
+					'type_id' => $contact['type'],
+					'contact_obj' => ORM::factory('Contact')->by_value($contact['value'])->find()
+				);
 		}
 
 		return $this;
@@ -766,7 +790,6 @@ class Lib_PlacementAds_AddEdit {
 		$city = &$this->city;
 		$location = &$this->location;
 		$object = &$this->object;
-		
 
 		if (!$city->loaded()) {
 			$this->raise_error('При сохранении, не указан город');
@@ -782,7 +805,7 @@ class Lib_PlacementAds_AddEdit {
 		}
 
 		@list($lat, $lon) = explode(',', $params->object_coordinates);
-		if ( ! $lat OR ! $lon OR $params->real_city_exists)
+		if ( ! $lat OR ! $lon)
 		{
 			// если координаты не пришли, запрашиваем координаты по адресу
 			@list($coords, $region_title, $address) = Ymaps::instance()->get_coord_by_name($city_title.', '.$address);
@@ -790,29 +813,17 @@ class Lib_PlacementAds_AddEdit {
 			@list($lon, $lat) = $coords;
 		}
 
-		if ($address)
-		{
-			$loc_count = 0;
-			if ($object->location_id)
-				$loc_count = ORM::factory('Object')->where("location_id","=", $object->location_id)->count_all();
+		$location->region 	= $region_title;
+		$location->city 	= $city_title;
+		$location->address 	= $address;
+		$location->lat 		= $lat;
+		$location->lon 		= $lon;
+		$location->save();
 
-			if ($loc_count == 1 AND $object->location_id <> $city->location_id)
-				$location = $location->where("id","=",$object->location_id)->find();
-
-			$location->region 	= $region_title;
-			$location->city 	= $city_title;
-			$location->address 	= $address;
-			$location->lat 		= $lat;
-			$location->lon 		= $lon;
-			$location->save();
-		}
-
-		// если не нашли адрес, то берем location города
-		if ( ! $location->loaded() )
-			$location = $city->location;
 
 		return $this;
 	}
+
 
 	function save_many_cities()
 	{
@@ -891,7 +902,12 @@ class Lib_PlacementAds_AddEdit {
 			// при редактировании автора не меняем
 			$object->author 			= $user->id;
 		}
-		$object->user_text 			= Text::clear_usertext_tags($params->user_text_adv);
+		//filter text only if user is not admin
+		if (!\Yarmarka\Models\User::current()->isAdminOrModerator()) {
+			$object->user_text 			= Text::clear_usertext_tags($params->user_text_adv);
+		} else {
+			$object->user_text = $params->user_text_adv;
+		}
 		if ( ! $this->is_edit)
 		{
 			$object->date_expiration	= $this->lifetime_to_date($params->lifetime);
@@ -1107,17 +1123,22 @@ class Lib_PlacementAds_AddEdit {
 
 		if ($user AND $object->category AND $settings = Kohana::$config->load("category.".$object->category.".additional_fields.".$user->org_type))
 		{
+			$additional = array();
 			foreach ($settings as $setting) {
 				$name = str_replace("additional_", "", $setting);
 				$value = $params->{$setting};
 
 				if (!$value)
 					ORM::factory('User_Settings')
-						->_delete($user, "orginfo", $name);
+						->_delete($user->id, "orginfo", $name);
 				
 				ORM::factory('User_Settings')
-						->update_or_save($user, "orginfo", $name, $value);
+						->update_or_save($user->id, "orginfo", $name, $value);
+
+				$additional[$setting] = $value;
 			}
+
+			$additional = ORM::factory('Data_Additional')->set_additional($object->id, $additional);
 		}
 
 		return $this;
@@ -1166,10 +1187,13 @@ class Lib_PlacementAds_AddEdit {
 			}
 
 			// удаляем старые значения
+			$old = Text::ucfirst($reference->attribute_obj->type);
+			if (!empty($old)) {
 			ORM::factory('Data_'.Text::ucfirst($reference->attribute_obj->type))
 				->where('object', '=', $object->id)
 				->where('reference', '=', $reference->id)
 				->delete_all();
+			}
 
 			// проверяем есть ли значение
 			if (is_array($value)) 
@@ -1253,7 +1277,7 @@ class Lib_PlacementAds_AddEdit {
 		{
 			$object->title = $object->generate_title();
 		} else {
-			$object->title = Text::ucfirst(mb_strtolower($object->title));
+			$object->title = strip_tags($object->title);
 		}
 
 		$object->full_text = $object->generate_full_text();
@@ -1278,11 +1302,11 @@ class Lib_PlacementAds_AddEdit {
 
 		$compiled = Object_Compile::saveObjectCompiled($this->object, $params);
 
-		$object = ORM::factory('Object', $object->id)->get_row_as_obj();
-		$object->compiled = $compiled;
+		$_object = ORM::factory('Object', $object->id)->get_row_as_obj();
+		$_object->compiled = $compiled;
 
-		Cache::instance('object')->delete($object->id);
-		Cache::instance('object')->set($object->id, (array) $object, 3600);
+		Cache::instance('object')->delete($_object->id);
+		Cache::instance('object')->set($_object->id, (array) $_object, 3600);
 		
 		return $this;
 	}

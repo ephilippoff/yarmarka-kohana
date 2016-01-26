@@ -108,15 +108,18 @@ class Search {
 	 * @param  array  $params array(
      *       "premium" => TRUE,
      *       "id" => 3570644,//"id" => array(3570644),
+     *       "email" => "xxx@xxx.ru" by user.email
      *       "active" => TRUE,
      *       "published" =>TRUE,
      *       "city_id" => array(1919),//"city_id" => 1919,
      *       "category_id" => 96,//"category_id" => array(96),
      *       "user_id" => 327190,
+     *       "user_text" => "Тратата "
      *       "source" => 1,
      *       "photo" => TRUE,
      *       "video" => TRUE,
      *      	"private" => TRUE,
+     *		 "type_tr" => 123,
      *       "org" => TRUE,
      *       "filters" =>array(
      *                    'tip-sdelki5' => 3250,
@@ -185,12 +188,49 @@ class Search {
 			$object = $object->where("o.id", "NOT IN", $params->not_id);
 		}
 
+		if ($params->email) {
+			$useremail_subquery = DB::select("useremail.id")
+										->from(array("user","useremail") )
+										->where("o.author","=",DB::expr("useremail.id") )
+										->where(DB::expr("w_lower(useremail.email)"),"LIKE", "%".$params->email."%")
+										->limit(1);
+			$object = $object->where(DB::expr('exists'), DB::expr(''), $useremail_subquery);
+		}
+
+		if ($params->contact) {
+			$object = $object->where('', 'EXISTS', DB::expr('(SELECT oc.id FROM object_contacts as oc 
+											JOIN contacts as c ON c.id = oc.contact_id 
+											WHERE oc.object_id=o.id AND c.contact_clear LIKE \'%'.$params->contact['clear'].'%\')'));
+		}
+
+		if ( isset($params->moder_state) ) { 
+			$object = $object->where('o.moder_state', '=', $params->moder_state);
+		}
+
+		if ($params->compile_exists AND $table_name == "vw_objectcompiled") {
+			$object = $object->where("o.compiled", "IS NOT", NULL);
+		}
+
+		if ($params->complaint_exists) {
+			$object = $object->where('', 'EXISTS', DB::expr('(SELECT cmpl.id FROM complaints as cmpl 
+					WHERE cmpl.object_id=o.id)'));
+		}
+
+		if ($params->user_role) {
+			$object = $object->where('', 'EXISTS', DB::expr('(SELECT id FROM "user" as usr
+					WHERE usr.id=o.author and usr.role='.$params->user_role.')'));
+		}
+
+		if ($params->user_text) {
+			$object = $object->where(DB::expr("w_lower(o.full_text)"), "like", "%".mb_strtolower($params->user_text)."%");
+		}
+
 		if ($params->user_id) {
 			if (!$params->user_company_include) {
 				$object = $object->where("o.author", "=", $params->user_id);
 			} else {
 				$object = $object->where("o.author_company_id", "=", $params->user_id);
-				//$object = $object->where("o.compiled", "IS NOT", NULL);
+				
 			}
 		}
 
@@ -222,6 +262,15 @@ class Search {
 			}
 			if (isset($params->date_created["to"])) {
 				$object = $object->where("o.date_created", "<", $params->date_created["to"]);
+			}
+		}
+
+		if ($params->real_date_created) { 
+			if (isset($params->real_date_created["from"])) {
+				$object = $object->where("o.real_date_created", ">=", $params->real_date_created["from"]);
+			}
+			if (isset($params->real_date_created["to"])) {
+				$object = $object->where("o.real_date_created", "<", $params->real_date_created["to"]);
 			}
 		}
 
@@ -281,12 +330,20 @@ class Search {
 			}
 		}
 
-		if ($params->source) {
+		if ( $params->source ) {
 			$object = $object->where("o.source_id", "=", (int) $params->source);
 		}
 
 		if ($params->expiration) {
 			$object = $object->where("o.date_expired", "<", DB::expr("NOW()"));
+		}
+
+		if ($params->expirationInverse) {
+			$object = $object->where("o.date_expired", ">", DB::expr("NOW()"));
+		}
+
+		if ($params->type_tr) {
+			$object = $object->where('o.type_tr', '=', (int) $params->type_tr);
 		}
 
 		if ($params->is_favorite) {
@@ -338,6 +395,14 @@ class Search {
 										->where("userorg.org_type", "IN", $orgtype_filter)
 										->limit(1);
 			$object = $object->where(DB::expr('exists'), DB::expr(''), $orgtype_subquery);
+		}
+
+		if ($params->without_attribute) {
+			$without_attribute_subquery = DB::select("list.id")
+										->from(array("data_list","list") )
+										->where("list.object","=", DB::expr("o.id"))
+										->where("list.attribute", "=", (int) $params->without_attribute);
+			$object = $object->where(DB::expr('not exists'), DB::expr(''), $without_attribute_subquery);
 		}
 
 		

@@ -121,6 +121,7 @@ class Form_Add  {
 
 		$category_array = array();
 		$category_list = ORM::factory('Category')
+								->where("through_weight","IS NOT",NULL)
 								->where("is_ready", "=", 1)
 								->order_by("through_weight")
 								->cached(DATE::WEEK, array("category", "add"))
@@ -145,19 +146,20 @@ class Form_Add  {
 						$childs_array[$child->id] = $child->title;
 					}
 				}
-
 				$category_array[$item->title] = $childs_array;
 			}
+			
 		}
 
 		$category_array["Другие"] = array(
-			156 => "В хорошие руки"
+			156 => "В хорошие руки",
+			72 => "Товары для детей"
 		);
 
 
 
 		if ($user = Auth::instance()->get_user())
-			if ($user->role == 9 OR $user->role == 1)
+			if (\Yarmarka\Models\User::current()->isAdminOrModerator())
 			{
 
 				$category_array["Другие"][155] = "Каталог компаний";
@@ -628,8 +630,10 @@ class Form_Add  {
 		if ($category->loaded())
 			$text_required = $category->text_required;
 
-		if ($value)
+		$isModerator = \Yarmarka\Models\User::current()->isAdminOrModerator();
+		if ($value && !$isModerator) {
 			$value = Text::clear_usertext_tags($value);
+		}
 
 		$this->_data->text = array( 'value' 		=> $value,
 									'text_required' => $text_required,
@@ -770,35 +774,43 @@ class Form_Add  {
 		$errors		= $this->errors;
 		$contact_person = "";
 		$contacts = Array();
+		$contactsAdditional = array();
 
 		$user_id = NULL;
 		if ($user = Auth::instance()->get_user())
 			$user_id = $user->id;
 
+		$callback = function($id, $value, $type, $verified) use (&$contacts, &$contactsAdditional) {
+			if (isset($contacts[$type]) || !in_array($type, array( 'mobile', 'phone', 'email' ))) {
+				$contactsAdditional []= array(
+						'type' => $type,
+						'value' => $value,
+						'index' => count($contactsAdditional)
+					);
+			} else {
+				$contacts[$type] = Array("id" => $id, "value" => $value, "verified" => $verified);
+			}
+		};
+
 		if ($object->loaded() AND !$this->is_post)
 		{	
-			self::parse_object_contact($object_id, $user_id, function($id, $value, $type, $verified) use (&$contacts){
-				$contacts[$type] = Array("id" => $id, "value" => $value, "verified" => $verified);
-			});
+			self::parse_object_contact($object_id, $user_id, $callback);
 			$contact_person = $object->contact;
 		}
 		elseif ($this->is_post)
 		{			
-			self::parse_post_contact($this->params, $user_id, function($id, $value, $type, $verified) use (&$contacts){
-				$contacts[$type] = Array("id" => $id, "value" => $value, "verified" => $verified);
-			});
+			self::parse_post_contact($this->params, $user_id, $callback);
 
 			$contact_person = $this->params["contact"];
 		} elseif ($user_id)
 		{
-			self::parse_user_contact($user_id, function($id, $value, $type, $verified) use (&$contacts){
-				$contacts[$type] = Array("id" => $id, "value" => $value, "verified" => $verified);
-			});
+			self::parse_user_contact($user_id, $callback);
 
 			$contact_person = $user->fullname;
 		} 
 
-		$this->_data->contacts = array(	"contacts" 			=> $contacts, 
+		$this->_data->contacts = array(	'contactsAdditional' => $contactsAdditional,
+										"contacts" 			=> $contacts, 
 										"contact_person" 	=> $contact_person,
 										"contact_error" 	=> $errors->contact,
 										"contacts_error" 	=> $errors->contacts,
@@ -878,6 +890,7 @@ class Form_Add  {
 
 	function Additional()
 	{
+		$object 	= $this->object;
 		$category_id 	= $this->category_id;
 		$errors 		= $this->errors;
 		$user = Auth::instance()->get_user();
@@ -900,12 +913,20 @@ class Form_Add  {
 				$values[$field] = $this->params[$field];
 			}
 		} else {
-			if ($user)
-			{
-				$orginfo_data = ORM::factory('User_Settings')
-								->get_group($user->id, "orginfo");
-				foreach ($orginfo_data as $key => $data) {
-					$values["additional_".$key] = $data;
+			if ($this->_edit) {
+				$additional = ORM::factory('Data_Additional')->get_additional($object->id);
+				if ( $additional AND array_values($additional) > 0 ) {
+					$values = array_merge($values, $additional);
+				}
+			} else {
+				if ($user)
+				{
+					
+					$orginfo_data = ORM::factory('User_Settings')
+									->get_group(($this->_edit) ? $object->author: $user->id, "orginfo");
+					foreach ($orginfo_data as $key => $data) {
+						$values["additional_".$key] = $data;
+					}
 				}
 			}
 		}
@@ -976,6 +997,8 @@ class Form_Add  {
 
 	static private function parse_user_contact($user_id, $callback)
 	{
+		/* http://yarmarka.myjetbrains.com/youtrack/issue/yarmarka-448 */
+		/*
 		$oc = ORM::factory('User_Contact')
 					->join("contacts","left")
 						->on("contact_id","=","contacts.id")
@@ -983,17 +1006,23 @@ class Form_Add  {
 					->where("user_id","=",$user_id)
 					->order_by("user_contact.id","asc")
 					->find_all();
+		*/
+
+		$oc = ORM::factory('Contact')
+			->where('verified_user_id', '=', $user_id)
+			->find_all();
+
 		foreach($oc as $contact)
 		{
-			$type = Model_Contact_Type::get_type_name($contact->contact->contact_type_id);
-			$callback($contact->id, $contact->contact->contact, $type, TRUE);
+			$type = Model_Contact_Type::get_type_name($contact->contact_type_id);
+			$callback($contact->id, $contact->contact, $type, TRUE);
 		}
 	}
 
 	static private function parse_object_contact($object_id, $user_id, $callback)
 	{
 		$session_id 		= session_id();
-		$oc = ORM::factory('Object_Contacts')->where("object_id","=",$object_id)->find_all();
+		$oc = ORM::factory('Object_Contacts')->where("object_id","=",$object_id)->order_by('id')->find_all();
 		foreach($oc as $contact)
 		{
 			$verified = FALSE;

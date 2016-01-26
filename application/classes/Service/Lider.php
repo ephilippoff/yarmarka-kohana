@@ -76,6 +76,9 @@ class Service_Lider extends Service
 
 		Service_Lider::apply_service($object_id, $quantity, $cities, $categories);
 		self::saveServiceInfoToCompiled($object_id);
+
+		ORM::factory('Order_Log')->write($orderItem->order_id, "notice", vsprintf("Активация услуги Лидер: № %s", array( $orderItem->order_id ) ) );
+
 	}
 
 	static function apply_service($object_id, $quantity, $cities = NULL, $categories = NULL)
@@ -130,6 +133,15 @@ class Service_Lider extends Service
 		}
 
 		$or_item->date_expiration = DB::expr("(NOW() + INTERVAL '".Service_Lider::LIDER_DAYS." days')");
+
+		$new_engine_cities = Kohana::$config->load('common.new_engine_cities');
+		if ( $new_engine_cities AND !in_array($object->id, $new_engine_cities) ) {
+			$or_item->category_id = 1;
+			$or_item->type = 1;
+			$or_item->invoice_id = 1;
+			$or_item->service_options = 'main_page';
+		}
+
 		$or_item->save();
 
 		return TRUE;

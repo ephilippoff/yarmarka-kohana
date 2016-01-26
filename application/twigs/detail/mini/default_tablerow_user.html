@@ -1,6 +1,12 @@
 {% set services = get_service_icon_info(object.compiled.services, true) %}
-<tr class="tr" data-id="{{object.id}}">
-	<td class="td td-1">
+{% for service in services if service.name == 'premium'%}
+	{% if loop.first %}
+		<tr class="tr premium_tr" data-id="{{object.id}}">
+	{% else %}
+		<tr class="tr" data-id="{{object.id}}">
+	{% endif %}
+{% endfor %}
+	<td class="td td-1 hidden-xs">
 		<div class="mb5"><input type="checkbox" id="check_{{object.id}}" class="js-select-object" data-id="{{object.id}}"><label for="check_{{object.id}}"><span></span></label></div>
 		<div class="img-cont js-hide-region-{{object.id}}">
 
@@ -28,7 +34,7 @@
 				{% set is_favourite = 'fa-heart' %}
 			{% endif %}
 			<i class="fa {{is_favourite}} fa-lg mr5 js-favourite js-favourite-ico pointer red" data-id="{{object.id}}" title="Избранное"></i>
-			<a href="{{ object.compiled.url }}" title="{{ object.title|e }}" class="bold js-object-title-{{object.id}} {% if object.is_published == 0 %} red strike {% endif %}">
+			<a href="{% if is_cv_mode %}/detail/use_cv?object_id={{ object.id }}{% else %}{{ object.compiled.url }}{% endif %}" title="{{ object.title|e }}" class="bold js-object-title-{{object.id}} {% if object.is_published == 0 %} red strike {% endif %}">
 				{{ object.title|e }}
 			</a>
 		</p>
@@ -37,9 +43,9 @@
 				{% if not object.is_bad %}
 					<span class="green">Прошло модерацию.</span>
 				{% elseif object.is_bad == 1 %}
-					<span class="red">Заблокировано на исправление</span>
+					<span class="red">Заблокировано модератором, до исправления</span>
 				{% elseif object.is_bad == 2 %}
-					<span class="red">Заблокировано окончательно</span>
+					<span class="red">Заблокировано модератором окончательно</span>
 				{% endif %}
 			{% else  %}
 				<span class="red">Пока не прошло модерацию</span>
@@ -64,6 +70,7 @@
 				<span class="button button-style1 bg-color-blue mr3 mb3 js-service-premium" data-id="{{object.id}}"><i class="fa fa-check-circle fa-lg mr5"></i>Премиум</span>
 				<span class="button button-style1 bg-color-blue mr3 mb3 js-service-lider" data-id="{{object.id}}"><i class="fa fa-check-circle fa-lg mr5"></i>Лидер</span>
 				<span class="button button-style1 bg-color-blue mr3 mb3 js-service-newspaper" data-id="{{object.id}}" data-city="{{object.city_id}}"><i class="fa fa-check-circle fa-lg mr5"></i>В газету</span>
+				<span class="button button-style1 bg-color-blue mr3 mb3 js-service-cities" data-id="{{object.id}}" data-city="{{object.city_id}}"><i class="fa fa-check-circle fa-lg mr5"></i>В несколько городов</span>
 				
 			</div>
 			{% if object.is_published == 0 %}
@@ -74,19 +81,21 @@
 		</div>
 	</td>
 	<td class="td w190 p10 va-t">
-		<div class="js-hide-region-{{object.id}}">
-			<span class="button w100p button-style1 bg-color-lightgreen mb3 ta-l js-ocontrol-publish" data-id="{{object.id}}">
-				{% if object.is_published %} 
-					<i class="fa fa-trash pull-left fa-lg"></i><span>Снять с публикации</span>
-				{% else %}
-					<i class="fa fa-check pull-left fa-lg"></i><span>Опубликовать</span>
-				{% endif %}			
-			</span>		
+		{% if object.is_bad != 2 %}	
+			<div class="js-hide-region-{{object.id}}">
+				<span class="button w100p button-style1 bg-color-lightgreen mb3 ta-l js-ocontrol-publish" data-id="{{object.id}}">
+					{% if object.is_published %} 
+						<i class="fa fa-trash pull-left fa-lg"></i><span>Снять с публикации</span>
+					{% else %}
+						<i class="fa fa-check pull-left fa-lg"></i><span>Опубликовать</span>
+					{% endif %}			
+				</span>		
 
-			<span class="button w100p button-style1 bg-color-lightgreen mb3 ta-l js-ocontrol-edit" data-id="{{object.id}}"><i class="fa fa-edit pull-left fa-lg"></i>Редактировать</span>
-		</div>
+				<span class="button w100p button-style1 bg-color-lightgreen mb3 ta-l js-ocontrol-edit" data-id="{{object.id}}"><i class="fa fa-edit pull-left fa-lg"></i>Редактировать</span>
+			</div>
+		{% endif %}
 	</td>
-	<td class="td td-icons">
+	<td class="td td-icons hidden-xs">
 		<div class="js-hide-region-{{object.id}}">
 			{% for services in services %}
 				<i class="fa {{ services.icon_class }} fa-lg gray" title="{{services.title}}"></i>

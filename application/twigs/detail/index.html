@@ -7,6 +7,8 @@
 	{{ css("comments.css") }}
 {% endblock css%}
 
+
+
 {% block title %} {{object.title|e}} {% endblock title%}
 {% block meta_description %} {{ object.user_text|e|slice(0, 200) }} {% endblock meta_description%}
 
@@ -17,10 +19,9 @@
 {% endblock crumbs %}
 
 {% block leftside %} 
-	<div class="col-md-7">
-		
+	<div class="col-md-7 col-sm-7">
 		<div class="row">
-			<div class="col-md-8">
+			<div class="col-md-12 col-lg-8">
 				<article>
 					{% if (object.compiled.images.local_photo|length == 0 and object.compiled.images.remote_photo|length == 0) %}
 						{% include 'detail/nophoto' %}
@@ -29,8 +30,8 @@
 					{% include 'detail/attributes' %}
 				</article>
 			</div>
-			<div class="col-md-4">
-				<div class="banner module {zoneID: 45}"></div>
+			<div class="col-lg-4">
+				<div class="banner hidden-sm hidden-xs hidden-md module {zoneID: 45}"></div>
 			</div>
 		</div>
 
@@ -44,14 +45,16 @@
 				{% include 'detail/info' %}
 			</div>
 		</div>
-		<div class="row">
+		<div class="row hidden-md hidden-sm hidden-xs">
 			<div class="col-md-12">
-			{{ requestblock('block_twig/adslinkline', {'city_id': city.id, 'category_id': category.id, 'theme_class': theme_class}) }}
+				<div class="banner module {zoneID: 18 }"></div>
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-md-12">
-			<div class="banner module {zoneID: 18 }"></div>
+			<div class="col-lg-12 hidden-lg hidden-md hidden-sm">
+				{% include 'detail/controls' %}
+				{% include 'detail/services' %}
+				{% include 'block/vk/comments_surgut' %}
 			</div>
 		</div>
 		{% if (category.show_map) %}
@@ -66,13 +69,17 @@
 {% endblock %}
 
 {% block rightside %}
-	<div class="col-md-5">
+	<div class="col-md-5 col-sm-5">
 		<aside>
-			{% include 'detail/controls' %}
-			{% include 'detail/services' %}
+			<div class="hidden-xs">
+				{% include 'detail/controls' %}
+				{% include 'detail/services' %}
+				{% include 'block/vk/comments_surgut' %}
+			</div>
 			{% include 'detail/similar' %}
-
-			{#{% include 'detail/comments' %}#}
+			<div class="detail_last_views">
+				{{ requestblock('block_twig/last_views', { mode:'twig', 'page':1, 'perPage':5, 'showMore': true, 'horizontalView': horizontalView}) }}
+			</div>
 		</aside>
 	</div>
 {% endblock rightside %}

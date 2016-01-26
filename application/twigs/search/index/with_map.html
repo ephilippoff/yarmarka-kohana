@@ -24,8 +24,6 @@
 
 {% block wrapperclass %}page-search{% endblock wrapperclass %}
 
-
-
 {% block subcategories %}
 	{% if sphinx_category_childs|length > 0%}
 		{% include 'search/sphinxcategories' %}
@@ -47,6 +45,10 @@
 	{% include 'search/result' %}
 	{% include 'search/paginator' %}
 {% endblock content%}
+
+{% block last_views %} 
+	{{ requestblock('block_twig/last_views', {}) }}
+{% endblock last_views %}
 
 
 {% block map %}

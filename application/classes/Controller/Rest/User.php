@@ -168,6 +168,10 @@ class Controller_Rest_User extends Controller_Rest {
 		$type = (string) $this->post->type;
 		$type_id = Model_Contact_Type::get_type_id($type);
 		$code = (string) $this->post->code;
+
+		if (property_exists($this->post, 'checkCode')) {
+			$code = $this->post->checkCode;
+		}
 		
 
 		if (!$contact_value or !$type or !$type_id) {

@@ -6,6 +6,7 @@ class Service_Kupon extends Service
 	protected $_kupon_group = NULL;
 	protected $_title = NULL;
 	protected $_is_multiple = FALSE;
+	protected $_orderId = NULL;
 
 	public function __construct($kupon_group_id)
 	{
@@ -128,6 +129,9 @@ class Service_Kupon extends Service
 			$kupon->to_sold($oi->loaded() ? $oi->order_id : NULL, $key);
 			$orderItem->kupon = $kupon;
 			$kuponsArray[] = $kupon->get_row_as_obj();
+
+			ORM::factory('Order_Log')->write($orderItem->order_id, "notice", vsprintf("Активация купона: %s, № %s", array($kupon->id, $orderItem->order_id) ) );
+			
 		}
 
 		$order->electronic_delivery($orderItem, $kuponsArray);
@@ -156,20 +160,26 @@ class Service_Kupon extends Service
 
 	}
 
-	public function return_reserve($ids, $description = NULL)
+	public function return_reserve($ids, $description = NULL, $orderId = NULL)
 	{
+
+		ORM::factory('Order_Log')->write(NULL, "notice", vsprintf("Возврат купонов из резерва: %s", array(join(", ",$ids)) ) );
+
 		foreach ($ids as $id) {
 			$kupon = ORM::factory('Kupon', $id);
-			$kupon->return_to_avail($description);
+			$kupon->return_to_avail($description, $orderId);
 		}
 		
 	}
 
-	public function reserve($ids, $access_key = NULL)
+	public function reserve($ids, $access_key = NULL, $orderId = NULL)
 	{
+
+		ORM::factory('Order_Log')->write(NULL, "notice", vsprintf("Резерв купонов: %s", array(join(", ",$ids)) ) );
+
 		foreach ($ids as $id) {
 			$kupon = ORM::factory('Kupon', $id);
-			$kupon->reserve(NULL, $access_key);
+			$kupon->reserve($orderId, $access_key);
 		}
 	}
 

@@ -69,7 +69,33 @@ define([
                     
                 }
             });
-        }
+        },
+
+        moderateAction: function(id, params) {
+            params = params || {};
+
+            var controlModel = new ControlModel();
+            controlModel.urlRoot = "/rest_object/moderate_reasons";
+            params.error = params.error || function() {};
+            params.success = params.success || function() {};
+            console.log(id, params)
+            controlModel.save({id: id, params: params}, {
+                success: function(model) {
+                    var resp = model.toJSON();
+                    if (resp.code == 200) {
+                        app.windows.vent.trigger("showWindow","moderate", {
+                            id: id,
+                            reasons: resp.result,
+                            params: params
+                        });
+                    } else {
+                        params.error(resp.error);
+                    }
+                }
+            });
+            
+            
+        },
     });
 
 });

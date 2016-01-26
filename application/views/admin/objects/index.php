@@ -4,6 +4,24 @@
 	}
 </style>
 
+<? $user_role_admin = FALSE; ?>
+<? $user_role = Auth::instance()->get_user()->role; ?>
+
+<? if (in_array($user_role, array(1,5,9))): ?>
+	<? $user_role_admin = TRUE; ?>
+	<style type="text/css" media="screen">
+		* {
+			font-size: 14px;
+		}
+	</style>
+	<?=HTML::style('/static/develop/css/iLight.css')?>
+	<?=HTML::style('/static/develop/css/css.css')?>
+
+<? endif; ?>
+
+<?=HTML::style('bootstrap/datepicker/css/datepicker.css')?>
+
+
 <?=HTML::script('bootstrap/datepicker/js/bootstrap-datepicker.js')?>
 <?=HTML::style('bootstrap/datepicker/css/datepicker.css')?>
 
@@ -24,6 +42,7 @@
 <?=HTML::script('bootstrap/image-gallery/js/load-image.js')?>
 <?=HTML::script('bootstrap/image-gallery/js/bootstrap-image-gallery.js')?>
 <?=HTML::style('bootstrap/image-gallery/css/bootstrap-image-gallery.css')?>
+
 
 <script type="text/javascript" src="/bootstrap/tinymce/tinymce.min.js"></script>
 <script type="text/javascript" src="/bootstrap/tinymce/jquery.tinymce.min.js"></script>
@@ -84,7 +103,7 @@ function reload_row(object_id, moder_state) {
 			window.location.reload();
 		}
 	} else {
-		$.post('/khbackend/objects/object_row/'+object_id, {moder_state:moder_state}, function(html){
+		$.post('/khbackend/objects/row/'+object_id, {moder_state:moder_state}, function(html){
 			var old_row = $('#'+object_id);
 			old_row.after(html);
 			old_row.remove();
@@ -106,51 +125,108 @@ function obj_selection(src, obj_id)
 	
 }
 </script>
+ <div id="popup-layer" class="z200" style="display: none;"></div>
+ <div class="wrapper container page-search" style="margin-top:50px;">
 <a href="/add" target="_blank">Подать объявление</a>
 <form class="form-inline">
-	<div class="input-prepend">
-		<span class="add-on"><i class="icon-envelope"></i></span>
-		<input class="span2" id="prependedInput" type="text" placeholder="User email or object id" name="email" value="<?=Arr::get($_GET, 'email')?>">
-    </div>
-	<div class="input-prepend">
-		<span class="add-on">Contact</span>
-		<input class="span2" id="prependedInput" type="text" placeholder="User contact or name" name="contact" value="<?=Arr::get($_GET, 'contact')?>">
-    </div>
-	<div class="input-prepend">
-		<div class="btn-group">
-			<button class="btn dropdown-toggle" data-toggle="dropdown">
-				<span id="date_field">
-					<?php if (Arr::get($_GET, 'date_field') == 'date_created') : ?>
-						С учетом поднятия
-					<?php else : ?>
-						Реальная дата
-					<?php endif; ?>
-				</span>
-				<span class="caret"></span>
-			</button>
-			<ul class="dropdown-menu">
-				<li><a href="#" data-field="real_date_created" class="date_field">Реальная дата</a></li>
-				<li><a href="#" data-field="date_created" class="date_field">С учетом поднятия</a></li>
-			</ul>
-		</div>		
-		<input type="hidden" name="date_field" value="<?=Arr::get($_GET, 'date_field', 'real_date_created')?>" />
-		<input type="text" class="input-small dp" placeholder="date from" name="date[from]" value="<?=Arr::get(@$_GET['date'], 'from', date('Y-m-d', strtotime('-3 days')))?>">
-		<input type="text" class="input-small dp" placeholder="date to" name="date[to]" value="<?=Arr::get(@$_GET['date'], 'to')?>">
-	</div>
-	<?=Form::select('category_id', array('' => 'Все рубрики')+$categories, Arr::get($_GET, 'category_id'), array('class' => 'span2'))?>
-	<?=Form::select('moder_state', 
-		array(
-			'' => 'Все объвления',
-			'0' => 'На модерации',
-			'1' => 'Прошло модерацию',
-			'3' => 'Есть жалобы',
-		), 
-		Arr::get($_GET, 'moder_state', '0'), array('class' => 'span2'))
-	?>
-	<input type="submit" name="" value="Filter" class="btn btn-primary">
-	<input type="reset" name="" value="Clear" class="btn">
-</form>
+	
+	<?php if ( !array_intersect(array_keys($search_filters), array('user_id','contact') ) ): ?>
+		<div class="input-prepend">
+			<span class="add-on"><i class="icon-envelope"></i></span>
+			<input class="span2" id="prependedInput" type="text" placeholder="User email or object id" name="email" value="<?=Arr::get($search_filters, 'email',Arr::get($search_filters, 'id'))?>">
+	    </div>
+    <?php endif; ?>
+	
+	<?php if ( !array_intersect(array_keys($search_filters), array('user_id','email','id') ) ): ?>
+		<div class="input-prepend">
+			<span class="add-on">Contact</span>
+			<input class="span2" id="prependedInput" type="text" placeholder="User contact or name" name="contact" value="<?=Arr::get(@$search_filters['contact'], 'raw')?>">
+	    </div>
+    <?php endif; ?>
+  
+	<?php if ( !array_intersect(array_keys($search_filters), array('user_id','email','id','contact') ) ): ?>
+		<?=Form::select('source', 
+			array(
+				'' => 'Все (из газеты и сайта)',
+				'1' => 'Подано на сайт',
+				'2' => 'Подано в газету'
+			), 
+			Arr::get($search_filters, 'source'), array('class' => 'span2'))
+		?>
+		<div class="input-prepend">
+			<div class="btn-group">
+				<button class="btn dropdown-toggle" data-toggle="dropdown">
+					<span id="date_field">
+						<?php if (Arr::get($search_filters, 'date_field') == 'date_created') : ?>
+							С учетом поднятия
+						<?php else : ?>
+							Реальная дата
+						<?php endif; ?>
+					</span>
+					<span class="caret"></span>
+				</button>
+				<ul class="dropdown-menu">
+					<li><a href="#" data-field="real_date_created" class="date_field">Реальная дата</a></li>
+					<li><a href="#" data-field="date_created" class="date_field">С учетом поднятия</a></li>
+				</ul>
+			</div>		
+			<input type="hidden" name="date_field" value="<?=Arr::get($search_filters, 'date_field', 'real_date_created')?>" />
+			<input type="text" class="input-small dp" placeholder="date from" name="date[from]" value="<?=Arr::get(@$search_filters['date_created'], 'from', Arr::get(@$search_filters['real_date_created'], 'from' ) )?>">
+			<input type="text" class="input-small dp" placeholder="date to" name="date[to]" value="<?=Arr::get(@$search_filters['date_created'], 'to', Arr::get(@$search_filters['real_date_created'], 'to' ) )?>">
+		</div>
 
+		<?=Form::select('category_id', array('' => 'Все рубрики')+$categories, Arr::get($search_filters, 'category_id'), array('class' => 'span2'))?>
+		<?=Form::select('city_id', array('' => 'Все города')+$cities, Arr::get($search_filters, 'city_id'), array('class' => 'span2'))?>
+		<?=Form::select('user_role', array('' => 'Все пользователи')+$roles, Arr::get($search_filters, 'user_role'), array('class' => 'span2'))?>
+		<?=Form::select('moder_state', 
+			array(
+				'' => 'Все объвления',
+				'0' => 'На модерации',
+				'1' => 'Прошло модерацию',
+				'3' => 'Есть жалобы',
+			), 
+			Arr::get($search_filters, 'moder_state'), array('class' => 'span2'))
+		?>
+		
+
+	<?php endif; ?>
+
+	<!-- filters from http://yarmarka.myjetbrains.com/youtrack/issue/yarmarka-353 -->
+	<!-- object type filter -->
+	<div class="input-prepend">
+		<span class="add-on"><?php echo $additionalFilters['obj_type']['label']; ?></span>
+		<select name="additional[obj_type]" class="span3">
+			<?php foreach($additionalFilters['obj_type']['items'] as $item) { ?>
+				<?php $selected = $item['value'] == $additionalFilters['obj_type']['value'] ? 'selected="selected"' : ''; ?>
+				<option value="<?php echo $item['value']; ?>" <?php echo $selected; ?> ><?php echo $item['label']; ?></option>
+			<?php } ?>
+		</select>
+	</div>
+	<!-- object type filter done -->
+
+	<!-- object text filter -->
+	<div class="input-prepend">
+		<span class="add-on"><?php echo $additionalFilters['text']['label']; ?></span>
+		<textarea class="span2" name="additional[text]" rows="1"><?php echo $additionalFilters['text']['value']; ?></textarea>
+	</div>
+	<!-- object text filter done -->
+
+	<!-- expired filter -->
+	<div class="input-prepend">
+		<label style="font-size:14px;">
+			<?php echo $additionalFilters['expired']['label']; ?>
+			<input type="checkbox" value="1" <?php echo $additionalFilters['expired']['value'] == 1 ? 'checked="checked"' : ''; ?> name="additional[expired]" />
+		</label>
+	</div>
+	<!-- expired filter done -->
+	<!-- filters done -->
+
+	<?=Form::select('without_attribute_id', array('' => '--')+$attributes, Arr::get($search_filters, 'without_attribute'), array('class' => 'span2'))?>
+
+	<input type="submit" name="" value="Filter" class="btn btn-primary">
+	<input type="reset" name="" value="Clear" class="btn" onclick="document.location='/khbackend/objects';">
+</form>
+<?php echo Debug::vars($attributes);?>
 <?php if (isset($author) AND $author->loaded()) : ?>
 <div class="alert">
 	Объявления отфильтрованы по пользователю <strong><?=$author->fullname?></strong>
@@ -172,7 +248,41 @@ function obj_selection(src, obj_id)
 		<th></th>
 	</tr>
 	<?php foreach ($objects as $object) : ?>
-		<?=View::factory('admin/objects/object_row', array('object' => $object))?>
+		<?php
+			$compiled = $object_compiled[$object->id]['compiled'];
+			if ($compiled) {
+				echo View::factory('admin/objects/row', array(
+					'object' => $object, 
+					'compiled' => $compiled, 
+					'categories' => $categories, 
+					'cities' => $cities,
+					'users' => $users,
+					'complaints' => $complaints,
+					'object_contacts' => $object_contacts,
+					'roles' => $roles
+				));
+			}
+		?>
+		<? if ($user_role_admin): ?>
+			<tr><td colspan="6">
+				
+				<div class="row p20">
+					<div class="col-md-12">
+						<p class="button js-service-up button-style1 bg-color-lightgreen mb3" data-id="<?=$object->id?>">
+							<i class="fa fa-angle-double-up fa-lg mr5"></i>Поднять
+						</p>
+						<p class="button js-service-premium button-style1 bg-color-lightgreen mb3" data-id="<?=$object->id?>">
+							<i class="fa fa-check-circle  fa-lg mr5"></i>Премиум
+						</p>
+						<p class="button js-service-lider button-style1 bg-color-lightgreen mb3" data-id="<?=$object->id?>">
+							<i class="fa fa-check-circle fa-lg mr5"></i>Лидер
+						</p>
+						<p class="button button-style1 bg-color-blue mr3 mb3 js-service-newspaper" data-id="<?=$object->id?>" data-city="<?=$object->city_id?>">
+							<i class="fa fa-check-circle fa-lg mr5"></i>В газету</p>
+					</div>
+				</div>
+			</td></tr>
+		<? endif; ?>
 	<?php endforeach; ?>
 </table>
 
@@ -192,7 +302,20 @@ function obj_selection(src, obj_id)
 	</div>
 </div>
 <?php endif; ?>
-
+</div>
 <!-- Modal -->
 <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 </div>
+<div id="windows"></div>
+<script>
+  var _globalSettings =  { 
+        host: 'surgut.yarmarka.biz', 
+        page: 'usersearch', 
+        data: window.data, 
+        category_id: '',
+        query_params: '',
+        city_id: '',
+        debug: '1'
+    };
+</script>
+<script data-main="/static/develop/js/main.js" src="/static/develop/js/lib/require.js"></script>

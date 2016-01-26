@@ -1,6 +1,19 @@
 <div class="breadcrumbs-cont module mt10">
-	<a href="http://{{ domain.get_domain() }}/glavnaya-kategoriya" rel="nofollow"  class="">Все объявления в {{ city.sinonim }}</a>
+	<a href="/{{sphinx_search_query}}" rel="nofollow" class="hidden-xs">Главная</a>
+	<a href="/{{sphinx_search_query}}" rel="nofollow" class="hidden-lg hidden-sm hidden-md home-a"><i class="fa fa-home"></i></a>
 	{% for crumb in crumbs %}
-			/ <a href="{{ url(crumb.uri) }}"  class="">{{crumb.title}}</a>
+			<span class="hidden-xs">/</span> <a href="{{ url(crumb.uri ~ crumb.query) }}" class="crumbs-item"><span>{{crumb.title}}</span></a>
 	{% endfor %}
 </div>
+
+<script>
+	var hrefs = $('.crumbs-item').length,
+		hrefsWidth = 90 / hrefs;
+	if (hrefs == 0) {
+		$('.breadcrumb-h1').css('max-width', '70%');
+	};
+	
+	$('.crumbs-item').each(function(){
+		$(this).css('max-width', hrefsWidth+'%');
+	});
+</script>

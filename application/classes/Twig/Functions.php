@@ -62,7 +62,12 @@ class Twig_Functions
 
 	public static function debug($param)
 	{
-		return Debug::vars($param);
+		//return Debug::vars($param);
+		$text = '<pre>';
+		$text .= var_export($param, true);
+		$text .= '</pre>';
+
+		return $text;
 	}
 
 	public static function obj($array = array())
@@ -70,9 +75,13 @@ class Twig_Functions
 		return new Obj($array);
 	}
 
-	public static function domain($domain_str, $url_str, $protocol_str = "http://")
+	public static function domain($domain_str, $url_str, $protocol_str = "http://", $old = FALSE)
 	{
-		return Domain::get_domain_by_city($domain_str, $url_str, $protocol_str);
+		return ($old) ? Domain::get_domain_by_city_old($domain_str, $url_str, $protocol_str) : Domain::get_domain_by_city($domain_str, $url_str, $protocol_str);
+	}
+
+	public static function sameUrlOnAnotherDomain($domain, $protocol_str = "http://") {
+		return Domain::get_domain_by_city($domain, $domain . '\\' . Yarmarka\Models\Request::current()->getUrl(), $protocol_str);
 	}
 
 	public static function file_exist($path)
@@ -193,35 +202,49 @@ class Twig_Functions
 		$result = array();
 
 		foreach ($services as $name => $service_items) {
-			
 
-			foreach ($service_items as $service_item) {
-				$service_item = new Obj($service_item);
-				$result_item = array();
-				if ($name == "up" AND strtotime(date("Y-m-d H:i:s"). ' + 7 days') > strtotime(date("Y-m-d H:i:s")) ) {
-					$result_item["name"] = $name;
-					$result_item["icon_class"] = "fa-angle-double-up";
-					$result_item["title"] = "Поднято ".date("Y-m-d H:i", strtotime($service_item->date_created));
-				}
-				elseif ($name == "premium" AND strtotime($service_item->date_expiration) > strtotime(date("Y-m-d H:i:s")) ) {
-					$result_item["name"] = $name;
-					$result_item["icon_class"] = "fa-info-circle";
-					$result_item["title"] = "Текущая услуга 'Премиум' действует до ".date("Y-m-d H:i", strtotime($service_item->date_expiration));
-				}
-				elseif ($name == "lider" AND strtotime($service_item->date_expiration) > strtotime(date("Y-m-d H:i:s")) ) {
-					$result_item["name"] = $name;
-					$result_item["icon_class"] = "fa-info-circle";
-					$result_item["title"] = "Текущая услуга 'Лидер' действует до ".date("Y-m-d H:i", strtotime($service_item->date_expiration));
-				}
-
-				if ( in_array(Arr::get($result_item, "name"), array("up","lider","premium")) AND $show_not_activated) {
-					$not_activated = $service_item->count - $service_item->activated;
-					if ($not_activated > 0) {
-						$result_item["icon_class"] .= " fa-pulse";
-						$result_item["title"] = "Осталось неактивированных ".$not_activated.". ".$result_item["title"];
+			if (in_array($name, array('up','premium','lider'))) {
+				foreach ($service_items as $service_item) {
+					$service_item = new Obj($service_item);
+					$result_item = array();
+					if ($name == "up" AND strtotime(date("Y-m-d H:i:s"). ' + 7 days') > strtotime(date("Y-m-d H:i:s")) ) {
+						$result_item["name"] = $name;
+						$result_item["icon_class"] = "fa-angle-double-up";
+						$result_item["title"] = "Поднято ".date("Y-m-d H:i", strtotime($service_item->date_created));
 					}
+					elseif ($name == "premium" AND strtotime($service_item->date_expiration) > strtotime(date("Y-m-d H:i:s")) ) {
+						$result_item["name"] = $name;
+						$result_item["icon_class"] = "fa-info-circle";
+						$result_item["title"] = "Текущая услуга 'Премиум' действует до ".date("Y-m-d H:i", strtotime($service_item->date_expiration));
+					}
+					elseif ($name == "lider" AND strtotime($service_item->date_expiration) > strtotime(date("Y-m-d H:i:s")) ) {
+						$result_item["name"] = $name;
+						$result_item["icon_class"] = "fa-info-circle";
+						$result_item["title"] = "Текущая услуга 'Лидер' действует до ".date("Y-m-d H:i", strtotime($service_item->date_expiration));
+					}
+					elseif ($name == "cities") {
+						$result_item["name"] = $name;
+						$result_item["icon_class"] = "fa-info-circle";
+						$result_item["title"] = "Приобретена услуга 'В несколько городов'";
+					}
+
+					if ( in_array(Arr::get($result_item, "name"), array("up","lider","premium")) AND $show_not_activated) {
+						$not_activated = $service_item->count - $service_item->activated;
+						if ($not_activated > 0) {
+							$result_item["icon_class"] .= " fa-pulse";
+							$result_item["title"] = "Осталось неактивированных ".$not_activated.". ".$result_item["title"];
+						}
+					}
+					$result[] = $result_item;
 				}
-				$result[] = $result_item;
+			} elseif (in_array($name, array('cities'))) {
+				if ($name == "cities") {
+					$result_item["name"] = $name;
+					$result_item["icon_class"] = "fa-info-circle";
+					$result_item["title"] = vsprintf("Объявление размещено в %d городах", array(count($service_items)));
+					$result[] = $result_item;
+				}
+
 			}
 			
 		}
@@ -268,6 +291,47 @@ class Twig_Functions
 			"nizhnevartovsk" => "Нижневартовск"
 		);
 		return $cities[$city_name];
+	}
+
+	public static function custommenu($root)
+	{
+		$structure = ORM::factory('Structure')
+			->where("url","=",$root)
+			->find();
+
+		$result = array();
+
+		Twig_Functions::get_customenu_three($structure, $result);
+
+		return $result;
+	}
+
+	public static function get_customenu_three($structure, &$result)
+	{
+		$user = Auth::instance()->get_user();
+
+		$result["root"] = $structure->as_array();
+		$result["childs"] = array();
+		$subs = ORM::factory('Structure')
+				->where("parent_id","=", $structure->id)
+				->find_all();
+		foreach ($subs as $sub) {
+			if ($sub->for_admin AND !Acl::check("object.add.type")) {
+				continue;
+			}
+			
+			$c = ORM::factory('Structure')
+				->where("parent_id","=", $sub->id)
+				->count_all();
+			if ($c > 0) {
+				$tmp = array();
+				
+				Twig_Functions::get_customenu_three($sub, $tmp);
+				$result["childs"][] = $tmp;
+			} else {
+				$result["childs"][] = $sub->as_array();
+			}
+		}
 	}
 
 	

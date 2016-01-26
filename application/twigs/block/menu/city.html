@@ -2,12 +2,12 @@
 {% set rows = (cities|length/cols)|round %}
 {% set i = 0 %}
 {% set main_cities = ['tyumen','surgut','nizhnevartovsk','nefteyugansk'] %}
-<div class="proom-list iLight-cont js-citymenu border-color-blue popup-menu-cont left brb2 w400 z300">
+<div class="proom-list iLight-cont js-citymenu border-color-blue popup-menu-cont brb2 w400 z300">
 	{% for col in 0..cols %}
 		<ul class="fl">
 			{% for city in cities|slice(i, rows) %}
 				<li>
-					<a href="{{ domain(city.seo_name, FALSE) }}" class="{% if city.seo_name in main_cities %}bold{% endif %}">{{ city.title}}</a>
+					<a href="//{{ domain(city.seo_name, canonical_url, null, true) }}" class="{% if city.seo_name in main_cities %}bold{% endif %}">{{ city.title}}</a>
 				</li>
 			{% endfor %}
 		</ul>

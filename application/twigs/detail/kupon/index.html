@@ -15,7 +15,6 @@
 		{{ requestblock('block_twig/topline', {'favourites':favourites}) }}
 		{% include 'block/header/logoline' %}
 		{% include 'search/kupony/promo' %}
-		{{ requestblock('block_twig/adslinkline',{'city_id': city.id, 'category_id': category.id, 'theme_class': theme_class}) }}
 {% endblock header %} 
 
 {% block crumbs %} 
@@ -32,7 +31,7 @@
 			{% if (object.compiled.images.main_photo|length != 0) %}
 				{% include 'detail/kupon/main_photo' %}
 			{% endif %}
-			<div class="text-cont module">
+			<div class="text-cont module clearfix">
 				<div class="text fl w100p" itemprop="description">
 				{% set text = NULL %}
 
@@ -52,6 +51,7 @@
 				{{ text }}
 				</div>
 			</div>
+			{% include 'block/vk/comments_surgut' %}
 		</article>
 	</div>
 {% endblock %}	
@@ -66,7 +66,9 @@
 			{% if check_object_access(object, 'object.moderate') %}
 				<div class="module">{% include 'detail/kupon/controls' %}</div>
 			{% endif %}
-			
+			{% if testKuponLink %}
+				<a href="{{ testKuponLink }}">Тестовая версия для печати</a>
+			{% endif %}
 			<div class="module">{% include 'detail/kupon/coupon_info' %}</div>
 			
 			{% if object.is_published and actionIsActive %}

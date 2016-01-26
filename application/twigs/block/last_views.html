@@ -1,0 +1,52 @@
+{% if horizontalView %}
+<div class="last-views module" {% if showMore %}data-showmore="true" data-pages="{{ pagination.totalPages }}" {% endif %}>
+	<div class="title_block brt2">
+		<span>Вы недавно смотрели</span>
+	</div>
+	<div class="items" data-role="container">
+		{% for item in items %}
+				<div class="last-wrap clearfix">
+					<a href="{{ item.url }}" rel="nofollow" class="object-caption bold">
+								{{ item.shortTitle }}
+					</a>
+					{% if item.price > 0 %}
+					<span class="amount fs14">{{ item.price|number_format(0, ' ', ' ') }} <i class="fa fa-rub"></i></span>
+					{% endif %}
+				</div>
+		{% endfor %}
+	</div>
+	{% if showMore %}
+	<div class="title_block more_button brb2" data-role="button-container">
+		<button data-role="button"><i class="fa fa-chevron-down"></i></button>
+	</div>
+	{% endif %}
+</div>
+{% else %}
+<div class="last-views">
+	<div class="title_block brt2">Вы недавно смотрели</div>
+	<div class="items">
+		{% for item in items %}
+			{% if loop.index <= 5 %}
+			<div class="item">
+				<p>
+					<a href="{{ item.url }}" rel="nofollow">
+						<img 
+						src="{{ item.image.url }}"
+						width="{{ item.image.width }}"
+						height="{{ item.image.height }}"
+						alt="{{ item.image.alt }}"
+						title="{{ item.image.title }}" />
+					</a>
+				</p>
+				<a href="{{ item.url }}" rel="nofollow">{{ item.shortTitle }}</a>
+				{% if item.price > 0 %}
+					<span>{{ item.price|number_format(0, ' ', ' ') }} <i class="fa fa-rub"></i></span>
+				{% else %}
+				<span style="min-height:28px;"></span>
+				{% endif %}
+			</div>
+			{% endif %}
+		{% endfor %}
+	</div>
+</div>
+{% endif %}

@@ -692,8 +692,8 @@
 							<div class="inp-cont-long ">
 									<div class="checkbox">
 										<label>
-											<input type="checkbox" name="block_comments" id="block_comments" value="1" <? if ($params->block_comments) echo "checked"; ?>></input>
-											<span for="block_comments" class="">Отключить возможность задавать вопросы на странице объявления</span>
+											<input type="checkbox" name="block_comments" id="block_comments" value="1" class="hidden" <? if ($params->block_comments) echo "checked"; ?>></input>
+											<span for="block_comments" class="hidden">Отключить возможность задавать вопросы на странице объявления</span>
 										</label>	
 									</div>
 							</div>

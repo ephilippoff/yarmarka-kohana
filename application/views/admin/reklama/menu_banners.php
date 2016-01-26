@@ -23,6 +23,26 @@
 </div>	-->
 
 <a href="/khbackend/reklama/add_menu_banner" style="margin-bottom: 20px;display: inline-block;">Добавить баннер</a>
+<form class="form-inline" action="/<?php echo Request::current()->uri(); ?>">
+	<?php foreach($filters['groups'] as $key => $filterGroup) { ?>
+		<div class="input-prepend">
+			<span class="add-on"><?php echo $filterGroup['label']; ?></span>
+			<select name="<?php echo $key; ?>">
+				<option value="">Все</option>
+				<?php foreach($filterGroup['items'] as $filterGroupItem) { ?>
+					<?php $selected = $filters['selected'][$key] == $filterGroupItem['id'] ? 'selected="selected"' : ''; ?>
+					<option value="<?php echo $filterGroupItem['id']; ?>" <?php echo $selected; ?>><?php echo $filterGroupItem['title']; ?></option>
+				<?php } ?>
+			</select>
+		</div>
+	<?php } ?>
+
+	<input type="hidden" name="sort_by" value="<?php echo $sort_by; ?>" />
+	<input type="hidden" name="sort" value="<?php echo $sort; ?>" />
+
+	<button type="submit" class="btn btn-primary">Применить</button>
+	<button type="reset" class="btn btn-default">Сброить</button>
+</form>
 
 <table class="table table-hover table-condensed promo">
 	<tr>

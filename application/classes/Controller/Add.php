@@ -21,7 +21,18 @@ class Controller_Add extends Controller_Template {
 				if ($user->is_expired_date_validation())
 					HTTP::redirect("/user/orginfo?from=another");
 			}
+		}else{
+			$this->redirect(URL::site('user/login?return=add'));
 		}
+	}
+
+	public function initAddForm($twig) {
+
+		$twig->topMenuContainerClass = 'hidden-sm hidden-xs'; //hide on tablets and mobile
+		$twig->showCatalogMenuButtonAfterLogo = true;
+		$twig->catalogMenuAfterLogoButtonAdditionalClass = 'hidden-md hidden-lg'; //hide on desktops and laptops
+		$twig->footerMenuAdditionalClass = 'hidden-xs'; //hide on mobile
+		$twig->footerAdditionalClass = 'hidden-xs hidden-md hidden-lg hidden-sm'; //hide on all devices
 	}
 
 	public function action_index()
@@ -30,6 +41,8 @@ class Controller_Add extends Controller_Template {
 		$this->auto_render  = FALSE;
 		$twig = Twig::factory('user/add');
 		$twig->params = new Obj();
+		$twig->onPageFlag = 'add';
+		$this->initAddForm($twig);
 		
 		$prefix = (Kohana::$environment == Kohana::PRODUCTION) ? "" : "dev_";
 		$staticfile = new StaticFile("attributes", $prefix.'static_attributes.js');
@@ -58,6 +71,9 @@ class Controller_Add extends Controller_Template {
 				$errors = new Obj($errors->error);
 			else {
 				$object_id = $errors->object_id;
+				if (Session::instance()->get('cv_mode') && $post_data['rubricid'] == 35 && isset($_GET['cv_mode']) && $_GET['cv_mode'] == 1) {
+					$this->redirect('/detail/use_cv?object_id=' . $object_id);
+				}
 				$this->redirect('/detail/'.$object_id."?afteradd=1");
 			}
 
@@ -72,6 +88,13 @@ class Controller_Add extends Controller_Template {
 				//'object_id'		=> (int)$this->request->query('object_id'),
 				'city_id'		=> (int)$this->request->param('city_id')
 			);
+		}
+
+		if (Session::instance()->get('cv_mode') == 1 && isset($_GET['cv_mode']) && $_GET['cv_mode'] == 1) {
+			if (!isset($params)) {
+				$params = array();
+			}
+			$params['rubricid'] = 35;
 		}
 
 		$form_data = new Form_Add($params, $is_post, $errors);
@@ -117,6 +140,8 @@ class Controller_Add extends Controller_Template {
 		$twig->params->errors = (array) $errors;
 		$twig->params->assets = $this->assets;
 		$twig->params->user = ($user AND $user->loaded()) ? $user->org_type : "undefined";
+		$twig->params->allowCkEditor = \Yarmarka\Models\User::current()->isAdminOrModerator();
+		$twig->allowCkEditor = $twig->params->allowCkEditor;
 
 		$expired = NULL;
 		if ($user AND !$user->is_valid_orginfo()
@@ -138,7 +163,10 @@ class Controller_Add extends Controller_Template {
 		$this->use_layout   = FALSE;
 		$this->auto_render  = FALSE;
 		$twig = Twig::factory('user/add');
+		$twig->onPageFlag = 'add';
 		$twig->params = new Obj();
+
+		$this->initAddForm($twig);
 
 		$user = Auth::instance()->get_user();
 		
@@ -224,6 +252,8 @@ class Controller_Add extends Controller_Template {
 		$twig->params->errors = (array) $errors;
 		$twig->params->assets = $this->assets;
 		$twig->params->user = ($user AND $user->loaded()) ? $user->org_type : "undefined";
+		$twig->params->allowCkEditor = \Yarmarka\Models\User::current()->isAdminOrModerator();
+		$twig->allowCkEditor = $twig->params->allowCkEditor;
 
 		$expired = NULL;
 		if (!$user->is_valid_orginfo())
@@ -232,6 +262,18 @@ class Controller_Add extends Controller_Template {
 			$expired =  $settings->{"date-expired"};
 
 		}
+
+
+		if ($object->is_bad) {
+			$twig->params->moder_messages = ORM::factory('User_Messages')
+			                        ->get_messages_from_admins($object_id)
+			                        ->order_by("createdOn", "desc")
+			                        ->limit(3)
+			                        ->getprepared_all();
+		} else {
+			$twig->params->moder_messages = array();
+		}
+
 		$twig->params->expired_orginfo = $expired;
 		$twig->params = (array) $twig->params;
 		$twig->block_name = "add/_index";
@@ -338,6 +380,38 @@ class Controller_Add extends Controller_Template {
 		$this->response->body(json_encode($this->json));
 	}
 
+	public function action_set_order() {
+		$this->use_layout = FALSE;
+		$this->auto_render = FALSE;
+
+		if (!isset($_REQUEST['fileName']) || !is_array($_REQUEST['fileName'])) {
+			return;
+		}
+		$fileNames = $_REQUEST['fileName'];
+		//select items
+		$images = ORM::factory('Tmp_Img')
+			->select('*')
+			->where('name', 'in', $fileNames)
+			->find_all();
+
+		$data = array();
+		foreach($images as $image) {
+			$data[$image->name] = array_search($image->name, $fileNames);
+			$image->delete();
+		}
+		asort($data);
+
+		foreach($data as $key => $value) {
+			$img = ORM::factory('Tmp_Img');
+			$img->name = $key;
+			$img->save();
+		}
+
+		$this->json['code'] = 200;
+		$this->json['data'] = $data;
+		$this->response->body(json_encode($this->json));
+	}
+
 	public function action_crop() {
 
 		$this->use_layout = FALSE;
@@ -407,25 +481,27 @@ class Controller_Add extends Controller_Template {
 		$imgObj = $imgConstructor($cropData['fileName']);
 
 		//validate new sizes - http://yarmarka.myjetbrains.com/youtrack/issue/yarmarka-316#comment=90-1078
-		if ($cropData['x'] < 0) {
-			$cropData['width'] += $cropData['x'];
-			$cropData['x'] = 0;
-		}
-		if ($cropData['y'] < 0) {
-			$cropData['height'] += $cropData['y'];
-			$cropData['y'] = 0;
-		}
-		if ($cropData['x'] + $cropData['width'] > $cropData['imageSize'][0]) {
-			$cropData['width'] = $cropData['imageSize'][0] - $cropData['x'];
-		}
-		if ($cropData['y'] + $cropData['height'] > $cropData['imageSize'][1]) {
-			$cropData['height'] = $cropData['imageSize'][1] - $cropData['y'];
-		}
-		if ($cropData['width'] > $cropData['imageSize'][0]) {
-			$cropData['width'] = $cropData['imageSize'][0];
-		}
-		if ($cropData['height'] > $cropData['imageSize'][1]) {
-			$cropData['height'] = $cropData['imageSize'][1];
+		if (empty($_REQUEST['disableRectValidate']) || !$_REQUEST['disableRectValidate']) {
+			if ($cropData['x'] < 0) {
+				$cropData['width'] += $cropData['x'];
+				$cropData['x'] = 0;
+			}
+			if ($cropData['y'] < 0) {
+				$cropData['height'] += $cropData['y'];
+				$cropData['y'] = 0;
+			}
+			if ($cropData['x'] + $cropData['width'] > $cropData['imageSize'][0]) {
+				$cropData['width'] = $cropData['imageSize'][0] - $cropData['x'];
+			}
+			if ($cropData['y'] + $cropData['height'] > $cropData['imageSize'][1]) {
+				$cropData['height'] = $cropData['imageSize'][1] - $cropData['y'];
+			}
+			if ($cropData['width'] > $cropData['imageSize'][0]) {
+				$cropData['width'] = $cropData['imageSize'][0];
+			}
+			if ($cropData['height'] > $cropData['imageSize'][1]) {
+				$cropData['height'] = $cropData['imageSize'][1];
+			}
 		}
 
 		//create background color for rotate
@@ -470,6 +546,7 @@ class Controller_Add extends Controller_Template {
 		//header('Content-Type: ' . $cropData['imageMime']);
 		$imgOutput = 'image' . $cropData['suffix'];
 		//$imgOutput($imgObj);
+		//die;
 
 		//recreate thumbnails
 		$oldImageModule = new Imageci();

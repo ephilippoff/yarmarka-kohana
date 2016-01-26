@@ -1,6 +1,6 @@
 <?php
 
-	class Debug {
+	class Debug extends Kohana_Debug {
 
 		public static function email($view) {
 			$sLogFileName = 'email.log';

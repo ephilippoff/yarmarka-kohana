@@ -6,7 +6,7 @@ define([
     'use strict';
 
     var iconSettings = {
-        house: {
+        house1: {
             iconLayout: 'default#image',
             iconImageHref: '/static/develop/images/house.png',
             iconImageSize: [27,39],

@@ -67,6 +67,7 @@ class Model_User_Settings extends ORM {
 										->where("name","=",$name)
 										->where("type","=", $type)
 										->find();
+		
 		$setting->created_on = DB::expr("NOW()");						
 		$setting->user_id = $user_id;				
 		$setting->type = $type;

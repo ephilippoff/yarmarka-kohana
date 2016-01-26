@@ -3,6 +3,9 @@ return array(
 	"up" => array(
 		"default" => 20
 	),
+	"cities" => array(
+		"default" => 20
+	),
 	"lider" => array(
 		"tyumen" => array(
 			"kvartiry-i-komnaty" => 4,

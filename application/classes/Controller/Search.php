@@ -60,6 +60,8 @@ class Controller_Search extends Controller_Template {
 
         $search_info = $this->get_search_info();
 
+        Yarmarka\Models\Request::current()->setUrl($search_info->s_suri);
+
         if ($search_info->city_id) {
             Cookie::set('location_city_id', $search_info->city_id, strtotime( '+31 days' ));
         }
@@ -84,8 +86,21 @@ class Controller_Search extends Controller_Template {
         $twig = Twig::factory('search/index');
         $twig->data_file = $staticfile->jspath;
 
+        /*
+            http://yarmarka.myjetbrains.com/youtrack/issue/yarmarka-347
+            http://yarmarka.myjetbrains.com/youtrack/issue/yarmarka-352
+        */
+            //$newsCategoryId = 174;
+            //if (in_array($search_info->category->id, $categoriesToFilterExpiration)) {
+                $search_info->search_filters['expiration'] = true;
+            //}
+        /*
+            done
+        */
+
         //main search
         $main_search_query = Search::searchquery($search_info->search_filters, $search_params);
+        //$main_search_query->where('o.source_id', '<>', 2);
 
         $twig->main_search_result = Search::getresult($main_search_query->execute()->as_array());
         if (!$search_info->main_search_result_count) {
@@ -240,7 +255,7 @@ class Controller_Search extends Controller_Template {
             $search_info->show_canonical = true;
             $bIsHttps = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'];
             $sCanonicalUrlPrefix = 'http' . ($bIsHttps ? 's' : '') . '://' . $_SERVER['HTTP_HOST'] . '/';
-            $search_info->canonical_url = $sCanonicalUrlPrefix . $search_info->canonical_url;
+            $search_info->full_canonical_url = $sCanonicalUrlPrefix.$search_info->canonical_url;
             $search_info->show_canonical_simple = true;
         //}
 
@@ -255,6 +270,7 @@ class Controller_Search extends Controller_Template {
         foreach ((array) $search_info as $key => $item) {
             $twig->{$key} = $item;
         }        
+
         $this->cache_stat($twig, $search_params);
         $this->response->body($twig);
 
@@ -337,10 +353,15 @@ class Controller_Search extends Controller_Template {
             "org" => $this->params_by_uri->get_reserved_query_params("org"),
             "filters" => $clean_query_params
         );
-		//Для рубрики новостей включаем фильтр по дате старта показа
-		if ($info->category->seo_name == 'novosti') 
-			$info->search_filters["expiration"] = TRUE;
-		
+        //Для рубрики новостей включаем фильтр по дате старта показа
+        if ($info->category->seo_name == 'novosti') {
+            $info->search_filters["expiration"] = TRUE;
+        } 
+
+        if ($info->category->seo_name == 'glavnaya-kategoriya') {
+            $info->search_filters["not_category_seo_name"] = array("novosti");
+        }
+
         $info->seo_attributes = Seo::get_seo_attributes(
             $this->params_by_uri->get_proper_segments(),
             $info->search_filters["filters"],
@@ -356,11 +377,13 @@ class Controller_Search extends Controller_Template {
                 $clean_query_params
             )
         );
+
         return $info;
     }
 
     public function get_search_info_by_sphinx($search_text)
     {
+        $clean_query_params = array_merge($this->params_by_uri->get_clean_query_params(), $this->params_by_uri->get_seo_filters());
         $info = new Obj();
 
         $info->search_text = $search_text;
@@ -404,12 +427,20 @@ class Controller_Search extends Controller_Template {
             "city_id" => $info->city_id,
             "category_id" => (count($info->child_categories_ids) > 0) ? $info->child_categories_ids : $info->category_id,
 
+            "user_id" => $this->params_by_uri->get_reserved_query_params("user_id"),
+            "source" => $this->params_by_uri->get_reserved_query_params("source"),
+            "photo" => $this->params_by_uri->get_reserved_query_params("photo"),
+            "video" => $this->params_by_uri->get_reserved_query_params("video"),
+            "private" => $this->params_by_uri->get_reserved_query_params("private"),
+            "org" => $this->params_by_uri->get_reserved_query_params("org"),
+            "filters" => $clean_query_params,
+
             //TODO фильтр по фото
             //"user_id" => $this->params_by_uri->get_reserved_query_params("user_id"),
             //"photo" => $this->params_by_uri->get_reserved_query_params("photo"),
 
             "search_text" => $info->search_text,
-            "filters" => array()
+            //"filters" => array()
         );
 
         $info->seo_attributes = Seo::get_seo_attributes(
@@ -417,6 +448,13 @@ class Controller_Search extends Controller_Template {
             $info->search_filters["filters"],
             $this->params_by_uri->get_category(),
             $this->domain->get_city()
+        );
+
+        $info->query_params_for_js = json_encode(
+            array_merge(
+                $this->params_by_uri->get_query_params_without_reserved($this->request->query()),
+                $clean_query_params
+            )
         );
 
         

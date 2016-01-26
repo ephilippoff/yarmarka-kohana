@@ -15,6 +15,7 @@ define(function(require){
             windows: {
                 service: require('lib/text!templates/windows/service.tmpl'),
                 backcall: require('lib/text!templates/windows/backcall.tmpl'),
+                moderate: require('lib/text!templates/windows/moderate.tmpl'),
                 object_callback: require('lib/text!templates/windows/object_callback.tmpl'),
                 message: require('lib/text!templates/windows/message.tmpl'),
                 editService: require('lib/text!templates/windows/editService.tmpl')
@@ -26,6 +27,7 @@ define(function(require){
                 buyObject: require('lib/text!templates/services/buyObject.tmpl'),
                 kupon: require('lib/text!templates/services/kupon.tmpl'),
                 newspaper: require('lib/text!templates/services/newspaper.tmpl'),
+                cities: require('lib/text!templates/services/cities.tmpl'),
             },
             detail: {
                 baloon: require('lib/text!templates/detail/baloon.tmpl'), 

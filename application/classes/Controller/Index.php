@@ -30,14 +30,16 @@ class Controller_Index extends Controller_Template {
     }
 
     public function action_index() {
-
         $twig = Twig::factory('index/index');
-
+        
         $twig->last_city_id = $this->last_city_id;
         $last_city = NULL;
         if ($twig->last_city_id) {
             $twig->last_city = $last_city = ORM::factory('City', $twig->last_city_id)->get_row_as_obj();
         }
+
+        $twig->menuName = 'mainmenu';
+        $twig->staticMainMenu = TRUE;
 
         $twig->months = Date::get_months_names();
 
@@ -50,7 +52,7 @@ class Controller_Index extends Controller_Template {
                 "city_id" => $this->last_city_id,
                 "category_seo_name" => "novosti"
             ),
-            array("limit" => 2, "page" => 1)
+            array("limit" => 5, "page" => 1)
         );
         $twig->premiumnews = Search::getresult($search_query->execute()->as_array());
         
@@ -67,10 +69,9 @@ class Controller_Index extends Controller_Template {
                 "category_seo_name" => "novosti",
                 "not_id" => $premium_ids
             ),
-            array("limit" => 15, "page" => 1)
+            array("limit" => 7, "page" => 1, "order" => "date_expired")
         );
         $twig->lastnews = Search::getresult($search_query->execute()->as_array());
-
        
         $index_info = $this->get_index_info($last_city);
 
@@ -94,7 +95,7 @@ class Controller_Index extends Controller_Template {
                 "category_id" => array(173),
                 "city_id" => ($this->last_city_id) ? array($this->last_city_id) : NULL,
             ),
-            array("limit" => 2)
+            array("limit" => 3, "order" => "date_expired")
         );
 
         $twig->premium_kupons = Search::getresult($premium_kupons->execute()->as_array());
@@ -107,7 +108,7 @@ class Controller_Index extends Controller_Template {
                 "category_id" => array(173),
                 "city_id" => ($this->last_city_id) ? array($this->last_city_id) : NULL,
             ),
-            array("limit" => 10)
+            array("limit" => 3, "order" => "date_expired")
         );
 
         $twig->kupons = Search::getresult($kupons->execute()->as_array());
@@ -120,7 +121,6 @@ class Controller_Index extends Controller_Template {
             return Imageci::getSavePaths($item->filename);
         }, $attachments);
         $twig->promo_thumbnails = $promo_thumbnails;
-
         $this->response->body($twig);
     }
 

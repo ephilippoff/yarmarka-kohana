@@ -1,14 +1,14 @@
-<div class="popup-menu-cont popup-menu-cont2l iLight-cont js-newsmenu z300">
+<div class="popup-menu-cont2l iLight-cont {% if staticMainMenu %} left_menu hidden-xs {% else %} js-newsmenu popup-menu-cont{% endif %} z300">
 	<div class="left brb2">
 		<ul class="top" role="menu">
 			{% for element in categories %}
 				<li class="js-submenu-item" data-submenu-id="section{{element.id}}" class="section{{element.id}}">
-					<span class="span-link" onclick="window.location = '{{ '/' ~ element.category_url ~ '/' ~ element.seo_name }}'">
-						<span class="name">{{element.title}}</span>
+					<a class="span-link" href="{{ '/' ~ element.category_url ~ '/' ~ element.seo_name }}">
+						{{element.title}}
 						{% if element.count > 0 %}
-							<span class="count">{{element.count}}</span>
+							<span class="count">({{element.count}})</span>
 						{% endif %}
-					</span>
+					</a>
 				</li>
 			{% endfor %}
 		</ul>

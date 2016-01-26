@@ -189,17 +189,17 @@ class Service
      * @param  [type] $tempOrderItemId [ID of record in Order_ItemTemp table, set if is edit]
      * @return [void]
      */
-    public function save($object_info, $key, $tempOrderItemId = NULL)
+    public function save($object_info, $key, $tempOrderItemId = NULL, $orderId = NULL)
     {
         $params = new Obj();
         $params->service =  $this->get();
         $params->object =  $object_info;
         $params->title = $this->get_title($params);
 
-        return $this->save_to_cart($params, $key, $tempOrderItemId);
+        return $this->save_to_cart($params, $key, $tempOrderItemId, $orderId);
     }
 
-    protected function save_to_cart($params, $key, $tempOrderItemId = NULL)
+    protected function save_to_cart($params, $key, $tempOrderItemId = NULL, $orderId = NULL)
     {
         $object_id = $params->object["id"];
 
@@ -215,7 +215,7 @@ class Service
         }
 
         if ($order_item_temp->loaded()) {
-            $order_item_temp->return_reserve();
+            $order_item_temp->return_reserve($orderId);
         }
         $order_item_temp->object_id = $object_id;
         $order_item_temp->service_id = NULL;
@@ -224,7 +224,7 @@ class Service
         $order_item_temp->key = $key;
         $order_item_temp->save();
 
-        $order_item_temp->reserve($key);
+        $order_item_temp->reserve($key, $orderId);
 
         return $order_item_temp->get_row_as_obj();
     }

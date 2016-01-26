@@ -3,9 +3,10 @@ define(['marionette',
     'templates',
     'views/components/windows/service',
     'views/components/windows/backcall',
+    'views/components/windows/moderate',
     'views/components/windows/message',
     'views/components/windows/object_callback'
-], function (Marionette, templates, ServiceView, BackcallView, MessageView, ObjectCallbackView) {
+], function (Marionette, templates, ServiceView, BackcallView, ModerateView, MessageView, ObjectCallbackView) {
     'use strict';
 
     var ErrorWindow = Marionette.ItemView.extend({
@@ -35,6 +36,7 @@ define(['marionette',
             service: ServiceView,
             backcall: BackcallView,
             message: MessageView,
+            moderate: ModerateView,
             object_callback: ObjectCallbackView
 
         },
@@ -49,6 +51,7 @@ define(['marionette',
         blackLayer: {
             service : true,
             backcall : true,
+            moderate : true,
             message : true,
             object_callback: true
         },

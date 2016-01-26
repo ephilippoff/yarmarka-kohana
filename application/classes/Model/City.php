@@ -39,4 +39,8 @@ class Model_City extends ORM {
 					->find();
 	}
 
+	public function visible($value = true) {
+		return $this->where('is_visible', '=', $value);
+	}
+
 } // End City Model

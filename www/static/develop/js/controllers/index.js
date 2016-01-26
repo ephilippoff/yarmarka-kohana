@@ -14,15 +14,21 @@ define([
     "modules/filters",
     "modules/map",
 
-    'modules/afisha'
+    'modules/afisha',
+    'modules/reklama_click'
 ], 
 function (Marionette, templates, utils, IndexPage, SearchPage, DetailPage, 
-    UserSearchPage, CartPage, AddPage, ArticlePage, FiltersModule, MapModule, Afisha) {
+    UserSearchPage, CartPage, AddPage, ArticlePage, FiltersModule, MapModule, Afisha,
+    ReklamaClickInitializer) {
     "use strict";
-    
+
     return Marionette.Controller.extend({
         before: function() {
 
+        },
+
+        initialize: function () {
+            ReklamaClickInitializer();
         },
 
         start_indexSection : function() {

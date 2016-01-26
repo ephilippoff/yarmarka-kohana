@@ -87,7 +87,15 @@ gulp.task('buildconcatcss', function() {
                         './www/static/develop/css/bootstrap.tables.min.css',
                             './www/static/develop/css/font-awesome.css',
                             './www/static/develop/css/iLight.css',
-                            './www/static/develop/css/css.css'])
+                            './www/static/develop/css/css.css',
+                            //manualy add ordered css to gulp
+                            './www/static/develop/css/adaptive/extra-small-phones.css',
+                            './www/static/develop/css/adaptive/small-tablets.css',
+                            './www/static/develop/css/adaptive/medium-desktops.css',
+                            './www/static/develop/css/adaptive/large-desktops.css',
+                            //all blocks
+                            './www/static/develop/css/blocks/**/*.css'
+                            ])
                 .pipe(concat('appstyles.css'))
                 .pipe(csso())
                 .pipe(gulp.dest('./www/static/develop/production/css/'));

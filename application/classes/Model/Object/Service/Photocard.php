@@ -32,7 +32,7 @@ class Model_Object_Service_Photocard extends ORM
 			->join('object', 'left')
 			->on('object_service_photocard.object_id', '=', 'object.id')
 			->join('category', 'left')
-			->on('object.category', '=', 'category.id')	
+			->on('object_service_photocard.category_id', '=', 'category.id')	
 			->join('city', 'left')
 			->on('object.city_id', '=', 'city.id')				
 			->join('object_attachment', 'left')
