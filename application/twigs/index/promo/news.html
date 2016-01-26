@@ -13,7 +13,7 @@
 				<img src="{{get_file(news.compiled.images.main_photo['208x208'])}}" alt="">
 			</div>
 			<div class="news_info">
-				<span class="date fs12">{{news.date_expired|date('H:i')}}</span><a href="/newsline/{{news.date_expired|date('Y-m-d')}}#{{news.id}}" class="ml10">{{news.title}}</a><br>
+				<span class="date fs12">{{news.date_expired|date('H:i')}}</span><a href="/novosti/{{news.seo_name}}-{{news.id}}.html" class="ml10">{{news.title}}</a><br>
 				{{news.user_text|striptags|slice(0,230)}}...
 			</div>
 		{% endif %}
@@ -39,7 +39,7 @@
 					{% for news in lastnews %}
 						{%  if loop.index <= newsNumber %}
 							<li>
-								<span class="date fs12">{{news.date_expired|date('H:i')}}</span><a href="/newsline/{{news.date_expired|date('Y-m-d')}}#{{news.id}}" class="ml10">{{news.title|slice(0,60)}}...</a>
+								<span class="date fs12">{{news.date_expired|date('H:i')}}</span><a href="/novosti/{{news.seo_name}}-{{news.id}}.html" class="ml10">{{news.title|slice(0,60)}}...</a>
 							</li>
 						{% endif %}
 					{% endfor %}
