@@ -68,18 +68,18 @@
 		border: none !important;
 	} 
 
-	.kupon_wrap{
+	.kupons_block .kupon_wrap{
 		width: 50%;
 		float: left;
 		padding-right: 5px;
 	}
 
-	.kupon_wrap:nth-child(even){
+	.kupons_block .kupon_wrap:nth-child(even){
 		padding-right: 0;
 		padding-left: 5px;
 	}
 
-	.kupon_wrap:last-child{
+	.kupons_block .kupon_wrap:last-child{
 		display: none;
 	}
 
@@ -140,22 +140,22 @@
 
 @media (max-width: 400px){
 
-	.kupon_wrap{
+	.kupons_block .kupon_wrap{
 		width: 100%;
 		padding: 0;
 	}
 
-	.kupon_wrap:nth-child(2){
+	.kupons_block .kupon_wrap:nth-child(2){
 		display: none;
 	}
 
-	.kupon_wrap .coupon-item-cont {
+	.kupons_block .kupon_wrap .coupon-item-cont {
 	    float: none;
 	    display: block;
 	    max-width: 100%;
 	}
 
-	.kupon_wrap .coupon-item-cont img{
+	.kupons_block .kupon_wrap .coupon-item-cont img{
 		width: 100%;
 	}
 
