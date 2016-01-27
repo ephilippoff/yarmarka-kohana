@@ -32,5 +32,6 @@ class Controller_Search_Category extends Controller_Template {
 
         $twig->link_counters = array_merge($counters_parents, $counters_childs);
         $this->response->body($twig);
+
     }
 }
