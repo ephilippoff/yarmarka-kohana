@@ -466,7 +466,7 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 
 			$_contacts[$contact->object_id][] = $contact->get_row_as_obj();
 		}
-		$this->template->object_contacts = $_contacts[$this->template->object->id];
+		$this->template->object_contacts = $_contacts;//[$this->template->object->id];
 
 		$this->template->complaints = ORM::factory('Complaint')
 			->where("object_id", "IN", $ids )
