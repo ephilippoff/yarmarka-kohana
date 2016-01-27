@@ -112,10 +112,10 @@ class Lib_PlacementAds_AddEditByModerator extends Lib_PlacementAds_AddEdit {
 		$validation = &$this->validation;
 		$params = &$this->params;
 
-		if ($category AND $settings = Kohana::$config->load("category.".$category->id.".additional_fields.2"))
+		if ($category AND $settings = Kohana::$config->load("category.".$category->id.".additional_fields.1"))
 		{
 
-			$titles =  Kohana::$config->load("dictionaries.additional_fields.2");
+			$titles =  Kohana::$config->load("dictionaries.additional_fields.1");
 			foreach ($settings as $setting) {
 				$validation->rules($setting, array(
 						array('not_empty', array(':value', $titles[$setting]))
@@ -147,7 +147,7 @@ class Lib_PlacementAds_AddEditByModerator extends Lib_PlacementAds_AddEdit {
 		$params = &$this->params;
 		$object = &$this->object;
 
-		if ($object->category AND $settings = Kohana::$config->load("category.".$object->category.".additional_fields.2"))
+		if ($object->category AND $settings = Kohana::$config->load("category.".$object->category.".additional_fields.1"))
 		{
 			$additional = array();
 			foreach ($settings as $setting) {
