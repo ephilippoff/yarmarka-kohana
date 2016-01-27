@@ -609,11 +609,11 @@ class Model_Object extends ORM {
 
 			$contact->add('objects', $this->id);
 			$contact->reload();
-		} else {
-			$contact_exists->contact_type_id	= intval($contact_type_id);
-			$contact_exists->contact			= trim($contact_str);
-			$contact_exists->save();
-		}
+
+			$contact->contact_type_id	= intval($contact_type_id);
+			$contact->contact			= trim($contact_str);
+			$contact->save();
+		} 
 
 		return $contact->loaded() ? $contact : $contact_exists;
 	}
