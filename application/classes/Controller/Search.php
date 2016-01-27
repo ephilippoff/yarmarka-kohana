@@ -98,6 +98,7 @@ class Controller_Search extends Controller_Template {
             done
         */
 
+
         //main search
         $main_search_query = Search::searchquery($search_info->search_filters, $search_params);
         //$main_search_query->where('o.source_id', '<>', 2);
@@ -130,7 +131,7 @@ class Controller_Search extends Controller_Template {
         $search_query = Search::searchquery(
             array(
                 "expiration" => TRUE,
-                "premium" => TRUE,
+                "premium" => false,
                 "active" => TRUE,
                 "published" =>TRUE,
                 "city_id" => $search_info->city_id,
@@ -334,7 +335,18 @@ class Controller_Search extends Controller_Template {
             $twig->{$key} = $item;
         }        
 
+
         $twig->staticMainMenu = TRUE;
+
+        $twig->isNews = $search_info->category->id == 174;
+        $twig->isNewsSubcategory = array_key_exists('filters', $search_info->search_filters)
+            && is_array($search_info->search_filters['filters'])
+            && array_key_exists('news-category', $search_info->search_filters['filters'])
+            && $search_info->search_filters['filters']['news-category'] != NULL;
+
+        if ($twig->isNewsSubcategory) {
+            $twig->catTitle = $search_info->search_filters['filters']['news-category'];
+        }
 
         $this->cache_stat($twig, $search_params);
         $this->response->body($twig);

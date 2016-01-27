@@ -115,3 +115,9 @@ $(document).ready(function(){
         });
     }
 });
+
+$(document).ready(function(){
+    $('.news_wrap').each(function(){
+        $(this).fadeIn(500);
+    });
+});

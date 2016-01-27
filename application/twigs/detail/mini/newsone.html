@@ -1,8 +1,9 @@
-<div class="bg-color-whitesmoke p20 mb20 br2">
-	<p class="fs18"><span>{{ object.date_expired|date('H:i d.m') }}</span> <a class="bold" href="{{object.compiled.url}}" name="{{object.id}}">{{object.title}}</a></p>
-	<div class="photo-cont mt10">
-		<img class="news-photo" src="{{get_file(object.compiled.images.main_photo.original)}}" width="500">
-		<p>{{object.compiled.attributes['news-category'].value}}</p>
+<div class="col-md-4 news_wrap">
+	<div class="img">
+		<a href="{{object.compiled.url}}">
+			<img src="{{get_file(object.compiled.images.main_photo.original)}}" alt="">
+		</a>
 	</div>
-	<div class="text-cont mt10">{{object.user_text}}</div>
+	<p><a href="{{object.compiled.url}}">{{object.title|slice(0,45)}}...</a></p>
+	<span class="date fs12"><i class="fa fa-clock-o"></i> {{ object.date_expired|date('H:i') }}</span>
 </div>

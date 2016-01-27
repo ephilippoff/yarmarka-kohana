@@ -1,5 +1,30 @@
-<div class="coupons-cont clearfix">
-	{% for object in main_search_result %}
-		{% include 'detail/mini/newsone' %}
-	{% endfor %}
+
+{% for object in main_search_result %}
+	{% if loop.first%}
+		<div class="clearfix main_last_news module">
+			<div class="image_block">
+				<img src="{{get_file(object.compiled.images.main_photo.original)}}" alt="">
+			</div>
+			<div class="news_info">
+				<span class="date fs12"><i class="fa fa-clock-o"></i> {{ object.date_expired|date('H:i') }}</span>
+				<a href="{{object.compiled.url}}" class="fs16 mb10 db">{{object.title}}</a>
+				{{object.user_text|slice(0,310)}}...
+			</div>
+		</div>
+	</div>
+	{% endif %}
+{% endfor %}
+
+{% if isNewsSubcategory %}
+<div class="title_block brt2 module">Читайте также:</div>
+<div class="other_cat_news">
+	<div class="row">
+		{% for object in main_search_result %}
+			{% if loop.index > 1 and loop.index <= 13 %}
+				{% include 'detail/mini/newsone' %}
+			{% endif %}
+		{% endfor %}
+	</div>
 </div>
+{% endif %}
+

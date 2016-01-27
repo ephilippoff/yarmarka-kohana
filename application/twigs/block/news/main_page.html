@@ -1,16 +1,20 @@
 {% if catTitle and reverse %}
 	<div class="title_block brt2 module">Остальные новости</div>
 {% elseif catTitle %}
-	<div class="title_block brt2 module">Другие новости по рубрике "{{catTitle}}"</div>
+	<div class="title_block brt2 module">Читайте также:</div>
 {% else %}
 	{% set catTitle = 'all' %}
 	<div class="title_block brt2 module">Новости</div>
 {% endif %}
 
+{% if newsTitle is empty %}
+	{% set newsTitle = 'noTitle' %}
+{% endif %}
+
 <div class="news_cat_block">
 	{% if catTitle and reverse %} <!-- Вывод для всем рубрикам, кроме выбранной -->
 		{% for item in data %}
-			{% if item.title != catTitle %}
+			{% if item.id != catTitle and item.title != catTitle %}
 				<div class="row">
 					<div class="col-md-12">
 						<h2><a href="{{ item.url }}" style="color:#333;">{{ item.title }}</a></h2>
@@ -80,23 +84,24 @@
 		{% endfor %}
 	{% else %} <!-- Вывод для одной рубрики -->
 		{% for item in data %}
-			{% if item.title == catTitle %}
-				<div class="row">
-					<div class="col-md-12">
-						<div class="row" style="padding-bottom:15px;">
-							{% for innerItem in item.items %}
-								{% if innerItem.title != newsTitle %}
-									<div class="col-md-6 col-sm-6 clearfix one_cat_news">
-										<a href="{{ innerItem.url }}" class="clearfix image-block"><img src="{{ innerItem.image }}"/></a>
-										<span class="date fs12">{{ innerItem.date|date('d.m') }}</span>
-										<a href="{{ innerItem.url }}">{{ innerItem.title|slice(0,80)}}...</a><br><br>
+			{% if item.id == catTitle or item.title == catTitle %}
+				<div class="other_cat_news">
+					<div class="row">
+						{% for innerItem in item.items %}
+							{% if innerItem.title != newsTitle %}
+								<div class="col-md-4 news_wrap">
+									<div class="img">
+										<a href="{{ innerItem.url }}">
+											<img src="{{ innerItem.image }}" alt="">
+										</a>
 									</div>
-								{% endif %}
-							{% endfor %}
-						</div>
+									<p><a href="{{ innerItem.url }}">{{ innerItem.title|slice(0,45)}}...</a></p>
+									<span class="date fs12"><i class="fa fa-clock-o"></i> {{ innerItem.date|date('d.m') }}</span>
+								</div>
+							{% endif %}
+						{% endfor %}
 					</div>
 				</div>
-				<hr>
 			{% endif %}
 		{% endfor %}
 	{% endif %}
