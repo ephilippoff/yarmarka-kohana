@@ -1311,3 +1311,35 @@ article img.news-photo{
     padding: 20px 0 10px;
     border-top: 1px solid #ccc;
 }
+
+.other_cat_news .news_wrap{
+    margin-bottom: 20px;
+    display: none;
+}
+
+.other_cat_news .img{
+    width: 100%;
+    height: 110px;
+    overflow: hidden;
+}
+
+.other_cat_news .img img{
+    width: 100%;
+    height: auto;
+}
+
+.other_cat_news p{
+    word-break: break-all;
+}
+
+.main_last_news .image_block{
+    width: 40%;
+    height: auto;
+    float: left;
+    margin-right: 10px;
+}
+
+.main_last_news .image_block img{
+    width: 100%;
+    height: 100%;
+}

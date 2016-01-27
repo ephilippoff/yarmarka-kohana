@@ -32,7 +32,8 @@
 			foreach($items as $item) {
 				$categories[$item->id] = array(
 						'title' => $item->title,
-						'url' => '/novosti/' . $item->url
+						'url' => '/novosti/' . $item->url,
+						'id' => $item->id,
 					);
 			}
 
@@ -52,9 +53,11 @@
 					$newsGroups[$sci] = array(
 							'title' => $categories[$sci]['title'],
 							'url' => $categories[$sci]['url'],
+							'id' => $categories[$sci]['id'],
 							'items' => array()
 						);
 				}
+
 				$group = &$newsGroups[$sci];
 
 				if (count($group['items']) >= $itemsPerCategory) {
