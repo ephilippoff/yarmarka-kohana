@@ -11,21 +11,9 @@
 				<div class="text">{{object.user_text|slice(0,1000)}}...</div>
 			</div>
 		</div>
-</div>
 	{% endif %}
 {% endfor %}
 
-{% if isNewsSubcategory %}
-	<div class="other_cat_news" id="same_cat_news">
-		<div class="row">
-			{% for object in main_search_result %}
-				{% if loop.index > 1 and loop.index <= 19 %}
-					{% include 'detail/mini/newsone' %}
-				{% endif %}
-			{% endfor %}
-		</div>
-	</div>
-{% endif %}
 
 <script>
 	
