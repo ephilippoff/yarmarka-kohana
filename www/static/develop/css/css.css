@@ -1312,13 +1312,13 @@ article img.news-photo{
     padding: 0 0 10px;
 }
 
-.main_last_news .text>div{
+.main_last_news .text>p{
     display: none;
 }
 
-.main_last_news .text>div:first-child,
-.main_last_news .text>div:nth-child(2),
-.main_last_news .text>div:nth-child(3){
+.main_last_news .text>p:first-child,
+.main_last_news .text>p:nth-child(2),
+.main_last_news .text>p:nth-child(3){
     display: block;
 }
 
@@ -1354,7 +1354,8 @@ article img.news-photo{
 
 .main_last_news .news_info{
     background: rgba(204, 204, 204, 0.27);
-    padding-bottom: 10px;
+    padding: 0 10px 10px;
+    margin-bottom: 10px;
 }
 
 .main_last_news .image_block img{

@@ -8,7 +8,7 @@
 			<div class="news_info">
 				<span class="date fs12"><i class="fa fa-clock-o"></i> {{ object.date_expired|date('H:i') }}</span>
 				<a href="{{object.compiled.url}}" class="fs16 mb10 db">{{object.title}}</a>
-				<div class="text">{{object.user_text|slice(0,1000)}}...</div>
+				<div class="text">{{object.user_text}}</div>
 			</div>
 		</div>
 	{% endif %}
@@ -25,3 +25,13 @@
 		</div>
 	</div>
 {% endif %}
+
+<script>
+	$(document).ready(function(){
+		$('.main_last_news .text').find('div').replaceWith(function(index, oldHTML){
+		 	return $("<p>").html(oldHTML);
+		});
+
+
+	});
+</script>
