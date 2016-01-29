@@ -1043,6 +1043,10 @@ a.auto-collapse-expand {
     color: #D30000;
 }
 
+.date.light{
+    color: rgba(246, 117, 62, 0.7);
+}
+
 .date>span{
     color: #8F8F8F;
 }

@@ -9,7 +9,7 @@
 			</div>
 		{% endif %}
 		{% if object.compiled.services.premium.0.activated != 1 %}
-		<div class="date fs12"><i class="fa fa-clock-o"></i> {{ object.date_expired|date('H:i') }} <span>- {{ object.date_expired|date('d.m.y') }}</span></div>
+		<div class="date light fs12">{{ object.date_expired|date('H:i') }} <span>- {{ object.date_expired|date('d.m.y') }}</span></div>
 		{% endif %}
 		<p><a href="{{object.compiled.url}}" class="fs16">{{object.title}}</a></p>
 	</div>
