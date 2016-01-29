@@ -136,6 +136,10 @@
 		margin: 0;
 
 	}
+
+	.other_cat_news .masonry:nth-last-child(2) .news_wrap{
+		border-bottom: 1px solid #ccc;
+	}
 }
 
 @media (max-width: 500px){
@@ -193,6 +197,13 @@
 
 	.dialog_window button:last-child{
 	    width: 40%;
+	}
+
+	.main_cat_news img,
+	article img.news-photo{
+		width: 100%;
+		float: none;
+		margin-right: 0;
 	}
 
 }

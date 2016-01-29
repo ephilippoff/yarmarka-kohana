@@ -8,22 +8,25 @@
 			<div class="news_info">
 				<span class="date fs12"><i class="fa fa-clock-o"></i> {{ object.date_expired|date('H:i') }}</span>
 				<a href="{{object.compiled.url}}" class="fs16 mb10 db">{{object.title}}</a>
-				{{object.user_text|slice(0,310)}}...
+				<div class="text">{{object.user_text|slice(0,1000)}}...</div>
 			</div>
 		</div>
+</div>
 	{% endif %}
 {% endfor %}
 
 {% if isNewsSubcategory %}
-<div class="title_block brt2 module">Читайте также:</div>
-<div class="other_cat_news">
-	<div class="row">
-		{% for object in main_search_result %}
-			{% if loop.index > 1 and loop.index <= 13 %}
-				{% include 'detail/mini/newsone' %}
-			{% endif %}
-		{% endfor %}
+	<div class="other_cat_news" id="same_cat_news">
+		<div class="row">
+			{% for object in main_search_result %}
+				{% if loop.index > 1 and loop.index <= 19 %}
+					{% include 'detail/mini/newsone' %}
+				{% endif %}
+			{% endfor %}
+		</div>
 	</div>
-</div>
 {% endif %}
 
+<script>
+	
+</script>

@@ -117,7 +117,19 @@ $(document).ready(function(){
 });
 
 $(document).ready(function(){
-    $('.news_wrap').each(function(){
-        $(this).fadeIn(500);
-    });
+
+    if ($('html').hasClass('desktop') || $('html').hasClass('tablet')) {
+            var $container = $('#same_cat_news');
+            $container.imagesLoaded( function() {
+                $('.news_wrap').each(function(){
+                    $(this).fadeIn(500);
+                });
+                $container.masonry({
+                    itemSelector: '.masonry',
+                    singleMode: true,
+                    isResizable: true
+                }); 
+            });
+        }
+    
 });

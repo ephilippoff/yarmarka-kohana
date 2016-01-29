@@ -131,7 +131,7 @@ class Controller_Search extends Controller_Template {
         $search_query = Search::searchquery(
             array(
                 "expiration" => TRUE,
-                "premium" => false,
+                "premium" => TRUE,
                 "active" => TRUE,
                 "published" =>TRUE,
                 "city_id" => $search_info->city_id,
@@ -373,6 +373,8 @@ class Controller_Search extends Controller_Template {
 
         $this->cache_stat($twig, $search_params);
         $this->response->body($twig);
+
+        // var_dump($twig->main_search_result[1]); die;
 
     }
 

@@ -205,6 +205,7 @@ class Controller_Detail extends Controller_Template {
 		$twig->domain      = $this->domain;
 		$twig->city        = $this->domain->get_city();
 
+
 		$twig->horizontalView = TRUE;
 		$twig->staticMainMenu = TRUE;
 		$twig->reverse = TRUE;

@@ -1,7 +1,7 @@
 {% if catTitle and reverse %}
-	<div class="title_block brt2 module">Остальные новости</div>
-{% elseif catTitle %}
 	<div class="title_block brt2 module">Читайте также:</div>
+{% elseif catTitle %}
+	<div class="title_block brt2 module">Другие новости в этой категории</div>
 {% else %}
 	{% set catTitle = 'all' %}
 	<div class="title_block brt2 module">Новости</div>
@@ -20,11 +20,11 @@
 						<h2><a href="{{ item.url }}" style="color:#333;">{{ item.title }}</a></h2>
 						<div class="row" style="padding-bottom:15px;">
 							{% for innerItem in item.items %}
-								{% if loop.index == 1 %}
+								{% if loop.first %}
 									<div class="col-md-6 clearfix main_cat_news">
+										<div class="date fs12 mb10"><i class="fa fa-clock-o"></i> {{ innerItem.date|date('m:h') }} <span>- {{ innerItem.date|date('d.m.y') }}</span></div>
 										<img src="{{ innerItem.image }}" />
-										<span class="date fs12">{{ innerItem.date|date('d.m') }}</span>
-										<a href="{{ innerItem.url }}">{{ innerItem.title|slice(0,80)}}...</a><br><br>
+										<a href="{{ innerItem.url }}" class="fs16">{{ innerItem.title}}</a><br><br>
 											{{ innerItem.short_text }}
 									</div>
 								{% endif %}
@@ -33,8 +33,8 @@
 								<div class="row">
 									{% for innerItem in item.items %}
 										{% if loop.index != 1 %}
-											<div class="col-md-12 other_cat_news">
-												<span class="date fs12">{{ innerItem.date|date('d.m') }}</span>
+											<div class="col-md-12 col-sm-6 other_cat_news">
+												<div class="date fs12"><i class="fa fa-clock-o"></i> {{ innerItem.date|date('m:h') }} <span>- {{ innerItem.date|date('d.m.y') }}</span></div>
 												<a href="{{ innerItem.url }}">{{ innerItem.title|slice(0,80)}}...</a>
 											</div>
 										{% endif %}
@@ -55,12 +55,12 @@
 					<h2><a href="{{ item.url }}" style="color:#333;">{{ item.title }}</a></h2>
 					<div class="row" style="padding-bottom:15px;">
 						{% for innerItem in item.items %}
-							{% if loop.index == 1 %}
+							{% if loop.first %}
 								<div class="col-md-6 clearfix main_cat_news">
+									<div class="date fs12 mb10"><i class="fa fa-clock-o"></i> {{ innerItem.date|date('m:h') }} <span>- {{ innerItem.date|date('d.m.y') }}</span></div>
 									<img src="{{ innerItem.image }}" />
-									<span class="date fs12">{{ innerItem.date|date('d.m') }}</span>
-									<a href="{{ innerItem.url }}">{{ innerItem.title|slice(0,80)}}...</a><br><br>
-										{{ innerItem.short_text }}
+									<a href="{{ innerItem.url }}" class="fs16">{{ innerItem.title}}</a><br><br>
+											{{ innerItem.short_text }}
 								</div>
 							{% endif %}
 						{% endfor %}
@@ -68,8 +68,8 @@
 							<div class="row">
 								{% for innerItem in item.items %}
 									{% if loop.index != 1 %}
-										<div class="col-md-12 other_cat_news">
-											<span class="date fs12">{{ innerItem.date|date('d.m') }}</span>
+										<div class="col-md-12 col-sm-6 other_cat_news">
+											<div class="date fs12"><i class="fa fa-clock-o"></i> {{ innerItem.date|date('m:h') }} <span>- {{ innerItem.date|date('d.m.y') }}</span></div>
 											<a href="{{ innerItem.url }}">{{ innerItem.title|slice(0,80)}}...</a>
 										</div>
 									{% endif %}
@@ -85,18 +85,15 @@
 	{% else %} <!-- Вывод для одной рубрики -->
 		{% for item in data %}
 			{% if item.id == catTitle or item.title == catTitle %}
-				<div class="other_cat_news">
+				<div class="other_cat_news" id="same_cat_news">
 					<div class="row">
 						{% for innerItem in item.items %}
 							{% if innerItem.title != newsTitle %}
-								<div class="col-md-4 news_wrap">
-									<div class="img">
-										<a href="{{ innerItem.url }}">
-											<img src="{{ innerItem.image }}" alt="">
-										</a>
+								<div class="col-md-6 col-sm-6 masonry">
+									<div class="news_wrap">
+										<div class="date fs12"><i class="fa fa-clock-o"></i> {{ innerItem.date|date('m:h') }} <span>- {{ innerItem.date|date('d.m.y') }}</span></div>
+										<p><a href="{{object.compiled.url}}" class="fs16">{{innerItem.title}}</a></p>
 									</div>
-									<p><a href="{{ innerItem.url }}">{{ innerItem.title|slice(0,45)}}...</a></p>
-									<span class="date fs12"><i class="fa fa-clock-o"></i> {{ innerItem.date|date('d.m') }}</span>
 								</div>
 							{% endif %}
 						{% endfor %}

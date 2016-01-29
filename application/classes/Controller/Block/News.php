@@ -47,6 +47,7 @@
 
 			$newsGroups = array();
 
+
 			foreach($items as $item) {
 				$sci = $item['data_list_value'];
 				if (!array_key_exists($sci, $newsGroups)) {
@@ -59,7 +60,6 @@
 				}
 
 				$group = &$newsGroups[$sci];
-
 				if (count($group['items']) >= $itemsPerCategory) {
 					continue;
 				}
