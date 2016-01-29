@@ -91,7 +91,6 @@
 							{% if innerItem.title != newsTitle %}
 								<div class="col-md-6 col-sm-6 masonry">
 									<div class="news_wrap">
-										<img src="" alt="">
 										<div class="date fs12"><i class="fa fa-clock-o"></i> {{ innerItem.date|date('m:h') }} <span>- {{ innerItem.date|date('d.m.y') }}</span></div>
 										<p><a href="{{object.compiled.url}}" class="fs16">{{innerItem.title}}</a></p>
 									</div>

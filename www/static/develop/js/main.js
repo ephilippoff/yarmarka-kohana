@@ -117,18 +117,19 @@ $(document).ready(function(){
 });
 
 $(document).ready(function(){
-    $('img').load(function(){
-        $('.news_wrap').each(function(){
-            $(this).fadeIn(500);
-        });
 
-        if ($('html').hasClass('desktop') || $('html').hasClass('tablet')) {
-            $('#same_cat_news').masonry({
-                itemSelector: '.masonry',
-                singleMode: true,
-                isResizable: true
-            }); 
+    if ($('html').hasClass('desktop') || $('html').hasClass('tablet')) {
+            var $container = $('#same_cat_news');
+            $container.imagesLoaded( function() {
+                $('.news_wrap').each(function(){
+                    $(this).fadeIn(500);
+                });
+                $container.masonry({
+                    itemSelector: '.masonry',
+                    singleMode: true,
+                    isResizable: true
+                }); 
+            });
         }
-    });
     
 });
