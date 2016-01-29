@@ -117,13 +117,18 @@ $(document).ready(function(){
 });
 
 $(document).ready(function(){
-    $('.news_wrap').each(function(){
-        $(this).fadeIn(500);
-    });
+    $('img').load(function(){
+        $('.news_wrap').each(function(){
+            $(this).fadeIn(500);
+        });
 
-    $('#same_cat_news').masonry({
-        itemSelector: '.masonry',
-        singleMode: true,
-        isResizable: true
-    }); 
+        if ($('html').hasClass('desktop') || $('html').hasClass('tablet')) {
+            $('#same_cat_news').masonry({
+                itemSelector: '.masonry',
+                singleMode: true,
+                isResizable: true
+            }); 
+        }
+    });
+    
 });

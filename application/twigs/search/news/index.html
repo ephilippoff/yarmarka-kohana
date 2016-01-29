@@ -22,7 +22,7 @@
 		</div><!--skin-theme1-->
 {% endblock header %} 
 
-{% block crumbs %} {% include 'search/kupony/crumbs' %} {% endblock crumbs %}
+{% block crumbs %} {% include 'search/crumbs' %} {% endblock crumbs %}
 
 
 {% block leftside %} 
@@ -33,10 +33,9 @@
 	<div class="row main_block">
 		<div class="col-lg-12">
 			{% include 'search/news/result' %}
-			{# if isNewsSubcategory #}
-				{{ requestblock('block_news/main_page', {'itemsPerCategory' : 6, 'catTitle' : catTitle, 'reverse' : true}) }}
-			{# endif #}
+			{{ requestblock('block_news/main_page', {'itemsPerCategory' : 6, 'catTitle' : catTitle, 'reverse' : true}) }}
 		</div>
+
 	</div>
 {% endblock content%}
 

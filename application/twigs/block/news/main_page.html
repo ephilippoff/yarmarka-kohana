@@ -33,7 +33,7 @@
 								<div class="row">
 									{% for innerItem in item.items %}
 										{% if loop.index != 1 %}
-											<div class="col-md-12 other_cat_news">
+											<div class="col-md-12 col-sm-6 other_cat_news">
 												<div class="date fs12"><i class="fa fa-clock-o"></i> {{ innerItem.date|date('m:h') }} <span>- {{ innerItem.date|date('d.m.y') }}</span></div>
 												<a href="{{ innerItem.url }}">{{ innerItem.title|slice(0,80)}}...</a>
 											</div>
@@ -68,7 +68,7 @@
 							<div class="row">
 								{% for innerItem in item.items %}
 									{% if loop.index != 1 %}
-										<div class="col-md-12 other_cat_news">
+										<div class="col-md-12 col-sm-6 other_cat_news">
 											<div class="date fs12"><i class="fa fa-clock-o"></i> {{ innerItem.date|date('m:h') }} <span>- {{ innerItem.date|date('d.m.y') }}</span></div>
 											<a href="{{ innerItem.url }}">{{ innerItem.title|slice(0,80)}}...</a>
 										</div>
@@ -85,18 +85,16 @@
 	{% else %} <!-- Вывод для одной рубрики -->
 		{% for item in data %}
 			{% if item.id == catTitle or item.title == catTitle %}
-				<div class="other_cat_news">
+				<div class="other_cat_news" id="same_cat_news">
 					<div class="row">
 						{% for innerItem in item.items %}
 							{% if innerItem.title != newsTitle %}
-								<div class="col-md-4 news_wrap">
-									<div class="img">
-										<a href="{{ innerItem.url }}">
-											<img src="{{ innerItem.image }}" alt="">
-										</a>
+								<div class="col-md-6 col-sm-6 masonry">
+									<div class="news_wrap">
+										<img src="" alt="">
+										<div class="date fs12"><i class="fa fa-clock-o"></i> {{ innerItem.date|date('m:h') }} <span>- {{ innerItem.date|date('d.m.y') }}</span></div>
+										<p><a href="{{object.compiled.url}}" class="fs16">{{innerItem.title}}</a></p>
 									</div>
-									<p><a href="{{ innerItem.url }}">{{ innerItem.title|slice(0,45)}}...</a></p>
-									<span class="date fs12"><i class="fa fa-clock-o"></i> {{ innerItem.date|date('d.m') }}</span>
 								</div>
 							{% endif %}
 						{% endfor %}

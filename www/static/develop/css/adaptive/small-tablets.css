@@ -20,6 +20,12 @@
 		margin-bottom: 20px;
 	}
 
+	.main_cat_news img{
+		width: 50%;
+		float: left;
+		margin-right: 10px;
+	}
+
 	.kupon_wrap:last-child{
 		margin-bottom: 0;
 	}
