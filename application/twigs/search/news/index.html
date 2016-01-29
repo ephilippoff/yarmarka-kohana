@@ -32,7 +32,6 @@
 {% block content %}
 	<div class="row main_block">
 		<div class="col-lg-12">
-			{% include 'index/promo/photo_news' %}
 			{% include 'search/news/result' %}
 			{# if isNewsSubcategory #}
 				{{ requestblock('block_news/main_page', {'itemsPerCategory' : 6, 'catTitle' : catTitle, 'reverse' : true}) }}
@@ -44,9 +43,6 @@
 
 {% block rightside %} 
 	<div class="right-side hidden-sm hidden-xs">
-		{% if check_object_access(object, 'object.moderate') %}
-			<div class="module">{% include 'detail/kupon/controls' %}</div>
-		{% endif %}
 		<div class="detail_news">
 			{% include 'index/promo/news' with {'newsNumber' : 6} %}
 		</div>

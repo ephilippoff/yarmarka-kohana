@@ -48,7 +48,7 @@
 
 
 body{font-family: 'pt_sansregular', Verdana, sans-serif;font-size:14px;color:#333;}
-a:link, a:visited, a:active, .span-link{color: #2a76a1;}
+a:link, a:visited, a:active, .span-link{color: #2B587A;}
 .span-link{cursor: pointer;}
 a{text-decoration: none;}
 a:hover, .span-link:hover{ color: #D30000; -webkit-transition: color 0.3s;-moz-transition: color 0.3s;-o-transition: color 0.3s;transition: color 0.3s;}
@@ -1023,8 +1023,7 @@ a.auto-collapse-expand {
 }
 
 .main_cat_news img{
-    float: left;
-    width: 30%;
+    width: 100%;
     margin-right: 5px;
 }
 
@@ -1040,8 +1039,12 @@ a.auto-collapse-expand {
     margin: 10px auto;
 }
 
-span.date{
-    color: #E96F4F;
+.date{
+    color: #D30000;
+}
+
+.date>span{
+    color: #8F8F8F;
 }
 
 .read_more{
@@ -1082,7 +1085,7 @@ span.date{
 }
 
 .other_cat_news{
-    margin-bottom: 5px;
+    margin-bottom: 10px;
 }
 
 .main_title a{
@@ -1306,28 +1309,40 @@ article img.news-photo{
 }
 
 .main_last_news{
-    padding: 20px 0 10px;
-    border-top: 1px solid #ccc;
+    padding: 0 0 10px;
+}
+
+.main_last_news .text>div{
+    display: none;
+}
+
+.main_last_news .text>div:first-child,
+.main_last_news .text>div:nth-child(2),
+.main_last_news .text>div:nth-child(3){
+    display: block;
 }
 
 .other_cat_news .news_wrap{
     margin-bottom: 20px;
     display: none;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #ccc;
 }
 
-.other_cat_news .img{
+.other_cat_news .masonry:last-child .news_wrap,
+.other_cat_news .masonry:nth-last-child(2) .news_wrap{
+   border-bottom: none;
+}
+
+/*.other_cat_news .img{
     width: 100%;
     height: 110px;
     overflow: hidden;
-}
+}*/
 
 .other_cat_news .img img{
     width: 100%;
     height: auto;
-}
-
-.other_cat_news p{
-    word-break: break-all;
 }
 
 .main_last_news .image_block{
@@ -1335,6 +1350,11 @@ article img.news-photo{
     height: auto;
     float: left;
     margin-right: 10px;
+}
+
+.main_last_news .news_info{
+    background: rgba(204, 204, 204, 0.27);
+    padding-bottom: 10px;
 }
 
 .main_last_news .image_block img{

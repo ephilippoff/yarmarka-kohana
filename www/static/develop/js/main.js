@@ -120,4 +120,10 @@ $(document).ready(function(){
     $('.news_wrap').each(function(){
         $(this).fadeIn(500);
     });
+
+    $('#same_cat_news').masonry({
+        itemSelector: '.masonry',
+        singleMode: true,
+        isResizable: true
+    }); 
 });
