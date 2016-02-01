@@ -336,28 +336,6 @@ class Controller_Search extends Controller_Template {
         }        
         $twig->isGuest = Auth::instance()->get_user() == NULL;
 
-        foreach($twig->category_childs_elements as &$value) {
-            $k = $twig->s_host . '/' . $twig->category_url . '/' . $value->url;
-            if (!array_key_exists($k, $twig->link_counters)) {
-                $value->count = 0;
-            } else {
-                $value->count = $twig->link_counters[$k];
-            }
-        }
-
-        foreach($twig->category_childs as &$value) {
-            $k = $twig->s_host . '/' . $value->url;
-            if (!array_key_exists($k, $twig->link_counters)) {
-                $value->count = 0;
-            } else {
-                $value->count = $twig->link_counters[$k];
-            }
-        }
-        
-        $this->process_child_categories($twig->category_childs_elements);
-        $this->process_child_categories($twig->category_childs);
-        //var_dump($twig->category_childs_elements);die;
-
 
         $twig->staticMainMenu = TRUE;
 
@@ -508,6 +486,28 @@ class Controller_Search extends Controller_Template {
                 $clean_query_params
             )
         );
+
+        foreach($info->category_childs_elements as &$value) {
+            $k = $info->s_host . '/' . $info->category_url . '/' . $value->url;
+            // if (!array_key_exists($k, $info->link_counters)) {
+            //     $value->count = 0;
+            // } else {
+            //     $value->count = $info->link_counters[$k];
+            // }
+        }
+
+        foreach($info->category_childs as &$value) {
+            $k = $info->s_host . '/' . $value->url;
+            // if (!array_key_exists($k, $info->link_counters)) {
+            //     $value->count = 0;
+            // } else {
+            //     $value->count = $info->link_counters[$k];
+            // }
+        }
+        
+        $this->process_child_categories($info->category_childs_elements);
+        $this->process_child_categories($info->category_childs);
+        //var_dump($info->category_childs_elements);die;
 
         return $info;
     }
