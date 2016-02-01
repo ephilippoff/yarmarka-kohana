@@ -1108,7 +1108,7 @@ a.auto-collapse-expand {
 .photo_news_wrap{
     width: 25%;
     float: left;
-    padding: 5px;
+    padding: 0 5px 5px;
 }
 
 .photo_news_img{
@@ -1365,4 +1365,41 @@ article img.news-photo{
 .main_last_news .image_block img{
     width: 100%;
     height: 100%;
+}
+
+.photo_news{
+    border-top: 1px solid #ccc;
+    padding-top: 10px;
+}
+
+/*latest ads*/
+
+.ad_wrap{
+    width: 15%;
+    padding: 5px;
+    -webkit-transition: all 0.15s ease-in;
+    -o-transition: all 0.15s ease-in;
+    transition: all 0.15s ease-in;
+}
+
+.ad_wrap:hover{
+    background-color: rgba(204, 204, 204, 0.18);
+}
+
+.ad_wrap img{
+    width: 100%;
+}
+
+.ad_wrap .title{
+    -ms-word-break: break-all;
+    word-break: break-all;
+    color: #333;
+    font-size: 12px;
+}
+
+
+.ad_wrap .cost{
+    text-align: right;
+    padding: 7px 0;
+    font-weight: bold;
 }
