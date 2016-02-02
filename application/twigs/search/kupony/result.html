@@ -1,7 +1,9 @@
-<div class="coupons-cont clearfix">
-	{% for object in main_search_result %}
-		{% include 'detail/mini/kupon' %}
-	{% else %}
-		{% include 'search/noresult' %}
-	{% endfor %}
+<div class="row">
+	<div class="coupons-cont clearfix">
+		{% for object in main_search_result %}
+			{% include 'detail/mini/kupon' %}
+		{% else %}
+			{% include 'search/noresult' %}
+		{% endfor %}
+	</div>
 </div>

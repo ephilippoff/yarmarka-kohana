@@ -10,7 +10,6 @@
 	.popup-window .required-label{position: static; width: auto;}
 	.popup-window .required-label .msg{position: static}
 	.popup-window .required-label .msg:after{display: none;}
-	.coupons-cont .coupon-item-cont{width: 48%;}
     .main_menu{/*border-bottom:1px solid #313131;*/ padding: 10px; margin-bottom: 20px;}
     .main_menu .menu-item{width: 100%; padding: 5px 0;}
     .main_menu .top_menu_icon+.menu-item{margin-top: 10px;}
@@ -110,6 +109,7 @@
 	    margin-top: 10px;
 	}
 
+<<<<<<< HEAD
 	
 	.dialog_window .relative .close{
 		font-size: 18px;
@@ -139,6 +139,10 @@
 
 	.other_cat_news .masonry:nth-last-child(2) .news_wrap{
 		border-bottom: 1px solid #ccc;
+=======
+	.coupon-item-cont .description-cont {
+	    font-size: 13px;
+>>>>>>> 259321b2a1d319de539bd6b006bea3c8934e15c7
 	}
 }
 
@@ -171,6 +175,10 @@
 	img.category-icon{
 	    position: static;
 	    float: left;
+	}
+
+	.coupon-item-cont .description-cont {
+	    font-size: 16px;
 	}
 }
 
