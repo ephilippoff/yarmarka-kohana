@@ -16,6 +16,8 @@
 						'title' => $item['title'],
 						'url' => $objectsService->getUrl($item),
 						'price' => $item['price'],
+						'cat_title' => $item['category_title'],
+						'cat_url' => $item['category_url'],
 						'short_text' => mb_strlen($item['full_text']) > 150 ? (mb_substr($item['full_text'], 0, 147) . '...') : $item['full_text']
 					);
 		}
@@ -57,9 +59,9 @@
 		public function action_main_page_latest() {
 
 			/* settings */
-			$count = 8;
+			$count = 6;
 
-			$view = Twig::factory('block/advert/main_page_premium');
+			$view = Twig::factory('block/advert/main_page_latest');
 
 			$rubric = 14;
 
@@ -93,8 +95,6 @@
 			$view->data = $processedData;
 
 			$this->response->body($view);
-
-
 		}
 
 	}

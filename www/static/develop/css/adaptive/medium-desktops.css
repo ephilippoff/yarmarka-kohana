@@ -43,4 +43,12 @@
 		height: 63px;
 	}
 
+	.ad_wrap{
+	    width: 20%;
+	}
+
+	.latest_ads .ad_wrap:nth-child(6){
+		display: none;
+	}
+
 }

@@ -24,19 +24,7 @@
 				{% include 'index/promo/left' %}
 			</div>
 			<div class="col-md-9">
-				<div class="latest_ads">
-					<div class="title_block brt2 module">Свежие объявления</div>
-					<div class="ad_wrap module">
-						<a href="#">
-							<div class="img_block">
-								<img src="http://yarmarka.biz./uploads/208x208/14/e9/9f/14e99fcab3bc3de54198762fb31345d6.jpg" alt="">
-							</div>
-							<div class="title">Lorem ipsum dolor sit?</div>
-						</a>
-						<div class="cost">13160 P</div>
-						<a href="#">Продажа авто</a>
-					</div>
-				</div>
+				{{ requestblock('block_advert/main_page_latest', {'city_id': city.id, 'theme_class': theme_class}) }}
 				<div class="row">
 					<div class="col-md-8 main_block">
 						<div class="row">
