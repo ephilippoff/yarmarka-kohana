@@ -222,7 +222,80 @@ define([
                     options.error();
                 }
             });
-        }
+        },
+
+        kuponGroup: function(id, groupId, options) {
+            
+            var serviceModel = new ServiceModel();
+            serviceModel.urlRoot = "/rest_service/check_kupon";
+            options.error = options.error || function() {};
+            options.success = options.success || function() {};
+            app.settings.khQuery = true;
+            serviceModel.save({
+                id: id
+            }, {
+                success: function(model) {
+                    app.settings.khQuery = true;
+                    var resp = model.toJSON(),
+                        result = {};
+                    
+                    result.info = resp;
+
+                    var group = _.findWhere(result.info.groups, {id: groupId});
+
+                    if (options.justCheck) {
+                        if (group && group.available) {
+                            options.success();
+                        } else {
+                            options.error();
+                        }
+                    } else {
+
+                        result.result = {
+                           quantity: 1,
+                           sum: group.service.price,
+                           id: groupId
+                        };
+                        _.extend(result.info, group);
+
+
+                        var key = $.cookie("cartKey");
+                        if (!key) {
+                            var session_id = $.cookie("yarmarka");
+                            var key = (session_id + Date.now());
+                            $.cookie("cartKey", key, { expires: 7, path: '/', domain: '.'+app.settings.mainHost})
+                        }
+                        console.log(result);
+                        var addServiceModel = new ServiceModel();
+                        addServiceModel.urlRoot = "/rest_service/save";
+                        addServiceModel.save({serviceData : result, key : key},{
+                            success: function(model) {
+                                app.settings.khQuery = false;
+                                var resp = model.toJSON();
+                                if (resp.code == 200) {
+                                    app.services.updateCart();
+                                    options.success();
+                                    $(window).attr("location", "/cart");
+                                } else {
+                                    options.error();
+                                    console.log("Ошибка при сохранении услуги");
+                                }
+                            }, 
+                            error: function(text) {
+                                app.settings.khQuery = false;
+                                s.getOption("error")("Ошибка при сохранении услуги");
+                                console.log("Ошибка при сохранении услуги");
+                            }
+                        })
+                    }
+
+
+                }, error: function() {
+                    app.settings.khQuery = false;
+                    options.error();
+                }
+            });
+        },
     });
 
 });
