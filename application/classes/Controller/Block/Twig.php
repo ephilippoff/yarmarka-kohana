@@ -96,6 +96,8 @@ class Controller_Block_Twig extends Controller_Block
         $twig->staticMainMenu = $this->request->post("staticMainMenu");
 
         $this->response->body($twig);
+
+        
     }
 
     ////// Реализация содержимого блоков
