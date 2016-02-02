@@ -43,7 +43,7 @@
 			$query
 				->join('category', 'inner')
 				->on('category.id', '=', 'object.category')
-				->select(array('category.url', 'category_url'));
+				->select(array('category.url', 'category_url'), array('category.title', 'category_title'));
 		}
 
 		public function filterPassedModeration($query) {
