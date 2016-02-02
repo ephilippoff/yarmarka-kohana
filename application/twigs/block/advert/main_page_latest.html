@@ -1,0 +1,27 @@
+<div class="latest_ads clearfix">
+	<div class="title_block brt2">Свежие объявления</div>
+	{% for item in data %}
+	<div class="ad_wrap module">
+		<a href="#">
+			<div class="img_block">
+				<img src="{{ item.image }}" alt="{{ item.title }}">
+			</div>
+			{% if item.title|length > 40 %}
+			<div class="title">{{ item.title|slice(0,40) }}...</div>
+			{% else %}
+			<div class="title">{{ item.title}}</div>
+			{% endif %}
+		</a>
+		{% if item.price > 0 %}
+			<div class="cost">{{ item.price|number_format(0, ' ', ' ') }} <i class="fa fa-rub"></i></div>
+		{% else %}
+			<span style="min-height:32px;"></span>
+		{% endif %}
+		{% if item.cat_title|length > 15 %}
+			<a href="{{ item.cat_url }}" title="{{ item.cat_title }}">{{ item.cat_title|slice(0,15) }}...</a>
+		{% else %}
+			<a href="{{ item.cat_url }}" title="{{ item.cat_title }}">{{ item.cat_title}}</a>
+		{% endif %}
+	</div>
+	{% endfor %}
+</div>
