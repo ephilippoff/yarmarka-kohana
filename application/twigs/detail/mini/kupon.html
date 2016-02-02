@@ -1,4 +1,4 @@
-<div class="search_kupon_wrap col-lg-4 col-md-4 col-sm-6 col-xs-6 col-xxs-12">
+<div class="search_kupon_wrap {% if onPageFlag == 'search' %}col-lg-4 col-md-4 col-sm-6 col-xs-6 col-xxs-12{% endif %}">
 	<div class="coupon-item-cont" onclick = "window.location.href='{{ object.compiled.url }}'">
 		<div class="img-cont">
 			<img src="{{ get_file(object.compiled.images.main_photo['341x256']) }}" alt="{{ object.title|e }}">
