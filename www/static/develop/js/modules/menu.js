@@ -94,8 +94,18 @@ define([
         initialize: function(options) {
             MenuView.prototype.initialize.call(this, options);
             var s = this;
-
+            console.log('init');
             var $menu = this.$el.find(this.getOption("menuClass")+ " ul.top");
+
+            $('.left_menu').find('.section').each(function(){
+                var id = $(this).attr('id');
+                $(this).attr('id', id+'-l');
+            });
+
+            $('.left_menu').find('ul.top li').each(function(){
+                var id = $(this).attr('data-submenu-id');
+                $(this).attr('data-submenu-id', id+'-l');
+            });
 
             if ($menu.length > 0){
                 try {
@@ -116,12 +126,12 @@ define([
 
             this.activeRow = row;
             this.submenuActivateTimer = setTimeout(function(){
-               var $row = $(row), 
-                  submenuId = $row.data("submenu-id"), 
-                  $submenu = $("#" + submenuId);
+                var $row = $(row), 
+                    submenuId = $row.data("submenu-id"), 
+                    submenu = "#" + submenuId;
 
-              $submenu.fadeIn(70);
-            }, 200)
+                  $(submenu).show();
+            }, 200);
            
         },
         deactivateSubmenu: function(row) {
@@ -131,9 +141,9 @@ define([
             }
             var $row = $(row), 
                 submenuId = $row.data("submenu-id"), 
-                $submenu = $("#" + submenuId);
+                submenu = "#" + submenuId;
 
-            $submenu.fadeOut(70);
+            $(submenu).fadeOut(70);
         }
     });
 
@@ -150,6 +160,16 @@ define([
         },
         init: function (menusToload) {
             menusToload = menusToload || [];
+
+            if (_.contains(menusToload, "main")) {
+                this.main = new MenuView({
+                    el: mainMenuSettings.controlClass,
+                    templateClass: mainMenuSettings.menuTemplate,
+                    menuClass: mainMenuSettings.menuClass,
+                    controlClass: mainMenuSettings.controlClass,
+                    doNotRemove: true
+                });
+            }
 
             if (_.contains(menusToload, "main")) {
                 var menuOptions = {

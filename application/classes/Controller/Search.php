@@ -86,6 +86,8 @@ class Controller_Search extends Controller_Template {
         $twig = Twig::factory('search/index');
         $twig->data_file = $staticfile->jspath;
 
+        $twig->onPageFlag = 'search';
+
         /*
             http://yarmarka.myjetbrains.com/youtrack/issue/yarmarka-347
             http://yarmarka.myjetbrains.com/youtrack/issue/yarmarka-352
