@@ -911,7 +911,8 @@ a.auto-collapse-expand {
     font-size: 14px;
     color: #fff;
     background-color: #2b587a;
-    padding: 2px 10px;
+    padding: 0 10px;
+    line-height: 25px;
 }
 
 .last-views .items {
@@ -1111,7 +1112,7 @@ a.auto-collapse-expand {
 .photo_news_wrap{
     width: 25%;
     float: left;
-    padding: 5px;
+    padding: 0 5px 5px;
 }
 
 .photo_news_img{
@@ -1368,4 +1369,58 @@ article img.news-photo{
 .main_last_news .image_block img{
     width: 100%;
     height: 100%;
+}
+
+.photo_news{
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 10px;
+}
+
+/*latest ads*/
+
+.ad_wrap{
+    width: 16.666%;
+    float: left;
+    border-left: 1px solid #ccc;
+    padding: 10px;
+    -webkit-transition: all 0.15s ease-in;
+    -o-transition: all 0.15s ease-in;
+    transition: all 0.15s ease-in;
+}
+
+.ad_wrap:last-child{
+    border-right: 1px solid #ccc;
+}
+
+.ad_wrap:hover{
+    background-color: #f0f0f0;
+}
+
+.ad_wrap a{
+    display: block;
+}
+
+.ad_wrap .img_block{
+    height: 100px;
+    overflow: hidden;
+}
+
+.ad_wrap .img_block img{
+    height: 100%;
+    width: auto;
+}
+
+.ad_wrap .title{
+    -ms-word-break: break-all;
+    word-break: break-all;
+    color: #333;
+    font-size: 12px;
+    height: 32px;
+}
+
+
+.ad_wrap .cost{
+    text-align: right;
+    padding: 7px 0;
+    font-weight: bold;
 }
