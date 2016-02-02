@@ -109,7 +109,6 @@
 	    margin-top: 10px;
 	}
 
-<<<<<<< HEAD
 	
 	.dialog_window .relative .close{
 		font-size: 18px;
@@ -139,10 +138,10 @@
 
 	.other_cat_news .masonry:nth-last-child(2) .news_wrap{
 		border-bottom: 1px solid #ccc;
-=======
+	}
+
 	.coupon-item-cont .description-cont {
 	    font-size: 13px;
->>>>>>> 259321b2a1d319de539bd6b006bea3c8934e15c7
 	}
 }
 
