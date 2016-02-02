@@ -2,7 +2,7 @@
 	<div class="title_block brt2">Свежие объявления</div>
 	{% for item in data %}
 	<div class="ad_wrap module">
-		<a href="#">
+		<a href="{{item.url}}">
 			<div class="img_block">
 				<img src="{{ item.image }}" alt="{{ item.title }}">
 			</div>
