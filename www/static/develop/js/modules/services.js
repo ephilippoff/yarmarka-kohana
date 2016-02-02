@@ -235,7 +235,7 @@ define([
                 id: id
             }, {
                 success: function(model) {
-                    app.settings.khQuery = true;
+                    app.settings.khQuery = false;
                     var resp = model.toJSON(),
                         result = {};
                     
@@ -268,6 +268,7 @@ define([
                         console.log(result);
                         var addServiceModel = new ServiceModel();
                         addServiceModel.urlRoot = "/rest_service/save";
+                        app.settings.khQuery = true;
                         addServiceModel.save({serviceData : result, key : key},{
                             success: function(model) {
                                 app.settings.khQuery = false;
