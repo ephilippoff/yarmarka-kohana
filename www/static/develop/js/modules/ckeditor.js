@@ -8,6 +8,7 @@ define([
 
 	//config
 	CKEDITOR.editorConfig = function( config ) {
+		config.allowedContent = true;
 		config.language = 'ru';
 		config.contentsCss = '/assets/css/css.css';
 		config.toolbarCanCollapse = true;
