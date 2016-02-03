@@ -11,6 +11,9 @@
 	{% set newsTitle = 'noTitle' %}
 {% endif %}
 
+{% set currentDate = "now"|date("m.d.y") %}
+{% set today = 'Сегодня' %}
+
 <div class="news_cat_block">
 	{% if catTitle and reverse %} <!-- Вывод для всем рубрикам, кроме выбранной -->
 		{% for item in data %}
@@ -22,7 +25,13 @@
 							{% for innerItem in item.items %}
 								{% if loop.first %}
 									<div class="col-md-6 clearfix main_cat_news">
-										<div class="date light fs12 mb10">{{ innerItem.date|date('m:h') }} <span>- {{ innerItem.date|date('d.m.y') }}</span></div>
+										<div class="date light fs12 mb10">{{ innerItem.date|date('m:h') }} 
+											{% if innerItem.date|date('d.m.y') == currentDate %}
+												<span>{{ today }}</span>
+											{% else %}
+												<span>{{ innerItem.date|date('d.m.y') }}</span>
+											{% endif %}
+										</div>
 										<img src="{{ innerItem.image }}" />
 										<a href="{{ innerItem.url }}" class="fs16">{{ innerItem.title}}</a><br><br>
 											{{ innerItem.short_text }}
@@ -34,7 +43,13 @@
 									{% for innerItem in item.items %}
 										{% if loop.index != 1 %}
 											<div class="col-md-12 col-sm-6 other_cat_news">
-												<div class="date light fs12">{{ innerItem.date|date('m:h') }} <span>- {{ innerItem.date|date('d.m.y') }}</span></div>
+												<div class="date light fs12">{{ innerItem.date|date('m:h') }} 
+													{% if innerItem.date|date('d.m.y') == currentDate %}
+														<span>{{ today }}</span>
+													{% else %}
+														<span>{{ innerItem.date|date('d.m.y') }}</span>
+													{% endif %}
+												</div>
 												<a href="{{ innerItem.url }}">{{ innerItem.title|slice(0,80)}}...</a>
 											</div>
 										{% endif %}
@@ -57,7 +72,13 @@
 						{% for innerItem in item.items %}
 							{% if loop.first %}
 								<div class="col-md-6 clearfix main_cat_news">
-									<div class="date light fs12 mb10">{{ innerItem.date|date('m:h') }} <span>- {{ innerItem.date|date('d.m.y') }}</span></div>
+									<div class="date light fs12 mb10">{{ innerItem.date|date('m:h') }} 
+										{% if innerItem.date|date('d.m.y') == currentDate %}
+											<span>{{ today }}</span>
+										{% else %}
+											<span>{{ innerItem.date|date('d.m.y') }}</span>
+										{% endif %}
+									</div>
 									<img src="{{ innerItem.image }}" />
 									<a href="{{ innerItem.url }}" class="fs16">{{ innerItem.title}}</a><br><br>
 											{{ innerItem.short_text }}
@@ -69,7 +90,13 @@
 								{% for innerItem in item.items %}
 									{% if loop.index != 1 %}
 										<div class="col-md-12 col-sm-6 other_cat_news">
-											<div class="date light fs12">{{ innerItem.date|date('m:h') }} <span>- {{ innerItem.date|date('d.m.y') }}</span></div>
+											<div class="date light fs12">{{ innerItem.date|date('m:h') }} 
+												{% if innerItem.date|date('d.m.y') == currentDate %}
+													<span>{{ today }}</span>
+												{% else %}
+													<span>{{ innerItem.date|date('d.m.y') }}</span>
+												{% endif %}
+											</div>
 											<a href="{{ innerItem.url }}">{{ innerItem.title|slice(0,80)}}...</a>
 										</div>
 									{% endif %}
@@ -91,7 +118,13 @@
 							{% if innerItem.title != newsTitle %}
 								<div class="col-md-6 col-sm-6 masonry">
 									<div class="news_wrap">
-										<div class="date light fs12">{{ innerItem.date|date('m:h') }} <span>- {{ innerItem.date|date('d.m.y') }}</span></div>
+										<div class="date light fs12">{{ innerItem.date|date('m:h') }} 
+											{% if innerItem.date|date('d.m.y') == currentDate %}
+												<span>{{ today }}</span>
+											{% else %}
+												<span>{{ innerItem.date|date('d.m.y') }}</span>
+											{% endif %}
+										</div>
 										<p><a href="{{object.compiled.url}}" class="fs16">{{innerItem.title}}</a></p>
 									</div>
 								</div>
