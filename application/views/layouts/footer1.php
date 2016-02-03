@@ -61,7 +61,7 @@
 						<?php if ($city_id == 1948): ?>
 							<a class="mr5 mb10 fl" href="https://vk.com/ya_vartovsk"><img src="/images/vkcom.png"></a>
 						<?php else: ?>
-							<a class="mr5 mb10 fl" href="https://vk.com/yarmarkasurgut"><img src="/images/vkcom.png"></a>
+							<a class="mr5 mb10 fl" href="https://vk.com/yarmarka_official"><img src="/images/vkcom.png"></a>
 						<?php endif; ?>
 						
 						<a class="mr5 mb10 fl" href="https://twitter.com/yarmarka_biz"><img src="/images/twitter.png"></a>
