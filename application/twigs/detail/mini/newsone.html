@@ -1,15 +1,24 @@
+{% set currentDate = "now"|date("m.d.y") %}
+{% set today = 'Сегодня' %}
+
 <div class="col-md-6 masonry">
 	<div class="news_wrap">
 		{% if object.compiled.services.premium.0.activated == 1 %}
 			<div class="img">
-				<div class="date">{{object.compiled.attributes['news-category'].value}} <span class="fs12">- {{ object.date_expired|date('d.m.y') }}</span></div>
+				<div class="date">{{object.compiled.attributes['news-category'].value}} 
+					{% if object.date_expired|date('d.m.y') == currentDate %}
+						<span class="fs12">- {{ today }}</span>
+					{% else %}
+						<span class="fs12">- {{ object.date_expired|date('d.m.y') }}</span>
+					{% endif %}
+				</div>
 				<a href="{{object.compiled.url}}">
 					<img src="{{get_file(object.compiled.images.main_photo.original)}}" alt="">
 				</a>
 			</div>
 		{% endif %}
 		{% if object.compiled.services.premium.0.activated != 1 %}
-		<div class="date light fs12">{{ object.date_expired|date('H:i') }} <span>- {{ object.date_expired|date('d.m.y') }}</span></div>
+		<div class="date light fs12">{{ object.date_expired|date('H:i') }} <span>{{ object.date_expired|date('d.m.y') }}</span></div>
 		{% endif %}
 		<p><a href="{{object.compiled.url}}" class="fs16">{{object.title}}</a></p>
 	</div>
