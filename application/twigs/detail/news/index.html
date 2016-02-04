@@ -9,7 +9,11 @@
 		{% include 'block/header/navigationline/article' %}
 {% endblock header %} 
 
-{% block crumbs %} {% include 'search/kupony/crumbs' %} {% endblock crumbs %}
+{% block title %}{{object.title}}{% endblock title %}
+
+{% block meta_description %}{{object.user_text|slice(0,250)|striptags}}{% endblock meta_description %}
+
+{% block crumbs %}{% endblock crumbs %}
 
 {% macro map(object) %}
     {% include 'detail/kupon/map' %}
