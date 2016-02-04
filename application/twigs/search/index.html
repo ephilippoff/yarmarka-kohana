@@ -20,6 +20,11 @@
 {% block meta_description %} {{ seo_attributes.description }} {% endblock meta_description%}
 {% block wrapperclass %}page-search{% endblock wrapperclass %}
 
+{% block header %}
+	{{ parent() }}
+	{% include 'block/header/navigationline/simple' %}
+{% endblock header %} 
+
 {% block crumbs %} 
 	{% include 'search/crumbs' %}
 {% endblock crumbs %}
