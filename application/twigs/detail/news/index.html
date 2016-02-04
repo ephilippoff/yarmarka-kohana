@@ -24,7 +24,7 @@
 		<div class="col-lg-12">
 			<article>
 				<div class="news_info clearfix">
-					<div class="date light fs14 fl"><i class="fa fa-clock-o"></i> {{ innerItem.date|date('m:h') }} <span>- {{ innerItem.date|date('d.m.y') }}</span></div>
+					<div class="date light fs14 fl">{{ innerItem.date|date('m:h') }} <span>- {{ innerItem.date|date('d.m.y') }}</span></div>
 					<span class="cat">
 						Категория: {{ object.compiled.attributes['news-category'].value }}
 					</span>
