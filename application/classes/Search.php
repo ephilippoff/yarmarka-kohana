@@ -402,7 +402,15 @@ class Search {
 										->from(array("data_list","list") )
 										->where("list.object","=", DB::expr("o.id"))
 										->where("list.attribute", "=", (int) $params->without_attribute);
+
 			$object = $object->where(DB::expr('not exists'), DB::expr(''), $without_attribute_subquery);
+
+			$without_attribute_subquery_ref = DB::select("ref.id")
+										->from(array("reference","ref") )
+										->where("ref.category","=", DB::expr("o.category"))
+										->where("ref.attribute", "=", (int) $params->without_attribute);
+
+			$object = $object->where(DB::expr('exists'), DB::expr(''), $without_attribute_subquery_ref);
 		}
 
 		

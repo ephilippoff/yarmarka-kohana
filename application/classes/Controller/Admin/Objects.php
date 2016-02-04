@@ -56,6 +56,12 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 				"clear" => ( Valid::email( $contact ) ) ? $contact : Text::clear_phone_number($contact),
 				"raw" => $contact
 			);
+		} elseif ($filters_enable AND $without_attribute_id = intval($this->request->query('without_attribute_id'))) {
+
+			$filters_enable = FALSE;
+			
+			$search_filters["without_attribute"] = $without_attribute_id;
+
 		} else {
 			$query = $this->request->query();
 
@@ -133,10 +139,7 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 			
 		}
 
-		if ($filters_enable AND $without_attribute_id = intval($this->request->query('without_attribute_id')))
-		{
-			$search_filters["without_attribute"] = $without_attribute_id;
-		}
+		
 
 		if ($filters_enable AND $source = intval($this->request->query('source')) )
 		{

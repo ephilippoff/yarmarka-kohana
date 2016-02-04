@@ -144,7 +144,7 @@ function obj_selection(src, obj_id)
 	    </div>
     <?php endif; ?>
   
-	<?php if ( !array_intersect(array_keys($search_filters), array('user_id','email','id','contact') ) ): ?>
+	<?php if ( !array_intersect(array_keys($search_filters), array('user_id','email','id','contact', 'without_attribute') ) ): ?>
 		<?=Form::select('source', 
 			array(
 				'' => 'Все (из газеты и сайта)',
