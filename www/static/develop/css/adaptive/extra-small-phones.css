@@ -10,7 +10,6 @@
 	.popup-window .required-label{position: static; width: auto;}
 	.popup-window .required-label .msg{position: static}
 	.popup-window .required-label .msg:after{display: none;}
-	.coupons-cont .coupon-item-cont{width: 48%;}
     .main_menu{/*border-bottom:1px solid #313131;*/ padding: 10px; margin-bottom: 20px;}
     .main_menu .menu-item{width: 100%; padding: 5px 0;}
     .main_menu .top_menu_icon+.menu-item{margin-top: 10px;}
@@ -140,6 +139,28 @@
 	.other_cat_news .masonry:nth-last-child(2) .news_wrap{
 		border-bottom: 1px solid #ccc;
 	}
+
+
+	.coupon-item-cont .description-cont {
+	    font-size: 13px;
+
+	.ad_wrap{
+	    width: 25%;
+	}
+
+	.latest_ads .ad_wrap:nth-child(5){
+		display: none;
+	}
+}
+
+@media (max-width: 570px){
+	.ad_wrap{
+	    width: 33.333%;
+	}
+
+	.latest_ads .ad_wrap:nth-child(4){
+		display: none;
+	}
 }
 
 @media (max-width: 500px){
@@ -172,6 +193,10 @@
 	    position: static;
 	    float: left;
 	}
+
+	.coupon-item-cont .description-cont {
+	    font-size: 16px;
+	}
 }
 
 @media (max-width: 400px){
@@ -189,6 +214,14 @@
 	    float: none;
 	    display: block;
 	    max-width: 100%;
+	}
+
+	.ad_wrap{
+	    width: 50%;
+	}
+
+	.latest_ads .ad_wrap:nth-child(3){
+		display: none;
 	}
 
 	.kupons_block .kupon_wrap .coupon-item-cont img{

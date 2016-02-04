@@ -1,4 +1,3 @@
-
 {% for object in main_search_result %}
 	{% if loop.first%}
 		<div class="clearfix main_last_news module">
@@ -6,7 +5,7 @@
 				<img src="{{get_file(object.compiled.images.main_photo.original)}}" alt="">
 			</div>
 			<div class="news_info">
-				<span class="date fs12"><i class="fa fa-clock-o"></i> {{ object.date_expired|date('H:i') }}</span>
+				<span class="date fs12">{{ object.date_expired|date('H:i') }}</span>
 				<a href="{{object.compiled.url}}" class="fs16 mb10 db">{{object.title}}</a>
 				<div class="text">{{object.user_text}}</div>
 			</div>
