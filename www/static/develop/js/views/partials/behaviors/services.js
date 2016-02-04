@@ -9,6 +9,7 @@ define([
         ui: {
             upService: ".js-service-up",
             kuponService: ".js-service-kupon",
+            kuponServiceGroup: ".js-Service-Kupon-Group",
             premiumService: ".js-service-premium",
             liderService: ".js-service-lider",
             newspaperService: ".js-service-newspaper",
@@ -18,11 +19,29 @@ define([
         events: {
             "click @ui.upService": "upServiceClick",
             "click @ui.kuponService": "kuponServiceClick",
+            "click @ui.kuponServiceGroup": "kuponServiceGroupClick",
             "click @ui.premiumService": "premiumServiceClick",
             "click @ui.liderService": "liderServiceClick",
             "click @ui.newspaperService": "newspaperServiceClick",
             "click @ui.citiesService": "citiesServiceClick",
         },
+
+        initialize: function() {
+            $(this.ui.kuponServiceGroup).each(function(index, item){
+                app.services.kuponGroup($(item).data('id'), $(item).data('group'), {
+                    justCheck: true,
+                    success: function(result) {
+                       
+                    },
+                    error: function(result) {
+                        var $item = $(item);
+                        $('<span style="text-decoration:line-through;">'+$item.text()+'</span>').insertAfter(item);
+                        $item.remove()
+                    }
+                });
+            });
+        },
+
 
         upServiceClick: function(e) {
             var s = this;
@@ -103,6 +122,21 @@ define([
             e.preventDefault();
             var id = $(e.currentTarget).data("id");
             app.services.kupon(id, {
+                success: function(result) {
+                    console.log(result);
+                },
+                error: function(result) {
+                    console.log(result);
+                }
+            });
+        },
+
+        kuponServiceGroupClick: function(e) {
+            var s = this;
+            e.preventDefault();
+            var id = $(e.currentTarget).data("id");
+            var group = $(e.currentTarget).data("group");
+            app.services.kuponGroup(id, group, {
                 success: function(result) {
                     console.log(result);
                 },
