@@ -1,23 +1,24 @@
-<div class="coupon-item-cont" onclick = "window.location.href='{{ object.compiled.url }}'">
+<div class="search_kupon_wrap {% if sidebar == false %}col-lg-4 col-md-4 col-sm-6 col-xs-6 col-xxs-12{% endif %}">
+	<div class="coupon-item-cont" onclick = "window.location.href='{{ object.compiled.url }}'">
 		<div class="img-cont">
-				<img src="{{ get_file(object.compiled.images.main_photo['341x256']) }}" alt="{{ object.title|e }}">
+			<img src="{{ get_file(object.compiled.images.main_photo['341x256']) }}" alt="{{ object.title|e }}">
 			<div class="discount-label">-{{ object.compiled.attributes.skidka.value }} <span>%</span></div>
-				<div class="slide-cont">
-					<div class="geo-cont">
-						<ul class="geo-items">
-							<li>
-								<div class="addr-item"></div>
-								<span>{{ object.compiled.city }}</span>
-							</li>
+			<div class="slide-cont">
+				<div class="geo-cont">
+					<ul class="geo-items">
+						<li>
+							<div class="addr-item"></div>
+							<span>{{ object.compiled.city }}</span>
+						</li>
 
-						</ul>
-					</div>
-					<div class="data-cont">
-						<div class="time-cont">
-							До конца акции {{ get_date_diff("now", object.compiled.attributes['goden-do'].value ) }}
-						</div>
+					</ul>
+				</div>
+				<div class="data-cont">
+					<div class="time-cont">
+						До конца акции {{ get_date_diff("now", object.compiled.attributes['goden-do'].value ) }}
 					</div>
 				</div>
+			</div>
 
 		</div>
 
@@ -29,7 +30,7 @@
 		<div class="price-cont">
 			{% set actionIsActive = TRUE %}
 			{% if object.compiled.attributes['kupon_state'] and object.compiled.attributes['kupon_state'].value %}
-				{% set actionIsActive = FALSE %}
+			{% set actionIsActive = FALSE %}
 			{% endif %}
 			<div class="price">
 				{{ object.compiled.attributes['old-price'].value }}	<span class="rub">&#8399;</span>
@@ -37,10 +38,11 @@
 			<div class="discounted" {% if not actionIsActive %}style='background:gray;'{% endif %}>
 				<div class="separator"></div>
 				{% if actionIsActive %}
-					{{ object.compiled.attributes.tsena.value }} <span class="rub">&#8399;</span>
+				{{ object.compiled.attributes.tsena.value }} <span class="rub">&#8399;</span>
 				{% else %}
-					Продано
+				Продано
 				{% endif %}
 			</div>
 		</div>
 	</div>
+</div>

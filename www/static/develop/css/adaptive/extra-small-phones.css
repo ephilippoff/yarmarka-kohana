@@ -10,7 +10,6 @@
 	.popup-window .required-label{position: static; width: auto;}
 	.popup-window .required-label .msg{position: static}
 	.popup-window .required-label .msg:after{display: none;}
-	.coupons-cont .coupon-item-cont{width: 48%;}
     .main_menu{/*border-bottom:1px solid #313131;*/ padding: 10px; margin-bottom: 20px;}
     .main_menu .menu-item{width: 100%; padding: 5px 0;}
     .main_menu .top_menu_icon+.menu-item{margin-top: 10px;}
@@ -108,6 +107,10 @@
 	    float: none;
 	    margin-top: 10px;
 	}
+
+	.coupon-item-cont .description-cont {
+	    font-size: 13px;
+	}
 }
 
 @media (max-width: 500px){
@@ -135,6 +138,10 @@
 	img.category-icon{
 	    position: static;
 	    float: left;
+	}
+
+	.coupon-item-cont .description-cont {
+	    font-size: 16px;
 	}
 }
 

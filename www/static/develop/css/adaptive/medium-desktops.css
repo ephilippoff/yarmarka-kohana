@@ -55,4 +55,8 @@
 	    width: 70%;
 	}
 
+	.coupon-item-cont .description-cont{
+		height: 60px;
+	}
+
 }
