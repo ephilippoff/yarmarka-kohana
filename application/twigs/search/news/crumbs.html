@@ -2,7 +2,6 @@
 	<a href="/" rel="nofollow" class="">Главная</a>
 	
 	{% set tmp = '' %}
-	{{debug(crumbs)}}
 	{% for crumb in crumbs %}
 	
 			/ <a href="{{ url(tmp ~ crumb.uri) }}" class="">{{crumb.title}}</a>

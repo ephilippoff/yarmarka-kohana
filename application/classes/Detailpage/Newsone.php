@@ -48,9 +48,19 @@ class Detailpage_Newsone extends Detailpage_Default
 		$info['crumbs'] = Search_Url::get_category_crubms($object->category);
 
 		$attributes = @$this->_info['object']->compiled['attributes'];
+
 		if ($attributes) {
 			foreach ($attributes as $attribute) {
-				$attribute['uri'] = $attribute['seo_name'];
+				
+				$ae = ORM::factory('Attribute_Element')
+						->join("attribute")
+							->on("attribute.id","=","attribute_element.attribute")
+						->where("attribute.seo_name","=",$attribute['seo_name'])
+						->where("attribute_element.title","=",$attribute['value'])
+						->cache(Date::WEEK)
+						->find();
+
+				$attribute['uri'] = $ae->url;
 				$attribute['title'] = $attribute['value'];
 				$attribute['query'] = '';
 				array_push($info['crumbs'], $attribute);
