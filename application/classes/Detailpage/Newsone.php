@@ -57,7 +57,7 @@ class Detailpage_Newsone extends Detailpage_Default
 							->on("attribute.id","=","attribute_element.attribute")
 						->where("attribute.seo_name","=",$attribute['seo_name'])
 						->where("attribute_element.title","=",$attribute['value'])
-						->cache(Date::WEEK)
+						->cached(Date::WEEK)
 						->find();
 
 				$attribute['uri'] = $ae->url;
