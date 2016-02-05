@@ -1,14 +1,12 @@
 <div class="breadcrumbs-cont module">
 	<a href="/" rel="nofollow" class="">Главная</a>
-
+	
+	{% set tmp = '' %}
+	{{debug(crumbs)}}
 	{% for crumb in crumbs %}
 	
-		{% if loop.last %}
-			/ <h1>{{crumb.title}}</h1>
-		{% else %}
-			/ <a href="{{ url(crumb.uri) }}" class="">{{crumb.title}}</a>
-		{% endif %}
-		
+			/ <a href="{{ url(tmp ~ crumb.uri) }}" class="">{{crumb.title}}</a>
+		{% set tmp = '' ~ crumb.uri ~ '/' %}
 	{% endfor %}
 
 	
