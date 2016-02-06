@@ -6,7 +6,7 @@ class Search_Url
     static $reserved_query_params = array("photo", "video", "org", "private", "source", "user_id", "limit", "order", "page", "search");
     static $reserved_query_params_requirements = array(
         "order" => array("price","price_desc","date_desc","date"),
-        "limit" => array(5,10,15,20,25,30,60,90)
+        "limit" => array(5,10,15,20,25,30,50, 60,90)
     );
     static $reserved_query_params_defaults = array(
         "order" => "date_created",
