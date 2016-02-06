@@ -197,9 +197,9 @@ class Controller_Search extends Controller_Template {
             'count_in' => 8,
             'path' => URL::SERVER("PATH_INFO"),
             'limits' => array(
-                "30" => Search_Url::get_suri_without_reserved($this->request->query(),array(),array("limit","page")),
-                "60" => Search_Url::get_suri_without_reserved($this->request->query(), array( "limit" => 60), array("page")),
-                "90" => Search_Url::get_suri_without_reserved($this->request->query(), array( "limit" => 90), array("page")),
+                "10" => Search_Url::get_suri_without_reserved($this->request->query(),array(),array("limit","page")),
+                "20" => Search_Url::get_suri_without_reserved($this->request->query(), array( "limit" => 20), array("page")),
+                "50" => Search_Url::get_suri_without_reserved($this->request->query(), array( "limit" => 50), array("page")),
             )
         ));
         $twig->small_pagination = (array(

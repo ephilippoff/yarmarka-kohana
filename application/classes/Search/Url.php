@@ -10,7 +10,7 @@ class Search_Url
     );
     static $reserved_query_params_defaults = array(
         "order" => "date_created",
-        "limit" => 30,
+        "limit" => 10,
         "page" => 0
     );
     static $reserved = array("order", "page", "limit");
