@@ -386,7 +386,8 @@ class Lib_PlacementAds_AddEdit {
 			$this->contacts []= array(
 					'value' => $contact['value'],
 					'type_id' => $contact['type'],
-					'contact_obj' => ORM::factory('Contact')->by_value($contact['value'])->find()
+					'contact_obj' => ORM::factory('Contact')->by_value($contact['value'])->find(),
+					'is_additional' => true
 				);
 		}
 
@@ -732,10 +733,16 @@ class Lib_PlacementAds_AddEdit {
 		} else {
 			if (!$params->just_check) {
 				foreach ($this->contacts as $contact_item) {
+					if (array_key_exists('is_additional', $contact_item) && $contact_item['is_additional']) {
+						continue;
+					}
 					$contact = $contact_item["contact_obj"];
 					$contact_validation = $contact->check_contact($params->session_id, $contact_item["value"], $contact_item["type_id"], FALSE, TRUE);
 					if (!$contact_validation->check())
-					{	
+					{
+						if (!is_array($errors)) {
+							$errors = array();
+						}	
 						$errors = array_merge($errors, $contact_validation->errors('validation/object_form'));
 					}
 				}
