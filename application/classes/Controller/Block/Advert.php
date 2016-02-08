@@ -58,27 +58,62 @@
 
 			/* settings */
 			$count = 8;
+			$rubric = 1;
+			$categoryHierarchyLevel = 5;
 
 			$view = Twig::factory('block/advert/main_page_premium');
-
-			$rubric = 14;
-
 			$categoriesService = $this->getService('Categories');
+			$hierarchy = $categoriesService->getCategoryWithChilds(
+				$rubric, $categoryHierarchyLevel, array( 'fresh_limit' ));
 
-			$hierarchy = $categoriesService->getCategoryWithChilds($rubric);
+			usort($hierarchy, function ($a, $b) {
+				return $b['fresh_limit'] - $a['fresh_limit'];
+			});			
 
 			/* get services */
 			$objectsService = $this->getService('Objects');
 
-			/* get data */
-			$query = $objectsService->getObjects();
-			$objectsService->selectMainImage($query, true);
-			$objectsService->selectPublished($query);
-			$objectsService->filterPassedModeration($query);
-			$objectsService->selectCategoryUrl($query);
-			$objectsService->withCategories($query, $hierarchy);
-			$objectsService->orderByCreated($query);
-			$items = $query->limit($count)->execute();
+			/* get city seo name from url */
+			$citySeoName = 'tyumen';
+			$uriMatches = array();
+			if (preg_match('/(.*).' . Kohana::$config->load('common.main_domain') . '/', $_SERVER['HTTP_HOST'], $uriMatches)) {
+
+				$citySeoName = $uriMatches[1];
+
+			}
+
+			/* prepare the query */
+			$baseQuery = NULL;
+
+			foreach($hierarchy as $category) {
+
+				if ($category['fresh_limit'] < 1) {
+					continue;
+				}
+
+				$query = $objectsService->getObjects();
+				$objectsService->selectMainImage($query, true);
+				$objectsService->selectPublished($query);
+				$objectsService->selectShowOnMain($query);
+				$objectsService->filterPassedModeration($query);
+				$objectsService->filterByCitySeoName($query, $citySeoName);
+				$objectsService->selectCategoryUrl($query);
+				$objectsService->withCategories($query, array_merge($category['childs'], array( $category['id'] )));
+				$objectsService->orderByCreated($query);
+				$query->limit($category['fresh_limit']);
+				$query = DB::select('*')->from(array(DB::expr('(' . $query . ')'), 'x'));
+
+				if ($baseQuery !== NULL) {
+					$baseQuery->union($query);
+				} else {
+					$baseQuery = $query;
+				}
+			}
+			
+			//var_dump((string) $baseQuery);
+			//die;
+
+			$items = $baseQuery->execute();
 
 			/* process data */
 			$processedData = array();
