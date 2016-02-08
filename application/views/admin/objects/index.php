@@ -92,7 +92,15 @@ $(document).ready(function() {
 		$.post('/khbackend/objects/ajax_archive/'+$(this).data('id'), {}, function(){
 			window.location.reload();
 		});
-	});	
+	});
+
+	$('.not_show_on_index').on('change', function(){
+		var value = $(this).prop("checked");
+		var object_id = $(this).data('id');
+		$.post('/khbackend/objects/not_show_on_index/'+object_id, {value:value}, function(json){
+			console.log(json)
+		}, 'json');
+	})
 });
 function reload_row(object_id, moder_state) {
 	var current_moder_state = $('select[name=moder_state]').val();

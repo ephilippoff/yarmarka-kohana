@@ -330,6 +330,30 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 		$this->decline_form(1);
 	}
 
+	public function action_not_show_on_index()
+	{
+		$this->use_layout = FALSE;
+		$this->auto_render = FALSE;
+
+		$object = ORM::factory('Object', $this->request->param('id'));
+		if ( ! $object->loaded())
+		{
+			throw new HTTP_Exception_404;
+		}
+		
+		$value = $this->request->post('value');
+
+		$json = array();
+
+		$json['code'] = 200;
+		$json['result'] = ($value == 'true')? TRUE : FALSE;
+
+		$object->not_show_on_index = $json['result'];
+		$object->save();
+
+		$this->response->body(json_encode($json));
+	}
+
 	public function action_ajax_ban()
 	{
 		$this->use_layout = FALSE;

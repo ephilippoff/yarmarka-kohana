@@ -78,7 +78,7 @@
 			<?=$compiled["region"]?>,<?=$compiled["city"]?>,<?=$compiled["address"]?>
 		</address>
 	</td>
-	<td style="width:150px;">
+	<td style="width:200px;">
 		<div class="btn-group">
 			<button class="btn dropdown-toggle
 				<?php if ( ! $object->is_moderate()) : ?>
@@ -129,6 +129,10 @@
 		<?php /*if ($object->main_image_filename) : ?>
 			<a title="Удалить из показов(кр) / Поместить в показы(зел.) " href="#" onclick="obj_selection(this, <?=$object->id?>);return false;" class="<?php if ($object->in_selection) : ?> in <?php endif; ?> selection"></a>				
 		<?php endif;*/ ?>
+		
+		<div>
+			<label for="not_show_on_index_<?=$object->id?>"><input type="checkbox" class="not_show_on_index" id="not_show_on_index_<?=$object->id?>"  data-id="<?=$object->id?>" <? if ($object->not_show_on_index):?>checked<? endif; ?> >не показывать на главной</label>
+		</div>
 		<? if ($user_role_admin): ?>
 		<ul  class="">
 		<li><a href="<?=URL::site('edit/'.$object->id)?>" class="btn-warning">Редактировать</a></li>
