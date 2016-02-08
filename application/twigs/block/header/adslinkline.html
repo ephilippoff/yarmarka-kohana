@@ -10,12 +10,12 @@
 					{% set link = link|first %}
 					<a class="w23p dib va-t clearfix" href="{{ link.link }}" target="_blank" data-id="{{ link.id }}">
 						<img src="{{ '/./uploads/banners/' ~ link.image }}" class="fl hidden-md hidden-sm"/>
-						<span class="ml10 fs12 fl w50p h50 oh">{{ link.title }}</span>
+						<span class="fs12 fl w50p h50 oh">{{ link.title }}</span>
 					</a>
 				{% else %}
 					<a class="w23p dib va-t clearfix" href="http://c.yarmarka.biz{{ info_link }}" style="height:50px; overflow:hidden;"  target="_blank">
 						<img src="{{ staticfile('images/empty_ads.png') }}" class="fl hidden-md hidden-sm"/>
-						<span class="ml10 fs12 fl w50p oh">Рекламное место свободно</span>
+						<span class="fs12 fl w50p oh">Рекламное место свободно</span>
 					</a>
 				{% endif %} 
 				
@@ -30,8 +30,6 @@
 			{% endfor  %}
 		</div>
 	{% endif %}
-
-	<span class="notice-bg reklama">реклама</span>
 	<span class="notice-bg how-to-buy hidden">как купить</span>
 	{% endif %}
 </div><!--reklama-cont-->
