@@ -20,6 +20,14 @@
 		margin-bottom: 20px;
 	}
 
+	.reklama-cont .banners{
+		height: 56px;
+	}
+
+	#reklama_container a span{
+		margin-left: 0;
+	}
+
 	.main_cat_news img{
 		width: 50%;
 		float: left;

@@ -371,7 +371,7 @@ select{background-color: #FFFFFF;border: 1px solid #C3C3C3;padding:2px 10px;heig
 
 /* reklama-cont */
 .reklama-cont {position: relative;padding: 5px 9px;}
-.reklama-cont .banners {min-height: 50px;}
+.reklama-cont .banners {height: 48px; overflow: hidden;}
 .reklama-cont .banners .item {border-radius: 2px;display: inline-block;text-align: center; margin-right: 9px;position:relative;}
 .reklama-cont .banners .item img {width: 100px;height: 50px;border-radius: 2px;}
 .reklama-cont .banners .item span {position: absolute;left:0px;top:10px;display:inline-block; width:100%;text-align: center;color:white;}
@@ -1203,6 +1203,7 @@ img.category-icon{
 
 #reklama_container a span{
     width: 50%;
+    margin-left: 10px;
 }
 
 .category-block{
@@ -1379,16 +1380,18 @@ article img.news-photo{
 /*latest ads*/
 
 .ad_wrap{
-    width: 16.666%;
+    width: 25%;
     float: left;
     border-left: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
     padding: 10px;
     -webkit-transition: all 0.15s ease-in;
     -o-transition: all 0.15s ease-in;
     transition: all 0.15s ease-in;
 }
 
-.ad_wrap:last-child{
+.ad_wrap:nth-child(5),
+.ad_wrap:nth-child(9){
     border-right: 1px solid #ccc;
 }
 
@@ -1403,6 +1406,7 @@ article img.news-photo{
 .ad_wrap .img_block{
     height: 100px;
     overflow: hidden;
+    text-align: center;
 }
 
 .ad_wrap .img_block img{
@@ -1415,12 +1419,12 @@ article img.news-photo{
     word-break: break-all;
     color: #333;
     font-size: 12px;
-    height: 32px;
+    height: 45px;
 }
 
 
 .ad_wrap .cost{
     text-align: right;
-    padding: 7px 0;
+    padding: 7px 0 0;
     font-weight: bold;
 }
