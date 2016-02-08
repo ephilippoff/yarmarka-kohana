@@ -59,7 +59,7 @@
 		public function action_main_page_latest() {
 
 			/* settings */
-			$count = 6;
+			$count = 8;
 
 			$view = Twig::factory('block/advert/main_page_latest');
 

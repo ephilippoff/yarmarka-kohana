@@ -1380,16 +1380,18 @@ article img.news-photo{
 /*latest ads*/
 
 .ad_wrap{
-    width: 16.666%;
+    width: 25%;
     float: left;
     border-left: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
     padding: 10px;
     -webkit-transition: all 0.15s ease-in;
     -o-transition: all 0.15s ease-in;
     transition: all 0.15s ease-in;
 }
 
-.ad_wrap:last-child{
+.ad_wrap:nth-child(5),
+.ad_wrap:nth-child(9){
     border-right: 1px solid #ccc;
 }
 
@@ -1404,6 +1406,7 @@ article img.news-photo{
 .ad_wrap .img_block{
     height: 100px;
     overflow: hidden;
+    text-align: center;
 }
 
 .ad_wrap .img_block img{
@@ -1416,7 +1419,7 @@ article img.news-photo{
     word-break: break-all;
     color: #333;
     font-size: 12px;
-    height: 32px;
+    height: 45px;
 }
 
 

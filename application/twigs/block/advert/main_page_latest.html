@@ -1,15 +1,15 @@
 <div class="latest_ads clearfix">
 	<div class="title_block brt2">Свежие объявления</div>
 	{% for item in data %}
-	<div class="ad_wrap module">
+	<div class="ad_wrap">
 		<a href="{{item.url}}">
 			<div class="img_block">
 				<img src="{{ item.image }}" alt="{{ item.title }}">
 			</div>
 			{% if item.title|length > 40 %}
-			<div class="title">{{ item.title|slice(0,40) }}...</div>
+			<div class="title">{{ item.cat_title }}/{{ item.title|slice(0,40) }}...</div>
 			{% else %}
-			<div class="title">{{ item.title}}</div>
+			<div class="title">{{ item.cat_title }}/{{ item.title}}</div>
 			{% endif %}
 		</a>
 		{% if item.price > 0 %}
@@ -18,9 +18,9 @@
 			<span style="min-height:32px;"></span>
 		{% endif %}
 		{% if item.cat_title|length > 15 %}
-			<a href="{{ item.cat_url }}" title="{{ item.cat_title }}">{{ item.cat_title|slice(0,15) }}...</a>
+			<a href="{{ item.cat_url }}" class="hidden" title="{{ item.cat_title }}">{{ item.cat_title|slice(0,15) }}...</a>
 		{% else %}
-			<a href="{{ item.cat_url }}" title="{{ item.cat_title }}">{{ item.cat_title}}</a>
+			<a href="{{ item.cat_url }}" class="hidden" title="{{ item.cat_title }}">{{ item.cat_title}}</a>
 		{% endif %}
 	</div>
 	{% endfor %}
