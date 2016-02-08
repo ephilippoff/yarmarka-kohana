@@ -113,7 +113,7 @@
 			//var_dump((string) $baseQuery);
 			//die;
 
-			$items = $baseQuery->execute();
+			$items = $baseQuery === NULL ? array() : $baseQuery->execute();
 
 			/* process data */
 			$processedData = array();
