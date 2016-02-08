@@ -28,6 +28,7 @@
 	    width: 100%;
 	    float: none !important;
 	    font-size: 13px;
+	    margin-left: 0;
 	}
 
 	.category-block{
@@ -36,6 +37,10 @@
 
 	.photo_news_img{
 		height: 63px;
+	}
+
+	.reklama-cont .banners{
+		height: 56px;
 	}
 
 
