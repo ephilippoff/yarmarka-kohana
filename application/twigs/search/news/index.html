@@ -32,6 +32,9 @@
 {% block content %}
 	<div class="row main_block">
 		<div class="col-lg-12">
+			{% if isNewsSubcategory == empty %}
+				{% include 'index/promo/photo_news' %}
+			{% endif %}
 			{% include 'search/news/result' %}
 			{{ requestblock('block_news/main_page', {'itemsPerCategory' : 6, 'catTitle' : catTitle, 'reverse' : true}) }}
 		</div>

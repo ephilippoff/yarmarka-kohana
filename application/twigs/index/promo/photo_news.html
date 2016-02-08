@@ -1,19 +1,32 @@
+{% set currentDate = "now"|date("m.d.y") %}
+{% set today = 'Сегодня' %}
 <div class="row mb10">
-	<div class="col-md-12 items-cont photo_news">
+	<div class="col-md-12 items-cont photo_news {% if onPageFlag == 'search' %}hidden-sm hidden-xs{% endif %}">
 		<div class="title_block brt2 module">Новости</div>
 		<ul>
 			{% for news in premiumnews|slice(0,5) %}
-				<li>
-					<div class="photo_news_wrap">
-						<a href="{{news.compiled.url}}" class="fs12">
-							<div class="photo_news_img">
-								<img src="{{get_file(news.compiled.images.main_photo['120x90'])}}">
-							</div>
-							<p><span class="date fs10">{{news.date_expired|date('H:i')}}</span><br> {{news.title|slice(0,50)}}...</p>
+			<li>
+				<div class="photo_news_wrap hidden-sm hidden-xs">
+					<a href="{{news.compiled.url}}" class="fs12">
+						<div class="photo_news_img">
+							<img src="{{get_file(news.compiled.images.main_photo['120x90'])}}">
+						</div>
+						<div class="date light fs10">{{news.date_expired|date('H:i')}} 
+							{% if news.date_expired|date('d.m.y') == currentDate %}
+							<span>{{ today }}</span>
+							{% else %}
+							<span>{{news.date_expired|date('d.m.y')}}</span>
+							{% endif %}
+						</div> 
+						{% if news.title|length > 50 %}
+						{{news.title|slice(0,50)}}...
+						{% else %}
+						{{news.title}}
+						{% endif %}
 						</a>
 					</div>
 				</li>
-			{% endfor %}
-		</ul>
+				{% endfor %}
+			</ul>
+		</div>
 	</div>
-</div>

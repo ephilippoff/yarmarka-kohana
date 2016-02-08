@@ -1390,6 +1390,10 @@ article img.news-photo{
     transition: all 0.15s ease-in;
 }
 
+.ad_wrap:nth-child(n+6){
+    border-bottom: none;
+}
+
 .ad_wrap:nth-child(5),
 .ad_wrap:nth-child(9){
     border-right: 1px solid #ccc;
