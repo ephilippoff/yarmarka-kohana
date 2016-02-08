@@ -6,12 +6,12 @@
 			<div class="img_block">
 				<img src="{{ item.image }}" alt="{{ item.title }}">
 			</div>
-			{% if item.title|length > 40 %}
-			<div class="title">{{ item.cat_title }}/{{ item.title|slice(0,40) }}...</div>
-			{% else %}
-			<div class="title">{{ item.cat_title }}/{{ item.title}}</div>
-			{% endif %}
 		</a>
+		{% if item.title|length > 40 %}
+		<div class="title"><a href="{{item.url}}">{{ item.cat_title }}/{{ item.title|slice(0,40) }}...</a></div>
+		{% else %}
+		<div class="title"><a href="{{item.url}}">{{ item.cat_title }}/{{ item.title}}</a></div>
+		{% endif %}
 		{% if item.price > 0 %}
 			<div class="cost">{{ item.price|number_format(0, ' ', ' ') }} <i class="fa fa-rub"></i></div>
 		{% else %}

@@ -49,10 +49,11 @@
 	}
 
 	.ad_wrap{
-	    width: 20%;
+	    width: 33.333%;
 	}
 
-	.latest_ads .ad_wrap:nth-child(6){
+	.ad_wrap:nth-child(3),
+	.ad_wrap:nth-child(6){
 		display: none;
 	}
 

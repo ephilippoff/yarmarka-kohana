@@ -143,24 +143,12 @@
 
 	.coupon-item-cont .description-cont {
 	    font-size: 13px;
-
-	.ad_wrap{
-	    width: 25%;
-	}
-
-	.latest_ads .ad_wrap:nth-child(5){
-		display: none;
 	}
 }
 
 @media (max-width: 570px){
-	.ad_wrap{
-	    width: 33.333%;
-	}
 
-	.latest_ads .ad_wrap:nth-child(4){
-		display: none;
-	}
+
 }
 
 @media (max-width: 500px){
@@ -220,7 +208,8 @@
 	    width: 50%;
 	}
 
-	.latest_ads .ad_wrap:nth-child(3){
+	.latest_ads .ad_wrap:nth-child(4),
+	.latest_ads .ad_wrap:nth-child(7){
 		display: none;
 	}
 

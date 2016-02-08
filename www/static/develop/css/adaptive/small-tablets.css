@@ -70,6 +70,11 @@
 	    width: 20%;
 	}
 
+	.photo_news{
+		border-bottom: none;
+		padding-bottom: 0;
+	}
+
 	
 
 
