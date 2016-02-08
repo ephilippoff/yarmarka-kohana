@@ -82,7 +82,7 @@ gulp.task('buildcss', function() {
                 .pipe(gulp.dest('./www/static/develop/production/css/'));
 });
 
-gulp.task('buildconcatcss', [ 'css' ], function() {
+gulp.task('buildconcatcss', [ 'buildcss' ], function() {
     return gulp.src(['./www/static/develop/css/bootstrap.min.css',
                         './www/static/develop/css/bootstrap.tables.min.css',
                             './www/static/develop/css/font-awesome.css',
