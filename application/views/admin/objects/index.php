@@ -258,30 +258,12 @@ function obj_selection(src, obj_id)
 					'users' => $users,
 					'complaints' => $complaints,
 					'object_contacts' => $object_contacts,
-					'roles' => $roles
+					'roles' => $roles,
+					'user_role_admin' => $user_role_admin
 				));
 			}
 		?>
-		<? if ($user_role_admin): ?>
-			<tr><td colspan="6">
-				
-				<div class="row p20">
-					<div class="col-md-12">
-						<p class="button js-service-up button-style1 bg-color-lightgreen mb3" data-id="<?=$object->id?>">
-							<i class="fa fa-angle-double-up fa-lg mr5"></i>Поднять
-						</p>
-						<p class="button js-service-premium button-style1 bg-color-lightgreen mb3" data-id="<?=$object->id?>">
-							<i class="fa fa-check-circle  fa-lg mr5"></i>Премиум
-						</p>
-						<p class="button js-service-lider button-style1 bg-color-lightgreen mb3" data-id="<?=$object->id?>">
-							<i class="fa fa-check-circle fa-lg mr5"></i>Лидер
-						</p>
-						<p class="button button-style1 bg-color-blue mr3 mb3 js-service-newspaper" data-id="<?=$object->id?>" data-city="<?=$object->city_id?>">
-							<i class="fa fa-check-circle fa-lg mr5"></i>В газету</p>
-					</div>
-				</div>
-			</td></tr>
-		<? endif; ?>
+		
 	<?php endforeach; ?>
 </table>
 
