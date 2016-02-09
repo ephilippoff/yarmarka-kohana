@@ -108,7 +108,7 @@ $(document).ready(function() {
 							}
 
 					   </script>
-						<input id="fn-title-price" class="form-control" type="text" value="Название прайс-листа"/>
+						<input id="fn-title-price" class="form-control" type="text" placeholder="Введите название прайс-листа" style="width:300px;"/>
 									
 						<div id="fn-userfile-upload">
 							<!--<div class="">-->

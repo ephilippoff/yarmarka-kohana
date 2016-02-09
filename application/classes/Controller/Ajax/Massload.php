@@ -230,26 +230,11 @@ class Controller_Ajax_Massload extends Controller_Template {
 
 		$pl = new Priceload($user_id, $settings);		
 
-		/*try {
-			
-			$db->begin();	
-
-			$pl->saveTempRecordsByLoadedFiles();
-
-			$db->commit();
-
-		} catch(Exception $e)
-		{
-			$db->rollback();
-			$this->json['data'] ="error";
-			$this->json['error'] = "Непредвиденная ошибка при загрузке (saveTempRecordsByLoadedFiles). Возможно файл содержит некорректные строки";
-			Log::instance()->add(Log::NOTICE, $e->getMessage());
-			ORM::factory("Priceload", $pl->_priceload_id)->delete();
-			return;
-		}*/
+		
 
 		$pl->setState(1);
 		
+		Email::send(Kohana::$config->load('common.admin_emails'), Kohana::$config->load('email.default_from'), 'Загрузили новый прайслист', 'Загрузили новый прайслист: '.$title);
 
 
 		$this->json['data'] = "ok";
