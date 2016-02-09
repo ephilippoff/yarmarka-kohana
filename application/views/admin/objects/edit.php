@@ -1,7 +1,7 @@
 <script type="text/javascript" charset="utf-8">
 	$(document).ready(function() {
-		$('textarea').tinymce({
-			selector: "textarea",
+		$('.tiny').tinymce({
+			//selector: "textarea .tiny",
 			theme: "modern",
 			image_advtab: true,
 			width: '100%',
