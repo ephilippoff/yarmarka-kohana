@@ -63,6 +63,7 @@ $(document).ready(function() {
 	$text_type = (@$article->text_type == 2 or @$text_type_default == 2 or @$_POST['text_type'] == 2) ? 2 : 1;
 		
 	$start_date = isset($article->start_date) ? $article->start_date : Arr::get($_POST, 'start_date', date('Y-m-d H:i:s'));	
+	$weight = isset($article->weight) ? $article->weight : Arr::get($_POST, 'weight');	
 	$end_date   = isset($article->end_date)   ? $article->end_date   : Arr::get($_POST, 'end_date',   date('Y-m-d H:i:s', strtotime('+3 days')));
 	$img_url	= isset($article->img_url)   ? $article->img_url   : Arr::get($_POST, 'img_url', '');
 ?>
@@ -106,6 +107,13 @@ $(document).ready(function() {
 			<input type="checkbox" name="is_visible" value="1" id="is_visible" <?php if (Arr::get($_POST, 'is_visible', @$article->is_visible)) echo 'checked' ?>>
 		</div>
 	</div>	
+
+	<div class="control-group only2 fn-start-date-box" <?php if ($text_type == 1) : ?>style="display: none"<?php endif; ?> >
+		<label class="control-label">Вес:</label>
+		<div class="controls">
+			<input style="width: 200px;" type="text" class="input-small" placeholder="вес" name="weight" value="<?=$weight?>">
+		</div>
+	</div>
 		
 	<div class="control-group only2 fn-start-date-box" <?php if ($text_type == 1) : ?>style="display: none"<?php endif; ?> >
 		<label class="control-label">Дата начала:</label>
