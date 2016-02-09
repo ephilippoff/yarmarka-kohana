@@ -28,8 +28,9 @@ define([
 
         initialize: function() {
             $(this.ui.kuponServiceGroup).each(function(index, item){
-                app.services.kuponGroup($(item).data('id'), $(item).data('group'), {
+                app.services.kupon($(item).data('id'), {
                     justCheck: true,
+                    group: $(item).data('group'),
                     success: function(result) {
                        
                     },
@@ -121,14 +122,7 @@ define([
             var s = this;
             e.preventDefault();
             var id = $(e.currentTarget).data("id");
-            app.services.kupon(id, {
-                success: function(result) {
-                    console.log(result);
-                },
-                error: function(result) {
-                    console.log(result);
-                }
-            });
+            app.services.kupon(id, {});
         },
 
         kuponServiceGroupClick: function(e) {
@@ -136,13 +130,8 @@ define([
             e.preventDefault();
             var id = $(e.currentTarget).data("id");
             var group = $(e.currentTarget).data("group");
-            app.services.kuponGroup(id, group, {
-                success: function(result) {
-                    console.log(result);
-                },
-                error: function(result) {
-                    console.log(result);
-                }
+            app.services.kupon(id, {
+                group: group
             });
         }
     });
