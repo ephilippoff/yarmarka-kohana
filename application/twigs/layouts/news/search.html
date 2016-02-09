@@ -2,20 +2,12 @@
 
 {% block body %}
 	
-	{% block header %} 
+	{% block header %}
 		{{ parent() }}
-	{% endblock header %}
+	{% endblock header %} 
 
-	{% block crumbs %}
-		<div class="breadcrumbs-cont module mt10">
-		{% for crumb in crumbs %}
-			{% if crumb.url %}
-				<a href="{{ url(crumb.url) }}">{{crumb.title}}</a> /
-			{% else  %}
-				<h1>{{crumb.title}}</h1>
-			{% endif %}
-		{% endfor %}
-		</div>
+	{% block crumbs %} 
+		Крошки
 	{% endblock crumbs %}
 
 	<div class="row min-content-height">
@@ -44,7 +36,6 @@
 		{{ parent() }}
 	{% endblock templates %}
 
-	
 {% endblock body %}
-{% block page_name%}article{% endblock page_name %}
 
+{% block page_name%}news_search{% endblock page_name %}

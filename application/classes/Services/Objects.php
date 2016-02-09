@@ -19,10 +19,10 @@
 				->where('data_list.value', 'in', $values);
 		}
 
-		public function selectMainImage($query) {
+		public function selectMainImage($query, $require = false) {
 			$query
 				->select(array('object_attachment.filename', 'main_image_filename'))
-				->join('object_attachment', 'left')
+				->join('object_attachment', $require ? 'inner' : 'left')
 				->on('object_attachment.id', '=', 'object.main_image_id');
 		}
 
@@ -43,7 +43,23 @@
 			$query
 				->join('category', 'inner')
 				->on('category.id', '=', 'object.category')
-				->select(array('category.url', 'category_url'));
+				->select(array('category.url', 'category_url'), array('category.title', 'category_title'));
+		}
+
+		public function filterPassedModeration($query) {
+			$query->where('object.moder_state', '=', 1);
+		}
+
+		public function orderByCreated($query) {
+			$query->order_by('date_expired', 'desc');
+		}
+
+		public function filterOnlyPriceExists($query) {
+			$query->where('price', '>', 0);
+		}
+
+		public function withCategories($query, $categories) {
+			$query->where('category', 'in', $categories);
 		}
 
 		/* helpers */

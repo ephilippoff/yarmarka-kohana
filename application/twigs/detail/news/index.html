@@ -9,27 +9,37 @@
 		{% include 'block/header/navigationline/article' %}
 {% endblock header %} 
 
-
 {% block title %}{{object.title}}{% endblock title %}
 
 {% block meta_description %}{{object.user_text|slice(0,250)|striptags}}{% endblock meta_description %}
 
-{% block crumbs %}{% endblock crumbs %}
+{% block crumbs %} {% include 'search/news/crumbs' %} {% endblock crumbs %}
+
 
 {% macro map(object) %}
     {% include 'detail/kupon/map' %}
 {% endmacro %}
 
+{% block leftside %}
+	{% include 'index/promo/left' %}
+{% endblock leftside %}
+
 {% block content %}
-	<div class="row">
-		<div class="col-md-9">
-			<article class="bg-color-whitesmoke p20 br2">
-				<h1 class="captionbold"><i class="fa fa-globe mr3"></i>{{object.date_expired|date('d/m, H:i')}}<span class="fs22 ml10">{{object.title}}</span></h1>
-				<div class="photo-cont mt10">
-					<img class="news-photo" src="{{ get_file(object.compiled.images.main_photo.original) }}" width="500">
-					<p>{{ object.compiled.attributes['news-category'].value }}</p>
+	<div class="row main_block">
+		<div class="col-lg-12">
+			<article>
+				<div class="news_info clearfix">
+					<div class="date light fs14 fl">{{ innerItem.date|date('m:h') }} <span>- {{ innerItem.date|date('d.m.y') }}</span></div>
+					<span class="cat">
+						Категория: {{ object.compiled.attributes['news-category'].value }}
+					</span>
 				</div>
-				<div class="text-cont mt10">
+				<hr>
+				<h1 class="captionbold">{{object.title}}</h1>
+				<div class="photo-cont mt10">
+					<img class="news-photo" src="{{ get_file(object.compiled.images.main_photo.original) }}">
+				</div>
+				<div class="text-cont mt10 module">
 					{% set text = object.user_text %}
 
 					{% for image in object.compiled.images.local_photo %}
@@ -47,52 +57,22 @@
 					
 					{{ text }}
 				</div>
-					{% if newsone.is_category == 0 %}
-						<div id="hypercomments_widget"></div>
-						<script type="text/javascript">
-							_hcwp = window._hcwp || [];
-							_hcwp.push({widget:"Stream", widget_id:16227, callback: function(app, init){$('#hypercomments_widget .hc_count_user_online').remove();} });
-							(function() {
-								if("HC_LOAD_INIT" in window)return;
-								HC_LOAD_INIT = true;
-								var lang = (navigator.language || navigator.systemLanguage || navigator.userLanguage || "en").substr(0, 2).toLowerCase();
-								var hcc = document.createElement("script"); hcc.type = "text/javascript"; hcc.async = true;
-								hcc.src = ("https:" == document.location.protocol ? "https" : "http")+"://w.hypercomments.com/widget/hc/16227/"+lang+"/widget.js";
-								var s = document.getElementsByTagName("script")[0];
-								s.parentNode.insertBefore(hcc, s.nextSibling);
-							})();
-						</script>
-						<a href="http://hypercomments.com" class="hc-link" title="comments widget">comments powered by HyperComments</a>							
-					{% endif %}
+				{% include 'block/vk/comments_surgut' %}
+				{{ requestblock('block_news/main_page', {'catTitle': object.compiled.attributes['news-category'].value, 'newsTitle' : object.title, 'itemsPerCategory' : 11}) }}
+				{{ requestblock('block_news/main_page', {'catTitle': object.compiled.attributes['news-category'].value, 'reverse': reverse, 'itemsPerCategory' : 6}) }}
 			</article>
-		</div>
-		<div class="col-md-3">
-			{% if check_object_access(object, 'object.moderate') %}
-				<div class="module">{% include 'detail/kupon/controls' %}</div>
-			{% endif %}
-			{% include 'index/informers' %}
 		</div>
 	</div>
 {% endblock content %}
 
-{% block leftside %} 
-	<ul class="hidden-xs">
-		{% set current_date = NULL %}
-		{% for news in lastnews %}
-			{% if not current_date or current_date != news.date_expired|date('d/m') %}
-				{% set current_date = news.date_expired|date('d/m') %}
-				<li class="pl10 mb5">
-					<span class="bold">{{ news.date_expired|date('d') ~ ' ' ~ months[news.date_expired|date('m')] }}</span>
-				</li>
-			{% endif %}
-			<li class="pl10 mb20">
-				{% set image = get_image_paths(news.photo) %}
-				<p><img src="{{get_file(news.compiled.images.main_photo['208x208'])}}" alt=""></p>
-				<p>
-					<span class="fs12"><i class="fa fa-home mr3"></i> {{news.date_expired|date('H:i')}}</span>
-					<a href="{{news.compiled.url}}" class="ml10">{{news.title|slice(0,70)}}</a>
-				</p>
-			</li>
-		{% endfor %}
-	</ul>
-{% endblock leftside %}
+{% block rightside %}
+	<div class="right-side hidden-sm hidden-xs">
+		{% if check_object_access(object, 'object.moderate') %}
+			<div class="module">{% include 'detail/kupon/controls' %}</div>
+		{% endif %}
+		<div class="detail_news">
+			{% include 'index/promo/news' %}
+		</div>
+		{% include 'index/informers' %}
+	</div>
+{% endblock rightside %}

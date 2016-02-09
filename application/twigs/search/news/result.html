@@ -1,5 +1,36 @@
-<div class="coupons-cont clearfix">
-	{% for object in main_search_result %}
-		{% include 'detail/mini/newsone' %}
-	{% endfor %}
-</div>
+{% for object in main_search_result %}
+	{% if loop.first%}
+		<div class="clearfix main_last_news module">
+			<div class="image_block">
+				<img src="{{get_file(object.compiled.images.main_photo.original)}}" alt="">
+			</div>
+			<div class="news_info">
+				<span class="date fs12">{{ object.date_expired|date('H:i') }}</span>
+				<a href="{{object.compiled.url}}" class="fs16 mb10 db">{{object.title}}</a>
+				<div class="text">{{object.user_text}}</div>
+			</div>
+		</div>
+	{% endif %}
+{% endfor %}
+
+{% if isNewsSubcategory %}
+	<div class="other_cat_news" id="same_cat_news">
+		<div class="row">
+			{% for object in main_search_result %}
+				{% if loop.index > 1 and loop.index <= 19 %}
+					{% include 'detail/mini/newsone' %}
+				{% endif %}
+			{% endfor %}
+		</div>
+	</div>
+{% endif %}
+
+<script>
+	$(document).ready(function(){
+		$('.main_last_news .text').find('div').replaceWith(function(index, oldHTML){
+		 	return $("<p>").html(oldHTML);
+		});
+
+
+	});
+</script>

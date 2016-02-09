@@ -100,6 +100,7 @@ class Controller_Search extends Controller_Template {
             done
         */
 
+
         //main search
         $main_search_query = Search::searchquery($search_info->search_filters, $search_params);
         //$main_search_query->where('o.source_id', '<>', 2);
@@ -127,6 +128,25 @@ class Controller_Search extends Controller_Template {
             $objects_for_map = array_merge($objects_for_map, $main_search_coords);
         }
         //end main search
+
+        //premium news
+        $search_query = Search::searchquery(
+            array(
+                "expiration" => TRUE,
+                "premium" => TRUE,
+                "active" => TRUE,
+                "published" =>TRUE,
+                "city_id" => $search_info->city_id,
+                "category_seo_name" => "novosti"
+            ),
+            array("limit" => 4, "page" => 1)
+        );
+        $twig->premiumnews = Search::getresult($search_query->execute()->as_array());
+        
+        $premium_ids = array_map(function($item){
+            return $item["id"];
+        }, $twig->premiumnews);
+        //premium news end
 
         //premium
         $premium_search_query = Search::searchquery(
@@ -184,6 +204,50 @@ class Controller_Search extends Controller_Template {
             $objects_for_map = array_merge($objects_for_map, $vip_search_coords);
         }
         //vip end
+
+        //lastnews
+        $search_query = Search::searchquery(
+            array(
+                "expiration" => TRUE,
+                "active" => TRUE,
+                "published" =>TRUE,
+                "city_id" => $search_info->city_id,
+                "category_seo_name" => "novosti",
+                    
+            ),
+            array("limit" => 7, "page" => 1, "order" => "date_expired")
+        );
+        $twig->lastnews = Search::getresult($search_query->execute()->as_array());
+        //lastnews end
+
+        //kupons
+         $premium_kupons = Search::searchquery(
+            array(
+                "active" => TRUE,
+                "published" =>TRUE,
+                "expiration" => TRUE,
+                "premium" => TRUE,
+                "category_id" => array(173),
+                "city_id" => ($search_info->city_id) ? array($search_info->city_id) : NULL,
+            ),
+            array("limit" => 3, "order" => "date_expired")
+        );
+
+        $twig->premium_kupons = Search::getresult($premium_kupons->execute()->as_array());
+
+        $kupons = Search::searchquery(
+            array(
+                "active" => TRUE,
+                "published" =>TRUE,
+                "expiration" => TRUE,
+                "category_id" => array(173),
+                "city_id" => ($search_info->city_id) ? array($search_info->city_id) : NULL,
+            ),
+            array("limit" => 3, "order" => "date_expired")
+        );
+
+        $twig->kupons = Search::getresult($kupons->execute()->as_array());
+        //kupons end
 
         //pagination
         $pagination = Pagination::factory( array(
@@ -268,14 +332,59 @@ class Controller_Search extends Controller_Template {
         } else if ($search_info->category->seo_name == 'novosti') {
             $twig->set_filename('search/news/index');
         }
-		
+
         foreach ((array) $search_info as $key => $item) {
             $twig->{$key} = $item;
         }        
+        $twig->isGuest = Auth::instance()->get_user() == NULL;
+
+
+        $twig->staticMainMenu = TRUE;
+
+        $twig->isNews = $search_info->category->id == 174;
+        $twig->isNewsSubcategory = array_key_exists('filters', $search_info->search_filters)
+            && is_array($search_info->search_filters['filters'])
+            && array_key_exists('news-category', $search_info->search_filters['filters'])
+            && $search_info->search_filters['filters']['news-category'] != NULL;
+
+        if ($twig->isNewsSubcategory) {
+            $twig->catTitle = $search_info->search_filters['filters']['news-category'];
+        }
 
         $this->cache_stat($twig, $search_params);
         $this->response->body($twig);
 
+        // var_dump($twig->main_search_result[1]); die;
+
+    }
+
+    protected function process_child_categories(&$arr) {
+        usort($arr, function ($a, $b) {
+
+            //1. by count desc
+            $count_a = (int) $a->count;
+            $count_b = (int) $b->count;
+
+            if ($count_a != $count_b) {
+                return $count_b - $count_a;
+            }
+
+            //2. by title
+            $title_a = $a->title;
+            $title_b = $b->title;
+
+            if ($title_a != $title_b) {
+                return $title_a < $title_b ? -1 : 1;
+            }
+
+            //3. by weight
+            $weight_a = (int) $a->weight;
+            $weight_b = (int) $b->weight;
+
+            return $weight_b - $weight_a;
+
+        });
+        return $arr;
     }
 
     public function cache_stat($info, $search_params)
@@ -379,6 +488,28 @@ class Controller_Search extends Controller_Template {
                 $clean_query_params
             )
         );
+
+        foreach($info->category_childs_elements as &$value) {
+            $k = $info->s_host . '/' . $info->category_url . '/' . $value->url;
+            // if (!array_key_exists($k, $info->link_counters)) {
+            //     $value->count = 0;
+            // } else {
+            //     $value->count = $info->link_counters[$k];
+            // }
+        }
+
+        foreach($info->category_childs as &$value) {
+            $k = $info->s_host . '/' . $value->url;
+            // if (!array_key_exists($k, $info->link_counters)) {
+            //     $value->count = 0;
+            // } else {
+            //     $value->count = $info->link_counters[$k];
+            // }
+        }
+        
+        $this->process_child_categories($info->category_childs_elements);
+        $this->process_child_categories($info->category_childs);
+        //var_dump($info->category_childs_elements);die;
 
         return $info;
     }

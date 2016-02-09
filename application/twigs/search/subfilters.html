@@ -10,7 +10,7 @@
 					{% set count = link_counters[s_host ~ '/' ~ category_url ~ '/' ~ element.url] %}
 					<li>
 						<div>
-							<a href="{{ url(category_url ~ '/' ~ element.url) }}" title="{{element.title}}">{{element.title}}</a>
+							<a href="{{ url(category_url ~ '/' ~ element.url) }}" title="{{element.title}}" data-weight="{{ element.wight }}">{{element.title}}</a>
 							{% if count > 0 %}
 								<span class="count">{{count}}</span>
 							{% endif %}
@@ -24,6 +24,7 @@
 	</div>
 </div>
 <script type="text/javascript">
+	
 	new Yarmarka.UI.Columns.OrderedHeight({ 
 		el: '.subcategories-cont.module.subcat-search', 
 		elementSelector: 'li>div', 
@@ -34,4 +35,5 @@
 			allowedHeight: 100
 		}
 	});
+
 </script>

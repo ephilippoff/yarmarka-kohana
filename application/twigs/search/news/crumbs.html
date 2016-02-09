@@ -1,0 +1,11 @@
+<div class="breadcrumbs-cont module">
+	<a href="/" rel="nofollow" class="hidden-xs">Главная</a>
+	<a href="/" rel="nofollow" class="hidden-lg hidden-sm hidden-md home-a"><i class="fa fa-home"></i></a>
+	{% set tmp = '' %}
+	{% for crumb in crumbs %}
+			<span class="hidden-xs">/</span> <a href="{{ url(tmp ~ crumb.uri) }}" class="crumbs-item"><span>{{crumb.title}}</span></a>
+		{% set tmp = '' ~ crumb.uri ~ '/' %}
+	{% endfor %}
+
+	
+</div>

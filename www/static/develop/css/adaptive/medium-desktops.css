@@ -14,14 +14,6 @@
 		border-right: 1px solid #ccc;
 	}
 
-	.photo_news_wrap{
-	    width: 25%;
-	}
-
-	ul li:last-child .photo_news_wrap{
-		display: none;
-	}
-
 	#reklama_container a{
 	    max-height: 200px;
 	}
@@ -36,27 +28,33 @@
 	    width: 100%;
 	    float: none !important;
 	    font-size: 13px;
-	}
-
-	.reklama-cont .banners{
-		height: auto;
-		padding: 15px 0;
+	    margin-left: 0;
 	}
 
 	.category-block{
 		width: 50%;
 	}
 
-	.dialog_window>div{
-		width: 70%;
+	.photo_news_img{
+		height: 63px;
 	}
 
-	.dialog_window .contact_form input {
-	    width: 70%;
+	.reklama-cont .banners{
+		height: 56px;
 	}
+
 
 	.coupon-item-cont .description-cont{
 		height: 60px;
+	}
+
+	.ad_wrap{
+	    width: 33.333%;
+	}
+
+	.ad_wrap:nth-child(3),
+	.ad_wrap:nth-child(6){
+		display: none;
 	}
 
 }

@@ -1,11 +1,15 @@
 {% set theme_class = 'crimson-theme' %}
+
+{% if newsNumber is empty %}
+	{% set newsNumber = 7 %}
+{% endif %}
+
 <div class="{{theme_class}} module br2" >
 	<div class="menu-cont2 brt2">
 		<div class="row">
 			<div class="col-md-12 clearfix">
 				<span class="menu-item left">
-					<span class="menu-item-cont nobg visible-lg hidden-md visible-sm visible-xs">Последние новости</span>
-					<span class="menu-item-cont nobg hidden-lg hidden-sm hidden-xs">Новости</span>
+					<span class="menu-item-cont nobg">Последние новости</span>
 				</span>
 			</div>
 		</div>			
@@ -16,12 +20,15 @@
 				<ul class="dib w100p last_news_ul">
 					{% set current_date = NULL %}
 					{% for news in lastnews %}
-						<li>
-							<span class="date fs12">{{news.date_expired|date('H:i')}}</span><a href="/newsline/{{news.date_expired|date('Y-m-d')}}#{{news.id}}" class="ml10">{{news.title|slice(0,60)}}...</a>
-						</li>
+						{%  if loop.index <= newsNumber %}
+							<li>
+								<span class="date fs12">{{news.date_expired|date('H:i')}}</span><a href="/novosti/{{news.seo_name}}-{{news.id}}.html" class="ml10">{{news.title|slice(0,60)}}...</a>
+							</li>
+						{% endif %}
 					{% endfor %}
 				</ul>
 			</div>
 		</div>
 	</div>
 </div>
+

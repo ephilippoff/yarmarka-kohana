@@ -12,13 +12,13 @@
 			/* settings */
 			$shortTextLength = 250;
 			$shortTextAfter = '...';
-			$itemsPerCategory = 5;
 
 			$view = Twig::factory('block/news/main_page');
 
 			$view->catTitle = $this->request->post("catTitle");
 			$view->reverse = $this->request->post("reverse");
 			$view->newsTitle = $this->request->post("newsTitle");
+			$itemsPerCategory = $this->request->post("itemsPerCategory");
 
 			/* get services instances */
 			$attribitesService = $this->getService('Attributes');
@@ -32,7 +32,8 @@
 			foreach($items as $item) {
 				$categories[$item->id] = array(
 						'title' => $item->title,
-						'url' => '/novosti/' . $item->url
+						'url' => '/novosti/' . $item->url,
+						'id' => $item->id,
 					);
 			}
 
@@ -46,17 +47,19 @@
 
 			$newsGroups = array();
 
+
 			foreach($items as $item) {
 				$sci = $item['data_list_value'];
 				if (!array_key_exists($sci, $newsGroups)) {
 					$newsGroups[$sci] = array(
 							'title' => $categories[$sci]['title'],
 							'url' => $categories[$sci]['url'],
+							'id' => $categories[$sci]['id'],
 							'items' => array()
 						);
 				}
-				$group = &$newsGroups[$sci];
 
+				$group = &$newsGroups[$sci];
 				if (count($group['items']) >= $itemsPerCategory) {
 					continue;
 				}

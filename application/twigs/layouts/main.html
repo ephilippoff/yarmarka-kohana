@@ -76,12 +76,6 @@
 				Ваш браузер устарел, установите более современный. Например <a style="font-size:20px;" target="_blank" href="https://www.google.ru/chrome/browser/desktop/">Google Chrome</a>
 			</div>
 		<![endif]-->		
-		
-        {% if get_session_value('site_disable') %}
-            <div class="red">
-                <span class=" fs22 captionbold">Внимание! Сайт в режиме обслуживания.</span> Т.е. выключен для всех пользователей, кроме разрешенных IP адресов
-            </div>
-        {% endif %}
         <div id="popup-layer" class="z200" style="display: none;"></div>
         <div class="wrapper container {% block wrapperclass %}{% endblock wrapperclass %}">
 			<div class="banner topline {zoneID: 42}"></div>			
