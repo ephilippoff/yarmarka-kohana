@@ -6,9 +6,10 @@
 		<th class="price">Цена</th>
 	</thead>
 	<tbody>
+
 	<%  _.each(info.groups, function(item, key) {%>
 		<tr>
-			<td class="w25"><input type="radio" class="js-group" id="<%=item.service.name%><%=key%>" name="<%=item.service.name%>" <% if (key == 0) { %> checked <% } %> value="<%=item.id%>"></td>
+			<td class="w25"><input type="radio" class="js-group" id="<%=item.service.name%><%=key%>" name="<%=item.service.name%>" <% if (item.id == group || (info.groups.length == 1) ) { %> checked <% } %> value="<%=item.id%>"></td>
 			<td class="service-title"><label for="<%=item.service.name%><%=key%>"><span style="display:block; cursor:pointer;"><%=item.service.title%></span></label></td>
 			<td class="price">
 				<span><%=item.service.price%> руб.</span>

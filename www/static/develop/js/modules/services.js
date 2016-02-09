@@ -202,101 +202,112 @@ define([
                 success: function(model) {
                     app.settings.khQuery = false;
                     var resp = model.toJSON();
-                    options.success();
-                    app.windows.vent.trigger("showWindow", "service", {
-                        title: resp.object.title,
-                        serviceView : new KuponView({
-                            model: new ServiceModel({
-                                info: resp,
-                                is_edit: options.is_edit,
-                                edit_params: options.edit_params
-                            })
-                        }),
-                        code: resp.code,
-                        success: options.success,
-                        error: options.error,
-                        is_edit: options.is_edit
-                    });
-                }, error: function() {
-                    app.settings.khQuery = false;
-                    options.error();
-                }
-            });
-        },
-
-        kuponGroup: function(id, groupId, options) {
-            
-            var serviceModel = new ServiceModel();
-            serviceModel.urlRoot = "/rest_service/check_kupon";
-            options.error = options.error || function() {};
-            options.success = options.success || function() {};
-            app.settings.khQuery = true;
-            serviceModel.save({
-                id: id
-            }, {
-                success: function(model) {
-                    app.settings.khQuery = false;
-                    var resp = model.toJSON(),
-                        result = {};
-                    
-                    result.info = resp;
-
-                    var group = _.findWhere(result.info.groups, {id: groupId});
 
                     if (options.justCheck) {
-                        if (group && group.available) {
-                            options.success();
-                        } else {
-                            options.error();
-                        }
+                        var group = _.findWhere(resp.groups, {id: options.group});
+                       if (group && group.available) {
+                           options.success();
+                       } else {
+                           options.error();
+                       }
                     } else {
-
-                        result.result = {
-                           quantity: 1,
-                           sum: group.service.price,
-                           id: groupId
-                        };
-                        _.extend(result.info, group);
-
-
-                        var key = $.cookie("cartKey");
-                        if (!key) {
-                            var session_id = $.cookie("yarmarka");
-                            var key = (session_id + Date.now());
-                            $.cookie("cartKey", key, { expires: 7, path: '/', domain: '.'+app.settings.mainHost})
-                        }
-                        console.log(result);
-                        var addServiceModel = new ServiceModel();
-                        addServiceModel.urlRoot = "/rest_service/save";
-                        app.settings.khQuery = true;
-                        addServiceModel.save({serviceData : result, key : key},{
-                            success: function(model) {
-                                app.settings.khQuery = false;
-                                var resp = model.toJSON();
-                                if (resp.code == 200) {
-                                    app.services.updateCart();
-                                    options.success();
-                                    $(window).attr("location", "/cart");
-                                } else {
-                                    options.error();
-                                    console.log("Ошибка при сохранении услуги");
-                                }
-                            }, 
-                            error: function(text) {
-                                app.settings.khQuery = false;
-                                s.getOption("error")("Ошибка при сохранении услуги");
-                                console.log("Ошибка при сохранении услуги");
-                            }
-                        })
+                        options.success();
+                        app.windows.vent.trigger("showWindow", "service", {
+                            title: resp.object.title,
+                            serviceView : new KuponView({
+                                model: new ServiceModel({
+                                    info: resp,
+                                    is_edit: options.is_edit,
+                                    edit_params: options.edit_params,
+                                    group: options.group
+                                })
+                            }),
+                            code: resp.code,
+                            success: options.success,
+                            error: options.error,
+                            is_edit: options.is_edit
+                        });
                     }
-
-
                 }, error: function() {
                     app.settings.khQuery = false;
                     options.error();
                 }
             });
         },
+
+        // kuponGroup: function(id, groupId, options) {
+            
+        //     var serviceModel = new ServiceModel();
+        //     serviceModel.urlRoot = "/rest_service/check_kupon";
+        //     options.error = options.error || function() {};
+        //     options.success = options.success || function() {};
+        //     app.settings.khQuery = true;
+        //     serviceModel.save({
+        //         id: id
+        //     }, {
+        //         success: function(model) {
+        //             app.settings.khQuery = false;
+        //             var resp = model.toJSON(),
+        //                 result = {};
+                    
+        //             result.info = resp;
+
+        //             var group = _.findWhere(result.info.groups, {id: groupId});
+
+        //             if (options.justCheck) {
+        //                 if (group && group.available) {
+        //                     options.success();
+        //                 } else {
+        //                     options.error();
+        //                 }
+        //             } else {
+
+        //                 result.result = {
+        //                    quantity: 1,
+        //                    sum: group.service.price,
+        //                    id: groupId
+        //                 };
+        //                 _.extend(result.info, group);
+
+
+        //                 var key = $.cookie("cartKey");
+        //                 if (!key) {
+        //                     var session_id = $.cookie("yarmarka");
+        //                     var key = (session_id + Date.now());
+        //                     $.cookie("cartKey", key, { expires: 7, path: '/', domain: '.'+app.settings.mainHost})
+        //                 }
+        //                 console.log(result);
+        //                 var addServiceModel = new ServiceModel();
+        //                 addServiceModel.urlRoot = "/rest_service/save";
+        //                 app.settings.khQuery = true;
+        //                 addServiceModel.save({serviceData : result, key : key},{
+        //                     success: function(model) {
+        //                         app.settings.khQuery = false;
+        //                         var resp = model.toJSON();
+        //                         if (resp.code == 200) {
+        //                             app.services.updateCart();
+        //                             options.success();
+        //                             $(window).attr("location", "/cart");
+        //                         } else {
+        //                             options.error();
+        //                             console.log("Ошибка при сохранении услуги");
+        //                         }
+        //                     }, 
+        //                     error: function(text) {
+        //                         app.settings.khQuery = false;
+        //                         s.getOption("error")("Ошибка при сохранении услуги");
+        //                         console.log("Ошибка при сохранении услуги");
+        //                     }
+        //                 })
+        //             }
+
+
+        //         }, error: function() {
+        //             app.settings.khQuery = false;
+        //             options.error();
+        //         }
+        //     });
+        // },
     });
 
 });
