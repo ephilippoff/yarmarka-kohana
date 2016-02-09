@@ -13,7 +13,7 @@
 		<div class="title"><a href="{{item.url}}">{{ item.cat_title }}/{{ item.title}}</a></div>
 		{% endif %}
 		{% if item.price > 0 %}
-			<div class="cost">{{ item.price|number_format(0, ' ', ' ') }} <i class="fa fa-rub"></i></div>
+			<div class="cost bold">{{ item.price|number_format(0, ' ', ' ') }} <i class="fa fa-rub"></i></div>
 		{% else %}
 			<span style="min-height:32px;"></span>
 		{% endif %}
