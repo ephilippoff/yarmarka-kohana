@@ -30,10 +30,10 @@
 					</span>
 				{% endif %}
 				
-				<ul style="position: absolute;width:{{ulWidth}}px">
+				<ul style="position: absolute;width:100%;">
 					<li class="li-title ml10"><span class="bold  black fs18" style="width: 165px">{{category.title}}</span></li>
 					{% for subcategory in categories2l if subcategory.parent_id == category.id %}
-						<li class="ml20">
+						<li class="ml20" style="width:{{ulWidth}}px;">
 							<a href="/{{category.seo_name}}/{{subcategory.seo_name}}">{{subcategory.title}}</a>
 						</span></li>
 					{% endfor %}
