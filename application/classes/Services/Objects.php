@@ -32,6 +32,10 @@
 				->where('object.date_expired', '<=', DB::expr('NOW()'));
 		}
 
+		public function selectShowOnMain($query, $value = 0) {
+			$query->where('object.not_show_on_index', '=', $value);
+		}
+
 		public function filterOnlyPremium($query) {
 			$query
 				->join('object_rating', 'inner')
@@ -50,6 +54,18 @@
 			$query->where('object.moder_state', '=', 1);
 		}
 
+		public function filterByCitySeoName($query, $citySeoName) {
+			/*
+			$query->where(DB::expr('(select id from city where seo_name = ' . Database::instance()->escape($citySeoName) . ' limit 1)'),
+				'=', DB::expr('any(cities::int[])'));
+			*/
+			$this->filterByCityId($query, DB::expr('(select id from city where seo_name = ' . Database::instance()->escape($citySeoName) . ' limit 1)'));
+		}
+
+		public function filterByCityId($query, $cityId) {
+			$query->where('city_id', '=', $cityId);
+		}
+
 		public function orderByCreated($query) {
 			$query->order_by('date_expired', 'desc');
 		}
@@ -60,6 +76,10 @@
 
 		public function withCategories($query, $categories) {
 			$query->where('category', 'in', $categories);
+		}
+
+		public function withCategory($query, $categoryId) {
+			$query->where('category', '=', $categoryId);
 		}
 
 		/* helpers */

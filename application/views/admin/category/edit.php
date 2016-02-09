@@ -20,6 +20,14 @@
 		</div>
 	</div>	
 	
+	<div class="control-group <?=Arr::get($errors, 'fresh_limit') ? 'error' : ''?>">
+		<label class="control-label">fresh_limit:</label>
+		<div class="controls">
+			<input type="text" name="fresh_limit" value="<?php echo $category->fresh_limit; ?>" />
+			<span class="help-inline"><?=Arr::get($errors, 'fresh_limit')?></span>
+		</div>
+	</div>	
+
 	<div class="control-group">
 		<label class="control-label">business types</label>
 		<div class="controls">
