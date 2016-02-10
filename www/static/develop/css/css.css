@@ -1431,3 +1431,13 @@ article img.news-photo{
     text-align: right;
     padding: 3px 0 15px;
 }
+
+.submenu-ul:after {
+    content:'';
+    display:block;
+    position: absolute;
+    height:100%;
+    width:40px;
+    left:-30px;
+    top:0;
+}
