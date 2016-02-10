@@ -75,6 +75,15 @@
 		padding-bottom: 0;
 	}
 
+	.ad_wrap{
+	    width: 25%;
+	}
+
+	.ad_wrap:nth-child(3),
+	.ad_wrap:nth-child(6){
+		display: block;
+	}
+
 	
 
 
