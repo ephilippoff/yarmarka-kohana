@@ -21,10 +21,6 @@
 			{% if user %}
 				<!--<span class="menu-item span-link hidden-sm hidden-xs" onclick="window.location='/user'">Мои объявления <span>~{{get_myobjects_info()}}</span></span>-->
 			{% endif %}
-			<span class="menu-item span-link js-favourite-counter fav" onclick="window.location='/user/favorites'"><i class="fa fa-heart mr3"></i><span>{{ get_favorites_info()|length }}</span></span>
-			{% set cart_info = get_cart_info() %}
-			{% set cart_count = cart_info.count %}
-			<span class="menu-item span-link cart" onclick="window.location='/cart'"><i class="fa fa-shopping-cart mr3"></i><span class="js-cart-counter">{{cart_count}}</span> <span class="js-cart-summ"></span></span>
 			<span class="menu-item span-link hidden-sm hidden-xs" onclick="window.location='https://vk.com/yarmarkasurgut'"><i class="ico ico16 vkontakte-ico16 mr3"></i>Мы в Контакте</span>
 			<span class="menu-item span-link hidden" onclick="window.location='/article/help'"><i class="fa fa-book mr3"></i>Помощь</span>
 			<span class="menu-item span-link hidden" onclick="window.location='/article/pravila-razmeshcheniya-obyavlenii'"><i class="fa fa-info-circle mr3"></i>Правила</span>

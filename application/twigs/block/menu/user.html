@@ -1,21 +1,21 @@
 {% set user = get_user() %}
 <div class="proom-list iLight-cont js-usermenu border-color-blue popup-menu-cont right brb2 z300">
 	<p class="pl10 pt10 pr10 bold">{{ user.email|e }}</p>
-	<ul>
+	<ul class="user-ul">
 		{% if user %}
-			<li><a href="{{ url('user/') }}">Мои объявления <span>~{{get_myobjects_info()}}</span></span>
+			<li><a href="{{ url('user/') }}"><i class="fa fa-newspaper-o"></i> Мои объявления</span>
 		{% endif %}
-		<li><a href="{{ url('user/favorites') }} ">Избранные <i class="fa fa-heart"></i></a></li>
+		<li><a href="{{ url('user/favorites') }} "><i class="fa fa-heart"></i> Мои избранные</a></li>
+		<li><a href="{{ url('user/cart') }} "><i class="fa fa-shopping-cart mr3"></i> Корзина</a></li>
 		<li><a href="{{ url('user/profile') }} ">Настройки пользователя</a></li>
 		<li><a href="{{ url('user/subscriptions') }}">Подписки</a></li>
 		<li><a href="{{ url('user/orders') }}">Заказы</a></li>
-		<li class=""><a href="{{ url('user/password') }}">Смена пароля</a></li>
+		<li><a href="{{ url('user/password') }}">Смена пароля</a></li>
 		{% if user.org_type == 2  %}
-			<li class=""><a href="{{ url('user/orginfo') }}">Настройки компании</a></li>
-			<li class=""><a href="{{ url('user/employers') }}">Сотрудники</a></li>
-			<li class=""><a href="{{ url('user/objectload') }}">Массовая загрузка</a></li>
+			<li><a href="{{ url('user/orginfo') }}">Настройки компании</a></li>
+			<li><a href="{{ url('user/employers') }}">Сотрудники</a></li>
+			<li><a href="{{ url('user/objectload') }}">Массовая загрузка</a></li>
 		{% endif %}
-		<li class="divider bg-color-blue"></li>
-		<li class=""><a href="{{ url('user/logout?return=' ~ strim(get_request_uri(), '/')) }}"><i class="fa fa-sign-out mr5"></i>Выход</a></li>
+		<li><a href="{{ url('user/logout?return=' ~ strim(get_request_uri(), '/')) }}"><i class="fa fa-sign-out mr5"></i>Выход</a></li>
 	</ul>
 </div>	

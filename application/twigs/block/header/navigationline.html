@@ -1,48 +1,31 @@
-<div class="{{ theme_class }}">
-	<div class="menu-cont2 trn brb2 module">
-		<div class="row">
-			<div class="col-lg-5 col-md-3 col-sm-12 hidden-xs col-lg-push-7 col-md-push-9 clearfix">
-				<div class="menu-item-wrp js-citymenu-dropdown-right" style="float: right;position: relative;">
-					<span class="menu-item span-link city_change hidden-md hidden-xs hidden-sm" style="height: 100%;display: block;">
-						еще <i class="fa fa-caret-down ml5"></i>
-					</span>
-					<span class="menu-item span-link city_change hidden-lg" style="height: 100%;display: block;">
-						в другом городе <i class="fa fa-caret-down ml5"></i>
-					</span>
+
+<div class="menu-cont2 trn brb2 module main_menu">
+	<div class="row">
+		<div class="col-lg-9">
+			<div class="clearfix">
+				<div class="main_menu_item iLight hidden-sm crimson-theme hidden-xs top-razdel">
+					<span class="menu-item-cont">Объявления</span>
 				</div>
-				{% for key, _city in  {'nefteyugansk':'г. Нефтеюганск','nizhnevartovsk':'г. Нижневартовск','surgut':'г. Сургут','tyumen':'г. Тюмень'} if key != city.seo_name %}
-					{% set count = link_counters[domain(key, canonical_url, '')] %}
-					{% if count is empty or count > 0 %}
-						<a class="menu-item right visible-lg hidden-xs visible-sm hidden-md" href="//{{ domain(key, canonical_url, null, true) }}"><span class="menu-item-cont">{{ _city }} <span class="count">{{count}}</span></span></a>
-					{% endif %}
-				{% endfor %}
+
+				<div class="main_menu_item orange-theme js-newsmenu-dropdown " style="display:block; margin-top:0;">
+					<a class="menu-item-cont hidden-sm hidden-xs" href="/novosti">Новости<i class="fa fa-caret-down ml3"></i></a>
+				</div>
+
+				<div class="main_menu_item green-theme js-kuponmenu-dropdown" style="display:block;">
+					<a class="menu-item-cont hidden-sm hidden-xs" href="/kupony">Купоны<i class="fa fa-caret-down ml3"></i></a>
+				</div>
+
+				<div class="main_menu_item blue-theme city-companies" style="display:block;">
+					<a class="menu-item-cont" href="/search_company">Компании города</a>
+				</div>
 			</div>
-			<div class="col-lg-7 col-md-9 col-sm-12 col-xs-12 col-lg-pull-5 col-md-pull-3 clearfix main_menu">
-				<div class="menu-item w25p left iLight crimson-theme {% if staticMainMenu == false %} js-mainmenu-dropdown {% else %} hidden-sm hidden-xs{% endif %} top-razdel"><!--main-page-style iLight-disable-->
-					<span class="menu-item-cont ta-c">{% if staticMainMenu %}Объявления{% else %} Объявления<i class="fa fa-caret-down ml3"></i>{% endif %}</span>
-				</div>
-				<!-- Если меню статично, то на мобильных скрываем статичное меню и возвращаем его в привычное состояние-->
-				{% if staticMainMenu %}
-				<div class=" hidden-lg hidden-md menu-item w25p left iLight crimson-theme js-mainmenu-dropdown top-razdel w100xs">
-					<span class="menu-item-cont ta-c">Объявления<i class="fa fa-caret-down ml3"></i></span>
-				</div>
-				{% endif %}
-				<!-- КОнец блока -->
-				<div class="hidden-lg hidden-md hidden-sm top_menu_icon crimson-theme hidden" onclick="$('.js-newsmenu-dropdown, .js-kuponmenu-dropdown, .city-companies').slideToggle();">
-					<i class="fa fa-bars"></i>
-				</div>
-				<div class="menu-item w25p left green-dense-theme js-newsmenu-dropdown " style="display:block; margin-top:0;">
-					<span class="menu-item-cont hidden-sm hidden-xs" onclick="window.location='/novosti'">Новости<i class="fa fa-caret-down ml3"></i></span>
-					<span class="menu-item-cont hidden-lg visible-sm visible-xs" data-link="/novosti">Новости<i class="fa fa-caret-down ml3"></i></span>
-				</div>
-				<div class="menu-item w25p left light-blue-theme js-kuponmenu-dropdown" style="display:block;">
-					<span class="menu-item-cont hidden-sm hidden-xs" onclick="window.location='/kupony'">Купоны<i class="fa fa-caret-down ml3"></i></span>
-					<span class="menu-item-cont hidden-lg visible-sm visible-xs" data-link="/kupony">Купоны<i class="fa fa-caret-down ml3"></i></span>
-				</div>
-				<div class="menu-item w25p left purple-theme city-companies" style="display:block;">
-					<span class="menu-item-cont" onclick="window.location='/search_company'">Компании города</span>
-				</div>
-			</div>	
-		</div>			
-	</div>
+		</div>
+		<div class="col-lg-3 clearfix">
+			<div class="js-citymenu-dropdown-right">
+				<span class="city_change">
+					в другом городе <i class="fa fa-caret-down ml5"></i>
+				</span>
+			</div>
+		</div>	
+	</div>			
 </div>
