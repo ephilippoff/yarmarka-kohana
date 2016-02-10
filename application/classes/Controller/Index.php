@@ -67,7 +67,7 @@ class Controller_Index extends Controller_Template {
                 "published" =>TRUE,
                 "city_id" => $this->last_city_id,
                 "category_seo_name" => "novosti",
-                "not_id" => $premium_ids
+                //"not_id" => $premium_ids
             ),
             array("limit" => 7, "page" => 1, "order" => "date_expired")
         );
