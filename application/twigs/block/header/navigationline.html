@@ -1,50 +1,18 @@
-<!-- 
-<div class="menu-cont2 trn brb2 module main_menu">
-	<div class="row">
-		<div class="col-lg-9">
-			<div class="clearfix">
-				<div class="main_menu_item iLight hidden-sm crimson-theme hidden-xs top-razdel">
-					<span class="menu-item-cont">Объявления</span>
-				</div>
-
-				<div class="main_menu_item orange-theme js-newsmenu-dropdown " style="display:block; margin-top:0;">
-					<a class="menu-item-cont hidden-sm hidden-xs" href="/novosti">Новости<i class="fa fa-caret-down ml3"></i></a>
-				</div>
-
-				<div class="main_menu_item green-theme js-kuponmenu-dropdown" style="display:block;">
-					<a class="menu-item-cont hidden-sm hidden-xs" href="/kupony">Купоны<i class="fa fa-caret-down ml3"></i></a>
-				</div>
-
-				<div class="main_menu_item blue-theme city-companies" style="display:block;">
-					<a class="menu-item-cont" href="/search_company">Компании города</a>
-				</div>
-			</div>
-		</div>
-		<div class="col-lg-3 clearfix">
-			<div class="js-citymenu-dropdown-right">
-				<span class="city_change">
-					в другом городе <i class="fa fa-caret-down ml5"></i>
-				</span>
-			</div>
-		</div>	
-	</div>			
-</div> -->
-
-<div class="main_menu menu-cont2">
+<div class="main_menu menu-cont2" style="background:none;">
 	<div class="clearfix">
-		<div class="main_menu_item iLight hidden-sm hidden-xs top-razdel">
-			<span class="menu-item-cont">Объявления</span>
+		<div class="main_menu_item iLight hidden-sm hidden-xs {% if staticMainMenu == false %}js-mainmenu-dropdown{% endif %} top-razdel">
+			<span class="menu-item-cont">Объявления{% if staticMainMenu == false %}<i class="fa fa-caret-down ml3"></i>{% endif %}</span>
 		</div>
 
-		<div class="main_menu_item js-newsmenu-dropdown " style="display:block; margin-top:0;">
+		<div class="main_menu_item js-newsmenu-dropdown ">
 			<a class="menu-item-cont hidden-sm hidden-xs" href="/novosti">Новости<i class="fa fa-caret-down ml3"></i></a>
 		</div>
 
-		<div class="main_menu_item js-kuponmenu-dropdown" style="display:block;">
+		<div class="main_menu_item js-kuponmenu-dropdown">
 			<a class="menu-item-cont hidden-sm hidden-xs" href="/kupony">Купоны<i class="fa fa-caret-down ml3"></i></a>
 		</div>
 
-		<div class="main_menu_item city-companies" style="display:block;">
+		<div class="main_menu_item city-companies">
 			<a class="menu-item-cont" href="/search_company">Компании города</a>
 		</div>
 	</div>
