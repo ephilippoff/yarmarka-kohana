@@ -87,12 +87,14 @@ define([
             openMenu: function(){
                 this.$el.find('.bars, .preview_menu_block').addClass('active');
                 $("#popup-layer").fadeIn(200);
+                $('#search-form1').hide();
                 this.$menu.show().animate({left: '0'}, 300);
             },
 
             closeMenu: function(){
                 this.$el.find('.bars, .preview_menu_block').removeClass('active');
                 $("#popup-layer").fadeOut(200);
+                $('#search-form1').show();
                 this.$menu.animate({left: '-100%'}, 300).fadeOut();
             },
 

@@ -144,6 +144,10 @@
 	.coupon-item-cont .description-cont {
 	    font-size: 13px;
 	}
+
+	.menu_content{
+		width: 60%;
+	}
 }
 
 @media (max-width: 570px){
@@ -172,6 +176,10 @@
 
 	.image-block{
 		width: 30%;
+	}
+
+	.menu_content{
+		width: 80%;
 	}
 }
 
