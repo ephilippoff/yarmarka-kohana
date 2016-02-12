@@ -17,7 +17,7 @@
 			{% set menuHeight = (banners[category.id] is defined and banners[category.id].menu_height) ? banners[category.id].menu_height : 0 %}
 			{% set divWidth = (banners[category.id] is defined and banners[category.id].menu_width) ? banners[category.id].menu_width : 341 %}
 			{% set ulWidth = 191 %}
-			<div class="section section{{category.id}}" id="section{{category.id}}" style="width: {{divWidth}}px; display: none;position:relative;"  data-menu-height="{{menuHeight}}">				
+			<div class="section section{{category.id}}" id="section{{category.id}}" style="width: {{divWidth}}px; display: none;"  data-menu-height="{{menuHeight}}">				
 				<ul style="position: absolute;width:100%;height:100%;" class="submenu-ul">
 					<li>
 						{% if banners[category.id] is defined and file_exist('/uploads/banners/menu/' ~ banners[category.id].image) and banners[category.id].menu_name == 'main' %}
