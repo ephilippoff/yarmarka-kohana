@@ -145,6 +145,7 @@
 	    font-size: 13px;
 	}
 
+<<<<<<< HEAD
 	.ad_wrap{
 	    width: 33.333%;
 	}
@@ -152,10 +153,22 @@
 	.ad_wrap:nth-child(3),
 	.ad_wrap:nth-child(6){
 		display: none;
+=======
+	.menu_content{
+		width: 60%;
+	}
+
+	.city_col{
+		float: none;
+>>>>>>> index_surgut_3_0_fix
 	}
 }
 
 @media (max-width: 570px){
+
+	.preview_menu_block .search-cont{
+		display: none;
+	}
 
 
 }
@@ -181,6 +194,10 @@
 
 	.image-block{
 		width: 30%;
+	}
+
+	.menu_content{
+		width: 80%;
 	}
 }
 

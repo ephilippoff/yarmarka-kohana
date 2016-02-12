@@ -1,6 +1,6 @@
-<div class="top-line module">
+<div class="top-line module hidden-sm hidden-xs">
 	<div class="row">
-		<div class="col-md-2 col-sm-push-0 col-xs-6">
+		<div class="col-md-2">
 			<div class="logo">
 				<a rel="nofollow" href="/">
 					<img src="{{ staticfile('images/logo.png') }}" alt="Газета бесплатных объявлений Ярмарка-Тюменская область" title="Газета бесплатных объявлений Ярмарка-Тюменская область">
@@ -14,11 +14,15 @@
 			</div>
 		</div>
 		{% endif %}
-		<div class="col-md-2 col-md-push-8 col-xs-6">
-			<span class="button w100p dib bg-color-crimson add-advert white ta-c pointer" onclick="window.location='/add'">Подать объявление</span>
+		<div class="col-md-2">
+			<div class="menu-item-wrp js-citymenu-dropdown">
+				<span class="menu-item city_change">
+					{% set current_city = get_current_city() %}
+					<span>{{current_city}}</span><i class="fa fa-caret-down ml5"></i>
+				</span>
+			</div>
 		</div>
-		<div class="clearfix visible-xs visible-sm"></div>
-		<div class="col-md-8 col-md-pull-2">
+		<div class="col-md-6">
 			<!--/noindex-->
 			<div class="search-cont">
 				<div class="seach-bl">
@@ -40,10 +44,9 @@
 			</div>
 			<!--/noindex-->
 		</div>
-		<!-- <div class="col-md-4 col-md-pull-2">
-			<a href="/" target="_blank">
-				<img class="banner" src="{{ staticfile('images/banner1.gif') }}" width="1280" height="100" alt="" title="" border="0">
-			</a>						
-		</div>	 -->
+		
+		<div class="col-md-2">
+			<span class="button w100p dib bg-color-crimson add-advert white ta-c pointer" onclick="window.location='/add'">Подать объявление</span>
+		</div>
 	</div>
 </div>
