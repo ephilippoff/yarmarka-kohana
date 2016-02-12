@@ -45,7 +45,7 @@
 		<!-- User menu -->
 		<div class="list_div" id="user_menu">
 			{% if user %}
-				<h2>{{ user.email|e }}<i class="fa fa-user mr3"></i></h2>
+				<h2>{{ user.email|e }} <i class="fa fa-caret-right"></i></h2>
 				<div class="menu_container">
 					{% include "block/menu/user" with {'name' : 'outside'} %}
 				</div>
@@ -57,6 +57,10 @@
 					<a href="/user/registration">Регистрация</a>
 				</div>
 			{% endif %}
+			<h2>Ваш город: Сургут <i class="fa fa-caret-right"></i></h2>
+			<div class="menu_container">
+				{{ requestblock('block_twig/othercities', {'city_id': city.id, 'canonical_url': canonical_url, 'cols' : 2, 'class' : 'mobile'}) }}
+			</div>
 		</div>
 		<!-- User menu end -->
 
@@ -76,11 +80,55 @@
 		</div>
 		<a href="/search_company" class="companies">Компании города</a>
 
-		<div class="change_city_cont">
-			<h2>Ваш город: Сургут <i class="fa fa-caret-right"></i></h2>
-			<div class="menu_container">
-				{{ requestblock('block_twig/othercities', {'city_id': city.id, 'canonical_url': canonical_url, 'cols' : 2, 'class' : 'mobile'}) }}
-			</div>
-		</div>
 	</div>
 </div>
+
+<script>
+	;( function( $, window, document, undefined )
+	{
+		'use strict';
+
+		var elSelector		= '.preview_menu_block',
+			$element		= $( elSelector );
+
+		if( !$element.length ) return true;
+
+		var elHeight		= 0,
+			elTop			= 0,
+			$document		= $( document ),
+			dHeight			= 0,
+			$window			= $( window ),
+			wHeight			= 0,
+			wScrollCurrent	= 0,
+			wScrollBefore	= 0,
+			wScrollDiff		= 0;
+
+		$window.on( 'scroll', function()
+		{
+			elHeight		= $element.outerHeight();
+			dHeight			= $document.height();
+			wHeight			= $window.height();
+			wScrollCurrent	= $window.scrollTop();
+			wScrollDiff		= wScrollBefore - wScrollCurrent;
+			elTop			= parseInt( $element.css( 'top' ) ) + wScrollDiff;
+
+			if( wScrollCurrent <= 0 ) // scrolled to the very top; element sticks to the top
+				$element.css( 'top', 0 );
+
+			else if( wScrollDiff > 0 ) // scrolled up; element slides in
+				$element.css( 'top', elTop > 0 ? 0 : elTop );
+
+			else if( wScrollDiff < 0 ) // scrolled down
+			{
+				if( wScrollCurrent + wHeight >= dHeight - elHeight )  // scrolled to the very bottom; element slides in
+					$element.css( 'top', ( elTop = wScrollCurrent + wHeight - dHeight ) < 0 ? elTop : 0 );
+
+				else // scrolled down; element slides out
+					$element.css( 'top', Math.abs( elTop ) > elHeight ? -elHeight : elTop );
+			}
+
+			wScrollBefore = wScrollCurrent;
+		});
+
+	})( jQuery, window, document );
+</script>

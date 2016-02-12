@@ -148,9 +148,17 @@
 	.menu_content{
 		width: 60%;
 	}
+
+	.city_col{
+		float: none;
+	}
 }
 
 @media (max-width: 570px){
+
+	.preview_menu_block .search-cont{
+		display: none;
+	}
 
 
 }

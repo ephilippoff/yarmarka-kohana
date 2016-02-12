@@ -6,7 +6,7 @@
 {% set main_cities = ['tyumen','surgut','nizhnevartovsk','nefteyugansk'] %}
 <div class="proom-list iLight-cont js-citymenu{% if class %}_{{class}}{% endif %} border-color-blue popup-menu-cont brb2 w400 z300">
 	{% for col in 0..cols %}
-		<ul class="fl">
+		<ul class="fl city_col">
 			{% for city in cities|slice(i, rows) %}
 				<li>
 					<a href="//{{ domain(city.seo_name, canonical_url, null, true) }}" class="{% if city.seo_name in main_cities %}bold{% endif %}">{{ city.title}}</a>
