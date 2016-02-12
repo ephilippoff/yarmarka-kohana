@@ -57,6 +57,9 @@ class Controller_Block_Twig extends Controller_Block
         $city_id = $this->request->post("city_id");
         $twig = Twig::factory('block/menu/city');
 
+        $twig->cols = $this->request->post("cols");
+         $twig->class = $this->request->post("class");
+
         $cities = ORM::factory('City')->where("is_visible","=",1);
         if ($city_id)
             $cities = $cities->where("id","<>",$city_id);

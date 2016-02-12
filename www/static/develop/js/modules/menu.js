@@ -2,44 +2,102 @@
 define([
     'marionette',
     'menuAim'
-], function (Marionette) {
-    'use strict';
+    ], function (Marionette) {
+        'use strict';
 
-    var mainMenuSettings = {
-        controlClass: ".js-mainmenu-dropdown",
-        menuClass: ".js-mainmenu",
-        menuTemplate: "#template-mainmenu"
-    };
+        var mainMenuSettings = {
+            controlClass: ".js-mainmenu-dropdown",
+            menuClass: ".js-mainmenu",
+            menuTemplate: "#template-mainmenu"
+        };
 
-    var userMenuSettings = {
-        controlClass: ".js-usermenu-dropdown",
-        menuClass: ".js-usermenu",
-        menuTemplate: "#template-usermenu"
-    }
+        var userMenuSettings = {
+            controlClass: ".js-usermenu-dropdown",
+            menuClass: ".js-usermenu",
+            menuTemplate: "#template-usermenu"
+        }
 
-    var cityMenuSettings = {
-        controlClass: ".js-citymenu-dropdown",
-        menuClass: ".citymenu1",
-        menuTemplate: "#template-citymenu"
-    }
+        var cityMenuSettings = {
+            controlClass: ".js-citymenu-dropdown",
+            menuClass: ".citymenu1",
+            menuTemplate: "#template-citymenu"
+        }
 
-    var cityMenuSettingsRight = {
-        controlClass: ".js-citymenu-dropdown-right",
-        menuClass: ".citymenu2",
-        menuTemplate: "#template-citymenu"
-    }
+        var cityMenuSettingsRight = {
+            controlClass: ".js-citymenu-dropdown-right",
+            menuClass: ".citymenu2",
+            menuTemplate: "#template-citymenu"
+        }
 
-    var newsMenuSettings = {
-        controlClass: ".js-newsmenu-dropdown",
-        menuClass: ".js-newsmenu",
-        menuTemplate: "#template-newsmenu"
-    }
+        var newsMenuSettings = {
+            controlClass: ".js-newsmenu-dropdown",
+            menuClass: ".js-newsmenu",
+            menuTemplate: "#template-newsmenu"
+        }
 
-    var kuponMenuSettings = {
-        controlClass: ".js-kuponmenu-dropdown",
-        menuClass: ".js-kuponmenu",
-        menuTemplate: "#template-kuponmenu"
-    }
+        var kuponMenuSettings = {
+            controlClass: ".js-kuponmenu-dropdown",
+            menuClass: ".js-kuponmenu",
+            menuTemplate: "#template-kuponmenu"
+        }
+
+        var MobileMenu = Marionette.View.extend({
+            el: ".mobile_menu",
+            events: {
+                "click .bars" : "onButtonClick"
+            },
+
+            initialize: function(options){
+                this.$menu = this.$el.find('.menu_content');
+                $('#menu').accordion({
+                    heightStyle: "content",
+                    collapsible: true,
+                });
+
+                $('#user_menu, .change_city_cont').accordion({
+                    collapsible: true,
+                    active: false,
+                    heightStyle: "content",
+                });
+
+                var xPos = 50;
+                var me = this;
+                $(document).scroll(function() {
+                    if ($(document).scrollTop() >= xPos && !$('.menu_content').is(':visible'))
+                    {
+                        me.$el.find('.preview_menu_block').slideUp();
+                        xPos = $(document).scrollTop();
+                    }
+                    else
+                    {
+                        me.$el.find('.preview_menu_block').slideDown();
+                        xPos = $(document).scrollTop();
+                    }
+                });
+            },
+
+            onButtonClick: function(){
+                if (!$('.menu_content').is(':visible')) {
+                    this.openMenu();
+                }else{
+                    this.closeMenu();
+                }
+            },
+
+            openMenu: function(){
+                this.$el.find('.bars, .preview_menu_block').addClass('active');
+                $("#popup-layer").fadeIn(200);
+                this.$menu.show().animate({left: '0'}, 300);
+            },
+
+            closeMenu: function(){
+                this.$el.find('.bars, .preview_menu_block').removeClass('active');
+                $("#popup-layer").fadeOut(200);
+                this.$menu.animate({left: '-100%'}, 300).fadeOut();
+            },
+
+        });
+
     var MenuView = Marionette.ItemView.extend({
         events: {
             "click" : "showMenu",
@@ -90,96 +148,97 @@ define([
         }
     });
 
-    var MainmenuView = MenuView.extend({
-        initialize: function(options) {
-            MenuView.prototype.initialize.call(this, options);
-            var s = this;
-            console.log('init');
-            var $menu = this.$el.find(this.getOption("menuClass")+ " ul.top");
+var MainmenuView = MenuView.extend({
+    initialize: function(options) {
+        MenuView.prototype.initialize.call(this, options);
+        var s = this;
+        var $menu = this.$el.find(this.getOption("menuClass")+ " ul.top");
 
-            $('.left_menu').find('.section').each(function(){
-                var id = $(this).attr('id');
-                $(this).attr('id', id+'-l');
-            });
+        $('.left_menu').find('.section').each(function(){
+            var id = $(this).attr('id');
+            $(this).attr('id', id+'-l');
+        });
 
-            $('.left_menu').find('ul.top li').each(function(){
-                var id = $(this).attr('data-submenu-id');
-                $(this).attr('data-submenu-id', id+'-l');
-            });
+        $('.left_menu').find('ul.top li').each(function(){
+            var id = $(this).attr('data-submenu-id');
+            $(this).attr('data-submenu-id', id+'-l');
+        });
 
-            if ($menu.length > 0){
-                try {
-                    $menu.menuAim({
-                        activate: this.activateSubmenu.bind(this), 
-                        deactivate: this.deactivateSubmenu,
-                        rowSelector: ".js-submenu-item"
-                    });
-                } catch(e) {}
-            }
-        },
-        onRender: function() {
-
-        },
-        activateSubmenu: function(row) {
-            var s = this;
-            if (this.submenuActivateTimer) clearTimeout(this.submenuActivateTimer);
-
-            this.activeRow = row;
-            this.submenuActivateTimer = setTimeout(function(){
-                var $row = $(row), 
-                    submenuId = $row.data("submenu-id"), 
-                    submenu = "#" + submenuId;
-
-                  $(submenu).show();
-            }, 200);
-           
-        },
-        deactivateSubmenu: function(row) {
-            if (this.submenuActivateTimer) clearTimeout(this.submenuActivateTimer);
-            if (!row) {
-                row = this.activeRow;
-            }
-            var $row = $(row), 
-                submenuId = $row.data("submenu-id"), 
-                submenu = "#" + submenuId;
-
-            $(submenu).fadeOut(70);
-        }
-    });
-
-
-
-    return Marionette.Module.extend({
-        initialize: function() {
-            this.user = new MenuView({
-                el: userMenuSettings.controlClass,
-                templateClass: userMenuSettings.menuTemplate,
-                menuClass: userMenuSettings.menuClass,
-                controlClass: userMenuSettings.controlClass,
-            });
-        },
-        init: function (menusToload) {
-            menusToload = menusToload || [];
-
-            if (_.contains(menusToload, "main")) {
-                this.main = new MenuView({
-                    el: mainMenuSettings.controlClass,
-                    templateClass: mainMenuSettings.menuTemplate,
-                    menuClass: mainMenuSettings.menuClass,
-                    controlClass: mainMenuSettings.controlClass,
-                    doNotRemove: true
+        if ($menu.length > 0){
+            try {
+                $menu.menuAim({
+                    activate: this.activateSubmenu.bind(this), 
+                    deactivate: this.deactivateSubmenu,
+                    rowSelector: ".js-submenu-item"
                 });
-            }
+            } catch(e) {}
+        }
+    },
+    onRender: function() {
 
-            if (_.contains(menusToload, "main")) {
-                var menuOptions = {
-                    el: mainMenuSettings.controlClass,
-                    templateClass: mainMenuSettings.menuTemplate,
-                    menuClass: mainMenuSettings.menuClass,
-                    controlClass: mainMenuSettings.controlClass
-                };
+    },
+    activateSubmenu: function(row) {
+        var s = this;
+        if (this.submenuActivateTimer) clearTimeout(this.submenuActivateTimer);
 
-                if (_globalSettings.page == 'index') {
+        this.activeRow = row;
+        this.submenuActivateTimer = setTimeout(function(){
+            var $row = $(row), 
+            submenuId = $row.data("submenu-id"), 
+            submenu = "#" + submenuId;
+
+            $(submenu).show();
+        }, 200);
+
+    },
+    deactivateSubmenu: function(row) {
+        if (this.submenuActivateTimer) clearTimeout(this.submenuActivateTimer);
+        if (!row) {
+            row = this.activeRow;
+        }
+        var $row = $(row), 
+        submenuId = $row.data("submenu-id"), 
+        submenu = "#" + submenuId;
+
+        $(submenu).fadeOut(70);
+    }
+});
+
+
+
+return Marionette.Module.extend({
+    initialize: function() {
+        this.user = new MenuView({
+            el: userMenuSettings.controlClass,
+            templateClass: userMenuSettings.menuTemplate,
+            menuClass: userMenuSettings.menuClass,
+            controlClass: userMenuSettings.controlClass,
+        });
+
+        this.mobilemenu = new MobileMenu();
+    },
+    init: function (menusToload) {
+        menusToload = menusToload || [];
+
+        if (_.contains(menusToload, "main")) {
+            this.main = new MenuView({
+                el: mainMenuSettings.controlClass,
+                templateClass: mainMenuSettings.menuTemplate,
+                menuClass: mainMenuSettings.menuClass,
+                controlClass: mainMenuSettings.controlClass,
+                doNotRemove: true
+            });
+        }
+
+        if (_.contains(menusToload, "main")) {
+            var menuOptions = {
+                el: mainMenuSettings.controlClass,
+                templateClass: mainMenuSettings.menuTemplate,
+                menuClass: mainMenuSettings.menuClass,
+                controlClass: mainMenuSettings.controlClass
+            };
+
+            if (_globalSettings.page == 'index') {
                     //override some settings
                     menuOptions.alwaysVisibleMenu = true;
                     menuOptions.doNotRemove = true;

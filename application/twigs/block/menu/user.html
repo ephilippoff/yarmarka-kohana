@@ -1,6 +1,8 @@
 {% set user = get_user() %}
 <div class="proom-list iLight-cont js-usermenu border-color-blue popup-menu-cont right brb2 z300">
+	{% if name != 'outside' %}
 	<p class="pl10 pt10 pr10 bold">{{ user.email|e }}</p>
+	{% endif %}
 	<ul class="user-ul">
 		{% if user %}
 			<li><a href="{{ url('user/') }}"><i class="fa fa-newspaper-o"></i> Мои объявления</span>
