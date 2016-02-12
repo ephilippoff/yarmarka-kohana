@@ -1,0 +1,86 @@
+<div class="mobile_menu">
+	<div class="preview_menu_block clearfix hidden-lg hidden-md">
+		<div class="search-cont">
+			<div class="seach-bl">
+				<div class="input-seach">
+					<form action="/" method="get" name="search-form" id="search-form1" class="js-search-form">
+						<div class="input-group w100p">
+							<input class="search placeholder form-control js-search-input" name="search" id="search-input" value="{{ search_text }}" type="text" placeholder="{% if get_session_value('site_disable') %}Сайт в режиме разработки.{% else %}Поиск объявлений{% endif %}" autocomplete="off" data-city="{{city.id}}">
+							<div class="input-group-addon">
+								<button class="button bg-color-crimson button-style1" type="submit"><i class="fa fa-search fa-lg"></i></button>
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="search-popup border-color-crimson js-search-popup-cont z400">
+				</div>
+			</div>
+		</div>
+		<div class="bars">
+			<span class="sw-topper"></span>
+			<span class="sw-bottom"></span>
+			<span class="sw-footer"></span>
+		</div>
+	</div>
+	<div class="menu_content">
+		<!-- Search -->
+		<div class="search-cont" style="margin-bottom:30px;">
+			<div class="seach-bl">
+				<div class="input-seach">
+					<form action="/" method="get" name="search-form" id="search-form2" class="js-search-form">
+						<div class="input-group w100p">
+							<input class="search placeholder form-control js-search-input" name="search" id="search-input" value="{{ search_text }}" type="text" placeholder="{% if get_session_value('site_disable') %}Сайт в режиме разработки.{% else %}Поиск объявлений{% endif %}" autocomplete="off" data-city="{{city.id}}">
+							<div class="input-group-addon">
+								<button class="button bg-color-crimson button-style1" type="submit"><i class="fa fa-search fa-lg"></i></button>
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="search-popup border-color-crimson js-search-popup-cont z400">
+				</div>
+			</div>
+		</div>
+		<!-- Search end -->
+		
+		<!-- User menu -->
+		<div class="list_div" id="user_menu">
+			{% if user %}
+				<h2>{{ user.email|e }}<i class="fa fa-user mr3"></i></h2>
+				<div class="menu_container">
+					{% include "block/menu/user" with {'name' : 'outside'} %}
+				</div>
+			{% else %}
+				<h2 style="background:#C11515;">Личный кабинет<i class="fa fa-caret-right"></i></h2>
+				<div class="menu_container">
+					<a class="hidden-xxs" href="/user/login?return={{ strim(get_request_uri(), '/') }}">Вход в личный кабинет</a>
+					<a class="visible-xxs hidden-xs" href="/user/login?return={{ strim(get_request_uri(), '/') }}">Вход</a>
+					<a href="/user/registration">Регистрация</a>
+				</div>
+			{% endif %}
+		</div>
+		<!-- User menu end -->
+
+		<div id="menu">
+			<h2>Объявления <i class="fa fa-caret-right"></i></h2>
+			<div class="menu_container">
+				{{ requestblock('block_twig/mainmenu', {'city_id': city.id}) }}
+			</div>
+			<h2>Новости <i class="fa fa-caret-right"></i></h2>
+			<div class="menu_container">
+				{{ requestblock('block_twig/newsmenu', {'city_id': city.id}) }}
+			</div>
+			<h2>Купоны <i class="fa fa-caret-right"></i></h2>
+			<div class="menu_container">
+				{{ requestblock('block_twig/kuponmenu', {'city_id': city.id}) }}
+			</div>
+		</div>
+		<a href="/search_company" class="companies">Компании города</a>
+
+		<div class="change_city_cont">
+			<h2>Ваш город: Сургут <i class="fa fa-caret-right"></i></h2>
+			<div class="menu_container">
+				{{ requestblock('block_twig/othercities', {'city_id': city.id, 'canonical_url': canonical_url, 'cols' : 2, 'class' : 'mobile'}) }}
+			</div>
+		</div>
+	</div>
+</div>
