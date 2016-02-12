@@ -1446,9 +1446,7 @@ article img.news-photo{
 
 .ad_wrap .cost{
     text-align: right;
-<<<<<<< HEAD
     padding: 3px 0 15px;
-=======
     padding: 7px 0 0;
     font-weight: bold;
 }
@@ -1661,5 +1659,5 @@ a.companies{
 .preview_menu_block .search-cont .input-group-addon{
     border-top-right-radius: 2px;
     border-bottom-right-radius: 2px;
->>>>>>> index_surgut_3_0_fix
+
 }
