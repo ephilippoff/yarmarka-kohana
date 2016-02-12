@@ -1165,7 +1165,7 @@ img.category-icon{
     background-color: #D0CDCD;
     color: #fff;
 }
-.left_menu .right>.section{
+.left_menu .right{
     /*display: block !important;*/
     background-color: #fff;
     height: 100%;

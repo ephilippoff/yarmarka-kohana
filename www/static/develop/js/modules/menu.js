@@ -96,7 +96,7 @@ define([
             var s = this;
             console.log('init');
             var $menu = this.$el.find(this.getOption("menuClass")+ " ul.top");
-
+console.log(this.getOption("menuClass")+ " ul.top");
             $('.left_menu').find('.section').each(function(){
                 var id = $(this).attr('id');
                 $(this).attr('id', id+'-l');
@@ -109,10 +109,11 @@ define([
 
             if ($menu.length > 0){
                 try {
+                    
                     $menu.menuAim({
                         activate: this.activateSubmenu.bind(this), 
-                        deactivate: this.deactivateSubmenu,
-                        rowSelector: ".js-submenu-item"
+                        deactivate: this.deactivateSubmenu.bind(this),
+                        rowSelector: this.$(".js-submenu-item")
                     });
                 } catch(e) {}
             }
@@ -183,14 +184,50 @@ define([
                     //override some settings
                     menuOptions.alwaysVisibleMenu = true;
                     menuOptions.doNotRemove = true;
-                    menuOptions.el = '.left_menu';
-                    menuOptions.menuClass = '.top_level_menu';
+                    menuOptions.el = $('.left_menu');
+                    menuOptions.menuClass = '.top_level_menu:visible';
                     menuOptions.doNotUseTemplate = true;
 
                     var me = this;
-                    $(menuOptions.el).on('mouseleave', function (e) {
+                    var allowDeactivate = true;
+                    $('body').on('mousemove', function (e) {
+                        var r = me.main.$el.find('.right');
+                        var l = me.main.$el.find('.left');
+                        var rd = { w: r.width(), h: r.height() };
+                        var ld = { w: l.width(), h: l.height() };
+
+                        var td = { w: rd.w + ld.w, h: rd.h + ld.h };
+                        var to = l.offset();
+
+                        var w = to.left <= e.pageX && e.pageX <= (to.left + td.w);
+                        var h = to.top <= e.pageY && e.pageY <= (to.top + td.h);
+
+                        if (w && h) {
+                            return;
+                        }
+
                         me.main.deactivateSubmenu();
                     });
+                    /*
+                    $(menuOptions.el).find('.submenu-ul').on('mousemove', function (e) {
+                        var x = this;
+                        var offset = $(x).offset();
+                        var mouseOffset = { top: e.pageY, left: e.pageX };
+
+                        console.log([ $(x).width(), $(x).height() ], offset, mouseOffset);
+
+                        if (
+                            offset.top <= mouseOffset.top && offset.top + $(x).height() >= mouseOffset.top
+                            && offset.left <= mouseOffset.left && offset.left + $(x).width() >= mouseOffset.left) {
+
+                            e.stopPropagation();
+                            allowDeactivate = false;
+                        } else {
+                            allowDeactivate = true;
+                            console.log('close');
+                        }
+                    });
+*/
                 }
 
                 this.main = new MainmenuView(menuOptions);
