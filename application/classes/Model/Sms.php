@@ -8,27 +8,39 @@ class Model_Sms extends ORM {
 
 	protected $_table_name = 'sms';
 
-	public function set_success($response)
+	public function set_success($response_text, $response = NULL)
 	{
 		if ( ! $this->loaded())
 		{
 			return FALSE;
 		}
 
-		$this->response = $response;
+		if ($response) {
+			$this->pilot_id = $response['id'];
+			$this->status_code = $response['status'];
+		}
+
+		$this->response = $response_text;
 		$this->status = self::SUCCESS;
 
 		return $this->save();
 	}
 
-	public function set_error($response)
+	public function set_error($response_text, $response = NULL)
 	{
 		if ( ! $this->loaded())
 		{
 			return FALSE;
 		}
 
-		$this->response = $response;
+
+		if ($response) {
+			$this->pilot_id = $response['id'];
+			$this->status_code = $response['status'];
+		}
+
+
+		$this->response = $response_text;
 		$this->status = self::ERROR;
 
 		return $this->save();
