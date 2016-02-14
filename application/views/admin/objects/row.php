@@ -10,7 +10,7 @@
 		<?=$object->id?> 
 		<?php 
 	 		$services = array();
-	 		if ($compiled["services"]) {
+	 		if (@$compiled["services"]) {
 		 		foreach ($compiled["services"] as $key => $service) {
 		 			if (count($service) > 0 ) {
 		 				array_push($services, $key." (".count($service).")");
@@ -24,7 +24,7 @@
 
 	</td>
 	<td>
-		<?=$compiled["city"]?><br />
+		<?=@$compiled["city"]?><br />
 		<?=$categories[$object->category]?>
 	</td>
 	<td>
@@ -66,7 +66,7 @@
 		<p class="text-error">
 		 	<?php 
 		 		$attributes = array();
-		 		if ($compiled["attributes"]) {
+		 		if (@$compiled["attributes"]) {
 			 		foreach ($compiled["attributes"] as $key => $attribute) {
 			 			array_push($attributes, $attribute["title"].":".$attribute["value"]);
 			 		}
@@ -75,7 +75,7 @@
 			<?=implode(", ", $attributes)?>
 		</p>
 		<address>
-			<?=$compiled["region"]?>,<?=$compiled["city"]?>,<?=$compiled["address"]?>
+			<?=@$compiled["region"]?>,<?=@$compiled["city"]?>,<?=@$compiled["address"]?>
 		</address>
 	</td>
 	<td style="width:200px;">
