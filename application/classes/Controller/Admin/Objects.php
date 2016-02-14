@@ -531,8 +531,8 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 		// 	'object_contacts' => $object_contacts,
 		// 	'roles' => $roles
 		// );
-
-		// $this->template->object = $object;
+		$user_role = Auth::instance()->get_user()->role;
+		$this->template->user_role_admin = (in_array($user_role, array(1,5,9))) ? TRUE: FALSE;
 	}
 
 	public function action_edit()
