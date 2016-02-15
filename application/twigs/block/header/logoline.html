@@ -1,24 +1,17 @@
 <div class="top-line module hidden-sm hidden-xs">
 	<div class="row">
 		<div class="col-md-2">
-			<div class="logo">
-				<a rel="nofollow" href="/">
-					<img src="{{ staticfile('images/logo.png') }}" alt="Газета бесплатных объявлений Ярмарка-Тюменская область" title="Газета бесплатных объявлений Ярмарка-Тюменская область">
-				</a>
-			</div>
-		</div>
-		{% if showCatalogMenuButtonAfterLogo %}
-		<div class="menu-cont2 col-xs-6 col-sm-6 col-md-2 {{ catalogMenuAfterLogoButtonAdditionalClass }}">
-			<div class="menu-item menu-button left crimson-theme w100p iLight js-mainmenu-dropdown"><!--main-page-style iLight-disable-->
-				<span class="menu-item-cont ta-c"><i class="fa fa-bars hidden-md hidden-lg"></i>Выбрать рубрику<i class="fa fa-caret-down ml3 hidden-sm hidden-xs"></i></span>
-			</div>
-		</div>
-		{% endif %}
-		<div class="col-md-2">
 			<div class="menu-item-wrp js-citymenu-dropdown">
 				<span class="menu-item city_change">
 					{% set current_city = get_current_city() %}
 					<span>{{current_city}}</span><i class="fa fa-caret-down ml5"></i>
+				</span>
+			</div>
+		</div>
+		<div class="col-md-2">
+			<div class="menu-item-wrp category-btn">
+				<span class="menu-item city_change">
+					<span>Легковые авто</span></i>
 				</span>
 			</div>
 		</div>
