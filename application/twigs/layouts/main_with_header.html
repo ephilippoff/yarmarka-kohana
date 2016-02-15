@@ -2,7 +2,6 @@
 
 {% block body %} 
 	{% block header %}
-		{% include 'block/header/mobile_menu/index' %}
 		<header>
 		{{ requestblock('block_twig/topline', {'favourites':favourites, 'staticMainMenu' : staticMainMenu}) }}
 		{% include 'block/header/logoline' %}
