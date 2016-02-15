@@ -1449,7 +1449,6 @@ article img.news-photo{
 .ad_wrap .cost{
     text-align: right;
     padding: 3px 0 15px;
-<<<<<<< HEAD
     padding: 7px 0 0;
     font-weight: bold;
 }
@@ -1673,7 +1672,7 @@ a.companies{
 
 .logo_white img{
     height: 100%;
-=======
+
 }
 
 .submenu-ul:after {
@@ -1684,5 +1683,4 @@ a.companies{
     width:40px;
     left:-30px;
     top:0;
->>>>>>> 0588f8d4ffc996ded4bb8b3ba0ee285991be3759
 }
