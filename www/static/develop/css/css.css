@@ -1563,7 +1563,7 @@ article img.news-photo{
     height: 100vh;
     position: absolute;
     top: 0;
-    left: 0%;
+    left: -100%;
     background-color: #2F1A1A;
     color: #fff;
     padding: 20px 30px;
@@ -1645,9 +1645,9 @@ a.companies{
 
 .preview_menu_block .search-cont{
     width: 40%;
-    float: left;
-    position: relative;
-    left: 30%;
+    float: right;
+    margin-right: 50px;
+    margin-top: 1px;
 }
 
 .preview_menu_block .search-cont input{
@@ -1660,4 +1660,14 @@ a.companies{
     border-top-right-radius: 2px;
     border-bottom-right-radius: 2px;
 
+}
+
+.logo_white{
+    display: block;
+    float: left;
+    height: 36px;
+}
+
+.logo_white img{
+    height: 100%;
 }
