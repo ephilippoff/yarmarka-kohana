@@ -24,6 +24,7 @@
 
 	</td>
 	<td>
+		<b><?=@$cities[$object->city_id]?> </b> <br />
 		<?=@$compiled["city"]?><br />
 		<?=$categories[$object->category]?>
 	</td>
