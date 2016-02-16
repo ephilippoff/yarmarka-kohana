@@ -130,8 +130,18 @@ Route::set('detail', '<path>/<object_seo_name>.html',  array('path' => '[a-zA-Z0
 // 		'controller' => 'Detail',
 // 		'action'     => 'index'
 // 	));
-	
 
+Route::set('reklamodatelyam_static', 'reklamodatelyam/<path>', array('path' => '.*(\.js|\.css|\.png|\.jpg|\.gif)$'))
+	->defaults(array(
+		'controller' => 'Static',
+		'action'     => 'reklamodatelyam_static',
+	));
+	
+Route::set('reklamodatelyam', 'reklamodatelyam/<path>', array('path' => '.*'))
+	->defaults(array(
+		'controller' => 'Static',
+		'action'     => 'reklamodatelyam',
+	));
 
 Route::set('not_unique_contact_msg', 'block/not_unique_contact_msg/<number>')
 	->defaults(array(
