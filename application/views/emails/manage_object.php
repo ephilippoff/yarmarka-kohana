@@ -24,10 +24,10 @@
 		</div>
 
 		<div class="content" style="text-align: center; margin-top: 30px;" align="center">
-			<div class="img" style="display: inline-block; width: 100%; max-width: 165px; text-align: center;" align="center">
-				<img src="<?=URL::site('static/develop/production/images/2_165.jpg', 'http')?>">
+			<div class="img" style="display: inline-block; width: 100%; max-width: 280px; text-align: center;" align="center">
+				<img src="<?=URL::site('static/develop/production/images/9_165.jpg', 'http')?>">
 		</div>
-			<div class="text" style="text-align: left; line-height: 1.6; display: inline-block; width: 100%; max-width: 630px; margin-bottom: 15px;" align="left">
+			<div class="text" style="text-align: left; line-height: 1.6; display: inline-block; width: 100%; max-width: 500px; margin-bottom: 15px;" align="left">
 				<h2 style="font-size: 1.5em; display: block; text-align: center; margin-bottom: 15px;" align="center">Здравствуйте!</h2>
 				На <a style="color: #d44234;" href="<?php echo CI::base('http') ?>">yarmarka.biz</a> произошли следующие действия с вашими объявлениями: <br><br>
 				<? foreach($actions as $action) {?>
