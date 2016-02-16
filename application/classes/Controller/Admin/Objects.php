@@ -519,7 +519,8 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 			->where('is_visible',"=",1)
 			->order_by('title')
 			->cached(Date::WEEK)
-			->find_all();
+			->find_all()
+			->as_array('id', 'title');
 
 		// $params = array(
 		// 	'object' => $object, 
