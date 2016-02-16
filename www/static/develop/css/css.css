@@ -1005,7 +1005,6 @@ a.auto-collapse-expand {
     border-bottom: 1px solid #ccc;
     padding: 0 10px 10px 10px;
     margin-bottom: 10px;
-    word-break: break-word;
 }
 
 .last_news_ul li:last-child{
