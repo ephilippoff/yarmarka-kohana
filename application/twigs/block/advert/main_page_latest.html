@@ -2,16 +2,16 @@
 	<div class="title_block brt2">Свежие объявления</div>
 	{% for item in data %}
 	<div class="ad_wrap">
-		{% if item.price > 0 %}
-			<div class="cost bold">{{ item.price|number_format(0, ' ', ' ') }} <i class="fa fa-rub"></i></div>
-		{% else %}
-			<span style="min-height:32px;"></span>
-		{% endif %}
 		<a href="{{item.url}}">
 			<div class="img_block">
 				<img src="{{ item.image }}" alt="{{ item.title }}">
 			</div>
 		</a>
+		{% if item.price > 0 %}
+			<div class="cost bold">{{ item.price|number_format(0, ' ', ' ') }} <i class="fa fa-rub"></i></div>
+		{% else %}
+			<span style="min-height:26px;"></span>
+		{% endif %}
 		{% if item.title|length > 40 %}
 		<div class="title"><a href="{{item.url}}">{{ item.title|slice(0,40) }}...</a></div>
 		{% else %}
