@@ -10,7 +10,7 @@
 		{% if item.price > 0 %}
 			<div class="cost bold">{{ item.price|number_format(0, ' ', ' ') }} <i class="fa fa-rub"></i></div>
 		{% else %}
-			<span style="min-height:26px;"></span>
+			<div style="height:24px;"></div>
 		{% endif %}
 		{% if item.title|length > 40 %}
 		<div class="title"><a href="{{item.url}}">{{ item.title|slice(0,40) }}...</a></div>
