@@ -69,7 +69,8 @@ class Detailpage_Default
 
 		$similar_search_query = Search::searchquery(
 			array(
-				"hash" => Cookie::get('search_hash'),
+				//"hash" => Cookie::get('search_hash'),
+				'category_id' => $object->category,
 				"not_id" => Cookie::get('ohistory') ? 
 									array_merge(explode(",", Cookie::get('ohistory')), array($object->id)) 
 										: array($object->id)
