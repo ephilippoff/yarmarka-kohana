@@ -15,6 +15,13 @@ define([ 'jquery' ], function ($) {
 				data: JSON.stringify({ id: $el.data('id') }), 
 				success: function () {
 					$el.data('disableReklamaClickIncrement', true);
+					var x = function () { $el.removeAttr('target'); };
+					var y = function () { $el.attr('target', '_blank'); };
+					if (is_mobile_user_agent()) {
+						x();
+					} else {
+						y();
+					}
 					$el[0].click();
 				},
 				dataType:'json'
