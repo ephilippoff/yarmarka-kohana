@@ -1447,6 +1447,7 @@ article img.news-photo{
 
 .ad_wrap .cost{
     text-align: right;
+<<<<<<< HEAD
     padding: 3px 0 15px;
     padding: 7px 0 0;
     font-weight: bold;
@@ -1671,6 +1672,7 @@ a.companies{
 
 .logo_white img{
     height: 100%;
+    padding: 3px 0;
 
 }
 
