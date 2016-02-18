@@ -72,8 +72,7 @@
 						{% for innerItem in item.items %}
 							{% if loop.first %}
 								<div class="col-md-6 clearfix main_cat_news">
-									<div class="date light fs12 mb10">{{ innerItem.date|date('m:h') }} 
-										{{currentDate}}
+									<div class="date light fs12 mb10">{{ innerItem.date|date('m:h') }}
 										{% if innerItem.date|date('d.m.y') == currentDate %}
 											<span>{{ today }}</span>
 										{% else %}
