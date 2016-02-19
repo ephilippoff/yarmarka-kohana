@@ -27,7 +27,7 @@ define([
             if (!this.model.get("is_edit")){
                 if (this.model.get("city_id")){
                     var cities = this.getNewspaperCities();
-                    this.changeCity(cities[this.model.get("city_id")][1]);
+                    this.changeCity(cities[1948][1]);
                 }
             }
         },
@@ -44,7 +44,7 @@ define([
             });
         },
         getNewspaperCities: function() {
-                return {1948: ["Ярмарка-Нижневартовск","nizhnevartovsk"], 1919:["Ярмарка-Тюмень","tyumen"],1979:["Ярмарка-Сургут","surgut"] };
+                return {1948: ["Ярмарка-Нижневартовск","nizhnevartovsk"] };
         },
         templateHelpers: function() {
             var s = this;
