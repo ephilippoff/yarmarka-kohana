@@ -310,6 +310,9 @@ Route::set('default', '(<controller>(/<action>(/<id>)))')
 		if (! in_array($params["controller"], Kohana_Other::get_controllers(Kohana::list_files('classes/Controller')))) {
 			return FALSE;
 		}
+		if ($params["controller"] == 'Search') {
+			return FALSE;
+		}
 	})
 	->defaults(array(
 		'controller' => 'Index',
