@@ -658,7 +658,7 @@ class Controller_Ajax_Massload extends Controller_Template {
 			$ol->setState(99, "Не обнаружено ни одной строки");
 		}
 
-		
+		Email::send(Kohana::$config->load('common.admin_emails'), Kohana::$config->load('email.default_from'), 'Добавили новый  файл для массовой загрузки', 'Добавили новый  файл для массовой загрузки');
 
 		$this->json['data'] = "ok";
 		$this->json['objectload_id'] = $ol->_objectload_id;
