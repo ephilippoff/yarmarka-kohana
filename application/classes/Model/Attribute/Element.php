@@ -48,6 +48,20 @@ class Model_Attribute_Element extends ORM
 					->where("attribute_element.id", "IN", $object_subquery)
 					->where("reference.category", "=", (int) $category_id )
 					->where("reference.is_seo_used","=",1);
+	}
+
+	public function get_elements($category_id)
+	{
+		
+
+		return ORM::factory('Attribute_Element')
+					->select("attribute_element.*", array("attribute.seo_name","attribute_seo_name"))
+					->join('attribute')
+						->on("attribute_element.attribute","=","attribute.id")
+					->join('reference')
+						->on("attribute.id","=","reference.attribute")
+					->where("reference.category", "=", (int) $category_id )
+					->where("reference.is_seo_used","=",1);
 	}	
 }
 
