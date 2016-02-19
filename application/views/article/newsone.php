@@ -106,7 +106,10 @@
 								?>
 								<?php foreach ($news_list as $article) : ?>
 									<?php $query_uri = '?em_client_email=noreply@yarmarka.biz&em_campaign_id=4&em_campaign_name=newsone_'.$article->id ?>
-									<li><?php if ($article->is_category == 0) : ?><span><?=date('d.m', strtotime($article->start_date))?></span><?php endif; ?> <a rel="nofollow" href="<?=URL::site(Route::get('newsone')->uri(array('id' => $article->id, 'seo_name' => $article->seo_name))).$query_uri?>"><?=$article->title?></a></li>
+									<li><?php if ($article->is_category == 0 AND $newsone->seo_name <> 'infografika') : ?>
+										<span><?=date('d.m', strtotime($article->start_date))?></span>
+									<?php endif; ?>
+									 <a rel="nofollow" href="<?=URL::site(Route::get('newsone')->uri(array('id' => $article->id, 'seo_name' => $article->seo_name))).$query_uri?>"><?=$article->title?></a></li>
 								<?php endforeach; ?>
 							</ul>
 						<?php endif; ?>						

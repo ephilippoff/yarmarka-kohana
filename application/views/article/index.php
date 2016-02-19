@@ -13,19 +13,6 @@
 			
 			<section class="main-section iPage-leftPading">	                			
 				<div class="innerPage">
-					<?php if (FALSE) : ?>
-					<aside class="iPage-rightAside">
-						<h2>Полезные ссылки</h2>
-						<br/>
-						<ul>
-							<li><a href="">FAQ</a></li>
-							<li><a href="">Помощь по сайту</a></li>
-							<li><a href="">Зарегистрироваться</a></li>
-							<li><a href="">ДОНАТ ДОНАТ</a></li>
-							<li><a href="">Мы любим индууууур</a></li>
-						</ul>
-					</aside>
-					<?php endif; ?>
 					<div class="innerPage-cont iPage-rightPadding">
 						<article class="iPage-article">
 							<h1 class="big" style="text-align: center;"><?=$article->title?></h1>
