@@ -541,7 +541,7 @@ class Search_Url
     {
         $result = array();
         $element = ORM::factory('Attribute_Element', $element_id);
-        if (!$element->loaded()) return "";
+        if (!$element->loaded()) return array();
 
         $parent_element_id = $element->parent_element;
         array_push($result, $element);

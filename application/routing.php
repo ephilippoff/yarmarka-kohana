@@ -87,12 +87,12 @@ Route::set('detail', '<path>/<object_seo_name>.html',  array('path' => '[a-zA-Z0
 		$object_id =  (int) end($object_seo_name_segments);
 
 		if ($object_id == 0) {
-			throw new HTTP_Exception_404;
+			return FALSE;
 		}
 
 		$object = ORM::factory('Objectcompiled', $object_id);
 		if (!$object->loaded()) {
-			throw new HTTP_Exception_404;
+			return FALSE;
 		}
 
 		$url = $object->get_full_url();
@@ -102,6 +102,7 @@ Route::set('detail', '<path>/<object_seo_name>.html',  array('path' => '[a-zA-Z0
 		if ($object->type_tr AND in_array($object->type_tr, array(101,102,201,89))) {
 			$params["action"] = "type".$object->type_tr;
 		}
+
 		return $params;
 	})->defaults(array(
 		'controller' => 'Detail',
