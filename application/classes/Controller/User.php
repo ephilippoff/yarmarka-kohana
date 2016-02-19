@@ -297,6 +297,8 @@ class Controller_User extends Controller_Template {
     	$this->assets->js('http://yandex.st/backbone/1.1.2/backbone-min.js');  	
     	$this->assets->js('old/ajaxupload.js');
 
+    	throw new HTTP_Exception_404;
+    	
     	$already_agree = FALSE;
     	$us = ORM::factory('User_Settings')
     					->get_by_name($this->user->id, "priceload_agreed")
@@ -397,7 +399,7 @@ class Controller_User extends Controller_Template {
 	public function action_objectunload()
     {
     	$this->layout = 'users_v2';  
-
+    	throw new HTTP_Exception_404;
     	$avail_categories = Kohana::$config->load('massload.frontend_load_category');
 
     	$categories = Array();								
