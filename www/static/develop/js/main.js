@@ -136,5 +136,5 @@ function animated (element, animation) {
     $(element).addClass("animated").addClass(animation);
     setTimeout(function(){
         $(element).removeClass('animated').removeClass(animation);
-    }, 1000);
+    }, 400);
 }
