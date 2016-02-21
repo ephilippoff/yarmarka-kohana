@@ -106,10 +106,12 @@ class Search_Url
         }
 
         if ($old_param = $this->get_old_seo_query_param()) {
-            throw new Kohana_Exception_Withparams("old seo param incorrect",array(
-                "uri" => $this->get_proper_category_uri()."/".$this->get_seo_param_segment($old_param),
-                "code" => 301
-            ));
+            if ($this->get_seo_param_segment($old_param)) {
+                throw new Kohana_Exception_Withparams("old seo param incorrect",array(
+                    "uri" => $this->get_proper_category_uri()."/".$this->get_seo_param_segment($old_param),
+                    "code" => 301
+                ));
+            }
         }
     }
 
