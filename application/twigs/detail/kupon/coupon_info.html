@@ -19,7 +19,7 @@
 					</td>
 				</tr>
 		</tbody></table>
-		{% if kupon_info.sold_count %}
+		{% if kupon_info.sold_count and (object.is_published != 0) %}
 			<p class="pl10 pt10 fs20">Купили {{kupon_info.sold_count}} чел.</p>
 		{% endif %}
 	</div>	

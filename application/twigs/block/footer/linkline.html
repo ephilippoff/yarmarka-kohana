@@ -14,34 +14,18 @@
 		</div>
 	</div>
 	{% set city_config = get_config("info") %}
-	<div class="footer-container {{ footerAdditionalClass }} hidden-xs">
+	<div class="footer-container {{ footerAdditionalClass }}">
 		<div class="row">
-			<div class="col-md-4 ">
-				<p class="bold">Редакция в Тюмени:</p>
-				<ul class="p5">
-					<li><i class="fa fa-phone mr5"></i>{{city_config.tm.phone}}</li>
-					<li><i class="fa fa-envelope mr5"></i>{{city_config.tm.email}}</li>
-					<li><i class="fa fa-map-marker mr5"></i>{{city_config.tm.address}}</li>
-				</ul>
-			</div>
-			<div class="col-md-4 ">
-				<p class="bold">Редакция в Нижневартовске:</p>
-				<ul class="p5">
-					<li><i class="fa fa-phone mr5"></i>{{city_config.nv.phone}}</li>
-					<li><i class="fa fa-envelope mr5"></i>{{city_config.nv.email}}</li>
-					<li><i class="fa fa-map-marker mr5"></i>{{city_config.nv.address}}</li>
-				</ul>
-			</div>
-			<div class="col-md-4 ">
+			<div class="col-md-6">
 				<p class="bold">Редакция в Сургуте:</p>
 				<ul class="p5">
 					<li><i class="fa fa-phone mr5"></i>{{city_config.sg.phone}}</li>
-					<li><i class="fa fa-envelope mr5"></i>{{city_config.sg.email}}</li>
+					<li><i class="fa fa-envelope mr5"></i><a href="mailto:{{city_config.sg.email}}">{{city_config.sg.email}}</a></li>
 					<li><i class="fa fa-map-marker mr5"></i>{{city_config.sg.address}}</li>
 				</ul>
 			</div>
 		</div>
-		<div class="row">
+		<div class="row hidden-xs">
 			<div class="col-md-12">
 				<div class="stat-cont">
 					<img src="http://yarmarka.biz/images/robokassa.jpg">
