@@ -352,6 +352,10 @@ class Controller_Search extends Controller_Template {
         }
 
         $this->cache_stat($twig, $search_params);
+
+        if (count($twig->main_search_result) == 0) {
+            $this->response->status(404);
+        }
         $this->response->body($twig);
 
         // var_dump($twig->main_search_result[1]); die;

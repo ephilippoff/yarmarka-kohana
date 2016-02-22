@@ -72,25 +72,27 @@ class Search_Url
         if ($proper_category_uri = $this->is_seo_category_segment_incorrect()) {
             //TODO Log incorrect category seo
 
-            throw new Kohana_Exception_Withparams("category incorrect", array(
-                "uri" => $proper_category_uri,
-                "code" => 301
-            ));
+            // throw new Kohana_Exception_Withparams("category incorrect", array(
+            //     "uri" => $proper_category_uri,
+            //     "code" => 301
+            // ));
+            throw new HTTP_Exception_404;
         }
 
         if ($proper_seo_param_uri = $this->is_seo_param_segment_incorrect()) {
             //TODO Log incorrect seo params
-            if ($proper_seo_param_uri === TRUE) {
-                throw new Kohana_Exception_Withparams("seo_param incorrect", array(
-                    "uri" => $this->get_proper_category_uri(),
-                    "code" => 301
-                ));
-            } else {
-                throw new Kohana_Exception_Withparams("seo_param correct, but uri wrong", array(
-                    "uri" => $this->get_proper_category_uri()."/".$proper_seo_param_uri,
-                    "code" => 301
-                ));
-            }
+            // if ($proper_seo_param_uri === TRUE) {
+            //     throw new Kohana_Exception_Withparams("seo_param incorrect", array(
+            //         "uri" => $this->get_proper_category_uri(),
+            //         "code" => 301
+            //     ));
+            // } else {
+            //     throw new Kohana_Exception_Withparams("seo_param correct, but uri wrong", array(
+            //         "uri" => $this->get_proper_category_uri()."/".$proper_seo_param_uri,
+            //         "code" => 301
+            //     ));
+            // }
+            throw new HTTP_Exception_404;
         }
 
         if ($this->get_reserved_query_params("page")) {
@@ -104,10 +106,12 @@ class Search_Url
         }
 
         if ($old_param = $this->get_old_seo_query_param()) {
-            throw new Kohana_Exception_Withparams("old seo param incorrect",array(
-                "uri" => $this->get_proper_category_uri()."/".$this->get_seo_param_segment($old_param),
-                "code" => 301
-            ));
+            if ($this->get_seo_param_segment($old_param)) {
+                throw new Kohana_Exception_Withparams("old seo param incorrect",array(
+                    "uri" => $this->get_proper_category_uri()."/".$this->get_seo_param_segment($old_param),
+                    "code" => 301
+                ));
+            }
         }
     }
 
@@ -354,6 +358,7 @@ class Search_Url
             if ($element) {
                 $proper_seo_param = self::get_seo_param_segment($element->id);
                 $this->_proper_seo_param_uri = $proper_seo_param;
+
                 if ($seo_params_uri <> $proper_seo_param) {
                     return  $proper_seo_param;
                 } else {
@@ -394,7 +399,7 @@ class Search_Url
         foreach ($uri as $key => $value) {
 
             $_ae = ORM::factory('Attribute_Element')
-                        ->get_elements_with_published_objects($category_id, $city_id);
+                        ->get_elements($category_id);
 
             $_ae = $_ae->where("attribute_element.seo_name", "=", strtolower($value) );
             if ($_parent_ae) {
@@ -541,7 +546,7 @@ class Search_Url
     {
         $result = array();
         $element = ORM::factory('Attribute_Element', $element_id);
-        if (!$element->loaded()) return "";
+        if (!$element->loaded()) return array();
 
         $parent_element_id = $element->parent_element;
         array_push($result, $element);

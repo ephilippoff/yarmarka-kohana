@@ -608,32 +608,6 @@
 			<? endif; ?>
 		</div>
 
-		<div id="div_price" style="display:none;">
-			<? if (property_exists($form_data, 'price')): ?>
-				<div class="row mb10">
-					<div class="col-md-3  labelcont">
-						<label>Прайс-лист:</label>
-					</div>
-					<div class="col-md-9 ">
-						<div class="row">
-							<div class="col-md-10">
-								<div class="inp-cont ">
-									<?=
-									View::factory('add/block/price', array(
-										"data" => new Obj($form_data->price)
-									));
-									?>							
-									<span class="inform">
-										Прайс лист необходимо предварительно загрузить и дождаться одобрения модератора<a href="/user/priceload">(как?)</a>
-									</span>							
-								</div>
-							</div>
-						</div>				
-					</div>
-				</div>			
-			<? endif; ?>
-		</div>
-
 		<?
 		$prolongation_access = FALSE;
 		?>  
