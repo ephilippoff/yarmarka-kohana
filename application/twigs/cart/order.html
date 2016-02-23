@@ -111,13 +111,13 @@
 					<p class="mt20 ta-r">
 						<form id="order_form" class="ta-r" action="/cart/to_payment_system" method="POST">
 							<input type="hidden" name="id" value="{{ order.id }}">
-							<span class="button_v2 bg-color-blue p20 white br3" onclick="$('#order_form').submit();">Перейти к оплате<i class="fa fa-angle-double-right fa-lg ml5"></i></span>
+							<button class="br2 button button-style1 bg-color-blue p5" onclick="$('#order_form').submit();">Перейти к оплате<i class="fa fa-angle-double-right fa-lg ml5"></i></button>
 						</form>
 					</p>
 				{% elseif state == "notPaid" %}
 					<form id="order_form" class="ta-r" action="/cart/to_payment_system" method="POST">
 						<input type="hidden" name="id" value="{{ order.id }}">
-						<span class="button_v2 bg-color-blue p20 white br3" onclick="$('#order_form').submit();">Перейти к счету в платежной системе<i class="fa fa-angle-double-right fa-lg ml5"></i></span>
+						<button class="br2 button button-style1 bg-color-blue p5" onclick="$('#order_form').submit();">Перейти к счету в платежной системе<i class="fa fa-angle-double-right fa-lg ml5"></i></button>
 					</form>
 				{% endif %}
 
