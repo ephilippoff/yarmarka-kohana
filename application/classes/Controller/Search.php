@@ -13,7 +13,7 @@ class Controller_Search extends Controller_Template {
         $this->auto_render = FALSE;
         $this->cached_search_info = FALSE;
 
-        if ($search_info = $this->get_search_info_from_cache()) {
+        if (false && $search_info = $this->get_search_info_from_cache()) {
             $this->cached_search_info = unserialize($search_info->params);
             Cookie::set('search_hash', $search_info->hash, strtotime( '+14 days' ));
         } else {
@@ -353,6 +353,26 @@ class Controller_Search extends Controller_Template {
 
         $this->cache_stat($twig, $search_params);
 
+        foreach($twig->category_childs_elements as &$value) {
+            $k = $twig->s_host . '/' . $twig->category_url . '/' . $value->url;
+            if (!array_key_exists($k, $twig->link_counters)) {
+                $value->count = 0;
+            } else {
+                $value->count = $twig->link_counters[$k];
+            }
+        }
+
+        foreach($twig->category_childs as &$value) {
+            $k = $twig->s_host . '/' . $value->url;
+            if (!array_key_exists($k, $twig->link_counters)) {
+                $value->count = 0;
+            } else {
+                $value->count = $twig->link_counters[$k];
+            }
+        }
+        $this->process_child_categories($twig->category_childs_elements);
+        $this->process_child_categories($twig->category_childs);
+
         if (count($twig->main_search_result) == 0) {
             $this->response->status(404);
         }
@@ -492,28 +512,6 @@ class Controller_Search extends Controller_Template {
                 $clean_query_params
             )
         );
-
-        foreach($info->category_childs_elements as &$value) {
-            $k = $info->s_host . '/' . $info->category_url . '/' . $value->url;
-            // if (!array_key_exists($k, $info->link_counters)) {
-            //     $value->count = 0;
-            // } else {
-            //     $value->count = $info->link_counters[$k];
-            // }
-        }
-
-        foreach($info->category_childs as &$value) {
-            $k = $info->s_host . '/' . $value->url;
-            // if (!array_key_exists($k, $info->link_counters)) {
-            //     $value->count = 0;
-            // } else {
-            //     $value->count = $info->link_counters[$k];
-            // }
-        }
-        
-        $this->process_child_categories($info->category_childs_elements);
-        $this->process_child_categories($info->category_childs);
-        //var_dump($info->category_childs_elements);die;
 
         return $info;
     }
