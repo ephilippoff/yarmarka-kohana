@@ -175,7 +175,7 @@ class Search {
 		}
 
 		if ($params->location_id) {
-			$object = $object->where('o.location_id', '=', $params->location_id);
+			//$object = $object->where('o.location_id', '=', $params->location_id);
 		}
 
 		if ($active) {
