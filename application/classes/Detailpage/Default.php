@@ -69,7 +69,7 @@ class Detailpage_Default
 
 		$domain = new Domain();
 		$object_location = ORM::factory('Location', $object->location_id);
-		$object_location_value = $object_location->loaded() ? $object_location->city : NULL;
+		$object_location_value = $object_location->loaded() ? trim($object_location->city . ' ' . $object_location->address) : NULL;
 		$similar_search_query = Search::searchquery(
 			array(
 				//"hash" => Cookie::get('search_hash'),
