@@ -178,7 +178,7 @@ class Search {
 			$object = $object
 				->join(array('locations', 'l'), 'left')
 				->on('l.id', '=', 'o.location_id')
-				->where('l.city', '=', $params->location);
+				->where(DB::expr('concat(l.city, \' \', l.address)'), '=', $params->location);
 		}
 
 		if ($active) {
