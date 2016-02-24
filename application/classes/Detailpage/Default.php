@@ -71,8 +71,10 @@ class Detailpage_Default
 		$similar_search_query = Search::searchquery(
 			array(
 				//"hash" => Cookie::get('search_hash'),
+				'active' => true,
 				'city_id' => $domain->get_city()->id,
 				'expiration' => true,
+				'expired' => true,
 				'is_published' => true,
 				'category_id' => $object->category,
 				"not_id" => Cookie::get('ohistory') ? 
