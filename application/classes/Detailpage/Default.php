@@ -68,12 +68,14 @@ class Detailpage_Default
 		$info = array();
 
 		$domain = new Domain();
+		$object_location = ORM::factory('Location', $object->location_id);
+		$object_location_value = $object_location->loaded() ? $object_location->city : NULL;
 		$similar_search_query = Search::searchquery(
 			array(
 				//"hash" => Cookie::get('search_hash'),
 				'active' => true,
 				'city_id' => array($domain->get_city()->id),
-				'location_id' => $object->location_id,
+				'location' => $object_location_value,
 				'expiration' => true,
 				'expired' => true,
 				'is_published' => true,
