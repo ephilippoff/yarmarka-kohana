@@ -67,9 +67,15 @@ class Detailpage_Default
 		$object = $this->_orm_object;
 		$info = array();
 
+		$domain = new Domain();
 		$similar_search_query = Search::searchquery(
 			array(
 				//"hash" => Cookie::get('search_hash'),
+				'active' => true,
+				'city_id' => $domain->get_city()->id,
+				'expiration' => true,
+				'expired' => true,
+				'is_published' => true,
 				'category_id' => $object->category,
 				"not_id" => Cookie::get('ohistory') ? 
 									array_merge(explode(",", Cookie::get('ohistory')), array($object->id)) 

@@ -338,8 +338,16 @@ class Search {
 			$object = $object->where("o.date_expired", "<", DB::expr("NOW()"));
 		}
 
+		if ($params->expired) {
+			$object = $object
+				->and_where_open()
+				->where('o.date_expiration', '>', DB::expr('NOW()'))
+				->or_where('o.date_expiration', 'is', DB::expr('null'))
+				->and_where_close();
+		}
+
 		if ($params->expirationInverse) {
-			$object = $object->where("o.date_expired", ">", DB::expr("NOW()"));
+			$object = $object->where("o.date_expired", "<=", DB::expr("NOW()"));
 		}
 
 		if ($params->type_tr) {
