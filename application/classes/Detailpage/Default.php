@@ -85,8 +85,6 @@ class Detailpage_Default
 		);
 		$info['similar_search_result'] = Search::getresult($similar_search_query->execute()->as_array());
 
-		var_dump($info['similar_search_result']);die;
-
 		$info['similar_coords'] = array_map(function($item){
 			return array(
 				"id" => $item["id"],
