@@ -174,6 +174,10 @@ class Search {
 			$object = $object->where("o.is_published", "=", 0);
 		}
 
+		if ($params->location_id) {
+			$object = $object->where('o.location_id', '=', $params->location_id);
+		}
+
 		if ($active) {
 			$object = $object->where("o.active", "=", 1);
 		}
