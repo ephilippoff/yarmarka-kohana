@@ -72,7 +72,7 @@ class Detailpage_Default
 			array(
 				//"hash" => Cookie::get('search_hash'),
 				'active' => true,
-				'city_id' => $domain->get_city()->id,
+				'city_id' => array($domain->get_city()->id),
 				'expiration' => true,
 				'expired' => true,
 				'is_published' => true,
@@ -84,6 +84,8 @@ class Detailpage_Default
 			array("limit" => 10, "page" => 0)
 		);
 		$info['similar_search_result'] = Search::getresult($similar_search_query->execute()->as_array());
+
+		var_dump($info['similar_search_result']);die;
 
 		$info['similar_coords'] = array_map(function($item){
 			return array(
