@@ -74,7 +74,7 @@ class Detailpage_Default
 			array(
 				//"hash" => Cookie::get('search_hash'),
 				'active' => true,
-				'city_id' => array($domain->get_city()->id),
+				//'city_id' => array($domain->get_city()->id),
 				'location' => $object_location_value,
 				'expiration' => true,
 				'expired' => true,
