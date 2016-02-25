@@ -25,6 +25,7 @@ class StaticFile {
 		if ($user){
 			$set = ORM::factory('User_Settings')->get_by_name($user->id, "clearcache")->find();
 			if ($set->loaded()){
+				var_dump($this);die;
 				call_user_func(array($this, $this->name));
 				return;
 			}
