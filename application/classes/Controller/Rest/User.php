@@ -115,7 +115,7 @@ class Controller_Rest_User extends Controller_Rest {
 			$contact->save();
 
 			if ($type_id == Model_Contact_Type::MOBILE)
-
+			{
 				//высылаем код в смс
 				$sms_count = ORM::factory('Sms')->cnt_by_phone($contact->contact_clear, $session_id);
 				if ($sms_count == 0) {
@@ -124,7 +124,7 @@ class Controller_Rest_User extends Controller_Rest {
 					$sms = Sms::send($contact->contact_clear, 'Код проверки телефона: '.$code, $session_id, 'sms.from_reserve');
 				} else {
 					$this->json["code"] = 400;
-					$this->json["text"] = "Возникли проблемы с доставкой для Вас кода, обратитесь, пожалуйста, в <a href='http://http://feedback.yarmarka.biz/'>службу техподдержки</a>";
+					$this->json["text"] = "Возникли проблемы с доставкой для Вас кода, обратитесь, пожалуйста, в <a href='http://http://feedback.yarmarka.biz/'>службу техподдержки </a>";
 					return;
 				}
 
