@@ -21,6 +21,48 @@ var Yarmarka = {
 
         testMediaQuery: function (query) {
             return window.matchMedia(query).matches;
+        },
+
+        qsort: function (arr, l, r, p) {
+            if (typeof(p) !== 'function') {
+                p = function (a, b) { return a < b; }
+            }
+
+            var qs = function (arr, l, r, p) {
+                if (l < r) {
+                    var c = part(arr, l, r, p);
+
+                    qs(arr, l, c, p);
+                    qs(arr, c + 1, r, p);
+                }
+
+                return arr;
+            };
+
+            var part = function (arr, l, r, p) {
+                var x = arr[r];
+                var j = l - 1;
+
+                for(var i = l; i < r; i++) {
+                    if (p(arr[i], x)) {
+                        j++;
+                        var tmp = arr[i];
+                        arr[i] = arr[j];
+                        arr[j] = tmp;
+                    }
+                }
+
+                if (j < r - 1) {
+                    j++;
+                    var tmp = arr[j];
+                    arr[j] = arr[r];
+                    arr[r] = tmp;
+                }
+
+                return j;
+            };
+
+            return qs(arr, l, r, p);
         }
     };
 
@@ -71,7 +113,6 @@ var Yarmarka = {
             this.containerWidth = this.getContainerWidth();
             this.containerHeight = this.getContainerHeight();
             this.itemHeight = this.getItemHeight();
-            console.log(this.itemHeight);
 
             //process forceOneColumnMobile
             if (this.options.forceOneColumnMobile && Yarmarka.Helpers.detectMobile()) {
@@ -183,7 +224,6 @@ var Yarmarka = {
         },
 
         convertItem: function (domItem, index) {
-            console.log(this.options.itemWidthSelector);
             return {
                 html: $(domItem).html(),
                 width: this.options.itemWidthSelector 
@@ -257,12 +297,17 @@ var Yarmarka = {
                 this.visibleItemsCount = this.visibleRowsCount * this.columnsCount;
 
                 if (this.visibleItemsCount < this.items.length) {
+                    var p = function (a, b) {
+                        return $(a.html).text() < $(b.html).text();
+                    };
+                    var tmp = this.takeItemsPart(0, this.visibleItemsCount);
                     var visibleItemsTable = this.getItemsTable(
-                        this.takeItemsPart(0, this.visibleItemsCount), 
+                        Yarmarka.Helpers.qsort(tmp, 0, tmp.length - 1, p), 
                         this.columnsCount,
                         this.visibleRowsCount);
+                    tmp = this.takeItemsPart(this.visibleItemsCount, this.items.length);
                     var hiddenItemsTable = this.getItemsTable(
-                        this.takeItemsPart(this.visibleItemsCount, this.items.length),
+                        Yarmarka.Helpers.qsort(tmp, 0, tmp.length - 1, p),
                         this.columnsCount,
                         this.columnRows - this.visibleRowsCount);
                     this.itemsTable = $.merge(visibleItemsTable, hiddenItemsTable);
