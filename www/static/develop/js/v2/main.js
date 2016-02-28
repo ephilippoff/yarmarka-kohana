@@ -282,24 +282,31 @@ var Yarmarka = {
         }, Base.prototype.options),
 
         initialize: function (options) {
+            var me = this;
+            this.sortAll = false;
             if (this.options.enableAutoCollapse) {
                 this.options.autoCollapseOptions.el = this.$el;
                 this.autoCollapseObject = new Yarmarka.UI.AutoCollapse(options.autoCollapseOptions);
+                this.autoCollapseObject.$content.on('expand_start', function () {
+                    me.sortAll = true;
+                    me.render();
+                });
             }
 
             Base.prototype.initialize.apply(this, arguments);
         },
 
         draw: function () {
+            var p = function (a, b) {
+                return $(a.html).text() < $(b.html).text();
+            };
             if (this.options.enableAutoCollapse) {
                 this.height = this.getItemHeight();
                 this.visibleRowsCount = Math.floor(this.options.autoCollapseOptions.allowedHeight / this.height);
                 this.visibleItemsCount = this.visibleRowsCount * this.columnsCount;
 
                 if (this.visibleItemsCount < this.items.length) {
-                    var p = function (a, b) {
-                        return $(a.html).text() < $(b.html).text();
-                    };
+                    
                     var tmp = this.takeItemsPart(0, this.visibleItemsCount);
                     var visibleItemsTable = this.getItemsTable(
                         Yarmarka.Helpers.qsort(tmp, 0, tmp.length - 1, p), 
@@ -311,6 +318,13 @@ var Yarmarka = {
                         this.columnsCount,
                         this.columnRows - this.visibleRowsCount);
                     this.itemsTable = $.merge(visibleItemsTable, hiddenItemsTable);
+                } 
+                if (this.sortAll) {
+                    var x = Yarmarka.Helpers.qsort(this.items, 0, this.items.length - 1, p);
+                    this.itemsTable = this.getItemsTable(
+                        x,
+                        this.columnsCount,
+                        this.columnRows);
                 }
             }
             Base.prototype.draw.apply(this, arguments);
@@ -430,6 +444,7 @@ var Yarmarka = {
 
         expand: function () {
             var me = this;
+            this.$content.trigger('expand_start');
             this.state(true).promise().done(function () {
                 //restore height to auto -> avoid problems when resize
                 me.$el.css('height', 'auto');
@@ -437,7 +452,10 @@ var Yarmarka = {
         },
 
         collapse: function () {
-            this.state(false);
+            var me = this;
+            this.state(false).promise().done(function () {
+                me.$content.trigger('resize');
+            });
         },
 
         state: function (value) {
