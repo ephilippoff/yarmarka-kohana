@@ -986,27 +986,43 @@ class Controller_Ajax extends Controller_Template
 
 		if ($code AND $exists_contact->loaded())
 		{
-			$this->json['contact_id'] = $exists_contact->id;
-			if (ORM::factory('Sms')->cnt_by_phone($exists_contact->contact_clear, $session_id) AND ! $force)
-			{
-				$this->json['code'] = 303;
-				$this->json['msg'] = 'SMS уже отрпавлено на этот номер, смотрите код в телефоне';
-			}
-			elseif ($contact_type_id == Model_Contact_Type::MOBILE 
-				AND ORM::factory('Sms')->cnt_by_session_id($session_id) >= Kohana::$config->load('user.max_sms'))
-			{
-				$this->json['code'] = 304;
-				$this->json['msg'] = 'Вы исчерпали лимит SMS на сегодня';
-			}
-			else
-			{
+			// $this->json['contact_id'] = $exists_contact->id;
+			// if (ORM::factory('Sms')->cnt_by_phone($exists_contact->contact_clear, $session_id) AND ! $force)
+			// {
+			// 	$this->json['code'] = 303;
+			// 	$this->json['msg'] = 'SMS уже отрпавлено на этот номер, смотрите код в телефоне';
+			// }
+			// elseif ($contact_type_id == Model_Contact_Type::MOBILE 
+			// 	AND ORM::factory('Sms')->cnt_by_session_id($session_id) >= Kohana::$config->load('user.max_sms'))
+			// {
+			// 	$this->json['code'] = 304;
+			// 	$this->json['msg'] = 'Вы исчерпали лимит SMS на сегодня';
+			// }
+			// else
+			// {
 				$exists_contact->verification_code = $code;
 				$exists_contact->save();
 
 				if ($contact_type_id == Model_Contact_Type::MOBILE)
 				{
-					// высылаем код в смс
-					Sms::send($exists_contact->contact_clear, 'Код проверки телефона: '.$code, $session_id);
+					$lastminute_sms = ORM::factory('Sms')->sms_by_1minute($exists_contact->contact_clear, $session_id);
+					if ($lastminute_sms->loaded()) {
+						$this->json["code"] = 406;
+						$this->json["msg"] = "Не прошло минуты с момента отправки последней смс";
+						return;
+					}
+					//высылаем код в смс
+					$sms_count = ORM::factory('Sms')->cnt_by_phone($exists_contact->contact_clear, $session_id);
+					if ($sms_count == 0) {
+						$sms = Sms::send($exists_contact->contact_clear, 'Код проверки телефона: '.$code, $session_id, 'sms.from');
+					} elseif ($sms_count == 1) {
+						$sms = Sms::send($exists_contact->contact_clear, 'Код проверки телефона: '.$code, $session_id, 'sms.from_reserve');
+					} else {
+						$this->json["code"] = 405;
+						$this->json["msg"] = "Возникли проблемы с доставкой для Вас кода, обратитесь, пожалуйста, в <a href='http://http://feedback.yarmarka.biz/'>службу техподдержки </a>";
+						return;
+					}
+
 				}
 				else
 				{
@@ -1016,7 +1032,7 @@ class Controller_Ajax extends Controller_Template
 					$subj 	= 'Подтверждение email на “Ярмарка-онлайн”';
 					Email::send($exists_contact->contact, Kohana::$config->load('email.default_from'), $subj, $msg);
 				}
-			}
+			//}
 		}
 	}
 

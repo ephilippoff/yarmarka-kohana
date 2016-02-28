@@ -46,6 +46,19 @@ class Model_Sms extends ORM {
 			->count_all();
 	}
 
+	public function sms_by_1minute($phone, $session_id = NULL)
+	{
+		if (is_null($session_id))
+		{
+			$session_id = session_id();
+		}
+
+		return $this->where('phone', '=', $phone)
+			->where('created_on','>=', DB::expr("CURRENT_TIMESTAMP-INTERVAL '1 minute'"))
+			->where('session_id', '=', $session_id)
+			->find();
+	}
+
 	public function cnt_by_session_id($session_id = NULL)
 	{
 		if (is_null($session_id))
