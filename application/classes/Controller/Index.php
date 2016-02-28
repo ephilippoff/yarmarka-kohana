@@ -122,7 +122,7 @@ class Controller_Index extends Controller_Template {
 
         $twig->menuName = 'mainmenu';
         $twig->staticMainMenu = TRUE;
-        $twig->menu1 = 'lol';
+        $twig->onPageFlag = 'main';
         
         $this->response->body($twig);
     }

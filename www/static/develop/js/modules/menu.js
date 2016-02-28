@@ -72,6 +72,7 @@ define([
             openMenu: function(){
                 this.$el.find('.bars, .preview_menu_block').addClass('active');
                 $("#popup-layer").fadeIn(200);
+                $('#wrap-page').addClass('fixed z200');
                 $('#search-form1').hide();
                 this.$menu.show().animate({left: '0'}, 500);
             },
@@ -79,6 +80,7 @@ define([
             closeMenu: function(){
                 this.$el.find('.bars, .preview_menu_block').removeClass('active');
                 $("#popup-layer").fadeOut(200);
+                $('#wrap-page').removeClass('fixed z200');
                 $('#search-form1').show();
                 this.$menu.animate({left: '-100%'}, 500).fadeOut();
             },
@@ -141,16 +143,6 @@ var MainmenuView = MenuView.extend({
         var s = this;
         var $menu = this.$el.find(this.getOption("menuClass")+ " ul.top");
 
-        $('.left_menu').find('.section').each(function(){
-            var id = $(this).attr('id');
-            $(this).attr('id', id+'-l');
-        });
-
-        $('.left_menu').find('ul.top li').each(function(){
-            var id = $(this).attr('data-submenu-id');
-            $(this).attr('data-submenu-id', id+'-l');
-        });
-
         if ($menu.length > 0){
             try {
                 $menu.menuAim({
@@ -167,13 +159,12 @@ var MainmenuView = MenuView.extend({
     activateSubmenu: function(row) {
         var s = this;
         if (this.submenuActivateTimer) clearTimeout(this.submenuActivateTimer);
-
         this.activeRow = row;
         this.submenuActivateTimer = setTimeout(function(){
             var $row = $(row), 
             submenuId = $row.data("submenu-id"), 
             submenu = "#" + submenuId;
-
+            console.log(submenuId, submenu);
             $(submenu).show();
         }, 200);
 
@@ -207,15 +198,15 @@ return Marionette.Module.extend({
     init: function (menusToload) {
         menusToload = menusToload || [];
 
-        if (_.contains(menusToload, "main")) {
-            this.main = new MenuView({
-                el: mainMenuSettings.controlClass,
-                templateClass: mainMenuSettings.menuTemplate,
-                menuClass: mainMenuSettings.menuClass,
-                controlClass: mainMenuSettings.controlClass,
-                doNotRemove: true
-            });
-        }
+        // if (_.contains(menusToload, "main")) {
+        //     this.main = new MenuView({
+        //         el: mainMenuSettings.controlClass,
+        //         templateClass: mainMenuSettings.menuTemplate,
+        //         menuClass: mainMenuSettings.menuClass,
+        //         controlClass: mainMenuSettings.controlClass,
+        //         doNotRemove: true
+        //     });
+        // }
 
         if (_.contains(menusToload, "main")) {
             var menuOptions = {

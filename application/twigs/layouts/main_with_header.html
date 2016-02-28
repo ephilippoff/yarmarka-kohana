@@ -3,7 +3,7 @@
 {% block body %} 
 	{% block header %}
 		<header>
-		{{ requestblock('block_twig/topline', {'favourites':favourites, 'staticMainMenu' : staticMainMenu}) }}
+		{{ requestblock('block_twig/topline', {'favourites':favourites, 'staticMainMenu' : staticMainMenu, 'search_text' : search_text, 'onPageFlag' : onPageFlag}) }}
 		{% include 'block/header/logoline' %}
 		</header>
 	{% endblock header %}

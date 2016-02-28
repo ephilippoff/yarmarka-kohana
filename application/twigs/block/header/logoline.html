@@ -15,15 +15,15 @@
 					<form action="/" method="get" name="search-form" id="search-form" class="js-search-form">
 						<div class="input-group w100p">
 							<div class="row">
-								<div class="col-lg-3">
+								<div class="col-lg-3 col-md-3">
 									<div class="category-search">
 										Все категории <i class="fa fa-caret-down ml5"></i>
 									</div>
 								</div>
-								<div class="col-lg-8">
+								<div class="col-lg-8 col-md-8">
 									<input class="search placeholder form-control js-search-input" name="search" id="search-input" value="{{ search_text }}" type="text" placeholder="{% if get_session_value('site_disable') %}Сайт в режиме разработки.{% else %}Поиск объявлений{% endif %}" autocomplete="off" data-city="{{city.id}}">
 								</div>
-								<div class="col-lg-1">
+								<div class="col-lg-1 col-md-1">
 									<div class="input-group-addon clearfix">
 										<button class="button bg-color-crimson button-style1" type="submit"><i class="fa fa-search fa-lg"></i></button>
 									</div>

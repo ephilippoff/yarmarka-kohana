@@ -28,7 +28,9 @@ class Controller_Block_Twig extends Controller_Block
         $twig = Twig::factory('block/header/topline');
         $twig->user = Auth::instance()->get_user();
         $twig->favourites = $this->request->post("favourites");
+        $twig->search_text = $this->request->post("search_text");
         $twig->staticMainMenu = $this->request->post("staticMainMenu");
+        $twig->onPageFlag = $this->request->post("onPageFlag");
 
         $this->response->body($twig);
     }

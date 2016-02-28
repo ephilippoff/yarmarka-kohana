@@ -16,15 +16,15 @@
 {% block header %}
 		{{ requestblock('block_twig/topline', {'favourites':favourites}) }}
 		{% include 'block/header/logoline' %}
+		{% block crumbs %} {% include 'search/crumbs' %} {% endblock crumbs %}
 		{{ requestblock('block_twig/adslinkline',{'city_id': city.id, 'theme_class': theme_class}) }}
 		<div class="{{theme_class}}">
 		</div><!--skin-theme1-->
 {% endblock header %} 
 
-{% block crumbs %} {% include 'search/crumbs' %} {% endblock crumbs %}
 
-
-{% block leftside %} 
+{% block leftside %}
+	<h1 class="module hidden-lg hidden-md db ta-c">{{ seo_attributes.h1 ? seo_attributes.h1: category.title }}</h1>
 	{% include 'index/promo/left' %}
 {% endblock leftside %}
 

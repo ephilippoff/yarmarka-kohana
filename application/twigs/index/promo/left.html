@@ -14,23 +14,29 @@
 				{% if staticMainMenu %}
 					{% if menuName == 'mainmenu' %}
 						{{ requestblock('block_twig/mainmenu', {'city_id': city.id, 'staticMainMenu': staticMainMenu}) }}
-					{% else %}
-						{{ requestblock('block_twig/newsmenu', {'city_id': city.id, 'staticMainMenu': staticMainMenu}) }}
-					{% endif %}
+						{% else %}
+							{{ requestblock('block_twig/newsmenu', {'city_id': city.id, 'staticMainMenu': staticMainMenu}) }}
+						{% endif %}
 				{% endif %}
 			</div>
 		</div>
 	</div>
+	<div class="hidden-lg hidden-md col-sm-5 hidden-xs">
+		{% include 'index/promo/news' %}
+	</div>
+</div>
+<div class="row">
 	{% include 'index/promo/kupon' with {'sidebar' : true} %}
 </div>
 
 <script>
-	$(document).ready(function(){
-		tablet(function(){
-			if ($('div').is('.kupons_block')) {
-				var height = $('.kupons_block').height();
-				$('.left_menu').css('height', height - 35);
-			};
-		});
-	});
+$('.left_block').find('.section').each(function(){
+	var id = $(this).attr('id');
+	$(this).attr('id', id+'-l');
+});
+
+$('.left_block').find('ul.top li').each(function(){
+	var id = $(this).attr('data-submenu-id');
+	$(this).attr('data-submenu-id', id+'-l');
+});
 </script>
