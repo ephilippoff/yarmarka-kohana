@@ -1000,8 +1000,7 @@ class Controller_Ajax extends Controller_Template
 			// }
 			// else
 			// {
-				$exists_contact->verification_code = $code;
-				$exists_contact->save();
+				
 
 				if ($contact_type_id == Model_Contact_Type::MOBILE)
 				{
@@ -1011,6 +1010,10 @@ class Controller_Ajax extends Controller_Template
 						$this->json["msg"] = "Не прошло минуты с момента отправки последней смс";
 						return;
 					}
+
+					$exists_contact->verification_code = $code;
+					$exists_contact->save();
+					
 					//высылаем код в смс
 					$sms_count = ORM::factory('Sms')->cnt_by_phone($exists_contact->contact_clear, $session_id);
 					if ($sms_count == 0) {
@@ -1026,6 +1029,9 @@ class Controller_Ajax extends Controller_Template
 				}
 				else
 				{
+					$exists_contact->verification_code = $code;
+					$exists_contact->save();
+
 					$msg = View::factory('emails/contact_verification_code', 
 						array('contact' => $exists_contact->contact, 'code' => $code))
 						->render();
