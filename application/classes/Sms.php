@@ -2,8 +2,10 @@
 
 class Sms
 {
-	public static function send($number, $text, $session_id = NULL)
+	public static function send($number, $text, $session_id = NULL, $from = 'sms.from')
 	{
+		$from =  Kohana::$config->load($from);
+		
 		$number = Text::clear_phone_number($number);
 		$text 	= trim($text);
 		if (is_null($session_id))
@@ -20,7 +22,7 @@ class Sms
 		$sms_record->status 	= Model_Sms::PENDING;
 		$sms_record->save();
 
-		$sms_pilot = new Smspilot(Kohana::$config->load('sms.api_key'), FALSE, Kohana::$config->load('sms.from'));
+		$sms_pilot = new Smspilot(Kohana::$config->load('sms.api_key'), FALSE, $from );
 		$result = FALSE;
 
 		$last_sms = ORM::factory('Sms')

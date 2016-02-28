@@ -117,7 +117,19 @@ class Controller_Rest_User extends Controller_Rest {
 			if ($type_id == Model_Contact_Type::MOBILE)
 			{
 				//высылаем код в смс
-				$sms = Sms::send($contact->contact_clear, 'Код проверки телефона: '.$code, $session_id);
+				$sms_count = ORM::factory('Sms')->cnt_by_phone($contact->contact_clear, $session_id);
+				if ($sms_count == 0) {
+					$sms = Sms::send($contact->contact_clear, 'Код проверки телефона: '.$code, $session_id, 'sms.from');
+				} elseif ($sms_count == 1) {
+					$sms = Sms::send($contact->contact_clear, 'Код проверки телефона: '.$code, $session_id, 'sms.from_reserve');
+				} else {
+					$this->json["code"] = 400;
+					$this->json["text"] = "Возникли проблемы с доставкой для Вас кода, обратитесь, пожалуйста, в <a href='http://http://feedback.yarmarka.biz/'>службу техподдержки </a>";
+					return;
+				}
+
+				
+				
 				$response = $sms->response;
 				$status = $sms->status;
 				if ($status == "ERROR")

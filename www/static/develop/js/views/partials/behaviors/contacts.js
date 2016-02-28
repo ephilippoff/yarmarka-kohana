@@ -169,7 +169,7 @@ define([
         showHideMessage: function(text) {
             this.ui.contactCodeCont.addClass("hidden");
             if (text) {
-                this.ui.contactDescription.text(text);
+                this.ui.contactDescription.html(text);
                 this.ui.contactDescription.removeClass("hidden");
             } else {
                 this.ui.contactDescription.text("");

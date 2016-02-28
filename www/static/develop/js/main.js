@@ -129,7 +129,7 @@ $(document).ready(function(){
                     isResizable: true
                 }); 
             });
-        }  
+    }
 });
 
 function animated (element, animation) {
