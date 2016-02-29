@@ -671,6 +671,22 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 			));		
 	}
 	
+
+	public function action_csv_export() {
+
+		if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+			// check the data
+			$date_start = NULL;
+			$date_end = NULL;
+
+			if (isset($_POST['date_start'])) $date_start = strtotime($_POST['date_start']);
+			if (isset($_POST['date_end'])) $date_end = strtotime($_POST['date_end']);
+
+		}
+
+	}
+
 }
 
 /* End of file Objects.php */
