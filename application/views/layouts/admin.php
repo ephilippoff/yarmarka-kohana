@@ -82,7 +82,8 @@
 								<?php endif?>
 								<?php if (Auth::instance()->have_access_to('moderation_log')) : ?>
 									<li><a href="<?=URL::site('khbackend/objects/moderation_log')?>">История модераций</a></li>
-								<?php endif?>									
+								<?php endif?>	
+								<li><a href="<?=URL::site('khbackend/objects/csv_export')?>">CSV Export</a></li>					
 							</ul>
 						</li>
 						<?php endif; ?>

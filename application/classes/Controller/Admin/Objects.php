@@ -671,6 +671,81 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 			));		
 	}
 	
+
+	public function action_csv_export() {
+
+		$moder_state_map = array(
+				0 => 'На модерации',
+				1 => 'Прошло модерацию',
+				3 => 'Есть жалобы'
+			);
+
+		if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+			ini_set('memory_limit', -1);
+			set_time_limit(0);
+
+			// check the data
+			$date_start = NULL;
+			$date_end = NULL;
+			$sep = ';';
+
+			if (isset($_POST['date_start'])) $date_start = strtotime($_POST['date_start']);
+			if (isset($_POST['date_end'])) $date_end = strtotime($_POST['date_end']);
+
+			// prepare database query
+			$query = ORM::factory('Object');
+			if ($date_start != NULL) {
+				$query->where('date_created', '>=', date('Y-m-d H:i:s', $date_start));
+			}
+			if ($date_end != NULL) {
+				$query->where('date_created', '<=', date('Y-m-d H:i:s', $date_end));
+			}
+			$items = $query->find_all();
+
+			$res_file_name = 'export_' . time() . '.csv';
+			$res_file_path = $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . $res_file_name; 
+			$f = fopen($res_file_path, 'w');
+
+			// process data
+			$export = array();
+			foreach($items as $item) {
+				fwrite($f,
+					implode($sep, array(
+						$item->get_full_url(),
+						$item->date_created,
+						$item->date_updated,
+						$item->author,
+						$item->date_expiration,
+						array_key_exists($item->moder_state, $moder_state_map)
+							? $moder_state_map[$item->moder_state]
+							: 'Unknown'
+					)) . "\n");
+			}
+
+			fclose($f);
+
+			while(ob_get_level()) {
+				ob_get_clean();
+			}
+
+			header('Content-Description: File Transfer');
+			header('Content-Type: application/octet-stream');
+			header('Content-Disposition: attachment; filename=' . $res_file_name);
+			header('Expires: 0');
+			header('Cache-Control: must-revalidate');
+			header('Pragma: public');
+			header('Content-Length: ' . filesize($res_file_path));
+			readfile($res_file_path);
+
+			unlink($res_file_path);
+
+	        die;
+
+		}
+
+	}
+
 }
 
 /* End of file Objects.php */

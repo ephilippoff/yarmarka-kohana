@@ -91,8 +91,6 @@ class Controller_Detail extends Controller_Template {
 		$twig->currentUri = $this->request->uri();
 		$twig->userEmail = $cUser->getEmail();
 
-		
-
 		//add to last views
 		LastViews::instance()->set($object->id);
 		$this->response->body($twig);
