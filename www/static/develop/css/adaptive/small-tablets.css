@@ -84,6 +84,15 @@
 		display: block;
 	}
 
+
+	#button-next button{
+	    margin: 0px auto 30px;
+	    background: #BF4040;
+	    color: #fff;
+	    padding: 7px 20px;
+	    border-radius: 2px;
+	}
+
 	
 
 

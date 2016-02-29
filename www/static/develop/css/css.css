@@ -1440,3 +1440,14 @@ article img.news-photo{
     left:-30px;
     top:0;
 }
+
+#button-next button{
+    display: none;
+    margin: 30px auto;
+    float: right;
+    outline: none;
+    border: none;
+    border-bottom: 1px dotted #6A6A6A;
+    background: none;
+    color: #333;
+}
