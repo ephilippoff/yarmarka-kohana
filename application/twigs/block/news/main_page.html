@@ -65,7 +65,7 @@
 		{% endfor %}
 	{% elseif catTitle == 'all' %} <!-- Вывод для всем рубрикам -->
 		{% for item in data %}
-			<div class="row">
+			<div class="row" data-role="main_page_news" data-category="{{ item.id }}" data-pages="{{ item.pages }}">
 				<div class="col-md-12">
 					<h2><a href="{{ item.url }}" style="color:#333;">{{ item.title }}</a></h2>
 					<div class="row" style="padding-bottom:15px;">
@@ -101,6 +101,9 @@
 										</div>
 									{% endif %}
 								{% endfor %}
+								<div data-role="append_container">
+
+								</div>
 							</div>
 							<a href="{{ item.url }}" class="">Читать далее..</a>
 						</div>

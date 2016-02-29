@@ -289,4 +289,30 @@ class Controller_Rest_Object extends Controller_Rest {
 		$this->json["code"] = 200;
 	}
 
+	public function action_main_page_news() {
+		$page = $this->post->page;
+		$perPage = $this->post->perPage;
+		$category = property_exists($this->post, 'category') ? $this->post->category : NULL;
+
+		$this->json['page'] = $page;
+		$this->json['perPage'] = $perPage;
+
+		if (!property_exists($this->post, 'category')) {
+			$this->json['code'] = 400;
+			$this->json['error'] = 'category';
+			return;
+		}
+
+		$categories = Controller_Block_News::get_categories($this->post->category);
+		$newsGroups = Controller_Block_News::get_items(
+			$categories, 
+			NULL,
+			true,
+			$page,
+			$perPage,
+			false);
+
+		$this->json['result'] = $newsGroups;
+	}
+
 }
