@@ -32,11 +32,11 @@ function (Marionette, templates, utils, IndexPage, SearchPage, DetailPage,
         initialize: function () {
             ReklamaClickInitializer();
 
-            $('[data-role=main_page_news]').each(function () {
+            if($('div').is('#same_cat_news')) {
                 var view = new MainPageNewsView({
-                    el: this
+                    el: $('#button-next')
                 });
-            });
+            }
         },
 
         start_indexSection : function() {
