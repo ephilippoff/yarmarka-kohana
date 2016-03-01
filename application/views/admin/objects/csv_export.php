@@ -18,6 +18,6 @@
 
 <script type="text/javascript">
 	$('[name=date_start],[name=date_end]').datepicker({
-		format: 'mm-dd-yyyy'
+		format: 'yyyy-mm-dd'
 	});
 </script>
