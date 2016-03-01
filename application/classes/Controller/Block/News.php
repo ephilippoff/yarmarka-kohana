@@ -96,6 +96,7 @@
 						'short_text' => $shortText,
 						'url' => '/novosti/' . $item['seo_name'] . '-' . $item['id'] . '.html'
 					);
+				// var_dump($group); die;
 			}
 
 			return $newsGroups;
