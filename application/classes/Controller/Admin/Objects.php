@@ -696,27 +696,9 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 				$query->where('date_created', '>=', date('Y-m-d H:i:s', $date_start));
 			}
 			if ($date_end != NULL) {
-				$query->where('date_created', '<=', $date_end);
+				$query->where('date_created', '<=', date('Y-m-d H:i:s', $date_end));
 			}
 			$items = $query->find_all();
-
-			// process data
-			$export = array();
-			foreach($items as $item) {
-				$export []= implode($sep, array(
-						$item->get_full_url(),
-						$item->date_created,
-						$item->date_updated,
-						$item->author,
-						$item->date_expiration,
-						array_key_exists($item->moder_state, $moder_state_map)
-							? $moder_state_map[$item->moder_state]
-							: 'Unknown'
-					));
-			}
-			
-			// prepare string
-			$res = implode("\n", $export);
 
 			// send to browser
 			header('Content-Description: File Transfer');
@@ -726,9 +708,24 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 	        header('Expires: 0');
 	        header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
 	        header('Pragma: public');
-	        header('Content-Length: ' . mb_strlen($res));
+	        //header('Content-Length: ' . mb_strlen($res));
 
-	        echo $res;
+			// process data
+			$export = array();
+			foreach($items as $item) {
+				echo implode($sep, array(
+						$item->get_full_url(),
+						$item->date_created,
+						$item->date_updated,
+						$item->author,
+						$item->date_expiration,
+						array_key_exists($item->moder_state, $moder_state_map)
+							? $moder_state_map[$item->moder_state]
+							: 'Unknown'
+					));
+				echo "\n";
+			}
+
 	        die;
 
 		}
