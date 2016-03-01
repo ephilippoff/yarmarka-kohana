@@ -12,7 +12,9 @@
 						
 					<div class="contacts-list-cont js-contact-list">
 						{% for contact in object.compiled.contacts %}
-							
+							{% if contact.type == '5' %}
+ 								
+ 							{% else %}
 								<p>
 									{% if isAdmin %}
 										{{ contact.value }}
@@ -20,7 +22,7 @@
 										{{ contact.value|contacthide }}
 									{% endif %}
 								</p>
-							
+							{% endif %}
 						{% endfor %}
 					</div>
 					<button type="submit" class="button dib bg-color-blue white p10 br2 js-contacts-show" data-id="{{object.id}}">Показать контакты</button>
