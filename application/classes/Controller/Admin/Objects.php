@@ -674,14 +674,62 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 
 	public function action_csv_export() {
 
+		$moder_state_map = array(
+				0 => 'На модерации',
+				1 => 'Прошло модерацию',
+				3 => 'Есть жалобы'
+			);
+
 		if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 			// check the data
 			$date_start = NULL;
 			$date_end = NULL;
+			$sep = ';';
 
 			if (isset($_POST['date_start'])) $date_start = strtotime($_POST['date_start']);
 			if (isset($_POST['date_end'])) $date_end = strtotime($_POST['date_end']);
+
+			// prepare database query
+			$query = ORM::factory('Object');
+			if ($date_start != NULL) {
+				$query->where('date_created', '>=', date('Y-m-d H:i:s', $date_start));
+			}
+			if ($date_end != NULL) {
+				$query->where('date_created', '<=', $date_end);
+			}
+			$items = $query->find_all();
+
+			// process data
+			$export = array();
+			foreach($items as $item) {
+				$export []= implode($sep, array(
+						$item->get_full_url(),
+						$item->date_created,
+						$item->date_updated,
+						$item->author,
+						$item->date_expiration,
+						array_key_exists($item->moder_state, $moder_state_map)
+							? $moder_state_map[$item->moder_state]
+							: 'Unknown'
+					));
+			}
+			
+			// prepare string
+			$res = implode("\n", $export);
+
+			// send to browser
+			header('Content-Description: File Transfer');
+	        header('Content-Type: application/octet-stream');
+	        header('Content-Disposition: attachment; filename=export.csv');
+	        header('Content-Transfer-Encoding: binary');
+	        header('Expires: 0');
+	        header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+	        header('Pragma: public');
+	        header('Content-Length: ' . mb_strlen($res));
+
+	        echo $res;
+	        die;
 
 		}
 
