@@ -353,25 +353,29 @@ class Controller_Search extends Controller_Template {
 
         $this->cache_stat($twig, $search_params);
 
-        foreach($twig->category_childs_elements as &$value) {
-            $k = $twig->s_host . '/' . $twig->category_url . '/' . $value->url;
-            if (!array_key_exists($k, $twig->link_counters)) {
-                $value->count = 0;
-            } else {
-                $value->count = $twig->link_counters[$k];
+        if (property_exists($twig, 'category_childs_elements')) {
+            foreach($twig->category_childs_elements as &$value) {
+                $k = $twig->s_host . '/' . $twig->category_url . '/' . $value->url;
+                if (!array_key_exists($k, $twig->link_counters)) {
+                    $value->count = 0;
+                } else {
+                    $value->count = $twig->link_counters[$k];
+                }
             }
+            $this->process_child_categories($twig->category_childs_elements);
         }
 
-        foreach($twig->category_childs as &$value) {
-            $k = $twig->s_host . '/' . $value->url;
-            if (!array_key_exists($k, $twig->link_counters)) {
-                $value->count = 0;
-            } else {
-                $value->count = $twig->link_counters[$k];
+        if (property_exists($twig, 'category_childs')) {
+            foreach($twig->category_childs as &$value) {
+                $k = $twig->s_host . '/' . $value->url;
+                if (!array_key_exists($k, $twig->link_counters)) {
+                    $value->count = 0;
+                } else {
+                    $value->count = $twig->link_counters[$k];
+                }
             }
+            $this->process_child_categories($twig->category_childs);
         }
-        $this->process_child_categories($twig->category_childs_elements);
-        $this->process_child_categories($twig->category_childs);
 
         if (count($twig->main_search_result) == 0) {
             $this->response->status(404);
