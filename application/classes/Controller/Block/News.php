@@ -15,7 +15,7 @@
 			$page = 1,
 			$perPage = 6,
 			$groupByCategories = true,
-			$shortTextLength = 200, 
+			$shortTextLength = 300, 
 			$shortTextAfter = '...'
 		) {
 
@@ -54,7 +54,6 @@
 					->limit($limit);
 			}
 			$items = $query->execute();
-
 			// process items
 			$newsGroups = array();
 			foreach($items as $item) {
@@ -136,6 +135,8 @@
 			$view->reverse = $this->request->post("reverse");
 			$view->newsTitle = $this->request->post("newsTitle");
 			$itemsPerCategory = $this->request->post("itemsPerCategory");
+			$view->isNewsSubcategory = $this->request->post("isNewsSubcategory");
+			$view->onPageFlag = $this->request->post("onPageFlag");
 
 			$categories = self::get_categories();
 			$newsGroups = self::get_items($categories, $itemsPerCategory);
@@ -145,12 +146,13 @@
 				$newsGroup['pages'] = ceil($newsGroup['count'] / $itemsPerCategory);
 			} 		
 
-			//echo '<pre>'; var_dump($newsGroups); echo '</pre>';
+			// echo '<pre>'; var_dump($view); echo '</pre>'; die;
 			
 			/* push view data */
 			$view->data = $newsGroups;
 
 			$this->response->body($view);
+
 
 		}
 

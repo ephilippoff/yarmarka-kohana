@@ -59,7 +59,7 @@
 				</div>
 				{% include 'block/vk/comments_surgut' %}
 				{{ requestblock('block_news/main_page', {'catTitle': object.compiled.attributes['news-category'].value, 'newsTitle' : object.title, 'itemsPerCategory' : 11}) }}
-				{{ requestblock('block_news/main_page', {'catTitle': object.compiled.attributes['news-category'].value, 'reverse': reverse, 'itemsPerCategory' : 6}) }}
+				{{ requestblock('block_news/main_page', {'catTitle': object.compiled.attributes['news-category'].value, 'reverse': reverse, 'itemsPerCategory' : 6, 'onPageFlag' : onPageFlag}) }}
 			</article>
 		</div>
 	</div>

@@ -1,18 +1,22 @@
-{% if catTitle and reverse %}
-	<div class="title_block brt2 module">Читайте также:</div>
-{% elseif catTitle %}
-	<div class="title_block brt2 module">Другие новости в этой категории</div>
-{% else %}
-	{% set catTitle = 'all' %}
-	<!-- <div class="title_block brt2 module">Новости</div> -->
-{% endif %}
-
 {% if newsTitle is empty %}
 	{% set newsTitle = 'noTitle' %}
 {% endif %}
 
 {% set currentDate = "now"|date("m.d.y") %}
 {% set today = 'Сегодня' %}
+{% if catTitle and reverse %} <!-- Вывод для всем рубрикам, кроме выбранной -->
+	{% include 'search/news/result' %}
+{% endif %}
+
+{% set itemsPerCategory = 6 %}
+
+{% if catTitle and reverse %}
+	<div class="title_block brt2 module">Читайте также:</div>
+{% elseif catTitle %}
+	<div class="title_block brt2 module">Другие новости в этой категории</div>
+{% else %}
+	{% set catTitle = 'all' %}
+{% endif %}
 
 <div class="news_cat_block">
 	{% if catTitle and reverse %} <!-- Вывод для всем рубрикам, кроме выбранной -->
@@ -41,7 +45,7 @@
 							<div class="col-md-6">
 								<div class="row">
 									{% for innerItem in item.items %}
-										{% if loop.index != 1 %}
+										{% if loop.index != 1 and loop.index <= itemsPerCategory %}
 											<div class="col-md-12 col-sm-6 other_cat_news">
 												<div class="date light fs12">{{ innerItem.date|date('m:h') }} 
 													{% if innerItem.date|date('d.m.y') == currentDate %}

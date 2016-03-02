@@ -126,6 +126,8 @@ class Controller_Search extends Controller_Template {
             }, $twig->main_search_result);
 
             $objects_for_map = array_merge($objects_for_map, $main_search_coords);
+
+            // var_dump($twig->main_search_result); die;
         }
         //end main search
 

@@ -129,6 +129,8 @@ $(document).ready(function(){
                     isResizable: true
                 }); 
             });
+    }else{
+        $('.other_cat_news .news_wrap').show();
     }
 });
 
