@@ -207,6 +207,7 @@ class Controller_Detail extends Controller_Template {
 		$twig->horizontalView = TRUE;
 		$twig->staticMainMenu = TRUE;
 		$twig->reverse = TRUE;
+		$twig->onPageFlag = 'detail';
 
 		$detail_info = Detailpage::factory("Newsone", $object)
 							->get_crumbs()
