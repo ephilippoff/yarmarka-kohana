@@ -696,10 +696,10 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 			// prepare database query
 			$query = ORM::factory('Object');
 			if ($date_start != NULL) {
-				$query->where('date_created', '>=', date('Y-m-d H:i:s', $date_start));
+				$query->where('real_date_created', '>=', date('Y-m-d H:i:s', $date_start));
 			}
 			if ($date_end != NULL) {
-				$query->where('date_created', '<=', date('Y-m-d H:i:s', $date_end));
+				$query->where('real_date_created', '<=', date('Y-m-d H:i:s', $date_end));
 			}
 			$items = $query->find_all();
 
@@ -713,7 +713,7 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 				fwrite($f,
 					implode($sep, array(
 						$item->get_full_url(),
-						$item->date_created,
+						$item->real_date_created,
 						$item->date_updated,
 						$item->author,
 						$item->date_expiration,
