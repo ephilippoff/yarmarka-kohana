@@ -38,7 +38,7 @@ define([ 'jquery', 'underscore', 'backbone' ], function () {
 				this.model.set('category', this.$el.data('category'));
 			}
 			this.model.set('pages', this.$el.data('pages'));
-			this.$appendContainer = this.$el.closest('.news_cat_block').find('#same_cat_news .row');
+			this.$appendContainer = $('#same_cat_news .row');
 			this.render();
 
 			this.listenTo(this.model, 'change:page', this.onModelPageChanged);
@@ -76,6 +76,8 @@ define([ 'jquery', 'underscore', 'backbone' ], function () {
 	                $container.masonry('reloadItems');   
       				$container.masonry('layout'); 
 	            });
+	    	}else{
+	    		$('.other_cat_news .news_wrap').show();
 	    	}
 		},
 
