@@ -171,6 +171,110 @@ class Controller_Admin_Articles extends Controller_Admin_Template {
 
 		$this->response->body(json_encode(array('code' => 200)));
 	}
+
+	public function action_wiki()
+	{
+		$limit  = Arr::get($_GET, 'limit', 30);
+		$page   = $this->request->query('page');
+		$offset = ($page AND $page != 1) ? ($page-1)*$limit : 0;		
+			
+		$wiki = DB::select()
+				->from('wiki');
+		
+		$clone_to_count = clone $wiki;
+		$count_all = $clone_to_count->select(array(DB::expr('COUNT(*)'), 'total'))->execute();
+		
+		$wiki->select('*')->limit($limit)->offset($offset)->order_by('id', 'DESC');		
+		
+		$this->template->wiki = $wiki->execute();
+		
+		$this->template->pagination	= Pagination::factory(array(
+				'current_page'   => array('source' => 'query_string', 'key' => 'page'),
+				'total_items'    => $count_all[0]['total'],
+				'items_per_page' => $limit,
+				'auto_hide'      => TRUE,
+				'view'           => 'pagination/bootstrap',
+			))->route_params(array(
+				'controller' => 'articles',
+				'action'     => 'news',
+			));
+	}
+
+	public function action_wiki_add()
+	{
+		$this->template->errors = array();
+
+
+		if (HTTP_Request::POST === $this->request->method()) 
+		{
+			try 
+			{				
+				$post = $_POST;
+				
+				$redirect_to = 'wiki';
+				
+				ORM::factory('Wiki')->values($post)->save();				
+
+				$this->redirect('khbackend/articles/'.$redirect_to);
+			} 
+			catch (ORM_Validation_Exception $e) 
+			{
+				$this->template->errors = $e->errors('validation');
+			}
+		}
+	}
+
+	public function action_wiki_edit()
+	{
+		$this->template->errors = array();
+
+
+
+		$article = ORM::factory('Wiki', $this->request->param('id'));
+		if ( ! $article->loaded())
+		{
+			throw new HTTP_Exception_404;
+		}
+
+		if (HTTP_Request::POST === $this->request->method()) 
+		{
+			try
+			{			
+				$post = $_POST;
+				
+				$redirect_to = 'wiki';
+				
+				ORM::factory('Wiki')->values($post)->save();				
+
+				$this->redirect('khbackend/articles/'.$redirect_to);
+			}
+			catch(ORM_Validation_Exception $e)
+			{
+				$this->template->errors = $e->errors('validation');
+			}
+		}
+
+		$this->template->article = $article;
+	}
+
+	public function action_delete_wiki()
+	{
+		$this->auto_render = FALSE;
+
+		$article = ORM::factory('Wiki', $this->request->param('id'));
+		if ( ! $article->loaded())
+		{
+			throw new HTTP_Exception_404;
+		}
+
+		$article->delete();
+
+		$this->response->body(json_encode(array('code' => 200)));
+	}
+
+
+
+	
 }
 
 /* End of file Articles.php */

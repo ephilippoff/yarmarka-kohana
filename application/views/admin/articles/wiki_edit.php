@@ -1,0 +1,1 @@
+<?php include 'wiki_form.php' ?>
