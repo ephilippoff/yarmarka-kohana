@@ -263,14 +263,18 @@ class Search_Url
     public static function clean_query_params($category_id, $params = array())
     {
         $result = array();
-        if (count(array_keys($params)) > 0) {
+        $keys = array();
+        foreach (array_keys($params) as $key_item) {
+            array_push($keys, (string) $key_item);
+        }
+        if (count($keys) > 0) {
 
             $attributes = ORM::factory('Attribute')
                             ->select(DB::expr("attribute.*"),"reference.is_seo_used")
                             ->join("reference")
                                 ->on("reference.attribute","=","attribute.id")
                             ->where("reference.category","=",$category_id)
-                            ->where("attribute.seo_name","IN",array_keys($params))
+                            ->where("attribute.seo_name","IN",$keys)
                             ->order_by("reference.weight")
                             ->getprepared_all();
 
