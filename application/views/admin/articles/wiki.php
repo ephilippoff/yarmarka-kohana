@@ -31,12 +31,13 @@
 <tr>
 	<td><?=$article['id']?></td>
 	<td>
-		<a href="/khbackend/articles/wiki_edit/<?=$article['id']?>" target="_blank"><?=$article['url']?></a>
+		<a href="/reklamodatelyam/<?=$article['url']?>" target="_blank"><?=$article['url']?></a>
 	</td>
 	<td>
 		<?=$article['city']?>
 	</td>
 	<td>
+		<a href="/khbackend/articles/wiki_edit/<?=$article['id']?>" class="icon-pencil"></a>
 		<a href="<?=URL::site('khbackend/articles/delete_wiki/'.$article['id'])?>" class="icon-trash delete_article"></a>
 	</td>
 
