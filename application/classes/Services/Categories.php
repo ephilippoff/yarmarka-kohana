@@ -77,6 +77,9 @@
 			foreach($rows as $row) {
 				for($i = 0; $i < $lvl;$i++) {
 					$id = $row['c' . $i . '_id'];
+					if (!$id) {
+						continue;
+					}
 					if (array_key_exists($id, $res)) {
 						continue;
 					}
