@@ -134,9 +134,13 @@ class Controller_Static extends Controller_Template {
 		$this->use_layout = FALSE;
 		$this->auto_render = FALSE;
 
+		$path = $this->request->param("path");
+		$path_segments = explode("/", $path);
+		array_pop($path_segments);
+
 		$articles_root = 'uploads/articles/';
 
-		$filename = DOCROOT.$articles_root.$this->request->param("path").".html";
+		$filename = DOCROOT.$articles_root.$path.".html";
 
 		$html = '';
 
@@ -145,7 +149,42 @@ class Controller_Static extends Controller_Template {
 		} else {
 			throw new HTTP_Exception_404;
 		}
+
+		$wiki = ORM::factory('Wiki')
+					->where("url","=", $path)
+					->getprepared_all();
+		$access = (count(array_filter($wiki, function($item){
+			return ($item->city == 'surgut' OR $item->city == '*');
+		})) > 0);
+
+		if (!$access) {
+			throw new HTTP_Exception_404;
+		}
+
+		$templates_name = array(
+			array("header.html", "header_template"), 
+			array("footer.html", "footer_template")
+		);
 		
+		$templates_info = array();
+		foreach ($templates_name as $template_name) {
+			$p = $this->get_template_path($articles_root, $path_segments, $template_name[0]);
+			if ($p) {
+				array_push($templates_info, 
+					array( "path" =>$p, "name" => $template_name[0], "tmpl" => $template_name[1])
+				);
+			}
+		}
+
+		foreach ($templates_info as $template_info) {
+			$tmpl = file_get_contents($template_info["path"]);
+			$regexp = '/.*<'.$template_info['tmpl'].'><\/'.$template_info['tmpl'].'>.*/';
+			$html = preg_replace($regexp, $tmpl, $html);
+		}
+
+		//<header_template></header_template>
+		//<footer_template></footer_template>
+
 		$this->response->body($html);
 	}
 
@@ -163,5 +202,22 @@ class Controller_Static extends Controller_Template {
 		$this->response->headers('Content-Type', $mime_type);
 		$this->response->body(file_get_contents($filename));
 
+	}
+
+	function get_template_path($articles_root, $segments, $name) {
+		$header_path_segments = $segments;
+
+		$header_filename = $articles_root.implode("/", $header_path_segments)."/".$name;
+		while (!file_exists($header_filename) AND count($header_path_segments) > 0) {
+			array_pop($header_path_segments);
+			$header_filename = $articles_root.implode("/", $header_path_segments).$name;
+			
+		}
+
+		if ( file_exists($header_filename) ) {
+			return $header_filename;
+		}
+
+		return FALSE;
 	}
 }

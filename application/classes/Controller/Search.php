@@ -378,9 +378,9 @@ class Controller_Search extends Controller_Template {
             $this->process_child_categories($twig->category_childs);
         }
 
-        if (count($twig->main_search_result) == 0) {
-            $this->response->status(404);
-        }
+        // if (count($twig->main_search_result) == 0) {
+        //     $this->response->status(404);
+        // }
         $this->response->body($twig);
 
         // var_dump($twig->main_search_result[1]); die;
