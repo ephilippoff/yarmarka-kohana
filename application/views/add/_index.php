@@ -280,7 +280,7 @@
 						<label>Город публикации:</label>
 					</div>
 					<div class="col-md-9 ">
-						<div class="row">
+						<div class="row real_city_not_exists" <?php if ($form_data->city['real_city_exists']) echo 'style="display:none;"'; ?>>
 							<div class="col-md-10">
 								<div class="inp-cont <? if ($form_data->city["city_error"]) echo "error"; ?>">
 									<span class="required-star">*</span>
@@ -299,26 +299,14 @@
 									<? endif; ?>							
 								</div>
 							</div>					
-						</div>				
-					</div>
-				</div>		
+						</div>	
 
-				<div class="row mb10">
-					<div class="col-md-3  labelcont">
-						<label></label>
-					</div>
-					<div class="col-md-9 ">
-						<input type="checkbox" id="real_city_exists" name="real_city_exists" <? if ($form_data->city["real_city_exists"]) echo 'checked'; ?>>
-						<label for="real_city_exists">Товар/услуга/продукт/вакансия находится в другом городе</label>							
-					</div>
-				</div>		
-
-				<div class="row mb10 real_city_exists" <? if (!$form_data->city["real_city_exists"]) echo 'style="display:none;"'; ?>>
-					<div class="col-md-3  labelcont">
-						<label></label>
-					</div>
-					<div class="col-md-9 ">
 						<div class="row">
+							<input type="checkbox" id="real_city_exists" name="real_city_exists" <? if ($form_data->city["real_city_exists"]) echo 'checked'; ?>>
+							<label for="real_city_exists">Товар/услуга/продукт/вакансия находится в другом городе</label>
+						</div>		
+
+						<div class="row real_city_exists" <?php if (!$form_data->city['real_city_exists']) echo 'style="display:none;'; ?> >
 							<div class="col-md-10">
 								<div class="inp-cont ">
 									<span class="required-star">*</span>																		
@@ -328,7 +316,7 @@
 									</span>					
 								</div>
 							</div>
-						</div>				
+						</div>	
 					</div>
 				</div>		
 			</div>

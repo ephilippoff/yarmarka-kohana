@@ -362,6 +362,10 @@ var cityView = Backbone.View.extend({
     },
     setRealCity: function(event) {
         $(".real_city_exists").toggle();
+        $(".real_city_not_exists").toggle();
+        if ($('.real_city_not_exists').is(':visible')) {
+            $('.real_city_exists input').val('');
+        }
         this.changeRealCity();
     },
     changeRealCity: function(e) {

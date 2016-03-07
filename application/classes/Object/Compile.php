@@ -70,9 +70,9 @@ class Object_Compile
 					->where('id', '=', $location_id)
 					->find();
 
-		if ($params["real_city"]) {
+		//if ($params["real_city"]) {
 			$result["real_city"] = $params["real_city"];
-		}
+		//}
 
 		$result["address"] = $location->address;
 		$result["city"] = $location->city;
