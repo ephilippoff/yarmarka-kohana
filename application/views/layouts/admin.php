@@ -138,6 +138,7 @@
 								<?php if (Auth::instance()->have_access_to('seopattern')) : ?>
 									<li><a href="<?=URL::site('khbackend/seopatterns/index')?>">Seo patterns</a></li>
 								<?php endif?>									
+								<li><a href="<?=URL::site('khbackend/settings/test_email')?>">Test email</a></li>
 							</ul>
 						</li>
 						<?php endif; ?>

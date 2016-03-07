@@ -49,4 +49,36 @@ class Controller_Admin_Settings extends Controller_Admin_Template {
 		$this->redirect('/khbackend/settings/cache');
 	}
 
+	public function action_test_email() {
+
+		if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+			if (!isset($_REQUEST['to'])) {
+				die;
+			}
+
+			$toTokens = explode(',', $_REQUEST['to']);
+			$subj = 'Поздравляем Вас с успешным размещением объявления на «Ярмарка-онлайн»!';			
+			$msg = View::factory('emails/add_notice',
+					array(
+						'is_edit' => false,
+						'object' => ORM::factory('Object', 2597476), 
+						'name' => Auth::instance()->get_user()->get_user_name(), 
+						'obj' => ORM::factory('Object', 2597476), 
+						'city' => ORM::factory('City', 1979), 
+						'category' => ORM::factory('Category', 140), 
+						'subdomain' => Region::get_domain_by_city(1979), 
+						'contacts' => array(), 
+						'address' => 'Hoàng Quốc Việt,Phú Mỹ,7,Hồ Chí Minh, Вьетнам'
+					)
+				);
+
+			foreach($toTokens as $token) {
+				Email::send($token, Kohana::$config->load('email.default_from'), $subj, $msg);
+			}
+
+		}
+
+	}
+
 }
