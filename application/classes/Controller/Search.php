@@ -100,7 +100,6 @@ class Controller_Search extends Controller_Template {
             done
         */
 
-
         //main search
         $main_search_query = Search::searchquery($search_info->search_filters, $search_params);
         //$main_search_query->where('o.source_id', '<>', 2);
@@ -532,6 +531,7 @@ class Controller_Search extends Controller_Template {
         $info->city_id = ($this->domain->get_city()) ? $this->domain->get_city()->id : NULL;
         $info->category_id = $this->params_by_uri->get_category()->id;
         $info->child_categories_ids = $this->params_by_uri->get_category_childs_id();
+        $info->category_deep_childs = array_map(function ($a) { return $a['id']; }, $this->getService('Categories')->getCategoryWithChilds($info->category_id, 8));
 
         $info->s_host = URL::SERVER("HTTP_HOST");
         $info->s_suri = trim(URL::SERVER("REQUEST_URI"),"/");
@@ -567,7 +567,7 @@ class Controller_Search extends Controller_Template {
             "active" => TRUE,
             "published" =>TRUE,
             "city_id" => $info->city_id,
-            "category_id" => (count($info->child_categories_ids) > 0) ? $info->child_categories_ids : $info->category_id,
+            "category_id" => (count($info->child_categories_ids) > 0) ? $info->category_deep_childs : $info->category_id,
 
             "user_id" => $this->params_by_uri->get_reserved_query_params("user_id"),
             "source" => $this->params_by_uri->get_reserved_query_params("source"),
