@@ -57,12 +57,16 @@ define([
                 zoom = options.zoom || 10,
                 settings = options.settings || {};
 
-            DG.then(function(){
-                var map = DG.map(elid, {
-                    center: [lat, lon],
-                    zoom: zoom
+            $('button[data-role="show-map"]').click(function(){
+                $('#map-cont').slideDown();
+                DG.then(function(){
+                    var map = DG.map(elid, {
+                        center: [lat, lon],
+                        zoom: zoom
+                    });
+                    ready(map);
                 });
-                ready(map);
+                $(this).remove();
             });
         },
 
@@ -81,7 +85,6 @@ define([
                     zoom: zoom,
                     controls: ['smallMapDefaultSet']
                 }, settings));
-
                 ready(map);
             });
         },

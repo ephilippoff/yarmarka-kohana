@@ -140,3 +140,11 @@ function animated (element, animation) {
         $(element).removeClass('animated').removeClass(animation);
     }, 400);
 }
+
+$(function(){
+        var i = 1;
+        $('#vk_comments').each(function(){
+            $(this).attr('id', 'vk_comments'+i);
+            i++;
+        });
+    });
