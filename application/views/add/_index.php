@@ -306,7 +306,7 @@
 							<label for="real_city_exists">Товар/услуга/продукт/вакансия находится в другом городе</label>
 						</div>		
 
-						<div class="row real_city_exists" <?php if (!$form_data->city['real_city_exists']) echo 'style="display:none;'; ?> >
+						<div class="row real_city_exists" <?php if (!$form_data->city['real_city_exists']) echo 'style="display:none;"'; ?> >
 							<div class="col-md-10">
 								<div class="inp-cont ">
 									<span class="required-star">*</span>																		

@@ -223,7 +223,7 @@
 						</div><!--fieldscont-->
 					</div> <!-- smallcont -->
 
-					<div class="smallcont real_city_exists" <? if (!$form_data->city["real_city_exists"]) echo 'style="display:none;"';?>>
+					<div class="smallcont real_city_exists" <? if (!$form_data->city["real_city_exists"]) echo 'style="display:none;"';?> >
 						<div class="labelcont">
 							<label><span></span></label>
 						</div>	
