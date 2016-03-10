@@ -7,10 +7,12 @@
 					Ваш город: <span>{{current_city}}</span><i class="fa fa-caret-down ml5"></i>
 				</span>
 			</div>
+			{#
 			{% set neiboors = custommenu('surgut.yarmarka.biz').childs %}
 			{% for city in neiboors %}
 				<span class="menu-item span-link hidden-sm hidden-xs" onclick="window.location='http://{{ city.url }}'">{{ city.title}}</span>
 			{% endfor %}
+			#}
 		</div>
 		<div class="cont2 col-md-6 {% if onPageFlag == add %}col-sm-6 {% else %}col-sm-8 {% endif %} col-xs-6 col-xxs-6 clearfix">
 			<div class="menu-item-wrp menu-block {% if user %}js-usermenu-dropdown{% endif %} user-dropdown">
