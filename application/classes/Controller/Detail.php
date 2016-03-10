@@ -91,6 +91,13 @@ class Controller_Detail extends Controller_Template {
 		$twig->currentUri = $this->request->uri();
 		$twig->userEmail = $cUser->getEmail();
 
+		if ($user !== NULL) {
+			//start user_object_stat item
+			$user_object_stat_item = ORM::factory('Stat');
+			$user_object_stat_item->start($user->id, $object->id);
+			$twig->user_object_stat_item = $user_object_stat_item;
+		}
+
 		//add to last views
 		LastViews::instance()->set($object->id);
 		$this->response->body($twig);
