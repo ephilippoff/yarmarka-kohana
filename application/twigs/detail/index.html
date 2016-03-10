@@ -29,6 +29,7 @@
 					{% include 'detail/thumbnails' %}
 					{% include 'detail/attributes' %}
 				</article>
+				<button class="more-button module button bg-color-blue" data-role="show-map">Показать на карте</button>
 			</div>
 			<div class="col-lg-4">
 				<div class="banner hidden-sm hidden-xs hidden-md module {zoneID: 45}"></div>
@@ -38,6 +39,7 @@
 		<div class="row">
 			<div class="col-md-12">
 				{% include 'detail/contacts' %}
+				{% include 'block/vk/comments_surgut' %}
 			</div>
 		</div>
 		<div class="row">
@@ -54,7 +56,6 @@
 			<div class="col-lg-12 hidden-lg hidden-md hidden-sm">
 				{% include 'detail/controls' %}
 				{% include 'detail/services' %}
-				{% include 'block/vk/comments_surgut' %}
 			</div>
 		</div>
 		{% if (category.show_map) %}
@@ -74,7 +75,6 @@
 			<div class="hidden-xs">
 				{% include 'detail/controls' %}
 				{% include 'detail/services' %}
-				{% include 'block/vk/comments_surgut' %}
 			</div>
 			{% include 'detail/similar' %}
 			<div class="detail_last_views">

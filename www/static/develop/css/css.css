@@ -1436,19 +1436,7 @@ article img.news-photo{
     top:0;
 }
 
-/*#button-next button{
-    display: none;
-    margin: 30px auto;
-    float: right;
-    outline: none;
-    border: none;
-    border-bottom: 1px dotted #6A6A6A;
-    background: none;
-    color: #333;
-}*/
-
 .more-button{
-    background: #BF4040;
     border: none;
     outline: none;
     padding: 5px 15px;
@@ -1457,8 +1445,4 @@ article img.news-photo{
     -webkit-transition: all 0.1s ease-in;
     -o-transition: all 0.1s ease-in;
     transition: all 0.1s ease-in;
-}
-
-.more-button:hover{
-    background: #E85151;
 }
