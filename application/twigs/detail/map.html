@@ -1,6 +1,6 @@
-<button class="more-button module" data-role="show-map">Показать на карте</button>
+<div id="flag"></div>
 <div class="info-block-cont theme2 module hidden" id="map-cont">
-	<div class="block-title">
+	<div class="title_block brt2">
 		{% if object.compiled.region == object.compiled.city %}
 			<span><i class="mr5 fa fa-map-marker"></i>{{object.compiled.region}}, {{object.compiled.address}}</span>
 		{% else %}
