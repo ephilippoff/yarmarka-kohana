@@ -61,11 +61,13 @@
 			</div>
 		</div>
 		{% if (category.show_map) %}
-			<div class="row">
-				<div class="col-md-12">
-					{% include 'detail/map' %}
+			{% if object.compiled.address is not empty %}
+				<div class="row">
+					<div class="col-md-12">
+						{% include 'detail/map' %}
+					</div>
 				</div>
-			</div>
+			{% endif %}
 		{% endif %}
 		{% include 'detail/photo' %}
 	</div>
