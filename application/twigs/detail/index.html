@@ -29,7 +29,9 @@
 					{% include 'detail/thumbnails' %}
 					{% include 'detail/attributes' %}
 				</article>
-				<button class="more-button module button bg-color-blue" data-role="show-map">Показать на карте</button>
+				{% if object.compiled.address is not empty %}
+					<button class="more-button module button bg-color-blue" data-role="show-map">Показать на карте</button>
+				{% endif %}
 			</div>
 			<div class="col-lg-4">
 				<div class="banner hidden-sm hidden-xs hidden-md module {zoneID: 45}"></div>
