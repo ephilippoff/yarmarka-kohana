@@ -95,6 +95,7 @@ class Controller_Detail extends Controller_Template {
 		LastViews::instance()->set($object->id);
 		$this->response->body($twig);
 		LastViews::instance()->commit();
+		// echo "<pre>"; var_dump($twig); echo "</pre>";die;
 	}
 
 	protected function validate_cv_mode($categorySeoName) {
