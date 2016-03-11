@@ -31,51 +31,49 @@
 
 {% if check_object_access(object, 'object.moderate') %}
 	<div class="info-block-cont theme2 module">
-		<div class="block-title">
-			<span>Функции администратора</span><i class="fa fa-eye fa-lg ml5" onclick="$('.js-admin-control-cont').toggleClass('hidden');"></i>
+		<div class="block-title" style="cursor: pointer;" onclick="$('.inner').toggleClass('hidden'); $('.fr i').toggleClass('fa-minus fa-plus');">
+			<span>Колонка администратора</span><span class="fr"><i class="fa fa-minus"></i></span>
 		</div>
-		<div class="row">
-			<div class="list list1 col-md-12">
-				<div class="row p10 hidden js-admin-control-cont">
-					<div class="list list1 col-md-6">
-						<p class="button js-ocontrol-edit button-style1 bg-color-crimson mb3" data-id="{{object.id}}">
-							<i class="fa fa-edit fa-lg mr5"></i>Редактировать
-						</p>
-					</div>
-					<div class="list list1 col-md-6">
-						<p class="button js-moderate-action button-style1 bg-color-crimson mb3" data-id="{{object.id}}">
-							<i class="fa fa-edit fa-lg mr5"></i>Модерация объявления
-						</p>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="info-block-cont theme2 module">
-		<div class="block-title mt10">
-				<span>Контакты для администратора</span><i class="fa fa-eye fa-lg ml5" onclick="$('.js-admin-contact-cont').toggleClass('hidden');"></i>
-		</div>
-		<div class="row contacts-cont hidden js-admin-contact-cont">
-			<div class="col-md-6">
-				<div class="p10">
-					<span class="author-name">{{object.contact}}</span>
-					<div class="contacts-list-cont">
-						{% for contact in object.compiled.contacts %}
-							<p>{{ contact.value }}</p>
-						{% endfor %}
+		<div class="inner">
+			<div class="row">
+				<div class="list list1 col-md-12">
+					<div class="row p10 js-admin-control-cont">
+						<div class="list list1 col-md-6">
+							<p class="button js-ocontrol-edit button-style1 bg-color-crimson mb3" data-id="{{object.id}}">
+								<i class="fa fa-edit fa-lg mr5"></i>Редактировать
+							</p>
+						</div>
+						<div class="list list1 col-md-6">
+							<p class="button js-moderate-action button-style1 bg-color-crimson mb3" data-id="{{object.id}}">
+								<i class="fa fa-edit fa-lg mr5"></i>Модерация объявления
+							</p>
+						</div>
 					</div>
 				</div>
 			</div>
-			<div class="col-md-6">
-				{% if object.compiled.author.org_type == 2 %}
-					<p>{{ object.compiled.author.org_name }}</p>
-					{% if object.compiled.author.logo %}
-						<div class="img-cont"><img src="{{  get_file(object.compiled.author.logo['120x90']) }}"></div>
+			<hr>
+			<div class="row js-admin-contact-cont">
+				<div class="col-md-6 fz14">
+					<div class="p10">
+						<span class="author-name">{{object.contact}}</span>
+						<div class="contacts-list-cont">
+							{% for contact in object.compiled.contacts %}
+								<p>{{ contact.value }}</p>
+							{% endfor %}
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6 fz14">
+					{% if object.compiled.author.org_type == 2 %}
+						<p>{{ object.compiled.author.org_name }}</p>
+						{% if object.compiled.author.logo %}
+							<div class="img-cont"><img src="{{  get_file(object.compiled.author.logo['120x90']) }}"></div>
+						{% endif %}
+						<p><span class="moreinfo span-link">Все объявления компании</span></p>
+						<p>{{ object.compiled.author.org_post_address }}</p>
+						<p><i class="ico phone"></i>{{ object.compiled.author.org_phone }}</p>
 					{% endif %}
-					<p><span class="moreinfo span-link">Все объявления компании</span></p>
-					<p>{{ object.compiled.author.org_post_address }}</p>
-					<p><i class="ico phone"></i>{{ object.compiled.author.org_phone }}</p>
-				{% endif %}
+				</div>
 			</div>
 		</div>
 	</div>
