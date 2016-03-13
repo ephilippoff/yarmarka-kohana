@@ -261,7 +261,7 @@ class Sphinx {
 	private static function GetSphinxKeyword($sQuery)
 	{
 		mb_internal_encoding("UTF-8");
-		$sQuery = Text::remove_symbols($sQuery);
+		//$sQuery = Text::remove_symbols($sQuery);
 		$aKeyword = array();
 		$aRequestString=explode(' ', $sQuery);
 
