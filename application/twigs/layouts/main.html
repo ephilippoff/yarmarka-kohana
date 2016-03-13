@@ -102,6 +102,9 @@
                     city_id: '{{city_id}}',
                     debug: '{{ is_debug_mode() }}',
                     allowCkEditor: {% if allowCkEditor %}true{% else %}false{% endif %}
+                    {% if user_object_stat_item %}
+                        , 'user_object_stat_id': {{ user_object_stat_item.id }}
+                    {% endif %}
                 };
             </script>
             {% if is_debug_mode() %}

@@ -12,6 +12,55 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 
 	}
 
+	public function action_user_stat() {
+
+		$state = array(
+				'date_start' => NULL,
+				'date_end' => NULL,
+				'page' => 1,
+				'per_page' => 100,
+				'total_page' => NULL
+			);
+
+		// get parameters
+		if (isset($_REQUEST['page']) && $_REQUEST['page'] > 0) {
+			$state['page'] = (int) $_REQUEST['page'];
+		}
+		if (isset($_REQUEST['date_start']) && $_REQUEST['date_start'] > 0) {
+			$state['date_start'] = strtotime($_REQUEST['date_start']);
+		}
+		if (isset($_REQUEST['date_end']) && $_REQUEST['date_end'] > 0) {
+			$state['date_end'] = strtotime($_REQUEST['date_end']);
+		}
+		if (isset($_REQUEST['per_page']) && $_REQUEST['per_page'] > 0) {
+			$state['per_page'] = (int) $_REQUEST['per_page'];
+		}
+
+		// prepare query
+		$query = ORM::factory('Stat')
+			->with('user')
+			->with('object')
+			->where('date_end', '', DB::expr('is not null'));
+		if ($state['date_start'] !== NULL) {
+			$query->where('date_start', '>=', $state['date_start']);
+		}
+		if ($state['date_end'] !== NULL) {
+			$query->where('date_end', '<=', $state['date_end']);
+		}
+		$query1 = clone $query;
+		$query1
+			->order_by('date_start', 'desc')
+			->limit($state['per_page'])
+			->offset(($state['page'] - 1) * $state['per_page']);
+
+		$state['total_count'] = $query->count_all();
+		$state['total_page'] = ceil($state['total_count'] / $state['per_page']);
+		$state['items'] = $query1->find_all();
+
+		$this->template->data = $state;
+
+	}
+
 	public function action_index()
 	{
 

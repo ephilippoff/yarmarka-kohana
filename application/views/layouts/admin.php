@@ -83,7 +83,8 @@
 								<?php if (Auth::instance()->have_access_to('moderation_log')) : ?>
 									<li><a href="<?=URL::site('khbackend/objects/moderation_log')?>">История модераций</a></li>
 								<?php endif?>	
-								<li><a href="<?=URL::site('khbackend/objects/csv_export')?>">CSV Export</a></li>					
+								<li><a href="<?=URL::site('khbackend/objects/csv_export')?>">CSV Export</a></li>
+								<li><a href="<?=URL::site('khbackend/objects/user_stat')?>">Статистика</a></li>			
 							</ul>
 						</li>
 						<?php endif; ?>
@@ -161,7 +162,7 @@
 		</div>
 	</div>
 
-	<div class="container">
+	<div class="container" id="main_admin_container">
 		<div id="loading" style="position:absolute; z-index:99999; background-color:red; color: white; top: 10; left: 5; display:none">
 			Loading...
 		</div>

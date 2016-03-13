@@ -472,3 +472,23 @@ var Yarmarka = {
     //export plugin
     Yarmarka.UI.AutoCollapse = AutoCollapse;
 })();
+
+// statistic
+(function () {
+
+    $(document).ready(function () {
+        if (_globalSettings.user_object_stat_id) {
+            window.onbeforeunload = function (e) {
+                $.ajax({
+                        url: '/rest_stat/end',
+                        data: JSON.stringify({ id: _globalSettings.user_object_stat_id }),
+                        dataType: 'json',
+                        type: 'POST',
+                        async: false,
+                        contentType: 'application/json; charset=utf-8',
+                    });
+            };
+        }
+    });
+
+})();
