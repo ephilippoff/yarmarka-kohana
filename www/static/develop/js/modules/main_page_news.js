@@ -16,7 +16,7 @@ define([ 'jquery', 'underscore', 'backbone' ], function () {
 			'click [data-role=next_page]': 'onNextButtonClick'
 		},
 
-		nextButtonTemplate: _.template('<button data-role="next_page">Еще новости</button>'),
+		nextButtonTemplate: _.template('<button data-role="next_page" class="more-button module button bg-color-blue">Еще новости</button>'),
 
 		itemTemplate: _.template(
 			'<div class="col-md-6 col-sm-6 masonry">'

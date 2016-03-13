@@ -57,12 +57,21 @@ define([
                 zoom = options.zoom || 10,
                 settings = options.settings || {};
 
-            DG.then(function(){
-                var map = DG.map(elid, {
-                    center: [lat, lon],
-                    zoom: zoom
-                });
-                ready(map);
+            $('button[data-role="show-map"]').click(function(){
+                var top = $('#flag').offset().top;
+                console.log(top);
+                $('body,html').animate({scrollTop: top-50}, 750);
+                setTimeout(function(){
+                    $('#map-cont').slideDown();
+                    DG.then(function(){
+                        var map = DG.map(elid, {
+                            center: [lat, lon],
+                            zoom: zoom
+                        });
+                        ready(map);
+                    });
+                }, 800);
+                $(this).remove();
             });
         },
 
@@ -81,7 +90,6 @@ define([
                     zoom: zoom,
                     controls: ['smallMapDefaultSet']
                 }, settings));
-
                 ready(map);
             });
         },
