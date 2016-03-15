@@ -140,7 +140,6 @@
 			<li><a href="#" data-id="<?=$object->id?>" class="js-service-up">Поднять</a>, 
 			<a href="#" data-id="<?=$object->id?>" class="js-service-premium">Премиум</a>, 
 			<a href="#" data-id="<?=$object->id?>" class="js-service-lider">Лидер</a>, 
-			<a href="#" data-id="<?=$object->id?>" class="js-service-newspaper" data-city="<?=$object->city_id?>">В газету</a></li>
 			<a href="#" data-id="<?=$object->id?>" class="js-service-cities" data-city="<?=$object->city_id?>">Несколько городов</a></li>
 			
 		</ul>

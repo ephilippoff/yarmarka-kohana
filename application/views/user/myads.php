@@ -397,7 +397,6 @@
 													<li><a title="Бегущая строка на сайте" href="<?=CI::site('billing/pay_service/'.$running_line_site_s->id.'/'.$ad->id)?>" class="btn-pmenu "><i class="ico rs"></i><span>Бегущая строка</span></a></li>																																		
 													<li><a title="Текстовая ссылка" href="<?=CI::site('billing/pay_service/'.$service_promo_link->id.'/'.$ad->id)?>" class="btn-pmenu "><i class="ico pl"></i><span>Текст. ссылка</span></a></li>
 													<li><a title="Графическая ссылка" href="<?=CI::site('billing/pay_service/'.$service_promo_link_bg->id.'/'.$ad->id)?>" class="btn-pmenu "><i class="ico plg"></i><span>Графич. ссылка</span></a></li>													
-													<li><a title="Подать в газету" href="<?=CI::site('billing/pay_service/34/'.$ad->id)?>" class="btn-pmenu "><i class="ico yarmarka"></i><span>В газету</span></a></li>		
 													<li><a title="Воспользоваться услугами" href="<?=CI::site('billing/services_for_ads/'.$ad->id)?>" class="btn-pmenu "><i class="ico services"></i><span>Пакет услуг</span></a></li>													
 										<?php endif; ?>
 									</ul>
