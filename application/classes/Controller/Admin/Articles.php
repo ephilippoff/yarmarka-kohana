@@ -13,14 +13,40 @@ class Controller_Admin_Articles extends Controller_Admin_Template {
 	{
 		$limit  = Arr::get($_GET, 'limit', 30);
 		$page   = $this->request->query('page');
-		$offset = ($page AND $page != 1) ? ($page-1)*$limit : 0;		
-			
+		$offset = ($page AND $page != 1) ? ($page-1)*$limit : 0;
+
+		$search_filters = array();
+		
+		if ($id = intval($this->request->query('id')))
+		{
+			$search_filters["id"] = $id;
+		} 
+
+		if ($title = (string)  $this->request->query('title'))
+		{
+			$search_filters["title"] = $title;
+		} 
+
+		if ($text = (string) $this->request->query('text'))
+		{
+			$search_filters["text"] = $text;
+		} 
+
 		$news = DB::select()
 				->from('articles')
 				->join('email_campaign_statistic', 'LEFT')
 				->on(DB::expr('(\'newsone_\' || articles.id)'), '=', 'email_campaign_statistic.campaign_name')
 				->where('text_type', '=', 2);
-		
+		foreach ($search_filters as $key => $value) {
+			if ($value AND $key == 'id') {
+				$news = $news->where("articles.".$key,"=",(int) $value);
+			} else {
+				$news = $news->where("articles.".$key,"LIKE","%".$value."%");
+			}
+		}
+
+		$this->template->search_filters = $search_filters;
+
 		$clone_to_count = clone $news;
 		$count_all = $clone_to_count->select(array(DB::expr('COUNT(*)'), 'total'))->execute();
 	

@@ -17,7 +17,22 @@
 		});
 	});
 </script>
-
+<form class="form-inline">
+	<div class="input-prepend">
+		<span class="add-on">@id</span>
+		<input class="span2" type="text" placeholder="id" name="id" value="<?=Arr::get($search_filters, 'id')?>">
+    </div>
+    <div class="input-prepend">
+    	<span class="add-on">@title</span>
+		<input class="span2" type="text" placeholder="title" name="title" value="<?=Arr::get($search_filters, 'title')?>">
+    </div>
+    <div class="input-prepend">
+    	<span class="add-on">@text</span>
+		<input class="span2" type="text" placeholder="text" name="text" value="<?=Arr::get($search_filters, 'text')?>">
+    </div>
+    <input type="submit" name="" value="Filter" class="btn btn-primary">
+    <input type="reset" name="" value="Clear" class="btn" onclick="document.location='/khbackend/articles/news';">
+</form>
 <table class="table table-hover table-condensed news articles">
 <tr>
 	<th>Id</th>
