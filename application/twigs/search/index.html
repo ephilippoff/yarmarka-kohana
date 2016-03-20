@@ -61,7 +61,11 @@
 
 {% block footertext %}
 	<div class="col-md-12 mb10">
-		{{ seo_attributes.footer }}
+		{% if get_global('footer') %}
+			{{ get_global('footer') }}
+		{% else %}
+			{{ seo_attributes.footer }}
+		{% endif %}
 	</div>
 {% endblock footertext %}
 

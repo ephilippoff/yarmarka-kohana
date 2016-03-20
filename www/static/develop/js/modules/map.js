@@ -58,14 +58,19 @@ define([
                 settings = options.settings || {};
 
             $('button[data-role="show-map"]').click(function(){
-                $('#map-cont').slideDown();
-                DG.then(function(){
-                    var map = DG.map(elid, {
-                        center: [lat, lon],
-                        zoom: zoom
+                var top = $('#flag').offset().top;
+                console.log(top);
+                $('body,html').animate({scrollTop: top-50}, 750);
+                setTimeout(function(){
+                    $('#map-cont').slideDown();
+                    DG.then(function(){
+                        var map = DG.map(elid, {
+                            center: [lat, lon],
+                            zoom: zoom
+                        });
+                        ready(map);
                     });
-                    ready(map);
-                });
+                }, 800);
                 $(this).remove();
             });
         },
