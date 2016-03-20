@@ -139,6 +139,13 @@ define([
                 });
             }
 
+            if (keyCode == 13 && this.ui.searchPopupCont.find('li.mark')) {
+                e.preventDefault();
+                e.stopPropagation();
+                this.ui.searchPopupCont.find('li.mark').trigger('click');
+                return;
+            }
+
             if (!text) {
                 s.ui.searchPopupCont.hide();
             }
