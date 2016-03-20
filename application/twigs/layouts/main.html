@@ -2,13 +2,22 @@
 <!--[if IE]><html lang="ru" class="ie"><![endif]-->
 <!--[if !IE]><!--><html lang="ru"><!--<![endif]-->
     <head>
-        <title>{% block title %} {% endblock title%}</title>
+        <title>
+            {% if get_global('title') %}
+                {{ get_global('title') }}
+            {% else %}
+                {% block title %} {% endblock title%}
+            {% endif %}
+        </title>
         <meta charset="UTF-8">
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="Description" content="{% block meta_description %}{% endblock meta_description%}">
+        <meta name="Description" content="{% if get_global('description') %}{{ get_global('description') }}{% else %}{% block meta_description %}{% endblock meta_description%}{% endif %}">
         <meta name="robots" content="{% block meta_robots %}all{% endblock meta_robots%}">
         <link rel="shortcut icon" href="{{ staticfile("images/favicon.ico") }}">
+        {% if get_global('keywords') %}
+            <meta name="Keywords" content="{{ get_global('keywords') }}">
+        {% endif %}
         
         {% if show_canonical %}
             {% if show_canonical_simple %}

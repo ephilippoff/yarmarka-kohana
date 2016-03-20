@@ -113,6 +113,69 @@ if (PHP_SAPI == 'cli') // Try and load minion
 }
 else
 {
+	/* pretty urls processor */
+
+	// construct the url
+	// 0. protocol
+	$urlProtocol = 'http';
+	if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') {
+		$urlProtocol = 'https';
+	}
+	$urlProtocol .= '://';
+	// 1. host
+	$urlHost = $_SERVER['HTTP_HOST'];
+	// 2. relative path
+	$urlPath = isset($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO'] : '';
+	// 3. query string
+	$urlQuery = $_SERVER['QUERY_STRING'];
+	// build url
+	$urlCompiled = $urlProtocol . $urlHost 
+		. ($urlPath != NULL ? $urlPath : '/') 
+		. ($urlQuery != NULL ? ('?' . $urlQuery) : '');
+
+	//var_dump($urlCompiled);die;
+
+	// get the data. TODO - think to cache it
+	$item = ORM::factory('PrettyUrl')
+		->where('pretty', '=', $urlCompiled)
+		->find();
+
+	if ($item->loaded()) {
+		$parsedUrl = parse_url($item->ugly);
+
+		if (isset($parsedUrl['host'])) {
+			$_SERVER['HTTP_HOST'] = $parsedUrl['host'];
+		}
+
+		if (isset($parsedUrl['path'])) {
+			$_SERVER['PATH_INFO'] = $parsedUrl['path'];
+		}
+
+		if (isset($parsedUrl['query'])) {
+			// clear GET
+			foreach($_GET as $key => $value) {
+				unset($_GET[$key]);
+			}
+			$tmp = array();
+			parse_str($parsedUrl['query'], $tmp);
+			foreach($tmp as $key => $value) {
+				$_GET[$key] = $value;
+			}
+		}
+
+		// append global attributes to override all others
+		$GLOBALS['title'] = htmlspecialchars($item->title);
+		$GLOBALS['h1'] = $item->h1;
+		$GLOBALS['description'] = htmlspecialchars($item->description);
+		$GLOBALS['keywords'] = htmlspecialchars($item->keywords);
+		$GLOBALS['footer'] = $item->footer;
+	}
+
+	//header('Content-Type: text/plain');
+	//var_dump($_SERVER);die;
+
+	/* done */
+
 	/**
 	 * Execute the main request. A source of the URI can be passed, eg: $_SERVER['PATH_INFO'].
 	 * If no source is specified, the URI will be automatically detected.
