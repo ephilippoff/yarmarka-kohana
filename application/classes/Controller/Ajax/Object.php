@@ -56,6 +56,7 @@ class Controller_Ajax_Object extends Controller_Ajax {
 			foreach ($objects as $object) {
 				$o = new Obj($object->as_array());
 				$o->category_url = ORM::factory('Category',$object->category_id)->url;
+				$o->url = '/' . $object->get_url();
 				$resobjects[] = $o;
 			}
 
