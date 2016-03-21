@@ -128,6 +128,17 @@ else
 	$urlPath = isset($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO'] : '';
 	// 3. query string
 	$urlQuery = $_SERVER['QUERY_STRING'];
+	$urlQueryParsed = array();
+	parse_str($urlQuery, $urlQueryParsed);
+	$ignore = array( 'page', 'limit' );
+	$ignoreSave = array();
+	foreach($ignore as $ignoreItem) {
+		if (isset($urlQueryParsed[$ignoreItem])) {
+			$ignoreSave[$ignoreItem] = $urlQueryParsed[$ignoreItem];
+			unset($urlQueryParsed[$ignoreItem]);
+		}
+	}
+	$urlQuery = http_build_query($urlQueryParsed);
 	// build url
 	$urlCompiled = $urlProtocol . $urlHost 
 		. ($urlPath != NULL ? $urlPath : '/') 
@@ -158,6 +169,7 @@ else
 			}
 			$tmp = array();
 			parse_str($parsedUrl['query'], $tmp);
+			$tmp = array_merge($tmp, $ignoreSave);
 			foreach($tmp as $key => $value) {
 				$_GET[$key] = $value;
 			}
@@ -169,6 +181,21 @@ else
 		$GLOBALS['description'] = htmlspecialchars($item->description);
 		$GLOBALS['keywords'] = htmlspecialchars($item->keywords);
 		$GLOBALS['footer'] = $item->footer;
+		$GLOBALS['category_path'] = $urlPath;
+	} else {
+
+		// maybe this is ugly url
+		$item = ORM::factory('PrettyUrl')
+			->where('ugly', '=', $urlCompiled)
+			->find();
+
+		if ($item->loaded()) {
+			//move it to pretty url
+			header('HTTP/1.1 301 Moved Permanently'); 
+			header('Location: ' . $item->pretty); 
+			exit(); 
+		}
+
 	}
 
 	//header('Content-Type: text/plain');
