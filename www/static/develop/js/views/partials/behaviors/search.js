@@ -27,12 +27,13 @@ define([
             }
         },
         click: function() {
-            this.getOption("uiSearchForm").submit();
+            //this.getOption("uiSearchForm").submit();
+            window.location.href = this.$('[data-goto]').data('goto');
         }
     });
 
     var ObjectItemView = ItemView.extend({
-        template: "<span class='finded-title'><%=title %></span><a href='/<%=category_url %>'><%=category_title %></a>",
+        template: "<span class='finded-title' data-goto='<%= url %>'><%=title %></span><a href='/<%=category_url %>'><%=category_title %></a>",
         className: "result-line",
         tagName: "li"
     });
