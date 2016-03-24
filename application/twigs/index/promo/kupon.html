@@ -1,7 +1,7 @@
 {# set theme_class = 'light-blue-theme' #}
 {% if kupons|length > 0 or premium_kupons|length > 0 %}
 {% if premium_kupons|length > 0 %}
-<div class="col-md-12 col-sm-5 col-xs-12 items-cont kupons_block clearfix">
+<div class="col-md-12 items-cont kupons_block clearfix">
 	<ul>
 		{% for object in premium_kupons %}
 		<li class="clearfix kupon_wrap">
@@ -11,7 +11,7 @@
 	</ul>
 </div>
 {% else %}
-<div class="col-md-12 col-sm-5 col-xs-12 kupons_block clearfix">
+<div class="col-md-12 kupons_block clearfix">
 	<ul>
 		{% for object in kupons %}
 		<li class="clearfix kupon_wrap">

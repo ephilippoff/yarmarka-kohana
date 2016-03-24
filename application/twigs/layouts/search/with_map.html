@@ -6,13 +6,11 @@
 	
 	{% block header %} 
 		{{ parent() }}
+		{% block crumbs %} 
+			{% include 'search/crumbs' %}
+		{% endblock crumbs %}
 		{{ requestblock('block_twig/adslinkline',{'city_id': city.id, 'category_id': category.id, 'theme_class': theme_class}) }}
-		{% include 'block/header/navigationline/simple' %}
 	{% endblock header %} 
-
-	{% block crumbs %} 
-		Крошки
-	{% endblock crumbs %}
 
 	{% block subcategories %}{% endblock subcategories %}
 

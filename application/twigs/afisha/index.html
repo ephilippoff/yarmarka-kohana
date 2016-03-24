@@ -1,7 +1,5 @@
 {% extends "layouts/index" %}
-
-{% set theme_class = 'crimson-theme' %}
-{% block title %}Газета бесплатных объявлений Ярмарка{% endblock title%}
+{% block title %}Афиша{% endblock title%}
 {% block meta_description %}Газета бесплатных объявлений. Разделы сайта: работа, квартиры, дома, недвижимость, авто, ремонт и строительство, мебель, домашние животные. {% endblock meta_description%}
 
 {% block wrapperclass %}page-index{% endblock wrapperclass %}
@@ -13,8 +11,6 @@
 {% endblock header %} 
 
 {% block css %}
-	<link rel="stylesheet" href="/vendor/bootstrap/dist/css/bootstrap.min.css" />
-	<link rel="stylesheet" href="/vendor/bootstrap/dist/css/bootstrap-theme.min.css" />
 	<link rel="stylesheet" href="/vendor/jquery-ui/themes/base/jquery-ui.min.css" />
 	<link rel="stylesheet" href="/vendor/chosen/chosen.min.css" />
 	{{ parent() }}
@@ -28,7 +24,8 @@
 {% endblock js %}
 
 {% block content %}
-<div class="fn-afisha-container">
+<div class="min-content-height">
+	<div class="fn-afisha-container"></div>
 </div>
 {% endblock content %}
 

@@ -6,8 +6,6 @@
 		{{ requestblock('block_twig/topline', {'favourites':favourites}) }}
 		{% include 'block/header/logoline' %}
 		{{ requestblock('block_twig/adslinkline',{'city_id': city.id, 'theme_class': theme_class}) }}
-		{% include 'block/header/navigationline/article' %}
-
 {% endblock header %} 
 
 {% block title %}{{object.title}}{% endblock title %}

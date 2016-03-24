@@ -42,7 +42,8 @@
 	.reklama-cont .banners{
 		height: 56px;
 	}
-
+	
+	.top-line .search-cont .input-group-addon{position: relative; left: 1px;}
 
 	.coupon-item-cont .description-cont{
 		height: 60px;
@@ -57,4 +58,19 @@
 		display: none;
 	}
 
+}
+
+@media screen and (max-width:1024px) {
+	
+	.top-line,
+	.menu-cont.menu-cont1{
+		display: none;
+	}
+}
+
+
+
+@media screen and (min-width:1024px) {
+	
+	.mobile_menu{display: none !important;}
 }

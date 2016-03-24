@@ -28,6 +28,10 @@ class Controller_Block_Twig extends Controller_Block
         $twig = Twig::factory('block/header/topline');
         $twig->user = Auth::instance()->get_user();
         $twig->favourites = $this->request->post("favourites");
+        $twig->search_text = $this->request->post("search_text");
+        $twig->staticMainMenu = $this->request->post("staticMainMenu");
+        $twig->onPageFlag = $this->request->post("onPageFlag");
+
         $this->response->body($twig);
     }
 
@@ -55,6 +59,9 @@ class Controller_Block_Twig extends Controller_Block
     {
         $city_id = $this->request->post("city_id");
         $twig = Twig::factory('block/menu/city');
+
+        $twig->cols = $this->request->post("cols");
+         $twig->class = $this->request->post("class");
 
         $cities = ORM::factory('City')->where("is_visible","=",1);
         if ($city_id)
