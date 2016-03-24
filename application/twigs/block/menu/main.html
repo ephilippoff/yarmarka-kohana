@@ -18,7 +18,7 @@
 			{% set divWidth = (banners[category.id] is defined and banners[category.id].menu_width) ? banners[category.id].menu_width : 400 %}
 			{% set ulWidth = 191 %}
 			<div class="section section{{category.id}}" id="section{{category.id}}" style="width: {{divWidth}}px; display: none;"  data-menu-height="{{menuHeight}}">				
-				<ul class="submenu-ul">
+				<ul class="submenu-ul" style="position:relative; width: 100%;">
 					<li>
 						{% if banners[category.id] is defined and file_exist('/uploads/banners/menu/' ~ banners[category.id].image) and banners[category.id].menu_name == 'main' %}
 							<map name="map{{category.id}}" id="map{{category.id}}" style="position: absolute;right:{{banners[category.id].x}}px ; bottom:{{banners[category.id].y}}px;z-index:0;">
