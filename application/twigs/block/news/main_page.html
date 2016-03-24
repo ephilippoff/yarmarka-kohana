@@ -2,7 +2,7 @@
 	{% set newsTitle = 'noTitle' %}
 {% endif %}
 
-{% set currentDate = "now"|date("m.d.y") %}
+{% set currentDate = "now"|date("d.m.y") %}
 {% set today = 'Сегодня' %}
 {% if catTitle and reverse %} <!-- Вывод для всем рубрикам, кроме выбранной -->
 	{% include 'search/news/result' %}
@@ -17,14 +17,6 @@
 {% else %}
 	{% set catTitle = 'all' %}
 {% endif %}
-
-{% if newsTitle is empty %}
-	{% set newsTitle = 'noTitle' %}
-{% endif %}
-
-{% set currentDate = "now"|date("d.m.y") %}
-{% set today = 'Сегодня' %}
-
 <div class="news_cat_block">
 	{% if catTitle and reverse %} <!-- Вывод для всем рубрикам, кроме выбранной -->
 		{% for item in data %}

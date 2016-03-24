@@ -8,9 +8,9 @@
 			Крошки
 		{% endblock crumbs %}
 	{% endblock header %} 
-	<h1 class="module hidden-xs hidden-sm db ta-c">{{ seo_attributes.h1 ? seo_attributes.h1: category.title }}</h1>
+	<h1 class="module db ta-c">{{ seo_attributes.h1 ? seo_attributes.h1: category.title }}</h1>
 	<div class="row min-content-height">
-		<div class="col-md-3">
+		<div class="col-md-3 hidden-sm hidden-xs">
 			{% block leftside %} 
 				<div class="obj-control-head clearfix brt2">&nbsp;</div>
 			{% endblock leftside %}
