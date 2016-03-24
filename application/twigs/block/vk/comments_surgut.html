@@ -9,7 +9,7 @@
 		<script type="text/javascript" src="//yastatic.net/share2/share.js" charset="utf-8"></script>
 		<div class="ya-share2" data-services="vkontakte,facebook,odnoklassniki,moimir,gplus,twitter,lj"></div>
 	</div>
-	<span id="share-message" class="hidden fr mr10 mt2">Поделитесь ссылкой с друзьями:</span>
+	<span id="share-message" class="hidden-xs fr mr10 mt2">Поделитесь ссылкой с друзьями:</span>
 </div>
 <div id="vk_comments" data-role="comments-container"></div>
 <script>
@@ -18,6 +18,13 @@
 		var placeID = place.attr('id');
 		place.css('margin', '10px 0');
 		$('#share-message').fadeIn();
+		mobile(function(){
+			$('.share-links').css({
+				'float' : 'none',
+				'margin': 'auto',
+				'width' : '70%'
+			});
+		});
 		VK.init({apiId: 5197401, onlyWidgets: true});
 		VK.Widgets.Comments(placeID, {limit: 10, width: "auto", attach: "*"});
 		$(this).remove();
