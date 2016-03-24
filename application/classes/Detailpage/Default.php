@@ -67,9 +67,19 @@ class Detailpage_Default
 		$object = $this->_orm_object;
 		$info = array();
 
+		$domain = new Domain();
+		$object_location = ORM::factory('Location', $object->location_id);
+		$object_location_value = $object_location->loaded() ? trim($object_location->city . ' ' . $object_location->address) : NULL;
 		$similar_search_query = Search::searchquery(
 			array(
-				"hash" => Cookie::get('search_hash'),
+				//"hash" => Cookie::get('search_hash'),
+				'active' => true,
+				//'city_id' => array($domain->get_city()->id),
+				'location' => $object_location_value,
+				'expiration' => true,
+				'expired' => true,
+				'is_published' => true,
+				'category_id' => $object->category,
 				"not_id" => Cookie::get('ohistory') ? 
 									array_merge(explode(",", Cookie::get('ohistory')), array($object->id)) 
 										: array($object->id)

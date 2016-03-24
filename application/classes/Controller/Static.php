@@ -129,4 +129,39 @@ class Controller_Static extends Controller_Template {
 		echo $f->save();
 		//echo Debug::vars($f->compile($vakancies));
 	}
+
+	public function action_reklamodatelyam() {
+		$this->use_layout = FALSE;
+		$this->auto_render = FALSE;
+
+		$articles_root = 'uploads/articles/';
+
+		$filename = DOCROOT.$articles_root.$this->request->param("path").".html";
+
+		$html = '';
+
+		if (file_exists($filename)) {
+			$html = file_get_contents($filename);
+		} else {
+			throw new HTTP_Exception_404;
+		}
+		
+		$this->response->body($html);
+	}
+
+	public function action_reklamodatelyam_static() { 
+		$this->use_layout = FALSE;
+		$this->auto_render = FALSE;
+
+		$articles_root = 'uploads/articles/';
+
+		$filename = DOCROOT.$articles_root.$this->request->param("path");
+
+		$path_parts = pathinfo($filename);
+		$mime_type =File::mime_by_ext($path_parts['extension']);
+
+		$this->response->headers('Content-Type', $mime_type);
+		$this->response->body(file_get_contents($filename));
+
+	}
 }

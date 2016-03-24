@@ -144,6 +144,18 @@ class Controller_Block_Twig extends Controller_Block
             $reklama = array_slice($reklama, 0, $count);
         }
 
+        // http://yarmarka.myjetbrains.com/youtrack/issue/yarmarka-607
+        $main_domain = Kohana::$config->load('common.main_domain');
+        foreach($reklama as &$item) {
+            $item->nofollow = false;
+            if (!$item->link) { continue; }
+            $host = parse_url($item->link, PHP_URL_HOST);
+            if (!$host || preg_match('/' . $main_domain . '/', $host)) {
+                continue;
+            }
+            $item->nofollow = true;
+        }
+
         return $reklama;
     }
 

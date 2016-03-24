@@ -91,12 +91,11 @@ class Controller_Detail extends Controller_Template {
 		$twig->currentUri = $this->request->uri();
 		$twig->userEmail = $cUser->getEmail();
 
-		
-
 		//add to last views
 		LastViews::instance()->set($object->id);
 		$this->response->body($twig);
 		LastViews::instance()->commit();
+		// echo "<pre>"; var_dump($twig); echo "</pre>";die;
 	}
 
 	protected function validate_cv_mode($categorySeoName) {
@@ -209,6 +208,7 @@ class Controller_Detail extends Controller_Template {
 		$twig->horizontalView = TRUE;
 		$twig->staticMainMenu = TRUE;
 		$twig->reverse = TRUE;
+		$twig->onPageFlag = 'detail';
 
 		$detail_info = Detailpage::factory("Newsone", $object)
 							->get_crumbs()
@@ -317,7 +317,9 @@ class Controller_Detail extends Controller_Template {
 			}
 		}
 
+		LastViews::instance()->set($object->id);
 		$this->response->body($twig);
+		LastViews::instance()->commit();
 	}
 
 	public function after()

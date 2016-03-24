@@ -60,7 +60,12 @@ class Object_Compiled
 					$_attribute["value"] = $attribute["value"];
 				break;
 			}
-			$result[$_attribute["seo_name"]] = $_attribute;
+			if (array_key_exists($_attribute["seo_name"], $result)) {
+				$result["_".$_attribute["seo_name"]] = $_attribute;
+			} else {
+				$result[$_attribute["seo_name"]] = $_attribute;
+			}
+			
 		}	
 
 		return $result;

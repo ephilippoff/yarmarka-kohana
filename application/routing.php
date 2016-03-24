@@ -87,12 +87,12 @@ Route::set('detail', '<path>/<object_seo_name>.html',  array('path' => '[a-zA-Z0
 		$object_id =  (int) end($object_seo_name_segments);
 
 		if ($object_id == 0) {
-			throw new HTTP_Exception_404;
+			return FALSE;
 		}
 
 		$object = ORM::factory('Objectcompiled', $object_id);
 		if (!$object->loaded()) {
-			throw new HTTP_Exception_404;
+			return FALSE;
 		}
 
 		$url = $object->get_full_url();
@@ -102,6 +102,7 @@ Route::set('detail', '<path>/<object_seo_name>.html',  array('path' => '[a-zA-Z0
 		if ($object->type_tr AND in_array($object->type_tr, array(101,102,201,89))) {
 			$params["action"] = "type".$object->type_tr;
 		}
+
 		return $params;
 	})->defaults(array(
 		'controller' => 'Detail',
@@ -130,8 +131,18 @@ Route::set('detail', '<path>/<object_seo_name>.html',  array('path' => '[a-zA-Z0
 // 		'controller' => 'Detail',
 // 		'action'     => 'index'
 // 	));
-	
 
+Route::set('reklamodatelyam_static', 'reklamodatelyam/<path>', array('path' => '.*(\.js|\.css|\.png|\.jpg|\.gif)$'))
+	->defaults(array(
+		'controller' => 'Static',
+		'action'     => 'reklamodatelyam_static',
+	));
+	
+Route::set('reklamodatelyam', 'reklamodatelyam/<path>', array('path' => '.*'))
+	->defaults(array(
+		'controller' => 'Static',
+		'action'     => 'reklamodatelyam',
+	));
 
 Route::set('not_unique_contact_msg', 'block/not_unique_contact_msg/<number>')
 	->defaults(array(
@@ -297,6 +308,9 @@ Route::set('user', 'user(/<action>(/<category_path>))', array(
 Route::set('default', '(<controller>(/<action>(/<id>)))')
 	->filter(function($route, $params, $request){
 		if (! in_array($params["controller"], Kohana_Other::get_controllers(Kohana::list_files('classes/Controller')))) {
+			return FALSE;
+		}
+		if ($params["controller"] == 'Search') {
 			return FALSE;
 		}
 	})

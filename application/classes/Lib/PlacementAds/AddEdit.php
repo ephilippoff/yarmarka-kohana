@@ -41,9 +41,10 @@ class Lib_PlacementAds_AddEdit {
 			foreach((array) $this->params as $key=>$value){
 				if (preg_match('/^param_([0-9]*)/', $key, $matches))
 				{
-					$this->params->{$key} = preg_match('/_[0-9]+/', $this->params->{$key}) 
+					$this->params->{$key} = ( is_array( $this->params->{$key} ) OR preg_match('/_[0-9]+/', $this->params->{$key}) ) 
 						? str_replace("_", "", $this->params->{$key})
 						: $this->params->{$key};
+						
 					$data_params[] = explode("_", $key);
 				}
 			}

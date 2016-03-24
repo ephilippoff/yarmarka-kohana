@@ -6,7 +6,7 @@
 				<% _.each(getNewspaperCities(), function(value, key){ %>
 					<label for="city_<%=key%>">
 						<span class="p10 pointer">
-							<input type="radio" name="city" class="m10 js-city" value="<%=value[1]%>" id="city_<%=key%>" <% if (parseInt(city_id) == key || (is_edit && edit_params.service.city == value[1]) ) { %>checked<% } %>><span class="ml5 bold"><%=value[0]%></span>
+							<input type="radio" name="city" class="m10 js-city" value="<%=value[1]%>" id="city_<%=key%>" checked><span class="ml5 bold"><%=value[0]%></span>
 						</span>
 					</label>
 				<% }); %>

@@ -174,6 +174,13 @@ class Search {
 			$object = $object->where("o.is_published", "=", 0);
 		}
 
+		if ($params->location) {
+			$object = $object
+				->join(array('locations', 'l'), 'left')
+				->on('l.id', '=', 'o.location_id')
+				->where(DB::expr('concat(l.city, \' \', l.address)'), '=', $params->location);
+		}
+
 		if ($active) {
 			$object = $object->where("o.active", "=", 1);
 		}
@@ -338,8 +345,16 @@ class Search {
 			$object = $object->where("o.date_expired", "<", DB::expr("NOW()"));
 		}
 
+		if ($params->expired) {
+			$object = $object
+				->and_where_open()
+				->where('o.date_expiration', '>', DB::expr('NOW()'))
+				->or_where('o.date_expiration', 'is', DB::expr('null'))
+				->and_where_close();
+		}
+
 		if ($params->expirationInverse) {
-			$object = $object->where("o.date_expired", ">", DB::expr("NOW()"));
+			$object = $object->where("o.date_expired", "<=", DB::expr("NOW()"));
 		}
 
 		if ($params->type_tr) {

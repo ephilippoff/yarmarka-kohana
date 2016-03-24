@@ -9,6 +9,7 @@
         <meta name="Description" content="{% block meta_description %}{% endblock meta_description%}">
         <meta name="robots" content="{% block meta_robots %}all{% endblock meta_robots%}">
         <link rel="shortcut icon" href="{{ staticfile("images/favicon.ico") }}">
+        
         {% if show_canonical %}
             {% if show_canonical_simple %}
                 <link rel="canonical" href="{{ full_canonical_url }}">
@@ -25,6 +26,7 @@
                     {{ css("iLight.css") }}
                     {{ css("jquery-ui.css") }}
                     {{ css("css.css") }}
+                    {{ css("animate.css") }}
 
                     {{ css("adaptive/large-desktops.css") }}
 
@@ -46,6 +48,7 @@
 					<!--<![endif]-->
             {% endif %}
             {{ css("bootstrap-xxs.css") }}
+            {{ css("animate.css") }}
         {% endblock css %}
 
         {{ js("lib/jquery.js") }}

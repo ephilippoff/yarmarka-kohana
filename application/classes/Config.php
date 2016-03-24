@@ -85,7 +85,8 @@ class Config extends Kohana_Config {
 		if (self::is_debug_mode()) {
 			return "/static/develop/";
 		} else {
-			return "/static/develop/production/";
+			//return "/static/develop/production/";
+			return "/static/develop/";
 		}
 		
 	}
