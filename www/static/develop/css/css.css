@@ -1688,9 +1688,14 @@ a.companies{
     outline: none;
     padding: 5px 15px;
     color: #fff;
+    position: relative;
+    bottom: 2px;
     border-radius: 2px;
     -webkit-transition: all 0.1s ease-in;
     -o-transition: all 0.1s ease-in;
     transition: all 0.1s ease-in;
 }
 
+.share-links{
+    float: right;
+}
