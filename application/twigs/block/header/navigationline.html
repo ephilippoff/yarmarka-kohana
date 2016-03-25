@@ -1,11 +1,11 @@
 <div class="main_menu menu-cont2" style="background:none;">
 	<div class="clearfix">
-		{% if onPageFlag == 'main' %}
-		<div class="main_menu_item iLight hidden-sm hidden-xs top-razdel" onclick="animated('.left_block', 'shake')" >
-		{% else %}
-		<div class="main_menu_item iLight hidden-sm hidden-xs top-razdel" onclick="animated('.left_block', 'shake')" >
-		{% endif %}
-			<span class="menu-item-cont">Объявления{% if onPageFlag != 'main' %}<i class="fa fa-caret-down ml3"></i>{% endif %}</span>
+
+		<div class="main_menu_item js-citymenu-dropdown">
+			<span class="menu-item-cont">
+				{% set current_city = get_current_city() %}
+				<span>Город: {{current_city}}</span><i class="fa fa-caret-down ml5"></i>
+			</span>
 		</div>
 
 		<div class="main_menu_item js-newsmenu-dropdown ">
@@ -19,6 +19,7 @@
 		<div class="main_menu_item city-companies">
 			<a class="menu-item-cont" href="/search_company">Компании города</a>
 		</div>
+
 	</div>
 </div>
 
