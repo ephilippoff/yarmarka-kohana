@@ -1317,7 +1317,13 @@ img.category-icon{
 }
 
 article img.news-photo{
-    width: 60%;
+    max-width: 60%;
+    display: block;
+    margin: 10px 0;
+}
+
+article h1{
+    font-size: 20px;
 }
 
 
@@ -1686,16 +1692,25 @@ a.companies{
 .more-button{
     border: none;
     outline: none;
-    padding: 5px 15px;
+    padding: 4px 15px;
     color: #fff;
-    position: relative;
-    bottom: 2px;
     border-radius: 2px;
     -webkit-transition: all 0.1s ease-in;
     -o-transition: all 0.1s ease-in;
     transition: all 0.1s ease-in;
 }
 
+.more-button span{
+    float: left;
+    margin-right: 5px;
+}
+
 .share-links{
     float: right;
+}
+
+.ya-share2__container_size_m .ya-share2__icon {
+    height: 26px !important;
+    width: 26px !important;
+    background-size: 26px 26px !important;
 }
