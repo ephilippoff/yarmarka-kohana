@@ -28,7 +28,7 @@
 	</div>
 </div>
 
-{% set neiboors = custommenu('surgut.yarmarka.biz').childs %}
- 			{% for city in neiboors %}
- 				<span class="menu-item span-link hidden-sm hidden-xs" onclick="window.location='http://{{ city.url }}'">{{ city.title}}</span>
- 			{% endfor %}
+{% set neiboors = custommenu('surgut.new.yarmarka.biz').childs %}
+	{% for city in neiboors %}
+		<span class="menu-item span-link hidden-sm hidden-xs" onclick="window.location='http://{{ city.url }}'">{{ city.title}}</span>
+	{% endfor %}
