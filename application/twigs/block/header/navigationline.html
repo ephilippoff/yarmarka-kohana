@@ -1,6 +1,10 @@
 <div class="main_menu menu-cont2" style="background:none;">
 	<div class="clearfix">
-		<div class="main_menu_item iLight hidden-sm hidden-xs {% if onPageFlag != 'main' %}js-mainmenu-dropdown{% endif %} top-razdel">
+		{% if onPageFlag == 'main' %}
+		<div class="main_menu_item iLight hidden-sm hidden-xs top-razdel" onclick="animated('.left_block', 'shake')" >
+		{% else %}
+		<div class="main_menu_item iLight hidden-sm hidden-xs top-razdel" onclick="animated('.left_block', 'shake')" >
+		{% endif %}
 			<span class="menu-item-cont">Объявления{% if onPageFlag != 'main' %}<i class="fa fa-caret-down ml3"></i>{% endif %}</span>
 		</div>
 
