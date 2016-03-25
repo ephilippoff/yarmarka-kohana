@@ -133,5 +133,9 @@
 		margin-top: 60px;
 	}
 
+	article img.news-photo{
+	    margin: 10px auto;
+	}
+
 
 }

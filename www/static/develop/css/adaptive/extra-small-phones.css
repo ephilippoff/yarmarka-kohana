@@ -154,6 +154,11 @@
 	#reklama_container a:nth-last-child(2){
 		display: none;
 	}
+
+	article img.news-photo{
+	    max-width: 80%;
+	    margin: 10px auto;
+	}
 }
 
 @media (max-width: 570px){
@@ -195,6 +200,10 @@
 
 @media (max-width: 480px){
 
+	button[data-role="show_share"]{
+		display: inline-block;
+	}
+
 	img.category-icon{
 	    position: static;
 	    float: left;
@@ -202,6 +211,27 @@
 
 	.coupon-item-cont .description-cont {
 	    font-size: 16px;
+	}
+
+	.more-button{
+		display: inline-block;
+		margin-right: 10px;
+	}
+
+	.share-links{
+		display: none;
+		float: none;
+		margin-bottom: 10px;
+	}
+
+	.share-links ul{
+		width: 100%;
+		display: block;
+		text-align: center;
+	}
+
+	.buttons-block{
+		text-align: center;
 	}
 }
 
@@ -243,7 +273,23 @@
 	article img.news-photo{
 		width: 100%;
 		float: none;
-		margin-right: 0;
+		margin: 10px auto;
+	}
+
+}
+
+@media (min-width: 481px){
+
+	.share-links{
+		display: block !important;
+	}
+
+	.buttons-block{
+		float: left;
+	}
+
+	button[data-role="show_share"]{
+		display: none;
 	}
 
 }

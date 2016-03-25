@@ -3,32 +3,41 @@
 <script type="text/javascript" src="//vk.com/js/api/openapi.js?121"></script>
 
 <div class="clearfix">
-	<button class="more-button button bg-color-blue module" data-role="show_comments">Оставить комментарий <i class="fa fa-comment"></i></button>
+	<div class="buttons-block clearfix">
+		<button class="more-button button bg-color-blue module" data-role="show_comments"><span class="hidden-xxs">Оставить комментарий</span> <span class="hidden-lg visible-xxs">Комментировать</span> <i class="fa fa-comment"></i></button>
+		<button class="more-button button bg-color-blue module hidden-lg" data-role="show_share"><span>Поделиться</span> <i class="fa fa-share-alt"></i></button>
+	</div>
 	<div class="share-links">
 		<script type="text/javascript" src="//yastatic.net/es5-shims/0.0.2/es5-shims.min.js" charset="utf-8"></script>
 		<script type="text/javascript" src="//yastatic.net/share2/share.js" charset="utf-8"></script>
 		<div class="ya-share2" data-services="vkontakte,facebook,odnoklassniki,moimir,gplus,twitter,lj"></div>
 	</div>
-	<span id="share-message" class="hidden-xs fr mr10 mt2">Поделитесь ссылкой с друзьями:</span>
 </div>
 <div id="vk_comments" data-role="comments-container"></div>
 <script>
 	$('.more-button[data-role="show_comments"]').click(function(){
-		var place = $(this).closest('div.clearfix').next('div[data-role="comments-container"]');
-		var placeID = place.attr('id');
-		place.css('margin', '10px 0');
-		$('#share-message').fadeIn();
-		mobile(function(){
-			$('.share-links').css({
-				'float' : 'none',
-				'margin': 'auto',
-				'width' : '70%'
+		var place = $('div[data-role="comments-container"]');
+		if ($(place).is(':empty')) {
+			var placeID = place.attr('id');
+			place.css('margin', '10px 0');
+			VK.init({apiId: 5197401, onlyWidgets: true});
+			VK.Widgets.Comments(placeID, {limit: 10, width: "auto", attach: "*"});
+		}else{
+			$(place).empty().css({
+				'height' : 'auto',
+				'width' : 'auto'
 			});
-		});
-		VK.init({apiId: 5197401, onlyWidgets: true});
-		VK.Widgets.Comments(placeID, {limit: 10, width: "auto", attach: "*"});
-		$(this).remove();
+
+		}
 	});
+
+	$('.more-button[data-role="show_share"]').click(function(){
+		var place = $('.share-links');
+		if ($(place).is(':visible')) {
+			$(place).fadeOut();
+		}else $(place).fadeIn();
+	});
+
 </script>
 
 {% endif %}
