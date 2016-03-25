@@ -27,7 +27,7 @@
 							<img hidefocus="true" style="position: absolute;right:{{banners[category.id].x}}px ; bottom:{{banners[category.id].y}}px;z-index:1;" usemap="#map{{category.id}}" src="/uploads/banners/menu/{{banners[category.id].image}}"/>
 						{% endif %}
 					</li>
-					<li class="li-title ml10"><span class="bold  black fs18" style="width: 165px">{{category.title}}</span></li>
+					<li class="li-title ml20"><span class="bold  black fs18" style="width: 165px">{{category.title}}</span></li>
 					{% for subcategory in categories2l if subcategory.parent_id == category.id %}
 						<li class="ml20" style="width:{{ulWidth}}px;position:relative;z-index:1;">
 							<a href="/{{category.seo_name}}/{{subcategory.seo_name}}">{{subcategory.title}}</a>

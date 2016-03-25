@@ -1,12 +1,13 @@
-<div class="top-line module hidden-sm hidden-xs">
+<div class="top-line module menu-cont2 hidden-sm hidden-xs" style="background: transparent; padding: 0;">
 	<div class="row">
 		<div class="col-md-2">
-			<div class="menu-item-wrp js-citymenu-dropdown">
-				<span class="menu-item city_change">
-					{% set current_city = get_current_city() %}
-					<span>{{current_city}}</span><i class="fa fa-caret-down ml5"></i>
-				</span>
-			</div>
+			{% if onPageFlag == 'main' %}
+				<div class="menu-item-wrp iLight hidden-sm hidden-xs top-razdel" onclick="animated('.left_block', 'shake')" >
+				{% else %}
+				<div class="menu-item-wrp iLight hidden-sm hidden-xs top-razdel js-mainmenu-dropdown" >
+				{% endif %}
+					<span class="menu-item-cont">Объявления{% if onPageFlag != 'main' %}<i class="fa fa-caret-down ml3"></i>{% endif %}</span>
+				</div>
 		</div>
 		<div class="col-md-8">
 			<!--/noindex-->
@@ -15,13 +16,13 @@
 					<form action="/" method="get" name="search-form" id="search-form" class="js-search-form">
 						<div class="input-group w100p">
 							<div class="row">
+								<div class="col-lg-8 col-md-8">
+									<input class="search placeholder form-control js-search-input" name="search" id="search-input" value="{{ search_text }}" type="text" placeholder="{% if get_session_value('site_disable') %}Сайт в режиме разработки.{% else %}Поиск объявлений{% endif %}" autocomplete="off" data-city="{{city.id}}">
+								</div>
 								<div class="col-lg-3 col-md-3">
 									<div class="category-search">
 										Все категории <i class="fa fa-caret-down ml5"></i>
 									</div>
-								</div>
-								<div class="col-lg-8 col-md-8">
-									<input class="search placeholder form-control js-search-input" name="search" id="search-input" value="{{ search_text }}" type="text" placeholder="{% if get_session_value('site_disable') %}Сайт в режиме разработки.{% else %}Поиск объявлений{% endif %}" autocomplete="off" data-city="{{city.id}}">
 								</div>
 								<div class="col-lg-1 col-md-1">
 									<div class="input-group-addon clearfix">
