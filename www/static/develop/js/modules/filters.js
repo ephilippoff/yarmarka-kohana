@@ -383,7 +383,8 @@ define([
         ui: {
             form: ".js-filters-form",
             submit: ".js-filters-submit",
-            staticFilters: ".js-filters-static input"
+            staticFilters: ".js-filters-static input",
+            staticFiltersSelect: ".js-filters-static select"
         },
         regions: {
             filters: ".js-filters-cont"
@@ -401,6 +402,11 @@ define([
             _.each(this.ui.staticFilters, function(item){
                 if (queryParams[$(item).attr("name")]) {
                     $(item).prop("checked", true);
+                }
+            });
+            _.each(this.ui.staticFiltersSelect, function(item){
+                if (queryParams[$(item).attr("name")]) {
+                    $(item).val(queryParams[$(item).attr("name")]);
                 }
             });
         },
