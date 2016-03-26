@@ -17,7 +17,7 @@ class Controller_Detail extends Controller_Template {
 
 		$is_old = $this->request->param("is_old");
 		if ($is_old) {
-			HTTP::redirect("detail/".$this->request->param("object_id").".html", 301);
+			HTTP::redirect_to_object($this->request->param("object_id"), 301);
 			return;
 		}
 
