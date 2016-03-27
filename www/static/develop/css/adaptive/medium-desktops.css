@@ -59,18 +59,3 @@
 	}
 
 }
-
-@media screen and (max-width:1024px) {
-	
-	.top-line,
-	.menu-cont.menu-cont1{
-		display: none;
-	}
-}
-
-
-
-@media screen and (min-width:1024px) {
-	
-	.mobile_menu{display: none !important;}
-}

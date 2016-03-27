@@ -539,7 +539,7 @@ define([
             $(".js-search-extend i").remove();
             $(".js-search-extend").click(function(e){
                 e.preventDefault();
-                $(".js-filters").toggle();
+                $(".js-filters").slideToggle();
             });
         }
     });
