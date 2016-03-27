@@ -120,8 +120,8 @@
 				//die;
 
 				$items = $baseQuery === NULL ? array() : $baseQuery->execute();
-				
-				Cache::instance('memcache')->set("main_page_latest:{$citySeoName}", $items);
+
+				Cache::instance('memcache')->set("main_page_latest:{$citySeoName}", $items, 1200);
 			}
 			
 
