@@ -16,8 +16,8 @@
 					<span class="menu-item span-link hidden-xxs lk"><i class="fa {% if user.org_type == 2 %}fa-group{% else %}fa-user{% endif %} mr3"></i>Личный кабинет<i class="fa fa-caret-down ml5 hidden-sm hidden-xs"></i></span>
 					<span class="menu-item span-link visible-xxs hidden-xs hidden-sm hidden-md hidden-lg lk"><i class="fa {% if user.org_type == 2 %}fa-group{% else %}fa-user{% endif %} mr3"></i>Мой кабинет<i class="fa fa-caret-down ml5 hidden-sm hidden-xs"></i></span>
 				{% else %}
-					<span class="menu-item span-link show_on_large hidden-xxs lk" onclick="window.location='/user/login?return={{ strim(get_request_uri(), '/') }}'"><i class="fa fa-user mr3"></i>Вход в личный кабинет</span>
-					<span class="menu-item span-link visible-xxs hidden-xs hidden-sm hidden-md hidden-lg show_on_small lk" onclick="window.location='/user/login?return={{ strim(get_request_uri(), '/') }}'"><i class="fa fa-user mr3"></i>Вход</span>
+					<a class="menu-item show_on_large hidden-xxs lk" href="/user/login?return={{ strim(get_request_uri(), '/') }}"><i class="fa fa-user mr3"></i>Вход в личный кабинет</a>
+					<a class="menu-item visible-xxs hidden-xs hidden-sm hidden-md hidden-lg show_on_small lk" href="/user/login?return={{ strim(get_request_uri(), '/') }}"><i class="fa fa-user mr3"></i>Вход</a>
 				{% endif %}
 			</div>
 			{% if user %}

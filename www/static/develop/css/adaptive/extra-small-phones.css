@@ -28,6 +28,7 @@
 		padding: 0;
 	}
 
+
 	.form-cont .btn-next{
 		width: 170px;
 		line-height: 30px;
@@ -60,8 +61,34 @@
 		padding-left: 5px;
 	}
 
-	.kupons_block .kupon_wrap:last-child{
+	.kupons_block .kupon_wrap:last-child,
+	.options-wrap{
 		display: none;
+		float: none;
+	}
+
+	.options-wrap{
+    	position: absolute;
+    	top: 40px;
+    	background: #fff;
+    	box-shadow: 0px 0px 2px #ccc;
+    	z-index: 10;
+	}
+
+	.save-confirm, .save-complete, div[data-role="error"]{
+		top: 37px;
+	}
+
+	.control_buttons .menu-item{
+		padding: 10px 20px;
+	}
+
+	.options-wrap .menu-item{
+		display: block;
+	    border-bottom: 1px solid #ccc !important;
+	    border-left: 1px solid #ccc !important;
+		border-right: 1px solid #ccc !important;
+	    border-radius: 0 !important;
 	}
 
 	.left_block>.module{
@@ -297,7 +324,7 @@
 
 @media (min-width: 768px){
 
-	.js-newsmenu-dropdown, .js-kuponmenu-dropdown, .city-companies{display: block !important;}
+	.js-newsmenu-dropdown, .js-kuponmenu-dropdown, .city-companies, .options-wrap{display: block !important;}
 	.brb2 .js-mainmenu-dropdown{border-bottom-left-radius: 2px;}
 	.br2 .js-mainmenu-dropdown{border-bottom-left-radius: 2px; border-top-left-radius: 2px;}
 
