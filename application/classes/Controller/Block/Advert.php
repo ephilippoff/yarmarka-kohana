@@ -85,8 +85,8 @@
 
 			}
 
-			if (!$items = Cache::instance('memcache')->get("main_page_latest:{$citySeoName}") )
-			{
+			//if (!$items = Cache::instance('memcache')->get("main_page_latest:{$citySeoName}") )
+			//{
 
 				/* prepare the query */
 				$baseQuery = NULL;
@@ -121,8 +121,8 @@
 
 				$items = $baseQuery === NULL ? array() : $baseQuery->execute();
 
-				Cache::instance('memcache')->set("main_page_latest:{$citySeoName}", $items, 1200);
-			}
+			//	Cache::instance('memcache')->set("main_page_latest:{$citySeoName}", $items, 1200);
+			//}
 			
 
 			/* process data */

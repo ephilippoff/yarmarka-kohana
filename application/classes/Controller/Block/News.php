@@ -27,12 +27,7 @@
 			$limit = $perPage;
 
 			// fill counts for categories
-			$countQuery = $objectsService->getObjects(array('data_list.value', 'data_list_value'));
-			$objectsService->selectPublished($countQuery);
-			$objectsService->filterDataList($countQuery, array_keys($categories));
-			$countQuery
-				->select(array(DB::expr('count(*)'), 'cnt'))
-				->group_by('data_list.value');
+			$countQuery = DB::select(DB::expr('"data_list"."value" AS "data_list_value", (select count(*) from object where "data_list"."object" = "object"."id" and "object"."is_published" = 1 AND "object"."date_expired" <= NOW()) AS "cnt" FROM "data_list" WHERE "data_list"."value" IN (' . implode(',', array_keys($categories)) . ')'));
 			$counts = $countQuery->execute();
 			foreach($counts as $count) {
 				$sci = $count['data_list_value'];
