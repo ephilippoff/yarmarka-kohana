@@ -1,6 +1,6 @@
 {% if vip_search_result|length > 0 %}
 	<div class="js-liders info-block-cont">
-		<div class="items-list-lider">
+		<div class="items-list-lider clearfix">
 			{% for vip_object in vip_search_result %}
 				{% include 'detail/mini/vip_compact' %}
 			{% endfor %}
