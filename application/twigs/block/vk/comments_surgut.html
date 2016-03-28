@@ -10,32 +10,43 @@
 	<div class="share-links">
 		<script type="text/javascript" src="//yastatic.net/es5-shims/0.0.2/es5-shims.min.js" charset="utf-8"></script>
 		<script type="text/javascript" src="//yastatic.net/share2/share.js" charset="utf-8"></script>
-		<div class="ya-share2" data-services="vkontakte,facebook,odnoklassniki,moimir,gplus,twitter,lj"></div>
+		<div class="ya-share2" id="ya-share2" data-services="vkontakte,facebook,odnoklassniki,moimir,gplus,twitter,lj"></div>
 	</div>
 </div>
 <div id="vk_comments" data-role="comments-container"></div>
 <script>
-	$('.more-button[data-role="show_comments"]').click(function(){
-		var place = $('div[data-role="comments-container"]');
-		if ($(place).is(':empty')) {
-			var placeID = place.attr('id');
-			place.css('margin', '10px 0');
-			VK.init({apiId: 5197401, onlyWidgets: true});
-			VK.Widgets.Comments(placeID, {limit: 10, width: "auto", attach: "*"});
-		}else{
-			$(place).empty().css({
-				'height' : 'auto',
-				'width' : 'auto'
-			});
+	
+	$(function(){
+		var imageSRC = $('#img1').find('img').attr('src');
 
-		}
-	});
+		Ya.share2('ya-share2', {
+		    content: {
+		        image: imageSRC
+		    }
+		});
 
-	$('.more-button[data-role="show_share"]').click(function(){
-		var place = $('.share-links');
-		if ($(place).is(':visible')) {
-			$(place).fadeOut();
-		}else $(place).fadeIn();
+		$('.more-button[data-role="show_comments"]').click(function(){
+			var place = $('div[data-role="comments-container"]');
+			if ($(place).is(':empty')) {
+				var placeID = place.attr('id');
+				place.css('margin', '10px 0');
+				VK.init({apiId: 5197401, onlyWidgets: true});
+				VK.Widgets.Comments(placeID, {limit: 10, width: "auto", attach: "*"});
+			}else{
+				$(place).empty().css({
+					'height' : 'auto',
+					'width' : 'auto'
+				});
+
+			}
+		});
+
+		$('.more-button[data-role="show_share"]').click(function(){
+			var place = $('.share-links');
+			if ($(place).is(':visible')) {
+				$(place).fadeOut();
+			}else $(place).fadeIn();
+		});
 	});
 
 </script>
