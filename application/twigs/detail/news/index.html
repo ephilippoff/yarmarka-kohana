@@ -56,7 +56,7 @@
 					
 					{{ text }}
 				</div>
-				{% include 'block/vk/comments_surgut' %}
+				{% include 'block/vk/comments_surgut' with {'image': get_file(object.compiled.images.main_photo.original) } %}
 				{{ requestblock('block_news/main_page', {'catTitle': object.compiled.attributes['news-category'].value, 'newsTitle' : object.title, 'itemsPerCategory' : 11}) }}
 				{{ requestblock('block_news/main_page', {'catTitle': object.compiled.attributes['news-category'].value, 'reverse': reverse, 'itemsPerCategory' : 6, 'onPageFlag' : onPageFlag}) }}
 			</article>
