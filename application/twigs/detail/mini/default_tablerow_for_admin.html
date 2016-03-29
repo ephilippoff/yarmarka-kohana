@@ -42,7 +42,11 @@
 				<span class="red">Пока не прошло модерацию</span>
 				{% endif %}
 			</p>
+			{% if object.is_premium %}
+			<p class="style1"><span>{{ object.compiled.city }}</span></p>
+			{% else %}
 			<p class="style1"><span>{{ object.date_created|date("d.m") }}</span> / <span>{{ object.compiled.city }}</span> </p>
+			{% endif %}
 			{% if object.price > 0 %}
 			<p class="amount">{{ object.price|number_format(0, ' ', ' ') }} руб.</p>
 			{% endif %}
