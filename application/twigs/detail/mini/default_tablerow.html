@@ -63,7 +63,7 @@
 				{% endif %}
 			</td>		
 			<td class="td td-company-info hidden-xs"><!-- Секция о компании -->
-				{% if object.compiled.author.org_type == 2 and object.compiled.author.role != 9 %}
+				{% if object.compiled.author.org_type == 2 and object.compiled.author.role != 9 and object.compiled.author.role != 2 %}
 				{% if object.compiled.author.logo %}
 				<div class="img-cont">
 					<img src="{{ get_file( object.compiled.author.logo['120x90']) }}" alt="">

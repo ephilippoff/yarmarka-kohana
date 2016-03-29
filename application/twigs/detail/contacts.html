@@ -1,6 +1,6 @@
 <div class="info-block-cont theme2 contacts-cont module">
-	<div class="block-title">
-		<span>Контактные данные</span>
+	<div class="title_block brt2">
+		<span><i class="fa fa-phone mr5"></i>Контактные данные</span>
 	</div>					
 	<div class="body">
 		<div class="row js-object-contacts-{{object.id}}">
@@ -13,8 +13,8 @@
 					<div class="contacts-list-cont js-contact-list">
 						{% for contact in object.compiled.contacts %}
 							{% if contact.type == '5' %}
-								
-							{% else %}
+ 								
+ 							{% else %}
 								<p>
 									{% if isAdmin %}
 										{{ contact.value }}
@@ -50,7 +50,7 @@
 					{% endif %}
 				</div>
 				<div class="col-md-6 col-sm-6">
-					{% if object.compiled.author.org_type == 2 and object.compiled.author.role != 9 %}
+					{% if object.compiled.author.org_type == 2 and object.compiled.author.role != 9 and object.compiled.author.role != 2 %}
 						<p><span class="moreinfo span-link" onclick='document.location="/user?id={{object.author_company_id}}"'>{{ object.compiled.author.org_name }}</span></p>
 						{% if object.compiled.author.logo %}
 							<div class="img-cont"><img src="{{  get_file(object.compiled.author.logo['120x90']) }}"></div>
