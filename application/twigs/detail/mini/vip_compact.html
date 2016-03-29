@@ -1,7 +1,11 @@
 <div class="item {% if half %}half{% endif %}" >
 	<div class="img-cont mt10 img-wrapper">
+		{% if vip_object.compiled.images.main_photo %}
 		<img onclick="window.location = '{{ vip_object.compiled.url }}'" alt="{{ vip_object.title|e }}"  src="{{ get_file(vip_object.compiled.images.main_photo['272x203']) }}">
 		<span class="photos-count">{{vip_object.compiled.images.local_photo|length + vip_object.compiled.images.remote_photo|length}}</span>
+		{% else %}
+		<img class="img-frame" src="{{staticfile('images/nophoto136x107.png')}}">
+		{% endif %}
 	</div>
 	<a rel="nofollow" href="{{ vip_object.compiled.url }}" title="{{ vip_object.title|e }}" class="dib object-caption bold">
 		
