@@ -138,7 +138,7 @@ Route::set('reklamodatelyam_static', 'reklamodatelyam/<path>', array('path' => '
 		'action'     => 'reklamodatelyam_static',
 	));
 	
-Route::set('reklamodatelyam', 'reklamodatelyam/<path>', array('path' => '.*'))
+Route::set('reklamodatelyam', 'reklamodatelyam/<path>.html', array('path' => '.*'))
 	->defaults(array(
 		'controller' => 'Static',
 		'action'     => 'reklamodatelyam',
