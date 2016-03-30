@@ -85,7 +85,7 @@
 
 			}
 
-			if (!$items = Cache::instance('memcache')->get("main_page_latest:{$citySeoName}") )
+			if (!($items = Cache::instance('memcache')->get("main_page_latest:{$citySeoName}")))
 			{
 
 				/* prepare the query */

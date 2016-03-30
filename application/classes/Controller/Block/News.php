@@ -27,12 +27,7 @@
 			$limit = $perPage;
 
 			// fill counts for categories
-			$countQuery = $objectsService->getObjects(array('data_list.value', 'data_list_value'));
-			$objectsService->selectPublished($countQuery);
-			$objectsService->filterDataList($countQuery, array_keys($categories));
-			$countQuery
-				->select(array(DB::expr('count(*)'), 'cnt'))
-				->group_by('data_list.value');
+			$countQuery = DB::select(DB::expr('"data_list"."value" AS "data_list_value", (select count(*) from object where "data_list"."object" = "object"."id" and "object"."is_published" = 1 AND "object"."date_expired" <= NOW()) AS "cnt" FROM "data_list" WHERE "data_list"."value" IN (' . implode(',', array_keys($categories)) . ')'));
 			$counts = $countQuery->execute();
 			foreach($counts as $count) {
 				$sci = $count['data_list_value'];
@@ -131,6 +126,14 @@
 
 			$view = Twig::factory('block/news/main_page');
 
+			$citySeoName = 'tyumen';
+			$uriMatches = array();
+			if (preg_match('/(.*).' . Kohana::$config->load('common.main_domain') . '/', $_SERVER['HTTP_HOST'], $uriMatches)) {
+
+				$citySeoName = $uriMatches[1];
+
+			}
+
 			$view->catTitle = $this->request->post("catTitle");
 			$view->reverse = $this->request->post("reverse");
 			$view->newsTitle = $this->request->post("newsTitle");
@@ -138,8 +141,15 @@
 			$view->isNewsSubcategory = $this->request->post("isNewsSubcategory");
 			$view->onPageFlag = $this->request->post("onPageFlag");
 
-			$categories = self::get_categories();
-			$newsGroups = self::get_items($categories, $itemsPerCategory);
+			$cache = Cache::instance('memcache');
+			if (!($categories = $cache->get('main_page_news_cat:{$citySeoName}'))) {
+				$categories = self::get_categories();
+				$cache->set('main_page_news_cat:{$citySeoName}', $categories, 3600);
+			}
+			if (!($newsGroups = $cache->get('main_page_news_items:{$citySeoName}'))) {
+				$newsGroups = self::get_items($categories, $itemsPerCategory);
+				$cache->set('main_page_news_items:{$citySeoName}', $newsGroups, 3600);
+			}
 
 			// update total pages value
 			foreach($newsGroups as &$newsGroup) {
