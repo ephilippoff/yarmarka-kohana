@@ -97,6 +97,12 @@ class Lib_PlacementAds_AddEditByModerator extends Lib_PlacementAds_AddEdit {
 		
 		$object->type_tr = $params ->obj_type;
 
+		if ($params->do_not_show_company_info) {
+			$object->style = 'p';
+		} else {
+			$object->style = NULL;
+		}
+
 		return $this;
 	}
 

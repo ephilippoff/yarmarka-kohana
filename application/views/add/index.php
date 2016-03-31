@@ -121,6 +121,24 @@
 
 			<? if (Acl::check("object.add.type")) : ?>
 				<p class="p20 red"><i class="fa fa-eye fa-lg mr5"></i>Вы авторизованы с ролью модератора, будьте внимательны</p>
+
+				<div class="fl100  pt16 pb15"  id="div_linked_company">
+						<div class="smallcont">
+							<div class="labelcont">
+								<label><span>Не показывать инфу о компании:</span></label>
+							</div>	
+							<div class="fieldscont">
+								<div class="inp-cont-long ">
+									<div class="inp-cont">
+										<div class="pt4">											
+											<input type="checkbox" name="do_not_show_company_info" <? if ($form_data->_edit AND $object->style == "p") echo "checked"; ?>/>
+										</div>
+									</div>
+								</div><!--inp-cont-short-->
+								
+							</div><!--fieldscont-->
+						</div> <!-- smallcont -->
+				</div>
 				<? if (property_exists($form_data, 'advert_type')): ?>
 					<div id="div_advert_type" class="smallcont">
 						<div class="labelcont">
