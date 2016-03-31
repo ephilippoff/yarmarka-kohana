@@ -10,7 +10,7 @@ class HTTP_Exception_404 extends Kohana_HTTP_Exception_404 {
 		}
 		else
 		{
-			return Response::factory()->body(Request::factory('block/error_404')->execute());
+			return Response::factory()->status(404)->body(Request::factory('block/error_404')->execute());
 		}
     }
 }

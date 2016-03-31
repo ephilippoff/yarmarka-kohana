@@ -462,6 +462,23 @@ class Controller_Admin_Users extends Controller_Admin_Template {
 		$this->template->user = $user;
 	}
 
+	public function action_change_role()
+	{
+		$this->layout = FALSE;
+		$this->auto_render = FALSE;
+
+		$user = ORM::factory('User', $this->request->post('user_id'));
+		if ( ! $user->loaded())
+		{
+			throw new HTTP_Exception_404;
+		}
+
+		$user->role = (int) $this->request->post('role');
+		$user->save();
+		
+		return $this->response->body(json_encode(array("OK")));
+	}
+
 	public function action_ip_info()
 	{
 		$this->layout = 'admin_popup';

@@ -85,38 +85,45 @@
 
 			}
 
-			/* prepare the query */
-			$baseQuery = NULL;
+			if (!($items = Cache::instance('memcache')->get("main_page_latest:{$citySeoName}")))
+			{
 
-			foreach($hierarchy as $category) {
+				/* prepare the query */
+				$baseQuery = NULL;
 
-				if ($category['fresh_limit'] < 1) {
-					continue;
+				foreach($hierarchy as $category) {
+
+					if ($category['fresh_limit'] < 1) {
+						continue;
+					}
+
+					$query = $objectsService->getObjects();
+					$objectsService->selectMainImage($query, true);
+					$objectsService->selectPublished($query);
+					$objectsService->selectShowOnMain($query);
+					$objectsService->filterPassedModeration($query);
+					$objectsService->filterByCitySeoName($query, $citySeoName);
+					$objectsService->selectCategoryUrl($query);
+					$objectsService->withCategories($query, array_merge($category['childs'], array( $category['id'] )));
+					$objectsService->orderByCreated($query);
+					$query->limit($category['fresh_limit']);
+					$query = DB::select('*')->from(array(DB::expr('(' . $query . ')'), 'x'));
+
+					if ($baseQuery !== NULL) {
+						$baseQuery->union($query);
+					} else {
+						$baseQuery = $query;
+					}
 				}
+				
+				//var_dump((string) $baseQuery);
+				//die;
 
-				$query = $objectsService->getObjects();
-				$objectsService->selectMainImage($query, true);
-				$objectsService->selectPublished($query);
-				$objectsService->selectShowOnMain($query);
-				$objectsService->filterPassedModeration($query);
-				$objectsService->filterByCitySeoName($query, $citySeoName);
-				$objectsService->selectCategoryUrl($query);
-				$objectsService->withCategories($query, array_merge($category['childs'], array( $category['id'] )));
-				$objectsService->orderByCreated($query);
-				$query->limit($category['fresh_limit']);
-				$query = DB::select('*')->from(array(DB::expr('(' . $query . ')'), 'x'));
+				$items = $baseQuery === NULL ? array() : $baseQuery->execute();
 
-				if ($baseQuery !== NULL) {
-					$baseQuery->union($query);
-				} else {
-					$baseQuery = $query;
-				}
+				Cache::instance('memcache')->set("main_page_latest:{$citySeoName}", $items, 1200);
 			}
 			
-			//var_dump((string) $baseQuery);
-			//die;
-
-			$items = $baseQuery === NULL ? array() : $baseQuery->execute();
 
 			/* process data */
 			$processedData = array();
