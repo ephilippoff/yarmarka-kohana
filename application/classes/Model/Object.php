@@ -636,6 +636,10 @@ class Model_Object extends ORM {
 			$this->date_expired = DB::expr('NOW()');
 		}
 
+
+		$this->title = mb_strtoupper(mb_substr($this->title, 0, 1)) . 
+			mb_substr($this->title, 1, mb_strlen($this->title) - 1);
+
 		parent::save($validation);
 	}
 
