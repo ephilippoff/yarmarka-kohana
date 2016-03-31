@@ -1,3 +1,14 @@
 User-agent: *
-Disallow: 
-Disallow: /user/
+
+Disallow: /user
+Disallow: /detail
+Disallow: /user
+Disallow: /add
+Disallow: /edit
+Disallow: /redirect
+Disallow: /*utm_source=
+Disallow: /*view=
+
+
+Sitemap: http://surgut.yarmarka.biz/sitemap.xml
+Host: surgut.yarmarka.biz

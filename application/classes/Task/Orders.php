@@ -24,10 +24,10 @@ class Task_Orders extends Minion_Task
 		}
 
 		// /Minion::write("start","return reserved kupons");
-		//$this->return_reserved_kupons();
+		$this->return_reserved_kupons();
 
 		Minion::write("start","activate services");
-		//$this->activate_services();
+		$this->activate_services();
 	}
 
 	function return_reserved_kupons()

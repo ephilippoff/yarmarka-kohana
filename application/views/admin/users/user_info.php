@@ -1,4 +1,17 @@
 <h1><?=$user->login?> (<?=$user->email?>)</h1>
+<script>
+	$(document).ready(function(){
+
+		$('#select-role').change(function(){
+			var user_id = <?=$user->id?>;
+			var value = $(this).val();
+			$.post( "/khbackend/users/change_role", {role:value, user_id: user_id}, function( ) {
+			  	alert('Успешная смена роли')
+			});
+		});
+
+	})
+</script>
 <div class="row"> 
 	<div class="span12">
 		<table class="table table-hover table-condensed">
@@ -25,7 +38,13 @@
 			</tr>
 			<tr>
 				<td>Роль</td>
-				<td><?=Kohana::$config->load("dictionaries.user_role.".$user->role)?></td>
+				<td>
+				<select id="select-role">
+					<? foreach ( Kohana::$config->load("dictionaries.user_role") as $key => $value): ?>
+						<option value="<?=$key?>" <? if ($user->role == $key):?>selected<?endif;?> ><?=$value?></option>
+					<? endforeach; ?>
+				</select>
+				</td>
 			</tr>
 			<? if ($user->linked_to_user): ?>
 				<tr>
