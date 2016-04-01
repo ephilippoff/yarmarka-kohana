@@ -4,13 +4,14 @@
 </button>
 <div class="clearfix">
 	<div class="control_buttons module fs0 fl options-wrap">
-		<a href="/add/{{ category.id }}" class="menu-item">Добавить</a>
 		<span class="span-link menu-item js-search-extend control-item" onclick="mobile(function(){$('.options-wrap').fadeOut();});">Расширенный поиск</span>
+		<span class="span-link menu-item" onclick="$('.item.half:first-child').css('margin-top', '0');" data-action="showMap">Показать на карте</span>
 		{% if not isGuest %}
 		<div class="menu-item" data-role="subscription-module"><span class="span-link">Сохранить поиск</span></div>
 		{% else %}
 		<a class="menu-item" href="/user/login?return={{ strim(get_request_uri(), '/') }}">Сохранить поиск</a>
 		{% endif %}
+		<div class="menu-item span-link" id="limit"><i class="fa fa-list"></i> {{limitList}}</div>
 	</div>
 
 	<div class="control_buttons module fs0 fr">
