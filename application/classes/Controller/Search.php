@@ -259,8 +259,8 @@ class Controller_Search extends Controller_Template {
             'auto_hide' => TRUE,
             'view' => 'pagination/search',
             'first_page_in_url' => FALSE,
-            'count_out' => 1,
-            'count_in' => 8,
+            'count_out' => 0,
+            'count_in' => 4,
             'path' => URL::SERVER("PATH_INFO"),
             'limits' => array(
                 "10" => Search_Url::get_suri_without_reserved($this->request->query(),array(),array("limit","page")),
@@ -277,6 +277,24 @@ class Controller_Search extends Controller_Template {
             "total" => $pagination->total_pages,
         ));
         $twig->pagination = $pagination;
+
+        $limitList = Pagination::factory( array(
+            'total_items' => $search_info->main_search_result_count,
+            'items_per_page' => $search_params['limit'],
+            'view' => 'pagination/limit',
+            'path' => URL::SERVER("PATH_INFO"),
+            'limits' => array(
+                "10" => Search_Url::get_suri_without_reserved($this->request->query(),array(),array("limit","page")),
+                "20" => Search_Url::get_suri_without_reserved($this->request->query(), array( "limit" => 20), array("page")),
+                "50" => Search_Url::get_suri_without_reserved($this->request->query(), array( "limit" => 50), array("page")),
+            )
+        ));
+
+        $twig->limitList = $limitList;
+
+
+        // $twig->limitList = implode(" ", $limitList);
+        // echo "<pre>"; var_dump($pagination->config['limits']); die; echo "</pre>";
         //pagination end
 
         

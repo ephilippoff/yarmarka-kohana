@@ -277,7 +277,7 @@ var Yarmarka = {
         options: $.extend({
             enableAutoCollapse: true,
             autoCollapseOptions: {
-                allowedHeight: 100
+                allowedHeight: 85
             }
         }, Base.prototype.options),
 
@@ -364,12 +364,12 @@ var Yarmarka = {
     var AutoCollapse = function (options) {
         this.options = {
             cssClass: 'auto-collapse',
-            expandCssClass: 'auto-collapse-expand',
+            expandCssClass: 'auto-collapse-expand more-button button bg-color-blue',
             expandWrapperCssClass: 'auto-collapse-expand-wrapper',
             el: '[data-auto-collapse]',
-            expandLabel: 'Посмотреть все',
+            expandLabel: 'Показать весь список',
             animateDuration: 1500,
-            height: 100
+            height: 80
         };
         $.extend(this.options, options);
 
