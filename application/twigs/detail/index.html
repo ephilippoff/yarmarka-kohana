@@ -29,7 +29,7 @@
 					{% include 'detail/thumbnails' %}
 					{% include 'detail/attributes' %}
 				</article>
-				{% if object.compiled.address is not empty %}
+				{% if object.compiled['attributes']['adres-raion'] %}
 					<button class="more-button module button bg-color-blue" data-role="show-map">Показать на карте</button>
 				{% endif %}
 			</div>

@@ -77,6 +77,7 @@ define([
                 code: this.ui.contactList.find("input").val(),
                 success: function(result) {
                     s.ui.contactList.html(result);
+                    $(e.currentTarget).remove();
                 },
                 captcha: function(result) {
                     s.ui.contactList.html(result);
