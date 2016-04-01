@@ -3,20 +3,19 @@
 	<a href="/{{sphinx_search_query}}" rel="nofollow" class="hidden-lg hidden-md home-a"><i class="fa fa-home"></i></a>
 	{% for crumb in crumbs %}
 		{% if crumb.uri != canonical_url and canonical_url %}
-			 <span class="hidden-xs hidden-sm">/</span> <a href="{{ url(crumb.uri ~ crumb.query) }}" class="crumbs-item"><span>{{crumb.title}}</span></a>
+			<i class="fa fa-angle-right hidden-xs hidden-sm"></i> <a href="{{ url(crumb.uri ~ crumb.query) }}" class="crumbs-item"><span>{{crumb.title}}</span></a>
 		{% endif %}
 	{% endfor %}
-
-	 <span class="hidden-xs">/</span> <h1 class="breadcrumb-h1"><span>{{ get_global('h1') ? get_global('h1') : (seo_attributes.h1 ? seo_attributes.h1: category.title) }}</span></h1> <span class="count">{{ link_counters[s_host ~ s_suri] }}</span>
+	<h1 class="crumbs-h1 crumbs-item"><i class="fa fa-angle-right hidden-xs hidden-sm"></i> <span>{{ seo_attributes.h1 ? seo_attributes.h1: category.title }}</span></h1>
 </div>
 
 <script>
 
-	var length = $('.breadcrumbs-cont a').length;
-	if (length >= 2) {
-		$('.breadcrumbs-cont a:last').css({
-			'border-bottom-right-radius' : '3px',
-			'border-top-right-radius' : '3px'
-		});
-	}$('.breadcrumbs-cont').hide();
+	// var length = $('.breadcrumbs-cont a').length;
+	// if (length >= 2) {
+	// 	$('.breadcrumbs-cont a:last').css({
+	// 		'border-bottom-right-radius' : '3px',
+	// 		'border-top-right-radius' : '3px'
+	// 	});
+	// }
 </script>

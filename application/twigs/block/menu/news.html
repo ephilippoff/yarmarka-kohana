@@ -6,7 +6,7 @@
 					<a class="span-link" href="{{ '/' ~ element.category_url ~ '/' ~ element.seo_name }}">
 						{{element.title}}
 						{% if element.count > 0 %}
-							<span class="count">({{element.count}})</span>
+							<span class="count {% if staticMainMenu %} hidden {% endif %}">({{element.count}})</span>
 						{% endif %}
 					</a>
 				</li>

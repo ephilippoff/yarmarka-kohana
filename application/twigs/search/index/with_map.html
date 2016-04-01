@@ -36,7 +36,8 @@
 {% endblock filters %}
 
 {% block content %} 
-	{% include 'search/control' %}
+	{% include 'search/control' with {'mapButton' : true} %}
+	{% include 'search/crumbs' %}
 	{% include 'search/filters' %}
 	{% include 'search/result' %}
 	{% include 'search/paginator' %}

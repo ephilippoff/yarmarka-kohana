@@ -76,6 +76,13 @@ define(
 					this.thanksView.show();	
 					this.thanksView.render();
 				}
+
+				if (value == 'remove') {
+					this.subjectsView.hide();
+					this.writeView.hide();
+					this.thanksView.hide();	
+					this.thanksView.hide();
+				}
 			},
 
 			onModelSubjectChanged: function (model, value) {
@@ -92,7 +99,13 @@ define(
 
 			onStartButtonClick: function (e) {
 				e.preventDefault();
-				this.model.setSelectState();
+				if (this.model.get('remove') == true) {
+					this.model.setInitialState();
+					this.model.set('remove', false);
+				}else{
+					this.model.setSelectState();
+					this.model.setRemoveAllow();
+				}
 			}
 
 		});

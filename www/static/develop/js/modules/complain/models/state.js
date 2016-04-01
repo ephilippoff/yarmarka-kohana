@@ -32,6 +32,10 @@ define([ 'underscore', 'backbone' ], function (_, Backbone) {
 			this.set('state', 'thanks');
 		},
 
+		setRemoveAllow: function () {
+			this.set('remove', true);
+		},
+
 		resetSubjectSilent: function () {
 			this.set({ subject: null }, { silent: true });
 		}
