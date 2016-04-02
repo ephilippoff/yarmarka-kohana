@@ -38,7 +38,9 @@
 {% block filters %}{% endblock filters %}
 
 {% block control %}
-	{% include 'search/control' %}
+	{% if object.compiled.url %}
+		{% include 'search/control' %}
+	{% endif %}
 {% endblock control %}
 
 {% block content %}
