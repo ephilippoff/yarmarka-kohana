@@ -725,7 +725,7 @@ select{background-color: #FFFFFF;border: 1px solid #C3C3C3;padding:2px 10px;heig
 .items-list-lider .item .photo-cont {}
 .items-list-lider .item img {max-width: 100%; height: auto; cursor: pointer;}
 .items-list-lider .item.half {margin: 15px 0;}
-.items-list-lider .item.half:first-child{margin-top: -2px;}
+.items-list-lider .item.half:first-child{margin-top: 23px;}
 .items-list-lider .item.half img {max-height: 130px;}
 
 .items-list-lider .item.half .additional-info{margin-top: 10px;}
@@ -911,7 +911,8 @@ a.auto-collapse-expand {
     float: right;
     font-size: 14px;
     color: #fff;
-    padding: 4px 15px;
+    padding: 4px 0;
+    width: 186px;
 }
 .common-error {
     color:red;
@@ -1833,10 +1834,10 @@ div[data-role="error"]{
 
 #more-options{
     border-radius: 2px;
-    font-size: 23px;
-    padding-right: 20px; 
-    padding-left: 20px;
+    font-size: 17px;
     border-radius: 2px;
+    height: 27px;
+    line-height: 20px;
 }
 
 .limits{
@@ -1892,4 +1893,15 @@ div[data-role="error"]{
 
 .contacts-list-cont p:last-child{
     margin-bottom: 0;
+}
+
+.small_pag .paginator-cont{
+    padding: 0;
+}
+
+.small_pag .paginator-cont a,
+.small_pag .paginator-cont span{
+    height: 27px;
+    width: 27px;
+    line-height: 27px;
 }

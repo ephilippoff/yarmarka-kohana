@@ -17,14 +17,9 @@
 		<div class="menu-item span-link" id="limit"><i class="fa fa-list"></i> {{limitList}}</div>
 	</div>
 
-	<div class="control_buttons module fs0 fr">
-		{% if small_pagination.prev %}
-			<a class="menu-item" href="{{small_pagination.prev_url}}">Назад</a>
-		{% endif %}
-		<span class="menu-item">стр. {{ small_pagination.current }} из {{ small_pagination.total }}</span>
-		{% if small_pagination.next %}
-			<a class="menu-item" href="{{small_pagination.next_url}}">Далее</a>
-		{% endif %}
+
+	<div class="fr small_pag">
+		{{small_pagination}}
 	</div>
 </div>
 

@@ -37,6 +37,10 @@
 
 {% block filters %}{% endblock filters %}
 
+{% block control %}
+	{% include 'search/control' with {'mapButton' : true} %}
+{% endblock control %}
+
 {% block content %} 
 	{% include 'search/control' %}
 	{% include 'search/crumbs' %}
