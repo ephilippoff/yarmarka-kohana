@@ -262,7 +262,7 @@ class Kohana_Kohana_Exception extends Exception {
 			$response->headers('Content-Type', Kohana_Exception::$error_view_content_type.'; charset='.Kohana::$charset);
 
 			// Set the response body
-			$response->body($view->render());
+			// $response->body($view->render());
 		}
 		catch (Exception $e)
 		{

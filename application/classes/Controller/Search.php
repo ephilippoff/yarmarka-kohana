@@ -272,15 +272,25 @@ class Controller_Search extends Controller_Template {
                 "50" => Search_Url::get_suri_without_reserved($this->request->query(), array( "limit" => 50), array("page")),
             )
         ));
-        $twig->small_pagination = (array(
-            "prev" => $pagination->previous_page,
-            "prev_url" => $pagination->url($pagination->previous_page),
-            "next" => $pagination->next_page,
-            "next_url" => $pagination->url($pagination->next_page),
-            "current" => $pagination->current_page,
-            "total" => $pagination->total_pages,
-        ));
+        // $twig->small_pagination = (array(
+        //     "prev" => $pagination->previous_page,
+        //     "prev_url" => $pagination->url($pagination->previous_page),
+        //     "next" => $pagination->next_page,
+        //     "next_url" => $pagination->url($pagination->next_page),
+        //     "current" => $pagination->current_page,
+        //     "total" => $pagination->total_pages,
+        // ));
+
+        // $twig->small_pagination = $pagination(array(
+        //     'count_out' => 0,
+        //     'count_in' => 2,
+        // ));
+
         $twig->pagination = $pagination;
+
+        $twig->small_pagination = $pagination;
+
+
 
         $limitList = Pagination::factory( array(
             'total_items' => $search_info->main_search_result_count,
