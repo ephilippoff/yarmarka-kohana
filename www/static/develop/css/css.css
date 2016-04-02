@@ -725,7 +725,7 @@ select{background-color: #FFFFFF;border: 1px solid #C3C3C3;padding:2px 10px;heig
 .items-list-lider .item .photo-cont {}
 .items-list-lider .item img {max-width: 100%; height: auto; cursor: pointer;}
 .items-list-lider .item.half {margin: 15px 0;}
-.items-list-lider .item.half:first-child{margin-top: 23px;}
+.items-list-lider .item.half:first-child{margin-top: 25px;}
 .items-list-lider .item.half img {max-height: 130px;}
 
 .items-list-lider .item.half .additional-info{margin-top: 10px;}
