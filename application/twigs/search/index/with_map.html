@@ -40,8 +40,16 @@
 {% endblock control %}
 
 {% block content %} 
+
 	{% include 'search/crumbs' %}
 	{% include 'search/filters' %}
+	
+	{% block map %}
+		{% if category.show_map %}
+			{% include 'search/map' %}
+		{% endif %}
+	{% endblock map %}
+	
 	{% include 'search/result' %}
 	{% include 'search/paginator' %}
 {% endblock content%}
@@ -50,12 +58,6 @@
 	{{ requestblock('block_twig/last_views', {}) }}
 {% endblock last_views %}
 
-
-{% block map %}
-	{% if category.show_map %}
-		{% include 'search/map' %}
-	{% endif %}
-{% endblock map %}
 
 {% block rightside %} 
 	{% set half = TRUE %}
