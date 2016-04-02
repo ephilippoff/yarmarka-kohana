@@ -1,6 +1,6 @@
 {% set mini_cart_path = 'detail/mini/default_tablerow' %}
 {% if check_access("object.moderate") %}
-	{# set mini_cart_path = 'detail/mini/default_tablerow_for_admin' #}
+	{% set mini_cart_path = 'detail/mini/default_tablerow_for_admin' %}
 {% endif %}
 
 	{% for object in premium_search_result %}
