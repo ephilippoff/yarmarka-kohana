@@ -10,14 +10,26 @@
 		{{ requestblock('block_twig/adslinkline',{'city_id': city.id, 'category_id': category.id, 'theme_class': theme_class}) }}
 	{% endblock header %} 
 
-	{% block subcategories %}{% endblock subcategories %}
+	<div class="row">
+		<div class="col-lg-10 col-lg-push-1">
+			{% block subcategories %}{% endblock subcategories %}
+		</div>
+	</div>
 
 	{% block filters %} 
 		Фильтры
 	{% endblock filters %}
 
+	<div class="row">
+		<div class="col-lg-10 col-lg-push-1">
+			{% block control %} 
+				контроль-кнопки
+			{% endblock control %}
+		</div>
+	</div>
+
 	<div class="row min-content-height">
-		<div class="col-md-9 main_block clearfix">
+		<div class="col-lg-7 col-md-9 col-lg-push-1">
 			{% block content %}
 				контент
 			{% endblock content %}
@@ -25,7 +37,7 @@
 				Последние просмотренные
 			{% endblock last_views %}
 		</div><!--col-->
-		<div class="col-md-3 right-side">
+		<div class="col-lg-3 col-md-3 col-lg-push-1 right-side">
 			{% block rightside %}
 				Правая сторона
 			{% endblock rightside %}
