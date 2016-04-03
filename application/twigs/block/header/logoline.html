@@ -16,19 +16,23 @@
 					<form action="/" method="get" name="search-form" id="search-form" class="js-search-form">
 						<div class="input-group w100p">
 							<div class="row">
-								<div class="col-lg-8 col-md-8">
+								<div class="col-lg-6 col-md-6">
 									<input class="search placeholder form-control js-search-input" name="search" id="search-input" value="{{ search_text }}" type="text" placeholder="{% if get_session_value('site_disable') %}Сайт в режиме разработки.{% else %}Поиск объявлений{% endif %}" autocomplete="off" data-city="{{city.id}}">
 								</div>
-								<div class="col-lg-3 col-md-3">
+								<div class="col-lg-5 col-md-5">
 									<!-- <div class="category-search">
 										Все категории <i class="fa fa-caret-down ml5"></i>
 									</div> -->
 
-									<select data-role="categories" style="color:black;">
-										{% for category in get_categories() %}
-											<option value="{{ category.id }}">{{ repeat('&nbsp;&nbsp;', category.level - 1) }}{{ category.title }}</option>
-										{% endfor %}
-									</select>
+									<div class="category-search">
+										<select data-role="categories" style="color:black;">
+											{% for category in get_categories() %}
+												<option value="{{ category.id }}" {% if category_id and category_id == category.id %}selected="selected"{% endif %}>
+													{{ repeat('&nbsp;&nbsp;', category.level - 1) }}{{ category.title }}
+												</option>
+											{% endfor %}
+										</select>
+									</div>
 								</div>
 								<div class="col-lg-1 col-md-1">
 									<div class="input-group-addon clearfix">
