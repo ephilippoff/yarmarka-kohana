@@ -36,7 +36,7 @@ class Controller_Ajax_Object extends Controller_Ajax {
 		// process category_id
 		if ($category_id > 0) {
 			$categories = Services_Factory::factory('Categories')->getCategoryWithChilds($category_id);
-			$category_id = $categories[$category_id]['childs'];
+			$category_id = array_merge(array( $category_id ), $categories[$category_id]['childs']);
 		}
 
 		$region_id = 0;
