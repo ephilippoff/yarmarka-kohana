@@ -18,6 +18,35 @@ class Twig_Functions
 		return View::factory($path, $params)->render();
 	}
 
+	public static function repeat($str, $times) {
+		$res = '';
+		for($i = 0;$i < $times;$i++) {
+			$res .= $str;
+		}
+		return $res;
+	}
+
+	public static function get_categories() {
+		$service = Services_Factory::factory('Categories');
+		$categories = $service->getCategoryWithChilds(1, 5, array('title'), 2);
+
+		$flattern = function ($items, $level, $cb) {
+			$res = array();
+			foreach($items as $item) {
+				$res []= array(
+						'id' => $item['id']
+						, 'title' => $item['title']
+						, 'level' => $level + 1
+					);
+				$res = array_merge($res, $cb($item['childs'], $level + 1, $cb));
+			}
+			return $res;
+		};
+
+		$categories = $flattern($categories, 0, $flattern);
+		return $categories;
+	}
+
 	public static function css($file)
 	{
 		try {

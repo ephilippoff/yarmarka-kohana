@@ -24,6 +24,11 @@
 				<div class="seach-bl">
 					<div class="input-seach">
 						<form action="/" method="get" name="search-form" id="search-form" class="js-search-form">
+							<select data-role="categories">
+								{% for category in get_categories() %}
+									<option value="{{ category.id }}">{{ repeat('&nbsp;&nbsp;', category.level - 1) }}{{ category.title }}</option>
+								{% endfor %}
+							</select>
 							<div class="input-group w100p">
 								<input class="search placeholder form-control js-search-input" name="search" id="search-input" value="{{ search_text }}" type="text" placeholder="{% if get_session_value('site_disable') %}Сайт в режиме разработки.{% else %}Поиск объявлений{% endif %}" autocomplete="off" data-city="{{city.id}}">
 								<div class="input-group-addon">
