@@ -37,6 +37,8 @@ return array(
 		'custommenu'  		=> array ('func' => array('Twig_Functions', 'custommenu'), 'options' => array() ),
 		'pluk'   => array ('func' => array('Twig_Functions', 'pluk'), 'options' => array() ),
 		'get_global'   => array ('func' => array('Twig_Functions', 'get_global'), 'options' => array() ),
+		'get_categories'   => array ('func' => array('Twig_Functions', 'get_categories'), 'options' => array() ),
+		'repeat'   => array ('func' => array('Twig_Functions', 'repeat'), 'options' => array() ),
 	),
 	'filters' => array(
 		'contacthide' => array('Twig_Filters', 'contacthide'),

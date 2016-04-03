@@ -33,6 +33,12 @@ class Controller_Ajax_Object extends Controller_Ajax {
 		$city_id 	 = (int) $this->request->query('city_id');
 		$category_id = (int) $this->request->query('category_id');
 
+		// process category_id
+		if ($category_id > 0) {
+			$categories = Services_Factory::factory('Categories')->getCategoryWithChilds($category_id);
+			$category_id = $categories[$category_id]['childs'];
+		}
+
 		$region_id = 0;
 
 		$this->json['objects'] = array();

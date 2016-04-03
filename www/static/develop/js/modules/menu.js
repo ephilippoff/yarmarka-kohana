@@ -49,6 +49,7 @@ define([
 
             initialize: function(options){
                 this.$menu = this.$el.find('.menu_content');
+                if (!$('#menu').accordion) return;
                 $('#menu').accordion({
                     heightStyle: "content",
                     collapsible: true,
