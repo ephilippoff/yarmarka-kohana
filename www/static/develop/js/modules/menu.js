@@ -71,7 +71,7 @@ define([
 
             openMenu: function(){
                 this.$el.find('.bars, .preview_menu_block').addClass('active');
-                $("#popup-layer").fadeIn(200);
+                $(".popup-layer").fadeIn(200);
                 $('#wrap-page').addClass('fixed z200');
                 $('#search-form1').hide();
                 this.$menu.show().animate({left: '0'}, 500);
@@ -79,7 +79,7 @@ define([
 
             closeMenu: function(){
                 this.$el.find('.bars, .preview_menu_block').removeClass('active');
-                $("#popup-layer").fadeOut(200);
+                $(".popup-layer").fadeOut(200);
                 $('#wrap-page').removeClass('fixed z200');
                 $('#search-form1').show();
                 this.$menu.animate({left: '-100%'}, 500).fadeOut();
