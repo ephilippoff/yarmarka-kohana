@@ -1,3 +1,4 @@
+<h1 class="captionbold fs22" style="display: block;text-align: center;">{{ seo_attributes.h1 ? seo_attributes.h1: category.title }}</h1>
 <div class="breadcrumbs-cont module clearfix">
 	<a href="/{{sphinx_search_query}}" rel="nofollow" class="hidden-xs hidden-sm">Главная</a>
 	<a href="/{{sphinx_search_query}}" rel="nofollow" class="hidden-lg hidden-md home-a"><i class="fa fa-home"></i></a>
@@ -6,16 +7,5 @@
 			<i class="fa fa-angle-right hidden-xs hidden-sm"></i> <a href="{{ url(crumb.uri ~ crumb.query) }}" class="crumbs-item"><span>{{crumb.title}}</span></a>
 		{% endif %}
 	{% endfor %}
-	<h1 class="crumbs-h1 crumbs-item"><i class="fa fa-angle-right hidden-xs hidden-sm"></i> <span>{{ seo_attributes.h1 ? seo_attributes.h1: category.title }}</span></h1>
+	<span class="crumbs-h1 crumbs-item"><i class="fa fa-angle-right hidden-xs hidden-sm"></i> <span>{{ seo_attributes.h1 ? seo_attributes.h1: category.title }}</span></span>
 </div>
-
-<script>
-
-	// var length = $('.breadcrumbs-cont a').length;
-	// if (length >= 2) {
-	// 	$('.breadcrumbs-cont a:last').css({
-	// 		'border-bottom-right-radius' : '3px',
-	// 		'border-top-right-radius' : '3px'
-	// 	});
-	// }
-</script>

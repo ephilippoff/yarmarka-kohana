@@ -38,11 +38,11 @@
 {% block filters %}{% endblock filters %}
 
 {% block control %}
+	{% include 'search/crumbs' %}
 	{% include 'search/control' %}
 {% endblock control %}
 
 {% block content %}
-	{% include 'search/crumbs' %}
 	{% include 'search/filters' %}
 	{% include 'search/result' %}
 	{% include 'search/paginator' %}

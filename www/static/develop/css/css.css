@@ -720,13 +720,13 @@ select{background-color: #FFFFFF;border: 1px solid #C3C3C3;padding:2px 10px;heig
 .items-list-cont2 .items-cont ul li span{color: gray}
 
 .items-list-lider{border-bottom: none;}
-.items-list-lider .item {line-height: 20px;padding: 5px 15px;background: #f5f5f5;border-radius: 3px;margin:0 10px 10px 0;}
+.items-list-lider .item {line-height: 20px;padding: 5px 15px;background: #f5f5f5;border-radius: 3px;margin:10px auto; width: 200px;}
 .items-list-lider .item a{font-size: 14px;}
 .items-list-lider .item .line2 {color: #333; font-size: 14px;}
 .items-list-lider .item .photo-cont {}
 .items-list-lider .item img {max-width: 100%; height: auto; cursor: pointer;}
 .items-list-lider .item.half {margin: 15px auto; width: 200px;}
-.items-list-lider .item.half:first-child{margin-top: 25px;}
+.items-list-lider .item:first-child{margin-top: 0px;}
 .items-list-lider .item.half img {max-height: 130px;}
 
 .items-list-lider .item.half .additional-info{margin-top: 10px;}
