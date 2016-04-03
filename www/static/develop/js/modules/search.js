@@ -18,21 +18,25 @@ define([
 
         },
 
-        do: function(text, options) {
+        do: function(text, options, category) {
             var s = this;
             window.clearTimeout(this.searchTimer);
             this.searchTimer = setTimeout(function(){
-               s.searchAdverts(text, options)
+               s.searchAdverts(text, options, category)
             }, 400);
         },
 
-        searchAdverts: function(text, options) {
+        searchAdverts: function(text, options, category) {
             
             var search = new SearchModel();
             options.error = options.error || function() {};
             options.success = options.success || function() {};
+            var data = {text: text, city_id: options.city_id};
+            if (category !== null && category !== undefined) {
+                data.category_id = category;
+            }
             search.fetch({
-                data: {text: text, city_id: options.city_id},
+                data: data,
                 success: function(model) {
                     var resp = model.toJSON();
                     if (resp.code == 200) {

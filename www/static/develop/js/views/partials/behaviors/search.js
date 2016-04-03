@@ -97,7 +97,8 @@ define([
         ui: {
             searchInput: ".js-search-input",
             searchForm: ".js-search-form",
-            searchPopupCont: ".js-search-popup-cont"
+            searchPopupCont: ".js-search-popup-cont",
+            categoryBox: '[data-role=categories]'
         },
 
         events: {
@@ -136,7 +137,7 @@ define([
                             s.ui.searchPopupCont.show();
                         }
                     }
-                });
+                }, this.ui.categoryBox.val());
             }
 
             if (keyCode == 13 && this.ui.searchPopupCont.find('li.mark')) {
