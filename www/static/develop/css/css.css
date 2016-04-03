@@ -226,10 +226,10 @@ select{background-color: #FFFFFF;border: 1px solid #C3C3C3;padding:2px 10px;heig
 .top-line{background-color: #fff; box-sizing: border-box; height: 45px;}
 .logo{float: left; height: 25px; margin: 4px 10px 0;}
 .logo img{height: 100%;}
-.top-line .add-advert{height: 41px;border-radius: 3px;line-height: 41px;}
+.top-line .add-advert{height: 44px;border-radius: 3px;line-height: 44px;}
 .top-line .search-cont .view1 .col1 input.search{width: 100%;}
 .top-line .banner{max-width: 100%;max-height: 45px;}
-.top-line .search-cont{position: relative; border: 1px solid #D90000; border-radius: 2px;}
+.top-line .search-cont{position: relative; border: 2px solid #D90000; border-radius: 2px;}
 .top-line .search-cont input.search{border:none; outline: none; color: #d90000;border-radius: 2px 0px 0px 2px;font-size: 14px;width: 100%;box-sizing: border-box;height: 40px; padding: 0px 10px;text-transform: uppercase;}
 .top-line .search-cont .input-group-addon{position: relative; left: 1px; float: right; border-color: #D90000;height: 40px; width: 100%; border-radius: 0px 2px 2px 0px;}
 .top-line .search-cont .input-group-addon .button{width: 100%; height: 40px;border:0;}
@@ -249,7 +249,7 @@ select{background-color: #FFFFFF;border: 1px solid #C3C3C3;padding:2px 10px;heig
 .main_menu.menu-cont2{background-color: transparent; line-height: 1.4; padding: 0;}
 
 .main_menu .right li{margin-bottom: 10px;}
-.top-razdel, .category-btn{display: block; background-color: #D90000; text-align: center;line-height: 41px;border-radius: 2px; position: relative;color: #fff; cursor: pointer; -webkit-transition: all 0.15s ease-in;-o-transition: all 0.15s ease-in;transition: all 0.15s ease-in; transition-delay: 0s;-moz-transition-delay: 0s;-o-transition-delay: 0s;-webkit-transition-delay: 0s;}
+.top-razdel, .category-btn{display: block; background-color: #D90000; text-align: center;line-height: 44px;border-radius: 2px; position: relative;color: #fff; cursor: pointer; -webkit-transition: all 0.15s ease-in;-o-transition: all 0.15s ease-in;transition: all 0.15s ease-in; transition-delay: 0s;-moz-transition-delay: 0s;-o-transition-delay: 0s;-webkit-transition-delay: 0s;}
 .top-razdel:hover, .category-btn:hover{background-color: #E85151; color: #fff; transition-delay: 0.3s;-moz-transition-delay: 0.3s;-o-transition-delay: 0.3s;-webkit-transition-delay: 0.3s;}
 .main_menu .main_menu_item{padding: 0px 10px; float: left; cursor: pointer; position: relative; -webkit-transition: all 0.15s ease-in;-o-transition: all 0.15s ease-in;transition: all 0.15s ease-in;}
 .main_menu .main_menu_item>a, .main_menu .main_menu_item>span{display: block; color: #2B587A; padding: 7px 0; text-align: center;}
