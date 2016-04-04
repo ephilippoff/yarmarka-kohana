@@ -167,7 +167,7 @@
 			$step1FileName = '1.xml.gz';
 			$step1OutFile = $sitemapsPath . $step1FileName;
 			$step1OutFileTemp = $step1OutFile . '.tmp';
-			$this->getStep1Data($step1OutFile);
+			$this->getStep1Data($step1OutFileTemp);
 			$changed = !$this->filesEq($step1OutFile, $step1OutFileTemp);
 			if ($changed) {
 				copy($step1OutFileTemp, $step1OutFile);
