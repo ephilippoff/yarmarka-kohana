@@ -58,10 +58,10 @@ define([
             if (action == 'showMap') {
                 this.initMapBlock();
                 this.ui.wrap.show();
-                this.ui.button.attr('data-action', 'hideMap');
+                this.ui.button.attr('data-action', 'hideMap').text('Спрятать карту');;
             }else {
                 this.ui.wrap.hide();
-                this.ui.button.attr('data-action', 'showMap');
+                this.ui.button.attr('data-action', 'showMap').text('Показать на карте');
             }
         },
 
