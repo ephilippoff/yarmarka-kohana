@@ -11,6 +11,7 @@
 {% block content %}
 	{{ parent() }}
 	<div class="bg-color-whitesmoke p20">
+		{% if subscriptions|length > 0 %}
 		{% for subscription in subscriptions %}
 			{% set info = subscription.get_data() %}
 			<div>{{ info.title }}</div>
@@ -47,6 +48,9 @@
 				<button>{% if subscription.enabled %}Остановить{% else %}Активировать{% endif %}</button>
 			</form>
 		{% endfor %}
+		{% else %}
+		<p>В настоящее время у вас нет подписок. вы можете подписаться на странице поиска.</p>
+		{% endif %}
 	</div>
 {% endblock content %}
 
