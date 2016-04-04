@@ -82,8 +82,6 @@ function (Marionette, templates, utils, IndexPage, SearchPage, DetailPage,
                 new SearchPage({
                       el: "body"
                 });
-                $(this).hide();
-                $('#map-wrap').show();
             });
         },
 

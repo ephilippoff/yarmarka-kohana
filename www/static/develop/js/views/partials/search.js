@@ -14,7 +14,9 @@ define([
             tr:"tr.tr",
             map: "#map",
             banners: ".js-banners",
-            liders: ".js-liders"
+            liders: ".js-liders",
+            button: '#map-button',
+            wrap: '#map-wrap'
         },
         events: {
             "mouseover @ui.tr": function(e) {
@@ -23,6 +25,10 @@ define([
             },
             "mouseleave @ui.tr": function(e) {
                  $(e.currentTarget).removeClass("hover");
+            },
+
+            "click @ui.button": function(e) {
+                 this.buttonCheck();
             }
         },
         behaviors: {
@@ -38,9 +44,29 @@ define([
         },
 
         initialize: function() {
-            var s = this;
             this.bindUIElements();
+            // this.buttonCheck();
+            var s = this;
+            this.ui.button.on('click', function(){
+                s.buttonCheck();
+            });
             
+        },
+
+        buttonCheck: function(){
+            var action = this.ui.button.attr('data-action');
+            if (action == 'showMap') {
+                this.initMapBlock();
+                this.ui.wrap.show();
+                this.ui.button.attr('data-action', 'hideMap');
+            }else {
+                this.ui.wrap.hide();
+                this.ui.button.attr('data-action', 'showMap');
+            }
+        },
+
+        initMapBlock: function(){
+            var s = this;
             
             if (this.ui.map.length) {
                 this.initMap(function(){
@@ -86,7 +112,6 @@ define([
             
 
             this.citySelect();
-
         },
 
         citySelect: function() {
