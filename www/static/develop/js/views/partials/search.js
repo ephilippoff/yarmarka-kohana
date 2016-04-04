@@ -25,10 +25,6 @@ define([
             },
             "mouseleave @ui.tr": function(e) {
                  $(e.currentTarget).removeClass("hover");
-            },
-
-            "click @ui.button": function(e) {
-                 this.buttonCheck();
             }
         },
         behaviors: {
@@ -45,11 +41,7 @@ define([
 
         initialize: function() {
             this.bindUIElements();
-            // this.buttonCheck();
-            var s = this;
-            this.ui.button.on('click', function(){
-                s.buttonCheck();
-            });
+            this.buttonCheck();
             
         },
 
@@ -60,6 +52,7 @@ define([
                 this.ui.wrap.show();
                 this.ui.button.attr('data-action', 'hideMap').text('Спрятать карту');;
             }else {
+                this.ui.map.empty();
                 this.ui.wrap.hide();
                 this.ui.button.attr('data-action', 'showMap').text('Показать на карте');
             }
