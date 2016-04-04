@@ -18,7 +18,6 @@ class Controller_Static extends Controller_Template {
 			HTTP::redirect("http://".$proper_domain, 301);
 		}
 		$subdomain = ($domain->get_city()) ? $domain->get_subdomain(): FALSE;
-		
 		if ($subdomain) {
 			$filename = APPPATH."../sitemaps/$subdomain.sitemap.xml";
 			if (!file_exists($filename)) {
@@ -33,6 +32,13 @@ class Controller_Static extends Controller_Template {
 		}
 		$this->response->headers('Content-Type', 'text/xml');
 		echo file_get_contents($filename);
+	}
+
+	public function action_sitemap_new() {
+		$s = new Sitemap();
+		$s->rebuild();
+		echo 'OK';
+		die;
 	}
 
 	public function action_yandex_feed(){

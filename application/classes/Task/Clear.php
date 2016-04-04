@@ -292,7 +292,5 @@ class Task_Clear extends Minion_Task
         file_put_contents($filename, $filedata);
         chmod ($filename, 0777);
     }
-
-
     
 }
