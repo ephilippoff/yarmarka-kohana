@@ -7,7 +7,7 @@
 		{% endif %}
 	{% endfor %}
 
-	 <span class="hidden-xs">/</span> <h1 class="breadcrumb-h1"><span>{{ seo_attributes.h1 ? seo_attributes.h1: category.title }}</span></h1> <span class="count">{{ link_counters[s_host ~ s_suri] }}</span>
+	 <span class="hidden-xs">/</span> <h1 class="breadcrumb-h1"><span>{{ get_global('h1') ? get_global('h1') : (seo_attributes.h1 ? seo_attributes.h1: category.title) }}</span></h1> <span class="count">{{ link_counters[s_host ~ s_suri] }}</span>
 </div>
 
 <script>

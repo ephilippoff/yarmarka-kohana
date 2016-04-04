@@ -250,6 +250,11 @@ class Controller_Search extends Controller_Template {
         $twig->kupons = Search::getresult($kupons->execute()->as_array());
         //kupons end
 
+        $oldCategoryPath = Request::current()->param('category_path');
+        if (isset($GLOBALS['category_path'])) {
+            Request::current()->set_param('category_path', $GLOBALS['category_path']);
+        }
+        
         //pagination
         $pagination = Pagination::factory( array(
             'current_page' => array('source' => 'query_string', 'key' => 'page'),
@@ -260,7 +265,7 @@ class Controller_Search extends Controller_Template {
             'first_page_in_url' => FALSE,
             'count_out' => 1,
             'count_in' => 8,
-            'path' => URL::SERVER("PATH_INFO"),
+            'path' => isset($GLOBALS['category_path']) ? $GLOBALS['category_path'] : URL::SERVER("PATH_INFO"),
             'limits' => array(
                 "10" => Search_Url::get_suri_without_reserved($this->request->query(),array(),array("limit","page")),
                 "20" => Search_Url::get_suri_without_reserved($this->request->query(), array( "limit" => 20), array("page")),
@@ -278,6 +283,7 @@ class Controller_Search extends Controller_Template {
         $twig->pagination = $pagination;
         //pagination end
 
+        Request::current()->param('category_path', $oldCategoryPath);
         
         //save search settings cache
         if (!$this->cached_search_info AND !$search_info->search_text) {

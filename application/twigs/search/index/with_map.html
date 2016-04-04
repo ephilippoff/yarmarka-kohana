@@ -65,7 +65,11 @@
 
 
 {% block footertext %} 
+	{% if get_global('footer') %}
+		{{ get_global('footer') }}
+	{% else %}
 		{{ seo_attributes.footer }}
+	{% endif %}
 {% endblock footertext %}
 
 {% block footer %} 

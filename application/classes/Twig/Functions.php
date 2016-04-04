@@ -3,6 +3,13 @@
 
 class Twig_Functions
 {
+	public static function get_global($name) {
+		if (array_key_exists($name, $GLOBALS)) {
+			return $GLOBALS[$name];
+		}
+		return NULL;
+	}
+
 	public static function requestblock($path, $params = array())
 	{
 		return Request::factory($path)->post($params)->execute();

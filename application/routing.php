@@ -9,7 +9,6 @@ Route::set('admin', '<controller>(/<action>)', array('controller' => '(admin_.*|
 Route::set('all','<addr>', array('addr' => '.*'))
 	->filter(function($route, $params, $request){
 		$site_disable = Kohana::$config->load("common.site_disable");
-
 		if ($site_disable) {
 			$white_ips = Kohana::$config->load("common.white_ips");
 			if (!in_array($_SERVER['REMOTE_ADDR'], $white_ips)) {
