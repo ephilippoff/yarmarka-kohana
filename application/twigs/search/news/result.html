@@ -7,7 +7,7 @@
 		<img src="{{ innerItem.image }}" alt="">
 	</div>
 	<div class="news_info">
-		<span class="date fs12">{{ innerItem.date|date('m:h') }}</span>
+		<span class="date fs12">{{ innerItem.date|date('H:i') }}</span>
 		<a href="{{ innerItem.url }}" class="fs16 mb10 db">{{ innerItem.title }}</a>
 		<div class="text">{{ innerItem.short_text }}</div>
 	</div>

@@ -90,9 +90,7 @@
 						'short_text' => $shortText,
 						'url' => '/novosti/' . $item['seo_name'] . '-' . $item['id'] . '.html'
 					);
-				// var_dump($group); die;
 			}
-
 			return $newsGroups;
 
 		}
@@ -123,6 +121,7 @@
 		}
 
 		public function action_main_page() {
+
 
 			$view = Twig::factory('block/news/main_page');
 
@@ -156,10 +155,11 @@
 				$newsGroup['pages'] = ceil($newsGroup['count'] / $itemsPerCategory);
 			} 		
 
-			// echo '<pre>'; var_dump($view); echo '</pre>'; die;
+			// echo '<pre>'; var_dump($newsGroup); echo '</pre>'; die;
 			
 			/* push view data */
 			$view->data = $newsGroups;
+
 
 			$this->response->body($view);
 

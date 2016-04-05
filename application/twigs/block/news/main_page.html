@@ -28,7 +28,7 @@
 							{% for innerItem in item.items %}
 								{% if loop.first %}
 									<div class="col-md-6 clearfix main_cat_news">
-										<div class="date light fs12 mb10">{{ innerItem.date|date('m:h') }} 
+										<div class="date light fs12 mb10">{{ innerItem.date|date('H:i') }} 
 											{% if innerItem.date|date('d.m.y') == currentDate %}
 												<span>{{ today }}</span>
 											{% else %}
@@ -46,7 +46,7 @@
 									{% for innerItem in item.items %}
 										{% if loop.index != 1 and loop.index <= itemsPerCategory %}
 											<div class="col-md-12 col-sm-6 other_cat_news">
-												<div class="date light fs12">{{ innerItem.date|date('m:h') }} 
+												<div class="date light fs12">{{ innerItem.date|date('H:i') }} 
 													{% if innerItem.date|date('d.m.y') == currentDate %}
 														<span>{{ today }}</span>
 													{% else %}
@@ -75,7 +75,7 @@
 						{% for innerItem in item.items %}
 							{% if loop.first %}
 								<div class="col-md-6 clearfix main_cat_news">
-									<div class="date light fs12 mb10">{{ innerItem.date|date('m:h') }}
+									<div class="date light fs12 mb10">{{ innerItem.date|date('H:i') }}
 										{% if innerItem.date|date('d.m.y') == currentDate %}
 											<span>{{ today }}</span>
 										{% else %}
@@ -93,7 +93,7 @@
 								{% for innerItem in item.items %}
 									{% if loop.index != 1 %}
 										<div class="col-md-12 col-sm-6 other_cat_news">
-											<div class="date light fs12">{{ innerItem.date|date('m:h') }} 
+											<div class="date light fs12">{{ innerItem.date|date('H:i') }} 
 												{% if innerItem.date|date('d.m.y') == currentDate %}
 													<span>{{ today }}</span>
 												{% else %}
@@ -124,7 +124,7 @@
 							{% if innerItem.title != newsTitle %}
 								<div class="col-md-6 col-sm-6 masonry">
 									<div class="news_wrap">
-										<div class="date light fs12">{{ innerItem.date|date('m:h') }} 
+										<div class="date light fs12">{{ innerItem.date|date('H:i') }} 
 											{% if innerItem.date|date('d.m.y') == currentDate %}
 												<span>{{ today }}</span>
 											{% else %}
