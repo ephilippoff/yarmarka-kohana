@@ -1906,3 +1906,58 @@ div[data-role="error"]{
     width: 27px;
     line-height: 27px;
 }
+
+.subscribe-table{
+    width: 100%;
+}
+
+.subscribe-table tr td,
+.subscribe-table tr th{
+    border-bottom: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    padding: 5px 15px;
+}
+
+.subscribe-table tr th{
+    border-top: 1px solid #ccc;
+}
+
+.subscribe-table tr td:first-child,
+.subscribe-table tr th:first-child{
+    border-left: 1px solid #ccc;
+    /*width: 30%;*/
+}
+
+.subscribe-table tbody td{
+    vertical-align: top;
+    padding: 10px 15px;
+}
+
+.subscribe-table tr  .action{
+    text-align: center;
+    vertical-align: middle;
+}
+
+.subscribe-table tr .action button{
+    outline: none;
+    font-size: 20px;
+    background: #E9E9E9;
+    padding: 5px 10px;
+    border-radius: 4px;
+    border: 1px solid #DDD;
+}
+
+.subscribe-table .fa-play{
+    color: #57A957;
+    text-shadow: 0px 0px 2px #A4A4A4;
+}
+
+.subscribe-table .fa-pause{
+    text-shadow: 0px 0px 2px #A4A4A4;
+    color: #E96F4F;
+}
+
+.subscribe-table .fa-trash{
+    text-shadow: 0px 0px 2px #A4A4A4;
+    color: #d90000;
+}
