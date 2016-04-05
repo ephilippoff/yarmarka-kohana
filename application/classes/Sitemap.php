@@ -3,7 +3,7 @@
 	class Sitemap {
 
 		protected $gzipLevel = 9;
-		protected $compareBufferSize = 512 * 1024;
+		protected $compareBufferSize = 524288;
 		protected $maxPerStep1 = 50000;
 		protected $maxFiles = 100;
 		protected $cityName = 'surgut';
