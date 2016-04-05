@@ -7,10 +7,9 @@
 				<i class="fa fa-angle-right hidden-xs hidden-sm"></i> <a href="{{ url(crumb.uri ~ crumb.query) }}" class="crumbs-item"><span>{{crumb.title}}</span></a>
 			{% endif %}
 		{% endfor %}
-		<span class="crumbs-h1 crumbs-item hidden"><i class="fa fa-angle-right hidden-xs hidden-sm"></i> <span>{{ seo_attributes.h1 ? seo_attributes.h1: category.title }}</span></span>
 	</div>
 
-	<h1 class="captionbold fs22" style="display: block;text-align: center;">{{ seo_attributes.h1 ? seo_attributes.h1: category.title }}</h1>
+	<h1 class="captionbold crumbs-h1" style="display: block;">{{ seo_attributes.h1 ? seo_attributes.h1: category.title }}</h1>
 
 	<hr>
 </div>

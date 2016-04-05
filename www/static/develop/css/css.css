@@ -405,8 +405,7 @@ select{background-color: #FFFFFF;border: 1px solid #C3C3C3;padding:2px 10px;heig
 
 /* breadcrumbs */
 .breadcrumbs-cont{font-size: 13px;}
-.breadcrumbs-cont a{font-size: 13px; }
-.breadcrumbs-cont .crumbs-h1{font-size: 13px;}
+.crumbs-h1{font-size: 22px;}
 /* breadcrumbs end */
 
 /* subcategories-cont */
