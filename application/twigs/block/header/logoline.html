@@ -20,15 +20,14 @@
 									<input class="search placeholder form-control js-search-input" name="search" id="search-input" value="{{ search_text }}" type="text" placeholder="{% if get_session_value('site_disable') %}Сайт в режиме разработки.{% else %}Поиск объявлений{% endif %}" autocomplete="off" data-city="{{city.id}}">
 								</div>
 								<div class="col-lg-5 col-md-5">
-									<!-- <div class="category-search">
-										Все категории <i class="fa fa-caret-down ml5"></i>
-									</div> -->
 
 									<div class="category-search">
-										<select data-role="categories" style="color:black;">
+										<i class="fa fa-caret-down"></i>
+										<i class="fa fa-caret-up"></i>
+										<select data-role="categories">
 											{% for category in get_categories() %}
-												<option value="{{ category.id }}" {% if category_id and category_id == category.id %}selected="selected"{% endif %}>
-													{{ repeat('&nbsp;&nbsp;', category.level - 1) }}{{ category.title }}
+												<option value="{{ category.id }}" {% if category_id and category_id == category.id %}selected="selected"{% endif %} {% if category.level < 3 %} class="bold" {% endif %}>
+													{{ repeat('&nbsp;&nbsp;', category.level - 1) }} {{ category.title }}
 												</option>
 											{% endfor %}
 										</select>
