@@ -51,7 +51,7 @@ define([ 'jquery', 'underscore', 'backbone' ], function () {
 			this.$nextButton = $(this.nextButtonTemplate());
 
 			this.undelegateEvents();
-			if (this.model.get('page') <= this.model.get('pages')) {
+			if (this.model.get('page') < this.model.get('pages')) {
 				this.$el.append(this.$nextButton);
 				this.$nextButton.fadeIn(200);
 			}else console.log(this.model.get('page'), this.model.get('pages'));

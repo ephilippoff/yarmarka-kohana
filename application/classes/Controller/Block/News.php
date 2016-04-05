@@ -155,7 +155,7 @@
 				$newsGroup['pages'] = ceil($newsGroup['count'] / $itemsPerCategory);
 			} 		
 
-			// echo '<pre>'; var_dump($newsGroup); echo '</pre>'; die;
+			echo '<pre>'; var_dump($newsGroup); echo '</pre>'; die;
 			
 			/* push view data */
 			$view->data = $newsGroups;
