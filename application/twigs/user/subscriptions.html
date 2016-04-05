@@ -11,42 +11,77 @@
 {% block content %}
 	{{ parent() }}
 	<div class="bg-color-whitesmoke p20">
-		{% for subscription in subscriptions %}
-			{% set info = subscription.get_data() %}
-			<div>{{ info.title }}</div>
-			<ul>
-				{% for item in info.attributes %}
-					<li>
-						<b>{{ item.title }}: </b>
-						{% if (item.type == 'list') %}
-							{% if (item.value is iterable) %}
-								{{ pluk(item.value, ('title'))|join(', ') }}
-							{% else %}
-								{{ item.value.title }}
-							{% endif %}
-						{% elseif (item.type == 'integer') %}
-							{% if (item.value.min) %} от {{ item.value.min }}{% endif %}
-							{% if (item.value.max) %} до {{ item.value.max }}{% endif %}
+		{% if subscriptions|length > 0 %}
+		<table class="subscribe-table">
+			<thead>
+				<tr>
+					<th>Рубрика</th>
+					<th class="action">{% if subscription.enabled %}Остановить{% else %}Активировать{% endif %}</th>
+					<th class="action">Удалить</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for subscription in subscriptions %}
+				<tr>
+					{% set info = subscription.get_data() %}
+					<td>
+						<div class="fs20 mb5">{{ info.title }}</div>
+
+						{% if info.attributes %}
+							<hr style="border-top: 1px solid #E6E6E6; border-bottom: none;">
+							{% for item in info.attributes %}
+								<li>
+									<b>{{ item.title }}: </b>
+									{% if (item.type == 'list') %}
+										{% if (item.value is iterable) %}
+											{{ pluk(item.value, ('title'))|join(', ') }}
+										{% else %}
+											{{ item.value.title }}
+										{% endif %}
+									{% elseif (item.type == 'integer') %}
+										{% if (item.value.min) %} от {{ item.value.min }}{% endif %}
+										{% if (item.value.max) %} до {{ item.value.max }}{% endif %}
+									{% endif %}
+								</li>
+							{% endfor %}
 						{% endif %}
-					</li>
+					</td>
+
+					<td class="action">
+						<form method="POST" class="ta-c">
+							<input type="hidden" name="id" value="{{ subscription.id }}" />
+							<input type="hidden" name="action" value="enable" />
+							<input type="hidden" name="value" value="{{ subscription.get_not_enabled() }}" />
+							<button>{% if subscription.enabled %}<i class="fa fa-pause"></i>{% else %}<i class="fa fa-play"></i>{% endif %}</button>
+						</form>
+					</td>
+
+					<td class="action">
+						<form method="POST" class="ta-c">
+							<input type="hidden" name="id" value="{{ subscription.id }}" />
+							<input type="hidden" name="action" value="remove" />
+							<button><i class="fa fa-trash"></i></button>
+						</form>
+					</td>
+				</tr>
 				{% endfor %}
+			</tbody>
+		</table>
+		{% else %}
+			<p>В настоящее время у вас нет подписок. вы можете подписаться на странице поиска.</p>
+		{% endif %}
+		
+		
+			
+			<div>{{ info.title }}</div> аккордеон
+			<ul>
+				
 				
 				{% if (info.search_text) %}<li><b>Строка поиска: </b>{{ info.search_text }}</li>{% endif %}
 				{% if (info.with_photo) %}<li><b>Есть фото: </b>Да</li>{% endif %}
 				{% if (info.only_private) %}<li><b>Только частные: </b>Да</li>{% endif %}
 			</ul>
-			<form method="POST">
-				<input type="hidden" name="id" value="{{ subscription.id }}" />
-				<input type="hidden" name="action" value="remove" />
-				<button>Удалить</button>
-			</form>
-			<form method="POST">
-				<input type="hidden" name="id" value="{{ subscription.id }}" />
-				<input type="hidden" name="action" value="enable" />
-				<input type="hidden" name="value" value="{{ subscription.get_not_enabled() }}" />
-				<button>{% if subscription.enabled %}Остановить{% else %}Активировать{% endif %}</button>
-			</form>
-		{% endfor %}
+		
 	</div>
 {% endblock content %}
 
