@@ -10,10 +10,14 @@
 
 		protected $prettyUrls;
 		protected $config;
+		protected $gzipFile;
 
 		public function __construct() {
 			$this->initConfig();
 			$this->initPrettyUrls();
+
+			ini_set('memory_limit', '-1');
+			set_time_limit(0);
 		}
 
 		protected function initConfig() {
@@ -35,12 +39,17 @@
 			return $url;
 		}
 
-		protected function writeFile($file, $data) {
+		protected function openFile($file) {
 			$mode = 'wb' . $this->gzipLevel;	
+			$this->fd = gzopen($file, $mode);
+		}
 
-			$fd = gzopen($file, $mode);
-			gzwrite($fd, $data);
-			gzclose($fd);
+		protected function writeFile($data) {
+			gzwrite($this->fd, $data);
+		}
+
+		protected function closeFile() {
+			gzclose($this->fd);
 		}
 
 		protected function filesEq($a, $b) {
@@ -66,34 +75,42 @@
 			return $this->checkForPretty('http://' . $this->cityName . '.' . $this->config['main_domain'] . '/' . $part);
 		}
 
-		protected function compileSiteMapFile($entries) {
-			$res = '<?xml version="1.0" encoding="UTF-8"?>' . "\r\n"
+		protected function getSitemapHeader() {
+			return '<?xml version="1.0" encoding="UTF-8"?>' . "\r\n"
 				. '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
-
-			foreach($entries as $entry) {
-				$res .= '<url>';
-				foreach($entry as $key => $value) {
-					$res .= '<' . $key . '>' . $value . '</' . $key . '>';
-				}
-				$res .= '</url>';
-			}
-
-			return $res . '</urlset>';
 		}
 
-		protected function getStep1Data() {
+		protected function getSitemapFooter() {
+			return '</urlset>';
+		}
+
+		protected function getSitemapEntry($entry) {
+			$res = '<url>';
+			foreach($entry as $key => $value) {
+				$res .= '<' . $key . '>' . $value . '</' . $key . '>';
+			}
+			$res .= '</url>';
+			return $res;
+		}
+
+		protected function getStep1Data($file) {
+			$this->openFile($file);
+			$this->writeFile($this->getSitemapHeader());
 			$categories = ORM::factory('Category')->find_all();
-			$entries = array();
+			$counter = 0;
 			foreach ($categories as $category) {
 	            if (!$category->url) continue;
 
-	            $entry = array(
+	            $this->writeFile($this->getSitemapEntry(array(
 	                'loc' => $this->makeUrl($category->url),
 	                'changefreq' => 'daily',
 	                'priority' => '0.8'
-	            );
+	            )));
+	            $counter++;
 
-	            $entries[] = $entry;
+	            if ($counter >= $this->maxPerStep1) {
+	            	break;
+	            }
 
 	            $elements = ORM::factory('Attribute_Element')
 	                            ->get_elements_with_published_objects($category->id)
@@ -102,35 +119,45 @@
 
 	            foreach ($elements as $element) {
 	                if (!$element->url) continue;
-	                $entry_element = array(
+	                $this->writeFile($this->getSitemapEntry(array(
 	                    'loc' => $this->makeUrl($category->url . '/' . $element->url),
 	                    'changefreq' => 'daily',
 	                    'priority' => '0.8'
-	                );
-	                $entries[] = $entry_element;
+	                )));
+	                $counter++;
+	                if ($counter >= $this->maxPerStep1) {
+		            	break;
+		            }
+	            }
+	            if ($counter >= $this->maxPerStep1) {
+	            	break;
 	            }
 	        }
-	        if (count($entries) > $this->maxPerStep1) {
-	        	$entries = array_slice($entries, 0, $this->maxPerStep1);
-	        }
-	        return $entries;
+	        $this->writeFile($this->getSitemapFooter());
+	        $this->closeFile();
 		}
 
-		protected function getStep2Data($lastModified) {
+		protected function getStep2Data($lastModified, $file) {
 			$objects = ORM::factory('Object')
 				->where('date_created', '>', date('Y-m-d H:i:s', $lastModified))
 				->or_where('date_updated', '>', date('Y-m-d H:i:s', $lastModified))
 				->find_all();
-			$entries = array();
+			$ok = false;
 			foreach($objects as $object) {
-				$entries []= array(
+				if (!$ok) {
+					$this->openFile($file);
+					$ok = true;
+				}
+				$this->writeFile($this->getSitemapEntry(array(
 						'loc' => $object->get_url()
 						, 'changefreq' => 'monthly'
 						, 'priority' => '0.5'
 						, 'lastmod' => date('Y-m-d\TH:i:sP', strtotime($object->date_updated ? $object->date_updated : $object->date_created))
-					);
+					)));
 			}
-			return $entries;
+			if ($ok) {
+				$this->closeFile();
+			}
 		}
 
 		public function rebuild() {
@@ -140,8 +167,7 @@
 			$step1FileName = '1.xml.gz';
 			$step1OutFile = $sitemapsPath . $step1FileName;
 			$step1OutFileTemp = $step1OutFile . '.tmp';
-			$data = $this->compileSiteMapFile($this->getStep1Data());
-			$this->writeFile($step1OutFileTemp, $data);
+			$this->getStep1Data($step1OutFile);
 			$changed = !$this->filesEq($step1OutFile, $step1OutFileTemp);
 			if ($changed) {
 				copy($step1OutFileTemp, $step1OutFile);
@@ -154,11 +180,7 @@
 				$lastModified = 0;
 			}
 			$step2OutFile = $sitemapsPath . uniqid() . '.xml.gz';
-			$data = $this->getStep2Data($lastModified);
-			if (count($data)) {
-				$data = $this->compileSiteMapFile($data);
-				$this->writeFile($step2OutFile, $data);
-			}
+			$this->getStep2Data($lastModified, $step2OutFile);
 
 			// create big sitemap
 			$files = scandir($sitemapsPath);
