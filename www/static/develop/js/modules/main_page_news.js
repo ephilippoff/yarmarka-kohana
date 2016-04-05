@@ -31,8 +31,8 @@ define([ 'jquery', 'underscore', 'backbone' ], function () {
 			+ '</div>'),
 
 		initialize: function () {
-			this.$nextButton = $(this.nextButtonTemplate());
-			this.$el.append(this.$nextButton);
+			// this.$nextButton = $(this.nextButtonTemplate());
+			// this.$el.append(this.$nextButton);
 			this.model = new Model();
 			if (this.$el.data('category')) {
 				this.model.set('category', this.$el.data('category'));
