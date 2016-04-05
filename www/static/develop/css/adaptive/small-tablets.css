@@ -16,6 +16,10 @@
 		height: auto !important;
 	}
 
+	.crums-wrap{
+		margin-bottom: 15px;
+	}
+
 	.kupons_block .kupon_wrap{
 		width: 50%;
 		float: left;
