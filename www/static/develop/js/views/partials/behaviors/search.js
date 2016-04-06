@@ -58,7 +58,7 @@ define([
 
     var SearchPopup = Marionette.LayoutView.extend({
         template: templates.searchPopup,
-        className: "z400",
+        className: "z201",
         regions: {
             objects: ".js-objects",
             pricerows: ".js-pricerows"
@@ -76,7 +76,7 @@ define([
             }
         },
         onRender: function() {
-            console.log('init');
+            console.log(this.$el);
             this.objects.show(new CollectionView({
                 collection: this.getOption("objects"), 
                 childView: ObjectItemView,
@@ -103,7 +103,14 @@ define([
         },
 
         events: {
-            "keyup @ui.searchInput": "searchInputKeyUp"
+            "keyup @ui.searchInput" : "searchInputKeyUp",
+            "click"                 : "onClick"
+        },
+
+        onClick: function(e) {
+            if (e.target != this.ui.searchPopupCont) {
+               this.ui.searchPopupCont.hide();
+            }
         },
 
         searchInputKeyUp: function(e) {
