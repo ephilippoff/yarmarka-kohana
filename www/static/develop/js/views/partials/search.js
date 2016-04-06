@@ -25,6 +25,9 @@ define([
             },
             "mouseleave @ui.tr": function(e) {
                  $(e.currentTarget).removeClass("hover");
+            },
+            "click @ui.button": function(e) {
+                this.buttonCheck();
             }
         },
         behaviors: {

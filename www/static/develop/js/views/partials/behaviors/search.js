@@ -76,6 +76,7 @@ define([
             }
         },
         onRender: function() {
+            console.log('init');
             this.objects.show(new CollectionView({
                 collection: this.getOption("objects"), 
                 childView: ObjectItemView,

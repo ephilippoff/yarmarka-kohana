@@ -77,11 +77,9 @@ function (Marionette, templates, utils, IndexPage, SearchPage, DetailPage,
             }
 
 
-
-            $('[data-action="showMap"]').click(function(){       
-                new SearchPage({
-                      el: "body"
-                });
+     
+            new SearchPage({
+                  el: "body"
             });
         },
 
