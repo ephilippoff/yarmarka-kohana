@@ -760,11 +760,7 @@ class Lib_PlacementAds_AddEdit {
 			}
 		}
 		
-		if ($category AND !$category_settings->phone_or_mobile_notrequired AND !$params->itis_massload AND !$params->contact_mobile)
-		{
-			$errors['contact_mobile'] =  "Необходимо обязательно указать мобильный телефон, и подтвердить его по СМС";
-		}
-		elseif ($category AND !in_array($category->id, $exclusion) AND !$params->itis_massload AND !$params->contact_mobile)
+		if ($category AND !in_array($category->id, $exclusion) AND !$params->itis_massload AND !$params->contact_mobile)
 		{
 			$errors['contact_mobile'] = "Необходимо обязательно указать мобильный телефон, и подтвердить его по СМС";
 		} elseif ($category AND in_array($category->id, $exclusion) AND !$params->itis_massload AND !$params->contact_email)
