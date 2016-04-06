@@ -701,33 +701,29 @@ class Lib_PlacementAds_AddEdit {
 			$errors['not_autorized'] =  Kohana::message('validation/object_form', 'not_autorized');
 		}
 
+		$exclusion = Kohana::$config->load("common.add_phone_required_exlusion");
+
 		// указаны ли контакты
 		if ( !count($this->contacts))
 		{
 			$errors['contacts'] = Kohana::message('validation/object_form', 'empty_contacts');
 		} 
-		elseif ($category_settings->one_mobile_phone)
+		elseif (!$category OR ( $category AND !in_array($category->id, $exclusion) AND !$params->itis_massload ) )
 		{
 			$mobile = array_filter(array_values($this->contacts), function($v){
 				return ($v["type"] == 1);
 			});
 			if (!count($mobile))
 			{
-				$errors['contacts'] = "В эту рубрику необходимо указать и подтвердить хотябы один мобильный телефон";
+				$errors['contacts'] = "Необходимо указать и подтвердить хотя бы один мобильный телефон";
 			}
-		} elseif ( $category AND Kohana::$config->load("common.add_phone_required") AND !$params->itis_massload)
-		{
-			
-			$exclusion = Kohana::$config->load("common.add_phone_required_exlusion");
-			if (!in_array($category->id, $exclusion))
+		} elseif ( $category AND in_array($category->id, $exclusion) AND !$params->itis_massload) {
+			$mobile = array_filter(array_values($this->contacts), function($v){
+				return ($v["type"] == 5);
+			});
+			if (!count($mobile))
 			{
-				$mobile = array_filter(array_values($this->contacts), function($v){
-					return ($v["type"] == 1 OR $v["type"] == 2);
-				});
-				if (!count($mobile))
-				{
-					$errors['contacts'] = "В эту рубрику необходимо указать и подтвердить хотябы один телефон";
-				}
+				$errors['contacts'] = "Необходимо указать Email";
 			}
 		}
 
