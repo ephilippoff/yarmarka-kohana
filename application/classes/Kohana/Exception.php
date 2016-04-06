@@ -250,15 +250,15 @@ class Kohana_Exception extends Exception {
 				$trace = array_slice($trace, 0, 2);
 			}
 
-			if (Kohana::$environment === Kohana::PRODUCTION)
-			{	
+			// if (Kohana::$environment === Kohana::PRODUCTION)
+			// {	
 				//$_content = Request::factory('block/error_404')->execute()
 				 $view = Request::factory('block/error_404')->post(array("is_system_error" => TRUE))->execute();
 				 //View::factory('layouts/default', array('_content' => $_content, '_assets' => ''));				
-			}
-			else
+			// }
+			// else
 				// Instantiate the error view.
-				$view = View::factory(Kohana_Exception::$error_view, get_defined_vars());
+				// $view = View::factory(Kohana_Exception::$error_view, get_defined_vars());
 			
 			// Prepare the response object.
 			$response = Response::factory();
