@@ -1006,6 +1006,9 @@ define([
                 case 401 :
                     self.setError('Это не мобильный телефон, выберите "городской"');
                 break;
+                case 405 :
+                    self.setError("Возникли проблемы с доставкой для Вас кода, обратитесь, пожалуйста, в <a href='http://http://feedback.yarmarka.biz/'>службу техподдержки </a>");
+                break;
             }
         },
         checkCode : function(){
