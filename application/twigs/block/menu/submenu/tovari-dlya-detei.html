@@ -1,0 +1,47 @@
+<div class="section section{{category.id}}" id="section{{category.id}}" style="width: {{divWidth}}px; display: none;"  data-menu-height="{{menuHeight}}">				
+				<ul class="submenu-ul">
+					<li>
+						{% if banners[category.id] is defined and file_exist('/uploads/banners/menu/' ~ banners[category.id].image) and banners[category.id].menu_name == 'main' %}
+							<map name="map{{category.id}}" id="map{{category.id}}" style="position: absolute;right:{{banners[category.id].x}}px ; bottom:{{banners[category.id].y}}px;z-index:0;">
+								<area shape="poly" coords="{{banners[category.id].map_params}}" class="" href="/redirect/ref_cb?id={{banners[category.id].id}}" target="_blank" />
+							</map>
+							<img hidefocus="true" style="position: absolute;right:{{banners[category.id].x}}px ; bottom:{{banners[category.id].y}}px;z-index:1;" usemap="#map{{category.id}}" src="/uploads/banners/menu/{{banners[category.id].image}}"/>
+						{% elseif file_exist(category.main_menu_image) %}
+							<span class="img" style="z-index:0;">
+								<img  hidefocus="true"  src="{{category.main_menu_image}}">
+							</span>
+						{% endif %}
+					</li>
+					<li class="li-title ml10"><span class="bold  black fs18" style="width: 165px">{{category.title}}</span></li>
+						<li class="ml20" style="width:{{ulWidth}}px;position:relative;z-index:1;">
+							<a href="/tovary-dlya-detei/detskaya-mebel" title="Детская мебель" data-weight="">Детская мебель</a>
+						</li>
+						<li class="ml20" style="width:{{ulWidth}}px;position:relative;z-index:1;">
+							<a href="/tovary-dlya-detei/detskaya-obuv" title="Детская обувь" data-weight="">Детская обувь</a>
+						</li>
+						<li class="ml20" style="width:{{ulWidth}}px;position:relative;z-index:1;">
+							<a href="/tovary-dlya-detei/detskaya-odezhda" title="Детская одежда" data-weight="">Детская одежда</a>
+						</li>
+						<li class="ml20" style="width:{{ulWidth}}px;position:relative;z-index:1;">
+							<a href="/tovary-dlya-detei/detskie-avtokresla" title="Детские автокресла" data-weight="">Детские автокресла</a>
+						</li>
+						<li class="ml20" style="width:{{ulWidth}}px;position:relative;z-index:1;">
+							<a href="/tovary-dlya-detei/detskie-kolyaski" title="Детские коляски" data-weight="">Детские коляски</a>
+						</li>
+						<li class="ml20" style="width:{{ulWidth}}px;position:relative;z-index:1;">
+							<a href="/tovary-dlya-detei/igrushki" title="Игрушки" data-weight="">Игрушки</a>
+						</li>
+						<li class="ml20" style="width:{{ulWidth}}px;position:relative;z-index:1;">
+							<a href="/tovary-dlya-detei/mesta-v-detskih-uchrezhdeniyah" title="Места в детских учреждениях" data-weight="">Места в детских учреждениях</a>
+						</li>
+						<li class="ml20" style="width:{{ulWidth}}px;position:relative;z-index:1;">
+							<a href="/tovary-dlya-detei/tovary-dlya-malyshey" title="Товары для малышей" data-weight="">Товары для малышей</a>
+						</li>
+						<li class="ml20" style="width:{{ulWidth}}px;position:relative;z-index:1;">
+							<a href="/tovary-dlya-detei/tovary-dlya-shkolnikov" title="Товары для школьников" data-weight="">Товары для школьников</a>
+						</li>
+						<li class="ml20" style="width:{{ulWidth}}px;position:relative;z-index:1;">
+							<a href="/tovary-dlya-detei/drugoe1" title="Другое..." data-weight="">Другое...</a>
+						</li>
+				</ul>
+			</div>
