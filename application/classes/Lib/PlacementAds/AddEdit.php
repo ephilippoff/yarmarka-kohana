@@ -285,6 +285,8 @@ class Lib_PlacementAds_AddEdit {
 			));
 		}
 
+		$exclusion = Kohana::$config->load("common.add_phone_required_exlusion");
+
 		// верифицированы ли контакты
 		if ($category AND !$params->just_check)
 		{
@@ -302,12 +304,18 @@ class Lib_PlacementAds_AddEdit {
 			));
 
 		} 
-		elseif ($category AND $category_settings->one_mobile_phone AND !$params->itis_massload  AND !$params->just_check)
+		elseif ($category AND !$params->itis_massload  AND !$params->just_check)
 		{
 			$validation->rules('contact_mobile', array(
 				array('mobile_verified', array(':value', $params->session_id) )
 			));
+		} elseif ($category AND in_array($category->id, $exclusion) AND !$params->itis_massload  AND !$params->just_check)
+		{
+			$validation->rules('contact_email', array(
+				array('email_verified', array(':value', $params->session_id) )
+			));
 		}
+		
 
 		return $this;
 	}
@@ -728,6 +736,8 @@ class Lib_PlacementAds_AddEdit {
 			$errors['not_autorized'] =  Kohana::message('validation/object_form', 'not_autorized');
 		}
 
+		$exclusion = Kohana::$config->load("common.add_phone_required_exlusion");
+
 		if (count($this->contacts) == 0)
 		{
 			$errors['contact_mobile'] = "Необходимо добавить хотя бы один верифицированный контакт для связи";
@@ -750,14 +760,16 @@ class Lib_PlacementAds_AddEdit {
 			}
 		}
 		
-		if ($category AND !$category_settings->phone_or_mobile_notrequired AND !$params->itis_massload AND !$params->contact_mobile AND !$params->contact_phone)
+		if ($category AND !$category_settings->phone_or_mobile_notrequired AND !$params->itis_massload AND !$params->contact_mobile)
 		{
-			$errors['contact_mobile'] = "Для этой рубрики, необходимо обязательно указать телефон";
-			$errors['contact_phone'] = "Для этой рубрики, необходимо обязательно указать телефон";
+			$errors['contact_mobile'] =  "Необходимо обязательно указать мобильный телефон, и подтвердить его по СМС";
 		}
-		elseif ($category AND $category_settings->one_mobile_phone AND !$params->itis_massload AND !$params->contact_mobile)
+		elseif ($category AND !in_array($category->id, $exclusion) AND !$params->itis_massload AND !$params->contact_mobile)
 		{
-			$errors['contact_mobile'] = "Для этой рубрики, необходимо обязательно указать мобильный телефон";
+			$errors['contact_mobile'] = "Необходимо обязательно указать мобильный телефон, и подтвердить его по СМС";
+		} elseif ($category AND in_array($category->id, $exclusion) AND !$params->itis_massload AND !$params->contact_email)
+		{
+			$errors['contact_email'] = "Необходимо обязательно указать Email";
 		}
 
 		//если пользователь привязан к компании и подает объявления как от компании то не проверяем количество поданных
