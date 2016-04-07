@@ -60,6 +60,12 @@ define([
                     active: false,
                     heightStyle: "content",
                 });
+
+                $('#user_menu, .change_city_cont, #subscribe-cont').accordion({
+                    collapsible: true,
+                    active: false,
+                    heightStyle: "content",
+                });
             },
 
             onButtonClick: function(){
