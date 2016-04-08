@@ -20,12 +20,17 @@ class Controller_Cart extends Controller_Template {
 
 		$twig = Twig::factory('cart/index');
 		$twig->user = $user = Auth::instance()->get_user();
+		$twig->canonical_url = 'user/cart';
 		$cart = $cartTempItems = $sale_types = array();
 		$key = Cart::get_key();
 
 		$twig->crumbs = array(
 			array(
-				"title" => "Оформление заказа"
+				"title" => "Мой кабинет",
+				"url" => "user"
+			),
+			array(
+				"title" => "Корзина - оформление заказа"
 			)
 		);
 
@@ -125,13 +130,15 @@ class Controller_Cart extends Controller_Template {
 
 		$twig->crumbs = array(
 			array(
-				"title" => "Оформление заказа",
+				"title" => "Корзина - оформление заказа",
 				"url" => "cart"
 			),
 			array(
 				"title" => "Оформление доставки - электронная доставка"
 			)
 		);
+
+		$twig->canonical_url = 'user/cart';
 		
 		$params = ($order->params) ? $order->params : "{}";
 		$params = new Obj(json_decode($params));
@@ -342,7 +349,11 @@ class Controller_Cart extends Controller_Template {
 
 		$twig->crumbs = array(
 			array(
-				"title" => "Оформление заказа",
+				"title" => "Мой кабинет",
+				"url" => "user"
+			),
+			array(
+				"title" => "Корзина - оформление заказа",
 				"url" => "cart"
 			)
 		);
@@ -386,7 +397,19 @@ class Controller_Cart extends Controller_Template {
 		{
 			$twig->crumbs = array(
 				array(
-					"title" => "Заказ №".$order->id
+					"title" => "Мой кабинет",
+					"url" => "user"
+				),
+				array(
+					"title" => "Корзина - оформление заказа",
+					"url" => "cart"
+				),
+				array(
+					"title" => "Подтверждение заказа",
+					"url" => "cart/order/".$order->id
+				),
+				array(
+					"title" => "Подтверждение заказа №".$order->id
 				)
 			);
 		}

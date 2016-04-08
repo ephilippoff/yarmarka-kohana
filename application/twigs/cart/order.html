@@ -4,9 +4,11 @@
 
 {% block header %}
 	{{ parent() }}
-	{% include 'cart/promo' %}
 {% endblock header %}
 
+{% block leftside %} 
+	{% include 'user/personal/nav' %}
+{% endblock leftside %}
 
 {% block content %}
 

@@ -39,14 +39,13 @@
 	<ul>
 		<li class="{{ (canonical_url == 'user/orders') ? 'active' }}"><a href="{{ url('user/orders') ~ query_url_str }}">История заказов</a></li>
 		<li class="{{ (canonical_url == 'user/subscriptions') ? 'active' }}"><a href="{{ url('user/subscriptions') ~ query_url_str }}">Подписки</a></li>
-		<li class="{{ (canonical_url == 'user/cart') ? 'active' }}"><a href="{{ url('user/cart') ~ query_url_str }}">Корзина</a></li>
+		<li class="{{ (canonical_url == 'user/cart') ? 'active' }}"><a href="{{ url('cart') ~ query_url_str }}">Корзина</a></li>
 	</ul>
-
 
 	{% if user.org_type == 2 %}
 	<span>Управление компанией</span>
 	<ul>
-		<li><a href="{{ url('user/orginfo') ~ query_url_str }}" class="{{ (canonical_url == 'user/orginfo') ? 'active' }}">Данные компании</a></li>
+		<li class="{{ (canonical_url == 'user/orginfo') ? 'active' }}"><a href="{{ url('user/orginfo') ~ query_url_str }}">Данные компании</a></li>
 		<li class="{{ (canonical_url == 'user/employers') ? 'active' }}"><a href="{{ url('user/employers') ~ query_url_str }}">Сотрудники</a></li>
 		<li class="{{ (canonical_url == 'user/objectload') ? 'active' }}"><a href="{{ url('user/objectload') ~ query_url_str }}">Массовая загрузка</a></li>
 	</ul>

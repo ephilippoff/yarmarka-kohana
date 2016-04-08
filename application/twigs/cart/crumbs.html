@@ -1,9 +1,17 @@
 <div class="breadcrumbs-cont module mt10">
+	<div class="crums-wrap clearfix">
+		<a href="/{{sphinx_search_query}}" rel="nofollow" class="hidden-xs hidden-sm">Главная</a>
+		<a href="/{{sphinx_search_query}}" rel="nofollow" class="hidden-lg hidden-md home-a"><i class="fa fa-home"></i></a>
+		{% for crumb in crumbs %}
+			{% if crumb.url %}
+				<i class="fa fa-angle-right hidden-xs hidden-sm"></i> <a href="{{ url(crumb.url) }}" class="crumbs-item">{{crumb.title}}</a>
+			{% endif %}
+		{% endfor %}
+	</div>
 	{% for crumb in crumbs %}
-		{% if crumb.url %}
-			<a href="{{ url(crumb.url) }}" class="captionbold">{{crumb.title}}</a> /
-		{% else  %}
-			<h1>{{crumb.title}}</h1>
+		{% if not crumb.url %}
+			<h1 class="captionbold crumbs-h1" style="display: block;">{{crumb.title}}</h1>
 		{% endif %}
 	{% endfor %}
 </div>
+
