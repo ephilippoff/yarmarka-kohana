@@ -16,6 +16,10 @@ class Controller_Static extends Controller_Template {
 		$limit = $this->request->post("limit");
 		$sendmail = $this->request->post("sendmail");
 
+		if (!$limit) {
+			$limit = 10;
+		}
+
 		$subquery = DB::select("o.id")
                         ->from(array("object","o") )
                         ->where("o.date_expiration","<", DB::expr("NOW()"))
