@@ -26,10 +26,6 @@ class Controller_Cart extends Controller_Template {
 
 		$twig->crumbs = array(
 			array(
-				"title" => "Мой кабинет",
-				"url" => "user"
-			),
-			array(
 				"title" => "Корзина - оформление заказа"
 			)
 		);

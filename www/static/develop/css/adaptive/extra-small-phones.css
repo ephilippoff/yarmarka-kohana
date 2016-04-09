@@ -222,6 +222,53 @@
 	#flip-scroll td { border-left: 0; border-right: 0; border-bottom: 0; }
 	#flip-scroll tbody tr { border-left: 1px solid #babcbf; }
 	#flip-scroll td:last-child { border-bottom: 1px solid #babcbf; }
+
+
+
+
+	#block-table table, 
+	#block-table thead, 
+	#block-table tbody, 
+	#block-table th, 
+	#block-table td, 
+	#block-table tr { 
+		display: block; 
+	}
+
+	#block-table tr{
+		margin-bottom: 15px;
+	}
+ 
+	#block-table thead tr { 
+		position: absolute;
+		top: -9999px;
+		left: -9999px;
+	}
+ 
+	#block-table tr { border: 1px solid #ccc; }
+ 
+	#block-table td { 
+		border: none;
+		border-bottom: 1px solid #eee; 
+		position: relative;
+		padding-left: 50%; 
+		white-space: normal;
+		text-align:left;
+	}
+ 
+	#block-table td:before { 
+		position: absolute;
+		top: 6px;
+		left: 6px;
+		width: 45%; 
+		padding-right: 10px; 
+		white-space: nowrap;
+		text-align:left;
+		font-weight: bold;
+	}
+ 
+
+	#block-table td:before { content: attr(data-title); }
 }
 
 @media (max-width: 570px){
