@@ -1,12 +1,10 @@
-<div class="row {% if (onPageFlag == 'search') or (onPageFlag == 'detail') %} hidden-sm {% endif %}">
+<div class="row {% if (onPageFlag == 'search') or (onPageFlag == 'detail') %} hidden-sm {% endif %} hidden-xs">
 	<div class="col-md-12 col-sm-7 col-xs-12 ">
 		<div class="crimson-theme br2 left_block" >
 			<div class="menu-cont2 brt2">
 				<div class="row">
 					<div class="col-md-12 clearfix">
 						<div class="title_block left hidden-xs">{% if menuName == 'mainmenu' %}Объявления{% else %}Разделы новостей{% endif %}</div>
-						<!-- Другой текст для мобильных -->
-						<span class="title_block left hidden-sm hidden-lg hidden-md"><a href="/kupony" style="color:inherit;">Купоны</a></span>
 					</div>
 				</div>			
 			</div>
@@ -25,7 +23,7 @@
 		{% include 'index/promo/news' %}
 	</div>
 </div>
-<div class="row">
+<div class="row hidden-xs">
 	{% include 'index/promo/kupon' with {'sidebar' : true} %}
 </div>
 
