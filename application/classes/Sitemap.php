@@ -5,6 +5,7 @@
 		protected $gzipLevel = 9;
 		protected $compareBufferSize = 524288;
 		protected $maxPerStep1 = 50000;
+		protected $maxPerStep2 = 50000;
 		protected $maxFiles = 100;
 		protected $cityName = 'surgut';
 
@@ -141,6 +142,7 @@
 			$objects = ORM::factory('Object')
 				->where('date_created', '>', date('Y-m-d H:i:s', $lastModified))
 				->or_where('date_updated', '>', date('Y-m-d H:i:s', $lastModified))
+				->limit($this->maxPerStep2)
 				->find_all();
 			$ok = false;
 			foreach($objects as $object) {
