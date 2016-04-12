@@ -131,7 +131,7 @@
 								<div class="inp-cont-long ">
 									<div class="inp-cont">
 										<div class="pt4">											
-											<input type="checkbox" name="do_not_show_company_info" <? if ($form_data->_edit AND $object->style == "p") echo "checked"; ?>/>
+											<input type="checkbox" name="do_not_show_company_info" <? if (($form_data->_edit AND $object->style == "p") OR !$form_data->_edit) echo "checked"; ?>/>
 										</div>
 									</div>
 								</div><!--inp-cont-short-->
