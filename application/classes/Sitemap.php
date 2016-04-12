@@ -6,7 +6,7 @@
 		protected $compareBufferSize = 524288;
 		protected $maxPerStep1 = 50000;
 		protected $maxPerStep2 = 50000;
-		protected $selectLimit = 50;
+		protected $selectLimit = 1000;
 		protected $maxFiles = 100;
 		protected $cityName = 'surgut';
 
@@ -124,7 +124,7 @@
 					->on('attribute.id','=','reference.attribute')
 				->join('category')
 					->on('category.id', '=', 'reference.category')
-				->where('attribute_element.id', 'IN', $objectSubQuery)
+				// ->where('attribute_element.id', 'IN', $objectSubQuery)
 				->where('reference.is_seo_used','=',1)
 				->order_by('category.id')
 				->limit($this->selectLimit)
@@ -185,11 +185,11 @@
 			$ok = false;
 
 			while($total < $this->maxPerStep2 && $lastPage != 0) {
-
+$x = time();
 				$objects = ORM::factory('Object')
 					->where('date_created', '>', date('Y-m-d H:i:s', $lastModified))
 					->or_where('date_updated', '>', date('Y-m-d H:i:s', $lastModified))
-					->limit(min($this->maxPerStep2 - $total, $this->step2PerPage))
+					->limit(min($this->maxPerStep2 - $total, $this->selectLimit))
 					->offset($total)
 					->find_all();
 				$lastPage = count($objects);
@@ -206,6 +206,7 @@
 							, 'lastmod' => date('Y-m-d\TH:i:sP', strtotime($object->date_updated ? $object->date_updated : $object->date_created))
 						)));
 				}
+echo (time() - $x) . "\r\n";
 			}
 
 			if ($ok) {
@@ -220,9 +221,7 @@
 			$step1FileName = '1.xml.gz';
 			$step1OutFile = $sitemapsPath . $step1FileName;
 			$step1OutFileTemp = $step1OutFile . '.tmp';
-			$x = time();
 			$this->getStep1Data($step1OutFileTemp);
-			echo (date() - $x) . '<br />';die;
 			$changed = !$this->filesEq($step1OutFile, $step1OutFileTemp);
 			if ($changed) {
 				copy($step1OutFileTemp, $step1OutFile);
