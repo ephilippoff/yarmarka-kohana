@@ -6,6 +6,7 @@
 		protected $compareBufferSize = 524288;
 		protected $maxPerStep1 = 50000;
 		protected $maxPerStep2 = 50000;
+		protected $selectLimit = 50;
 		protected $maxFiles = 100;
 		protected $cityName = 'surgut';
 
@@ -97,79 +98,131 @@
 		protected function getStep1Data($file) {
 			$this->openFile($file);
 			$this->writeFile($this->getSitemapHeader());
-			$categories = ORM::factory('Category')->find_all();
+			$total = 0;
 			$counter = 0;
-			foreach ($categories as $category) {
-	            if (!$category->url) continue;
+			$lastCategoryUrl = NULL;
+			// prepare query
 
-	            $this->writeFile($this->getSitemapEntry(array(
-	                'loc' => $this->makeUrl($category->url),
-	                'changefreq' => 'daily',
-	                'priority' => '0.8'
-	            )));
-	            $counter++;
+			// 1. published objects inner query
+			$objectSubQuery =  DB::select('value')
+				->from('data_list')
+				->join('object')
+					->on('data_list.object','=','object.id') 
+				->where('active','=','1')
+				->where('is_published','=','1')
+				->where('category','=', DB::expr('category.id'));
 
-	            if ($counter >= $this->maxPerStep1) {
-	            	break;
-	            }
+			// 2. prepare attributes elements query
+			$categoriesQuery = DB::select(
+						array('attribute_element.url', 'element_url')
+						, array('category.url', 'category_url')
+					)
+				->from('attribute_element')
+				->join('attribute')
+					->on('attribute_element.attribute','=','attribute.id')
+				->join('reference')
+					->on('attribute.id','=','reference.attribute')
+				->join('category')
+					->on('category.id', '=', 'reference.category')
+				->where('attribute_element.id', 'IN', $objectSubQuery)
+				->where('reference.is_seo_used','=',1)
+				->order_by('category.id')
+				->limit($this->selectLimit)
+				->offset($total);
+			// prepare query done
+			while(true) {
+				// exec
+				$x = time();
+				$categoriesQuery->offset($total);
+				$categories = $categoriesQuery->execute();
+				
+				foreach ($categories as $item) {
+					$total++;
+		            if (!$item['category_url']) continue;
 
-	            $elements = ORM::factory('Attribute_Element')
-	                            ->get_elements_with_published_objects($category->id)
-	                            ->cached(Date::DAY)
-	                            ->find_all();
+		            if ($lastCategoryUrl != $item['category_url']) {
+						$this->writeFile($this->getSitemapEntry(array(
+							'loc' => $this->makeUrl($item['category_url']),
+							'changefreq' => 'daily',
+							'priority' => '0.8'
+						)));
+						$lastCategoryUrl = $item['category_url'];
+						$counter++;
+						if ($counter >= $this->maxPerStep1) {
+							break;
+						}
+					}
 
-	            foreach ($elements as $element) {
-	                if (!$element->url) continue;
-	                $this->writeFile($this->getSitemapEntry(array(
-	                    'loc' => $this->makeUrl($category->url . '/' . $element->url),
-	                    'changefreq' => 'daily',
-	                    'priority' => '0.8'
-	                )));
-	                $counter++;
-	                if ($counter >= $this->maxPerStep1) {
-		            	break;
+		            if (!$item['element_url']) {
+		            	continue;
 		            }
-	            }
-	            if ($counter >= $this->maxPerStep1) {
-	            	break;
-	            }
-	        }
-	        $this->writeFile($this->getSitemapFooter());
+
+					$this->writeFile($this->getSitemapEntry(array(
+						'loc' => $this->makeUrl($item['category_url'] . '/' . $item['element_url']),
+						'changefreq' => 'daily',
+						'priority' => '0.8'
+					)));
+					$counter++;
+					if ($counter >= $this->maxPerStep1) {
+						break;
+					}
+		        }
+
+		        echo 'Sec: ' . (time() - $x) . ' Rows: ' . $total . "\r\n";
+
+		        if ($counter >= $this->maxPerStep1 || count($categories) == 0) {
+		        	break;
+		        }
+		    }
+
+		    $this->writeFile($this->getSitemapFooter());
 	        $this->closeFile();
 		}
 
 		protected function getStep2Data($lastModified, $file) {
-			$objects = ORM::factory('Object')
-				->where('date_created', '>', date('Y-m-d H:i:s', $lastModified))
-				->or_where('date_updated', '>', date('Y-m-d H:i:s', $lastModified))
-				->limit($this->maxPerStep2)
-				->find_all();
+			$total = 0;
+			$lastPage = -1;
 			$ok = false;
-			foreach($objects as $object) {
-				if (!$ok) {
-					$this->openFile($file);
-					$ok = true;
+
+			while($total < $this->maxPerStep2 && $lastPage != 0) {
+
+				$objects = ORM::factory('Object')
+					->where('date_created', '>', date('Y-m-d H:i:s', $lastModified))
+					->or_where('date_updated', '>', date('Y-m-d H:i:s', $lastModified))
+					->limit(min($this->maxPerStep2 - $total, $this->step2PerPage))
+					->offset($total)
+					->find_all();
+				$lastPage = count($objects);
+				$total += $lastPage;
+				foreach($objects as $object) {
+					if (!$ok) {
+						$this->openFile($file);
+						$ok = true;
+					}
+					$this->writeFile($this->getSitemapEntry(array(
+							'loc' => $object->get_url()
+							, 'changefreq' => 'monthly'
+							, 'priority' => '0.5'
+							, 'lastmod' => date('Y-m-d\TH:i:sP', strtotime($object->date_updated ? $object->date_updated : $object->date_created))
+						)));
 				}
-				$this->writeFile($this->getSitemapEntry(array(
-						'loc' => $object->get_url()
-						, 'changefreq' => 'monthly'
-						, 'priority' => '0.5'
-						, 'lastmod' => date('Y-m-d\TH:i:sP', strtotime($object->date_updated ? $object->date_updated : $object->date_created))
-					)));
 			}
+
 			if ($ok) {
 				$this->closeFile();
 			}
 		}
 
 		public function rebuild() {
-			$sitemapsPath = $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'sitemaps' . DIRECTORY_SEPARATOR;
+			$sitemapsPath = ($_SERVER['DOCUMENT_ROOT'] ? $_SERVER['DOCUMENT_ROOT'] : '.') . DIRECTORY_SEPARATOR . 'sitemaps' . DIRECTORY_SEPARATOR;
 			$bigOutputFileName = $sitemapsPath . 'index.xml';
 			// step 1
 			$step1FileName = '1.xml.gz';
 			$step1OutFile = $sitemapsPath . $step1FileName;
 			$step1OutFileTemp = $step1OutFile . '.tmp';
+			$x = time();
 			$this->getStep1Data($step1OutFileTemp);
+			echo (date() - $x) . '<br />';die;
 			$changed = !$this->filesEq($step1OutFile, $step1OutFileTemp);
 			if ($changed) {
 				copy($step1OutFileTemp, $step1OutFile);
