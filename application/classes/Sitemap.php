@@ -191,7 +191,9 @@ $x = time();
 					->or_where('date_updated', '>', date('Y-m-d H:i:s', $lastModified))
 					->limit(min($this->maxPerStep2 - $total, $this->selectLimit))
 					->offset($total)
-					->find_all();
+					->order_by('date_updated', 'desc')
+					->find_all()
+					->as_array();
 				$lastPage = count($objects);
 				$total += $lastPage;
 				foreach($objects as $object) {
