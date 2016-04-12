@@ -17,7 +17,7 @@
 			<div class="m_poll">
 				<div class="left-b">
 					<address>
-						<div>Телефон:<span class="tel">+7(3452)492-100</span></div>
+						<div>Телефон:<span class="tel">+7(3452)56-84-04</span></div>
 						<div class="e-mail">E-mail: info@yarmarka.biz </div>
 						<div class="adr">
 						   <span class="locality"></span>
