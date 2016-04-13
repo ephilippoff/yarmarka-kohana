@@ -372,7 +372,8 @@ class Lib_PlacementAds_AddEdit {
 			$contacts[] = array(
 				'contact_obj' 	=> $contact,
 				'value' 		=> $value,
-				'type_id' 	=> $type_id
+				'type_id' 		=> $type_id,
+				'moderate'		=> $contact->moderate
 			);
 
 		}

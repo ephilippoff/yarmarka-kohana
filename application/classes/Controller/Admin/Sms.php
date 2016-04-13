@@ -40,6 +40,32 @@ class Controller_Admin_Sms extends Controller_Admin_Template {
 		$offset = ($page AND $page != 1) ? ($page-1) * $limit : 0;	
 		
 		$list = ORM::factory('Email');
+
+		$search_filters = array();
+
+		if ($title = $this->request->query('title'))
+		{
+			$search_filters["title"] = strtolower(trim($title));
+			$list = $list->where(DB::expr('w_lower("title")'),'LIKE','%'.mb_strtolower(trim($title)).'%');
+		} 
+
+		if ($recipient = $this->request->query('recipient'))
+		{
+			$search_filters["recipient"] = strtolower(trim($recipient));
+			$list = $list->where(DB::expr('w_lower("recipient")'),'LIKE','%'.mb_strtolower(trim($recipient)).'%');
+		} 
+
+		if ($date = $this->request->query('date'))
+		{
+			$search_filters["date"] = $date;
+			if ( $date['from'] ) {
+				$list = $list->where('created_on','>=',$date['from']);
+			}
+			if ( $date['to'] ) {
+				$list = $list->where('created_on','<=',$date['to']);
+			}
+			
+		} 
 		
 		// количество общее
 		$clone_to_count = clone $list;
@@ -58,7 +84,9 @@ class Controller_Admin_Sms extends Controller_Admin_Template {
 			))->route_params(array(
 				'controller' => 'sms',
 				'action'     => 'emails',
-			));							
+			));
+
+		$this->template->search_filters = $search_filters;
 	}
 
 	public function action_email()

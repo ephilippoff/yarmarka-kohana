@@ -4,6 +4,37 @@
 	.success{background-color: greenyellow}
 </style>
 
+<?=HTML::script('bootstrap/datepicker/js/bootstrap-datepicker.js')?>
+<?=HTML::style('bootstrap/datepicker/css/datepicker.css')?>
+
+<script type="text/javascript" charset="utf-8">
+	$(document).ready(function() {
+		// enable datepicker
+		$('.dp').datepicker({
+			format:	'yyyy-mm-dd'
+		}).on('changeDate', function(){
+			$(this).datepicker('hide');
+		});
+
+	});
+</script>
+
+<form class="form-inline">
+		<div class="input-prepend">
+			<span class="add-on">Тема</span>
+			<input class="span2" id="prependedInput" type="text" placeholder="" name="title" value="<?=Arr::get($search_filters, 'title')?>">
+		</div>
+		<div class="input-prepend">
+			<span class="add-on">Получатель</span>
+			<input class="span2" id="prependedInput" type="text" placeholder="" name="recipient" value="<?=Arr::get($search_filters, 'recipient')?>">
+		</div>
+		<input type="text" class="input-small dp" placeholder="date from" name="date[from]" value="<?=Arr::get(@$search_filters['date'], 'from')?>">
+		<input type="text" class="input-small dp" placeholder="date to" name="date[to]" value="<?=Arr::get(@$search_filters['date'], 'to' )?>">
+
+		<input type="submit" name="" value="Filter" class="btn btn-primary">
+		<input type="reset" name="" value="Clear" class="btn" onclick="document.location='/khbackend/sms/emails';">
+</form>
+
 <table class="table table-hover table-condensed articles">
 <thead>
 	<tr>
