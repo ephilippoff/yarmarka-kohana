@@ -359,6 +359,7 @@ class Lib_PlacementAds_AddEdit {
 							'value' 		=> $value,
 							'type' 			=> $contact_type->id,
 							'type_name' 	=> $contact_type->name,
+							'moderate'		=> $contact->moderate
 						);
 					}
 				}
@@ -711,7 +712,7 @@ class Lib_PlacementAds_AddEdit {
 		elseif (!$category OR ( $category AND !in_array($category->id, $exclusion) AND !$params->itis_massload ) )
 		{
 			$mobile = array_filter(array_values($this->contacts), function($v){
-				return ($v["type"] == 1);
+				return ($v["type"] == 1 OR ($v["type"] == 2 AND $v["moderate"] == 1) );
 			});
 			if (!count($mobile))
 			{
