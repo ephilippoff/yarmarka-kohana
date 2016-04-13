@@ -74,7 +74,7 @@
 		}
 
 		protected function makeUrl($part) {
-			return $this->checkForPretty('http://' . $this->cityName . '.' . $this->config['main_domain'] . '/' . $part);
+			return htmlspecialchars($this->checkForPretty('http://' . $this->cityName . '.' . $this->config['main_domain'] . '/' . $part));
 		}
 
 		protected function getSitemapHeader() {
@@ -168,7 +168,7 @@
 					}
 		        }
 
-		        echo 'Sec: ' . (time() - $x) . ' Rows: ' . $total . "\r\n";
+		        echo 'Seconds: ' . (time() - $x) . ' Rows: ' . $total . "\r\n";
 
 		        if ($counter >= $this->maxPerStep1 || count($categories) == 0) {
 		        	break;
@@ -191,7 +191,7 @@ $x = time();
 					->or_where('date_updated', '>', date('Y-m-d H:i:s', $lastModified))
 					->limit(min($this->maxPerStep2 - $total, $this->selectLimit))
 					->offset($total)
-					->order_by('date_updated', 'desc')
+					->order_by(DB::expr('(case when date_updated is null then date_created else date_updated end)'), 'desc')
 					->find_all()
 					->as_array();
 				$lastPage = count($objects);
@@ -199,16 +199,17 @@ $x = time();
 				foreach($objects as $object) {
 					if (!$ok) {
 						$this->openFile($file);
+						$this->writeFile($this->getSitemapHeader());
 						$ok = true;
 					}
 					$this->writeFile($this->getSitemapEntry(array(
-							'loc' => $object->get_url()
+							'loc' => htmlspecialchars($object->get_url())
 							, 'changefreq' => 'monthly'
 							, 'priority' => '0.5'
 							, 'lastmod' => date('Y-m-d\TH:i:sP', strtotime($object->date_updated ? $object->date_updated : $object->date_created))
 						)));
 				}
-echo (time() - $x) . "\r\n";
+echo 'Seconds: ' . (time() - $x) . ' Rows: ' . $lastPage . "\r\n";
 			}
 
 			if ($ok) {
