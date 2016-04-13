@@ -5,7 +5,7 @@
 		protected $gzipLevel = 9;
 		protected $compareBufferSize = 524288;
 		protected $maxPerStep1 = 50000;
-		protected $maxPerStep2 = 50000;
+		protected $maxPerStep2 = 43000;
 		protected $selectLimit = 1000;
 		protected $maxFiles = 100;
 		protected $cityName = 'surgut';
