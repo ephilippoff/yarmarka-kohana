@@ -203,7 +203,7 @@ $x = time();
 						$ok = true;
 					}
 					$this->writeFile($this->getSitemapEntry(array(
-							'loc' => htmlspecialchars($object->get_url())
+							'loc' => $this->makeUrl($object->get_url())
 							, 'changefreq' => 'monthly'
 							, 'priority' => '0.5'
 							, 'lastmod' => date('Y-m-d\TH:i:sP', strtotime($object->date_updated ? $object->date_updated : $object->date_created))
