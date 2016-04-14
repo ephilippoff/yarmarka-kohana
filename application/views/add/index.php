@@ -422,7 +422,7 @@
 			<? if ( property_exists($form_data, 'subject') ): ?>
 				<div class="smallcont" id="div_subject">
 					<div class="labelcont">
-							<label><span>Заголовок:</span></label>
+							<label><span>Заголовок объявления:</span></label>
 					</div>
 					<div class="fieldscont">
 						<div class="inp-cont-long">
@@ -1007,7 +1007,7 @@
 <script id="template-subject" type="text/template">
 	<div class="smallcont" id="div_subject">
 		<div class="labelcont">
-				<label><span>Заголовок:</span></label>
+				<label><span>Заголовок объявления:</span></label>
 		</div>
 		<div class="fieldscont">
 			<div class="inp-cont-long">

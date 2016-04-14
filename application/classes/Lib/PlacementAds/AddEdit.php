@@ -277,7 +277,7 @@ class Lib_PlacementAds_AddEdit {
 		if ($category AND !$category->title_auto_fill AND !$params->itis_massload)
 		{
 			$validation->rules('title_adv', array(
-				array('not_empty', array(':value', "Заголовок")),
+				array('not_empty', array(':value', "Заголовок объявления")),
 				array('min_length', array(':value', 10, "Заголовок")),
 			));
 		}
