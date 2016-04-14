@@ -6,6 +6,7 @@
 		protected $compareBufferSize = 524288;
 		protected $maxPerStep1 = 50000;
 		protected $maxPerStep2 = 43000;
+		//protected $maxPerStep2 = 20;
 		protected $selectLimit = 1000;
 		protected $maxFiles = 100;
 		protected $cityName = 'surgut';
@@ -213,6 +214,7 @@ echo 'Seconds: ' . (time() - $x) . ' Rows: ' . $lastPage . "\r\n";
 			}
 
 			if ($ok) {
+				$this->writeFile($this->getSitemapFooter());
 				$this->closeFile();
 			}
 		}
