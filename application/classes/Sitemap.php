@@ -5,8 +5,9 @@
 		protected $gzipLevel = 9;
 		protected $compareBufferSize = 524288;
 		protected $maxPerStep1 = 50000;
-		protected $maxPerStep2 = 50000;
-		protected $selectLimit = 50;
+		protected $maxPerStep2 = 43000;
+		//protected $maxPerStep2 = 20;
+		protected $selectLimit = 1000;
 		protected $maxFiles = 100;
 		protected $cityName = 'surgut';
 
@@ -74,7 +75,7 @@
 		}
 
 		protected function makeUrl($part) {
-			return $this->checkForPretty('http://' . $this->cityName . '.' . $this->config['main_domain'] . '/' . $part);
+			return htmlspecialchars($this->checkForPretty('http://' . $this->cityName . '.' . $this->config['main_domain'] . '/' . $part));
 		}
 
 		protected function getSitemapHeader() {
@@ -124,7 +125,7 @@
 					->on('attribute.id','=','reference.attribute')
 				->join('category')
 					->on('category.id', '=', 'reference.category')
-				->where('attribute_element.id', 'IN', $objectSubQuery)
+				// ->where('attribute_element.id', 'IN', $objectSubQuery)
 				->where('reference.is_seo_used','=',1)
 				->order_by('category.id')
 				->limit($this->selectLimit)
@@ -132,6 +133,7 @@
 			// prepare query done
 			while(true) {
 				// exec
+				$x = time();
 				$categoriesQuery->offset($total);
 				$categories = $categoriesQuery->execute();
 				
@@ -166,7 +168,7 @@
 						break;
 					}
 		        }
-
+		        echo 'Seconds: ' . (time() - $x) . ' Rows: ' . $total . "\r\n";
 		        if ($counter >= $this->maxPerStep1 || count($categories) == 0) {
 		        	break;
 		        }
@@ -182,36 +184,41 @@
 			$ok = false;
 
 			while($total < $this->maxPerStep2 && $lastPage != 0) {
-
+$x = time();
 				$objects = ORM::factory('Object')
 					->where('date_created', '>', date('Y-m-d H:i:s', $lastModified))
 					->or_where('date_updated', '>', date('Y-m-d H:i:s', $lastModified))
-					->limit(min($this->maxPerStep2 - $total, $this->step2PerPage))
+					->limit(min($this->maxPerStep2 - $total, $this->selectLimit))
 					->offset($total)
-					->find_all();
+					->order_by(DB::expr('(case when date_updated is null then date_created else date_updated end)'), 'desc')
+					->find_all()
+					->as_array();
 				$lastPage = count($objects);
 				$total += $lastPage;
 				foreach($objects as $object) {
 					if (!$ok) {
 						$this->openFile($file);
+						$this->writeFile($this->getSitemapHeader());
 						$ok = true;
 					}
 					$this->writeFile($this->getSitemapEntry(array(
-							'loc' => $object->get_url()
+							'loc' => $this->makeUrl($object->get_url())
 							, 'changefreq' => 'monthly'
 							, 'priority' => '0.5'
 							, 'lastmod' => date('Y-m-d\TH:i:sP', strtotime($object->date_updated ? $object->date_updated : $object->date_created))
 						)));
 				}
+echo 'Seconds: ' . (time() - $x) . ' Rows: ' . $lastPage . "\r\n";
 			}
 
 			if ($ok) {
+				$this->writeFile($this->getSitemapFooter());
 				$this->closeFile();
 			}
 		}
 
 		public function rebuild() {
-			$sitemapsPath = $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'sitemaps' . DIRECTORY_SEPARATOR;
+			$sitemapsPath = ($_SERVER['DOCUMENT_ROOT'] ? $_SERVER['DOCUMENT_ROOT'] : '.') . DIRECTORY_SEPARATOR . 'sitemaps' . DIRECTORY_SEPARATOR;
 			$bigOutputFileName = $sitemapsPath . 'index.xml';
 			// step 1
 			$step1FileName = '1.xml.gz';
@@ -219,7 +226,6 @@
 			$step1OutFileTemp = $step1OutFile . '.tmp';
 			$x = time();
 			$this->getStep1Data($step1OutFileTemp);
-			echo (date() - $x) . '<br />';die;
 			$changed = !$this->filesEq($step1OutFile, $step1OutFileTemp);
 			if ($changed) {
 				copy($step1OutFileTemp, $step1OutFile);
