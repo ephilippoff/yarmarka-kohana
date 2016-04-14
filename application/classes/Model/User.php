@@ -169,6 +169,22 @@ class Model_User extends Model_Auth_User {
 		return $query->find_all();
 	}
 
+	public function has_approved_contact()
+	{
+		if ( ! $this->loaded())
+		{
+			return FALSE;
+		}
+
+		$contact = ORM::factory('Contact')
+						->where("verified_user_id","=",$this->id)
+						->where("contact_type_id","IN", array(1,2))
+						->where("moderate","=",1)
+						->find();
+
+		return $contact->loaded() ? $contact : FALSE;
+	}
+
 	public function add_contact($contact_type_id, $contact_str, $moderate = 0, $skip_linking = 0)
 	{
 		if ( ! $this->loaded())

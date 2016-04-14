@@ -708,25 +708,28 @@ class Lib_PlacementAds_AddEdit {
 		if ( !count($this->contacts))
 		{
 			$errors['contacts'] = Kohana::message('validation/object_form', 'empty_contacts');
-		} 
-		elseif (!$category OR ( $category AND !in_array($category->id, $exclusion) AND !$params->itis_massload ) )
-		{
-			$mobile = array_filter(array_values($this->contacts), function($v){
-				return ($v["type"] == 1 OR ($v["type"] == 2 AND $v["moderate"] == 1) );
-			});
-			if (!count($mobile))
-			{
-				$errors['contacts'] = "Необходимо указать и подтвердить хотя бы один мобильный телефон";
-			}
-		} elseif ( $category AND in_array($category->id, $exclusion) AND !$params->itis_massload) {
-			$mobile = array_filter(array_values($this->contacts), function($v){
-				return ($v["type"] == 5);
-			});
-			if (!count($mobile))
-			{
-				$errors['contacts'] = "Необходимо указать Email";
-			}
+		} elseif( $user AND !$user->has_approved_contact() AND !$params->itis_massload) {
+			$errors['contacts'] = "Необходимо указать и подтвердить номер мобильного телефона";
 		}
+
+		// elseif (!$category OR ( $category AND !in_array($category->id, $exclusion) AND !$params->itis_massload ) )
+		// {
+		// 	$mobile = array_filter(array_values($this->contacts), function($v){
+		// 		return ($v["type"] == 1 OR ($v["type"] == 2 AND $v["moderate"] == 1) );
+		// 	});
+		// 	if (!count($mobile))
+		// 	{
+		// 		$errors['contacts'] = "Необходимо указать и подтвердить хотя бы один мобильный телефон";
+		// 	}
+		// } elseif ( $category AND in_array($category->id, $exclusion) AND !$params->itis_massload) {
+		// 	$mobile = array_filter(array_values($this->contacts), function($v){
+		// 		return ($v["type"] == 5);
+		// 	});
+		// 	if (!count($mobile))
+		// 	{
+		// 		$errors['contacts'] = "Необходимо указать Email";
+		// 	}
+		// }
 
 		//если пользователь привязан к компании и подает объявления как от компании то не проверяем количество поданных
 		if ($user AND $category AND (!$user->linked_to_user OR !isset($params->link_to_company))) 
