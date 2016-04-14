@@ -455,7 +455,7 @@
 			<? if (property_exists($form_data, 'subject')): ?>
 				<div class="row mb10" id="div_subject">
 					<div class="col-md-3  labelcont">
-						<label>Заголовок:</label>
+						<label>Заголовок объявления:</label>
 					</div>
 					<div class="col-md-9 ">
 						<div class="inp-cont <? if ($form_data->subject["subject_error"]) echo "error"; ?>">
