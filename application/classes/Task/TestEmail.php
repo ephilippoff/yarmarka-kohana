@@ -13,10 +13,15 @@ class Task_TestEmail extends Minion_Task
 		                 ->where("o.author","=",327190)
 		                 ->limit(10)
 		                 ->execute();
+		$domain = 'http://c.yarmarka.biz';
+		if (count($objects) AND $objects[0]['city_id'] == 1979) {
+			$domain = 'http://surgut.yarmarka.biz';
+		}
 
 		 $msg = View::factory('emails/object_to_archive',
 		         array(
-		             'objects' => $objects
+		             'objects' => $objects,
+		             'domain' => $domain
 		         ))->render();
 
 		Minion_CLI::write(

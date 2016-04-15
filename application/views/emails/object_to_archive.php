@@ -34,23 +34,32 @@
 						<tr><td style="line-height: 0;" colspan="2">&nbsp;<img height="20" title="" alt="" src="data:image/gif;base64,R0lGODlhAQABAJEAAAAAAP///////wAAACH5BAEAAAIALAAAAAABAAEAAAICVAEAOw%3D%3D"></td></tr>	
 			
 
-			<tr><td colspan="2" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;line-height: 15px;">Ваши объявления успешно перемещены в архив:</td></tr>
-			<?php foreach ($objects as $obj): ?>
-			<tr>
-				<td colspan="2" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;line-height: 35px;">
-					
-						<a  href="http://surgut.yarmarka.biz/detail/<?php echo $obj['id']; ?>" style="color: #d44234;"> <?php echo $obj['title']; ?> </a><br>
-					
-				</td>
-			</tr>
-			<?php endforeach; ?>
-			
-			<tr><td style="line-height: 0;" colspan="2">&nbsp;<img height="12" title="" alt="" src="data:image/gif;base64,R0lGODlhAQABAJEAAAAAAP///////wAAACH5BAEAAAIALAAAAAABAAEAAAICVAEAOw%3D%3D"></td></tr>			
-			<tr><td colspan="2" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;line-height: 15px;">Вы можете возобновить объявления в любое время в <a style="color: #d44234;" href="http://c.yarmarka.biz/user/myads">личном кабинете</a>.</td></tr>
+						<tr><td colspan="2" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;line-height: 15px;">Ваши объявления успешно перемещены в архив:</td></tr>
+						<?php foreach ($objects as $obj): ?>
+						<tr>
+							<td colspan="2" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;line-height: 35px;">
+								
+									<a href="<?php echo $domain; ?>/detail/<?php echo $obj['id']; ?>" style="color: #d44234;"> <?php echo $obj['title']; ?> </a><br>
+								
+							</td>
+						</tr>
+						<?php endforeach; ?>
 						
-			<tr><td style="line-height: 0;" colspan="2">&nbsp;<img height="12" title="" alt="" src="data:image/gif;base64,R0lGODlhAQABAJEAAAAAAP///////wAAACH5BAEAAAIALAAAAAABAAEAAAICVAEAOw%3D%3D"></td></tr>					
-			<tr><td colspan="2" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;line-height: 15px;">Воспользуйтесь так же дополнительными сервисами в <a style="color: #d44234;" href="http://c.yarmarka.biz/user/myads">личном кабинете</a> для повышения эффективности объявлений.</td></tr>				
-			
+						<?php if ($domain == 'http://c.yarmarka.biz'): ?>
+						<tr><td style="line-height: 0;" colspan="2">&nbsp;<img height="12" title="" alt="" src="data:image/gif;base64,R0lGODlhAQABAJEAAAAAAP///////wAAACH5BAEAAAIALAAAAAABAAEAAAICVAEAOw%3D%3D"></td></tr>			
+						<tr><td colspan="2" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;line-height: 15px;">Вы можете возобновить объявления в любое время в <a style="color: #d44234;" href="http://c.yarmarka.biz/user/myads">личном кабинете</a>.</td></tr>
+									
+						<tr><td style="line-height: 0;" colspan="2">&nbsp;<img height="12" title="" alt="" src="data:image/gif;base64,R0lGODlhAQABAJEAAAAAAP///////wAAACH5BAEAAAIALAAAAAABAAEAAAICVAEAOw%3D%3D"></td></tr>					
+						<tr><td colspan="2" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;line-height: 15px;">Воспользуйтесь так же дополнительными сервисами в <a style="color: #d44234;" href="http://c.yarmarka.biz/user/myads">личном кабинете</a> для повышения эффективности объявлений.</td></tr>				
+						<?php endif; ?>
+
+						<?php if ($domain == 'http://surgut.yarmarka.biz'): ?>
+						<tr><td style="line-height: 0;" colspan="2">&nbsp;<img height="12" title="" alt="" src="data:image/gif;base64,R0lGODlhAQABAJEAAAAAAP///////wAAACH5BAEAAAIALAAAAAABAAEAAAICVAEAOw%3D%3D"></td></tr>			
+						<tr><td colspan="2" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;line-height: 15px;">Вы можете возобновить объявления в любое время в <a style="color: #d44234;" href="http://surgut.yarmarka.biz/user">личном кабинете</a>.</td></tr>
+									
+						<tr><td style="line-height: 0;" colspan="2">&nbsp;<img height="12" title="" alt="" src="data:image/gif;base64,R0lGODlhAQABAJEAAAAAAP///////wAAACH5BAEAAAIALAAAAAABAAEAAAICVAEAOw%3D%3D"></td></tr>					
+						<tr><td colspan="2" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;line-height: 15px;">Воспользуйтесь так же дополнительными сервисами в <a style="color: #d44234;" href="http://surgut.yarmarka.biz/user">личном кабинете</a> для повышения эффективности объявлений.</td></tr>				
+						<?php endif; ?>
 
 
 			
