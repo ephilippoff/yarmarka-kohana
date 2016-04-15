@@ -105,12 +105,12 @@ table.our-services td:first-child a{
 	text-align: center !important;
 }
 
-ul{
+.dotes ul{
 	list-style-type: disc;
 	padding-left: 15px;
 }
 
-ol{
+.dotes ol{
 	list-style-type: decimal;
 }
 
