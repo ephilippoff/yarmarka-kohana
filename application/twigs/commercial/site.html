@@ -1,0 +1,173 @@
+{% extends "layouts/simple" %}
+
+
+{% block header %}
+	{{ parent() }}
+	{{ css("commercial.css") }}
+	{% include 'cart/crumbs' %}
+{% endblock header %}
+
+
+{% block content %}
+
+<div class="col-lg-12">
+	
+	<table class="our-services mt20 mb20" id="block-table">
+		<thead>
+			<tr>
+				<th></th>
+				<th style="text-transform: uppercase;">Реклама на сайте</th>
+				<th>7 дней</th>
+				<th>14 дней</th>
+				<th>28 дней</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td><a href="target"><img src="../images/commercial/i_target.png" alt=""></a></td>
+				<td data-title="Услуга">
+					<a href="target" class="bold">«Точно в цель»</a>
+					<ul>
+						<li>Контекстная реклама</li>
+						<li>Размещение графических и текстовых ссылок</li>
+					</ul>
+				</td>
+				<td data-title="7 дней">от 200 руб.</td>
+				<td data-title="14 дней">от 400 руб.</td>
+				<td data-title="28 дней">от 800 руб.</td>
+			</tr>
+
+			<tr>
+				<td><a href="view"><img src="../images/commercial/i_view.png" alt=""></a></td>
+				<td data-title="Услуга">
+					<a href="view" class="bold">«У всех на виду»</a>
+					<ul>
+						<li>Баннерная реклама</li>
+						<li>Размещение рекламных баннеров в шапке страниц и справа от поисковой выдачи</li>
+					</ul>
+				</td>
+				<td data-title="Цена" colspan="3">от 100 руб./1000 показов</td>
+			</tr>
+
+			<tr>
+				<td><a href="number_one"><img src="../images/commercial/i_target.png" alt=""></a></td>
+				<td data-title="Услуга">
+					<a href="number_one" class="bold">«Номер один»</a>
+					<ul>
+						<li>Баннеры в меню</li>
+						<li>Размещение рекламного баннера в главном меню (рубрикаторе) сайта</li>
+					</ul>
+				</td>
+				<td data-title="7 дней">от 2500 руб.</td>
+				<td data-title="14 дней">от 5000 руб.</td>
+				<td data-title="28 дней">от 10000 руб.</td>
+			</tr>
+
+			<tr>
+				<td><a href="tri_slona"><img src="../images/commercial/i_3elph.png" alt=""></a></td>
+				<td data-title="Услуга">
+					<a href="tri_slona" class="bold">«Три слона»</a>
+					<ul>
+						<li>Их невозможно не заметить</li>
+						<li>Посетители раздела видят вашу рекламу постоянно</li>
+						<li>Ограничение показов отсутствует</li>
+					</ul>
+				</td>
+				<td data-title="Цена" colspan="3">от 8 руб./клик</td>
+			</tr>
+
+			<tr>
+				<td><a href="personal"><img src="../images/commercial/i_vizit_card.png" alt=""></a></td>
+				<td data-title="Услуга">
+					<a href="personal" class="bold">«Визитная карточка»</a>
+					<ul>
+						<li>Персональная страница</li>
+						<li>Создание страницы компании на базе сайта «Ярмарка-онлайн»</li>
+					</ul>
+				</td>
+				<td data-title="Цена" colspan="3">Бесплатно при покупке прайса, контекстной или банерной рекламы</td>
+			</tr>
+
+			<tr>
+				<td><a href="leader"><img src="../images/commercial/i_lider.png" alt=""></a></td>
+				<td data-title="Услуга">
+					<a href="leader" class="bold">«Лидер»</a>
+					<ul>
+						<li>Фотообъявления</li>
+						<li>Размещение фотообъявлений в начале страниц рубрик и на главной странице</li>
+					</ul>
+				</td>
+				<td data-title="7 дней">от 35 руб.</td>
+				<td data-title="14 дней">от 70 руб.</td>
+				<td data-title="28 дней">от 140 руб.</td>
+			</tr>
+
+			<tr>
+				<td><a href="premium"><img src="../images/commercial/i_premium.png" alt=""></a></td>
+				<td data-title="Услуга">
+					<a href="premium" class="bold">«Премиум»</a>
+					<ul>
+						<li>Премиум-объявления</li>
+						<li>Размещение объявления в специальном блоке, в начале страниц поисковой выдачи</li>
+					</ul>
+				</td>
+				<td data-title="7 дней">от 20 руб.</td>
+				<td data-title="14 дней">от 40 руб.</td>
+				<td data-title="28 дней">от 80 руб.</td>
+			</tr>
+
+			<tr>
+				<td><a href="full"><img src="../images/commercial/i_full.png" alt=""></a></td>
+				<td data-title="Услуга">
+					<a href="full" class="bold">«По полной»</a>
+					<ul>
+						<li>Прайс-листы</li>
+						<li>Загрузка на персональную страницу перечня ваших товаров, услуг и цен на них</li>
+					</ul>
+				</td>
+				<td data-title="7 дней"> — </td>
+				<td data-title="14 дней"> — </td>
+				<td data-title="28 дней">от 2500 руб.</td>
+			</tr>
+
+			<tr>
+				<td><a href="conveer"><img src="../images/commercial/i_konveer.png" alt=""></a></td>
+				<td data-title="Услуга">
+					<a href="conveer" class="bold">«Конвейер»</a>
+					<ul>
+						<li>Массовая загрузка</li>
+						<li>Загрузка большого колличества объявлений на сайт и удобное управление ими</li>
+					</ul>
+				</td>
+				<td data-title="7 дней"> — </td>
+				<td data-title="14 дней"> — </td>
+				<td data-title="28 дней">от 150 руб.</td>
+			</tr>
+
+			<tr>
+				<td></td>
+				<td data-title="Услуга">
+					<p class="bold mb10">Размещение новостей на сайте yarmarka.biz</p>
+					<ul>
+						<li>Новость в новостном блоке 800 рублей сутки (до 2000 знаков) вначале списка</li>
+						<li>Новости от компаний 1200 рублей сутки (до 2000 знаков) вначале списка</li>
+						<li>Новости на уик-енд (пт, сб, вс) 1300 рублей (до 2000 знаков) вначале списка</li>
+						<li>Статья 2700 т.р. (до 6000 знаков)</li>
+					</ul>
+				</td>
+				<td data-title="7 дней"> — </td>
+				<td data-title="14 дней"> — </td>
+				<td data-title="28 дней">от 800 руб.</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<a href="../uploads/YARM_Price_2015.xlsx" class="db ta-r bold mb50 fs16">Скачать прайс-лист</a>
+
+</div>
+
+{% endblock content %}
+
+{% block footer %} 
+	{{ parent() }}
+{% endblock footer %}
