@@ -13,10 +13,6 @@ class Task_ArchiveObjects extends Minion_Task
         $limit  = $params['limit'];
         $sendmail  = $params['sendmail'];
 
-        if (!$limit) {
-            $limit = 10;
-        }
-
         $this->archive($limit, $sendmail);
 
     }
@@ -24,7 +20,7 @@ class Task_ArchiveObjects extends Minion_Task
    protected function archive($limit, $sendmail) {
         $subquery = DB::select("o.id")
                         ->from(array("object","o") )
-                        ->where("o.date_expiration","<", DB::expr("NOW()"))
+                        //->where("o.date_expiration","<", DB::expr("NOW()"))
                         ->where("o.in_archive", "=", 'N' )
                         ->where("o.active", "=", 1)
                         ->limit($limit);
@@ -47,10 +43,10 @@ class Task_ArchiveObjects extends Minion_Task
 
         }
 
-        $subquery_objects_with_author = $subquery_objects_with_author->execute();
-        Minion_CLI::write('objects with author to archive: '.count($subquery_objects_with_author)."<br>");
+        $result_objects_with_author = $subquery_objects_with_author->execute();
+        Minion_CLI::write('objects with author to archive: '.count($result_objects_with_author)."<br>");
 
-        if (!count($subquery_objects_with_author)) {
+        if (!count($result_objects_with_author)) {
             return;
         }
 
