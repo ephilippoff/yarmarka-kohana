@@ -8,7 +8,20 @@ class Task_TestEmail extends Minion_Task
 	protected function _execute(array $params)
 	{
 
-		Minion_CLI::write(Email::send( 'almaznv@yandex.ru', Kohana::$config->load('email.default_from'), 'test', '	Осенью, планируя свое участие в очередном избирательном цикле, мы уже спрашивали вас о вашем отношении к предстоящим выборам и нашему участию в них. За прошедшие полгода много чего случилось, и мы хотели бы получить новые социологические данные и посмотреть, есть ли сдвиги в настроениях наших сторонников.'));
+		$objects = DB::select("o.*")
+		                 ->from(array("object","o") )
+		                 ->where("o.author","=",327190)
+		                 ->limit(10)
+		                 ->execute();
+
+		 $msg = View::factory('emails/object_to_archive',
+		         array(
+		             'objects' => $objects
+		         ))->render();
+
+		Minion_CLI::write(
+			Email::send('almaznv@yandex.ru', Kohana::$config->load('email.default_from'), 'Ваши объявления перемещены в архив', $msg)
+		);
 
 	}
 
