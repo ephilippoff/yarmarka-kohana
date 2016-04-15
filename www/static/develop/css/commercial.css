@@ -202,7 +202,7 @@ p{margin: 10px 0 !important;}
 /*Три слона*/
 
 .three-el-wrap{
-	background: url("static/develop/images/commercial/3eleph.png") no-repeat scroll left top, transparent linear-gradient(to bottom, rgb(180, 200, 227), rgb(210, 230, 232)) repeat scroll 0% 0%;
+	background: url("../../static/develop/images/commercial/3eleph.png") no-repeat scroll left top, transparent linear-gradient(to bottom, rgb(180, 200, 227), rgb(210, 230, 232)) repeat scroll 0% 0%;
 	padding-bottom: 50px;
 }
 
@@ -240,7 +240,7 @@ p{margin: 10px 0 !important;}
 }
 
 .leader-wrap{
-	background-image: url('static/develop/images/commercial/bg-leader.png');
+	background-image: url('../../static/develop/images/commercial/bg-leader.png');
 	background-repeat: no-repeat;
 	padding: 1150px 20% 0;
 	-webkit-background-size: 100% auto;
