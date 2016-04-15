@@ -95,7 +95,7 @@
             {% block body %}
                 {% block footer %} 
                     {% include 'block/footer/linkline' %}
-                    { requestblock('block_twig/debug_info', {}) }
+                    {{ requestblock('block_twig/debug_info', {}) }}
                 {% endblock footer %}
             {% endblock body%}
         </div>

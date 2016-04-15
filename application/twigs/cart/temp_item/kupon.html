@@ -8,6 +8,6 @@ class="{% if cartItem.available %}warning{%else%}danger{% endif %} js-cartitem">
 	</td>
 	<td><label for="quantity{{ cartItem.service.group_id }}">Количество:</label> <input type="number" id="quantity{{ cartItem.service.group_id }}" name="quantity{{ cartItem.service.group_id }}" value="{{cartItem.service.ids|length}}" min="1" max="{{cartItem.avail_count + 1}}"></td>
 	<td class="js-itemsum itemsum">{{cartItem.service.price_total}} руб.</td>
-	<td><span class="span-link js-edit"><i class="fa fa-pencil mr3"></i></span></td>
+	<td><span class="span-link js-edit"><i class="fa fa-pencil-square-o"></i></span></td>
 	<td><span class="span-link js-delete"><i class="fa fa-trash mr3"></i></span></td>
 </tr>

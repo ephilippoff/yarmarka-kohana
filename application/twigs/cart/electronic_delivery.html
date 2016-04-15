@@ -4,54 +4,75 @@
 
 {% block header %}
 	{{ parent() }}
-	{% include 'cart/promo' %}
 {% endblock header %}
+
+{% block leftside %} 
+	{% include 'user/personal/nav' %}
+{% endblock leftside %}
 
 
 {% block content %}
 	<p class="p10 fs16 ">Укажите контактные данные, для связи с Вами. </p>
 	<form action="/cart/electronic_delivery/{{ order.id }}" method="POST" id="js-electronic_delivery_form">
+		
+		<div class="row">
+				<div class="col-lg-12 p20">
+					<div class="js-error errors-cont mb20 red">
+						{% if errors %}
+							{% set err_values = errors|values %}
+							{{ err_values|join("<br>") }}
+						{% endif %}
+					</div>
+				</div>
+			</div>
 
-		<div class="p20">
-			<table class="cart-table table">
-				
-				<tr><td><label class="fs18 bold">E-mail</label></td><td>
+		<div class="p20 form-cont">
+			<div class="row">
+				<div class="col-md-3 labelcont">
+					<label>E-mail</label>
+				</div>
+				<div class="col-md-5 mb20">
 					<div class="input-group w100p">
 						<span class="input-group-addon bg-color-whitesmoke"><i class="fa fa-envelope-o"></i></span>
 						{% if (user) %}
-							<input class="input fields w300" type="text" name="email" value="{{ user.email }}" >
+							<input class="input fields w100p" type="text" name="email" value="{{ user.email }}" >
 						{% else  %}
-							<input class="input fields w300" type="text" name="email" value="{{ post.email }}">
+							<input class="input fields w100p" type="text" name="email" value="{{ post.email }}">
 						{% endif %}
 					</div>
-					
-				</td></tr>
-				<tr><td colspan="2">На указанный email будут отправлены купоны на приобретенные услуги</td></tr>
-			
+				</div>
+				<div class="col-md-4">На указанный email будут отправлены купоны на приобретенные услуги</div>
+			</div>
 
-				
-				<tr><td><label class="fs18 bold">Имя</label></td><td>
+			<div class="row">
+				<div class="col-md-3 labelcont">
+					<label>Имя</label>
+				</div>
+				<div class="col-md-5 mb20">
 					<div class="input-group w100p">
 						<span class="input-group-addon bg-color-whitesmoke"><i class="fa fa-user"></i></span>
-						<input class="input fields w300" type="text" name="name" value="{{ post.name }}">
+						<input class="input fields w100p" type="text" name="name" value="{{ post.name }}">
 					</div>
-					</td></tr>
-				<tr><td><label class="fs18 bold">Мобильный телефон</label></td><td>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-md-3 labelcont">
+					<label>Мобильный телефон</label>
+				</div>
+				<div class="col-md-5 mb20">
 					<div class="input-group w100p">
 						<span class="input-group-addon bg-color-whitesmoke"><i class="fa fa-mobile-phone"></i></span>
-						<input class="input fields w300 js-mobile-phone" type="text" name="phone" value="{{ post.phone }}">
+						<input class="input fields w100p js-mobile-phone" type="text" name="phone" value="{{ post.phone }}">
 					</div>
-					</td></tr>
-				<tr><td colspan="2">На указанный мобильный телефона будет отправлен номер купона. Также, имя и мобильный телефон у Вас могут спросить в момент предъявления купона (или номера) поставщику услуги</td></tr>
-			</table>
-			<div class="js-error errors-cont mb20 red">
-				{% if errors %}
-					{% set err_values = errors|values %}
-					{{ err_values|join("<br>") }}
-				{% endif %}
+				</div>
+				<div class="col-md-4 hidden-xs" style="height: 50px;">&nbsp;</div>
+				<hr style="margin-top: 20px;">
+				<div class="col-lg-12 mb20">На указанный мобильный телефона будет отправлен номер купона. Также, имя и мобильный телефон у Вас могут спросить в момент предъявления купона (или номера) поставщику услуги.</div>
 			</div>
+
 			<div class="ta-r mb20">
-				<span class="button_v2 bg-color-blue p20 white br3" onclick="$('#js-electronic_delivery_form').submit();">Сохранить<i class="fa fa-angle-double-right fa-lg ml5"></i></span>
+				<span class="button button-style1 bg-color-blue btn-next" onclick="$('#js-electronic_delivery_form').submit();">Сохранить <i class="fa fa-arrow-right"></i></span>
 			</div>
 		</div>
 	</form>

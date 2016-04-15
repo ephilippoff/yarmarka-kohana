@@ -252,9 +252,9 @@ class Kohana_Exception extends Exception {
 
 			if (Kohana::$environment === Kohana::PRODUCTION)
 			{	
-				//$_content = Request::factory('block/error_404')->execute()
+				$_content = Request::factory('block/error_404')->execute();
 				 $view = Request::factory('block/error_404')->post(array("is_system_error" => TRUE))->execute();
-				 //View::factory('layouts/default', array('_content' => $_content, '_assets' => ''));				
+				 View::factory('layouts/default', array('_content' => $_content, '_assets' => ''));				
 			}
 			else
 				// Instantiate the error view.
