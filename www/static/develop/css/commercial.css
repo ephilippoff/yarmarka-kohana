@@ -11,15 +11,15 @@
 }
 
 .services-wrap .service-item-wrap:first-child{
-	background-image: url('../../images/commercial/site.png');
+	background-image: url('../../static/develop/images/commercial/site.png');
 }
 
 .services-wrap .service-item-wrap:nth-child(2){
-	background-image: url('../../images/commercial/indoor.png');
+	background-image: url('../../static/develop/images/commercial/indoor.png');
 }
 
 .services-wrap .service-item-wrap:last-child{
-	background-image: url('../../images/commercial/outdoor.png');
+	background-image: url('../../static/develop/images/commercial/outdoor.png');
 }
 
 .service-item-wrap .title{
@@ -202,7 +202,7 @@ p{margin: 10px 0 !important;}
 /*Три слона*/
 
 .three-el-wrap{
-	background: url("/images/commercial/3eleph.png") no-repeat scroll left top, transparent linear-gradient(to bottom, rgb(180, 200, 227), rgb(210, 230, 232)) repeat scroll 0% 0%;
+	background: url("static/develop/images/commercial/3eleph.png") no-repeat scroll left top, transparent linear-gradient(to bottom, rgb(180, 200, 227), rgb(210, 230, 232)) repeat scroll 0% 0%;
 	padding-bottom: 50px;
 }
 
@@ -240,7 +240,7 @@ p{margin: 10px 0 !important;}
 }
 
 .leader-wrap{
-	background-image: url('/images/commercial/bg-leader.png');
+	background-image: url('static/develop/images/commercial/bg-leader.png');
 	background-repeat: no-repeat;
 	padding: 1150px 20% 0;
 	-webkit-background-size: 100% auto;
