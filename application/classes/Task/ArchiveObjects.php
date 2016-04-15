@@ -84,7 +84,7 @@ class Task_ArchiveObjects extends Minion_Task
 
                 Minion_CLI::write('notice send to: '.$user->email."<br>");
 
-                Email::send('a.vagapov@yarmarka.biz', Kohana::$config->load('email.default_from'), 'Ваши объявления перемещены в архив', $msg);
+                Email::send($user->email, Kohana::$config->load('email.default_from'), 'Ваши объявления перемещены в архив', $msg);
 
             }
         }
