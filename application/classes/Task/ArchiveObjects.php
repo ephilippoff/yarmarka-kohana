@@ -20,7 +20,7 @@ class Task_ArchiveObjects extends Minion_Task
    protected function archive($limit, $sendmail) {
         $subquery = DB::select("o.id")
                         ->from(array("object","o") )
-                        //->where("o.date_expiration","<", DB::expr("NOW()"))
+                        ->where("o.date_expiration","<", DB::expr("NOW()"))
                         ->where("o.in_archive", "=", 'N' )
                         ->where("o.active", "=", 1)
                         ->limit($limit);
