@@ -72,12 +72,13 @@ define([
         showContacts: function(e) {
             var s = this;
             e.preventDefault();
-            var id = $(e.currentTarget).data("id");
+            var $target = $(e.currentTarget);
+            var id = $target.data("id");
             app.ocontrol.contacts(id, {
                 code: this.ui.contactList.find("input").val(),
                 success: function(result) {
                     s.ui.contactList.html(result);
-                    $(e.currentTarget).remove();
+                    $target.remove();
                 },
                 captcha: function(result) {
                     s.ui.contactList.html(result);
