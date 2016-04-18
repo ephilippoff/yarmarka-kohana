@@ -166,6 +166,7 @@ var MainmenuView = MenuView.extend({
             submenuId = $row.data("submenu-id"), 
             submenu = "#" + submenuId;
             console.log(submenuId, submenu);
+            $(submenu).height($(submenu).parent().parent().height());
             $(submenu).show();
         }, 200);
 
