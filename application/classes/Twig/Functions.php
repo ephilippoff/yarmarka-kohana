@@ -28,8 +28,7 @@ class Twig_Functions
 
 	public static function get_categories() {
 		$service = Services_Factory::factory('Categories');
-		$categories = $service->getCategoryWithChilds(1, 5, array('title'), 2);
-
+		$categories = $service->getCategoryWithChilds(1, 5, array('title', 'url'), 2);
 		$flattern = function ($items, $level, $cb) {
 			$res = array();
 			foreach($items as $item) {
@@ -37,6 +36,7 @@ class Twig_Functions
 						'id' => $item['id']
 						, 'title' => $item['title']
 						, 'level' => $level + 1
+						, 'url' => $item['url']
 					);
 				$res = array_merge($res, $cb($item['childs'], $level + 1, $cb));
 			}
