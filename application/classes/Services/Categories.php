@@ -64,11 +64,11 @@
 							break;
 						}
 						if (!array_key_exists($id, $resPointer)) {
-							$resPointer[$id] = array(
-									'id' => $id,
-									'title' => $row['c' . $i . '_title'],
-									'childs' => array()
-								);
+							$resItem = array( 'childs' => array() );
+							foreach($cols as $col) {
+								$resItem[$col] = $row['c' . $i . '_' . $col];
+							}
+							$resPointer[$id] = $resItem;
 						}
 						$resPointer = &$resPointer[$id]['childs'];
 					}

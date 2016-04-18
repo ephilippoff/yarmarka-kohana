@@ -26,7 +26,7 @@
 										<i class="fa fa-caret-up"></i>
 										<select data-role="categories">
 											{% for category in get_categories() %}
-												<option value="{{ category.id }}" {% if category_id and category_id == category.id %}selected="selected"{% endif %} {% if category.level < 3 %} class="bold" {% endif %}>
+												<option data-url="{{ category.url }}" value="{{ category.id }}" {% if category_id and category_id == category.id %}selected="selected"{% endif %} {% if category.level < 3 %} class="bold" {% endif %}>
 													{{ repeat('&nbsp;&nbsp;', category.level - 1) }} {{ category.title }}
 												</option>
 											{% endfor %}
