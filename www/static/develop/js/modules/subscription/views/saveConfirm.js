@@ -2,9 +2,10 @@ define([ 'jquery', 'underscore', 'backbone' ], function ($, _, Backbone) {
 
 	return Backbone.View.extend({
 
+		className: 'save-confirm',
+
 		template: _.template(
-				'<div>Я хочу получать информацию о новых объявлениях:</div>'
-				+ '<div><%= info.title %></div>'
+				'<div>Я хочу получать информацию о новых объявлениях: <b><%= info.title %></b></div>'
 				+ '<ul>'
 					+ '<% _.each(info.attributes, function (item) { %>'
 						+ '<li>'
@@ -25,10 +26,10 @@ define([ 'jquery', 'underscore', 'backbone' ], function ($, _, Backbone) {
 					+ '<% if (info.with_photo) { %><li><b>Есть фото: </b>Да</li><% } %>'
 					+ '<% if (info.only_private) { %><li><b>Только частные: </b>Да</li><% } %>'
 				+ '</ul>'
-				+ '<div>На электронную почту <a href="mailto:<%= info.email %>"><%= info.email %></a></div>'
+				+ '<div>Электронная почта: <a href="mailto:<%= info.email %>"><%= info.email %></a></div>'
 				+ '<div>'
-					+ '<button data-role="save">Сохранить</button>'
-					+ '<button data-role="cancel">Отменить</button>'
+					+ '<button data-role="save" class="button bg-color-blue more-button">Сохранить</button>'
+					+ '<button data-role="cancel" class="button bg-color-blue more-button">Отменить</button>'
 				+ '</div>'
 			),
 
@@ -39,6 +40,7 @@ define([ 'jquery', 'underscore', 'backbone' ], function ($, _, Backbone) {
 
 		render: function () {
 			this.$el.html(this.template(this.model.toJSON()));
+			this.$el.fadeIn(300);
 			return this.$el;
 		},
 
@@ -49,6 +51,7 @@ define([ 'jquery', 'underscore', 'backbone' ], function ($, _, Backbone) {
 
 		onCancelButtonClick: function (e) {
 			e.preventDefault();
+			this.model.set('renderAgain', false);
 			this.model.set('state', 'initial');
 		}
 

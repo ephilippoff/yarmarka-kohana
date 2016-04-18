@@ -4,7 +4,7 @@
 */
 
 // Number of page links in the begin and end of whole range
-$count_out = ( ! empty($config['count_out'])) ? (int) $config['count_out'] : 0;
+$count_out = ( ! empty($config['count_out'])) ? (int) $config['count_out'] : 3;
 // Number of page links on each side of current page
 $count_in = ( ! empty($config['count_in'])) ? (int) $config['count_in'] : 5;
 
@@ -37,18 +37,18 @@ for ($i = $n1; $i <= $n2; $i++)
 {
 	$links[$i] = $i;
 }
-// if ($use_n3)
-// {
-// 	$links[$n3] = '&hellip;';
-// }
+if ($use_n3)
+{
+	$links[$n3] = '&hellip;';
+}
 for ($i = $n4; $i <= $n5; $i++)
 {
 	$links[$i] = $i;
 }
-// if ($use_n6)
-// {
-// 	$links[$n6] = '&hellip;';
-// }
+if ($use_n6)
+{
+	$links[$n6] = '&hellip;';
+}
 for ($i = $n7; $i <= $n8; $i++)
 {
 	$links[$i] = $i;
@@ -56,22 +56,10 @@ for ($i = $n7; $i <= $n8; $i++)
 
 ?>
 
-<div class="paginator-cont module clearfix">
-	
-	<?php if ($previous_page !== FALSE): ?>
-		<a class="prev" href="<?php echo HTML::chars($page->url($previous_page)) ?>" rel="prev"><i class="fa fa-chevron-left"></i></a> 
-	<?php endif ?>
-
-
-	<?php foreach ($links as $number => $content): ?>
-		<?php if ($number === $current_page): ?>
-			<span class="active"><?php echo $content ?></span>
-		<?php else: ?>
-			<a href="<?php echo HTML::chars($page->url($number)) ?>" rel=""><?php echo $content ?></a>
-		<?php endif ?>
-	<?php endforeach ?>
-
-	<?php if ($next_page !== FALSE): ?>
-		<a class="next" href="<?php echo HTML::chars($page->url($next_page)) ?>" rel="next"><i class="fa fa-chevron-right"></i></a>
-	<?php endif ?>
+<div class="limits">
+	<ul>
+		<?php foreach ($config['limits'] as $limit => $url): ?>
+		<li><a href="<?=$config['path'].$url?>" rel="nofollow"><?=$limit ?></a></li>
+		<?php endforeach ?>
+	</ul>
 </div>

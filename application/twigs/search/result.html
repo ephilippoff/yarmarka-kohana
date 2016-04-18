@@ -2,15 +2,14 @@
 {% if check_access("object.moderate") %}
 	{% set mini_cart_path = 'detail/mini/default_tablerow_for_admin' %}
 {% endif %}
-<table class="table-result-info">
+
 	{% for object in premium_search_result %}
 		{% include mini_cart_path %}
 	{% endfor %}
-</table>
-<table class="table-result-info">
+
+
 	{% for object in main_search_result if object.compiled.url %}
 		{% include mini_cart_path %}
 	{% else %}
 		{% include 'search/noresult' %}
 	{% endfor %}
-</table>

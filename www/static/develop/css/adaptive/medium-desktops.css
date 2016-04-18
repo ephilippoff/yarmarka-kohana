@@ -40,9 +40,10 @@
 	}
 
 	.reklama-cont .banners{
-		height: 56px;
+		height: 50px;
 	}
-
+	
+	.top-line .search-cont .input-group-addon{position: relative; left: 1px;}
 
 	.coupon-item-cont .description-cont{
 		height: 60px;

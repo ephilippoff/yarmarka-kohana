@@ -12,7 +12,8 @@ define([ 'jquery', 'underscore', 'backbone' ], function($, _, Backbone) {
 			return this.$el;
 		},
 
-		onSaveButtonClick: function() {
+		onSaveButtonClick: function(e) {
+			e.preventDefault();
 			this.model.setStateSaveConfirm();
 		}
 

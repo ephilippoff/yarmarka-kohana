@@ -17,12 +17,13 @@
 {% block title %} {{ seo_attributes.title }} {% endblock title%}
 {% block meta_description %} {{ seo_attributes.description }} {% endblock meta_description%}
 
-{% block crumbs %} 
-	{% include 'search/crumbs' %}
-{% endblock crumbs %}
-
 
 {% block wrapperclass %}page-search{% endblock wrapperclass %}
+
+
+{% block crumbs %}
+	{% include 'search/crumbs' %}
+{% endblock crumbs %}
 
 {% block subcategories %}
 	{% if sphinx_category_childs|length > 0%}
@@ -39,9 +40,19 @@
 	
 {% endblock filters %}
 
+{% block control %}
+	{% include 'search/control' with {'mapButton' : true} %}
+{% endblock control %}
+
 {% block content %} 
-	{% include 'search/control' %}
 	{% include 'search/filters' %}
+	
+	{% block map %}
+		{% if category.show_map %}
+			{% include 'search/map' %}
+		{% endif %}
+	{% endblock map %}
+	
 	{% include 'search/result' %}
 	{% include 'search/paginator' %}
 {% endblock content%}
@@ -51,12 +62,6 @@
 {% endblock last_views %}
 
 
-{% block map %}
-	{% if category.show_map %}
-		{% include 'search/map' %}
-	{% endif %}
-{% endblock map %}
-
 {% block rightside %} 
 	{% set half = TRUE %}
 	{% include 'search/vip' %}
@@ -65,7 +70,11 @@
 
 
 {% block footertext %} 
+	{% if get_global('footer') %}
+		{{ get_global('footer') }}
+	{% else %}
 		{{ seo_attributes.footer }}
+	{% endif %}
 {% endblock footertext %}
 
 {% block footer %} 

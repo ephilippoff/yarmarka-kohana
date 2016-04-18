@@ -1,0 +1,155 @@
+<div class="mobile_menu">
+	<div class="preview_menu_block clearfix hidden-lg">
+		<a rel="nofollow" href="/" class="Logo_white">
+			<img src="{{ staticfile('images/Logo_white.png') }}" alt="Газета бесплатных объявлений Ярмарка-Тюменская область" title="Газета бесплатных объявлений Ярмарка-Тюменская область">
+		</a>
+		<div class="bars">
+			<span class="sw-topper"></span>
+			<span class="sw-bottom"></span>
+			<span class="sw-footer"></span>
+		</div>
+		<div class="search-cont">
+			<div class="seach-bl">
+				<div class="input-seach">
+					<form action="/" method="get" name="search-form" id="search-form1" class="js-search-form">
+						<div class="input-group w100p">
+							<input class="search placeholder form-control" name="search" id="search-input1" value="{{ search_text }}" type="text" placeholder="{% if get_session_value('site_disable') %}Сайт в режиме разработки.{% else %}Поиск объявлений{% endif %}" autocomplete="off" data-city="{{city.id}}">
+							<div class="input-group-addon">
+								<button class="button bg-color-crimson button-style1" type="submit"><i class="fa fa-search fa-lg"></i></button>
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="search-popup border-color-crimson js-search-popup-cont z400">
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="menu_content">
+		<!-- Search -->
+		<div class="search-cont" style="margin-bottom:30px;">
+			<div class="seach-bl">
+				<div class="input-seach">
+					<form action="/" method="get" name="search-form" id="search-form2" class="js-search-form">
+						<div class="input-group w100p">
+							<input class="search placeholder form-control" name="search" id="search-input2" value="{{ search_text }}" type="text" placeholder="{% if get_session_value('site_disable') %}Сайт в режиме разработки.{% else %}Поиск объявлений{% endif %}" autocomplete="off" data-city="{{city.id}}">
+							<div class="input-group-addon">
+								<button class="button bg-color-crimson button-style1" type="submit"><i class="fa fa-search fa-lg"></i></button>
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="search-popup border-color-crimson js-search-popup-cont z400">
+				</div>
+			</div>
+		</div>
+		<!-- Search end -->
+		
+		<!-- User menu -->
+		<div class="list_div" id="user_menu">
+			{% if user %}
+			<h2>{{ user.email|e }} <i class="fa fa-caret-right"></i></h2>
+			<div class="menu_container">
+				{% include "block/menu/user" with {'name' : 'outside'} %}
+			</div>
+			{% else %}
+			<h2 style="background:#C11515;">Личный кабинет<i class="fa fa-caret-right"></i></h2>
+			<div class="menu_container">
+				<a class="hidden-xxs" href="/user/login?return={{ strim(get_request_uri(), '/') }}">Вход в личный кабинет</a>
+				<a class="visible-xxs hidden-xs" href="/user/login?return={{ strim(get_request_uri(), '/') }}">Вход</a>
+				<a href="/user/registration">Регистрация</a>
+			</div>
+			{% endif %}
+			<h2>Ваш город: Сургут <i class="fa fa-caret-right"></i></h2>
+			<div class="menu_container">
+				{{ requestblock('block_twig/othercities', {'city_id': city.id, 'canonical_url': canonical_url, 'cols' : 2, 'class' : 'mobile'}) }}
+			</div>
+
+			<h2>Дополнительно <i class="fa fa-caret-right"></i></h2>
+			<div class="menu_container">
+				<a href="https://vk.com/yarmarkasurgut" target="_blank"><i class="fa fa-vk"></i> Мы Вконтакте</a>
+				<a href="http://feedback.yarmarka.biz"><i class="fa fa-question-circle mr3"></i>Техподдержка</a>
+			</div>
+		</div>
+		<!-- User menu end -->
+
+		<div id="menu">
+			<h2>Объявления <i class="fa fa-caret-right"></i></h2>
+			<div class="menu_container">
+				{{ requestblock('block_twig/mainmenu', {'city_id': city.id}) }}
+			</div>
+			<h2>Новости <i class="fa fa-caret-right"></i></h2>
+			<div class="menu_container">
+				{{ requestblock('block_twig/newsmenu', {'city_id': city.id}) }}
+			</div>
+			<h2>Купоны <i class="fa fa-caret-right"></i></h2>
+			<div class="menu_container">
+				{{ requestblock('block_twig/kuponmenu', {'city_id': city.id}) }}
+			</div>
+		</div>
+		<a href="/search_company" class="companies">Компании города</a>
+
+	</div>
+</div>
+
+<div class="popup-layer z200"></div>
+
+<script>
+;( function( $, window, document, undefined )
+{
+	'use strict';
+
+	var elSelector		= '.preview_menu_block',
+	$element		= $( elSelector );
+
+	if( !$element.length ) return true;
+
+	var elHeight		= 0,
+	elTop			= 0,
+	$document		= $( document ),
+	dHeight			= 0,
+	$window			= $( window ),
+	wHeight			= 0,
+	wScrollCurrent	= 0,
+	wScrollBefore	= 0,
+	wScrollDiff		= 0;
+
+	$window.on( 'scroll', function()
+	{
+		elHeight		= $element.outerHeight();
+		dHeight			= $document.height();
+		wHeight			= $window.height();
+		wScrollCurrent	= $window.scrollTop();
+		wScrollDiff		= wScrollBefore - wScrollCurrent;
+		elTop			= parseInt( $element.css( 'top' ) ) + wScrollDiff;
+
+			if( wScrollCurrent <= 0 ) // scrolled to the very top; element sticks to the top
+			$element.css( 'top', 0 );
+
+			else if( wScrollDiff > 0 ) // scrolled up; element slides in
+			$element.css( 'top', elTop > 0 ? 0 : elTop );
+
+			else if( wScrollDiff < 0 ) // scrolled down
+			{
+				if( wScrollCurrent + wHeight >= dHeight - elHeight )  // scrolled to the very bottom; element slides in
+				$element.css( 'top', ( elTop = wScrollCurrent + wHeight - dHeight ) < 0 ? elTop : 0 );
+
+				else // scrolled down; element slides out
+				$element.css( 'top', Math.abs( elTop ) > elHeight ? -elHeight : elTop );
+			}
+
+			wScrollBefore = wScrollCurrent;
+		});
+
+})( jQuery, window, document );
+
+$('.mobile_menu').find('.section').each(function(){
+	var id = $(this).attr('id');
+	$(this).attr('id', id+'-mobile');
+});
+
+$('.mobile_menu').find('ul.top li').each(function(){
+	var id = $(this).attr('data-submenu-id');
+	$(this).attr('data-submenu-id', id+'-mobile');
+});
+</script>

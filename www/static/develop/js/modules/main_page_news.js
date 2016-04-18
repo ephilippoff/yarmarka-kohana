@@ -54,7 +54,7 @@ define([ 'jquery', 'underscore', 'backbone' ], function () {
 			if (this.model.get('page') < this.model.get('pages')) {
 				this.$el.append(this.$nextButton);
 				this.$nextButton.fadeIn(200);
-			}
+			}else console.log(this.model.get('page'), this.model.get('pages'));
 			this.delegateEvents();
 
 		},

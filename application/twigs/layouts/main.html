@@ -2,13 +2,22 @@
 <!--[if IE]><html lang="ru" class="ie"><![endif]-->
 <!--[if !IE]><!--><html lang="ru"><!--<![endif]-->
     <head>
-        <title>{% block title %} {% endblock title%}</title>
+        <title>
+            {% if get_global('title') %}
+                {{ get_global('title') }}
+            {% else %}
+                {% block title %} {% endblock title%}
+            {% endif %}
+        </title>
         <meta charset="UTF-8">
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="Description" content="{% block meta_description %}{% endblock meta_description%}">
+        <meta name="Description" content="{% if get_global('description') %}{{ get_global('description') }}{% else %}{% block meta_description %}{% endblock meta_description%}{% endif %}">
         <meta name="robots" content="{% block meta_robots %}all{% endblock meta_robots%}">
         <link rel="shortcut icon" href="{{ staticfile("images/favicon.ico") }}">
+        {% if get_global('keywords') %}
+            <meta name="Keywords" content="{{ get_global('keywords') }}">
+        {% endif %}
         
         {% if show_canonical %}
             {% if show_canonical_simple %}
@@ -24,6 +33,7 @@
                     {{ css("bootstrap.tables.min.css") }}
                     {{ css("font-awesome.css") }}
                     {{ css("iLight.css") }}
+                    {{ css("jquery-ui.css") }}
                     {{ css("css.css") }}
                     {{ css("animate.css") }}
 
@@ -57,6 +67,7 @@
         {{ js("v2/main.js") }}
         {{ js("lib/masonry.js") }}
         {{ js("lib/adaptive.js") }}
+        {{ js("jquery-ui.min.js") }}
         <script type="text/javascript">
           var _gaq = _gaq || [];
           _gaq.push(['_setAccount', 'UA-33375349-1']);
@@ -80,12 +91,11 @@
 			</div>
 		<![endif]-->		
         <div id="popup-layer" class="z200" style="display: none;"></div>
-        <div class="wrapper container {% block wrapperclass %}{% endblock wrapperclass %}">
-			<div class="banner topline {zoneID: 42}"></div>			
+        <div class="wrapper container {% block wrapperclass %}{% endblock wrapperclass %}" id="wrap-page">			
             {% block body %}
                 {% block footer %} 
                     {% include 'block/footer/linkline' %}
-                    {{ requestblock('block_twig/debug_info', {}) }}
+                    { requestblock('block_twig/debug_info', {}) }
                 {% endblock footer %}
             {% endblock body%}
         </div>

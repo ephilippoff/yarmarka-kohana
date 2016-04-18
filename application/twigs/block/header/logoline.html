@@ -1,49 +1,55 @@
-<div class="top-line module">
+<div class="top-line module menu-cont2 hidden-sm hidden-xs" style="background: transparent; padding: 0;">
 	<div class="row">
-		<div class="col-md-2 col-sm-push-0 col-xs-6">
-			<div class="logo">
-				<a rel="nofollow" href="/">
-					<img src="{{ staticfile('images/logo.png') }}" alt="Газета бесплатных объявлений Ярмарка-Тюменская область" title="Газета бесплатных объявлений Ярмарка-Тюменская область">
-				</a>
-			</div>
+		<div class="col-md-2">
+			{% if onPageFlag == 'main' %}
+				<div class="menu-item-wrp iLight hidden-sm hidden-xs top-razdel" onclick="animated('.left_block', 'shake')" >
+				{% else %}
+				<div class="menu-item-wrp iLight hidden-sm hidden-xs top-razdel js-mainmenu-dropdown" >
+				{% endif %}
+					<span class="menu-item-cont">Объявления{% if onPageFlag != 'main' %}<i class="fa fa-caret-down ml3"></i>{% endif %}</span>
+				</div>
 		</div>
-		{% if showCatalogMenuButtonAfterLogo %}
-		<div class="menu-cont2 col-xs-6 col-sm-6 col-md-2 {{ catalogMenuAfterLogoButtonAdditionalClass }}">
-			<div class="menu-item menu-button left crimson-theme w100p iLight js-mainmenu-dropdown"><!--main-page-style iLight-disable-->
-				<span class="menu-item-cont ta-c"><i class="fa fa-bars hidden-md hidden-lg"></i>Выбрать рубрику<i class="fa fa-caret-down ml3 hidden-sm hidden-xs"></i></span>
-			</div>
-		</div>
-		{% endif %}
-		<div class="col-md-2 col-md-push-8 col-xs-6">
-			<span class="button w100p dib bg-color-crimson add-advert white ta-c pointer" onclick="window.location='/add'">Подать объявление</span>
-		</div>
-		<div class="clearfix visible-xs visible-sm"></div>
-		<div class="col-md-8 col-md-pull-2">
+		<div class="col-md-8">
 			<!--/noindex-->
 			<div class="search-cont">
 				<div class="seach-bl">
-					<div class="input-seach">
-						<form action="/" method="get" name="search-form" id="search-form" class="js-search-form">
-							<div class="input-group w100p">
-								<input class="search placeholder form-control js-search-input" name="search" id="search-input" value="{{ search_text }}" type="text" placeholder="{% if get_session_value('site_disable') %}Сайт в режиме разработки.{% else %}Поиск объявлений{% endif %}" autocomplete="off" data-city="{{city.id}}">
-								<div class="input-group-addon">
-									<button class="button bg-color-crimson button-style1" type="submit"><i class="fa fa-search fa-lg"></i></button>
+					<form action="/" method="get" name="search-form" id="search-form" class="js-search-form">
+						<div class="input-group w100p">
+							<div class="row">
+								<div class="col-lg-6 col-md-6">
+									<input class="search placeholder form-control js-search-input" name="search" id="search-input" value="{{ search_text }}" type="text" placeholder="{% if get_session_value('site_disable') %}Сайт в режиме разработки.{% else %}Поиск объявлений{% endif %}" autocomplete="off" data-city="{{city.id}}">
+								</div>
+								<div class="col-lg-5 col-md-5">
+
+									<div class="category-search">
+										<i class="fa fa-caret-down"></i>
+										<i class="fa fa-caret-up"></i>
+										<select data-role="categories">
+											{% for category in get_categories() %}
+												<option data-url="{{ category.url }}" value="{{ category.id }}" {% if category_id and category_id == category.id %}selected="selected"{% endif %} {% if category.level < 3 %} class="bold" {% endif %}>
+													{{ repeat('&nbsp;&nbsp;', category.level - 1) }} {{ category.title }}
+												</option>
+											{% endfor %}
+										</select>
+									</div>
+								</div>
+								<div class="col-lg-1 col-md-1">
+									<div class="input-group-addon clearfix">
+										<button class="button bg-color-crimson button-style1" type="submit"><i class="fa fa-search fa-lg"></i></button>
+									</div>
 								</div>
 							</div>
-						</form>
-					</div>
-					<div class="search-popup border-color-crimson js-search-popup-cont z400">
-
+						</div>
+					</form>
+					<div class="search-popup border-color-crimson js-search-popup-cont z201 find-list">
 					</div>
 				</div>
-
 			</div>
 			<!--/noindex-->
 		</div>
-		<!-- <div class="col-md-4 col-md-pull-2">
-			<a href="/" target="_blank">
-				<img class="banner" src="{{ staticfile('images/banner1.gif') }}" width="1280" height="100" alt="" title="" border="0">
-			</a>						
-		</div>	 -->
+		
+		<div class="col-md-2">
+			<span class="button w100p dib bg-color-crimson add-advert white ta-c pointer" onclick="window.location='/add'">Подать объявление</span>
+		</div>
 	</div>
 </div>

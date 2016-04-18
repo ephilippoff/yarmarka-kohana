@@ -1,12 +1,10 @@
-<div class="row {% if (onPageFlag == 'search') or (onPageFlag == 'detail') %} hidden-sm {% endif %}">
+<div class="row {% if (onPageFlag == 'search') or (onPageFlag == 'detail') %} hidden-sm {% endif %} hidden-xs">
 	<div class="col-md-12 col-sm-7 col-xs-12 ">
 		<div class="crimson-theme br2 left_block" >
 			<div class="menu-cont2 brt2">
 				<div class="row">
 					<div class="col-md-12 clearfix">
-						<span class="menu-item left hidden-xs"><span class="menu-item-cont nobg">{% if menuName == 'mainmenu' %}Объявления{% else %}Разделы новостей{% endif %}</span></span>
-						<!-- Другой текст для мобильных -->
-						<span class="menu-item left hidden-sm hidden-lg hidden-md"><span class="menu-item-cont nobg"><a href="/kupony" style="color:inherit;">Купоны</a></span></span>
+						<div class="title_block left hidden-xs">{% if menuName == 'mainmenu' %}Объявления{% else %}Разделы новостей{% endif %}</div>
 					</div>
 				</div>			
 			</div>
@@ -14,23 +12,29 @@
 				{% if staticMainMenu %}
 					{% if menuName == 'mainmenu' %}
 						{{ requestblock('block_twig/mainmenu', {'city_id': city.id, 'staticMainMenu': staticMainMenu}) }}
-					{% else %}
-						{{ requestblock('block_twig/newsmenu', {'city_id': city.id, 'staticMainMenu': staticMainMenu}) }}
-					{% endif %}
+						{% else %}
+							{{ requestblock('block_twig/newsmenu', {'city_id': city.id, 'staticMainMenu': staticMainMenu}) }}
+						{% endif %}
 				{% endif %}
 			</div>
 		</div>
 	</div>
+	<div class="hidden-lg hidden-md col-sm-5 hidden-xs">
+		{% include 'index/promo/news' %}
+	</div>
+</div>
+<div class="row hidden-xs">
 	{% include 'index/promo/kupon' with {'sidebar' : true} %}
 </div>
 
 <script>
-	$(document).ready(function(){
-		tablet(function(){
-			if ($('div').is('.kupons_block')) {
-				var height = $('.kupons_block').height();
-				$('.left_menu').css('height', height - 35);
-			};
-		});
-	});
+$('.left_block').find('.section').each(function(){
+	var id = $(this).attr('id');
+	$(this).attr('id', id+'-l');
+});
+
+$('.left_block').find('ul.top li').each(function(){
+	var id = $(this).attr('data-submenu-id');
+	$(this).attr('data-submenu-id', id+'-l');
+});
 </script>

@@ -5,28 +5,29 @@
 	<div class="body">
 		<div class="row js-object-contacts-{{object.id}}">
 			{% if object.is_published > 0 or isAdmin %}
-				<div class="col-md-6 col-sm-6">
-					<span class="author-name">{{object.contact}}</span>
-
-					<form action="">
-						
-					<div class="contacts-list-cont js-contact-list">
-						{% for contact in object.compiled.contacts %}
-							{% if contact.type == '5' %}
- 								
- 							{% else %}
-								<p>
-									{% if isAdmin %}
-										{{ contact.value }}
-									{% else %}
-										{{ contact.value|contacthide }}
+				<div class="col-md-12 clearfix">
+					<div class="clearfix">
+						<span class="author-name">{{object.contact}}</span>
+						<form action="" class="clearfix module" id="show_contacts">	
+							<div class="contacts-list-cont js-contact-list fl">
+								{% for contact in object.compiled.contacts %}
+									{% if contact.type == '5' %}
+		 								
+		 							{% else %}
+										<p>
+											{% if isAdmin %}
+												{{ contact.value }}
+											{% else %}
+												{{ contact.value|contacthide }}
+											{% endif %}
+										</p>
 									{% endif %}
-								</p>
-							{% endif %}
-						{% endfor %}
+								{% endfor %}
+							</div>
+							<button type="submit" class="hidden-xxs bg-color-blue js-contacts-show" data-id="{{object.id}}">Показать номер телефона</button>
+							<button type="submit" class="hidden-lg visible-xxs bg-color-blue js-contacts-show" data-id="{{object.id}}">Показать</button>
+						</form>
 					</div>
-					<button type="submit" class="button dib bg-color-blue white p10 br2 js-contacts-show" data-id="{{object.id}}">Показать контакты</button>
-					</form>
 					{% if object.source_id == 1 %}
 						{% if isGuest %}
 							<div class="write-to-author unauthorized">

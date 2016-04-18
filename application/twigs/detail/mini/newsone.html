@@ -1,9 +1,9 @@
-{% set currentDate = "now"|date("m.d.y") %}
+{% set currentDate = "now"|date("d.m.y") %}
 {% set today = 'Сегодня' %}
 
 <div class="col-md-6 masonry">
 	<div class="news_wrap">
-		<div class="date light fs12">{{ innerItem.date|date('m:h') }} 
+		<div class="date light fs12">{{ innerItem.date|date('H:i') }} 
 			<span>
 				{% if innerItem.date|date('d.m.y') == currentDate %}
 					{{ today }}

@@ -17,11 +17,12 @@ define([
     'modules/afisha',
     'modules/reklama_click',
 
-    'modules/main_page_news'
+    'modules/main_page_news',
+    'modules/subscription/main'
 ], 
 function (Marionette, templates, utils, IndexPage, SearchPage, DetailPage, 
     UserSearchPage, CartPage, AddPage, ArticlePage, FiltersModule, MapModule, Afisha,
-    ReklamaClickInitializer, MainPageNewsView) {
+    ReklamaClickInitializer, MainPageNewsView, SubscriptionModule) {
     "use strict";
 
     return Marionette.Controller.extend({
@@ -57,7 +58,6 @@ function (Marionette, templates, utils, IndexPage, SearchPage, DetailPage,
         },
 
         start_searchSection : function() {
-            console.log("search start");
 
             app.module("filters", FiltersModule);
             app.module("map", MapModule);
@@ -65,8 +65,19 @@ function (Marionette, templates, utils, IndexPage, SearchPage, DetailPage,
 
             app.menu.init(["main", "city", "kupon", "news"]);
             app.favourite.init(["list"]);
+
+
+
+             /* initialize subscriptions module */
+            var $temp = $('[data-role=subscription-module]');
+            if ($temp.length) {
+                new SubscriptionModule({
+                    el: $temp
+                });
+            }
+
             new SearchPage({
-                el: "body"
+                  el: "body"
             });
         },
 

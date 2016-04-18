@@ -19,7 +19,7 @@
 {% endblock crumbs %}
 
 {% block leftside %}
-	<div class="col-md-7 col-sm-7">
+	<div class="col-md-8">
 		<div class="row">
 			<div class="col-md-12 col-lg-8">
 				<article>
@@ -29,7 +29,7 @@
 					{% include 'detail/thumbnails' %}
 					{% include 'detail/attributes' %}
 				</article>
-				{% if object.compiled.address is not empty %}
+				{% if object.compiled['attributes']['adres-raion'] %}
 					<button class="more-button module button bg-color-blue" data-role="show-map">Показать на карте</button>
 				{% endif %}
 			</div>
@@ -74,7 +74,7 @@
 {% endblock %}
 
 {% block rightside %}
-	<div class="col-md-5 col-sm-5">
+	<div class="col-md-4">
 		<aside>
 			<div class="hidden-xs">
 				{% include 'detail/controls' %}

@@ -11,7 +11,7 @@ define([ 'jquery', 'underscore', 'backbone', './models/state', './views/initial'
 		childView: null,
 		templated: null,
 
-		template: _.template('<div data-role="error" style="color:red;"><%= error %></div>'),
+		template: _.template('<div data-role="error" style="color:red;"><b><%= error %></b></div>'),
 
 		initialize: function () {
 			this.model = new StateModel();
@@ -26,6 +26,7 @@ define([ 'jquery', 'underscore', 'backbone', './models/state', './views/initial'
 			this.releaseTemplated();
 			this.$templated = $(this.template(this.model.toJSON()));
 			this.$el.append(this.$templated);
+			this.$el.find('span').remove();
 
 			var state = this.model.get('state');
 			this.releaseChildView();
@@ -33,9 +34,13 @@ define([ 'jquery', 'underscore', 'backbone', './models/state', './views/initial'
 		},
 
 		releaseChildView: function () {
-			if (this.childView) {
-				this.childView.remove();
-				this.childView = null;
+			if ( (this.childView) && (this.model.get('state') != 'saveConfirm')) {
+				this.childView.$el.fadeOut(300);
+				me = this;
+				setTimeout(function(){
+					this.childView.remove();
+					this.childView = null;
+				}, 300);
 			}
 		},
 
@@ -57,6 +62,10 @@ define([ 'jquery', 'underscore', 'backbone', './models/state', './views/initial'
 		},
 
 		setChildView: function (view) {
+			if (this.model.get('renderAgain') == false) {
+				this.$el.find('a[data-role="save"]').remove();
+				this.model.set('renderAgain', true);
+			}
 			this.childView = view;
 			this.$el.append(this.childView.render());
 		},
@@ -71,7 +80,9 @@ define([ 'jquery', 'underscore', 'backbone', './models/state', './views/initial'
 		},
 
 		onModelErrorChanged: function (model, value) {
+			this.model.set('renderAgain', false);
 			this.render();
+			$('div[data-role="error"]').fadeIn().delay(1000).fadeOut();
 		}
 
 	});

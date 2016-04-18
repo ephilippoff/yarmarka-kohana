@@ -1,4 +1,4 @@
-.tab-filter{background-color:#F7F8F8;border-top: 2px solid #909EA5;padding-top: 7px;}
+.tab-filter{background-color:#F7F8F8;border-top: 1px solid #ccc;padding-top: 10px;}
 .tab-filter .params-cont{padding-right: 100px;padding-left: 18px; position: relative;z-index:1;}
 .tab-filter .column-list{min-width:-webkit-min-content;}
 .tab-filter .multiselect .checkbox label{width:90%;}.tab-filter .filters-items, .tab-filter .filters-subitems{width:780px;overflow:hidden;}

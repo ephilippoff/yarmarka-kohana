@@ -1,8 +1,8 @@
-<div class="breadcrumbs-cont module mt10">
-	<a href="/{{sphinx_search_query}}" rel="nofollow" class="hidden-xs">Главная</a>
-	<a href="/{{sphinx_search_query}}" rel="nofollow" class="hidden-lg hidden-sm hidden-md home-a"><i class="fa fa-home"></i></a>
+<div class="breadcrumbs-cont module mt10 clearfix">
+	<a href="/{{sphinx_search_query}}" rel="nofollow" class="hidden-xs hidden-sm">Главная</a>
+	<a href="/{{sphinx_search_query}}" rel="nofollow" class="hidden-lg hidden-md home-a"><i class="fa fa-home"></i></a>
 	{% for crumb in crumbs %}
-			<span class="hidden-xs">/</span> <a href="{{ url(crumb.uri ~ crumb.query) }}" class="crumbs-item"><span>{{crumb.title}}</span></a>
+			<i class="fa fa-angle-right hidden-xs hidden-sm"></i> <a href="{{ url(crumb.uri ~ crumb.query) }}" class="crumbs-item"><span>{{crumb.title}}</span></a>
 	{% endfor %}
 </div>
 

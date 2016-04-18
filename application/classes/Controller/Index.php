@@ -38,8 +38,6 @@ class Controller_Index extends Controller_Template {
             $twig->last_city = $last_city = ORM::factory('City', $twig->last_city_id)->get_row_as_obj();
         }
 
-        $twig->menuName = 'mainmenu';
-        $twig->staticMainMenu = TRUE;
 
         $twig->months = Date::get_months_names();
 
@@ -121,6 +119,11 @@ class Controller_Index extends Controller_Template {
             return Imageci::getSavePaths($item->filename);
         }, $attachments);
         $twig->promo_thumbnails = $promo_thumbnails;
+
+        $twig->menuName = 'mainmenu';
+        $twig->staticMainMenu = TRUE;
+        $twig->onPageFlag = 'main';
+        
         $this->response->body($twig);
     }
 

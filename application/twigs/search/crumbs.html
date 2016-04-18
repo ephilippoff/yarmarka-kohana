@@ -1,23 +1,23 @@
-<div class="breadcrumbs-cont module">
-	<a href="/{{sphinx_search_query}}" rel="nofollow" class="hidden-xs">Главная</a>
-	<a href="/{{sphinx_search_query}}" rel="nofollow" class="hidden-lg hidden-sm hidden-md home-a"><i class="fa fa-home"></i></a>
-	{% for crumb in crumbs %}
-		{% if crumb.uri != canonical_url and canonical_url %}
-			 <span class="hidden-xs">/</span> <a href="{{ url(crumb.uri ~ crumb.query) }}" class="crumbs-item"><span>{{crumb.title}}</span></a>
-		{% endif %}
-	{% endfor %}
+<div class="breadcrumbs-cont mb20">
+	<div class="crums-wrap clearfix">
+		<a href="/{{sphinx_search_query}}" rel="nofollow" class="hidden-xs hidden-sm">Главная</a>
+		<a href="/{{sphinx_search_query}}" rel="nofollow" class="hidden-lg hidden-md home-a"><i class="fa fa-home"></i></a>
+		{% for crumb in crumbs %}
+			{% if crumb.uri != canonical_url and canonical_url %}
+				<i class="fa fa-angle-right hidden-xs hidden-sm"></i> <a href="{{ url(crumb.uri ~ crumb.query) }}" class="crumbs-item"><span>{{crumb.title}}</span></a>
+			{% endif %}
+		{% endfor %}
+	</div>
 
-	 <span class="hidden-xs">/</span> <h1 class="breadcrumb-h1"><span>{{ seo_attributes.h1 ? seo_attributes.h1: category.title }}</span></h1> <span class="count">{{ link_counters[s_host ~ s_suri] }}</span>
+	<h1 class="captionbold crumbs-h1" style="display: block;">{{ seo_attributes.h1 ? seo_attributes.h1: category.title }}</h1>
+
+	<hr>
 </div>
 
+
+
 <script>
-	var hrefs = $('.crumbs-item').length,
-		hrefsWidth = 40 / hrefs;
-	if (hrefs == 0) {
-		$('.breadcrumb-h1').css('max-width', '70%');
+	if ($('.crums-wrap a').length <= 2) {
+		$('.crums-wrap').hide();
 	};
-	
-	$('.crumbs-item').each(function(){
-		$(this).css('max-width', hrefsWidth+'%');
-	});
 </script>

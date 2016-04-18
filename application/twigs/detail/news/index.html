@@ -6,8 +6,6 @@
 		{{ requestblock('block_twig/topline', {'favourites':favourites}) }}
 		{% include 'block/header/logoline' %}
 		{{ requestblock('block_twig/adslinkline',{'city_id': city.id, 'theme_class': theme_class}) }}
-		{% include 'block/header/navigationline/article' %}
-
 {% endblock header %} 
 
 {% block title %}{{object.title}}{% endblock title %}
@@ -30,14 +28,14 @@
 		<div class="col-lg-12">
 			<article>
 				<div class="news_info clearfix">
-					<div class="date light fs14 fl">{{ innerItem.date|date('m:h') }} <span>- {{ innerItem.date|date('d.m.y') }}</span></div>
+					<div class="date light fs14 fl">{{object.date_expired|date('H:i')}} <span>- {{ object.date_expired.date|date('d.m.y') }}</span></div>
 					<span class="cat">
 						Категория: {{ object.compiled.attributes['news-category'].value }}
 					</span>
 				</div>
 				<hr>
 				<h1 class="captionbold">{{object.title}}</h1>
-				<div class="photo-cont mt10">
+				<div class="image-cont mt10" id="img1">
 					<img class="news-photo" src="{{ get_file(object.compiled.images.main_photo.original) }}">
 				</div>
 				<div class="text-cont mt10 module">

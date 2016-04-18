@@ -107,7 +107,9 @@ function (app, $, Marionette, Backbone, _) {
 //Прилипающий сайдбар на страницах
 
 $(document).ready(function(){
-    if ($('div').is('.right-side')) {
+    var mainBlockHeight = $('.main_block').outerHeight();
+    var rightsideHeight = $('.right-side').outerHeight();
+    if ( ($('div').is('.right-side')) && (rightsideHeight < mainBlockHeight)) {
         var mainBlockBottomY = $(document).height() - ($('.main_block').offset().top + $('.main_block').outerHeight());
         $('.right-side').hcSticky({
             stickTo: document,

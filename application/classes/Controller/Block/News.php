@@ -27,7 +27,7 @@
 			$limit = $perPage;
 
 			// fill counts for categories
-			$countQuery = DB::select(DB::expr('"data_list"."value" AS "data_list_value", (select count(*) from object where "data_list"."object" = "object"."id" and "object"."is_published" = 1 AND "object"."date_expired" <= NOW()) AS "cnt" FROM "data_list" WHERE "data_list"."value" IN (' . implode(',', array_keys($categories)) . ')'));
+			$countQuery = DB::select(DB::expr('"data_list"."value" AS "data_list_value", sum((select count(*) from object where "data_list"."object" = "object"."id" and "object"."is_published" = 1 AND "object"."date_expired" <= NOW())) AS "cnt" FROM "data_list" WHERE "data_list"."value" IN (' . implode(',', array_keys($categories)) . ') group by "data_list"."value"'));
 			$counts = $countQuery->execute();
 			foreach($counts as $count) {
 				$sci = $count['data_list_value'];
@@ -90,9 +90,7 @@
 						'short_text' => $shortText,
 						'url' => '/novosti/' . $item['seo_name'] . '-' . $item['id'] . '.html'
 					);
-				// var_dump($group); die;
 			}
-
 			return $newsGroups;
 
 		}
@@ -124,6 +122,7 @@
 
 		public function action_main_page() {
 
+
 			$view = Twig::factory('block/news/main_page');
 
 			$citySeoName = 'tyumen';
@@ -150,16 +149,16 @@
 				$newsGroups = self::get_items($categories, $itemsPerCategory);
 				$cache->set('main_page_news_items:{$citySeoName}', $newsGroups, 3600);
 			}
-
 			// update total pages value
 			foreach($newsGroups as &$newsGroup) {
 				$newsGroup['pages'] = ceil($newsGroup['count'] / $itemsPerCategory);
 			} 		
 
-			// echo '<pre>'; var_dump($view); echo '</pre>'; die;
+			// echo '<pre>'; var_dump($newsGroup); echo '</pre>'; die;
 			
 			/* push view data */
 			$view->data = $newsGroups;
+
 
 			$this->response->body($view);
 

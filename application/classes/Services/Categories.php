@@ -18,7 +18,7 @@
 			$query->where('parent_id', 'in', $parentIds);
 		}
 
-		public function getCategoryWithChilds($parent_id, $lvl = 5, $cols = array()) {
+		public function getCategoryWithChilds($parent_id, $lvl = 5, $cols = array(), $mode = 1) {
 
 			//append default columns
 			$defaultCols = array( 'id', 'title' );
@@ -54,43 +54,44 @@
 			$rows = $query->execute();
 
 			$res = array();
-/*
-			foreach($rows as $row) {
-				$resPointer = &$res;
-				for($i = 0; $i < $lvl;$i++) {
-					$id = $row['c' . $i . '_id'];
-					if (!$id) {
-						break;
+
+			if ($mode != 1) {
+				foreach($rows as $row) {
+					$resPointer = &$res;
+					for($i = 0; $i < $lvl;$i++) {
+						$id = $row['c' . $i . '_id'];
+						if (!$id) {
+							break;
+						}
+						if (!array_key_exists($id, $resPointer)) {
+							$resItem = array( 'childs' => array() );
+							foreach($cols as $col) {
+								$resItem[$col] = $row['c' . $i . '_' . $col];
+							}
+							$resPointer[$id] = $resItem;
+						}
+						$resPointer = &$resPointer[$id]['childs'];
 					}
-					if (!array_key_exists($id, $resPointer)) {
-						$resPointer[$id] = array(
-								'id' => $id,
-								'title' => $row['c' . $i . '_title'],
-								'childs' => array()
-							);
-					}
-					$resPointer = &$resPointer[$id]['childs'];
 				}
-			}
-*/
+			} else {
+				foreach($rows as $row) {
+					for($i = 0; $i < $lvl;$i++) {
+						$id = $row['c' . $i . '_id'];
+						if (!$id) {
+							continue;
+						}
+						if (array_key_exists($id, $res)) {
+							continue;
+						}
+						$res[$id] = array( 'childs' => array() );
+						foreach($cols as $col) {
+							$res[$id][$col] = $row['c' . $i . '_' . $col];
+						}
 
-			foreach($rows as $row) {
-				for($i = 0; $i < $lvl;$i++) {
-					$id = $row['c' . $i . '_id'];
-					if (!$id) {
-						continue;
-					}
-					if (array_key_exists($id, $res)) {
-						continue;
-					}
-					$res[$id] = array( 'childs' => array() );
-					foreach($cols as $col) {
-						$res[$id][$col] = $row['c' . $i . '_' . $col];
-					}
-
-					for($j = $i - 1;$j >= 0;$j--) {
-						$pId = $row['c' . $j . '_id'];
-						$res[$pId]['childs'] []= $id;
+						for($j = $i - 1;$j >= 0;$j--) {
+							$pId = $row['c' . $j . '_id'];
+							$res[$pId]['childs'] []= $id;
+						}
 					}
 				}
 			}

@@ -15,60 +15,34 @@
 	<div class="right brb2 visible-lg visible-md">
 		{% for category in categories1l %}
 			{% set menuHeight = (banners[category.id] is defined and banners[category.id].menu_height) ? banners[category.id].menu_height : 0 %}
-			{% set divWidth = (banners[category.id] is defined and banners[category.id].menu_width) ? banners[category.id].menu_width : 341 %}
+			{% set divWidth = (banners[category.id] is defined and banners[category.id].menu_width) ? banners[category.id].menu_width : 400 %}
 			{% set ulWidth = 191 %}
 
 			{% if category.seo_name == 'tovary-dlya-detei' %}
 				{% include 'block/menu/submenu/tovari-dlya-detei' %}
 			{% else %}
 				<div class="section section{{category.id}}" id="section{{category.id}}" style="width: {{divWidth}}px; display: none;"  data-menu-height="{{menuHeight}}">				
-					<ul class="submenu-ul">
+					<ul style="position: relative;width:100%;" class="submenu-ul">
 						<li>
 							{% if banners[category.id] is defined and file_exist('/uploads/banners/menu/' ~ banners[category.id].image) and banners[category.id].menu_name == 'main' %}
 								<map name="map{{category.id}}" id="map{{category.id}}" style="position: absolute;right:{{banners[category.id].x}}px ; bottom:{{banners[category.id].y}}px;z-index:0;">
 									<area shape="poly" coords="{{banners[category.id].map_params}}" class="" href="/redirect/ref_cb?id={{banners[category.id].id}}" target="_blank" />
 								</map>
 								<img hidefocus="true" style="position: absolute;right:{{banners[category.id].x}}px ; bottom:{{banners[category.id].y}}px;z-index:1;" usemap="#map{{category.id}}" src="/uploads/banners/menu/{{banners[category.id].image}}"/>
-							{% elseif file_exist(category.main_menu_image) %}
-								<span class="img" style="z-index:0;">
-									<img  hidefocus="true"  src="{{category.main_menu_image}}">
-								</span>
 							{% endif %}
 						</li>
-						<li class="li-title ml10"><span class="bold  black fs18" style="width: 165px">{{category.title}}</span></li>
+						<li class="li-title ml20"><span class="bold  black fs18" style="width: 165px">{{category.title}}</span></li>
 						{% for subcategory in categories2l if subcategory.parent_id == category.id %}
 							<li class="ml20" style="width:{{ulWidth}}px;position:relative;z-index:1;">
 								<a href="/{{category.seo_name}}/{{subcategory.seo_name}}">{{subcategory.title}}</a>
-							</span></li>
+							</li>
 						{% endfor %}
 					</ul>
+					{% if file_exist(category.main_menu_image) %}
+							<img  hidefocus="true"  src="{{category.main_menu_image}}">
+					{% endif %}
 				</div>
 			{% endif %}
 		{% endfor %}
 	</div>
 </div>
-
-{% if staticMainMenu %}
-
-<script>
-/*
-	$('.left_menu .left ul li, .right .section').mouseover(function(){
-		var dataID = $(this).attr('data-submenu-id');
-		//console.log(dataID);
-		$('.right .section').each(function(){
-			if ($(this).attr('id') == dataID) {
-				$(this).show();
-			}
-		});
-	}).mouseleave(function(){
-		$('.right .section').hide();
-	});
-*/
-/*
-	$('.right .section').mouseover(function(){
-		$(this).show();
-	});
-*/
-</script>
-
-{% endif %}

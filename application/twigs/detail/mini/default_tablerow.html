@@ -1,3 +1,4 @@
+<table class="table-result-info">
 {% if object.is_premium %}
 	<tr class="tr premium_tr" data-id="{{object.id}}">
 {% else %}
@@ -29,7 +30,11 @@
 					{{ object.title|e }}
 				</a>
 			</p>
+			{% if object.is_premium %}
+			<p class="style1"><span>{{ object.compiled.city }}</span></p>
+			{% else %}
 			<p class="style1"><span>{{ object.date_created|date("d.m") }}</span> / <span>{{ object.compiled.city }}</span> </p>
+			{% endif %}
 			{% if object.price > 0 %}
 			<p class="amount">{{ object.price|number_format(0, ' ', ' ') }} руб.</p>
 			{% endif %}
@@ -69,18 +74,16 @@
 				{#<div class="state mt5 red" style="font-size:10px;">Компания не проверена<i class="fa fa-question-circle fa-lg ml3"></i></div>#}
 				{% endif %}
 			</td>
-			<td class="td td-icons hidden-xs" style="text-align:center;">
+			<td class="td td-icons hidden" style="text-align:center;">
 				{% set services = get_service_icon_info(object.compiled.services, check_access("object.moderate")) %}
 				{% for services in services %}
 				<i class="fa {{ services.icon_class }} fa-lg gray" title="{{services.title}}"></i>
 				{% endfor %}		
 			</td>
 		</tr>
+</table>
 
-		{% if loop.index in banner_zone_positions|keys %}
-		<tr class="tr banner_tr">
-			<td colspan="4">
-				<div class="banner {zoneID: {{banner_zone_positions[loop.index]}} }"></div>
-			</td>
-		</tr>	
-		{% endif %}
+
+	{% if loop.index in banner_zone_positions|keys %}
+	<div class="banner {zoneID: {{banner_zone_positions[loop.index]}} }"></div>
+	{% endif %}

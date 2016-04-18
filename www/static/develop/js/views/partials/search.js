@@ -5,9 +5,8 @@ define([
     "views/partials/behaviors/favourite",
     "views/partials/behaviors/search",
     "views/partials/behaviors/ads",
-    "base/utils",
-    'modules/subscription/main'
-], function (Marionette, templates, FavouriteBehavior, SearchBehavior, AdsBehavior, utils, SubscriptionModule) {
+    "base/utils"
+], function (Marionette, templates, FavouriteBehavior, SearchBehavior, AdsBehavior, utils) {
     "use strict";
 
     return Marionette.LayoutView.extend({
@@ -15,7 +14,9 @@ define([
             tr:"tr.tr",
             map: "#map",
             banners: ".js-banners",
-            liders: ".js-liders"
+            liders: ".js-liders",
+            button: '#map-button',
+            wrap: '#map-wrap'
         },
         events: {
             "mouseover @ui.tr": function(e) {
@@ -24,6 +25,9 @@ define([
             },
             "mouseleave @ui.tr": function(e) {
                  $(e.currentTarget).removeClass("hover");
+            },
+            "click @ui.button": function(e) {
+                this.buttonCheck();
             }
         },
         behaviors: {
@@ -39,9 +43,26 @@ define([
         },
 
         initialize: function() {
-            var s = this;
             this.bindUIElements();
+            this.buttonCheck();
             
+        },
+
+        buttonCheck: function(){
+            var action = this.ui.button.attr('data-action');
+            if (action == 'showMap') {
+                this.initMapBlock();
+                this.ui.wrap.show();
+                this.ui.button.attr('data-action', 'hideMap').text('Спрятать карту');;
+            }else {
+                this.ui.map.empty();
+                this.ui.wrap.hide();
+                this.ui.button.attr('data-action', 'showMap').text('Показать на карте');
+            }
+        },
+
+        initMapBlock: function(){
+            var s = this;
             
             if (this.ui.map.length) {
                 this.initMap(function(){
@@ -87,14 +108,6 @@ define([
             
 
             this.citySelect();
-
-            /* initialize subscriptions module */
-            var $temp = $('[data-role=subscription-module]');
-            if ($temp.length) {
-                new SubscriptionModule({
-                    el: $temp
-                });
-            }
         },
 
         citySelect: function() {

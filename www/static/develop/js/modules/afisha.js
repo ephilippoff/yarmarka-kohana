@@ -34,7 +34,7 @@ define([ 'backbone' ], function (Backbone) {
 						'<label><%= label %></label>' + 
 					'</div>' +
 					'<div class="col-md-10">' +
-						'<select class="form-control"></select>' +
+						'<select class="select" style="width: 350px;"></select>' +
 					'</div>' +
 				'</div>' +
 			'</div>'),
@@ -44,7 +44,7 @@ define([ 'backbone' ], function (Backbone) {
 				'</div>' +
 			'</div>'),
 		_objectTemplateWrap: function (x) {
-			return '<div class="col-md-3 afisha-object">' + x + '</div>';
+			return '<div class="col-md-2 afisha-object">' + x + '</div>';
 		},
 		_objectTemplates: function (x) {
 			if (!this._objectTemplatesCache) {

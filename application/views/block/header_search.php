@@ -141,7 +141,6 @@
 			doMarkRow(e.keyCode);
 		});
 
-		
 	});
 </script>
 <script id="template-search-popup" type="text/template">

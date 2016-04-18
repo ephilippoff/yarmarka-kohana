@@ -250,6 +250,11 @@ class Controller_Search extends Controller_Template {
         $twig->kupons = Search::getresult($kupons->execute()->as_array());
         //kupons end
 
+        $oldCategoryPath = Request::current()->param('category_path');
+        if (isset($GLOBALS['category_path'])) {
+            Request::current()->set_param('category_path', $GLOBALS['category_path']);
+        }
+        
         //pagination
         $pagination = Pagination::factory( array(
             'current_page' => array('source' => 'query_string', 'key' => 'page'),
@@ -258,8 +263,39 @@ class Controller_Search extends Controller_Template {
             'auto_hide' => TRUE,
             'view' => 'pagination/search',
             'first_page_in_url' => FALSE,
-            'count_out' => 1,
-            'count_in' => 8,
+            'path' => isset($GLOBALS['category_path']) ? $GLOBALS['category_path'] : URL::SERVER("PATH_INFO"),
+            'count_out' => 0,
+            'count_in' => 4,
+            'limits' => array(
+                "10" => Search_Url::get_suri_without_reserved($this->request->query(),array(),array("limit","page")),
+                "20" => Search_Url::get_suri_without_reserved($this->request->query(), array( "limit" => 20), array("page")),
+                "50" => Search_Url::get_suri_without_reserved($this->request->query(), array( "limit" => 50), array("page")),
+            )
+        ));
+        // $twig->small_pagination = (array(
+        //     "prev" => $pagination->previous_page,
+        //     "prev_url" => $pagination->url($pagination->previous_page),
+        //     "next" => $pagination->next_page,
+        //     "next_url" => $pagination->url($pagination->next_page),
+        //     "current" => $pagination->current_page,
+        //     "total" => $pagination->total_pages,
+        // ));
+
+        // $twig->small_pagination = $pagination(array(
+        //     'count_out' => 0,
+        //     'count_in' => 2,
+        // ));
+
+        $twig->pagination = $pagination;
+
+        $twig->small_pagination = $pagination;
+
+
+
+        $limitList = Pagination::factory( array(
+            'total_items' => $search_info->main_search_result_count,
+            'items_per_page' => $search_params['limit'],
+            'view' => 'pagination/limit',
             'path' => URL::SERVER("PATH_INFO"),
             'limits' => array(
                 "10" => Search_Url::get_suri_without_reserved($this->request->query(),array(),array("limit","page")),
@@ -267,17 +303,15 @@ class Controller_Search extends Controller_Template {
                 "50" => Search_Url::get_suri_without_reserved($this->request->query(), array( "limit" => 50), array("page")),
             )
         ));
-        $twig->small_pagination = (array(
-            "prev" => $pagination->previous_page,
-            "prev_url" => $pagination->url($pagination->previous_page),
-            "next" => $pagination->next_page,
-            "next_url" => $pagination->url($pagination->next_page),
-            "current" => $pagination->current_page,
-            "total" => $pagination->total_pages,
-        ));
-        $twig->pagination = $pagination;
+
+        $twig->limitList = $limitList;
+
+
+        // $twig->limitList = implode(" ", $limitList);
+        // echo "<pre>"; var_dump($pagination->config['limits']); die; echo "</pre>";
         //pagination end
 
+        Request::current()->param('category_path', $oldCategoryPath);
         
         //save search settings cache
         if (!$this->cached_search_info AND !$search_info->search_text) {

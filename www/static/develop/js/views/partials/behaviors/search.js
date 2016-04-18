@@ -27,12 +27,13 @@ define([
             }
         },
         click: function() {
-            this.getOption("uiSearchForm").submit();
+            //this.getOption("uiSearchForm").submit();
+            window.location.href = this.$('[data-goto]').data('goto');
         }
     });
 
     var ObjectItemView = ItemView.extend({
-        template: "<span class='finded-title'><%=title %></span><a href='/<%=category_url %>'><%=category_title %></a>",
+        template: "<span class='finded-title' data-goto='<%= url %>'><%=title %></span><a href='/<%=category_url %>'><%=category_title %></a>",
         className: "result-line",
         tagName: "li"
     });
@@ -57,7 +58,7 @@ define([
 
     var SearchPopup = Marionette.LayoutView.extend({
         template: templates.searchPopup,
-        className: "z400",
+        className: "z201",
         regions: {
             objects: ".js-objects",
             pricerows: ".js-pricerows"
@@ -75,6 +76,7 @@ define([
             }
         },
         onRender: function() {
+            console.log(this.$el);
             this.objects.show(new CollectionView({
                 collection: this.getOption("objects"), 
                 childView: ObjectItemView,
@@ -96,11 +98,24 @@ define([
         ui: {
             searchInput: ".js-search-input",
             searchForm: ".js-search-form",
-            searchPopupCont: ".js-search-popup-cont"
+            searchPopupCont: ".js-search-popup-cont",
+            categoryBox: '[data-role=categories]'
         },
 
         events: {
             "keyup @ui.searchInput": "searchInputKeyUp"
+            , "click"                 : "onClick"
+            , 'submit @ui.searchForm': 'beforeSubmitForm'
+        },
+
+        onClick: function(e) {
+            if (e.target != this.ui.searchPopupCont) {
+               this.ui.searchPopupCont.hide();
+            }
+        },
+
+        beforeSubmitForm: function(e) {
+            this.ui.searchForm.attr('action', '/' + this.ui.categoryBox.find('option:selected').data('url'));
         },
 
         searchInputKeyUp: function(e) {
@@ -135,7 +150,14 @@ define([
                             s.ui.searchPopupCont.show();
                         }
                     }
-                });
+                }, this.ui.categoryBox.val());
+            }
+
+            if (keyCode == 13 && this.ui.searchPopupCont.find('li.mark')) {
+                e.preventDefault();
+                e.stopPropagation();
+                this.ui.searchPopupCont.find('li.mark').trigger('click');
+                return;
             }
 
             if (!text) {

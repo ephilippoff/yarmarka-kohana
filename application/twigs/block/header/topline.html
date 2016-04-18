@@ -1,38 +1,28 @@
-<div class="menu-cont menu-cont1 module">
+{% include 'block/header/mobile_menu/index' %}
+<div class="banner topline hidden-xs {zoneID: 42}"></div>
+<div class="menu-cont menu-cont1 module hidden-sm hidden-xs">
 	<div class="row">
-		<div class="cont1 col-md-6 {% if onPageFlag == add %}col-sm-6 {% else %}col-sm-4 {% endif %}col-xs-6 col-xxs-6 clearfix">
-			<div class="menu-item-wrp js-citymenu-dropdown" style="float: left;position: relative;">
-				<span class="menu-item span-link city_change">
-					{% set current_city = get_current_city() %}
-					Ваш город: <span>{{current_city}}</span><i class="fa fa-caret-down ml5"></i>
-				</span>
+		<div class="w60p fl clearfix">
+			<div class="logo">
+				<a rel="nofollow" href="/">
+					<img src="{{ staticfile('images/Logo_white.png') }}" alt="Газета бесплатных объявлений Ярмарка-Тюменская область" title="Газета бесплатных объявлений Ярмарка-Тюменская область">
+				</a>
 			</div>
-			{% set neiboors = custommenu('surgut.yarmarka.biz').childs %}
-			{% for city in neiboors %}
-				<span class="menu-item span-link hidden-sm hidden-xs" onclick="window.location='http://{{ city.url }}'">{{ city.title}}</span>
-			{% endfor %}
+			{% include 'block/header/navigationline' %}
 		</div>
-		<div class="cont2 col-md-6 {% if onPageFlag == add %}col-sm-6 {% else %}col-sm-8 {% endif %} col-xs-6 col-xxs-6 clearfix">
+		<div class="cont2 w40p fl clearfix">
 			<div class="menu-item-wrp menu-block {% if user %}js-usermenu-dropdown{% endif %} user-dropdown">
 				{% if user %}
-					<span class="menu-item span-link hidden-xxs lk"><i class="fa {% if user.org_type == 2 %}fa-group{% else %}fa-user{% endif %} mr3"></i>Личный кабинет<i class="fa fa-caret-down ml5 hidden-sm hidden-xs"></i></span>
-					<span class="menu-item span-link visible-xxs hidden-xs hidden-sm hidden-md hidden-lg lk"><i class="fa {% if user.org_type == 2 %}fa-group{% else %}fa-user{% endif %} mr3"></i>Мой кабинет<i class="fa fa-caret-down ml5 hidden-sm hidden-xs"></i></span>
+					<a href="/user/" class="menu-item lk"><i class="fa {% if user.org_type == 2 %}fa-group{% else %}fa-user{% endif %} mr3"></i>Личный кабинет<i class="fa fa-caret-down ml5 hidden-sm hidden-xs"></i></a>
 				{% else %}
-					<span class="menu-item span-link show_on_large hidden-xxs lk" onclick="window.location='/user/login?return={{ strim(get_request_uri(), '/') }}'"><i class="fa fa-user mr3"></i>Вход в личный кабинет</span>
-					<span class="menu-item span-link visible-xxs hidden-xs hidden-sm hidden-md hidden-lg show_on_small lk" onclick="window.location='/user/login?return={{ strim(get_request_uri(), '/') }}'"><i class="fa fa-user mr3"></i>Вход</span>
+					<a class="menu-item show_on_large hidden-xxs lk" href="/user/login?return={{ strim(get_request_uri(), '/') }}"><i class="fa fa-user mr3"></i>Вход в личный кабинет</a>
+					<a class="menu-item visible-xxs hidden-xs hidden-sm hidden-md hidden-lg show_on_small lk" href="/user/login?return={{ strim(get_request_uri(), '/') }}"><i class="fa fa-user mr3"></i>Вход</a>
 				{% endif %}
 			</div>
 			{% if user %}
 				<!--<span class="menu-item span-link hidden-sm hidden-xs" onclick="window.location='/user'">Мои объявления <span>~{{get_myobjects_info()}}</span></span>-->
 			{% endif %}
-			<span class="menu-item span-link js-favourite-counter fav" onclick="window.location='/user/favorites'"><i class="fa fa-heart mr3"></i><span>{{ get_favorites_info()|length }}</span></span>
-			{% set cart_info = get_cart_info() %}
-			{% set cart_count = cart_info.count %}
-			<span class="menu-item span-link cart" onclick="window.location='/cart'"><i class="fa fa-shopping-cart mr3"></i><span class="js-cart-counter">{{cart_count}}</span> <span class="js-cart-summ"></span></span>
-			<span class="menu-item span-link hidden-sm hidden-xs" onclick="window.location='https://vk.com/yarmarkasurgut'"><i class="ico ico16 vkontakte-ico16 mr3"></i>Мы в Контакте</span>
-			<span class="menu-item span-link hidden" onclick="window.location='/article/help'"><i class="fa fa-book mr3"></i>Помощь</span>
-			<span class="menu-item span-link hidden" onclick="window.location='/article/pravila-razmeshcheniya-obyavlenii'"><i class="fa fa-info-circle mr3"></i>Правила</span>
-			<span class="menu-item span-link hidden-xs tech" onclick="window.location='http://feedback.yarmarka.biz'"><i class="fa fa-question-circle mr3"></i>Техподдержка</span>
+			<a class="menu-item hidden-sm hidden-xs" href="https://vk.com/yarmarkasurgut" target="_blank"><i class="fa fa-vk"></i> Мы Вконтакте</a>
 		</div>
 	</div>
 </div>

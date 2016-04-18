@@ -7,22 +7,32 @@
 	{% block header %} 
 		{{ parent() }}
 		{{ requestblock('block_twig/adslinkline',{'city_id': city.id, 'category_id': category.id, 'theme_class': theme_class}) }}
-		{% include 'block/header/navigationline/simple' %}
 	{% endblock header %} 
-
-	{% block crumbs %} 
-		Крошки
-	{% endblock crumbs %}
-
-	{% block subcategories %}{% endblock subcategories %}
+	
+	<div class="row">
+		<div class="col-lg-10 col-lg-push-1">
+			{% block crumbs %}{% endblock crumbs %}
+			{% block subcategories %}{% endblock subcategories %}
+		</div>
+	</div>
+	
 
 	{% block filters %} 
 		Фильтры
 	{% endblock filters %}
+
 	<div class="row">
-		<div class="col-md-8">
+		<div class="col-lg-10 col-lg-push-1">
+			{% block control %} 
+				контроль-кнопки
+			{% endblock control %}
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-lg-7 col-md-9 col-lg-push-1">
 			<div class="search_wrap main_block">
 				{% block content %}
+				{% block map %}Карта{% endblock map %}
 					контент
 				{% endblock content %}
 			</div>
@@ -30,17 +40,8 @@
 				Последние просмотренные
 			{% endblock last_views %}
 		</div><!--col-->
-		<div class="col-md-4 right-side">
-			<div class="row">
-				<div class="col-md-12">
-					{% block map %}Карта{% endblock map %}
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-md-12">
-					{% block rightside %}Правая сторона{% endblock rightside %}
-				</div>
-			</div>
+		<div class="col-lg-3 col-md-3 col-lg-push-1 right-side">
+			{% block rightside %}Правая сторона{% endblock rightside %}
 		</div><!--col-->
 	</div><!--row-->
 
