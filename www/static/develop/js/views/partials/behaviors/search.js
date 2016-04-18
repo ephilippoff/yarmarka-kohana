@@ -102,10 +102,10 @@ define([
 
         events: {
             "keyup @ui.searchInput": "searchInputKeyUp"
-            , 'change @ui.categoryBox': 'categoryBoxValueChanged'
+            , 'submit @ui.searchForm': 'beforeSubmitForm'
         },
 
-        categoryBoxValueChanged: function(e) {
+        beforeSubmitForm: function(e) {
             this.ui.searchForm.attr('action', '/' + this.ui.categoryBox.find('option:selected').data('url'));
         },
 
