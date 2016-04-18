@@ -92,9 +92,10 @@ define([
         events: {
             "click" : "showMenu",
             "mouseover" : "showMenu",
-            "mouseleave" : "closeMenu"
+            //"mouseleave" : "closeMenu"
         },
         initialize: function(options) {
+            var $this = this;
             this.visible = 0;
 
             if (!options.doNotUseTemplate) {
@@ -109,10 +110,15 @@ define([
                 $(this).addClass('citymenu'+cityClass);
                 cityClass++;
             });
+
+            $("#popup-layer").on("mouseover", function() {
+                $this.closeMenu();
+            });
         },
 
         showMenu: function() {
             if (this.getOption('alwaysVisibleMenu')) {
+                $("#popup-layer").fadeIn(70).removeClass('z200').removeClass('z100').addClass('z100');
                 return;
             }
             var s = this;
@@ -126,8 +132,9 @@ define([
             
         },
 
-        closeMenu: function() {
+        closeMenu: function(e) {
             if (this.getOption('alwaysVisibleMenu')) {
+                $("#popup-layer").fadeOut(70).removeClass('z100').addClass("z200");
                 return;
             }
             if (this.activateTimer) clearTimeout(this.activateTimer);
@@ -165,8 +172,6 @@ var MainmenuView = MenuView.extend({
             var $row = $(row), 
             submenuId = $row.data("submenu-id"), 
             submenu = "#" + submenuId;
-            console.log(submenuId, submenu);
-            $(submenu).height($(submenu).parent().parent().height());
             $(submenu).show();
         }, 200);
 
@@ -179,7 +184,6 @@ var MainmenuView = MenuView.extend({
         var $row = $(row), 
         submenuId = $row.data("submenu-id"), 
         submenu = "#" + submenuId;
-
         $(submenu).fadeOut(70);
     }
 });
@@ -227,7 +231,10 @@ return Marionette.Module.extend({
                     menuOptions.doNotUseTemplate = true;
 
                     var me = this;
-                    $(menuOptions.el).on('mouseleave', function (e) {
+                    // $(menuOptions.el).on('mouseleave', function (e) {
+                    //     me.main.deactivateSubmenu();
+                    // });
+                    $("#popup-layer").on("mouseover", function() {
                         me.main.deactivateSubmenu();
                     });
                 }

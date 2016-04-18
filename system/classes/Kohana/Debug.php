@@ -63,7 +63,7 @@ class Kohana_Debug {
 	 */
 	protected static function _dump( & $var, $length = 128, $limit = 10, $level = 0)
 	{
-		return '';
+		//return '';
 		if ($var === NULL)
 		{
 			return '<small>NULL</small>';
