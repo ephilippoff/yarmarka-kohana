@@ -103,14 +103,19 @@ define([
         },
 
         events: {
-            "keyup @ui.searchInput" : "searchInputKeyUp",
-            "click"                 : "onClick"
+            "keyup @ui.searchInput": "searchInputKeyUp"
+            , "click"                 : "onClick"
+            , 'change @ui.categoryBox': 'categoryBoxValueChanged'
         },
 
         onClick: function(e) {
             if (e.target != this.ui.searchPopupCont) {
                this.ui.searchPopupCont.hide();
             }
+        },
+
+        categoryBoxValueChanged: function(e) {
+            this.ui.searchForm.attr('action', '/' + this.ui.categoryBox.find('option:selected').data('url'));
         },
 
         searchInputKeyUp: function(e) {
