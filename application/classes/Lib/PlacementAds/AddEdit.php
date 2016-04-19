@@ -743,7 +743,7 @@ class Lib_PlacementAds_AddEdit {
 		{
 			$errors['contact_mobile'] = "Необходимо добавить хотя бы один верифицированный контакт для связи";
 		} else {
-			if (!$params->just_check) {
+			if (!$params->just_check AND !$params->itis_massload) {
 				foreach ($this->contacts as $contact_item) {
 					if (array_key_exists('is_additional', $contact_item) && $contact_item['is_additional']) {
 						continue;

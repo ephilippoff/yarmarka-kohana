@@ -199,9 +199,9 @@ class Object
 			->init_object_and_mode()
 			->check_neccesaries()
 			->normalize_attributes()
-			->init_contacts()
 			->init_validation_rules()
 			//->init_validation_rules_for_attributes()
+			->init_contacts()
 			->exec_validation()
 			->check_signature();
 
