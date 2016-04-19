@@ -209,6 +209,7 @@ class Object
 		{
 			$add->save_address()
 				->prepare_object()
+				->save_style_object()
 				->save_external_info()
 				->save_parentid_object();
 

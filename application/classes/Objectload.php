@@ -218,7 +218,7 @@ class Objectload
 		$record = Massload::to_post_format($record, $config["id"], NULL, $config, $dictionary);
 
 		$record = array_merge($record, $config["autofill"]);
-
+		$record['set_no_company'] = $row->set_no_company;
 		return Object::PlacementAds_ByMassLoad($record, $user_id);
 
 	}

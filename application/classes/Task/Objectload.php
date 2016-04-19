@@ -90,6 +90,17 @@ class Task_Objectload extends Minion_Task
 		Auth::instance()->force_login($user);
 		$db = Database::instance();
 
+		$set_no_company = FALSE;
+
+		$user_settings = ORM::factory('User_Settings')
+								->where("name","=","set_no_company")
+								->where("user_id","=",$user_id)
+								->order_by("id","asc")->find();
+
+		if ($user_settings->loaded()) {
+			$set_no_company = TRUE;
+		}
+
 		$ol = new Objectload($user_id, $objectload_id);
 		$ol->setState(4);
 		$ol->loadSettings($user_id);
@@ -137,7 +148,7 @@ class Task_Objectload extends Minion_Task
 
 		Minion::write("Success", "Start...");
 
-		$ol->forEachRecord($filters, function($row, $category, $cc) use ($ol, $ct, $test){
+		$ol->forEachRecord($filters, function($row, $category, $cc) use ($ol, $ct, $test, $set_no_company){
 			
 			$ct->_update();
 			if (!$ct->_check($ct->id))
@@ -162,6 +173,8 @@ class Task_Objectload extends Minion_Task
 			if ($test)
 				return 'continue';
 
+			$row->set_no_company = $set_no_company;
+			
 			$object = new Obj( $ol->saveRowAsObject($row, $config, $dictionary) );
 
 			if ($object->object_id) {
