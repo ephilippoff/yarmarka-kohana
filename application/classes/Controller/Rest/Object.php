@@ -262,12 +262,17 @@ class Controller_Rest_Object extends Controller_Rest {
 
 		$auhor = ORM::factory('User', $object->author);
 
+		$description = "";
+
 		if ($type == "block_edit") {
 			$object->moderate_ban_for_edit();
+			$description = "Заблокировано до исправления по причине : $comment";
 		} else if ($type == "block_object") {
 			$object->moderate_ban();
+			$description = "Заблокировано окончательно по причине : $comment";
 		}  else if ($type == "block_full" AND $auhor->loaded()) {
 			$auhor->ban($comment);
+			$description = "Удалено по причине: $comment";
 			//$object->moderate_full_ban();
 		}
 
@@ -277,7 +282,7 @@ class Controller_Rest_Object extends Controller_Rest {
 		$m_log = ORM::factory('Object_Moderation_Log');
 		$m_log->action_by 	= $user->id;
 		$m_log->user_id 	= $auhor->id;
-		$m_log->description = $comment;
+		$m_log->description = $description;
 		$m_log->reason 		= $comment;
 		$m_log->object_id 	= $object->id;
 		$m_log->noticed = ($send_mail) ? FALSE: TRUE;

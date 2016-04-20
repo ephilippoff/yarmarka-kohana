@@ -58,7 +58,7 @@ class Task_ModerationEmailNotices extends Minion_Task
                     $domain = 'http://surgut.yarmarka.biz';
                 }
 
-                return '<p>'.$item->reason . ' ('.HTML::anchor($domain.'/detail/'.$item->object_id, $item->object_title).')</p>';
+                return '<p>'.$item->description . ' ('.HTML::anchor($domain.'/detail/'.$item->object_id, $item->object_title).')</p>';
             }, $actions_for_user);
 
             
