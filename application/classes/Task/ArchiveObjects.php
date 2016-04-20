@@ -69,6 +69,8 @@ class Task_ArchiveObjects extends Minion_Task
                                 ->where("o.id","IN", $subquery_objects_with_author)
                                 ->where("o.author","=",$user->id)
                                 ->execute();
+
+                if (!count($objects)) continue;
                 
                 $domain = 'http://c.yarmarka.biz';
                 if (count($objects) AND $objects[0]['city_id'] == 1979) {

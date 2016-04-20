@@ -1,0 +1,1 @@
+ALTER TABLE object_moderation_log ADD COLUMN noticed boolean;

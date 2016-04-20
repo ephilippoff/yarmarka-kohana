@@ -461,6 +461,8 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 
 		if ($reason)
 		{
+			$send_mail = $this->request->post('send_email');
+
 			// moderation log
 			$m_log = ORM::factory('Object_Moderation_Log');
 			$m_log->action_by 	= Auth::instance()->get_user()->id;
@@ -468,23 +470,24 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 			$m_log->description = $description;
 			$m_log->reason 		= $reason;
 			$m_log->object_id 	= $object->id;
+			$m_log->noticed =  ($send_mail) ? FALSE: TRUE;
 			$m_log->save();
 
 			// msg to user
 			ORM::factory('User_Messages')->add_msg_to_object($object->id, $description);
 
-			if ($this->request->post('send_email') AND $object->user->loaded())
-			{
-				$msg = View::factory('emails/manage_object', 
-					array(
-						'UserName' => $object->user->fullname ? $object->user->fullname : $object->user->login,
-						'actions' => array(
-							$description . ' ('.HTML::anchor($object->get_url(), $object->title).')',
-						),
-					)
-				)->render();
-				Email::send(trim($object->user->email), Kohana::$config->load('email.default_from'), "Сообщение от модератора сайта", $msg);
-			}
+			// if ($this->request->post('send_email') AND $object->user->loaded())
+			// {
+			// 	$msg = View::factory('emails/manage_object', 
+			// 		array(
+			// 			'UserName' => $object->user->fullname ? $object->user->fullname : $object->user->login,
+			// 			'actions' => array(
+			// 				$description . ' ('.HTML::anchor($object->get_url(), $object->title).')',
+			// 			),
+			// 		)
+			// 	)->render();
+			// 	Email::send(trim($object->user->email), Kohana::$config->load('email.default_from'), "Сообщение от модератора сайта", $msg);
+			// }
 						
 
 			if ($is_bad)

@@ -273,18 +273,28 @@ class Controller_Rest_Object extends Controller_Rest {
 
 		ORM::factory('User_Messages')->add_msg_to_object($id, $comment);
 
-		if ($send_mail AND $auhor->loaded() AND $auhor->email)
-		{
-			$msg = View::factory('emails/manage_object', 
-				array(
-					'UserName' => $auhor->fullname ? $auhor->fullname : $auhor->login,
-					'actions' => array(
-						$comment . ' ('.HTML::anchor($object->get_url(), $object->title).')',
-					),
-				)
-			)->render();
-			Email::send(trim($auhor->email), Kohana::$config->load('email.default_from'), "Сообщение от модератора сайта", $msg);
-		}
+		// moderation log
+		$m_log = ORM::factory('Object_Moderation_Log');
+		$m_log->action_by 	= $user->id;
+		$m_log->user_id 	= $auhor->id;
+		$m_log->description = $comment;
+		$m_log->reason 		= $comment;
+		$m_log->object_id 	= $object->id;
+		$m_log->noticed = ($send_mail) ? FALSE: TRUE;
+		$m_log->save();
+
+		// if ($send_mail AND $auhor->loaded() AND $auhor->email)
+		// {
+		// 	$msg = View::factory('emails/manage_object', 
+		// 		array(
+		// 			'UserName' => $auhor->fullname ? $auhor->fullname : $auhor->login,
+		// 			'actions' => array(
+		// 				$comment . ' ('.HTML::anchor($object->get_url(), $object->title).')',
+		// 			),
+		// 		)
+		// 	)->render();
+		// 	Email::send(trim($auhor->email), Kohana::$config->load('email.default_from'), "Сообщение от модератора сайта", $msg);
+		// }
 
 		$this->json["code"] = 200;
 	}
