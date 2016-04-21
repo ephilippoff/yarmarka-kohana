@@ -60,7 +60,7 @@
 				<a href="/user/registration">Регистрация</a>
 			</div>
 			{% endif %}
-			<h2>Ваш город: Сургут <i class="fa fa-caret-right"></i></h2>
+			<h2>Ваш город: {{ get_current_city() }} <i class="fa fa-caret-right"></i></h2>
 			<div class="menu_container">
 				{{ requestblock('block_twig/othercities', {'city_id': city.id, 'canonical_url': canonical_url, 'cols' : 2, 'class' : 'mobile'}) }}
 			</div>
