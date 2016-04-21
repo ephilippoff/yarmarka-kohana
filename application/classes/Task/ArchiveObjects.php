@@ -50,6 +50,7 @@ class Task_ArchiveObjects extends Minion_Task
             return;
         }
 
+        $new_engine_cities = Kohana::$config->load("common.new_engine_cities");
 
         if ($sendmail) {
             $subquery_authors = DB::select("o.author")
@@ -73,15 +74,18 @@ class Task_ArchiveObjects extends Minion_Task
                 if (!count($objects)) continue;
                 
                 $domain = 'http://c.yarmarka.biz';
-                if (count($objects) AND $objects[0]['city_id'] == 1979) {
-                    $domain = 'http://surgut.yarmarka.biz';
-                }
+                $city_id = $objects[0]['city_id'];
+                $is_new = FALSE;
 
+                if (in_array($city_id, $new_engine_cities) {
+                    $is_new = Region::get_domain_by_city($city_id);
+                }
 
                 $msg = View::factory('emails/object_to_archive',
                         array(
                             'objects' => $objects,
-                            'domain' => $domain
+                            'domain' => $domain,
+                            'is_new' => $is_new
                         ));
 
                 Minion_CLI::write('notice send to: '.$user->email."<br>");

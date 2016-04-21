@@ -30,6 +30,8 @@ class Task_ModerationEmailNotices extends Minion_Task
         if (!count($user_ids)) {
             return;
         }
+        
+        $new_engine_cities = Kohana::$config->load("common.new_engine_cities");
 
         $users_for_notice = ORM::factory('User')->where("id","IN",$user_ids)->find_all();
 
@@ -54,9 +56,6 @@ class Task_ModerationEmailNotices extends Minion_Task
             $actions_for_user = array_map(function($item){
                 $domain = 'http://c.yarmarka.biz';
                 Minion_CLI::write($item->object_city_id);
-                if ($item->object_city_id == 1979) {
-                    $domain = 'http://surgut.yarmarka.biz';
-                }
 
                 return '<p>'.$item->description . ' ('.HTML::anchor($domain.'/detail/'.$item->object_id, $item->object_title).')</p>';
             }, $actions_for_user);
