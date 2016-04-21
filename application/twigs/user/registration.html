@@ -1,9 +1,8 @@
-{% extends "layouts/user" %}
+{% extends "layouts/add" %}
 
 {% block header %} 
 		{{ requestblock('block_twig/topline', {'favourites':favourites}) }}
 		{% include 'block/header/logoline' %}
-		{% include 'user/add/promo' %}
 {% endblock header %} 
 
 {% block crumbs %}{% endblock crumbs %}

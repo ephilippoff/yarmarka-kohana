@@ -16,6 +16,19 @@
 		height: auto !important;
 	}
 
+	.result-item .control-item>input {
+	    height: 20px;
+	    width: 20px;
+	}
+
+	.result-item .control-item>.fa{
+		font-size: 24px;
+	}
+
+	.result-item .control-item>.fa-times {
+	    font-size: 26px;
+	}
+
 	.crumbs-h1{
 		font-size: 18px;
 	}
@@ -44,7 +57,8 @@
 		margin-bottom: 0;
 	}
 
-	.table-result-info.style1 .td-1{
+	.table-result-info.style1 .td-1,
+	.subcategories-cont{
 		display: none;
 	}
 

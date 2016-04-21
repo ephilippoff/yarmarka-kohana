@@ -4,9 +4,11 @@
 
 {% block header %}
 	{{ parent() }}
-	{% include 'cart/promo' %}
 {% endblock header %}
 
+{% block leftside %} 
+	{% include 'user/personal/nav' %}
+{% endblock leftside %}
 
 {% block content %}
 
@@ -44,29 +46,33 @@
 		</div>
 		<div class="p20">
 			{% set error = FALSE %}
-			<table class="table">
-				<tr class="fs18">
-					<th class="">Наименование</th>
-					<th class="w200">Параметры</th>
-					<th class="w200">Цена</th>
-				</tr>
+			<table class="table" id="flip-scroll">
+				<thead>
+					<tr class="fs18">
+						<th class="">Наименование</th>
+						<th class="w200">Параметры</th>
+						<th class="w200">Цена</th>
+					</tr>
+				</thead>
 
-				{% set i = 1 %}
-				{% for item in orderItems  if item.service.name == 'kupon' %}
-					{% if loop.first %}
-						<tr><td colspan="5">Купоны</td></tr>
-					{% endif %}
-					{% include 'cart/item/kupon' %}
-					{% set i = i +1 %}
-				{% endfor %}
+				<tbody>
+					{% set i = 1 %}
+					{% for item in orderItems  if item.service.name == 'kupon' %}
+						{% if loop.first %}
+							<tr><td colspan="5">Купоны</td></tr>
+						{% endif %}
+						{% include 'cart/item/kupon' %}
+						{% set i = i +1 %}
+					{% endfor %}
 
-				{% for item in orderItems if item.service.name != 'kupon' %}
-					{% if loop.first %}
-						<tr><td colspan="5">Услуги для объявлений</td></tr>
-					{% endif %}
-					{% include 'cart/item/other' %}
-					{% set i = i + 1 %}
-				{% endfor %}
+					{% for item in orderItems if item.service.name != 'kupon' %}
+						{% if loop.first %}
+							<tr><td colspan="5">Услуги для объявлений</td></tr>
+						{% endif %}
+						{% include 'cart/item/other' %}
+						{% set i = i + 1 %}
+					{% endfor %}
+				</tbody>
 			</table>
 
 			<div class="ta-r mb20">

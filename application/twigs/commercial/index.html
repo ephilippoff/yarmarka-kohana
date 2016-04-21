@@ -1,0 +1,45 @@
+{% extends "layouts/simple" %}
+
+
+{% block header %}
+	{{ parent() }}
+	{{ css("commercial.css") }}
+	{% include 'cart/crumbs' %}
+{% endblock header %}
+
+
+{% block content %}
+
+<div class="col-lg-12">
+	
+	<div class="services-wrap mt50">
+		<div class="row">
+			<div class="col-md-12 clearfix ta-c">
+				<div class="service-item-wrap">
+					<div class="title">Реклама <br>на сайте</div>
+					<a href="commercial/site" class="link">подробнее</a>
+				</div>
+				<div class="service-item-wrap">
+					<div class="title">Индор <br>реклама</div>
+					<a href="http://indoor.yarmarka.biz/" class="link" target="_blank">подробнее</a>
+				</div>
+				<div class="service-item-wrap">
+					<div class="title">Наружная <br>реклама</div>
+					<a href="commercial/outdoor" class="link">подробнее</a>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-lg-12">
+				<a class="order-call" href="http://feedback.yarmarka.biz/">Заказать консультацию специалиста</a>
+			</div>
+		</div>
+	</div>
+
+</div>
+
+{% endblock content %}
+
+{% block footer %} 
+	{{ parent() }}
+{% endblock footer %}

@@ -1,0 +1,86 @@
+{% extends "layouts/simple" %}
+
+
+{% block header %}
+	{{ parent() }}
+	{{ css("commercial.css") }}
+	{% include 'cart/crumbs' %}
+{% endblock header %}
+
+
+{% block content %}
+
+<div class="col-lg-12 w100p_img mb50">
+	
+	<div class="ad_title mb20">
+		<span>Услуга "Три слона"</span>
+	</div>
+	
+	<div class="three-el-wrap clearfix">
+		<div class="ad_title mb50 bold">
+			Их невозможно <br>не заметить!
+		</div>
+
+		<div class="clearfix">
+			<div class="panel-3elph">
+				<p style="margin-bottom: 50px !important;"><span>3</span> баннера одновременно в</p>
+				<p style="margin-bottom: 50px !important;"><span>3</span>-x разных местах ваша реклама будет сопровождать посетителя на</p>
+				<p><span>3</span>-х этапах просмотра объявлений</p>
+			</div>
+		</div>
+
+		<div class="ta-c" style="padding: 0px 15px;">
+			<div class="fs35 bold ta-c" style="margin-top: 200px;">
+				Как это выглядит в рубрике
+			</div>
+			<img src="../static/develop/images/commercial/3elph1.png" alt="" class="mb20">
+
+			<div class="fs35 bold ta-c">
+				Как это выглядит в карточке объявлений
+			</div>
+			<img src="../static/develop/images/commercial/3elph2.png" alt="" class="mb20 mt20">
+
+			<div class="fs35 bold ta-c">
+				Как это выглядит между строк
+			</div>
+			<img src="../static/develop/images/commercial/3elph3.png" alt="" class="mb20 mt20">
+			<p class="fs26 ta-c">Оплата только за клики!<br>1 клик по вашему баннеру будет стоить вам всего 10 рублей.*</p>
+			<p class="ak">* при покупке 500 кликов</p>
+		</div>
+
+		<table class="ad short" id="block-table" style="margin: auto;">
+			<thead>
+				<tr>
+					<th style="background: none;">Количество разделов</th>
+					<th style="background: none;">Цена 1 клика, руб.</th>
+					<th style="background: none;">Минимальный заказ, кликов</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td data-title="Количество разделов">1</td>
+					<td data-title="Цена 1 клика, руб.">10</td>
+					<td data-title="Минимальный заказ, кликов">500</td>
+				</tr>
+				<tr>
+					<td data-title="Количество разделов">1</td>
+					<td data-title="Цена 1 клика, руб.">10</td>
+					<td data-title="Минимальный заказ, кликов">500</td>
+				</tr>
+				<tr>
+					<td data-title="Количество разделов">1</td>
+					<td data-title="Цена 1 клика, руб.">10</td>
+					<td data-title="Минимальный заказ, кликов">500</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+
+</div>
+
+{% endblock content %}
+
+{% block footer %} 
+	{{ parent() }}
+{% endblock footer %}

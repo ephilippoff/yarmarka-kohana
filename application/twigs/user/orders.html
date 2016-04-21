@@ -3,58 +3,63 @@
 {% block header %} 
 		{{ requestblock('block_twig/topline', {'favourites':favourites}) }}
 		{% include 'block/header/logoline' %}
-		{% include 'user/personal/promo' %}
 {% endblock header %} 
 
-{% block crumbs %}{% endblock crumbs %}
+{% block leftside %} 
+	{% include 'user/personal/nav' %}
+{% endblock leftside %}
 
 {% block content %}
 	{{ parent() }}
 	<div class="bg-color-whitesmoke p20">
-		<table class="orders-table table">
-			<tr>
-				<th class="col1">Дата</th>
-				<th class="col2">Наименование</th>
-				<th class="col3">Состояние</th>
-				<th class="col4">Сумма</th>
-				<th class="col5"></th>
-			</tr>
-
-			{% for order in orders %}
+		<table class="orders-table table" id="block-table">
+			<thead>
 				<tr>
-					<td class="col1">{{ order.created|date("d.m.Y H:i") }}</td>
-					<td class="col1"><a href="/cart/order/{{order.id}}">Заказ #{{order.id}}</a></td> 
-					<td class="col2">
-						{{ order.state_name }}
-						{% if order.state == 2 %}
-							{{order.payment_date|date("d.m.Y H:i")}}
-						{% endif %}
-					</td> 
-					<td class="col3">{{ order.sum }} руб.</td>
-					<td><span class="span-link" onclick="$('.info_{{ order.id }}').toggle();"><i class="fa fa-arrow-down"></i></span></td>
+					<th class="col1">Дата</th>
+					<th class="col2">Наименование</th>
+					<th class="col3">Состояние</th>
+					<th class="col4">Сумма</th>
+					<th class="col5"></th>
 				</tr>
-				
-				<tr style="display:none;" class="info_{{ order.id }}">
-					<td colspan="5">
-						<p class="p10">Содержание заказа #{{ order.id }}</p>
-						{% for orderItem in order.items %}
-							<p class="p10">
-								{% if orderItem.params.service.name == 'kupon' %}
-									{% if order.state == 2 or order.state == 22 or order.state == 222 %}
-										<span><a href="/kupon/print/{{orderItem.params.service.id}}"><i class="fa fa-file-o mr5"></i>Купон. {{orderItem.params.service.title}}</a></span>
+			</thead>
+
+			<tbody>
+				{% for order in orders %}
+					<tr>
+						<td data-title="Дата" class="col1">{{ order.created|date("d.m.Y H:i") }}</td>
+						<td data-title="Наименование" class="col1"><a href="/cart/order/{{order.id}}">Заказ #{{order.id}}</a></td> 
+						<td data-title="Состояние" class="col2">
+							{{ order.state_name }}
+							{% if order.state == 2 %}
+								{{order.payment_date|date("d.m.Y H:i")}}
+							{% endif %}
+						</td> 
+						<td data-title="Сумма" class="col3">{{ order.sum }} руб.</td>
+						<td data-title="Подробнее"><span class="span-link" onclick="$('.info_{{ order.id }}').toggle();"><i class="fa fa-arrow-down"></i></span></td>
+					</tr>
+					
+					<tr style="display:none;" class="info_{{ order.id }}">
+						<td colspan="5">
+							<p class="p10">Содержание заказа #{{ order.id }}</p>
+							{% for orderItem in order.items %}
+								<p class="p10">
+									{% if orderItem.params.service.name == 'kupon' %}
+										{% if order.state == 2 or order.state == 22 or order.state == 222 %}
+											<span><a href="/kupon/print/{{orderItem.params.service.id}}"><i class="fa fa-file-o mr5"></i>Купон. {{orderItem.params.service.title}}</a></span>
+										{% else %}
+											<span>{{orderItem.params.service.title}}</span>
+										{% endif %}
 									{% else %}
-										<span>{{orderItem.params.service.title}}</span>
+										<span><a href="/detail/{{orderItem.params.object.id}}">Услуга "{{orderItem.params.service.title}}" для объявления {{orderItem.params.object.title}}</a></span>
 									{% endif %}
-								{% else %}
-									<span><a href="/detail/{{orderItem.params.object.id}}">Услуга "{{orderItem.params.service.title}}" для объявления {{orderItem.params.object.title}}</a></span>
-								{% endif %}
-								<br><span>{{orderItem.params.service.price}} руб</span>
-							</p>
-						{% endfor %}
-					</td>
-				</tr>
-				
-			{% endfor %}
+									<br><span>{{orderItem.params.service.price}} руб</span>
+								</p>
+							{% endfor %}
+						</td>
+					</tr>
+					
+				{% endfor %}
+			</tbody>
 		</table>
 		{{ pagination }}
 	</div>

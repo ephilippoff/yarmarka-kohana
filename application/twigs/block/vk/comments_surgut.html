@@ -2,12 +2,14 @@
 
 <script type="text/javascript" src="//vk.com/js/api/openapi.js?121"></script>
 
-<div class="clearfix">
+<div class="clearfix module">
+	{% if not landing %}
 	<div class="buttons-block clearfix">
 		<button class="more-button button bg-color-blue module" data-role="show_comments"><span class="hidden-xxs">Оставить комментарий</span> <span class="hidden-lg visible-xxs">Комментировать</span> <i class="fa fa-comment"></i></button>
 		<button class="more-button button bg-color-blue module hidden-lg" data-role="show_share"><span>Поделиться</span> <i class="fa fa-share-alt"></i></button>
 	</div>
-	<div class="share-links">
+	{% endif %}
+	<div class="share-links" {% if landing %}style="float:left;" {% endif %}>
 		<script type="text/javascript" src="//yastatic.net/es5-shims/0.0.2/es5-shims.min.js" charset="utf-8"></script>
 		<script type="text/javascript" src="//yastatic.net/share2/share.js" charset="utf-8"></script>
 		<div class="ya-share2" id="ya-share" data-services="vkontakte,facebook,odnoklassniki,moimir,gplus,twitter,lj"></div>
