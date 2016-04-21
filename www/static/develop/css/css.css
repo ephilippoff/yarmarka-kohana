@@ -59,6 +59,8 @@ hr{
     border-bottom: none;
 }
 
+img{max-width: 100%;}
+
 h3, h2, strong, .bold, b {font-family: 'pt_sansbold', Verdana, sans-serif;}
 .caption {font-family: 'pt_sans_captionregular', Verdana, sans-serif;}
 .captionbold {font-family: 'pt_sans_captionbold', Verdana, sans-serif;}
