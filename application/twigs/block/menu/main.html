@@ -18,9 +18,9 @@
 			{% set ulWidth = 191 %}
 			<div class="section section{{category.id}}" id="section{{category.id}}" style="width: {{divWidth}}px;  display: none;">				
 				<ul class="submenu-ul">
-					<li class="li-title ml20"><span class="bold  black fs18" style="width: 165px">{{category.title}}</span></li>
+					<li class="li-title ml20"><span class="bold  black fs18 w100p">{{category.title}}</span></li>
 					{% for subcategory in categories2l if subcategory.parent_id == category.id %}
-						<li class="ml20" style="width:{{ulWidth}}px;position:relative;z-index:1;">
+						<li class="ml20" style="width:{{ulWidth}}px;">
 							<a href="/{{category.seo_name}}/{{subcategory.seo_name}}">{{subcategory.title}}</a>
 						</span></li>
 					{% endfor %}
