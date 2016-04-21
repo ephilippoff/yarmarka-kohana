@@ -6,7 +6,7 @@
 									'sport-otdih-hobby','domashnie-zhivotnye-i-rasteniya', 'v-horoshie-ruki', 'prodovolstvennye-tovary'] %}
 			{% for category in categories1l if category.seo_name in true_categories %}
 				{% set menuHeight = (banners[category.id] is defined and banners[category.id].menu_height) ? banners[category.id].menu_height : '' %}
-				<li class="js-submenu-item" data-submenu-id="section{{category.id}}" class="section{{category.id}}" data-menu-height="{{menuHeight}}">
+				<li class="js-submenu-item" data-submenu-id="section{{category.id}}" class="section{{category.id}}">
 					<a class="span-link" href="/{{category.seo_name}}">{{category.title}}</a>
 				</li>
 			{% endfor %}
@@ -16,7 +16,7 @@
 		{% for category in categories1l %}
 			{% set divWidth = (banners[category.id] is defined and banners[category.id].menu_width) ? banners[category.id].menu_width : 400 %}
 			{% set ulWidth = 191 %}
-			<div class="section section{{category.id}}" id="section{{category.id}}" style="width: {{divWidth}}px; {% if loop.index != 13 %} display: none; {% endif %}">				
+			<div class="section section{{category.id}}" id="section{{category.id}}" style="width: {{divWidth}}px;  display: none;">				
 				<ul class="submenu-ul">
 					<li class="li-title ml20"><span class="bold  black fs18" style="width: 165px">{{category.title}}</span></li>
 					{% for subcategory in categories2l if subcategory.parent_id == category.id %}
