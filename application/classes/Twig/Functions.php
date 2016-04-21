@@ -321,12 +321,15 @@ class Twig_Functions
 		$main_domain = $config["main_domain"];
 
 		$city_name = strtolower(trim( str_replace($main_domain, "", $domain), "."));
-		$cities = array(
-			"surgut" => "Сургут",
-			"tyumen" => "Тюмень",
-			"nizhnevartovsk" => "Нижневартовск"
-		);
-		return $cities[$city_name];
+
+		$city = ORM::factory('City')->where('seo_name',"=",$city_name)->cached(Date::WEEK)->find();
+
+		// $cities = array(
+		// 	"surgut" => "Сургут",
+		// 	"tyumen" => "Тюмень",
+		// 	"nizhnevartovsk" => "Нижневартовск"
+		// );
+		return $city->title;
 	}
 
 	public static function custommenu($root)
