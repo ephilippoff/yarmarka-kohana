@@ -57,7 +57,7 @@ class Task_ModerationEmailNotices extends Minion_Task
                 $domain = 'http://c.yarmarka.biz';
                 Minion_CLI::write($item->object_city_id);
 
-                return '<p>'.$item->description . ' ('.HTML::anchor($domain.'/detail/'.$item->object_id, $item->object_title).')</p>';
+                return '<p>'.HTML::anchor($domain.'/detail/'.$item->object_id, $item->object_title).':<br>'$item->description.'</p>';
             }, $actions_for_user);
 
             
