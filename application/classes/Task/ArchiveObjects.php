@@ -91,13 +91,16 @@ class Task_ArchiveObjects extends Minion_Task
 
                 Email::send($user->email, Kohana::$config->load('email.default_from'), 'Ваши объявления перемещены в архив', $msg);
 
+                DB::update(array("object","o"))
+                    ->set( array("in_archive" => "T", "is_published" => 0) )
+                    ->where("o.id", "IN", $subquery_objects_with_author)
+                    ->where("o.author","=",$user->id)
+                    ->execute();
+
             }
         }
 
-        DB::update(array("object","o"))
-            ->set( array("in_archive" => "T", "is_published" => 0) )
-            ->where("o.id", "IN", $subquery_objects_with_author)
-            ->execute();
+        
     }
 
 }
