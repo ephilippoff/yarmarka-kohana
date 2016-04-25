@@ -119,7 +119,7 @@ class Controller_Rest_Service extends Controller_Rest {
 				$errors = $errors + 1;
 				continue;
 			}
-			$object =  $object->get_row_as_obj(array("id","title"));
+			$object =  $object->get_row_as_obj(array("id","title","main_image_id"));
 			$objects_to_action[] = $object;
 
 			$service = Service::factory("Lider", $object->id);
