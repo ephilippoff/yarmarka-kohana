@@ -140,8 +140,13 @@ class Controller_Rest_Service extends Controller_Rest {
 		$this->json['services'] = $services_to_action;
 		$this->json['objects'] = $objects_to_action;
 		if (count($objects_to_action) == 1) {
-			$this->json['object'] = $objects_to_action[0];
-			$this->json['service'] = $services_to_action[0];
+			if (!$objects_to_action[0]->main_image_id) {
+				$this->json['text'] = "Для применения услуги 'Лидер' к объявлению, необходимо прикрепить хотябы одно фото";
+				$this->json['code'] = 400;
+			} else {
+				$this->json['object'] = $objects_to_action[0];
+				$this->json['service'] = $services_to_action[0];
+			}
 		}
 	}
 
