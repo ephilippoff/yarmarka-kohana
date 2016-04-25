@@ -77,7 +77,7 @@ class Task_ArchiveObjects extends Minion_Task
                 $city_id = $objects[0]['city_id'];
                 $is_new = FALSE;
 
-                if (in_array($city_id, $new_engine_cities) {
+                if (in_array($city_id, $new_engine_cities)) {
                     $is_new = Region::get_domain_by_city($city_id);
                 }
 
