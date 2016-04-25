@@ -22,8 +22,7 @@ class Task_ArchiveObjects extends Minion_Task
                         ->from(array("object","o") )
                         ->where("o.date_expiration","<", DB::expr("NOW()"))
                         ->where("o.in_archive", "=", 'N' )
-                        ->where("o.active", "=", 1)
-                        ->limit($limit);
+                        ->where("o.active", "=", 1);
 
         $subquery_objects_without_author = clone $subquery;
         $subquery_objects_with_author = clone $subquery;
