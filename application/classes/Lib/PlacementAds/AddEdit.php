@@ -921,6 +921,15 @@ class Lib_PlacementAds_AddEdit {
 			$object->author_company_id = $user->id; //DB::expr('NULL');
 		}
 
+
+		if ( ! $this->is_edit AND !$params->itis_massload AND $category AND $city AND ORM::factory('Settings')->isPremodEnabled()) {
+			$premod = Kohana::$config->load('category.'.$category->parent->seo_name.'.'.$city->seo_name.'.premod');
+
+			if ($premod) {
+				$object->moder_state = -1;
+			}
+		}
+
 		if ( ! $this->is_edit)
 		{
 			// при редактировании автора не меняем

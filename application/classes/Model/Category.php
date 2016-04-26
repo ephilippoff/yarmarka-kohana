@@ -20,6 +20,7 @@ class Model_Category extends ORM {
 
 	protected $_belongs_to = array(
 		'category' => array('local_key' => 'parent_id'),
+		'parent'	=> array('model' => 'Category', 'foreign_key' => 'parent_id'),
 	);
 
 	public function get_url($region_id = NULL, $city_id = NULL, $action_id = NULL)

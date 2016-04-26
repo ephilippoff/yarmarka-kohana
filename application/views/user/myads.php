@@ -322,7 +322,12 @@
 									<div class="col2">
 										<a href="<?=$ad->get_url()?>" target="_blank"><?=htmlspecialchars($ad->title)?></a>
 										<div class="ml5">
-											<p class="info">Публикуется в рубрике: <a href="<?=$ad->category_obj->get_url($ad->city_obj->region_id, $ad->city_id)?>"><?=$ad->category_obj->title?></a>, <?=$ad->city_obj->loaded() ? $ad->city_obj->title : $ad->city?></p>
+											<?php  if ($ad->moder_state < 0 ):?>
+												<p class="info" style="color:red;font-size:1.2em;">Объявление будет опубликовано после предварительной модерации</p>
+											<?php else: ?>
+												<p class="info">Публикуется в рубрике: <a href="<?=$ad->category_obj->get_url($ad->city_obj->region_id, $ad->city_id)?>"><?=$ad->category_obj->title?></a>, <?=$ad->city_obj->loaded() ? $ad->city_obj->title : $ad->city?></p>
+											<?php endif; ?>
+											
 											<p class="info">Расположение:
 												<?php if ($ad->location_obj->loaded() AND $ad->location_obj->address) : ?>
 													<?=$ad->location_obj->city?>,<?=$ad->location_obj->address?>
