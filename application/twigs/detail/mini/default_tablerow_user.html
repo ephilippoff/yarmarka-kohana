@@ -39,7 +39,7 @@
 			</a>
 		</p>
 		<p class="style1">
-			{% if object.moder_state %}	
+			{% if object.moder_state >= 0 %}	
 				{% if not object.is_bad %}
 					<span class="green">Прошло модерацию.</span>
 				{% elseif object.is_bad == 1 %}
@@ -47,7 +47,9 @@
 				{% elseif object.is_bad == 2 %}
 					<span class="red">Заблокировано модератором окончательно</span>
 				{% endif %}
-			{% else  %}
+			{% elseif  object.moder_state < 0 %}
+				<span class="red">Будет опубликовано после преварительной модерации</span>
+			{% else %}
 				<span class="red">Пока не прошло модерацию</span>
 			{% endif %}
 		</p>

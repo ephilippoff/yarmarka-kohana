@@ -84,6 +84,8 @@
 			<button class="btn dropdown-toggle
 				<?php if ( ! $object->is_moderate()) : ?>
 					btn-warning
+				<?php elseif ($object->is_moderate() < 0) : ?>
+					btn-default
 				<?php elseif ($object->is_banned()) : ?>
 					btn-danger
 				<?php else : ?>
@@ -93,6 +95,8 @@
 				<span class="text">
 				<?php if ( ! $object->is_moderate()) : ?>
 					На модерации
+				<?php elseif ($object->is_moderate() < 0) : ?>
+					! Пред модерация
 				<?php elseif ($object->is_banned()) : ?>
 					<?php if ($object->is_bad == 1) : ?>
 						На исправлении

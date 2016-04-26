@@ -798,6 +798,33 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 
 	}
 
+	public function action_premod_state() {
+
+		$this->use_layout = FALSE;
+		$this->auto_render = FALSE;
+
+		$enabled = ORM::factory('Settings')->isPremodEnabled();
+
+		$json['state'] = $enabled;
+		$json['code'] = 200;
+		
+		$this->response->body(json_encode($json));		
+	}
+
+	public function action_premod_control() {
+
+		$this->use_layout = FALSE;
+		$this->auto_render = FALSE;
+
+		
+		$enabled = ORM::factory('Settings')->premodControl();
+
+		$json['state'] = $enabled;
+		$json['code'] = 200;
+		
+		$this->response->body(json_encode($json));		
+	}
+
 }
 
 /* End of file Objects.php */

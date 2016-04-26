@@ -303,7 +303,7 @@ class Model_Object extends ORM {
 
 	public function is_moderate()
 	{
-		return (bool) $this->moder_state;
+		return $this->moder_state;
 	}
 
 	public function get_edit_url($city_seo_name = NULL) {
