@@ -26,26 +26,27 @@ define([
             var s = this;
             e.preventDefault();
             var id = $(e.currentTarget).data("id");
+            var target = e.target;
             app.ocontrol.publishUnpublish(id, {
                 success: function(result) {
                     if (result.is_published) {
-                        $(".js-object-state-"+id).removeClass("red").text("Объявление опубликовано");
+                        $(".js-object-state-"+id).removeClass("red").addClass("green").text("Объявление опубликовано");
                         $(".js-object-title-"+id).removeClass("red").removeClass("strike");
-                        $(".js-object-services-"+id).removeClass("hidden");
+                        $(".js-object-services-"+id).slideDown();
                         $(".js-object-contacts-"+id).text("Контактные данные доступны, обновите страницу");
-                        $(e.currentTarget).find("span").text("Снять с публикации");
+                        $(target).addClass("fa-times").removeClass('fa-plus');
+                        console.log(e.currentTarget);
                     } else {
-                        $(".js-object-state-"+id).addClass("red").text("Объявление снято");
+                        $(".js-object-state-"+id).addClass("red").removeClass("green").text("Объявление снято");
                         $(".js-object-title-"+id).addClass("red").addClass("strike");
-                        $(".js-object-services-"+id).addClass("hidden");
+                        $(".js-object-services-"+id).slideUp();
                         $(".js-object-contacts-"+id).text("Объявление снято с публикации, контактные данные не доступны.");
-                        $(e.currentTarget).find("span").text("Опубликовать");
+                        $(target).removeClass("fa-times").addClass('fa-plus');
 
                         app.windows.vent.trigger("showWindow","object_callback",{
                                 id: id
                         });
                     }
-                    console.log(result);
                 },
                 error: function(result) {
                     alert(result.errors);
