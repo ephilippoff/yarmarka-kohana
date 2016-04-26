@@ -1,4 +1,4 @@
-{% extends "layouts/search" %}
+{% extends "layouts/user" %}
 
 {% set theme_class = 'blue-subtle-theme' %}
 
@@ -13,14 +13,16 @@
 {% block header %} 
 		{{ requestblock('block_twig/topline', {'favourites':favourites}) }}
 		{% include 'block/header/logoline' %}
-		{% include 'search/user/promo' %}
+		{% include 'search/user/crumbs' %}
 {% endblock header %} 
 
 
 {% block title %} {{ seo_attributes.title }} {% endblock title%}
 {% block meta_description %}{% endblock meta_description%}
-{% block wrapperclass %}page-search{% endblock wrapperclass %}
 
+{% block leftside %} 
+	{% include 'user/personal/nav' %}
+{% endblock leftside %}
 
 {% block crumbs %} {% endblock crumbs %}
 {% block subcategories %}{% endblock subcategories %}

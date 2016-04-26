@@ -2,10 +2,10 @@
 	<form method="POST" id="userinfo" enctype="multipart/form-data">
 
 		<div class="row mb10">
-			<div class="col-md-3 col-xs-4 labelcont">
+			<div class="col-md-3  labelcont">
 				<label>Идентификатор</label>
 			</div>
-			<div class="col-md-9 col-xs-8">
+			<div class="col-md-9 ">
 				<div class="inp-cont ">
 					<?= $user->id ?>				
 				</div>
@@ -13,10 +13,10 @@
 		</div>		
 
 		<div class="row mb10">
-			<div class="col-md-3 col-xs-4 labelcont">
+			<div class="col-md-3  labelcont">
 				<label>Email</label>
 			</div>
-			<div class="col-md-9 col-xs-8">
+			<div class="col-md-9 ">
 				<div class="inp-cont ">
 					<?= $user->email ?>				
 				</div>
@@ -32,10 +32,10 @@
 		</script>		
 
 		<div class="row mb10">
-			<div class="col-md-3 col-xs-4 labelcont">
+			<div class="col-md-3  labelcont">
 				<label>Тип учетной записи</label>
 			</div>
-			<div class="col-md-9 col-xs-8">
+			<div class="col-md-9 ">
 				<div class="inp-cont">
 					<div class="pt4">
 						<?= $types[$user->org_type] ?>
@@ -85,10 +85,10 @@
 
 
 		<div class="row mb10">
-			<div class="col-md-3 col-xs-4 labelcont">
+			<div class="col-md-3  labelcont">
 				<label>Привязка к компании</label>
 			</div>
-			<div class="col-md-9 col-xs-8">
+			<div class="col-md-9 ">
 				<div class="inp-cont ">
 					<? if (!$request_company->loaded()): ?>
 						<div class="pt4">
@@ -141,10 +141,10 @@
 		<? if ($user->org_type == 1 AND ! $parent_user->loaded()): ?>
 
 			<div class="row mb10">
-				<div class="col-md-3 col-xs-4 labelcont">
+				<div class="col-md-3  labelcont">
 					<label>Рубрики с ограничениями</label>
 				</div>
-				<div class="col-md-9 col-xs-8">
+				<div class="col-md-9 ">
 					<div class="inp-cont">
 						<div class="pt4">
 							<? foreach ($categories_limit as $category): ?>
@@ -168,10 +168,10 @@
 		<? if (!$parent_user->loaded() AND count($individual_limit) > 0): ?>
 
 			<div class="row mb10">
-				<div class="col-md-3 col-xs-4 labelcont">
+				<div class="col-md-3  labelcont">
 					<label>Индивидуальные ограничения</label>
 				</div>
-				<div class="col-md-9 col-xs-8">
+				<div class="col-md-9 ">
 					<div class="inp-cont ">
 						<div class="inp-cont">
 							<div class="pt4">
@@ -200,7 +200,7 @@
 
 
 			<div class="row mb10">
-				<div class="col-md-3 col-xs-4 labelcont">
+				<div class="col-md-3  labelcont">
 					<label><?= $field["title"] ?></label>
 				</div>
 
@@ -210,7 +210,7 @@
 					$lenth_unput = "col-md-12";
 				?>			
 
-				<div class="col-md-9 col-xs-8">
+				<div class="col-md-9 ">
 					<div class="row">
 						<div class="<?= $lenth_unput ?>">
 							<div class="inp-cont <? if ($errors->{$field["name"]}) echo "error"; ?>">

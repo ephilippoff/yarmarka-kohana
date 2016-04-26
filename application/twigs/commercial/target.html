@@ -1,0 +1,64 @@
+{% extends "layouts/simple" %}
+
+
+{% block header %}
+	{{ parent() }}
+	{{ css("commercial.css") }}
+	{% include 'cart/crumbs' %}
+{% endblock header %}
+
+
+{% block content %}
+
+<div class="col-lg-12 w100p_img">
+	
+	<div class="ad_title">
+		<span>ТОЧНО В ЦЕЛЬ</span>
+		Эффективное размещение <br>
+		250 р. в неделю!
+	</div>
+
+	<div class="darts_wrap mt50 mb50">
+		<img class="hidden-xs" src="../static/develop/images/commercial/darts_bg.png" alt="">
+		<span>Выгодное расположение<br>под строкой поиска</span>
+		<span>Создание и размещение<br>персональной страницы</span>
+		<span>Размещение ссылки<br>на ваш сайт</span>
+		<span>Размещение в карточках<br>объявлений</span>
+		<span>На любой странице</span>
+	</div>
+
+	<div class="ad_title">
+		Как это выглядит
+	</div>
+
+	<hr>
+
+	<div class="ta-c mt20">
+		<div class="fs20 ta-c">Графическая ссылка</div>
+		<img class="mb30 ta-c" src="../static/develop/images/commercial/promo_lt.png" alt="">
+
+		<div class="fs20 ta-c">Текстовая ссылка</div>
+		<img class="mb30 ta-c" src="../static/develop/images/commercial/promo_lt2.png" alt="">
+
+		<div class="ta-c fs16 mb20">При нажатии на ссылку посетитель переходит на ваш сайт или на вашу персональную страницу на нашем сайте. <br>Изготовление персональной страницы бесплатно.</div>
+	</div>
+
+	<hr>
+
+	<div class="ad_title">
+		Сколько это стоит
+	</div>
+
+	<div class="ta-c mt30">
+		<img class="mb30" src="../static/develop/images/commercial/sample2.png" alt="">
+	</div>
+
+	
+
+</div>
+
+{% endblock content %}
+
+{% block footer %} 
+	{{ parent() }}
+{% endblock footer %}
