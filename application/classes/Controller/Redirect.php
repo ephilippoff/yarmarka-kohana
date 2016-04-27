@@ -45,7 +45,7 @@ class Controller_Redirect extends Controller_Template
 			return;
 		} else {
 			$query="";
-			if (isset($_SERVER['QUERY_STRING'])) {
+			if (isset($_SERVER['QUERY_STRING']) AND $_SERVER['QUERY_STRING']) {
 				$query = "?".$_SERVER['QUERY_STRING'];
 			}
 			HTTP::redirect("/".join("/",$path_segments).$query, 301);
