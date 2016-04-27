@@ -48,7 +48,7 @@ class Controller_Detail extends Controller_Template {
 
 		$detail_info = Detailpage::factory("Default", $object)
 						->get_messages()
-						->get_similar()
+						//->get_similar()
 						->get_crumbs()
 						->get();
 
