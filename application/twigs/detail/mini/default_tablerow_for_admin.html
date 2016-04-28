@@ -17,7 +17,7 @@
 {% endif %}
 
 <div class="ad-mini-wrap clearfix {% if object.is_premium %}premium{% endif %}">
-	<div class="img-wrap fl">
+	<div class="img-wrap fl hidden-xxs">
 		{% if object.compiled.images.main_photo %}
 		<img class="img-frame" src="{{ get_file(object.compiled.images.main_photo['120x90']) }}" alt="{{ object.title|e }}">
 			{% if object.compiled.images.local_photo|length + object.compiled.images.remote_photo|length > 1 %}
