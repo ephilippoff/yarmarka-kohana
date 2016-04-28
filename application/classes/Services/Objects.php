@@ -28,6 +28,7 @@
 
 		public function selectPublished($query, $value = 1) {
 			$query
+				->where('object.active', '=', 1)
 				->where('object.is_published', '=', $value)
 				->where('object.date_expired', '<=', DB::expr('NOW()'));
 		}
