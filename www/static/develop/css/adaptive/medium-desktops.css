@@ -58,4 +58,8 @@
 		display: none;
 	}
 
+	.ad-mini-wrap .main-ad-wrap{
+		width: 55%;
+	}
+
 }

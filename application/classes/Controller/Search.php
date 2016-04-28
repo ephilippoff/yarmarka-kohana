@@ -118,7 +118,7 @@ class Controller_Search extends Controller_Template {
                 return array(
                     "id" => $item["id"],
                     "title" => addslashes($item["title"]),
-                    "price" => $item["price"],
+                    "price" => $item['price'],
                     "photo" => @$item["compiled"]["images"]["main_photo"]["120x90"],
                     "coords" => array(@$item["compiled"]["lat"], @$item["compiled"]["lon"])
                 );
@@ -126,7 +126,7 @@ class Controller_Search extends Controller_Template {
 
             $objects_for_map = array_merge($objects_for_map, $main_search_coords);
 
-            // var_dump($twig->main_search_result); die;
+            // echo "<pre>"; var_dump($twig->main_search_result); echo "</pre>"; die;
         }
         //end main search
 
@@ -272,6 +272,7 @@ class Controller_Search extends Controller_Template {
                 "50" => Search_Url::get_suri_without_reserved($this->request->query(), array( "limit" => 50), array("page")),
             )
         ));
+
         // $twig->small_pagination = (array(
         //     "prev" => $pagination->previous_page,
         //     "prev_url" => $pagination->url($pagination->previous_page),
@@ -298,8 +299,8 @@ class Controller_Search extends Controller_Template {
             'view' => 'pagination/limit',
             'path' => URL::SERVER("PATH_INFO"),
             'limits' => array(
-                "10" => Search_Url::get_suri_without_reserved($this->request->query(),array(),array("limit","page")),
-                "20" => Search_Url::get_suri_without_reserved($this->request->query(), array( "limit" => 20), array("page")),
+                "30" => Search_Url::get_suri_without_reserved($this->request->query(),array(),array("limit","page")),
+                "40" => Search_Url::get_suri_without_reserved($this->request->query(), array( "limit" => 40), array("page")),
                 "50" => Search_Url::get_suri_without_reserved($this->request->query(), array( "limit" => 50), array("page")),
             )
         ));
@@ -417,7 +418,7 @@ class Controller_Search extends Controller_Template {
         // }
         $this->response->body($twig);
 
-        // var_dump($twig->main_search_result[1]); die;
+        // echo "<pre>"; var_dump($twig); echo "</pre>"; die;
 
     }
 

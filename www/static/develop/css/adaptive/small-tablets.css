@@ -57,8 +57,7 @@
 		margin-bottom: 0;
 	}
 
-	.table-result-info.style1 .td-1,
-	.subcategories-cont{
+	.table-result-info.style1 .td-1{
 		display: none;
 	}
 

@@ -11,9 +11,6 @@
 					<li>
 						<div>
 							<a href="{{ url(child_category.url) }}" title="{{child_category.title}}">{{child_category.title}}</a>
-							{% if count > 0 %}
-								<span class="count">{{count}}</span>
-							{% endif %}
 						</div>
 					</li>
 				{% endfor %}
@@ -23,15 +20,19 @@
 		{% endfor %}
 	</div>
 </div>
+{% if category_childs|length > 4 %}
 <script type="text/javascript">
-	new Yarmarka.UI.Columns.OrderedHeight({ 
-		el: '.subcategories-cont.module.subcat-search',
-		elementSelector: 'li>div', 
-		forceOneColumnMobile: false,
-		enableAutoCollapse: true,
-		itemWidthSelector: 'a',
-		autoCollapseOptions: {
-			allowedHeight: 110
-		}
+	desktop(function(){
+		new Yarmarka.UI.Columns.OrderedHeight({ 
+			el: '.subcategories-cont.module.subcat-search',
+			elementSelector: 'li>div', 
+			forceOneColumnMobile: false,
+			enableAutoCollapse: true,
+			itemWidthSelector: 'a',
+			autoCollapseOptions: {
+				allowedHeight: 110
+			}
+		});
 	});
 </script>
+{% endif %}

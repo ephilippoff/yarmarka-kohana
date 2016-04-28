@@ -281,6 +281,15 @@
 		display: none;
 	}
 
+	.img-wrap{
+		width: 68px;
+		height: 40px;
+	}
+
+	.main-ad-wrap .table-details{
+		display: none;
+	}
+
 
 }
 
@@ -313,6 +322,10 @@
 }
 
 @media (max-width: 480px){
+
+	.ad-mini-wrap .main-ad-wrap {
+	    width: 70%;
+	}
 
 	button[data-role="show_share"]{
 		display: inline-block;
