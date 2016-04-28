@@ -6,6 +6,12 @@ Route::set('admin', '<controller>(/<action>)', array('controller' => '(admin_.*|
 	throw new HTTP_Exception_404;
 });
 
+Route::set('robots', 'robots.txt')
+	->defaults(array(
+		'controller' => 'Static',
+		'action'     => 'robots',
+	));
+
 Route::set('all','<addr>', array('addr' => '.*'))
 	->filter(function($route, $params, $request){
 		$site_disable = Kohana::$config->load("common.site_disable");
