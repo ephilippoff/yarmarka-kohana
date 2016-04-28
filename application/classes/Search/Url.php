@@ -3,8 +3,9 @@
 class Search_Url
 {
 
-    static $reserved_query_params = array("photo", "video", "org", "private", "source", "user_id", "limit", "order", "page", "search");
+    static $reserved_query_params = array("photo", "video", "org", "private", "source", "user_id", "limit", "order", "page", "search", "period");
     static $reserved_query_params_requirements = array(
+        "period" => array(1,2,3),
         "order" => array("price","price_desc","date_desc","date"),
         "limit" => array(5,10,15,20,25,30,50, 60,90)
     );

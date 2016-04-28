@@ -41,7 +41,7 @@ class Controller_Redirect extends Controller_Template
 
 		$path_detail_segments = explode("-", $path);
 		if ( $object_id = (int) $path_detail_segments[count($path_detail_segments)-1] ) {
-			HTTP::redirect("/detail/".$object_id, 301);
+			HTTP::redirect_to_object($object_id, 301);
 			return;
 		} 
 
@@ -89,7 +89,6 @@ class Controller_Redirect extends Controller_Template
 
 
 		HTTP::redirect("/".join("/",$path_segments).$query, 301);
-
 	}
 	
 }
