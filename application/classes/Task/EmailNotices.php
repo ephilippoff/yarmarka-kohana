@@ -47,6 +47,8 @@ class Task_EmailNotices extends Minion_Task
         if (!count($users)) {
             Minion_CLI::write('nothing to send about photo');
             return;
+        } else {
+             Minion_CLI::write('email about photo will send to '.count($users).' users');
         }
 
         foreach ($users as $user) {
@@ -105,6 +107,8 @@ class Task_EmailNotices extends Minion_Task
         if (!count($users)) {
             Minion_CLI::write('nothing to send about up');
             return;
+        } else {
+             Minion_CLI::write('email about up will send to '.count($users).' users');
         }
 
         foreach ($users as $user) {
@@ -164,6 +168,8 @@ class Task_EmailNotices extends Minion_Task
         if (!count($users)) {
             Minion_CLI::write('nothing to send about expiration');
             return;
+        } else {
+             Minion_CLI::write('email about expiration will send to '.count($users).' users');
         }
 
         foreach ($users as $user) {
