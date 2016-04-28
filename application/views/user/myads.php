@@ -263,11 +263,11 @@
 	                                            <?php endif; ?>
 
 
-	                                            <li class="">
+	                                          <!--   <li class="">
 	                                                <a title="Удалить объявление" href="" class="btn-funcmenu  " onclick="delete_ad(<?php echo $ad->id ?>, this); return false;" class="btn btn-lc active">
 	                                                    <i class="ico del"></i><span>Удалить</span>
 	                                                </a>
-	                                            </li>
+	                                            </li> -->
 
 
                                        		<? endif; ?>
