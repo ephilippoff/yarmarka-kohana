@@ -1115,20 +1115,24 @@ class Lib_PlacementAds_AddEdit {
 		}
 
 
-		if ($this->is_edit AND $params->publish_and_prolonge)
+		if ($this->is_edit)
 		{
-			if ($object->is_bad <> 2)
+			if ($object->is_bad <> 2 )
 			{
-				$object->is_published = 1;
-				if ($object->in_archive)
+				if ($params->publish_and_prolonge) {
+					$object->is_published = 1;
+				}
+				
+				if ( $object->in_archive )
 				{
-					$object->prolong($this->lifetime_to_date("3m"));
-				} else 
+					$object->prolong($this->lifetime_to_date("45d"));
+				} else if ( strtotime( $object->date_expiration ) < strtotime( $this->lifetime_to_date("45d") ) )
 				{
-					$object->date_expiration = $this->lifetime_to_date("3m");
+					$object->date_expiration = $this->lifetime_to_date("45d");
 				}
 			}
 		}
+		
 		return $this;
 	}
 
@@ -1446,6 +1450,9 @@ class Lib_PlacementAds_AddEdit {
 				break;
 				case "3m":
 					$date_expiration = date('Y-m-d H:i:s', strtotime('+3 month'));
+				break;
+				case "45d":
+					$date_expiration = date('Y-m-d H:i:s', strtotime('+45 days'));
 				break;
 				default:
 					$date_expiration = date('Y-m-d H:i:s', strtotime('+14 days'));

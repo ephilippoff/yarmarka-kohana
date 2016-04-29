@@ -114,13 +114,14 @@ class Lib_PlacementAds_AddEditByModerator extends Lib_PlacementAds_AddEdit {
 		$time_expired = date_create($params->_time_expired);
 		date_time_set($expired, (int) date_format($time_expired, 'H'), (int) date_format($time_expired, 'i'));
 
-		// $expiration = date_create($params->_date_expiration); 
-		// $time_expiration = date_create($params->_time_expiration);
-		// date_time_set($expiration, (int) date_format($time_expiration, 'H'), (int) date_format($time_expiration, 'i'));
+		$expiration = date_create($params->_date_expiration); 
+		$time_expiration = date_create($params->_time_expiration);
+		date_time_set($expiration, (int) date_format($time_expiration, 'H'), (int) date_format($time_expiration, 'i'));
 
 		$object->date_created = date_format($created, "Y-m-d H:i");
 		$object->date_expired = date_format($expired, "Y-m-d H:i");
-		//$object->date_expiration = date_format($expiration, "Y-m-d H:i");
+
+		$object->date_expiration = date_format($expiration, "Y-m-d H:i");
 
 		return $this;
 	}
@@ -193,6 +194,31 @@ class Lib_PlacementAds_AddEditByModerator extends Lib_PlacementAds_AddEdit {
 				$additional[$setting] = $value;
 			}
 			$additional = ORM::factory('Data_Additional')->set_additional($object->id, $additional);
+		}
+
+		return $this;
+	}
+
+	function save_other_options()
+	{
+		$params = &$this->params;
+		$object = &$this->object;
+		$user   = &$this->user;
+
+		
+
+		// отключаем комментарии к объявлению
+		if ($params->block_comments)
+		{
+			$object->disable_comments();
+		}
+
+		if ($user AND $user->linked_to_user AND isset($this->params->link_to_company))
+		{
+			$object->author_company_id = $user->linked_to_user;
+		} elseif ($user AND $user->linked_to_user AND !isset($this->params->link_to_company))
+		{
+			$object->author_company_id = $user->id;
 		}
 
 		return $this;
