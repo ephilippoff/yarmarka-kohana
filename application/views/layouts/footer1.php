@@ -34,10 +34,6 @@
 						<div><?=Kohana::$config->load("info.sg.title")?></div>
 						<div>Телефон: <span class="tel"><?=Kohana::$config->load("info.sg.phone")?></span></div>
 						<div class="e-mail">E-mail: <?=Kohana::$config->load("info.sg.email")?></div>
-						<div class="adr">
-						   <span class="locality"></span>
-						   <span class="street-address">Адрес: <?=Kohana::$config->load("info.sg.address")?></span>
-						</div>
 						<div>
 						</div>
 					</address>

@@ -3,13 +3,13 @@
 return array(
 	'tm' => array(		
 		'title' => 'Тюмень', 
-		'phone' => '(3452) 49-21-21 (доб. 1152)', 
+		'phone' => '(3452)56-84-04', 
 		'email' => 'info@yarmarka.biz',
 		'address' => 'ул. 50 лет ВЛКСМ,49, оф.302'				
 	),
 	'sg' => array(		
 		'title' => 'Сургут', 
-		'phone' => '(3462) 22-22-77', 
+		'phone' => '(3462)55-04-04', 
 		'email' => 'info@yarmarka.biz',
 		'address' => 'ул. Маяковского, 45в'				
 	),
