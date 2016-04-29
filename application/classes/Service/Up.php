@@ -65,7 +65,16 @@ class Service_Up extends Service
 		if (!$object->loaded()) return FALSE;
 		
 		$object->date_created = DB::expr("NOW()");
+		
+		if ( strtotime( $object->date_expiration ) < strtotime( Lib_PlacementAds_AddEdit::lifetime_to_date("45d") ) ) {
+			
+			$object->date_expiration = Lib_PlacementAds_AddEdit::lifetime_to_date("45d");
+
+		}
+
 		$object->save();
+
+
 
 		$or = ORM::factory('Object_Service_Up')
 					->where("object_id", "=", $object_id)

@@ -134,6 +134,13 @@ class Service_Cities extends Service
 		$object = ORM::factory('Object', $object_id);
 		if ($object->loaded()) {
 
+			if ( strtotime( $object->date_expiration ) < strtotime( Lib_PlacementAds_AddEdit::lifetime_to_date("45d") ) ) {
+				
+				$object->date_expiration = Lib_PlacementAds_AddEdit::lifetime_to_date("45d");
+				$object->save();
+
+			}
+
 			$cities = $object->get_cities();
 
 			foreach ($new_cities as $new_city) {

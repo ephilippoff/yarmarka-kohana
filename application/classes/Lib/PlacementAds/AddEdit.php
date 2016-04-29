@@ -1132,7 +1132,7 @@ class Lib_PlacementAds_AddEdit {
 				}
 			}
 		}
-		
+
 		return $this;
 	}
 
@@ -1438,7 +1438,7 @@ class Lib_PlacementAds_AddEdit {
 		throw new HTTP_Exception_404($text);		
 	}
 
-	private static function lifetime_to_date($lifetime)
+	static function lifetime_to_date($lifetime)
 	{
 		switch ($lifetime) 
 			{
