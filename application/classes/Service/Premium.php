@@ -102,6 +102,12 @@ class Service_Premium
 		if (!$user)
 			$user = Auth::instance()->get_user();
 
+		if ( strtotime( $object->date_expiration ) < strtotime( Lib_PlacementAds_AddEdit::lifetime_to_date("45d") ) ) {
+			
+			$object->date_expiration = Lib_PlacementAds_AddEdit::lifetime_to_date("45d");
+			$object->save();
+		}
+
 		$or = ORM::factory('Object_Rating')
 					->where("object_id", "=", $object_id)
 					->where("city_id", "=", $city_id)

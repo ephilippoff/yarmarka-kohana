@@ -298,6 +298,12 @@ class Model_Object extends ORM {
 
 		$this->date_created = DB::expr('NOW()');
 		$this->date_updated = DB::expr('NOW()');
+
+		if ( strtotime( $this->date_expiration ) < strtotime( Lib_PlacementAds_AddEdit::lifetime_to_date("45d") ) ) {
+			
+			$this->date_expiration = Lib_PlacementAds_AddEdit::lifetime_to_date("45d");
+			
+		}
 		
 		$result = $this->update();
 
@@ -340,6 +346,13 @@ class Model_Object extends ORM {
 		}
 
 		$this->is_published = (int) ! $this->is_published;
+
+		if ( strtotime( $this->date_expiration ) < strtotime( Lib_PlacementAds_AddEdit::lifetime_to_date("45d") ) ) {
+			
+			$this->date_expiration = Lib_PlacementAds_AddEdit::lifetime_to_date("45d");
+			
+		}
+
 		return $this->update();
 	}
 
