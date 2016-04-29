@@ -112,6 +112,7 @@
 					->on('data_list.object','=','object.id') 
 				->where('active','=','1')
 				->where('is_published','=','1')
+				->where('author','=',327190)
 				->where('category','=', DB::expr('category.id'));
 
 			// 2. prepare attributes elements query
@@ -187,10 +188,12 @@
 			while($total < $this->maxPerStep2 && $lastPage != 0) {
 $x = time();
 				$objects = ORM::factory('Object')
+					->where_open()
 					->where('date_created', '>', date('Y-m-d H:i:s', $lastModified))
 					->or_where('date_updated', '>', date('Y-m-d H:i:s', $lastModified))
-					->where('active','=',1)
-					->where('is_published','=',1)
+					->where_close()
+					//->where('active','=',1)
+					//->where('is_published','=',1)
 					->limit(min($this->maxPerStep2 - $total, $this->selectLimit))
 					->offset($total)
 					->order_by(DB::expr('(case when date_updated is null then date_created else date_updated end)'), 'desc')
@@ -220,9 +223,15 @@ echo 'Seconds: ' . (time() - $x) . ' Rows: ' . $lastPage . "\r\n";
 			}
 		}
 
+		public function makeDir($path)
+		{
+		     return is_dir($path) || mkdir($path, 0777, true);
+		}
+
 		public function rebuild() {
-			$sitemapsPath = ($_SERVER['DOCUMENT_ROOT'] ? $_SERVER['DOCUMENT_ROOT'] : '.') . DIRECTORY_SEPARATOR . 'sitemaps' . DIRECTORY_SEPARATOR;
-			$bigOutputFileName = $sitemapsPath . $this->cityName.'.index.xml';
+			$sitemapsPath = ($_SERVER['DOCUMENT_ROOT'] ? $_SERVER['DOCUMENT_ROOT'] : '.') . DIRECTORY_SEPARATOR . 'sitemaps' . DIRECTORY_SEPARATOR . $this->cityName . DIRECTORY_SEPARATOR;
+			$this->makeDir($sitemapsPath);
+			$bigOutputFileName = $sitemapsPath . 'index.xml';
 			// step 1
 			$step1FileName = '1.xml.gz';
 			$step1OutFile = $sitemapsPath . $step1FileName;
@@ -265,7 +274,7 @@ echo 'Seconds: ' . (time() - $x) . ' Rows: ' . $lastPage . "\r\n";
 			foreach($filesMap as $key => $value) {
 				fwrite($fd, 
 					'<sitemap>'
-						. '<loc>' . $this->makeUrl('sitemaps/' . $key) . '</loc>'
+						. '<loc>' . $this->makeUrl('sitemaps/'.$this->cityName.'/' . $key) . '</loc>'
 						. '<lastmod>' . date('Y-m-d\TH:i:sP', $value) . '</lastmod>'
 					. '</sitemap>');
 			}
