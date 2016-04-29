@@ -77,7 +77,7 @@ class Model_Article extends ORM {
 
 		$articles = ORM::factory('Article')
 			->where('parent_id', '=', intval($parent_id))
-			->where('text_type', '=', 1)	
+			->where('text_type', 'IN', array(1,3) )	
 			->find_all();
 
 		foreach ($articles as $article)
