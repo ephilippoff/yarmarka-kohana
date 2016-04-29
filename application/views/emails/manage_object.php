@@ -30,7 +30,11 @@
 			<div class="text" style="text-align: left; line-height: 1.6; display: inline-block; width: 100%; max-width: 500px; margin-bottom: 15px;" align="left">
 				<h2 style="font-size: 1.5em; display: block; text-align: center; margin-bottom: 15px;" align="center">Здравствуйте!</h2>
 				На <a style="color: #d44234;" href="http://yarmarka.biz/">yarmarka.biz</a> произошли следующие действия с вашими объявлениями: <br><br>
-				<?php foreach($actions as $action) { ?>
+				<?php foreach($actions_negative as $action) { ?>
+					<p class="p3"><?php echo $action; ?></p>
+				<?php } ?>
+				<hr>
+				<?php foreach($actions_positive as $action) { ?>
 					<p class="p3"><?php echo $action; ?></p>
 				<?php } ?>
 				<div class="footer" style="text-align: right; font-size: 12px; margin: 10px 0;" align="right">С уважением, команда «Ярмарка-онлайн»</div>

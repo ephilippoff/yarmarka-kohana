@@ -350,6 +350,10 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 			throw new HTTP_Exception_404;
 		}
 
+		$to_forced_moderation = $object->to_forced_moderation;
+		$moder_state = $object->moder_state;
+		$status = ($to_forced_moderation OR $moder_state < 0) ? TRUE : FALSE;
+
 		if (intval($this->request->post('moder_state')))
 		{
 			$object->moder_state 	= 1;
@@ -367,8 +371,13 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 		$m_log->action_by 	= Auth::instance()->get_user()->id;
 		$m_log->user_id 	= $object->author;
 		$m_log->description = $object->moder_state ? "Прошло модерацию" : "На модерации" ;
-		$m_log->reason 		= "STATUS".$object->moder_state;
+		$m_log->reason 		= "STATUS".$status;
 		$m_log->object_id 	= $object->id;
+		
+		if ($status) {
+			$m_log->noticed = FALSE;
+		}
+
 		$m_log->save();		
 	}
 

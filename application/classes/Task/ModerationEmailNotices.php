@@ -30,8 +30,6 @@ class Task_ModerationEmailNotices extends Minion_Task
         if (!count($user_ids)) {
             return;
         }
-        
-        $new_engine_cities = Kohana::$config->load("common.new_engine_cities");
 
         $users_for_notice = ORM::factory('User')->where("id","IN",$user_ids)->find_all();
 
@@ -51,25 +49,42 @@ class Task_ModerationEmailNotices extends Minion_Task
 
 
 
-            Minion_CLI::write('Actions: '.count($actions_for_user) );
+            
+            $actions_for_user_negative = array_filter( $actions_for_user, function($item) {
+                return $item->reason <> 'STATUS1';
+            });
 
-            $actions_for_user = array_map(function($item){
+            $actions_for_user_positive = array_filter( $actions_for_user, function($item) {
+                return $item->reason === 'STATUS1';
+            });
+
+            Minion_CLI::write('Actions negative: '.count($actions_for_user_negative).' , positive:'.count($actions_for_user_positive) );
+
+
+            $actions_for_user_negative = array_map(function($item){
                 $domain = 'http://c.yarmarka.biz';
-                Minion_CLI::write($item->object_city_id);
 
                 return '<p>'.HTML::anchor($domain.'/detail/'.$item->object_id, $item->object_title).':<br>'.$item->description.'</p>';
-            }, $actions_for_user);
+            }, $actions_for_user_negative);
+
+            $actions_for_user_positive = array_map(function($item){
+                $domain = 'http://c.yarmarka.biz';
+                return '<p>'.HTML::anchor($domain.'/detail/'.$item->object_id, $item->object_title).':<br> прошло модерацию</p>';
+            }, $actions_for_user_positive);
 
             
 
             $msg = View::factory('emails/manage_object',
                  array(
                      'UserName' => $user->fullname ? $user->fullname : $user->login,
-                     'actions' => $actions_for_user
+                     'actions_negative' => $actions_for_user_negative,
+                     'actions_positive' => $actions_for_user_positive
                  )
              )->render();
 
-             Email::send($user->email, Kohana::$config->load('email.default_from'), "Сообщение от модератора сайта", $msg);
+             Email::send(
+                    $user->email, 
+                    Kohana::$config->load('email.default_from'), "Сообщение от модератора сайта", $msg);
 
              DB::update('object_moderation_log')
                 ->set(array("noticed" => "T"))
