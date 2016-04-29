@@ -298,6 +298,7 @@ class Model_Object extends ORM {
 
 		$this->date_created = DB::expr('NOW()');
 		$this->date_updated = DB::expr('NOW()');
+		$this->is_published = 1;
 
 		if ( strtotime( $this->date_expiration ) < strtotime( Lib_PlacementAds_AddEdit::lifetime_to_date("45d") ) ) {
 			
