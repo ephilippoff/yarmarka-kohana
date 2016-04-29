@@ -4,7 +4,10 @@
 
 		protected function _execute(array $params) {
 			ob_end_clean();
-			$s = new Sitemap();
+			$s = new Sitemap('surgut');
+			$s->rebuild();
+
+			$s = new Sitemap('tobolsk');
 			$s->rebuild();
 			echo 'OK';
 		}

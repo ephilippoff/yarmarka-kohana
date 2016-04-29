@@ -9,13 +9,14 @@
 		//protected $maxPerStep2 = 20;
 		protected $selectLimit = 1000;
 		protected $maxFiles = 100;
-		protected $cityName = 'surgut';
+		private $cityName;
 
 		protected $prettyUrls;
 		protected $config;
 		protected $gzipFile;
 
-		public function __construct() {
+		public function __construct($cityName) {
+			$this->cityName = $cityName;
 			$this->initConfig();
 			$this->initPrettyUrls();
 
@@ -188,6 +189,8 @@ $x = time();
 				$objects = ORM::factory('Object')
 					->where('date_created', '>', date('Y-m-d H:i:s', $lastModified))
 					->or_where('date_updated', '>', date('Y-m-d H:i:s', $lastModified))
+					->where('active','=',1)
+					->where('is_published','=',1)
 					->limit(min($this->maxPerStep2 - $total, $this->selectLimit))
 					->offset($total)
 					->order_by(DB::expr('(case when date_updated is null then date_created else date_updated end)'), 'desc')
@@ -219,7 +222,7 @@ echo 'Seconds: ' . (time() - $x) . ' Rows: ' . $lastPage . "\r\n";
 
 		public function rebuild() {
 			$sitemapsPath = ($_SERVER['DOCUMENT_ROOT'] ? $_SERVER['DOCUMENT_ROOT'] : '.') . DIRECTORY_SEPARATOR . 'sitemaps' . DIRECTORY_SEPARATOR;
-			$bigOutputFileName = $sitemapsPath . 'index.xml';
+			$bigOutputFileName = $sitemapsPath . $this->cityName.'.index.xml';
 			// step 1
 			$step1FileName = '1.xml.gz';
 			$step1OutFile = $sitemapsPath . $step1FileName;
