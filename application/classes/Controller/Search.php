@@ -27,6 +27,11 @@ class Controller_Search extends Controller_Template {
             $route_params = $this->request->param();
             $query_params = $this->request->query();
 
+            if (@$query_params['k']) {
+                $query_params['search'] = $query_params['k'];
+                unset($query_params['k']);
+            }
+
             try {
                 $searchuri = new Search_Url($route_params['category_path'], $query_params, ($this->domain->get_city()) ? $this->domain->get_city()->id : FALSE);
             } catch (Kohana_Exception $e) {
