@@ -7,7 +7,7 @@
 <?php endif; ?>
 
 	<td>
-		<?=$object->id?> 
+		<?=$object->id?> <br>
 		<?php 
 	 		$services = array();
 	 		if (@$compiled["services"]) {
@@ -18,9 +18,11 @@
 		 		}
 		 	}
 	 	?>
-		<?php if (count($services) > 0) :?>
-			<?=implode(", ", $services)?>
-		<?php endif;?>
+	 	<a href="<?=URL::site('khbackend/objects/services/'.$object->id)?>" target="_blank">Услуги: <br>
+			<?php if (count($services) > 0) :?>
+				<?=implode(", ", $services)?>
+			<?php endif;?>
+		</a>
 
 	</td>
 	<td>

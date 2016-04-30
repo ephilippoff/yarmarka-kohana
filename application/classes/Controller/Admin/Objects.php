@@ -834,6 +834,98 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 		$this->response->body(json_encode($json));		
 	}
 
+	public function action_services()
+	{
+		//$this->use_layout = FALSE;
+
+		$object = ORM::factory('Object', $this->request->param('id'));
+		
+		$this->template->object = $object;
+		
+		$cities = explode(',', preg_replace('/{(.*)}/i', '$1', $object->cities));
+
+		$this->template->cities = ORM::factory('City')->where('id','IN',$cities)->getprepared_all();
+
+		array_walk($this->template->cities, function($city) use($object){
+			if ($city->id == $object->city_id) {
+				$city->main = TRUE;
+			}
+		});
+
+		$this->template->cities_count = count($cities);
+
+
+		$this->template->premiums = ORM::factory('Object_Rating')
+						->where('object_id','=',$object->id)
+						->getprepared_all();
+
+		array_walk($this->template->premiums, function($premium) {
+			if ( strtotime($premium->date_expiration) < strtotime(date('dd.mm.yyyy'))) {
+				$premium->expired = TRUE;
+			}
+			$premium->city =  ORM::factory('City', $premium->city_id)->title;
+		});
+
+		$this->template->liders = ORM::factory('Object_Service_Photocard')
+					->where('object_id','=',$object->id)
+					->getprepared_all();
+
+		array_walk($this->template->liders, function($lider) {
+			if ( strtotime($lider->date_expiration) < strtotime(date('dd.mm.yyyy'))) {
+				$lider->expired = TRUE;
+			}
+			$cities = explode(',', preg_replace('/{(.*)}/i', '$1', $lider->cities));
+			$categories = explode(',', preg_replace('/{(.*)}/i', '$1', $lider->categories));
+
+			$cities = ORM::factory('City')->where('id','IN',$cities)->getprepared_all();
+
+			$lider->cities = join('<br>', array_map(function($city){
+				return $city->title;
+			}, $cities));
+
+			$categories = ORM::factory('Category')->where('id','IN',$categories)->getprepared_all();
+
+			$lider->categories = join('<br>', array_map(function($category){
+				return $category->title;
+			}, $categories));
+
+			
+		});
+
+		$this->template->ups = ORM::factory('Object_Service_Up')
+					->where('object_id','=',$object->id)
+					->getprepared_all();
+
+    	$orders = ORM::factory('Order')
+					->where('user_id','=',$object->author)
+					->where('state','IN',array(2,22,222))
+					->order_by('created','desc')
+	    			->getprepared_all();
+
+	     if (count($orders) > 0 )
+        {
+            $order_items = ORM::factory('Order_Item')
+                                ->where("order_id","IN", array_map(function($item){return $item->id;},  $orders))
+                                ->getprepared_all();
+                                
+
+            foreach ($orders as $order) {
+                $order->state_name = Model_Order::get_state($order->state);
+                $order->items = array_filter($order_items, function($item) use ($order){ return ($order->id == $item->order_id);});
+                foreach ($order->items as $order_item) {
+                    $order_item->params = json_decode($order_item->params);
+                    if ($order_item->params->object->id == $object->id) {
+                    	$order->current = TRUE;
+                    }
+                }
+            }
+        }
+
+    	$this->template->orders = $orders;
+
+		//echo Debug::vars($orders);
+	}
+
 }
 
 /* End of file Objects.php */
