@@ -12,9 +12,9 @@
 				{% if staticMainMenu %}
 					{% if menuName == 'mainmenu' %}
 						{{ requestblock('block_twig/mainmenu', {'city_id': city.id, 'staticMainMenu': staticMainMenu}) }}
-						{% else %}
-							{{ requestblock('block_twig/newsmenu', {'city_id': city.id, 'staticMainMenu': staticMainMenu}) }}
-						{% endif %}
+					{% else %}
+						{{ requestblock('block_twig/newsmenu', {'city_id': city.id, 'staticMainMenu': staticMainMenu}) }}
+					{% endif %}
 				{% endif %}
 			</div>
 		</div>

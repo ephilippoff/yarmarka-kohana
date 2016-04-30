@@ -107,6 +107,23 @@ class Controller_Block_Twig extends Controller_Block
         
     }
 
+     public function action_mobilemenu()
+    {
+        $city_id = $this->request->post("city_id");
+        $twig = Twig::factory('block/menu/main_mobile');
+        $categories = ORM::factory('Category')->get_categories_extend(array(
+            "with_child" => FALSE, 
+            "with_ads" => TRUE, 
+            "city_id" => $city_id
+        ));
+        
+        $twig->categories1l = $categories["main"];
+        $twig->parents_ids  = $categories["main_ids"];
+        $twig->staticMainMenu = $this->request->post("staticMainMenu");
+
+        $this->response->body($twig);
+    }
+
     ////// Реализация содержимого блоков
 
     public function adslinkline($city_id = NULL, $category_id = NULL, $type = "image", $count = NULL)

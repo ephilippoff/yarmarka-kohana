@@ -98,7 +98,7 @@ define([
         events: {
             "click" : "showMenu",
             "mouseover" : "showMenu",
-            //"mouseleave" : "closeMenu"
+            "mouseleave" : "closeMenu"
         },
         initialize: function(options) {
             var $this = this;
@@ -117,14 +117,10 @@ define([
                 cityClass++;
             });
 
-            $("#popup-layer").on("mouseover", function() {
-                $this.closeMenu();
-            });
         },
 
         showMenu: function() {
             if (this.getOption('alwaysVisibleMenu')) {
-                $("#popup-layer").fadeIn(70).removeClass('z200').removeClass('z100').addClass('z100');
                 return;
             }
             var s = this;
@@ -140,7 +136,6 @@ define([
 
         closeMenu: function(e) {
             if (this.getOption('alwaysVisibleMenu')) {
-                $("#popup-layer").fadeOut(70).removeClass('z100').addClass("z200");
                 return;
             }
             if (this.activateTimer) clearTimeout(this.activateTimer);
@@ -237,10 +232,7 @@ return Marionette.Module.extend({
                     menuOptions.doNotUseTemplate = true;
 
                     var me = this;
-                    // $(menuOptions.el).on('mouseleave', function (e) {
-                    //     me.main.deactivateSubmenu();
-                    // });
-                    $("#popup-layer").on("mouseover", function() {
+                    $(menuOptions.el).on('mouseleave', function (e) {
                         me.main.deactivateSubmenu();
                     });
                 }
