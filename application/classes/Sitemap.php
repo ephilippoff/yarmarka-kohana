@@ -10,6 +10,7 @@
 		protected $selectLimit = 1000;
 		protected $maxFiles = 100;
 		private $cityName;
+		private $cityId;
 
 		protected $prettyUrls;
 		protected $config;
@@ -17,6 +18,7 @@
 
 		public function __construct($cityName) {
 			$this->cityName = $cityName;
+			$this->cityId = ORM::factory('City')->where('seo_name','=',$cityName)->find()->id;
 			$this->initConfig();
 			$this->initPrettyUrls();
 
@@ -112,7 +114,7 @@
 					->on('data_list.object','=','object.id') 
 				->where('active','=','1')
 				->where('is_published','=','1')
-				->where('author','=',327190)
+				->where('city_id','=', $this->cityId)
 				->where('category','=', DB::expr('category.id'));
 
 			// 2. prepare attributes elements query
@@ -192,8 +194,9 @@ $x = time();
 					->where('date_created', '>', date('Y-m-d H:i:s', $lastModified))
 					->or_where('date_updated', '>', date('Y-m-d H:i:s', $lastModified))
 					->where_close()
-					//->where('active','=',1)
-					//->where('is_published','=',1)
+					->where('active','=',1)
+					->where('is_published','=',1)
+					->where('city_id','=', $this->cityId)
 					->limit(min($this->maxPerStep2 - $total, $this->selectLimit))
 					->offset($total)
 					->order_by(DB::expr('(case when date_updated is null then date_created else date_updated end)'), 'desc')
