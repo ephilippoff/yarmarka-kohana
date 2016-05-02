@@ -1968,10 +1968,10 @@ div[data-role="error"]{
     color: #fff;
     border: none;
     outline: none;
-    float: left;
-    position: relative;
-    top: 21px;
-    left: 20px;
+    position: absolute;
+    left: 20%;
+    top: 50%;
+    margin-top: -14px;
 }
 
 .contacts-list-cont p:last-child{
