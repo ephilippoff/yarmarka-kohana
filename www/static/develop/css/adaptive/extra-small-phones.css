@@ -284,6 +284,10 @@
 
 @media (max-width: 570px){
 
+	#show_contacts button{
+		left: 50%;
+	}
+
 	.preview_menu_block .search-cont{
 		display: none;
 	}
