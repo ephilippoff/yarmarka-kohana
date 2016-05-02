@@ -9,10 +9,11 @@
 		<button class="more-button button bg-color-blue module hidden-lg" data-role="show_share"><span>Поделиться</span> <i class="fa fa-share-alt"></i></button>
 	</div>
 	{% endif %}
-	<div class="share-links" {% if landing %}style="float:left;" {% endif %}>
+	<div class="share-links {% if landing %}fl{% endif %}">
+		<span class="fl hidden-xs" style="font-size: 12px;position: relative;top: 5px;">Поделиться с друзьями</span>
 		<script type="text/javascript" src="//yastatic.net/es5-shims/0.0.2/es5-shims.min.js" charset="utf-8"></script>
 		<script type="text/javascript" src="//yastatic.net/share2/share.js" charset="utf-8"></script>
-		<div class="ya-share2" id="ya-share" data-services="vkontakte,facebook,odnoklassniki,moimir,gplus,twitter,lj"></div>
+		<div class="ya-share2 fr ml15" id="ya-share" data-services="vkontakte,facebook,odnoklassniki,moimir,gplus,twitter,lj"></div>
 	</div>
 </div>
 <div id="vk_comments" data-role="comments-container"></div>

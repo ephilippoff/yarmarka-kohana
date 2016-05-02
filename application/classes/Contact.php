@@ -51,12 +51,12 @@ class Contact
 		if (strpos($phone, '79') === 0)
 		{
 			// mobile phone
-			return '+'.$phone[0].'('.substr($phone, 1, 3).')'.substr($phone, 4, 3).'-'.substr($phone, 7, 2).'-'.substr($phone, 9, 2);
+			return '+'.$phone[0].' ('.substr($phone, 1, 3).') '.substr($phone, 4, 3).'-'.substr($phone, 7, 2).'-'.substr($phone, 9, 2);
 		}
 		else
 		{
 			// home phone
-			return '+'.$phone[0].'('.substr($phone, 1, 4).')'.substr($phone, 5, 2).'-'.substr($phone, 7, 2).'-'.substr($phone, 9);
+			return '+'.$phone[0].' ('.substr($phone, 1, 4).') '.substr($phone, 5, 2).'-'.substr($phone, 7, 2).'-'.substr($phone, 9);
 		}
 	}
 
