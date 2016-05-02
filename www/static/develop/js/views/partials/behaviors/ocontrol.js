@@ -78,9 +78,20 @@ define([
                 code: this.ui.contactList.find("input").val(),
                 success: function(result) {
                     s.ui.contactList.html(result);
-                    $(e.currentTarget).remove();
+                    s.ui.contactList.find('p').each(function(){
+                       var phone = $(this).html();
+                        if (phone.indexOf('79') !== -1) {
+                            phone = '+'+phone.charAt(0)+' ('+phone.charAt(1)+phone.charAt(2)+phone.charAt(3)+') '+phone.charAt(4)+phone.charAt(5)+phone.charAt(6)+'-'+phone.charAt(7)+phone.charAt(8)+'-'+phone.charAt(9)+phone.charAt(10);
+                        }else {
+                            phone = '+'+phone.charAt(0)+' ('+phone.charAt(1)+phone.charAt(2)+phone.charAt(3)+phone.charAt(4)+') '+phone.charAt(5)+phone.charAt(6)+'-'+phone.charAt(7)+phone.charAt(8)+'-'+phone.charAt(9)+phone.charAt(10);
+                        }
+                        $(this).text(phone);
+                    });
+
+                    s.ui.contactsShow.remove();
                 },
                 captcha: function(result) {
+                    s.ui.contactsShow.css('position', 'static');
                     s.ui.contactList.html(result);
                 },
                 error: function(result) {

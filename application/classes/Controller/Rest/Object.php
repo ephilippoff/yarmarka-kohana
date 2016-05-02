@@ -36,7 +36,7 @@ class Controller_Rest_Object extends Controller_Rest {
 							->rule('captcha', 'captcha', array(':value', ""));
 					if ( !$validation->check())
 					{
-						$twig->error = "Не правильный код";
+						$twig->error = "Код введен неверно!";
 						$twig->code = 400;
 					} else {
 						$result = $this->show_contacts($object);

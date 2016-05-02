@@ -270,6 +270,13 @@
 		text-align:left;
 		font-weight: bold;
 	}
+
+	.mail-author {
+	   width: 90%;
+	   bottom: auto;
+	   top: 35px;
+	   left: 5%;
+	}
  
 
 	#block-table td:before { content: attr(data-title); }
@@ -279,6 +286,10 @@
 
 	.preview_menu_block .search-cont{
 		display: none;
+	}
+
+	#complain>a {
+	    padding: 5px 10px;
 	}
 
 	.img-wrap{
