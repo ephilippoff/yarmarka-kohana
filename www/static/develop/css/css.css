@@ -1969,7 +1969,7 @@ div[data-role="error"]{
     border: none;
     outline: none;
     position: absolute;
-    left: 20%;
+    left: 25%;
     top: 50%;
     margin-top: -14px;
 }
