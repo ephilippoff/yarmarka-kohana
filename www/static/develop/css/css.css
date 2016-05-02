@@ -61,7 +61,7 @@ hr{
 
 img{max-width: 100%;}
 
-h3, h2, strong, .bold, b {font-family: 'pt_sansbold', Verdana, sans-serif;}
+h3, h2, strong, .bold, b, .title_block {font-family: 'pt_sansbold', Verdana, sans-serif;}
 .caption {font-family: 'pt_sans_captionregular', Verdana, sans-serif;}
 .captionbold {font-family: 'pt_sans_captionbold', Verdana, sans-serif;}
 .uppercase {text-transform: uppercase;}
@@ -1041,13 +1041,15 @@ a.auto-collapse-expand {
     box-sizing: border-box;
 }
 
-.title_block,
-.menu-cont2{
+.title_block{
     font-size: 14px;
     color: #000;
-    background-color: #E7F0F5;
     padding: 1px 10px;
     line-height: 25px;
+    border-bottom: 2px solid rgba(211, 0, 0, 0.49);
+    position: relative;
+    top: 1px;
+    z-index: 5;
 }
 
 .last-views .items {
