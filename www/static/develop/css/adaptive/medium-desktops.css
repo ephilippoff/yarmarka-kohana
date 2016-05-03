@@ -6,6 +6,10 @@
 		width: 25%;
 	}
 
+	.filter-item {
+	    width: 33.333% !important;
+	}
+
 	.last-views .item:nth-child(5){
 		display: none;
 	}
