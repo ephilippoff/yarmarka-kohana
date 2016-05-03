@@ -32,6 +32,7 @@
 .tab-filter .multiselect.active .cont {background-position: 0 -195px;}
 .tab-filter .multiselect.active:hover{background-position:right -234px;box-shadow: 0 0 5px #4FAAE3;}
 .tab-filter .multiselect.active:hover .cont {background-position: 0 -273px;}
+/*.tab-filter .multiselect.active:hover .cont{background-position: 0px -195px !important;}*/
 .tab-filter .multiselect:hover{background-position: right -78px; box-shadow:0 0 5px #4faae3;}
 .tab-filter .multiselect:hover .cont{background-position: 0px -117px;}
 .tab-filter .multiselect span{line-height: 19px;}

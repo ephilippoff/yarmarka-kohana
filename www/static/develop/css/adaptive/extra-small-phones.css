@@ -399,13 +399,14 @@
 		text-align: center;
 	}
 
+	.filter-item {
+	   width: 100% !important;
+	}
+
 }
 
 @media (max-width: 400px){
 
-	.filter-item {
-	   width: 100% !important;
-	}
 
 	.kupons_block .kupon_wrap{
 		width: 100%;

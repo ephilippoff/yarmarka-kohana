@@ -125,6 +125,11 @@ define([
             e.preventDefault();
             this.ui.valuesCont.toggle();
             this.ui.valuesCont.parent().parent().siblings().find(".js-filter-values-cont").hide();
+            if (!this.ui.valuesCont.parent().hasClass('active')) {
+                $('.multiselect').removeClass('active');
+                this.ui.valuesCont.parent().addClass('active');
+            }else this.ui.valuesCont.parent().removeClass('active');
+            
         },
         initialize: function(options){
             _.extend(this.options.attibute = {}, this.model.get(0))
