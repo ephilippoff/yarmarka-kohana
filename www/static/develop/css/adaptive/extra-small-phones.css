@@ -401,11 +401,19 @@
 
 }
 
-@media (max-width: 400px){
+@media (max-width: 430px){
 
 	.filter-item {
 	   width: 100% !important;
 	}
+
+	.tab-filter .filters-items .column-list{
+		width: 250px !important;
+	}
+}
+
+@media (max-width: 400px){
+
 
 	.kupons_block .kupon_wrap{
 		width: 100%;
