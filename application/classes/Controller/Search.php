@@ -524,6 +524,7 @@ class Controller_Search extends Controller_Template {
             "source" => $this->params_by_uri->get_reserved_query_params("source"),
             "photo" => $this->params_by_uri->get_reserved_query_params("photo"),
             "video" => $this->params_by_uri->get_reserved_query_params("video"),
+            "period" => $this->params_by_uri->get_reserved_query_params("period"),
             "private" => $this->params_by_uri->get_reserved_query_params("private"),
             "org" => $this->params_by_uri->get_reserved_query_params("org"),
             "filters" => $clean_query_params
