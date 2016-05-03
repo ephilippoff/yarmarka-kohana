@@ -280,6 +280,25 @@
  
 
 	#block-table td:before { content: attr(data-title); }
+
+	.filter-item {
+	    width: 50% !important;
+	}
+
+	.params-cont{
+		width: 220px;
+		display: inline-block;
+	}
+
+	.tab-filter .param{
+		width: auto !important;
+	}
+
+	.submit-cont {
+	    position: static !important;
+	    text-align: center;
+	}
+
 }
 
 @media (max-width: 570px){
@@ -303,6 +322,10 @@
 
 	.main-ad-wrap .table-details{
 		display: none;
+	}
+
+	.multiselect .checkbox{
+		max-width: 100%;
 	}
 
 
@@ -375,9 +398,14 @@
 	.buttons-block{
 		text-align: center;
 	}
+
 }
 
 @media (max-width: 400px){
+
+	.filter-item {
+	   width: 100% !important;
+	}
 
 	.kupons_block .kupon_wrap{
 		width: 100%;

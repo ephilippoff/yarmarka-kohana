@@ -403,6 +403,20 @@ class Search {
 			$orgtype_filter = array_merge($orgtype_filter, $org_types);
 		}
 
+		if ($params->period) {
+			if ($params->period === 1) {
+				//today
+				$object = $object->where("o.date_created",">=", DB::expr("NOW() - INTERVAL '1 days'") );
+			} else if ($params->period === 2) {
+				//week
+				$object = $object->where("o.date_created",">=", DB::expr("NOW() - INTERVAL '7 days'") );
+			} else if ($params->period === 3) {
+				//month
+				$object = $object->where("o.date_created",">=", DB::expr("NOW() - INTERVAL '31 days'") );
+			} 
+
+		}
+
 		if (count($orgtype_filter)) {
 			$orgtype_subquery = DB::select("userorg.id")
 										->from(array("user","userorg") )

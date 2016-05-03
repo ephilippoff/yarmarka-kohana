@@ -164,6 +164,7 @@ define([
 
     var TextFilterItem = FilterItem.extend({
         template: templates.filters.textFilterItem,
+        className: 'filter-item',
         ui: {
             valuesCont: ".js-filter-values-cont",
             strValue: ".js-filter-str-value",
@@ -193,6 +194,7 @@ define([
     });
 
     var NumericFilterItem = FilterItem.extend({
+        className: 'filter-item',
         template: templates.filters.numericFilterItem,
         ui: {
             valuesCont: ".js-filter-values-cont",
@@ -290,6 +292,7 @@ define([
 
     var ListMultiFilterItem = ListFilterItem.extend({
         template: templates.filters.listBoxFilterItem,
+        className: 'multi-cont clearfix filter-item',
         ui: {
             valuesCont: ".js-filter-values-cont",
             input: "input",
@@ -352,6 +355,7 @@ define([
     });
 
     var FiltersListView = Marionette.CollectionView.extend({
+        className: "clearfix main-filters-cont",
         getChildView: function(item) {
             var attribute = item.get(0)
             if ( !attribute ) {
@@ -383,7 +387,9 @@ define([
         ui: {
             form: ".js-filters-form",
             submit: ".js-filters-submit",
-            staticFilters: ".js-filters-static input"
+            infoForm: '.submit-cont>span',
+            staticFilters: ".js-filters-static input",
+            staticFiltersSelect: ".js-filters-static select"
         },
         regions: {
             filters: ".js-filters-cont"
@@ -401,6 +407,11 @@ define([
             _.each(this.ui.staticFilters, function(item){
                 if (queryParams[$(item).attr("name")]) {
                     $(item).prop("checked", true);
+                }
+            });
+            _.each(this.ui.staticFiltersSelect, function(item){
+                if (queryParams[$(item).attr("name")]) {
+                    $(item).val(queryParams[$(item).attr("name")]);
                 }
             });
         },
@@ -445,10 +456,10 @@ define([
                         }, {
                             success: function(model, response) {
                                 var count = model.get("count");
-                                if (count) {
-                                    s.ui.submit.text("Найдено: " + count + ". Показать!").removeClass("bg-color-crimson").addClass("bg-color-blue");
+                                if (count > 0) {
+                                    s.ui.infoForm.html('<i class="fa fa-check green mr5" aria-hidden="true"></i>Найдено ' + count + ' объявлений');
                                 } else {
-                                     s.ui.submit.text("Не найдено").addClass("bg-color-crimson").removeClass("bg-color-blue");
+                                     s.ui.infoForm.html(' <i class="fa fa-exclamation red mr5" aria-hidden="true"></i>Не найдено');
                                 }
                             }
                         });
