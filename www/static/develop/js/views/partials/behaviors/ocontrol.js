@@ -34,14 +34,15 @@ define([
                         $(".js-object-title-"+id).removeClass("red").removeClass("strike");
                         $(".js-object-services-"+id).slideDown();
                         $(".js-object-contacts-"+id).text("Контактные данные доступны, обновите страницу");
-                        $(target).addClass("fa-times").removeClass('fa-plus');
-                        console.log(e.currentTarget);
+                        s.ui.publishControl.find('i').addClass("fa-times").removeClass('fa-check');
+                        s.ui.publishControlCaption.text('Снять с публикации');
                     } else {
                         $(".js-object-state-"+id).addClass("red").removeClass("green").text("Объявление снято");
                         $(".js-object-title-"+id).addClass("red").addClass("strike");
                         $(".js-object-services-"+id).slideUp();
                         $(".js-object-contacts-"+id).text("Объявление снято с публикации, контактные данные не доступны.");
-                        $(target).removeClass("fa-times").addClass('fa-plus');
+                        s.ui.publishControl.find('i').removeClass("fa-times").addClass('fa-check');
+                        s.ui.publishControlCaption.text('Опубликовать');
 
                         app.windows.vent.trigger("showWindow","object_callback",{
                                 id: id
