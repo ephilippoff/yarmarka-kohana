@@ -11,14 +11,6 @@
 		<div data-role="complain" data-object-id="{{ object.id }}" data-is-guest="{{ isGuest }}" class="dib" id="complain">
 			<a href="#" data-role="start" class="red"><i class="fa fa-exclamation-triangle mr5 fa-lg"></i> Пожаловаться</a>
 		</div>
-		<div 
-		data-role="writeToAuthor" 
-		data-id="{{ object.id }}" 
-		data-email="{{ userEmail }}" 
-		data-is-job-vacancy="{{ isJobVacancy }}"
-		{% if cvAttachedUrl %}data-text="Мое резюме на Ярмарке: {{ cvAttachedUrl }}. " data-state="compose"{% endif %}
-		class="write-to-author dib">
-	</div>
 	</div>
 	{% if object.is_published == 0 %}
 		<div class="p5 dib red js-object-state-{{object.id}}">Объявление снято</div>

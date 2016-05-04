@@ -328,6 +328,43 @@
 		max-width: 100%;
 	}
 
+	.share-links{
+		display: none;
+		float: none;
+		margin-bottom: 10px;
+	}
+
+	.share-links ul{
+		width: 100%;
+		display: block;
+		text-align: center;
+	}
+
+	.more-button{
+		display: inline-block;
+		margin-right: 10px;
+	}
+
+	.buttons-block{
+		text-align: center;
+	}
+
+	.ya-share2,
+	.share-links>span{
+		float: none !important;
+	}
+
+	.share-links>span{
+		display: block;
+	    text-align: center;
+	    position: static;
+	    margin-bottom: 5px;
+	}
+
+	.actions_block{
+		text-align: center;
+	}
+
 
 }
 
@@ -378,30 +415,10 @@
 	    font-size: 16px;
 	}
 
-	.more-button{
-		display: inline-block;
-		margin-right: 10px;
-	}
-
-	.share-links{
-		display: none;
-		float: none;
-		margin-bottom: 10px;
-	}
-
-	.share-links ul{
-		width: 100%;
-		display: block;
-		text-align: center;
-	}
-
-	.buttons-block{
-		text-align: center;
-	}
-
 }
 
 @media (max-width: 430px){
+
 
 	.filter-item {
 	   width: 100% !important;
@@ -458,18 +475,23 @@
 
 @media (min-width: 481px){
 
-	.share-links{
-		display: block !important;
-	}
+	
+
+}
+
+@media (min-width: 571px){
 
 	.buttons-block{
 		float: left;
 	}
 
+	.share-links{
+		display: block !important;
+	}
+
 	button[data-role="show_share"]{
 		display: none;
 	}
-
 }
 
 

@@ -131,7 +131,7 @@ button.bg-color-blue:hover{background-color: #4381AF;-webkit-transition: backgro
 
 input{background-color: #FFFFFF; outline: 0;}
 input[type="text"], input[type="password"]{background-color: #FFFFFF;border: 1px solid #C3C3C3;font-size: 14px;height: 30px;padding:0px 10px;outline: 0; border-radius:2px;}
-textarea{background-color: #FFFFFF;border: 1px solid #C3C3C3;font-size: 14px;padding: 5px 10px;outline: 0; border-radius:2px;}
+textarea{resize: none; background-color: #FFFFFF;border: 1px solid #C3C3C3;font-size: 14px;padding: 5px 10px;outline: 0; border-radius:2px;}
 select{background-color: #FFFFFF;border: 1px solid #C3C3C3;padding:2px 10px;height: 30px;outline: 0; border-radius:2px;}
 
 .for-ie-msg-cont{text-align:center;padding:34px;font-size:20px; color:#fff; background-color: red;}
@@ -2049,7 +2049,14 @@ div[data-role="error"]{
     position: absolute;
     z-index: 50;
     background: #fff;
-    bottom: 68px;
+    bottom: 25px;
     box-shadow: 0px 0px 4px;
-    padding: 10px;
+    padding: 10px 20px;
+}
+
+.share-links>span{
+    font-size: 12px;
+    position: relative;
+    top: 5px;
+    float: left;
 }
