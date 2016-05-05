@@ -1,21 +1,3 @@
-{% if object.moder_state %}	
-	{% if not object.is_bad %}
-		{% set ad_state = 'Объявление прошло модерацию' %}
-		{% set i_state = 'check' %}
-		{% set i_color = 'green' %}
-	{% elseif object.is_bad == 1 %}
-		{% set ad_state = 'Заблокировано на исправление' %}
-		{% set i_state = 'clock-o' %}
-		{% set i_color = 'yellow' %}
-	{% elseif object.is_bad == 2 %}
-		{% set ad_state = 'Заблокировано окончательно' %}
-	{% endif %}
-	{% else  %}
-		{% set ad_state = 'Пока не прошло модерацию' %}
-		{% set i_state = 'question' %}
-		{% set i_color = 'gray' %}
-{% endif %}
-
 <div class="ad-mini-wrap clearfix {% if object.is_premium %}premium{% endif %}">
 	<div class="img-wrap fl hidden-xxs">
 		{% if object.compiled.images.main_photo %}
@@ -37,7 +19,7 @@
 		<i class="fa {{is_favourite}} fa-lg mr5 js-favourite js-favourite-ico pointer red" data-id="{{object.id}}" title="Избранное"></i>
 		<a href="{{ object.compiled.url }}" title="{{ object.title|e }}" class="object-caption bold {% if object.is_published == 0 %} red strike {% endif %}">
 			{{ object.title|e }}
-		</a> <i class="fa fa-{{i_state}} ml5 {{i_color}}" aria-hidden="true" title="{{ad_state}}"></i>
+		</a>
 
 		{% if object.is_premium %}
 		<p class="date fs12"><span>{{ object.compiled.city }}</span></p>
