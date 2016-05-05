@@ -1417,7 +1417,7 @@ var Teddypass = new function(){
 			else {														
 				html='<div id="teddypass_signup_hint" class="teddypass hint"><img '+logo_img+' width="64" height="33"/><p>'+TeddypassDictionary.getTeddyCanGeneratePassword()+'</p><p id="teddypass_ifnew">'+TeddypassDictionary.getIfNoTeddyYet()+'</p><div			><a href="#gen_password" id="teddypass_gentext"			>'+TeddypassDictionary.getGetTeddyAndGenPassword()+'</a></div><div class="learn_more"><a href="//www.teddyid.com/" target="_blank">'+TeddypassDictionary.getLearnMore()+'</a></div></div>';
 			}
-			$('body').append(html);
+			$('#teddy').append(html);
 			
 			// correct the difference between colors hue
 			var rgb = $("#"+id+" p").css('color').match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
