@@ -2,11 +2,11 @@ define([ 'jquery', 'underscore', 'backbone' ], function ($, _, Backbone) {
 
 	return Backbone.View.extend({
 
-		tagName: 'button',
+		tagName: 'a',
 
-		className: 'button dib bg-color-blue white p10 br2 mt10',
+		className: 'span-link',
 
-		template: _.template('<% if (is_job_vacancy) { %>Откликнуться на вакансию<% } else { %>Написать автору<% } %>'),
+		template: _.template('<% if (is_job_vacancy) { %><i class="fa fa-reply" aria-hidden="true"></i> Откликнуться <span class="hidden-xs">на вакансию</span><% } else { %><i class="fa fa-reply" aria-hidden="true"></i> Оставить личное сообщение<% } %>'),
 
 		events: {
 			'click': 'onUserClick'

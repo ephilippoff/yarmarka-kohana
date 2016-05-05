@@ -6,6 +6,10 @@
 		width: 25%;
 	}
 
+	.filter-item {
+	    width: 33.333% !important;
+	}
+
 	.last-views .item:nth-child(5){
 		display: none;
 	}
@@ -56,6 +60,10 @@
 	.ad_wrap:nth-child(3),
 	.ad_wrap:nth-child(6){
 		display: none;
+	}
+
+	.ad-mini-wrap .main-ad-wrap{
+		width: 55%;
 	}
 
 }

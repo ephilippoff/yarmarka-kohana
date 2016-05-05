@@ -4,16 +4,13 @@
 <div class="subcategories-cont module subcat-search">
 	<div class="row">
 		{% for col in 0..cols %}
-			<div class="col-md-4">
+			<div class="col-md-4 col-sm-4">
 				<ul>
 				{% for child_category in category_childs|slice(i, rows) %}
 					{% set count = link_counters[s_host ~ '/' ~ child_category.url] %}
 					<li>
 						<div>
 							<a href="{{ url(child_category.url) }}" title="{{child_category.title}}">{{child_category.title}}</a>
-							{% if count > 0 %}
-								<span class="count">{{count}}</span>
-							{% endif %}
 						</div>
 					</li>
 				{% endfor %}
@@ -23,8 +20,26 @@
 		{% endfor %}
 	</div>
 </div>
+{% if category_childs|length > 15 %}
 <script type="text/javascript">
-	desktop(function(){
+	// desktop(function(){
+		new Yarmarka.UI.Columns.OrderedHeight({ 
+			el: '.subcategories-cont.module.subcat-search',
+			elementSelector: 'li>div', 
+			forceOneColumnMobile: false,
+			enableAutoCollapse: true,
+			itemWidthSelector: 'a',
+			autoCollapseOptions: {
+				allowedHeight: 110
+			}
+		});
+	// });
+</script>
+{% endif %}
+
+{% if category_childs|length > 5 %}
+<script type="text/javascript">
+	mobile(function(){
 		new Yarmarka.UI.Columns.OrderedHeight({ 
 			el: '.subcategories-cont.module.subcat-search',
 			elementSelector: 'li>div', 
@@ -37,3 +52,4 @@
 		});
 	});
 </script>
+{% endif %}

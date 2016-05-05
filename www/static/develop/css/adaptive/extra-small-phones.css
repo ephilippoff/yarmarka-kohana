@@ -270,15 +270,99 @@
 		text-align:left;
 		font-weight: bold;
 	}
+
+	.mail-author {
+	   width: 90%;
+	   bottom: auto;
+	   top: 35px;
+	   left: 5%;
+	}
  
 
 	#block-table td:before { content: attr(data-title); }
+
+	.filter-item {
+	    width: 50% !important;
+	}
+
+	.params-cont{
+		width: 220px;
+		display: inline-block;
+	}
+
+	.tab-filter .param{
+		width: auto !important;
+	}
+
+	.submit-cont {
+	    position: static !important;
+	    text-align: center;
+	}
+
 }
 
 @media (max-width: 570px){
 
+	#show_contacts button{
+		left: 50%;
+	}
+
 	.preview_menu_block .search-cont{
 		display: none;
+	}
+
+	#complain>a {
+	    padding: 5px 10px;
+	}
+
+	.img-wrap{
+		width: 68px;
+		height: 40px;
+	}
+
+	.main-ad-wrap .table-details{
+		display: none;
+	}
+
+	.multiselect .checkbox{
+		max-width: 100%;
+	}
+
+	.share-links{
+		display: none;
+		float: none;
+		margin-bottom: 10px;
+	}
+
+	.share-links ul{
+		width: 100%;
+		display: block;
+		text-align: center;
+	}
+
+	.more-button{
+		display: inline-block;
+		margin-right: 10px;
+	}
+
+	.buttons-block{
+		text-align: center;
+	}
+
+	.ya-share2,
+	.share-links>span{
+		float: none !important;
+	}
+
+	.share-links>span{
+		display: block;
+	    text-align: center;
+	    position: static;
+	    margin-bottom: 5px;
+	}
+
+	.actions_block{
+		text-align: center;
 	}
 
 
@@ -314,6 +398,10 @@
 
 @media (max-width: 480px){
 
+	.ad-mini-wrap .main-ad-wrap {
+	    width: 70%;
+	}
+
 	button[data-role="show_share"]{
 		display: inline-block;
 	}
@@ -327,29 +415,26 @@
 	    font-size: 16px;
 	}
 
-	.more-button{
-		display: inline-block;
-		margin-right: 10px;
+}
+
+@media (max-width: 430px){
+
+
+	.filter-item {
+	   width: 100% !important;
 	}
 
-	.share-links{
-		display: none;
-		float: none;
-		margin-bottom: 10px;
-	}
-
-	.share-links ul{
-		width: 100%;
-		display: block;
-		text-align: center;
-	}
-
-	.buttons-block{
-		text-align: center;
+	.tab-filter .filters-items .column-list{
+		width: 250px !important;
 	}
 }
 
 @media (max-width: 400px){
+
+	.ad-mini-wrap .price{
+		font-size: 18px;
+	}
+
 
 	.kupons_block .kupon_wrap{
 		width: 100%;
@@ -394,18 +479,23 @@
 
 @media (min-width: 481px){
 
-	.share-links{
-		display: block !important;
-	}
+	
+
+}
+
+@media (min-width: 571px){
 
 	.buttons-block{
 		float: left;
 	}
 
+	.share-links{
+		display: block !important;
+	}
+
 	button[data-role="show_share"]{
 		display: none;
 	}
-
 }
 
 

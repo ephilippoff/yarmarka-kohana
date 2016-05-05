@@ -4,7 +4,7 @@ define([ 'underscore', 'backbone' ], function (_, Backbone) {
 
 		tagName: 'div',
 
-		className: 'container-fluid',
+		className: 'mail-author',
 
 		template: _.template(
 				'<div class="mt10">Напишите автору объявления</div>'
