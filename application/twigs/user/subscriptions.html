@@ -49,14 +49,14 @@
 					<form method="POST" class="fr ta-c">
 						<input type="hidden" name="id" value="{{ subscription.id }}" />
 						<input type="hidden" name="action" value="remove" />
-						<button><i class="fa fa-times"></i></button>
+						<button><i class="fa fa-times" title="Удалить подписку"></i></button>
 					</form>
 
 					<form method="POST" class="fr ta-c">
 						<input type="hidden" name="id" value="{{ subscription.id }}" />
 						<input type="hidden" name="action" value="enable" />
 						<input type="hidden" name="value" value="{{ subscription.get_not_enabled() }}" />
-						<button>{% if subscription.enabled %}<i class="fa fa-pause"></i>{% else %}<i class="fa fa-play"></i>{% endif %}</button>
+						<button>{% if subscription.enabled %}<i class="fa fa-pause" title="Приостановить подписку"></i>{% else %}<i class="fa fa-play" title="Оформить подписку"></i>{% endif %}</button>
 					</form>
 				</div>
 			{% endfor %}

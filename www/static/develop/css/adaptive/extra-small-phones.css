@@ -431,6 +431,10 @@
 
 @media (max-width: 400px){
 
+	.ad-mini-wrap .price{
+		font-size: 18px;
+	}
+
 
 	.kupons_block .kupon_wrap{
 		width: 100%;
