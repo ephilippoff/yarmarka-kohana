@@ -613,19 +613,22 @@ select{background-color: #FFFFFF;border: 1px solid #C3C3C3;padding:2px 10px;heig
 }
 
 .ad-mini-wrap .premium-tape {
-    background: url('/static/develop/images/premium.png') no-repeat;
-    width: 93px;
-    height: 34px;
     position: absolute;
-    top: -3px;
-    left: -5px;
+    top: -2px;
+    left: -1px;
+    font-size: 22px;
+    color: #FFCF1F;
+}
+
+.ad-mini-wrap .main-ad-wrap{
+    width: 65%;
 }
 
 .main-ad-wrap .table-details td:nth-child(2){
     padding-left: 10px;
 }
 
-.ad-mini-wrap .price{color: #D90000; line-height: 30px; font-size: 22px; margin-top: 20px; display: inline-block;}
+.ad-mini-wrap .price{color: #D90000; line-height: 30px; font-size: 22px; margin-top: 3px; display: inline-block; float: right;}
 
 /*result search ads end*/
 
@@ -642,7 +645,6 @@ select{background-color: #FFFFFF;border: 1px solid #C3C3C3;padding:2px 10px;heig
 .table-result-info .td-1{vertical-align:top;padding: 10px 10px 10px 23px;width: 170px;}
 .table-result-info .td-1 .img-cont{width: 136px;height: 107px;position: relative;text-align: left;cursor: pointer;}
 .table-result-info .img-frame{max-width: 136px;max-height: 107px;}
-.table-result-info .img-cont .premium-tape {background: url('/static/develop/images/premium.png') no-repeat;width: 93px;height: 34px;position: absolute;top: -3px;left: -5px;}
 .photos-count{position: absolute;bottom: 10px;left: 32%; width: 20px; color: white;border: 1px solid #fff;line-height: 1;padding: 1px; text-align: center;background-color: rgba(157, 157, 157, 0.4);}
 .table-result-info .td-2{vertical-align: top; padding: 10px;word-wrap: break-word;}
 .table-result-info .td-2 .title{/*line-height: 25px;*/ font-size: 14px;}
