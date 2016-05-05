@@ -668,6 +668,7 @@ var photoView = Backbone.View.extend({
     template: templates.photo,
     events: {
         'click .fn-remove': 'remove',
+        'click .fn-main': 'makeMain',
         'click span.rotate': 'rotate',
         'click .img': 'openCurtain'
     },
@@ -693,6 +694,11 @@ var photoView = Backbone.View.extend({
             });
         };
         img.src = me.model.get('original');
+    },
+
+    makeMain: function(){
+        $('#add-block').prepend(this.$el);
+        this.model.set('active', true);
     },
 
     openCurtain: function(){
@@ -722,14 +728,6 @@ var photoView = Backbone.View.extend({
                     fileNames[i] = userfile;
                     i++;
                 });
-                if (fileNames.length) {
-                    var firstModel = ctx.collection.where({
-                        filename: fileNames[0]
-                    });
-                    if (firstModel.length) {
-                        firstModel[0].set('active', true);
-                    }
-                }
                 var i = 1;
                 this.interval = setInterval(function() {
                     increment();
@@ -759,12 +757,12 @@ var photoView = Backbone.View.extend({
             }
 
         });
-return this;
-},
+    return this;
+    },
 
-remove: function() {
-    this.collection.remove(this.model);
-},
+    remove: function() {
+        this.collection.remove(this.model);
+    },
 });
 
 /* cropper view */
