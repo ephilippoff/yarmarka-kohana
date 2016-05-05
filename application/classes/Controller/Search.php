@@ -28,8 +28,12 @@ class Controller_Search extends Controller_Template {
             $query_params = $this->request->query();
 
             if (@$query_params['k']) {
-                $query_params['search'] = $query_params['k'];
-                unset($query_params['k']);
+                
+                $query_params = array(
+                    'search' => $query_params['k']
+                );
+                HTTP::redirect($uri."?".http_build_query($query_params), 301);
+                return;
             }
 
             try {
