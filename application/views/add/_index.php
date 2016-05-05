@@ -257,8 +257,7 @@
 									<input class="form-control w100 js-contact-code-value" type="text" placeholder="<?=$type_params["placeholder"]?>">
 									<span class="input-group-addon button bg-color-crimson white pl5 pr5 brr3 js-contact-code-ok">ок</span>
 								</div>
-								<span class="inform hidden js-contact-code-description"></span>
-								<div class="input-group w100p hidden js-contact-description"></div>
+								<span class="inform hidden js-contact-code-description js-contact-description"></span>
 							</div>
 						</div>
 					</div>
