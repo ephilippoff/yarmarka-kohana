@@ -67,9 +67,9 @@
 		</div>
 
 		{% if object.is_premium %}
-		<p class="date fs12"><span>{{ object.compiled.city }}</span></p>
+		<p class="date fs12 ta-r"><span>{{ object.compiled.city }}</span></p>
 		{% else %}
-		<p class="date fs12"><span>{{ object.date_created|date("d.m") }} / {{ object.compiled.city }}</span> </p>
+		<p class="date fs12 ta-r"><span>{{ object.date_created|date("d.m") }} / {{ object.compiled.city }}</span> </p>
 		{% endif %}
 	</div>
 
