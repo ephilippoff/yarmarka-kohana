@@ -590,8 +590,7 @@
 							</div>
 						</div>				
 					</div>
-				</div>		
-				<hr class="dib mb30 w100p">	
+				</div>
 			<? endif; ?>
 		</div>
 
@@ -615,7 +614,7 @@
 										"1m" => "30 дней",
 										"2m" => "60 дней",
 										"3m" => "90 дней");
-									$default_period = "2m";
+									$default_period = "1m";
 									if ($params->lifetime)
 										$default_period = $params->lifetime;
 									?>
@@ -662,7 +661,7 @@
 		<? endif; ?>	
 
 		<? if (!$form_data->_edit OR $prolongation_access): ?>
-			<div class="row mb10">
+			<div class="row mb10 hidden">
 				<div class="col-md-3  labelcont">
 					<label>Срок объявления:</label>
 				</div>
@@ -676,7 +675,7 @@
 										"1m" => "на 30 дней",
 										"2m" => "на 60 дней",
 										"3m" => "на 90 дней");
-									$default_period = "2m";
+									$default_period = "1m";
 									if ($params->lifetime)
 										$default_period = $params->lifetime;
 									?>

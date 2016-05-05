@@ -2060,3 +2060,9 @@ div[data-role="error"]{
     top: 5px;
     float: left;
 }
+
+.share-links>span.landing-span{
+    float: right;
+    position: static;
+    margin-bottom: 10px;
+}
