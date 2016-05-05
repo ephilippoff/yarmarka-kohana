@@ -4,11 +4,9 @@
 {% endif %}
 
 {% if premium_search_result|length > 0 %}
-	<h2 class="mb10">Премиум-объявления</h2>
 	{% for object in premium_search_result %}
 		{% include mini_cart_path %}
 	{% endfor %}
-	<h2 class="mt10 mb10">Обычные объявления</h2>
 {% endif %}
 
 {% for object in main_search_result if object.compiled.url %}
