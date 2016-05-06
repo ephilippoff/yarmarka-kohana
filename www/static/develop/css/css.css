@@ -1787,7 +1787,6 @@ a.companies{
 }
 
 .submenu-ul{
-    width: 100%;
     position: relative;
     z-index: 11;
     display: inline-block;
