@@ -27,10 +27,10 @@
 				</ul>
 				<div class="submenu-img">
 					{% if banners[category.id] is defined and file_exist('/uploads/banners/menu/' ~ banners[category.id].image) and banners[category.id].menu_name == 'main' %}
-						<map name="map{{category.id}}" id="map{{category.id}}" style="position: absolute;right:{{banners[category.id].x}}px ; bottom:{{banners[category.id].y}}px;z-index:0;">
+						<map name="map{{category.id}}" id="map{{category.id}}" style="width: 100%; height: 100%; position: absolute;right:{{banners[category.id].x}}px ; bottom:{{banners[category.id].y}}px;z-index:0;">
 							<area shape="poly" coords="{{banners[category.id].map_params}}" class="" href="/redirect/ref_cb?id={{banners[category.id].id}}" target="_blank" />
 						</map>
-						<img hidefocus="true" style="width: 100%; height: 100%; right:{{banners[category.id].x}}px; bottom:{{banners[category.id].y}}px;" usemap="#map{{category.id}}" src="/uploads/banners/menu/{{banners[category.id].image}}"/>
+						<img hidefocus="true" style="right:{{banners[category.id].x}}px; bottom:{{banners[category.id].y}}px;" usemap="#map{{category.id}}" src="/uploads/banners/menu/{{banners[category.id].image}}"/>
 					{% else %}
 						<img  hidefocus="true"  src="/static/develop/{{category.main_menu_image}}">
 					{% endif %}
