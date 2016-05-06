@@ -27,7 +27,7 @@
 				</ul>
 				<div class="submenu-img">
 					{% if banners[category.id] is defined and file_exist('/uploads/banners/menu/' ~ banners[category.id].image) and banners[category.id].menu_name == 'main' %}
-						<a href="/redirect/ref_cb?id={{banners[category.id].id}}">
+						<a href="/redirect/ref_cb?id={{banners[category.id].id}}" class="db" target="_blank">
 							<img hidefocus="true" style="right:{{banners[category.id].x}}px; bottom:{{banners[category.id].y}}px;" src="/uploads/banners/menu/{{banners[category.id].image}}"/>
 						</a>
 					{% else %}

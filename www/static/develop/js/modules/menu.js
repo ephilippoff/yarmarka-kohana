@@ -151,7 +151,6 @@ define([
             $("#popup-layer").fadeOut(100);
             $(this.getOption("controlClass")).removeClass("z301");
             this.visible = 0;
-            console.log('closed menu');
         }
     });
 
@@ -196,7 +195,6 @@ var MainmenuView = MenuView.extend({
         submenu = "#" + submenuId;
 
         $(submenu).fadeOut(70);
-        console.log('closed submenu');
 
     }
 });
