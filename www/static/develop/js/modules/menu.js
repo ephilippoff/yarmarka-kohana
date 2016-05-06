@@ -97,8 +97,8 @@ define([
     var MenuView = Marionette.ItemView.extend({
         events: {
             "click" : "showMenu",
-            "mouseover" : "showMenu",
-            "mouseleave" : "closeMenu"
+            "mouseover" : "showMenu"
+            // "mouseleave" : "closeMenu"
         },
         initialize: function(options) {
             this.visible = 0;
@@ -109,6 +109,16 @@ define([
                     $(options.templateClass).remove();
                 }
             }
+
+            var s = this;
+
+            var menuWrap = this.getOption('menuClass')
+
+            $(menuWrap).on('mouseleave', function(){
+                s.closeMenu();
+            });
+
+            // this.$el.find(.on('mouseleave')
             //Разделение меню городов по Class;
             var cityClass = 1;
             $('.js-citymenu').each(function(){
@@ -137,8 +147,8 @@ define([
                 return;
             }
             if (this.activateTimer) clearTimeout(this.activateTimer);
-            $(this.getOption("menuClass")).fadeOut(70);
-            $("#popup-layer").fadeOut(70);
+            $(this.getOption("menuClass")).fadeOut(100);
+            $("#popup-layer").fadeOut(100);
             $(this.getOption("controlClass")).removeClass("z301");
             this.visible = 0;
         }
@@ -171,7 +181,6 @@ var MainmenuView = MenuView.extend({
             var $row = $(row), 
             submenuId = $row.data("submenu-id"), 
             submenu = "#" + submenuId;
-            console.log(submenuId, submenu);
             $(submenu).show();
         }, 200);
 
