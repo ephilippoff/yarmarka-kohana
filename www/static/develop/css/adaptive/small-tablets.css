@@ -16,15 +16,6 @@
 		height: auto !important;
 	}
 
-	.tab-filter .param{
-		width: 33.3333% !important;
-	}
-
-	.small_pag,
-	a.auto-collapse-expand{
-		margin-right: 0;
-	}
-
 	.result-item .control-item>input {
 	    height: 20px;
 	    width: 20px;

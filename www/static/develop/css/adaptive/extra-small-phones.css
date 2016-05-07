@@ -288,11 +288,6 @@
 	    width: 50% !important;
 	}
 
-	.params-cont{
-		width: 220px;
-		display: inline-block;
-	}
-
 	.tab-filter .param{
 		width: auto !important;
 	}
