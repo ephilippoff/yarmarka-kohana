@@ -97,8 +97,8 @@ define([
     var MenuView = Marionette.ItemView.extend({
         events: {
             "click" : "showMenu",
-            "mouseover" : "showMenu"
-            // "mouseleave" : "closeMenu"
+            "mouseover" : "showMenu",
+            "mouseleave" : "closeMenu"
         },
         initialize: function(options) {
             this.visible = 0;
@@ -109,14 +109,6 @@ define([
                     $(options.templateClass).remove();
                 }
             }
-
-            var s = this;
-
-            var menuWrap = this.getOption('menuClass')
-
-            $(menuWrap).on('mouseleave', function(){
-                s.closeMenu();
-            });
 
             // this.$el.find(.on('mouseleave')
             //Разделение меню городов по Class;

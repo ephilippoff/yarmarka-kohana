@@ -236,6 +236,7 @@ define([
     });
 
     var IListFilterItem = FilterItem.extend({
+        className: 'filter-item',
         template: templates.filters.ilistFilterItem,
         ui: {
             valuesCont: ".js-filter-values-cont",
@@ -272,6 +273,7 @@ define([
     
 
     var ListFilterItem = FilterItem.extend({
+        className: 'filter-item',
         template: templates.filters.listFilterItem,
         ui: {
             select: "select",
@@ -296,6 +298,7 @@ define([
     });
 
     var ListMultiFilterItem = ListFilterItem.extend({
+        className: 'filter-item',
         template: templates.filters.listBoxFilterItem,
         className: 'multi-cont clearfix filter-item',
         ui: {
@@ -543,9 +546,6 @@ define([
             });
 
             
-            if ( !_.isEmpty(this.queryParams) ) {
-                $(".js-filters").show();
-            }
 
             this.filtersLoaded();
 
