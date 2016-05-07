@@ -18,7 +18,17 @@
 					<% _.each(_.keys(values).slice(i, i + rows), function(key){ %>
 						<div>
 							<label for="<%=seo_name%>[<%=key%>]" class="label-span"><%=values[key]%></label>
-							<input class="cmn-toggle-round" type="checkbox" name="<%=seo_name%>[<%=key%>]" id="<%=seo_name%>[<%=key%>]" value="<%=clearValue(key)%>" data-str="<%=values[key]%>" <%=checked(key)%>>
+							<input 
+							class="cmn-toggle-round" 
+							type="checkbox" 
+							name="<%=seo_name%>[<%=key%>]" 
+							id="<%=seo_name%>[<%=key%>]" 
+							value="<%=clearValue(key)%>" 
+							data-str="<%=values[key]%>" 
+							<% if (values[key] == 'Продажа') { %> 
+							checked="checked" 
+							<% } %>
+							<%=checked(key)%>>
 							<label for="<%=seo_name%>[<%=key%>]"></label>
 						</div>
 					<% }); %>

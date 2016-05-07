@@ -273,6 +273,13 @@
 	   top: 35px;
 	   left: 5%;
 	}
+
+	.img-wrap {
+	    width: 68px;
+	    height: 60px;
+	    margin-top: 5px;
+	    margin-right: 5px;
+	}
  
 
 	#block-table td:before { content: attr(data-title); }
@@ -295,9 +302,19 @@
 	    text-align: center;
 	}
 
+	.ad-mini-wrap .premium-tape{
+		font-size: 14px;
+		position: static;
+	}
+
 }
 
+
 @media (max-width: 570px){
+
+	.ad-mini-wrap .price{
+		font-size: 18px;
+	}
 
 	#show_contacts button{
 		left: 50%;
@@ -314,10 +331,6 @@
 	.img-wrap{
 		width: 68px;
 		height: 40px;
-	}
-
-	.main-ad-wrap .table-details{
-		display: none;
 	}
 
 	.multiselect .checkbox{
@@ -394,8 +407,15 @@
 
 @media (max-width: 480px){
 
-	.ad-mini-wrap .main-ad-wrap {
-	    width: 70%;
+	.ad-mini-wrap .main-ad-wrap{
+		width: 75%;
+		line-height: 1;
+	}
+
+	.ad-mini-wrap .price{
+		float: left;
+		font-size: 14px;
+		margin: 0;
 	}
 
 	button[data-role="show_share"]{
@@ -426,10 +446,6 @@
 }
 
 @media (max-width: 400px){
-
-	.ad-mini-wrap .price{
-		font-size: 18px;
-	}
 
 
 	.kupons_block .kupon_wrap{
