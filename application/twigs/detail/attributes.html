@@ -3,28 +3,28 @@
 </div>
 <div class="params-cont module">
 	{% if object.compiled.attributes|length > 0 %}
-		<table>
+		<table class="w100p">
 			<tbody>
 				<tr>
-					<td>Город</td>
+					<td class="bold">Город</td>
 					<td>{% if object.compiled.real_city %}{{object.compiled.real_city }}{% else %}{{ object.compiled.city }}{% endif %}, {{ object.compiled.address }}</td>
 				</tr>
 				{% for attr in object.compiled.attributes if attr.value and attr.seo_name in ['adres-raion']%}
 				<tr>
-					<td>{{ attr.title }}</td>
+					<td class="bold">{{ attr.title }}</td>
 					<td>{{ attr.value|e }}</td>
 				</tr>
 				{% endfor %}
-				{% for attr in object.compiled.attributes if attr.value and attr.seo_name not in ['tsena','adres-raion']%}
+				{% for attr in object.compiled.attributes if attr.value and attr.seo_name not in ['zarplata','tsena','adres-raion']%}
 				<tr>
-					<td>{{ attr.title }}</td>
+					<td class="bold">{{ attr.title }}</td>
 					<td>{{ attr.value|e }}</td>
 				</tr>
 				{% endfor %}
-				{% for attr in object.compiled.attributes if attr.value and attr.seo_name in ['tsena']%}
+				{% for attr in object.compiled.attributes if attr.value and attr.seo_name in ['tsena', 'zarplata']%}
 				<tr>
-					<td>{{ attr.title }}</td>
-					<td><p class="amount">{{ attr.value|e|number_format(0, ' ', ' ') }} руб.</p></td>
+					<td class="bold">{{ attr.title }}</td>
+					<td><p class="amount">{{ attr.value|e|number_format(0, ' ', ' ') }} <i class="fa fa-rub"></i></p></td>
 				</tr>
 				{% endfor %}
 			</tbody>

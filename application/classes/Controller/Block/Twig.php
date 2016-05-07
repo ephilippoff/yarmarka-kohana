@@ -323,7 +323,7 @@ class Controller_Block_Twig extends Controller_Block
         /* pagination */
         $pagination = array(
                 'page' => (int) Arr::get($requestData, 'page', 1),
-                'perPage' => (int) Arr::get($requestData, 'perPage', 5),
+                'perPage' => (int) Arr::get($requestData, 'perPage', 4),
                 'total' => count($ids)
             );
         $pagination['totalPages'] = ceil($pagination['total'] / $pagination['perPage']);
