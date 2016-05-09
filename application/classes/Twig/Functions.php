@@ -332,6 +332,25 @@ class Twig_Functions
 		return $city->title;
 	}
 
+	public static function get_city()
+	{
+		$domain = URL::SERVER('HTTP_HOST');
+		
+		$config = Kohana::$config->load("common");
+		$main_domain = $config["main_domain"];
+
+		$city_name = strtolower(trim( str_replace($main_domain, "", $domain), "."));
+
+		$city = ORM::factory('City')->where('seo_name',"=",$city_name)->cached(Date::WEEK)->find();
+
+		// $cities = array(
+		// 	"surgut" => "Сургут",
+		// 	"tyumen" => "Тюмень",
+		// 	"nizhnevartovsk" => "Нижневартовск"
+		// );
+		return $city;
+	}
+
 	public static function custommenu($root)
 	{
 		$structure = ORM::factory('Structure')
