@@ -196,6 +196,8 @@ class Lib_PlacementAds_AddEditByMassLoad extends Lib_PlacementAds_AddEdit {
 			$object->style = NULL;
 		}
 
+		$object->moder_state = 4;
+		
 		return $this;
 	}
 

@@ -219,6 +219,7 @@ function obj_selection(src, obj_id)
 				'0' => 'На модерации',
 				'1' => 'Прошло модерацию',
 				'3' => 'Есть жалобы',
+				'4' => 'Массовая загрузка',
 				'-1' => 'Пред модерация',
 			), 
 			Arr::get($search_filters, 'moder_state'), array('class' => 'span2'))

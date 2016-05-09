@@ -86,7 +86,7 @@
 			<button class="btn dropdown-toggle
 				<?php if ( ! $object->is_moderate()) : ?>
 					btn-warning
-				<?php elseif ($object->is_moderate() < 0) : ?>
+				<?php elseif ($object->is_moderate() == -1 OR $object->is_moderate() == 4) : ?>
 					btn-default
 				<?php elseif ($object->is_banned()) : ?>
 					btn-danger
@@ -97,7 +97,9 @@
 				<span class="text">
 				<?php if ( ! $object->is_moderate()) : ?>
 					На модерации
-				<?php elseif ($object->is_moderate() < 0) : ?>
+				<?php elseif ($object->is_moderate() == 4) : ?>
+					Массовая загрузка
+				<?php elseif ($object->is_moderate() == -1) : ?>
 					! Пред модерация
 				<?php elseif ($object->is_banned()) : ?>
 					<?php if ($object->is_bad == 1) : ?>
