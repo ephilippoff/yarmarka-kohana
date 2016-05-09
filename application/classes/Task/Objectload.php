@@ -190,7 +190,8 @@ class Task_Objectload extends Minion_Task
 			$result = array("status" => "no");
 			if ($object->error AND array_key_exists("nochange", $object->error))
 				$result = array(
-						"status" 	=> "nochange"
+						"status" 	=> "nochange",
+						"object_id" => $object->object_id
 					);
 			elseif ($object->error)
 				$result = array(
