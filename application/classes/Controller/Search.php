@@ -276,9 +276,9 @@ class Controller_Search extends Controller_Template {
             'count_out' => 0,
             'count_in' => 4,
             'limits' => array(
-                "10" => Search_Url::get_suri_without_reserved($this->request->query(),array(),array("limit","page")),
-                "20" => Search_Url::get_suri_without_reserved($this->request->query(), array( "limit" => 20), array("page")),
+                "25" => Search_Url::get_suri_without_reserved($this->request->query(),array(),array("limit","page")),
                 "50" => Search_Url::get_suri_without_reserved($this->request->query(), array( "limit" => 50), array("page")),
+                "75" => Search_Url::get_suri_without_reserved($this->request->query(), array( "limit" => 75), array("page")),
             )
         ));
 
