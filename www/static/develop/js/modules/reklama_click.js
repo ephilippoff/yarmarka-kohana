@@ -23,7 +23,7 @@ define([ 'jquery' ], function ($) {
 					} else {
 						y();
 					}
-					$el[0].click();
+					//$el[0].click();
 				},
 				dataType:'json'
 			});
