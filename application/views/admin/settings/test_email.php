@@ -31,7 +31,7 @@
 		<option value="manage_object">Модерация объявлений</option>
 		<option value="object_to_archive">Архивация объявлений</option>
 		<option value="payment_success">Подтверждение оплаты заказа</option>
-		<option value="payment_success_apply_notify">Оплачена услуга на сайте!</option>
+		<!-- <option value="payment_success_apply_notify">Оплачена услуга на сайте!</option> -->
 		<option value="register_data">На сайте «Ярмарка-онлайн» для вас автоматически создана учетная запись</option>
 		<option value="register_success">Успешно зарегистрировались</option>
 	</select><br>

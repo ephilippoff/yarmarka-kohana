@@ -58,14 +58,14 @@ class Controller_Admin_Settings extends Controller_Admin_Template {
 							"block_contact" => 'Сообщение от модератора сайта ',
 							"contact_verification_code" => "Подтверждение email на ",
 							//"fast_register_success" => "",
-							"forgot_password" => "	Восстановление пароля",
+							"forgot_password" => "Восстановление пароля",
 							"kupon_notify" => "Вы приобрели купоны на скидку",
 							"manage_object" => "Сообщение от модератора сайта",
 							"object_to_archive" => "Ваши объявления перемещены в архив",
 							"payment_success" => "Потверждение оплаты. Заказ №",
 							"payment_success_apply_notify" => "Оплата объявлений в газету",
 							"register_data" => "Для вас создана учетная запись на сайте yarmarka.biz",
-							"register_success" => "	Подтверждение регистрации на Ярмарке");
+							"register_success" => "Подтверждение регистрации на Ярмарке");
 
 		$subject = $this->request->param('id');
 
