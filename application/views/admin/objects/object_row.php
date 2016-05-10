@@ -6,8 +6,6 @@
 	<tr id="<?=$object->id?>">
 	<?php endif; ?>
 		<?
-		echo 1;
-		echo Debug::vars($compiled);
 			$used_service = NULL;
 			try {
 				$used_service = $object->used_service;

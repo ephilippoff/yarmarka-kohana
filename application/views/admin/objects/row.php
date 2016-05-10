@@ -18,11 +18,13 @@
 		 		}
 		 	}
 	 	?>
+	 	<?php if (count($services) > 0) :?>
 	 	<a href="<?=URL::site('khbackend/objects/services/'.$object->id)?>" target="_blank">Услуги: <br>
-			<?php if (count($services) > 0) :?>
+			
 				<?=implode(", ", $services)?>
-			<?php endif;?>
+			
 		</a>
+		<?php endif;?>
 
 	</td>
 	<td>

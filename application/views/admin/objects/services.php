@@ -29,8 +29,8 @@
 				</tr>
 				<tr class="<? if (!isset($premium->expired) ):?>success<? endif; ?>">
 					<td><?=$premium->city?></td>
-					<td><?=$premium->count?></td>
 					<td><?=$premium->activated?></td>
+					<td><?=$premium->count?></td>
 					<td><?=date('d.m.Y H:i', strtotime($premium->date_expiration) )?></td>
 				</tr>
 			<? endforeach; ?>
