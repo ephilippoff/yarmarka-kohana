@@ -9,6 +9,7 @@ define([
     "views/partials/userSearch",
     "views/partials/cart",
     "views/partials/add",
+    "modules/add-service/main",
     "views/partials/article",
 
     "modules/filters",
@@ -21,7 +22,7 @@ define([
     'modules/subscription/main'
 ], 
 function (Marionette, templates, utils, IndexPage, SearchPage, DetailPage, 
-    UserSearchPage, CartPage, AddPage, ArticlePage, FiltersModule, MapModule, Afisha,
+    UserSearchPage, CartPage, AddPage, serviceApp, ArticlePage, FiltersModule, MapModule, Afisha,
     ReklamaClickInitializer, MainPageNewsView, SubscriptionModule) {
     "use strict";
 
@@ -107,6 +108,7 @@ function (Marionette, templates, utils, IndexPage, SearchPage, DetailPage,
             new AddPage({
                 el: "body"
             });
+
         },
 
         start_userSection : function() {

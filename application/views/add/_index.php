@@ -721,21 +721,28 @@
 			</div>		
 		<? endif; ?>
 
-		<div id="div_submit">
-			<div class="row mb20">
-				<div class="col-md-3 labelcont">
-					<label></label>
+
+		<div class="row">
+			<div class="col-md-10 col-md-push-1">
+				<div data-role="service-set" class="clearfix service-set mb20">
+			
+					<div class="service-wrap"></div>
+
 				</div>
-				<div class="col-md-9 ta-r">
-					<? if ($form_data->_edit): ?>	
-						<? if ($object->is_bad <> 2): ?>	
-							<span id="submit_button" class="button button-style1 bg-color-blue btn-next">Далее <i class="fa fa-arrow-right"></i></span>							
-						<? endif; ?>
-					<? else: ?>
-						<span id="submit_button" class="button button-style1 bg-color-blue btn-next">Далее <i class="fa fa-arrow-right"></i></span>							
-					<? endif; ?>				
+
+				<div id="div_submit">
+					<div class="row  mt20 mb20 clearfix">
+						<? if ($form_data->_edit): ?>	
+							<? if ($object->is_bad <> 2): ?>	
+									<span id="submit_button" class="button button-style1 bg-color-blue js-button-submit more_button fr">Далее</span>							
+							<? endif; ?>
+						<? else: ?>
+							<span id="submit_button" class="button button-style1 bg-color-blue js-button-submit more_button fr">Далее</span>							
+						<? endif; ?>				
+					</div>			
 				</div>
-			</div>			
+			</div>
 		</div>
+
 	</form>
 </div>
