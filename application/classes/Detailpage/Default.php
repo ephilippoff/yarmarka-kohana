@@ -76,8 +76,8 @@ class Detailpage_Default
 				'active' => true,
 				'city_id' => array($domain->get_city()->id),
 				// 'location' => $object_location_value,
-				'expiration' => true,
-				'expired' => true,
+				// 'expiration' => true,
+				// 'expired' => true,
 				"published" => TRUE,
 				'category_id' => $object->category,
 				"not_id" => Cookie::get('ohistory') ? 
