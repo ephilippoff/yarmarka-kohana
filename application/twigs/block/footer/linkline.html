@@ -1,8 +1,12 @@
 <div class="gray-theme ">
 	<div class="">
 		<div class="row">
-			<div class="{% if onPageFlag == 'add' %} col-md-9 {% else %} col-md-12 {% endif %} brt3" {% if onPageFlag == 'add' %}style="margin-bottom:20px;"{% endif %}>
+			<div class="col-md-12 brt3" {% if onPageFlag == 'add' %}style="margin-bottom:20px;"{% endif %}>
 				<div class="menu-cont2">
+					{% set neiboors = custommenu('surgut.yarmarka.biz').childs %}
+			 		{% for city in neiboors %}
+			 			<span>{{ city.title}}</span>
+					{% endfor %}
 					<span class="menu-item dib hidden-xs"><span onclick="window.location='/add'" class="menu-item-cont">Подать объявление</span></span>
 					<span class="menu-item dib hidden-xs"><span onclick="window.location='http://feedback.yarmarka.biz/'" class="menu-item-cont">Техподдержка</span></span>
 					<span class="menu-item dib hidden-xs"><span onclick="window.location='/commercial'" class="menu-item-cont">Рекламодателям</span></span>
