@@ -11,8 +11,9 @@ define([
     //'lib/cropper.js'
     'cropper',
     'views/partials/add/additional_contacts',
-    'modules/ckeditor'
-    ], function(Marionette, templates, ContactsBehavior, jqueryFileUpload, nicEdit, maskedInput, ymap, cropper, AdditionalContacts, CkEditor) {
+    'modules/ckeditor',
+    'modules/add-service/main'
+    ], function(Marionette, templates, ContactsBehavior, jqueryFileUpload, nicEdit, maskedInput, ymap, cropper, AdditionalContacts, CkEditor, serviceApp) {
         "use strict";
 
         var photoList = Backbone.Collection.extend({
@@ -1304,6 +1305,13 @@ var categoryView = Backbone.View.extend({
     },
 
     change: function(e) {
+        var $temp = $('[data-role=service-set]');
+        $temp.find('*:not(".service-wrap")').remove();
+        if ($temp.length) {
+            new serviceApp({
+                el: $temp
+            });
+        }
         this.value = $(e.target).val();
         this._init_data();
         this.app.initialize({
