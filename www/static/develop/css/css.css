@@ -385,7 +385,7 @@ select{background-color: #FFFFFF;border: 1px solid #C3C3C3;padding:2px 10px;heig
 
 /* reklama-cont */
 .reklama-cont {position: relative;padding: 5px 9px;}
-.reklama-cont .banners {height: 50px; overflow: hidden;}
+.reklama-cont .banners {height: 73px; overflow: hidden;}
 .reklama-cont .banners .item {border-radius: 2px;display: inline-block;text-align: center; margin-right: 9px;position:relative;}
 .reklama-cont .banners .item img {width: 100px;height: 50px;border-radius: 2px;}
 .reklama-cont .banners .item span {position: absolute;left:0px;top:10px;display:inline-block; width:100%;text-align: center;color:white;}
@@ -1327,14 +1327,15 @@ img.category-icon{
     width: 25%;
     display: block;
     float: left;
-    padding: 0 20px;
+    padding: 0 10px;
     max-height: 200px;
 }
 
 #reklama_container img{
-    float: none !important;
+    float: left;
     display: block;
-    margin: auto;
+    margin-right: 10px;
+    width: 80px;
 }
 
 #reklama_container a span{
