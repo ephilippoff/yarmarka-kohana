@@ -2107,3 +2107,26 @@ div[data-role="error"]{
 .lk-nav li.active{
     border-bottom: 1px solid #ccc;
 }
+
+.footer-menu{
+    background-color: #D90000;
+    text-align: center;
+    margin-top: 50px;
+    font-size: 0;
+}
+
+.footer-menu a{
+    display: inline-block;
+    width: 16.6666%;
+    color: #fff;
+    font-size: 14px;
+    text-align: center;
+    padding: 5px 0;
+    -webkit-transition: all 0.15s ease-in;
+    -o-transition: all 0.15s ease-in;
+    transition: all 0.15s ease-in;
+}
+
+.footer-menu a:hover{
+    background-color: #E85151;
+}

@@ -2,17 +2,13 @@
 	<div class="">
 		<div class="row">
 			<div class="col-md-12 brt3" {% if onPageFlag == 'add' %}style="margin-bottom:20px;"{% endif %}>
-				<div class="menu-cont2">
-					{% set neiboors = custommenu('surgut.yarmarka.biz').childs %}
-			 		{% for city in neiboors %}
-			 			<span>{{ city.title}}</span>
-					{% endfor %}
-					<span class="menu-item dib hidden-xs"><span onclick="window.location='/add'" class="menu-item-cont">Подать объявление</span></span>
-					<span class="menu-item dib hidden-xs"><span onclick="window.location='http://feedback.yarmarka.biz/'" class="menu-item-cont">Техподдержка</span></span>
-					<span class="menu-item dib hidden-xs"><span onclick="window.location='/commercial'" class="menu-item-cont">Рекламодателям</span></span>
-					<span class="menu-item dib hidden-xs"><span onclick="window.location='/article/pravila-razmeshcheniya-obyavlenii'" class="menu-item-cont">Правила</span></span>
-					<span class="menu-item dib hidden-xs"><span onclick="window.location='/article/help'" class="menu-item-cont">Помощь</span></span>
-					<a class="menu-item  dib" target="_blank" href="/article/informatsiya-o-kompanii"><span class="menu-item-cont">О компании</span></a>
+				<div class="footer-menu">
+					<a href="/add">Подать объявление</a>
+					<a href="http://feedback.yarmarka.biz/" target="_blank">Техподдержка</a>
+					<a href="/commercial">Рекламодателям</a>
+					<a href="/article/pravila-razmeshcheniya-obyavlenii">Правила</a>
+					<a href="/article/help">Помощь</a>
+					<a target="_blank" href="/article/informatsiya-o-kompanii">О компании</a>
 				</div>
 			</div>
 		</div>
@@ -52,6 +48,16 @@
 					</div>
 					<div class="stat-cont">
 						<a target="_blank" href="/article/platezhnye-sistemy-robokassa">Информация о платежной системе Robokassa</a>, <a target="_blank" href="/article/platezhnye-sistemy-platron">Информация о платежной системе Platron</a>
+					</div>
+					<hr>
+					<div class="other_cities fs12">
+						Ярмарка в других городах: 
+						{% if custommenu('surgut.yarmarka.biz').childs %}
+							{% set neiboors = custommenu('surgut.yarmarka.biz').childs %}
+					 		{% for city in neiboors %}
+					 			<a class="dib mr5">{{ city.title}}</a>
+							{% endfor %}
+						{% endif %}
 					</div>
 				</div>
 			</div>
