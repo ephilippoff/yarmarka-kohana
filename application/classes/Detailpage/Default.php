@@ -76,9 +76,9 @@ class Detailpage_Default
 				'active' => true,
 				'city_id' => array($domain->get_city()->id),
 				// 'location' => $object_location_value,
-				// 'expiration' => true,
+				'expiration' => true,
 				// 'expired' => true,
-				"is_published" =>TRUE,
+				"is_published" => TRUE,
 				'category_id' => $object->category,
 				"not_id" => Cookie::get('ohistory') ? 
 									array_merge(explode(",", Cookie::get('ohistory')), array($object->id)) 
@@ -86,6 +86,7 @@ class Detailpage_Default
 			),
 			array("limit" => 10, "page" => 0)
 		);
+
 		$info['similar_search_result'] = Search::getresult($similar_search_query->execute()->as_array());
 
 		$info['similar_coords'] = array_map(function($item){
@@ -101,6 +102,8 @@ class Detailpage_Default
 		$info['objects_for_map'] = json_encode($info['similar_coords']);
 
 		$this->_info = array_merge($this->_info, $info);
+
+		// echo "<pre>";var_dump($this); die; echo "</pre>";
 
 		// echo "<pre>"; var_dump($info['similar_search_result']); echo "</pre>"; die;
 		return $this;
