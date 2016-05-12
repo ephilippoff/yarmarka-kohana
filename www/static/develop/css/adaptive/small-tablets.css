@@ -21,6 +21,10 @@
 	    width: 20px;
 	}
 
+	.reklama-cont .banners{
+		height: 55px;
+	}
+
 	.result-item .control-item>.fa{
 		font-size: 24px;
 	}
