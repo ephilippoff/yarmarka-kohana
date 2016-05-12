@@ -28,6 +28,10 @@
 		font-size: 16px;
 	}
 
+	.footer-menu a{
+		width: 50%;
+	}
+
 
 	.form-cont .btn-next{
 		width: 170px;

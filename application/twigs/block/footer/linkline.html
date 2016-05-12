@@ -4,10 +4,10 @@
 			<div class="col-md-12 brt3" {% if onPageFlag == 'add' %}style="margin-bottom:20px;"{% endif %}>
 				<div class="footer-menu">
 					<a href="/add">Подать объявление</a>
-					<a href="http://feedback.yarmarka.biz/" target="_blank">Техподдержка</a>
-					<a href="/commercial">Рекламодателям</a>
-					<a href="/article/pravila-razmeshcheniya-obyavlenii">Правила</a>
-					<a href="/article/help">Помощь</a>
+					<a class="hidden-xs" href="http://feedback.yarmarka.biz/" target="_blank">Техподдержка</a>
+					<a class="hidden-xs" href="/commercial">Рекламодателям</a>
+					<a class="hidden-xs" href="/article/pravila-razmeshcheniya-obyavlenii">Правила</a>
+					<a class="hidden-xs" href="/article/help">Помощь</a>
 					<a target="_blank" href="/article/informatsiya-o-kompanii">О компании</a>
 				</div>
 			</div>
@@ -52,12 +52,10 @@
 					<hr>
 					<div class="other_cities fs12">
 						Ярмарка в других городах: 
-						{% if custommenu('surgut.yarmarka.biz').childs %}
-							{% set neiboors = custommenu('surgut.yarmarka.biz').childs %}
-					 		{% for city in neiboors %}
-					 			<a class="dib mr5">{{ city.title}}</a>
-							{% endfor %}
-						{% endif %}
+						{% set neiboors = custommenu('surgut.yarmarka.biz').childs %}
+					 	{% for city in neiboors %}
+					 		<a class="dib mr5" href="http://{{ city.url }}">г. {{ city.title}}</a>
+						{% endfor %}
 					</div>
 				</div>
 			</div>
