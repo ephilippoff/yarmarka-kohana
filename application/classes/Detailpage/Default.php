@@ -76,7 +76,7 @@ class Detailpage_Default
 				'active' => true,
 				'city_id' => array($domain->get_city()->id),
 				// 'location' => $object_location_value,
-				// 'expiration' => true,
+				'expiration' => true,
 				'expired' => true,
 				"is_published" => TRUE,
 				'category_id' => $object->category,
