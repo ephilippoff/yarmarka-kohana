@@ -77,8 +77,8 @@ class Detailpage_Default
 				'city_id' => array($domain->get_city()->id),
 				// 'location' => $object_location_value,
 				'expiration' => true,
-				'expired' => true,
-				"published" =>TRUE,
+				// 'expired' => true,
+				"is_published" =>TRUE,
 				'category_id' => $object->category,
 				"not_id" => Cookie::get('ohistory') ? 
 									array_merge(explode(",", Cookie::get('ohistory')), array($object->id)) 
