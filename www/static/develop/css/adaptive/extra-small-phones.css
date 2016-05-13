@@ -306,17 +306,31 @@
 		position: static;
 	}
 
+	#show_contacts button{
+		left: 35%;
+	}
+
+	.params-cont {
+	    width: 240px;
+	    display: inline-block;
+	}
+
 }
 
 
 @media (max-width: 570px){
+
+	.moreinfo{
+		float: none !important;
+		display: block;
+	}
 
 	.ad-mini-wrap .price{
 		font-size: 18px;
 	}
 
 	#show_contacts button{
-		left: 50%;
+		left: 60%;
 	}
 
 	.preview_menu_block .search-cont{

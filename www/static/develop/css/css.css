@@ -729,11 +729,11 @@ select{background-color: #FFFFFF;border: 1px solid #C3C3C3;padding:2px 10px;heig
 .thumbnails-cont .img-cont .center-img{max-width: 120px;}
 .thumbnails-cont .img-cont img{height: auto;max-width: 100%;max-height: 90px;}
 
-.params-cont table tr td{padding: 3px 10px;}
-.params-cont tr td:first-child{width: 25%; vertical-align: top;}
-.params-cont table tr td:last-child{padding-right: 0;}
-.params-cont .amount{font-size: 22px;color: #D90000;font-weight: normal;line-height: 1.2;}
-.params-cont .rub{}
+.attrs-cont table tr td{padding: 3px 10px;}
+.attrs-cont tr td:first-child{width: 25%; vertical-align: top;}
+.attrs-cont table tr td:last-child{padding-right: 0;}
+.attrs-cont .amount{font-size: 22px;color: #D90000;font-weight: normal;line-height: 1.2;}
+.attrs-cont .rub{}
 
 .service-block-cont{background-color: #F5F5F5}
 .service-block-cont .line{padding: 5px 5px;margin-bottom: 5px;width: 100%;text-align: center;}
@@ -1988,7 +1988,7 @@ div[data-role="error"]{
     border: none;
     outline: none;
     position: absolute;
-    left: 25%;
+    left: 28%;
     top: 50%;
     margin-top: -14px;
 }

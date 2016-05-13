@@ -8,6 +8,9 @@
 				<div class="col-md-12 clearfix">
 					<div class="clearfix">
 						<span class="author-name">{{object.contact}}</span>
+						{% if object.compiled.author.org_type == 2 %}
+						<a class="moreinfo fr" href="/glavnaya-kategoriya?user_id={{object.compiled.author.id}}&published=1&active=1">Все объявления компании</a>
+						{% endif %}
 						<form action="" class="clearfix module" id="show_contacts">	
 							<div class="contacts-list-cont js-contact-list fl">
 								{% for contact in object.compiled.contacts %}
