@@ -117,7 +117,7 @@ class Controller_Rest_Object extends Controller_Rest {
 		 )->render();
 
 		Email::send( 
-			'almaznv@yandex.ru'//$author->email
+			$author->email
 			, Kohana::$config->load('email.default_from'), $subject, $msg);
 	}
 
