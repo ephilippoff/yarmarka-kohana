@@ -104,18 +104,21 @@ class Controller_Rest_Object extends Controller_Rest {
 
 		Cache::instance('memcache')->set("action_write_to_author:{$object_id}{$user_id}", 1, Date::DAY);
 
-		/* prepare message text */
-		$message = 'Вам было отправлено сообщение по объявлению: ' . $object->get_full_url() . "\r\n";
-		$message .= 'Текст сообщения:' . "\r\n";
-		$message .= '------------------------------------' . "\r\n";
-		$message .= htmlspecialchars($this->post->message) . "\r\n";
-		$message .= '------------------------------------' . "\r\n";
-		$message .= 'Email отправителя: ' . $user->email;
-
 		/* prepare subject */
 		$subject = 'У Вас сообщение на «Ярмарка-онлайн»';
 
-		Email::send( $author->email, Kohana::$config->load('email.default_from'), $subject, $message, false);
+		$msg = View::factory('emails/new_message_from_buyer',
+		     array(
+		         'url' => $object->get_full_url(),
+		         'title' => $object->title,
+		         'user' => $user,
+		         'message' => $this->post->message
+		     )
+		 )->render();
+
+		Email::send( 
+			'almaznv@yandex.ru'//$author->email
+			, Kohana::$config->load('email.default_from'), $subject, $msg);
 	}
 
 	public function action_callback() {

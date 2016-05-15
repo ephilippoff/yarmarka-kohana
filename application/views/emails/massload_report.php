@@ -55,7 +55,7 @@
 					<?php if (count($withservice_err_ids)): ?>
 						<li style="color:red;">Премиум не применился (т.к. содержат ошибки):
 							<?php foreach ($withservice_err_ids as $prem_id):?>
-								<a href="http://c.yarmarka.biz/user/objectload_file_list/<?php echo $fileid; ?>#<?php echo $prem_id; ?>"><?php echo $prem_id;?></a>,
+								<a href="http://c.yarmarka.biz/user/objectload_file_list/<?php echo $fileid; ?>#<?php echo $prem_id; ?>"><?php echo $prem_id; ?></a>,
 							<?php endforeach; ?>
 						</li>
 					<?php endif; ?>
