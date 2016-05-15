@@ -94,6 +94,16 @@ class Controller_Rest_Object extends Controller_Rest {
 			throw new Exception('Unauthorized');
 		}
 
+		$object_id = $this->post->object_id;
+		$user_id = $user->id;
+
+		if (Cache::instance('memcache')->get("action_write_to_author:{$object_id}{$user_id}")) {
+			$this->json["code"] = 300;
+			return;
+		}
+
+		Cache::instance('memcache')->set("action_write_to_author:{$object_id}{$user_id}", 1, Date::DAY);
+
 		/* prepare message text */
 		$message = 'Вам было отправлено сообщение по объявлению: ' . $object->get_full_url() . "\r\n";
 		$message .= 'Текст сообщения:' . "\r\n";
