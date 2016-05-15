@@ -381,6 +381,62 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 		$m_log->save();		
 	}
 
+	public function action_ajax_moderate_objectload_unpublish()
+	{
+		$this->auto_render = FALSE;
+
+		$action = $this->request->post('action');
+		$object = ORM::factory('Object', $this->request->param('id'));
+		if ( ! $object->loaded())
+		{
+			throw new HTTP_Exception_404;
+		}
+
+		$user_id = $object->author;
+		$category_id = $object->category;
+
+		$objectloads = ORM::factory('Objectload')->where('user_id','=',$user_id)->order_by("id","desc")->limit(1)->find_all()->as_array(NULL,'id');;
+
+
+		$categories = array_filter( Kohana::$config->load('massload/bycategory')->as_array(), function($item) use ($category_id){
+			return $item['id'] == $category_id;
+		});
+
+		$categories = array_map(function($item){
+			return $item['category'];
+		}, $categories);
+
+
+	
+		$objects = ORM::factory('Objectload_Files')
+				->get_union_subquery_by_category($objectloads, $categories);
+
+		
+		$count = 0;
+		if ($objects)
+		{
+			$count = ORM::factory('Object')
+					->where('number', 'IN', $objects)
+					->where('author','=', $user_id)
+					->count_all();
+
+			if ($action == 'do') {
+
+				$f = ORM::factory('Object')
+					->where('number', 'IN', $objects)
+					->where('author','=', $user_id)
+					->set('is_published', 0)
+					->set('is_bad', 1)
+					->update_all();
+			}
+		}
+
+		$json['count'] = $count;
+		$json['action'] = $action;
+		$json['code'] = ($action == 'do')? 201: 200;
+		$this->response->body(json_encode($json));
+	}
+
 	public function action_ajax_decline()
 	{
 		$this->use_layout = FALSE;

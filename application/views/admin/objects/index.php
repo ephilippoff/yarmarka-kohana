@@ -107,6 +107,24 @@ $(document).ready(function() {
 		});
 	});
 
+	$(document).on('click', '.fn-objectload-moderate', function(e){
+		e.preventDefault();
+		var obj = this;
+		$.post('/khbackend/objects/ajax_moderate_objectload_unpublish/'+$(obj).data('id'), {action:false}, function(result){
+	
+			result = JSON.parse(result);
+					console.log(result)
+			if (confirm("Уверены что хотите снять " +result.count + " объявлений этого пользователя?")) {
+
+				$.post('/khbackend/objects/ajax_moderate_objectload_unpublish/'+$(obj).data('id'), {action:'do'}, function(){
+					reload_row($(obj).data('id'));
+					alert('готово!')
+				});
+			} 
+			
+		});
+	});
+
 	$('.not_show_on_index').on('change', function(){
 		var value = $(this).prop("checked");
 		var object_id = $(this).data('id');
