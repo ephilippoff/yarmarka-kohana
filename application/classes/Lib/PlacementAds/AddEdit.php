@@ -1356,13 +1356,30 @@ class Lib_PlacementAds_AddEdit {
 		$category = &$this->category;
 		$user = &$this->user;
 		$contacts = &$this->contacts;
+
+		$user_id = $user->id;
+		$object_id = $object->id;
+		$is_edit = $this->is_edit ? "TRUE":"FALSE";
+		$key = md5("add_edit_object:{$is_edit}{$object_id}{$user_id}");
+
 		if ($user->email)
 		{
 			// отправляем уведомление о успешном редактировании/публикации
 			$is_edit = $this->is_edit;
 			$subj = $this->is_edit 
 				? 'Вы успешно изменили Ваше объявление.' 
-				: 'Поздравляем Вас с успешным размещением объявления на «Ярмарка-онлайн»!';			
+				: 'Поздравляем Вас с успешным размещением объявления на «Ярмарка-онлайн»!';
+
+
+			if ( $this->is_edit) {
+
+				if ( $result = Cache::instance('memcache')->get($key) ) {
+					return $this;
+				}
+
+				Cache::instance('memcache')->set($key, 1, Date::TENMINUTES);
+
+			}
 
 			$msg = View::factory('emails/add_notice',
 					array('is_edit' => $is_edit,'object' => $object, 'name' => $user->get_user_name(), 

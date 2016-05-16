@@ -91,11 +91,11 @@ class Object
 				throw $e;
 			}
 
-			$add->send_to_forced_moderation();
+			$add->send_to_forced_moderation()
+				->send_message();
 
 			if (!$is_local) {
-				$add->send_external_integrations()
-					->send_message();
+				$add->send_external_integrations();
 			}
 
 			$json['object_id'] = $add->object->id;
