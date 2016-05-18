@@ -31,8 +31,7 @@ class Lib_PlacementAds_AddEditByModerator extends Lib_PlacementAds_AddEdit {
 		if ($category AND $category->text_required)
 		{
 			$validation->rules('user_text_adv', array(
-				array('not_empty_html', array(':value', "Текст объявления")),
-				array('max_length', array(':value', 15000, "Текст объявления")),
+				array('not_empty_html', array(':value', "Текст объявления"))
 			));
 		}
 
