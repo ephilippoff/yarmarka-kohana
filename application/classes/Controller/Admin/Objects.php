@@ -666,8 +666,15 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 		$this->template->object = $object;
 	}
 
+	
+
 	public function action_save()
 	{
+		function my_mb_ucfirst($str) {
+		    $fc = mb_strtoupper(mb_substr($str, 0, 1));
+		    return $fc.mb_substr($str, 1);
+		}
+
 		$this->auto_render = FALSE;
 		$json = array('code' => 400);
 
@@ -686,8 +693,8 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 		}
 		else
 		{
-			$object->title 		= trim($title);
-			$object->user_text 	= trim($user_text);
+			$object->title 		= my_mb_ucfirst(mb_strtolower(trim($title)));
+			$object->user_text 	= mb_strtolower(trim($user_text));
 			$object->save();
 
 			$json['code'] = 200;
