@@ -1,14 +1,23 @@
 <script type="text/javascript" charset="utf-8">
+
+    var tinyLoaded = true;
 	$(document).ready(function() {
-		$('.tiny').tinymce({
-			//selector: "textarea .tiny",
-			theme: "modern",
-			image_advtab: true,
-			width: '100%',
-			verify_html : false,
-			toolbar_items_size: 'small',
-			plugins: ["visualblocks visualchars code fullscreen"],
-		});
+
+		try {
+
+				$('.tiny').tinymce({
+					//selector: "textarea .tiny",
+					theme: "modern",
+					image_advtab: true,
+					width: '100%',
+					verify_html : false,
+					toolbar_items_size: 'small',
+					plugins: ["visualblocks visualchars code fullscreen"],
+				});
+
+		} catch (e) {
+
+		}
 
 		$('#edit_form').submit(function(e){
 			e.preventDefault();
