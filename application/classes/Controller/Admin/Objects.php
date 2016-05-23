@@ -693,8 +693,8 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 		}
 		else
 		{
-			$object->title 		= my_mb_ucfirst(mb_strtolower(trim($title)));
-			$object->user_text 	= mb_strtolower(trim($user_text));
+			$object->title 		= trim($title);
+			$object->user_text 	= trim($user_text);
 			$object->save();
 
 			$json['code'] = 200;

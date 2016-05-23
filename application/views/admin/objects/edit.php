@@ -3,6 +3,38 @@
     var tinyLoaded = true;
 	$(document).ready(function() {
 
+		function resetCaps(text) {
+			var sourceText = text, clearedText, allTags, clearedHTM;
+		  
+		  function capitalizeFirstLetter(string) {
+		      return string.charAt(0).toUpperCase() + string.slice(1);
+		  }
+		  
+		  var re = /(<([^>]+)>)/ig;
+		  var allTags = sourceText.match(re);
+		  clearedText = sourceText.replace(re, '@@@').split('@@@').map(function(item){
+		  	
+		    var sourceSub = item, clearedSub;
+		    var reSigns = /(\.|!)/ig;
+		  	var allSigns = item.match(reSigns);
+		    
+		    clearedSub = sourceSub.replace(reSigns, '###').split('###').map(function(subItem){
+		    	return (subItem.length >= 3) ? subItem.replace(subItem.trim(), capitalizeFirstLetter(subItem.trim().toLowerCase())) : subItem;
+		    }).reduce(function(result, current, index){
+		      result = result || "";
+		      return result + allSigns[index - 1] + current;
+		    });
+		    
+		    
+		  	return clearedSub;
+		  }).reduce(function(result, current, index){
+		  	result = result || "";
+		  	return result + allTags[index - 1] + current;
+		  });
+		  
+		  return clearedText;
+		}
+
 		try {
 
 				$('.tiny').tinymce({
@@ -34,6 +66,15 @@
 
 
 		});
+
+		$('.js-correct').click(function(e){
+
+			e.preventDefault();
+			$('.tiny').val(resetCaps($('.tiny').val()));
+			$('.title').val(resetCaps($('.title').val()));
+
+
+		})
 	});
 </script>
 
@@ -45,11 +86,12 @@
 <div class="modal-body">
 		<div class="alert alert-error hide"></div>
 
-		<input type="text" name="title" style="width:100%" value="<?=$object->title?>" required />
+		<input type="text" name="title" style="width:100%" value="<?=$object->title?>" class="title" required />
 		<br /><br />
 		<textarea name="user_text" cols="35" rows="8" class="tiny input-xlarge"><?=$object->user_text?></textarea>
 </div>
 <div class="modal-footer">
+	<button class="btn btn-warning fl js-correct">Исправить регистр</button>
 	<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
 	<input type="submit" class="btn btn-primary" value="Save changes" />
 </div>
