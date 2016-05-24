@@ -35,6 +35,8 @@ class Sphinx {
 			"common_result_info" => Sphinx::getResultDescription($objects, $pricerows)
 		);
 
+		// var_dump($limit); die;
+
 		return $result;
 	}
 
@@ -54,7 +56,7 @@ class Sphinx {
 
 	public static function searchObjects($keywords, $category_id = 0, $city_id = 0, $offset = 0, $limit = 0, $groupby = FALSE)
 	{
-		$mode = SPH_MATCH_EXTENDED2;
+		$mode = SPH_MATCH_ANY;
 
 		$sphinx = new SphinxClient();
 		$sphinx->SetServer ( '127.0.0.1', 9312 ); 		
@@ -89,6 +91,7 @@ class Sphinx {
 		} elseif($city_id>0){
 			$sphinx->SetFilter('city_id', array($city_id));
 		}
+		// var_dump($sphinx); die;
 
 		return $sphinx->Query("@* ".$keywords, $object_index_name);
 	}

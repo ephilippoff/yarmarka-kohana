@@ -32,7 +32,7 @@ class Controller_Search extends Controller_Template {
                 $query_params = array(
                     'search' => $query_params['k']
                 );
-                HTTP::redirect($uri."?".http_build_query($query_params), 301);
+                HTTP::redirect($uri."=".http_build_query($query_params), 301);
                 return;
             }
 
@@ -77,6 +77,8 @@ class Controller_Search extends Controller_Template {
 
         $search_params = Search_Url::clean_reserved_query_params($this->request->query());
 
+        // var_dump($this->request->query()); die;
+
         //link counters
         if ($search_info->enable_link_couters) {
             $search_info->link_counters = Search_Url::getcounters($search_info->s_host, $search_info->category_url, array_merge($search_info->category_childs, $search_info->category_childs_elements) );
@@ -114,12 +116,14 @@ class Controller_Search extends Controller_Template {
         //$main_search_query->where('o.source_id', '<>', 2);
 
         $twig->main_search_result = Search::getresult($main_search_query->execute()->as_array());
+
         if (!$search_info->main_search_result_count) {
                 $main_search_result_count = Search::searchquery($search_info->search_filters, array(), array("count" => TRUE))
                                                         ->execute()
                                                         ->get("count");
                 $search_info->main_search_result_count = $main_search_result_count;
         }
+
 
         if (count($twig->main_search_result) > 0) 
         {
