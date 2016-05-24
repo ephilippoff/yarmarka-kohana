@@ -9,8 +9,8 @@ class Task_EmailNotices extends Minion_Task
 
     protected function _execute(array $params)
     {
-        $this->aboutPhoto();
-        $this->aboutUp();
+        //$this->aboutPhoto();
+        //$this->aboutUp();
         $this->aboutExpiration();
 
     }
@@ -139,6 +139,8 @@ class Task_EmailNotices extends Minion_Task
 
     public function aboutExpiration() {
 
+        $new_engine_cities = Kohana::$config->load("common.new_engine_cities");
+
         $notice_query =  DB::select("on.object_id")
                         ->from(array("object_notice","on"))
                         ->where("on.object_id","=",DB::expr("o.id"))
@@ -150,9 +152,10 @@ class Task_EmailNotices extends Minion_Task
                         ->where("o.active", "=", 1 )
                         ->where("o.is_published", "=", 1 )
                         ->where("o.number", "IS", NULL )
-                        ->where(DB::expr("NOW()"),">", DB::expr("o.date_expiration - interval '7 days'"))
-                        ->where(DB::expr("NOW()"),"<", DB::expr("o.date_expiration - interval '6 days'"))
-                        ->where("o.category", "NOT IN", array(0))
+                        ->where("o.author","=",327190)
+                        // ->where(DB::expr("NOW()"),">", DB::expr("o.date_expiration - interval '7 days'"))
+                        // ->where(DB::expr("NOW()"),"<", DB::expr("o.date_expiration - interval '6 days'"))
+                        // ->where("o.category", "NOT IN", array(0))
                         ->where("o.id", "NOT IN", $notice_query );
 
         $subquery_authors = DB::select("oa.author")
@@ -181,6 +184,25 @@ class Task_EmailNotices extends Minion_Task
                             ->execute();
 
             if (!count($objects)) continue;
+
+            $domain = 'http://c.yarmarka.biz';
+            $city_id = $objects[0]['city_id'];
+            $is_new = FALSE;
+
+            if (in_array($city_id, $new_engine_cities)) {
+                $is_new = Region::get_domain_by_city($city_id);
+            }
+
+            $msg = View::factory('emails/object_expiration',
+                    array(
+                        'objects' => $objects,
+                        'domain' => $domain,
+                        'is_new' => $is_new
+                    ));
+
+            Email::send(
+                'almaznv@yandex.ru'//$user->email
+                , Kohana::$config->load('email.default_from'), 'Истекает срок публикации ваших объявлений', $msg);
 
             Minion_CLI::write('notice about '.Model_Object_Notice::EXPIRATION.' in '.count($objects).' objects sent to: '.$user->email);
 
