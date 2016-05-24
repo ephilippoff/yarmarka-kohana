@@ -74,7 +74,7 @@ class Detailpage_Default
 			array(
 				// "hash" => Cookie::get('search_hash'),
 				'active' => true,
-				'city_id' => $domain->get_city()->id,
+				'city_id' => array($domain->get_city()->id),
 				// 'location' => $object_location_value,
 				// 'expiration' => true,
 				// 'expired' => true,
@@ -105,7 +105,7 @@ class Detailpage_Default
 
 		// echo "<pre>";var_dump($this); die; echo "</pre>";
 
-		// echo "<pre>"; var_dump($info['similar_search_result']); echo "</pre>"; die;
+		echo "<pre>"; var_dump($info['similar_search_result']); echo "</pre>"; die;
 		return $this;
 	}
 
