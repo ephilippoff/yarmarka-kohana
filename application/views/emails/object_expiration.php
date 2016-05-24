@@ -28,7 +28,7 @@
 			<td>
 				<table align="center" cellspacing="0" cellpadding="0" border="0" width="" style="color:#000;font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;border-collapse: collapse;">
 					<tbody>	
-						<tr><td align="right" colspan="2" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;line-height: 12px;"><a style="color:#fff;padding:5px 10px;background-color:#D44234;text-decoration:none;" href="http://c.yarmarka.biz/add">Подать объявление</a></td></tr>
+						<tr><td align="right" colspan="2" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;line-height: 12px;"><a style="color:#fff;padding:5px 10px;background-color:#D44234;text-decoration:none;" href="http://<?php echo $city; ?>.yarmarka.biz/add">Подать объявление</a></td></tr>
 						<tr><td colspan="2">&nbsp;</td></tr>
 						<tr><td align="center" colspan="2" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;line-height: 15px;font-size:18px;font-weight:bold;">Здравствуйте!</td></tr>
 						<tr><td style="line-height: 0;" colspan="2">&nbsp;<img height="20" title="" alt="" src="data:image/gif;base64,R0lGODlhAQABAJEAAAAAAP///////wAAACH5BAEAAAIALAAAAAABAAEAAAICVAEAOw%3D%3D"></td></tr>	
@@ -56,10 +56,10 @@
 						<?php else: ?>
 
 						<tr><td style="line-height: 0;" colspan="2">&nbsp;<img height="12" title="" alt="" src="data:image/gif;base64,R0lGODlhAQABAJEAAAAAAP///////wAAACH5BAEAAAIALAAAAAABAAEAAAICVAEAOw%3D%3D"></td></tr>			
-						<tr><td colspan="2" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;line-height: 15px;">Обратите внимание, что Ваше объявление сильно опустилось на страницах поиска и его сложнее найти. Воспользуйтесь услугой "Подъем" в <a style="color: #d44234;" href="<?php echo $is_new; ?>/user">личном кабинете</a>, чтобы вернуть объявление на первую строчку!</td></tr>
+						<tr><td colspan="2" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;line-height: 15px;">Обратите внимание, что Ваше объявление сильно опустилось на страницах поиска и его сложнее найти. Воспользуйтесь услугой "Подъем" в <a style="color: #d44234;" href="http://<?php echo $city; ?>.yarmarka.biz/user">личном кабинете</a>, чтобы вернуть объявление на первую строчку!</td></tr>
 									
 						<tr><td style="line-height: 0;" colspan="2">&nbsp;<img height="12" title="" alt="" src="data:image/gif;base64,R0lGODlhAQABAJEAAAAAAP///////wAAACH5BAEAAAIALAAAAAABAAEAAAICVAEAOw%3D%3D"></td></tr>					
-						<tr><td colspan="2" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;line-height: 15px;">Воспользуйтесь так же дополнительными сервисами в <a style="color: #d44234;" href="<?php echo $is_new; ?>/user">личном кабинете</a> для повышения эффективности объявлений.</td></tr>				
+						<tr><td colspan="2" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;line-height: 15px;">Воспользуйтесь так же дополнительными сервисами в <a style="color: #d44234;" href="http://<?php echo $city; ?>.yarmarka.biz/user">личном кабинете</a> для повышения эффективности объявлений.</td></tr>				
 						<?php endif; ?>
 
 

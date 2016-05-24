@@ -186,6 +186,7 @@ class Task_EmailNotices extends Minion_Task
 
             $domain = 'http://c.yarmarka.biz';
             $city_id = $objects[0]['city_id'];
+            $city = ORM::factory('City', $city_id)->seo_name;
             $is_new = FALSE;
 
             if (in_array($city_id, $new_engine_cities)) {
@@ -196,6 +197,7 @@ class Task_EmailNotices extends Minion_Task
                     array(
                         'objects' => $objects,
                         'domain' => $domain,
+                        'city' => $city,
                         'is_new' => $is_new
                     ));
 
