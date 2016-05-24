@@ -80,9 +80,9 @@ class Detailpage_Default
 				// 'expired' => true,
 				"published" => TRUE,
 				'category_id' => $object->category,
-				"not_id" => Cookie::get('ohistory') ? 
-									array_merge(explode(",", Cookie::get('ohistory')), array($object->id)) 
-										: array($object->id)
+				// "not_id" => Cookie::get('ohistory') ? 
+				// 					array_merge(explode(",", Cookie::get('ohistory')), array($object->id)) 
+				// 						: array($object->id)
 			),
 			array("limit" => 10, "page" => 0)
 		);
