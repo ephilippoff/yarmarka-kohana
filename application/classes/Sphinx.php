@@ -56,7 +56,7 @@ class Sphinx {
 
 	public static function searchObjects($keywords, $category_id = 0, $city_id = 0, $offset = 0, $limit = 0, $groupby = FALSE)
 	{
-		$mode = SPH_MATCH_PHRASE;
+		$mode = SPH_MATCH_EXTENDED2;
 
 		$sphinx = new SphinxClient();
 		$sphinx->SetServer ( '127.0.0.1', 9312 ); 		
@@ -91,7 +91,7 @@ class Sphinx {
 		} elseif($city_id>0){
 			$sphinx->SetFilter('city_id', array($city_id));
 		}
-
+		
 		return $sphinx->Query("@* ".$keywords, $object_index_name);
 	}
 
