@@ -72,12 +72,12 @@ class Detailpage_Default
 		$object_location_value = $object_location->loaded() ? trim($object_location->city . ' ' . $object_location->address) : NULL;
 		$similar_search_query = Search::searchquery(
 			array(
-				// "hash" => Cookie::get('search_hash'),
+				"hash" => Cookie::get('search_hash'),
 				'active' => true,
 				'city_id' => array($domain->get_city()->id),
-				// 'location' => $object_location_value,
-				// 'expiration' => true,
-				// 'expired' => true,
+				'location' => $object_location_value,
+				'expiration' => true,
+				'expired' => true,
 				"published" => TRUE,
 				'category_id' => $object->category,
 				"not_id" => Cookie::get('ohistory') ? 
