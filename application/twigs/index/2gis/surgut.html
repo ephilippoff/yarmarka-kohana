@@ -1,3 +1,4 @@
+
 <a id="2gis_mini_biglink" title="Организации Сургута" href="http://maps.2gis.ru/#/?history=project/surgut/center/73.359104,61.290642/zoom/10/">Перейти к большой карте</a>
 <noscript id="dg-widget-minigis-place-7120aa68" style="color:#c00;font-size:16px;font-weight:bold;">
     Код для вставки виджета на сайт    
@@ -6,5 +7,5 @@
 <script type="text/javascript">
     new DG.Widget.Components.Loader({
         wid: '7120aa68', 
-        params: {"projectSelector":{"id":39,"code":"surgut","name":"Сургут","centroid":"POINT(73.359104 61.290642)"},"search":{"rubrics":{"list":["_1","_3","_4","_5","_6","_7","_8","_9","_10","_11","_12","_13","_14","_15","_16","_17","_18","_19","_20","_21","_22","_23","_24","_25","_26","_27","_28","_29","_30","_32","_33","_34","_36","_37","_38","_39","_40","_41","_42","_43","_44","_45","_46","_47","_48","_49","_50","_51","_52","_54","_56"]},"_searchFirmBasePoint":{}},"customBalloon":{},"Map":{"zoom":10,"lon":73.359104,"lat":61.290642},"resize":{"w":1200,"h":650}}    });
+        params: {"projectSelector":{"id":39,"code":"{{city.seo_name}}","name":"{{city.title|replace({'г. ': ''}) }}","centroid":"POINT({{city.geo_loc|split(',')[1]}} {{city.geo_loc|split(',')[0]}})"},"search":{"rubrics":{"list":["_1","_3","_4","_5","_6","_7","_8","_9","_10","_11","_12","_13","_14","_15","_16","_17","_18","_19","_20","_21","_22","_23","_24","_25","_26","_27","_28","_29","_30","_32","_33","_34","_36","_37","_38","_39","_40","_41","_42","_43","_44","_45","_46","_47","_48","_49","_50","_51","_52","_54","_56"]},"_searchFirmBasePoint":{}},"customBalloon":{},"Map":{"zoom":10,"lon":{{city.geo_loc|split(',')[1]}},"lat":{{city.geo_loc|split(',')[0]}}},"resize":{"w":1200,"h":650}}    });
 </script>
