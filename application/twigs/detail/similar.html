@@ -1,10 +1,9 @@
 {% if similar_search_result|length > 0 %}
-{% set rand = random((similar_search_result|length-3)) %}
 <div class="title_block brt2">Похожие предложения</div>
 <div class="info-block-cont theme1 module">
 	<table class="table-result-info style1">
 		<tbody>
-			{% for object in similar_search_result|slice(rand,(rand+3)) %}
+			{% for object in similar_search_result|slice(0,3) %}
 				{% include 'detail/mini/default_tablerow_simple' %}
 			{% endfor %}
 		</tbody>
