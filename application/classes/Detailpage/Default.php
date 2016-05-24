@@ -105,7 +105,7 @@ class Detailpage_Default
 
 		// echo "<pre>";var_dump($this); die; echo "</pre>";
 
-		echo "<pre>"; var_dump($info['similar_search_result']); echo "</pre>"; die;
+		// echo "<pre>"; var_dump($info['similar_search_result']); echo "</pre>"; die;
 		return $this;
 	}
 
