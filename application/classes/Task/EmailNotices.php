@@ -202,7 +202,7 @@ class Task_EmailNotices extends Minion_Task
                     ));
 
             Email::send(
-                'almaznv@yandex.ru'//$user->email
+                $user->email
                 , Kohana::$config->load('email.default_from'), 'Истекает срок публикации ваших объявлений', $msg);
 
             Minion_CLI::write('notice about '.Model_Object_Notice::EXPIRATION.' in '.count($objects).' objects sent to: '.$user->email);
