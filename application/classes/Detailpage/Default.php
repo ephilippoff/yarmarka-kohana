@@ -74,15 +74,15 @@ class Detailpage_Default
 			array(
 				// "hash" => Cookie::get('search_hash'),
 				'active' => true,
-				'city_id' => array($domain->get_city()->id),
+				'city_id' => $domain->get_city()->id,
 				// 'location' => $object_location_value,
 				// 'expiration' => true,
 				// 'expired' => true,
-				// "published" => TRUE,
+				"published" => TRUE,
 				'category_id' => $object->category,
-				// "not_id" => Cookie::get('ohistory') ? 
-				// 					array_merge(explode(",", Cookie::get('ohistory')), array($object->id)) 
-				// 						: array($object->id)
+				"not_id" => Cookie::get('ohistory') ? 
+									array_merge(explode(",", Cookie::get('ohistory')), array($object->id)) 
+										: array($object->id)
 			),
 			array("limit" => 10, "page" => 0)
 		);
