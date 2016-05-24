@@ -25,10 +25,10 @@
 				</ul>
 			</div>
 		</div>
-		{% if onPageFlag == 'main' %}
-			<div class="row hidden-xs">
-				<div class="col-md-12">
-					<div class="stat-cont">
+		<div class="row hidden-xs">
+			<div class="col-md-12">
+				{% if onPageFlag == 'main' %}
+				<div class="stat-cont">
 						<img src="http://yarmarka.biz/images/robokassa.jpg">
 						<a rel="nofollow" href="https://www.platron.ru"><img src="http://yarmarka.biz/images/platron.png"></a>
 						<img height="30" src="http://yarmarka.biz/images/visa.png">
@@ -45,20 +45,25 @@
 												} catch (e) {
 												}"></a>
 						<!-- /Yandex.Metrika informer -->
-					</div>
-					<div class="stat-cont">
-						<a target="_blank" href="/article/platezhnye-sistemy-robokassa">Информация о платежной системе Robokassa</a>, <a target="_blank" href="/article/platezhnye-sistemy-platron">Информация о платежной системе Platron</a>
-					</div>
-					<hr>
-					<div class="other_cities fs12">
-						Ярмарка в других городах: 
-						{% set neiboors = custommenu('surgut.yarmarka.biz').childs %}
-					 	{% for city in neiboors %}
-					 		<a class="dib mr5" href="http://{{ city.url }}">г. {{ city.title}}</a>
-						{% endfor %}
-					</div>
+				</div>
+				<div class="stat-cont">
+					<a target="_blank" href="/article/platezhnye-sistemy-robokassa">Информация о платежной системе Robokassa</a>, <a target="_blank" href="/article/platezhnye-sistemy-platron">Информация о платежной системе Platron</a>
+				</div>
+				{% endif %}
+				<hr>
+				<div class="other_cities fs12">
+					{% if onPageFlag == 'search' %}
+						{% set title = category.title %}
+					{% else %}
+						{% set title = 'Ярмарка' %}
+					{% endif %}
+					{{title}} в других городах: 
+					{% set neiboors = custommenu('surgut.yarmarka.biz').childs %}
+				 	{% for city in neiboors %}
+				 		<a class="dib mr5" href="http://{{ city.url }}">г. {{ city.title}}</a>
+					{% endfor %}
 				</div>
 			</div>
-		{% endif %}
+		</div>
 	</div>
 </div>
