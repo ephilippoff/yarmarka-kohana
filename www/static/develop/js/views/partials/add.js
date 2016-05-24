@@ -632,14 +632,16 @@ var textView = Backbone.View.extend({
 
         var staticPath = app.settings.staticPath;
 
-        if (!_globalSettings.allowCkEditor) {
-            new nicEditor({
-                iconsPath: staticPath + 'images/nicEditorIcons.gif'
-            }).panelInstance('user_text_adv');
-        } else {
-            CkEditor.replaceOne('#user_text_adv', {
-                fileUpload: true
-            });
+        if (this.text_required) {
+            if (!_globalSettings.allowCkEditor) {
+                new nicEditor({
+                    iconsPath: staticPath + 'images/nicEditorIcons.gif'
+                }).panelInstance('user_text_adv');
+            } else {
+                CkEditor.replaceOne('#user_text_adv', {
+                    fileUpload: true
+                });
+            }
         }
     },
 
@@ -649,7 +651,7 @@ var textView = Backbone.View.extend({
             value: this.value,
             text_required: this.text_required
         });
-        this.$el.html(html);
+        this.$el.html((this.text_required) ? html: "");
         return this;
     },
 
@@ -1782,7 +1784,7 @@ return Marionette.ItemView.extend({
         },
 
         submitForm: _.once(function() {
-            if (this.text && nicEditors.findEditor('user_text_adv')) {
+            if (this.text && this.category.settings.text_required && nicEditors.findEditor('user_text_adv')) {
                 nicEditors.findEditor('user_text_adv').saveContent();
             }
             $('#' + this.form_id).submit();

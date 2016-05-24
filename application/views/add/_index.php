@@ -484,7 +484,7 @@
 			.nicEdit-main ul{ list-style: inside; list-style-type: circle; }
 		</style>
 		<div id="div_textadv">
-			<? if (property_exists($form_data, 'text')): ?>
+			<? if (property_exists($form_data, 'text') AND $form_data->text['text_required']): ?>
 				<div class="row mb10">
 					<div class="col-md-3 col-xs-12 labelcont">
 						<label>Текст объявления:</label>
