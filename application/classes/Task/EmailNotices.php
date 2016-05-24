@@ -152,10 +152,9 @@ class Task_EmailNotices extends Minion_Task
                         ->where("o.active", "=", 1 )
                         ->where("o.is_published", "=", 1 )
                         ->where("o.number", "IS", NULL )
-                        ->where("o.author","=",327190)
-                        // ->where(DB::expr("NOW()"),">", DB::expr("o.date_expiration - interval '7 days'"))
-                        // ->where(DB::expr("NOW()"),"<", DB::expr("o.date_expiration - interval '6 days'"))
-                        // ->where("o.category", "NOT IN", array(0))
+                        ->where(DB::expr("NOW()"),">", DB::expr("o.date_expiration - interval '7 days'"))
+                        ->where(DB::expr("NOW()"),"<", DB::expr("o.date_expiration - interval '6 days'"))
+                        ->where("o.category", "NOT IN", array(0))
                         ->where("o.id", "NOT IN", $notice_query );
 
         $subquery_authors = DB::select("oa.author")
