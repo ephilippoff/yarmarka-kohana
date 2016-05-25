@@ -35,7 +35,7 @@ class Sphinx {
 			"common_result_info" => Sphinx::getResultDescription($objects, $pricerows)
 		);
 
-		// var_dump($limit); die;
+		
 
 		return $result;
 	}
@@ -91,7 +91,7 @@ class Sphinx {
 		} elseif($city_id>0){
 			$sphinx->SetFilter('city_id', array($city_id));
 		}
-		
+
 		return $sphinx->Query("@* ".$keywords, $object_index_name);
 	}
 
@@ -270,13 +270,14 @@ class Sphinx {
 		if ($aRequestString) {
 			foreach ($aRequestString as $sValue)
 			{
-				if (mb_strlen($sValue)>2)
+				if (mb_strlen($sValue)>1)
 				{
 					$aKeyword[] .= "(".$sValue." | *".$sValue."*)";
 				}
 			}
 			$sSphinxKeyword = implode(" & ", $aKeyword);
 		}
+
 		return $sSphinxKeyword;
 	}
 };

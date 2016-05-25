@@ -432,7 +432,7 @@ class Controller_Search extends Controller_Template {
 
         $this->response->body($twig);
 
-        // echo "<pre>"; var_dump($twig); echo "</pre>"; die;
+        echo "<pre>"; var_dump($twig->main_search_result); echo "</pre>"; die;
 
     }
 
@@ -595,6 +595,7 @@ class Controller_Search extends Controller_Template {
             $info->city_id,
             (count($info->child_categories_ids) > 0) ? $info->child_categories_ids : $info->category_id
         );
+
         $info->sphinx_category_childs = $info->category_childs = $sphinx_category_childs["categories"];
         $info->category_childs_elements = $this->params_by_uri->get_category_childs_elements($info->category_id, $info->city_id, $this->params_by_uri->get_seo_filters());
         $info->category_childs_elements_colsize = 4;
