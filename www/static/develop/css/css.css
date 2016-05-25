@@ -1372,7 +1372,7 @@ img.category-icon{
     bottom: 120%;
     left: 0;
     width: 240px;
-    z-index: 2;
+    z-index: 10;
     box-shadow: 0px 0px 10px #ccc;
 }
 
