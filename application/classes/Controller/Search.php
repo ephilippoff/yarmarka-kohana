@@ -709,7 +709,7 @@ class Controller_Search extends Controller_Template {
                     $search_info->search_text = array_shift($newSearchText);
                 }elseif (count($newSearchText) == 1) {
                     $newSearchText = implode('', $newSearchText);
-                    if (strlen($newSearchText) > 2) {
+                    if (strlen($newSearchText) > 3) {
                        $search_info->search_text = substr($newSearchText, 0, -2);
                     }else break;
                 }
