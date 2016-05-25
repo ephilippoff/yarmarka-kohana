@@ -717,7 +717,7 @@ class Controller_Search extends Controller_Template {
                        $search_info->search_text = substr($newSearchText, 0, -2);
                     }else break;
                 }
-                else break;
+                // else break;
 
                 if (count($result) > 0) {
                     break;
