@@ -691,7 +691,9 @@ class Controller_Search extends Controller_Template {
        
         $filters = array(
                 "active" => TRUE,
-                "published" =>TRUE,
+                'expiration' => true,
+                'expired' => true,
+                'published' => true,
                 "city_id" => $search_info->city->id,
                 "category_id" => $search_info->category->id
         );
