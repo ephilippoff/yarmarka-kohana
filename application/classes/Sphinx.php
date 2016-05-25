@@ -66,7 +66,7 @@ class Sphinx {
 		$sphinx->SetFieldWeights(array (
 				'city_title' => 50,
 				'cat_title' => 40,
-				'full_text' => 10
+				'full_text' => 90
 		));
 		
 		if ($groupby == "category") {

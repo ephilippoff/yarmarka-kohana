@@ -8,7 +8,7 @@
 	{% set mini_cart_path = 'detail/mini/default_tablerow_for_admin' %}
 {% endif %}
 
-{% for object in other_adverts%}
+{% for object in other_adverts|slice(0,10) %}
 	{% include mini_cart_path %}
 {% endfor %}
 

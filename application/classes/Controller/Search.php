@@ -695,7 +695,7 @@ class Controller_Search extends Controller_Template {
                 'expired' => true,
                 'published' => true,
                 "city_id" => $search_info->city->id,
-                "category_id" => $search_info->category->id
+                "category_id" => $search_info->category->id,
         );
 
 
@@ -703,7 +703,7 @@ class Controller_Search extends Controller_Template {
         $temp = $category;
 
         while (1 == 1) {
-            $result = Search::getresult(Search::searchquery($filters, array("limit" => 10, "page" => 1))->execute()->as_array());
+            $result = Search::getresult(Search::searchquery($filters, array("limit" => 50, "page" => 1))->execute()->as_array());
 
             if ( count($result) > 0 OR !$category->parent_id OR $category->id == 1) {
                 $newSearchText = explode(' ', $search_info->search_text);
@@ -726,7 +726,16 @@ class Controller_Search extends Controller_Template {
             $filters['category_id'] = $category->id;
         }
 
-        return $result;
+        foreach ($result as $key => $value) {
+            if (count($result[$key]['compiled']) == 0) {
+                unset($result[$key]);
+            }        
+        }
+
+
+        if (shuffle($result)) {
+            return $result;
+        }
     }
     
     public function after()
