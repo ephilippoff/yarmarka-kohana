@@ -706,21 +706,22 @@ class Controller_Search extends Controller_Template {
             $result = Search::getresult(Search::searchquery($filters, array("limit" => 50, "page" => 1))->execute()->as_array());
 
             if (!$category->parent_id OR $category->id == 1) {
-                $newSearchText = explode(' ', $search_info->search_text);
-                $category = $temp;
-                $filters['category_id'] = $category->id;
-                if (count($newSearchText)>1) {
-                    $search_info->search_text = array_shift($newSearchText);
-                }elseif (count($newSearchText) == 1) {
-                    $newSearchText = implode('', $newSearchText);
-                    if (strlen($newSearchText) > 3) {
-                       $search_info->search_text = substr($newSearchText, 0, -2);
-                    }else break;
+                // $newSearchText = explode(' ', $search_info->search_text);
+                // $category = $temp;
+                // $filters['category_id'] = $category->id;
+                // if (count($newSearchText)>1) {
+                //     $search_info->search_text = array_shift($newSearchText);
+                // }elseif (count($newSearchText) == 1) {
+                //     $newSearchText = implode('', $newSearchText);
+                //     if (strlen($newSearchText) > 3) {
+                //        $search_info->search_text = substr($newSearchText, 0, -2);
+                //     }else break;
+                break;
                 }
 
                 if (count($result) > 0) {
                     break;
-                }
+                // }
                 
                 
             }
@@ -729,11 +730,11 @@ class Controller_Search extends Controller_Template {
             $filters['category_id'] = $category->id;
         }
 
-        foreach ($result as $key => $value) {
-            if (count($result[$key]['compiled']) == 0) {
-                unset($result[$key]);
-            }        
-        }
+        // foreach ($result as $key => $value) {
+        //     if (count($result[$key]['compiled']) == 0) {
+        //         unset($result[$key]);
+        //     }        
+        // }
 
 
         if (shuffle($result)) {
