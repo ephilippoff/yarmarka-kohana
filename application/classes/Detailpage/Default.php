@@ -78,7 +78,7 @@ class Detailpage_Default
 				'location' => $object_location_value,
 				'expiration' => true,
 				'expired' => true,
-				'is_published' => true,
+				'published' => true,
 				'category_id' => $object->category,
 				"not_id" => Cookie::get('ohistory') ? 
 									array_merge(explode(",", Cookie::get('ohistory')), array($object->id)) 
