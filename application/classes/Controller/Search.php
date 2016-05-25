@@ -563,7 +563,6 @@ class Controller_Search extends Controller_Template {
                 $clean_query_params
             )
         );
-
         return $info;
     }
 

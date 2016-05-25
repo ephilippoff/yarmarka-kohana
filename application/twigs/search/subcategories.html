@@ -22,7 +22,7 @@
 </div>
 {% if category_childs|length > 15 %}
 <script type="text/javascript">
-	// desktop(function(){
+	desktop(function(){
 		new Yarmarka.UI.Columns.OrderedHeight({ 
 			el: '.subcategories-cont.module.subcat-search',
 			elementSelector: 'li>div', 
@@ -33,11 +33,11 @@
 				allowedHeight: 110
 			}
 		});
-	// });
+	});
 </script>
 {% endif %}
 
-{% if category_childs|length > 5 %}
+{% if category_childs|length > 3 %}
 <script type="text/javascript">
 	mobile(function(){
 		new Yarmarka.UI.Columns.OrderedHeight({ 
@@ -47,7 +47,7 @@
 			enableAutoCollapse: true,
 			itemWidthSelector: 'a',
 			autoCollapseOptions: {
-				allowedHeight: 110
+				allowedHeight: 60
 			}
 		});
 	});

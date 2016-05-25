@@ -28,6 +28,10 @@
 		font-size: 16px;
 	}
 
+	.footer-menu a{
+		width: 50%;
+	}
+
 
 	.form-cont .btn-next{
 		width: 170px;
@@ -273,17 +277,19 @@
 	   top: 35px;
 	   left: 5%;
 	}
+
+	.img-wrap {
+	    width: 68px;
+	    height: 60px;
+	    margin-top: 5px;
+	    margin-right: 5px;
+	}
  
 
 	#block-table td:before { content: attr(data-title); }
 
 	.filter-item {
 	    width: 50% !important;
-	}
-
-	.params-cont{
-		width: 220px;
-		display: inline-block;
 	}
 
 	.tab-filter .param{
@@ -295,12 +301,36 @@
 	    text-align: center;
 	}
 
+	.ad-mini-wrap .premium-tape{
+		font-size: 14px;
+		position: static;
+	}
+
+	#show_contacts button{
+		left: 35%;
+	}
+
+	.params-cont {
+	    width: 240px;
+	    display: inline-block;
+	}
+
 }
+
 
 @media (max-width: 570px){
 
+	.moreinfo{
+		float: none !important;
+		display: block;
+	}
+
+	.ad-mini-wrap .price{
+		font-size: 18px;
+	}
+
 	#show_contacts button{
-		left: 50%;
+		left: 60%;
 	}
 
 	.preview_menu_block .search-cont{
@@ -314,10 +344,6 @@
 	.img-wrap{
 		width: 68px;
 		height: 40px;
-	}
-
-	.main-ad-wrap .table-details{
-		display: none;
 	}
 
 	.multiselect .checkbox{
@@ -394,8 +420,15 @@
 
 @media (max-width: 480px){
 
-	.ad-mini-wrap .main-ad-wrap {
-	    width: 70%;
+	.ad-mini-wrap .main-ad-wrap{
+		width: 75%;
+		line-height: 1;
+	}
+
+	.ad-mini-wrap .price{
+		float: left;
+		font-size: 14px;
+		margin: 0;
 	}
 
 	button[data-role="show_share"]{
@@ -426,10 +459,6 @@
 }
 
 @media (max-width: 400px){
-
-	.ad-mini-wrap .price{
-		font-size: 18px;
-	}
 
 
 	.kupons_block .kupon_wrap{

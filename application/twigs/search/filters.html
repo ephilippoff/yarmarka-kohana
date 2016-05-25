@@ -4,7 +4,7 @@
 			<input type="hidden" name="search" value="{{ search_text }}" />
 		{% endif %}
 		<div class="js-filters-cont"></div>
-		<div class="pos-r params-cont">
+		<div class="pos-r params-cont" style="padding: 0px 7px;">
 			<div class="param js-filters-static">
 				<span>Только с фото</span>
 				<input type="checkbox" name="photo" id="photo" value="1" class="cmn-toggle-round">
@@ -27,9 +27,9 @@
 			<div class="submit-cont">
 				<span class="db"></span>
 				<button class="bg-color-blue js-filters-submit">Поиск</button>
+				<button class="bg-color-blue js-filters-reset" style="display: none;">Сбросить</button>
 			</div>
 		</div>
 	</form>
 	
 </div><!--filters-cont-->
-

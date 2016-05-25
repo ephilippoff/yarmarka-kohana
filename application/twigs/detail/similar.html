@@ -1,8 +1,6 @@
 {% if similar_search_result|length > 0 %}
+<div class="title_block brt2">Похожие предложения</div>
 <div class="info-block-cont theme1 module">
-	<div class="title_block brt2">
-		<span>Похожие предложения</span>
-	</div>
 	<table class="table-result-info style1">
 		<tbody>
 			{% for object in similar_search_result|slice(0,3) %}

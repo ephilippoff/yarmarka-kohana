@@ -14,20 +14,12 @@
 				{{ object.title|e }}
 			</a>
 		</p>
-		<p class="style1"><span>{{ object.date_created|date("d.m") }}</span> / <span>г. {{ object.compiled.address }}</span></p>
-		{% if object.price > 0 %}
-			<p class="amount">{{ object.price|number_format(0, ' ', ' ') }} руб.</p>
+		<p class="style1"><span>{{ object.date_created|date("d.m") }}</span>
+		{% if object.compiled.city %}
+		/ <span>{{ object.compiled.city }}</span></p>
 		{% endif %}
-		{% if object.compiled.attributes|length > 0 %}
-			<table class="table-details">									
-				<tbody>
-					{% for attr in object.compiled.attributes|slice(0, 2) if attr.value %}
-					<tr>
-						<td class="attr-title">{{ attr.title }}</td>
-						<td class="value">{{ attr.value|e }}</td>
-					</tr>
-					{% endfor %}
-			</tbody></table>
+		{% if object.price > 0 %}
+			<p class="amount">{{ object.price|number_format(0, ' ', ' ') }} <i class="fa fa-rub"></i></p>
 		{% endif %}
 	</td>				
 </tr>

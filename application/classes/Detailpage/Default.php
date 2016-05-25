@@ -72,13 +72,13 @@ class Detailpage_Default
 		$object_location_value = $object_location->loaded() ? trim($object_location->city . ' ' . $object_location->address) : NULL;
 		$similar_search_query = Search::searchquery(
 			array(
-				//"hash" => Cookie::get('search_hash'),
+				// "hash" => Cookie::get('search_hash'),
 				'active' => true,
-				//'city_id' => array($domain->get_city()->id),
-				'location' => $object_location_value,
-				'expiration' => true,
-				'expired' => true,
-				'is_published' => true,
+				'city_id' => array($domain->get_city()->id),
+				// 'location' => $object_location_value,
+				// 'expiration' => true,
+				// 'expired' => true,
+				"published" => TRUE,
 				'category_id' => $object->category,
 				"not_id" => Cookie::get('ohistory') ? 
 									array_merge(explode(",", Cookie::get('ohistory')), array($object->id)) 
@@ -86,7 +86,10 @@ class Detailpage_Default
 			),
 			array("limit" => 10, "page" => 0)
 		);
+
 		$info['similar_search_result'] = Search::getresult($similar_search_query->execute()->as_array());
+
+		shuffle($info['similar_search_result']);
 
 		$info['similar_coords'] = array_map(function($item){
 			return array(
@@ -101,6 +104,10 @@ class Detailpage_Default
 		$info['objects_for_map'] = json_encode($info['similar_coords']);
 
 		$this->_info = array_merge($this->_info, $info);
+
+		// echo "<pre>";var_dump($this); die; echo "</pre>";
+
+		// echo "<pre>"; var_dump($info['similar_search_result']); echo "</pre>"; die;
 		return $this;
 	}
 
