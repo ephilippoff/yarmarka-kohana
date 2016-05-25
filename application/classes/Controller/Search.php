@@ -432,7 +432,7 @@ class Controller_Search extends Controller_Template {
 
         $this->response->body($twig);
 
-        echo "<pre>"; var_dump($twig->main_search_result); echo "</pre>"; die;
+        // echo "<pre>"; var_dump($twig->main_search_result); echo "</pre>"; die;
 
     }
 
