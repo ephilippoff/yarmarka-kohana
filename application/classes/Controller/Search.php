@@ -685,6 +685,9 @@ class Controller_Search extends Controller_Template {
 
     public function find_other_adverts($search_info)
     {
+        // var_dump($search_info->search_text); die;
+
+
        
         $filters = array(
                 "active" => TRUE,
@@ -700,7 +703,19 @@ class Controller_Search extends Controller_Template {
             $result = Search::getresult(Search::searchquery($filters, array("limit" => 10, "page" => 1))->execute()->as_array());
 
             if ( count($result) > 0 OR !$category->parent_id OR $category->id == 1) {
-                break;
+                $newSearchText = explode(' ', $search_info->search_text);
+                $category = $search_info->category;
+                if (count($newSearchText)>1) {
+                    $search_info->search_text = array_shift($newSearchText);
+                }elseif (count($newSearchText) == 1) {
+                    $newSearchText = implode('', $newSearchText);
+                    if (strlen($newSearchText) > 2) {
+                       $search_info->search_text = substr($newSearchText, 0, -2);
+                    }else break;
+                }
+                else break;
+                
+                
             }
 
             $category = ORM::factory('Category', $category->parent_id);

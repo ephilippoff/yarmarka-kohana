@@ -157,10 +157,12 @@ class Search {
 			}
 		}
 
+
+
 		$order = ($params->order) ? $params->order : "date_created";
 		$order_direction = ($params->order_direction) ? $params->order_direction : "DESC";
 
-		$limit = ($params->limit) ? (int) $params->limit : 10;
+		$limit = ($params->limit) ? (int) $params->limit : 30;
 		$page = ($params->page) ? (int) $params->page : 0;
 
 		$active = (isset($params->active)) ? $params->active : TRUE;
