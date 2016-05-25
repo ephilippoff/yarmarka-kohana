@@ -705,7 +705,7 @@ class Controller_Search extends Controller_Template {
         while (1 == 1) {
             $result = Search::getresult(Search::searchquery($filters, array("limit" => 50, "page" => 1))->execute()->as_array());
 
-            if ( count($result) > 0 OR !$category->parent_id OR $category->id == 1) {
+            if (!$category->parent_id OR $category->id == 1) {
                 $newSearchText = explode(' ', $search_info->search_text);
                 // $category = ORM::factory('Category', $category->parent_id);
                 // $filters['category_id'] = $category->id;
@@ -718,6 +718,10 @@ class Controller_Search extends Controller_Template {
                     }else break;
                 }
                 else break;
+
+                if (count($result) > 0) {
+                    break;
+                }
                 
                 
             }
