@@ -700,13 +700,14 @@ class Controller_Search extends Controller_Template {
 
 
         $category = $search_info->category;
+        $temp = $category;
 
         while (1 == 1) {
             $result = Search::getresult(Search::searchquery($filters, array("limit" => 10, "page" => 1))->execute()->as_array());
 
             if ( count($result) > 0 OR !$category->parent_id OR $category->id == 1) {
                 $newSearchText = explode(' ', $search_info->search_text);
-                $category = $search_info->category;
+                $category = $temp;
                 if (count($newSearchText)>1) {
                     $search_info->search_text = array_shift($newSearchText);
                 }elseif (count($newSearchText) == 1) {
