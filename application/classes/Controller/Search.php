@@ -707,8 +707,8 @@ class Controller_Search extends Controller_Template {
 
             if (!$category->parent_id OR $category->id == 1) {
                 $newSearchText = explode(' ', $search_info->search_text);
-                // $category = ORM::factory('Category', $category->parent_id);
-                $filters['category_id'] = $temp->id;
+                $category = $temp;
+                $filters['category_id'] = $category->id;
                 if (count($newSearchText)>1) {
                     $search_info->search_text = array_shift($newSearchText);
                 }elseif (count($newSearchText) == 1) {
@@ -717,7 +717,6 @@ class Controller_Search extends Controller_Template {
                        $search_info->search_text = substr($newSearchText, 0, -2);
                     }else break;
                 }
-                // else break;
 
                 if (count($result) > 0) {
                     break;
