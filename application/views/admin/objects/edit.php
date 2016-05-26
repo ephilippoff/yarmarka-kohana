@@ -35,21 +35,25 @@
 		  return clearedText;
 		}
 
-		try {
+		// try {
 
-				$('.tiny').tinymce({
-					//selector: "textarea .tiny",
-					theme: "modern",
-					image_advtab: true,
-					width: '100%',
-					verify_html : false,
-					toolbar_items_size: 'small',
-					plugins: ["visualblocks visualchars code fullscreen"],
-				});
+		// 		$('.tiny').tinymce({
+		// 			//selector: "textarea .tiny",
+		// 			theme: "modern",
+		// 			image_advtab: true,
+		// 			width: '100%',
+		// 			verify_html : false,
+		// 			toolbar_items_size: 'small',
+		// 			plugins: ["visualblocks visualchars code fullscreen"],
+		// 		});
 
-		} catch (e) {
+		// } catch (e) {
 
-		}
+		// }
+
+		 new nicEditor({
+                    iconsPath:'/images/nicEditorIcons.gif'
+           }).panelInstance('tiny');
 
 		$('#edit_form').submit(function(e){
 			e.preventDefault();
@@ -88,7 +92,7 @@
 
 		<input type="text" name="title" style="width:100%" value="<?=$object->title?>" class="title" required />
 		<br /><br />
-		<textarea name="user_text" cols="35" rows="8" class="tiny input-xlarge"><?=$object->user_text?></textarea>
+		<textarea name="user_text"  style="width:500px; height:250px;"  class="tiny input-xlarge" id="tiny"><?=$object->user_text?></textarea>
 </div>
 <div class="modal-footer">
 	<button class="btn btn-warning fl js-correct">Исправить регистр</button>

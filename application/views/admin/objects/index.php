@@ -44,8 +44,8 @@
 <?=HTML::style('bootstrap/image-gallery/css/bootstrap-image-gallery.css')?>
 
 
-<script type="text/javascript" src="/bootstrap/tinymce/tinymce.min.js"></script>
-<script type="text/javascript" src="/bootstrap/tinymce/jquery.tinymce.min.js"></script>
+<?=HTML::script('/static/develop/js/old/nicEdit.js')?>
+
 
 <script type="text/javascript" charset="utf-8">
 
