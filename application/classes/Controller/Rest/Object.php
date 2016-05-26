@@ -333,7 +333,8 @@ class Controller_Rest_Object extends Controller_Rest {
 
 		$categories = Controller_Block_News::get_categories($this->post->category);
 		$newsGroups = Controller_Block_News::get_items(
-			$categories, 
+			$categories,
+			NULL,
 			NULL,
 			true,
 			$page,

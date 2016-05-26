@@ -47,7 +47,7 @@ class Controller_Index extends Controller_Template {
                 "premium" => TRUE,
                 "active" => TRUE,
                 "published" =>TRUE,
-                "city_id" => $this->last_city_id,
+                "city_id" => $this->city->id,
                 "category_seo_name" => "novosti"
             ),
             array("limit" => 4, "page" => 1)
@@ -63,7 +63,7 @@ class Controller_Index extends Controller_Template {
                 "expiration" => TRUE,
                 "active" => TRUE,
                 "published" =>TRUE,
-                "city_id" => $this->last_city_id,
+                "city_id" => $this->city->id,
                 "category_seo_name" => "novosti",
                 //"not_id" => $premium_ids
             ),
@@ -91,7 +91,7 @@ class Controller_Index extends Controller_Template {
                 "expiration" => TRUE,
                 "premium" => TRUE,
                 "category_id" => array(173),
-                "city_id" => ($this->last_city_id) ? array($this->last_city_id) : NULL,
+                "city_id" => $this->city->id,
             ),
             array("limit" => 3, "order" => "date_expired")
         );
@@ -104,7 +104,7 @@ class Controller_Index extends Controller_Template {
                 "published" =>TRUE,
                 "expiration" => TRUE,
                 "category_id" => array(173),
-                "city_id" => ($this->last_city_id) ? array($this->last_city_id) : NULL,
+                "city_id" => $this->city->id,
             ),
             array("limit" => 3, "order" => "date_expired")
         );
