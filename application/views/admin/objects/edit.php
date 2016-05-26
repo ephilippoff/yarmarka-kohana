@@ -51,12 +51,14 @@
 
 		// }
 
-		 new nicEditor({
+		var editor =new nicEditor({
                     iconsPath:'/images/nicEditorIcons.gif'
            }).panelInstance('tiny');
 
 		$('#edit_form').submit(function(e){
 			e.preventDefault();
+
+			nicEditors.findEditor('tiny').saveContent();
 
 			$.post('/khbackend/objects/save/<?=$object->id?>', $(this).serialize(), function(json){
 				if (json.code == 200) {
@@ -74,7 +76,12 @@
 		$('.js-correct').click(function(e){
 
 			e.preventDefault();
-			$('.tiny').val(resetCaps($('.tiny').val()));
+
+			nicEditors.findEditor('tiny').saveContent();
+
+
+			nicEditors.findEditor('tiny').setContent(resetCaps($('#tiny').val()));
+
 			$('.title').val(resetCaps($('.title').val()));
 
 
