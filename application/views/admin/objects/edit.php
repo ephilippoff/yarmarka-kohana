@@ -52,7 +52,7 @@
 		// }
 
 		var editor =new nicEditor({
-                    iconsPath:'/images/nicEditorIcons.gif'
+                    iconsPath:'/static/develop/images/nicEditorIcons.gif'
            }).panelInstance('tiny');
 
 		$('#edit_form').submit(function(e){
