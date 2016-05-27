@@ -111,8 +111,17 @@ class Twig_Functions
 		return new Obj($array);
 	}
 
-	public static function domain($domain_str, $url_str, $protocol_str = "http://", $old = FALSE)
+	public static function domain($domain_str, $url_str, $protocol_str = "http://", $old = FALSE, $id = FALSE)
 	{
+		$new_engine_cities = Kohana::$config->load("common.new_engine_cities");
+		if ($new_engine_cities AND $id) {
+			if (in_array($id, $new_engine_cities)) {
+				return Domain::get_domain_by_city($domain_str, $url_str, $protocol_str);
+			} else {
+				return Domain::get_domain_by_city_old($domain_str, $url_str, $protocol_str);
+			}
+		}
+
 		return ($old) ? Domain::get_domain_by_city_old($domain_str, $url_str, $protocol_str) : Domain::get_domain_by_city($domain_str, $url_str, $protocol_str);
 	}
 

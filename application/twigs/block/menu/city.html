@@ -9,7 +9,7 @@
 		<ul class="fl city_col">
 			{% for city in cities|slice(i, rows) %}
 				<li>
-					<a href="//{{ domain(city.seo_name, canonical_url, null, true) }}" class="{% if city.seo_name in main_cities %}bold{% endif %}">{{ city.title}}</a>
+					<a href="//{{ domain(city.seo_name, canonical_url, null, true, city.id) }}" class="{% if city.seo_name in main_cities %}bold{% endif %}">{{ city.title}}</a>
 				</li>
 			{% endfor %}
 		</ul>
