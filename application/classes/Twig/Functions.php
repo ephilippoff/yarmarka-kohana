@@ -118,7 +118,12 @@ class Twig_Functions
 			if (in_array($id, $new_engine_cities)) {
 				return Domain::get_domain_by_city($domain_str, $url_str, $protocol_str);
 			} else {
-				return Domain::get_domain_by_city_old($domain_str, $url_str, $protocol_str);
+				if (strpos($url_str, 'user') === false) {
+					return Domain::get_domain_by_city_old($domain_str, $url_str, $protocol_str);
+				} else {
+					return Domain::get_domain_by_city("c", $url_str, $protocol_str);
+				}
+				
 			}
 		}
 
