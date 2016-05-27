@@ -202,9 +202,9 @@ class Controller_Detail extends Controller_Template {
 		$object = $this->request->param("object");
 		$url = $this->request->param("url");
 
-		if ($url <> $this->request->get_full_url()) {
-			HTTP::redirect($url, 301);
-		}
+		// if ($url <> $this->request->get_full_url()) {
+		// 	HTTP::redirect($url, 301);
+		// }
 
 		if ($object->active == 0) {
 		   throw new HTTP_Exception_404;
