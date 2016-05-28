@@ -427,9 +427,23 @@ class Controller_Search extends Controller_Template {
         }
 
         if (count($twig->main_search_result) == 0) {
-            $search_info->search_text = 'Тойота';
-            $twig->other_adverts = $this->find_other_adverts($search_info);
-            // var_dump($search_info->search_text); die;
+            $result = $this->find_other_adverts($search_info);
+            while (count($result) == 0) {
+
+                $newSearchText = explode(' ', $search_info->search_text);
+                if (count($newSearchText)>1) {
+                    $search_info->search_text = array_shift($newSearchText);
+                }elseif (count($newSearchText) == 1) {
+                    $newSearchText = implode('', $newSearchText);
+                    if (strlen($newSearchText) > 3) {
+                       $search_info->search_text = substr($newSearchText, 0, -2);
+                    }else break;
+                }
+
+                var_dump($search_info->search_text); die;
+                $twig->other_adverts = $this->find_other_adverts($search_info);
+                
+            }
         }
 
         $this->response->body($twig);
