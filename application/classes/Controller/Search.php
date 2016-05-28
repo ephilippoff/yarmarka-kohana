@@ -440,7 +440,7 @@ class Controller_Search extends Controller_Template {
                     }else break;
                 }
 
-                // var_dump($search_info->search_text); die;
+                var_dump($search_info->search_text); die;
                 $twig->other_adverts = $this->find_other_adverts($search_info);
                 
             }
