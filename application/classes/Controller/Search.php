@@ -443,7 +443,7 @@ class Controller_Search extends Controller_Template {
                 $result = $this->find_other_adverts($search_info);
             }
 
-            var_dump($search_info->search_text);
+            var_dump($result);
         }
 
         $this->response->body($twig);
