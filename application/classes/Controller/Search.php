@@ -427,7 +427,9 @@ class Controller_Search extends Controller_Template {
         }
 
         if (count($twig->main_search_result) == 0) {
+            $search_info->search_text = 'Тойота';
             $twig->other_adverts = $this->find_other_adverts($search_info);
+            var_dump($search_info->search_text); die;
         }
 
         $this->response->body($twig);
@@ -705,20 +707,20 @@ class Controller_Search extends Controller_Template {
         while (1 == 1) {
             $result = Search::getresult(Search::searchquery($filters, array("limit" => 50, "page" => 1))->execute()->as_array());
 
-            if (!$category->parent_id OR $category->id == 1) {
-                $newSearchText = explode(' ', $search_info->search_text);
-                if (count($newSearchText)>1) {
-                    $search_info->search_text = array_shift($newSearchText);
-                }elseif (count($newSearchText) == 1) {
-                    $newSearchText = implode('', $newSearchText);
-                    if (strlen($newSearchText) > 3) {
-                       $search_info->search_text = substr($newSearchText, 0, -2);
-                    }else break;
-                }
+            if (count($result) > 0 OR !$category->parent_id OR $category->id == 1) {
+                // $newSearchText = explode(' ', $search_info->search_text);
+                // if (count($newSearchText)>1) {
+                //     $search_info->search_text = array_shift($newSearchText);
+                // }elseif (count($newSearchText) == 1) {
+                //     $newSearchText = implode('', $newSearchText);
+                //     if (strlen($newSearchText) > 3) {
+                //        $search_info->search_text = substr($newSearchText, 0, -2);
+                //     }else break;
+                // }
 
-                if (count($result) > 0) {
+                // if (count($result) > 0) {
                     break;
-                }
+                // }
                 
                 
             }
