@@ -427,9 +427,9 @@ class Controller_Search extends Controller_Template {
         }
 
         if (count($twig->main_search_result) == 0) {
-            $search_info->search_text = 'Тойота';
+            $search_info->search_text = 'Lexus';
             $twig->other_adverts = $this->find_other_adverts($search_info);
-            var_dump($search_info->search_text); die;
+            // var_dump($search_info->search_text); die;
         }
 
         $this->response->body($twig);
