@@ -712,7 +712,7 @@ class Controller_Search extends Controller_Template {
                 'expired' => true,
                 'published' => true,
                 "city_id" => $search_info->city->id,
-                "search_text" => '',
+                // "search_text" => '',
                 "category_id" => $search_info->category->id,
         );
 
