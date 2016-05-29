@@ -722,7 +722,7 @@ class Controller_Search extends Controller_Template {
         while (1 == 1) {
             $result = Search::getresult(Search::searchquery($filters, array("limit" => 50, "page" => 1))->execute()->as_array());
 
-            if (!$category->parent_id OR $category->id == 1) {
+            if (count($result) > 0 OR !$category->parent_id OR $category->id == 1) {
                 break;
             }
 
