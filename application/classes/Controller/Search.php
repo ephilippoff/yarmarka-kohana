@@ -713,7 +713,7 @@ class Controller_Search extends Controller_Template {
                 'published' => true,
                 "city_id" => $search_info->city->id,
                 "search_text" => '',
-                // "category_id" => $search_info->category->id,
+                "category_id" => $search_info->category->id,
         );
 
 
