@@ -427,7 +427,8 @@ class Controller_Search extends Controller_Template {
         }
 
         if (count($twig->main_search_result) == 0) {
-            while (count($this->find_other_adverts($search_info)) == 0) {
+            $result = $this->find_other_adverts($search_info);
+            while (count($result) == 0) {
 
                 $newSearchText = explode(' ', $search_info->search_text);
                 if (count($newSearchText)>1) {
@@ -438,7 +439,7 @@ class Controller_Search extends Controller_Template {
                        $search_info->search_text = substr($newSearchText, 0, -2);
                     }else break;
                 }
-                // var_dump($result);
+                // var_dump($search_info->search_text);
 
                 $result = $this->find_other_adverts($search_info);
             }
@@ -711,7 +712,8 @@ class Controller_Search extends Controller_Template {
                 'expired' => true,
                 'published' => true,
                 "city_id" => $search_info->city->id,
-                "category_id" => $search_info->category->id,
+                "search_text" => '',
+                // "category_id" => $search_info->category->id,
         );
 
 
@@ -728,11 +730,11 @@ class Controller_Search extends Controller_Template {
             $filters['category_id'] = $category->id;
         }
 
-        foreach ($result as $key => $value) {
-            if (count($result[$key]['compiled']) == 0) {
-                unset($result[$key]);
-            }        
-        }
+        // foreach ($result as $key => $value) {
+        //     if (count($result[$key]['compiled']) == 0) {
+        //         unset($result[$key]);
+        //     }        
+        // }
 
 
         if (shuffle($result)) {
