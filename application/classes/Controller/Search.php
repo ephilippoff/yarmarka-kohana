@@ -704,7 +704,7 @@ class Controller_Search extends Controller_Template {
     {
         // var_dump($search_info->search_text); die;
 
-
+        $categoryID = ($search_info->category->id == 1) ? $search_info->child_categories_ids : $search_info->category->id;
        
         $filters = array(
                 "active" => TRUE,
@@ -713,7 +713,7 @@ class Controller_Search extends Controller_Template {
                 'published' => true,
                 "city_id" => $search_info->city->id,
                 "search_text" => $search_info->search_text,
-                // "category_id" => $search_info->category->id,
+                "category_id" => $categoryID
         );
 
 
