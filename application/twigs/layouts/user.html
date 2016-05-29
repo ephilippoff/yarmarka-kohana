@@ -1,5 +1,9 @@
 {% extends "layouts/main_with_header" %}
 
+{% block title %}
+	{% for crumb in crumbs %}{{crumb.title}}{% endfor %}
+{% endblock title %}
+
 {% set theme_class = 'blue-subtle-theme' %}
 
 {% block css %}

@@ -2,6 +2,14 @@
 
 {% set theme_class = 'blue-subtle-theme' %}
 
+{% block title %}
+	{% if isEdit %}
+		Редактирование объявления
+	{% else %}
+		Создание объявления в {{cityTitle}}
+	{% endif %}
+{% endblock title %}
+
 {% block css %}
 	{{ parent() }}
 	{{ css("bootstrap.tables.min.css") }}

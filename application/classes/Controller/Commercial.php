@@ -26,6 +26,8 @@ class Controller_Commercial extends Controller_Template {
 			)
 		);
 
+		$twig->seo_attributes = 'Рекламодателям';
+
 		$this->response->body($twig);
 	}
 

@@ -154,7 +154,10 @@ class Controller_Add extends Controller_Template {
 
 		$twig->params = (array) $twig->params;
 		$twig->block_name = "add/_index";
+		$twig->cityTitle = $form_data->_data->city['city_title'];
 		$this->response->body($twig);
+
+		// echo "<pre>"; var_dump($twig); echo '</pre>'; die;
 
 	}
 
@@ -164,6 +167,7 @@ class Controller_Add extends Controller_Template {
 		$this->auto_render  = FALSE;
 		$twig = Twig::factory('user/add');
 		$twig->onPageFlag = 'add';
+		$twig->isEdit = TRUE;
 		$twig->params = new Obj();
 
 		$this->initAddForm($twig);

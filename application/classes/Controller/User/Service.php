@@ -110,7 +110,7 @@ class Controller_User_Service extends Controller_User_Profile {
         $twig->user = $this->user;
 
         $twig->crumbs = array(
-            array("title" => "Личный кабинет - Заказы"),
+            array("title" => "Личный кабинет - История заказов"),
         );
 
         $user = $this->user;
