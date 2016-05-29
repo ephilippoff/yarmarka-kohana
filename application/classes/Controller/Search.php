@@ -427,8 +427,7 @@ class Controller_Search extends Controller_Template {
         }
 
         if (count($twig->main_search_result) == 0) {
-            $result = $this->find_other_adverts($search_info);
-            while (count($result) == 0) {
+            while (count($this->find_other_adverts($search_info)) == 0) {
 
                 $newSearchText = explode(' ', $search_info->search_text);
                 if (count($newSearchText)>1) {
@@ -439,11 +438,12 @@ class Controller_Search extends Controller_Template {
                        $search_info->search_text = substr($newSearchText, 0, -2);
                     }else break;
                 }
+                // var_dump($result);
 
                 $result = $this->find_other_adverts($search_info);
             }
 
-            var_dump($result);
+            $twig->other_adverts = $result;
         }
 
         $this->response->body($twig);
@@ -716,27 +716,12 @@ class Controller_Search extends Controller_Template {
 
 
         $category = $search_info->category;
-        $temp = $category;
 
         while (1 == 1) {
             $result = Search::getresult(Search::searchquery($filters, array("limit" => 50, "page" => 1))->execute()->as_array());
 
             if (!$category->parent_id OR $category->id == 1) {
-                // $newSearchText = explode(' ', $search_info->search_text);
-                // if (count($newSearchText)>1) {
-                //     $search_info->search_text = array_shift($newSearchText);
-                // }elseif (count($newSearchText) == 1) {
-                //     $newSearchText = implode('', $newSearchText);
-                //     if (strlen($newSearchText) > 3) {
-                //        $search_info->search_text = substr($newSearchText, 0, -2);
-                //     }else break;
-                // }
-
-                // if (count($result) > 0) {
-                    break;
-                // }
-                
-                
+                break;
             }
 
             $category = ORM::factory('Category', $category->parent_id);
