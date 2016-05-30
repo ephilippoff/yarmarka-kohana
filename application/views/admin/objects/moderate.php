@@ -1,5 +1,6 @@
  <?=HTML::script('bootstrap/datepicker/js/bootstrap-datepicker.js')?>
 <?=HTML::style('bootstrap/datepicker/css/datepicker.css')?>
+<?=HTML::script('/static/develop/js/old/nicEdit.js')?>
  <style>
 
         * {
@@ -84,5 +85,6 @@
 <div style="400px;">
 	<section class="app"></section>
 </div>
-<?=HTML::script('static/develop/moderate-ui/dist/libs.js')?>
-<?=HTML::script('static/develop/moderate-ui/dist/app.js')?>
+<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">asdad</div>
+<?=HTML::script('static/develop/moderate-ui-prod/libs.js')?>
+<?=HTML::script('static/develop/moderate-ui-prod/app.js')?>

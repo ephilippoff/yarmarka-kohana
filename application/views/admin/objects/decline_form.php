@@ -11,7 +11,11 @@
 				if (json.code == 200) {
 					$('.modal-body .alert-error').hide('slow');
 					$('#myModal').modal('hide');
-					reload_row(<?=$object->id?>, 1);
+					var reload_row = reload_row || false;
+					if (reload_row) {
+						reload_row(<?=$object->id?>, 1);
+
+					}
 				} else {
 					$('.modal-body .alert-error').html('Укажите причину').show('slow');
 				}
@@ -62,6 +66,6 @@
 </div>
 <div class="modal-footer">
 	<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-	<input type="submit" class="btn btn-primary" value="Save changes" />
+	<input type="submit" class="btn btn-primary js-submit" value="Save changes" />
 </div>
 </form>

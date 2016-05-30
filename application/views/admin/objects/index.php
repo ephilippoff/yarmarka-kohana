@@ -178,8 +178,10 @@ function obj_selection(src, obj_id)
  <div id="popup-layer" class="z200" style="display: none;"></div>
  <div class="wrapper container page-search" style="margin-top:50px;">
 <a href="/add" target="_blank">Подать объявление</a>
+<a href="/khbackend/objects/moderate" style="margin-left:40px;">Перейти в интерфейс модерации</a>
 
 <a href="#" class="js-premod-control" style="float:right;"></a>
+
 
 <form class="form-inline">
 	

@@ -368,19 +368,22 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 		}
 		$object->save();
 		
-		// moderation log
-		$m_log = ORM::factory('Object_Moderation_Log');
-		$m_log->action_by 	= Auth::instance()->get_user()->id;
-		$m_log->user_id 	= $object->author;
-		$m_log->description = $object->moder_state ? "Прошло модерацию" : "На модерации" ;
-		$m_log->reason 		= "STATUS".$status;
-		$m_log->object_id 	= $object->id;
-		
-		if ($status) {
-			$m_log->noticed = FALSE;
-		}
+		if ($object->author) {
+			// moderation log
+			$m_log = ORM::factory('Object_Moderation_Log');
+			$m_log->action_by 	= Auth::instance()->get_user()->id;
+			$m_log->user_id 	= $object->author;
+			$m_log->description = $object->moder_state ? "Прошло модерацию" : "На модерации" ;
+			$m_log->reason 		= "STATUS".$status;
+			$m_log->object_id 	= $object->id;
+			
+			if ($status) {
+				$m_log->noticed = FALSE;
+			}
 
-		$m_log->save();		
+			$m_log->save();		
+
+		}
 	}
 
 	public function action_ajax_moderate_objectload_unpublish()
@@ -530,15 +533,17 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 		{
 			$send_mail = $this->request->post('send_email');
 
+			if ($object->author) {
 			// moderation log
-			$m_log = ORM::factory('Object_Moderation_Log');
-			$m_log->action_by 	= Auth::instance()->get_user()->id;
-			$m_log->user_id 	= $object->author;
-			$m_log->description = $description;
-			$m_log->reason 		= $reason;
-			$m_log->object_id 	= $object->id;
-			$m_log->noticed =  ($send_mail) ? FALSE: TRUE;
-			$m_log->save();
+				$m_log = ORM::factory('Object_Moderation_Log');
+				$m_log->action_by 	= Auth::instance()->get_user()->id;
+				$m_log->user_id 	= $object->author;
+				$m_log->description = $description;
+				$m_log->reason 		= $reason;
+				$m_log->object_id 	= $object->id;
+				$m_log->noticed =  ($send_mail) ? FALSE: TRUE;
+				$m_log->save();
+			}
 
 			// msg to user
 			ORM::factory('User_Messages')->add_msg_to_object($object->id, $description);
@@ -556,7 +561,6 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 			// 	Email::send(trim($object->user->email), Kohana::$config->load('email.default_from'), "Сообщение от модератора сайта", $msg);
 			// }
 						
-
 			if ($is_bad)
 			{
 				$object->is_published 	= 0;
@@ -1009,10 +1013,12 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 			"published" =>TRUE,
 			//"main_image_exists" => TRUE,
 			"compile_exists" => TRUE,
-			"moder_state" => 0
+			"moder_state" => 0,
+			"source" => 1,
+			"user_role" => 2
 		);
 
-		if ( isset($filters['id']) ) {
+		if ( isset($filters['id']) AND $filters['id']) {
 			$params['id'] = (int) $filters['id'];
 		} else {
 
@@ -1021,7 +1027,7 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 				$params['moder_state'] = (int) $filters['state'];
 			}
 
-			if ( isset($filters['category']) ) {
+			if ( isset($filters['category']) AND $filters['category'] ) {
 				$params['category_id'] = array((int) $filters['category']);
 			}
 
@@ -1151,9 +1157,26 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 
 
 			$newItem->contacts = $item['compiled']['contacts'];
-			$newItem->services = $item['compiled']['services'];
 
-			$newItem->attributes = $item['compiled']['attributes'];
+	 		$services = array();
+	 		if (isset($item['compiled']['services'])) {
+		 		foreach ($item['compiled']['services'] as $key => $service) {
+		 			if (count($service) > 0 ) {
+		 				array_push($services, $key." (".count($service).")");
+		 			}
+		 		}
+		 	}
+
+			$newItem->services = (count($services) > 0) ? implode(", ", $services) : "";
+
+	 		$attributes = array();
+	 		if (isset($item['compiled']['attributes'])) {
+		 		foreach ($item['compiled']['attributes'] as $key => $attribute) {
+		 			array_push($attributes, $attribute["title"].":".$attribute["value"]);
+		 		}
+		 	}
+
+			$newItem->attributes = implode(", ", $attributes);
 
 			$newItem->url = $item['compiled']['url'];
 			$newItem->photos = $item['compiled']['images']['local_photo'];
