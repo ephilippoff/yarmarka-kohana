@@ -62,6 +62,16 @@ class Lib_PlacementAds_AddEditByModerator extends Lib_PlacementAds_AddEdit {
 		return $this;
 	}
 
+	function save_many_cities() {
+		$object = &$this->object;
+
+		$params = &$this->params;
+
+		$object->cities = $params->other_cities;
+
+		return $this;
+	}
+
 
 
 	function exec_validation()

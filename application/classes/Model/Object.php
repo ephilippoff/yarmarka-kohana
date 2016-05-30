@@ -621,15 +621,17 @@ class Model_Object extends ORM {
 
 	public function save(Validation $validation = NULL)
 	{
-		if ($this->cities AND is_array($this->cities))
-		{
-			$this->cities = '{'.join(',', $this->cities).'}';
-		}
+		
 		
 		// по дефолту заполняем cities только для новых объяв
 		if ($this->city_id AND ! $this->loaded())
 		{
 			$this->cities = '{'.$this->city_id.'}';
+		}
+
+		if ($this->cities AND is_array($this->cities))
+		{
+			$this->cities = '{'.join(',', $this->cities).'}';
 		}
 
 		if ($this->geo_loc)		

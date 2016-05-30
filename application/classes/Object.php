@@ -131,6 +131,7 @@ class Object
 		if ( ! $add->errors)
 		{
 			$add->save_address()
+				->save_many_cities()
 				->prepare_object()
 				->save_typetr_object()
 				->save_dates_object();

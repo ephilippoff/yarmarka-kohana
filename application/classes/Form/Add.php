@@ -446,9 +446,28 @@ class Form_Add  {
 										);
 	}
 
-	function Other_Cities()
+	function OtherCities()
 	{
 
+		$object 		= $this->object;
+		$params         = $this->params;
+
+		$cities_choosed = $object->get_cities();
+		$city_id = NULL;
+
+		$cities_list = ORM::factory('City')->visible()->getprepared_all();
+
+		if ($object->loaded() AND !$this->is_post)
+			$cities_choosed = $object->get_cities();
+		elseif ($this->is_post AND array_key_exists("other_cities", $this->params))
+			$cities_choosed = $this->params['other_cities'];
+
+		$cities_choosed = ($cities_choosed) ? $cities_choosed : array();
+
+		$this->_data->other_cities = array(
+											'cities_list' => $cities_list,
+											'cities_choosed' => $cities_choosed
+										);
 		return $this;
 	}
 
