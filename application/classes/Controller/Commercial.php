@@ -265,4 +265,22 @@ class Controller_Commercial extends Controller_Template {
 		$this->response->body($twig);
 	}
 
+	public function action_indoor()
+	{
+
+		$twig = Twig::factory('commercial/indoor');
+
+		$twig->crumbs = array(
+			array(
+				"title" => "Рекламодателям",
+				"url" => "commercial"
+			),
+			array(
+				"title" => "Индор реклама в городе Сургут"
+			)
+		);
+
+		$this->response->body($twig);
+	}
+
 }
