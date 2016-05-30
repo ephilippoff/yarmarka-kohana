@@ -12,6 +12,8 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 
 	}
 
+
+
 	public function action_user_stat() {
 
 		$state = array(
@@ -987,6 +989,179 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
     	$this->template->orders = $orders;
 
 		//echo Debug::vars($orders);
+	}
+
+	public function action_moderate() {
+
+	}
+
+	public function action_moderate_ads_by_filter() {
+		$this->use_layout = FALSE;
+		$this->auto_render = FALSE;
+
+		$filters = (array) json_decode($this->request->post('filters'));
+
+		$page = (int) $this->request->post('page');
+
+
+		$params = array(
+			"active" => TRUE,
+			"published" =>TRUE,
+			//"main_image_exists" => TRUE,
+			"compile_exists" => TRUE,
+			"moder_state" => 0
+		);
+
+		if ( isset($filters['id']) ) {
+			$params['id'] = (int) $filters['id'];
+		} else {
+
+			if ( isset($filters['state']) ) {
+
+				$params['moder_state'] = (int) $filters['state'];
+			}
+
+			if ( isset($filters['category']) ) {
+				$params['category_id'] = array((int) $filters['category']);
+			}
+
+
+			if ( @$filters['dateFrom'] OR @$filters['dateTo']) {
+
+				$filter_by_date = array();
+				if (@$filters['dateFrom']) {
+					$filter_by_date['from'] =  $filters['dateFrom'];
+				}
+
+				if (@$filters['dateTo']) {
+					$filter_by_date['to'] =  $filters['dateTo'];
+				}
+
+				$params['real_date_created'] = $filter_by_date;
+			}
+
+		}
+
+
+		$search_query = Search::searchquery(
+		    $params,
+		    array("limit" => 100, "page" => 1)
+		);
+
+		$result = Search::getresult($search_query->execute()->as_array());
+
+		$result_count = Search::searchquery($params, array(), array("count" => TRUE))
+                                    ->execute()
+                                    ->get("count");
+
+		$ids = array_map(function($item){
+			return $item['id'];
+		}, $result);
+
+		$preloaded = $this->prepare_preloaded_items( array_slice($result, $page, 3) );
+
+		$json['total'] = $result_count;
+		$json['ids'] = $ids;
+		$json['preloaded'] = $preloaded;
+		$json['code'] = 200;
+		
+		$this->response->body(json_encode($json));		
+	}
+
+	public function action_moderate_ads_by_ids() {
+		$this->use_layout = FALSE;
+		$this->auto_render = FALSE;
+
+		$ids = (array) json_decode($this->request->post('ids'));
+
+
+		$search_query = Search::searchquery(
+		    array(
+		   			"id" =>  $ids
+		   	),
+		    array()
+		);
+
+		$result = Search::getresult($search_query->execute()->as_array());
+
+		$preloaded = $this->prepare_preloaded_items( $result );
+
+		$json['preloaded'] = $preloaded;
+		$json['code'] = 200;
+		
+		$this->response->body(json_encode($json));		
+
+	}
+
+	public function action_moderate_categories() {
+		$this->use_layout = FALSE;
+		$this->auto_render = FALSE;
+
+		
+		$categories = ORM::factory('Category')->get_categories_extend(array(
+		    "with_child" => TRUE, 
+		    "with_ads" => TRUE,
+		));
+
+		$json['main'] = array_map(function($item){
+			return array(
+				'id' => $item->id,
+				'title' => $item->title
+			);
+		}, $categories["main"]);
+
+		$json['childs'] = array_map(function($item){
+			return array(
+				'id' => $item->id,
+				'title' => $item->title,
+				'parent_id' => $item->parent_id
+			);
+		}, $categories["childs"]);
+
+		$json['code'] = 200;
+		
+		$this->response->body(json_encode($json));		
+
+	}
+
+	private function prepare_preloaded_items($items) {
+
+		$preloaded = array();
+		array_walk($items , function($item) use (&$preloaded) {
+			
+			$newItem =  new stdclass;
+			$newItem->id = $item['id'];
+
+			$newItem->title = $item['title'];
+			$newItem->text = $item['user_text'];
+			$newItem->city_id = $item['city_id'];
+			$newItem->city_title = $item['compiled']['city'];
+			$newItem->category = $item['category'];
+
+			$newItem->cities = $item['cities'];
+			$newItem->moder_state = $item['moder_state'];
+			$newItem->is_bad = $item['is_bad'];
+
+			$newItem->author = $item['author'];
+
+			$newItem->real_date_created = $item['real_date_created'];
+			$newItem->date_created = $item['date_created'];
+			$newItem->date_expiration = $item['date_expiration'];
+			//$newItem->real_author_id = $item['real_author_id'];
+
+
+			$newItem->contacts = $item['compiled']['contacts'];
+			$newItem->services = $item['compiled']['services'];
+
+			$newItem->attributes = $item['compiled']['attributes'];
+
+			$newItem->url = $item['compiled']['url'];
+			$newItem->photos = $item['compiled']['images']['local_photo'];
+
+			$preloaded[$item['id']] = $newItem;
+		});
+
+		return $preloaded;
 	}
 
 }

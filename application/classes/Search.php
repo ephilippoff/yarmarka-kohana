@@ -345,6 +345,10 @@ class Search {
 			$object = $object->where("o.date_expired", "<", DB::expr("NOW()"));
 		}
 
+		if ($params->main_image_exists) {
+			$object = $object->where("o.main_image_id", "IS NOT", NULL);
+		}
+
 		if ($params->expired) {
 			$object = $object
 				->and_where_open()
