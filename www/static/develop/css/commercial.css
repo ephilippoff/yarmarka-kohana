@@ -642,7 +642,6 @@ p{margin: 10px 0 !important;}
 
 
 
-
 @media screen and (max-width: 1199px) {
 
 	.w100p_img img,
@@ -864,6 +863,15 @@ p{margin: 10px 0 !important;}
 	.descr_title span,
 	.descr_title{
 		text-align: center;
+	}
+
+	.our-services td{
+		padding-left: 30% !important ;
+		width: 100% !important ;
+	}
+
+	.our-services p.bold{
+		margin: 0 !important;
 	}
 
 
