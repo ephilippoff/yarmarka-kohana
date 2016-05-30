@@ -317,7 +317,7 @@ p{margin: 10px 0 !important;}
 }
 
 #indoor .main_block{
-    background-image: url('/images/commercial/indoor_main.jpg');
+    background-image: url('../../static/develop/images/commercial/indoor_main.jpg');
     background-repeat: no-repeat;
     background-position: top center;
     padding: 100px 0;
@@ -424,7 +424,7 @@ p{margin: 10px 0 !important;}
 }
 
 .indoor-section{
-    background-image: url('/images/commercial/indoor.jpg');
+    background-image: url('../../static/develop/images/commercial/indoor.jpg');
     background-repeat: no-repeat;
     background-position: top center;
     padding: 25px 40px 38px;
