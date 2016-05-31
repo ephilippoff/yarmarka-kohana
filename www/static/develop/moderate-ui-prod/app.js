@@ -378,11 +378,21 @@ webpackJsonp_name_([0],{
 
 
 	        //  setTimeout(() => {
-	        //     callback({main:[{id:1,title:'Автотранспорт'}], childs:[{id:2,title:'Легковые',parent_id:1}]});
+	        //     callback({main:[{id:1,title:'Автотранспорт'},{id:3,title:'dfsdfsfs'}], childs:[{id:2,title:'Легковые',parent_id:1}]});
 
 	        // }, 100);
 
 	        $.post('/khbackend/objects/moderate_categories', {}, function (response) {
+
+	            callback(response);
+	        }, 'json');
+	    },
+
+	    getInfoAboutUser: function getInfoAboutUser(author_id, author_company_id) {
+	        var callback = arguments.length <= 2 || arguments[2] === undefined ? function () {} : arguments[2];
+
+
+	        $.post('/khbackend/objects/moderate_about', { author_id: author_id, author_company_id: author_company_id }, function (response) {
 
 	            callback(response);
 	        }, 'json');
@@ -535,8 +545,182 @@ webpackJsonp_name_([0],{
 	    '4': 'Массовая загрузка'
 	};
 
-	var Filter = function (_React$Component) {
-	    _inherits(Filter, _React$Component);
+	var DateRangeFilter = function (_React$Component) {
+	    _inherits(DateRangeFilter, _React$Component);
+
+	    function DateRangeFilter() {
+	        _classCallCheck(this, DateRangeFilter);
+
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(DateRangeFilter).apply(this, arguments));
+	    }
+
+	    _createClass(DateRangeFilter, [{
+	        key: 'render',
+	        value: function render() {
+
+	            return React.createElement(
+	                'div',
+	                { className: 'input-prepend' },
+	                React.createElement(
+	                    'span',
+	                    { className: 'add-on' },
+	                    'Дата'
+	                ),
+	                React.createElement('input', { type: 'text',
+	                    placeholder: 'date from',
+	                    className: 'input-small dp',
+	                    ref: 'dateFrom',
+	                    value: this.props.dateFrom || "",
+	                    onChange: this.props.onChange.bind(this, 'dateFrom')
+	                }),
+	                React.createElement('input', { type: 'text',
+	                    placeholder: 'date to',
+	                    className: 'input-small dp',
+	                    ref: 'dateTo',
+	                    value: this.props.dateTo || "",
+	                    onChange: this.props.onChange.bind(this, 'dateTo')
+	                })
+	            );
+	        }
+	    }, {
+	        key: 'dateFrom',
+	        get: function get() {
+	            return this.refs.dateFrom.value;
+	        }
+	    }, {
+	        key: 'dateTo',
+	        get: function get() {
+	            return this.refs.dateTo.value;
+	        }
+	    }]);
+
+	    return DateRangeFilter;
+	}(React.Component);
+
+	var ModerateStateFilter = function (_React$Component2) {
+	    _inherits(ModerateStateFilter, _React$Component2);
+
+	    function ModerateStateFilter() {
+	        _classCallCheck(this, ModerateStateFilter);
+
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(ModerateStateFilter).apply(this, arguments));
+	    }
+
+	    _createClass(ModerateStateFilter, [{
+	        key: 'value',
+	        value: function value() {
+	            return this.refs.select.value;
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+
+	            return React.createElement(
+	                'div',
+	                { className: 'input-prepend' },
+	                React.createElement(
+	                    'span',
+	                    { className: 'add-on' },
+	                    'Состояние'
+	                ),
+	                React.createElement(
+	                    'select',
+	                    { className: 'form-control',
+	                        ref: 'select',
+	                        value: this.props.value || "0", onChange: this.props.onChange },
+	                    Object.keys(MODER_STATES).map(function (state_name) {
+	                        return React.createElement(
+	                            'option',
+	                            { key: state_name + "", value: state_name },
+	                            MODER_STATES[state_name]
+	                        );
+	                    })
+	                )
+	            );
+	        }
+	    }]);
+
+	    return ModerateStateFilter;
+	}(React.Component);
+
+	var CategoryFilter = function (_React$Component3) {
+	    _inherits(CategoryFilter, _React$Component3);
+
+	    function CategoryFilter() {
+	        _classCallCheck(this, CategoryFilter);
+
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(CategoryFilter).apply(this, arguments));
+	    }
+
+	    _createClass(CategoryFilter, [{
+	        key: 'value',
+	        value: function value() {
+	            return this.refs.select.value;
+	        }
+	    }, {
+	        key: 'renderOptGroups',
+	        value: function renderOptGroups() {
+	            var categories = _Provider2.default.statics.prepareCategories(this.context.categories.main, this.context.categories.childs);
+
+	            return categories.map(function (main_category) {
+	                return React.createElement(
+	                    'optgroup',
+	                    {
+	                        key: main_category.id,
+	                        label: main_category.title },
+	                    main_category.childs.map(function (child) {
+	                        return React.createElement(
+	                            'option',
+	                            {
+	                                key: child.id,
+	                                value: child.id },
+	                            child.title
+	                        );
+	                    })
+	                );
+	            });
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+
+	            return React.createElement(
+	                'div',
+	                { className: 'input-prepend' },
+	                React.createElement(
+	                    'span',
+	                    { className: 'add-on' },
+	                    'Категория'
+	                ),
+	                React.createElement(
+	                    'select',
+	                    { className: 'form-control',
+	                        ref: 'select',
+	                        value: this.props.value || "0",
+	                        onChange: this.props.onChange },
+	                    React.createElement(
+	                        'option',
+	                        { value: '0' },
+	                        ' -- '
+	                    ),
+	                    this.renderOptGroups()
+	                )
+	            );
+	        }
+	    }], [{
+	        key: 'contextTypes',
+	        get: function get() {
+	            return {
+	                categories: React.PropTypes.object
+	            };
+	        }
+	    }]);
+
+	    return CategoryFilter;
+	}(React.Component);
+
+	var Filter = function (_React$Component4) {
+	    _inherits(Filter, _React$Component4);
 
 	    _createClass(Filter, null, [{
 	        key: 'propTypes',
@@ -545,26 +729,25 @@ webpackJsonp_name_([0],{
 	                filters: React.PropTypes.object.isRequired
 	            };
 	        }
+	    }, {
+	        key: 'contextTypes',
+	        get: function get() {
+	            return {
+	                categories: React.PropTypes.object
+	            };
+	        }
 	    }]);
 
 	    function Filter(props) {
 	        _classCallCheck(this, Filter);
 
-	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Filter).call(this, props));
+	        var _this4 = _possibleConstructorReturn(this, Object.getPrototypeOf(Filter).call(this, props));
 
-	        _this.state = {
-	            categories: [],
+	        _this4.state = props.filters;
 
-	            id: props.filters.id,
-	            dateFrom: props.filters.dateFrom,
-	            dateTo: props.filters.dateTo,
-	            state: props.filters.state,
-	            category: props.filters.category
-	        };
+	        _this4.onSubmit = _this4.onSubmit.bind(_this4);
 
-	        _this.onSubmit = _this.onSubmit.bind(_this);
-
-	        return _this;
+	        return _this4;
 	    }
 
 	    _createClass(Filter, [{
@@ -579,20 +762,14 @@ webpackJsonp_name_([0],{
 	        }
 	    }, {
 	        key: 'shouldComponentUpdate',
-	        value: function shouldComponentUpdate(nextProps, nextState) {
-	            return JSON.stringify(this.state) != JSON.stringify(nextState);
+	        value: function shouldComponentUpdate(nextProps, nextState, nextContext) {
+	            return JSON.stringify(this.state) != JSON.stringify(nextState) || JSON.stringify(this.context) != JSON.stringify(nextContext);
 	        }
 	    }, {
 	        key: 'componentWillReceiveProps',
 	        value: function componentWillReceiveProps(props) {
 
-	            this.setState({
-	                id: props.filters.id,
-	                dateFrom: props.filters.dateFrom,
-	                dateTo: props.filters.dateTo,
-	                state: props.filters.state,
-	                category: props.filters.category
-	            });
+	            this.setState(props.filters);
 	        }
 	    }, {
 	        key: 'handleFieldChange',
@@ -609,56 +786,22 @@ webpackJsonp_name_([0],{
 	        key: 'onSubmit',
 	        value: function onSubmit(e) {
 	            e.preventDefault();
+
 	            var r = this.refs,
 	                filters = {
 	                id: r.id.value.trim(),
-	                dateFrom: r.dateFrom.value,
-	                dateTo: r.dateTo.value,
-	                state: r.state.value,
-	                category: r.category.value
+	                dateFrom: r.date.dateFrom,
+	                dateTo: r.date.dateTo,
+	                state: r.state.value(),
+	                category: r.category.value()
 	            };
 
+	            console.log(filters);
 	            this.props.onChange(filters);
 	        }
 	    }, {
 	        key: 'render',
 	        value: function render() {
-
-	            var moderationStates = [],
-	                filters = this.state || {};
-
-	            for (var state_name in MODER_STATES) {
-
-	                moderationStates.push(React.createElement(
-	                    'option',
-	                    { key: state_name + "", value: state_name },
-	                    MODER_STATES[state_name]
-	                ));
-	            }
-
-	            var contextCategories = _Provider2.default.statics.prepareCategories(this.context.categories.main, this.context.categories.childs);
-
-	            var categories = [];
-
-	            contextCategories.forEach(function (main_category, index) {
-
-	                var subcategories = [];
-
-	                main_category.childs.forEach(function (child) {
-
-	                    subcategories.push(React.createElement(
-	                        'option',
-	                        { key: child.id, value: child.id },
-	                        child.title
-	                    ));
-	                });
-
-	                categories.push(React.createElement(
-	                    'optgroup',
-	                    { key: main_category.id, label: main_category.title },
-	                    subcategories
-	                ));
-	            });
 
 	            return React.createElement(
 	                'div',
@@ -672,74 +815,30 @@ webpackJsonp_name_([0],{
 	                        React.createElement(
 	                            'span',
 	                            { className: 'add-on' },
-	                            'ID'
+	                            'ID/Email'
 	                        ),
 	                        React.createElement('input', { className: 'span2', type: 'text',
 	                            ref: 'id',
-	                            value: filters.id || "",
+	                            value: this.state.id || "",
 	                            onChange: this.handleFieldChange.bind(this, 'id')
 	                        })
 	                    ),
-	                    React.createElement(
-	                        'div',
-	                        { className: 'input-prepend' },
-	                        React.createElement(
-	                            'span',
-	                            { className: 'add-on' },
-	                            'Дата'
-	                        ),
-	                        React.createElement('input', { type: 'text',
-	                            placeholder: 'date from',
-	                            className: 'input-small dp',
-	                            ref: 'dateFrom',
-	                            value: filters.dateFrom || "",
-	                            onChange: this.handleFieldChange.bind(this, 'dateFrom')
-	                        }),
-	                        React.createElement('input', { type: 'text',
-	                            placeholder: 'date to',
-	                            className: 'input-small dp',
-	                            ref: 'dateTo',
-	                            value: filters.dateTo || "",
-	                            onChange: this.handleFieldChange.bind(this, 'dateTo')
-	                        })
-	                    ),
-	                    React.createElement(
-	                        'div',
-	                        { className: 'input-prepend' },
-	                        React.createElement(
-	                            'span',
-	                            { className: 'add-on' },
-	                            'Состояние'
-	                        ),
-	                        React.createElement(
-	                            'select',
-	                            { className: 'form-control',
-	                                ref: 'state',
-	                                value: filters.state || "0", onChange: this.handleFieldChange.bind(this, 'state') },
-	                            moderationStates
-	                        )
-	                    ),
-	                    React.createElement(
-	                        'div',
-	                        { className: 'input-prepend' },
-	                        React.createElement(
-	                            'span',
-	                            { className: 'add-on' },
-	                            'Категория'
-	                        ),
-	                        React.createElement(
-	                            'select',
-	                            { className: 'form-control',
-	                                ref: 'category',
-	                                value: filters.category || "0", onChange: this.handleFieldChange.bind(this, 'category') },
-	                            React.createElement(
-	                                'option',
-	                                { value: '0' },
-	                                ' -- '
-	                            ),
-	                            categories
-	                        )
-	                    ),
+	                    React.createElement(DateRangeFilter, {
+	                        ref: 'date',
+	                        dateFrom: this.state.dateFrom,
+	                        dateTo: this.state.dateTo,
+	                        onChange: this.handleFieldChange.bind(this)
+	                    }),
+	                    React.createElement(ModerateStateFilter, {
+	                        ref: 'state',
+	                        value: this.state.state,
+	                        onChange: this.handleFieldChange.bind(this, 'state')
+	                    }),
+	                    React.createElement(CategoryFilter, {
+	                        ref: 'category',
+	                        value: this.state.category,
+	                        onChange: this.handleFieldChange.bind(this, 'category')
+	                    }),
 	                    React.createElement('input', { type: 'reset', defaultValue: 'Clear', className: 'btn btn-default' }),
 	                    React.createElement('input', { type: 'submit', defaultValue: 'Filter', className: 'btn btn-primary', onClick: this.onSubmit })
 	                )
@@ -751,10 +850,6 @@ webpackJsonp_name_([0],{
 	}(React.Component);
 
 	;
-
-	Filter.contextTypes = {
-	    categories: React.PropTypes.object
-	};
 
 	exports.default = Filter;
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(161)))
@@ -916,6 +1011,12 @@ webpackJsonp_name_([0],{
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+	var _Api = __webpack_require__(170);
+
+	var _Api2 = _interopRequireDefault(_Api);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -928,7 +1029,13 @@ webpackJsonp_name_([0],{
 	    function AboutUser() {
 	        _classCallCheck(this, AboutUser);
 
-	        return _possibleConstructorReturn(this, Object.getPrototypeOf(AboutUser).apply(this, arguments));
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(AboutUser).call(this));
+
+	        _this.state = {
+	            author: null,
+	            author_company: null
+	        };
+	        return _this;
 	    }
 
 	    _createClass(AboutUser, [{
@@ -937,75 +1044,151 @@ webpackJsonp_name_([0],{
 	            return JSON.stringify(this.props.ad) != JSON.stringify(nextProps.ad);
 	        }
 	    }, {
+	        key: "componentWillReceiveProps",
+	        value: function componentWillReceiveProps(props) {
+	            var _this2 = this;
+
+	            if (!props || !props.ad) return;
+
+	            _Api2.default.getInfoAboutUser(props.ad.author, props.ad.author_company_id, function (response) {
+	                return _this2.setState({
+	                    author: response.author,
+	                    author_company: response.author_company
+	                });
+	            });
+	        }
+	    }, {
 	        key: "render",
 	        value: function render() {
-	            var ad = this.props.ad;
+	            var author = this.state.author,
+	                author_company = this.state.author_company;
 
-	            if (!ad || !ad.user || !ad.user.email) {
+	            if (!this.state.author) {
 	                return React.createElement("div", { className: "row" });
 	            }
+
+	            var aboutAuthor = React.createElement(
+	                "p",
+	                { className: "mt20" },
+	                "Информация о авторе ",
+	                React.createElement(
+	                    "strong",
+	                    null,
+	                    React.createElement(
+	                        "a",
+	                        null,
+	                        author.email
+	                    )
+	                ),
+	                " :",
+	                author.org_type == 2 ? React.createElement(
+	                    "span",
+	                    null,
+	                    "название: ",
+	                    React.createElement(
+	                        "strong",
+	                        null,
+	                        author_company.org_name
+	                    )
+	                ) : "",
+	                React.createElement(
+	                    "span",
+	                    null,
+	                    "зарегистрирован: ",
+	                    React.createElement(
+	                        "strong",
+	                        null,
+	                        author.regdate
+	                    )
+	                ),
+	                " ,",
+	                React.createElement(
+	                    "span",
+	                    null,
+	                    "тип учетки: ",
+	                    React.createElement(
+	                        "strong",
+	                        null,
+	                        author.org_type
+	                    )
+	                ),
+	                " ,",
+	                React.createElement(
+	                    "span",
+	                    null,
+	                    "Роль: ",
+	                    React.createElement(
+	                        "strong",
+	                        null,
+	                        author.role
+	                    )
+	                )
+	            );
+
+	            var aboutCompany = author.id != author_company.id && React.createElement(
+	                "p",
+	                { className: "mt20" },
+	                "Информация о Компании ",
+	                React.createElement(
+	                    "strong",
+	                    null,
+	                    React.createElement(
+	                        "a",
+	                        null,
+	                        author_company.email
+	                    )
+	                ),
+	                " :",
+	                React.createElement(
+	                    "span",
+	                    null,
+	                    "название: ",
+	                    React.createElement(
+	                        "strong",
+	                        null,
+	                        author_company.org_name
+	                    )
+	                ),
+	                " ,",
+	                React.createElement(
+	                    "span",
+	                    null,
+	                    "зарегистрирован: ",
+	                    React.createElement(
+	                        "strong",
+	                        null,
+	                        author_company.regdate
+	                    )
+	                ),
+	                " ,",
+	                React.createElement(
+	                    "span",
+	                    null,
+	                    "тип учетки: ",
+	                    React.createElement(
+	                        "strong",
+	                        null,
+	                        author_company.org_type
+	                    )
+	                ),
+	                " ,",
+	                React.createElement(
+	                    "span",
+	                    null,
+	                    "Роль: ",
+	                    React.createElement(
+	                        "strong",
+	                        null,
+	                        author_company.role
+	                    )
+	                )
+	            );
 
 	            return React.createElement(
 	                "div",
 	                { className: "row" },
-	                React.createElement(
-	                    "p",
-	                    { className: "mt20" },
-	                    "Информация о авторе ",
-	                    React.createElement(
-	                        "strong",
-	                        null,
-	                        React.createElement(
-	                            "a",
-	                            null,
-	                            ad.user.email
-	                        )
-	                    ),
-	                    ":",
-	                    React.createElement(
-	                        "span",
-	                        null,
-	                        "зарегистрирован: ",
-	                        React.createElement(
-	                            "strong",
-	                            null,
-	                            ad.user.registartion_date
-	                        )
-	                    ),
-	                    ",",
-	                    React.createElement(
-	                        "span",
-	                        null,
-	                        "тип учетки: ",
-	                        React.createElement(
-	                            "strong",
-	                            null,
-	                            ad.user.org_type
-	                        )
-	                    ),
-	                    ",",
-	                    React.createElement(
-	                        "span",
-	                        null,
-	                        "объявлений: ",
-	                        React.createElement(
-	                            "strong",
-	                            null,
-	                            ad.user.count
-	                        )
-	                    ),
-	                    ",",
-	                    React.createElement(
-	                        "span",
-	                        null,
-	                        "Роль: ",
-	                        React.createElement(
-	                            "strong",
-	                            null,
-	                            ad.user.role
-	                        )
-	                    )
-	                )
+	                aboutAuthor,
+	                aboutCompany
 	            );
 	        }
 	    }]);
@@ -1077,7 +1260,7 @@ webpackJsonp_name_([0],{
 	            var _this2 = this;
 
 	            $('#decline_form', $("#myModal")).submit(function () {
-	                _this2.props.onModerate('ok');
+	                return _this2.props.onModerate('ok');
 	            });
 	        }
 	    }, {
@@ -1258,7 +1441,17 @@ webpackJsonp_name_([0],{
 	                    { className: 'fontsize-middle gray' },
 	                    ad.attributes
 	                ),
-	                React.createElement('p', null),
+	                React.createElement(
+	                    'p',
+	                    null,
+	                    React.createElement(
+	                        'strong',
+	                        null,
+	                        ad.contact
+	                    ),
+	                    ', ',
+	                    ad.contacts
+	                ),
 	                React.createElement(
 	                    'p',
 	                    { className: 'fontsize-middle orange' },

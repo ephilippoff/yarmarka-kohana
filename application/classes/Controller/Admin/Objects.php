@@ -1150,13 +1150,18 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 
 			$newItem->author = $item['author'];
 
-			$newItem->real_date_created = $item['real_date_created'];
-			$newItem->date_created = $item['date_created'];
+			$newItem->real_date_created = date_format(date_create($item['real_date_created']), 'd.m.Y');
+			$newItem->date_created =  date_format(date_create($item['date_created']), 'd.m.Y');
 			$newItem->date_expiration = $item['date_expiration'];
-			//$newItem->real_author_id = $item['real_author_id'];
+			$newItem->author_company_id = $item['author_company_id'];
 
+			$contacts = array();
+	 		foreach ($item['compiled']['contacts'] as $contact) {
+	 			array_push($contacts, $contact['value'] );
+	 		}
 
-			$newItem->contacts = $item['compiled']['contacts'];
+	 		$newItem->contact =  $item['contact'];
+			$newItem->contacts = implode(", ", $contacts);
 
 	 		$services = array();
 	 		if (isset($item['compiled']['services'])) {
@@ -1185,6 +1190,48 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 		});
 
 		return $preloaded;
+	}
+
+	public function action_moderate_about() {
+		$this->use_layout = FALSE;
+		$this->auto_render = FALSE;
+
+		
+		$author_id = $this->request->post('author_id');
+		$author_company_id = $this->request->post('author_company_id');
+
+		$json['author'] = array();
+		$json['author_company'] = array();
+
+		if ($author_id) {
+
+			$users = ORM::factory('User')
+						->where('id','IN', array($author_id, $author_company_id))
+						->getprepared_all(array("id","email", "fullname", "org_name", "org_type", "role", "last_visit_date", "regdate"));
+
+			foreach ($users as $user) {
+				$user->regdate = date_format(date_create($user->regdate), 'd.m.Y');
+				$user->last_visit_date = date_format(date_create($user->last_visit_date), 'd.m.Y');
+
+				$user->role = Kohana::$config->load("dictionaries.user_role.".$user->role);
+				$user->org_type = Kohana::$config->load("dictionaries.org_types.".$user->org_type);
+			}
+
+			if (count($users) == 1) {
+				$json['author'] = $users[0];
+				$json['author_company'] = $users[0];
+			} else {
+				$json['author'] = $users[0];
+				$json['author_company'] = $users[1];
+			}
+
+
+		}
+
+		$json['code'] = 200;
+		
+		$this->response->body(json_encode($json));		
+
 	}
 
 }
