@@ -107,16 +107,18 @@ function (app, $, Marionette, Backbone, _) {
 //Прилипающий сайдбар на страницах
 
 $(document).ready(function(){
-    var mainBlockHeight = $('.main_block').outerHeight();
-    var rightsideHeight = $('.right-side').outerHeight();
-    console.log(mainBlockHeight, rightsideHeight);
-    if ( ($('div').is('.right-side')) && (rightsideHeight < mainBlockHeight)) {
-        var mainBlockBottomY = $(document).height() - ($('.main_block').offset().top + $('.main_block').outerHeight());
-        $('.right-side').hcSticky({
-            stickTo: document,
-            bottomEnd: mainBlockBottomY
-        });
-    }
+    $('.right-side').imagesLoaded(function(){
+        var mainBlockHeight = $('.main_block').outerHeight();
+        var rightsideHeight = $('.right-side').outerHeight();
+        console.log(mainBlockHeight, rightsideHeight);
+        if ( ($('div').is('.right-side')) && (rightsideHeight < mainBlockHeight)) {
+            var mainBlockBottomY = $(document).height() - ($('.main_block').offset().top + $('.main_block').outerHeight());
+            $('.right-side').hcSticky({
+                stickTo: document,
+                bottomEnd: mainBlockBottomY
+            });
+        }
+    });
 });
 
 $(document).ready(function(){
