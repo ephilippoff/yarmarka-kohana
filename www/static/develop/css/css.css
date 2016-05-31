@@ -1313,9 +1313,8 @@ img.category-icon{
     z-index: 300;
 }
 
-.left_menu.mainmenu .left,
 .left_menu.mainmenu .right{
-    min-height: 500px;
+    height: 500px;
 }
 
 .last-wrap{
