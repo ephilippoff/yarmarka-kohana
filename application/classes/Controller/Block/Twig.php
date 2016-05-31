@@ -31,7 +31,9 @@ class Controller_Block_Twig extends Controller_Block
         $twig->search_text = $this->request->post("search_text");
         $twig->staticMainMenu = $this->request->post("staticMainMenu");
         $twig->onPageFlag = $this->request->post("onPageFlag");
-
+        $domain = new Domain();
+        $city = $domain->get_city_by_subdomain($domain->get_subdomain());
+        $twig->city = $city->id;
         $this->response->body($twig);
     }
 
