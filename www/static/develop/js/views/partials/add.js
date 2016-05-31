@@ -810,13 +810,19 @@ var photoView = Backbone.View.extend({
                     data: _.extend(data, {
                         fileName: this.model.get('filename')
                     }),
-                    success: function(answer) {
-                    //var avoidCache = '?v=' + Math.random();
+                    success: function(answer) {        
+                    var avoidCache = '?v=' + Math.random();
                     me.model.set('filename', answer.fileName);
                     me.model.set('filepath', answer.thumbnails['120x90']);
                     me.model.set('original', answer.thumbnails['original']);
                     me.$el.find('img').attr('src', answer.thumbnails['120x90']);
                     me.$el.find('input[type=hidden]').val(answer.fileName);
+
+                    if (me.$el.find('.img').hasClass('active')) {
+                        $('#active_userfile').val(me.model.get('filename'));
+                        // me.model.set('active', true);
+                        console.log(me.model.attributes);
+                    }; 
                 }
             });
             }
@@ -1227,6 +1233,7 @@ $('#fileupload').fileupload({
 
         changeActive: function(main_item) {
             var photo_cont = this.photos[main_item.cid].$el.find(".img");
+            console.log('set active');
             if (main_item.get("active")) {
                 photo_cont.addClass("active");
                 this.collection.each(function(item) {
