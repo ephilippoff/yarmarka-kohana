@@ -1308,10 +1308,14 @@ img.category-icon{
     height: 100%;
     box-shadow: 0px 2px 3px #313131;
     position: absolute;
-    top: 28px;
-    left: 96%;
+    top: 0;
+    left: 100%;
     z-index: 300;
-    height: 94%;
+}
+
+.left_menu.mainmenu .left,
+.left_menu.mainmenu .right{
+    min-height: 500px;
 }
 
 .last-wrap{
