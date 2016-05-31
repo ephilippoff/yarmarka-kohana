@@ -23,6 +23,10 @@
 	.popup-window table td{ width: 50%;}
 	.popup-window h3{margin: 20px 0;}
 
+	a.auto-collapse-expand{
+		float: left;
+	}
+
 
 	.crumbs-h1{
 		font-size: 16px;
