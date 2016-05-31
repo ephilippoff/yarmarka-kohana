@@ -108,6 +108,7 @@ function (app, $, Marionette, Backbone, _) {
 
 $(document).ready(function(){
     $('.right-side').imagesLoaded(function(){
+        console.log('loaded imgs');
         var mainBlockHeight = $('.main_block').outerHeight();
         var rightsideHeight = $('.right-side').outerHeight();
         console.log(mainBlockHeight, rightsideHeight);
