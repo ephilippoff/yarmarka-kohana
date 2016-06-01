@@ -121,6 +121,10 @@ img.banner,
 	width: -moz-calc(100% + 2px);
 	width: calc(100% + 2px);
     z-index: 15;
+    /*overflow-y: auto;
+    max-height: 300px;
+    border-bottom: 1px solid #ccc;
+    border-right: 1px solid #ccc;*/
 }
 
 .accordeon-menu .optgroup_value,
@@ -146,6 +150,11 @@ img.banner,
 .accordeon-menu .option.back{
 	background: #B4D3EA;
 }
+
+/*.accordeon-menu .optgroup:last-child .option:last-child,
+.accordeon-menu .optgroup:last-child .optgroup_value{
+	border-bottom: none;
+}*/
 
 .accordeon-menu .option.back:hover{
 	background: #A9C6DC;
