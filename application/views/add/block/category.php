@@ -2,15 +2,23 @@
 <? if ($data->edit): ?>
 	<?=$data->value?>
 	<input type="hidden" name="<?=$name?>" id="<?=$id?>" value="<?=$data->category_id?>"/>
-<? else: ?>		
-	<select name="<?=$name?>" id="<?=$id?>" class="<?=$_class?> w100p">
-		<option value="0">---</option>
-		<? foreach($data->category_list as $key=> $item) : ?>
-			<optgroup label="<?=$key?>">
-			<? foreach($item as $id=>$title) : ?>
-			<option value="<?=$id?>" <?if ($id == $data->category_id) { echo "selected"; } ?>><?=$title?></option>
+<? else: ?>	
+	<input type="hidden" name="<?=$name?>" value="0"/>
+	<div id="<?=$id?>" data-value="<?=$data->category_id?>" class="<?=$_class?> accordeon-menu bbn brt2 brb2 w100p">
+		<div class="sign_icon">
+			<i class="fa fa-angle-down" aria-hidden="true"></i>
+		</div>
+		<div class="current_value">---</div>
+		<div class="select_wrap hidden">
+			<div class="option" data-value="0">---</div>
+			<? foreach($data->category_list as $key=> $item) : ?>
+			<div class="optgroup">
+				<div class="optgroup_value"><?=$key?></div>
+				<? foreach($item as $id=>$title) : ?>
+					<div class="option hidden" data-value="<?=$id?>"><?=$title?></div>
+				<? endforeach; ?>
+			</div>
 			<? endforeach; ?>
-			</optgroup>
-		<? endforeach; ?>
-	</select>
+		</div>
+	</div>
 <? endif; ?>
