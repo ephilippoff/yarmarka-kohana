@@ -3,7 +3,7 @@
 	<?=$data->value?>
 	<input type="hidden" name="<?=$name?>" id="<?=$id?>" value="<?=$data->category_id?>"/>
 <? else: ?>	
-	<input type="hidden" name="<?=$name?>" value="0"/>
+	<input type="hidden" name="<?=$name?>" id="<?=$id?>" value=""/>
 	<div id="<?=$id?>" data-value="<?=$data->category_id?>" class="<?=$_class?> accordeon-menu bbn brt2 brb2 w100p">
 		<div class="sign_icon">
 			<i class="fa fa-angle-down" aria-hidden="true"></i>

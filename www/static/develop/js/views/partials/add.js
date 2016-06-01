@@ -1360,7 +1360,7 @@ var categoryView = Backbone.View.extend({
 
         this.$el.find('.accordeon-menu').data('value', self.data('value'));
 
-        $('#default_action, input[name=rubricid]').val(self.data('value'));
+        $('input[name=rubricid]').val(self.data('value'));
 
         this.change(e);
 
