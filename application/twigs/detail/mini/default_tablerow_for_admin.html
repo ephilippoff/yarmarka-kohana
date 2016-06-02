@@ -16,7 +16,7 @@
 		{% set i_color = 'gray' %}
 {% endif %}
 
-<div class="ad-mini-wrap clearfix {% if object.is_premium %}premium{% endif %}">
+<div class="ad-mini-wrap clearfix {% if object.is_premium %}premium{% endif %}" onclick="javascript:window.location.href = '{{ object.compiled.url }}'">
 	<div class="img-wrap fl hidden-xxs">
 		{% if object.compiled.images.main_photo %}
 		<img class="img-frame" src="{{ get_file(object.compiled.images.main_photo['120x90']) }}" alt="{{ object.title|e }}">

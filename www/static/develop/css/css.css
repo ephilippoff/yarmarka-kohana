@@ -587,6 +587,7 @@ select{background-color: #FFFFFF;border: 1px solid #C3C3C3;padding:2px 10px;heig
     width: 100%;
     position: relative;
     padding: 10px;
+    cursor: pointer;
     /*padding-left: 0;*/
     border-bottom: 1px solid #ccc;
     -webkit-box-sizing: border-box;
