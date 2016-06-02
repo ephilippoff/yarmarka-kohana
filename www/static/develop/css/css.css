@@ -1305,12 +1305,14 @@ img.category-icon{
     padding: 10px 0;
 }
 
-.right ul li a{
+.right ul li a,
+.left ul li a{
     display: block;
     padding: 5px 20px;
 }
 
-.right ul li a:hover{
+.right ul li a:hover,
+.left ul li a:hover{
     background-color: #5EB9BD;
     color: #fff;
 }
