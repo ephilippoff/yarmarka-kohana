@@ -2212,7 +2212,7 @@ div[data-role="error"]{
     border-top: 1px solid #ccc;
 }
 
-.accordeon-menu .select_wrap{
+.js-search-form .accordeon-menu .select_wrap{
     position: absolute;
     top: -webkit-calc(100% + 1px);
     top: -moz-calc(100% + 1px);
