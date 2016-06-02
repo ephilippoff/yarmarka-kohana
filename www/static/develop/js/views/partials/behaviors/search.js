@@ -99,23 +99,79 @@ define([
             searchInput: ".js-search-input",
             searchForm: ".js-search-form",
             searchPopupCont: ".js-search-popup-cont",
-            categoryBox: '[data-role=categories]'
+            categoryBox: '[data-role=categories]',
+
         },
 
         events: {
-            "keyup @ui.searchInput": "searchInputKeyUp"
-            , "click"                 : "onClick"
-            , 'submit @ui.searchForm': 'beforeSubmitForm'
+            "keyup @ui.searchInput": "searchInputKeyUp",
+            "click"                 : "onClick",
+            'submit @ui.searchForm': 'beforeSubmitForm',
+            'click @ui.categoryBox' : 'accordeonToggle',
+            'click .optgroup' : 'openOptgroup',
+            'click .back' : 'getBack',
+            'click .option:not(.back)' : 'setValue'
         },
 
         onClick: function(e) {
             if (e.target != this.ui.searchPopupCont) {
-               this.ui.searchPopupCont.hide();
+                this.$container = $('.accordeon-menu');
+                this.$container.addClass('brb2, bb');
+                this.$container.find('.select_wrap').hide();
             }
         },
 
+        accordeonToggle: function(e){
+            e.stopPropagation();
+            this.$container = $('.accordeon-menu');
+            this.$container.toggleClass('brb2');
+            this.$container.find('.select_wrap').toggle();
+        },
+
+        openOptgroup: function(e){
+            e.stopPropagation();
+            var self = $(e.currentTarget);
+            self.addClass('active').children('.option').show();
+            this.$container = $('.accordeon-menu');
+            this.$container.find('.option').first().addClass('back').html('<i class="fa fa-long-arrow-left mr5" aria-hidden="true"></i> Назад');
+            $('.optgroup:not(.active)').slideUp();         
+            self.find('.optgroup_value').addClass('active bold');
+
+        },
+
+        getBack: function(e){
+            e.stopPropagation();
+            var self = $(e.currentTarget);
+            $('.option').not('.back').slideUp();
+            $('.optgroup_value').each(function(){
+                $(this).removeClass('active bold');
+            });
+            $('.optgroup').removeClass('active').slideDown();
+
+            $('.option.back').removeClass('back').html('Все объявления');
+        },
+
+        setValue: function(e){
+            var self = $(e.currentTarget);
+            if (self.data('value') == 1) {
+                self.addClass('back');
+            }
+
+            this.ui.categoryBox.find('.current_value').html(self.html());
+
+            this.getBack(e);
+            this.accordeonToggle(e);
+
+
+            this.ui.categoryBox.data({
+                'value' : self.data('value'),
+                'url'   : self.data('url')
+            });
+
+        },
+
         beforeSubmitForm: function(e) {
-            this.ui.searchForm.attr('action', '/' + this.ui.categoryBox.find('option:selected').data('url'));
+            this.ui.searchForm.attr('action', '/' + this.ui.categoryBox.data('url'));
         },
 
         searchInputKeyUp: function(e) {
@@ -150,7 +206,7 @@ define([
                             s.ui.searchPopupCont.show();
                         }
                     }
-                }, this.ui.categoryBox.val());
+                }, this.ui.categoryBox.data('value'));
             }
 
             if (keyCode == 13 && this.ui.searchPopupCont.find('li.mark')) {
