@@ -115,25 +115,22 @@ define([
 
         onClick: function(e) {
             if (e.target != this.ui.searchPopupCont) {
-                this.$container = $('.accordeon-menu');
-                this.$container.addClass('brb2, bb');
-                this.$container.find('.select_wrap').hide();
+                this.ui.categoryBox.addClass('brb2, bb');
+                this.ui.categoryBox.find('.select_wrap').hide();
             }
         },
 
         accordeonToggle: function(e){
             e.stopPropagation();
-            this.$container = $('.accordeon-menu');
-            this.$container.toggleClass('brb2');
-            this.$container.find('.select_wrap').toggle();
+            this.ui.categoryBox.toggleClass('brb2');
+            this.ui.categoryBox.find('.select_wrap').toggle();
         },
 
         openOptgroup: function(e){
             e.stopPropagation();
             var self = $(e.currentTarget);
             self.addClass('active').children('.option').show();
-            this.$container = $('.accordeon-menu');
-            this.$container.find('.option').first().addClass('back').html('<i class="fa fa-long-arrow-left mr5" aria-hidden="true"></i> Назад');
+            this.ui.categoryBox.find('.option').first().addClass('back').html('<i class="fa fa-long-arrow-left mr5" aria-hidden="true"></i> Назад');
             $('.optgroup:not(.active)').slideUp();         
             self.find('.optgroup_value').addClass('active bold');
 

@@ -1288,7 +1288,7 @@ var categoryView = Backbone.View.extend({
     el: '#div_category',
     events: {
         'change select': 'change',
-        'click .accordeon-menu' : 'accordeonToggle',
+        'click #rubricid' : 'accordeonToggle',
         'click .optgroup' : 'openOptgroup',
         'click .back' : 'getBack',
         'click .option:not(.back)' : 'setValue'
@@ -1300,7 +1300,7 @@ var categoryView = Backbone.View.extend({
             me.hideMenu();
         });
         _.extend(this, options);
-        this.control = this.$el.find(".accordeon-menu");
+        this.control = this.$el.find("#rubricid");
         if (!this.control.length)
             this.control = this.$el.find("#fn-category");
         this._init_data();
@@ -1322,13 +1322,13 @@ var categoryView = Backbone.View.extend({
 
     accordeonToggle: function(e){
         e.stopPropagation();
-        this.$container = $('.accordeon-menu');
+        this.$container = $('#rubricid');
         this.$container.toggleClass('brb2, bb');
         this.$container.find('.select_wrap').toggle();
     },
 
     hideMenu: function(){
-        this.$container = $('.accordeon-menu');
+        this.$container = $('#rubricid');
         this.$container.addClass('brb2, bb');
         this.$container.find('.select_wrap').hide();
     },
@@ -1337,7 +1337,7 @@ var categoryView = Backbone.View.extend({
         e.stopPropagation();
         var self = $(e.currentTarget);
         self.addClass('active').children('.option').show();
-        this.$container = $('.accordeon-menu');
+        this.$container = $('#rubricid');
         this.$container.find('.option').first().addClass('back').html('<i class="fa fa-long-arrow-left mr5" aria-hidden="true"></i> Назад');
         $('.optgroup:not(.active)').slideUp();         
         self.find('.optgroup_value').addClass('active bold');
@@ -1358,7 +1358,7 @@ var categoryView = Backbone.View.extend({
         this.getBack(e);
         this.accordeonToggle(e);
 
-        this.$el.find('.accordeon-menu').data('value', self.data('value'));
+        this.$el.find('#rubricid').data('value', self.data('value'));
 
         $('input[name=rubricid]').val(self.data('value'));
 

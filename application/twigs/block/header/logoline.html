@@ -16,9 +16,9 @@
 					<form action="/" method="get" name="search-form" id="search-form" class="clearfix js-search-form">
 							
 						<input class="search placeholder form-control js-search-input" name="search" id="search-input" value="{{ search_text }}" type="text" placeholder="{% if get_session_value('site_disable') %}Сайт в режиме разработки.{% else %}Поиск объявлений{% endif %}" autocomplete="off" data-city="{{city.id}}">
-								
+						{% set catTitle = "" %}
 						{% for category in get_categories() %}
-							{% if category_id and category_id == category.id %}
+							{% if category_id == category.id %}
 								{% set catTitle = category.title %}
 							{% endif %}
 						{% endfor %}
