@@ -2223,6 +2223,9 @@ div[data-role="error"]{
     line-height: 30px;
     font-size: 16px;
     border-bottom: none;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 .js-search-form .accordeon-menu .option:first-child{
