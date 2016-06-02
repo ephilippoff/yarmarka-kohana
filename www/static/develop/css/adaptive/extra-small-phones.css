@@ -27,6 +27,10 @@
 		float: left;
 	}
 
+	.ad-mini-wrap .info-wrap{
+		width: 30%;
+	}
+
 
 	.crumbs-h1{
 		font-size: 16px;
@@ -333,6 +337,30 @@
 		font-size: 18px;
 	}
 
+	.ad-mini-wrap .info-wrap{
+		width: 7%;
+	}
+
+	.small_visible{
+		display: block !important;
+	}
+
+	.ad-mini-wrap .table-details,
+	.ad-mini-wrap .small_hidden{
+		display: none;
+	}
+
+	.ad-mini-wrap .main-ad-wrap{
+		width: 75%;
+		line-height: 1;
+	}
+
+	.ad-mini-wrap .price{
+		float: left;
+		font-size: 14px;
+		margin: 0;
+	}
+
 	#show_contacts button{
 		left: 60%;
 	}
@@ -423,17 +451,6 @@
 }
 
 @media (max-width: 480px){
-
-	.ad-mini-wrap .main-ad-wrap{
-		width: 75%;
-		line-height: 1;
-	}
-
-	.ad-mini-wrap .price{
-		float: left;
-		font-size: 14px;
-		margin: 0;
-	}
 
 	button[data-role="show_share"]{
 		display: inline-block;

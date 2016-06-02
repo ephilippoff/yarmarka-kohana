@@ -599,6 +599,10 @@ select{background-color: #FFFFFF;border: 1px solid #C3C3C3;padding:2px 10px;heig
     background-color: #f8f8f8;
 }
 
+.ad-mini-wrap .hidden-lg.small_visible{
+    display: none;
+}
+
 .img-wrap{
     position: relative;
     width: 136px;
@@ -623,6 +627,10 @@ select{background-color: #FFFFFF;border: 1px solid #C3C3C3;padding:2px 10px;heig
     color: #FFCF1F;
 }
 
+.ad-mini-wrap .info-wrap{
+    width: 20%;
+}
+
 .ad-mini-wrap .main-ad-wrap{
     width: 50%;
 }
@@ -632,6 +640,8 @@ select{background-color: #FFFFFF;border: 1px solid #C3C3C3;padding:2px 10px;heig
 }
 
 .ad-mini-wrap .price{color: #D90000; line-height: 30px; font-size: 22px; margin-top: 3px; display: inline-block; float: right;}
+.ad-mini-wrap .price.square_price{font-size: 14px; text-align: right; line-height: 1; margin: 5px 0;}
+.ad-mini-wrap .price.square_price sup{font-size: 11px;}
 
 /*result search ads end*/
 
@@ -736,6 +746,7 @@ select{background-color: #FFFFFF;border: 1px solid #C3C3C3;padding:2px 10px;heig
 .attrs-cont tr td:first-child{width: 25%; vertical-align: top;}
 .attrs-cont table tr td:last-child{padding-right: 0;}
 .attrs-cont .amount{font-size: 22px;color: #D90000;font-weight: normal;line-height: 1.2;}
+.attrs-cont .amount.fs14{font-size: 14px;}
 .attrs-cont .rub{}
 
 .service-block-cont{background-color: #F5F5F5}
