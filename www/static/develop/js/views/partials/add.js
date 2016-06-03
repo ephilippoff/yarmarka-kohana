@@ -1339,6 +1339,7 @@ var categoryView = Backbone.View.extend({
         self.addClass('active').children('.option').show();
         this.$container = $('#rubricid');
         this.$container.find('.option').first().addClass('back').html('<i class="fa fa-long-arrow-left mr5" aria-hidden="true"></i> Назад');
+        this.$container.find('.option:not(.back, .optgroup .option)').slideUp(); //self.children('.option').show();
         $('.optgroup:not(.active)').slideUp();         
         self.find('.optgroup_value').addClass('active bold');
 
@@ -1370,6 +1371,7 @@ var categoryView = Backbone.View.extend({
         e.stopPropagation();
         var self = $(e.currentTarget);
         $('.optgroup .option').not('.back').slideUp();
+        $('.option').not('.optgroup .option').slideDown();
         $('.optgroup_value').each(function(){
             $(this).removeClass('active bold');
         });
