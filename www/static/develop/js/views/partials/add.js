@@ -1369,7 +1369,7 @@ var categoryView = Backbone.View.extend({
     getBack: function(e){
         e.stopPropagation();
         var self = $(e.currentTarget);
-        $('.option').not('.back').slideUp();
+        $('.optgroup .option').not('.back').slideUp();
         $('.optgroup_value').each(function(){
             $(this).removeClass('active bold');
         });

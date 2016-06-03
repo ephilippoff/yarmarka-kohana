@@ -2178,6 +2178,10 @@ div[data-role="error"]{
     z-index: 15;
 }
 
+.accordeon-menu .optgroup{
+    position: relative;
+}
+
 .accordeon-menu .optgroup_value,
 .accordeon-menu .option,
 .accordeon-menu .current_value{

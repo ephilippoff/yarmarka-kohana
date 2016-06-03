@@ -33,9 +33,12 @@
 									{% for category in get_categories() %}
 										{% if category.childs and category.id != 1 %}
 										<div class="optgroup">
+											<div class="sign_icon">
+												<i class="fa fa-plus-square-o" aria-hidden="true"></i>
+											</div>
 											<div class="optgroup_value">{{ category.title }}</div>
 											{% for subcategory in category.childs %}
-											<div class="option hidden" data-url="{{subcategory.url}}" data-value="{{ subcategory.id }}">{{subcategory.title}}</div>
+												<div class="option hidden" data-url="{{subcategory.url}}" data-value="{{ subcategory.id }}">{{subcategory.title}}</div>
 											{% endfor %}
 										</div>
 										{% endif %}
