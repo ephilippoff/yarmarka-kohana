@@ -67,9 +67,10 @@
 					{% set neiboors = custommenu('surgut.yarmarka.biz').childs %}
 				 	{% for city in neiboors %}
 				 		{% if city.url == 'nizhnevartovsk.yarmarka.biz' %}
-				 			{% set additional = 'nizhnevartovsk' %}
+				 		<a class="dib mr5" href="http://{{ city.url }}/nizhnevartovsk/{{catUrl}}">г. {{ city.title}}</a>
+				 		{% else %}
+				 		<a class="dib mr5" href="http://{{ city.url }}/{{catUrl}}">г. {{ city.title}}</a>
 				 		{% endif %}
-				 		<a class="dib mr5" href="http://{{ city.url }}/{{additional}}{{catUrl}}">г. {{ city.title}}</a>
 					{% endfor %}
 				</div>
 			</div>
