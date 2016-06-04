@@ -69,10 +69,10 @@
 
 			/* get data */
 			$query = $objectsService->getObjects();
-			// $objectsService->selectMainImage($query);
+			$objectsService->selectMainImage($query);
 			$objectsService->selectPublished($query);
 			$objectsService->filterOnlyVip($query);
-			// $objectsService->selectCategoryUrl($query);
+			$objectsService->selectCategoryUrl($query);
 			$items = $query->execute();
 
 			/* process data */
@@ -87,16 +87,21 @@
 			/* push view data */
 			$view->data = $processedData;
 
-			// var_dump($processedData); die;
+			$count = count($view->data);
+
+			if ($count < 6) {
+				$new_data = $this->main_page_latest($count, $view->data);
+				$view->data = $new_data;
+			}
 
 			$this->response->body($view);
 
 		}
 
-		public function action_main_page_latest() {
+		public function main_page_latest($limit, $vip_data) {
 
 			/* settings */
-			$count = 6;
+			$count = 6 - $limit;
 			$rubric = 1;
 			$categoryHierarchyLevel = 5;
 
@@ -171,10 +176,14 @@
 				$processedData []= $this->process_item($item);
 			}
 
-			/* push view data */
-			$view->data = $processedData;
+			$new_data = array_merge($vip_data, $processedData);
 
-			$this->response->body($view);
+			return $new_data;
+
+			/* push view data */
+			// $view->data = $processedData;
+
+			// $this->response->body($view);
 		}
 
 	}

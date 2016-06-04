@@ -39,16 +39,16 @@
 
 		public function filterOnlyPremium($query) {
 			$query
-				->join('object_service_photocard', 'inner')
+				->join('object_rating', 'inner')
 				->on('object_rating.object_id', '=', 'object.id')
 				->where('object_rating.date_expiration', '>', DB::expr('NOW()'));
 		}
 
 		public function filterOnlyVip($query) {
 			$query
-				->join('object_rating', 'inner')
-				->on('object_rating.object_id', '=', 'object.id')
-				->where('object_rating.date_expiration', '>', DB::expr('NOW()'));
+				->join('object_service_photocard', 'inner')
+				->on('object_service_photocard.object_id', '=', 'object.id')
+				->where('object_service_photocard.date_expiration', '>', DB::expr('NOW()'));
 		}
 
 		public function selectCategoryUrl($query) {
