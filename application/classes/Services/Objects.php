@@ -39,6 +39,13 @@
 
 		public function filterOnlyPremium($query) {
 			$query
+				->join('object_service_photocard', 'inner')
+				->on('object_rating.object_id', '=', 'object.id')
+				->where('object_rating.date_expiration', '>', DB::expr('NOW()'));
+		}
+
+		public function filterOnlyVip($query) {
+			$query
 				->join('object_rating', 'inner')
 				->on('object_rating.object_id', '=', 'object.id')
 				->where('object_rating.date_expiration', '>', DB::expr('NOW()'));

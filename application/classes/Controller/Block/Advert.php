@@ -56,10 +56,47 @@
 
 		}
 
+
+		public function action_main_page_vip() {
+
+			/* settings */
+			$count = 6;
+
+			$view = Twig::factory('block/advert/main_page_latest');
+
+			/* get services */
+			$objectsService = $this->getService('Objects');
+
+			/* get data */
+			$query = $objectsService->getObjects();
+			// $objectsService->selectMainImage($query);
+			$objectsService->selectPublished($query);
+			$objectsService->filterOnlyVip($query);
+			// $objectsService->selectCategoryUrl($query);
+			$items = $query->execute();
+
+			/* process data */
+			$processedData = array();
+			foreach($items as $index => $item) {
+				if ($index >= $count) {
+					break;
+				}
+				$processedData []= $this->process_item($item);
+			}
+
+			/* push view data */
+			$view->data = $processedData;
+
+			// var_dump($processedData); die;
+
+			$this->response->body($view);
+
+		}
+
 		public function action_main_page_latest() {
 
 			/* settings */
-			$count = 8;
+			$count = 6;
 			$rubric = 1;
 			$categoryHierarchyLevel = 5;
 
