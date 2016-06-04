@@ -11,25 +11,28 @@
 		<div class="current_value">---</div>
 		<div class="select_wrap hidden">
 			<div class="option" data-value="0">---</div>
+
+			<? foreach($data->category_list as $key=> $item) : ?>	
+				<div class="optgroup">
+					<div class="sign_icon">
+						<i class="fa fa-plus-square-o" aria-hidden="true"></i>
+					</div>
+					<div class="optgroup_value"><?=$key?></div>
+					<? foreach($item as $id=>$title) : ?>
+						<?php if (!in_array($id, array(42,156,72))): ?>
+							<div class="option hidden" data-value="<?=$id?>"><?=$title?></div>
+						<?php endif ?>
+					<? endforeach; ?>
+				</div>
+			<? endforeach; ?>
+
 			<? foreach ($data->category_list['Другие'] as $key => $value) : ?>
 				<?php if (in_array($key, array(42,156,72))): ?>
 					<div class="option" data-value="<?=$key?>"><?=$value?></div>
 				<?php endif ?>
 			<? endforeach; ?>
 
-			<? foreach($data->category_list as $key=> $item) : ?>
-			<div class="optgroup">
-				<div class="sign_icon">
-					<i class="fa fa-plus-square-o" aria-hidden="true"></i>
-				</div>
-				<div class="optgroup_value"><?=$key?></div>
-				<? foreach($item as $id=>$title) : ?>
-					<?php if (!in_array($id, array(42,156,72))): ?>
-						<div class="option hidden" data-value="<?=$id?>"><?=$title?></div>
-					<?php endif ?>
-				<? endforeach; ?>
 			</div>
-			<? endforeach; ?>
 		</div>
 	</div>
 <? endif; ?>
