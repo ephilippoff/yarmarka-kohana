@@ -74,7 +74,7 @@ class Detailpage_Default
 		$info['similar_vip_search_result'] = $this->get_vip_similar_query($object, $domain);
 
 		foreach ($info['similar_vip_search_result'] as $item) {
-			$not_id = [];
+			$not_id = array();
 			array_push($not_id, $item['id']);
 		}
 
@@ -86,7 +86,7 @@ class Detailpage_Default
 				'category_id' => $object->category,
 				"not_id" => Cookie::get('ohistory') ? 
 									array_merge(explode(",", Cookie::get('ohistory')), array($object->id), $not_id) 
-										: array($object->id, $not_id)
+										: array_merge(array($object->id), $not_id)
 			),
 			array("limit" => 10, "page" => 0)
 		);
@@ -122,10 +122,13 @@ class Detailpage_Default
 				'city_id' => array($domain->get_city()->id),
 				"published" => TRUE,
 				'photocard' => true,
-				'category_id' => $object->category
+				'category_id' => $object->category,
+				"not_id" => array($object->id)
 			),
 			array("limit" => 2, "page" => 0)
 		);
+
+		// var_dump($object->id); die;
 
 		$info['similar_vip_search_result'] = Search::getresult($query->execute()->as_array());
 
