@@ -60,7 +60,7 @@
 		public function action_main_page_vip() {
 
 			/* settings */
-			$count = 6;
+			$count = 8;
 
 			$view = Twig::factory('block/advert/main_page_latest');
 
@@ -89,7 +89,7 @@
 
 			$count = count($view->data);
 
-			if ($count < 6) {
+			if ($count < 8) {
 				$new_data = $this->main_page_latest($count, $view->data);
 				$view->data = $new_data;
 			}
@@ -101,7 +101,7 @@
 		public function main_page_latest($limit, $vip_data) {
 
 			/* settings */
-			$count = 6 - $limit;
+			$count = 8 - $limit;
 			$rubric = 1;
 			$categoryHierarchyLevel = 5;
 
