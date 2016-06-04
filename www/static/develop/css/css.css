@@ -1552,14 +1552,7 @@ article h1{
     transition: all 0.15s ease-in;
 }
 
-.ad_wrap:nth-child(3),
-.ad_wrap:nth-child(6){
-    display: none;
-}
 
-.ad_wrap:nth-child(n+6){
-    border-bottom: none;
-}
 
 .ad_wrap:hover{
     background-color: #f0f0f0;
