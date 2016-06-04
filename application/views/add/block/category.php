@@ -31,8 +31,6 @@
 					<div class="option" data-value="<?=$key?>"><?=$value?></div>
 				<?php endif ?>
 			<? endforeach; ?>
-
-			</div>
 		</div>
 	</div>
 <? endif; ?>

@@ -22,10 +22,8 @@ function (Marionette, IndexRouter, IndexController, Windows, Mainmenu,
     var app = new Marionette.Application();
 
     var t0 = window.performance.now();
-    console.log("start app");
 
     app.addInitializer(function(){
-        console.log("app initialized");
         app.backLayer = $("#popup-layer");
 
         app.module("common", Common);
