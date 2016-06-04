@@ -60,7 +60,7 @@
 		public function action_main_page_vip() {
 
 			/* settings */
-			$count = 8;
+			$count = 30;
 
 			$view = Twig::factory('block/advert/main_page_latest');
 
@@ -85,14 +85,19 @@
 			}
 
 			/* push view data */
-			$view->data = $processedData;
 
-			$count = count($view->data);
+			$count = count($processedData);
 
 			if ($count < 8) {
-				$new_data = $this->main_page_latest($count, $view->data);
+				$new_data = $this->main_page_latest($count, $processedData);
 				$view->data = $new_data;
+			}else{
+				shuffle($processedData);
+				array_slice($processedData, 0, 8);
+				$view->data = $processedData;
 			}
+
+
 
 			$this->response->body($view);
 
