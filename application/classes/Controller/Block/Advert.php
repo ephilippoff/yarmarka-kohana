@@ -88,7 +88,7 @@
 
 			$count = count($processedData);
 
-			var_dump($count); die;
+			var_dump($processedData); die;
 
 			if ($count < 8) {
 				$new_data = $this->main_page_latest($count, $processedData);
