@@ -183,7 +183,6 @@
 
 			$new_data = array_merge($vip_data, $processedData);
 
-			var_dump($new_data); die;
 
 			return $new_data;
 
