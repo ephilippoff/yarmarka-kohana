@@ -88,8 +88,6 @@
 
 			$count = count($processedData);
 
-			var_dump($processedData); die;
-
 			if ($count < 8) {
 				$new_data = $this->main_page_latest($count, $processedData);
 				$view->data = $new_data;
@@ -184,6 +182,8 @@
 			}
 
 			$new_data = array_merge($vip_data, $processedData);
+
+			var_dump($new_data); die;
 
 			return $new_data;
 
