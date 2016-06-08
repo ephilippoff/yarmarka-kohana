@@ -83,10 +83,9 @@ class Detailpage_Default
 				'active' => true,
 				'city_id' => array($domain->get_city()->id),
 				"published" => TRUE,
+				"photocard" => FALSE,
 				'category_id' => $object->category,
-				"not_id" => Cookie::get('ohistory') ? 
-									array_merge(explode(",", Cookie::get('ohistory')), array($object->id), $not_id) 
-										: array_merge(array($object->id), $not_id)
+				"not_id" => Cookie::get('ohistory') ? array_merge(explode(",", Cookie::get('ohistory')), array($object->id)) : array($object->id)
 			),
 			array("limit" => 10, "page" => 0)
 		);
