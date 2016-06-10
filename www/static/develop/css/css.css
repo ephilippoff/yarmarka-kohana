@@ -609,6 +609,9 @@ select{background-color: #FFFFFF;border: 1px solid #C3C3C3;padding:2px 10px;heig
     top: -2px;
     left: -1px;
     font-size: 25px;
+}
+
+.ad-mini-wrap .premium-tape .fa{
     color: #FFCF1F;
 }
 
@@ -1040,6 +1043,16 @@ a.auto-collapse-expand {
     position: relative;
     top: 1px;
     z-index: 5;
+}
+
+.title_block a.fr{
+    font-size: 11px;
+    color: #bebebe;
+    font-family: 'pt_sansregular';
+}
+
+.title_block a.fr:hover{
+    color: #333;
 }
 
 .last-views .items {
@@ -2225,3 +2238,4 @@ div[data-role="error"]{
     width: calc(100% + 2px);
     z-index: 15;
 }
+

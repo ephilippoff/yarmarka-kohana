@@ -35,7 +35,7 @@
 		</a> 
 		
 		{% if object.is_premium %}
-		<span class="premium-tape"><i class="fa fa-star" title="Премиум-объявление" aria-hidden="true"></i></span>
+		<span class="premium-tape" onclick="event.stopPropagation()"><a href="/commercial/premium" target="_blank" class="db"><i class="fa fa-star" title="Премиум-объявление" aria-hidden="true"></i></a></span>
 		{% endif %}
 
 		<i class="fa fa-{{i_state}} ml5 {{i_color}}" aria-hidden="true" title="{{ad_state}}"></i>
