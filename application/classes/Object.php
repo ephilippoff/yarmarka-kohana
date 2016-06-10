@@ -365,6 +365,11 @@ class Object
 	{
 		$check = self::PlacementAds_Validate($input_params, TRUE);
 		$error = $check["error"];
+
+		if (isset($error['contact_mobile'])) {
+			unset($error['contact_mobile']);
+			sort($error);
+		}
 		
 		if (isset($check['add_obj']->object->moder_state) AND $check['add_obj']->object->moder_state  == 1) {
 			if (!$error) {
