@@ -4,7 +4,7 @@
 	<div class="col-md-12 items-cont photo_news {% if onPageFlag == 'search' %}hidden-sm hidden-xs{% endif %}">
 		<div class="title_block brt2 module">Новости</div>
 		<ul>
-			{% for news in premiumnews|slice(0,5) %}
+			{% for news in premiumnews|slice(0,4) %}
 			<li>
 				<div class="photo_news_wrap hidden-sm hidden-xs">
 					<a href="{{news.compiled.url}}" class="fs12">
