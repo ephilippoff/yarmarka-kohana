@@ -47,7 +47,7 @@ class Controller_Index extends Controller_Template {
                 "premium" => TRUE,
                 "active" => TRUE,
                 "published" =>TRUE,
-                "city_id" => $this->city->id,
+                // "city_id" => $this->city->id,
                 "category_seo_name" => "novosti"
             ),
             array("limit" => 100, "page" => 1)
