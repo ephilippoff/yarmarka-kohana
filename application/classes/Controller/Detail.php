@@ -272,6 +272,8 @@ class Controller_Detail extends Controller_Template {
 		foreach ((array) $detail_info as $key => $item) {
 			$twig->{$key} = $item;
 		}
+
+		// echo "<pre>"; var_dump($twig); echo "</pre>"; die;
 		
 		$this->response->body($twig);
 	}
