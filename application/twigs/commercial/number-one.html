@@ -1,0 +1,149 @@
+{% extends "layouts/simple" %}
+
+{% block title %}
+	{% for crumb in crumbs %}
+		{% if not crumb.url %}
+			{{crumb.title}}
+		{% endif %}
+	{% endfor %}
+{% endblock title%}
+
+{% block header %}
+	{{ parent() }}
+	{{ css("commercial.css") }}
+	{% include 'cart/crumbs' %}
+{% endblock header %}
+
+
+{% block content %}
+
+<div class="col-lg-12 w100p_img">
+	
+	<div class="ad_title">
+		<span>Номер один</span>
+		Размещение рекламного баннера в главном меню сайта
+	</div>
+	
+	<p>Хотите получить больше переходов на Ваш сайт? Или у Вас имеется уникальное предложение, которое требует особого пристального внимания? А может у Вас имеется превосходный новый продукт, о котором Вы хотите поскорее всем рассказать? Мы с радостью поможем Вам в решении любого из этих вопросов! Размещение рекламного баннера в главном меню сайта “Ярмарка-онлайн” - это то, что Вам нужно! Почему?</p>
+	<p>Оцените преимущества этого предложения:</p>
+	<ol>
+		<li>Выбор раздела - охват целевой аудитории в конкретном разделе сайта (Недвижимость, Автотранспорт, Услуги и пр.)</li>
+		<li>Гибкий размер и границы баннера (возможен разворот по ширине страницы)</li>
+		<li>Нет ограничения показов, каждый посетитель будет видеть рекламу каждый раз, когда открывает раздел меню.</li>
+		<li>Предоставляется статистика кликов по баннеру (по запросу).</li>
+		<li>Ежедневно наш сайт посещают свыше 10 000 уникальных пользователей, главная страница - одна из самых посещаемых</li>
+	</ol>
+
+	<p>Пример рекламного баннера в разделе “Для дома и дачи” в главном меню сайта:</p>
+
+	<img src="../static/develop/images/commercial/menubanner1.png" class="w100p mt20 mb20" alt="">
+
+	<p>Стоимость размещения, руб./мес.:</p>
+
+	<table class="ad mt20" id="block-table" style="max-width: 800px;">
+		<thead>
+			<tr>
+				<th style="background: none;"></th>
+				<th>Нижневартовск</th>
+				<th>Сургут</th>
+				<th>Тюмень</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td data-title="Раздел">Работа</td>
+				<td data-title="Нижневартовск">8000</td>
+				<td data-title="Сургут">6000</td>
+				<td data-title="Тюмень">4000</td>
+			</tr>
+			<tr>
+				<td data-title="Раздел">Автотранспорт</td>
+				<td data-title="Нижневартовск">10000</td>
+				<td data-title="Сургут">8000</td>
+				<td data-title="Тюмень">5000</td>
+			</tr>
+			<tr>
+				<td data-title="Раздел">Недвижимость</td>
+				<td data-title="Нижневартовск">10000</td>
+				<td data-title="Сургут">8000</td>
+				<td data-title="Тюмень">5000</td>
+			</tr>
+			<tr>
+				<td data-title="Раздел">Услуги</td>
+				<td data-title="Нижневартовск">10000</td>
+				<td data-title="Сургут">8000</td>
+				<td data-title="Тюмень">5000</td>
+			</tr>
+			<tr>
+				<td data-title="Раздел">Бытовая электроника</td>
+				<td data-title="Нижневартовск">10000</td>
+				<td data-title="Сургут">8000</td>
+				<td data-title="Тюмень">5000</td>
+			</tr>
+			<tr>
+				<td data-title="Раздел">Для дома и дачи</td>
+				<td data-title="Нижневартовск">10000</td>
+				<td data-title="Сургут">8000</td>
+				<td data-title="Тюмень">5000</td>
+			</tr>
+			<tr>
+				<td data-title="Раздел">Для бизнеса</td>
+				<td data-title="Нижневартовск">7000</td>
+				<td data-title="Сургут">5000</td>
+				<td data-title="Тюмень">3500</td>
+			</tr>
+			<tr>
+				<td data-title="Раздел">Барахолка</td>
+				<td data-title="Нижневартовск">7000</td>
+				<td data-title="Сургут">5000</td>
+				<td data-title="Тюмень">3500</td>
+			</tr>
+			<tr>
+				<td data-title="Раздел">Спорт, отдых, хобби</td>
+				<td data-title="Нижневартовск">7000</td>
+				<td data-title="Сургут">5000</td>
+				<td data-title="Тюмень">3500</td>
+			</tr>
+			<tr>
+				<td data-title="Раздел">Домашние любимцы и растения</td>
+				<td data-title="Нижневартовск">7000</td>
+				<td data-title="Сургут">5000</td>
+				<td data-title="Тюмень">3500</td>
+			</tr>
+			<tr>
+				<td data-title="Раздел">Знакомство и общение</td>
+				<td data-title="Нижневартовск">5000</td>
+				<td data-title="Сургут">3500</td>
+				<td data-title="Тюмень">2500</td>
+			</tr>
+			<tr>
+				<td data-title="Раздел">Продовольственные товары</td>
+				<td data-title="Нижневартовск">5000</td>
+				<td data-title="Сургут">3500</td>
+				<td data-title="Тюмень">2500</td>
+			</tr>
+			<tr>
+				<td data-title="Раздел">Строительство и ремонт</td>
+				<td data-title="Нижневартовск">15000</td>
+				<td data-title="Сургут">12000</td>
+				<td data-title="Тюмень">9000</td>
+			</tr>
+		</tbody>
+	</table>
+	<p class="bold">Скидки за период размещения:</p>
+	От 3 месяцев - 10%
+
+	<p class="bold">Требования к баннеру:</p>
+	<ul>
+		<li>прозрачный файл формата .png</li>
+		<li>вес файла в пределах 300 кб</li>
+	</ul>
+
+	<p class="bold">Наши контакты:</p>
+</div>
+
+{% endblock content %}
+
+{% block footer %} 
+	{{ parent() }}
+{% endblock footer %}

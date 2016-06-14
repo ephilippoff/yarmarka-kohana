@@ -41,7 +41,7 @@ class Lib_PlacementAds_AddEdit {
 			foreach((array) $this->params as $key=>$value){
 				if (preg_match('/^param_([0-9]*)/', $key, $matches))
 				{
-					$this->params->{$key} = ( is_array( $this->params->{$key} ) OR preg_match('/_[0-9]+/', $this->params->{$key}) ) 
+					$this->params->{$key} = ( is_array( $this->params->{$key} ) OR preg_match('/^_[0-9]+$/', $this->params->{$key}) ) 
 						? str_replace("_", "", $this->params->{$key})
 						: $this->params->{$key};
 						
@@ -272,8 +272,8 @@ class Lib_PlacementAds_AddEdit {
 		if ($category AND !$category->title_auto_fill AND !$params->itis_massload)
 		{
 			$validation->rules('title_adv', array(
-				array('not_empty', array(':value', "Заголовок")),
-				array('min_length', array(':value', 10, "Заголовок")),
+				array('not_empty', array(':value', "Заголовок объявления")),
+				array('min_length', array(':value', 10, "Заголовок объявления")),
 			));
 		}
 
@@ -284,6 +284,8 @@ class Lib_PlacementAds_AddEdit {
 				array('max_length', array(':value', 15000, "Текст объявления")),
 			));
 		}
+
+		$exclusion = Kohana::$config->load("common.add_phone_required_exlusion");
 
 		// верифицированы ли контакты
 		if ($category AND !$params->just_check)
@@ -302,12 +304,18 @@ class Lib_PlacementAds_AddEdit {
 			));
 
 		} 
-		elseif ($category AND $category_settings->one_mobile_phone AND !$params->itis_massload  AND !$params->just_check)
+		elseif ($category AND !$params->itis_massload  AND !$params->just_check)
 		{
 			$validation->rules('contact_mobile', array(
 				array('mobile_verified', array(':value', $params->session_id) )
 			));
+		} elseif ($category AND in_array($category->id, $exclusion) AND !$params->itis_massload  AND !$params->just_check)
+		{
+			$validation->rules('contact_email', array(
+				array('email_verified', array(':value', $params->session_id) )
+			));
 		}
+		
 
 		return $this;
 	}
@@ -364,7 +372,8 @@ class Lib_PlacementAds_AddEdit {
 			$contacts[] = array(
 				'contact_obj' 	=> $contact,
 				'value' 		=> $value,
-				'type_id' 	=> $type_id
+				'type_id' 		=> $type_id,
+				'moderate'		=> $contact->moderate
 			);
 
 		}
@@ -728,11 +737,13 @@ class Lib_PlacementAds_AddEdit {
 			$errors['not_autorized'] =  Kohana::message('validation/object_form', 'not_autorized');
 		}
 
+		$exclusion = Kohana::$config->load("common.add_phone_required_exlusion");
+
 		if (count($this->contacts) == 0)
 		{
 			$errors['contact_mobile'] = "Необходимо добавить хотя бы один верифицированный контакт для связи";
 		} else {
-			if (!$params->just_check) {
+			if (!$params->just_check AND !$params->itis_massload) {
 				foreach ($this->contacts as $contact_item) {
 					if (array_key_exists('is_additional', $contact_item) && $contact_item['is_additional']) {
 						continue;
@@ -750,14 +761,12 @@ class Lib_PlacementAds_AddEdit {
 			}
 		}
 		
-		if ($category AND !$category_settings->phone_or_mobile_notrequired AND !$params->itis_massload AND !$params->contact_mobile AND !$params->contact_phone)
+		if ($category AND !in_array($category->id, $exclusion) AND !$params->itis_massload AND !$params->contact_mobile)
 		{
-			$errors['contact_mobile'] = "Для этой рубрики, необходимо обязательно указать телефон";
-			$errors['contact_phone'] = "Для этой рубрики, необходимо обязательно указать телефон";
-		}
-		elseif ($category AND $category_settings->one_mobile_phone AND !$params->itis_massload AND !$params->contact_mobile)
+			$errors['contact_mobile'] = "Необходимо обязательно указать мобильный телефон, и подтвердить его по СМС";
+		} elseif ($category AND in_array($category->id, $exclusion) AND !$params->itis_massload AND !$params->contact_email)
 		{
-			$errors['contact_mobile'] = "Для этой рубрики, необходимо обязательно указать мобильный телефон";
+			$errors['contact_email'] = "Необходимо обязательно указать Email";
 		}
 
 		//если пользователь привязан к компании и подает объявления как от компании то не проверяем количество поданных
@@ -1106,20 +1115,24 @@ class Lib_PlacementAds_AddEdit {
 		}
 
 
-		if ($this->is_edit AND $params->publish_and_prolonge)
+		if ($this->is_edit)
 		{
-			if ($object->is_bad <> 2)
+			if ($object->is_bad <> 2 )
 			{
-				$object->is_published = 1;
-				if ($object->in_archive)
+				if ($params->publish_and_prolonge) {
+					$object->is_published = 1;
+				}
+				
+				if ( $object->in_archive )
 				{
-					$object->prolong($this->lifetime_to_date("3m"));
-				} else 
+					$object->prolong($this->lifetime_to_date("45d"));
+				} else if ( strtotime( $object->date_expiration ) < strtotime( $this->lifetime_to_date("45d") ) )
 				{
-					$object->date_expiration = $this->lifetime_to_date("3m");
+					$object->date_expiration = $this->lifetime_to_date("45d");
 				}
 			}
 		}
+
 		return $this;
 	}
 
@@ -1343,13 +1356,30 @@ class Lib_PlacementAds_AddEdit {
 		$category = &$this->category;
 		$user = &$this->user;
 		$contacts = &$this->contacts;
+
+		$user_id = $user->id;
+		$object_id = $object->id;
+		$is_edit = $this->is_edit ? "TRUE":"FALSE";
+		$key = md5("add_edit_object:{$is_edit}{$object_id}{$user_id}");
+
 		if ($user->email)
 		{
 			// отправляем уведомление о успешном редактировании/публикации
 			$is_edit = $this->is_edit;
 			$subj = $this->is_edit 
 				? 'Вы успешно изменили Ваше объявление.' 
-				: 'Поздравляем Вас с успешным размещением объявления на «Ярмарка-онлайн»!';			
+				: 'Поздравляем Вас с успешным размещением объявления на «Ярмарка-онлайн»!';
+
+
+			if ( $this->is_edit) {
+
+				if ( $result = Cache::instance('memcache')->get($key) ) {
+					return $this;
+				}
+
+				Cache::instance('memcache')->set($key, 1, Date::TENMINUTES);
+
+			}
 
 			$msg = View::factory('emails/add_notice',
 					array('is_edit' => $is_edit,'object' => $object, 'name' => $user->get_user_name(), 
@@ -1425,7 +1455,7 @@ class Lib_PlacementAds_AddEdit {
 		throw new HTTP_Exception_404($text);		
 	}
 
-	private static function lifetime_to_date($lifetime)
+	static function lifetime_to_date($lifetime)
 	{
 		switch ($lifetime) 
 			{
@@ -1437,6 +1467,9 @@ class Lib_PlacementAds_AddEdit {
 				break;
 				case "3m":
 					$date_expiration = date('Y-m-d H:i:s', strtotime('+3 month'));
+				break;
+				case "45d":
+					$date_expiration = date('Y-m-d H:i:s', strtotime('+45 days'));
 				break;
 				default:
 					$date_expiration = date('Y-m-d H:i:s', strtotime('+14 days'));

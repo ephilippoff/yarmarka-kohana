@@ -8,13 +8,13 @@
 					</div>
 				</div>			
 			</div>
-			<div style="border:1px solid #ccc;">
+			<div style="border:1px solid #ccc;position:relative;">
 				{% if staticMainMenu %}
 					{% if menuName == 'mainmenu' %}
 						{{ requestblock('block_twig/mainmenu', {'city_id': city.id, 'staticMainMenu': staticMainMenu}) }}
-						{% else %}
-							{{ requestblock('block_twig/newsmenu', {'city_id': city.id, 'staticMainMenu': staticMainMenu}) }}
-						{% endif %}
+					{% else %}
+						{{ requestblock('block_twig/newsmenu', {'city_id': city.id, 'staticMainMenu': staticMainMenu}) }}
+					{% endif %}
 				{% endif %}
 			</div>
 		</div>
@@ -23,7 +23,7 @@
 		{% include 'index/promo/news' %}
 	</div>
 </div>
-<div class="row hidden-xs">
+<div class="row hidden-sm hidden-xs">
 	{% include 'index/promo/kupon' with {'sidebar' : true} %}
 </div>
 

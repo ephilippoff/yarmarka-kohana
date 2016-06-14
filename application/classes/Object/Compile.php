@@ -71,7 +71,7 @@ class Object_Compile
 					->find();
 
 		//if ($params["real_city"]) {
-			$result["real_city"] = $params["real_city"];
+			$result["real_city"] = @$params["real_city"];
 		//}
 
 		$result["address"] = $location->address;

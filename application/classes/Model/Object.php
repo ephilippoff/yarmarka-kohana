@@ -303,7 +303,7 @@ class Model_Object extends ORM {
 
 	public function is_moderate()
 	{
-		return (bool) $this->moder_state;
+		return $this->moder_state;
 	}
 
 	public function get_edit_url($city_seo_name = NULL) {
@@ -462,6 +462,13 @@ class Model_Object extends ORM {
 		}
 
 		$this->is_published = (int) ! $this->is_published;
+
+		if ( strtotime( $this->date_expiration ) < strtotime( Lib_PlacementAds_AddEdit::lifetime_to_date("45d") ) ) {
+			
+			$this->date_expiration = Lib_PlacementAds_AddEdit::lifetime_to_date("45d");
+			
+		}
+
 		return $this->update();
 	}
 

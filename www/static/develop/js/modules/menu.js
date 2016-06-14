@@ -60,6 +60,12 @@ define([
                     active: false,
                     heightStyle: "content",
                 });
+
+                $('#user_menu, .change_city_cont, #subscribe-cont').accordion({
+                    collapsible: true,
+                    active: false,
+                    heightStyle: "content",
+                });
             },
 
             onButtonClick: function(){
@@ -95,6 +101,7 @@ define([
             "mouseleave" : "closeMenu"
         },
         initialize: function(options) {
+            var $this = this;
             this.visible = 0;
 
             if (!options.doNotUseTemplate) {
@@ -103,12 +110,15 @@ define([
                     $(options.templateClass).remove();
                 }
             }
+
+            // this.$el.find(.on('mouseleave')
             //Разделение меню городов по Class;
             var cityClass = 1;
             $('.js-citymenu').each(function(){
                 $(this).addClass('citymenu'+cityClass);
                 cityClass++;
             });
+
         },
 
         showMenu: function() {
@@ -126,13 +136,13 @@ define([
             
         },
 
-        closeMenu: function() {
+        closeMenu: function(e) {
             if (this.getOption('alwaysVisibleMenu')) {
                 return;
             }
             if (this.activateTimer) clearTimeout(this.activateTimer);
-            $(this.getOption("menuClass")).fadeOut(70);
-            $("#popup-layer").fadeOut(70);
+            $(this.getOption("menuClass")).fadeOut(100);
+            $("#popup-layer").fadeOut(100);
             $(this.getOption("controlClass")).removeClass("z301");
             this.visible = 0;
         }
@@ -165,7 +175,6 @@ var MainmenuView = MenuView.extend({
             var $row = $(row), 
             submenuId = $row.data("submenu-id"), 
             submenu = "#" + submenuId;
-            console.log(submenuId, submenu);
             $(submenu).show();
         }, 200);
 
@@ -178,8 +187,8 @@ var MainmenuView = MenuView.extend({
         var $row = $(row), 
         submenuId = $row.data("submenu-id"), 
         submenu = "#" + submenuId;
-
         $(submenu).fadeOut(70);
+
     }
 });
 

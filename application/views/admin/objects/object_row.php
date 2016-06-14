@@ -6,8 +6,6 @@
 	<tr id="<?=$object->id?>">
 	<?php endif; ?>
 		<?
-		echo 1;
-		echo Debug::vars($compiled);
 			$used_service = NULL;
 			try {
 				$used_service = $object->used_service;
@@ -70,6 +68,8 @@
 				<button class="btn dropdown-toggle
 					<?php if ( ! $object->is_moderate()) : ?>
 						btn-warning
+					<?php elseif ($object->is_moderate() == -1 OR $object->is_moderate() == 4) : ?>
+						btn-default
 					<?php elseif ($object->is_banned()) : ?>
 						btn-danger
 					<?php else : ?>
@@ -79,6 +79,10 @@
 					<span class="text">
 					<?php if ( ! $object->is_moderate()) : ?>
 						На модерации
+					<?php elseif ($object->is_moderate() == 4) : ?>
+						Массовая загрузка
+					<?php elseif ($object->is_moderate() == -1) : ?>
+						! Пред модерация
 					<?php elseif ($object->is_banned()) : ?>
 						<?php if ($object->is_bad == 1) : ?>
 							На исправлении

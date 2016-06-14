@@ -36,6 +36,7 @@ class Twig_Functions
 	public static function get_categories() {
 		$service = Services_Factory::factory('Categories');
 		$categories = $service->getCategoryWithChilds(1, 5, array('title', 'url'), 2);
+		// var_dump($categories); die;
 		$flattern = function ($items, $level, $cb) {
 			$res = array();
 			foreach($items as $item) {
@@ -43,6 +44,7 @@ class Twig_Functions
 						'id' => $item['id']
 						, 'title' => $item['title']
 						, 'level' => $level + 1
+						, 'childs' => $item['childs']
 						, 'url' => $item['url']
 					);
 				$res = array_merge($res, $cb($item['childs'], $level + 1, $cb));
@@ -111,8 +113,22 @@ class Twig_Functions
 		return new Obj($array);
 	}
 
-	public static function domain($domain_str, $url_str, $protocol_str = "http://", $old = FALSE)
+	public static function domain($domain_str, $url_str, $protocol_str = "http://", $old = FALSE, $id = FALSE)
 	{
+		$new_engine_cities = Kohana::$config->load("common.new_engine_cities");
+		if ($new_engine_cities AND $id) {
+			if (in_array($id, $new_engine_cities)) {
+				return Domain::get_domain_by_city($domain_str, $url_str, $protocol_str);
+			} else {
+				if (strpos($url_str, 'user') === false) {
+					return Domain::get_domain_by_city_old($domain_str, $url_str, $protocol_str);
+				} else {
+					return Domain::get_domain_by_city("c", $url_str, $protocol_str);
+				}
+				
+			}
+		}
+
 		return ($old) ? Domain::get_domain_by_city_old($domain_str, $url_str, $protocol_str) : Domain::get_domain_by_city($domain_str, $url_str, $protocol_str);
 	}
 
@@ -321,12 +337,34 @@ class Twig_Functions
 		$main_domain = $config["main_domain"];
 
 		$city_name = strtolower(trim( str_replace($main_domain, "", $domain), "."));
-		$cities = array(
-			"surgut" => "Сургут",
-			"tyumen" => "Тюмень",
-			"nizhnevartovsk" => "Нижневартовск"
-		);
-		return $cities[$city_name];
+
+		$city = ORM::factory('City')->where('seo_name',"=",$city_name)->cached(Date::WEEK)->find();
+
+		// $cities = array(
+		// 	"surgut" => "Сургут",
+		// 	"tyumen" => "Тюмень",
+		// 	"nizhnevartovsk" => "Нижневартовск"
+		// );
+		return $city->title;
+	}
+
+	public static function get_city()
+	{
+		$domain = URL::SERVER('HTTP_HOST');
+		
+		$config = Kohana::$config->load("common");
+		$main_domain = $config["main_domain"];
+
+		$city_name = strtolower(trim( str_replace($main_domain, "", $domain), "."));
+
+		$city = ORM::factory('City')->where('seo_name',"=",$city_name)->cached(Date::WEEK)->find();
+
+		// $cities = array(
+		// 	"surgut" => "Сургут",
+		// 	"tyumen" => "Тюмень",
+		// 	"nizhnevartovsk" => "Нижневартовск"
+		// );
+		return $city;
 	}
 
 	public static function custommenu($root)

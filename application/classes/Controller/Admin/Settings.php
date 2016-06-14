@@ -49,33 +49,69 @@ class Controller_Admin_Settings extends Controller_Admin_Template {
 		$this->redirect('/khbackend/settings/cache');
 	}
 
+	public function action_get_test_message() {
+		$this->use_layout = FALSE;
+		$this->auto_render = FALSE;
+
+
+		$subjects =	array(  "add_notice" => "Поздравляем Вас с успешным размещением объявления на ",
+							"block_contact" => 'Сообщение от модератора сайта ',
+							"contact_verification_code" => "Подтверждение email на ",
+							//"fast_register_success" => "",
+							"forgot_password" => "Восстановление пароля",
+							"kupon_notify" => "Вы приобрели купоны на скидку",
+							"manage_object" => "Сообщение от модератора сайта",
+							"object_to_archive" => "Ваши объявления перемещены в архив",
+							"payment_success" => "Потверждение оплаты. Заказ №",
+							"payment_success_apply_notify" => "Оплата объявлений в газету",
+							"register_data" => "Для вас создана учетная запись на сайте yarmarka.biz",
+							"register_success" => "Подтверждение регистрации на Ярмарке");
+
+		$subject = $this->request->param('id');
+
+		$email = ORM::factory('Email')->where('title','LIKE','%'.$subjects[$subject].'%')->order_by("id","desc")->find();
+
+		$json = array();
+
+		$json['code'] = 200;
+		$json['result'] = ($email->loaded()) ? $email->id: FALSE;
+
+
+		$this->response->body(json_encode($json));
+	}
+
 	public function action_test_email() {
 
+		
 		if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-			if (!isset($_REQUEST['to'])) {
+			if (!isset($_REQUEST['to']) OR !isset($_REQUEST['email_id'])) {
 				die;
 			}
 
-			$toTokens = explode(',', $_REQUEST['to']);
-			$subj = 'Поздравляем Вас с успешным размещением объявления на «Ярмарка-онлайн»!';			
-			$msg = View::factory('emails/add_notice',
-					array(
-						'is_edit' => false,
-						'object' => ORM::factory('Object', 2597476), 
-						'name' => Auth::instance()->get_user()->get_user_name(), 
-						'obj' => ORM::factory('Object', 2597476), 
-						'city' => ORM::factory('City', 1979), 
-						'category' => ORM::factory('Category', 140), 
-						'subdomain' => Region::get_domain_by_city(1979), 
-						'contacts' => array(), 
-						'address' => 'Hoàng Quốc Việt,Phú Mỹ,7,Hồ Chí Minh, Вьетнам'
-					)
-				);
+			$email = ORM::factory('Email', (int) $_REQUEST['email_id']);
 
-			foreach($toTokens as $token) {
-				Email::send($token, Kohana::$config->load('email.default_from'), $subj, $msg);
-			}
+			if (!$email->loaded()) return;
+
+			$toTokens = explode(',', $_REQUEST['to']);
+			// $subj = '(Тест без шаблона) Поздравляем Вас с успешным размещением объявления на «Ярмарка-онлайн»!';			
+			// $msg = View::factory('emails/add_notice',
+			// 		array(
+			// 			'is_edit' => false,
+			// 			'object' => ORM::factory('Object', 2597476), 
+			// 			'name' => Auth::instance()->get_user()->get_user_name(), 
+			// 			'obj' => ORM::factory('Object', 2597476), 
+			// 			'city' => ORM::factory('City', 1979), 
+			// 			'category' => ORM::factory('Category', 140), 
+			// 			'subdomain' => Region::get_domain_by_city(1979), 
+			// 			'contacts' => array(), 
+			// 			'address' => 'Hoàng Quốc Việt,Phú Mỹ,7,Hồ Chí Minh, Вьетнам'
+			// 		)
+			// 	);
+
+			//foreach($toTokens as $token) {
+				Email::send($toTokens, Kohana::$config->load('email.default_from'), $email->title, $email->text);
+			//}
 
 		}
 

@@ -15,10 +15,10 @@
 			<? if ($from OR strtotime($date->format('Y-m-d H:i:s')) >= strtotime($expired)): ?>
 			
 				<div class="row mb10">
-					<div class="col-md-3 col-xs-4 labelcont">
+					<div class="col-md-3  labelcont">
 						<label></label>
 					</div>
-					<div class="col-md-9 col-xs-8">
+					<div class="col-md-9 ">
 								<div class="inp-cont" style=" font-size:16px;">
 									<span style="color:red;">Для продолжения работы с сайтом, пожалуйста, поделитесь с нами информацией о Вашей компании</span>.
 								</div>				
@@ -30,10 +30,10 @@
 			?>
 			
 				<div class="row mb10">
-					<div class="col-md-3 col-xs-4 labelcont">
+					<div class="col-md-3  labelcont">
 						<label></label>
 					</div>
-					<div class="col-md-9 col-xs-8">
+					<div class="col-md-9 ">
 						<div class="inp-cont" style=" font-size:16px;">
 							<span style="color:red;">Для продолжения работы с сайтом, пожалуйста, поделитесь с нами информацией о Вашей компании</span>.
 							Если сейчас у Вас нет возможности заполнить форму, сделайте это в любое удобное время, но не позднее чем <?=$expired?>
@@ -45,10 +45,10 @@
 	
 	
 		<div class="row mb10">
-			<div class="col-md-3 col-xs-4 labelcont">
+			<div class="col-md-3  labelcont">
 				<label>1</label>
 			</div>
-			<div class="col-md-9 col-xs-8">
+			<div class="col-md-9 ">
 						<div class="inp-cont">
 							<div class="">
 								Вы выбрали тип учетной записи "Компания". Для завершения регистрации с этим типом, необходимо предоставить ИНН и загрузить его скан, а также заполнить другие обязательные поля отмеченные зведочкой <span style="color:red;">*</span>.
@@ -58,10 +58,10 @@
 		</div>			
 			
 		<div class="row mb10">
-			<div class="col-md-3 col-xs-4 labelcont">
+			<div class="col-md-3  labelcont">
 				<label>2</label>
 			</div>
-			<div class="col-md-9 col-xs-8">
+			<div class="col-md-9 ">
 						<div class="inp-cont">
 							<div class="">
 								Если вы представитель компании, уже имеющей официальную учетную запись на нашем сайте, и хотите подавать объявления от ее лица, без ограничений, совершите привязку учетной записи к этой компании. (Т.е. компания, в своей учетной записи должна добавить Вашу учетную запись в разделе 'Сотрудники'). Свою учетную запись нужно сменить на тип "Частное лицо"
@@ -71,10 +71,10 @@
 		</div>	
 			
 		<div class="row mb10">
-			<div class="col-md-3 col-xs-4 labelcont">
+			<div class="col-md-3  labelcont">
 				<label>3</label>
 			</div>
-			<div class="col-md-9 col-xs-8">
+			<div class="col-md-9 ">
 						<div class="inp-cont">
 							<div class="">
 								Вы можете не заполнять форму и сбросить тип учетной записи на "Частное лицо" если перейдете по <span class="link" style="cursor:pointer;" href="/user/reset_orgtype" onclick="reset_orgtype()">ссылке</span>. При этом будут применены ограничения на количество объявлений в некоторые рубрики (Продажа квартир и комнат, Аренда квартир и комнат, Вакансии)
@@ -84,10 +84,10 @@
 		</div>			
 			
 		<div class="row mb10">
-			<div class="col-md-3 col-xs-4 labelcont">
+			<div class="col-md-3  labelcont">
 				<label>4</label>
 			</div>
-			<div class="col-md-9 col-xs-8">
+			<div class="col-md-9 ">
 						<div class="inp-cont">
 							<div class="">
 								Не забудьте нажать на кнопку "Сохранить", после заполнения формы!
@@ -102,10 +102,10 @@
 		<? if ($success OR count((array) $errors)): ?>
 
 		<div class="row mb10">
-			<div class="col-md-3 col-xs-4 labelcont">
+			<div class="col-md-3  labelcont">
 				<label></label>
 			</div>
-			<div class="col-md-9 col-xs-8">
+			<div class="col-md-9 ">
 							<div class="inp-cont">
 								<div class="">
 									<? if (count((array) $errors)): ?>
@@ -142,10 +142,10 @@
 			<div class="pb10 pt20">
 
 				<div class="row mb10">
-					<div class="col-md-3 col-xs-4 labelcont">
+					<div class="col-md-3  labelcont">
 						<label>Состояние модерации</label>
 					</div>
-					<div class="col-md-9 col-xs-8">
+					<div class="col-md-9 ">
 							<div class="inp-cont">
 								<div class="">
 									<?=$org_moderate_states[$inn_moderate["inn_moderate"]]?>
@@ -159,10 +159,10 @@
 				
 				<? if ($inn_moderate["inn_moderate_reason"]): ?>				
 					<div class="row mb10">
-						<div class="col-md-3 col-xs-4 labelcont">
+						<div class="col-md-3  labelcont">
 							<label>Причина отклонения</label>
 						</div>
-						<div class="col-md-9 col-xs-8">
+						<div class="col-md-9 ">
 								<div class="inp-cont">
 									<div class="">
 										<?=$inn_moderate["inn_moderate_reason"]?>
@@ -178,19 +178,19 @@
 		<? if ($inn["inn"]): ?>
 
 		<div class="row mb10">
-			<div class="col-md-3 col-xs-4 labelcont">
+			<div class="col-md-3  labelcont">
 				<label>ИНН</label>
 			</div>
-			<div class="col-md-9 col-xs-8">
+			<div class="col-md-9 ">
 				<?=$inn["inn"]?>
 			</div>
 		</div>			
 			
 		<div class="row mb10">
-			<div class="col-md-3 col-xs-4 labelcont">
+			<div class="col-md-3  labelcont">
 				<label>Юридическое название</label>
 			</div>
-			<div class="col-md-9 col-xs-8">
+			<div class="col-md-9 ">
 							<div class="inp-cont">
 								<div class="">
 									<?=$inn["org_full_name"]?>
@@ -200,10 +200,10 @@
 		</div>			
 			
 		<div class="row mb10">
-			<div class="col-md-3 col-xs-4 labelcont">
+			<div class="col-md-3  labelcont">
 				<label>Скан ИНН</label>
 			</div>
-			<div class="col-md-9 col-xs-8">
+			<div class="col-md-9 ">
 							<div class="inp-cont">
 								<img src="<?=$inn["inn_skan"]?>" style="padding:10px;max-width:300px;">
 					  		</div>
@@ -232,10 +232,10 @@
 			</script>
 			<? foreach ($form as $field): ?>
 				<div class="row mb10">
-					<div class="col-md-3 col-xs-4 labelcont">
+					<div class="col-md-3  labelcont">
 						<label><?= $field["title"] ?></label>
 					</div>
-					<div class="col-md-9 col-xs-8">
+					<div class="col-md-9 ">
 						<?
 						$lenth_unput = "col-md-6";
 						if ($field["type"] == "long" OR $field["type"] == "text")

@@ -9,7 +9,7 @@
 				<div class="list list1 col-md-12">
 					<p class="button js-ocontrol-publish button-style1 bg-color-lightgreen mb3" data-id="{{object.id}}">
 							{% if object.is_published %} 
-								<i class="fa fa-trash fa-lg mr5"></i><span>Снять с публикации</span>
+								<i class="fa fa-times fa-lg mr5"></i><span>Снять с публикации</span>
 							{% else %}
 								<i class="fa fa-check fa-lg mr5"></i><span>Опубликовать</span>
 							{% endif %}
@@ -69,7 +69,6 @@
 						{% if object.compiled.author.logo %}
 							<div class="img-cont"><img src="{{  get_file(object.compiled.author.logo['120x90']) }}"></div>
 						{% endif %}
-						<p><span class="moreinfo span-link">Все объявления компании</span></p>
 						<p>{{ object.compiled.author.org_post_address }}</p>
 						<p><i class="ico phone"></i>{{ object.compiled.author.org_phone }}</p>
 					{% endif %}

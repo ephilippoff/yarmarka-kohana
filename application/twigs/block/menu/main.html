@@ -1,12 +1,13 @@
-<div class="popup-menu-cont2l iLight-cont {% if staticMainMenu %}left_menu hidden-xs {% else %}js-mainmenu popup-menu-cont{% endif %} z300">
-	<div class="left brb2 top_level_menu">
+
+<div class="popup-menu-cont2l iLight-cont {% if staticMainMenu %}left_menu mainmenu hidden-xs {% else %}js-mainmenu popup-menu-cont{% endif %} z150" style="cursor:default;{% if staticMainMenu %}position:relative;{% endif %}">
+	<div class="left brb2 top_level_menu"  style="background:white;">
 		<ul class="top" role="menu">
-			{% set true_categories = ['kupony','rabota','avtotransport','nedvizhimost','uslugi', 'stroitelstvo-i-remont', 
+			{% set true_categories = ['kupony','rabota','avtotransport','nedvizhimost','uslugi', 'meditsina-zdorove-tovary-i-uslugi', 'stroitelstvo-i-remont', 
 									'biznes', 'lichnie-veshi', 'tovary-dlya-detei','dlya-doma-i-dachi', 'bitovaya-elektronika', 'znakomstvo-i-obshenie',
 									'sport-otdih-hobby','domashnie-zhivotnye-i-rasteniya', 'v-horoshie-ruki', 'prodovolstvennye-tovary'] %}
 			{% for category in categories1l if category.seo_name in true_categories %}
 				{% set menuHeight = (banners[category.id] is defined and banners[category.id].menu_height) ? banners[category.id].menu_height : '' %}
-				<li class="js-submenu-item" data-submenu-id="section{{category.id}}" class="section{{category.id}}" data-menu-height="{{menuHeight}}">
+				<li class="js-submenu-item" data-submenu-id="section{{category.id}}" class="section{{category.id}}">
 					<a class="span-link" href="/{{category.seo_name}}">{{category.title}}</a>
 				</li>
 			{% endfor %}
@@ -14,30 +15,29 @@
 	</div> 
 	<div class="right brb2 visible-lg visible-md">
 		{% for category in categories1l %}
-			{% set menuHeight = (banners[category.id] is defined and banners[category.id].menu_height) ? banners[category.id].menu_height : 0 %}
+
 			{% set divWidth = (banners[category.id] is defined and banners[category.id].menu_width) ? banners[category.id].menu_width : 400 %}
 			{% set ulWidth = 191 %}
-			<div class="section section{{category.id}}" id="section{{category.id}}" style="width: {{divWidth}}px; display: none;"  data-menu-height="{{menuHeight}}">				
-				<ul style="position: relative;width:100%;" class="submenu-ul">
-					<li>
-						{% if banners[category.id] is defined and file_exist('/uploads/banners/menu/' ~ banners[category.id].image) and banners[category.id].menu_name == 'main' %}
-							<map name="map{{category.id}}" id="map{{category.id}}" style="position: absolute;right:{{banners[category.id].x}}px ; bottom:{{banners[category.id].y}}px;z-index:0;">
-								<area shape="poly" coords="{{banners[category.id].map_params}}" class="" href="/redirect/ref_cb?id={{banners[category.id].id}}" target="_blank" />
-							</map>
-							<img hidefocus="true" style="position: absolute;right:{{banners[category.id].x}}px ; bottom:{{banners[category.id].y}}px;z-index:1;" usemap="#map{{category.id}}" src="/uploads/banners/menu/{{banners[category.id].image}}"/>
-						{% endif %}
-					</li>
-					<li class="li-title ml20"><span class="bold  black fs18" style="width: 165px">{{category.title}}</span></li>
+			<div class="section section{{category.id}}" id="section{{category.id}}" style="width: {{divWidth}}px;  display: none;">				
+				<ul class="submenu-ul">
+					<li class="li-title ml20"><span class="bold  black fs18 w100p">{{category.title}}</span></li>
 					{% for subcategory in categories2l if subcategory.parent_id == category.id %}
-						<li class="ml20" style="width:{{ulWidth}}px;position:relative;z-index:1;">
+						<li class="ml20" style="width:{{ulWidth}}px;">
 							<a href="/{{category.seo_name}}/{{subcategory.seo_name}}">{{subcategory.title}}</a>
 						</span></li>
 					{% endfor %}
 				</ul>
-				{% if file_exist(category.main_menu_image) %}
-						<img  hidefocus="true"  src="{{category.main_menu_image}}">
-				{% endif %}
+				<div class="submenu-img">
+					{% if banners[category.id] is defined and file_exist('/uploads/banners/menu/' ~ banners[category.id].image) and banners[category.id].menu_name == 'main' %}
+						<a href="/redirect/ref_cb?id={{banners[category.id].id}}" class="db" target="_blank">
+							<img hidefocus="true" style="right:{{banners[category.id].x}}px; bottom:{{banners[category.id].y}}px;" src="/uploads/banners/menu/{{banners[category.id].image}}"/>
+						</a>
+					{% else %}
+						<img  hidefocus="true"  src="/static/develop/{{category.main_menu_image}}">
+					{% endif %}
+				</div>
 			</div>
+
 		{% endfor %}
 	</div>
 </div>

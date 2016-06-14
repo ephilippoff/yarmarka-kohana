@@ -155,8 +155,8 @@ class Massload_Avito
 	{
 		foreach ($row as $key=>$value)
 		{ 
-			if ($key <> "images")
-				$row->{$key} = strip_tags($value);
+			if ($key <> "images" AND $value)
+				$row->{$key} = strip_tags(is_array($value) ? $value[0]: $value);
 		}
 		return $row;
 	}

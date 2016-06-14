@@ -1,22 +1,23 @@
-{% extends "layouts/user" %}
+{% extends "layouts/add" %}
+
+{% block title %}
+	Вход
+{% endblock title %}
 
 {% block header %} 
 		{{ requestblock('block_twig/topline', {'favourites':favourites}) }}
 		{% include 'block/header/logoline' %}
-		{% include 'user/add/promo' %}
 {% endblock header %} 
 
 {% block crumbs %}{% endblock crumbs %}
 
 {% block content %}
-	<div class="{{theme_class}}">
-		<div class="menu-cont2 clearfix reg_forgot_block brt2">
-			<div class="col-md-12 right clearfix">
-				<a class="menu-item right" href="/user/registration"><span class="menu-item-cont">Регистрация</span></a>
-				<a class="menu-item right" href="/user/forgot_password"><span class="menu-item-cont">Забыли пароль?</span></a>
-			</div>
-		</div>
+
+	<div class="title_block clearfix reg_forgot_block brt2">
+		<a class="fr ml15" href="/user/registration"><span class="menu-item-cont">Регистрация</span></a>
+		<a class="fr ml15" href="/user/forgot_password"><span class="menu-item-cont">Забыли пароль?</span></a>
 	</div>
+
 	<div class="bg-color-whitesmoke p20">
 		{% if user %}
 			<div class="ta-c pt16 pb15">
@@ -113,7 +114,9 @@
 								</div>				
 							</div>
 						</div>
-					</div>			
+					</div>	
+					<hr>
+					<div id="teddy" class="clearfix"></div>		
 					<!-- enable teddyid -->
 					{{ js("teddypass.js") }}
 					<!-- /enable teddyid -->

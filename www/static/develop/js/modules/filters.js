@@ -125,6 +125,11 @@ define([
             e.preventDefault();
             this.ui.valuesCont.toggle();
             this.ui.valuesCont.parent().parent().siblings().find(".js-filter-values-cont").hide();
+            if (!this.ui.valuesCont.parent().hasClass('active')) {
+                $('.multiselect').removeClass('active');
+                this.ui.valuesCont.parent().addClass('active');
+            }else this.ui.valuesCont.parent().removeClass('active');
+            
         },
         initialize: function(options){
             _.extend(this.options.attibute = {}, this.model.get(0))
@@ -164,6 +169,7 @@ define([
 
     var TextFilterItem = FilterItem.extend({
         template: templates.filters.textFilterItem,
+        className: 'filter-item',
         ui: {
             valuesCont: ".js-filter-values-cont",
             strValue: ".js-filter-str-value",
@@ -193,6 +199,7 @@ define([
     });
 
     var NumericFilterItem = FilterItem.extend({
+        className: 'filter-item',
         template: templates.filters.numericFilterItem,
         ui: {
             valuesCont: ".js-filter-values-cont",
@@ -229,6 +236,7 @@ define([
     });
 
     var IListFilterItem = FilterItem.extend({
+        className: 'filter-item',
         template: templates.filters.ilistFilterItem,
         ui: {
             valuesCont: ".js-filter-values-cont",
@@ -265,6 +273,7 @@ define([
     
 
     var ListFilterItem = FilterItem.extend({
+        className: 'filter-item',
         template: templates.filters.listFilterItem,
         ui: {
             select: "select",
@@ -289,7 +298,9 @@ define([
     });
 
     var ListMultiFilterItem = ListFilterItem.extend({
+        className: 'filter-item',
         template: templates.filters.listBoxFilterItem,
+        //className: 'multi-cont clearfix filter-item',
         ui: {
             valuesCont: ".js-filter-values-cont",
             input: "input",
@@ -352,6 +363,7 @@ define([
     });
 
     var FiltersListView = Marionette.CollectionView.extend({
+        className: "clearfix main-filters-cont",
         getChildView: function(item) {
             var attribute = item.get(0)
             if ( !attribute ) {
@@ -383,13 +395,19 @@ define([
         ui: {
             form: ".js-filters-form",
             submit: ".js-filters-submit",
-            staticFilters: ".js-filters-static input"
+            reset: '.js-filters-reset',
+            infoForm: '.submit-cont>span',
+            staticFilters: ".js-filters-static input",
+            staticFiltersSelect: ".js-filters-static select",
+            filter: ".filter-item"
+
         },
         regions: {
             filters: ".js-filters-cont"
         },
         events: {
-            "click @ui.submit": "submitClick"
+            "click @ui.submit": "submitClick",
+            "click @ui.reset" : "resetForm"
         },
         initialize: function(options) {
             this.bindUIElements();
@@ -401,6 +419,11 @@ define([
             _.each(this.ui.staticFilters, function(item){
                 if (queryParams[$(item).attr("name")]) {
                     $(item).prop("checked", true);
+                }
+            });
+            _.each(this.ui.staticFiltersSelect, function(item){
+                if (queryParams[$(item).attr("name")]) {
+                    $(item).val(queryParams[$(item).attr("name")]);
                 }
             });
         },
@@ -445,10 +468,12 @@ define([
                         }, {
                             success: function(model, response) {
                                 var count = model.get("count");
-                                if (count) {
-                                    s.ui.submit.text("Найдено: " + count + ". Показать!").removeClass("bg-color-crimson").addClass("bg-color-blue");
+                                if (count > 0) {
+                                    s.ui.infoForm.html('<i class="fa fa-check green mr5" aria-hidden="true"></i>Найдено ' + count + ' объявлений');
+                                    s.ui.submit.text('Показать');
                                 } else {
-                                     s.ui.submit.text("Не найдено").addClass("bg-color-crimson").removeClass("bg-color-blue");
+                                     s.ui.infoForm.html(' <i class="fa fa-exclamation red mr5" aria-hidden="true"></i>Не найдено ни одного объявления. Сбросьте параметры поиска и попробуйте еще раз.');
+                                     s.ui.reset.fadeIn();
                                 }
                             }
                         });
@@ -478,6 +503,30 @@ define([
                     }
                 });
         },
+
+        resetForm:function(e){
+            var s = this;
+            e.preventDefault();
+            $('.filter-item').each(function(){
+                var titleHTML = $(this).find('span.name').html();
+                if (titleHTML !== 'Тип сделки') {
+                    $(this).find('.js-filter-anyinput').click();
+                }
+                $(this).find('input[type=text]').each(function(){
+                    $(this).val('');
+                    $(this).trigger('keyup');
+                });
+                $(this).find('select').each(function(){
+                    $(this).find('option').first().attr('selected', 'selected');
+                    $(this).trigger('change');
+                    $(this).find('option').first().removeAttr('selected');
+                });
+            });
+
+            $('#photo:checked, #private:checked').next().click();
+            this.ui.reset.fadeOut();
+        },
+
         getFormValues: function() {
             var s = this, formData = {};
             this.ui.form.serializeArray().map(function(x){formData[x.name] = x.value;});
@@ -527,9 +576,6 @@ define([
             });
 
             
-            if ( !_.isEmpty(this.queryParams) ) {
-                $(".js-filters").show();
-            }
 
             this.filtersLoaded();
 

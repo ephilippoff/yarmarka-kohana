@@ -70,23 +70,33 @@ class Detailpage_Default
 		$domain = new Domain();
 		$object_location = ORM::factory('Location', $object->location_id);
 		$object_location_value = $object_location->loaded() ? trim($object_location->city . ' ' . $object_location->address) : NULL;
+		
+		$info['similar_vip_search_result'] = $this->get_vip_similar_query($object, $domain);
+
+		foreach ($info['similar_vip_search_result'] as $item) {
+			$not_id = array();
+			array_push($not_id, $item['id']);
+		}
+
 		$similar_search_query = Search::searchquery(
 			array(
-				//"hash" => Cookie::get('search_hash'),
 				'active' => true,
-				//'city_id' => array($domain->get_city()->id),
-				'location' => $object_location_value,
-				'expiration' => true,
-				'expired' => true,
-				'is_published' => true,
+				'city_id' => array($domain->get_city()->id),
+				"published" => TRUE,
+				"photocard" => FALSE,
 				'category_id' => $object->category,
-				"not_id" => Cookie::get('ohistory') ? 
-									array_merge(explode(",", Cookie::get('ohistory')), array($object->id)) 
-										: array($object->id)
+				"not_id" => Cookie::get('ohistory') ? array_merge(explode(",", Cookie::get('ohistory')), array($object->id)) : array($object->id)
 			),
 			array("limit" => 10, "page" => 0)
 		);
+
+		// var_dump($similar_search_query); die;
+
 		$info['similar_search_result'] = Search::getresult($similar_search_query->execute()->as_array());
+
+		shuffle($info['similar_search_result']);
+
+		$info['similar_search_result'] = array_merge($info['similar_vip_search_result'], $info['similar_search_result']);
 
 		$info['similar_coords'] = array_map(function($item){
 			return array(
@@ -102,6 +112,26 @@ class Detailpage_Default
 
 		$this->_info = array_merge($this->_info, $info);
 		return $this;
+	}
+
+	public function get_vip_similar_query($object, $domain){
+		$query = Search::searchquery(
+			array(
+				'active' => true,
+				'city_id' => array($domain->get_city()->id),
+				"published" => TRUE,
+				'photocard' => true,
+				'category_id' => $object->category,
+				"not_id" => array($object->id)
+			),
+			array("limit" => 2, "page" => 0)
+		);
+
+		// var_dump($object->id); die;
+
+		$info['similar_vip_search_result'] = Search::getresult($query->execute()->as_array());
+
+		return $info['similar_vip_search_result'];
 	}
 
 }

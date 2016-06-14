@@ -101,6 +101,12 @@ class Service_Lider extends Service
 				return $item->id;
 			} , (array) ORM::factory('Category')->where("seo_name","IN", $categories)->getprepared_all());
 
+		if ( strtotime( $object->date_expiration ) < strtotime( Lib_PlacementAds_AddEdit::lifetime_to_date("45d") ) ) {
+			
+			$object->date_expiration = Lib_PlacementAds_AddEdit::lifetime_to_date("45d");
+			$object->save();
+		}
+		
 		$or = ORM::factory('Object_Service_Photocard')
 					->where("object_id", "=", $object_id)
 					->where("active","=",1)

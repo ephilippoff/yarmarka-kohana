@@ -1,24 +1,35 @@
-<div class="block-title">
-		<span>Функции администратора</span><i class="fa fa-eye fa-lg ml5" onclick="$('.js-admin-control-cont').toggleClass('hidden');"></i>
-</div>
-<div class="row p10 hidden js-admin-control-cont">
-	<p class="button js-ocontrol-edit button-style1 bg-color-crimson mb3" data-id="{{object.id}}">
-		<i class="fa fa-edit fa-lg mr5"></i>Редактировать
-	</p>
-	<p class="button js-ocontrol-publish button-style1 bg-color-lightgreen mb3" data-id="{{object.id}}">
-			{% if object.is_published %} 
-				<i class="fa fa-trash fa-lg mr5"></i><span>Снять с публикации</span>
-			{% else %}
-				<i class="fa fa-check fa-lg mr5"></i><span>Опубликовать</span>
-			{% endif %}
-	</p>
-	<p class="button js-service-up button-style1 bg-color-lightgreen mb3" data-id="{{object.id}}">
-		<i class="fa fa-angle-double-up fa-lg mr5"></i>Поднять
-	</p>
-	<p class="button js-service-premium button-style1 bg-color-lightgreen mb3" data-id="{{object.id}}">
-		<i class="fa fa-question-circle fa-lg mr5"></i>Премиум
-	</p>
-	<p class="button js-service-lider button-style1 bg-color-lightgreen mb3" data-id="{{object.id}}">
-		<i class="fa fa-question-circle fa-lg mr5"></i>Лидер
-	</p>
+<div class="info-block-cont theme2 module">
+	<div class="block-title" style="cursor: pointer;" onclick="$('.inner').toggleClass('hidden'); $('.fr i').toggleClass('fa-minus fa-plus');">
+		<span>Колонка администратора</span><span class="fr"><i class="fa fa-minus"></i></span>
+	</div>
+	<div class="inner">
+		<div class="row">
+			<div class="list list1 col-md-12">
+				<div class="row p10 js-admin-control-cont">
+					<p class="button js-ocontrol-edit button-style1 bg-color-crimson mb3" data-id="{{object.id}}">
+						<i class="fa fa-edit fa-lg mr5"></i>Редактировать
+					</p>
+					<p class="button js-ocontrol-publish button-style1 bg-color-lightgreen mb3" data-id="{{object.id}}">
+						{% if object.is_published %} 
+						<i class="fa fa-trash fa-lg mr5"></i><span>Снять с публикации</span>
+						{% else %}
+						<i class="fa fa-check fa-lg mr5"></i><span>Опубликовать</span>
+						{% endif %}
+					</p>
+					<p class="button js-service-up button-style1 bg-color-lightgreen mb3" data-id="{{object.id}}">
+						<i class="fa fa-angle-double-up fa-lg mr5"></i>Поднять
+					</p>
+					<p class="button js-service-premium button-style1 bg-color-lightgreen mb3" data-id="{{object.id}}">
+						<i class="fa fa-question-circle fa-lg mr5"></i>Премиум
+					</p>
+					<p class="button js-service-lider button-style1 bg-color-lightgreen mb3" data-id="{{object.id}}">
+						<i class="fa fa-question-circle fa-lg mr5"></i>Лидер
+					</p>
+					<p class="button js-service-cities button-style1 bg-color-lightgreen mb3" data-id="{{object.id}}" data-city="{{object.city_id}}">
+						<i class="fa fa-question-circle fa-lg mr5"></i>Несколько городов
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>

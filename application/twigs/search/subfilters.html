@@ -1,19 +1,16 @@
-{% set cols = 3 %}
+{% set cols = 4 %}
 {% set rows = (category_childs_elements|length/cols)|round %}
 {% set i = 0 %}
 <div class="subcategories-cont module subcat-search">
 	<div class="row">
 		{% for col in 0..cols %}
-			<div class="col-md-{{ category_childs_elements_colsize ? category_childs_elements_colsize : 2 }}">
+			<div class="col-md-{{ category_childs_elements_colsize ? category_childs_elements_colsize : 3 }} col-sm-{{ category_childs_elements_colsize ? category_childs_elements_colsize : 3 }} col-xs-6 col-xxs-12">
 				<ul>
 				{% for element in category_childs_elements|slice(i, rows) %}
 					{% set count = link_counters[s_host ~ '/' ~ category_url ~ '/' ~ element.url] %}
 					<li>
 						<div>
 							<a href="{{ url(category_url ~ '/' ~ element.url) }}" title="{{element.title}}" data-weight="{{ element.wight }}">{{element.title}}</a>
-							{% if count > 0 %}
-								<span class="count">{{count}}</span>
-							{% endif %}
 						</div>
 					</li>
 				{% endfor %}
@@ -23,17 +20,41 @@
 		{% endfor %}
 	</div>
 </div>
-<script type="text/javascript">
-	
-	new Yarmarka.UI.Columns.OrderedHeight({ 
-		el: '.subcategories-cont.module.subcat-search', 
-		elementSelector: 'li>div', 
-		forceOneColumnMobile: false,
-		enableAutoCollapse: true,
-		itemWidthSelector: 'a',
-		autoCollapseOptions: {
-			allowedHeight: 100
-		}
-	});
 
+{% if category_childs_elements|length > 15 %}
+
+<script type="text/javascript">
+		desktop_tablet(function(){
+			new Yarmarka.UI.Columns.OrderedHeight({ 
+				el: '.subcategories-cont.module.subcat-search', 
+				elementSelector: 'li>div', 
+				forceOneColumnMobile: false,
+				enableAutoCollapse: true,
+				itemWidthSelector: 'a',
+				autoCollapseOptions: {
+					allowedHeight: 110
+				}
+			});
+		});
 </script>
+
+{% endif %}
+
+{% if category_childs_elements|length > 3 %}
+
+<script type="text/javascript">
+	mobile(function(){
+		new Yarmarka.UI.Columns.OrderedHeight({ 
+			el: '.subcategories-cont.module.subcat-search', 
+			elementSelector: 'li>div', 
+			forceOneColumnMobile: false,
+			enableAutoCollapse: true,
+			itemWidthSelector: 'a',
+			autoCollapseOptions: {
+				allowedHeight: 110
+			}
+		});
+	});
+</script>
+
+{% endif %}

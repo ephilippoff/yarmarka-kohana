@@ -27,15 +27,19 @@ define([ 'underscore', 'backbone', './models/state', './views/initial', './views
 		},
 
 		render: function () {
-
 			/* destroy old view */
-			if (this.currentView) {
+			console.log(this.appState.get('state'));
+			if (this.currentView && this.appState.get('state') == 'initial') {
 				this.currentView.remove();
 			}
 
 			/* create new one */
 			this.currentView = this.getCurrentView();
-			this.$el.empty().append(this.currentView.render());
+			if (this.appState.get('doNotShowAgain') == true && this.appState.get('state') == 'initial') {
+				return;
+			}else this.$el.append(this.currentView.render());
+
+			this.appState.set('doNotShowAgain', true);
 
 			return this.$el;
 		},

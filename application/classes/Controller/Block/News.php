@@ -9,7 +9,8 @@
 		}
 
 		public static function get_items(
-			$categories, 
+			$categories,
+			$city_id,
 			$itemsPerCategory = NULL,
 			$usePagination = false,
 			$page = 1,
@@ -41,6 +42,10 @@
 			$objectsService->selectPublished($query);
 			$objectsService->selectMainImage($query);
 			$objectsService->filterDataList($query, array_keys($categories));
+
+			if ($city_id) {
+				$query = $query->where(DB::expr($city_id), "=", DB::expr("ANY(object.cities)"));
+			}
 
 			$query->order_by('date_expired', 'desc');
 			if ($usePagination) {
@@ -140,14 +145,16 @@
 			$view->isNewsSubcategory = $this->request->post("isNewsSubcategory");
 			$view->onPageFlag = $this->request->post("onPageFlag");
 
+			$city_id = $this->request->post("city_id");
+
 			$cache = Cache::instance('memcache');
-			if (!($categories = $cache->get('main_page_news_cat:{$citySeoName}'))) {
+			if (!($categories = $cache->get("main_page_news_cat:{$citySeoName}"))) {
 				$categories = self::get_categories();
-				$cache->set('main_page_news_cat:{$citySeoName}', $categories, 3600);
+				$cache->set("main_page_news_cat:{$citySeoName}", $categories, 3600);
 			}
-			if (!($newsGroups = $cache->get('main_page_news_items:{$citySeoName}'))) {
-				$newsGroups = self::get_items($categories, $itemsPerCategory);
-				$cache->set('main_page_news_items:{$citySeoName}', $newsGroups, 3600);
+			if (!($newsGroups = $cache->get("main_page_news_items:{$city_id}"))) {
+				$newsGroups = self::get_items($categories, $city_id, $itemsPerCategory);
+				$cache->set("main_page_news_items:{$city_id}", $newsGroups, 3600);
 			}
 			// update total pages value
 			foreach($newsGroups as &$newsGroup) {

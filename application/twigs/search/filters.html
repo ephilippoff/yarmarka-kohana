@@ -1,21 +1,35 @@
-<div class="filters-cont tab-filter clearfix module js-filters" style="display:none;">
-	<form method="GET" action="{{category_url}}" class="js-filters-form">
+<div class="filters-cont tab-filter clearfix module js-filters" style="display: none;">
+	<form method="GET" action="{{category_url}}" class="js-filters-form ta-c">
 		{% if search_text %}
 			<input type="hidden" name="search" value="{{ search_text }}" />
 		{% endif %}
 		<div class="js-filters-cont"></div>
-		<div class="param js-filters-static">
-			<div class="mt10">
-				<label><input type="checkbox" name="photo" value="1"><span><i class="fa fa-camera-retro fa-lg ml3 mr3"></i> Есть фото</span></label>
+		<div class="pos-r params-cont" style="padding: 0px 7px;">
+			<div class="param js-filters-static">
+				<span>Только с фото</span>
+				<input type="checkbox" name="photo" id="photo" value="1" class="cmn-toggle-round">
+				<label for="photo"></label>
+			</div>
+			<div class="param js-filters-static">
+				<span>Только частные</span>
+				<input type="checkbox" name="private" id="private" value="1" class="cmn-toggle-round">
+				<label for="private"></label>
+			</div>
+			<div class="param js-filters-static cont clearfix">
+				<span style="position: relative; top: 5px;">Показывать за</span>
+				<select name="period" class="fr">
+					<option value="0">все время</option>
+					<option value="1">сегодня</option>
+					<option value="2">неделю</option>
+					<option value="3">месяц</option>
+				</select>
+			</div>
+			<div class="submit-cont">
+				<span class="db"></span>
+				<button class="bg-color-blue js-filters-submit">Поиск</button>
+				<button class="bg-color-blue js-filters-reset" style="display: none;">Сбросить</button>
 			</div>
 		</div>
-		<div class="param js-filters-static">
-			<div class="mt10">
-				<label><input type="checkbox" name="private" value="1"><span><i class="fa fa-user fa-lg mr3"></i> Только частные</span></label>
-			</div>
-		</div>
-		<span class="button dib bg-color-blue white js-filters-submit p10 br2" >Поиск</span>
 	</form>
 	
 </div><!--filters-cont-->
-

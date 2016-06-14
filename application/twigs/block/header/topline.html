@@ -1,4 +1,11 @@
-{% include 'block/header/mobile_menu/index' %}
+{% if city in [1979, 1948] %}
+	{% set vk_link = 'https://vk.com/yarmarkasurgut' %}
+{% else %}
+	{% set vk_link = 'https://vk.com/yarmarka_official' %}
+{% endif %}
+
+{% include 'block/header/mobile_menu/index' with {'vk_link' : vk_link} %}
+
 <div class="banner topline hidden-xs {zoneID: 42}"></div>
 <div class="menu-cont menu-cont1 module hidden-sm hidden-xs">
 	<div class="row">
@@ -13,7 +20,7 @@
 		<div class="cont2 w40p fl clearfix">
 			<div class="menu-item-wrp menu-block {% if user %}js-usermenu-dropdown{% endif %} user-dropdown">
 				{% if user %}
-					<a href="/user/" class="menu-item lk"><i class="fa {% if user.org_type == 2 %}fa-group{% else %}fa-user{% endif %} mr3"></i>Личный кабинет<i class="fa fa-caret-down ml5 hidden-sm hidden-xs"></i></a>
+					<a href="/user/userinfo" class="menu-item lk"><i class="fa {% if user.org_type == 2 %}fa-group{% else %}fa-user{% endif %} mr3"></i>Личный кабинет<i class="fa fa-caret-down ml5 hidden-sm hidden-xs"></i></a>
 				{% else %}
 					<a class="menu-item show_on_large hidden-xxs lk" href="/user/login?return={{ strim(get_request_uri(), '/') }}"><i class="fa fa-user mr3"></i>Вход в личный кабинет</a>
 					<a class="menu-item visible-xxs hidden-xs hidden-sm hidden-md hidden-lg show_on_small lk" href="/user/login?return={{ strim(get_request_uri(), '/') }}"><i class="fa fa-user mr3"></i>Вход</a>
@@ -22,7 +29,7 @@
 			{% if user %}
 				<!--<span class="menu-item span-link hidden-sm hidden-xs" onclick="window.location='/user'">Мои объявления <span>~{{get_myobjects_info()}}</span></span>-->
 			{% endif %}
-			<a class="menu-item hidden-sm hidden-xs" href="https://vk.com/yarmarkasurgut" target="_blank"><i class="fa fa-vk"></i> Мы Вконтакте</a>
+			<a class="menu-item hidden-sm hidden-xs" href="{{vk_link}}" target="_blank"><i class="fa fa-vk"></i> Мы Вконтакте</a>
 		</div>
 	</div>
 </div>

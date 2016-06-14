@@ -5,12 +5,12 @@
 	<div class="row">
 		{% set cancelButton = FALSE %}
 		{% for col in 0..cols %}
-			<div class="col-md-4">
+			<div class="col-md-4 col-sm-4 col-xs-6 col-xxs-12">
 				<ul>
 				{% for category in sphinx_category_childs|slice(i, rows) if (s_host ~ '/' ~ category.url ~ sphinx_search_query != dirty_url) %}
 					<li>
 						<a href="{{ url(category.url ~ sphinx_search_query) }}" title="{{category.title}}">{{category.title}}</a>
-						<span class="count">{{category.count}}</span>
+						<span class="count hidden">{{category.count}}</span>
 					</li>
 				{% endfor %}
 				{% if sphinx_category_childs|slice(i, rows)|length > 0 and not cancelButton %}

@@ -17,7 +17,7 @@ class Controller_Detail extends Controller_Template {
 
 		$is_old = $this->request->param("is_old");
 		if ($is_old) {
-			HTTP::redirect("detail/".$this->request->param("object_id").".html", 301);
+			HTTP::redirect_to_object($this->request->param("object_id"), 301);
 			return;
 		}
 
@@ -67,6 +67,7 @@ class Controller_Detail extends Controller_Template {
 			}
 		}
 
+
 		//favourites
 		$twig->favourites = ORM::factory('Favourite')->get_list_by_cookie();
 		//end favourites
@@ -86,6 +87,8 @@ class Controller_Detail extends Controller_Template {
 					);
 			}
 		}
+
+
 		$cUser = \Yarmarka\Models\User::current();
 		$twig->isGuest = $cUser->getIsGuest();
 		$twig->currentUri = $this->request->uri();
@@ -102,7 +105,8 @@ class Controller_Detail extends Controller_Template {
 		LastViews::instance()->set($object->id);
 		$this->response->body($twig);
 		LastViews::instance()->commit();
-		// echo "<pre>"; var_dump($twig->object->compiled['attributes']['adres-raion']); echo "</pre>";die;
+
+		// echo "<pre>"; var_dump($twig); echo "</pre>"; die;
 	}
 
 	protected function validate_cv_mode($categorySeoName) {
@@ -198,9 +202,9 @@ class Controller_Detail extends Controller_Template {
 		$object = $this->request->param("object");
 		$url = $this->request->param("url");
 
-		if ($url <> $this->request->get_full_url()) {
-			HTTP::redirect($url, 301);
-		}
+		// if ($url <> $this->request->get_full_url()) {
+		// 	HTTP::redirect($url, 301);
+		// }
 
 		if ($object->active == 0) {
 		   throw new HTTP_Exception_404;
@@ -268,6 +272,8 @@ class Controller_Detail extends Controller_Template {
 		foreach ((array) $detail_info as $key => $item) {
 			$twig->{$key} = $item;
 		}
+
+		// echo "<pre>"; var_dump($twig); echo "</pre>"; die;
 		
 		$this->response->body($twig);
 	}

@@ -21,7 +21,7 @@
 {% block leftside %}
 	<div class="col-md-8">
 		<div class="row">
-			<div class="col-md-12 col-lg-8">
+			<div class="col-md-12">
 				<article>
 					{% if (object.compiled.images.local_photo|length == 0 and object.compiled.images.remote_photo|length == 0) %}
 						{% include 'detail/nophoto' %}
@@ -33,7 +33,7 @@
 					<button class="more-button module button bg-color-blue" data-role="show-map">Показать на карте</button>
 				{% endif %}
 			</div>
-			<div class="col-lg-4">
+			<div class="col-lg-4 hidden">
 				<div class="banner hidden-sm hidden-xs hidden-md module {zoneID: 45}"></div>
 			</div>
 		</div>

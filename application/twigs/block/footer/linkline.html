@@ -1,14 +1,14 @@
-<div class="gray-theme ">
+<div class="gray-theme {% if onPageFlag == 'add' %}container{% endif %}">
 	<div class="">
 		<div class="row">
-			<div class="{% if onPageFlag == 'add' %} col-md-9 {% else %} col-md-12 {% endif %} brt3" {% if onPageFlag == 'add' %}style="margin-bottom:20px;"{% endif %}>
-				<div class="menu-cont2">
-					<span class="menu-item dib hidden-xs"><span onclick="window.location='/add'" class="menu-item-cont">Подать объявление</span></span>
-					<span class="menu-item dib hidden-xs"><span onclick="window.location='http://feedback.yarmarka.biz/'" class="menu-item-cont">Техподдержка</span></span>
-					<span class="menu-item dib hidden-xs"><span onclick="window.location='http://c.yarmarka.biz/ourservices/reklamodatelyam'" class="menu-item-cont">Рекламодателям</span></span>
-					<span class="menu-item dib hidden-xs"><span onclick="window.location='/article/pravila-razmeshcheniya-obyavlenii'" class="menu-item-cont">Правила</span></span>
-					<span class="menu-item dib hidden-xs"><span onclick="window.location='/article/help'" class="menu-item-cont">Помощь</span></span>
-					<a class="menu-item  dib" target="_blank" href="/article/informatsiya-o-kompanii"><span class="menu-item-cont">О компании</span></a>
+			<div class="col-md-12 brt3" {% if onPageFlag == 'add' %}style="margin-bottom:20px;"{% endif %}>
+				<div class="footer-menu">
+					<a href="/add">Подать объявление</a>
+					<a class="hidden-xs" href="http://feedback.yarmarka.biz/" target="_blank">Техподдержка</a>
+					<a class="hidden-xs" href="/commercial">Рекламодателям</a>
+					<a class="hidden-xs" href="/article/pravila-razmeshcheniya-obyavlenii">Правила</a>
+					<a class="hidden-xs" href="/article/help">Помощь</a>
+					<a target="_blank" href="/article/informatsiya-o-kompanii">О компании</a>
 				</div>
 			</div>
 		</div>
@@ -25,10 +25,10 @@
 				</ul>
 			</div>
 		</div>
-		{% if onPageFlag == 'main' %}
-			<div class="row hidden-xs">
-				<div class="col-md-12">
-					<div class="stat-cont">
+		<div class="row hidden-xs">
+			<div class="col-md-12">
+				{% if onPageFlag == 'main' %}
+				<div class="stat-cont">
 						<img src="http://yarmarka.biz/images/robokassa.jpg">
 						<a rel="nofollow" href="https://www.platron.ru"><img src="http://yarmarka.biz/images/platron.png"></a>
 						<img height="30" src="http://yarmarka.biz/images/visa.png">
@@ -45,12 +45,35 @@
 												} catch (e) {
 												}"></a>
 						<!-- /Yandex.Metrika informer -->
-					</div>
-					<div class="stat-cont">
-						<a target="_blank" href="/article/platezhnye-sistemy-robokassa">Информация о платежной системе Robokassa</a>, <a target="_blank" href="/article/platezhnye-sistemy-platron">Информация о платежной системе Platron</a>
-					</div>
+				</div>
+				<div class="stat-cont">
+					<a target="_blank" href="/article/platezhnye-sistemy-robokassa">Информация о платежной системе Robokassa</a>, <a target="_blank" href="/article/platezhnye-sistemy-platron">Информация о платежной системе Platron</a>
+				</div>
+				{% endif %}
+				<hr>
+				<div class="other_cities fs12">
+					{% if onPageFlag == 'search' %}
+						{% set title = category.title %}
+						{% set catUrl = null %}
+						{% for category in get_categories() %}
+							{% if category_id == category.id %}
+								{% set catUrl = category.url %}
+							{% endif %}
+						{% endfor %}
+					{% else %}
+						{% set title = 'Ярмарка' %}
+					{% endif %}
+					{{title}} в других городах: 
+					{% set neiboors = custommenu('surgut.yarmarka.biz').childs %}
+				 	{% for city in neiboors %}
+				 		{% if city.url == 'nizhnevartovsk.yarmarka.biz/' %}
+				 		<a class="dib mr5" href="http://{{ city.url }}nizhnevartovsk/{{catUrl}}">г. {{ city.title}}</a>
+				 		{% else %}
+				 		<a class="dib mr5" href="http://{{ city.url }}/{{catUrl}}">г. {{ city.title}}</a>
+				 		{% endif %}
+					{% endfor %}
 				</div>
 			</div>
-		{% endif %}
+		</div>
 	</div>
 </div>

@@ -12,36 +12,20 @@
 		{{ requestblock('block_twig/adslinkline', {'city_id': city.id, 'category_id': category.id, 'theme_class': theme_class}) }}
 	{% endblock header %}
 
-	<div class="light-blue-theme detail-cont brt2">
+	<div class="detail-cont brt2">
 		<div class="row">
-			<div class="col-md-2">&nbsp;</div>
-			<div class="col-md-8 detail-cont-in">
-				{% block crumbs %} 
-					Крошки
-				{% endblock crumbs %}
-				<div class="row module">
-					<div class="col-md-12">
-						<h1 class="captionbold fs22 js-object-title-{{object.id}} {% if object.is_published == 0 %} red strike {% endif %}">{{ object.title|e|capitalize }}</h1>
-						<div class="ml10">
-							<div class="fb-like" style="display:inline-block;" data-href="{{ get_request_uri() }}" data-layout="button_count" data-action="like" data-show-faces="false" data-share="true"></div>
-							<div id="vk_like" class="ml10" style="display:inline-block;"></div>
-							<script type="text/javascript">
-								VK.Widgets.Like("vk_like", {type: "button"});
-							</script>
-						</div>
-					</div>
-				</div>
-				<div class="row min-content-height">
-					{% block leftside %} 
-						Левый
-					{% endblock leftside %}
-
-					{% block rightside %} 
-						Правый
-					{% endblock rightside %}
+			<div class="col-md-9 detail-cont-in">
+				<div class="row min-content-height" style="border-right: 1px solid #ccc;">
+					{% block content %}
+					
+					{% endblock content %}
 				</div>
 			</div>
-			<div class="col-md-2">&nbsp;</div>
+			<div class="col-md-3">
+				{% block rightside %} 
+					Правый
+				{% endblock rightside %}
+			</div>
 		</div>
 	</div>
 

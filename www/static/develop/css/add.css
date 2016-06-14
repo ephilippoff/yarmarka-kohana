@@ -126,7 +126,6 @@ img.banner,
 		min-height: 0;
 	}
 	.js-contact .inp-cont.error .js-contact-description {
-		height:0;
 		position:relative;
 		overflow:hidden;
 		display:block !important;
@@ -234,3 +233,4 @@ img.banner,
 .banner {display:none;}
 .top-menu-container .menu-item:not(.js-mainmenu-dropdown) {display:none !important;}
 .top-menu-container>.menu-cont2>.row {height:0;}
+

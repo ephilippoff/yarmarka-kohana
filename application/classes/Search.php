@@ -320,6 +320,10 @@ class Search {
 			$object = $object->where("object_service_photocard.date_expiration", ">", DB::expr("NOW()"));
 			$object = $object->where("object_service_photocard.active","=", 1);
 
+			if ($params->not_id AND is_array($params->not_id)) {
+				$object = $object->where("object_service_photocard.object_id", "NOT IN", $params->not_id);
+			}
+
 			if ( $params->category_id ) {
 				$category_id = $params->category_id;
 				if (!is_array($category_id)) {
@@ -401,6 +405,20 @@ class Search {
 
 		if ($params->org) {
 			$orgtype_filter = array_merge($orgtype_filter, $org_types);
+		}
+
+		if ($params->period) {
+			if ($params->period === 1) {
+				//today
+				$object = $object->where("o.date_created",">=", DB::expr("NOW() - INTERVAL '1 days'") );
+			} else if ($params->period === 2) {
+				//week
+				$object = $object->where("o.date_created",">=", DB::expr("NOW() - INTERVAL '7 days'") );
+			} else if ($params->period === 3) {
+				//month
+				$object = $object->where("o.date_created",">=", DB::expr("NOW() - INTERVAL '31 days'") );
+			} 
+
 		}
 
 		if (count($orgtype_filter)) {

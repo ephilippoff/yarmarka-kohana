@@ -34,7 +34,8 @@
 									<li><a href="<?=URL::site('khbackend/users/moderation')?>">Модерация компаний</a></li>
 									<?php if (Auth::instance()->have_access_to('sms')) : ?>
 										<li><a href="<?=URL::site('khbackend/sms/index')?>">SMS</a></li>
-									<?php endif?>									
+									<?php endif?>
+									<li><a href="<?=URL::site('khbackend/sms/emails')?>">Emails</a></li>
 								</ul>
 							</li>
 						<?php endif; ?>

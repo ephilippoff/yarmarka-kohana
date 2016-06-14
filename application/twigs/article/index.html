@@ -2,10 +2,13 @@
 
 {% set theme_class = 'crimson-theme' %}
 
+{% block title %}
+{{article.title}}
+{% endblock title %}
+
 {% block header %} 
 		{{ requestblock('block_twig/topline', {'favourites':favourites}) }}
 		{% include 'block/header/logoline' %}
-		{% include 'block/header/navigationline/simple' %}
 {% endblock header %} 
 
 {% block crumbs %}{% endblock crumbs %}

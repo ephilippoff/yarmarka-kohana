@@ -41,17 +41,54 @@ class Controller_Redirect extends Controller_Template
 
 		$path_detail_segments = explode("-", $path);
 		if ( $object_id = (int) $path_detail_segments[count($path_detail_segments)-1] ) {
-			HTTP::redirect("/detail/".$object_id, 301);
+			HTTP::redirect_to_object($object_id, 301);
 			return;
-		} else {
-			$query="";
-			if (isset($_SERVER['QUERY_STRING'])) {
-				$query = "?".$_SERVER['QUERY_STRING'];
-			}
-			HTTP::redirect("/".join("/",$path_segments).$query, 301);
-		}
-		echo Debug::vars($path);
+		} 
 
+		$query="";
+		if (isset($_SERVER['QUERY_STRING']) AND $_SERVER['QUERY_STRING']) {
+			$query = "?".$_SERVER['QUERY_STRING'];
+		}
+		// HTTP::redirect("/".join("/",$path_segments).$query, 301);
+		
+
+	 	$uri = $this->request->uri();
+        $route_params = $this->request->param();
+        $query_params = $this->request->query();
+
+        $category_path = $route_params['category_path'];
+        $c = explode('/', $category_path);
+        array_shift($c);
+
+        $category_path = join('/',$c);
+
+        $this->domain = new Domain();
+        if ($proper_domain = $this->domain->is_domain_incorrect()) {
+            HTTP::redirect("http://".$proper_domain, 301);
+        }
+        
+        try {
+            $searchuri = new Search_Url($category_path, $query_params, ($this->domain->get_city()) ? $this->domain->get_city()->id : FALSE);
+        } catch (Kohana_Exception $e) {
+            //TODO Log incorrect seo
+            //HTTP::redirect("/", 301);
+        }
+
+		try {
+		    $searchuri->check_uri_segments();
+		} catch (Kohana_Exception_Withparams $e) {
+		    $error_params = $e->getParams();
+		    HTTP::redirect($error_params["uri"], $error_params["code"]);
+		}
+
+		try {
+		    $searchuri->check_query_params($query_params);
+		} catch (Kohana_Exception_Withparams $e) {
+		    $searchuri->incorrectly_query_params_for_seo = TRUE;
+		}
+
+
+		HTTP::redirect("/".join("/",$path_segments).$query, 301);
 	}
 	
 }

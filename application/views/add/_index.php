@@ -257,8 +257,7 @@
 									<input class="form-control w100 js-contact-code-value" type="text" placeholder="<?=$type_params["placeholder"]?>">
 									<span class="input-group-addon button bg-color-crimson white pl5 pr5 brr3 js-contact-code-ok">ок</span>
 								</div>
-								<span class="inform hidden js-contact-code-description"></span>
-								<div class="input-group w100p hidden js-contact-description"></div>
+								<span class="inform hidden js-contact-code-description js-contact-description"></span>
 							</div>
 						</div>
 					</div>
@@ -455,7 +454,7 @@
 			<? if (property_exists($form_data, 'subject')): ?>
 				<div class="row mb10" id="div_subject">
 					<div class="col-md-3  labelcont">
-						<label>Заголовок:</label>
+						<label>Заголовок объявления:</label>
 					</div>
 					<div class="col-md-9 ">
 						<div class="inp-cont <? if ($form_data->subject["subject_error"]) echo "error"; ?>">
@@ -485,7 +484,7 @@
 			.nicEdit-main ul{ list-style: inside; list-style-type: circle; }
 		</style>
 		<div id="div_textadv">
-			<? if (property_exists($form_data, 'text')): ?>
+			<? if (property_exists($form_data, 'text') AND $form_data->text['text_required']): ?>
 				<div class="row mb10">
 					<div class="col-md-3 col-xs-12 labelcont">
 						<label>Текст объявления:</label>
@@ -591,8 +590,7 @@
 							</div>
 						</div>				
 					</div>
-				</div>		
-				<hr class="dib mb30 w100p">	
+				</div>
 			<? endif; ?>
 		</div>
 
@@ -616,7 +614,7 @@
 										"1m" => "30 дней",
 										"2m" => "60 дней",
 										"3m" => "90 дней");
-									$default_period = "2m";
+									$default_period = "1m";
 									if ($params->lifetime)
 										$default_period = $params->lifetime;
 									?>
@@ -663,7 +661,7 @@
 		<? endif; ?>	
 
 		<? if (!$form_data->_edit OR $prolongation_access): ?>
-			<div class="row mb10">
+			<div class="row mb10 hidden">
 				<div class="col-md-3  labelcont">
 					<label>Срок объявления:</label>
 				</div>
@@ -677,7 +675,7 @@
 										"1m" => "на 30 дней",
 										"2m" => "на 60 дней",
 										"3m" => "на 90 дней");
-									$default_period = "2m";
+									$default_period = "1m";
 									if ($params->lifetime)
 										$default_period = $params->lifetime;
 									?>

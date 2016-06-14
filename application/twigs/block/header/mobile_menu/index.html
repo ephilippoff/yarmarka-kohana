@@ -46,6 +46,7 @@
 		<!-- Search end -->
 		
 		<!-- User menu -->
+		<a href="/add" class="bg-color-crimson white mobile_add">Подать объявление</a>
 		<div class="list_div" id="user_menu">
 			{% if user %}
 			<h2>{{ user.email|e }} <i class="fa fa-caret-right"></i></h2>
@@ -60,14 +61,14 @@
 				<a href="/user/registration">Регистрация</a>
 			</div>
 			{% endif %}
-			<h2>Ваш город: Сургут <i class="fa fa-caret-right"></i></h2>
+			<h2>Ваш город: {{ get_current_city() }} <i class="fa fa-caret-right"></i></h2>
 			<div class="menu_container">
 				{{ requestblock('block_twig/othercities', {'city_id': city.id, 'canonical_url': canonical_url, 'cols' : 2, 'class' : 'mobile'}) }}
 			</div>
 
 			<h2>Дополнительно <i class="fa fa-caret-right"></i></h2>
 			<div class="menu_container">
-				<a href="https://vk.com/yarmarkasurgut" target="_blank"><i class="fa fa-vk"></i> Мы Вконтакте</a>
+				<a href="{{vk_link}}" target="_blank"><i class="fa fa-vk"></i> Мы Вконтакте</a>
 				<a href="http://feedback.yarmarka.biz"><i class="fa fa-question-circle mr3"></i>Техподдержка</a>
 			</div>
 		</div>
@@ -76,7 +77,7 @@
 		<div id="menu">
 			<h2>Объявления <i class="fa fa-caret-right"></i></h2>
 			<div class="menu_container">
-				{{ requestblock('block_twig/mainmenu', {'city_id': city.id}) }}
+				{{ requestblock('block_twig/mobilemenu', {'city_id': city.id}) }}
 			</div>
 			<h2>Новости <i class="fa fa-caret-right"></i></h2>
 			<div class="menu_container">

@@ -8,6 +8,9 @@
 				<div class="col-md-12 clearfix">
 					<div class="clearfix">
 						<span class="author-name">{{object.contact}}</span>
+						{% if object.compiled.author.org_type == 2 %}
+						<a class="moreinfo fr" href="/glavnaya-kategoriya?user_id={{object.compiled.author.id}}&published=1&active=1">Все объявления компании</a>
+						{% endif %}
 						<form action="" class="clearfix module" id="show_contacts">	
 							<div class="contacts-list-cont js-contact-list fl">
 								{% for contact in object.compiled.contacts %}
@@ -31,16 +34,17 @@
 					{% if object.source_id == 1 %}
 						{% if isGuest %}
 							<div class="write-to-author unauthorized">
-								Чтобы отправить сообщение автору нужно <a href="/user/login?return={{ currentUri }}">Авторизоваться</a>
+								Чтобы отправить личное сообщение, нужно <a href="/user/login?return={{ currentUri }}">авторизоваться</a>
 							</div>
 						{% else %}
-							<div 
-								data-role="writeToAuthor" 
-								data-id="{{ object.id }}" 
-								data-email="{{ userEmail }}" 
-								data-is-job-vacancy="{{ isJobVacancy }}"
-								{% if cvAttachedUrl %}data-text="Мое резюме на Ярмарке: {{ cvAttachedUrl }}. " data-state="compose"{% endif %}
-								class="write-to-author"></div>
+						<div 
+							data-role="writeToAuthor" 
+							data-id="{{ object.id }}" 
+							data-email="{{ userEmail }}" 
+							data-is-job-vacancy="{{ isJobVacancy }}"
+							{% if cvAttachedUrl %}data-text="Мое резюме на Ярмарке: {{ cvAttachedUrl }}. " data-state="compose"{% endif %}
+							class="write-to-author dib">
+						</div>
 						{% endif %}
 					{% elseif object.source_id == 2 %}
 						<div class="write-to-author impossible">
@@ -68,7 +72,7 @@
 				</div>
 			{% else %}
 				<div class="col-md-12 col-sm-12">
-					Объявление снято с публикации, контактные данные не доступны.
+					<span class="red">Объявление снято с публикации, контактные данные не доступны.</span>
 				</div>
 			{% endif %}
 		</div>

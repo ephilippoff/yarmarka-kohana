@@ -27,6 +27,15 @@ class Controller_Search extends Controller_Template {
             $route_params = $this->request->param();
             $query_params = $this->request->query();
 
+            if (@$query_params['k']) {
+                
+                $query_params = array(
+                    'search' => $query_params['k']
+                );
+                HTTP::redirect($uri."?".http_build_query($query_params), 301);
+                return;
+            }
+
             try {
                 $searchuri = new Search_Url($route_params['category_path'], $query_params, ($this->domain->get_city()) ? $this->domain->get_city()->id : FALSE);
             } catch (Kohana_Exception $e) {
@@ -118,7 +127,7 @@ class Controller_Search extends Controller_Template {
                 return array(
                     "id" => $item["id"],
                     "title" => addslashes($item["title"]),
-                    "price" => $item["price"],
+                    "price" => $item['price'],
                     "photo" => @$item["compiled"]["images"]["main_photo"]["120x90"],
                     "coords" => array(@$item["compiled"]["lat"], @$item["compiled"]["lon"])
                 );
@@ -126,7 +135,7 @@ class Controller_Search extends Controller_Template {
 
             $objects_for_map = array_merge($objects_for_map, $main_search_coords);
 
-            // var_dump($twig->main_search_result); die;
+            // echo "<pre>"; var_dump($twig->main_search_result); echo "</pre>"; die;
         }
         //end main search
 
@@ -267,11 +276,12 @@ class Controller_Search extends Controller_Template {
             'count_out' => 0,
             'count_in' => 4,
             'limits' => array(
-                "10" => Search_Url::get_suri_without_reserved($this->request->query(),array(),array("limit","page")),
-                "20" => Search_Url::get_suri_without_reserved($this->request->query(), array( "limit" => 20), array("page")),
+                "25" => Search_Url::get_suri_without_reserved($this->request->query(),array(),array("limit","page")),
                 "50" => Search_Url::get_suri_without_reserved($this->request->query(), array( "limit" => 50), array("page")),
+                "75" => Search_Url::get_suri_without_reserved($this->request->query(), array( "limit" => 75), array("page")),
             )
         ));
+
         // $twig->small_pagination = (array(
         //     "prev" => $pagination->previous_page,
         //     "prev_url" => $pagination->url($pagination->previous_page),
@@ -298,8 +308,8 @@ class Controller_Search extends Controller_Template {
             'view' => 'pagination/limit',
             'path' => URL::SERVER("PATH_INFO"),
             'limits' => array(
-                "10" => Search_Url::get_suri_without_reserved($this->request->query(),array(),array("limit","page")),
-                "20" => Search_Url::get_suri_without_reserved($this->request->query(), array( "limit" => 20), array("page")),
+                "30" => Search_Url::get_suri_without_reserved($this->request->query(),array(),array("limit","page")),
+                "40" => Search_Url::get_suri_without_reserved($this->request->query(), array( "limit" => 40), array("page")),
                 "50" => Search_Url::get_suri_without_reserved($this->request->query(), array( "limit" => 50), array("page")),
             )
         ));
@@ -308,7 +318,7 @@ class Controller_Search extends Controller_Template {
 
 
         // $twig->limitList = implode(" ", $limitList);
-        // echo "<pre>"; var_dump($pagination->config['limits']); die; echo "</pre>";
+        // echo "<pre>"; var_dump($twig); die; echo "</pre>";
         //pagination end
 
         Request::current()->param('category_path', $oldCategoryPath);
@@ -412,12 +422,41 @@ class Controller_Search extends Controller_Template {
             $this->process_child_categories($twig->category_childs);
         }
 
-        // if (count($twig->main_search_result) == 0) {
-        //     $this->response->status(404);
-        // }
-        $this->response->body($twig);
+        if (count($twig->main_search_result) == 0) {
+            $twig->other_adverts = $this->find_other_adverts($search_info);
+        }
 
-        // var_dump($twig->main_search_result[1]); die;
+
+        if ($twig->category->id == 2 OR $twig->category->parent_id == 2 ) {
+            $property_map = $twig->main_search_result;
+            $property_map = array_map(function($item){
+                $square = 0;
+                $cost = 0;
+                if(isset($item['compiled']['attributes']['ploshchad'])){
+
+                    $square = $item['compiled']['attributes']['ploshchad']['value'];
+
+                }elseif (isset($item['compiled']['attributes']['ploshchad-doma'])) {
+                    $square = $item['compiled']['attributes']['ploshchad-doma']['value'];
+                }
+
+                if (isset($item['price'])){
+                    $cost = $item['price'];
+                }
+
+                if ($cost != 0 AND $square != 0) {
+                    $squarePrice = (int)($cost/$square);
+                    $item['square_price'] = $squarePrice;
+                    return $item;
+                }
+            }, $property_map);
+
+            $twig->main_search_result = $property_map;
+        }
+
+
+
+        $this->response->body($twig);
 
     }
 
@@ -523,6 +562,7 @@ class Controller_Search extends Controller_Template {
             "source" => $this->params_by_uri->get_reserved_query_params("source"),
             "photo" => $this->params_by_uri->get_reserved_query_params("photo"),
             "video" => $this->params_by_uri->get_reserved_query_params("video"),
+            "period" => $this->params_by_uri->get_reserved_query_params("period"),
             "private" => $this->params_by_uri->get_reserved_query_params("private"),
             "org" => $this->params_by_uri->get_reserved_query_params("org"),
             "filters" => $clean_query_params
@@ -551,7 +591,6 @@ class Controller_Search extends Controller_Template {
                 $clean_query_params
             )
         );
-
         return $info;
     }
 
@@ -664,6 +703,33 @@ class Controller_Search extends Controller_Template {
                         ->find();
 
         return ($search_info->loaded()) ? $search_info->get_row_as_obj() : FALSE;
+    }
+
+    public function find_other_adverts($search_info)
+    {
+       
+        $filters = array(
+                "active" => TRUE,
+                "published" =>TRUE,
+                "city_id" => $search_info->city->id,
+                "category_id" => $search_info->category->id
+        );
+
+
+        $category = $search_info->category;
+
+        while (1 == 1) {
+            $result = Search::getresult(Search::searchquery($filters, array("limit" => 10, "page" => 1))->execute()->as_array());
+
+            if ( count($result) > 0 OR !$category->parent_id OR $category->id == 1) {
+                break;
+            }
+
+            $category = ORM::factory('Category', $category->parent_id);
+            $filters['category_id'] = $category->id;
+        }
+
+        return $result;
     }
     
     public function after()

@@ -1,5 +1,15 @@
 {% extends "layouts/main_with_header" %}
 
+{% block title %}
+
+{% for crumb in crumbs %}
+	{% if not crumb.url %}
+		{{crumb.title}}
+	{% endif %}
+{% endfor %}
+
+{% endblock title %}
+
 {% block css %}
 	{{ parent() }}
 	{{ css("bootstrap.tables.min.css") }}
@@ -11,12 +21,21 @@
 		{{ parent() }}
 	{% endblock header %} 
 
-	{% block crumbs %}{% endblock crumbs %}
+	{% block crumbs %}
+		{% include 'cart/crumbs' %}
+	{% endblock crumbs %}
 
 	<div class="row min-content-height">
-		<div class="col-md-12">
+		<div class="col-md-3">
+			{% block leftside %} 
+				Левая сторона
+			{% endblock leftside %}
+		</div><!--col-->
+		<div class="col-md-9">
 			{% block content %} 
-				контент
+				<div class="{{theme_class}}">
+					<div class="menu-cont2 clearfix brt2">&nbsp;</div>
+				</div>
 			{% endblock content %}
 		</div><!--col-->
 	</div><!--row-->

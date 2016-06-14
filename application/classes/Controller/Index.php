@@ -47,12 +47,18 @@ class Controller_Index extends Controller_Template {
                 "premium" => TRUE,
                 "active" => TRUE,
                 "published" =>TRUE,
-                "city_id" => $this->last_city_id,
+                // "city_id" => $this->city->id,
                 "category_seo_name" => "novosti"
             ),
-            array("limit" => 4, "page" => 1)
+            array("limit" => 100, "page" => 1)
         );
         $twig->premiumnews = Search::getresult($search_query->execute()->as_array());
+
+        usort($twig->premiumnews, function($a1, $a2){
+            $v1 = strtotime($a1['compiled']['services']['premium'][0]['date_expiration']);
+            $v2 = strtotime($a2['compiled']['services']['premium'][0]['date_expiration']);
+            return $v2 - $v1;
+        }); 
         
         $premium_ids = array_map(function($item){
             return $item["id"];
@@ -63,7 +69,7 @@ class Controller_Index extends Controller_Template {
                 "expiration" => TRUE,
                 "active" => TRUE,
                 "published" =>TRUE,
-                "city_id" => $this->last_city_id,
+                "city_id" => $this->city->id,
                 "category_seo_name" => "novosti",
                 //"not_id" => $premium_ids
             ),
@@ -91,7 +97,7 @@ class Controller_Index extends Controller_Template {
                 "expiration" => TRUE,
                 "premium" => TRUE,
                 "category_id" => array(173),
-                "city_id" => ($this->last_city_id) ? array($this->last_city_id) : NULL,
+                "city_id" => $this->city->id,
             ),
             array("limit" => 3, "order" => "date_expired")
         );
@@ -104,7 +110,7 @@ class Controller_Index extends Controller_Template {
                 "published" =>TRUE,
                 "expiration" => TRUE,
                 "category_id" => array(173),
-                "city_id" => ($this->last_city_id) ? array($this->last_city_id) : NULL,
+                "city_id" => $this->city->id,
             ),
             array("limit" => 3, "order" => "date_expired")
         );

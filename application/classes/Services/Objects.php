@@ -28,6 +28,7 @@
 
 		public function selectPublished($query, $value = 1) {
 			$query
+				->where('object.active', '=', 1)
 				->where('object.is_published', '=', $value)
 				->where('object.date_expired', '<=', DB::expr('NOW()'));
 		}
@@ -41,6 +42,13 @@
 				->join('object_rating', 'inner')
 				->on('object_rating.object_id', '=', 'object.id')
 				->where('object_rating.date_expiration', '>', DB::expr('NOW()'));
+		}
+
+		public function filterOnlyVip($query) {
+			$query
+				->join('object_service_photocard', 'inner')
+				->on('object_service_photocard.object_id', '=', 'object.id')
+				->where('object_service_photocard.date_expiration', '>', DB::expr('NOW()'));
 		}
 
 		public function selectCategoryUrl($query) {

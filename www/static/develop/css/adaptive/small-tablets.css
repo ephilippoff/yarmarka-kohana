@@ -16,6 +16,23 @@
 		height: auto !important;
 	}
 
+	.result-item .control-item>input {
+	    height: 20px;
+	    width: 20px;
+	}
+
+	.reklama-cont .banners{
+		height: 55px;
+	}
+
+	.result-item .control-item>.fa{
+		font-size: 24px;
+	}
+
+	.result-item .control-item>.fa-times {
+	    font-size: 26px;
+	}
+
 	.crumbs-h1{
 		font-size: 18px;
 	}
@@ -94,9 +111,9 @@
 	    width: 25%;
 	}
 
-	.ad_wrap:nth-child(3),
-	.ad_wrap:nth-child(6){
-		display: block;
+	.ad_wrap:last-child,
+	.ad_wrap:nth-last-child(2){
+	    display: block;
 	}
 	
 	.breadcrumbs-cont {font-size: 0; position: relative;}

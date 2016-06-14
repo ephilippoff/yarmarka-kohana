@@ -1,0 +1,92 @@
+{% extends "layouts/simple" %}
+
+{% block title %}
+	{% for crumb in crumbs %}
+		{% if not crumb.url %}
+			{{crumb.title}}
+		{% endif %}
+	{% endfor %}
+{% endblock title%}
+
+{% block header %}
+	{{ parent() }}
+	{{ css("commercial.css") }}
+	{% include 'cart/crumbs' %}
+{% endblock header %}
+
+
+{% block content %}
+
+<div class="col-lg-8 col-lg-push-2 col-md-8 col-md-push-2 w100p_img">
+	
+	<div class="ad_title">
+		Наружная реклама в городе Сургут
+	</div>
+	
+	<div class="ta-c mt20">
+		<img src="../static/develop/images/commercial/surgut_banner.jpg" alt="">
+	</div>
+
+	<p>Наружная реклама – мощный канал продвижения для любого бизнеса. Секрет ее успеха очень прост: она доступна для обозрения большой аудитории и хорошо запоминается прохожим и проезжающим мимо. Она в первую очередь необходима тем компаниям, которые хотят заявить о себе и тем самым получить очевидное преимущество перед конкурентами. Даже установка одного  рекламного щита может привести в ваш магазин или офис десятки новых клиентов в день.</p>
+
+	<div class="bg-light-blue">
+		Наружная реклама — способ привлечь новых клиентов и повысить узнаваемость торговой марки
+	</div>
+
+	<div class="ta-c mt20 mb20">
+		<img src="../static/develop/images/commercial/work_process.jpg" alt="">
+	</div>
+
+	<div class="bg-light-blue">
+		Огромный выбор рекламных мест — вот что отличает нас на рынке наружной рекламы Сургута
+	</div>
+
+	<div class="works_wrap mt20 mb30">
+		Боковые брандмауэры
+		<div class="mt10 clearfix mb10">
+			<img src="../static/develop/images/commercial/b1.png" alt="">
+			<div class="text-work">
+				<span class="bold">22 х 13 м (горизонтальный)</span>
+				Аренда — 60000 руб. Монтаж, печать — 90000 руб.
+				<span class="bold">25 х 13 м (горизонтальный)</span>
+				ренда — 55000 руб. Монтаж, печать — 100000 руб.
+			</div>
+		</div>
+		<a href="https://docs.google.com/document/d/186uLZihZloh6OGOfy-Hj9qDNIS-wnVOjq1GO_4a3M_Q/edit">Прайс-лист рекламных поверхностей</a>
+	</div>
+
+	<div class="works_wrap mt20 mb30">
+		Центральный брандмауэр
+		<div class="mt10 clearfix mb10">
+			<img src="../static/develop/images/commercial/b2.png" alt="">
+			<div class="text-work">
+				<span class="bold">17 х 13 м (горизонтальный)</span>
+				Аренда — 70000 руб. Монтаж, печать — 80000 руб.
+			</div>
+		</div>
+		<a href="https://docs.google.com/document/d/186uLZihZloh6OGOfy-Hj9qDNIS-wnVOjq1GO_4a3M_Q/edit">Прайс-лист рекламных поверхностей</a>
+	</div>
+
+	<div class="works_wrap mt20 mb30">
+		Придорожные щиты и призматроны
+		<div class="mt10 clearfix mb10">
+			<img src="../static/develop/images/commercial/b3.png" alt="">
+			<div class="text-work">
+				<span class="bold">Более 50 конструкций<br>в городе Сургуте</span>
+			</div>
+		</div>
+		<a href="http://c.yarmarka.biz/uploads/adress_program.xls">Скачать адресную программу</a>
+	</div>
+
+	<div class="ta-c mb50">
+		<img src="../static/develop/images/commercial/reklama_contacts.png" alt="">
+	</div>
+
+
+</div>
+
+{% endblock content %}
+
+{% block footer %} 
+	{{ parent() }}
+{% endblock footer %}

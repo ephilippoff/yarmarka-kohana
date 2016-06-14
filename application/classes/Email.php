@@ -60,6 +60,11 @@ class Email {
 				$transport = Swift_SendmailTransport::newInstance(empty($config['options']) ? "/usr/sbin/sendmail -bs" : $config['options']);
 
 			break;
+			case 'sendmail-dev':
+				// Create a sendmail connection
+				$transport = Swift_SendmailTransport::newInstance(empty($config['options']) ? "/usr/sbin/sendmail -i -t" : $config['options']);
+
+			break;
 			default:
 				// Use the native connection
 				$transport = Swift_MailTransport::newInstance($config['options']);
@@ -87,6 +92,21 @@ class Email {
 
 		// Determine the message type
 		$html = ($html === TRUE) ? 'text/html' : 'text/plain';
+
+		try {
+
+			$ml = ORM::factory('Email');
+			$ml->title = $subject;
+			$ml->text = $message;
+			$ml->recipient = is_array($to) ? join($to,',') : $to;
+			$ml->sender = is_array($from) ? join($from,',') : $from;
+			$ml->save();
+
+		}
+		catch (Exception $e)
+		{
+			
+		}
 
 		// Create the message
 		$message = Swift_Message::newInstance($subject, $message, $html, 'utf-8');

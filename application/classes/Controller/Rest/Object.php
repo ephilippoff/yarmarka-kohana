@@ -36,7 +36,7 @@ class Controller_Rest_Object extends Controller_Rest {
 							->rule('captcha', 'captcha', array(':value', ""));
 					if ( !$validation->check())
 					{
-						$twig->error = "Не правильный код";
+						$twig->error = "Код введен неверно!";
 						$twig->code = 400;
 					} else {
 						$result = $this->show_contacts($object);
@@ -94,18 +94,31 @@ class Controller_Rest_Object extends Controller_Rest {
 			throw new Exception('Unauthorized');
 		}
 
-		/* prepare message text */
-		$message = 'Вам было отправлено сообщение по объявлению: ' . $object->get_full_url() . "\r\n";
-		$message .= 'Текст сообщения:' . "\r\n";
-		$message .= '------------------------------------' . "\r\n";
-		$message .= htmlspecialchars($this->post->message) . "\r\n";
-		$message .= '------------------------------------' . "\r\n";
-		$message .= 'Email отправителя: ' . $user->email;
+		$object_id = $this->post->object_id;
+		$user_id = $user->id;
+
+		if (Cache::instance('memcache')->get("action_write_to_author:{$object_id}{$user_id}")) {
+			$this->json["code"] = 300;
+			return;
+		}
+
+		Cache::instance('memcache')->set("action_write_to_author:{$object_id}{$user_id}", 1, Date::DAY);
 
 		/* prepare subject */
 		$subject = 'У Вас сообщение на «Ярмарка-онлайн»';
 
-		Email::send( $author->email, Kohana::$config->load('email.default_from'), $subject, $message, false);
+		$msg = View::factory('emails/new_message_from_buyer',
+		     array(
+		         'url' => $object->get_full_url(),
+		         'title' => $object->title,
+		         'user' => $user,
+		         'message' => $this->post->message
+		     )
+		 )->render();
+
+		Email::send( 
+			$author->email
+			, Kohana::$config->load('email.default_from'), $subject, $msg);
 	}
 
 	public function action_callback() {
@@ -262,29 +275,44 @@ class Controller_Rest_Object extends Controller_Rest {
 
 		$auhor = ORM::factory('User', $object->author);
 
+		$description = "";
+
 		if ($type == "block_edit") {
 			$object->moderate_ban_for_edit();
+			$description = "Заблокировано до исправления по причине : $comment";
 		} else if ($type == "block_object") {
 			$object->moderate_ban();
+			$description = "Заблокировано окончательно по причине : $comment";
 		}  else if ($type == "block_full" AND $auhor->loaded()) {
 			$auhor->ban($comment);
+			$description = "Удалено по причине: $comment";
 			//$object->moderate_full_ban();
 		}
 
 		ORM::factory('User_Messages')->add_msg_to_object($id, $comment);
 
-		if ($send_mail AND $auhor->loaded() AND $auhor->email)
-		{
-			$msg = View::factory('emails/manage_object', 
-				array(
-					'UserName' => $auhor->fullname ? $auhor->fullname : $auhor->login,
-					'actions' => array(
-						$comment . ' ('.HTML::anchor($object->get_url(), $object->title).')',
-					),
-				)
-			)->render();
-			Email::send(trim($auhor->email), Kohana::$config->load('email.default_from'), "Сообщение от модератора сайта", $msg);
-		}
+		// moderation log
+		$m_log = ORM::factory('Object_Moderation_Log');
+		$m_log->action_by 	= $user->id;
+		$m_log->user_id 	= $auhor->id;
+		$m_log->description = $description;
+		$m_log->reason 		= $comment;
+		$m_log->object_id 	= $object->id;
+		$m_log->noticed = ($send_mail) ? FALSE: TRUE;
+		$m_log->save();
+
+		// if ($send_mail AND $auhor->loaded() AND $auhor->email)
+		// {
+		// 	$msg = View::factory('emails/manage_object', 
+		// 		array(
+		// 			'UserName' => $auhor->fullname ? $auhor->fullname : $auhor->login,
+		// 			'actions' => array(
+		// 				$comment . ' ('.HTML::anchor($object->get_url(), $object->title).')',
+		// 			),
+		// 		)
+		// 	)->render();
+		// 	Email::send(trim($auhor->email), Kohana::$config->load('email.default_from'), "Сообщение от модератора сайта", $msg);
+		// }
 
 		$this->json["code"] = 200;
 	}
@@ -305,7 +333,8 @@ class Controller_Rest_Object extends Controller_Rest {
 
 		$categories = Controller_Block_News::get_categories($this->post->category);
 		$newsGroups = Controller_Block_News::get_items(
-			$categories, 
+			$categories,
+			NULL,
 			NULL,
 			true,
 			$page,

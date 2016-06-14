@@ -26,26 +26,28 @@ define([
             var s = this;
             e.preventDefault();
             var id = $(e.currentTarget).data("id");
+            var target = e.target;
             app.ocontrol.publishUnpublish(id, {
                 success: function(result) {
                     if (result.is_published) {
-                        $(".js-object-state-"+id).removeClass("red").text("Объявление опубликовано");
+                        $(".js-object-state-"+id).removeClass("red").addClass("green").text("Объявление опубликовано");
                         $(".js-object-title-"+id).removeClass("red").removeClass("strike");
-                        $(".js-object-services-"+id).removeClass("hidden");
+                        $(".js-object-services-"+id).slideDown();
                         $(".js-object-contacts-"+id).text("Контактные данные доступны, обновите страницу");
-                        $(e.currentTarget).find("span").text("Снять с публикации");
+                        s.ui.publishControl.find('i').addClass("fa-times").removeClass('fa-check');
+                        s.ui.publishControlCaption.text('Снять с публикации');
                     } else {
-                        $(".js-object-state-"+id).addClass("red").text("Объявление снято");
+                        $(".js-object-state-"+id).addClass("red").removeClass("green").text("Объявление снято");
                         $(".js-object-title-"+id).addClass("red").addClass("strike");
-                        $(".js-object-services-"+id).addClass("hidden");
+                        $(".js-object-services-"+id).slideUp();
                         $(".js-object-contacts-"+id).text("Объявление снято с публикации, контактные данные не доступны.");
-                        $(e.currentTarget).find("span").text("Опубликовать");
+                        s.ui.publishControl.find('i').removeClass("fa-times").addClass('fa-check');
+                        s.ui.publishControlCaption.text('Опубликовать');
 
                         app.windows.vent.trigger("showWindow","object_callback",{
                                 id: id
                         });
                     }
-                    console.log(result);
                 },
                 error: function(result) {
                     alert(result.errors);
@@ -72,14 +74,30 @@ define([
         showContacts: function(e) {
             var s = this;
             e.preventDefault();
-            var id = $(e.currentTarget).data("id");
+            var $target = $(e.currentTarget);
+            var id = $target.data("id");
             app.ocontrol.contacts(id, {
                 code: this.ui.contactList.find("input").val(),
                 success: function(result) {
                     s.ui.contactList.html(result);
-                    $(e.currentTarget).remove();
+
+                    //$target.remove();
+
+                    s.ui.contactList.find('p').each(function(){
+                       var phone = $(this).html();
+                        if (phone.indexOf('79') !== -1) {
+                            phone = '+'+phone.charAt(0)+' ('+phone.charAt(1)+phone.charAt(2)+phone.charAt(3)+') '+phone.charAt(4)+phone.charAt(5)+phone.charAt(6)+'-'+phone.charAt(7)+phone.charAt(8)+'-'+phone.charAt(9)+phone.charAt(10);
+                        }else {
+                            phone = '+'+phone.charAt(0)+' ('+phone.charAt(1)+phone.charAt(2)+phone.charAt(3)+phone.charAt(4)+') '+phone.charAt(5)+phone.charAt(6)+'-'+phone.charAt(7)+phone.charAt(8)+'-'+phone.charAt(9)+phone.charAt(10);
+                        }
+                        $(this).text(phone);
+                    });
+
+                    s.ui.contactsShow.remove();
+
                 },
                 captcha: function(result) {
+                    s.ui.contactsShow.css('position', 'static');
                     s.ui.contactList.html(result);
                 },
                 error: function(result) {

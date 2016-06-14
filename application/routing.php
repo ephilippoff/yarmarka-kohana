@@ -6,6 +6,18 @@ Route::set('admin', '<controller>(/<action>)', array('controller' => '(admin_.*|
 	throw new HTTP_Exception_404;
 });
 
+Route::set('robots', 'robots.txt')
+	->defaults(array(
+		'controller' => 'Static',
+		'action'     => 'robots',
+	));
+
+Route::set('sitemaps', 'sitemaps/index.xml')
+	->defaults(array(
+		'controller' => 'Static',
+		'action'     => 'sitemaps',
+	));
+
 Route::set('all','<addr>', array('addr' => '.*'))
 	->filter(function($route, $params, $request){
 		$site_disable = Kohana::$config->load("common.site_disable");
@@ -360,8 +372,8 @@ Route::set('search', '<category_path>', array(
 		}
 	});
 
-Route::set('sitemap', '(<subtitle>.)sitemap.xml')
-	->defaults(array(
-		'controller' => 'Static',
-		'action'     => 'sitemap',
-	));
+// Route::set('sitemap', '(<subtitle>.)sitemap.xml')
+// 	->defaults(array(
+// 		'controller' => 'Static',
+// 		'action'     => 'sitemap',
+// 	));

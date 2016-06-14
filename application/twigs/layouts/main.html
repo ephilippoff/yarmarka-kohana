@@ -30,23 +30,22 @@
         {% block css %}
             {% if is_debug_mode() %}
                     {{ css("bootstrap.min.css") }}
-                    {{ css("bootstrap.tables.min.css") }}
                     {{ css("font-awesome.css") }}
                     {{ css("iLight.css") }}
                     {{ css("jquery-ui.css") }}
                     {{ css("css.css") }}
-                    {{ css("animate.css") }}
+                    {{ css("bootstrap.tables.min.css") }}
 
-                    {{ css("adaptive/large-desktops.css") }}
+                    {% if onPageFlag == 'main' %}
+                        {{ css("animate.css") }}
+                    {% endif %}
 
-                    {{ css("adaptive/medium-desktops.css") }}
                     {{ css("adaptive/small-tablets.css") }}
                     {{ css("adaptive/extra-small-phones.css") }}
 
             {% else  %}
 					<!--[if IE 9]>
 						{{ css("bootstrap.min.css") }}
-						{{ css("bootstrap.tables.min.css") }}
 						{{ css("font-awesome.css") }}
 						{{ css("iLight.css") }}
 						{{ css("css.css") }}
@@ -57,7 +56,6 @@
 					<!--<![endif]-->
             {% endif %}
             {{ css("bootstrap-xxs.css") }}
-            {{ css("animate.css") }}
         {% endblock css %}
 
         {{ js("lib/jquery.js") }}
@@ -95,7 +93,7 @@
             {% block body %}
                 {% block footer %} 
                     {% include 'block/footer/linkline' %}
-                    { requestblock('block_twig/debug_info', {}) }
+                    {{ requestblock('block_twig/debug_info', {}) }}
                 {% endblock footer %}
             {% endblock body%}
         </div>
@@ -161,13 +159,15 @@
             <!-- /Userecho -->
 
             {% if not is_debug_mode() %}
-            <!-- Yandex.Metrika counter Surgut-->
-            <!-- Yandex.Metrika counter --><script type="text/javascript"> (function (d, w, c) { (w[c] = w[c] || []).push(function() { try { w.yaCounter15868324 = new Ya.Metrika({ id:15868324, clickmap:true, trackLinks:true, accurateTrackBounce:true, webvisor:true }); } catch(e) { } }); var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); }; s.type = "text/javascript"; s.async = true; s.src = "https://mc.yandex.ru/metrika/watch.js"; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "yandex_metrika_callbacks");</script><noscript><div><img src="https://mc.yandex.ru/watch/15868324" style="position:absolute; left:-9999px;" alt="" /></div></noscript><!-- /Yandex.Metrika counter -->
-            <!-- /Yandex.Metrika counter Surgut--> 
-
-            <!-- Yandex.Metrika counter Common-->
-           <script type="text/javascript"> (function (d, w, c) { (w[c] = w[c] || []).push(function() { try { w.yaCounter6996988 = new Ya.Metrika({ id:6996988, clickmap:true, trackLinks:true, accurateTrackBounce:true, webvisor:true, ut:"noindex" }); } catch(e) { } }); var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); }; s.type = "text/javascript"; s.async = true; s.src = "https://mc.yandex.ru/metrika/watch.js"; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "yandex_metrika_callbacks");</script><noscript><div><img src="https://mc.yandex.ru/watch/6996988?ut=noindex" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
-            <!-- /Yandex.Metrika counter Common-->
+                {% set city = get_city() %}
+                {% if city and city.counter_yandex %}
+                    <!-- Yandex.Metrika counter Surgut-->
+                    <!-- Yandex.Metrika counter --><script type="text/javascript"> (function (d, w, c) { (w[c] = w[c] || []).push(function() { try { w.yaCounter{{city.counter_yandex}} = new Ya.Metrika({ id:{{city.counter_yandex}}, clickmap:true, trackLinks:true, accurateTrackBounce:true, webvisor:true }); } catch(e) { } }); var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); }; s.type = "text/javascript"; s.async = true; s.src = "https://mc.yandex.ru/metrika/watch.js"; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "yandex_metrika_callbacks");</script><noscript><div><img src="https://mc.yandex.ru/watch/15868324" style="position:absolute; left:-9999px;" alt="" /></div></noscript><!-- /Yandex.Metrika counter -->
+                    <!-- /Yandex.Metrika counter Surgut--> 
+               {% endif %}
+                <!-- Yandex.Metrika counter Common-->
+               <script type="text/javascript"> (function (d, w, c) { (w[c] = w[c] || []).push(function() { try { w.yaCounter6996988 = new Ya.Metrika({ id:6996988, clickmap:true, trackLinks:true, accurateTrackBounce:true, webvisor:true, ut:"noindex" }); } catch(e) { } }); var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); }; s.type = "text/javascript"; s.async = true; s.src = "https://mc.yandex.ru/metrika/watch.js"; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "yandex_metrika_callbacks");</script><noscript><div><img src="https://mc.yandex.ru/watch/6996988?ut=noindex" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+                <!-- /Yandex.Metrika counter Common-->
             {% endif %}
         <!--/noindex-->
     </body>

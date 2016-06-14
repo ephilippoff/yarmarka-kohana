@@ -1,8 +1,8 @@
-$(document).ready(function(){
+// $(document).ready(function(){
 	
-	recalc_gadget();
+	
 
-});
+// });
 
 function recalc_gadget() {
 	var html = $('html'),
@@ -40,9 +40,10 @@ function desktop(action){
 	}
 }
 
+function desktop_tablet(action){
+	if ($('html').is('.desktop, .tablet')) {
+		action();
+	}
+}
 
-$(document).ready(function(){
-	desktop(function(){
-		$(this).css('background', '#333');
-	});
-});
+recalc_gadget();

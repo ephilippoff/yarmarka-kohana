@@ -1,89 +1,118 @@
-<table class="table-result-info">
-{% if object.is_premium %}
-	<tr class="tr premium_tr" data-id="{{object.id}}">
-{% else %}
-	<tr class="tr" data-id="{{object.id}}">
-{% endif %}
-		<td class="td td-1 hidden-xs"><!-- Секция фото -->
-			<div class="img-cont">
-				<div class="img-wrapper">
-					{% if object.compiled.images.main_photo %}
-					<img class="img-frame" src="{{ get_file(object.compiled.images.main_photo['120x90']) }}" alt="{{ object.title|e }}">
-					<span class="photos-count">{{object.compiled.images.local_photo|length + object.compiled.images.remote_photo|length}}</span>
-					{% else %}
-					<img class="img-frame" src="{{staticfile('images/nophoto136x107.png')}}">
-					{% endif %}
-				</div>
-				{% if object.is_premium %}
-				<span class="premium-tape"></span>
-				{% endif %}
-			</div>
-		</td>
-		<td class="td td-2"><!-- Секция контент -->
-			<p class="title">
-				{% set is_favourite = 'fa-heart-o' %}
-				{% if object.id in favourites %}
-				{% set is_favourite = 'fa-heart' %}
-				{% endif %}
-				<i class="fa {{is_favourite}} fa-lg mr5 js-favourite js-favourite-ico pointer red" data-id="{{object.id}}" title="Избранное"></i>
-				<a href="{{ object.compiled.url }}" title="{{ object.title|e }}" class="object-caption bold {% if object.is_published == 0 %} red strike {% endif %}">
-					{{ object.title|e }}
-				</a>
-			</p>
-			{% if object.is_premium %}
-			<p class="style1"><span>{{ object.compiled.city }}</span></p>
-			{% else %}
-			<p class="style1"><span>{{ object.date_created|date("d.m") }}</span> / <span>{{ object.compiled.city }}</span> </p>
+<div class="ad-mini-wrap clearfix {% if object.is_premium %}premium{% endif %}" onclick="javascript:window.location.href = '{{ object.compiled.url }}'">
+	<div class="img-wrap fl hidden-xxs">
+		{% if object.compiled.images.main_photo %}
+		<img class="img-frame" src="{{ get_file(object.compiled.images.main_photo['120x90']) }}" alt="{{ object.title|e }}">
+			{% if object.compiled.images.local_photo|length + object.compiled.images.remote_photo|length > 1 %}
+				<span class="photos-count hidden-xs">{{object.compiled.images.local_photo|length + object.compiled.images.remote_photo|length}}</span>
 			{% endif %}
-			{% if object.price > 0 %}
-			<p class="amount">{{ object.price|number_format(0, ' ', ' ') }} руб.</p>
-			{% endif %}
+		{% else %}
+		<img class="img-frame" src="{{staticfile('images/nophoto136x107.png')}}">
+		{% endif %}
+	</div>
 
-			{% if object.compiled.attributes|length > 0 %}
+
+	<div class="main-ad-wrap fl">
+		<a href="{{ object.compiled.url }}" title="{{ object.title|e }}" class="object-caption bold {% if object.is_published == 0 %} red strike {% endif %}">
+			{{ object.title|e }}
+		</a> 
+		
+		{% if object.is_premium %}
+		<span class="premium-tape" onclick="event.stopPropagation()"><a href="/commercial/premium" target="_blank" class="db"><i class="fa fa-star" title="Премиум-объявление" aria-hidden="true"></i></a></span>
+		{% endif %}
+
+		<div class="clearfix hidden-lg small_visible">
+			{% if object.compiled.attributes.zarplata.value > 0 %}
+				<span class="price fl">{{object.compiled.attributes.zarplata.value}} <i class="fa fa-rub" aria-hidden="true"></i></span>
+			{% elseif object.price > 0 %}
+				<span class="price fl">{{ object.price|number_format(0, ' ', ' ') }} <i class="fa fa-rub" aria-hidden="true"></i></span>
+			{% else %}
+			{% endif %}
+		</div>
+
+
+
+		{% if object.is_premium %}
+		<p class="date fs12 hidden-lg small_visible"><span>{{ object.compiled.city }}</span></p>
+		{% else %}
+		<p class="date fs12 hidden-lg small_visible"><span>{{ object.date_created|date("d.m") }} / {{ object.compiled.city }}</span> </p>
+		{% endif %}
+
+
+
+		{% if object.is_premium %}
+			<div class="hidden-xxs">{{object.full_text|slice(0,100)}}...</div>
+		{% else %}
 			<table class="table-details">									
 				<tbody>
-					{% if clean_query_params|keys|length > 0 %}
+				{% if clean_query_params|keys|length > 0 %}
 					{% for attr in object.compiled.attributes if attr.value and attr.seo_name in clean_query_params|keys %}
-					<tr>
-						<td class="attr-title">{{ attr.title }}</td>
-						<td class="value">{{ attr.value|e }}</td>
-					</tr>
+						{% if attr.title != 'Цена' %}
+							<tr>
+								<td class="">{{ attr.title }}</td>
+								<td class="ml10">{{ attr.value|e }}</td>
+							</tr>
+						{% endif %}
 					{% endfor %}
 					{% else %}
 					{% for attr in object.compiled.attributes|slice(0, 3) if attr.value %}
-					<tr>
-						<td class="attr-title">{{ attr.title }}</td>
-						<td class="value">{{ attr.value|e }}</td>
-					</tr>
+						{% if attr.title != 'Цена' %}
+							<tr>
+								<td class="">{{ attr.title }}</td>
+								<td class="ml10">{{ attr.value|e }}</td>
+							</tr>
+						{% endif %}
 					{% endfor %}
-					{% endif %}
-				</tbody></table>
 				{% endif %}
-				{% if object.is_published == 0 %}
-				<p class="pt10 pb10 js-object-state-{{object.id}} red">Объявление снято с публикации</p>
-				{% endif %}
-			</td>		
-			<td class="td td-company-info hidden-xs"><!-- Секция о компании -->
-				{% if object.compiled.author.org_type == 2 and object.compiled.author.role != 9 and object.compiled.author.role != 2 %}
-				{% if object.compiled.author.logo %}
-				<div class="img-cont">
-					<img src="{{ get_file( object.compiled.author.logo['120x90']) }}" alt="">
-				</div>
-				{% endif %}
-				<div class="title mt5">{{ object.compiled.author.org_name }}</div>
-				{#<div class="state mt5 red" style="font-size:10px;">Компания не проверена<i class="fa fa-question-circle fa-lg ml3"></i></div>#}
-				{% endif %}
-			</td>
-			<td class="td td-icons hidden" style="text-align:center;">
-				{% set services = get_service_icon_info(object.compiled.services, check_access("object.moderate")) %}
-				{% for services in services %}
-				<i class="fa {{ services.icon_class }} fa-lg gray" title="{{services.title}}"></i>
-				{% endfor %}		
-			</td>
-		</tr>
-</table>
+				</tbody>
+			</table>
+		{% endif %}
+
+	</div>
 
 
-	{% if loop.index in banner_zone_positions|keys %}
-	<div class="banner {zoneID: {{banner_zone_positions[loop.index]}} }"></div>
-	{% endif %}
+	<div class="info-wrap fr">
+
+		<div class="ta-r">
+			{% set is_favourite = 'fa-heart-o' %}
+			{% if object.id in favourites %}
+			{% set is_favourite = 'fa-heart' %}
+			{% endif %}
+			<i class="fa {{is_favourite}} fa-lg mr5 js-favourite js-favourite-ico pointer red" data-id="{{object.id}}" title="В избранное"></i>
+		</div>
+
+		<div class="clearfix small_hidden">
+			{% if object.compiled.attributes.zarplata.value > 0 %}
+				<span class="price">{{object.compiled.attributes.zarplata.value}} <i class="fa fa-rub" aria-hidden="true"></i></span>
+			{% elseif object.price > 0 %}
+				<span class="price">{{ object.price|number_format(0, ' ', ' ') }} <i class="fa fa-rub" aria-hidden="true"></i></span>
+			{% else %}
+			<span class="price">&nbsp;</span>
+			{% endif %}
+
+			{% if object.square_price %}
+			<span class="price square_price w100p">{{object.square_price|number_format(0, ' ', ' ')}} <i class="fa fa-rub" aria-hidden="true"></i>/кв<sup>2</sup></span>
+			{% endif %}
+		</div>
+
+		{% if object.is_premium %}
+		<p class="date fs12 ta-r small_hidden"><span>{{ object.compiled.city }}</span></p>
+		{% else %}
+		<p class="date fs12 ta-r small_hidden"><span>{{ object.date_created|date("d.m") }} / {{ object.compiled.city }}</span> </p>
+		{% endif %}
+	</div>
+
+</div>
+
+{% if loop.index == 3 %}
+	<ins class="adsbygoogle"
+		style="display:inline-block;width:100%;height:90px"
+		data-ad-client="ca-pub-4714092941447146"
+		data-ad-slot="1610833118"></ins>
+	<script>
+	(adsbygoogle = window.adsbygoogle || []).push({});
+	</script>
+{% endif %}
+
+{% if loop.index in banner_zone_positions|keys %}
+<div class="banner {zoneID: {{banner_zone_positions[loop.index]}} }"></div>
+{% endif %}
