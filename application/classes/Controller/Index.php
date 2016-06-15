@@ -47,18 +47,28 @@ class Controller_Index extends Controller_Template {
                 "premium" => TRUE,
                 "active" => TRUE,
                 "published" =>TRUE,
-                // "city_id" => $this->city->id,
                 "category_seo_name" => "novosti"
             ),
-            array("limit" => 100, "page" => 1)
+            array("limit" => 500, "page" => 1)
         );
         $twig->premiumnews = Search::getresult($search_query->execute()->as_array());
+
+        //Выбираем новости только по параметру [cities]
+
+        foreach ($twig->premiumnews as $item) {
+            $news_cities = str_replace(array('{','}'), '', $item['cities']);
+            $news_cities = explode(',', $news_cities);
+            if (!in_array($this->city->id, $news_cities)) {
+                unset($item);
+                sort($twig->premiumnews);
+            }
+        }
 
         usort($twig->premiumnews, function($a1, $a2){
             $v1 = strtotime($a1['compiled']['services']['premium'][0]['date_expiration']);
             $v2 = strtotime($a2['compiled']['services']['premium'][0]['date_expiration']);
             return $v2 - $v1;
-        }); 
+        });
         
         $premium_ids = array_map(function($item){
             return $item["id"];
