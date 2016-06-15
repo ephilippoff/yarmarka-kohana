@@ -67,11 +67,20 @@
 			/* get services */
 			$objectsService = $this->getService('Objects');
 
+			/* get city seo name from url */
+			$citySeoName = 'tyumen';
+			$uriMatches = array();
+			if (preg_match('/(.*).' . Kohana::$config->load('common.main_domain') . '/', $_SERVER['HTTP_HOST'], $uriMatches)) {
+
+				$citySeoName = $uriMatches[1];
+
+			}
+
 			/* get data */
 			$query = $objectsService->getObjects();
 			$objectsService->selectMainImage($query);
 			$objectsService->selectPublished($query);
-			// $objectsService->filterByCitySeoName($query, $citySeoName);
+			$objectsService->filterByCitySeoName($query, $citySeoName);
 			$objectsService->filterOnlyVip($query);
 			$objectsService->selectCategoryUrl($query);
 			$items = $query->execute();
