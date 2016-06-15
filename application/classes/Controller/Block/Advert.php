@@ -76,6 +76,8 @@
 
 			}
 
+			echo "<div class='hidden'>";echo $citySeoName; echo "</div>";
+
 
 			/* get data */
 			$query = $objectsService->getObjects();
