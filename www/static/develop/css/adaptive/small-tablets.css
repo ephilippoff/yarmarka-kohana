@@ -111,9 +111,9 @@
 	    width: 25%;
 	}
 
-	.ad_wrap:nth-child(3),
-	.ad_wrap:nth-child(6){
-		display: block;
+	.ad_wrap:last-child,
+	.ad_wrap:nth-last-child(2){
+	    display: block;
 	}
 	
 	.breadcrumbs-cont {font-size: 0; position: relative;}

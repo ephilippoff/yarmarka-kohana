@@ -25,7 +25,7 @@
 		<div class="col-md-6 main_block">
 			<div class="row">
 				<div class="col-md-12">
-					{{ requestblock('block_advert/main_page_latest', {'city_id': city.id, 'theme_class': theme_class}) }}
+					{{ requestblock('block_advert/main_page_vip', {'city_id': city.id, 'theme_class': theme_class}) }}
 					{% include 'index/promo/photo_news' %}
 					{{ requestblock('block_news/main_page', {'itemsPerCategory' : 6, 'city_id': city.id}) }}
 					<div class="banner module {zoneID: 18 }"></div>

@@ -320,6 +320,10 @@ class Search {
 			$object = $object->where("object_service_photocard.date_expiration", ">", DB::expr("NOW()"));
 			$object = $object->where("object_service_photocard.active","=", 1);
 
+			if ($params->not_id AND is_array($params->not_id)) {
+				$object = $object->where("object_service_photocard.object_id", "NOT IN", $params->not_id);
+			}
+
 			if ( $params->category_id ) {
 				$category_id = $params->category_id;
 				if (!is_array($category_id)) {

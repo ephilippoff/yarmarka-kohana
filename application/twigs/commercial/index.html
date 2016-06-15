@@ -1,5 +1,12 @@
 {% extends "layouts/simple" %}
 
+{% block title %}
+	{% for crumb in crumbs %}
+		{% if not crumb.url %}
+			{{crumb.title}}
+		{% endif %}
+	{% endfor %}
+{% endblock title%}
 
 {% block header %}
 	{{ parent() }}
@@ -21,7 +28,7 @@
 				</div>
 				<div class="service-item-wrap">
 					<div class="title">Индор <br>реклама</div>
-					<a href="http://indoor.yarmarka.biz/" class="link" target="_blank">подробнее</a>
+					<a href="commercial/indoor" class="link">подробнее</a>
 				</div>
 			</div>
 		</div>

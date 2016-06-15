@@ -1,4 +1,4 @@
-<div class="gray-theme ">
+<div class="gray-theme {% if onPageFlag == 'add' %}container{% endif %}">
 	<div class="">
 		<div class="row">
 			<div class="col-md-12 brt3" {% if onPageFlag == 'add' %}style="margin-bottom:20px;"{% endif %}>
@@ -54,13 +54,23 @@
 				<div class="other_cities fs12">
 					{% if onPageFlag == 'search' %}
 						{% set title = category.title %}
+						{% set catUrl = null %}
+						{% for category in get_categories() %}
+							{% if category_id == category.id %}
+								{% set catUrl = category.url %}
+							{% endif %}
+						{% endfor %}
 					{% else %}
 						{% set title = 'Ярмарка' %}
 					{% endif %}
 					{{title}} в других городах: 
 					{% set neiboors = custommenu('surgut.yarmarka.biz').childs %}
 				 	{% for city in neiboors %}
-				 		<a class="dib mr5" href="http://{{ city.url }}">г. {{ city.title}}</a>
+				 		{% if city.url == 'nizhnevartovsk.yarmarka.biz/' %}
+				 		<a class="dib mr5" href="http://{{ city.url }}nizhnevartovsk/{{catUrl}}">г. {{ city.title}}</a>
+				 		{% else %}
+				 		<a class="dib mr5" href="http://{{ city.url }}/{{catUrl}}">г. {{ city.title}}</a>
+				 		{% endif %}
 					{% endfor %}
 				</div>
 			</div>

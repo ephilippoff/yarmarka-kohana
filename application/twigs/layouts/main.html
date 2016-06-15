@@ -30,23 +30,22 @@
         {% block css %}
             {% if is_debug_mode() %}
                     {{ css("bootstrap.min.css") }}
-                    {{ css("bootstrap.tables.min.css") }}
                     {{ css("font-awesome.css") }}
                     {{ css("iLight.css") }}
                     {{ css("jquery-ui.css") }}
                     {{ css("css.css") }}
-                    {{ css("animate.css") }}
+                    {{ css("bootstrap.tables.min.css") }}
 
-                    {{ css("adaptive/large-desktops.css") }}
+                    {% if onPageFlag == 'main' %}
+                        {{ css("animate.css") }}
+                    {% endif %}
 
-                    {{ css("adaptive/medium-desktops.css") }}
                     {{ css("adaptive/small-tablets.css") }}
                     {{ css("adaptive/extra-small-phones.css") }}
 
             {% else  %}
 					<!--[if IE 9]>
 						{{ css("bootstrap.min.css") }}
-						{{ css("bootstrap.tables.min.css") }}
 						{{ css("font-awesome.css") }}
 						{{ css("iLight.css") }}
 						{{ css("css.css") }}
@@ -57,7 +56,6 @@
 					<!--<![endif]-->
             {% endif %}
             {{ css("bootstrap-xxs.css") }}
-            {{ css("animate.css") }}
         {% endblock css %}
 
         {{ js("lib/jquery.js") }}
@@ -83,7 +81,7 @@
         {% block js %}{% endblock js %}
 
     </head>
-    <body class="{% block bodyclass %}{% endblock bodyclass%}">
+    <body class="aasd {% block bodyclass %}{% endblock bodyclass%}">
 
 		<!--[if lte IE 8]>
 			<div class="for-ie-msg-cont">

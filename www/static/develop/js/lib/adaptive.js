@@ -40,4 +40,10 @@ function desktop(action){
 	}
 }
 
+function desktop_tablet(action){
+	if ($('html').is('.desktop, .tablet')) {
+		action();
+	}
+}
+
 recalc_gadget();

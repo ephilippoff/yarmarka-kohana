@@ -368,8 +368,8 @@ var Yarmarka = {
             expandWrapperCssClass: 'auto-collapse-expand-wrapper',
             el: '[data-auto-collapse]',
             expandLabel: 'Показать весь список',
-            animateDuration: 1500,
-            height: 80
+            animateDuration: 1000,
+            height: 1000
         };
         $.extend(this.options, options);
 
@@ -447,7 +447,10 @@ var Yarmarka = {
             this.$content.trigger('expand_start');
             this.state(true).promise().done(function () {
                 //restore height to auto -> avoid problems when resize
-                me.$el.css('height', 'auto');
+                me.$el.css({
+                    'height' : 'auto',
+                    'margin-bottom' : 0
+                });
             });
         },
 
