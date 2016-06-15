@@ -71,6 +71,7 @@
 			$query = $objectsService->getObjects();
 			$objectsService->selectMainImage($query);
 			$objectsService->selectPublished($query);
+			$objectsService->filterByCitySeoName($query, $citySeoName);
 			$objectsService->filterOnlyVip($query);
 			$objectsService->selectCategoryUrl($query);
 			$items = $query->execute();
