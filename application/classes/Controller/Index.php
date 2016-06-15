@@ -55,7 +55,7 @@ class Controller_Index extends Controller_Template {
 
         //Выбираем новости только по параметру [cities]
 
-        echo "<div class='hidden'>"; echo $this->city->id; echo "</div>";
+        echo "<div class='hidden'>текущий город "; echo $this->city->id; echo "</div>";
 
         foreach ($twig->premiumnews as $item) {
             $news_cities = str_replace(array('{','}'), '', $item['cities']);
