@@ -1,3 +1,4 @@
+{% if data|length > 0 %}
 <div class="latest_ads clearfix module">
 	<div class="title_block brt2">Интересные предложения <a href="/commercial/leader" target="_blank" class="fr">Хочу сюда попасть</a> </div>
 	{% for item in data|slice(0,8) %}
@@ -20,3 +21,4 @@
 	</div>
 	{% endfor %}
 </div>
+{% endif %}
