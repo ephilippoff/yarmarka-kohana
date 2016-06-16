@@ -66,7 +66,12 @@
 				<hr>
 			{% endif %}
 		{% endfor %}
-	{% elseif catTitle == 'all' %} <!-- Вывод для всем рубрикам -->
+
+
+
+
+
+	{% elseif catTitle == 'all' %} <!-- Вывод по всем рубрикам -->
 		{% for item in data %}
 			<div class="row" data-role="main_page_news" data-category="{{ item.id }}" data-pages="{{ item.pages }}">
 				<div class="col-md-12">
@@ -115,6 +120,12 @@
 			</div>
 			<hr>
 		{% endfor %}
+
+
+
+
+
+
 	{% else %} <!-- Вывод для одной рубрики -->
 		{% for item in data %}
 			{% if item.id == catTitle or item.title == catTitle %}
