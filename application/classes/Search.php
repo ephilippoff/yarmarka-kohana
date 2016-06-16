@@ -146,6 +146,7 @@ class Search {
 			$select = "category.title, category.url, count(o.id)";
 			$table_name = "object";
 		}
+
 		
 
 		if ($params->hash) {
@@ -156,10 +157,12 @@ class Search {
 			}
 		}
 
+
+
 		$order = ($params->order) ? $params->order : "date_created";
 		$order_direction = ($params->order_direction) ? $params->order_direction : "DESC";
 
-		$limit = ($params->limit) ? (int) $params->limit : 10;
+		$limit = ($params->limit) ? (int) $params->limit : 30;
 		$page = ($params->page) ? (int) $params->page : 0;
 
 		$active = (isset($params->active)) ? $params->active : TRUE;
@@ -481,6 +484,8 @@ class Search {
 			$category_id = $params->category_id ? $params->category_id : 0;
 
 			$sphinx_result = Sphinx::search($params->search_text, $category_id, $city_id, FALSE, NULL, 0, 1000);
+
+			// var_dump($category_id); die;
 			$objects = Sphinx::getObjects($sphinx_result);
 			$ids = implode(",",$objects);
 			$object = $object->where("o.id","IN",DB::expr("(".$ids.")"));
