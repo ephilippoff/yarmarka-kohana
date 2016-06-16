@@ -32,7 +32,7 @@ class Controller_Search extends Controller_Template {
                 $query_params = array(
                     'search' => $query_params['k']
                 );
-                HTTP::redirect($uri."?".http_build_query($query_params), 301);
+                HTTP::redirect($uri."=".http_build_query($query_params), 301);
                 return;
             }
 
@@ -77,6 +77,8 @@ class Controller_Search extends Controller_Template {
 
         $search_params = Search_Url::clean_reserved_query_params($this->request->query());
 
+        // var_dump($this->request->query()); die;
+
         //link counters
         if ($search_info->enable_link_couters) {
             $search_info->link_counters = Search_Url::getcounters($search_info->s_host, $search_info->category_url, array_merge($search_info->category_childs, $search_info->category_childs_elements) );
@@ -114,12 +116,14 @@ class Controller_Search extends Controller_Template {
         //$main_search_query->where('o.source_id', '<>', 2);
 
         $twig->main_search_result = Search::getresult($main_search_query->execute()->as_array());
+
         if (!$search_info->main_search_result_count) {
                 $main_search_result_count = Search::searchquery($search_info->search_filters, array(), array("count" => TRUE))
                                                         ->execute()
                                                         ->get("count");
                 $search_info->main_search_result_count = $main_search_result_count;
         }
+
 
         if (count($twig->main_search_result) > 0) 
         {
@@ -423,9 +427,25 @@ class Controller_Search extends Controller_Template {
         }
 
         if (count($twig->main_search_result) == 0) {
-            $twig->other_adverts = $this->find_other_adverts($search_info);
-        }
+            $result = $this->find_other_adverts($search_info);
+            while (count($result) == 0) {
 
+                $newSearchText = explode(' ', $search_info->search_text);
+                if (count($newSearchText)>1) {
+                    $search_info->search_text = array_shift($newSearchText);
+                }elseif (count($newSearchText) == 1) {
+                    $newSearchText = implode('', $newSearchText);
+                    if (strlen($newSearchText) > 3) {
+                       $search_info->search_text = substr($newSearchText, 0, -2);
+                    }else break;
+                }
+                // var_dump($search_info->search_text);
+
+                $result = $this->find_other_adverts($search_info);
+            }
+
+            $twig->other_adverts = $result;
+        }
 
         if ($twig->category->id == 2 OR $twig->category->parent_id == 2 ) {
             $property_map = $twig->main_search_result;
@@ -618,6 +638,7 @@ class Controller_Search extends Controller_Template {
             $info->city_id,
             (count($info->child_categories_ids) > 0) ? $info->child_categories_ids : $info->category_id
         );
+
         $info->sphinx_category_childs = $info->category_childs = $sphinx_category_childs["categories"];
         $info->category_childs_elements = $this->params_by_uri->get_category_childs_elements($info->category_id, $info->city_id, $this->params_by_uri->get_seo_filters());
         $info->category_childs_elements_colsize = 4;
@@ -707,21 +728,27 @@ class Controller_Search extends Controller_Template {
 
     public function find_other_adverts($search_info)
     {
+        // var_dump($search_info->search_text); die;
+
+        // $categoryID = ($search_info->category->id == 1) ? $search_info->child_categories_ids : $search_info->category->id;
        
         $filters = array(
                 "active" => TRUE,
-                "published" =>TRUE,
+                'expiration' => true,
+                'expired' => true,
+                'published' => true,
                 "city_id" => $search_info->city->id,
-                "category_id" => $search_info->category->id
+                "search_text" => $search_info->search_text,
+                // "category_id" => $categoryID
         );
 
 
         $category = $search_info->category;
 
         while (1 == 1) {
-            $result = Search::getresult(Search::searchquery($filters, array("limit" => 10, "page" => 1))->execute()->as_array());
+            $result = Search::getresult(Search::searchquery($filters, array("limit" => 50, "page" => 1))->execute()->as_array());
 
-            if ( count($result) > 0 OR !$category->parent_id OR $category->id == 1) {
+            if (count($result) > 0 OR !$category->parent_id OR $category->id == 1) {
                 break;
             }
 
@@ -729,7 +756,16 @@ class Controller_Search extends Controller_Template {
             $filters['category_id'] = $category->id;
         }
 
-        return $result;
+        // foreach ($result as $key => $value) {
+        //     if (count($result[$key]['compiled']) == 0) {
+        //         unset($result[$key]);
+        //     }        
+        // }
+
+
+        if (shuffle($result)) {
+            return $result;
+        }
     }
     
     public function after()
