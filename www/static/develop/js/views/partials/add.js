@@ -549,39 +549,39 @@ var mapcontrolView = Backbone.View.extend({
 
 kladr_autocomplete: function() {
             /*$('#'+this.address_field).autocomplete({
-            	source: function( request, response ) {
-            		request.parent_id = $('#city_kladr_id').val();
-            		request.address_required = 0;
+                source: function( request, response ) {
+                    request.parent_id = $('#city_kladr_id').val();
+                    request.address_required = 0;
 
-            		$.getJSON( "/ajax/kladr_address_autocomplete", request, function( data, status, xhr ) {
-            			response( data );
-            		});
-            	},
-            	minLength: 1,
-            	autoFocus: true,
-            	select: function( event, ui ) {
-            		$('#address_kladr_id').val(ui.item.id);
-            		$('#map_block_div').show();
+                    $.getJSON( "/ajax/kladr_address_autocomplete", request, function( data, status, xhr ) {
+                        response( data );
+                    });
+                },
+                minLength: 1,
+                autoFocus: true,
+                select: function( event, ui ) {
+                    $('#address_kladr_id').val(ui.item.id);
+                    $('#map_block_div').show();
 
-            		$('#error_address').hide();
-            		$('#error_address').parents('div.input').removeClass('error');
-            		setTimeout(function(){
-            			GetCoordinates();
-            		}, 100);
-            	},
-            	change: function( event, ui ) {
-            		if (ui.item == null) {
-            			// $('#city_kladr_id').val('');
-            			// $('#address_selector').val('');
-            			$('#address_kladr_id').val('');
-            			GetCoordinates();
-            			$('#map_block_div').show();
-            		}
-            	}
+                    $('#error_address').hide();
+                    $('#error_address').parents('div.input').removeClass('error');
+                    setTimeout(function(){
+                        GetCoordinates();
+                    }, 100);
+                },
+                change: function( event, ui ) {
+                    if (ui.item == null) {
+                        // $('#city_kladr_id').val('');
+                        // $('#address_selector').val('');
+                        $('#address_kladr_id').val('');
+                        GetCoordinates();
+                        $('#map_block_div').show();
+                    }
+                }
             }).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
-            	return $( "<li>" )
-            	.append( "<a>" + item.label + "</a>" )
-            	.appendTo( ul );
+                return $( "<li>" )
+                .append( "<a>" + item.label + "</a>" )
+                .appendTo( ul );
             };  */
         }
 
@@ -632,7 +632,7 @@ var textView = Backbone.View.extend({
 
         var staticPath = app.settings.staticPath;
 
-        if (this.text_required) {
+        // if (this.text_required) {
             if (!_globalSettings.allowCkEditor) {
                 new nicEditor({
                     iconsPath: staticPath + 'images/nicEditorIcons.gif'
@@ -642,7 +642,7 @@ var textView = Backbone.View.extend({
                     fileUpload: true
                 });
             }
-        }
+        // }
     },
 
     render: function() {
@@ -912,10 +912,10 @@ var photoView = Backbone.View.extend({
             /*
             , rotateDegrees: 0
             , appendRotate: function (degrees) {
-            	this.rotateDegrees = (this.rotateDegrees + degrees) % 360;
-            	this.$image.next().css({
-            		transform: 'rotate(' + this.rotateDegrees + 'deg)'
-            	});
+                this.rotateDegrees = (this.rotateDegrees + degrees) % 360;
+                this.$image.next().css({
+                    transform: 'rotate(' + this.rotateDegrees + 'deg)'
+                });
             }
             */
             ,
@@ -1030,32 +1030,32 @@ save: function() {
         /* bootstrap version */
         /*
         var html = 
-        	'<div class="modal fade">'
-        		+ '<div class="modal-dialog">'
-        			+ '<div class="modal-content">'
-        				+ '<div class="modal-body">'
-        					+ '<img src="" />'
-        				+ '</div>'
-        			+ '</div>'
-        		+ '</div>'
-        	+ '</div>';
-        	*/
+            '<div class="modal fade">'
+                + '<div class="modal-dialog">'
+                    + '<div class="modal-content">'
+                        + '<div class="modal-body">'
+                            + '<img src="" />'
+                        + '</div>'
+                    + '</div>'
+                + '</div>'
+            + '</div>';
+            */
             /* other version */
             var html =
             /*'<div class="popup-wrp z400 cropper-popup">'
-            	+ '<div class="popup-window mw500">'
-            		+ '<div class="header">'
-            			+ 'Редактирование изображения'
-            			+ '<div class="popup-window-close js-close">'
-            				+ '<i class="ico close-ico16"></i>'
-            			+ '</div>'
-            		+ '</div>'
-            		*/
+                + '<div class="popup-window mw500">'
+                    + '<div class="header">'
+                        + 'Редактирование изображения'
+                        + '<div class="popup-window-close js-close">'
+                            + '<i class="ico close-ico16"></i>'
+                        + '</div>'
+                    + '</div>'
+                    */
                     '<div>' + '<div class="cropper-image">' + '<img src="" />' + '</div>' + '<div class="cropper-actions">' + '<button class="btn" data-rotate="90"><span class="fa fa-undo"></span></button>'
             //+ '<button class="btn" data-rotate="-10"><span class="fa fa-repeat"></span></button>'
             + '<button class="btn" data-zoom="0.1"><span class="fa fa-search-plus"></span></button>' + '<button class="btn" data-zoom="-0.1"><span class="fa fa-search-minus"></span></button>' + '<button class="btn" data-refresh>Сбросить</button>' + '<button class="btn" data-destroy>Отменить</button>' + '<button class="btn" data-save>Сохранить</button>' + '</div>' + '</div>'
             /*
-            	+ '</div>'
+                + '</div>'
             + '</div>';
             */
 
@@ -1829,7 +1829,7 @@ return Marionette.ItemView.extend({
         _destroy_controls: function() {
             this.params.trigger("destroy");
             this.subject.trigger("destroy");
-            this.text.trigger("destroy");
+            // this.text.trigger("destroy");
             this.cmap.trigger("disable");
         },
 
