@@ -52,7 +52,6 @@ class Object
 		if ( ! $add->errors)
 		{
 			$add->save_address()
-				//->save_many_cities()
 				->prepare_object();
 
 			$db = Database::instance();
@@ -136,6 +135,7 @@ class Object
 				->save_typetr_object()
 				->save_dates_object();
 
+
 			$db = Database::instance();
 
 			try
@@ -147,6 +147,7 @@ class Object
 					->save_photo()
 					->save_video()
 					->save_price()
+					->save_many_cities()
 					->save_other_options()
 					->save_attributes()
 					->save_generated()

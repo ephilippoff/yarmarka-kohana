@@ -121,6 +121,8 @@ class Controller_Add extends Controller_Template {
 		elseif ($user AND $user->linked_to_user)
 			$form_data->LinkedUser();
 
+
+
 		if ( Acl::check("object.add.type") ) {
 			$form_data ->AdvertType();
 			$form_data ->UserType();

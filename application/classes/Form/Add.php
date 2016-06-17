@@ -453,6 +453,7 @@ class Form_Add  {
 		$params         = $this->params;
 
 		$cities_choosed = $object->get_cities();
+
 		$city_id = NULL;
 
 		$cities_list = ORM::factory('City')->visible()->getprepared_all();
