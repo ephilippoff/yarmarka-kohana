@@ -137,6 +137,44 @@
 				</div>			
 			<? endif; ?>
 
+			<? if (property_exists($form_data, 'other_cities')): ?>
+				<div id="div_city">
+					<div class="row mb10">
+						<div class="col-md-3  labelcont">
+							<label>Дполнительные города публикации:</label>
+						</div>
+						<div class="col-md-9 ">
+							<div class="row ">
+								<div class="col-md-10">
+									<div class="inp-cont ">
+										
+										<select data-placeholder="---" name="other_cities[]" id="cities" class="" multiple style="width:300px;height:300px;">
+
+												<? foreach ($form_data->other_cities["cities_list"] as $city): ?>
+												<?
+													$selected = '';
+													if ( in_array($city->id, $form_data->other_cities["cities_choosed"]) )
+													{
+														$selected = 'selected';
+													}
+												?>
+
+													<option value="<?=$city->id?>" <?= $selected; ?>><?=$city->title?></option>
+												
+												<? endforeach; ?>
+										</select>
+
+									</div>
+								</div>					
+							</div>	
+
+							
+						</div>
+					</div>		
+				</div>
+
+		<? endif; ?>
+
 			<? if (property_exists($form_data, 'dates')): ?>
 				<div id="div_advert_type" class="row mb10">
 					<div class="col-md-3  labelcont">

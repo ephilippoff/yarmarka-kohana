@@ -64,7 +64,10 @@
 				if (json.code == 200) {
 					$('.modal-body .alert-error').hide('slow');
 					$('#myModal').modal('hide');
-					reload_row(<?=$object->id?>);
+					var reload_row = reload_row || false;
+					if (reload_row) {
+						reload_row(<?=$object->id?>);
+					}
 				} else if (json.errors) {
 					$('.modal-body .alert-error').html(json.errors).show('slow');
 				}
