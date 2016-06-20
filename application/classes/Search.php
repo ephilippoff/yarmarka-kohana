@@ -527,6 +527,37 @@ class Search {
 				$compiled["author"]["logo"] = Imageci::getSavePaths($compiled["author"]["filename"]);
 			}
 		}
+			
+		if (in_array($object['category'], array("111","33","32","34","96","4","30","3")) ) {
+
+
+			$square = 0;
+			$cost = 0;
+
+			if( isset($compiled['attributes']['ploshchad']) ){
+
+				$square = $compiled['attributes']['ploshchad']['value'];
+
+			} elseif ( isset($compiled['attributes']['ploshchad-doma']) ) {
+
+				$square = $compiled['attributes']['ploshchad-doma']['value'];
+
+			}
+
+			if ( isset($compiled['attributes']['tsena']['value']) ){
+
+				$cost = $compiled['attributes']['tsena']['value'];
+
+			}
+
+			if ($cost != 0 AND $square != 0) {
+
+				$squarePrice = (int)($cost/$square);
+				$compiled['square_price'] = $squarePrice;
+
+			}
+		}
+
 		return $compiled;
 	}
 

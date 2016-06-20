@@ -447,35 +447,6 @@ class Controller_Search extends Controller_Template {
             $twig->other_adverts = $result;
         }
 
-        if ($twig->category->id == 2 OR $twig->category->parent_id == 2 ) {
-            $property_map = $twig->main_search_result;
-            $property_map = array_map(function($item){
-                $square = 0;
-                $cost = 0;
-                if(isset($item['compiled']['attributes']['ploshchad'])){
-
-                    $square = $item['compiled']['attributes']['ploshchad']['value'];
-
-                }elseif (isset($item['compiled']['attributes']['ploshchad-doma'])) {
-                    $square = $item['compiled']['attributes']['ploshchad-doma']['value'];
-                }
-
-                if (isset($item['price'])){
-                    $cost = $item['price'];
-                }
-
-                if ($cost != 0 AND $square != 0) {
-                    $squarePrice = (int)($cost/$square);
-                    $item['square_price'] = $squarePrice;
-                    return $item;
-                }
-            }, $property_map);
-
-            $twig->main_search_result = $property_map;
-        }
-
-
-
         $this->response->body($twig);
 
     }
