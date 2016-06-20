@@ -1400,12 +1400,12 @@ class Lib_PlacementAds_AddEdit {
 	{
 		$object = &$this->object;
 		// сохраняем запись для короткого урла *.ya24.biz
-		$object->send_to_db_dns();
+		//$object->send_to_db_dns();
 
 		if ( ! $this->is_edit) 
 		{
 			//пишем id объявления во временную таблицу для последующего обмена с terrasoft
-			$object->send_to_terrasoft();
+			//$object->send_to_terrasoft();
 		}
 
 		return $this;

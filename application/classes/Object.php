@@ -95,8 +95,7 @@ class Object
 			}
 
 			if (!$is_local) {
-				$add->send_external_integrations()
-					->send_to_forced_moderation()
+				$add->send_to_forced_moderation()
 					->send_message();
 			} else {
 				$add->send_to_forced_moderation();
@@ -154,9 +153,7 @@ class Object
 					->save_compile_surgut_object();
 
 
-			$add//->send_external_integrations()
-				//->send_message()
-				->send_to_forced_moderation();
+			$add->send_to_forced_moderation();
 
 
 			$json['object_id'] = $add->object->id;
@@ -233,10 +230,6 @@ class Object
 				throw $e;
 			}
 
-			if (!$is_local) {
-				$add->send_external_integrations();
-			}
-
 			$json['object_id'] = $add->object->id;
 		}
 		else
@@ -310,8 +303,7 @@ class Object
 				throw $e;
 			}
 
-			$add//->send_external_integrations()
-				->send_to_forced_moderation();
+			$add->send_to_forced_moderation();
 				//->send_message();
 
 			$json['object_id'] = $add->object->id;
