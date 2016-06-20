@@ -27,6 +27,24 @@ class Object_Compile
 		return $compiled;
 	}
 
+	static function saveImagesToCompiled($object)
+	{
+		$oc = ORM::factory('Object_Compiled')
+				->where("object_id","=",$object->id)
+				->find();
+		$compiled = array();
+		if ($oc->loaded()) {
+			$compiled = unserialize($oc->compiled);
+		}
+
+		$compiled["images"] = Object_Compile::getAttachments($object->id, $object->main_image_id);
+
+		$oc->object_id = $object->id;
+		$oc->compiled = serialize($compiled);
+		$oc->save();
+		return $compiled;
+	}
+
 	static function getAttachments($object_id, $main_photo_id) {
 		$result = array();
 		$result["local_photo"] 		= array();

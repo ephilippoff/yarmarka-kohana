@@ -183,6 +183,9 @@ class Task_Objectload extends Minion_Task
 				if (count($_photos) > 0) {
 					$ol->saveMainPhoto($object->object_id);
 				}
+
+				Object_Compile::saveImagesToCompiled(ORM::factory('Object', $object->object_id));
+				
 			}
 
 			Minion::write($prefix_log, $object->get_normal_string());
