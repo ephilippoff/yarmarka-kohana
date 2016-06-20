@@ -94,10 +94,6 @@ class Object
 			$add->send_to_forced_moderation()
 				->send_message();
 
-			if (!$is_local) {
-				$add->send_external_integrations();
-			}
-
 			$json['object_id'] = $add->object->id;
 		}
 		else
@@ -173,10 +169,6 @@ class Object
 
 			$add->send_to_forced_moderation();
 
-			if (!$is_local) {
-				$add->send_external_integrations();
-			}
-
 			$json['object_id'] = $add->object->id;
 		}
 		else
@@ -247,10 +239,6 @@ class Object
 
 				throw $e;
 			}
-
-			//$add//->send_external_integrations()
-				//->send_to_forced_moderation();
-				//->send_message();
 
 			$json['object_id'] = $add->object->id;
 			$json['external_id'] = $input_params['external_id'];

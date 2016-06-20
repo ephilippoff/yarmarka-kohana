@@ -1336,8 +1336,9 @@ class Lib_PlacementAds_AddEdit {
 	{
 		$object = &$this->object;
 		$object = ORM::factory('Object', $object->id);
+		
 		// сохраняем запись для короткого урла *.ya24.biz
-		Model_Object::send_to_db_dns($object->id);
+		//Model_Object::send_to_db_dns($object->id);
 
 		if ( ! $this->is_edit && !$object->type_tr) 
 		{
