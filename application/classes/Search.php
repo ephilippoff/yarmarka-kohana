@@ -528,7 +528,7 @@ class Search {
 			}
 		}
 			
-		if (in_array($object['category'], array("111","33","32","34","96","4","30","3")) ) {
+		if (in_array($object['category'], array("111","33","32","34","96","4","30","3","112","25")) ) {
 
 
 			$square = 0;
