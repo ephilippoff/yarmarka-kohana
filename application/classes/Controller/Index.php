@@ -41,6 +41,8 @@ class Controller_Index extends Controller_Template {
 
         $twig->months = Date::get_months_names();
 
+        //------Premium news
+
          $search_query = Search::searchquery(
             array(
                 "expiration" => TRUE,
@@ -69,6 +71,12 @@ class Controller_Index extends Controller_Template {
             $v2 = strtotime($a2['compiled']['services']['premium'][0]['date_expiration']);
             return $v2 - $v1;
         });
+
+        if (count($twig->premiumnews) > 4) {
+            $twig->premiumnews = array_slice($twig->premiumnews, 0, 4);
+        }
+
+        //------Premium news end
         
         $premium_ids = array_map(function($item){
             return $item["id"];
@@ -81,7 +89,7 @@ class Controller_Index extends Controller_Template {
                 "published" =>TRUE,
                 "city_id" => $this->city->id,
                 "category_seo_name" => "novosti",
-                //"not_id" => $premium_ids
+                "not_id" => $premium_ids
             ),
             array("limit" => 7, "page" => 1, "order" => "date_expired")
         );

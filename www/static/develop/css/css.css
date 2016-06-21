@@ -1337,12 +1337,13 @@ img.category-icon{
     float: right;
 }
 
-#reklama_container a{
+#reklama_container .tg-link{
     width: 25%;
     display: block;
     float: left;
     padding: 0 10px;
-    max-height: 200px;
+    height: 60px;
+    overflow: hidden;
 }
 
 #reklama_container img{
@@ -1352,7 +1353,7 @@ img.category-icon{
     width: 80px;
 }
 
-#reklama_container a span{
+#reklama_container .tg-link span{
     float: left;
     font-size: 13px;
     margin-left: 0;
@@ -2253,4 +2254,8 @@ div[data-role="error"]{
     left:0;
     width:100%;
     height:100%;
+}
+
+.detail_banners_cont{
+    height: 600px;
 }

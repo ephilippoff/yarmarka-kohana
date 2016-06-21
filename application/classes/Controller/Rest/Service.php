@@ -12,6 +12,7 @@ class Controller_Rest_Service extends Controller_Rest {
 
 		$objects = ORM::factory('Object')->where("id","IN", $ids)->where("active","=",1)->find_all();
 		$objects_to_action = array();
+		$category_id = ORM::factory('Object')->where("id","=", $this->param->id)->find()->category;
 		$services_to_action = array();
 		$errors = 0;
 		foreach ($objects as $object) {
@@ -24,7 +25,7 @@ class Controller_Rest_Service extends Controller_Rest {
 				continue;
 			}
 			$objects_to_action[] = $object->get_row_as_obj(array("id","title"));
-			$services_to_action[] = Service::factory("Up")->get();
+			$services_to_action[] = Service::factory("Up")->get($category_id);
 		}
 
 		if ($errors > 0){
@@ -35,8 +36,10 @@ class Controller_Rest_Service extends Controller_Rest {
 			$this->json['code'] = 400;
 		}
 
-		$this->json['count'] = Service::factory("Up")->get_balance();
-		$this->json['available'] = Service::factory("Up")->check_available(1);
+
+		$this->json['count'] = Service::factory("Up")->get_balance($category_id);
+		$this->json['available'] = Service::factory("Up")->check_available(1, $category_id);
+		$this->json['date_expired'] = Service::factory("Up")->get_date($category_id);
 		$this->json['services'] = $services_to_action;
 		$this->json['objects'] = $objects_to_action;
 
@@ -84,6 +87,7 @@ class Controller_Rest_Service extends Controller_Rest {
 		if (count($objects_to_action) == 0 OR $this->json['code'] <> 200) {
 			$this->json['code'] = 400;
 		}
+
 
 		$this->json['count'] = Service::factory("Premium")->get_balance();
 		$this->json['available'] = Service::factory("Premium")->check_available(1);

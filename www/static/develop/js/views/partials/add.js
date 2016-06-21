@@ -194,6 +194,26 @@ define([
 
         });
 
+var adTypeView = Backbone.View.extend({
+    el: '#ad_type',
+    events: {
+        'click': 'toggleContacts'
+    },
+    initialize: function() {
+        this.toggleContacts();
+    },
+
+    toggleContacts: function(){
+        console.log('clicked');
+        var value = this.$el.val();
+        if (value == 101) 
+            $('.cont_block, #additional_contacts').slideUp();
+        else 
+            $('.cont_block, #additional_contacts').slideDown();
+    }
+});
+
+
 var paramsView = Backbone.View.extend({
     el: '#div_params',
     template: templates.parameters,
@@ -313,6 +333,32 @@ var paramsView = Backbone.View.extend({
         });
     }
 
+});
+
+var addCitiesView = Backbone.View.extend({
+    el: '#div_cities',
+    events: {
+        'click #select_all': 'selectAll',
+        'mouseup #cities option' : 'checkSelectAll'
+    },
+    initialize: function() {
+        this.checkSelectAll();
+    },
+
+    selectAll: function(){
+        var options = this.$el.find('#cities option');
+        if ($('#cities option:selected').length !== $('#cities option').length){
+            options.prop('selected', true);
+        }else options.prop('selected', false);
+    },
+
+    checkSelectAll: function(){
+        if ($('#cities option:selected').length == $('#cities option').length){
+            $('#select_all').attr('checked', 'checked').prop('checked', true);
+        }
+        else
+            $('#select_all').removeAttr('checked');
+    }
 });
 
 var cityView = Backbone.View.extend({
@@ -1783,7 +1829,16 @@ return Marionette.ItemView.extend({
             this.category = new categoryView({
                 app: this
             });
+
+            this.ad_type = new adTypeView({
+                app: this
+            });
+
             this.city = new cityView({
+                category_id: this.category.category_id,
+                app: this
+            });
+            this.moderate_add_cities = new addCitiesView({
                 category_id: this.category.category_id,
                 app: this
             });
