@@ -183,6 +183,9 @@ class Task_Objectload extends Minion_Task
 				if (count($_photos) > 0) {
 					$ol->saveMainPhoto($object->object_id);
 				}
+
+				Object_Compile::saveImagesToCompiled(ORM::factory('Object', $object->object_id));
+				
 			}
 
 			Minion::write($prefix_log, $object->get_normal_string());
@@ -234,14 +237,14 @@ class Task_Objectload extends Minion_Task
 		ORM::factory('Objectload', $ol->_objectload_id)
 			->update_statistic();
 
-		if (!$test)
-		{
-			try {
-				Request::factory('user/send_report/'.$ol->_objectload_id)->execute();
-			} catch (Exception $e){
-				Minion::write($prefix_log, 'Ошибка отпарвки отчета: '.$e->getMessage());
-			}
-		}
+		// if (!$test)
+		// {
+		// 	try {
+		// 		Request::factory('user/send_report/'.$ol->_objectload_id)->execute();
+		// 	} catch (Exception $e){
+		// 		Minion::write($prefix_log, 'Ошибка отпарвки отчета: '.$e->getMessage());
+		// 	}
+		// }
 
 		Minion::write("Success", 'End');
 		return $ol->_objectload_id;

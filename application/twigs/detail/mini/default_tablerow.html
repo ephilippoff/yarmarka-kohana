@@ -89,8 +89,8 @@
 			<span class="price">&nbsp;</span>
 			{% endif %}
 
-			{% if object.square_price %}
-			<span class="price square_price w100p">{{object.square_price|number_format(0, ' ', ' ')}} <i class="fa fa-rub" aria-hidden="true"></i>/кв<sup>2</sup></span>
+			{% if object.compiled.square_price %}
+			<span class="price square_price w100p">{{object.compiled.square_price|number_format(0, ' ', ' ')}} <i class="fa fa-rub" aria-hidden="true"></i>/кв<sup>2</sup></span>
 			{% endif %}
 		</div>
 
