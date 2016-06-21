@@ -68,14 +68,10 @@
 			$objectsService = $this->getService('Objects');
 
 			/* get city seo name from url */
-			$citySeoName = 'tyumen';
-			$uriMatches = array();
-			if (preg_match('/(.*).' . Kohana::$config->load('common.main_domain') . '/', $_SERVER['HTTP_HOST'], $uriMatches)) {
 
-				$citySeoName = $uriMatches[1];
-
-			}
-
+			$domain = new Domain();
+        	$city = $domain->get_city_by_subdomain($domain->get_subdomain());
+			$citySeoName = $city->seo_name;
 
 			/* get data */
 			$query = $objectsService->getObjects();

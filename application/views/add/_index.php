@@ -111,7 +111,7 @@
 							<div class="col-md-10">
 								<div class="inp-cont ">
 									<span class="required-star">*</span>																		
-									<?= Form::select("obj_type", $form_data->advert_type['type_list'], $form_data->advert_type['value'], array('class' => 'w100p')); ?>					
+									<?= Form::select("obj_type", $form_data->advert_type['type_list'], $form_data->advert_type['value'], array('class' => 'w100p', 'id' => 'ad_type')); ?>					
 								</div>
 							</div>
 						</div>
@@ -138,7 +138,7 @@
 			<? endif; ?>
 
 			<? if (property_exists($form_data, 'other_cities')): ?>
-				<div id="div_city">
+				<div id="div_cities">
 					<div class="row mb10">
 						<div class="col-md-3  labelcont">
 							<label>Дполнительные города публикации:</label>
@@ -147,6 +147,12 @@
 							<div class="row ">
 								<div class="col-md-10">
 									<div class="inp-cont ">
+
+										<div class="select_all">
+											<label class="label-span">Выбрать все</label>
+											<input class="cmn-toggle-round" id="select_all" type="checkbox">
+											<label for="select_all"></label>
+										</div>
 										
 										<select data-placeholder="---" name="other_cities[]" id="cities" class="" multiple style="width:300px;height:300px;">
 
@@ -261,7 +267,7 @@
 					"phone" => array("name"=>"Городской телефон", "icon" => "<i class='fa fa-phone'></i>", "placeholder" => "Введите код"),
 					"email"=> array("name"=>"Email", "icon" => "<i class='fa fa-envelope-o'></i>", "placeholder" => "Введите код из письма")) as $type => $type_params): ?>
 
-				<div class="row mb20">
+				<div class="row mb20 cont_block">
 					<div class="col-md-3 labelcont">
 						<label><?=$type_params["name"]?>:</label>
 					</div>

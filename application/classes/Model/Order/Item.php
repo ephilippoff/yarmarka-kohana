@@ -10,6 +10,7 @@ class Model_Order_Item extends ORM
 
 	function return_reserve()
 	{
+		die;
 		if (!$this->loaded()) return;
 
 		$params = new Obj(json_decode($this->params));

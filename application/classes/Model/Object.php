@@ -463,6 +463,23 @@ class Model_Object extends ORM {
 
 		$this->is_published = (int) ! $this->is_published;
 
+
+		//Если тип = новость
+		if ($this->type_tr = 101) {
+			$city_id = $this->city_id;
+			$citySeoName = ORM::factory('City')
+	                ->where("id", "=", $city_id)
+	                ->find()
+	                ->seo_name;
+
+			//Удаляем кэш
+			$cache = Cache::instance('memcache');
+
+			$cache->delete("main_page_news_cat:{$citySeoName}");
+			$cache->delete("main_page_news_items:{$city_id}");
+		}
+
+
 		if ( strtotime( $this->date_expiration ) < strtotime( Lib_PlacementAds_AddEdit::lifetime_to_date("45d") ) ) {
 			
 			$this->date_expiration = Lib_PlacementAds_AddEdit::lifetime_to_date("45d");

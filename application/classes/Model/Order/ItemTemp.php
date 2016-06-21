@@ -52,7 +52,7 @@ class Model_Order_ItemTemp extends ORM
 		return $this->db->insert_id();
 	}
 
-	function return_reserve($orderId = NULL)
+	function return_reserve($orderId = NULL, $category_id = 0)
 	{
 		$user = Auth::instance()->get_user();
 		if (!$this->loaded()) return;
@@ -67,11 +67,11 @@ class Model_Order_ItemTemp extends ORM
 		} elseif ( in_array( $params->service->name, array("up", "premium")) 
 					AND in_array(@$params->service->discount_name, array("free_up", "prepayed_premium") ) AND $user) {
 			 $service = Service::factory(Text::ucfirst($params->service->name));
-			 $service->increase_balance($user, $params->service->quantity);
+			 $service->increase_balance($user, $params->service->quantity, $category_id);
 		}
 	}
 
-	function reserve($access_key = NULL, $orderId = NULL)
+	function reserve($access_key = NULL, $orderId = NULL, $category_id = 0)
 	{
 		$user = Auth::instance()->get_user();
 		if (!$this->loaded()) return;
@@ -84,7 +84,7 @@ class Model_Order_ItemTemp extends ORM
 		} elseif ( in_array( $params->service->name, array("up", "premium")) 
 					AND in_array(@$params->service->discount_name, array("free_up", "prepayed_premium") ) AND $user) {
 			 $service = Service::factory(Text::ucfirst($params->service->name));
-			 $service->decrease_balance($user, $params->service->quantity);
+			 $service->decrease_balance($user, $params->service->quantity, $category_id);
 		}
 	}
 

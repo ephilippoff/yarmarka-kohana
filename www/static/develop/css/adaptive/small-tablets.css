@@ -162,6 +162,20 @@
 	    margin: 10px auto;
 	}
 
+	.detail_banners_cont{
+	    height: auto;
+	}
+
+	#reklama_container .tg-link{
+		width: 50%;
+		text-align: center;
+	}
+
+	#reklama_container .tg-link:nth-child(2),
+	#reklama_container .tg-link:first-child{
+		display: none;
+	}
+
 
 }
 
