@@ -76,8 +76,6 @@ class Controller_Index extends Controller_Template {
             $twig->premiumnews = array_slice($twig->premiumnews, 0, 4);
         }
 
-        var_dump($twig->premiumnews); die;
-
         //------Premium news end
         
         $premium_ids = array_map(function($item){
