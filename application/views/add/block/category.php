@@ -12,6 +12,8 @@
 		<div class="select_wrap hidden">
 			<div class="option" data-value="0">---</div>
 
+			
+
 			<? foreach($data->category_list as $key=> $item) : ?>	
 				<div class="optgroup">
 					<div class="sign_icon">

@@ -101,12 +101,13 @@ class Controller_Detail extends Controller_Template {
 			$twig->user_object_stat_item = $user_object_stat_item;
 		}
 
+		
+
 		//add to last views
 		LastViews::instance()->set($object->id);
 		$this->response->body($twig);
 		LastViews::instance()->commit();
 
-		// echo "<pre>"; var_dump($twig); echo "</pre>"; die;
 	}
 
 	protected function validate_cv_mode($categorySeoName) {

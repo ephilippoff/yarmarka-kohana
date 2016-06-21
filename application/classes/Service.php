@@ -34,7 +34,7 @@ class Service
             return $price_config[$city];
         }
 
-        return $price_config;
+        return $price_config['default'];
     }
 
     public function getCategoryPrice($price_config, $category)
@@ -79,7 +79,7 @@ class Service
                         if (isset($city_price_config[$cityItem])) {
                             $category_price_config = $this->getCategoryPrice($city_price_config[$cityItem], $categoryItem);
                         } else {
-                            $category_price_config = $this->getCategoryPrice($city_price_config, $categoryItem);;
+                            $category_price_config = $this->getCategoryPrice($city_price_config, $categoryItem);
                         }
                         $price += ( is_array($category_price_config) ? $category_price_config["default"] : $category_price_config ) * $price_base;
                     }

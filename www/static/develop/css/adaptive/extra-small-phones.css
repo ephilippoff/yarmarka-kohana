@@ -184,16 +184,6 @@
 		float: none;
 	}
 
-	#reklama_container a{
-		width: 50%;
-		text-align: center;
-	}
-
-	#reklama_container a:last-child,
-	#reklama_container a:nth-last-child(2){
-		display: none;
-	}
-
 	article img.news-photo{
 	    max-width: 80%;
 	    margin: 10px auto;
