@@ -463,24 +463,21 @@ class Model_Object extends ORM {
 
 		$this->is_published = (int) ! $this->is_published;
 
-		$citySeoName = 'tyumen';
-		$uriMatches = array();
-		if (preg_match('/(.*).' . Kohana::$config->load('common.main_domain') . '/', $_SERVER['HTTP_HOST'], $uriMatches)) {
 
-			$citySeoName = $uriMatches[1];
+		//Если тип = новость
+		if ($this->type_tr = 101) {
+			$city_id = $this->city_id;
+			$citySeoName = ORM::factory('City')
+	                ->where("id", "=", $city_id)
+	                ->find()
+	                ->seo_name;
 
+			//Удаляем кэш
+			$cache = Cache::instance('memcache');
+
+			$cache->delete("main_page_news_cat:{$citySeoName}");
+			$cache->delete("main_page_news_items:{$city_id}");
 		}
-
-		$domain = new Domain();
-        $city = $domain->get_city_by_subdomain($domain->get_subdomain());
-
-        $city_id = $city->id;
-
-		//Удаляем кэш
-		$cache = Cache::instance('memcache');
-
-		$cache->delete("main_page_news_cat:{$citySeoName}");
-		$cache->delete("main_page_news_items:{$city_id}");
 
 
 		if ( strtotime( $this->date_expiration ) < strtotime( Lib_PlacementAds_AddEdit::lifetime_to_date("45d") ) ) {
