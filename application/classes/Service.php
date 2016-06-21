@@ -192,14 +192,15 @@ class Service
     public function save($object_info, $key, $tempOrderItemId = NULL, $orderId = NULL)
     {
         $params = new Obj();
-        $params->service =  $this->get();
+        $category_id = ORM::factory('Object')->where("id","=", $object_info['id'])->find()->category;
+        $params->service =  $this->get($category_id);
         $params->object =  $object_info;
         $params->title = $this->get_title($params);
 
-        return $this->save_to_cart($params, $key, $tempOrderItemId, $orderId);
+        return $this->save_to_cart($params, $key, $tempOrderItemId, $orderId, $category_id);
     }
 
-    protected function save_to_cart($params, $key, $tempOrderItemId = NULL, $orderId = NULL)
+    protected function save_to_cart($params, $key, $tempOrderItemId = NULL, $orderId = NULL, $category_id)
     {
         $object_id = $params->object["id"];
 
@@ -215,8 +216,9 @@ class Service
         }
 
         if ($order_item_temp->loaded()) {
-            $order_item_temp->return_reserve($orderId);
+            $order_item_temp->return_reserve($orderId, $category_id);
         }
+
         $order_item_temp->object_id = $object_id;
         $order_item_temp->service_id = NULL;
         $order_item_temp->service_name = $params->service["name"];
@@ -224,7 +226,7 @@ class Service
         $order_item_temp->key = $key;
         $order_item_temp->save();
 
-        $order_item_temp->reserve($key, $orderId);
+        $order_item_temp->reserve($key, $orderId, $category_id);
 
         return $order_item_temp->get_row_as_obj();
     }
