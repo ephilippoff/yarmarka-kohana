@@ -274,7 +274,7 @@ class Controller_Detail extends Controller_Template {
 			$twig->{$key} = $item;
 		}
 
-		// echo "<pre>"; var_dump($twig); echo "</pre>"; die;
+		echo "<pre>"; var_dump($twig->object); echo "</pre>"; die;
 		
 		$this->response->body($twig);
 	}
