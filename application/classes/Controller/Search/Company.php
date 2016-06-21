@@ -18,7 +18,7 @@ class Controller_Search_Company extends Controller_Template {
 
     public function action_index(){
          $twig = Twig::factory('other/companies');
-         $city = $this->city;
+         $twig->city = $this->city;
          $this->response->body($twig);
     }
 }

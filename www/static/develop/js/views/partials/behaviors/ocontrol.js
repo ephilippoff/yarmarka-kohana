@@ -74,11 +74,15 @@ define([
         showContacts: function(e) {
             var s = this;
             e.preventDefault();
-            var id = $(e.currentTarget).data("id");
+            var $target = $(e.currentTarget);
+            var id = $target.data("id");
             app.ocontrol.contacts(id, {
                 code: this.ui.contactList.find("input").val(),
                 success: function(result) {
                     s.ui.contactList.html(result);
+
+                    //$target.remove();
+
                     s.ui.contactList.find('p').each(function(){
                        var phone = $(this).html();
                         if (phone.indexOf('79') !== -1) {
@@ -90,6 +94,7 @@ define([
                     });
 
                     s.ui.contactsShow.remove();
+
                 },
                 captcha: function(result) {
                     s.ui.contactsShow.css('position', 'static');

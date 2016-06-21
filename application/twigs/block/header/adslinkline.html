@@ -3,21 +3,35 @@
 {% if imagelinks|length > 0 or textlinks|length > 0%}
  	{% if imagelinks|length > 0 %}
 		<div id="reklama_container" class="reklama-line banners js-adslink-graphic clearfix">
-			{% set length = (imagelinks|length > 4) ?  imagelinks|length : 4 %}
+			{% set length = (imagelinks|length > 3) ?  imagelinks|length : 3 %}
 			{% for i in 0..(length - 1) %}
 				{% set link = imagelinks|slice(i,1) %}
 				{% if link|length > 0 %}
 					{% set link = link|first %}
-					<a class="w23p dib va-t clearfix" href="{{ link.link }}" target="_blank" data-id="{{ link.id }}" {% if link.nofollow %}rel="nofollow"{% endif %}>
+					<a class="db clearfix tg-link" href="{{ link.link }}" target="_blank" data-id="{{ link.id }}" {% if link.nofollow %}rel="nofollow"{% endif %}>
 						<img src="{{ '/./uploads/banners/' ~ link.image }}" class="hidden-sm"/>
 						<span class="fs12 fl w50p h50 oh">{{ link.title }}</span>
 					</a>
 				{% else %}
-					<a class="w23p dib va-t clearfix tg-link" href="http://c.yarmarka.biz{{ info_link }}" style="height:50px; overflow:hidden;"  target="_blank">
+					<a class="db clearfix tg-link" href="http://surgut.yarmarka.biz/commercial/target"  target="_blank">
 						<img src="{{ staticfile('images/empty_ads.png') }}" class="fl hidden-md hidden-sm hidden-xs hidden-xxs"/>
 						<span class="fs12 fl w50p oh">Рекламное место свободно</span>
 					</a>
 				{% endif %} 
+
+				{% if loop.index == 2 %}
+					<div class="db clearfix tg-link" style="height: 60px;">
+						<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+						<ins class="adsbygoogle"
+						     style="display:block; min-width: 240px;"
+						     data-ad-client="ca-pub-4714092941447146"
+						     data-ad-slot="7557585519"
+						     data-ad-format="horizontal"></ins>
+						<script>
+						(adsbygoogle = window.adsbygoogle || []).push({});
+						</script>
+					</div>
+				{% endif %}
 				
 			{% endfor  %}
 		</div>

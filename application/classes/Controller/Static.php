@@ -7,7 +7,7 @@ class Controller_Static extends Controller_Template {
 		$this->use_layout = FALSE;
 		$this->template->data = Attribute::getData();
 	}
-
+	
 	public function action_sitemap()
 	{
 		$this->use_layout = FALSE;
@@ -225,5 +225,41 @@ class Controller_Static extends Controller_Template {
 		}
 
 		return FALSE;
+	}
+
+	public function action_robots()
+	{
+		$this->use_layout = FALSE;
+		$this->auto_render = FALSE;
+
+		$domain = new Domain();
+		if ($proper_domain = $domain->is_domain_incorrect()) {
+			HTTP::redirect("http://".$proper_domain, 301);
+		}
+		$subdomain = ($domain->get_city()) ? $domain->get_subdomain(): FALSE;
+		$filename = DOCROOT."robots.template.txt";
+		$robots_file = file_get_contents($filename);
+
+		$robots_file = mb_ereg_replace ( '\{\$subdomain\}' , $subdomain , $robots_file);
+
+		$this->response->headers('Content-Type', 'text/plain');
+		$this->response->body($robots_file);
+	}
+
+	public function action_sitemaps()
+	{
+		$this->use_layout = FALSE;
+		$this->auto_render = FALSE;
+
+		$domain = new Domain();
+		if ($proper_domain = $domain->is_domain_incorrect()) {
+			HTTP::redirect("http://".$proper_domain, 301);
+		}
+		$subdomain = ($domain->get_city()) ? $domain->get_subdomain(): FALSE;
+		$filename = DOCROOT."sitemaps/".$subdomain."/index.xml";
+		$robots_file = file_get_contents($filename);
+
+		$this->response->headers('Content-Type', 'text/xml');
+		$this->response->body($robots_file);
 	}
 }

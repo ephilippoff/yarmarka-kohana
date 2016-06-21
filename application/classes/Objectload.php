@@ -192,7 +192,7 @@ class Objectload
 				elseif ($return == 'continue') 
 					continue;
 				elseif (is_array($return)  AND $return["status"] == 'nochange'){
-					$this->setRecordNochange($file->table_name, $row->id);
+					$this->setRecordNochange($file->table_name, $row->id, $return["object_id"]);
 					continue;
 				}
 				elseif (is_array($return)  AND $return["status"] == 'success')
@@ -218,7 +218,7 @@ class Objectload
 		$record = Massload::to_post_format($record, $config["id"], NULL, $config, $dictionary);
 
 		$record = array_merge($record, $config["autofill"]);
-
+		$record['set_no_company'] = $row->set_no_company;
 		return Object::PlacementAds_ByMassLoad($record, $user_id);
 
 	}
@@ -412,7 +412,7 @@ class Objectload
 		$record->save();
 	}
 
-	private function setRecordNochange($table_name, $id)
+	private function setRecordNochange($table_name, $id, $object_id = NULL)
 	{
 		$record = ORM_Temp::factory($table_name, $id);
 		$record->loaded = NULL;
@@ -420,6 +420,7 @@ class Objectload
 		$record->error 		= NULL;
 		$record->text_error = NULL;
 		$record->nochange 	= 1;
+		$record->object_id 	= $object_id;
 		$record->save();
 	}
 

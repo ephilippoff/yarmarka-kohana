@@ -6,6 +6,14 @@ class Database_PDO extends Kohana_Database_PDO {
 		// Quote the table name
 		$table = ($add_prefix === TRUE) ? $table : $table;
 
+		$key = md5($table.($like ? $like : "").($add_prefix ? "TRUE": ""));
+
+		if ( $result = Cache::instance('memcache')->get("Database_PDO_list_columns:$key")) {
+			return unserialize($result);
+		}
+
+		
+
 		if (is_string($like))
 		{
 			// Search for column names
@@ -31,6 +39,8 @@ class Database_PDO extends Kohana_Database_PDO {
 			$columns[$column['column_name']] = $column;
 		}
 
+		Cache::instance('memcache')->set("Database_PDO_list_columns:$key", serialize($columns), Date::WEEK);
+		
 		return $columns;
 	}
 

@@ -2,12 +2,13 @@ define([ 'jquery' ], function ($) {
 
 	return function () {
 		$('.reklama-cont a').on('click', function (e) {
+
 			var $el = $(this);
 			if ($el.data('disableReklamaClickIncrement')) {
 				$el.data('disableReklamaClickIncrement', false);
 				return;
 			}
-			e.preventDefault();
+
 			
 			$.ajax({
 				url: '/rest_reklama/click',
@@ -22,7 +23,7 @@ define([ 'jquery' ], function ($) {
 					} else {
 						y();
 					}
-					$el[0].click();
+					//$el[0].click();
 				},
 				dataType:'json'
 			});

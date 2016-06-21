@@ -46,7 +46,7 @@
 			<p class="title">
 				{% set is_favourite = 'fa-heart-o' %}
 				{% if object.id in favourites %}
-				{% set is_favourite = 'fa-heart' %}
+					{% set is_favourite = 'fa-heart' %}
 				{% endif %}
 				<i class="fa {{is_favourite}} fa-lg mr5 js-favourite js-favourite-ico pointer red" data-id="{{object.id}}" title="Избранное"></i>
 				<a href="{% if is_cv_mode %}/detail/use_cv?object_id={{ object.id }}{% else %}{{ object.compiled.url }}{% endif %}" title="{{ object.title|e }}" class="bold js-object-title-{{object.id}} {% if object.is_published == 0 %} red strike {% endif %}">
@@ -56,16 +56,18 @@
 			</p>
 
 			<p class="style1">
-				{% if object.moder_state %}	
-				{% if not object.is_bad %}
-				<span class="green">Прошло модерацию.</span>
-				{% elseif object.is_bad == 1 %}
-				<span class="red">Заблокировано модератором до исправления</span>
-				{% elseif object.is_bad == 2 %}
-				<span class="red">Заблокировано модератором окончательно</span>
-				{% endif %}
-				{% else  %}
-				<span class="red">Пока не прошло модерацию</span>
+				{% if object.moder_state >= 0 %}	
+					{% if not object.is_bad %}
+						<span class="green">Прошло модерацию.</span>
+					{% elseif object.is_bad == 1 %}
+						<span class="red">Заблокировано модератором, до исправления</span>
+					{% elseif object.is_bad == 2 %}
+						<span class="red">Заблокировано модератором окончательно</span>
+					{% endif %}
+				{% elseif  object.moder_state < 0 %}
+					<span class="red">Будет опубликовано после преварительной модерации</span>
+				{% else %}
+					<span class="red">Пока не прошло модерацию</span>
 				{% endif %}
 			</p>
 

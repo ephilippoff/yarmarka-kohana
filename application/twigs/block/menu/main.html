@@ -1,7 +1,8 @@
-<div class="popup-menu-cont2l iLight-cont {% if staticMainMenu %}left_menu hidden-xs {% else %}js-mainmenu popup-menu-cont{% endif %} z300">
-	<div class="left brb2 top_level_menu">
+
+<div class="popup-menu-cont2l iLight-cont {% if staticMainMenu %}left_menu mainmenu hidden-xs {% else %}js-mainmenu popup-menu-cont{% endif %} z150" style="cursor:default;{% if staticMainMenu %}position:relative;{% endif %}">
+	<div class="left brb2 top_level_menu"  style="background:white;">
 		<ul class="top" role="menu">
-			{% set true_categories = ['kupony','rabota','avtotransport','nedvizhimost','uslugi', 'stroitelstvo-i-remont', 
+			{% set true_categories = ['kupony','rabota','avtotransport','nedvizhimost','uslugi', 'meditsina-zdorove-tovary-i-uslugi', 'stroitelstvo-i-remont', 
 									'biznes', 'lichnie-veshi', 'tovary-dlya-detei','dlya-doma-i-dachi', 'bitovaya-elektronika', 'znakomstvo-i-obshenie',
 									'sport-otdih-hobby','domashnie-zhivotnye-i-rasteniya', 'v-horoshie-ruki', 'prodovolstvennye-tovary'] %}
 			{% for category in categories1l if category.seo_name in true_categories %}
@@ -14,6 +15,7 @@
 	</div> 
 	<div class="right brb2 visible-lg visible-md">
 		{% for category in categories1l %}
+
 			{% set divWidth = (banners[category.id] is defined and banners[category.id].menu_width) ? banners[category.id].menu_width : 400 %}
 			{% set ulWidth = 191 %}
 			<div class="section section{{category.id}}" id="section{{category.id}}" style="width: {{divWidth}}px;  display: none;">				
@@ -35,6 +37,7 @@
 					{% endif %}
 				</div>
 			</div>
+
 		{% endfor %}
 	</div>
 </div>

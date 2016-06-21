@@ -18,10 +18,17 @@ class Task_Objectload extends Minion_Task
 
 		$ct = ORM::factory('Crontask')->begin("Objectload", $params);
 
-		try {
+		
 			if ($user_id)
 			{
-				$this->load($params, $ct);
+				try {
+					$this->load($params, $ct);
+				} catch (Exception $e)
+				{
+					$ct->error($e->getMessage());
+					Minion::write("Error", $e->getMessage());
+					return;
+				}
 			} 
 				else 
 			{
@@ -35,15 +42,17 @@ class Task_Objectload extends Minion_Task
 						break;
 
 					$params["user_id"] = $setting->user_id;
-					$this->load($params, $ct);
+					try {
+						$this->load($params, $ct);
+					} catch (Exception $e)
+					{
+						//$ct->error($e->getMessage());
+						Minion::write("Error", $e->getMessage());
+						continue;
+					}
 				}
 			}
-		} catch (Exception $e)
-		{
-			$ct->error($e->getMessage());
-			Minion::write("Error", $e->getMessage());
-			return;
-		}
+		
 		$ct->end();
 	}
 
@@ -81,6 +90,17 @@ class Task_Objectload extends Minion_Task
 		Auth::instance()->force_login($user);
 		$db = Database::instance();
 
+		$set_no_company = FALSE;
+
+		$user_settings = ORM::factory('User_Settings')
+								->where("name","=","set_no_company")
+								->where("user_id","=",$user_id)
+								->order_by("id","asc")->find();
+
+		if ($user_settings->loaded()) {
+			$set_no_company = TRUE;
+		}
+
 		$ol = new Objectload($user_id, $objectload_id);
 		$ol->setState(4);
 		$ol->loadSettings($user_id);
@@ -93,7 +113,19 @@ class Task_Objectload extends Minion_Task
 
 		if (!$objectload_id)
 		{
-			$ol->downloadLinks();
+			try {
+				$ol->downloadLinks();
+			} catch (Exception $e)
+			{
+				if ($ol->_objectload_id) {
+					$_ol = ORM::factory('Objectload', $ol->_objectload_id);
+						if ($_ol->loaded()) {
+							$_ol->set_state(99, "Ошибка при загрузке файла");
+						}
+				}
+				Minion::write("Error", "link filed");
+				throw $e;
+			}
 			Minion::write("Success", "Links loaded");
 
 			try {
@@ -116,8 +148,8 @@ class Task_Objectload extends Minion_Task
 
 		Minion::write("Success", "Start...");
 
-		$ol->forEachRecord($filters, function($row, $category, $cc) use ($ol, $ct, $test){
-
+		$ol->forEachRecord($filters, function($row, $category, $cc) use ($ol, $ct, $test, $set_no_company){
+			
 			$ct->_update();
 			if (!$ct->_check($ct->id))
 				return 'break';
@@ -141,6 +173,8 @@ class Task_Objectload extends Minion_Task
 			if ($test)
 				return 'continue';
 
+			$row->set_no_company = $set_no_company;
+			
 			$object = new Obj( $ol->saveRowAsObject($row, $config, $dictionary) );
 
 			if ($object->object_id) {
@@ -156,7 +190,8 @@ class Task_Objectload extends Minion_Task
 			$result = array("status" => "no");
 			if ($object->error AND array_key_exists("nochange", $object->error))
 				$result = array(
-						"status" 	=> "nochange"
+						"status" 	=> "nochange",
+						"object_id" => $object->object_id
 					);
 			elseif ($object->error)
 				$result = array(
@@ -209,7 +244,7 @@ class Task_Objectload extends Minion_Task
 		}
 
 		Minion::write("Success", 'End');
-
+		return $ol->_objectload_id;
 		//Temptable::delete_table($name);
 	}
 

@@ -152,10 +152,24 @@ class Form_Add  {
 		}
 
 		$category_array["Другие"] = array(
+			42 => "Медицина, здоровье. Товары и услуги",
 			156 => "В хорошие руки",
 			72 => "Товары для детей"
 		);
 
+		// Необходимо переместить рубрику "Другие" над остальными
+
+		$lastvalue = end($category_array);
+		$lastkey = key($category_array);
+
+		$tmp_array = array($lastkey=>$lastvalue);
+
+		array_pop($category_array);
+
+		$category_array = array_merge($tmp_array,$category_array);
+
+
+		
 
 
 		if ($user = Auth::instance()->get_user())
@@ -445,9 +459,29 @@ class Form_Add  {
 										);
 	}
 
-	function Other_Cities()
+	function OtherCities()
 	{
 
+		$object 		= $this->object;
+		$params         = $this->params;
+
+		$cities_choosed = $object->get_cities();
+
+		$city_id = NULL;
+
+		$cities_list = ORM::factory('City')->visible()->getprepared_all();
+
+		if ($object->loaded() AND !$this->is_post)
+			$cities_choosed = $object->get_cities();
+		elseif ($this->is_post AND array_key_exists("other_cities", $this->params))
+			$cities_choosed = $this->params['other_cities'];
+
+		$cities_choosed = ($cities_choosed) ? $cities_choosed : array();
+
+		$this->_data->other_cities = array(
+											'cities_list' => $cities_list,
+											'cities_choosed' => $cities_choosed
+										);
 		return $this;
 	}
 

@@ -52,7 +52,6 @@ class Object
 		if ( ! $add->errors)
 		{
 			$add->save_address()
-				//->save_many_cities()
 				->prepare_object();
 
 			$db = Database::instance();
@@ -91,11 +90,11 @@ class Object
 				throw $e;
 			}
 
-			$add->send_to_forced_moderation();
+			$add->send_to_forced_moderation()
+				->send_message();
 
 			if (!$is_local) {
-				$add->send_external_integrations()
-					->send_message();
+				$add->send_external_integrations();
 			}
 
 			$json['object_id'] = $add->object->id;
@@ -131,9 +130,11 @@ class Object
 		if ( ! $add->errors)
 		{
 			$add->save_address()
+				->save_many_cities()
 				->prepare_object()
 				->save_typetr_object()
 				->save_dates_object();
+
 
 			$db = Database::instance();
 
@@ -146,6 +147,7 @@ class Object
 					->save_photo()
 					->save_video()
 					->save_price()
+					->save_many_cities()
 					->save_other_options()
 					->save_attributes()
 					->save_generated()
@@ -199,9 +201,9 @@ class Object
 			->init_object_and_mode()
 			->check_neccesaries()
 			->normalize_attributes()
-			->init_contacts()
 			->init_validation_rules()
 			//->init_validation_rules_for_attributes()
+			->init_contacts()
 			->exec_validation()
 			->check_signature();
 
@@ -209,6 +211,7 @@ class Object
 		{
 			$add->save_address()
 				->prepare_object()
+				->save_style_object()
 				->save_external_info()
 				->save_parentid_object();
 
@@ -364,6 +367,11 @@ class Object
 	{
 		$check = self::PlacementAds_Validate($input_params, TRUE);
 		$error = $check["error"];
+
+		if (isset($error['contact_mobile'])) {
+			unset($error['contact_mobile']);
+			sort($error);
+		}
 		
 		if (isset($check['add_obj']->object->moder_state) AND $check['add_obj']->object->moder_state  == 1) {
 			if (!$error) {

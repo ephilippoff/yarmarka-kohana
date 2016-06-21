@@ -2,6 +2,7 @@
 
 class Date extends Kohana_Date {
 
+      const TENMINUTES = 600;
 
 	static function get_months_names() {
 		return array(

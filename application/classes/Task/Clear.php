@@ -22,13 +22,13 @@ class Task_Clear extends Minion_Task
         Minion_CLI::write('set_attribute_element_urls');
         $this->set_attribute_element_urls();
 
-        $cities = ORM::factory('City')->where("seo_name","=","surgut")->find_all();
-        foreach ($cities as $city) {
-            Minion_CLI::write('Create sitemap.xml for '.$city->seo_name);
-            $this->sitemap_by_city($city->seo_name);
-        }
-        Minion_CLI::write('Create sitemap.xml');
-        $this->sitemap();
+        // $cities = ORM::factory('City')->where("seo_name","=","surgut")->find_all();
+        // foreach ($cities as $city) {
+        //     Minion_CLI::write('Create sitemap.xml for '.$city->seo_name);
+        //     $this->sitemap_by_city($city->seo_name);
+        // }
+        // Minion_CLI::write('Create sitemap.xml');
+        // $this->sitemap();
         
         Minion_CLI::write('clear_search_url_cache');
         $this->clear_search_url_cache();

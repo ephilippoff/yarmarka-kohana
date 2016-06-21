@@ -12,6 +12,8 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 
 	}
 
+
+
 	public function action_user_stat() {
 
 		$state = array(
@@ -350,6 +352,10 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 			throw new HTTP_Exception_404;
 		}
 
+		$to_forced_moderation = $object->to_forced_moderation;
+		$moder_state = $object->moder_state;
+		$status = ($to_forced_moderation OR $moder_state < 0) ? TRUE : FALSE;
+
 		if (intval($this->request->post('moder_state')))
 		{
 			$object->moder_state 	= 1;
@@ -362,14 +368,78 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 		}
 		$object->save();
 		
-		// moderation log
-		$m_log = ORM::factory('Object_Moderation_Log');
-		$m_log->action_by 	= Auth::instance()->get_user()->id;
-		$m_log->user_id 	= $object->author;
-		$m_log->description = $object->moder_state ? "Прошло модерацию" : "На модерации" ;
-		$m_log->reason 		= "STATUS".$object->moder_state;
-		$m_log->object_id 	= $object->id;
-		$m_log->save();		
+		if ($object->author) {
+			// moderation log
+			$m_log = ORM::factory('Object_Moderation_Log');
+			$m_log->action_by 	= Auth::instance()->get_user()->id;
+			$m_log->user_id 	= $object->author;
+			$m_log->description = $object->moder_state ? "Прошло модерацию" : "На модерации" ;
+			$m_log->reason 		= "STATUS".$status;
+			$m_log->object_id 	= $object->id;
+			
+			if ($status) {
+				$m_log->noticed = FALSE;
+			}
+
+			$m_log->save();		
+
+		}
+	}
+
+	public function action_ajax_moderate_objectload_unpublish()
+	{
+		$this->auto_render = FALSE;
+
+		$action = $this->request->post('action');
+		$object = ORM::factory('Object', $this->request->param('id'));
+		if ( ! $object->loaded())
+		{
+			throw new HTTP_Exception_404;
+		}
+
+		$user_id = $object->author;
+		$category_id = $object->category;
+
+		$objectloads = ORM::factory('Objectload')->where('user_id','=',$user_id)->order_by("id","desc")->limit(1)->find_all()->as_array(NULL,'id');;
+
+
+		$categories = array_filter( Kohana::$config->load('massload/bycategory')->as_array(), function($item) use ($category_id){
+			return $item['id'] == $category_id;
+		});
+
+		$categories = array_map(function($item){
+			return $item['category'];
+		}, $categories);
+
+
+	
+		$objects = ORM::factory('Objectload_Files')
+				->get_union_subquery_by_category($objectloads, $categories);
+
+		
+		$count = 0;
+		if ($objects)
+		{
+			$count = ORM::factory('Object')
+					->where('number', 'IN', $objects)
+					->where('author','=', $user_id)
+					->count_all();
+
+			if ($action == 'do') {
+
+				$f = ORM::factory('Object')
+					->where('number', 'IN', $objects)
+					->where('author','=', $user_id)
+					->set('is_published', 0)
+					->set('is_bad', 1)
+					->update_all();
+			}
+		}
+
+		$json['count'] = $count;
+		$json['action'] = $action;
+		$json['code'] = ($action == 'do')? 201: 200;
+		$this->response->body(json_encode($json));
 	}
 
 	public function action_ajax_decline()
@@ -461,32 +531,36 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 
 		if ($reason)
 		{
+			$send_mail = $this->request->post('send_email');
+
+			if ($object->author) {
 			// moderation log
-			$m_log = ORM::factory('Object_Moderation_Log');
-			$m_log->action_by 	= Auth::instance()->get_user()->id;
-			$m_log->user_id 	= $object->author;
-			$m_log->description = $description;
-			$m_log->reason 		= $reason;
-			$m_log->object_id 	= $object->id;
-			$m_log->save();
+				$m_log = ORM::factory('Object_Moderation_Log');
+				$m_log->action_by 	= Auth::instance()->get_user()->id;
+				$m_log->user_id 	= $object->author;
+				$m_log->description = $description;
+				$m_log->reason 		= $reason;
+				$m_log->object_id 	= $object->id;
+				$m_log->noticed =  ($send_mail) ? FALSE: TRUE;
+				$m_log->save();
+			}
 
 			// msg to user
 			ORM::factory('User_Messages')->add_msg_to_object($object->id, $description);
 
-			if ($this->request->post('send_email') AND $object->user->loaded())
-			{
-				$msg = View::factory('emails/manage_object', 
-					array(
-						'UserName' => $object->user->fullname ? $object->user->fullname : $object->user->login,
-						'actions' => array(
-							$description . ' ('.HTML::anchor($object->get_url(), $object->title).')',
-						),
-					)
-				)->render();
-				Email::send(trim($object->user->email), Kohana::$config->load('email.default_from'), "Сообщение от модератора сайта", $msg);
-			}
+			// if ($this->request->post('send_email') AND $object->user->loaded())
+			// {
+			// 	$msg = View::factory('emails/manage_object', 
+			// 		array(
+			// 			'UserName' => $object->user->fullname ? $object->user->fullname : $object->user->login,
+			// 			'actions' => array(
+			// 				$description . ' ('.HTML::anchor($object->get_url(), $object->title).')',
+			// 			),
+			// 		)
+			// 	)->render();
+			// 	Email::send(trim($object->user->email), Kohana::$config->load('email.default_from'), "Сообщение от модератора сайта", $msg);
+			// }
 						
-
 			if ($is_bad)
 			{
 				$object->is_published 	= 0;
@@ -598,8 +672,15 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 		$this->template->object = $object;
 	}
 
+	
+
 	public function action_save()
 	{
+		function my_mb_ucfirst($str) {
+		    $fc = mb_strtoupper(mb_substr($str, 0, 1));
+		    return $fc.mb_substr($str, 1);
+		}
+
 		$this->auto_render = FALSE;
 		$json = array('code' => 400);
 
@@ -792,6 +873,364 @@ class Controller_Admin_Objects extends Controller_Admin_Template {
 	        die;
 
 		}
+
+	}
+
+	public function action_premod_state() {
+
+		$this->use_layout = FALSE;
+		$this->auto_render = FALSE;
+
+		$enabled = ORM::factory('Settings')->isPremodEnabled();
+
+		$json['state'] = $enabled;
+		$json['code'] = 200;
+		
+		$this->response->body(json_encode($json));		
+	}
+
+	public function action_premod_control() {
+
+		$this->use_layout = FALSE;
+		$this->auto_render = FALSE;
+
+		
+		$enabled = ORM::factory('Settings')->premodControl();
+
+		$json['state'] = $enabled;
+		$json['code'] = 200;
+		
+		$this->response->body(json_encode($json));		
+	}
+
+	public function action_services()
+	{
+		//$this->use_layout = FALSE;
+
+		$object = ORM::factory('Object', $this->request->param('id'));
+		
+		$this->template->object = $object;
+		
+		$cities = explode(',', preg_replace('/{(.*)}/i', '$1', $object->cities));
+
+		$this->template->cities = ORM::factory('City')->where('id','IN',$cities)->getprepared_all();
+
+		array_walk($this->template->cities, function($city) use($object){
+			if ($city->id == $object->city_id) {
+				$city->main = TRUE;
+			}
+		});
+
+		$this->template->cities_count = count($cities);
+
+
+		$this->template->premiums = ORM::factory('Object_Rating')
+						->where('object_id','=',$object->id)
+						->getprepared_all();
+
+		array_walk($this->template->premiums, function($premium) {
+			if ( strtotime($premium->date_expiration) < strtotime(date('dd.mm.yyyy'))) {
+				$premium->expired = TRUE;
+			}
+			$premium->city =  ORM::factory('City', $premium->city_id)->title;
+		});
+
+		$this->template->liders = ORM::factory('Object_Service_Photocard')
+					->where('object_id','=',$object->id)
+					->getprepared_all();
+
+		array_walk($this->template->liders, function($lider) {
+			if ( strtotime($lider->date_expiration) < strtotime(date('dd.mm.yyyy'))) {
+				$lider->expired = TRUE;
+			}
+			$cities = explode(',', preg_replace('/{(.*)}/i', '$1', $lider->cities));
+			$categories = explode(',', preg_replace('/{(.*)}/i', '$1', $lider->categories));
+
+			$cities = ORM::factory('City')->where('id','IN',$cities)->getprepared_all();
+
+			$lider->cities = join('<br>', array_map(function($city){
+				return $city->title;
+			}, $cities));
+
+			$categories = ORM::factory('Category')->where('id','IN',$categories)->getprepared_all();
+
+			$lider->categories = join('<br>', array_map(function($category){
+				return $category->title;
+			}, $categories));
+
+			
+		});
+
+		$this->template->ups = ORM::factory('Object_Service_Up')
+					->where('object_id','=',$object->id)
+					->getprepared_all();
+
+    	$orders = ORM::factory('Order')
+					->where('user_id','=',$object->author)
+					->where('state','IN',array(2,22,222))
+					->order_by('created','desc')
+	    			->getprepared_all();
+
+	     if (count($orders) > 0 )
+        {
+            $order_items = ORM::factory('Order_Item')
+                                ->where("order_id","IN", array_map(function($item){return $item->id;},  $orders))
+                                ->getprepared_all();
+                                
+
+            foreach ($orders as $order) {
+                $order->state_name = Model_Order::get_state($order->state);
+                $order->items = array_filter($order_items, function($item) use ($order){ return ($order->id == $item->order_id);});
+                foreach ($order->items as $order_item) {
+                    $order_item->params = json_decode($order_item->params);
+                    if ($order_item->params->object->id == $object->id) {
+                    	$order->current = TRUE;
+                    }
+                }
+            }
+        }
+
+    	$this->template->orders = $orders;
+
+		//echo Debug::vars($orders);
+	}
+
+	public function action_moderate() {
+
+	}
+
+	public function action_moderate_ads_by_filter() {
+		$this->use_layout = FALSE;
+		$this->auto_render = FALSE;
+
+		$filters = (array) json_decode($this->request->post('filters'));
+
+		$page = (int) $this->request->post('page');
+
+
+		$params = array(
+			"active" => TRUE,
+			"published" =>TRUE,
+			//"main_image_exists" => TRUE,
+			"compile_exists" => TRUE,
+			"moder_state" => 0,
+			"source" => 1,
+			"user_role" => 2
+		);
+
+		if ( isset($filters['id']) AND $filters['id']) {
+			$params['id'] = (int) $filters['id'];
+		} else {
+
+			if ( isset($filters['state']) ) {
+
+				$params['moder_state'] = (int) $filters['state'];
+			}
+
+			if ( isset($filters['category']) AND $filters['category'] ) {
+				$params['category_id'] = array((int) $filters['category']);
+			}
+
+
+			if ( @$filters['dateFrom'] OR @$filters['dateTo']) {
+
+				$filter_by_date = array();
+				if (@$filters['dateFrom']) {
+					$filter_by_date['from'] =  $filters['dateFrom'];
+				}
+
+				if (@$filters['dateTo']) {
+					$filter_by_date['to'] =  $filters['dateTo'];
+				}
+
+				$params['real_date_created'] = $filter_by_date;
+			}
+
+		}
+
+
+		$search_query = Search::searchquery(
+		    $params,
+		    array("limit" => 100, "page" => 1)
+		);
+
+		$result = Search::getresult($search_query->execute()->as_array());
+
+		$result_count = Search::searchquery($params, array(), array("count" => TRUE))
+                                    ->execute()
+                                    ->get("count");
+
+		$ids = array_map(function($item){
+			return $item['id'];
+		}, $result);
+
+		$preloaded = $this->prepare_preloaded_items( array_slice($result, $page, 3) );
+
+		$json['total'] = $result_count;
+		$json['ids'] = $ids;
+		$json['preloaded'] = $preloaded;
+		$json['code'] = 200;
+		
+		$this->response->body(json_encode($json));		
+	}
+
+	public function action_moderate_ads_by_ids() {
+		$this->use_layout = FALSE;
+		$this->auto_render = FALSE;
+
+		$ids = (array) json_decode($this->request->post('ids'));
+
+
+		$search_query = Search::searchquery(
+		    array(
+		   			"id" =>  $ids
+		   	),
+		    array()
+		);
+
+		$result = Search::getresult($search_query->execute()->as_array());
+
+		$preloaded = $this->prepare_preloaded_items( $result );
+
+		$json['preloaded'] = $preloaded;
+		$json['code'] = 200;
+		
+		$this->response->body(json_encode($json));		
+
+	}
+
+	public function action_moderate_categories() {
+		$this->use_layout = FALSE;
+		$this->auto_render = FALSE;
+
+		
+		$categories = ORM::factory('Category')->get_categories_extend(array(
+		    "with_child" => TRUE, 
+		    "with_ads" => TRUE,
+		));
+
+		$json['main'] = array_map(function($item){
+			return array(
+				'id' => $item->id,
+				'title' => $item->title
+			);
+		}, $categories["main"]);
+
+		$json['childs'] = array_map(function($item){
+			return array(
+				'id' => $item->id,
+				'title' => $item->title,
+				'parent_id' => $item->parent_id
+			);
+		}, $categories["childs"]);
+
+		$json['code'] = 200;
+		
+		$this->response->body(json_encode($json));		
+
+	}
+
+	private function prepare_preloaded_items($items) {
+
+		$preloaded = array();
+		array_walk($items , function($item) use (&$preloaded) {
+			
+			$newItem =  new stdclass;
+			$newItem->id = $item['id'];
+
+			$newItem->title = $item['title'];
+			$newItem->text = $item['user_text'];
+			$newItem->city_id = $item['city_id'];
+			$newItem->city_title = $item['compiled']['city'];
+			$newItem->category = $item['category'];
+
+			$newItem->cities = $item['cities'];
+			$newItem->moder_state = $item['moder_state'];
+			$newItem->is_bad = $item['is_bad'];
+
+			$newItem->author = $item['author'];
+
+			$newItem->real_date_created = date_format(date_create($item['real_date_created']), 'd.m.Y');
+			$newItem->date_created =  date_format(date_create($item['date_created']), 'd.m.Y');
+			$newItem->date_expiration = $item['date_expiration'];
+			$newItem->author_company_id = $item['author_company_id'];
+
+			$contacts = array();
+	 		foreach ($item['compiled']['contacts'] as $contact) {
+	 			array_push($contacts, $contact['value'] );
+	 		}
+
+	 		$newItem->contact =  $item['contact'];
+			$newItem->contacts = implode(", ", $contacts);
+
+	 		$services = array();
+	 		if (isset($item['compiled']['services'])) {
+		 		foreach ($item['compiled']['services'] as $key => $service) {
+		 			if (count($service) > 0 ) {
+		 				array_push($services, $key." (".count($service).")");
+		 			}
+		 		}
+		 	}
+
+			$newItem->services = (count($services) > 0) ? implode(", ", $services) : "";
+
+	 		$attributes = array();
+	 		if (isset($item['compiled']['attributes'])) {
+		 		foreach ($item['compiled']['attributes'] as $key => $attribute) {
+		 			array_push($attributes, $attribute["title"].":".$attribute["value"]);
+		 		}
+		 	}
+
+			$newItem->attributes = implode(", ", $attributes);
+
+			$newItem->url = $item['compiled']['url'];
+			$newItem->photos = $item['compiled']['images']['local_photo'];
+
+			$preloaded[$item['id']] = $newItem;
+		});
+
+		return $preloaded;
+	}
+
+	public function action_moderate_about() {
+		$this->use_layout = FALSE;
+		$this->auto_render = FALSE;
+
+		
+		$author_id = $this->request->post('author_id');
+		$author_company_id = $this->request->post('author_company_id');
+
+		$json['author'] = array();
+		$json['author_company'] = array();
+
+		if ($author_id) {
+
+			$users = ORM::factory('User')
+						->where('id','IN', array($author_id, $author_company_id))
+						->getprepared_all(array("id","email", "fullname", "org_name", "org_type", "role", "last_visit_date", "regdate"));
+
+			foreach ($users as $user) {
+				$user->regdate = date_format(date_create($user->regdate), 'd.m.Y');
+				$user->last_visit_date = date_format(date_create($user->last_visit_date), 'd.m.Y');
+
+				$user->role = Kohana::$config->load("dictionaries.user_role.".$user->role);
+				$user->org_type = Kohana::$config->load("dictionaries.org_types.".$user->org_type);
+			}
+
+			if (count($users) == 1) {
+				$json['author'] = $users[0];
+				$json['author_company'] = $users[0];
+			} else {
+				$json['author'] = $users[0];
+				$json['author_company'] = $users[1];
+			}
+
+
+		}
+
+		$json['code'] = 200;
+		
+		$this->response->body(json_encode($json));		
 
 	}
 

@@ -101,6 +101,7 @@ define([
             "mouseleave" : "closeMenu"
         },
         initialize: function(options) {
+            var $this = this;
             this.visible = 0;
 
             if (!options.doNotUseTemplate) {
@@ -117,6 +118,7 @@ define([
                 $(this).addClass('citymenu'+cityClass);
                 cityClass++;
             });
+
         },
 
         showMenu: function() {
@@ -134,7 +136,7 @@ define([
             
         },
 
-        closeMenu: function() {
+        closeMenu: function(e) {
             if (this.getOption('alwaysVisibleMenu')) {
                 return;
             }
@@ -185,7 +187,6 @@ var MainmenuView = MenuView.extend({
         var $row = $(row), 
         submenuId = $row.data("submenu-id"), 
         submenu = "#" + submenuId;
-
         $(submenu).fadeOut(70);
 
     }

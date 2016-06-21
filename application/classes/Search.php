@@ -146,6 +146,7 @@ class Search {
 			$select = "category.title, category.url, count(o.id)";
 			$table_name = "object";
 		}
+
 		
 
 		if ($params->hash) {
@@ -156,10 +157,12 @@ class Search {
 			}
 		}
 
+
+
 		$order = ($params->order) ? $params->order : "date_created";
 		$order_direction = ($params->order_direction) ? $params->order_direction : "DESC";
 
-		$limit = ($params->limit) ? (int) $params->limit : 10;
+		$limit = ($params->limit) ? (int) $params->limit : 30;
 		$page = ($params->page) ? (int) $params->page : 0;
 
 		$active = (isset($params->active)) ? $params->active : TRUE;
@@ -320,6 +323,10 @@ class Search {
 			$object = $object->where("object_service_photocard.date_expiration", ">", DB::expr("NOW()"));
 			$object = $object->where("object_service_photocard.active","=", 1);
 
+			if ($params->not_id AND is_array($params->not_id)) {
+				$object = $object->where("object_service_photocard.object_id", "NOT IN", $params->not_id);
+			}
+
 			if ( $params->category_id ) {
 				$category_id = $params->category_id;
 				if (!is_array($category_id)) {
@@ -343,6 +350,10 @@ class Search {
 
 		if ($params->expiration) {
 			$object = $object->where("o.date_expired", "<", DB::expr("NOW()"));
+		}
+
+		if ($params->main_image_exists) {
+			$object = $object->where("o.main_image_id", "IS NOT", NULL);
 		}
 
 		if ($params->expired) {
@@ -473,6 +484,8 @@ class Search {
 			$category_id = $params->category_id ? $params->category_id : 0;
 
 			$sphinx_result = Sphinx::search($params->search_text, $category_id, $city_id, FALSE, NULL, 0, 1000);
+
+			// var_dump($category_id); die;
 			$objects = Sphinx::getObjects($sphinx_result);
 			$ids = implode(",",$objects);
 			$object = $object->where("o.id","IN",DB::expr("(".$ids.")"));

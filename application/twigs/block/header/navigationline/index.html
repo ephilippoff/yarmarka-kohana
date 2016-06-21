@@ -32,9 +32,12 @@
 					<span class="menu-item-cont hidden-sm hidden-xs" onclick="window.location='/kupony'">Купоны<i class="fa fa-caret-down ml3"></i></span>
 					<span class="menu-item-cont hidden-lg visible-sm visible-xs" data-link="/kupony">Купоны<i class="fa fa-caret-down ml3"></i></span>
 				</div>
+				{% set cities2gis = ['surgut', 'ekaterinburg', '', 'tyumen', 'nizhnevartovsk'] %}
+				{% if city.seo_name in cities2gis %}
 				<div class="menu-item w25p left purple-theme city-companies">
 					<span class="menu-item-cont" onclick="window.location='/search_company'">Компании города</span>
 				</div>
+				{% endif %}
 			</div>	
 		</div>			
 	</div>

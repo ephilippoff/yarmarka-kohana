@@ -60,7 +60,7 @@ $(document).ready(function() {
 </script>
 
 <?php 
-	$text_type = (@$article->text_type == 2 or @$text_type_default == 2 or @$_POST['text_type'] == 2) ? 2 : 1;
+	$text_type = (@$article->text_type == 2 or @$text_type_default == 2 or @$_POST['text_type'] == 2) ? 2 : @$article->text_type;
 		
 	$start_date = isset($article->start_date) ? $article->start_date : Arr::get($_POST, 'start_date', date('Y-m-d'));	
 	$end_date   = isset($article->end_date)   ? $article->end_date   : Arr::get($_POST, 'end_date',   date('Y-m-d', strtotime('+3 days')));
@@ -97,6 +97,7 @@ $(document).ready(function() {
 		<div class="controls">			
 			<input type="radio" name="text_type" value="1" class="fn-type-text text_type" <?php if ($text_type == 1) echo 'checked' ?> > Статья
 			<input type="radio" name="text_type" value="2" class="fn-type-text text_type" <?php if ($text_type == 2) echo 'checked' ?> > Новость
+			<input type="radio" name="text_type" value="3" class="fn-type-text text_type" <?php if ($text_type == 3) echo 'checked' ?> > Рекламная страница
 		</div>
 	</div>	
 		

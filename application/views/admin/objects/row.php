@@ -7,7 +7,7 @@
 <?php endif; ?>
 
 	<td>
-		<?=$object->id?> 
+		<?=$object->id?> <br>
 		<?php 
 	 		$services = array();
 	 		if (@$compiled["services"]) {
@@ -18,8 +18,12 @@
 		 		}
 		 	}
 	 	?>
-		<?php if (count($services) > 0) :?>
-			<?=implode(", ", $services)?>
+	 	<?php if (count($services) > 0) :?>
+	 	<a href="<?=URL::site('khbackend/objects/services/'.$object->id)?>" target="_blank">Услуги: <br>
+			
+				<?=implode(", ", $services)?>
+			
+		</a>
 		<?php endif;?>
 
 	</td>
@@ -84,6 +88,8 @@
 			<button class="btn dropdown-toggle
 				<?php if ( ! $object->is_moderate()) : ?>
 					btn-warning
+				<?php elseif ($object->is_moderate() == -1 OR $object->is_moderate() == 4) : ?>
+					btn-default
 				<?php elseif ($object->is_banned()) : ?>
 					btn-danger
 				<?php else : ?>
@@ -93,6 +99,10 @@
 				<span class="text">
 				<?php if ( ! $object->is_moderate()) : ?>
 					На модерации
+				<?php elseif ($object->is_moderate() == 4) : ?>
+					Массовая загрузка
+				<?php elseif ($object->is_moderate() == -1) : ?>
+					! Пред модерация
 				<?php elseif ($object->is_banned()) : ?>
 					<?php if ($object->is_bad == 1) : ?>
 						На исправлении
@@ -110,6 +120,9 @@
 				<li><a href="#" data-id="<?=$object->id?>" data-state="0" data-class="btn-warning" class="moder_state btn-warning">На модерации</a></li>
 				<li><a href="<?=URL::site('khbackend/objects/ajax_decline/'.$object->id)?>" data-toggle="modal" data-target="#myModal" class="btn-danger">На исправление</a></li>
 				<li><a href="<?=URL::site('khbackend/objects/ajax_ban/'.$object->id)?>" data-toggle="modal" data-target="#myModal" class="btn-danger">Заблокировать</a></li>
+				<?php if ($object->is_moderate() == 4) : ?>
+					<li><a href="#" data-id="<?=$object->id?>" data-state="4" class="btn-warning fn-objectload-moderate">Снять все объявления <br>из этой загрузки</a></li>
+				<?php endif;?>
 				<?php if ($object->in_archive == 1) : ?>
 					<li><a href="#" data-id="<?=$object->id?>" class="btn-warning fn-archive">Разархивировать</a></li>
 				<?php endif;?>
@@ -156,6 +169,6 @@
 	<td>
 		<a href="<?=CI::site('detail/'.$object->id)?>" target="_blank" title="Open object in new window" class="icon-eye-open"></a>
 		<a href="<?=URL::site('edit/'.$object->id)?>" target="_blank" title="Edit object in new window" class="icon-pencil"></a>
-		<a href="<?=URL::site('khbackend/objects/ajax_delete/'.$object->id)?>" title="Delete object" data-toggle="modal" data-target="#myModal" class="icon-trash"></a>			
+		<a href="<?=URL::site('khbackend/objects/ajax_delete/acosh(arg)'.$object->id)?>" title="Delete object" data-toggle="modal" data-target="#myModal" class="icon-trash"></a>			
 	</td>
 </tr>

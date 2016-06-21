@@ -4,7 +4,7 @@
 <div class="subcategories-cont module subcat-search">
 	<div class="row">
 		{% for col in 0..cols %}
-			<div class="col-md-4 col-sm-4">
+			<div class="col-md-4 col-sm-4 col-xs-6 col-xxs-12">
 				<ul>
 				{% for child_category in category_childs|slice(i, rows) %}
 					{% set count = link_counters[s_host ~ '/' ~ child_category.url] %}
@@ -22,7 +22,7 @@
 </div>
 {% if category_childs|length > 15 %}
 <script type="text/javascript">
-	// desktop(function(){
+	desktop_tablet(function(){
 		new Yarmarka.UI.Columns.OrderedHeight({ 
 			el: '.subcategories-cont.module.subcat-search',
 			elementSelector: 'li>div', 
@@ -33,7 +33,7 @@
 				allowedHeight: 110
 			}
 		});
-	// });
+	});
 </script>
 {% endif %}
 

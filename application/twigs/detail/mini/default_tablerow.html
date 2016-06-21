@@ -1,4 +1,4 @@
-<div class="ad-mini-wrap clearfix {% if object.is_premium %}premium{% endif %}">
+<div class="ad-mini-wrap clearfix {% if object.is_premium %}premium{% endif %}" onclick="javascript:window.location.href = '{{ object.compiled.url }}'">
 	<div class="img-wrap fl hidden-xxs">
 		{% if object.compiled.images.main_photo %}
 		<img class="img-frame" src="{{ get_file(object.compiled.images.main_photo['120x90']) }}" alt="{{ object.title|e }}">
@@ -17,10 +17,10 @@
 		</a> 
 		
 		{% if object.is_premium %}
-		<span class="premium-tape"><i class="fa fa-star" title="Премиум-объявление" aria-hidden="true"></i></span>
+		<span class="premium-tape" onclick="event.stopPropagation()"><a href="/commercial/premium" target="_blank" class="db"><i class="fa fa-star" title="Премиум-объявление" aria-hidden="true"></i></a></span>
 		{% endif %}
 
-		<div class="clearfix hidden-lg visible-xxs">
+		<div class="clearfix hidden-lg small_visible">
 			{% if object.compiled.attributes.zarplata.value > 0 %}
 				<span class="price fl">{{object.compiled.attributes.zarplata.value}} <i class="fa fa-rub" aria-hidden="true"></i></span>
 			{% elseif object.price > 0 %}
@@ -32,9 +32,9 @@
 
 
 		{% if object.is_premium %}
-		<p class="date fs12 hidden-lg visible-xxs"><span>{{ object.compiled.city }}</span></p>
+		<p class="date fs12 hidden-lg small_visible"><span>{{ object.compiled.city }}</span></p>
 		{% else %}
-		<p class="date fs12 hidden-lg visible-xxs"><span>{{ object.date_created|date("d.m") }} / {{ object.compiled.city }}</span> </p>
+		<p class="date fs12 hidden-lg small_visible"><span>{{ object.date_created|date("d.m") }} / {{ object.compiled.city }}</span> </p>
 		{% endif %}
 
 
@@ -42,7 +42,7 @@
 		{% if object.is_premium %}
 			<div class="hidden-xxs">{{object.full_text|slice(0,100)}}...</div>
 		{% else %}
-			<table class="table-details hidden-xxs">									
+			<table class="table-details">									
 				<tbody>
 				{% if clean_query_params|keys|length > 0 %}
 					{% for attr in object.compiled.attributes if attr.value and attr.seo_name in clean_query_params|keys %}
@@ -80,7 +80,7 @@
 			<i class="fa {{is_favourite}} fa-lg mr5 js-favourite js-favourite-ico pointer red" data-id="{{object.id}}" title="В избранное"></i>
 		</div>
 
-		<div class="clearfix hidden-xxs">
+		<div class="clearfix small_hidden">
 			{% if object.compiled.attributes.zarplata.value > 0 %}
 				<span class="price">{{object.compiled.attributes.zarplata.value}} <i class="fa fa-rub" aria-hidden="true"></i></span>
 			{% elseif object.price > 0 %}
@@ -88,18 +88,30 @@
 			{% else %}
 			<span class="price">&nbsp;</span>
 			{% endif %}
+
+			{% if object.square_price %}
+			<span class="price square_price w100p">{{object.square_price|number_format(0, ' ', ' ')}} <i class="fa fa-rub" aria-hidden="true"></i>/кв<sup>2</sup></span>
+			{% endif %}
 		</div>
 
 		{% if object.is_premium %}
-		<p class="date fs12 ta-r hidden-xxs"><span>{{ object.compiled.city }}</span></p>
+		<p class="date fs12 ta-r small_hidden"><span>{{ object.compiled.city }}</span></p>
 		{% else %}
-		<p class="date fs12 ta-r hidden-xxs"><span>{{ object.date_created|date("d.m") }} / {{ object.compiled.city }}</span> </p>
+		<p class="date fs12 ta-r small_hidden"><span>{{ object.date_created|date("d.m") }} / {{ object.compiled.city }}</span> </p>
 		{% endif %}
 	</div>
 
-	
-
 </div>
+
+{% if loop.index == 3 %}
+	<ins class="adsbygoogle"
+		style="display:inline-block;width:100%;height:90px"
+		data-ad-client="ca-pub-4714092941447146"
+		data-ad-slot="1610833118"></ins>
+	<script>
+	(adsbygoogle = window.adsbygoogle || []).push({});
+	</script>
+{% endif %}
 
 {% if loop.index in banner_zone_positions|keys %}
 <div class="banner {zoneID: {{banner_zone_positions[loop.index]}} }"></div>

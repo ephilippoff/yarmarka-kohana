@@ -184,4 +184,21 @@ class Lib_PlacementAds_AddEditByMassLoad extends Lib_PlacementAds_AddEdit {
 		return $this;
 	}
 
+	function save_style_object()
+	{
+		$params = &$this->params;
+		$object = &$this->object;
+		
+
+		if ($params->set_no_company) {
+			$object->style = 'p';
+		} else {
+			$object->style = NULL;
+		}
+
+		$object->moder_state = 4;
+		
+		return $this;
+	}
+
 }

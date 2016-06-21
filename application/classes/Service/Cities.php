@@ -26,7 +26,9 @@ class Service_Cities extends Service
 			1979 => "г. Сургут",
 			1978 => "г. Советский",
 			1948 => "г. Нижневартовск",
-			1919 => "г. Тюмень"
+			1919 => "г. Тюмень",
+			2081 => "г. Екатеринбург",
+			3046 => "пгт. Излучинск"
 		);
 
 	protected $_name = "cities";
@@ -133,6 +135,13 @@ class Service_Cities extends Service
 	{
 		$object = ORM::factory('Object', $object_id);
 		if ($object->loaded()) {
+
+			if ( strtotime( $object->date_expiration ) < strtotime( Lib_PlacementAds_AddEdit::lifetime_to_date("45d") ) ) {
+				
+				$object->date_expiration = Lib_PlacementAds_AddEdit::lifetime_to_date("45d");
+				$object->save();
+
+			}
 
 			$cities = $object->get_cities();
 

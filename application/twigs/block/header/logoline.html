@@ -13,43 +13,51 @@
 			<!--/noindex-->
 			<div class="search-cont">
 				<div class="seach-bl">
-					<form action="/" method="get" name="search-form" id="search-form" class="js-search-form">
-						<div class="input-group w100p">
-							<div class="row">
-								<div class="col-lg-6 col-md-6">
-									<input class="search placeholder form-control js-search-input" name="search" id="search-input" value="{{ search_text }}" type="text" placeholder="{% if get_session_value('site_disable') %}Сайт в режиме разработки.{% else %}Поиск объявлений{% endif %}" autocomplete="off" data-city="{{city.id}}">
+					<form action="/" method="get" name="search-form" id="search-form" class="clearfix js-search-form">
+							
+						<input class="search placeholder form-control js-search-input" name="search" id="search-input" value="{{ search_text }}" type="text" placeholder="{% if get_session_value('site_disable') %}Сайт в режиме разработки.{% else %}Поиск объявлений{% endif %}" autocomplete="off" data-city="{{city.id}}">
+						{% set catTitle = "" %}
+						{% for category in get_categories() %}
+							{% if category_id == category.id %}
+								{% set catTitle = category.title %}
+							{% endif %}
+						{% endfor %}
+							<div data-role="categories" data-value="1" data-url="glavnaya-kategoriya" class="accordeon-menu bbn brt2 brb2 w100p">
+								<div class="sign_icon">
+									<i class="fa fa-angle-down" aria-hidden="true"></i>
 								</div>
-								<div class="col-lg-5 col-md-5">
+								<div class="current_value bbn">{% if catTitle %}{{catTitle}}{% else %}Все объявления{% endif %}</div>
 
-									<div class="category-search">
-										<i class="fa fa-caret-down"></i>
-										<i class="fa fa-caret-up"></i>
-										<select data-role="categories">
-											{% for category in get_categories() %}
-												<option data-url="{{ category.url }}" value="{{ category.id }}" {% if category_id and category_id == category.id %}selected="selected"{% endif %} {% if category.level < 3 %} class="bold" {% endif %}>
-													{{ repeat('&nbsp;&nbsp;', category.level - 1) }} {{ category.title }}
-												</option>
+								<div class="select_wrap hidden">
+									<div class="option" data-value="1" data-url="glavnaya-kategoriya">Все объявления</div>
+									{% for category in get_categories() %}
+										{% if category.childs and category.id != 1 %}
+										<div class="optgroup">
+											<div class="sign_icon">
+												<i class="fa fa-plus-square-o" aria-hidden="true"></i>
+											</div>
+											<div class="optgroup_value">{{ category.title }}</div>
+											{% for subcategory in category.childs %}
+												<div class="option hidden" data-url="{{subcategory.url}}" data-value="{{ subcategory.id }}">{{subcategory.title}}</div>
 											{% endfor %}
-										</select>
-									</div>
+										</div>
+										{% endif %}
+									{% endfor %}
 								</div>
-								<div class="col-lg-1 col-md-1">
-									<div class="input-group-addon clearfix">
-										<button class="button bg-color-crimson button-style1" type="submit"><i class="fa fa-search fa-lg"></i></button>
-									</div>
-								</div>
+							</div>
+							<div class="input-group-addon clearfix">
+								<button class="button bg-color-crimson button-style1" type="submit"><i class="fa fa-search fa-lg"></i></button>
 							</div>
 						</div>
 					</form>
-					<div class="search-popup border-color-crimson js-search-popup-cont z201 find-list">
+					<div class="search-popup border-color-crimson js-search-popup-cont find-list">
 					</div>
 				</div>
 			</div>
 			<!--/noindex-->
-		</div>
-		
-		<div class="col-md-2">
-			<a class="button w100p dib bg-color-crimson add-advert white ta-c pointer" href="/add">Подать объявление</a>
-		</div>
+			<div class="col-md-2">
+				<a class="button w100p dib bg-color-crimson add-advert white ta-c pointer" href="/add">Подать объявление</a>
+			</div>
+
 	</div>
 </div>

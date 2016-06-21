@@ -44,10 +44,23 @@
 <?=HTML::style('bootstrap/image-gallery/css/bootstrap-image-gallery.css')?>
 
 
-<script type="text/javascript" src="/bootstrap/tinymce/tinymce.min.js"></script>
-<script type="text/javascript" src="/bootstrap/tinymce/jquery.tinymce.min.js"></script>
+<?=HTML::script('/static/develop/js/old/nicEdit.js')?>
+
 
 <script type="text/javascript" charset="utf-8">
+
+function premod_check() {
+	$.get('/khbackend/objects/premod_state', function(json){
+		var res = JSON.parse(json)
+		if (res.state) {
+			$('.js-premod-control').text('Предмодерация включена').css('background','orange');
+		} else {
+			$('.js-premod-control').text('Предмодерация выключена').css('background','inherit');
+		}
+		
+	});
+}
+
 $(document).ready(function() {
 	// enable datepicker
 	$('.dp').datepicker({
@@ -94,6 +107,24 @@ $(document).ready(function() {
 		});
 	});
 
+	$(document).on('click', '.fn-objectload-moderate', function(e){
+		e.preventDefault();
+		var obj = this;
+		$.post('/khbackend/objects/ajax_moderate_objectload_unpublish/'+$(obj).data('id'), {action:false}, function(result){
+	
+			result = JSON.parse(result);
+					console.log(result)
+			if (confirm("Уверены что хотите снять " +result.count + " объявлений этого пользователя?")) {
+
+				$.post('/khbackend/objects/ajax_moderate_objectload_unpublish/'+$(obj).data('id'), {action:'do'}, function(){
+					reload_row($(obj).data('id'));
+					alert('готово!')
+				});
+			} 
+			
+		});
+	});
+
 	$('.not_show_on_index').on('change', function(){
 		var value = $(this).prop("checked");
 		var object_id = $(this).data('id');
@@ -101,6 +132,17 @@ $(document).ready(function() {
 			console.log(json)
 		}, 'json');
 	})
+
+	premod_check();
+
+	$('.js-premod-control').on('click', function(e){
+		e.preventDefault();
+
+		$.post('/khbackend/objects/premod_control', function(json){
+			premod_check();
+		}, 'json');
+	});
+
 });
 function reload_row(object_id, moder_state) {
 	var current_moder_state = $('select[name=moder_state]').val();
@@ -136,6 +178,11 @@ function obj_selection(src, obj_id)
  <div id="popup-layer" class="z200" style="display: none;"></div>
  <div class="wrapper container page-search" style="margin-top:50px;">
 <a href="/add" target="_blank">Подать объявление</a>
+<a href="/khbackend/objects/moderate" style="margin-left:40px;">Перейти в интерфейс модерации</a>
+
+<a href="#" class="js-premod-control" style="float:right;"></a>
+
+
 <form class="form-inline">
 	
 	<?php if ( !array_intersect(array_keys($search_filters), array('user_id','contact') ) ): ?>
@@ -192,6 +239,8 @@ function obj_selection(src, obj_id)
 				'0' => 'На модерации',
 				'1' => 'Прошло модерацию',
 				'3' => 'Есть жалобы',
+				'4' => 'Массовая загрузка',
+				'-1' => 'Пред модерация',
 			), 
 			Arr::get($search_filters, 'moder_state'), array('class' => 'span2'))
 		?>

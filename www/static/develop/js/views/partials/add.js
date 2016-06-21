@@ -195,6 +195,26 @@ define([
 
         });
 
+var adTypeView = Backbone.View.extend({
+    el: '#ad_type',
+    events: {
+        'click': 'toggleContacts'
+    },
+    initialize: function() {
+        this.toggleContacts();
+    },
+
+    toggleContacts: function(){
+        console.log('clicked');
+        var value = this.$el.val();
+        if (value == 101) 
+            $('.cont_block, #additional_contacts').slideUp();
+        else 
+            $('.cont_block, #additional_contacts').slideDown();
+    }
+});
+
+
 var paramsView = Backbone.View.extend({
     el: '#div_params',
     template: templates.parameters,
@@ -314,6 +334,32 @@ var paramsView = Backbone.View.extend({
         });
     }
 
+});
+
+var addCitiesView = Backbone.View.extend({
+    el: '#div_cities',
+    events: {
+        'click #select_all': 'selectAll',
+        'mouseup #cities option' : 'checkSelectAll'
+    },
+    initialize: function() {
+        this.checkSelectAll();
+    },
+
+    selectAll: function(){
+        var options = this.$el.find('#cities option');
+        if ($('#cities option:selected').length !== $('#cities option').length){
+            options.prop('selected', true);
+        }else options.prop('selected', false);
+    },
+
+    checkSelectAll: function(){
+        if ($('#cities option:selected').length == $('#cities option').length){
+            $('#select_all').attr('checked', 'checked').prop('checked', true);
+        }
+        else
+            $('#select_all').removeAttr('checked');
+    }
 });
 
 var cityView = Backbone.View.extend({
@@ -550,39 +596,39 @@ var mapcontrolView = Backbone.View.extend({
 
 kladr_autocomplete: function() {
             /*$('#'+this.address_field).autocomplete({
-            	source: function( request, response ) {
-            		request.parent_id = $('#city_kladr_id').val();
-            		request.address_required = 0;
+                source: function( request, response ) {
+                    request.parent_id = $('#city_kladr_id').val();
+                    request.address_required = 0;
 
-            		$.getJSON( "/ajax/kladr_address_autocomplete", request, function( data, status, xhr ) {
-            			response( data );
-            		});
-            	},
-            	minLength: 1,
-            	autoFocus: true,
-            	select: function( event, ui ) {
-            		$('#address_kladr_id').val(ui.item.id);
-            		$('#map_block_div').show();
+                    $.getJSON( "/ajax/kladr_address_autocomplete", request, function( data, status, xhr ) {
+                        response( data );
+                    });
+                },
+                minLength: 1,
+                autoFocus: true,
+                select: function( event, ui ) {
+                    $('#address_kladr_id').val(ui.item.id);
+                    $('#map_block_div').show();
 
-            		$('#error_address').hide();
-            		$('#error_address').parents('div.input').removeClass('error');
-            		setTimeout(function(){
-            			GetCoordinates();
-            		}, 100);
-            	},
-            	change: function( event, ui ) {
-            		if (ui.item == null) {
-            			// $('#city_kladr_id').val('');
-            			// $('#address_selector').val('');
-            			$('#address_kladr_id').val('');
-            			GetCoordinates();
-            			$('#map_block_div').show();
-            		}
-            	}
+                    $('#error_address').hide();
+                    $('#error_address').parents('div.input').removeClass('error');
+                    setTimeout(function(){
+                        GetCoordinates();
+                    }, 100);
+                },
+                change: function( event, ui ) {
+                    if (ui.item == null) {
+                        // $('#city_kladr_id').val('');
+                        // $('#address_selector').val('');
+                        $('#address_kladr_id').val('');
+                        GetCoordinates();
+                        $('#map_block_div').show();
+                    }
+                }
             }).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
-            	return $( "<li>" )
-            	.append( "<a>" + item.label + "</a>" )
-            	.appendTo( ul );
+                return $( "<li>" )
+                .append( "<a>" + item.label + "</a>" )
+                .appendTo( ul );
             };  */
         }
 
@@ -633,15 +679,17 @@ var textView = Backbone.View.extend({
 
         var staticPath = app.settings.staticPath;
 
-        if (!_globalSettings.allowCkEditor) {
-            new nicEditor({
-                iconsPath: staticPath + 'images/nicEditorIcons.gif'
-            }).panelInstance('user_text_adv');
-        } else {
-            CkEditor.replaceOne('#user_text_adv', {
-                fileUpload: true
-            });
-        }
+        // if (this.text_required) {
+            if (!_globalSettings.allowCkEditor) {
+                new nicEditor({
+                    iconsPath: staticPath + 'images/nicEditorIcons.gif'
+                }).panelInstance('user_text_adv');
+            } else {
+                CkEditor.replaceOne('#user_text_adv', {
+                    fileUpload: true
+                });
+            }
+        // }
     },
 
     render: function() {
@@ -650,7 +698,7 @@ var textView = Backbone.View.extend({
             value: this.value,
             text_required: this.text_required
         });
-        this.$el.html(html);
+        this.$el.html((this.text_required) ? html: "");
         return this;
     },
 
@@ -809,13 +857,19 @@ var photoView = Backbone.View.extend({
                     data: _.extend(data, {
                         fileName: this.model.get('filename')
                     }),
-                    success: function(answer) {
-                    //var avoidCache = '?v=' + Math.random();
+                    success: function(answer) {        
+                    var avoidCache = '?v=' + Math.random();
                     me.model.set('filename', answer.fileName);
                     me.model.set('filepath', answer.thumbnails['120x90']);
                     me.model.set('original', answer.thumbnails['original']);
                     me.$el.find('img').attr('src', answer.thumbnails['120x90']);
                     me.$el.find('input[type=hidden]').val(answer.fileName);
+
+                    if (me.$el.find('.img').hasClass('active')) {
+                        $('#active_userfile').val(me.model.get('filename'));
+                        // me.model.set('active', true);
+                        console.log(me.model.attributes);
+                    }; 
                 }
             });
             }
@@ -905,10 +959,10 @@ var photoView = Backbone.View.extend({
             /*
             , rotateDegrees: 0
             , appendRotate: function (degrees) {
-            	this.rotateDegrees = (this.rotateDegrees + degrees) % 360;
-            	this.$image.next().css({
-            		transform: 'rotate(' + this.rotateDegrees + 'deg)'
-            	});
+                this.rotateDegrees = (this.rotateDegrees + degrees) % 360;
+                this.$image.next().css({
+                    transform: 'rotate(' + this.rotateDegrees + 'deg)'
+                });
             }
             */
             ,
@@ -1023,32 +1077,32 @@ save: function() {
         /* bootstrap version */
         /*
         var html = 
-        	'<div class="modal fade">'
-        		+ '<div class="modal-dialog">'
-        			+ '<div class="modal-content">'
-        				+ '<div class="modal-body">'
-        					+ '<img src="" />'
-        				+ '</div>'
-        			+ '</div>'
-        		+ '</div>'
-        	+ '</div>';
-        	*/
+            '<div class="modal fade">'
+                + '<div class="modal-dialog">'
+                    + '<div class="modal-content">'
+                        + '<div class="modal-body">'
+                            + '<img src="" />'
+                        + '</div>'
+                    + '</div>'
+                + '</div>'
+            + '</div>';
+            */
             /* other version */
             var html =
             /*'<div class="popup-wrp z400 cropper-popup">'
-            	+ '<div class="popup-window mw500">'
-            		+ '<div class="header">'
-            			+ 'Редактирование изображения'
-            			+ '<div class="popup-window-close js-close">'
-            				+ '<i class="ico close-ico16"></i>'
-            			+ '</div>'
-            		+ '</div>'
-            		*/
+                + '<div class="popup-window mw500">'
+                    + '<div class="header">'
+                        + 'Редактирование изображения'
+                        + '<div class="popup-window-close js-close">'
+                            + '<i class="ico close-ico16"></i>'
+                        + '</div>'
+                    + '</div>'
+                    */
                     '<div>' + '<div class="cropper-image">' + '<img src="" />' + '</div>' + '<div class="cropper-actions">' + '<button class="btn" data-rotate="90"><span class="fa fa-undo"></span></button>'
             //+ '<button class="btn" data-rotate="-10"><span class="fa fa-repeat"></span></button>'
             + '<button class="btn" data-zoom="0.1"><span class="fa fa-search-plus"></span></button>' + '<button class="btn" data-zoom="-0.1"><span class="fa fa-search-minus"></span></button>' + '<button class="btn" data-refresh>Сбросить</button>' + '<button class="btn" data-destroy>Отменить</button>' + '<button class="btn" data-save>Сохранить</button>' + '</div>' + '</div>'
             /*
-            	+ '</div>'
+                + '</div>'
             + '</div>';
             */
 
@@ -1226,6 +1280,7 @@ $('#fileupload').fileupload({
 
         changeActive: function(main_item) {
             var photo_cont = this.photos[main_item.cid].$el.find(".img");
+            console.log('set active');
             if (main_item.get("active")) {
                 photo_cont.addClass("active");
                 this.collection.each(function(item) {
@@ -1279,12 +1334,20 @@ $('#fileupload').fileupload({
 var categoryView = Backbone.View.extend({
     el: '#div_category',
     events: {
-        'change select': 'change'
+        'change select': 'change',
+        'click #rubricid' : 'accordeonToggle',
+        'click .optgroup' : 'openOptgroup',
+        'click .back' : 'getBack',
+        'click .option:not(.back)' : 'setValue'
     },
 
     initialize: function(options) {
+        var me = this;
+        $('body').on('click', function(){
+            me.hideMenu();
+        });
         _.extend(this, options);
-        this.control = this.$el.find("select");
+        this.control = this.$el.find("#rubricid");
         if (!this.control.length)
             this.control = this.$el.find("#fn-category");
         this._init_data();
@@ -1294,7 +1357,7 @@ var categoryView = Backbone.View.extend({
 
     _init_data: function() {
         this.settings = {};
-        this.category_id = this.control.val();
+        this.category_id = this.control.data('value');
         if (this.category_id && this.category_id != 0) {
             this.data = data[this.category_id];
             if (this.data) {
@@ -1304,7 +1367,68 @@ var categoryView = Backbone.View.extend({
         this.app.descriptions = data["descriptions"];
     },
 
+    accordeonToggle: function(e){
+        e.stopPropagation();
+        this.$container = $('#rubricid');
+        this.$container.toggleClass('brb2, bb');
+        this.$container.find('.select_wrap').toggle();
+    },
+
+    hideMenu: function(){
+        this.$container = $('#rubricid');
+        this.$container.addClass('brb2, bb');
+        this.$container.find('.select_wrap').hide();
+    },
+
+    openOptgroup: function(e){
+        e.stopPropagation();
+        var self = $(e.currentTarget);
+        self.addClass('active').children('.option').show();
+        this.$container = $('#rubricid');
+        this.$container.find('.option').first().addClass('back').html('<i class="fa fa-long-arrow-left mr5" aria-hidden="true"></i> Назад');
+        this.$container.find('.option:not(.back, .optgroup .option)').slideUp(); //self.children('.option').show();
+        $('.optgroup:not(.active)').slideUp();         
+        self.find('.optgroup_value').addClass('active bold');
+
+    },
+
+    setValue: function(e){
+        var self = $(e.currentTarget);
+        if (self.data('value') == 0) {
+            self.addClass('back');
+        }
+
+        this.$el.find('.current_value').html(self.html());
+
+        $('.option .sign_icon').remove();
+
+        self.append('<div class="sign_icon"><i class="fa fa-check" aria-hidden="true"></i></div>');
+        this.getBack(e);
+        this.accordeonToggle(e);
+
+        this.$el.find('#rubricid').data('value', self.data('value'));
+
+        $('input[name=rubricid]').val(self.data('value'));
+
+        this.change(e);
+
+    },
+
+    getBack: function(e){
+        e.stopPropagation();
+        var self = $(e.currentTarget);
+        $('.optgroup .option').not('.back').slideUp();
+        $('.option').not('.optgroup .option').slideDown();
+        $('.optgroup_value').each(function(){
+            $(this).removeClass('active bold');
+        });
+        $('.optgroup').removeClass('active').slideDown();
+
+        $('.option.back').removeClass('back').html('---');
+    },
+
     change: function(e) {
+
         var $temp = $('[data-role=service-set]');
         $temp.find('*:not(".service-wrap")').remove();
         if ($temp.length) {
@@ -1313,6 +1437,9 @@ var categoryView = Backbone.View.extend({
             });
         }
         this.value = $(e.target).val();
+
+        //this.value = $(e.target).data('value');
+
         this._init_data();
         this.app.initialize({
             reinit_after_change: true
@@ -1714,7 +1841,16 @@ return Marionette.ItemView.extend({
             this.category = new categoryView({
                 app: this
             });
+
+            this.ad_type = new adTypeView({
+                app: this
+            });
+
             this.city = new cityView({
+                category_id: this.category.category_id,
+                app: this
+            });
+            this.moderate_add_cities = new addCitiesView({
                 category_id: this.category.category_id,
                 app: this
             });
@@ -1760,7 +1896,7 @@ return Marionette.ItemView.extend({
         _destroy_controls: function() {
             this.params.trigger("destroy");
             this.subject.trigger("destroy");
-            this.text.trigger("destroy");
+            // this.text.trigger("destroy");
             this.cmap.trigger("disable");
         },
 
@@ -1790,7 +1926,7 @@ return Marionette.ItemView.extend({
         },
 
         submitForm: _.once(function() {
-            if (this.text && nicEditors.findEditor('user_text_adv')) {
+            if (this.text && this.category.settings.text_required && nicEditors.findEditor('user_text_adv')) {
                 nicEditors.findEditor('user_text_adv').saveContent();
             }
             $('#' + this.form_id).submit();

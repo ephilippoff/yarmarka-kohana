@@ -121,9 +121,12 @@ class Controller_Add extends Controller_Template {
 		elseif ($user AND $user->linked_to_user)
 			$form_data->LinkedUser();
 
+
+
 		if ( Acl::check("object.add.type") ) {
 			$form_data ->AdvertType();
 			$form_data ->UserType();
+			$form_data ->OtherCities();
 		}
 
 		if ( Acl::check("object.add.dates") ) {
@@ -154,7 +157,10 @@ class Controller_Add extends Controller_Template {
 
 		$twig->params = (array) $twig->params;
 		$twig->block_name = "add/_index";
+		$twig->cityTitle = $form_data->_data->city['city_title'];
 		$this->response->body($twig);
+
+		// echo "<pre>"; var_dump($twig); echo '</pre>'; die;
 
 	}
 
@@ -164,6 +170,7 @@ class Controller_Add extends Controller_Template {
 		$this->auto_render  = FALSE;
 		$twig = Twig::factory('user/add');
 		$twig->onPageFlag = 'add';
+		$twig->isEdit = TRUE;
 		$twig->params = new Obj();
 
 		$this->initAddForm($twig);
@@ -233,6 +240,7 @@ class Controller_Add extends Controller_Template {
 		if ( Acl::check("object.add.type") ) {
 			$form_data ->AdvertType();
 			$form_data ->UserType();
+			$form_data ->OtherCities();
 		}
 
 		if ( Acl::check("object.add.dates") ) {

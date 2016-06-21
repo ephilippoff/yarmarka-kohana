@@ -24,6 +24,40 @@
 		<? endforeach; ?>
 	</p>
 <? endif; ?>
+<script>
+	function find_by_id(id) {
+		$('.js-row').addClass('hidden');
+		$('.js-row'+id).removeClass('hidden');
+	}
+
+	$(document).ready(function(){
+
+		$('.js-submit').click(function(e){
+			e.preventDefault();
+			find_by_id( $('#prependedInput').val() );
+
+			
+		});
+
+		$('.js-clear').click(function(e){
+			e.preventDefault();
+			$('#prependedInput').val('')
+			$('.js-row').removeClass('hidden');
+
+			
+		})
+	})
+</script>
+<form class="form-inline">
+	
+	<div class="input-prepend">
+		<span class="add-on">id</span>
+		<input class="span2" id="prependedInput" type="text" placeholder="" name="email" value="">
+    </div>
+
+    <input type="submit" name="" value="Найти" class="btn btn-primary js-submit">
+	<input type="reset" name="" value="Сброс" class="btn js-clear">
+</form>
 <table class="table table-hover table-condensed" style="width:100%">
 	<tr>
 		<? $statexist = FALSE;?>
@@ -68,7 +102,7 @@
 			if (property_exists($item, "premium") AND $item->premium)
 				$style='background:#FFFACC;';
 		?>
-		<tr style="<?=$style?>">
+		<tr style="<?=$style?>" class="js-row js-row<?=$item->external_id?>">
 		<? $statexist = FALSE;?>
 		<? foreach($fields as $field):?>
 			<?

@@ -40,6 +40,8 @@
 <% } %>
 
 <% if (info.code >= 400) { %>
+<div style="font-size:1.2em;">
 	<p>Вы не можете воспользоваться этой услугой, потому что объявление заполнено не полностью.</p>
-	<p><%=info.text%></p>
+	<p class="bold" style="color:red;"><%=info.text%></p>
+</div>
 <% } %>

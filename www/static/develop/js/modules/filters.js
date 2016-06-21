@@ -300,7 +300,7 @@ define([
     var ListMultiFilterItem = ListFilterItem.extend({
         className: 'filter-item',
         template: templates.filters.listBoxFilterItem,
-        className: 'multi-cont clearfix filter-item',
+        //className: 'multi-cont clearfix filter-item',
         ui: {
             valuesCont: ".js-filter-values-cont",
             input: "input",
@@ -395,15 +395,19 @@ define([
         ui: {
             form: ".js-filters-form",
             submit: ".js-filters-submit",
+            reset: '.js-filters-reset',
             infoForm: '.submit-cont>span',
             staticFilters: ".js-filters-static input",
-            staticFiltersSelect: ".js-filters-static select"
+            staticFiltersSelect: ".js-filters-static select",
+            filter: ".filter-item"
+
         },
         regions: {
             filters: ".js-filters-cont"
         },
         events: {
-            "click @ui.submit": "submitClick"
+            "click @ui.submit": "submitClick",
+            "click @ui.reset" : "resetForm"
         },
         initialize: function(options) {
             this.bindUIElements();
@@ -466,8 +470,10 @@ define([
                                 var count = model.get("count");
                                 if (count > 0) {
                                     s.ui.infoForm.html('<i class="fa fa-check green mr5" aria-hidden="true"></i>Найдено ' + count + ' объявлений');
+                                    s.ui.submit.text('Показать');
                                 } else {
-                                     s.ui.infoForm.html(' <i class="fa fa-exclamation red mr5" aria-hidden="true"></i>Не найдено');
+                                     s.ui.infoForm.html(' <i class="fa fa-exclamation red mr5" aria-hidden="true"></i>Не найдено ни одного объявления. Сбросьте параметры поиска и попробуйте еще раз.');
+                                     s.ui.reset.fadeIn();
                                 }
                             }
                         });
@@ -497,6 +503,30 @@ define([
                     }
                 });
         },
+
+        resetForm:function(e){
+            var s = this;
+            e.preventDefault();
+            $('.filter-item').each(function(){
+                var titleHTML = $(this).find('span.name').html();
+                if (titleHTML !== 'Тип сделки') {
+                    $(this).find('.js-filter-anyinput').click();
+                }
+                $(this).find('input[type=text]').each(function(){
+                    $(this).val('');
+                    $(this).trigger('keyup');
+                });
+                $(this).find('select').each(function(){
+                    $(this).find('option').first().attr('selected', 'selected');
+                    $(this).trigger('change');
+                    $(this).find('option').first().removeAttr('selected');
+                });
+            });
+
+            $('#photo:checked, #private:checked').next().click();
+            this.ui.reset.fadeOut();
+        },
+
         getFormValues: function() {
             var s = this, formData = {};
             this.ui.form.serializeArray().map(function(x){formData[x.name] = x.value;});

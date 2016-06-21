@@ -10,5 +10,5 @@ Disallow: /*utm_source=
 Disallow: /*view=
 
 
-Sitemap: http://surgut.yarmarka.biz/sitemap.xml
-Host: surgut.yarmarka.biz
+Sitemap: http://{$subdomain}.yarmarka.biz/sitemaps/index.xml
+Host: {$subdomain}.yarmarka.biz

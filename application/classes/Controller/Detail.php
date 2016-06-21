@@ -101,12 +101,13 @@ class Controller_Detail extends Controller_Template {
 			$twig->user_object_stat_item = $user_object_stat_item;
 		}
 
+		
+
 		//add to last views
 		LastViews::instance()->set($object->id);
 		$this->response->body($twig);
 		LastViews::instance()->commit();
 
-		// echo "<pre>"; var_dump($twig); echo "</pre>"; die;
 	}
 
 	protected function validate_cv_mode($categorySeoName) {
@@ -202,9 +203,9 @@ class Controller_Detail extends Controller_Template {
 		$object = $this->request->param("object");
 		$url = $this->request->param("url");
 
-		if ($url <> $this->request->get_full_url()) {
-			HTTP::redirect($url, 301);
-		}
+		// if ($url <> $this->request->get_full_url()) {
+		// 	HTTP::redirect($url, 301);
+		// }
 
 		if ($object->active == 0) {
 		   throw new HTTP_Exception_404;
@@ -272,6 +273,8 @@ class Controller_Detail extends Controller_Template {
 		foreach ((array) $detail_info as $key => $item) {
 			$twig->{$key} = $item;
 		}
+
+		// echo "<pre>"; var_dump($twig->object); echo "</pre>"; die;
 		
 		$this->response->body($twig);
 	}

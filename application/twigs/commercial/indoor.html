@@ -1,0 +1,157 @@
+{% extends "layouts/simple" %}
+
+{% block title %}
+	{% for crumb in crumbs %}
+		{% if not crumb.url %}
+			{{crumb.title}}
+		{% endif %}
+	{% endfor %}
+{% endblock title%}
+
+{% block header %}
+	{{ parent() }}
+	{{ css("commercial.css") }}
+	{% include 'cart/crumbs' %}
+{% endblock header %}
+
+
+{% block content %}
+
+<div class="col-lg-12">
+	
+	<div id="indoor">
+		<div class="main_block">
+			<div class="indoor_title">
+				<div class="indoor_big"><span>Ярмарка</span>|</div><div class="indoor_little"><span>in</span>door</div>
+			</div>
+
+			<div class="indoor_title2">
+				<span class="additional"></span>
+				Размещение рекламы
+				<span>ЖД Вокзал г. Сургут</span>
+			</div>
+
+			<div class="indoor_title3 ta-c">
+				<div class="ta-c"><span class="bold">yarmarka.biz</span></div>
+				сайт полезных объявлений
+			</div>
+
+			<div class="call_message">
+				Звоните: (3466) 406-102
+			</div>
+		</div>
+
+		<section class="indoor-section">
+			<div class="ta-c">
+				<div class="model_title bold">МОДЕЛЬ FLEXCACE (FC)</div>
+			</div>
+			<div class="bg-smoke clearfix">
+				<div class="model_format">
+					Формат
+					<div class="format_image">
+						<img src="/static/develop/images/commercial/format1.jpg" alt="">
+					</div>
+				</div>
+				<div class="model_description">
+					<div class="descr_title bold">
+						Технические характеристики
+						<span>Материал Транслюценный баннер</span>
+					</div>
+
+					<ul class="descr_ul">
+						<li>габариты (наружные) корпуса <br>3500 x 2500 мм</li>
+						<li>размер видимого рекламного поля <br>3500 x 2500 мм</li>
+						<li>размер винилового плаката <br>3650 x 2550 мм (включая карманы)</li>
+					</ul>
+				</div>
+			</div>
+
+			<div class="price_block">
+				<div class="bold">Стоимость</div>
+				<ul>
+					<li>Размещение - 30 000 руб./мес.</li>
+					<li>Печать - 12 000 руб.</li>
+					<li>Монтаж - 5 500 руб.</li>
+				</ul>
+			</div>
+
+			<div class="example">
+				<div class="bg-smoke">
+					<div class="ta-c bold">
+						Расположение баннеров 3.5 х 2.5 м - 2 шт
+					</div>
+					<div class="signs">
+						<span class="sign">№1</span>
+						<span class="sign">№2</span>
+					</div>
+				</div>
+				<div class="example_img">
+					<span class="additional"></span>
+					<img src="/static/develop/images/commercial/indoor_example1.jpg" alt="">
+				</div>
+			</div>
+		</section>
+
+
+		<section class="indoor-section">
+			<div class="ta-c">
+				<div class="model_title bold">МОДЕЛЬ Fra meSignLed FSI</div>
+			</div>
+			<div class="bg-smoke clearfix">
+				<div class="model_format">
+					Формат
+					<div class="format_image">
+						<img src="/static/develop/images/commercial/format2.jpg" alt="">
+					</div>
+				</div>
+				<div class="model_description">
+					<div class="descr_title bold">
+						Технические характеристики
+						<span>Материал Бэклит (Backlit) <br>пленка светорассеивающая</span>
+					</div>
+
+					<ul class="descr_ul">
+						<li>габариты (наружные) корпуса <br>3000 x 1000 мм</li>
+						<li>размер видимого рекламного поля <br>2894 x 894 мм</li>
+						<li>размер<br>2930 x 940 мм</li>
+						<li>светодиодная подстветка</li>
+					</ul>
+				</div>
+			</div>
+
+			<div class="price_block">
+				<div class="bold">Стоимость</div>
+				<ul>
+					<li>Размещение - 15 000 руб./мес.</li>
+					<li>Печать - 6 500 руб.</li>
+					<li>Монтаж - 1 500 руб.</li>
+				</ul>
+			</div>
+
+			<div class="example">
+				<div class="bg-smoke">
+					<div class="ta-c bold">
+						Расположение баннеров 3 х 1 м - 4 шт
+					</div>
+					<div class="signs">
+						<span class="sign">№1</span>
+						<span class="sign">№3</span>
+						<span class="sign">№2</span>
+						<span class="sign">№4</span>
+					</div>
+				</div>
+				<div class="example_img">
+					<span class="additional"></span>
+					<img src="/static/develop/images/commercial/indoor_example2.jpg" alt="">
+				</div>
+			</div>
+		</section>
+	</div>
+
+</div>
+
+{% endblock content %}
+
+{% block footer %} 
+	{{ parent() }}
+{% endblock footer %}

@@ -1,5 +1,12 @@
 {% extends "layouts/simple" %}
 
+{% block title %}
+	{% for crumb in crumbs %}
+		{% if not crumb.url %}
+			{{crumb.title}}
+		{% endif %}
+	{% endfor %}
+{% endblock title%}
 
 {% block header %}
 	{{ parent() }}
@@ -18,7 +25,7 @@
 	
 	<p><b>Премиум-объявление</b> в течение 7 дней отображается в специальном блоке на сайте. Этот блок располагается на самом видимом месте - сверху, над обычными объявлениями в поисковой выдаче:</p>
 
-	<img src="../static/develop/images/commercial/premium1.png" alt="">
+	<img src="../static/develop/images/commercial/premium1.jpg" alt="">
 
 	<p>Услуга также предусматривает поднятие объявления на первое место страницы поиска в момент применения.</p>
 
@@ -29,8 +36,10 @@
 
 	<p><br><br><b>Как присвоить моему объявлению премиум-статус?</b> <br> В карточке объявления нажмите на кнопку «Премиум» (в правой части страницы):</p>
 
-	<img src="../static/develop/images/commercial/premium-btn.png" alt="" class="mb50">
-	<img src="../static/develop/images/commercial/premium-btn2.png" alt="">
+	<img src="../static/develop/images/commercial/premium-btn.png" alt="" class="mb20">
+
+	<p>Или перейдите во вкладку "мои объявления" в личном кабинете и нажмите на кнопку “Премиум” под нужным объявлением:</p>
+	<img src="../static/develop/images/commercial/premium-btn2.png" alt="" class="db">
 
 </div>
 

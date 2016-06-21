@@ -27,6 +27,15 @@ class Controller_Search extends Controller_Template {
             $route_params = $this->request->param();
             $query_params = $this->request->query();
 
+            if (@$query_params['k']) {
+                
+                $query_params = array(
+                    'search' => $query_params['k']
+                );
+                HTTP::redirect($uri."=".http_build_query($query_params), 301);
+                return;
+            }
+
             try {
                 $searchuri = new Search_Url($route_params['category_path'], $query_params, ($this->domain->get_city()) ? $this->domain->get_city()->id : FALSE);
             } catch (Kohana_Exception $e) {
@@ -68,6 +77,8 @@ class Controller_Search extends Controller_Template {
 
         $search_params = Search_Url::clean_reserved_query_params($this->request->query());
 
+        // var_dump($this->request->query()); die;
+
         //link counters
         if ($search_info->enable_link_couters) {
             $search_info->link_counters = Search_Url::getcounters($search_info->s_host, $search_info->category_url, array_merge($search_info->category_childs, $search_info->category_childs_elements) );
@@ -105,12 +116,14 @@ class Controller_Search extends Controller_Template {
         //$main_search_query->where('o.source_id', '<>', 2);
 
         $twig->main_search_result = Search::getresult($main_search_query->execute()->as_array());
+
         if (!$search_info->main_search_result_count) {
                 $main_search_result_count = Search::searchquery($search_info->search_filters, array(), array("count" => TRUE))
                                                         ->execute()
                                                         ->get("count");
                 $search_info->main_search_result_count = $main_search_result_count;
         }
+
 
         if (count($twig->main_search_result) > 0) 
         {
@@ -267,9 +280,9 @@ class Controller_Search extends Controller_Template {
             'count_out' => 0,
             'count_in' => 4,
             'limits' => array(
-                "10" => Search_Url::get_suri_without_reserved($this->request->query(),array(),array("limit","page")),
-                "20" => Search_Url::get_suri_without_reserved($this->request->query(), array( "limit" => 20), array("page")),
+                "25" => Search_Url::get_suri_without_reserved($this->request->query(),array(),array("limit","page")),
                 "50" => Search_Url::get_suri_without_reserved($this->request->query(), array( "limit" => 50), array("page")),
+                "75" => Search_Url::get_suri_without_reserved($this->request->query(), array( "limit" => 75), array("page")),
             )
         ));
 
@@ -413,12 +426,57 @@ class Controller_Search extends Controller_Template {
             $this->process_child_categories($twig->category_childs);
         }
 
-        // if (count($twig->main_search_result) == 0) {
-        //     $this->response->status(404);
-        // }
-        $this->response->body($twig);
+        if (count($twig->main_search_result) == 0) {
+            $result = $this->find_other_adverts($search_info);
+            while (count($result) == 0) {
 
-        // echo "<pre>"; var_dump($twig); echo "</pre>"; die;
+                $newSearchText = explode(' ', $search_info->search_text);
+                if (count($newSearchText)>1) {
+                    $search_info->search_text = array_shift($newSearchText);
+                }elseif (count($newSearchText) == 1) {
+                    $newSearchText = implode('', $newSearchText);
+                    if (strlen($newSearchText) > 3) {
+                       $search_info->search_text = substr($newSearchText, 0, -2);
+                    }else break;
+                }
+                // var_dump($search_info->search_text);
+
+                $result = $this->find_other_adverts($search_info);
+            }
+
+            $twig->other_adverts = $result;
+        }
+
+        if ($twig->category->id == 2 OR $twig->category->parent_id == 2 ) {
+            $property_map = $twig->main_search_result;
+            $property_map = array_map(function($item){
+                $square = 0;
+                $cost = 0;
+                if(isset($item['compiled']['attributes']['ploshchad'])){
+
+                    $square = $item['compiled']['attributes']['ploshchad']['value'];
+
+                }elseif (isset($item['compiled']['attributes']['ploshchad-doma'])) {
+                    $square = $item['compiled']['attributes']['ploshchad-doma']['value'];
+                }
+
+                if (isset($item['price'])){
+                    $cost = $item['price'];
+                }
+
+                if ($cost != 0 AND $square != 0) {
+                    $squarePrice = (int)($cost/$square);
+                    $item['square_price'] = $squarePrice;
+                    return $item;
+                }
+            }, $property_map);
+
+            $twig->main_search_result = $property_map;
+        }
+
+
+
+        $this->response->body($twig);
 
     }
 
@@ -553,7 +611,6 @@ class Controller_Search extends Controller_Template {
                 $clean_query_params
             )
         );
-
         return $info;
     }
 
@@ -581,6 +638,7 @@ class Controller_Search extends Controller_Template {
             $info->city_id,
             (count($info->child_categories_ids) > 0) ? $info->child_categories_ids : $info->category_id
         );
+
         $info->sphinx_category_childs = $info->category_childs = $sphinx_category_childs["categories"];
         $info->category_childs_elements = $this->params_by_uri->get_category_childs_elements($info->category_id, $info->city_id, $this->params_by_uri->get_seo_filters());
         $info->category_childs_elements_colsize = 4;
@@ -666,6 +724,48 @@ class Controller_Search extends Controller_Template {
                         ->find();
 
         return ($search_info->loaded()) ? $search_info->get_row_as_obj() : FALSE;
+    }
+
+    public function find_other_adverts($search_info)
+    {
+        // var_dump($search_info->search_text); die;
+
+        // $categoryID = ($search_info->category->id == 1) ? $search_info->child_categories_ids : $search_info->category->id;
+       
+        $filters = array(
+                "active" => TRUE,
+                'expiration' => true,
+                'expired' => true,
+                'published' => true,
+                "city_id" => $search_info->city->id,
+                "search_text" => $search_info->search_text,
+                // "category_id" => $categoryID
+        );
+
+
+        $category = $search_info->category;
+
+        while (1 == 1) {
+            $result = Search::getresult(Search::searchquery($filters, array("limit" => 50, "page" => 1))->execute()->as_array());
+
+            if (count($result) > 0 OR !$category->parent_id OR $category->id == 1) {
+                break;
+            }
+
+            $category = ORM::factory('Category', $category->parent_id);
+            $filters['category_id'] = $category->id;
+        }
+
+        // foreach ($result as $key => $value) {
+        //     if (count($result[$key]['compiled']) == 0) {
+        //         unset($result[$key]);
+        //     }        
+        // }
+
+
+        if (shuffle($result)) {
+            return $result;
+        }
     }
     
     public function after()

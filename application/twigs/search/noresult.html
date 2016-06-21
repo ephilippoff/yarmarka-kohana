@@ -1,11 +1,13 @@
-<p class="msg p20" style="font-size:20px;">Объявлений не найдено</p>
-<p>Ознакомьтесь с несколькими советами по эффективному поиску:</p>
-<ul>
-	<li>Убедитесь, что в запросе нет опечаток</li>
-	<li>Используйте меньше слов в запросе, например, вместо "срочно куплю стиральную машину", наберите "стиральная машина"</li>
-	<li>В панели фильтров используйте меньшее количество опций</li>
-	<li>Попробуйте поискать объявления в другом городе или по всем городам</li>
-</ul>
+<p class="msg p20" style="font-size:20px;">Похоже, что у нас нет того, что Вы искали, но, возможно Вас заинтересует:</p>
 
+<hr>
 
+{% set mini_cart_path = 'detail/mini/default_tablerow' %}
+{% if check_access("object.moderate") %}
+	{% set mini_cart_path = 'detail/mini/default_tablerow_for_admin' %}
+{% endif %}
+
+{% for object in other_adverts|slice(0,10) %}
+	{% include mini_cart_path %}
+{% endfor %}
 

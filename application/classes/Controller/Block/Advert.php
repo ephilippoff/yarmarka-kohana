@@ -56,10 +56,64 @@
 
 		}
 
-		public function action_main_page_latest() {
+
+		public function action_main_page_vip() {
 
 			/* settings */
-			$count = 8;
+			$count = 30;
+
+			$view = Twig::factory('block/advert/main_page_latest');
+
+			/* get services */
+			$objectsService = $this->getService('Objects');
+
+			/* get city seo name from url */
+
+			$domain = new Domain();
+        	$city = $domain->get_city_by_subdomain($domain->get_subdomain());
+			$citySeoName = $city->seo_name;
+
+			/* get data */
+			$query = $objectsService->getObjects();
+			$objectsService->selectMainImage($query);
+			$objectsService->selectPublished($query);
+			$objectsService->filterByCitySeoName($query, $citySeoName);
+			$objectsService->filterOnlyVip($query);
+			$objectsService->selectCategoryUrl($query);
+			$items = $query->execute();
+
+			/* process data */
+			$processedData = array();
+			foreach($items as $index => $item) {
+				if ($index >= $count) {
+					break;
+				}
+				$processedData []= $this->process_item($item);
+			}
+
+			/* push view data */
+
+			$count = count($processedData);
+
+			if ($count < 8) {
+				$new_data = $this->main_page_latest($count, $processedData);
+				$view->data = $new_data;
+			}else{
+				shuffle($processedData);
+				array_slice($processedData, 0, 8);
+				$view->data = $processedData;
+			}
+
+
+
+			$this->response->body($view);
+
+		}
+
+		public function main_page_latest($limit, $vip_data) {
+
+			/* settings */
+			$count = 8 - $limit;
 			$rubric = 1;
 			$categoryHierarchyLevel = 5;
 
@@ -134,10 +188,15 @@
 				$processedData []= $this->process_item($item);
 			}
 
-			/* push view data */
-			$view->data = $processedData;
+			$new_data = array_merge($vip_data, $processedData);
 
-			$this->response->body($view);
+
+			return $new_data;
+
+			/* push view data */
+			// $view->data = $processedData;
+
+			// $this->response->body($view);
 		}
 
 	}
