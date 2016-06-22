@@ -1353,6 +1353,13 @@ var categoryView = Backbone.View.extend({
         this._init_data();
         this._init_description();
         this._init_price();
+
+        var category_id = this.control.data('value');
+        console.log(category_id)
+        if (category_id && category_id != 0) {
+             this.$el.find('.current_value').html($('#rubricid .option[data-value='+category_id+']').html());
+        }
+       
     },
 
     _init_data: function() {
