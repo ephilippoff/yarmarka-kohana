@@ -1,5 +1,52 @@
 /*global define */
+define('jquery', [], function() {
+    return jQuery;
+});
+
+require.config({
+    paths : {
+         underscore : 'lib/underscore',
+         backbone   : 'lib/backbone',
+         marionette : 'lib/backbone.marionette',
+         cropper: 'lib/cropper',
+         ymap: 'http://api-maps.yandex.ru/2.1/?load=package.full&lang=ru-RU',
+         fileupload: 'lib/vendor/jquery.fileupload',
+         nicEdit: 'lib/vendor/nicEdit',
+         maskedInput: 'lib/vendor/jquery.maskedinput',
+         ckeditor: 'lib/ckeditor/ckeditor',
+         ckeditorJqueryAdapter: 'lib/ckeditor/adapters/jquery'
+    },
+    shim : {
+        localStorage : ['backbone'],
+        underscore : {
+            exports : '_'
+        },
+        backbone : {
+            exports : 'Backbone',
+            deps : ['underscore']
+        },
+        marionette : {
+            exports : 'Backbone.Marionette',
+            deps : ['backbone']
+        },
+        paginator : {
+            deps : ['backbone'],
+            exports: 'Backbone.Paginator'
+        },
+        fileupload: {
+             deps : ['iframeTransport']
+        },
+         ckeditorJqueryAdapter: {
+            deps: [ 'ckeditor' ]
+        }
+    },
+    deps : ['underscore']
+});
+
+var CkEditor;
+
 define([
+
     "marionette",
     "templates/set/add",
     "views/partials/behaviors/contacts",
@@ -7,13 +54,12 @@ define([
     "nicEdit",
     "maskedInput",
     "ymap",
-    //use cropper
-    //'lib/cropper.js'
     'cropper',
     'views/partials/add/additional_contacts',
-    'modules/ckeditor',
     'modules/add-service/main'
-    ], function(Marionette, templates, ContactsBehavior, jqueryFileUpload, nicEdit, maskedInput, ymap, cropper, AdditionalContacts, CkEditor, serviceApp) {
+    ], function(Marionette, templates, ContactsBehavior, jqueryFileUpload, nicEdit, maskedInput, ymap, cropper, AdditionalContacts, 
+        //CkEditor, 
+        serviceApp) {
         "use strict";
 
         var photoList = Backbone.Collection.extend({
@@ -1840,7 +1886,15 @@ return Marionette.ItemView.extend({
         if (this.reinit_after_change)
             this._destroy_controls();
 
-        self._init_controls();
+            if ( _globalSettings.allowCkEditor) {
+               require(["modules/ckeditor"], function(ckeditor) {
+                    CkEditor = ckeditor;
+                    self._init_controls();
+                });
+           } else {
+                self._init_controls();
+           }
+        
     },
 
     _init_controls: function() {

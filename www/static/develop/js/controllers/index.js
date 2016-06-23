@@ -8,8 +8,7 @@ define([
     "views/partials/detail",
     "views/partials/userSearch",
     "views/partials/cart",
-    "views/partials/add",
-    "modules/add-service/main",
+    
     "views/partials/article",
 
     "modules/filters",
@@ -22,7 +21,9 @@ define([
     'modules/subscription/main'
 ], 
 function (Marionette, templates, utils, IndexPage, SearchPage, DetailPage, 
-    UserSearchPage, CartPage, AddPage, serviceApp, ArticlePage, FiltersModule, MapModule, Afisha,
+    UserSearchPage, CartPage, 
+    //AddPage, serviceApp, 
+    ArticlePage, FiltersModule, MapModule, Afisha,
     ReklamaClickInitializer, MainPageNewsView, SubscriptionModule) {
     "use strict";
 
@@ -105,9 +106,15 @@ function (Marionette, templates, utils, IndexPage, SearchPage, DetailPage,
             console.log("Add start");
             app.module("map", MapModule);
             app.menu.init(["main", "city", "kupon", "news"]);
-            new AddPage({
-                el: "body"
+
+            require(["views/partials/add"], function(AddPage, ServiceApp) {
+
+                    new AddPage({
+                        el: "body"
+                    });
             });
+
+            
 
         },
 
