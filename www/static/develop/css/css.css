@@ -1346,6 +1346,10 @@ img.category-icon{
     overflow: hidden;
 }
 
+#reklama_container .google-link{
+    width: 33%;
+}
+
 #reklama_container img{
     float: left;
     display: block;
