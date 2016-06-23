@@ -109,6 +109,7 @@ class Task_Object_Compiled extends Minion_Task
 		}
 
 		$compiled = array_merge($compiled, Object_Compile::getServices($item->id) );
+		die;
 		if ($show_hint)
 		{
 			Minion_CLI::write('services: saved');
