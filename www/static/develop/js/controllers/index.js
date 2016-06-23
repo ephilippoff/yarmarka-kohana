@@ -107,11 +107,16 @@ function (Marionette, templates, utils, IndexPage, SearchPage, DetailPage,
             app.module("map", MapModule);
             app.menu.init(["main", "city", "kupon", "news"]);
 
-            require(["views/partials/add"], function(AddPage, ServiceApp) {
+            require(["../static/develop/production/js/add.build.js"], function() {
+
+                require(['../js/views/partials/add'], function(AddPage)  {
 
                     new AddPage({
                         el: "body"
                     });
+                    
+                });
+              
             });
 
             
