@@ -1,7 +1,7 @@
 <?php defined('SYSPATH') OR die('No direct access allowed.');
 return array(
 	"up" => array(
-		"default" => 20
+		"default" => 50
 	),
 	"cities" => array(
 		"default" => 20
