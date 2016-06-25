@@ -63,6 +63,8 @@ class Lib_PlacementAds_AddEdit {
 		$address = "";
 		$param_keys = array_keys($params);
 		$address_attribute_ids = Kohana::$config->load('common.address_attribute_ids');
+
+		echo "<pre>";var_dump($params); echo "</pre>"; die;
 		$refs = array();
 		$ref = ORM::factory('Reference')
 
