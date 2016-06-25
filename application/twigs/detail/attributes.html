@@ -1,44 +1,44 @@
-<div class="text-cont module">
+<div class="text-cont module" itemprop="description">
 	{{object.user_text}}
 </div>
+<meta itemprop="url" content="{{object.compiled.url}}">
+<meta itemprop="productID" content="{{object.id}}">
+{% set cost = null %}
 <div class="attrs-cont module">
 	{% if object.compiled.attributes|length > 0 %}
-		<table class="w100p">
-			<tbody>
-				<tr>
-					<td class="bold">Город</td>
-					<td>{% if object.compiled.real_city %}{{object.compiled.real_city }}{% else %}{{ object.compiled.city }}{% endif %}, {{ object.compiled.address }}</td>
-				</tr>
-				{% for attr in object.compiled.attributes if attr.value and attr.seo_name in ['adres-raion']%}
-				<tr>
-					<td class="bold">{{ attr.title }}</td>
-					<td>{{ attr.value|e }}</td>
-				</tr>
-				{% endfor %}
-				{% for attr in object.compiled.attributes if attr.value and attr.seo_name not in ['zarplata','tsena','adres-raion']%}
-				<tr>
-					<td class="bold">{{ attr.title }}</td>
-					<td>{{ attr.value|e }}</td>
-				</tr>
-				{% endfor %}
-				{% set cost = null %}
-				{% for attr in object.compiled.attributes if attr.value and attr.seo_name in ['tsena', 'zarplata']%}
-				{% set cost = attr.value %}
-				<tr>
-					<td class="bold">{{ attr.title }}</td>
-					<td><p class="amount">{{ attr.value|e|number_format(0, ' ', ' ') }} <i class="fa fa-rub"></i></p></td>
-				</tr>
-				{% endfor %}
-
-				{% for attr in object.compiled.attributes if attr.value and attr.seo_name in ['ploshchad', 'ploshchad-doma'] %}
-				{% set square = attr.value %}
-				{% set price_for_square = cost//square %}
-				<tr>
-					<td class="bold">Цена за кв<sup>2</sup></td>
-					<td><p class="amount fs14">{{price_for_square|e|number_format(0, ' ', ' ') }} <i class="fa fa-rub"></i> </p></td>
-				</tr>
-				{% endfor %}
-			</tbody>
-		</table>
+	<table class="w100p">
+		<tbody>
+			<tr>
+				<td class="bold">Город</td>
+				<td>{% if object.compiled.real_city %}{{object.compiled.real_city }}{% else %}{{ object.compiled.city }}{% endif %}, {{ object.compiled.address }}</td>
+			</tr>
+			{% for attr in object.compiled.attributes if attr.value and attr.seo_name in ['adres-raion']%}
+			<tr>
+				<td class="bold">{{ attr.title }}</td>
+				<td>{{ attr.value|e }}</td>
+			</tr>
+			{% endfor %}
+			{% for attr in object.compiled.attributes if attr.value and attr.seo_name not in ['zarplata','tsena','adres-raion']%}
+			<tr>
+				<td class="bold">{{ attr.title }}</td>
+				<td>{{ attr.value|e }}</td>
+			</tr>
+			{% endfor %}
+			{% set cost = null %}
+			{% for attr in object.compiled.attributes if attr.value and attr.seo_name in ['tsena', 'zarplata']%}
+			{% set cost = attr.value %}
+			<tr>
+				<td class="bold">{{ attr.title }}</td>
+				<td><p class="amount">{{ attr.value|e|number_format(0, ' ', ' ') }} <i class="fa fa-rub"></i></p></td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
 	{% endif %}
+</div>
+
+<div itemprop="offers" itemscope="" itemtype="http://schema.org/Offer">
+	<meta itemprop="price" content="{{cost}}">
+	<meta itemprop="priceCurrency" content="RUB">
+	<meta itemprop="availability" content="{% if object.is_published > 0 %} InStock {% else %} OutOfStock {% endif %}">
 </div>
