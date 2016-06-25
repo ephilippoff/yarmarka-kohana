@@ -8,7 +8,7 @@
 		<div class="sign_icon">
 			<i class="fa fa-angle-down" aria-hidden="true"></i>
 		</div>
-		<div class="current_value">---</div>
+		<div class="current_value"><?=$data->value ? $data->value : '---' ?></div>
 		<div class="select_wrap hidden">
 			<div class="option" data-value="0">---</div>
 
@@ -22,7 +22,12 @@
 					<div class="optgroup_value"><?=$key?></div>
 					<? foreach($item as $id=>$title) : ?>
 						<?php if (!in_array($id, array(42,156,72))): ?>
-							<div class="option hidden" data-value="<?=$id?>"><?=$title?></div>
+							<div class="option hidden" data-value="<?=$id?>">
+								<?=$title?>
+								<? if ($id = $data->category_id): ?>
+									<div class="sign_icon"><i class="fa fa-check" aria-hidden="true"></i></div>
+								<? endif; ?>
+							</div>
 						<?php endif ?>
 					<? endforeach; ?>
 				</div>
