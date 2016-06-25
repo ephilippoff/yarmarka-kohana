@@ -42,9 +42,9 @@ class Lib_PlacementAds_AddEdit {
 				if (preg_match('/^param_([0-9]*)/', $key, $matches))
 				{
 					$this->params->{$key} = ( is_array( $this->params->{$key} ) OR preg_match('/^_[0-9]+$/', $this->params->{$key}) ) 
-						? str_replace("_", "", $this->params->{$key})
-						: $this->params->{$key};
-						
+					? str_replace("_", "", $this->params->{$key})
+					: $this->params->{$key};
+
 					$data_params[] = explode("_", $key);
 				}
 			}
@@ -52,10 +52,48 @@ class Lib_PlacementAds_AddEdit {
 			if (!$this->params->address)
 				$this->params->address = $this->parse_address_from_params((array) $this->params);
 
-			
+			$category_parent_id = ORM::factory('Category')
+			->where('id', '=', $this->params->rubricid)
+			->find()
+			->parent_id;
+
+			if ($category_parent_id AND $category_parent_id == 2) {
+				$this->params->square_price = $this->calculate_square_price((array) $this->params);
+			}
+
 
 		}
 		return $this;
+	}
+
+	function calculate_square_price($params)
+	{
+		$square_price = 0;
+		$param_keys = array_keys($params);
+		$square_attribute_ids = Kohana::$config->load('common.square_attribute_ids');
+		$ref = ORM::factory('Reference')
+		->where("attribute","IN", $square_attribute_ids)
+		->find_all();
+
+		foreach($ref as $item){
+			if (in_array("param_".$item->id, $param_keys))
+				$square = $params["param_".$item->id];
+		}
+
+		//====================
+
+		$price_attribute_id = Kohana::$config->load('common.price_attribute_id');
+
+		$ref = ORM::factory('Reference')
+		->where("attribute","=", $price_attribute_id)
+		->find_all();
+
+		foreach($ref as $item){
+			if (in_array("param_".$item->id, $param_keys))
+				$price = $params["param_".$item->id];
+		}
+
+		return round($price / $square, 1);
 	}
 
 	function parse_address_from_params($params)
@@ -64,16 +102,15 @@ class Lib_PlacementAds_AddEdit {
 		$param_keys = array_keys($params);
 		$address_attribute_ids = Kohana::$config->load('common.address_attribute_ids');
 
-		echo "<pre>";var_dump($params); echo "</pre>"; die;
 		$refs = array();
 		$ref = ORM::factory('Reference')
 
-					->where("attribute","IN", $address_attribute_ids)
-					->cached(Date::DAY)
-					->find_all();
+		->where("attribute","IN", $address_attribute_ids)
+		->cached(Date::DAY)
+		->find_all();
 		foreach($ref as $item){
 			if (in_array("param_".$item->id, $param_keys))
-					$address = $params["param_".$item->id];
+				$address = $params["param_".$item->id];
 		}
 
 		return $address;
@@ -91,7 +128,7 @@ class Lib_PlacementAds_AddEdit {
 			$auth->login($params->login, $params->pass, TRUE);
 			//echo CI::login($params->login, $params->pass);
 		} 
-			catch (Exception $e)
+		catch (Exception $e)
 		{
 			$errors["pass_error"] = $e->getMessage();
 
@@ -199,7 +236,7 @@ class Lib_PlacementAds_AddEdit {
 		if ($city_id > 0)
 		{
 			$city = ORM::factory('City', $city_id)
-								->cached(Date::WEEK, array("region", "add"));
+			->cached(Date::WEEK, array("region", "add"));
 			if ( ! $city->loaded() )
 				$this->raise_error('city not finded');
 		} 
@@ -262,9 +299,9 @@ class Lib_PlacementAds_AddEdit {
 		$category_settings  = new Obj((array) $this->category_settings);
 
 		$validation = Validation::factory((array) $this->params)
-			->rule('city_id', 'not_empty', array(':value', "Город"))
-			->rule('rubricid', 'not_empty', array(':value', "Раздел"))
-			->rule('rubricid', 'not_category_0', array(':value', "Раздел"));
+		->rule('city_id', 'not_empty', array(':value', "Город"))
+		->rule('rubricid', 'not_empty', array(':value', "Раздел"))
+		->rule('rubricid', 'not_category_0', array(':value', "Раздел"));
 
 		if ($category)
 		{
@@ -276,7 +313,7 @@ class Lib_PlacementAds_AddEdit {
 			$validation->rules('title_adv', array(
 				array('not_empty', array(':value', "Заголовок объявления")),
 				array('min_length', array(':value', 10, "Заголовок объявления")),
-			));
+				));
 		}
 
 		if ($category AND $category->text_required)
@@ -284,7 +321,7 @@ class Lib_PlacementAds_AddEdit {
 			$validation->rules('user_text_adv', array(
 				array('not_empty_html', array(':value', "Текст объявления")),
 				array('max_length', array(':value', 15000, "Текст объявления")),
-			));
+				));
 		}
 
 		$exclusion = Kohana::$config->load("common.add_phone_required_exlusion");
@@ -295,27 +332,27 @@ class Lib_PlacementAds_AddEdit {
 
 			$validation->rules('contact_mobile', array(
 				array('mobile_verified', array(':value', $params->session_id) )
-			));
+				));
 
 			$validation->rules('contact_phone', array(
 				array('phone_verified', array(':value', $params->session_id) )
-			));
+				));
 
 			$validation->rules('contact_email', array(
 				array('email_verified', array(':value', $params->session_id) )
-			));
+				));
 
 		} 
 		elseif ($category AND !$params->itis_massload  AND !$params->just_check)
 		{
 			$validation->rules('contact_mobile', array(
 				array('mobile_verified', array(':value', $params->session_id) )
-			));
+				));
 		} elseif ($category AND in_array($category->id, $exclusion) AND !$params->itis_massload  AND !$params->just_check)
 		{
 			$validation->rules('contact_email', array(
 				array('email_verified', array(':value', $params->session_id) )
-			));
+				));
 		}
 		
 
@@ -335,7 +372,7 @@ class Lib_PlacementAds_AddEdit {
 			$titles =  Kohana::$config->load("dictionaries.additional_fields.".$user->org_type);
 			foreach ($settings as $setting) {
 				$validation->rules($setting, array(
-						array('not_empty', array(':value', $titles[$setting]))
+					array('not_empty', array(':value', $titles[$setting]))
 					)
 				);
 			}
@@ -348,12 +385,12 @@ class Lib_PlacementAds_AddEdit {
 
 			foreach ($saveas as $field => $_saveas) {
 
-					$param = $saveas[$field][0];
-					$value = trim($params->{$field});
-					if ($value)
-						$params->{$param} = $value;
-					else
-						$params->{$param} = $saveas[$field][1];
+				$param = $saveas[$field][0];
+				$value = trim($params->{$field});
+				if ($value)
+					$params->{$param} = $value;
+				else
+					$params->{$param} = $saveas[$field][1];
 			}
 		}
 		return $this;
@@ -376,7 +413,7 @@ class Lib_PlacementAds_AddEdit {
 				'value' 		=> $value,
 				'type_id' 		=> $type_id,
 				'moderate'		=> $contact->moderate
-			);
+				);
 
 		}
 
@@ -396,10 +433,10 @@ class Lib_PlacementAds_AddEdit {
 				continue;
 			}
 			$this->contacts []= array(
-					'value' => $contact['value'],
-					'type_id' => $contact['type'],
-					'contact_obj' => ORM::factory('Contact')->by_value($contact['value'])->find(),
-					'is_additional' => true
+				'value' => $contact['value'],
+				'type_id' => $contact['type'],
+				'contact_obj' => ORM::factory('Contact')->by_value($contact['value'])->find(),
+				'is_additional' => true
 				);
 		}
 
@@ -423,8 +460,8 @@ class Lib_PlacementAds_AddEdit {
 			@list($values, $list_ids) = (array) Object_Utils::get_parsed_parameters($params, NULL, TRUE);
 
 		$this->signature 				= ($this->is_union_enabled()) ?
-													$this->generate_signature("", "",$values) : 
-														$this->generate_signature($params->title_adv, $params->user_text_adv, $values);
+		$this->generate_signature("", "",$values) : 
+		$this->generate_signature($params->title_adv, $params->user_text_adv, $values);
 
 		$this->signature_full = $this->generate_signature($params->title_adv, $params->user_text_adv, $values);														
 
@@ -580,15 +617,15 @@ class Lib_PlacementAds_AddEdit {
 	// 			//catch (Exception $e) {
 	// 			// 	$errors['union_error'] = $e->getMessage();
 	// 			//}
-					
+
 	// 		}
-			
+
 	// 		if ($parent_id >0 )	
 	// 			$this->parent_id = $parent_id;
 
 	// 		if ($this->destroy_union)	
 	// 			$this->parent_id = NULL;
-			
+
 
 	// 	}		
 
@@ -614,9 +651,9 @@ class Lib_PlacementAds_AddEdit {
 				@list($_t, $reference_id) =  explode("_", $_param);
 
 				$reference = ORM::factory('Reference')
-								->with_attribute_by_id($reference_id)
-								->cached(Date::WEEK)
-								->find();
+				->with_attribute_by_id($reference_id)
+				->cached(Date::WEEK)
+				->find();
 				if (!$reference->loaded())
 					continue;
 
@@ -628,11 +665,11 @@ class Lib_PlacementAds_AddEdit {
 				switch ($reference->type)
 				{
 					case 'integer':
-						$postparams->{"param_".$reference_id} = trim($postparams->{"param_".$reference_id});
-						$postparams->{"param_".$reference_id} = preg_replace('/[^0-9]/', '', $postparams->{"param_".$reference_id});
+					$postparams->{"param_".$reference_id} = trim($postparams->{"param_".$reference_id});
+					$postparams->{"param_".$reference_id} = preg_replace('/[^0-9]/', '', $postparams->{"param_".$reference_id});
 					break;
 					case 'numeric':
-						$postparams->{"param_".$reference_id} = trim(str_replace(",", ".", $postparams->{"param_".$reference_id}));
+					$postparams->{"param_".$reference_id} = trim(str_replace(",", ".", $postparams->{"param_".$reference_id}));
 					break;
 				}
 			}
@@ -665,7 +702,7 @@ class Lib_PlacementAds_AddEdit {
 				$params = array(
 					'param_'.$reference_id.'_min',
 					'param_'.$reference_id.'_max',
-				);
+					);
 			}
 			else
 			{
@@ -680,23 +717,23 @@ class Lib_PlacementAds_AddEdit {
 
 			if (!$reference->is_ilist)
 				switch ($reference->attribute_type)
-				{
-					case 'integer':
-						$rules[] = array('digit', array(':value', $reference->attribute_title));
-						$rules[] = array('min_value', array(':value', $reference->attribute_title, 0));
-						$rules[] = array('max_value', array(':value', $reference->attribute_title, 999999999));
-					break;
+			{
+				case 'integer':
+				$rules[] = array('digit', array(':value', $reference->attribute_title));
+				$rules[] = array('min_value', array(':value', $reference->attribute_title, 0));
+				$rules[] = array('max_value', array(':value', $reference->attribute_title, 999999999));
+				break;
 
-					case 'numeric':
-						$rules[] = array('numeric', array(':value', $reference->attribute_title));
-						$rules[] = array('min_value', array(':value', $reference->attribute_title, 0));
-						$rules[] = array('max_value', array(':value', $reference->attribute_title, 999999999));
-					break;
+				case 'numeric':
+				$rules[] = array('numeric', array(':value', $reference->attribute_title));
+				$rules[] = array('min_value', array(':value', $reference->attribute_title, 0));
+				$rules[] = array('max_value', array(':value', $reference->attribute_title, 999999999));
+				break;
 
-					case 'text':
-						$rules[] = array('max_length', array(':value', $reference->attribute_max_text_length, $reference->attribute_title));
-					break;
-				}
+				case 'text':
+				$rules[] = array('max_length', array(':value', $reference->attribute_max_text_length, $reference->attribute_title));
+				break;
+			}
 			// @todo check xss validation
 
 			foreach ($params as $param)
@@ -792,8 +829,8 @@ class Lib_PlacementAds_AddEdit {
 		}
 
 		if ( $category AND $category_settings->max_count AND
-					$category_settings->max_count <=
-						$this->category->get_count_active_object_in_category($user, $this->params->object_id))
+			$category_settings->max_count <=
+			$this->category->get_count_active_object_in_category($user, $this->params->object_id))
 		{
 			$errors['max_objects_for_user'] = "В эту рубрику можно разместить только одно объявление.";
 			if ($this->is_edit)
@@ -947,7 +984,7 @@ class Lib_PlacementAds_AddEdit {
 		{
 			//if (!empty($this->parent_id))
 			//{
-				$object->parent_id = ($this->parent_id == 0) ? NULL : $this->parent_id;
+			$object->parent_id = ($this->parent_id == 0) ? NULL : $this->parent_id;
 			//}
 		}
 	}
@@ -1018,11 +1055,11 @@ class Lib_PlacementAds_AddEdit {
 			$error = NULL;
 
 			if ( preg_match($youtube, $video, $matches) ) {//youtube
-					if ( !empty($matches[1]) ) {
-						$filename = $matches[1];
-					} else {
-						$filename = $matches[2];
-					}
+				if ( !empty($matches[1]) ) {
+					$filename = $matches[1];
+				} else {
+					$filename = $matches[2];
+				}
 				
 				$attachment = ORM::factory('Object_Attachment');
 				$attachment->filename 	= $filename;
@@ -1083,8 +1120,8 @@ class Lib_PlacementAds_AddEdit {
 		if ($this->signature)
 		{
 			$object_signature = ORM::factory('Object_Signature')
-						->where('object_id', '=', $object->id)
-						->find();
+			->where('object_id', '=', $object->id)
+			->find();
 			$object_signature->object_id  				= $object->id;
 			$object_signature->signature  				= $this->signature;
 			$object_signature->signature_full  			= $this->signature_full;
@@ -1153,10 +1190,10 @@ class Lib_PlacementAds_AddEdit {
 
 				if (!$value)
 					ORM::factory('User_Settings')
-						->_delete($user->id, "orginfo", $name);
+				->_delete($user->id, "orginfo", $name);
 				
 				ORM::factory('User_Settings')
-						->update_or_save($user->id, "orginfo", $name, $value);
+				->update_or_save($user->id, "orginfo", $name, $value);
 
 				$additional[$setting] = $value;
 			}
@@ -1182,9 +1219,9 @@ class Lib_PlacementAds_AddEdit {
 			if ((!is_array($value_detail)) AND ($value_detail>0))
 			{
 				$action = ORM::factory('Attribute_Action')
-						->where('value_id','=',intval($value_detail))
-						->cached(Date::WEEK, array("add","category"))
-						->find();
+				->where('value_id','=',intval($value_detail))
+				->cached(Date::WEEK, array("add","category"))
+				->find();
 				if ( $action->loaded() )
 				{
 					$object->action = $action->action_id;
@@ -1192,10 +1229,10 @@ class Lib_PlacementAds_AddEdit {
 			}
 
 			$reference = ORM::factory('Reference')
-				->where("id","=",$reference_id)
-				->set_time_link_cache(15)
-				->cached(Date::WEEK, array("add","relation"))
-				->find();
+			->where("id","=",$reference_id)
+			->set_time_link_cache(15)
+			->cached(Date::WEEK, array("add","relation"))
+			->find();
 
 			if ( ! $reference->loaded())
 			{
@@ -1212,7 +1249,7 @@ class Lib_PlacementAds_AddEdit {
 			// удаляем старые значения
 			$old = Text::ucfirst($reference->attribute_obj->type);
 			if (!empty($old)) {
-			ORM::factory('Data_'.Text::ucfirst($reference->attribute_obj->type))
+				ORM::factory('Data_'.Text::ucfirst($reference->attribute_obj->type))
 				->where('object', '=', $object->id)
 				->where('reference', '=', $reference->id)
 				->delete_all();
@@ -1226,7 +1263,7 @@ class Lib_PlacementAds_AddEdit {
 				//Условие №2 игнорирования дальнейшей обработки значения
 				$fail_cond2 = !isset($value[0]);
 				if (!$fail_cond2) $fail_cond2 = empty($value[0]);
-									
+
 				if ($fail_cond1 AND $fail_cond2) 
 					continue;					
 			}
@@ -1288,6 +1325,33 @@ class Lib_PlacementAds_AddEdit {
 				$data->save();
 			}
 		}
+
+		if ($params->square_price && $params->square_price > 0) {
+			$this->save_square_price();
+		}
+
+		return $this;
+	}
+
+	function save_square_price()
+	{
+
+		$params = &$this->params;
+		$object = &$this->object;
+		$square_price = $params->square_price;
+		$attribute_id = ORM::factory('Attribute')->where('title', '=', 'Цена за кв. м.')->find()->id;
+		$ref_id = ORM::factory('Reference')->where('attribute', '=', $attribute_id)->find()->id;
+		
+		$data = ORM::factory('Data_integer');
+
+		$data->attribute 	= $attribute_id;
+		$data->object 		= $object->id;
+		$data->reference 	= $ref_id;
+
+		$data->value_min = $square_price;
+
+		$data->save();
+
 		return $this;
 	}
 
@@ -1369,8 +1433,8 @@ class Lib_PlacementAds_AddEdit {
 			// отправляем уведомление о успешном редактировании/публикации
 			$is_edit = $this->is_edit;
 			$subj = $this->is_edit 
-				? 'Вы успешно изменили Ваше объявление.' 
-				: 'Поздравляем Вас с успешным размещением объявления на «Ярмарка-онлайн»!';
+			? 'Вы успешно изменили Ваше объявление.' 
+			: 'Поздравляем Вас с успешным размещением объявления на «Ярмарка-онлайн»!';
 
 
 			if ( $this->is_edit) {
@@ -1384,9 +1448,9 @@ class Lib_PlacementAds_AddEdit {
 			}
 
 			$msg = View::factory('emails/add_notice',
-					array('is_edit' => $is_edit,'object' => $object, 'name' => $user->get_user_name(), 
-						'obj' => $object, 'city' => $city, 'category' => $category, 'subdomain' => Region::get_domain_by_city($city->id), 
-						'contacts' => $contacts, 'address' => $params->address_str));
+				array('is_edit' => $is_edit,'object' => $object, 'name' => $user->get_user_name(), 
+					'obj' => $object, 'city' => $city, 'category' => $category, 'subdomain' => Region::get_domain_by_city($city->id), 
+					'contacts' => $contacts, 'address' => $params->address_str));
 
 			Email::send($user->email, Kohana::$config->load('email.default_from'), $subj, $msg);
 		}	
@@ -1440,12 +1504,12 @@ class Lib_PlacementAds_AddEdit {
 		$return = TRUE;
 
 		$ar = ORM::factory('Attribute_Relation')
-					->where("attribute_relation.category_id","=", $category_id)
-					->where("attribute_relation.reference_id","=", $reference_id)
+		->where("attribute_relation.category_id","=", $category_id)
+		->where("attribute_relation.reference_id","=", $reference_id)
 					//->where("attribute_relation.parent_id","IS NOT", NULL)
-					->where("attribute_relation.is_required","=", 1)
-					->cached(Date::DAY)
-					->find();
+		->where("attribute_relation.is_required","=", 1)
+		->cached(Date::DAY)
+		->find();
 
 		if (!array_key_exists("param_".$ar->reference_id, (array)$postparams) )
 			$return = FALSE;		
@@ -1460,23 +1524,23 @@ class Lib_PlacementAds_AddEdit {
 	static function lifetime_to_date($lifetime)
 	{
 		switch ($lifetime) 
-			{
-				case "1m":
-					$date_expiration = date('Y-m-d H:i:s', strtotime('+1 month'));
-				break;
-				case "2m":
-					$date_expiration = date('Y-m-d H:i:s', strtotime('+2 month'));
-				break;
-				case "3m":
-					$date_expiration = date('Y-m-d H:i:s', strtotime('+3 month'));
-				break;
-				case "45d":
-					$date_expiration = date('Y-m-d H:i:s', strtotime('+45 days'));
-				break;
-				default:
-					$date_expiration = date('Y-m-d H:i:s', strtotime('+14 days'));
-				break;
-			}
+		{
+			case "1m":
+			$date_expiration = date('Y-m-d H:i:s', strtotime('+1 month'));
+			break;
+			case "2m":
+			$date_expiration = date('Y-m-d H:i:s', strtotime('+2 month'));
+			break;
+			case "3m":
+			$date_expiration = date('Y-m-d H:i:s', strtotime('+3 month'));
+			break;
+			case "45d":
+			$date_expiration = date('Y-m-d H:i:s', strtotime('+45 days'));
+			break;
+			default:
+			$date_expiration = date('Y-m-d H:i:s', strtotime('+14 days'));
+			break;
+		}
 		return $date_expiration;
 	}
 
@@ -1504,25 +1568,25 @@ class Lib_PlacementAds_AddEdit {
 			foreach ($config["between_params"] as $attribute_id=>$procent)
 			{
 				$attribute = ORM::factory('Attribute')
-								->where("id","=",$attribute_id)
-								->cached(Date::DAY)
-								->find();
+				->where("id","=",$attribute_id)
+				->cached(Date::DAY)
+				->find();
 				if ($attribute->loaded())
 				{
 					if ($attribute->type == "integer")
 					{
-								$di = ORM::factory('Data_Integer')
-									->where("object","=",$similar_object_id)
-									->where("attribute","=",$attribute->id)
-									->find();
+						$di = ORM::factory('Data_Integer')
+						->where("object","=",$similar_object_id)
+						->where("attribute","=",$attribute->id)
+						->find();
 
 					} else
 					if ($attribute->type == "numeric")
 					{
-							$di = ORM::factory('Data_Numeric')
-								->where("object","=",$similar_object_id)
-								->where("attribute","=",$attribute->id)
-								->find();
+						$di = ORM::factory('Data_Numeric')
+						->where("object","=",$similar_object_id)
+						->where("attribute","=",$attribute->id)
+						->find();
 					}
 
 					$similar_value = $di->value_min;
