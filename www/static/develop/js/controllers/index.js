@@ -107,17 +107,29 @@ function (Marionette, templates, utils, IndexPage, SearchPage, DetailPage,
             app.module("map", MapModule);
             app.menu.init(["main", "city", "kupon", "news"]);
 
-            require(["../static/develop/production/js/add.build.js"], function() {
-
-                require(['../js/views/partials/add'], function(AddPage)  {
+            if (app.settings.debug) {
+                require(['views/partials/add'], function(AddPage)  {
 
                     new AddPage({
                         el: "body"
                     });
                     
                 });
-              
-            });
+                
+            } else {
+                require(["../static/develop/production/js/add.build.js"], function() {
+
+                    require(['../js/views/partials/add'], function(AddPage)  {
+
+                        new AddPage({
+                            el: "body"
+                        });
+                        
+                    });
+                  
+                });
+            }
+            
 
             
 

@@ -1401,7 +1401,7 @@ var categoryView = Backbone.View.extend({
         this._init_price();
 
         var category_id = this.control.data('value');
-        console.log(category_id)
+
         if (category_id && category_id != 0) {
              this.$el.find('.current_value').html($('#rubricid .option[data-value='+category_id+']').html());
         }
@@ -1887,10 +1887,16 @@ return Marionette.ItemView.extend({
             this._destroy_controls();
 
             if ( _globalSettings.allowCkEditor) {
-               require(["modules/ckeditor"], function(ckeditor) {
+
+                window.CKEDITOR_BASEPATH = (app.settings.debug) ? '/static/develop/js/lib/ckeditor/' : '../static/develop/production/js/lib/ckeditor/';
+
+                require([ "modules/ckeditor" ], function(ckeditor) {
+                
                     CkEditor = ckeditor;
                     self._init_controls();
+                
                 });
+
            } else {
                 self._init_controls();
            }
