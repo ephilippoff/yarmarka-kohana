@@ -427,4 +427,28 @@ class Controller_Rest_Service extends Controller_Rest {
 		
 		
 	}
+
+	public function action_get_prices()
+	{
+
+
+		$category_id = $this->request->post('category_id');
+		$city_id = $this->request->post('city_id');
+
+		$params = array(
+			'category' => ORM::factory('Category')->where('id','=',$category_id)->cached(Date::WEEK)->find()->seo_name,
+			'city' => ORM::factory('City')->where('id','=',$city_id)->cached(Date::WEEK)->find()->seo_name,
+			'quantity' => 1
+		);
+
+
+		$premium = Service::factory("Premium");
+		$premium->set_params($params);
+		$this->json['premium'] = $premium->getPriceMultiple();
+
+		$lider = Service::factory("Lider");
+		$lider->set_params($params);
+		$this->json['lider'] = $lider->getPriceMultiple();
+
+	}
 }

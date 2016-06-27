@@ -257,4 +257,12 @@ class Service
         return FALSE;
     }
 
+    public static function saveServiceToCart($serviceName, $object)
+    {
+        $key = Cart::get_key();
+        $service = Service::factory(Text::ucfirst($serviceName), $object['id']);
+        $service->set_defaults();
+        $service->save($object, $key);
+    }
+
 }
