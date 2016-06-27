@@ -98,6 +98,7 @@ class Controller_Search extends Controller_Template {
         $twig->data_file = $staticfile->jspath;
 
         $twig->onPageFlag = 'search';
+        $twig->itemscope = 'itemscope itemtype="http://schema.org/SearchResultsPage"';
 
         /*
             http://yarmarka.myjetbrains.com/youtrack/issue/yarmarka-347
