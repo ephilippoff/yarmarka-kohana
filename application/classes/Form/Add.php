@@ -201,6 +201,8 @@ class Form_Add  {
 										'category_error' => $errors->rubricid
 									);
 
+		
+
 		return $this;
 	}
 
@@ -525,6 +527,7 @@ class Form_Add  {
 					$params[$param[1]] = $value;
 				}
 			}*/
+
 		}
 
 		$data = array();

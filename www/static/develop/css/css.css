@@ -1338,12 +1338,16 @@ img.category-icon{
 }
 
 #reklama_container .tg-link{
-    width: 25%;
+    width: 22%;
     display: block;
     float: left;
     padding: 0 10px;
     height: 60px;
     overflow: hidden;
+}
+
+#reklama_container .google-link{
+    width: 33%;
 }
 
 #reklama_container img{

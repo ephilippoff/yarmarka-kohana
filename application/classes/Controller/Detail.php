@@ -45,6 +45,7 @@ class Controller_Detail extends Controller_Template {
 		$twig->city        = $this->domain->get_city();
 		$twig->onPageFlag = 'detail';
 		$twig->horizontalView = TRUE;
+		$twig->itemscope = 'itemscope itemtype="http://schema.org/ItemPage"';
 
 		$detail_info = Detailpage::factory("Default", $object)
 						->get_messages()
@@ -101,12 +102,16 @@ class Controller_Detail extends Controller_Template {
 			$twig->user_object_stat_item = $user_object_stat_item;
 		}
 
+		// echo "<pre>"; var_dump($twig->object); echo "</pre>"; die;
+
 		
 
 		//add to last views
 		LastViews::instance()->set($object->id);
 		$this->response->body($twig);
 		LastViews::instance()->commit();
+
+
 
 	}
 

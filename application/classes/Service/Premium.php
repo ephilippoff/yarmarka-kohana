@@ -186,6 +186,9 @@ class Service_Premium extends Service
 		$object = ORM::factory('Object', $object_id);
 
 		if (!$object->loaded()) return FALSE;
+		
+		$services = Object_Compile::getServices($object_id);
+		if (count($services['services']['premium']) !== 0 AND $object->type_tr == 101) return FALSE;
 
 		if (!$city_id) 
 			$city_id = $object->city_id;

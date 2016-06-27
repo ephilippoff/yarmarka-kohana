@@ -81,7 +81,7 @@
         {% block js %}{% endblock js %}
 
     </head>
-    <body class="aasd {% block bodyclass %}{% endblock bodyclass%}">
+    <body class="{% block bodyclass %}{% endblock bodyclass%}" {{ itemscope }} >
 
 		<!--[if lte IE 8]>
 			<div class="for-ie-msg-cont">

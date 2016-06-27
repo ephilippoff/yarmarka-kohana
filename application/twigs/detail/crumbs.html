@@ -1,4 +1,4 @@
-<div class="breadcrumbs-cont mb20">
+<div class="breadcrumbs-cont mb20" itemprop="breadcrumb">
 	<div class="crums-wrap clearfix">
 		<a href="/{{sphinx_search_query}}" rel="nofollow" class="hidden-xs hidden-sm">Главная</a>
 		<a href="/{{sphinx_search_query}}" rel="nofollow" class="hidden-lg hidden-md home-a"><i class="fa fa-home"></i></a>
@@ -7,9 +7,9 @@
 		{% endfor %}
 	</div>
 	{% if object.is_published > 0 %}
-	<h1 class="captionbold crumbs-h1" style="display: block;">{{ object.title|e}}</h1>
+	<h1 class="captionbold crumbs-h1" style="display: block;" itemprop="name">{{ object.title|e}}</h1>
 	{% else %}
-	<s class="red"><h1 class="captionbold crumbs-h1 red" style="display: block;">{{ object.title|e}}</h1></s>
+	<s class="red"><h1 class="captionbold crumbs-h1 red" style="display: block;" itemprop="name">{{ object.title|e}}</h1></s>
 	{% endif %}
 	<hr>
 </div>
