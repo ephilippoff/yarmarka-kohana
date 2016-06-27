@@ -922,6 +922,26 @@ class Form_Add  {
 			);
 	}
 
+
+	function WithService()
+	{
+		
+		$object 	= $this->object;
+		$user = Auth::instance()->get_user();
+		$value = "default";
+
+		if ($this->is_post)
+		{ 
+			if (isset($this->params['with_service']))
+				$value = $this->params['with_service'];
+		}
+		
+		$this->_data->with_service = $value;
+
+		return $this;
+	}
+
+
 	function Additional()
 	{
 		$object 	= $this->object;
@@ -972,6 +992,8 @@ class Form_Add  {
 						"values" =>  new Obj($values),
 						"vakancy_org_type" => $vakancy_org_type
 			);
+
+		return $this;
 	}
 
 	static private function parse_object_params($object_id){

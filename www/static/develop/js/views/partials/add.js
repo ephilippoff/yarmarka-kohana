@@ -50,24 +50,24 @@ define([
     "marionette",
     "templates/set/add",
     "views/partials/behaviors/contacts",
+    "views/partials/behaviors/add-services",
     "nicEdit",
     "maskedInput",
     "ymap",
     'cropper',
     'views/partials/add/additional_contacts',
-    'modules/add-service/main',
     'views/partials/add/photo'
 
     ], function(
         Marionette, 
         templates, 
-        ContactsBehavior, 
+        ContactsBehavior,
+        AddServiceBehavior,
         nicEdit, 
         maskedInput, 
         ymap, 
         cropper, 
         AdditionalContacts,
-        serviceApp, 
         photoControlView
     ) {
         "use strict";
@@ -453,6 +453,8 @@ var cityView = Backbone.View.extend({
         } else {
             this.app.addRequired(wrapper);
         }
+
+        this.app.triggerMethod("ChangedCity", {city_id: +this.value, category_id: this.app.category.category_id});
     },
     setLatLon: function() {
         var option = this.control.find('option:selected');
@@ -870,13 +872,6 @@ var categoryView = Backbone.View.extend({
 
     change: function(e) {
 
-        var $temp = $('[data-role=service-set]');
-        $temp.find('*:not(".service-wrap")').remove();
-        if ($temp.length) {
-            new serviceApp({
-                el: $temp
-            });
-        }
         this.value = $(e.target).val();
 
         //this.value = $(e.target).data('value');
@@ -894,6 +889,8 @@ var categoryView = Backbone.View.extend({
         }
         this._init_description();
         this._init_price();
+
+       
     },
 
     _init_description: function() {
@@ -968,6 +965,9 @@ return Marionette.ItemView.extend({
         ContactsBehavior: {
             behaviorClass: ContactsBehavior
         },
+        AddServiceBehavior: {
+            behaviorClass: AddServiceBehavior
+        },
     },
 
     initialize: function(options) {
@@ -978,7 +978,6 @@ return Marionette.ItemView.extend({
         this.settings = ($("#moderate").text()) ? eval($("#moderate").text()) : {};
         if (this.reinit_after_change)
             this._destroy_controls();
-
             if ( _globalSettings.allowCkEditor) {
 
                 window.CKEDITOR_BASEPATH = (app.settings.debug) ? '/static/develop/js/lib/ckeditor/' : '../static/develop/production/js/lib/ckeditor/';
@@ -997,29 +996,32 @@ return Marionette.ItemView.extend({
     },
 
     _init_controls: function() {
-        if (!this.reinit_after_change) {
-            this.category = new categoryView({
-                app: this
-            });
+            if (!this.reinit_after_change) {
+                this.category = new categoryView({
+                    app: this
+                });
 
-            this.ad_type = new adTypeView({
-                app: this
-            });
+                this.ad_type = new adTypeView({
+                    app: this
+                });
 
-            this.city = new cityView({
-                category_id: this.category.category_id,
-                app: this
-            });
-            this.moderate_add_cities = new addCitiesView({
-                category_id: this.category.category_id,
-                app: this
-            });
-            this.photo = new photoControlView({
-                app: this
-            });
+                this.city = new cityView({
+                    category_id: this.category.category_id,
+                    app: this
+                });
+                this.moderate_add_cities = new addCitiesView({
+                    category_id: this.category.category_id,
+                    app: this
+                });
+                this.photo = new photoControlView({
+                    app: this
+                });
                 // this.contacts = new contactListView({app : this});
                 // this.contacts.render();
             }
+
+            this.triggerMethod("ChangedCategory", {category_id: this.category.category_id, city_id: +this.city.value});
+
             this.address_precision = null;
             this.precision_error = null;
             this.cmap = new mapView({
@@ -1086,7 +1088,9 @@ return Marionette.ItemView.extend({
         },
 
         submitForm: _.once(function() {
-            if (this.text && this.category.settings.text_required && nicEditors.findEditor('user_text_adv')) {
+
+            if (this.text && nicEditors.findEditor('user_text_adv')) {
+                console.log(123123123)
                 nicEditors.findEditor('user_text_adv').saveContent();
             }
             $('#' + this.form_id).submit();
