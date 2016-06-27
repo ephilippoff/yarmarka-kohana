@@ -7,7 +7,7 @@ define(function(require){
             premium: require('lib/text!templates/add/service/premium.tmpl'),
             lider: require('lib/text!templates/add/service/lider.tmpl'),
             up: require('lib/text!templates/add/service/up.tmpl'),
-            free: require('lib/text!templates/add/service/free.tmpl')
+            default: require('lib/text!templates/add/service/free.tmpl')
         },
         filters: {
             listFilterItem: require('lib/text!templates/filters/listFilterItem.tmpl'),

@@ -3,7 +3,6 @@ Copyright (c) 2003-2015, CKSource - Frederico Knabben. All rights reserved.
 For licensing, see LICENSE.md or http://ckeditor.com/license
 */
 (function() {
-	window.CKEDITOR_BASEPATH = '/static/develop/js/lib/ckeditor/';
     if (window.CKEDITOR && window.CKEDITOR.dom) return;
     window.CKEDITOR || (window.CKEDITOR = function() {
         var a = /(^|.*[\\\/])ckeditor\.js(?:\?.*|;.*)?$/i,

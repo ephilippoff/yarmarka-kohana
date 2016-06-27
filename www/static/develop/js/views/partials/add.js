@@ -1,24 +1,76 @@
 /*global define */
+define('jquery', [], function() {
+    return jQuery;
+});
+
+require.config({
+    paths : {
+         underscore : 'lib/underscore',
+         backbone   : 'lib/backbone',
+         marionette : 'lib/backbone.marionette',
+         cropper: 'lib/cropper',
+         ymap: 'http://api-maps.yandex.ru/2.1/?load=package.full&lang=ru-RU',
+         fileupload: 'lib/vendor/jquery.fileupload',
+         nicEdit: 'lib/vendor/nicEdit',
+         maskedInput: 'lib/vendor/jquery.maskedinput',
+         ckeditor: 'lib/ckeditor/ckeditor',
+         ckeditorJqueryAdapter: 'lib/ckeditor/adapters/jquery'
+    },
+    shim : {
+        localStorage : ['backbone'],
+        underscore : {
+            exports : '_'
+        },
+        backbone : {
+            exports : 'Backbone',
+            deps : ['underscore']
+        },
+        marionette : {
+            exports : 'Backbone.Marionette',
+            deps : ['backbone']
+        },
+        paginator : {
+            deps : ['backbone'],
+            exports: 'Backbone.Paginator'
+        },
+        fileupload: {
+             deps : ['iframeTransport']
+        },
+         ckeditorJqueryAdapter: {
+            deps: [ 'ckeditor' ]
+        }
+    },
+    deps : ['underscore']
+});
+
+var CkEditor;
+
 define([
+
     "marionette",
     "templates/set/add",
     "views/partials/behaviors/contacts",
-    "fileupload",
+    "views/partials/behaviors/add-services",
     "nicEdit",
     "maskedInput",
     "ymap",
-    //use cropper
-    //'lib/cropper.js'
     'cropper',
     'views/partials/add/additional_contacts',
-    'modules/ckeditor',
-    'modules/add-service/main'
-    ], function(Marionette, templates, ContactsBehavior, jqueryFileUpload, nicEdit, maskedInput, ymap, cropper, AdditionalContacts, CkEditor, serviceApp) {
+    'views/partials/add/photo'
+
+    ], function(
+        Marionette, 
+        templates, 
+        ContactsBehavior,
+        AddServiceBehavior,
+        nicEdit, 
+        maskedInput, 
+        ymap, 
+        cropper, 
+        AdditionalContacts,
+        photoControlView
+    ) {
         "use strict";
-
-        var photoList = Backbone.Collection.extend({
-
-        });
 
         var additionalContactsController = new AdditionalContacts.Controller({});
 
@@ -401,6 +453,8 @@ var cityView = Backbone.View.extend({
         } else {
             this.app.addRequired(wrapper);
         }
+
+        this.app.triggerMethod("ChangedCity", {city_id: +this.value, category_id: this.app.category.category_id});
     },
     setLatLon: function() {
         var option = this.control.find('option:selected');
@@ -711,625 +765,7 @@ var textView = Backbone.View.extend({
     }
 });
 
-var photoView = Backbone.View.extend({
-    tagName: "div",
-    className: "img-b",
-    template: templates.photo,
-    events: {
-        'click .fn-remove': 'remove',
-        'click .fn-main': 'makeMain',
-        'click span.rotate': 'rotate',
-        'click .img': 'openCurtain'
-    },
-    initialize: function(options) {
-        _.extend(this, options);
-        this.render();
-        this.$image = this.$el.find('img');
-    },
 
-    rotate: function(ev, deg) {
-        var me = this;
-        var img = $('<img />')[0];
-        img.onload = function() {
-            me.saveCroppedPicture({
-                x: 0,
-                y: 0,
-                width: img.naturalHeight,
-                height: img.naturalWidth,
-                rotate: 90,
-                scaleX: 1,
-                scaleY: 1,
-                disableRectValidate: true
-            });
-        };
-        img.src = me.model.get('original');
-    },
-
-    makeMain: function(){
-        $('#add-block').prepend(this.$el);
-        this.model.set('active', true);
-    },
-
-    openCurtain: function(){
-        if (!$('html').hasClass('desktop')) {
-            $('.img-b .curtain').css('opacity', '0');
-            this.$el.find('.curtain').css('opacity', '1');
-        };
-        
-    },
-
-    render: function() {
-        var ctx = this;
-        var html = _.template(this.template)(this.model.toJSON());
-        this.container.append(this.$el.html(html));
-        $('#add-block').sortable({
-            revert: 300,
-            start: function(event, ui) {
-                clearInterval(this.interval);
-            },
-            stop: function(event, ui) {
-                var self = this;
-                var i = 0;
-                var fileNames = [i];
-                var img = $(self).children('.img-b');
-                var i = $(img).each(function() {
-                    var userfile = $(this).children('input').val();
-                    fileNames[i] = userfile;
-                    i++;
-                });
-                var i = 1;
-                this.interval = setInterval(function() {
-                    increment();
-                }, 1000);
-
-                function increment() {
-                    i++;
-                    if (i >= 3) {
-                        clearInterval(self.interval);
-                        data_save();
-                    };
-                }
-
-                function data_save() {
-                    $.ajax({
-                        url: '/add/set_order',
-                        dataType: 'json',
-                        method: 'GET',
-                        data: {
-                            fileName: fileNames
-                        },
-                        success: function(answer) {
-
-                        }
-                    });
-                }
-            }
-
-        });
-    return this;
-    },
-
-    remove: function() {
-        this.collection.remove(this.model);
-    },
-});
-
-/* cropper view */
-    // extend photo item view
-    var photoViewBase = photoView;
-    photoView = photoView.extend({
-        //extend events
-        events: _.extend(photoViewBase.prototype.events, {
-            'click .fn-crop': 'showCropper'
-        })
-            //override initialize method
-            ,
-            initialize: function(options) {
-            //console.log('photoView[Cropper extension] initialize');
-
-            photoViewBase.prototype.initialize.call(this, options);
-        },
-        remove: function() {
-            if (this.activeCropperView) {
-                this.activeCropperView.destroy();
-            }
-            photoViewBase.prototype.remove.call(this);
-        }
-            //initialize cropper view
-            ,
-            showCropper: function() {
-                //console.log('photoView[Cropper extension] showCropper');
-                //console.log(this.model);
-                var me = this;
-                me.activeCropperView = CropperViewFactory(this.model.get('original'), {})
-                .on('cropper_save', function(e) {
-                    me.saveCroppedPicture(this.cropBoxData);
-                });
-            }
-            //picture change processor
-            ,
-            saveCroppedPicture: function(data) {
-                var me = this;
-                $.ajax({
-                    url: '/add/crop',
-                    dataType: 'json',
-                    method: 'GET',
-                    data: _.extend(data, {
-                        fileName: this.model.get('filename')
-                    }),
-                    success: function(answer) {        
-                    var avoidCache = '?v=' + Math.random();
-                    me.model.set('filename', answer.fileName);
-                    me.model.set('filepath', answer.thumbnails['120x90']);
-                    me.model.set('original', answer.thumbnails['original']);
-                    me.$el.find('img').attr('src', answer.thumbnails['120x90']);
-                    me.$el.find('input[type=hidden]').val(answer.fileName);
-
-                    if (me.$el.find('.img').hasClass('active')) {
-                        $('#active_userfile').val(me.model.get('filename'));
-                        // me.model.set('active', true);
-                        console.log(me.model.attributes);
-                    }; 
-                }
-            });
-            }
-        });
-    //check prototype
-    //console.log(photoView.prototype);
-    /* cropper view */
-    var CurrentCropperView = null; //singleton
-    var CropperView = Backbone.View.extend({
-        //cropper data
-        cropBoxData: null,
-        cropCanvasData: null,
-        cropperOptions: {}
-        //bind events
-        ,
-        events: {
-            'click [data-save]': 'save',
-            'click .js-close': 'destroy',
-            'click [data-rotate]': 'rotate',
-            'click [data-zoom]': 'zoom',
-            'click [data-refresh]': 'refresh',
-            'click [data-destroy]': 'destroy'
-        }
-
-        ,
-        initialize: function(options) {
-            this.$image = this.$el.find('img');
-
-            //console.log('Initialize cropper view with options: ');
-            //console.log(options);
-
-            if (options.width) {
-                this.$image.width(options.width);
-            }
-        }
-
-        ,
-        setAspectRatio: function() {
-            if (!this.oldAspectRatio) {
-                this.oldAspectRatio = 3 / 4;
-            }
-            if (this.oldAspectRatio < 1) {
-                this.oldAspectRatio = 4 / 3;
-            } else {
-                this.oldAspectRatio = 3 / 4;
-            }
-
-            this.$image.cropper('setAspectRatio', this.oldAspectRatio);
-        }
-
-        ,
-        rotate: function(event) {
-            event.preventDefault();
-                //this.$image.cropper({ center: false, autoCropArea: 0 })
-                var cropBoxData = this.$image.cropper('getCropBoxData');
-                //console.log(cropBoxData);
-                this.setAspectRatio();
-
-                var degrees = +$(event.currentTarget).data('rotate');
-                this.$image.cropper('rotate', degrees);
-
-                //set container dimensions
-                var moveY = this.$image.next().height() - this.$image.next().find('.cropper-canvas').height();
-                this.$image.next().css({
-                    height: this.$image.next().find('.cropper-canvas').height() + 'px'
-                });
-                this.$image.data('cropper').container.height = this.$image.next().find('.cropper-canvas').height();
-                this.$image.data('cropper').limitCropBox(true, true);
-                this.$image.cropper('move', 0, -moveY / 2);
-                console.log(cropBoxData.top);
-                cropBoxData.top -= moveY / 2;
-
-                //rotate crop box
-                var temp = cropBoxData.width;
-                cropBoxData.width = cropBoxData.height;
-                cropBoxData.height = temp;
-
-                //calc move offset
-                cropBoxData.top += (cropBoxData.width - cropBoxData.height) * 0.5;
-                cropBoxData.left -= (cropBoxData.width - cropBoxData.height) * 0.5;
-
-                console.log(cropBoxData);
-                this.$image.cropper('setCropBoxData', cropBoxData);
-                //this.appendRotate(degrees);
-                console.log(this.$image.cropper('getCropBoxData'));
-            }
-            /*
-            , rotateDegrees: 0
-            , appendRotate: function (degrees) {
-                this.rotateDegrees = (this.rotateDegrees + degrees) % 360;
-                this.$image.next().css({
-                    transform: 'rotate(' + this.rotateDegrees + 'deg)'
-                });
-            }
-            */
-            ,
-            refresh: function(event) {
-                event.preventDefault();
-                this.$image.cropper('destroy');
-                this.initCropper();
-            }
-
-            ,
-            zoom: function(event) {
-                event.preventDefault();
-                var level = +$(event.currentTarget).data('zoom');
-                this.$image.cropper('zoom', level);
-            }
-
-            ,
-            render: function() {
-                if (CurrentCropperView != this) {
-                    if (CurrentCropperView != null) {
-                        CurrentCropperView.destroy();
-                    }
-                    CurrentCropperView = this;
-                }
-
-            //scroll to me
-            $('.cropper-cont').get(0).scrollIntoView();
-
-            //append dom
-            $('.cropper-cont').append(this.$el);
-            this.initCropper();
-        }
-
-        ,
-        initCropper: function() {
-            var me = this;
-            //init cropper
-            setTimeout(function() {
-                console.log(me.$image.height());
-                me.$image.cropper(_.extend(me.cropperOptions, {
-                    //some defaults - TODO
-                    aspectRatio: me.oldAspectRatio = 4 / 3,
-                    strict: false,
-                    //center: true,
-                    //autoCropArea: 1
-                    built: function() {
-                        var imageData = me.$image.cropper('getImageData');
-                        var toSet = {
-                            x: 0,
-                            y: 0,
-                            width: 0,
-                            height: 0,
-                            rotate: 0,
-                            scaleX: 1,
-                            scaleY: 1
-                        };
-
-                        //console.log(imageData);
-
-                        if (imageData.naturalWidth < imageData.naturalHeight) {
-                            me.setAspectRatio();
-                            toSet.width = imageData.naturalWidth;
-                            toSet.height = imageData.naturalWidth / me.oldAspectRatio;
-                        } else {
-                            toSet.height = imageData.naturalHeight;
-                            toSet.width = imageData.naturalHeight * me.oldAspectRatio;
-                        }
-
-                        toSet.x = (imageData.naturalWidth - toSet.width) * 0.5;
-                        toSet.y = (imageData.naturalHeight - toSet.height) * 0.5;
-
-                        //console.log(toSet);
-
-                        me.$image.cropper('setData', toSet);
-                        //set initial data
-                        me.updateData();
-                    }
-                }));
-}, 1);
-}
-
-,
-updateData: function() {
-    this.cropBoxData = this.$image.cropper('getData');
-    this.cropCanvasData = this.$image.cropper('getCanvasData');
-}
-
-,
-save: function() {
-            //save data
-            this.updateData();
-            //trigger done event
-            this.trigger('cropper_save');
-            this.destroy();
-        }
-
-        ,
-        destroy: function() {
-            //destroy cropper
-            this.$image.cropper('destroy');
-            //remove dom
-            this.$el.remove();
-            $('#div_photo').get(0).scrollIntoView();
-        }
-    });
-/* cropper view done */
-    //factory for cropper view
-    //simple creates bootstrap modal dialog
-    //TODO - export factory to usage in other modules
-    var CropperViewFactory = function(image, options) {
-        //markup
-        /* bootstrap version */
-        /*
-        var html = 
-            '<div class="modal fade">'
-                + '<div class="modal-dialog">'
-                    + '<div class="modal-content">'
-                        + '<div class="modal-body">'
-                            + '<img src="" />'
-                        + '</div>'
-                    + '</div>'
-                + '</div>'
-            + '</div>';
-            */
-            /* other version */
-            var html =
-            /*'<div class="popup-wrp z400 cropper-popup">'
-                + '<div class="popup-window mw500">'
-                    + '<div class="header">'
-                        + 'Редактирование изображения'
-                        + '<div class="popup-window-close js-close">'
-                            + '<i class="ico close-ico16"></i>'
-                        + '</div>'
-                    + '</div>'
-                    */
-                    '<div>' + '<div class="cropper-image">' + '<img src="" />' + '</div>' + '<div class="cropper-actions">' + '<button class="btn" data-rotate="90"><span class="fa fa-undo"></span></button>'
-            //+ '<button class="btn" data-rotate="-10"><span class="fa fa-repeat"></span></button>'
-            + '<button class="btn" data-zoom="0.1"><span class="fa fa-search-plus"></span></button>' + '<button class="btn" data-zoom="-0.1"><span class="fa fa-search-minus"></span></button>' + '<button class="btn" data-refresh>Сбросить</button>' + '<button class="btn" data-destroy>Отменить</button>' + '<button class="btn" data-save>Сохранить</button>' + '</div>' + '</div>'
-            /*
-                + '</div>'
-            + '</div>';
-            */
-
-        //compile
-        var $compiled = $(html);
-
-        //create view
-        var view = new CropperView(_.extend({
-            width: $('.fn-cropper-cont').width()
-        },
-        options, {
-            el: $compiled
-        }));
-
-        //continue only when image will be loaded
-        $compiled.find('img')[0].onload = function(e) {
-            view.render();
-        };
-        //push values
-        $compiled.find('img').attr('src', image);
-
-        return view;
-    };
-    /* cropper feacture done */
-
-    var photoControlView = Backbone.View.extend({
-        el: '#div_photo',
-        photos: [],
-        maxLength: 10,
-        hints: {
-            main: "Внимание! Первое фото в списке является главным.<br>До 10 фотографий с расширениями jpg, png, gif, не более 5мб",
-            requires: "До 10 фотографий с расширениями jpg, png, gif, не более 5мб. Фото можно перетащить в эту зону мышкой."
-        },
-        initialize: function(options) {
-            var self = this;
-            _.extend(this, options);
-
-            this._init_ajax_upload();
-
-            this.collection = new photoList();
-            this.collection.comparator = function(model) {
-                return model.get('id');
-            }
-            this.collection.on("add", this.addItem, this);
-            this.collection.on("remove", this.removeItem, this);
-            this.collection.on("change:active", this.changeActive, this);
-
-            _.each(this.$el.find(".img-b"), function(item) {
-                var params = {
-                    filename: $(item).find("input").val(),
-                    filepath: $(item).find("img").attr("src"),
-                    active: $(item).find(".img").hasClass("active"),
-                    original: $(item).find('img').data('original')
-                };
-                self.collection.add(params);
-                $(item).remove();
-            });
-            this.renderHint();
-        },
-
-        renderHint: function() {
-            if (this.collection.length) {
-                $(".fn-photo-hint").html(this.hints.main);
-            } else {
-                $(".fn-photo-hint").html(this.hints.requires);
-            }
-        },
-
-        _init_ajax_upload: function() {
-            var self = this;
-            // new AjaxUpload('userfile_upload', {
-            //     action: '/add/object_upload_file',
-            //     name: 'userfile1',
-            //     data : {context :self},
-            //     autoSubmit: true,
-            //     onSubmit: self.onSubmit,
-            //     onComplete: self.onComplete
-            // });
-$('#fileupload').fileupload({
-    uidropzone: $(".fn-photo-list"),
-    acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
-    maxFileSize: 6000,
-    autoUpload: false,
-                // disableImageResize: /Android(?!.*Chrome)|Opera/
-                //             .test(window.navigator.userAgent),
-                dataType: 'json',
-                success: function(result, data) {
-                    if (self.collection.length >= self.maxLength) {
-                        self.setError("Можно загрузить не более 10 фотографий");
-                        return;
-                    }
-                    if (result.filename) {
-
-                        var active = false;
-                        if (self.collection.length == 0) {
-                            $("#active_userfile").val(data.filename);
-                            active = true;
-                        }
-
-                        self.collection.add({
-                            filename: result.filename,
-                            filepath: result.filepaths['120x90'],
-                            active: active
-                                //fix to use crop feature
-                                ,
-                                original: result.filepaths.original
-                            });
-                        self.setError("");
-                    } else
-                    if (result.error) {
-                        self.renderHint();
-                        self.setError(result.error);
-                    } else {
-                        self.setError('Произошла непредвиденная ошибка');
-                    }
-                },
-                // error: function(e, data){
-                //     alert("Ошибка при загрузке фото");
-                // }
-            }).on("fileuploadadd", function(e, data) {
-                var jqXHR = data.submit();
-                if (self.collection.length >= self.maxLength) {
-                    self.setError("Можно загрузить не более 10 фотографий");
-                    jqXHR.abort();
-                }
-                this.jqXHR = jqXHR;
-            }).on("fileuploaddone", function(e, data) {
-                if (self.collection.length >= self.maxLength) {
-                    self.setError("Можно загрузить не более 10 фотографий");
-                    if (!this.jqXHR) {
-                        this.jqXHR.errorThrown = "Можно загрузить не более 10 фотографий";
-                        this._trigger('fail', e, data);
-                    } else {
-                        this.jqXHR.abort();
-                    }
-                }
-            }).on("fileuploadfail", function(e, data) {
-                self.renderHint();
-            }).on('fileuploadprogressall', function(e, data) {
-                var progress = parseInt(data.loaded / data.total * 100, 10);
-                if (progress == 100) {
-                    $('.fn-photo-hint').html("Файл загружен. Идет сохранение...");
-                } else {
-                    $('.fn-photo-hint').html("Идет загрузка... " + progress + '%');
-                }
-            });
-        },
-
-        addItem: function(item) {
-            var container = this.$el.find(".fn-photo-list");
-            var el = undefined;
-            if (item.get("id"))
-                el = $('#' + item.get("id"));
-            this.photos[item.cid] = new photoView({
-                el: el,
-                model: item,
-                collection: this.collection,
-                container: container
-            });
-            if (this.collection.length > 0) {
-                $(".fn-photo-hint").text();
-            }
-            this.renderHint();
-        },
-
-        removeItem: function(item) {
-            this.photos[item.cid].unbind();
-            this.photos[item.cid].$el.remove();
-            if (this.collection.length && item.get("active")) {
-                this.collection.at(0).set("active", true);
-            }
-            this.setError("");
-            this.renderHint();
-        },
-
-        changeActive: function(main_item) {
-            var photo_cont = this.photos[main_item.cid].$el.find(".img");
-            console.log('set active');
-            if (main_item.get("active")) {
-                photo_cont.addClass("active");
-                this.collection.each(function(item) {
-                    if (item.cid != main_item.cid)
-                        item.set("active", false);
-                });
-                $("#active_userfile").val(main_item.get("filename"));
-            } else {
-                photo_cont.removeClass("active");
-            }
-        },
-
-        onSubmit: function(file, doc) {
-            var self = this._settings.data.context;
-            self.setError("");
-        },
-
-        onComplete: function(file, data) {
-            var self = this._settings.data.context;
-
-            if (data)
-                data = $.parseJSON(data);
-
-            if (data === null || !data.filename) {
-                self.setError('Произошла непредвиденная ошибка');
-                return;
-            } else if (data.error) {
-                self.setError(data.error);
-                return;
-            }
-            var active = false;
-            if (self.collection.length == 0) {
-                $("#active_userfile").val(data.filename);
-                active = true;
-            }
-
-            self.collection.add({
-                filename: data.filename,
-                filepath: data.filepaths['120x90'],
-                active: active
-            });
-
-        },
-
-        setError: function(text) {
-            $("#error_userfile1").html(text);
-        }
-
-    });
 
 var categoryView = Backbone.View.extend({
     el: '#div_category',
@@ -1353,6 +789,13 @@ var categoryView = Backbone.View.extend({
         this._init_data();
         this._init_description();
         this._init_price();
+
+        var category_id = this.control.data('value');
+
+        if (category_id && category_id != 0) {
+             this.$el.find('.current_value').html($('#rubricid .option[data-value='+category_id+']').html());
+        }
+       
     },
 
     _init_data: function() {
@@ -1429,13 +872,6 @@ var categoryView = Backbone.View.extend({
 
     change: function(e) {
 
-        var $temp = $('[data-role=service-set]');
-        $temp.find('*:not(".service-wrap")').remove();
-        if ($temp.length) {
-            new serviceApp({
-                el: $temp
-            });
-        }
         this.value = $(e.target).val();
 
         //this.value = $(e.target).data('value');
@@ -1453,6 +889,8 @@ var categoryView = Backbone.View.extend({
         }
         this._init_description();
         this._init_price();
+
+       
     },
 
     _init_description: function() {
@@ -1514,302 +952,7 @@ var additionalView = Backbone.View.extend({
     }
 });
 
-var verifyWindowView = Backbone.View.extend({
-    tagName: "div",
-    className: "popup enter-popup fn-verify-contact-win",
-    template: templates.verifyContactWindow,
-    events: {
-        'click .fn-verify-contact-win-close': 'close',
-        'click .fn-verify-contact-win-submit': 'doVerifyCode'
-    },
-    initialize: function(options) {
-        _.extend(this, options);
-        this.render();
 
-        if (this.model.get("type") == "1" ||
-            this.model.get("type") == "5")
-            this.sendSms();
-        else
-            this.showVerificationCode();
-    },
-    render: function() {
-        var html = _.template(this.template)(this.model.toJSON());
-        $('body').append(this.$el.html(html));
-        $('body').find('.popup-layer').fadeIn();
-        this.$el.fadeIn();
-        return this;
-    },
-    close: function() {
-        this.unbind();
-        this.remove();
-        $('body').find('.popup-layer').fadeOut();
-    },
-    doVerifyCode: function() {
-        if (this.model.get("type") == "1" ||
-            this.model.get("type") == "5")
-            this.checkCode();
-        else
-            this.checkHomePhoneCode();
-
-    },
-    sendSms: function(force) {
-        var self = this;
-        var params = {
-            contact_type_id: this.model.get("type"),
-            force: force
-        };
-        if (this.model.get("type") == "5")
-            params.email = this.model.get("value");
-        else
-            params.phone = this.model.get("value");
-        $.post('/ajax/sent_verification_code', params,
-            function(json) {
-                self.responseSms(json, self);
-            },
-            'json');
-    },
-    responseSms: function(json, context) {
-        var self = context;
-        self.contact_id = json.contact_id;
-        switch (+json.code) {
-            case 200:
-            self.setError("Сообщение с кодом отправлено");
-            break;
-            case 303:
-            self.setError("Сообщение с кодом уже отправлено вам ранее");
-            break;
-            case 301:
-                    //уже верифицирован
-                    self.model.set("status", 'verified');
-                    self.close();
-                    break;
-                    case 302:
-                    //"Контакт принадлежит другому пользователю"
-                    self.setError(json.msg);
-                    break;
-                    case 304:
-                    self.setError("Вы исчерпали лимит SMS на сегодня");
-                    break;
-                    case 305:
-                    self.setError('Контакт в черном списке');
-                    break;
-                    case 401:
-                    self.setError('Это не мобильный телефон, выберите "городской"');
-                    break;
-                }
-            },
-            checkCode: function() {
-                var self = this;
-                var code = this.$el.find(".fn-input-code").val();
-
-                if (!self.contact_id)
-                    return;
-
-                $.post('/ajax/check_contact_code/' + self.contact_id, {
-                    code: code
-                }, function(json) {
-                    if (json.code == 200) {
-                        self.model.set("status", 'verified');
-                        self.close();
-                    } else {
-                        self.setError("Неправильный код");
-                    }
-                }, 'json');
-            },
-            checkHomePhoneCode: function() {
-                var self = this;
-                var code = this.$el.find(".fn-input-code").val();
-                if (code == this.verificationCode) {
-                    $.post('/ajax/verify_home_phone', {
-                        contact: self.model.get("value")
-                    },
-                    function(json) {
-                        if (json.code == 200) {
-                            self.model.set("status", 'verified');
-                            self.close();
-                        } else {
-                            self.setError(json.msg);
-                        }
-                    }, 'json');
-                } else {
-                    self.setError("Неправильный код");
-                }
-            },
-            showVerificationCode: function() {
-                this.verificationCode = this.generateVerificationCode();
-                this.setError('Этот номер телефона пройдет проверку. Подтвердите что вы согласны, введите код:' + this.verificationCode);
-            },
-            generateVerificationCode: function() {
-                var verificationCode = _.random(1000, 9999);
-                return verificationCode;
-            },
-            setError: function(text) {
-                this.$el.find(".fn-error-block").html(text);
-            }
-
-        });
-
-var contactModel = Backbone.Model.extend({
-    defaults: {
-        type: 1,
-        value: "",
-        status: "clear"
-    }
-});
-
-var contactList = Backbone.Collection.extend({
-    model: contactModel
-});
-
-var contactView = Marionette.ItemView.extend({
-    tagName: "div",
-    className: "contact-cont fn-contact",
-    template: templates.contact,
-    ui: {
-        delete: ".fn-contact-delete-button",
-        verify: ".fn-contact-verify-button",
-        type: ".fn-contact-type",
-        value: ".fn-contact-value"
-    },
-    events: {
-        'click @ui.delete': 'remove',
-        'click @ui.verify': 'doVerify',
-        'change @ui.type': 'changeType'
-    },
-    initialize: function(options) {
-        _.extend(this, options);
-    },
-    _init_inputs: function() {
-        this.contact = this.$el.find(".fn-contact-value");
-        this.type = this.$el.find(".fn-contact-type");
-        this.format = this.type.find("option:selected").data("format");
-        this.validation_type = this.type.find("option:selected").data("validation-type");
-
-        this.setValues();
-    },
-    _init_mask: function() {
-        var self = this;
-        if (this.model.get("type") != 5) {
-            $(this.contact).mask(this.format, {
-                "completed": function() {
-                    self.model.set("status", "valided");
-                    self.setValues();
-                }
-            });
-        } else {
-                //$(this.contact).val("");
-                $(this.contact).unbind();
-            }
-        },
-        setValues: function() {
-            this.model.set("value", this.contact.val());
-            this.model.set("type", this.type.val());
-        },
-        onRender: function() {
-            // var html     =  _.template(this.template, this.model.toJSON());
-            // this.container.append(this.$el.html(html));
-            this._init_inputs();
-            this._init_mask();
-            // return this;
-        },
-        remove: function() {
-            console.log(this.model)
-            this.model.collection.remove(this.model);
-        },
-        changeType: function() {
-            this._init_inputs();
-            this._init_mask();
-        },
-        doVerify: function() {
-            this.setValues();
-            this.window = new verifyWindowView({
-                model: this.model
-            });
-        },
-
-        changeStatus: function() {
-            this.$el.removeClass("verified");
-            this.$el.removeClass("noverified");
-            this.$el.find(".fn-contact-inform").html("");
-
-            if (this.model.get("status") == "clear") {
-
-            } else
-            if (this.model.get("status") == "valided") {
-
-            } else
-            if (this.model.get("status") == "verified") {
-                this.$el.addClass("verified");
-                this.$el.find(".fn-contact-inform").html("Контакт подтвержден");
-            } else
-            if (this.model.get("status") == "noverified") {
-                this.$el.addClass("noverified");
-            }
-        },
-
-    });
-
-var contactListView = Marionette.CollectionView.extend({
-    el: "#div_contacts",
-    contacts: [],
-    childView: contactView,
-    buildChildView: function(child, ChildViewClass, childViewOptions) {
-        var options = _.extend({
-            model: child
-        }, childViewOptions);
-        if ($('#contact_' + child.id).length) {
-            options.$el = $('#contact_' + child.id);
-        }
-        var view = new ChildViewClass(options);
-        return view;
-    },
-    ui: {
-        "addContact": ".fn-add-contact-button-text",
-        "contacts": ".contact-cont"
-    },
-    events: {
-        'click @ui.addContact': 'addContact'
-    },
-
-    initialize: function(options) {
-        _.extend(this, options);
-        var self = this;
-        this.bindUIElements();
-
-        this.collection = new contactList();
-            // this.collection.on("add", this.addItem, this);
-            // this.collection.on("remove", this.removeItem, this);
-            this.collection.on("change:status", this.changeStatus, this);
-
-            _.each(this.ui.contacts, function(item) {
-                var status = "clear",
-                $item = $(item);
-                if ($item.hasClass("verified"))
-                    status = "verified";
-                else if ($item.hasClass("noverified"))
-                    status = "noverified";
-
-                var params = {
-                    id: $item.data("item-id"),
-                    value: $item.find(".fn-contact-value").val(),
-                    type: $item.find(".fn-contact-type").val(),
-                    status: status
-                };
-                self.collection.add(params);
-            });
-        },
-
-        addContact: function() {
-            this.collection.add({
-                id: this.collection.length + 1
-            });
-        },
-
-        changeStatus: function(item) {
-            this.contacts[item.cid].changeStatus();
-        }
-
-    });
 
 
 return Marionette.ItemView.extend({
@@ -1822,6 +965,9 @@ return Marionette.ItemView.extend({
         ContactsBehavior: {
             behaviorClass: ContactsBehavior
         },
+        AddServiceBehavior: {
+            behaviorClass: AddServiceBehavior
+        },
     },
 
     initialize: function(options) {
@@ -1832,34 +978,50 @@ return Marionette.ItemView.extend({
         this.settings = ($("#moderate").text()) ? eval($("#moderate").text()) : {};
         if (this.reinit_after_change)
             this._destroy_controls();
+            if ( _globalSettings.allowCkEditor) {
 
-        self._init_controls();
+                window.CKEDITOR_BASEPATH = (app.settings.debug) ? '/static/develop/js/lib/ckeditor/' : '../static/develop/production/js/lib/ckeditor/';
+
+                require([ "modules/ckeditor" ], function(ckeditor) {
+                
+                    CkEditor = ckeditor;
+                    self._init_controls();
+                
+                });
+
+           } else {
+                self._init_controls();
+           }
+        
     },
 
     _init_controls: function() {
-        if (!this.reinit_after_change) {
-            this.category = new categoryView({
-                app: this
-            });
+            if (!this.reinit_after_change) {
+                this.category = new categoryView({
+                    app: this
+                });
 
-            this.ad_type = new adTypeView({
-                app: this
-            });
+                this.ad_type = new adTypeView({
+                    app: this
+                });
 
-            this.city = new cityView({
-                category_id: this.category.category_id,
-                app: this
-            });
-            this.moderate_add_cities = new addCitiesView({
-                category_id: this.category.category_id,
-                app: this
-            });
-            this.photo = new photoControlView({
-                app: this
-            });
+                this.city = new cityView({
+                    category_id: this.category.category_id,
+                    app: this
+                });
+                this.moderate_add_cities = new addCitiesView({
+                    category_id: this.category.category_id,
+                    app: this
+                });
+                this.photo = new photoControlView({
+                    app: this
+                });
                 // this.contacts = new contactListView({app : this});
                 // this.contacts.render();
             }
+
+            this.triggerMethod("ChangedCategory", {category_id: this.category.category_id, city_id: +this.city.value});
+
             this.address_precision = null;
             this.precision_error = null;
             this.cmap = new mapView({
@@ -1926,7 +1088,9 @@ return Marionette.ItemView.extend({
         },
 
         submitForm: _.once(function() {
-            if (this.text && this.category.settings.text_required && nicEditors.findEditor('user_text_adv')) {
+
+            if (this.text && nicEditors.findEditor('user_text_adv')) {
+                console.log(123123123)
                 nicEditors.findEditor('user_text_adv').saveContent();
             }
             $('#' + this.form_id).submit();
