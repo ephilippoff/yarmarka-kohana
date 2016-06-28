@@ -2263,3 +2263,7 @@ div[data-role="error"]{
 .detail_banners_cont{
     height: 600px;
 }
+
+.hide_imp{
+    display: none !important;
+}

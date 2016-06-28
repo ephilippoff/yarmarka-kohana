@@ -153,6 +153,7 @@ class Object
 
 				$db->commit();
 			}
+
 			catch(Exception $e)
 			{
 				$exception_message  = 'ByModerator Ошибка при сохранении объявления: </br>';

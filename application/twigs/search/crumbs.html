@@ -1,4 +1,4 @@
-<div class="breadcrumbs-cont mb20">
+<div class="breadcrumbs-cont mb20" itemprop="breadcrumb">
 	<div class="crums-wrap clearfix">
 		<a href="/{{sphinx_search_query}}" rel="nofollow" class="hidden-xs hidden-sm">Главная</a>
 		<a href="/{{sphinx_search_query}}" rel="nofollow" class="hidden-lg hidden-md home-a"><i class="fa fa-home"></i></a>
@@ -9,7 +9,7 @@
 		{% endfor %}
 	</div>
 
-	<h1 class="captionbold crumbs-h1" style="display: block;">{{ seo_attributes.h1 ? seo_attributes.h1: category.title }}</h1>
+	<h1 class="captionbold crumbs-h1" style="display: block;" itemprop="name">{{ seo_attributes.h1 ? seo_attributes.h1: category.title }}</h1>
 
 	<hr>
 </div>

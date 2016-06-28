@@ -1,10 +1,11 @@
-<div class="filters-cont tab-filter clearfix module js-filters" style="display: none;">
+<div class="filters-cont tab-filter clearfix module js-filters" style="display: none;" >
 	<form method="GET" action="{{category_url}}" class="js-filters-form ta-c">
 		{% if search_text %}
 			<input type="hidden" name="search" value="{{ search_text }}" />
 		{% endif %}
 		<div class="js-filters-cont"></div>
-		<div class="pos-r params-cont" style="padding: 0px 7px;">
+		<div  class="pos-r params-cont" style="padding: 0px 7px;">	
+
 			<div class="param js-filters-static">
 				<span>Только с фото</span>
 				<input type="checkbox" name="photo" id="photo" value="1" class="cmn-toggle-round">
@@ -33,3 +34,15 @@
 	</form>
 	
 </div><!--filters-cont-->
+
+<script type="text/javascript">
+$(document).ready(function(){
+	jQuery("#slider").slider({
+		min: 0,
+		max: 1000,
+		values: [0,1000],
+		range: true
+	});
+});
+</script>
+

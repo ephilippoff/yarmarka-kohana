@@ -2,7 +2,7 @@
 {% set today = 'Сегодня' %}
 
 <div class="col-md-6 masonry">
-	<div class="news_wrap">
+	<div class="news_wrap" itemscope itemtype="http://schema.org/ItemPage">
 		<div class="date light fs12">{{ innerItem.date|date('H:i') }} 
 			<span>
 				{% if innerItem.date|date('d.m.y') == currentDate %}
@@ -12,6 +12,6 @@
 				{% endif %}
 			</span>
 		</div>
-		<p><a href="{{innerItem.url}}" class="fs16">{{innerItem.title}}</a></p>
+		<p><a href="{{innerItem.url}}" itemprop="name" class="fs16">{{innerItem.title}}</a></p>
 	</div>
 </div>

@@ -2,10 +2,10 @@
 <div class="latest_ads clearfix module">
 	<div class="title_block brt2">Интересные предложения <a href="/commercial/leader" target="_blank" class="fr">Хочу сюда попасть</a> </div>
 	{% for item in data|slice(0,8) %}
-	<div class="ad_wrap">
-		<a href="{{item.url}}">
+	<div class="ad_wrap" itempscope itemtype="http://schema.org/ItemPage">
+		<a href="{{item.url}}" itemprop="url">
 			<div class="img_block">
-				<img src="{{ item.image }}" alt="{{ item.title }}">
+				<img src="{{ item.image }}" itemprop="image" alt="{{ item.title }}">
 			</div>
 		</a>
 		{% if item.price > 0 %}
@@ -14,9 +14,9 @@
 			<div style="height:24px;"></div>
 		{% endif %}
 		{% if item.title|length > 40 %}
-		<div class="title"><a href="{{item.url}}">{{ item.title|slice(0,40) }}...</a></div>
+		<div class="title" itemprop="name"><a href="{{item.url}}">{{ item.title|slice(0,40) }}...</a></div>
 		{% else %}
-		<div class="title"><a href="{{item.url}}">{{ item.title}}</a></div>
+		<div class="title" itemprop="name"><a href="{{item.url}}">{{ item.title}}</a></div>
 		{% endif %}
 	</div>
 	{% endfor %}
