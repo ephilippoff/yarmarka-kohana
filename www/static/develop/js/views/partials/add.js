@@ -1433,16 +1433,14 @@ var categoryView = Backbone.View.extend({
 
     change: function(e) {
 
-        var $temp = $('[data-role=service-set]');
-        $temp.find('*:not(".service-wrap")').remove();
-        if ($temp.length) {
-            new serviceApp({
-                el: $temp
-            });
-        }
+        // var $temp = $('[data-role=service-set]');
+        // $temp.find('*:not(".service-wrap")').remove();
+        // if ($temp.length) {
+        //     new serviceApp({
+        //         el: $temp
+        //     });
+        // }
         this.value = $(e.target).val();
-
-        //this.value = $(e.target).data('value');
 
         this._init_data();
         this.app.initialize({
