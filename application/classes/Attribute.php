@@ -10,11 +10,11 @@ class Attribute {
 		if ($category_id > 0 )
 		{
 			$_c = $category->where("id","=",$category_id)
-								// ->cached(Date::WEEK)
+								->cached(Date::WEEK)
 								->find_all();	
 		} else {
 			$_c = $category->order_by("id")
-					// ->cached(Date::WEEK, array("add","search","category"))
+					->cached(Date::WEEK, array("add","search","category"))
 					->find_all();
 		}
 
@@ -78,19 +78,19 @@ class Attribute {
 				->where("attribute_relation.parent_id","=",$parent_id)
 				->where("attribute_relation.parent_element_id","=",$element_id)
 				->order_by("attribute_relation.weight")
-				// ->cached(Date::WEEK, array("add","search","relation"))
+				->cached(Date::WEEK, array("add","search","relation"))
 				->find_all();
 
 		foreach ($ar as $relation)
 		{
 			$reference = ORM::factory('Reference')
 						->where("id", "=", $relation->reference_id)
-						// ->cached(Date::WEEK, array("add","search","relation"))
+						->cached(Date::WEEK, array("add","search","relation"))
 						->find();
 
 			$attribute = ORM::factory('Attribute')
 						->where("id", "=", $reference->attribute)
-						// ->cached(Date::WEEK, array("add","search","relation"))
+						->cached(Date::WEEK, array("add","search","relation"))
 						->find();
 
 			$rel_id = "_".$relation->reference_id;
@@ -126,7 +126,7 @@ class Attribute {
 					
 					$ae = $ae->order_by("weight")
 								->order_by("title")
-								// ->cached(Date::WEEK, array("add","search","element"))
+								->cached(Date::WEEK, array("add","search","element"))
 								->find_all();
 
 					foreach ($ae as $element)
