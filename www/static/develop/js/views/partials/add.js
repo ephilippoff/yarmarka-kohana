@@ -69,6 +69,11 @@ define([
 
                 this.$el = $("#" + this.model.get("id"));
 
+                if (this.model.get('title') == 'Цена за кв. м.') {
+                    console.log(this.model);
+                    this.$el.closest('.row.mb10').addClass('hide_imp');
+                }
+
                 //init ckeditor on kupon text
                 if ((this.model.get('id') == 'param_1000' || this.model.get('id') == 'param_1003') &&
                     _globalSettings.allowCkEditor) {

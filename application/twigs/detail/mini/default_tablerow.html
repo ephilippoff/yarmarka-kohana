@@ -26,6 +26,7 @@
 			{% elseif object.price > 0 %}
 				<span class="price fl">{{ object.price|number_format(0, ' ', ' ') }} <i class="fa fa-rub" aria-hidden="true"></i></span>
 			{% else %}
+				<span class="price fl">&nbsp;</span>
 			{% endif %}
 		</div>
 

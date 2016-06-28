@@ -76,8 +76,13 @@ class Lib_PlacementAds_AddEdit {
 		->find_all();
 
 		foreach($ref as $item){
-			if (in_array("param_".$item->id, $param_keys))
+			if (in_array("param_".$item->id, $param_keys)){
 				$square = $params["param_".$item->id];
+				if ($item->attribute == 63) {
+					$square*=100;
+				}
+			}
+				
 		}
 
 		//====================
@@ -1340,9 +1345,17 @@ class Lib_PlacementAds_AddEdit {
 		$object = &$this->object;
 		$square_price = $params->square_price;
 		$attribute_id = ORM::factory('Attribute')->where('title', '=', 'Цена за кв. м.')->find()->id;
-		$ref_id = ORM::factory('Reference')->where('attribute', '=', $attribute_id)->find()->id;
+		$ref = ORM::factory('Reference')->where('attribute', '=', $attribute_id)->find_all();
+
+		foreach($ref as $item){
+			if (property_exists($params, 'param_'.$item->id)) {
+				$ref_id = $item->id;
+			}
+		}
 		
 		$data = ORM::factory('Data_integer');
+
+		
 
 		$data->attribute 	= $attribute_id;
 		$data->object 		= $object->id;
