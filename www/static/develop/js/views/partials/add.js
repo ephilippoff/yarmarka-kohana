@@ -59,8 +59,6 @@ define([
             render: function() {
                 var self = this;
 
-                if (this.model.get("custom") == 'hidden') return "";
-
                 var template_name = this.model.get("type");
                 if (this.model.get("custom"))
                     template_name = "custom" + this.model.get("custom");
