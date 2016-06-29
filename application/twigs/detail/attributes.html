@@ -18,14 +18,15 @@
 				<td>{{ attr.value|e }}</td>
 			</tr>
 			{% endfor %}
-			{% for attr in object.compiled.attributes if attr.value and attr.seo_name not in ['square_price', 'zarplata','tsena','adres-raion']%}
+			{% for attr in object.compiled.attributes if attr.value and attr.seo_name not in ['price-per-square', 'zarplata','tsena','adres-raion']%}
 			<tr>
 				<td class="bold">{{ attr.title }}</td>
 				<td>{{ attr.value|e }}</td>
 			</tr>
 			{% endfor %}
 			{% set cost = null %}
-			{% for attr in object.compiled.attributes if attr.value and attr.seo_name in ['square_price', 'tsena', 'zarplata']%}
+
+			{% for attr in object.compiled.attributes if attr.value and attr.seo_name in ['price-per-square', 'tsena', 'zarplata']%}
 			{% set cost = attr.value %}
 			<tr>
 				<td class="bold">{{ attr.title }}</td>

@@ -268,7 +268,9 @@ var paramsView = Backbone.View.extend({
     },
 
     addItem: function(item) {
+        if (item.get("custom") == 'hidden') return;
         item.set("container", this.getContainer(item));
+
         if (item.get("type") == "text" && item.get("is_textarea"))
             item.set("type", "textarea");
         if (item.get("type") == "ilist")
