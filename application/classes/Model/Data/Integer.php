@@ -30,13 +30,12 @@ class Model_Data_Integer extends Data
 					->find();
 	}
 
-	public function by_object_and_attribute($object_id, $seo_name, $cached = 60)
+	public function by_object_and_attribute($object_id, $seo_name)
 	{
 		return $this->join('attribute')
 					->on('attribute.id', '=', 'data_integer.attribute')
 					->where("data_integer.object","=",$object_id)
 					->where("attribute.seo_name","IN", is_array($seo_name) ? $seo_name : array($seo_name))
-					->cached($cached)
 					->find();
 	}
 
@@ -86,25 +85,25 @@ class Model_Data_Integer extends Data
 		if (!$price_per_square_attribute->loaded()) return FALSE;
 
 		$_price = ORM::factory('Data_Integer')
-						->by_object_and_attribute($object_id, $price_attribute, Date::WEEK);
+						->by_object_and_attribute($object_id, $price_attribute);
 
 		if (!$_price->loaded()) return FALSE;
 
 		$_square = ORM::factory('Data_Numeric')
 				->select('data_numeric.id','data_numeric.value_min', DB::expr('attribute.seo_name as seo_name'))
-				->by_object_and_attribute($object_id, $square_attributes, Date::WEEK);
+				->by_object_and_attribute($object_id, $square_attributes);
 
 		if (!$_square->loaded()) {
 			$_square = ORM::factory('Data_Integer')
 				->select('data_integer.id','data_integer.value_min', DB::expr('attribute.seo_name as seo_name'))
-				->by_object_and_attribute($object_id, $square_attributes, Date::WEEK);
+				->by_object_and_attribute($object_id, $square_attributes);
 		}
 
 		if (!$_square->loaded()) return FALSE;
 
 		function calculate_square_price($price, $square, $multiply = 1)
 		{
-			return round($price / $square * $multiply, 1);
+			return round($price / ($square * $multiply), 1);
 		}
 
 		if ($_square->value_min > 0 AND $_price->value_min > 0) {
