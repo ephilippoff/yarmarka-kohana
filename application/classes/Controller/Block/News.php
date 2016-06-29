@@ -54,6 +54,7 @@
 					->limit($limit);
 			}
 			$items = $query->execute();
+
 			// process items
 			$newsGroups = array();
 			foreach($items as $item) {

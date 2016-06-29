@@ -3,6 +3,12 @@ define(function(require){
     "use strict";
     return {
         searchPopup: require('lib/text!templates/searchPopup.tmpl'),
+        addService: {
+            premium: require('lib/text!templates/add/service/premium.tmpl'),
+            lider: require('lib/text!templates/add/service/lider.tmpl'),
+            up: require('lib/text!templates/add/service/up.tmpl'),
+            free: require('lib/text!templates/add/service/free.tmpl')
+        },
         filters: {
             listFilterItem: require('lib/text!templates/filters/listFilterItem.tmpl'),
             listBoxFilterItem: require('lib/text!templates/filters/listBoxFilterItem.tmpl'),

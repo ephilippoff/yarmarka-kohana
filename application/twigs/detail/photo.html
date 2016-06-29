@@ -1,17 +1,17 @@
 <div class="images-cont module mt10">
 
 	{% if (object.compiled.images.youtube_video) %}
-		<iframe src="http://www.youtube.com/embed/{{object.compiled.images.youtube_video}}" type="text/html" width="100%" height="500" frameborder="0" allowfullscreen="true"></iframe>
+		<iframe src="http://www.youtube.com/embed/{{object.compiled.images.youtube_video}}" type="text/html" width="100%" height="500" frameborder="0" allowfullscreen="true" itemprop="image"></iframe>
 	{% endif %}
 	
 	{% for photo in object.compiled.images.local_photo %}
 		<div class="image-cont" id="img{{loop.index}}">
-			<img class="" alt="Объявление. {{object.compiled.city}}, {{object.title}}. Фото {{loop.index}}" src="{{ get_file(photo['original']) }}">
+			<img class="" alt="Объявление. {{object.compiled.city}}, {{object.title}}. Фото {{loop.index}}" src="{{ get_file(photo['original']) }}" itemprop="image">
 		</div>
 	{% endfor %}
 	{% for photo in object.compiled.images.remote_photo %}
 		<div class="image-cont" id="img{{loop.index}}">
-			<img class="" alt="Объявление. {{object.compiled.city}}, {{object.title}}. Фото {{loop.index}}" src="{{ photo }}">
+			<img class="" alt="Объявление. {{object.compiled.city}}, {{object.title}}. Фото {{loop.index}}" src="{{ photo }}" itemprop="image">
 		</div>
 	{% endfor %}
 </div>

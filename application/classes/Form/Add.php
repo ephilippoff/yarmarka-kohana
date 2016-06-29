@@ -157,6 +157,19 @@ class Form_Add  {
 			72 => "Товары для детей"
 		);
 
+		// Необходимо переместить рубрику "Другие" над остальными
+
+		$lastvalue = end($category_array);
+		$lastkey = key($category_array);
+
+		$tmp_array = array($lastkey=>$lastvalue);
+
+		array_pop($category_array);
+
+		$category_array = array_merge($tmp_array,$category_array);
+
+
+		
 
 
 		if ($user = Auth::instance()->get_user())
@@ -187,6 +200,8 @@ class Form_Add  {
 										'default_action'=> $default_action,
 										'category_error' => $errors->rubricid
 									);
+
+		
 
 		return $this;
 	}
@@ -453,6 +468,7 @@ class Form_Add  {
 		$params         = $this->params;
 
 		$cities_choosed = $object->get_cities();
+
 		$city_id = NULL;
 
 		$cities_list = ORM::factory('City')->visible()->getprepared_all();
@@ -511,6 +527,7 @@ class Form_Add  {
 					$params[$param[1]] = $value;
 				}
 			}*/
+
 		}
 
 		$data = array();
@@ -545,6 +562,9 @@ class Form_Add  {
 		$customs = Array();
 		foreach($elements as $key => $element)
 		{			
+			if ($element["custom"] == "hidden")
+				continue;
+			
 			if ($element["custom"] == "address")
 				$this->map = TRUE;
 

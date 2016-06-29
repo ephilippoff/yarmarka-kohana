@@ -1,7 +1,7 @@
-<div class="ad-mini-wrap clearfix {% if object.is_premium %}premium{% endif %}" onclick="javascript:window.location.href = '{{ object.compiled.url }}'">
+<div itemscope itemtype="https://schema.org/Thing" class="ad-mini-wrap clearfix {% if object.is_premium %}premium{% endif %}">
 	<div class="img-wrap fl hidden-xxs">
 		{% if object.compiled.images.main_photo %}
-		<img class="img-frame" src="{{ get_file(object.compiled.images.main_photo['120x90']) }}" alt="{{ object.title|e }}">
+		<img itemprop="image" class="img-frame" src="{{ get_file(object.compiled.images.main_photo['120x90']) }}" alt="{{ object.title|e }}">
 			{% if object.compiled.images.local_photo|length + object.compiled.images.remote_photo|length > 1 %}
 				<span class="photos-count hidden-xs">{{object.compiled.images.local_photo|length + object.compiled.images.remote_photo|length}}</span>
 			{% endif %}
@@ -12,7 +12,7 @@
 
 
 	<div class="main-ad-wrap fl">
-		<a href="{{ object.compiled.url }}" title="{{ object.title|e }}" class="object-caption bold {% if object.is_published == 0 %} red strike {% endif %}">
+		<a href="{{ object.compiled.url }}" title="{{ object.title|e }}" class="object-caption bold {% if object.is_published == 0 %} red strike {% endif %}" itemprop="name">
 			{{ object.title|e }}
 		</a> 
 		
@@ -26,6 +26,7 @@
 			{% elseif object.price > 0 %}
 				<span class="price fl">{{ object.price|number_format(0, ' ', ' ') }} <i class="fa fa-rub" aria-hidden="true"></i></span>
 			{% else %}
+				<span class="price fl">&nbsp;</span>
 			{% endif %}
 		</div>
 
@@ -42,7 +43,7 @@
 		{% if object.is_premium %}
 			<div class="hidden-xxs">{{object.full_text|slice(0,100)}}...</div>
 		{% else %}
-			<table class="table-details">									
+			<table class="table-details" itemprop="text">									
 				<tbody>
 				{% if clean_query_params|keys|length > 0 %}
 					{% for attr in object.compiled.attributes if attr.value and attr.seo_name in clean_query_params|keys %}
@@ -89,8 +90,10 @@
 			<span class="price">&nbsp;</span>
 			{% endif %}
 
-			{% if object.compiled.square_price %}
-			<span class="price square_price w100p">{{object.compiled.square_price|number_format(0, ' ', ' ')}} <i class="fa fa-rub" aria-hidden="true"></i>/кв<sup>2</sup></span>
+			{% if object.compiled.attributes.square_price.value > 0 %}
+			<span class="price square_price w100p">{{object.compiled.attributes.square_price.value|number_format(0, ' ', ' ')}} <i class="fa fa-rub" aria-hidden="true"></i>/кв<sup>2</sup></span>
+			{% else %}
+			<span class="price square_price w100p">&nbsp;</span>
 			{% endif %}
 		</div>
 

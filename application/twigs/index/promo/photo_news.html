@@ -4,18 +4,18 @@
 	<div class="col-md-12 items-cont photo_news {% if onPageFlag == 'search' %}hidden-sm hidden-xs{% endif %}">
 		<div class="title_block brt2 module">Новости</div>
 		<ul>
-			{% for news in premiumnews|slice(0,4) %}
+			{% for news in premiumnews %}
 			<li>
-				<div class="photo_news_wrap hidden-sm hidden-xs">
-					<a href="{{news.compiled.url}}" class="fs12">
+				<div class="photo_news_wrap hidden-sm hidden-xs" itemscope itemtype="http://schema.org/NewsArticle">
+					<a href="{{news.compiled.url}}" itemprop="url" class="fs12">
 						<div class="photo_news_img">
-							<img src="{{get_file(news.compiled.images.main_photo['120x90'])}}">
+							<img src="{{get_file(news.compiled.images.main_photo['120x90'])}}" itemprop="image">
 						</div>
 						<div class="date light fs10">{{news.date_expired|date('H:i')}} 
 							{% if news.date_expired|date('d.m.y') == currentDate %}
-							<span>{{ today }}</span>
+							<span itemprop="datePublished">{{ today }}</span>
 							{% else %}
-							<span>{{news.date_expired|date('d.m.y')}}</span>
+							<span itemprop="datePublished">{{news.date_expired|date('d.m.y')}}</span>
 							{% endif %}
 						</div> 
 						{% if news.title|length > 50 %}

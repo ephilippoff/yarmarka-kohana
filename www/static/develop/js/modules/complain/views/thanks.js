@@ -14,7 +14,7 @@ define([ 'jquery', 'underscore', 'backbone' ], function ($, _, Backbone) {
 
 		events: {
 		    "click .close" : "hide"
-		  },
+		},
 
 		initialize: function () {
 

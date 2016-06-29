@@ -66,7 +66,6 @@ class Lib_PlacementAds_AddEditByModerator extends Lib_PlacementAds_AddEdit {
 		$object = &$this->object;
 
 		$params = &$this->params;
-
 		$object->cities = $params->other_cities;
 
 		return $this;

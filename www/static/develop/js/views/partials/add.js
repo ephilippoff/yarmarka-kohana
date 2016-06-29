@@ -11,8 +11,9 @@ define([
     //'lib/cropper.js'
     'cropper',
     'views/partials/add/additional_contacts',
-    'modules/ckeditor'
-    ], function(Marionette, templates, ContactsBehavior, jqueryFileUpload, nicEdit, maskedInput, ymap, cropper, AdditionalContacts, CkEditor) {
+    'modules/ckeditor',
+    'modules/add-service/main'
+    ], function(Marionette, templates, ContactsBehavior, jqueryFileUpload, nicEdit, maskedInput, ymap, cropper, AdditionalContacts, CkEditor, serviceApp) {
         "use strict";
 
         var photoList = Backbone.Collection.extend({
@@ -58,6 +59,8 @@ define([
             render: function() {
                 var self = this;
 
+                if (this.model.get("custom") == 'hidden') return "";
+
                 var template_name = this.model.get("type");
                 if (this.model.get("custom"))
                     template_name = "custom" + this.model.get("custom");
@@ -68,6 +71,7 @@ define([
                 this.appendToOwnPosition(this.model, html);
 
                 this.$el = $("#" + this.model.get("id"));
+
 
                 //init ckeditor on kupon text
                 if ((this.model.get('id') == 'param_1000' || this.model.get('id') == 'param_1003') &&
@@ -194,6 +198,26 @@ define([
 
         });
 
+var adTypeView = Backbone.View.extend({
+    el: '#ad_type',
+    events: {
+        'click': 'toggleContacts'
+    },
+    initialize: function() {
+        this.toggleContacts();
+    },
+
+    toggleContacts: function(){
+        console.log('clicked');
+        var value = this.$el.val();
+        if (value == 101) 
+            $('.cont_block, #additional_contacts').slideUp();
+        else 
+            $('.cont_block, #additional_contacts').slideDown();
+    }
+});
+
+
 var paramsView = Backbone.View.extend({
     el: '#div_params',
     template: templates.parameters,
@@ -313,6 +337,32 @@ var paramsView = Backbone.View.extend({
         });
     }
 
+});
+
+var addCitiesView = Backbone.View.extend({
+    el: '#div_cities',
+    events: {
+        'click #select_all': 'selectAll',
+        'mouseup #cities option' : 'checkSelectAll'
+    },
+    initialize: function() {
+        this.checkSelectAll();
+    },
+
+    selectAll: function(){
+        var options = this.$el.find('#cities option');
+        if ($('#cities option:selected').length !== $('#cities option').length){
+            options.prop('selected', true);
+        }else options.prop('selected', false);
+    },
+
+    checkSelectAll: function(){
+        if ($('#cities option:selected').length == $('#cities option').length){
+            $('#select_all').attr('checked', 'checked').prop('checked', true);
+        }
+        else
+            $('#select_all').removeAttr('checked');
+    }
 });
 
 var cityView = Backbone.View.extend({
@@ -488,7 +538,6 @@ var mapcontrolView = Backbone.View.extend({
                 self.search = city + ', ' + this.$el.val();
                 window.clearTimeout(self.timeout);
                 self.timeout = setTimeout(function() {
-                    self.kladr_autocomplete();
                     self.geoCoder();
                 }, 500);
             } else {
@@ -545,45 +594,7 @@ var mapcontrolView = Backbone.View.extend({
                         self.setMessage("Адрес не найден, видимо он не существует", "red");
                     }
                     );
-},
-
-kladr_autocomplete: function() {
-            /*$('#'+this.address_field).autocomplete({
-                source: function( request, response ) {
-                    request.parent_id = $('#city_kladr_id').val();
-                    request.address_required = 0;
-
-                    $.getJSON( "/ajax/kladr_address_autocomplete", request, function( data, status, xhr ) {
-                        response( data );
-                    });
-                },
-                minLength: 1,
-                autoFocus: true,
-                select: function( event, ui ) {
-                    $('#address_kladr_id').val(ui.item.id);
-                    $('#map_block_div').show();
-
-                    $('#error_address').hide();
-                    $('#error_address').parents('div.input').removeClass('error');
-                    setTimeout(function(){
-                        GetCoordinates();
-                    }, 100);
-                },
-                change: function( event, ui ) {
-                    if (ui.item == null) {
-                        // $('#city_kladr_id').val('');
-                        // $('#address_selector').val('');
-                        $('#address_kladr_id').val('');
-                        GetCoordinates();
-                        $('#map_block_div').show();
-                    }
-                }
-            }).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
-                return $( "<li>" )
-                .append( "<a>" + item.label + "</a>" )
-                .appendTo( ul );
-            };  */
-        }
+}
 
     });
 
@@ -627,12 +638,13 @@ var textView = Backbone.View.extend({
         this.bind("destroy", this.destroy);
         this.control = this.$el.find("textarea");
         this.value = this.control.val();
+        
         if (!this.control.length)
             this.render();
 
         var staticPath = app.settings.staticPath;
 
-        // if (this.text_required) {
+        if (this.text_required) {
             if (!_globalSettings.allowCkEditor) {
                 new nicEditor({
                     iconsPath: staticPath + 'images/nicEditorIcons.gif'
@@ -642,7 +654,11 @@ var textView = Backbone.View.extend({
                     fileUpload: true
                 });
             }
-        // }
+         } else {
+            if (this.app.category.category_id) {
+                this.clear();
+            }
+         }
     },
 
     render: function() {
@@ -651,8 +667,12 @@ var textView = Backbone.View.extend({
             value: this.value,
             text_required: this.text_required
         });
-        this.$el.html((this.text_required) ? html: "");
+        this.$el.html( html);
         return this;
+    },
+
+    clear: function() {
+        this.$el.html( "");
     },
 
     destroy: function() {
@@ -1308,7 +1328,7 @@ var categoryView = Backbone.View.extend({
         this._init_price();
 
         var category_id = this.control.data('value');
-        console.log(category_id)
+
         if (category_id && category_id != 0) {
              this.$el.find('.current_value').html($('#rubricid .option[data-value='+category_id+']').html());
         }
@@ -1388,7 +1408,16 @@ var categoryView = Backbone.View.extend({
     },
 
     change: function(e) {
-        this.value = $(e.target).data('value');
+
+        // var $temp = $('[data-role=service-set]');
+        // $temp.find('*:not(".service-wrap")').remove();
+        // if ($temp.length) {
+        //     new serviceApp({
+        //         el: $temp
+        //     });
+        // }
+        this.value = $(e.target).val();
+
         this._init_data();
         this.app.initialize({
             reinit_after_change: true
@@ -1790,7 +1819,16 @@ return Marionette.ItemView.extend({
             this.category = new categoryView({
                 app: this
             });
+
+            this.ad_type = new adTypeView({
+                app: this
+            });
+
             this.city = new cityView({
+                category_id: this.category.category_id,
+                app: this
+            });
+            this.moderate_add_cities = new addCitiesView({
                 category_id: this.category.category_id,
                 app: this
             });
