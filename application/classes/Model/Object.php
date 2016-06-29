@@ -465,7 +465,7 @@ class Model_Object extends ORM {
 
 
 		//Если тип = новость
-		if ($this->type_tr = 101) {
+		if ($this->type_tr == 101) {
 			$city_id = $this->city_id;
 			$citySeoName = ORM::factory('City')
 	                ->where("id", "=", $city_id)
