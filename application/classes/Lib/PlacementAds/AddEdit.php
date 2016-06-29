@@ -52,53 +52,8 @@ class Lib_PlacementAds_AddEdit {
 			if (!$this->params->address)
 				$this->params->address = $this->parse_address_from_params((array) $this->params);
 
-			$category_parent_id = ORM::factory('Category')
-			->where('id', '=', $this->params->rubricid)
-			->find()
-			->parent_id;
-
-			if ($category_parent_id AND $category_parent_id == 2) {
-				$this->params->square_price = $this->calculate_square_price((array) $this->params);
-			}
-
-
 		}
 		return $this;
-	}
-
-	function calculate_square_price($params)
-	{
-		$square_price = 0;
-		$param_keys = array_keys($params);
-		$square_attribute_ids = Kohana::$config->load('common.square_attribute_ids');
-		$ref = ORM::factory('Reference')
-		->where("attribute","IN", $square_attribute_ids)
-		->find_all();
-
-		foreach($ref as $item){
-			if (in_array("param_".$item->id, $param_keys)){
-				$square = $params["param_".$item->id];
-				if ($item->attribute == 63) {
-					$square*=100;
-				}
-			}
-				
-		}
-
-		//====================
-
-		$price_attribute_id = Kohana::$config->load('common.price_attribute_id');
-
-		$ref = ORM::factory('Reference')
-		->where("attribute","=", $price_attribute_id)
-		->find_all();
-
-		foreach($ref as $item){
-			if (in_array("param_".$item->id, $param_keys))
-				$price = $params["param_".$item->id];
-		}
-
-		return round($price / $square, 1);
 	}
 
 	function parse_address_from_params($params)
@@ -1331,42 +1286,9 @@ class Lib_PlacementAds_AddEdit {
 			}
 		}
 
-		if ($params->square_price && $params->square_price > 0) {
-			$this->save_square_price();
-		}
-
 		return $this;
 	}
 
-	function save_square_price()
-	{
-
-		$params = &$this->params;
-		$object = &$this->object;
-		$square_price = $params->square_price;
-		$attribute_id = ORM::factory('Attribute')->where('title', '=', 'Цена за кв. м.')->find()->id;
-		$ref = ORM::factory('Reference')->where('attribute', '=', $attribute_id)->find_all();
-
-		foreach($ref as $item){
-			if (property_exists($params, 'param_'.$item->id)) {
-				$ref_id = $item->id;
-			}
-		}
-		
-		$data = ORM::factory('Data_integer');
-
-		
-
-		$data->attribute 	= $attribute_id;
-		$data->object 		= $object->id;
-		$data->reference 	= $ref_id;
-
-		$data->value_min = $square_price;
-
-		$data->save();
-
-		return $this;
-	}
 
 	function save_generated()
 	{
@@ -1382,6 +1304,9 @@ class Lib_PlacementAds_AddEdit {
 
 		$object->full_text = $object->generate_full_text();
 		$object->save();
+
+		ORM::factory('Data_integer')->save_price_per_square($object->id, $object->category);
+
 		return $this;
 	}
 
@@ -1408,23 +1333,6 @@ class Lib_PlacementAds_AddEdit {
 		Cache::instance('object')->delete($_object->id);
 		Cache::instance('object')->set($_object->id, (array) $_object, 3600);
 		
-		return $this;
-	}
-
-	function send_external_integrations()
-	{
-		$object = &$this->object;
-		$object = ORM::factory('Object', $object->id);
-		
-		// сохраняем запись для короткого урла *.ya24.biz
-		//Model_Object::send_to_db_dns($object->id);
-
-		if ( ! $this->is_edit && !$object->type_tr) 
-		{
-			//пишем id объявления во временную таблицу для последующего обмена с terrasoft
-			$object->send_to_terrasoft();
-		}
-
 		return $this;
 	}
 

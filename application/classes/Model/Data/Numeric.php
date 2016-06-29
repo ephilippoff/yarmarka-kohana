@@ -32,6 +32,16 @@ class Model_Data_Numeric extends Data
 
 		return $result;
 	}
+
+	public function by_object_and_attribute($object_id, $seo_name, $cached = 60)
+	{
+		return $this->join('attribute')
+					->on('attribute.id', '=', 'data_numeric.attribute')
+					->where("data_numeric.object","=",$object_id)
+					->where("attribute.seo_name","IN", is_array($seo_name) ? $seo_name : array($seo_name))
+					->cached($cached)
+					->find();
+	}
 }
 
 /* End of file Numeric.php */
