@@ -1,7 +1,7 @@
 <input type="hidden" name="default_action" id="default_action" value="<?=$data->default_action?>">
 <? if ($data->edit): ?>
 	<?=$data->value?>
-	<input type="hidden" name="<?=$name?>" id="<?=$id?>" value="<?=$data->category_id?>"/>
+	<input type="hidden" name="<?=$name?>" id="<?=$id?>" value="<?=$data->category_id?>" data-value="<?=$data->category_id?>"/>
 <? else: ?>	
 	<input type="hidden" name="<?=$name?>" id="<?=$id?>" value=""/>
 	<div id="<?=$name?>" data-value="<?=$data->category_id?>" class="<?=$_class?> accordeon-menu bbn brt2 brb2 w100p">

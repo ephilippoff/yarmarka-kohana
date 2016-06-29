@@ -538,7 +538,6 @@ var mapcontrolView = Backbone.View.extend({
                 self.search = city + ', ' + this.$el.val();
                 window.clearTimeout(self.timeout);
                 self.timeout = setTimeout(function() {
-                    self.kladr_autocomplete();
                     self.geoCoder();
                 }, 500);
             } else {
@@ -595,45 +594,7 @@ var mapcontrolView = Backbone.View.extend({
                         self.setMessage("Адрес не найден, видимо он не существует", "red");
                     }
                     );
-},
-
-kladr_autocomplete: function() {
-            /*$('#'+this.address_field).autocomplete({
-                source: function( request, response ) {
-                    request.parent_id = $('#city_kladr_id').val();
-                    request.address_required = 0;
-
-                    $.getJSON( "/ajax/kladr_address_autocomplete", request, function( data, status, xhr ) {
-                        response( data );
-                    });
-                },
-                minLength: 1,
-                autoFocus: true,
-                select: function( event, ui ) {
-                    $('#address_kladr_id').val(ui.item.id);
-                    $('#map_block_div').show();
-
-                    $('#error_address').hide();
-                    $('#error_address').parents('div.input').removeClass('error');
-                    setTimeout(function(){
-                        GetCoordinates();
-                    }, 100);
-                },
-                change: function( event, ui ) {
-                    if (ui.item == null) {
-                        // $('#city_kladr_id').val('');
-                        // $('#address_selector').val('');
-                        $('#address_kladr_id').val('');
-                        GetCoordinates();
-                        $('#map_block_div').show();
-                    }
-                }
-            }).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
-                return $( "<li>" )
-                .append( "<a>" + item.label + "</a>" )
-                .appendTo( ul );
-            };  */
-        }
+}
 
     });
 
