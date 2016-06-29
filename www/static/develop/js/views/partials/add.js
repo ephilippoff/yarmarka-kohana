@@ -638,12 +638,13 @@ var textView = Backbone.View.extend({
         this.bind("destroy", this.destroy);
         this.control = this.$el.find("textarea");
         this.value = this.control.val();
+        
         if (!this.control.length)
             this.render();
 
         var staticPath = app.settings.staticPath;
 
-        // if (this.text_required) {
+        if (this.text_required) {
             if (!_globalSettings.allowCkEditor) {
                 new nicEditor({
                     iconsPath: staticPath + 'images/nicEditorIcons.gif'
@@ -653,7 +654,11 @@ var textView = Backbone.View.extend({
                     fileUpload: true
                 });
             }
-        // }
+         } else {
+            if (this.app.category.category_id) {
+                this.clear();
+            }
+         }
     },
 
     render: function() {
@@ -662,8 +667,12 @@ var textView = Backbone.View.extend({
             value: this.value,
             text_required: this.text_required
         });
-        this.$el.html((this.text_required) ? html: "");
+        this.$el.html( html);
         return this;
+    },
+
+    clear: function() {
+        this.$el.html( "");
     },
 
     destroy: function() {
@@ -1319,7 +1328,7 @@ var categoryView = Backbone.View.extend({
         this._init_price();
 
         var category_id = this.control.data('value');
-        console.log(category_id)
+
         if (category_id && category_id != 0) {
              this.$el.find('.current_value').html($('#rubricid .option[data-value='+category_id+']').html());
         }
