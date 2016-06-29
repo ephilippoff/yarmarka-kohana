@@ -116,9 +116,8 @@
 			<span class="price">&nbsp;</span>
 			{% endif %}
 
-
-			{% if object.compiled.attributes.square_price.value > 0 %}
-			<span class="price square_price w100p">{{object.compiled.attributes.square_price.value|number_format(0, ' ', ' ')}} <i class="fa fa-rub" aria-hidden="true"></i>/кв<sup>2</sup></span>
+			{% if object.compiled.attributes.price-per-square.value > 0 %}
+			<span class="price square_price w100p">{{object.compiled.attributes.price-per-square.value|number_format(0, ' ', ' ')}} <i class="fa fa-rub" aria-hidden="true"></i>/кв<sup>2</sup></span>
 			{% else %}
 			<span class="price square_price w100p">&nbsp;</span>
 			{% endif %}
