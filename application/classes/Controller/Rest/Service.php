@@ -4,7 +4,7 @@ class Controller_Rest_Service extends Controller_Rest {
 
 	public function action_check_freeup()
 	{
-		$ids = ($this->param->ids) ? $this->param->ids: array($this->param->id);
+		$ids = ($this->post->ids) ? $this->post->ids: array($this->param->id);
 
 		if (!$ids OR !count($ids)) {
 			throw new HTTP_Exception_404;
@@ -15,14 +15,7 @@ class Controller_Rest_Service extends Controller_Rest {
 		$services_to_action = array();
 		$errors = 0;
 		foreach ($objects as $object) {
-			$info = Object::canEdit(Array("object_id" => $object->id, "rubricid" => $object->category, "city_id" => $object->city_id));
-			if ( $info["code"] == "error" )
-			{
-				$this->json['code'] = 400;
-				$this->json['text'] = $info["errors"];
-				$errors = $errors + 1;
-				continue;
-			}
+			
 			$objects_to_action[] = $object->get_row_as_obj(array("id","title"));
 			$services_to_action[] = Service::factory("Up")->get();
 		}
@@ -48,7 +41,7 @@ class Controller_Rest_Service extends Controller_Rest {
 
 	public function action_check_premium()
 	{
-		$ids = ($this->param->ids) ? $this->param->ids: array($this->param->id);
+		$ids = ($this->post->ids) ? $this->post->ids: array($this->param->id);
 
 		if (!$ids OR !count($ids)) {
 			throw new HTTP_Exception_404;
@@ -61,14 +54,7 @@ class Controller_Rest_Service extends Controller_Rest {
 		$services_to_action = array();
 		$errors = 0;
 		foreach ($objects as $object) {
-			$info = Object::canEdit(Array("object_id" => $object->id, "rubricid" => $object->category, "city_id" => $object->city_id));
-			if ( $info["code"] == "error" )
-			{
-				$this->json['code'] = 400;
-				$this->json['text'] = $info["errors"];
-				$errors = $errors + 1;
-				continue;
-			}
+			
 			$object =  $object->get_row_as_obj(array("id","title"));
 			$objects_to_action[] = $object;
 
@@ -98,7 +84,7 @@ class Controller_Rest_Service extends Controller_Rest {
 
 	public function action_check_lider()
 	{
-		$ids = ($this->param->ids) ? $this->param->ids: array($this->param->id);
+		$ids = ($this->post->ids) ? $this->post->ids: array($this->param->id);
 
 		if (!$ids OR !count($ids)) {
 			throw new HTTP_Exception_404;
@@ -111,14 +97,7 @@ class Controller_Rest_Service extends Controller_Rest {
 		$services_to_action = array();
 		$errors = 0;
 		foreach ($objects as $object) {
-			$info = Object::canEdit(Array("object_id" => $object->id, "rubricid" => $object->category, "city_id" => $object->city_id));
-			if ( $info["code"] == "error" )
-			{
-				$this->json['code'] = 400;
-				$this->json['text'] = $info["errors"];
-				$errors = $errors + 1;
-				continue;
-			}
+
 			$object =  $object->get_row_as_obj(array("id","title","main_image_id"));
 			$objects_to_action[] = $object;
 
@@ -234,7 +213,7 @@ class Controller_Rest_Service extends Controller_Rest {
 	public function action_check_cities()
 	{
 
-		$ids = ($this->param->ids) ? $this->param->ids: array($this->param->id);
+		$ids = ($this->post->ids) ? $this->post->ids: array($this->param->id);
 
 		if (!$ids OR !count($ids)) {
 			throw new HTTP_Exception_404;
