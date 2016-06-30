@@ -16,13 +16,7 @@ class Lib_PlacementAds_AddEdit {
 	public $is_edit = NULL;
 
 	public $parent_id;
-	public $create_union = FALSE;
-	public $edit_union = FALSE;
-	public $destroy_union = FALSE;
-	public $object_without_parent_id = NULL;
 	public $category_settings = array();
-
-	public $union_cancel = FALSE;
 
 	function Lib_PlacementAds_AddEdit()
 	{
@@ -419,14 +413,9 @@ class Lib_PlacementAds_AddEdit {
 		else 
 			@list($values, $list_ids) = (array) Object_Utils::get_parsed_parameters($params, NULL, TRUE);
 
-		$this->signature 				= ($this->is_union_enabled()) ?
-		$this->generate_signature("", "",$values) : 
-		$this->generate_signature($params->title_adv, $params->user_text_adv, $values);
+		$this->signature 				= $this->generate_signature($params->title_adv, $params->user_text_adv, $values);
 
 		$this->signature_full = $this->generate_signature($params->title_adv, $params->user_text_adv, $values);														
-
-		$this->options_exlusive_union 	= $this->get_options_exlusive_union($params->address, $params->city_id, $category->id, $list_ids);
-
 		$this->list_ids = $list_ids;
 
 		if ( $this->is_edit AND $params->itis_massload ){
@@ -448,8 +437,7 @@ class Lib_PlacementAds_AddEdit {
 				if ($signature_full == $sign_existed)
 						//AND $attachments_count == $input_attachament_count)
 				{
-					$errors['nochange'] = "Объявление не требует обновления.";	
-					$this->union_cancel = TRUE;
+					$errors['nochange'] = "Объявление не требует обновления.";
 				}
 			}
 		}
@@ -466,9 +454,6 @@ class Lib_PlacementAds_AddEdit {
 						$errors['signature'] = "Такое объявление у вас уже есть, дубли запрещены правилами сайта.";	
 						$object->is_published = 0;	
 					}					
-					//$object->is_bad = 2;	
-					//$object->date_updated = date('Y-m-d H:i:s');
-					$this->union_cancel = TRUE;
 				} else {
 					$errors['signature'] = "Такое объявление у вас уже есть, дубли запрещены правилами сайта.";	
 				}
@@ -478,120 +463,7 @@ class Lib_PlacementAds_AddEdit {
 		return $this;
 	}
 
-	// function check_signature_for_union()
-	// {
-	// 	$params = &$this->params;
-	// 	$object = &$this->object;
-	// 	$errors = &$this->errors;
-	// 	$category = &$this->category;
-	// 	$user     = &$this->user;
 
-	// 	if (!$category OR !$user) return $this;
-
-	// 	if ($this->is_union_enabled() AND $this->is_union_enabled_by_category($category->id) AND !$this->union_cancel)
-	// 	{
-	// 		$max_similarity = Kohana::$config->load('common.max_object_similarity');
-	// 		$similarity 	= ORM::factory('Object_Signature')->get_similarity($max_similarity, $this->signature, $this->options_exlusive_union, $params->object_id);
-
-	// 		if ($similarity["sm"] >= $max_similarity){
-
-	// 			$valid = $this->validate_between_parameters($category->id, $this->list_ids, $similarity["object_id"]);
-	// 			if (!$valid)
-	// 			{
-	// 				$this->destroy_union = TRUE;
-	// 				return $this;
-	// 			}
-
-	// 			$parent_id = (int) ORM::factory('Object', $similarity["object_id"])->parent_id;
-	// 			if ($parent_id == 0)
-	// 			{
-	// 				$this->create_union = TRUE;
-	// 				$this->object_without_parent_id = $similarity["object_id"];
-	// 			} else {
-	// 				$this->edit_union = TRUE;
-	// 				$this->parent_id = $parent_id;
-	// 			}				
-	// 		} 
-	// 			else if ($this->is_edit AND $object->parent_id)
-	// 		{
-	// 			$this->destroy_union = TRUE;
-	// 		}
-	// 	}
-
-	// 	return $this;
-	// }
-
-	// function save_union()
-	// {
-	// 	$params = &$this->params;
-	// 	$object = &$this->object;
-	// 	$errors = &$this->errors;
-	// 	$category = &$this->category;
-	// 	$user     = &$this->user;
-
-	// 	if (!$category OR !$user) return $this;
-
-	// 	if ($this->is_union_enabled() AND $this->is_union_enabled_by_category($category->id))
-	// 	{ 
-	// 		$parent_id = 0;
-
-	// 		if ($this->destroy_union)
-	// 		{
-	// 			$union_object = ORM::factory('Object', $object->parent_id);
-	// 			if ($union_object->loaded())
-	// 			{
-	// 				$this->parent_id = $union_object->id;
-	// 				if ($union_object->is_union <= 2)
-	// 				{
-	// 					ORM::factory('Object')
-	// 						->where('parent_id','=', $union_object->id)
-	// 						->set('parent_id',  DB::expr('NULL'))
-	// 						->update_all();
-	// 					DB::delete('object')->where("id","=",$union_object->id)->execute();						
-	// 				}
-	// 				else if ($union_object->is_union > 2)
-	// 				{
-	// 					ORM::factory('Object')
-	// 						->where('id','=', $object->id)
-	// 						->set('parent_id',  DB::expr('NULL'))
-	// 						->update_all();
-	// 					$this->edit_union = TRUE;		
-	// 				}
-	// 			}
-	// 		}
-
-	// 		if ($this->create_union OR $this->edit_union)
-	// 		{
-	// 			//ry {
-	// 				$this->original_params["object_id"] = $this->parent_id;
-	// 				$this->original_params["rubricid"]  = $category->id;
-	// 				$this->original_params["city_id"]   = $object->city_id;
-
-	// 				$objects_for_union = Array(
-	// 						"initial_object" 		 => $this->object_without_parent_id,
-	// 						"current_object_source"  => $object->id
-	// 					);
-
-	// 				$parent_id = (int) Object::PlacementAds_Union($this->original_params, $objects_for_union, $this->edit_union, $this->destroy_union);
-	// 			//}
-	// 			//catch (Exception $e) {
-	// 			// 	$errors['union_error'] = $e->getMessage();
-	// 			//}
-
-	// 		}
-
-	// 		if ($parent_id >0 )	
-	// 			$this->parent_id = $parent_id;
-
-	// 		if ($this->destroy_union)	
-	// 			$this->parent_id = NULL;
-
-
-	// 	}		
-
-	// 	return $this;
-
-	// }
 	/**
 	 * [normalize_attributes Приведение пользовательских данных в порядок, trim, replace и прочее]
 	 * @return [this]
@@ -934,21 +806,6 @@ class Lib_PlacementAds_AddEdit {
 		return $this;
 	}
 
-	function save_parentid_object()
-	{
-		$params 	= &$this->params;
-		$object 	= &$this->object;
-		$category 	= &$this->category;
-
-		if ($this->is_union_enabled() AND $this->is_union_enabled_by_category($category->id))
-		{
-			//if (!empty($this->parent_id))
-			//{
-			$object->parent_id = ($this->parent_id == 0) ? NULL : $this->parent_id;
-			//}
-		}
-	}
-
 	function save_object()
 	{
 		$object = &$this->object;
@@ -1085,7 +942,6 @@ class Lib_PlacementAds_AddEdit {
 			$object_signature->object_id  				= $object->id;
 			$object_signature->signature  				= $this->signature;
 			$object_signature->signature_full  			= $this->signature_full;
-			$object_signature->options_exlusive_union   = $this->options_exlusive_union;
 			$object_signature->save();
 		}
 		return $this;
@@ -1466,119 +1322,12 @@ class Lib_PlacementAds_AddEdit {
 		return $date_expiration;
 	}
 
-	private static function get_union_config($category = 0)
-	{
-		$config = NULL;
-		if ($category >0)
-		{
-			try {
-				$config = Kohana::$config->load('union.'.$category);
-			} catch (Exception $e)
-			{
-				$config = NULL;
-			}
-		}
-		return $config;
-	}
-
-	public static function validate_between_parameters($category_id, $list_ids = Array(), $similar_object_id)
-	{
-		$result = TRUE;
-		$config = self::get_union_config($category_id);
-		if ($config)
-		{
-			foreach ($config["between_params"] as $attribute_id=>$procent)
-			{
-				$attribute = ORM::factory('Attribute')
-				->where("id","=",$attribute_id)
-				->cached(Date::DAY)
-				->find();
-				if ($attribute->loaded())
-				{
-					if ($attribute->type == "integer")
-					{
-						$di = ORM::factory('Data_Integer')
-						->where("object","=",$similar_object_id)
-						->where("attribute","=",$attribute->id)
-						->find();
-
-					} else
-					if ($attribute->type == "numeric")
-					{
-						$di = ORM::factory('Data_Numeric')
-						->where("object","=",$similar_object_id)
-						->where("attribute","=",$attribute->id)
-						->find();
-					}
-
-					$similar_value = $di->value_min;
-					$odds = ($similar_value/100)*$procent;
-					$input_value   = $list_ids[$attribute_id];
-					//throw new Exception("val ".$similar_value." odds ".$odds." inp ".$input_value, 1);
-					
-					if ($input_value <= $similar_value-$odds
-						OR $input_value >= $similar_value+$odds)
-					{
-						$result = FALSE;
-						break;
-					}
-					
-				}
-
-			}
-
-		}
-		return $result;
-	}
-
-	private static function get_options_exlusive_union($address, $city_id, $category_id, $list_ids = Array())
-	{
-		$return = Array();
-		if ($address){
-			$address_signature = Object_Utils::generate_signature( $address );
-			$return = array_merge($return, $address_signature);
-		}
-		if ($city_id)
-			$return[] = $city_id;
-		if ($category_id)
-			$return[] = $category_id;
-
-		$config = self::get_union_config($category_id);
-
-		if ( is_array($config) ) 
-		{			
-			foreach ($list_ids as $key=>$item)
-			{
-				if (in_array($key, $config['options_exlusive_union']))
-				{
-					if ((int) $item > 0) {
-						$return[] = (int) $item;
-					}
-				}
-			}
-		}
-
-		asort($return);
-
-		return "{".join(',', $return)."}";
-	}
-
 	private static function generate_signature($title = "", $text = "", $values = Array())
 	{
 		$values[] = strip_tags($title);
 		$values[] = strip_tags($text);
 
 		return Object_Utils::generate_signature( join(", ", $values) );
-	}
-
-	private static function is_union_enabled()
-	{
-		return Kohana::$config->load('common.union_objects_by_similarity');
-	}
-
-	private static function is_union_enabled_by_category($category_id)
-	{
-		return (in_array($category_id, Kohana::$config->load('common.union_objects_by_similarity_by_cat')));
 	}
 
 	private static function is_similarity_enabled()
