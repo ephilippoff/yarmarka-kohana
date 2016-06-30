@@ -63,6 +63,11 @@ class Model_Data_Integer extends Data
 		return $result;
 	}
 
+	public static function calculate_square_price($price, $square, $multiply = 1)
+	{
+		return round($price / ($square * $multiply), 1);
+	}
+
 	public function save_price_per_square($object_id, $category_id)
 	{
 		$square_attributes = array(
@@ -101,10 +106,7 @@ class Model_Data_Integer extends Data
 
 		if (!$_square->loaded()) return FALSE;
 
-		function calculate_square_price($price, $square, $multiply = 1)
-		{
-			return round($price / ($square * $multiply), 1);
-		}
+		
 
 		if ($_square->value_min > 0 AND $_price->value_min > 0) {
 
@@ -112,7 +114,7 @@ class Model_Data_Integer extends Data
 			$item->attribute 	= $price_per_square_attribute->id;
 			$item->object 		= $object_id;
 			$item->reference 	= $price_per_square_attribute->reference_id;
-			$item->value_min 	= calculate_square_price($_price->value_min, $_square->value_min, ($_square->seo_name == 'ploshchad-uchastka-v-sotkakh') ? 100 : 1) ;
+			$item->value_min 	= Model_Data_Integer::calculate_square_price($_price->value_min, $_square->value_min, ($_square->seo_name == 'ploshchad-uchastka-v-sotkakh') ? 100 : 1) ;
 
 			return $item->save();
 
