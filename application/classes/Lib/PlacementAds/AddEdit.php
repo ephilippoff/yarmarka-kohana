@@ -1305,7 +1305,7 @@ class Lib_PlacementAds_AddEdit {
 		$object->full_text = $object->generate_full_text();
 		$object->save();
 
-		ORM::factory('Data_integer')->save_price_per_square($object->id, $object->category);
+		ORM::factory('Data_Integer')->save_price_per_square($object->id, $object->category);
 
 		return $this;
 	}
