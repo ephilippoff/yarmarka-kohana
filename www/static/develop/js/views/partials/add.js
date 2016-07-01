@@ -225,7 +225,6 @@ define([
         },
 
         addItem: function(item){
-            if (item.get("custom") == 'hidden') return;
             item.set("container", this.getContainer(item));
             if (item.get("type") == "text" && item.get("is_textarea"))
                 item.set("type", "textarea");
