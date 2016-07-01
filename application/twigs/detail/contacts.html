@@ -8,9 +8,6 @@
 				<div class="col-md-12 clearfix">
 					<div class="clearfix">
 						<span class="author-name">{{object.contact}}</span>
-						{% if object.compiled.author.org_type == 2 %}
-						<a class="moreinfo fr" href="/glavnaya-kategoriya?user_id={{object.compiled.author.id}}&published=1&active=1">Все объявления компании</a>
-						{% endif %}
 						<form action="" class="clearfix module" id="show_contacts">	
 							<div class="contacts-list-cont js-contact-list fl">
 								{% for contact in object.compiled.contacts %}
@@ -43,7 +40,7 @@
 							data-email="{{ userEmail }}" 
 							data-is-job-vacancy="{{ isJobVacancy }}"
 							{% if cvAttachedUrl %}data-text="Мое резюме на Ярмарке: {{ cvAttachedUrl }}. " data-state="compose"{% endif %}
-							class="write-to-author dib">
+							class="write-to-author dib mb10">
 						</div>
 						{% endif %}
 					{% elseif object.source_id == 2 %}
@@ -54,6 +51,22 @@
 						
 					{% endif %}
 				</div>
+				{% if object.compiled.author.org_type == 2 %}
+				<hr>
+				<div class="moreinfo">
+					<div class="fr hidden-sm hidden-xs hidden-xxs"><i class="fa fa-calendar fs16" title="На Ярмарке с {{object.compiled.author.regdate|date('Y')}} года" aria-hidden="true"></i></div>
+					{% if object.compiled.author.logo %}
+						<div class="org_logo">
+							<img src="{{  get_file(object.compiled.author.logo['120x90']) }}">
+						</div>
+					{% endif %}
+						<div class="org_info">
+							<a href="/glavnaya-kategoriya?user_id={{object.compiled.author.id}}&published=1&active=1">{{ object.compiled.author.org_name }}</a>
+							<div> <span class="bold">Адрес: </span> {{ object.compiled.author.org_post_address }}</div>
+							<div><span class="bold">Тел.: </span>{{ object.compiled.author.org_phone }}</div>
+						</div>
+				</div>
+				{% endif %}
 				<div class="col-md-6 col-sm-6">
 					{% if object.compiled.author.org_type == 2 and object.compiled.author.role != 9 and object.compiled.author.role != 2 %}
 						<p><span class="moreinfo span-link" onclick='document.location="/user?id={{object.author_company_id}}"'>{{ object.compiled.author.org_name }}</span></p>
@@ -62,12 +75,6 @@
 						{% endif %}
 						<p>{{ object.compiled.author.org_post_address }}</p>
 						<p><i class="ico phone"></i>{{ object.compiled.author.org_phone }}</p>
-						
-						<!-- <p><i class="ico vkontakte"></i><span class="span-link">http://vk.com/454545</span></p>
-						<p><i class="ico twitter"></i><span class="span-link">http://twitter.com/acc</span></p>
-						<p><i class="ico instagram"></i><span class="span-link">http://link.com</span></p>
-						<p><i class="ico email"></i><span class="span-link">sss@domain.ru</span></p>
-						<p><i class="ico site"></i><span class="span-link">http://site.ru</span></p> -->
 					{% endif %}
 				</div>
 			{% else %}

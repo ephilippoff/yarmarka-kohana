@@ -1,0 +1,36 @@
+<div class="org-about">
+	<div class="row">
+		{% if orginfo.logo %}
+			<div class="col-md-3">
+				{{orginfo.logo}}
+				<img src="{{  get_file(orginfo.logo) }}" alt="">
+			</div>
+		{% endif %}
+		<div class="col-md-5">
+			<p class="org_contacts clearfix">
+				<span class="dib"><i class="fa fa-map-marker" aria-hidden="true"></i></span>
+				<span class="dib">{{orginfo.address}}</span>
+			</p>
+			<p class="org_contacts clearfix">
+				<span class="dib"><i class="fa fa-phone" aria-hidden="true"></i></span>
+				<span class="dib">{{orginfo.phone}}</span>
+			</p>
+		</div>
+		<div class="col-md-4 {% if orginfo.logo is null %} col-md-push-3 {% endif %}">
+			<div class="regdate">
+				<i class="fa fa-calendar-check-o" aria-hidden="true"></i>
+				<p class="ta-c">На Ярмарке с {{orginfo.regdate|date('Y')}} года</p>
+			</div>
+		</div>
+	</div>
+	{% if orginfo.text %}
+	<div class="row">
+		<div class="col-md-12">
+			<div class="org_text mt15">
+				<span class="fs18 mb10 dib">О компании</span>
+				<p>{{orginfo.text}}</p>
+			</div>
+		</div>
+	</div>
+	{% endif %}
+</div>

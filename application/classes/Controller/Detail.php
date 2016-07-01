@@ -102,8 +102,6 @@ class Controller_Detail extends Controller_Template {
 			$twig->user_object_stat_item = $user_object_stat_item;
 		}
 
-		// var_dump($tiwg->object); die;
-
 		//add to last views
 		LastViews::instance()->set($object->id);
 		$this->response->body($twig);

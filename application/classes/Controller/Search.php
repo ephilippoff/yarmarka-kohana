@@ -508,9 +508,35 @@ class Controller_Search extends Controller_Template
             
             $twig->other_adverts = $result;
         }
+
+        // Страница поиска по конкретной организации
+        if ($twig->search_filters["user_id"] AND $twig->search_filters["user_id"] > 0) {
+            $twig->orginfo = $this->get_orginfo($twig->search_filters["user_id"]);
+
+            $orgname = $twig->orginfo["name"];
+            $city = $twig->city->sinonim;
+
+            $twig->seo_attributes["h1"] = "Все объявления компании ".$orgname." в ".$city;
+        }
+
         
         $this->response->body($twig);
-        
+    }
+
+    public function get_orginfo($id)
+    {
+        $orginfo = ORM::factory("User")->where("id", "=", $id)->find();
+
+        if ($orginfo->loaded()) {
+            return array(
+                    "name" => $orginfo->org_full_name,
+                    "address" => $orginfo->org_post_address,
+                    "phone" => $orginfo->org_phone,
+                    "regdate" => $orginfo->regdate,
+                    "logo" => ($orginfo->filename) ? Imageci::getOriginalSitePath($orginfo->filename) : null,
+                    "text" => $orginfo->about
+                );
+        }
     }
     
     protected function process_child_categories(&$arr)
