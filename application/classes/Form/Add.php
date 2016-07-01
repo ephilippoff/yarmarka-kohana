@@ -452,6 +452,9 @@ class Form_Add  {
 		$customs = Array();
 		foreach($elements as $key => $element)
 		{			
+			if ($element["custom"] == "hidden")
+				continue;
+			
 			if ($element["custom"] == "address")
 				$this->map = TRUE;
 
