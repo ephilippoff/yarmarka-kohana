@@ -32,7 +32,7 @@ class Detailpage_Newsone extends Detailpage_Default
 				"category_seo_name" => "novosti",
 				"not_id" => array($object->id)
 			),
-			array("limit" => 15, "page" => 1)
+			array("limit" => 7, "page" => 1, "order" => "date_expired")
 		);
 		$info['lastnews'] = Search::getresult($search_query->execute()->as_array());
 
