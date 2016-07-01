@@ -27,25 +27,35 @@
 	<div class="row main_block">
 		<div class="col-lg-12">
 			<article>
+				<meta itemprop="datePublished" content="{{object.date_expired|date('Y-m-d')}}">
+				<meta itemprop="dateModified" content="{{object.date_expired|date('Y-m-d')}}">
+				<meta itemprop="url" content="{{ object.url }}">
+				<meta itemprop="author" content="Газета бесплатных объявлений Ярмарка">
+				<meta itemprop="publisher" content="Газета бесплатных объявлений Ярмарка">
+				<meta itemprop="headline" content="{% if object.title|length > 110 %} {{object.title|slice(0,100)}}... {% else %} {{object.title}} {% endif %}">
+				<meta itemprop="mainEntityOfPage" content="{{ object.compiled.attributes['news-category'].value }}">
 				<div class="news_info clearfix">
-					<div class="date light fs14 fl" itemprop="datePublished">{{object.date_expired|date('H:i')}} <span>- {{ object.date_expired|date('d.m.y') }}</span></div>
+					<div class="date light fs14 fl">{{object.date_expired|date('H:i')}} <span>- {{ object.date_expired|date('d.m.y') }}</span></div>
 					<span class="cat">
 						Категория: {{ object.compiled.attributes['news-category'].value }}
 					</span>
 				</div>
 				<hr>
 				<h1 class="captionbold" itemprop="name">{{object.title}}</h1>
-				<div class="image-cont mt10" id="img1">
-					<img class="news-photo" itemprop="image" src="{{ get_file(object.compiled.images.main_photo.original) }}">
+				<div class="image-cont mt10" id="img1" itemprop="image" itemscope itemtype="https://schema.org/ImageObject">
+					<meta itemprop="width" content="270">
+					<meta itemprop="height" content="170">
+					<meta itemprop="url" content="{{ get_file(object.compiled.images.main_photo.original) }}">
+					<img class="news-photo" src="{{ get_file(object.compiled.images.main_photo.original) }}" itemprop="thumbnailUrl">
 				</div>
 				<div class="text-cont mt10 module">
 					{% set text = object.user_text %}
 
 					{% for image in object.compiled.images.local_photo %}
-						{% set v120 = '<img itemprop="image" src="/' ~ image["120x90"] ~ '">' %}
-						{% set v272 = '<img itemprop="image" src="/' ~ image["272x203"] ~ '">' %}
-						{% set v341 = '<img itemprop="image" src="/' ~ image["341x256"] ~ '">' %}
-						{% set vorig = '<img itemprop="image" class="w100p" src="/' ~ image["original"] ~ '">' %}
+						{% set v120 = '<img src="/' ~ image["120x90"] ~ '">' %}
+						{% set v272 = '<img src="/' ~ image["272x203"] ~ '">' %}
+						{% set v341 = '<img src="/' ~ image["341x256"] ~ '">' %}
+						{% set vorig = '<img class="w100p" src="/' ~ image["original"] ~ '">' %}
 						{% set text = text|replace({('{' ~ loop.index ~ 'image120}'):v120}) %}
 						{% set text = text|replace({('{' ~ loop.index ~ 'image272}'):v272}) %}
 						{% set text = text|replace({('{' ~ loop.index ~ 'image341}'):v341}) %}
