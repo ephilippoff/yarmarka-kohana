@@ -33,7 +33,7 @@
 			{% if isNewsSubcategory == empty %}
 				{% include 'index/promo/photo_news' %}
 			{% endif %}
-			{{ requestblock('block_news/main_page', {'itemsPerCategory' : 11, 'catTitle' : catTitle, 'reverse' : true, 'isNewsSubcategory' : isNewsSubcategory}) }}
+			{{ requestblock('block_news/main_page', {'seo_attributes' : seo_attributes, 'itemsPerCategory' : 11, 'catTitle' : catTitle, 'reverse' : true, 'isNewsSubcategory' : isNewsSubcategory}) }}
 		</div>
 
 	</div>

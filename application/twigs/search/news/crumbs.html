@@ -1,9 +1,9 @@
-<div class="breadcrumbs-cont module clearfix" itemprop="breadcrumb">
+<div class="breadcrumbs-cont module clearfix">
 	<a href="/" rel="nofollow" class="hidden-xs hidden-sm">Главная</a>
 	<a href="/" rel="nofollow" class="hidden-lg hidden-md home-a"><i class="fa fa-home"></i></a>
 	{% set tmp = '' %}
 	{% for crumb in crumbs %}
-			<span class="hidden-xs">/</span> <a href="{{ url(tmp ~ crumb.uri) }}"  itemprop="name" class="crumbs-item"><span>{{crumb.title}}</span></a>
+			<span class="hidden-xs">/</span> <a href="{{ url(tmp ~ crumb.uri) }}" class="crumbs-item"><span>{{crumb.title}}</span></a>
 		{% set tmp = '' ~ crumb.uri ~ '/' %}
 	{% endfor %}
 

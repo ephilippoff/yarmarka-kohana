@@ -218,7 +218,7 @@ class Controller_Detail extends Controller_Template {
 		$twig = Twig::factory('detail/news/index');
 		$twig->domain      = $this->domain;
 		$twig->city        = $this->domain->get_city();
-		$twig->itemscope = 'itemscope itemtype="https://schema.org/NewsArticle"';
+		$twig->itemscope = 'itemscope itemtype="https://schema.org/Article"';
 
 
 		$twig->horizontalView = TRUE;

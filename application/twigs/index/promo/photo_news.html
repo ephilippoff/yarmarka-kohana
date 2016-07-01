@@ -6,7 +6,7 @@
 		<ul>
 			{% for news in premiumnews %}
 			<li>
-				<div class="photo_news_wrap hidden-sm hidden-xs" itemscope itemtype="http://schema.org/NewsArticle">
+				<div class="photo_news_wrap hidden-sm hidden-xs" itemscope itemtype="http://schema.org/Article">
 					<a href="{{news.compiled.url}}" itemprop="url" class="fs12">
 						<div class="photo_news_img" itemprop="image" itemscope itemtype="https://schema.org/ImageObject">
 							<img src="{{get_file(news.compiled.images.main_photo['120x90'])}}" itemprop="thumbnailUrl">
