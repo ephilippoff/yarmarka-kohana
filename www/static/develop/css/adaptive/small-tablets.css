@@ -129,6 +129,7 @@
 	}
 	
 	.breadcrumbs-cont {font-size: 0; position: relative;}
+	.org-about{font-size: 13px !important;}
 	/*.breadcrumbs-cont:after{position: absolute; display: block; content: ''; background-color: #D90000; width: 100%; height: 34px; top: 3px;right: 0; z-index: -1; border-top-right-radius: 3px; border-bottom-right-radius: 3px;}*/
 	.breadcrumbs-cont a{color: #fff; padding: 7px 10px; font-size: 16px; float: left;}
 	.breadcrumbs-cont .home-a{display: inline-block; border-top-left-radius: 3px; border-bottom-left-radius: 3px; background-color: #BF4040; padding: 7px 25px 7px 10px;}

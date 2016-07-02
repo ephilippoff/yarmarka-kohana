@@ -2277,3 +2277,49 @@ div[data-role="error"]{
 .hide_imp{
     display: none !important;
 }
+
+.moreinfo{
+    padding: 10px 0;
+}
+
+.org_logo{
+    float: left;
+    margin-right: 15px;
+}
+
+.org-about{
+    background-color: #f8f8f8;
+    padding: 15px 25px;
+}
+
+p.org_contacts{
+    border-bottom: 1px solid #ccc;
+}
+
+p.org_contacts span{
+    max-width: 70%;
+}
+
+p.org_contacts .fa{
+    padding: 8px 5px;
+    border: 1px solid #ccc;
+    width: 25px;
+    text-align: center;
+    margin-top: 10px;
+    color: #555;
+    border-radius: 2px 2px 0 0;
+    border-bottom: none;
+    margin-right: 10px;
+}
+
+.org-about .regdate{
+    text-align: center;
+    margin-top: 27px;
+    font-size: 18px;
+}
+
+
+.org-about .regdate .fa{
+    color: #2b587a;
+    font-size: 25px;
+}

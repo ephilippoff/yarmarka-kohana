@@ -414,6 +414,8 @@
 
 @media (max-width: 500px){
 
+	.org_logo{float: none;}
+
 	.coupons-cont .coupon-item-cont{width: auto;}
     .search-cont{margin-top: 10px;}
     .usearch_menu{margin-top: 0 !important;}

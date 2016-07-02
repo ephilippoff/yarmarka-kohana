@@ -507,9 +507,54 @@ class Controller_Search extends Controller_Template
             
             $twig->other_adverts = $result;
         }
+
+        // Страница поиска по конкретной организации
+        if ($twig->search_filters["user_id"] AND $twig->search_filters["user_id"] > 0) {
+
+            $twig->orginfo = $this->get_orginfo($twig->search_filters["user_id"]);
+            $twig->category_childs = $this->get_company_categories($twig->search_filters);
+
+            $orgname = $twig->orginfo["name"];
+            $city = $twig->city->sinonim;
+
+            $twig->seo_attributes["h1"] = "Все объявления компании ".$orgname." в ".$city;
+        }
+
+
+
         
         $this->response->body($twig);
-        
+    }
+
+    public function get_company_categories($filters)
+    {
+        $filters["category_id"] = NULL;
+        $filters["not_category_seo_name"] = NULL;
+        $categories = Search::searchquery($filters, array(), array("group_category" => TRUE))
+                                                    ->execute()
+                                                    ->as_array();
+        foreach ($categories as &$item) {
+            $item['url'] = $item['url']."/?user_id=".$filters['user_id'];
+        }
+        unset($item);
+
+        return $categories;
+    }
+
+    public function get_orginfo($id)
+    {
+        $orginfo = ORM::factory("User")->where("id", "=", $id)->find();
+
+        if ($orginfo->loaded()) {
+            return array(
+                    "name" => $orginfo->org_full_name,
+                    "address" => $orginfo->org_post_address,
+                    "phone" => $orginfo->org_phone,
+                    "regdate" => $orginfo->regdate,
+                    "logo" => ($orginfo->filename) ? Imageci::getOriginalSitePath($orginfo->filename) : null,
+                    "text" => $orginfo->about
+                );
+        }
     }
     
     protected function process_child_categories(&$arr)
