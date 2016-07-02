@@ -9,8 +9,17 @@
 {% block crumbs %}{% endblock crumbs %}
 
 {% block content %}
-	{{ parent() }}
-	<div class="bg-color-whitesmoke p20">
+	{% block info %} 
+		<div class="info-block-cont theme3">
+			<div class="block-title">
+				<span>Информация</span>
+			</div>						
+			<div class="bg-color-whitesmoke p10">
+				Возможно вы уже регистрировались ранее?
+			</div>
+		</div>
+	{% endblock info %}
+	<div class="bg-color-whitesmoke p10">
 
 		<p class="mb20">{{message}}</p>			
 		{% if success %}
@@ -33,14 +42,3 @@
 		{% endif %}
 	</div>
 {% endblock %}
-
-{% block rightside %} 
-	<div class="info-block-cont theme3 module">
-		<div class="block-title">
-			<span>Информация</span>
-		</div>						
-		<div class="bg-color-whitesmoke p20">
-			Возможно вы уже регистрировались ранее?
-		</div>
-	</div>
-{% endblock rightside %}

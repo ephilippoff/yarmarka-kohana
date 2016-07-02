@@ -29,6 +29,12 @@
 {% block filters %}{% endblock filters %}
 
 {% block content %}
+	{% block info %}
+		{% include 'search/user/group_operations' %}
+		{% include 'search/user/info' %}
+		{#{% include 'search/user/messages' %}#}
+	{% endblock info %}
+	
 	{% if (main_search_result|length) %}
 		{% include 'search/user/control' %}
 		{% include 'search/user/filters' %}
@@ -40,12 +46,6 @@
 		{% include 'search/user/noresult' %}
 	{% endif %}
 {% endblock content%}
-
-{% block rightside %}
-	{% include 'search/user/group_operations' %}
-	{% include 'search/user/info' %}
-	{#{% include 'search/user/messages' %}#}
-{% endblock rightside %}
 
 
 {% block footertext %}{% endblock footertext %}

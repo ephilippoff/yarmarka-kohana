@@ -10,21 +10,19 @@
 {% endblock leftside %}
 
 {% block content %}
-	{{ parent() }}
-	<div class="bg-color-whitesmoke p20">
+	{% block info %} 
+		<div class="info-block-cont theme3">
+			<div class="block-title">
+				<span>Информация</span>
+			</div>						
+			<div class="bg-color-whitesmoke p10">
+				<span>
+					Вы можете сменить тип учетной записи на "Компания" если перейдете по <a href="/user/reset_to_company">ссылке</a>. 
+					Для подтверждения потребуется загрузить скан оригинала или копии ИНН.</span>
+			</div>
+		</div>
+	{% endblock info %}
+	<div class="bg-color-whitesmoke p10">
 		{{ requestoldview(block_name, params) }}
 	</div>
 {% endblock content %}
-
-{% block rightside %} 
-	<div class="info-block-cont theme3 module">
-		<div class="block-title">
-			<span>Информация</span>
-		</div>						
-		<div class="bg-color-whitesmoke p20">
-			<span>
-				Вы можете сменить тип учетной записи на "Компания" если перейдете по <a href="/user/reset_to_company">ссылке</a>. 
-				Для подтверждения потребуется загрузить скан оригинала или копии ИНН.</span>
-		</div>
-	</div>
-{% endblock rightside %}
