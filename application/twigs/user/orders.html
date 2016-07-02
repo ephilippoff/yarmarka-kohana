@@ -10,8 +10,18 @@
 {% endblock leftside %}
 
 {% block content %}
-	{{ parent() }}
-	<div class="bg-color-whitesmoke p20">
+	
+	{% block info %}
+		<div class="info-block-cont theme3">
+			<div class="block-title">
+				<span>Информация</span>
+			</div>
+			<div class="bg-color-whitesmoke p10">
+				Кликните на стрелку  <i class="fa fa-arrow-down span-link"></i> напротив заказа, чтоб посмотреть детализацию.
+			</div>
+		</div>
+	{% endblock info %}
+	<div class="bg-color-whitesmoke p10">
 		<table class="orders-table table" id="block-table">
 			<thead>
 				<tr>
@@ -65,14 +75,3 @@
 	</div>
 
 {% endblock content %}
-
-{% block rightside %}
-	<div class="info-block-cont theme3 module">
-		<div class="block-title">
-			<span>Информация</span>
-		</div>
-		<div class="bg-color-whitesmoke p20">
-			Кликните на стрелку  <i class="fa fa-arrow-down span-link"></i> напротив заказа, чтоб посмотреть детализацию.
-		</div>
-	</div>
-{% endblock rightside %}
