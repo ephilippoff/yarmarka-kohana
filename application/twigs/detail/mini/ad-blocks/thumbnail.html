@@ -1,0 +1,10 @@
+<div class="img-wrap fl hidden-xxs">
+	{% if object.compiled.images.main_photo %}
+		<img class="img-frame" src="{{ get_file(object.compiled.images.main_photo['120x90']) }}" alt="{{ object.title|e }}">
+		{% if object.compiled.images.local_photo|length + object.compiled.images.remote_photo|length > 1 %}
+			<span class="photos-count hidden-xs">{{object.compiled.images.local_photo|length + object.compiled.images.remote_photo|length}}</span>
+		{% endif %}
+	{% else %}
+		<img class="img-frame" src="{{staticfile('images/nophoto136x107.png')}}">
+	{% endif %}
+</div>

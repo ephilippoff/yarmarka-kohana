@@ -1,0 +1,27 @@
+{% if object.is_premium %}
+<div class="hidden-xxs">{{object.user_text|slice(0,100)}}...</div>
+{% else %}
+<table class="table-details">									
+	<tbody>
+		{% if clean_query_params|keys|length > 0 %}
+			{% for attr in object.compiled.attributes if attr.value and attr.seo_name in clean_query_params|keys %}
+				{% if attr.seo_name not in ['tsena', 'price-per-square'] %}
+				<tr>
+					<td class="">{{ attr.title }}</td>
+					<td class="ml10">{{ attr.value|e }}</td>
+				</tr>
+				{% endif %}
+			{% endfor %}
+		{% else %}
+			{% for attr in object.compiled.attributes|slice(0,3) if attr.value %}
+				{% if attr.seo_name not in ['tsena', 'price-per-square'] %}
+				<tr>
+					<td class="">{{ attr.title }}</td>
+					<td class="ml10">{{ attr.value|e }}</td>
+				</tr>
+				{% endif %}
+			{% endfor %}
+		{% endif %}
+	</tbody>
+</table>
+{% endif %}

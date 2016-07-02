@@ -387,7 +387,6 @@ class Controller_Search extends Controller_Template
         
         
         // $twig->limitList = implode(" ", $limitList);
-        // echo "<pre>"; var_dump($twig); die; echo "</pre>";
         //pagination end
         
         Request::current()->param('category_path', $oldCategoryPath);
