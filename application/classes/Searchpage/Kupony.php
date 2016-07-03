@@ -67,8 +67,6 @@ class Searchpage_Kupony extends Searchpage_Default
                     )
                 );
             }, $twig->premium_search_result);
-            
-            $objects_for_map = array_merge($objects_for_map, $premium_search_coords);
         }
         //premium end
         
@@ -101,8 +99,7 @@ class Searchpage_Kupony extends Searchpage_Default
                     )
                 );
             }, $twig->vip_search_result);
-            
-            $objects_for_map = array_merge($objects_for_map, $vip_search_coords);
+
         }
         //vip end
 
