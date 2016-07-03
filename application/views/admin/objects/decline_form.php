@@ -7,13 +7,15 @@
 		$('#decline_form').submit(function(e){
 			e.preventDefault();
 
+			var reload_row_func = reload_row || false;
+
 			$.post('/khbackend/objects/decline/<?=$object->id?>', $(this).serialize(), function(json){
 				if (json.code == 200) {
 					$('.modal-body .alert-error').hide('slow');
 					$('#myModal').modal('hide');
-					var reload_row = reload_row || false;
-					if (reload_row) {
-						reload_row(<?=$object->id?>, 1);
+					
+					if (reload_row_func) {
+						reload_row_func(<?=$object->id?>, 1);
 
 					}
 				} else {
