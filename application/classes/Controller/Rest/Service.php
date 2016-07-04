@@ -17,7 +17,7 @@ class Controller_Rest_Service extends Controller_Rest {
 		foreach ($objects as $object) {
 			
 			$objects_to_action[] = $object->get_row_as_obj(array("id","title"));
-			$services_to_action[] = Service::factory("Up", $object->id)->get();
+			$services_to_action[] = Service::factory("Up")->get();
 		}
 
 		if ($errors > 0){
@@ -28,23 +28,14 @@ class Controller_Rest_Service extends Controller_Rest {
 			$this->json['code'] = 400;
 		}
 
-		
-		
+		$this->json['count'] = Service::factory("Up")->get_balance();
+		$this->json['available'] = Service::factory("Up")->check_available(1);
 		$this->json['services'] = $services_to_action;
 		$this->json['objects'] = $objects_to_action;
 
 		if (count($objects_to_action) == 1) {
-
-			$up = Service::factory("Up", $objects_to_action[0]->id);
-
-			$this->json['count'] = $up->get_balance();
-			$this->json['available'] = $up->check_available(1);
-
 			$this->json['object'] = $objects_to_action[0];
 			$this->json['service'] = $services_to_action[0];
-		} else {
-			$this->json['count'] = 0;
-			$this->json['available'] = FALSE;
 		}
 	}
 
