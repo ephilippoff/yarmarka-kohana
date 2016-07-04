@@ -70,6 +70,7 @@ class Controller_Search extends Controller_Template
 
     public function action_adverts()
     {
+
         $search = new Searchpage_Adverts();
 
         if ($this->cached) {

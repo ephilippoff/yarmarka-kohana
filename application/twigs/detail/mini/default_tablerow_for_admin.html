@@ -16,37 +16,22 @@
 		{% set i_color = 'gray' %}
 {% endif %}
 
-<div class="ad-mini-wrap clearfix {% if object.is_premium %}premium{% endif %}" onclick="javascript:window.location.href = '{{ object.compiled.url }}'">
-	<div class="img-wrap fl hidden-xxs">
-		{% if object.compiled.images.main_photo %}
-		<img class="img-frame" src="{{ get_file(object.compiled.images.main_photo['120x90']) }}" alt="{{ object.title|e }}">
-			{% if object.compiled.images.local_photo|length + object.compiled.images.remote_photo|length > 1 %}
-				<span class="photos-count hidden-xs">{{object.compiled.images.local_photo|length + object.compiled.images.remote_photo|length}}</span>
-			{% endif %}
-		{% else %}
-		<img class="img-frame" src="{{staticfile('images/nophoto136x107.png')}}">
-		{% endif %}
-	</div>
+<a class="ad-mini-wrap clearfix {% if object.is_premium %}premium{% endif %}" href="{{ object.compiled.url }}">
+	{% include 'detail/mini/ad-blocks/thumbnail' %}
 
 
 	<div class="main-ad-wrap fl">
-		<a href="{{ object.compiled.url }}" title="{{ object.title|e }}" class="object-caption bold {% if object.is_published == 0 %} red strike {% endif %}">
+		<span title="{{ object.title|e }}" class="span-link object-caption bold {% if object.is_published == 0 %} red strike {% endif %}">
 			{{ object.title|e }}
-		</a> 
+		</span> 
 		
 		{% if object.is_premium %}
-		<span class="premium-tape" onclick="event.stopPropagation()"><a href="/commercial/premium" target="_blank" class="db"><i class="fa fa-star" title="Премиум-объявление" aria-hidden="true"></i></a></span>
+		<span class="premium-tape" onclick="javascript:window.location.href = '/commercial/premium'"><i class="fa fa-star" title="Премиум-объявление" aria-hidden="true"></i></span>
 		{% endif %}
 
 		<i class="fa fa-{{i_state}} ml5 {{i_color}}" aria-hidden="true" title="{{ad_state}}"></i>
 		<div class="clearfix hidden-lg small_visible">
-			{% if object.compiled.attributes.zarplata.value > 0 %}
-				<span class="price fl">{{object.compiled.attributes.zarplata.value}} <i class="fa fa-rub" aria-hidden="true"></i></span>
-			{% elseif object.price > 0 %}
-				<span class="price fl">{{ object.price|number_format(0, ' ', ' ') }} <i class="fa fa-rub" aria-hidden="true"></i></span>
-			{% else %}
-			<span class="price fl">&nbsp;</span>
-			{% endif %}
+			{% include 'detail/mini/ad-blocks/price' with {'fl_class' : 'fl'} %}
 		</div>
 
 
@@ -59,33 +44,7 @@
 
 
 
-		{% if object.is_premium %}
-			<div class="hidden-xxs">{{object.full_text|slice(0,100)}}...</div>
-		{% else %}
-			<table class="table-details">									
-				<tbody>
-				{% if clean_query_params|keys|length > 0 %}
-					{% for attr in object.compiled.attributes if attr.value and attr.seo_name in clean_query_params|keys %}
-						{% if attr.title != 'Цена' %}
-							<tr>
-								<td class="">{{ attr.title }}</td>
-								<td class="ml10">{{ attr.value|e }}</td>
-							</tr>
-						{% endif %}
-					{% endfor %}
-					{% else %}
-					{% for attr in object.compiled.attributes|slice(0, 3) if attr.value %}
-						{% if attr.title != 'Цена' %}
-							<tr>
-								<td class="">{{ attr.title }}</td>
-								<td class="ml10">{{ attr.value|e }}</td>
-							</tr>
-						{% endif %}
-					{% endfor %}
-				{% endif %}
-				</tbody>
-			</table>
-		{% endif %}
+		{% include 'detail/mini/ad-blocks/attributes' %}
 
 	</div>
 
@@ -108,29 +67,23 @@
 		</div>
 
 		<div class="clearfix small_hidden">
-			{% if object.compiled.attributes.zarplata.value > 0 %}
-				<span class="price">{{object.compiled.attributes.zarplata.value}} <i class="fa fa-rub" aria-hidden="true"></i></span>
-			{% elseif object.price > 0 %}
-				<span class="price">{{ object.price|number_format(0, ' ', ' ') }} <i class="fa fa-rub" aria-hidden="true"></i></span>
-			{% else %}
-			<span class="price">&nbsp;</span>
-			{% endif %}
+			{% include 'detail/mini/ad-blocks/price' %}
 
 			{% if object.compiled.attributes.price-per-square.value > 0 %}
-			<span class="price square_price w100p">{{object.compiled.attributes.price-per-square.value|number_format(0, ' ', ' ')}} <i class="fa fa-rub" aria-hidden="true"></i>/кв<sup>2</sup></span>
+				<span class="price square_price w100p">{{object.compiled.attributes.price-per-square.value|number_format(0, ' ', ' ')}} <i class="fa fa-rub" aria-hidden="true"></i>/кв<sup>2</sup></span>
 			{% else %}
-			<span class="price square_price w100p">&nbsp;</span>
+				<span class="price square_price w100p">&nbsp;</span>
 			{% endif %}
 		</div>
 
 		{% if object.is_premium %}
-		<p class="date fs12 ta-r small_hidden"><span>{{ object.compiled.city }}</span></p>
+			<p class="date fs12 ta-r small_hidden"><span>{{ object.compiled.city }}</span></p>
 		{% else %}
-		<p class="date fs12 ta-r small_hidden"><span>{{ object.date_created|date("d.m") }} / {{ object.compiled.city }}</span> </p>
+			<p class="date fs12 ta-r small_hidden"><span>{{ object.date_created|date("d.m") }} / {{ object.compiled.city }}</span> </p>
 		{% endif %}
 	</div>
 
-</div>
+</a>
 
 {% if loop.index == 2 %}
 	<ins class="adsbygoogle"

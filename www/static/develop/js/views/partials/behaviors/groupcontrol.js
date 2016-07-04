@@ -49,11 +49,11 @@ define([
             }
 
             if (count > 0) {
-                this.ui.groupOperations.show();
-                this.ui.hideRegion.hide();
+                this.ui.groupOperations.fadeIn();
+                this.ui.hideRegion.fadeOut();
             } else {
-                this.ui.groupOperations.hide();
-                this.ui.hideRegion.show();
+                this.ui.groupOperations.fadeOut();
+                this.ui.hideRegion.fadeIn();
             }
         },
 

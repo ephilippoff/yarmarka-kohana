@@ -1,0 +1,7 @@
+{% if object.compiled.attributes.zarplata.value > 0 %}
+	<span class="price {{fl_class}}">{{object.compiled.attributes.zarplata.value}} <i class="fa fa-rub" aria-hidden="true"></i></span>
+{% elseif object.price > 0 %}
+	<span class="price {{fl_class}}">{{ object.price|number_format(0, ' ', ' ') }} <i class="fa fa-rub" aria-hidden="true"></i></span>
+{% else %}
+	<span class="price {{fl_class}}">&nbsp;</span>
+{% endif %}

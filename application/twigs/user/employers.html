@@ -10,8 +10,17 @@
 {% endblock leftside %}
 
 {% block content %}
-	{{ parent() }}
-	<div class="bg-color-whitesmoke p20">
+	{% block info %} 
+		<div class="info-block-cont theme3">
+			<div class="block-title">
+				<span>Информация</span>
+			</div>						
+			<div class="bg-color-whitesmoke p10">
+				Впишите email вашего сотрудника, нажмите кнопку "Добавить". Эти пользователи смогут добавлять объявления от имени Вашей компании. Учетная запись сотрудника должна быть с типом "Частное лицо"
+			</div>
+		</div>
+	{% endblock info %}
+	<div class="bg-color-whitesmoke p10">
 		{% if user.linked_to_user %}
 			<div class="p10" style="font-size:14px; padding:20px">
 				<p class="p10" style="width:400px">Вы не можете просмотреть этот раздел т.к. Ваша учетная запись является подчиненной 
@@ -24,14 +33,3 @@
 		{% endif %}
 	</div>
 {% endblock content %}
-
-{% block rightside %} 
-	<div class="info-block-cont theme3 module">
-		<div class="block-title">
-			<span>Информация</span>
-		</div>						
-		<div class="bg-color-whitesmoke p20">
-			Впишите email вашего сотрудника, нажмите кнопку "Добавить". Эти пользователи смогут добавлять объявления от имени Вашей компании. Учетная запись сотрудника должна быть с типом "Частное лицо"
-		</div>
-	</div>
-{% endblock rightside %}

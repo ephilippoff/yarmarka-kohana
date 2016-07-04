@@ -14,8 +14,11 @@
 {% block content %}
 
 	<div class="title_block clearfix reg_forgot_block brt2">
-		<a class="fr ml15" href="/user/registration"><span class="menu-item-cont">Регистрация</span></a>
-		<a class="fr ml15" href="/user/forgot_password"><span class="menu-item-cont">Забыли пароль?</span></a>
+		Возможно вы уже регистрировались ранее?
+		<div class="fr">
+			<a class="ml15" href="/user/registration"><span class="menu-item-cont">Регистрация</span></a>
+			<a class="ml15" href="/user/forgot_password"><span class="menu-item-cont">Забыли пароль?</span></a>
+		</div>
 	</div>
 
 	<div class="bg-color-whitesmoke p20">
@@ -125,14 +128,3 @@
 			{% endif %}
 	</div>
 {% endblock content %}
-
-{% block rightside %} 
-	<div class="info-block-cont theme3 module">
-		<div class="block-title">
-			<span>Информация</span>
-		</div>						
-		<div class="bg-color-whitesmoke p20">
-			Возможно вы уже регистрировались ранее?
-		</div>
-	</div>
-{% endblock rightside %}

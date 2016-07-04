@@ -3,6 +3,7 @@
 class Date extends Kohana_Date {
 
       const TENMINUTES = 600;
+      const TENDAYS = 864000;
 
 	static function get_months_names() {
 		return array(

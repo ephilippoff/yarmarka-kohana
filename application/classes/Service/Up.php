@@ -5,7 +5,7 @@ class Service_Up extends Service
 	protected $_name = "up";
 	protected $_title = "Подъем";
 	protected $_is_multiple = FALSE;
-	protected static $_free_count = 3;
+	protected static $_free_count = 1;
 
 	public function __construct($object_id = NULL)
 	{
@@ -135,7 +135,7 @@ class Service_Up extends Service
 		if (!$user)
 			$user = Auth::instance()->get_user();
 
-		Cache::instance("services")->set("up:".$user->id, (int) $count, Date::DAY);
+		Cache::instance("services")->set("up:".$user->id, (int) $count, Date::TENDAYS);
 		return $count;
 	}
 

@@ -10,22 +10,20 @@
 {% endblock leftside %}
 
 {% block content %}
-	{{ parent() }}
-	<div class="bg-color-whitesmoke p20">
+	{% block info %} 
+		<div class="info-block-cont theme3">
+			<div class="block-title">
+				<span>Информация</span>
+			</div>						
+			<div class="bg-color-whitesmoke p10">
+				Здесь отображается статистика автоматических загрузок, для клиентов, у которых подключена услуга "Массовая загрузка". <br><br>
+				<span>
+					Ознакомиться с условиями использования и узнать, как подключить услугу, Вы можете, перейдя по <a target="_blank" href="http://c.yarmarka.biz/ourservices/massovaya-zagruzka-obyavleniy-na-sayt">ссылке</a>.
+				</span>
+			</div>					
+		</div>
+	{% endblock info %}
+	<div class="bg-color-whitesmoke p10">
 		{{ requestoldview(block_name, params) }}
 	</div>
 {% endblock content %}
-
-{% block rightside %} 
-	<div class="info-block-cont theme3 module">
-		<div class="block-title">
-			<span>Информация</span>
-		</div>						
-		<div class="bg-color-whitesmoke p20">
-			Здесь отображается статистика автоматических загрузок, для клиентов, у которых подключена услуга "Массовая загрузка". <br><br>
-			<span>
-				Ознакомиться с условиями использования и узнать, как подключить услугу, Вы можете, перейдя по <a target="_blank" href="http://c.yarmarka.biz/ourservices/massovaya-zagruzka-obyavleniy-na-sayt">ссылке</a>.
-			</span>
-		</div>					
-	</div>
-{% endblock rightside %}
