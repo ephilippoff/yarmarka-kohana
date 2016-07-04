@@ -5,17 +5,10 @@ class Service_Up extends Service
 	protected $_name = "up";
 	protected $_title = "Подъем";
 	protected $_is_multiple = FALSE;
-	protected static $_free_count = 1;
+	protected static $_free_count = 3;
 
 	public function __construct($object_id = NULL)
 	{
-		if ($object_id) {
-			$object = ORM::factory('Object',$object_id);
-			if ($object->loaded()) {
-				$this->object($object);
-			}
-		}
-
 		$this->_initialize();
 	}
 
@@ -104,21 +97,17 @@ class Service_Up extends Service
 		$quantity = ($quantity) ? $quantity : 1;
 		if ($quantity > 1) return $result;
 		
-		$object = $this->object();
-		if (!$object) return $result;
+		$user = Auth::instance()->get_user();
+		if (!$user) return $result;
 
-		$balance = ($balance) ? $balance : self::get_balance($object->id);
-
-
+		$balance = ($balance) ? $balance : self::get_balance($user);
 		if (!isset($balance)) {
-			$user = Auth::instance()->get_user();
-
-			$count = 0;
-			if ($user AND $user->id  == $object->author ) {
-				$count = Service_Up::$_free_count;
+			if ( Acl::check("object.add.type") )
+			{
+				$balance = (int) self::set_balance($user, 500);
+			} else {
+				$balance = (int) self::set_balance($user, Service_Up::$_free_count);
 			}
-
-			$balance = (int) self::set_balance($object->id, $count, $object->category);
 		}
 
 		if ($balance >= 0 AND $balance - intval($quantity) >= 0) {
@@ -128,53 +117,48 @@ class Service_Up extends Service
 		return $result;
 	}
 
-	static function get_balance($object_id = NULL)
+	static function get_balance($user = NULL)
 	{
-		if (!$object_id) return;
+		if (!$user) 
+			$user = Auth::instance()->get_user();
 
-		if ($object_id)
+		if ($user)
 		{
-			return Cache::instance("services")->get("up:".$object_id);
+			return Cache::instance("services")->get("up:".$user->id);
 		} else {
 			return 0;
 		}
 	}
 
-	static function set_balance($object_id, $count)
+	static function set_balance($user, $count)
 	{
-		if (!$object_id) return;
+		if (!$user)
+			$user = Auth::instance()->get_user();
 
-		$object = ORM::factory('Object', $object_id);
-
-		$duration = Date::TWOWEEKS;
-
-		if ($object->category == 36) {
-			$duration = Date::THREEDAYS;
-		}
-
-		Cache::instance("services")->set("up:".$object_id, (int) $count, $duration);
-
+		Cache::instance("services")->set("up:".$user->id, (int) $count, Date::DAY);
 		return $count;
 	}
 
-	static function decrease_balance($object_id, $count = 1)
+	static function decrease_balance($user, $count = 1)
 	{
-		if (!$object_id) return;
+		if (!$user)
+			$user = Auth::instance()->get_user();
 
-		$balance = self::get_balance($object_id);
+		$balance = self::get_balance($user);
 
 		if ($balance == 0)
 			return FALSE;
 
-		return self::set_balance($object_id, $balance - $count);
+		return self::set_balance($user, $balance - $count);
 	}
 
-	static function increase_balance($object_id, $count = 1)
+	static function increase_balance($user, $count = 1)
 	{
-		if (!$object_id) return;
+		if (!$user)
+			$user = Auth::instance()->get_user();
 
-		$balance = self::get_balance($object_id);
+		$balance = self::get_balance($user);
 
-		return self::set_balance($object_id, $balance + $count);
+		return self::set_balance($user, $balance + $count);
 	}
 }

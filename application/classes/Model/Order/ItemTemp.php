@@ -64,14 +64,10 @@ class Model_Order_ItemTemp extends ORM
 			$service = Service::factory(Text::ucfirst($params->service->name), $params->service->group_id);
 			$service->return_reserve($params->service->ids, NULL, $orderId);
 
-		} elseif ( in_array( $params->service->name, array("premium")) 
-					AND in_array(@$params->service->discount_name, array("prepayed_premium") ) AND $user) {
+		} elseif ( in_array( $params->service->name, array("up", "premium")) 
+					AND in_array(@$params->service->discount_name, array("free_up", "prepayed_premium") ) AND $user) {
 			 $service = Service::factory(Text::ucfirst($params->service->name));
 			 $service->increase_balance($user, $params->service->quantity);
-		}  elseif ( in_array( $params->service->name, array("up")) 
-					AND in_array(@$params->service->discount_name, array("free_up") ) AND $user) {
-			 $service = Service::factory(Text::ucfirst($params->service->name));
-			 $service->increase_balance($params->object->id, $params->service->quantity);
 		}
 	}
 
@@ -85,14 +81,10 @@ class Model_Order_ItemTemp extends ORM
 			$service = Service::factory(Text::ucfirst($params->service->name), $params->service->group_id);
 			$service->reserve($params->service->ids, $access_key, $orderId);
 
-		} elseif ( in_array( $params->service->name, array("premium")) 
-					AND in_array(@$params->service->discount_name, array("prepayed_premium") ) AND $user) {
+		} elseif ( in_array( $params->service->name, array("up", "premium")) 
+					AND in_array(@$params->service->discount_name, array("free_up", "prepayed_premium") ) AND $user) {
 			 $service = Service::factory(Text::ucfirst($params->service->name));
 			 $service->decrease_balance($user, $params->service->quantity);
-		} elseif ( in_array( $params->service->name, array("up")) 
-					AND in_array(@$params->service->discount_name, array("free_up") ) AND $user) {
-			 $service = Service::factory(Text::ucfirst($params->service->name));
-			 $service->decrease_balance($params->object->id, $params->service->quantity);
 		}
 	}
 
