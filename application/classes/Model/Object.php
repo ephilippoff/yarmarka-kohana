@@ -699,27 +699,6 @@ class Model_Object extends ORM {
 		return $this->save();
 	}
 
-	public static function send_to_db_dns($id)
-	{
-		return Model::factory('Dbdns')->add_record($id);
-	}
-
-	public function send_to_terrasoft()
-	{
-		if ( ! $this->loaded())
-		{
-			return FALSE;
-		}
-
-		$temp_object = ORM::factory('Temp_Objects');
-		$temp_object->record_id = $this->id;
-		$temp_object->status 	= 0;
-		$temp_object->tablename = 'object';
-		$temp_object->save();
-
-		return TRUE;
-	}
-
 	public function add_contact($contact_type_id, $contact_str)
 	{
 		if ( ! $this->loaded())
