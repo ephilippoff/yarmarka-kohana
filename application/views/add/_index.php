@@ -768,12 +768,25 @@
 
 		<div class="row">
 			<div class="col-md-10 col-md-push-1">
-				<div data-role="service-set" class="clearfix service-set mb20">
-			
-					<div class="service-wrap"></div>
+				<? if (property_exists($form_data, 'with_service')): ?>
+					
+					<div class="js-withservice hidden">
+						<input id="field_with_service" type="hidden" name="with_service" value="<?=$form_data->with_service?>" >
+						
+						<div data-role="service-set" class="clearfix service-set mb20">
+							<div class="tabs-wrap clearfix mt15">
+								<h2 style="font-size: 18px;" class="mb20">Воспользуйтесь услугами для увеличения отклика</h2>
+								<? foreach(array('default' =>'Бесплатно','premium' => 'Премиум','lider'=> 'Лидер') as $key=> $service): ?>
 
-				</div>
+									<div class="tab-item js-withservice-tab <?= (($key == $form_data->with_service) ? "active": "") ?>" data-service="<?=$key?>"><?=$service?></div>
+									
+								<? endforeach; ?>
+							</div>
+							<div class="service-wrap js-withservice-container"></div>
+						</div>
+					</div>
 
+				<? endif; ?>
 				<div id="div_submit">
 					<div class="row  mt20 mb20 clearfix">
 						<? if ($form_data->_edit): ?>	

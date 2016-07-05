@@ -10,8 +10,8 @@
 	{{ parent() }}
 	{% if data_file %}
 		{{ js(data_file) }}
-		{{ js("jquery.ui.touch-punch.min.js") }}
-		{{ js("device.min.js") }}
+		{{ js("lib/jquery.ui.touch-punch.min.js") }}
+		{{ js("lib/device.min.js") }}
 	{% endif %}
 {% endblock js%}
 
