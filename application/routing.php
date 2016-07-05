@@ -64,7 +64,7 @@ Route::set('/','')
 				$params['action'] = $config[$domain_segments[0]][1];
 			} else {
 				$params['controller'] = 'Search';
-				$params['action'] = 'index';
+				$params['action'] = 'adverts';
 			}
 			$params['category_path'] = $main_category;
 		} else {
@@ -333,8 +333,10 @@ Route::set('default', '(<controller>(/<action>(/<id>)))')
 Route::set('search', '<category_path>', array(
 		'category_path' => '[a-zA-Z0-9-\._/]+',
 	))->filter(function($route, $params, $request){
+
 		$performance = Performance::factory(Acl::check('profiler'));
 		$performance->add("SearchRouting","start");
+
 		$segments = explode("/", $params["category_path"]);
 
 		$city = ORM::factory('City')
@@ -361,10 +363,27 @@ Route::set('search', '<category_path>', array(
 				$params['controller'] = $config[$category->seo_name][0];
 				$params['action'] = $config[$category->seo_name][1];
 			} else {
+
 				$params['controller'] = 'Search';
-				$params['action'] = 'index';
+
+				switch ($category->seo_name) {
+					case 'novosti':
+						$params['action'] = 'novosti';
+
+						break;
+					case 'kupony':
+						$params['action'] = 'kupony';
+
+						break;
+					default:
+						$params['action'] = 'adverts';
+						break;
+				}
+				
 			}
+
 			$performance->add("SearchRouting","end");
+
 			return $params;
 
 		} else {

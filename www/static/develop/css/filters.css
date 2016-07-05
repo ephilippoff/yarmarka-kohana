@@ -27,7 +27,7 @@
 .tab-filter .multiselect .checkbox{padding:5px;cursor:auto}
 .tab-filter .group{color: #5D666E;font-size: 14px;border-bottom: 1px solid #F1F1F1;padding-bottom:5px;}
 .tab-filter .multiselect .cont{height:39px;background:url("/static/develop/images/multisel.png") no-repeat scroll left -39px;}
-.tab-filter .param{border-radius: 4px;width: 33.333%; position: relative;padding: 0 5px; margin-bottom: 10px;}
+.tab-filter .param{border-radius: 4px;width: 33.33333%; position: relative;padding: 0 5px; margin-bottom: 10px;}
 .tab-filter .multiselect.active{background-position:right -156px;box-shadow: 0 0 5px #4FAAE3;}
 .tab-filter .multiselect.active .cont {background-position: 0 -195px;}
 .tab-filter .multiselect.active:hover{background-position:right -234px;box-shadow: 0 0 5px #4FAAE3;}
@@ -155,8 +155,8 @@ input.cmn-toggle-round:checked + label:after {
 
 .submit-cont{
 	position: absolute;
-    bottom: 0;
-    left: 50%;
+  bottom: 0;
+  left: 50%;
 }
 
 .submit-cont button{

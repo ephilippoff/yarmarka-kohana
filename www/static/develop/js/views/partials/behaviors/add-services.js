@@ -54,6 +54,7 @@ define([
         },
 
         preRender: function(params) {
+            if (this.view.is_edit) return;
             var categoryId = this.categoryId = params.category_id;
             var cityId = this.cityId = params.city_id;
             var $this = this;
@@ -80,7 +81,6 @@ define([
         },
 
         renderService: function (params) {
-
             this.ui.cont.html(
                 new ServiceView({
                     model: new Backbone.Model({params: params}),

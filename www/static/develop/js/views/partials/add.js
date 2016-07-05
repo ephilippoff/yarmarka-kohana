@@ -122,6 +122,7 @@ define([
 
                 this.$el = $("#" + this.model.get("id"));
 
+
                 //init ckeditor on kupon text
                 if ((this.model.get('id') == 'param_1000' || this.model.get('id') == 'param_1003') &&
                     _globalSettings.allowCkEditor) {
@@ -317,7 +318,9 @@ var paramsView = Backbone.View.extend({
     },
 
     addItem: function(item) {
+        if (item.get("custom") == 'hidden') return;
         item.set("container", this.getContainer(item));
+
         if (item.get("type") == "text" && item.get("is_textarea"))
             item.set("type", "textarea");
         if (item.get("type") == "ilist")
@@ -589,7 +592,6 @@ var mapcontrolView = Backbone.View.extend({
                 self.search = city + ', ' + this.$el.val();
                 window.clearTimeout(self.timeout);
                 self.timeout = setTimeout(function() {
-                    self.kladr_autocomplete();
                     self.geoCoder();
                 }, 500);
             } else {
@@ -646,45 +648,7 @@ var mapcontrolView = Backbone.View.extend({
                         self.setMessage("Адрес не найден, видимо он не существует", "red");
                     }
                     );
-},
-
-kladr_autocomplete: function() {
-            /*$('#'+this.address_field).autocomplete({
-                source: function( request, response ) {
-                    request.parent_id = $('#city_kladr_id').val();
-                    request.address_required = 0;
-
-                    $.getJSON( "/ajax/kladr_address_autocomplete", request, function( data, status, xhr ) {
-                        response( data );
-                    });
-                },
-                minLength: 1,
-                autoFocus: true,
-                select: function( event, ui ) {
-                    $('#address_kladr_id').val(ui.item.id);
-                    $('#map_block_div').show();
-
-                    $('#error_address').hide();
-                    $('#error_address').parents('div.input').removeClass('error');
-                    setTimeout(function(){
-                        GetCoordinates();
-                    }, 100);
-                },
-                change: function( event, ui ) {
-                    if (ui.item == null) {
-                        // $('#city_kladr_id').val('');
-                        // $('#address_selector').val('');
-                        $('#address_kladr_id').val('');
-                        GetCoordinates();
-                        $('#map_block_div').show();
-                    }
-                }
-            }).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
-                return $( "<li>" )
-                .append( "<a>" + item.label + "</a>" )
-                .appendTo( ul );
-            };  */
-        }
+}
 
     });
 
@@ -728,12 +692,13 @@ var textView = Backbone.View.extend({
         this.bind("destroy", this.destroy);
         this.control = this.$el.find("textarea");
         this.value = this.control.val();
+        
         if (!this.control.length)
             this.render();
 
         var staticPath = app.settings.staticPath;
 
-        // if (this.text_required) {
+        if (this.text_required) {
             if (!_globalSettings.allowCkEditor) {
                 new nicEditor({
                     iconsPath: staticPath + 'images/nicEditorIcons.gif'
@@ -743,7 +708,11 @@ var textView = Backbone.View.extend({
                     fileUpload: true
                 });
             }
-        // }
+         } else {
+            if (this.app.category.category_id) {
+                this.clear();
+            }
+         }
     },
 
     render: function() {
@@ -752,8 +721,12 @@ var textView = Backbone.View.extend({
             value: this.value,
             text_required: this.text_required
         });
-        this.$el.html((this.text_required) ? html: "");
+        this.$el.html( html);
         return this;
+    },
+
+    clear: function() {
+        this.$el.html( "");
     },
 
     destroy: function() {
@@ -873,8 +846,6 @@ var categoryView = Backbone.View.extend({
     change: function(e) {
 
         this.value = $(e.target).val();
-
-        //this.value = $(e.target).data('value');
 
         this._init_data();
         this.app.initialize({

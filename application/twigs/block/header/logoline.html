@@ -13,7 +13,7 @@
 			<!--/noindex-->
 			<div class="search-cont">
 				<div class="seach-bl">
-					<form action="/" method="get" name="search-form" id="search-form" class="clearfix js-search-form">
+					<form action="/glavnaya-kategoriya" method="get" name="search-form" id="search-form" class="clearfix js-search-form">
 							
 						<input class="search placeholder form-control js-search-input" name="search" id="search-input" value="{{ search_text }}" type="text" placeholder="{% if get_session_value('site_disable') %}Сайт в режиме разработки.{% else %}Поиск объявлений{% endif %}" autocomplete="off" data-city="{{city.id}}">
 						{% set catTitle = "" %}

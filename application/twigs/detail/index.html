@@ -20,6 +20,7 @@
 
 {% block leftside %}
 	<div class="col-md-8" itemscope="" itemtype="http://schema.org/Product">
+		<meta itemprop="name" content="{{ object.title|e}}">
 		<div class="row">
 			<div class="col-md-12">
 				<article>
@@ -71,6 +72,7 @@
 		{% endif %}
 		{% include 'detail/photo' %}
 	</div>
+	<meta itemprop="dateCreated" content="{{object.date_created|date('Y-m-d')}}">
 {% endblock %}
 
 {% block rightside %}

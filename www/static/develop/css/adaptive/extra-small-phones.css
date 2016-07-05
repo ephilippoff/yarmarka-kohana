@@ -318,6 +318,11 @@
 
 @media (max-width: 570px){
 
+	.org_contacts .img-cont{
+		float: none;
+		margin-right: 0;
+	}
+
 	.moreinfo{
 		float: none !important;
 		display: block;

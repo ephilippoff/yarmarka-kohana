@@ -10,19 +10,17 @@
 {% endblock leftside %}
 
 {% block content %}
-	{{ parent() }}
-	<div class="bg-color-whitesmoke p20">
+	{% block info %} 
+		<div class="info-block-cont theme3">
+			<div class="block-title">
+				<span>Информация</span>
+			</div>						
+			<div class="bg-color-whitesmoke p10">
+				В этом разделе Вы можете увидеть все контакты, привязанные к вашей учетной записи. В случае удаления контакта, все объявления с ним снимаются с публикации.
+			</div>
+		</div>
+	{% endblock info %}
+	<div class="bg-color-whitesmoke p10">
 		{{ requestoldview(block_name, params) }}
 	</div>
 {% endblock content %}
-
-{% block rightside %} 
-	<div class="info-block-cont theme3 module">
-		<div class="block-title">
-			<span>Информация</span>
-		</div>						
-		<div class="bg-color-whitesmoke p20">
-			В этом разделе Вы можете увидеть все контакты, привязанные к вашей учетной записи. В случае удаления контакта, все объявления с ним снимаются с публикации.
-		</div>
-	</div>
-{% endblock rightside %}

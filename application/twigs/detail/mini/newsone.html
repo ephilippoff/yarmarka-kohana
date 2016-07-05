@@ -2,7 +2,7 @@
 {% set today = 'Сегодня' %}
 
 <div class="col-md-6 masonry">
-	<div class="news_wrap">
+	<div class="news_wrap" itemscope itemtype="http://schema.org/Article">
 		<div class="date light fs12">{{ innerItem.date|date('H:i') }} 
 			<span>
 				{% if innerItem.date|date('d.m.y') == currentDate %}
@@ -13,5 +13,13 @@
 			</span>
 		</div>
 		<p><a href="{{innerItem.url}}" class="fs16">{{innerItem.title}}</a></p>
+		<meta itemprop="name" content="{{ innerItem.title }}">
+		<meta itemprop="datePublished" content="{{ innerItem.date|date('Y-m-d') }}">
+		<meta itemprop="dateModified" content="{{ innerItem.date|date('Y-m-d') }}">
+		<meta itemprop="url" content="{{ innerItem.url }}">
+		<meta itemprop="author" content="Газета бесплатных объявлений Ярмарка">
+		<meta itemprop="publisher" content="Газета бесплатных объявлений Ярмарка">
+		<meta itemprop="headline" content="{% if innerItem.title|length > 110 %} {{innerItem.title|slice(0,100)}}... {% else %} {{innerItem.title}} {% endif %}">
+		<meta itemprop="mainEntityOfPage" content="{{ seo_attributes.h1 ? seo_attributes.h1: category.title }}">
 	</div>
 </div>

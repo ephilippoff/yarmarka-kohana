@@ -34,7 +34,7 @@ class Service
             return $price_config[$city];
         }
 
-        return $price_config['default'];
+        return $price_config;
     }
 
     public function getCategoryPrice($price_config, $category)

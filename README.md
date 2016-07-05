@@ -14,3 +14,5 @@ SetEnv KOHANA_ENV development
 полезно когда надо подключить модуль который был написан для Kohana < 3.3
 
 [Соглашение по стандартам оформления кода](http://kohanaframework.org/3.3/guide/kohana/conventions)
+
+dev

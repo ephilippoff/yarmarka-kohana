@@ -6,10 +6,13 @@
 		<ul>
 			{% for news in premiumnews %}
 			<li>
-				<div class="photo_news_wrap hidden-sm hidden-xs">
-					<a href="{{news.compiled.url}}" class="fs12">
-						<div class="photo_news_img">
-							<img src="{{get_file(news.compiled.images.main_photo['120x90'])}}">
+				<div class="photo_news_wrap hidden-sm hidden-xs" itemscope itemtype="http://schema.org/Article">
+					<a href="{{news.compiled.url}}" itemprop="url" class="fs12">
+						<div class="photo_news_img" itemprop="image" itemscope itemtype="https://schema.org/ImageObject">
+							<img src="{{get_file(news.compiled.images.main_photo['120x90'])}}" itemprop="thumbnailUrl">
+							<meta itemprop="width" content="120">
+							<meta itemprop="height" content="90">
+							<meta itemprop="url" content="{{get_file(news.compiled.images.main_photo['120x90'])}}">
 						</div>
 						<div class="date light fs10">{{news.date_expired|date('H:i')}} 
 							{% if news.date_expired|date('d.m.y') == currentDate %}
@@ -19,14 +22,20 @@
 							{% endif %}
 						</div> 
 						{% if news.title|length > 50 %}
-						{{news.title|slice(0,50)}}...
+							{{news.title|slice(0,50)}}...
 						{% else %}
-						{{news.title}}
+							{{news.title}}
 						{% endif %}
-						</a>
-					</div>
-				</li>
-				{% endfor %}
-			</ul>
-		</div>
+					</a>
+					<meta itemprop="datePublished" content="{{news.date_expired|date("Y-m-d")}}">
+					<meta itemprop="dateModified" content="{{news.date_expired|date("Y-m-d")}}">
+					<meta itemprop="author" content="Газета бесплатных объявлений Ярмарка">
+					<meta itemprop="publisher" content="Газета бесплатных объявлений Ярмарка">
+					<meta itemprop="headline" content="{% if news.title|length > 110 %} {{news.title|slice(0,100)}}... {% else %} {{news.title}} {% endif %}">
+					<meta itemprop="mainEntityOfPage" content="Новости: {{news['compiled']['attributes']['news-category']['value']}}">
+				</div>
+			</li>
+			{% endfor %}
+		</ul>
 	</div>
+</div>

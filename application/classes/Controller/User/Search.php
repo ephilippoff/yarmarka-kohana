@@ -173,10 +173,14 @@ class Controller_User_Search extends Controller_Template {
             ));
         } else {
             $org_name = $this->user->org_name;
+            $address = $this->user->org_post_address;
+            $phone = $this->user->org_phone;
+            $regdate = $this->user->regdate;
+
             $category_title = ($this->category_id > 1) ? " в рубрике ".$this->category->title : "";
             $this->twig->seo_attributes = new Obj(array(
-                "title" => "Все объявления компании '".$org_name."' ".$category_title,
-                "h1" => "Все объявления компании '".$org_name."' ".$category_title,
+                "title" => "Все объявления компании '".$org_name."'",
+                "h1" => "Все объявления компании '".$org_name."'",
             ));
         }
 

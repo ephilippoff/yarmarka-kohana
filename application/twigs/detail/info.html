@@ -19,7 +19,6 @@
 	{% endif %}
 	<div class="p5 dib">Код: {{ object.id }}</div>
 	<div class="p5 dib">Обновлено: {{ object.date_created|date('d.m.Y H:i') }}</div>
-	<meta itemprop="dateCreated" content="object.date_created|date('d.m H:i')">
 	{% if check_object_access(object, 'object.control') %}
 		<div class="p5 dib">Просмотров: {{ object.visits }}</div>
 	{% endif %}

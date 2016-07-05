@@ -10,8 +10,17 @@
 {% endblock leftside %}
 
 {% block content %}
-	{{ parent() }}
-	<div class="p20">
+	{% block info %}
+		<div class="info-block-cont theme3">
+			<div class="block-title">
+				<span>Информация</span>
+			</div>						
+			<div class="bg-color-whitesmoke p10">
+				В данном разделе Вы можете активировать или приостановить подписки на объявления
+			</div>
+		</div>
+	{% endblock info %}
+	<div class="p10">
 		{% if subscriptions|length > 0 %}
 		<div id="subscribe-cont">
 			{% for subscription in subscriptions %}
@@ -69,14 +78,3 @@
 		
 	</div>
 {% endblock content %}
-
-{% block rightside %}
-	<div class="info-block-cont theme3 module">
-		<div class="block-title">
-			<span>Информация</span>
-		</div>						
-		<div class="bg-color-whitesmoke p20">
-			В данном разделе Вы можете активировать или приостановить подписки на объявления
-		</div>
-	</div>
-{% endblock rightside %}

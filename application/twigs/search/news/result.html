@@ -1,35 +1,44 @@
 {% for item in data %}
-{% if item.id == catTitle or item.title == catTitle %}
-{% for innerItem in item.items %}
-{% if loop.first%}
-<div class="clearfix main_last_news module {% if onPageFlag == 'detail' %} hidden {% endif %}" data="">
-	<div class="image_block">
-		<img src="{{ innerItem.image }}" alt="">
-	</div>
-	<div class="news_info">
-		<span class="date fs12">{{ innerItem.date|date('H:i') }}</span>
-		<a href="{{ innerItem.url }}" class="fs16 mb10 db">{{ innerItem.title }}</a>
-		<div class="text">{{ innerItem.short_text }}</div>
-	</div>
-</div>
-{% endif %}
-{% endfor %}
-{% if isNewsSubcategory %}
-{% set itemsPerCategory = 19 %}
-<div class="other_cat_news" id="same_cat_news">
-	<div class="row">
+	{% if item.id == catTitle or item.title == catTitle %}
 		{% for innerItem in item.items %}
-		{% if loop.index != 1 %}
-		{% include 'detail/mini/newsone' %}
-		{% endif %}
-		{% endfor %}
-	</div>
-</div>
-<div id="button-next" class="clearfix" data-category="{{ item.id }}" data-pages="{{ item.pages }}">
+			{% if loop.first%}
+			<div itemscope itemtype="http://schema.org/Article" class="clearfix main_last_news module {% if onPageFlag == 'detail' %} hidden {% endif %}" data="">
+				<div class="image_block">
+					<img itemprop="thumbnailUrl" src="{{ innerItem.image }}" alt="">
+				</div>
+				<div class="news_info">
+					<span class="date fs12">{{ innerItem.date|date('H:i') }}</span>
+					<a href="{{ innerItem.url }}" class="fs16 mb10 db">{{ innerItem.title }}</a>
+					<div class="text" itemprop="description">{{ innerItem.short_text }}</div>
+				</div>
 
-</div>
-{% endif %}
-{% endif %}
+				<meta itemprop="name" content="{{ innerItem.title }}">
+				<meta itemprop="datePublished" content="{{ innerItem.date|date('Y-m-d') }}">
+				<meta itemprop="dateModified" content="{{ innerItem.date|date('Y-m-d') }}">
+				<meta itemprop="url" content="{{ innerItem.url }}">
+				<meta itemprop="author" content="Газета бесплатных объявлений Ярмарка">
+				<meta itemprop="publisher" content="Газета бесплатных объявлений Ярмарка">
+				<meta itemprop="headline" content="{% if innerItem.title|length > 110 %} {{innerItem.title|slice(0,100)}}... {% else %} {{innerItem.title}} {% endif %}">
+				<meta itemprop="mainEntityOfPage" content="{{ seo_attributes.h1 ? seo_attributes.h1: category.title }}">
+			</div>
+			{% endif %}
+		{% endfor %}
+		{% if isNewsSubcategory %}
+			{% set itemsPerCategory = 19 %}
+			<div class="other_cat_news" id="same_cat_news">
+				<div class="row">
+					{% for innerItem in item.items %}
+						{% if loop.index != 1 %}
+							{% include 'detail/mini/newsone' %}
+						{% endif %}
+					{% endfor %}
+				</div>
+			</div>
+			<div id="button-next" class="clearfix" data-category="{{ item.id }}" data-pages="{{ item.pages }}">
+
+			</div>
+		{% endif %}
+	{% endif %}
 {% endfor %}
 
 <script>

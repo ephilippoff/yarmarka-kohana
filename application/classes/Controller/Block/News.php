@@ -145,6 +145,7 @@
 			$itemsPerCategory = $this->request->post("itemsPerCategory");
 			$view->isNewsSubcategory = $this->request->post("isNewsSubcategory");
 			$view->onPageFlag = $this->request->post("onPageFlag");
+			$view->seo_attributes = $this->request->post("seo_attributes");
 
 			$city_id = $this->request->post("city_id");
 
@@ -161,8 +162,6 @@
 			foreach($newsGroups as &$newsGroup) {
 				$newsGroup['pages'] = ceil($newsGroup['count'] / $itemsPerCategory);
 			} 		
-
-			// echo '<pre>'; var_dump($newsGroup); echo '</pre>'; die;
 			
 			/* push view data */
 			$view->data = $newsGroups;

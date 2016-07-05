@@ -102,10 +102,6 @@ class Controller_Detail extends Controller_Template {
 			$twig->user_object_stat_item = $user_object_stat_item;
 		}
 
-		// echo "<pre>"; var_dump($twig->object); echo "</pre>"; die;
-
-		
-
 		//add to last views
 		LastViews::instance()->set($object->id);
 		$this->response->body($twig);
@@ -220,6 +216,7 @@ class Controller_Detail extends Controller_Template {
 		$twig = Twig::factory('detail/news/index');
 		$twig->domain      = $this->domain;
 		$twig->city        = $this->domain->get_city();
+		$twig->itemscope = 'itemscope itemtype="https://schema.org/Article"';
 
 
 		$twig->horizontalView = TRUE;
