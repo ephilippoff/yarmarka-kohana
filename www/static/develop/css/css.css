@@ -2277,3 +2277,59 @@ div[data-role="error"]{
 .hide_imp{
     display: none !important;
 }
+
+.org-about{
+    background-color: #f8f8f8;
+    padding: 15px 25px;
+    margin-bottom: 15px;
+}
+
+p.org_contacts {
+    border-bottom: 1px solid #ccc;
+}
+
+p.org_contacts span {
+    max-width: 70%;
+}
+
+p.org_contacts .fa {
+    width: 25px;
+    text-align: center;
+    margin-top: 10px;
+    color: #555;
+    margin-right: 10px;
+    padding: 8px 5px;
+    border: 1px solid #ccc;
+    border-bottom: none;
+    border-radius: 2px 2px 0px 0px;
+    border-bottom: none;
+}
+
+.org-about .regdate {
+    text-align: center;
+    margin-top: 27px;
+    font-size: 18px;
+}
+
+.org-about .regdate .fa {
+    color: #2b587a;
+    font-size: 25px;
+}
+
+.org_contacts_detail{
+    padding: 10px;
+    border-top: 1px solid #ccc;
+    margin-top: 10px;
+}
+
+.org_contacts_detail .img-cont{
+    float: left;
+    margin-right: 15px;
+}
+
+.org_contacts_detail .fa-calendar-check-o{
+    color: #2B587A;
+    font-size: 30px;
+    position: relative;
+    top: 10px;
+}

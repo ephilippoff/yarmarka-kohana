@@ -1,32 +1,13 @@
-{% set cols = (user_categories|length > 4) ? 2 : 1 %}
-{% set rows = (user_categories|length/cols)|round %}
-{% set i = 0 %}
-<div class="subcategories-cont module">
-	<div class="row">
-			<div class="col-md-2">
-				<ul>
-					<li><a href="{{ url('user') ~ query_url_str }}" class="{{ (canonical_url == 'user/published') ? 'active' }}">Опубликованные</a></li>
-					{% if check_access('object.moderate') %}
-						<li><a href="{{ url('user/unpublished') ~ query_url_str }}" class="{{ (canonical_url == 'user/unpublished') ? 'active' }}">Снятые/Архивные</a></li>
-					{% endif %}
-				</ul>
-			</div>
-		{% for col in 0..cols %}
-			<div class="col-md-3">
-				<ul>
-				{% for category in user_categories|slice(i, rows) %}
-					<li>
-						<a  class="{{ (category.url == category_url) ? 'active' }}" href="{{ url(canonical_url ~ (category.url ? '/' ~ category.url : '') )  ~ query_url_str }}" title="{{category.title}}">{{category.title}}</a>
-						{% if category.count > 0 %}
-							<span class="count">{{category.count}}</span>
-						{% else %}
-							<!-- <span class="count">?</span> -->
-						{% endif %}
-					</li>
-				{% endfor %}
-				</ul>
-			</div>
-			{% set i = i + rows %}
-		{% endfor %}
+<div class="right-side">
+	<div class="title_block">Категории</div>
+
+	<div class="left" style="border:1px solid #ccc;position:relative;">
+		<ul>
+			{% for category in user_categories %}
+			<li>
+				<a class="{{ (category.url == category_url) ? 'active' }}" href="{{ url(canonical_url ~ (category.url ? '/' ~ category.url : '') )  ~ query_url_str }}" title="{{category.title}}">{{category.title}}</a>
+			</li>
+			{% endfor %}
+		</ul>
 	</div>
 </div>
