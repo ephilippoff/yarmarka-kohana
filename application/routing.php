@@ -64,7 +64,7 @@ Route::set('/','')
 				$params['action'] = $config[$domain_segments[0]][1];
 			} else {
 				$params['controller'] = 'Search';
-				$params['action'] = 'index';
+				$params['action'] = 'adverts';
 			}
 			$params['category_path'] = $main_category;
 		} else {
