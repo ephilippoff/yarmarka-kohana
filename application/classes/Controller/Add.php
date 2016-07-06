@@ -74,6 +74,13 @@ class Controller_Add extends Controller_Template {
 				if (Session::instance()->get('cv_mode') && $post_data['rubricid'] == 35 && isset($_GET['cv_mode']) && $_GET['cv_mode'] == 1) {
 					$this->redirect('/detail/use_cv?object_id=' . $object_id);
 				}
+
+				if (array_key_exists('with_service', $post_data) AND $post_data['with_service'] <> 'default') {
+					$serviceName = $post_data['with_service'];
+					Service::saveServiceToCart($serviceName, (array) ORM::factory('Object',$object_id)->get_row_as_obj());
+				 	$this->redirect('/cart');
+				}
+
 				$this->redirect('/detail/'.$object_id."?afteradd=1");
 			}
 
@@ -114,7 +121,8 @@ class Controller_Add extends Controller_Template {
 					->Price()
 					->Contacts()
 					->Widgets()
-					->Additional();
+					->Additional()
+					->WithService();
 					
 		if ($user AND $user->org_type == 2)
 			$form_data->OrgInfo();

@@ -71,7 +71,28 @@ class Lib_PlacementAds_AddEditByModerator extends Lib_PlacementAds_AddEdit {
 		return $this;
 	}
 
+	function clear_news_cache()
+	{
 
+		$params = &$this->params;
+
+		$cities = (isset($params->other_cities)) ? array_merge($params->other_cities, array($params->city_id)) : array($params->city_id);
+
+		$city_seo_query = ORM::factory('City')
+	               ->where("id", "IN", $cities)
+	               ->find_all();
+
+	    $cache = Cache::instance('memcache');
+
+	    foreach ($city_seo_query as $item) {
+
+	    	$cache->delete("main_page_news_cat:{$item->seo_name}");
+			$cache->delete("main_page_news_items:{$item->id}");
+	    }
+
+	    return $this;
+		
+	}
 
 	function exec_validation()
 	{
