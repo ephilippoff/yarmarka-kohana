@@ -51,8 +51,7 @@ return array(
 			"prodovolstvennye-tovary" => 1,
 			"default" => 1
 		),
-		"base" => 100,
-		"default" => 1.5
+		"base" => 100
 	),
 	"premium" => array(
 		"nizhnevartovsk" => array(
@@ -104,8 +103,7 @@ return array(
 			"prodovolstvennye-tovary" => 0.8,
 			"default" => 1
 		),
-		"base" => 100,
-		"default" => 1
+		"base" => 100
 	),
 	"newspaper" => array(
 		"tyumen" => array(
