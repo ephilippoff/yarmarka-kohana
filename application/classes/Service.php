@@ -39,6 +39,8 @@ class Service
 
     public function getCategoryPrice($price_config, $category)
     {
+        if (!is_array($price_config))  return $price_config;
+
         if (array_key_exists($category, $price_config)) {
             $price_config = $price_config[$category];
         } else {
