@@ -84,17 +84,3 @@
 	</div>
 
 </a>
-
-{% if loop.index == 2 %}
-	<ins class="adsbygoogle"
-		style="display:inline-block;width:100%;height:90px"
-		data-ad-client="ca-pub-4714092941447146"
-		data-ad-slot="1610833118"></ins>
-	<script>
-	(adsbygoogle = window.adsbygoogle || []).push({});
-	</script>
-{% endif %}
-
-{% if loop.index in banner_zone_positions|keys %}
-<div class="banner {zoneID: {{banner_zone_positions[loop.index]}} }"></div>
-{% endif %}
