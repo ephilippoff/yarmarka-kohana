@@ -1,7 +1,4 @@
-{% if object.is_premium %}
-<div class="hidden-xxs">{{object.user_text|slice(0,100)}}...</div>
-{% else %}
-<table class="table-details">									
+<table class="table-details hidden-xxs">
 	<tbody>
 		{% if clean_query_params|keys|length > 0 %}
 			{% for attr in object.compiled.attributes if attr.value and attr.seo_name in clean_query_params|keys %}
@@ -24,4 +21,3 @@
 		{% endif %}
 	</tbody>
 </table>
-{% endif %}

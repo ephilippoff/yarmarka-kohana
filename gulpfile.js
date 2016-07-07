@@ -163,13 +163,13 @@ var settings = {
 gulp.task('moveCkEditor', function() {
 
     gulp.src(['./www/static/develop/js/modules/ckeditor.js'])
-        .pipe(gulp.dest('./www/assets/production/js/modules'));
+        .pipe(gulp.dest('./www/static/develop/production/js/modules'));
 
     gulp.src(['./www/static/develop/js/templates/ckeditor/**/*.*'])
-        .pipe(gulp.dest('./www/assets/production/js/templates/ckeditor'));
+        .pipe(gulp.dest('./www/static/develop/production/js/templates/ckeditor'));
 
     gulp.src(['./www/static/develop/js/lib/ckeditor/**/*.*'])
-        .pipe(gulp.dest('./www/assets/production/js/lib/ckeditor'));
+        .pipe(gulp.dest('./www/static/develop/production/js/lib/ckeditor'));
 
 });
 

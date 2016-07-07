@@ -131,6 +131,10 @@ class Object
 				->save_typetr_object()
 				->save_dates_object();
 
+			if ($input_params['obj_type'] == 101) {
+			 	$add->clear_news_cache();
+			}
+
 
 			$db = Database::instance();
 
