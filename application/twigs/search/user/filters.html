@@ -1,16 +1,16 @@
 <div class="filters-cont tab-filter clearfix module js-filters">
-	<form method="GET" action="{{get_request_uri()}}" id="form">
-		<div class="param">
+	<form method="GET" action="{{get_request_uri()}}" id="form" class="clearfix p10">
+		<div class="param fl">
 			<div class="mt10">
 				<label><input type="checkbox" name="photo" {% if search_filters.photo %}checked{% endif %}><span><i class="fa fa-camera-retro fa-lg ml3 mr3"></i> Есть фото</span></label>
 			</div>
 		</div>
-		<div class="param">
+		<div class="param fl">
 			<div class="mt5">
-				<input type="text" name="text" placeholder="Поиск по тексту" style="width:300px" value="{{ search_filters.user_text }}">
+				<input type="text" name="text" placeholder="Поиск по тексту" style="width:100%" value="{{ search_filters.user_text }}">
 			</div>
 		</div>
-		<span class="button dib bg-color-blue white p10 br2" onclick="$('#form').submit();">Отфильтровать!</span>
+		<span class="button dib bg-color-blue white p10 fr br2" onclick="$('#form').submit();">Отфильтровать!</span>
 	</form>
 	
 </div><!--filters-cont-->
