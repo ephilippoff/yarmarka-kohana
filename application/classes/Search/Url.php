@@ -26,7 +26,7 @@ class Search_Url
         $this->_category_childs = ORM::factory('Category')
                                 ->get_childs(array($this->_category->id), TRUE)
                                 ->getprepared_all();
-                                
+                           
         $this->_proper_category_uri = $this->_category->url;
 
         $this->_seo_param = NULL;
@@ -462,7 +462,7 @@ class Search_Url
                 $_category = $_category->where("parent_id", "in", $_category_ids);
             }
 
-            $_category->find();
+            $_category->cached(Date::WEEK)->find();
 
             if ($_category->loaded()) {
                 $_parent_category_id = $_category->parent_id;

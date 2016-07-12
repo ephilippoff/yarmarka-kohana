@@ -38,7 +38,7 @@ class Task_Clear extends Minion_Task
     function clear_search_url_cache()
     {
         ORM::factory('Search_Url_Cache')
-                ->where("created_on","<=", DB::expr("CURRENT_TIMESTAMP-INTERVAL '14 days'"))
+                ->where("created_on","<=", DB::expr("CURRENT_TIMESTAMP-INTERVAL '7 days'"))
                 ->delete_all();
     }
 
