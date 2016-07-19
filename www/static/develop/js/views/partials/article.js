@@ -4,8 +4,7 @@ define([
     "views/partials/behaviors/favourite",
     "views/partials/behaviors/ads",
     "views/partials/behaviors/ocontrol",
-    "views/partials/behaviors/services",
-    "gisMap"
+    "views/partials/behaviors/services"
 
 ], function (templates, FavouriteBehavior, AdsBehavior, OControlBehavior, ServicesBehavior) {
     "use strict";
@@ -38,10 +37,23 @@ define([
                 var lat = +this.ui.map.data("lat");
                 var lon = +this.ui.map.data("lon");
                 var baloonTemplate = templates.components.detail.baloon;
-                app.map.get2GisMap({ elid: "map", lat: lat, lon: lon, zoom: 15}, function(map){
+            
+                app.map.getMap({ elid: "map", lat: lat, lon: lon, zoom: 15}, function(map){
 
-                    DG.marker([lat,lon]).addTo(map).bindPopup('Расположение объекта');
+                    var collection = new ymaps.GeoObjectCollection();
+
+                    collection.add( app.map.createPlacemark([lat,lon], {
+                        style: app.map.getIconSettings("house"),
+                        content: {
+                            hintContent: 'Расположение объекта'
+                        }
+                    }));
+
+                    map.geoObjects.add(collection);
                     
+                    map.setBounds(collection.getBounds(), {
+                        checkZoomRange: true
+                    });
                 });
             }
         }

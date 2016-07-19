@@ -22,7 +22,7 @@
         //nicEdit: 'lib/vendor/nicEdit',
         maskedInput: 'lib/vendor/jquery.maskedinput',
         //ymap: 'http://api-maps.yandex.ru/2.1/?load=package.full&lang=ru-RU',
-        gisMap: 'http://maps.api.2gis.ru/2.0/loader.js?lazy=true',
+        //gisMap: 'http://maps.api.2gis.ru/2.0/loader.js?lazy=true',
         templates: 'templates'
     },
     optimizeCss: "standard",

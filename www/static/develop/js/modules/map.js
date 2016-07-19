@@ -48,33 +48,6 @@ define([
             return iconSettings[name];
         },
 
-        get2GisMap: function(options, ready) {
-
-            var clusterer,
-                elid = options.elid,
-                lat = options.lat || 55.76,
-                lon = options.lon || 37.64,
-                zoom = options.zoom || 10,
-                settings = options.settings || {};
-
-            $('button[data-role="show-map"]').click(function(){
-                var top = $('#flag').offset().top;
-                console.log(top);
-                $('body,html').animate({scrollTop: top-50}, 750);
-                setTimeout(function(){
-                    $('#map-cont').slideDown();
-                    DG.then(function(){
-                        var map = DG.map(elid, {
-                            center: [lat, lon],
-                            zoom: zoom
-                        });
-                        ready(map);
-                    });
-                }, 800);
-                $(this).remove();
-            });
-        },
-
         getMap: function(options, ready) {
 
             var clusterer,
@@ -84,14 +57,15 @@ define([
                 zoom = options.zoom || 10,
                 settings = options.settings || {};
 
-            ymaps.ready(function () {
-                var map = new ymaps.Map(elid, _.extend({
-                    center: [lat, lon],
-                    zoom: zoom,
-                    controls: ['smallMapDefaultSet']
-                }, settings));
-                ready(map);
-            });
+                ymaps.ready(function () {
+                    var map = new ymaps.Map(elid, _.extend({
+                        center: [lat, lon],
+                        zoom: zoom,
+                        controls: ['smallMapDefaultSet']
+                    }, settings));
+                    ready(map);
+                });
+
         },
 
         destroyMap: function(map) {
