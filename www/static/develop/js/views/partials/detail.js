@@ -89,6 +89,8 @@ define([
 
         showMapButtonClick: function(e) {
 
+            $(e.currentTarget).prop('disabled', true);
+            
             var top = $('#flag').offset().top;
             var s = this;
             $('body,html').animate({scrollTop: top-50}, 750);
@@ -97,7 +99,7 @@ define([
 
                 s.initMap();
 
-            $(this).remove();
+            this.ui.showMapButton.remove();
         },
 
         initMap: function() {
