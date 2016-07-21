@@ -3,9 +3,12 @@
 {% if imagelinks|length > 0 or textlinks|length > 0%}
  	{% if imagelinks|length > 0 %}
 		<div id="reklama_container" class="reklama-line banners js-adslink-graphic clearfix">
-			{% set length = (imagelinks|length > 3) ?  imagelinks|length : 3 %}
+			{% set length = (imagelinks|length >= 4) ?  4 : imagelinks|length %}
+			
 			{% for i in 0..(length - 1) %}
+
 				{% set link = imagelinks|slice(i,1) %}
+
 				{% if link|length > 0 %}
 					{% set link = link|first %}
 					<a class="db clearfix tg-link" href="{{ link.link }}" target="_blank" data-id="{{ link.id }}" {% if link.nofollow %}rel="nofollow"{% endif %}>
@@ -18,8 +21,9 @@
 						<span class="fs12 fl w50p oh">Рекламное место свободно</span>
 					</a>
 				{% endif %} 
+				
 
-				{% if loop.index == 2 %}
+				{% if length < 4 and loop.index == 2 %}
 					<div class="db clearfix tg-link google-link" style="height: 60px;">
 						<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 						<ins class="adsbygoogle"
@@ -34,6 +38,7 @@
 				{% endif %}
 				
 			{% endfor  %}
+
 		</div>
 	
 	{% endif %} 
