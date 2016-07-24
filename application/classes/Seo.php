@@ -11,7 +11,38 @@
  */
 class Seo extends ORM
 {
+	const ALL   = 'ALL';
+	const NONE  = 'NONE';
+
 	protected static $_cache = array();
+
+	protected static $noindex_patterns = array(
+		//'/^novosti(.*)\.html$/',
+		'/^redirect/',
+		'/^article/',
+		'/^user/',
+		'/^search_company/',
+		'/^modulnaya-reklama/',
+		'/^commercial/',
+		'/^add/',
+		'/feedback\.yarmarka\.biz/'
+	);
+
+	public static function get_meta_robots()
+	{
+		$url = Request::current()->uri();
+
+		foreach (self::$noindex_patterns as $pattern) {
+
+			$find = preg_match($pattern, $url);
+			if ($find) {
+				return Seo::NONE;
+				break;
+			}
+		}
+
+		return Seo::ALL;
+	}
 
 	public static function get_title($url = FALSE)
 	{

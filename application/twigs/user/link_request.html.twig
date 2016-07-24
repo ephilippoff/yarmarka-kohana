@@ -3,8 +3,12 @@
 {% block header %} 
 		{{ requestblock('block_twig/topline', {'favourites':favourites}) }}
 		{% include 'block/header/logoline' %}
-		{% include 'user/personal/promo' %}
+
 {% endblock header %} 
+
+{% block leftside %} 
+	{% include 'user/personal/nav' %}
+{% endblock leftside %}
 
 {% block crumbs %}{% endblock crumbs %}
 

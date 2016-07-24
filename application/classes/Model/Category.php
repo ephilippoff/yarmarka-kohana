@@ -214,6 +214,7 @@ class Model_Category extends ORM {
 				->where('parent_id', '=', 1)
 				->where('is_ready', '=', 1)
 				->order_by('through_weight')
+				->cached(DATE::WEEK)
 				->order_by('title');
 	}	
 	
@@ -221,23 +222,40 @@ class Model_Category extends ORM {
 	public function get_childs($parent_ids = array(), $with_subchilds = FALSE)
 	{
 		if ($with_subchilds) {
-
+			if (count($parent_ids) == 0 ) $parent_ids = array(0);
 			$categories = ORM::factory('Category')
 				->where('parent_id', 'in', $parent_ids)
 				->where('is_ready', '=', 1)
 				->order_by('weight')
 				->order_by('title')
+				->cached(DATE::WEEK)
 				->getprepared_all();
+
 			$ids = array_map(function($value){
 				return $value->id;
 			}, (array) $categories);
-			
-			return $this->get_childs(array_merge($ids, $parent_ids));
+
+			if (count($ids) == 0 ) $ids = array(0);
+
+			$categories = ORM::factory('Category')
+				->where('parent_id', 'in', $ids)
+				->where('is_ready', '=', 1)
+				->order_by('weight')
+				->order_by('title')
+				->cached(DATE::WEEK)
+				->getprepared_all();
+
+			$ids2 = array_map(function($value){
+				return $value->id;
+			}, (array) $categories);
+
+			return $this->get_childs(array_merge($ids, $ids2, $parent_ids));
 		}
 		return ORM::factory('Category')
 				->where('parent_id', 'in', $parent_ids)
 				->where('is_ready', '=', 1)
 				->order_by('weight')
+				->cached(DATE::WEEK)
 				->order_by('title');
 	}
 	

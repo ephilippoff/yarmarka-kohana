@@ -64,7 +64,7 @@
 				if (json.code == 200) {
 					$('.modal-body .alert-error').hide('slow');
 					$('#myModal').modal('hide');
-					var reload_row = reload_row || false;
+		
 					if (reload_row) {
 						reload_row(<?=$object->id?>);
 					}
@@ -88,7 +88,7 @@
 			$('.title').val(resetCaps($('.title').val()));
 
 
-		})
+		});
 	});
 </script>
 
