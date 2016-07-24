@@ -13,7 +13,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="Description" content="{% if get_global('description') %}{{ get_global('description') }}{% else %}{% block meta_description %}{% endblock meta_description%}{% endif %}">
-        <meta name="robots" content="{% block meta_robots %}all{% endblock meta_robots%}">
+        <meta name="robots" content="{% block meta_robots %}{{ get_meta_robots()}}{% endblock meta_robots%}">
         <link rel="shortcut icon" href="{{ staticfile("images/favicon.ico") }}">
         {% if get_global('keywords') %}
             <meta name="Keywords" content="{{ get_global('keywords') }}">

@@ -40,6 +40,7 @@ return array(
 		'get_categories'   => array ('func' => array('Twig_Functions', 'get_categories'), 'options' => array() ),
 		'repeat'   => array ('func' => array('Twig_Functions', 'repeat'), 'options' => array() ),
 		'get_city'   => array ('func' => array('Twig_Functions', 'get_city'), 'options' => array() ),
+		'get_meta_robots' => array ('func' => array('Twig_Functions', 'get_meta_robots'), 'options' => array() ),
 	),
 	'filters' => array(
 		'contacthide' => array('Twig_Filters', 'contacthide'),

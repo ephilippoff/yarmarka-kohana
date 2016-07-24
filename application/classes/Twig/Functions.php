@@ -10,6 +10,10 @@ class Twig_Functions
 		return NULL;
 	}
 
+	public static function get_meta_robots() {
+		return Seo::get_meta_robots();
+	}
+
 	public static function requestblock($path, $params = array())
 	{
 		return Request::factory($path)->post($params)->execute();
