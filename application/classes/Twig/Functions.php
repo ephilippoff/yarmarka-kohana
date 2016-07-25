@@ -10,6 +10,30 @@ class Twig_Functions
 		return NULL;
 	}
 
+	public static function link($href, $class, $text, $rel = "", $title = "")
+	{
+		$url = Request::current()->uri();
+		if (isset($GLOBALS['page_type']) AND !$rel) {
+			$link_seo_config = Kohana::$config->load("seo.links_with_low_priority.".$GLOBALS['page_type']);
+			if ( $link_seo_config ) {
+
+				foreach ($link_seo_config as $pattern) {
+
+					$find = preg_match($pattern, $href);
+					if ($find) {
+						$rel = 'nofollow';
+						break;
+					}
+
+				}
+
+			}
+			
+		}
+
+		return sprintf("<a href='%s' class='%s' rel='%s' title='%s'>%s</a>", $href, $class, $rel, $title, $text);
+	}
+
 	public static function get_meta_robots() {
 		return Seo::get_meta_robots();
 	}

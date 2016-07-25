@@ -26,7 +26,7 @@
 				$topCategories[$item['id']] = array(
 						'title' => $item['title'],
 						'url' => '/' . $item['url'],
-						'image' => 'http://yarmarka.biz/images/min_' . $item['main_menu_icon'],
+						'image' => ( $item['main_menu_icon']) ? 'http://yarmarka.biz/images/min_' . $item['main_menu_icon'] : '',
 						'items' => array(),
 					);
 			}
