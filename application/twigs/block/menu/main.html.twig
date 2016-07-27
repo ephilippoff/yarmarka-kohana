@@ -33,7 +33,9 @@
 							<img hidefocus="true" style="right:{{banners[category.id].x}}px; bottom:{{banners[category.id].y}}px;" src="/uploads/banners/menu/{{banners[category.id].image}}"/>
 						</a>
 					{% else %}
-						<img  hidefocus="true"  src="/static/develop/{{category.main_menu_image}}">
+						{% if category.main_menu_image %}
+							<img  hidefocus="true"  src="/static/develop/{{category.main_menu_image}}">
+						{% endif %}
 					{% endif %}
 				</div>
 			</div>
