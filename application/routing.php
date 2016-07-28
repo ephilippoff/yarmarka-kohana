@@ -328,7 +328,6 @@ Route::set('default', '(<controller>(/<action>(/<id>)))')
 		if ($params["controller"] == 'Search') {
 			return FALSE;
 		}
-		$GLOBALS['page_type'] = 'index';
 	})
 	->defaults(array(
 		'controller' => 'Index',

@@ -30,6 +30,7 @@ class Domain
 
         $city = ORM::factory('City')
                 ->where("seo_name", "=", $subdomain)
+                ->cached(Date::WEEK)
                 ->find();
 
         if ($city->loaded()) {

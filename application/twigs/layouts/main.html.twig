@@ -63,7 +63,6 @@
         {{ js("lib/jquery.metadata.js") }}
         {{ js("lib/jquery.openxtag.min.js") }}
         {{ js("v2/main.js") }}
-        {{ js("lib/masonry.js") }}
         {{ js("lib/adaptive.js") }}
         {{ js("lib/jquery-ui.min.js") }}
         <script type="text/javascript">
@@ -91,10 +90,14 @@
         <div id="popup-layer" class="z200" style="display: none;"></div>
         <div class="wrapper container {% block wrapperclass %}{% endblock wrapperclass %}" id="wrap-page">			
             {% block body %}
+                
                 {% block footer %} 
+
                     {% include 'block/footer/linkline' %}
                     {{ requestblock('block_twig/debug_info', {}) }}
+
                 {% endblock footer %}
+
             {% endblock body%}
         </div>
         <!--noindex-->

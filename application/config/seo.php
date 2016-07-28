@@ -1,11 +1,73 @@
 <?php defined('SYSPATH') OR die('No direct access allowed.');
 return array(
-	'noindex_routes'	=> array(
-		"add","user","admin", "backend", "cart", "userpage", "object_edit"
-	),
-	'title_postfix'		=> ' - Газета бесплатных объявлений Ярмарка',
+      'noindex_routes'  => array(
+            "add","user","admin", "backend", "cart", "userpage", "object_edit"
+      ),
 
-    'links_with_low_priority' => array(
+      'title_postfix'         => ' - Газета бесплатных объявлений Ярмарка',
+
+
+      'city_neiboors' => array(
+            'surgut' => array(
+                  '/nefteyugansk/',
+                  '/pyt\-yakh/',
+                  '/nizhnevartovsk/',
+                  '/tyumen/'
+                  
+            ),
+            'nefteyugansk' => array(
+                  '/nizhnevartovsk/',
+                  '/surgut/',
+                  '/kogalym/',
+                  '/langepas/',
+                  '/pyt\-yakh/',
+                  '/tyumen/'
+            ),
+            'nizhnevartovsk' => array(
+                  '/surgut/',
+                  '/nefteyugansk/',
+                  '/izluchinsk/',
+                  '/khanty-mansiisk/',
+                  '/megion/',
+                  '/raduzhnyi/',
+                  '/tyumen/'
+            ),
+             'tyumen' => array(
+                 '/ekaterinburg/',
+                 '/ishim/',
+                 '/tobolsk/',
+                 '/yalutorovsk/',
+                 '/zavodoukovsk/',
+                 '/nizhnevartovsk/',
+                  '/surgut/',
+            ),
+      ),
+
+      'category_map_filter' => array(
+            'index' => array(),
+            'search' => array(
+
+                  '/^lichnie-veshi/',
+                  '/^v-horoshie-ruki/',
+                  '/^znakomstvo-i-obshenie/',
+                  '/^novosti/',
+                  '/^prodovolstvennye-tovary/',
+                  '/^sport-otdih-hobby/',
+                  '/^avtotransport\/transportnye-uslugi/',
+                  '/drugoi-kommercheskii-transport/',
+                  '/vodnii-transport/',
+                  '/avtotransport\/arenda/',
+                  '/avtotransport\/mototsikly-velosipedy\/drugoi-moto-transport/',
+                  '/uslugi\/prochie/',
+                  '/stroitelstvo-i-remont\/remont-prochie/',
+                  '/dlya-doma-i-dachi/',
+                  '/domashnie-zhivotnye-i-rasteniya\/rasteniya/',
+                  '/domashnie-zhivotnye-i-rasteniya\/akvariumistika/',
+                  '/domashnie-zhivotnye-i-rasteniya\/accesoares-dlya-zhivotnih/',
+            )
+      ),
+
+      'links_with_low_priority' => array(
         'index' => array(
             // '/^\/lichnie-veshi/',
             // '/^\/v-horoshie-ruki/',
@@ -125,5 +187,5 @@ return array(
             // '/yugorsk\.yarmarka\./',
             // '/zavodoukovsk\.yarmarka\./',
         )
-    )
+      )
 );

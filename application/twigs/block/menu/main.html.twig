@@ -8,7 +8,7 @@
 			{% for category in categories1l if category.seo_name in true_categories %}
 				{% set menuHeight = (banners[category.id] is defined and banners[category.id].menu_height) ? banners[category.id].menu_height : '' %}
 				<li class="js-submenu-item" data-submenu-id="section{{category.id}}" class="section{{category.id}}">
-					{{ link( '/' ~ category.seo_name, "span-link", category.title ) }}
+					<span class="span-link" onclick="window.location='{{ '/' ~ category.seo_name }}'">{{ category.title }}</span>
 				</li>
 			{% endfor %}
 		</ul>
@@ -23,7 +23,7 @@
 					<li class="li-title ml20"><span class="bold  black fs18 w100p">{{category.title}}</span></li>
 					{% for subcategory in categories2l if subcategory.parent_id == category.id %}
 						<li class="ml20" style="width:{{ulWidth}}px;">
-							{{ link( '/' ~ category.seo_name ~ '/' ~ subcategory.seo_name, "", subcategory.title ) }}
+							<span class="span-link" onclick="window.location='{{ '/' ~ category.seo_name ~ '/' ~ subcategory.seo_name }}'">{{ subcategory.title }}</span>
 						</span></li>
 					{% endfor %}
 				</ul>

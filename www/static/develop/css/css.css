@@ -1301,14 +1301,14 @@ img.category-icon{
     padding: 10px 0;
 }
 
-.right ul li a,
-.left ul li a{
+.right ul li span.span-link,
+.left ul li span.span-link{
     display: block;
     padding: 5px 20px;
 }
 
-.right ul li a:hover,
-.left ul li a:hover{
+.right ul li span.span-link:hover,
+.left ul li span.span-link:hover{
     background-color: #5EB9BD;
     color: #fff;
 }
