@@ -80,6 +80,8 @@
 			$city = $domain->get_city();
 			$current_category = $this->request->post("category");
 
+			$view->seo_segment_url = $this->request->post("seo_segment_url");
+
 			if ($current_category) {
 				$view->category_title = $current_category->title;
 				$view->category_url = $current_category->seo_name;

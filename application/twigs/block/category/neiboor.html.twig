@@ -25,9 +25,11 @@
                 <dd class="neiboor-map__item">
                     {{ 
                         link(
-                            'http://' ~ domain(city.seo_name, category_url, null, true, city.id),
+                            'http://' ~ domain(city.seo_name, category_url ~ (seo_segment_url ? '/' ~ seo_segment_url: ''), null, true, city.id),
                             "",
-                            'в ' ~ city.sinonim
+                            'в ' ~ city.sinonim,
+                            "",
+                            'Объявления о продаже бу. ' ~ category_title~ ' в ' ~ city.sinonim
                         ) 
                     }}
                 </dd>
