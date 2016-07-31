@@ -8,6 +8,13 @@
 			$this->auto_render = false;
 		}
 
+		public function action_main_menu()
+		{
+		    $twig = Twig::factory('block/header/mobile_menu/index');
+		    $this->response->body($twig);
+		}
+
+
 		private function object_subquery($city_id) {
 
 			$object_subquery =  DB::select("object.id")

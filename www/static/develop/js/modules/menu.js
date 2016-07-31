@@ -15,31 +15,31 @@ define([
             controlClass: ".js-usermenu-dropdown",
             menuClass: ".js-usermenu",
             menuTemplate: "#template-usermenu"
-        }
+        };
 
         var cityMenuSettings = {
             controlClass: ".js-citymenu-dropdown",
             menuClass: ".citymenu1",
             menuTemplate: "#template-citymenu"
-        }
+        };
 
         var cityMenuSettingsRight = {
             controlClass: ".js-citymenu-dropdown-right",
             menuClass: ".citymenu2",
             menuTemplate: "#template-citymenu"
-        }
+        };
 
         var newsMenuSettings = {
             controlClass: ".js-newsmenu-dropdown",
             menuClass: ".js-newsmenu",
             menuTemplate: "#template-newsmenu"
-        }
+        };
 
         var kuponMenuSettings = {
             controlClass: ".js-kuponmenu-dropdown",
             menuClass: ".js-kuponmenu",
             menuTemplate: "#template-kuponmenu"
-        }
+        };
 
         var MobileMenu = Marionette.View.extend({
             el: ".mobile_menu",
@@ -132,7 +132,7 @@ define([
                 $(s.getOption("menuClass")).fadeIn(70);
                 $("#popup-layer").fadeIn(70);
                 $(s.getOption("controlClass")).addClass("z301");
-            }, 250)
+            }, 250);
             
         },
 
@@ -148,7 +148,7 @@ define([
         }
     });
 
-var MainmenuView = MenuView.extend({
+var TwoSectionMenu = MenuView.extend({
     initialize: function(options) {
         MenuView.prototype.initialize.call(this, options);
         var s = this;
@@ -192,6 +192,35 @@ var MainmenuView = MenuView.extend({
     }
 });
 
+var MainmenuView = TwoSectionMenu.extend({
+    initialize: function(options) {
+        var s = this;
+
+        $.post('/block_twig/mainmenu',{ city_id: options.city_id }, function (data) {
+            
+                if (!options.doNotUseTemplate) {
+                   s.$el.append(data);
+               }
+
+               var $menu = s.$el.find(s.getOption("menuClass")+ " ul.top");
+
+               if ($menu.length > 0){
+                   try {
+                       $menu.menuAim({
+                           activate: s.activateSubmenu.bind(s), 
+                           deactivate: s.deactivateSubmenu,
+                           rowSelector: ".js-submenu-item"
+                       });
+                   } catch(e) {}
+               }
+            
+        }, "html");
+
+       
+       
+    }
+});
+
 
 
 return Marionette.Module.extend({
@@ -223,7 +252,8 @@ return Marionette.Module.extend({
                 el: mainMenuSettings.controlClass,
                 templateClass: mainMenuSettings.menuTemplate,
                 menuClass: mainMenuSettings.menuClass,
-                controlClass: mainMenuSettings.controlClass
+                controlClass: mainMenuSettings.controlClass,
+                city_id:  _globalSettings.city_id
             };
 
             if (_globalSettings.page == 'index') {
@@ -233,7 +263,7 @@ return Marionette.Module.extend({
                     menuOptions.el = '.left_menu';
                     menuOptions.menuClass = '.top_level_menu';
                     menuOptions.doNotUseTemplate = true;
-
+                    
                     var me = this;
                     $(menuOptions.el).on('mouseleave', function (e) {
                         me.main.deactivateSubmenu();
@@ -263,7 +293,7 @@ return Marionette.Module.extend({
             }
 
             if (_.contains(menusToload, "news")) {
-                this.news = new MainmenuView({
+                this.news = new TwoSectionMenu({
                     el: newsMenuSettings.controlClass,
                     templateClass: newsMenuSettings.menuTemplate,
                     menuClass: newsMenuSettings.menuClass,
@@ -272,7 +302,7 @@ return Marionette.Module.extend({
             }
 
             if (_.contains(menusToload, "kupon")) {
-                this.kupon = new MainmenuView({
+                this.kupon = new TwoSectionMenu({
                     el: kuponMenuSettings.controlClass,
                     templateClass: kuponMenuSettings.menuTemplate,
                     menuClass: kuponMenuSettings.menuClass,

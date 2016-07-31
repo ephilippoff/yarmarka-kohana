@@ -53,13 +53,26 @@
 		</div>
 	</div>
 
-	{% block footer %} 
-		{{ parent() }}
-	{% endblock footer %}
 
-	{% block templates %}
-		{{ parent() }}
-	{% endblock templates %}
 {% endblock body %}
+
+{% block footer %}
+	{{ parent() }}
+{% endblock footer %}
+
+{% block footer_subblocks %}
+	
+	    <div class="hidden-xs hidden-sm">
+	        {{ requestblock('block_category/neiboors_map', {'category': category} ) }}
+	    </div>
+
+	    <hr  class="hidden-xs hidden-sm block">
+
+	    <div class="hidden-xs hidden-sm">
+	        {{ requestblock('block_category/category_map' ) }}
+	    </div>
+
+
+{% endblock footer_subblocks %}
 
 {%block page_name%}search{% endblock page_name %}

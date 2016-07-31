@@ -104,7 +104,7 @@ class Model_Category extends ORM {
 		{
 			$category = ORM::factory('Category')
 				->where('id', '=', $parent_id)
-				->cached(DATE::WEEK, array("category", "seo"))
+				->cached(Date::WEEK, array("category", "seo"))
 				->find();
 			if ($category->seo_name)
 			{
@@ -191,7 +191,7 @@ class Model_Category extends ORM {
 
 	public function get_count_childs($category_id)
  	{
- 		return $this->where("parent_id","=",$category_id)->count_all(NULL, DATE::WEEK, array("category", "add"));
+ 		return $this->where("parent_id","=",$category_id)->count_all(NULL, Date::WEEK, array("category", "add"));
  	}
 
  	public function get_default_action($category_id)
@@ -199,7 +199,7 @@ class Model_Category extends ORM {
  		$ac = ORM::factory('Action_Category')
 						->where("category_id","=",$category_id)
 						->where("is_default","IS NOT", NULL)
-						->cached(DATE::WEEK, array("category", "add"))
+						->cached(Date::WEEK, array("category", "add"))
 						->find();
 		if ($ac->action_id)
 			return $ac->action_id;
@@ -214,7 +214,7 @@ class Model_Category extends ORM {
 				->where('parent_id', '=', 1)
 				->where('is_ready', '=', 1)
 				->order_by('through_weight')
-				->cached(DATE::WEEK)
+				->cached(Date::WEEK)
 				->order_by('title');
 	}	
 	
@@ -228,7 +228,7 @@ class Model_Category extends ORM {
 				->where('is_ready', '=', 1)
 				->order_by('weight')
 				->order_by('title')
-				->cached(DATE::WEEK)
+				->cached(Date::WEEK)
 				->getprepared_all();
 
 			$ids = array_map(function($value){
@@ -242,7 +242,7 @@ class Model_Category extends ORM {
 				->where('is_ready', '=', 1)
 				->order_by('weight')
 				->order_by('title')
-				->cached(DATE::WEEK)
+				->cached(Date::WEEK)
 				->getprepared_all();
 
 			$ids2 = array_map(function($value){
@@ -255,7 +255,7 @@ class Model_Category extends ORM {
 				->where('parent_id', 'in', $parent_ids)
 				->where('is_ready', '=', 1)
 				->order_by('weight')
-				->cached(DATE::WEEK)
+				->cached(Date::WEEK)
 				->order_by('title');
 	}
 	

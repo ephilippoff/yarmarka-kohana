@@ -15,13 +15,33 @@
 		сео текст в футере
 	{% endblock footertext %}
 
-	{% block footer %} 
-		{{ parent() }}
-	{% endblock footer %} 
-
-	{% block templates %}
-		{{ parent() }}
-	{% endblock templates %}
 	
 {% endblock body %}
+
+{% block footer %}
+
+	{{ parent() }}
+
+{% endblock footer %}
+
+{% block footer_subblocks %}
+	
+	    <div class="hidden-xs hidden-sm">
+	        {{ requestblock('block_category/neiboors_map', {'category': category} ) }}
+	    </div>
+
+	    <hr  class="hidden-xs hidden-sm block">
+
+	    <div class="hidden-xs hidden-sm">
+	        {{ requestblock('block_category/category_map' ) }}
+	    </div>
+
+	    <hr  class="hidden-xs hidden-sm block">
+
+	    <div class="hidden-xs hidden-sm">
+	        {% include 'block/footer/payment_systems' %}
+	    </div>
+
+{% endblock footer_subblocks %}
+
 {%block page_name%}index{% endblock page_name %}

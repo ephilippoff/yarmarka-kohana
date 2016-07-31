@@ -115,24 +115,6 @@ $(document).ready(function(){
     }
 });
 
-$(document).ready(function(){
-    if ($('html').hasClass('desktop') || $('html').hasClass('tablet')) {
-            var $container = $('#same_cat_news');
-            $container.imagesLoaded( function() {
-                $('.news_wrap').each(function(){
-                    $(this).fadeIn(500);
-                });
-                $container.masonry({
-                    itemSelector: '.masonry',
-                    singleMode: true,
-                    isResizable: true
-                }); 
-            });
-    }else{
-        $('.other_cat_news .news_wrap').show();
-    }
-});
-
 function animated (element, animation) {
     $(element).addClass("animated").addClass(animation);
     setTimeout(function(){

@@ -1,59 +1,8 @@
-<div class="gray-theme {% if onPageFlag == 'add' %}container{% endif %}">
-	<div class="">
-		<div class="row">
-			<div class="col-md-12 brt3" {% if onPageFlag == 'add' %}style="margin-bottom:20px;"{% endif %}>
-				<div class="footer-menu">
-					<a href="/add"  rel="nofollow">Подать объявление</a>
-					<a class="hidden-xs" href="http://feedback.yarmarka.biz/" target="_blank"  rel="nofollow">Техподдержка</a>
-					<a class="hidden-xs" href="/commercial"  rel="nofollow">Рекламодателям</a>
-					<a class="hidden-xs" href="/article/pravila-razmeshcheniya-obyavlenii"  rel="nofollow">Правила</a>
-					<a class="hidden-xs" href="/article/help"  rel="nofollow">Помощь</a>
-					<a target="_blank" href="/article/informatsiya-o-kompanii"  rel="nofollow">О компании</a>
-				</div>
-			</div>
-		</div>
-	</div>
-	{% set city_config = get_config("info") %}
-	<div class="footer-container {{ footerAdditionalClass }}">
-		<div class="row hidden-xs">
-			<div class="col-md-12">
-				
-				{% if onPageFlag == 'search' or onPageFlag == 'main' %}
-					<div class="hidden-xs hidden-sm">
-						{{ requestblock('block_category/neiboors_map', {'category': category} ) }}
-					</div>
-					<hr  class="hidden-xs hidden-sm">
-					<div class="hidden-xs hidden-sm">
-						{{ requestblock('block_category/category_map' ) }}
-					</div>
-					<hr  class="hidden-xs hidden-sm">
-				{% endif %}
-
-				{% if onPageFlag == 'main' %}
-					<div class="stat-cont">
-							<img src="http://yarmarka.biz/images/robokassa.jpg">
-							<a rel="nofollow" href="https://www.platron.ru" ><img src="http://yarmarka.biz/images/platron.png"></a>
-							<img height="30" src="http://yarmarka.biz/images/visa.png">
-							<img height="30" src="http://yarmarka.biz/images/yandex_money.png">
-							<img height="30" src="http://yarmarka.biz/images/mastercard.png">
-							<a rel="nofollow" href="http://www.webmoney.ru"><img src="http://yarmarka.biz/images/88x31_wm_blue_on_transparent_ru.png"></a>
-
-							</script><a href="http://www.liveinternet.ru/click;yarmarkabiz" target="_blank"  rel="nofollow"><img src="//counter.yadro.ru/hit;yarmarkabiz?t18.6;r;s1280*1024*24;uhttp%3A//yarmarka.biz/;0.884230263531208" alt="" title="LiveInternet: показано число просмотров за 24 часа, посетителей за 24 часа и за сегодня" border="0" width="88" height="31"></a><!--/LiveInternet-->	
-
-							<!-- Yandex.Metrika informer -->
-							<a href="https://metrika.yandex.ru/stat/?id=6996988&amp;from=informer" target="_blank" rel="nofollow"><img src="//bs.yandex.ru/informer/6996988/3_1_FFFFFFFF_EFEFEFFF_0_pageviews" style="width:88px; height:31px; border:0;" alt="Яндекс.Метрика" title="Яндекс.Метрика: данные за сегодня (просмотры, визиты и уникальные посетители)" onclick="try {
-														Ya.Metrika.informer({i: this, id: 6996988, lang: 'ru'});
-														return false
-													} catch (e) {
-													}"></a>
-							<!-- /Yandex.Metrika informer -->
-					</div>
-					<div class="stat-cont">
-						<a target="_blank" href="/article/platezhnye-sistemy-robokassa"  rel="nofollow">Информация о платежной системе Robokassa</a>, <a target="_blank" href="/article/platezhnye-sistemy-platron"  rel="nofollow">Информация о платежной системе Platron</a>
-					</div>
-				{% endif %}
-				
-			</div>
-		</div>
-	</div>
+<div class="footer-menu brt3">
+    <a href="/add"  rel="nofollow">Подать объявление</a>
+    <a class="hidden-xs" href="http://feedback.yarmarka.biz/" target="_blank"  rel="nofollow">Техподдержка</a>
+    <a class="hidden-xs" href="/commercial"  rel="nofollow">Рекламодателям</a>
+    <a class="hidden-xs" href="/article/pravila-razmeshcheniya-obyavlenii"  rel="nofollow">Правила</a>
+    <a class="hidden-xs" href="/article/help"  rel="nofollow">Помощь</a>
+    <a target="_blank" href="/article/informatsiya-o-kompanii"  rel="nofollow">О компании</a>
 </div>

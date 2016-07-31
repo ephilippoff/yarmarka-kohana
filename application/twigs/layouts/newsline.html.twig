@@ -35,16 +35,10 @@
 			{% endblock rightside %}
 		</div><!--col-->
 	</div><!--row-->
-
-	{% block footer %} 
-		{{ parent() }}
-	{% endblock footer %}
-
-	{% block templates %}
-		{{ parent() }}
-	{% endblock templates %}
-
 	
 {% endblock body %}
+{% block footer %}
+	{{ parent() }}
+{% endblock footer %}
 {% block page_name%}article{% endblock page_name %}
 

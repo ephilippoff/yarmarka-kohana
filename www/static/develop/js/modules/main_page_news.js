@@ -62,23 +62,7 @@ define([ 'jquery', 'underscore', 'backbone' ], function () {
 		addItem: function (item) {
 
 			this.$appendContainer.append(this.itemTemplate(item));
-			this.masonryItems();
 
-		},
-
-		masonryItems: function() {
-			if ($('html').hasClass('desktop') || $('html').hasClass('tablet')) {
-	            var $container = $('#same_cat_news');
-	            $container.imagesLoaded( function() {
-	                $('.news_wrap').each(function(){
-	                    $(this).fadeIn(500);
-	                });
-	                $container.masonry('reloadItems');   
-      				$container.masonry('layout'); 
-	            });
-	    	}else{
-	    		$('.other_cat_news .news_wrap').show();
-	    	}
 		},
 
 		// events handlers

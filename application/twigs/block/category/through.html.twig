@@ -1,8 +1,9 @@
 <style>
+	
 	.category-map__container {
-		padding: 5px 30px;
+	    padding: 10px 20px;
 	}
-
+	
 	.category-map__section {
 		width:33%;
 		display: block;
@@ -13,17 +14,15 @@
 
 
 </style>
-<div class="row hidden-sm" id="rubricator">
-	<div class="col-lg-12 category-map__container">
-		{% for category in data if category.items|length > 0 %}
-			<dl class="category-map__section">
-				<dt class="category-map__title bold">{{ link( category.url, "", category.title, "", category.alt ) }}</dt>
-				{% for child_category in category.items %}
-					<dd class="category-map__item">
-						{{ link( child_category.url, "", child_category.title, "", child_category.alt ) }}
-					</dd>
-				{% endfor %}
-			</dl>
-		{% endfor %}
-	</div>
+<div class="category-map__container clearfix">
+	{% for category in data if category.items|length > 0 %}
+		<dl class="category-map__section">
+			<dt class="category-map__title bold">{{ link( category.url, "", category.title, "", category.alt ) }}</dt>
+			{% for child_category in category.items %}
+				<dd class="category-map__item">
+					{{ link( child_category.url, "", child_category.title, "", child_category.alt ) }}
+				</dd>
+			{% endfor %}
+		</dl>
+	{% endfor %}
 </div>

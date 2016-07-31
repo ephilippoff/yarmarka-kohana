@@ -4,7 +4,31 @@
 	{% set vk_link = 'https://vk.com/yarmarka_official' %}
 {% endif %}
 
-{% include 'block/header/mobile_menu/index' with {'vk_link' : vk_link} %}
+
+<div class="js-mobile-menu"></div>
+<script>
+	function append_mobile_menu() {
+		$.ajax({
+			url:'/block_mobile/menu',
+			dataType: 'html',
+			success: function (data) {
+				$('.js-mobile-menu').html(data);
+			}
+		});
+	}
+
+	var screen_width = document.documentElement.clientWidth;
+	if (screen_width < 1000) {
+		append_mobile_menu();
+	}
+	$( window ).resize(function() {
+		var exist = $('.js-mobile-menu').html();
+		if (!exist) {
+			append_mobile_menu();
+		}
+	});
+	
+</script>
 
 <div class="banner topline hidden-xs {zoneID: 42}"></div>
 <div class="menu-cont menu-cont1 module hidden-sm hidden-xs">
