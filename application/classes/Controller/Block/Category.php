@@ -84,7 +84,7 @@
 
 			if ($current_category) {
 				$view->category_title = $current_category->title;
-				$view->category_url = $current_category->seo_name;
+				$view->category_url = $current_category->url;
 			}
 
 			$view->cities = ORM::factory('City')

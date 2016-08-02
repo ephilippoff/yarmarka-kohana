@@ -81,12 +81,14 @@ class Detailpage_Default
 			->where('object','=', $this->_info['object']->id)
 			->getprepared_all();
 
-		$seo_links = array_map(function($item){
+		$info = $this->_info;
+		
+		$seo_links = array_map(function($item) use ($info){
 
 			return array(
-				'text' => sprintf('%s %s в %s', $this->_info['category']->title, $item->title2, $this->_info['city']->title),
-				'url' => sprintf('/%s%s', $this->_info['category']->url, ($item->url) ? '/'.$item->url:'' ),
-				'title' => sprintf('Объявления о продаже %s %s в %s', $this->_info['category']->sinonim, $item->title2, $this->_info['city']->title),
+				'text' => sprintf('%s %s в %s', $info['category']->title, $item->title2, $info['city']->title),
+				'url' => sprintf('/%s%s', $info['category']->url, ($item->url) ? '/'.$item->url:'' ),
+				'title' => sprintf('Объявления о продаже %s %s в %s', $info['category']->sinonim, $item->title2, $info['city']->title),
 			);
 		}, $values);
 
