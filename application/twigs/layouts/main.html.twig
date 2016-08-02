@@ -104,7 +104,9 @@
 
                                 {% include 'block/footer/linkline' %}
 
-                                {% block footer_subblocks %}{% endblock footer_subblocks %}
+                                {% block footer_subblocks %}
+                                    <div class="hidden-xs hidden-sm" style="min-height:100px;">&nbsp;</div>
+                                {% endblock footer_subblocks %}
                                 
                                 {{ requestblock('block_twig/debug_info', {}) }}
 

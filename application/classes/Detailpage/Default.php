@@ -20,6 +20,7 @@ class Detailpage_Default
 
 		$info['object'] = $object->get_row_as_obj();
 		$info['category'] = ORM::factory('Category', $object->category)->get_row_as_obj();
+		$info['city'] = ORM::factory('City', $object->city_id)->get_row_as_obj();
 		$info['object']->compiled =  Search::getresultrow((array) $info['object']);
 
 		return $info;
@@ -47,6 +48,54 @@ class Detailpage_Default
 		$info['crumbs'] = Search_Url::get_category_crubms($object->category);
 
 		$this->_info = array_merge($this->_info, $info);
+		return $this;
+	}
+
+	public function get_seo_links()
+	{
+
+		$attributes = $this->_info['object']->compiled['attributes'];
+		if (!$attributes) return $this;
+		$names_attributes = array_keys($attributes);
+
+		$seo_attrbiutes = ORM::factory('Reference')
+				->select('attribute.seo_name')
+				->join('attribute')
+					->on('reference.attribute','=','attribute.id')
+				->where('attribute.seo_name','IN',$names_attributes)
+				->where('reference.is_seo_used','=',1)
+				->cached(Date::WEEK)
+				->getprepared_all(array('seo_name'));
+
+		$seo_attrbiutes = array_map(function($item){
+			return $item->seo_name;
+		}, $seo_attrbiutes);
+
+		$values = ORM::factory('Data_List')
+			->select('attribute_element.title2','attribute_element.url')
+			->join('attribute')
+				->on('data_list.attribute','=','attribute.id')
+			->join('attribute_element')
+				->on('data_list.value','=','attribute_element.id')
+			->where('attribute.seo_name','IN',$seo_attrbiutes)
+			->where('object','=', $this->_info['object']->id)
+			->getprepared_all();
+
+		$seo_links = array_map(function($item){
+
+			return array(
+				'text' => sprintf('%s %s в %s', $this->_info['category']->title, $item->title2, $this->_info['city']->title),
+				'url' => sprintf('/%s%s', $this->_info['category']->url, ($item->url) ? '/'.$item->url:'' ),
+				'title' => sprintf('Объявления о продаже %s %s в %s', $this->_info['category']->sinonim, $item->title2, $this->_info['city']->title),
+			);
+		}, $values);
+
+		$info = array();
+
+		$info['seo_links'] = $seo_links ;
+
+		$this->_info = array_merge($this->_info, $info);
+
 		return $this;
 	}
 

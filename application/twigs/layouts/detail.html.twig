@@ -34,4 +34,15 @@
 	{{ parent() }}
 {% endblock footer %}
 
+{% block footer_subblocks %}
+	
+	<div class="hidden-xs hidden-sm">
+	       	{% include "block/footer/detail_links"%}
+	</div>
+
+
+
+{% endblock footer_subblocks %}
+
+
 {%block page_name%}detail{% endblock page_name %}
