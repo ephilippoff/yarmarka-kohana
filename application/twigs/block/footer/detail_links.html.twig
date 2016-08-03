@@ -1,0 +1,32 @@
+<style>
+    
+    .detail_links-map__container {
+        padding: 10px 20px;
+        min-height: 100px;
+    }
+
+    .detail_links-map__item {
+        display: block;
+        line-height: 24px;
+    }
+
+
+</style>
+<div class="detail_links-map__container clearfix">
+    
+        <dl class="detail_links-map__section">
+            {% for link in seo_links %}
+                <dd class="detail_links-map__item">
+                    {{ 
+                        link(
+                            link.url,
+                            "",
+                             link.text,
+                            "",
+                             link.title
+                        ) 
+                    }}
+                </dd>
+            {% endfor %}
+        </dl>
+</div>

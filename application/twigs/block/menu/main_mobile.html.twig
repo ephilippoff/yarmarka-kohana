@@ -6,7 +6,7 @@
 									'sport-otdih-hobby','domashnie-zhivotnye-i-rasteniya', 'v-horoshie-ruki', 'prodovolstvennye-tovary'] %}
 			{% for category in categories1l if category.seo_name in true_categories %}
 				<li class="js-submenu-item" data-submenu-id="section{{category.id}}" class="section{{category.id}}">
-					<a class="span-link" href="/{{category.seo_name}}">{{category.title}}</a>
+					<span class="span-link" onclick="window.location='/{{category.seo_name}}'">{{category.title}}</span>
 				</li>
 			{% endfor %}
 		</ul>

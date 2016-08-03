@@ -1,6 +1,6 @@
 <div class="mobile_menu">
 	<div class="preview_menu_block clearfix hidden-lg">
-		<a rel="nofollow" href="/" class="Logo_white">
+		<a rel="nofollow" href="/" class="Logo_white" rel="nofollow">
 			<img src="{{ staticfile('images/Logo_white.png') }}" alt="Газета бесплатных объявлений Ярмарка-Тюменская область" title="Газета бесплатных объявлений Ярмарка-Тюменская область">
 		</a>
 		<div class="bars">
@@ -46,7 +46,7 @@
 		<!-- Search end -->
 		
 		<!-- User menu -->
-		<a href="/add" class="bg-color-crimson white mobile_add">Подать объявление</a>
+		<a href="/add"  rel="nofollow" class="bg-color-crimson white mobile_add">Подать объявление</a>
 		<div class="list_div" id="user_menu">
 			{% if user %}
 			<h2>{{ user.email|e }} <i class="fa fa-caret-right"></i></h2>
@@ -56,9 +56,9 @@
 			{% else %}
 			<h2 style="background:#C11515;">Личный кабинет<i class="fa fa-caret-right"></i></h2>
 			<div class="menu_container">
-				<a class="hidden-xxs" href="/user/login?return={{ strim(get_request_uri(), '/') }}">Вход в личный кабинет</a>
-				<a class="visible-xxs hidden-xs" href="/user/login?return={{ strim(get_request_uri(), '/') }}">Вход</a>
-				<a href="/user/registration">Регистрация</a>
+				<a class="hidden-xxs" href="/user/login?return={{ strim(get_request_uri(), '/') }}" rel="nofollow">Вход в личный кабинет</a>
+				<a class="visible-xxs hidden-xs" href="/user/login?return={{ strim(get_request_uri(), '/') }}" rel="nofollow">Вход</a>
+				<a href="/user/registration" rel="nofollow">Регистрация</a>
 			</div>
 			{% endif %}
 			<h2>Ваш город: {{ get_current_city() }} <i class="fa fa-caret-right"></i></h2>
@@ -68,8 +68,8 @@
 
 			<h2>Дополнительно <i class="fa fa-caret-right"></i></h2>
 			<div class="menu_container">
-				<a href="{{vk_link}}" target="_blank"><i class="fa fa-vk"></i> Мы Вконтакте</a>
-				<a href="http://feedback.yarmarka.biz"><i class="fa fa-question-circle mr3"></i>Техподдержка</a>
+				<a href="{{vk_link}}" target="_blank" rel="nofollow"><i class="fa fa-vk"></i> Мы Вконтакте</a>
+				<a href="http://feedback.yarmarka.biz" rel="nofollow"><i class="fa fa-question-circle mr3"></i>Техподдержка</a>
 			</div>
 		</div>
 		<!-- User menu end -->
@@ -88,7 +88,7 @@
 				{{ requestblock('block_twig/kuponmenu', {'city_id': city.id}) }}
 			</div>
 		</div>
-		<a href="/search_company" class="companies">Компании города</a>
+		<a href="/search_company" class="companies" rel="nofollow">Компании города</a>
 
 	</div>
 </div>

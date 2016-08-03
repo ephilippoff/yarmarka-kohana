@@ -63,11 +63,13 @@ Route::set('/','')
 				$params['controller'] = $config[$domain_segments[0]][0];
 				$params['action'] = $config[$domain_segments[0]][1];
 			} else {
+				$GLOBALS['page_type'] = 'search';
 				$params['controller'] = 'Search';
 				$params['action'] = 'adverts';
 			}
 			$params['category_path'] = $main_category;
 		} else {
+			$GLOBALS['page_type'] = 'index';
 			$params['controller'] = 'Index';
 			$params['action'] = 'index';
 		}
@@ -90,6 +92,8 @@ Route::set('detail_work', 'detail/<object_id>',  array('object_id' => '[0-9]+'))
 
 Route::set('detail', '<path>/<object_seo_name>.html',  array('path' => '[a-zA-Z0-9-\._/]+'))
 	->filter(function($route, $params, $request){
+
+		$GLOBALS['page_type'] = 'detail';
 
 		$object_seo_name =  $params["object_seo_name"];
 		$object_category_segment = trim($params["path"], "/");
@@ -334,6 +338,8 @@ Route::set('search', '<category_path>', array(
 		'category_path' => '[a-zA-Z0-9-\._/]+',
 	))->filter(function($route, $params, $request){
 
+		
+
 		$performance = Performance::factory(Acl::check('profiler'));
 		$performance->add("SearchRouting","start");
 
@@ -363,7 +369,7 @@ Route::set('search', '<category_path>', array(
 				$params['controller'] = $config[$category->seo_name][0];
 				$params['action'] = $config[$category->seo_name][1];
 			} else {
-
+				$GLOBALS['page_type'] = 'search';
 				$params['controller'] = 'Search';
 
 				switch ($category->seo_name) {

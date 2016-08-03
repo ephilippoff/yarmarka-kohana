@@ -63,10 +63,9 @@
         {{ js("lib/jquery.metadata.js") }}
         {{ js("lib/jquery.openxtag.min.js") }}
         {{ js("v2/main.js") }}
-        {{ js("lib/masonry.js") }}
         {{ js("lib/adaptive.js") }}
         {{ js("lib/jquery-ui.min.js") }}
-        <script type="text/javascript">
+        <script type="text/javascript" async>
           var _gaq = _gaq || [];
           _gaq.push(['_setAccount', 'UA-33375349-1']);
           _gaq.push(['_setDomainName', 'yarmarka.biz']);
@@ -91,11 +90,38 @@
         <div id="popup-layer" class="z200" style="display: none;"></div>
         <div class="wrapper container {% block wrapperclass %}{% endblock wrapperclass %}" id="wrap-page">			
             {% block body %}
-                {% block footer %} 
-                    {% include 'block/footer/linkline' %}
-                    {{ requestblock('block_twig/debug_info', {}) }}
-                {% endblock footer %}
+
+               
+
             {% endblock body%}
+            
+            {% block footer %}
+                
+                <footer  class="bg-color-whitesmoke mt50">
+                    <div>
+                        <div class="row">
+                           <div class="col-md-12">
+
+                                {% include 'block/footer/linkline' %}
+
+                                {% block footer_subblocks %}
+                                    <div class="hidden-xs hidden-sm" style="min-height:100px;">&nbsp;</div>
+                                {% endblock footer_subblocks %}
+                                
+                                {{ requestblock('block_twig/debug_info', {}) }}
+
+                            </div>
+                       </div>
+                   </div>
+               </footer>
+                 
+            {% endblock footer %}
+
+            {% block templates %}
+
+            {% endblock templates %}
+
+
         </div>
         <!--noindex-->
             <div id="windows"></div>
@@ -131,7 +157,7 @@
         <!--noindex-->
             {% set userecho_token = get_userecho_token() %}
             <!-- Userecho -->
-            <script type='text/javascript'>
+            <script async type='text/javascript'>
 
             var _ues = {
             host:'feedback.yarmarka.biz',
@@ -166,7 +192,7 @@
                     <!-- /Yandex.Metrika counter Surgut--> 
                {% endif %}
                 <!-- Yandex.Metrika counter Common-->
-               <script type="text/javascript"> (function (d, w, c) { (w[c] = w[c] || []).push(function() { try { w.yaCounter6996988 = new Ya.Metrika({ id:6996988, clickmap:true, trackLinks:true, accurateTrackBounce:true, webvisor:true, ut:"noindex" }); } catch(e) { } }); var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); }; s.type = "text/javascript"; s.async = true; s.src = "https://mc.yandex.ru/metrika/watch.js"; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "yandex_metrika_callbacks");</script><noscript><div><img src="https://mc.yandex.ru/watch/6996988?ut=noindex" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+               <script type="text/javascript" async> (function (d, w, c) { (w[c] = w[c] || []).push(function() { try { w.yaCounter6996988 = new Ya.Metrika({ id:6996988, clickmap:true, trackLinks:true, accurateTrackBounce:true, webvisor:true, ut:"noindex" }); } catch(e) { } }); var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); }; s.type = "text/javascript"; s.async = true; s.src = "https://mc.yandex.ru/metrika/watch.js"; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "yandex_metrika_callbacks");</script><noscript><div><img src="https://mc.yandex.ru/watch/6996988?ut=noindex" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
                 <!-- /Yandex.Metrika counter Common-->
             {% endif %}
         <!--/noindex-->

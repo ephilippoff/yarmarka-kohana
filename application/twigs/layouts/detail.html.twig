@@ -27,13 +27,22 @@
 		{% endblock rightside %}
 	</div>
 
-	{% block footer %} 
-		{{ parent() }}
-	{% endblock footer %}
+{% endblock body %}
+
+
+{% block footer %} 
+	{{ parent() }}
+{% endblock footer %}
+
+{% block footer_subblocks %}
 	
-	{% block templates %}
-		{{ parent() }}
-	{% endblock templates %}
-{% endblock body %} 
+	<div class="hidden-xs hidden-sm">
+	       	{% include "block/footer/detail_links"%}
+	</div>
+
+
+
+{% endblock footer_subblocks %}
+
 
 {%block page_name%}detail{% endblock page_name %}

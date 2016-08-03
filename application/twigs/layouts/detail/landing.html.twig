@@ -29,14 +29,12 @@
 		</div>
 	</div>
 
-	{% block footer %} 
-		{{ parent() }}
-	{% endblock footer %}
-	
-	{% block templates %}
-		{{ parent() }}
-	{% endblock templates %}
 
 {% endblock body %} 
+
+{% block footer %} 
+	{{ parent() }}
+{% endblock footer %}
+
 
 {%block page_name%}detail{% endblock page_name %}

@@ -30,6 +30,7 @@ class Domain
 
         $city = ORM::factory('City')
                 ->where("seo_name", "=", $subdomain)
+                ->cached(Date::WEEK)
                 ->find();
 
         if ($city->loaded()) {
@@ -95,9 +96,9 @@ class Domain
             $domain_str .= ".";
         }
         if (!$url_str) {
-            return $protocol_str.$domain_str.$main_domain."/".$city;
+            return sprintf('%s%s%s%s',  $protocol_str , $domain_str, $main_domain, ($city)? "/".$city:"" );
         } else {
-            return $protocol_str.$domain_str.$main_domain."/".$city.self::url($url_str);
+            return sprintf('%s%s%s%s%s', $protocol_str, $domain_str, $main_domain, ($city)? "/".$city:"", self::url($url_str));
         }
     }
     

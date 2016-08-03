@@ -5,7 +5,9 @@
 				<div class="group">
 					<div class="img"><img src="{{staticfile('images/min_auto.png')}}" alt=""></div>
 					<div class="text-cont">
-						<p class="text"><a href="{{ categories.main["avtotransport"].url }}">Автотранспорт</a></p>
+					
+
+						<p class="text">{{ link(categories.main["avtotransport"].url, "", "Автотранспорт" ) }}</p>
 						{% set count = link_counters[categories.main["avtotransport"].url] %}
 						{% if (count) %}
 							<span class="info">{{count}} объявлений</span>

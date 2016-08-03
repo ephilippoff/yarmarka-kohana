@@ -16,15 +16,14 @@ define([
 
     'modules/afisha',
     'modules/reklama_click',
-
-    'modules/main_page_news',
+    
     'modules/subscription/main'
 ], 
 function (Marionette, templates, utils, IndexPage, SearchPage, DetailPage, 
     UserSearchPage, CartPage, 
     //AddPage, serviceApp, 
     ArticlePage, FiltersModule, MapModule, Afisha,
-    ReklamaClickInitializer, MainPageNewsView, SubscriptionModule) {
+    ReklamaClickInitializer, SubscriptionModule) {
     "use strict";
 
     return Marionette.Controller.extend({
@@ -34,12 +33,6 @@ function (Marionette, templates, utils, IndexPage, SearchPage, DetailPage,
 
         initialize: function () {
             ReklamaClickInitializer();
-
-            if($('div').is('#same_cat_news')) {
-                var view = new MainPageNewsView({
-                    el: $('#button-next')
-                });
-            }
         },
 
         start_indexSection : function() {

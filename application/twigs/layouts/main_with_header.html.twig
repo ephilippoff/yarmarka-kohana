@@ -7,7 +7,10 @@
 		{% include 'block/header/logoline' %}
 		</header>
 	{% endblock header %}
-	{% block templates %}
+	
+{% endblock body %} 
+
+{% block templates %}
 		<script id="template-usermenu" type="text/template">
 			{% include "block/menu/user" %}
 		</script>
@@ -24,4 +27,3 @@
 			{{ requestblock('block_twig/othercities', {'city_id': city.id, 'canonical_url': canonical_url}) }}
 		</script>
 	{% endblock templates %}
-{% endblock body %} 

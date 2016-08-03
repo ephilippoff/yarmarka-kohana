@@ -8,7 +8,7 @@
 			{% for category in categories1l if category.seo_name in true_categories %}
 				{% set menuHeight = (banners[category.id] is defined and banners[category.id].menu_height) ? banners[category.id].menu_height : '' %}
 				<li class="js-submenu-item" data-submenu-id="section{{category.id}}" class="section{{category.id}}">
-					<a class="span-link" href="/{{category.seo_name}}">{{category.title}}</a>
+					<span class="span-link" onclick="window.location='{{ '/' ~ category.seo_name }}'">{{ category.title }}</span>
 				</li>
 			{% endfor %}
 		</ul>
@@ -23,17 +23,19 @@
 					<li class="li-title ml20"><span class="bold  black fs18 w100p">{{category.title}}</span></li>
 					{% for subcategory in categories2l if subcategory.parent_id == category.id %}
 						<li class="ml20" style="width:{{ulWidth}}px;">
-							<a href="/{{category.seo_name}}/{{subcategory.seo_name}}">{{subcategory.title}}</a>
+							<span class="span-link" onclick="window.location='{{ '/' ~ category.seo_name ~ '/' ~ subcategory.seo_name }}'">{{ subcategory.title }}</span>
 						</span></li>
 					{% endfor %}
 				</ul>
 				<div class="submenu-img">
 					{% if banners[category.id] is defined and file_exist('/uploads/banners/menu/' ~ banners[category.id].image) and banners[category.id].menu_name == 'main' %}
-						<a href="/redirect/ref_cb?id={{banners[category.id].id}}" class="db" target="_blank">
+						<a href="/redirect/ref_cb?id={{banners[category.id].id}}" class="db" target="_blank" rel="nofollow">
 							<img hidefocus="true" style="right:{{banners[category.id].x}}px; bottom:{{banners[category.id].y}}px;" src="/uploads/banners/menu/{{banners[category.id].image}}"/>
 						</a>
 					{% else %}
-						<img  hidefocus="true"  src="/static/develop/{{category.main_menu_image}}">
+						{% if category.main_menu_image %}
+							<img  hidefocus="true"  src="/static/develop/{{category.main_menu_image}}">
+						{% endif %}
 					{% endif %}
 				</div>
 			</div>

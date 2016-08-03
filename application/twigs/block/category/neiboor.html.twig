@@ -1,0 +1,39 @@
+<style>
+    
+    .neiboor-map__container {
+        padding: 10px 20px;
+    }
+
+    .neiboor-map__title {
+        margin-bottom:10px;
+    }
+
+    .neiboor-map__item {
+        width:150px;
+        display: block;
+        float: left;
+        line-height: 24px;
+    }
+
+
+</style>
+<div class="neiboor-map__container clearfix">
+    
+        <dl class="neiboor-map__section">
+            <dt class="neiboor-map__title bold">{{ (category_title) ? category_title : "Ярмарка - Online" }} в других городах: </dt>
+            {% for city in cities %}
+                <dd class="neiboor-map__item">
+                    {{ 
+                        link(
+                            'http://' ~ domain(city.seo_name, category_url ~ (seo_segment_url ? '/' ~ seo_segment_url: ''), null, true, city.id),
+                            "",
+                            'в ' ~ city.sinonim,
+                            "",
+                            'Объявления о продаже бу. ' ~ category_title~ ' в ' ~ city.sinonim
+                        ) 
+                    }}
+                </dd>
+            {% endfor %}
+        </dl>
+</div>
+

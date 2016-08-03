@@ -3,9 +3,7 @@
 		<ul class="top" role="menu">
 			{% for element in categories %}
 				<li class="js-submenu-item" data-submenu-id="section{{element.id}}" class="section{{element.id}}">
-					<a class="span-link" href="{{ '/' ~ element.category_url ~ '/' ~ element.seo_name }}">
-						{{element.title}}
-					</a>
+					<span class="span-link" onclick="window.location='{{ '/' ~ element.category_url ~ '/' ~ element.seo_name }}'">{{element.title}}</span>
 				</li>
 			{% else %}
 				<li>
