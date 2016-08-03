@@ -172,15 +172,15 @@ class Controller_User_Search extends Controller_Template {
                 "h1" => "Личный кабинет - Мои опубликованные объявления"
             ));
         } else {
-            $org_name = $this->user->org_name;
-            $address = $this->user->org_post_address;
-            $phone = $this->user->org_phone;
-            $regdate = $this->user->regdate;
+            $this->twig->org_name = $this->user->org_name;
+            $this->twig->address = $this->user->org_post_address;
+            $this->twig->phone = $this->user->org_phone;
+            $this->twig->regdate = $this->user->regdate;
 
             $category_title = ($this->category_id > 1) ? " в рубрике ".$this->category->title : "";
             $this->twig->seo_attributes = new Obj(array(
-                "title" => "Все объявления компании '".$org_name."'",
-                "h1" => "Все объявления компании '".$org_name."'",
+                "title" => "Все объявления компании '".$this->twig->org_name."'",
+                "h1" => "Все объявления компании '".$this->twig->org_name."'",
             ));
         }
 
