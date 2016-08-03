@@ -1,0 +1,50 @@
+<div id="banners-in-right-column-index" style="display:none;">
+    <div class="mb10 ta-c">
+        <!-- Правый 200х200 (1) -->
+        <ins class="adsbygoogle"
+             style="display:inline-block;width:200px;height:200px"
+             data-ad-client="ca-pub-4714092941447146"
+             data-ad-slot="6599435911"></ins>
+    </div>
+    <div class="ta-c">
+        <!-- Правый 200х200 (2) -->
+        <ins class="adsbygoogle"
+             style="display:inline-block;width:200px;height:200px"
+             data-ad-client="ca-pub-4714092941447146"
+             data-ad-slot="9552902315"></ins>
+        <script>
+       
+
+        </script>
+    </div>
+
+</div>
+
+<div id="banners-in-topline" style="display:none;">
+    <ins class="adsbygoogle"
+         style="display:block; min-width: 240px;"
+         data-ad-client="ca-pub-4714092941447146"
+         data-ad-slot="7557585519"
+         data-ad-format="horizontal"></ins>
+</div>
+
+<script type="text/javascript"> 
+    $(document).ready( function() { 
+
+        if ($('.js-ga-right-index-banners').is(':visible')) {
+
+             $('.js-ga-right-index-banners').html( $('#banners-in-right-column-index').html() );
+
+             (adsbygoogle = window.adsbygoogle || []).push({});
+             (adsbygoogle = window.adsbygoogle || []).push({});
+             $('#banners-in-right-column-index').remove();
+        }
+
+        if ($('.js-ga-topline').length && $('.js-ga-topline').is(':visible')) {
+            $('.js-ga-topline').html( $('#banners-in-topline').html() );
+            (adsbygoogle = window.adsbygoogle || []).push({});
+
+             $('#banners-in-topline').remove();
+        }
+    });
+</script>

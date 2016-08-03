@@ -1,0 +1,35 @@
+<div id="banners-in-righ" style="display:none;">
+    <ins class="adsbygoogle"
+         style="display:block;"
+         data-ad-client="ca-pub-4714092941447146"
+         data-ad-slot="3127385918"
+         data-ad-format="rectangle"></ins>
+</div>
+
+<div id="banners-in-topline" style="display:none;">
+    <ins class="adsbygoogle"
+         style="display:block; min-width: 240px;"
+         data-ad-client="ca-pub-4714092941447146"
+         data-ad-slot="7557585519"
+         data-ad-format="horizontal"></ins>
+</div>
+
+<script type="text/javascript"> 
+    $(document).ready( function() { 
+
+          if ($('.js-ga-right-detail').is(':visible')) {
+
+            $('.js-ga-right-detail').html( $('#banners-in-righ').html() );
+            (adsbygoogle = window.adsbygoogle || []).push({});
+            $('#banners-in-righ').remove();
+
+          }
+
+          if ($('.js-ga-topline').length && $('.js-ga-topline').is(':visible')) {
+              $('.js-ga-topline').html( $('#banners-in-topline').html() );
+              (adsbygoogle = window.adsbygoogle || []).push({});
+
+               $('#banners-in-topline').remove();
+          }
+    });
+</script>

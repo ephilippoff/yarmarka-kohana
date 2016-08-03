@@ -1,0 +1,68 @@
+
+<div id="banners-in-right-column" style="display:none;">
+    <div class="module ta-r">
+        <ins class="adsbygoogle"
+             style="display:inline-block;width:200px;height:200px"
+             data-ad-client="ca-pub-4714092941447146"
+             data-ad-slot="6599435911"></ins>
+              <script>
+    
+    </script>
+    </div>
+
+    <div class="module ta-r">
+        <ins class="adsbygoogle"
+             style="display:inline-block;width:200px;height:200px"
+             data-ad-client="ca-pub-4714092941447146"
+             data-ad-slot="9552902315"></ins>
+       
+    </div>
+   
+</div>
+
+<div id="banners-in-topline" style="display:none;">
+    <ins class="adsbygoogle"
+         style="display:block; min-width: 240px;"
+         data-ad-client="ca-pub-4714092941447146"
+         data-ad-slot="7557585519"
+         data-ad-format="horizontal"></ins>
+</div>
+
+<div id="banners-between" style="display:none;">
+    <div>
+        <ins class="adsbygoogle"
+            style="display:inline-block;width:100%;height:90px"
+            data-ad-client="ca-pub-4714092941447146"
+            data-ad-slot="1610833118"></ins>
+    </div>
+    
+</div>
+
+
+<script type="text/javascript"> 
+    $(document).ready( function() { 
+
+        if ($('.js-ga-right-search-banners').is(':visible')) {
+
+            $('.js-ga-right-search-banners').html( $('#banners-in-right-column').html() );
+            (adsbygoogle = window.adsbygoogle || []).push({});
+            (adsbygoogle = window.adsbygoogle || []).push({});
+            $('#banners-in-right-column').remove();
+        }
+        
+        if ($('.js-ga-topline').length && $('.js-ga-topline').is(':visible') ) {
+            $('.js-ga-topline').html( $('#banners-in-topline').html() );
+            (adsbygoogle = window.adsbygoogle || []).push({});
+
+             $('#banners-in-topline').remove();
+        }
+
+         if ($('.js-ga-between').length && $('.js-ga-between').is(':visible') ) {
+            $('.js-ga-between').html( $('#banners-between').html() );
+            (adsbygoogle = window.adsbygoogle || []).push({});
+             $('#banners-between').remove();
+        }
+
+        
+    });
+</script>

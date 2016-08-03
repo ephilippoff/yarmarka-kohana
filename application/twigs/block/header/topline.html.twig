@@ -7,7 +7,13 @@
 
 <div class="js-mobile-menu"></div>
 <script>
+	var exist_mobile_menu = false;
 	function append_mobile_menu() {
+
+		if (exist_mobile_menu) return;
+
+		exist_mobile_menu = true;
+
 		$.ajax({
 			url:'/block_mobile/menu',
 			dataType: 'html',
@@ -22,10 +28,9 @@
 		append_mobile_menu();
 	}
 	$( window ).resize(function() {
-		var exist = $('.js-mobile-menu').html();
-		if (!exist) {
+
 			append_mobile_menu();
-		}
+
 	});
 	
 </script>

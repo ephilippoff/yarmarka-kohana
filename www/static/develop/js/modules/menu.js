@@ -193,9 +193,24 @@ var TwoSectionMenu = MenuView.extend({
 });
 
 var MainmenuView = TwoSectionMenu.extend({
+    menuLoaded: false,
+
     initialize: function(options) {
         var s = this;
 
+
+
+      
+
+       
+       
+    },
+
+    getMenu: function(options) {
+        if (this.menuLoaded) return;
+
+        this.menuLoaded = true;
+         var s = this;
         $.post('/block_twig/mainmenu',{ city_id: options.city_id }, function (data) {
             
                 if (!options.doNotUseTemplate) {
@@ -215,9 +230,6 @@ var MainmenuView = TwoSectionMenu.extend({
                }
             
         }, "html");
-
-       
-       
     }
 });
 
@@ -235,6 +247,7 @@ return Marionette.Module.extend({
         this.mobilemenu = new MobileMenu();
     },
     init: function (menusToload) {
+        var s =this;
         menusToload = menusToload || [];
 
         // if (_.contains(menusToload, "main")) {
@@ -271,6 +284,16 @@ return Marionette.Module.extend({
                 }
 
                 this.main = new MainmenuView(menuOptions);
+
+                var screen_width = document.documentElement.clientWidth;
+                if (screen_width > 1000) {
+                    this.main.getMenu(menuOptions);
+                }
+                $( window ).resize(function() {
+                   
+                        s.main.getMenu(menuOptions);
+                    
+                });
             }
 
             if (_.contains(menusToload, "city")) {
