@@ -56,8 +56,8 @@
 			{% else %}
 			<h2 style="background:#C11515;">Личный кабинет<i class="fa fa-caret-right"></i></h2>
 			<div class="menu_container">
-				<a class="hidden-xxs" href="/user/login?return={{ strim(get_request_uri(), '/') }}" rel="nofollow">Вход в личный кабинет</a>
-				<a class="visible-xxs hidden-xs" href="/user/login?return={{ strim(get_request_uri(), '/') }}" rel="nofollow">Вход</a>
+				<a class="hidden-xxs" href="/user/login?return={{ strim(request_uri, '/') }}" rel="nofollow">Вход в личный кабинет</a>
+				<a class="visible-xxs hidden-xs" href="/user/login?return={{ strim(request_uri, '/') }}" rel="nofollow">Вход</a>
 				<a href="/user/registration" rel="nofollow">Регистрация</a>
 			</div>
 			{% endif %}

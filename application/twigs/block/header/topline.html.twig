@@ -17,6 +17,7 @@
 		$.ajax({
 			url:'/block_mobile/menu',
 			dataType: 'html',
+			data: { location: window.location.pathname },
 			success: function (data) {
 				$('.js-mobile-menu').html(data);
 			}

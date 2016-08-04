@@ -338,7 +338,8 @@ class Twig_Functions
 
 	public static function get_request_uri()
 	{
-		return URL::SERVER('REQUEST_URI');
+		$uri = URL::SERVER('REQUEST_URI');
+		return (strpos($uri,'block_') === FALSE) ? $uri: "";
 	}
 
 	public static function get_session_value($name)
