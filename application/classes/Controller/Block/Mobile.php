@@ -10,7 +10,10 @@
 
         public function action_menu()
         {
+
             $twig = Twig::factory('block/header/mobile_menu/index');
+            $twig->request_uri = $this->request->query('location');
+            $twig->user = Auth::instance()->get_user();
             $this->response->body($twig);
         }
 

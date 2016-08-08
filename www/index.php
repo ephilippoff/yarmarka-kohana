@@ -113,6 +113,23 @@ if (PHP_SAPI == 'cli') // Try and load minion
 }
 else
 {
+	require_once 'Mobile_Detect.php';
+	$detect = new Mobile_Detect;
+
+	$GLOBALS['device'] = 'desktop';
+
+	if ( $detect->isMobile() ) {
+		$GLOBALS['device'] = 'mobile';
+	}
+	
+	// Any tablet device.
+	if( $detect->isTablet() ){
+		$GLOBALS['device'] = 'tablet';
+	}
+
+	
+	$GLOBALS['user_agent'] =  $detect->getUserAgent();
+	
 	/* pretty urls processor */
 
 	// construct the url

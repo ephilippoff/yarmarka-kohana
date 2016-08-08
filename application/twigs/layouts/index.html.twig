@@ -45,3 +45,11 @@
 {% endblock footer_subblocks %}
 
 {%block page_name%}index{% endblock page_name %}
+
+{% block google_adsense_script %}
+	<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+{% endblock google_adsense_script %}
+
+{% block google_adsense_right %}
+	{% include 'block/advert/google_adsense_right_index' %}
+{% endblock google_adsense_right %}

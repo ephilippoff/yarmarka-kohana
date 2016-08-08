@@ -46,3 +46,11 @@
 
 
 {%block page_name%}detail{% endblock page_name %}
+
+{% block google_adsense_script %}
+	<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+{% endblock google_adsense_script %}
+
+{% block google_adsense_right %}
+	{% include 'block/advert/google_adsense_detail' %}
+{% endblock google_adsense_right %}
