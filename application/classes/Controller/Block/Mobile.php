@@ -1,6 +1,6 @@
 <?php
 
-    class Controller_Block_Mobile extends Controller_Block {
+    class Controller_Block_Mobile extends Controller_Template {
 
         public function before() {
             //parent::before();
