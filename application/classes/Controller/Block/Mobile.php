@@ -3,7 +3,7 @@
     class Controller_Block_Mobile extends Controller_Block {
 
         public function before() {
-            parent::before();
+            //parent::before();
 
             $this->auto_render = false;
         }
