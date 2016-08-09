@@ -58,6 +58,12 @@ class Controller_Index extends Controller_Template {
         
         $twig->premiumnews = Search::getresult($search_query->execute()->as_array());
 
+        echo "<div class='hidden'>";
+        foreach ($twig->premiumnews as $item) {
+            var_dump($item);
+        }
+        echo "</div>";
+
         //Выбираем новости только по параметру [cities]
 
         // foreach ($premiumnews as $item) {
