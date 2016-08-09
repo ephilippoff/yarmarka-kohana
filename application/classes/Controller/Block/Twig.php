@@ -10,7 +10,7 @@
  * @author Mikhail Makeev <mihail.makeev@gmail.com> 
  * @version $id$
  */
-class Controller_Block_Twig extends Controller_Block
+class Controller_Block_Twig extends Controller_Template
 {
 
     protected $forceAllow = array(

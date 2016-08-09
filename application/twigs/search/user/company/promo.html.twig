@@ -3,17 +3,17 @@
 		{% if user.filename %}
 			{% set logo = get_image_paths(user.filename) %}
 			<div class="col-md-3">
-				<img src="{{  get_file(logo['341x256']) }}" alt="">
+				<img src="{{logo['341x256']}}" alt="">
 			</div>
 		{% endif %}
 		<div class="col-md-5">
 			<p class="org_contacts clearfix">
 				<span class="dib"><i class="fa fa-map-marker" aria-hidden="true"></i></span>
-				<span class="dib">{{(user.address) ? user.address : 'Нет данных'}}</span>
+				<span class="dib">{{(user.org_post_address) ? user.org_post_address : 'Нет данных'}}</span>
 			</p>
 			<p class="org_contacts clearfix">
 				<span class="dib"><i class="fa fa-phone" aria-hidden="true"></i></span>
-				<span class="dib">{{(user.phone) ? user.phone : 'Нет данных'}}</span>
+				<span class="dib">{{(user.org_phone) ? user.org_phone : 'Нет данных'}}</span>
 			</p>
 		</div>
 		<div class="col-md-4 {% if user.filename is null %} col-md-push-3 {% endif %}">

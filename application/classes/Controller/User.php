@@ -1644,6 +1644,7 @@ class Controller_User extends Controller_Template {
 					));
 				}
 
+
 				$this->redirect('/user/orginfo?success=1');
 			}
 		}

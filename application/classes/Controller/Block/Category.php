@@ -40,14 +40,16 @@
 
 			$city_neiboors_config = Kohana::$config->load("seo.city_neiboors.".$city_main);
 
-			foreach ($city_neiboors_config as $pattern) {
+			if ($city_neiboors_config) {
+				foreach ($city_neiboors_config as $pattern) {
 
-				$find = preg_match($pattern, $city_other);
-				if ($find) {
-					$result  = TRUE;
-					break;
+					$find = preg_match($pattern, $city_other);
+					if ($find) {
+						$result  = TRUE;
+						break;
+					}
+
 				}
-
 			}
 
 			return $result;
