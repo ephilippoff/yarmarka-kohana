@@ -221,6 +221,10 @@ class Search {
 			$object = $object->where("o.compiled", "IS NOT", NULL);
 		}
 
+		if ($params->city_published) {
+			$object = $object->where(DB::expr($params->city_published), "=", DB::expr("ANY(o.cities)"));
+		}
+
 		if ($params->complaint_exists) {
 			$object = $object->where('', 'EXISTS', DB::expr('(SELECT cmpl.id FROM complaints as cmpl 
 					WHERE cmpl.object_id=o.id)'));
