@@ -1198,6 +1198,7 @@ a.auto-collapse-expand {
 
 .date>span{
     color: #8F8F8F;
+    display: inline-block;
 }
 
 .read_more{
@@ -1302,13 +1303,17 @@ img.category-icon{
 }
 
 .right ul li span.span-link,
-.left ul li span.span-link{
+.left ul li span.span-link,
+.right ul li a,
+.left ul li a{
     display: block;
     padding: 5px 20px;
 }
 
 .right ul li span.span-link:hover,
-.left ul li span.span-link:hover{
+.left ul li span.span-link:hover,
+.right ul li a:hover,
+.left ul li a:hover{
     background-color: #5EB9BD;
     color: #fff;
 }
