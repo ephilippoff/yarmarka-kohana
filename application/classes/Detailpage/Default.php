@@ -54,8 +54,14 @@ class Detailpage_Default
 	public function get_seo_links()
 	{
 
-		$attributes = $this->_info['object']->compiled['attributes'];
+		try {
+			$attributes = $this->_info['object']->compiled['attributes'];
+		} catch(Exception $e) {
+			return $this;
+		}
+
 		if (!$attributes) return $this;
+
 		$names_attributes = array_keys($attributes);
 
 		$seo_attrbiutes = ORM::factory('Reference')
