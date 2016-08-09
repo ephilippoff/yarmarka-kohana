@@ -64,6 +64,8 @@ class Detailpage_Default
 
 		$names_attributes = array_keys($attributes);
 
+		if (!count($names_attributes)) $names_attributes = array('0');
+
 		$seo_attrbiutes = ORM::factory('Reference')
 				->select('attribute.seo_name')
 				->join('attribute')
@@ -76,6 +78,8 @@ class Detailpage_Default
 		$seo_attrbiutes = array_map(function($item){
 			return $item->seo_name;
 		}, $seo_attrbiutes);
+
+		if (!count($seo_attrbiutes)) $seo_attrbiutes = array('0');
 
 		$values = ORM::factory('Data_List')
 			->select('attribute_element.title2','attribute_element.url')
