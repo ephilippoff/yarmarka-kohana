@@ -51,18 +51,12 @@ class Controller_Index extends Controller_Template {
                 "published" =>TRUE,
                 "city_published" => $last_city->id,
                 "category_seo_name" => "novosti",
-                "order" => "date_created"
+                "order" => "real_date_created"
             ),
             array("limit" => 4, "page" => 1)
         );
         
         $twig->premiumnews = Search::getresult($search_query->execute()->as_array());
-
-        echo "<div class='hidden'>";
-        foreach ($twig->premiumnews as $item) {
-            var_dump($item);
-        }
-        echo "</div>";
 
         //Выбираем новости только по параметру [cities]
 
