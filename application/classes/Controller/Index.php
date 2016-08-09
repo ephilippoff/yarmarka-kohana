@@ -50,7 +50,8 @@ class Controller_Index extends Controller_Template {
                 "active" => TRUE,
                 "published" =>TRUE,
                 "city_published" => $last_city->id,
-                "category_seo_name" => "novosti"
+                "category_seo_name" => "novosti",
+                "order" => "date_created"
             ),
             array("limit" => 4, "page" => 1)
         );
