@@ -111,6 +111,67 @@ class Detailpage_Default
 		return $this;
 	}
 
+
+	public function get_seo_across_links()
+	{
+		$object = $this->_orm_object;
+		$domain = new Domain();
+		$city = $domain->get_city();
+		$city_id = $city->id;
+
+		$linked = ORM::factory('Seo_PopularObject')
+					->select('query')
+					->join('seo_popular_query')
+						->on('seo_popular_query.id','=','seo_popularobject.query_id')
+					->where('object_id','=',$object->id)
+					->getprepared_all();
+
+		if (!count($linked)) {
+
+			$popular_queries =  ORM::factory('Seo_Popular')
+									->where('city_id','=', $city_id)
+									->where('linked_to','<', 100)
+									->order_by('linked_to','asc')
+									->limit(3)
+									->find_all();
+			
+			foreach ($popular_queries as $query) {
+				
+				ORM::factory('Seo_PopularObject')
+					->values(array(
+						"query_id" => $query->id,
+						"object_id" => $object->id
+					))->save();
+
+				$sp = ORM::factory('Seo_Popular', $query->id);
+				$sp->linked_to = $sp->linked_to + 1;
+				$sp->save();
+
+			}
+
+			$linked = ORM::factory('Seo_PopularObject')
+					->select('query')
+					->join('seo_popular_query')
+						->on('seo_popular_query.id','=','seo_popularobject.query_id')
+					->where('object_id','=',$object->id)
+					->getprepared_all();
+		}
+
+		$info = array();
+
+		$info['seo_across_links'] = array_map(function($item) use ($city) {
+			return array(
+				"url" => "/?search=".$item->query,
+				"text" => sprintf('Поиск объявлений "%s" в %s', $item->query, $city->sinonim),
+				"title" => sprintf(' Объявления о продаже "%s" в %s', $item->query, $city->sinonim)
+			);
+		}, $linked);
+
+		$this->_info = array_merge($this->_info, $info);
+
+		return $this;
+	}
+
 	public function get_messages()
 	{
 		$object = $this->_orm_object;

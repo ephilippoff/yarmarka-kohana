@@ -40,14 +40,28 @@ class Sphinx {
 		return $result;
 	}
 
-	public function searchGroupByCategory($_keywords, $city_id = 0, $category_id = 0, $group_by = "category")
+	public function searchGroupByCategory($_keywords, $city_id = 0, $category_id = 0)
 	{
 		$keywords = Sphinx::GetSphinxKeyword($_keywords);
-		$objects = Sphinx::searchObjects($keywords, $category_id, $city_id, 0, 0, $group_by);
+		$objects = Sphinx::searchObjects($keywords, $category_id, $city_id, 0, 0, "category");
 		$objectsFound = $objects["total_found"];
 
 		$result = array(
 			"categories" => self::getCategories($objects),
+			"found" => $objectsFound
+		);
+
+		return $result;
+	}
+
+	public function searchGroupByCity($_keywords, $city_id = 0, $category_id = 0)
+	{
+		$keywords = Sphinx::GetSphinxKeyword($_keywords);
+		$objects = Sphinx::searchObjects($keywords, $category_id, $city_id, 0, 0, "city");
+		$objectsFound = $objects["total_found"];
+
+		$result = array(
+			"cities" => self::getCities($objects),
 			"found" => $objectsFound
 		);
 
@@ -154,6 +168,26 @@ class Sphinx {
 					"id" => $object["category"],
 					"title" => $object["cat_title"],
 					"url" => $object["cat_url"],
+					"count" => $object["@count"]
+				));
+
+			}
+		}
+
+		return $objects;
+	}
+
+	public static function getCities($result)
+	{
+		$objects = array();
+		$object_pricerows = array();
+		if($result && is_array(@$result["matches"])) {
+			foreach ($result['matches'] as $match) {
+				$object = $match['attrs'];
+				$objects[] = new Obj(array(
+					"id" => $object["city_id"],
+					"title" => $object["city_title"],
+					"seo_name" => $object["city_seo_name"],
 					"count" => $object["@count"]
 				));
 

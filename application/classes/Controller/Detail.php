@@ -52,6 +52,7 @@ class Controller_Detail extends Controller_Template {
 						->get_similar()
 						->get_crumbs()
 						->get_seo_links()
+						->get_seo_across_links()
 						->get();
 
 		foreach ((array) $detail_info as $key => $item) {

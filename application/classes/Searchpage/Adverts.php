@@ -390,7 +390,11 @@ class Searchpage_Adverts extends Searchpage_Default
         );
         
         $info->seo_attributes = Seo::get_seo_attributes($search_url->get_proper_segments(), $info->search_filters["filters"], $search_url->get_category(), $domain->get_city());
-        
+    
+        $info->seo_attributes['h1'] =  sprintf('Поиск объявлений "%s" в %s', $info->search_text, $domain->get_city()->sinonim);
+        $info->seo_attributes['title'] =  sprintf('"%s" в %s.', $info->search_text, $domain->get_city()->sinonim);
+
+
         $info->query_params_for_js = json_encode(array_merge($search_url->get_query_params_without_reserved($request->query()), $clean_query_params));
         
         
