@@ -33,13 +33,15 @@
 		}
 
 		public static function is_neiboor_city($city_main, $city_other) {
+
 			$result = FALSE;
 			$page_type = (isset($GLOBALS['page_type'])) ? $GLOBALS['page_type'] : NULL;
 			if (!$page_type) return $result;
 			if ( $page_type == 'index' ) return TRUE;
 
-			$city_neiboors_config = Kohana::$config->load("seo.city_neiboors.".$city_main);
+			$city_neiboors_config = Kohana::$config->load("seo.city_neiboors.".(($city_main) ?  $city_main : "main"));
 
+  
 			if ($city_neiboors_config) {
 				foreach ($city_neiboors_config as $pattern) {
 
@@ -76,6 +78,7 @@
 		}
 
 		public function action_neiboors_map() {
+
 			$view = Twig::factory('block/category/neiboor');
 
 			$domain = new Domain();

@@ -134,7 +134,7 @@ class Search {
 	 */
 	public static function searchquery($filters = array(), $params = array(), $options = array())
 	{
-		$params = new Obj(array_merge($filters, $params));
+		$params = new Search_Params(array_merge($filters, $params));
 		$options = new Obj($options);
 
 		$select = "o.*";
@@ -284,10 +284,12 @@ class Search {
 			}
 		}
 
-		if ( $params->city_id AND is_array($params->city_id) ) {
-			$object = $object->where("o.city_id", "IN", $params->city_id);
-		} elseif ($params->city_id) {
-			$object = $object->where(DB::expr($params->city_id), "=", DB::expr("ANY(o.cities)"));
+		if ($params->city_id !== 1) {
+			if ( $params->city_id AND is_array($params->city_id) ) {
+				$object = $object->where("o.city_id", "IN", $params->city_id);
+			} elseif ($params->city_id) {
+				$object = $object->where(DB::expr($params->city_id), "=", DB::expr("ANY(o.cities)"));
+			}
 		}
 
 		if ($params->premium) {
@@ -295,10 +297,13 @@ class Search {
 								->on("object_rating.object_id","=", "o.id");
 
 			$object = $object->where("object_rating.date_expiration", ">", DB::expr("NOW()"));
-			if ( $params->city_id AND is_array($params->city_id) ) {
-				$object = $object->where("object_rating.city_id", "IN", $params->city_id);
-			} elseif ($params->city_id) {
-				$object = $object->where("object_rating.city_id", "=" , $params->city_id);
+			
+			if ($params->city_id !== 1) {
+				if ( $params->city_id AND is_array($params->city_id) ) {
+					$object = $object->where("object_rating.city_id", "IN", $params->city_id);
+				} elseif ($params->city_id) {
+					$object = $object->where("object_rating.city_id", "=" , $params->city_id);
+				}
 			}
 		}
 
@@ -335,12 +340,14 @@ class Search {
 				$object = $object->where("object_service_photocard.categories", "&&", DB::expr('ARRAY['.join(',', $category_id).']') );
 			}
 
-			if ( $params->city_id ) {
-				$city_id = $params->city_id;
-				if (!is_array($city_id)) {
-					$city_id = array($city_id);
+			if ($params->city_id !== 1) {
+				if ( $params->city_id ) {
+					$city_id = $params->city_id;
+					if (!is_array($city_id)) {
+						$city_id = array($city_id);
+					}
+					$object = $object->where("object_service_photocard.cities", "&&", DB::expr('ARRAY['.join(',', $city_id).']') );
 				}
-				$object = $object->where("object_service_photocard.cities", "&&", DB::expr('ARRAY['.join(',', $city_id).']') );
 			}
 		}
 

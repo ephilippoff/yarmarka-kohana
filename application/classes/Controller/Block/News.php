@@ -43,8 +43,10 @@
 			$objectsService->selectMainImage($query);
 			$objectsService->filterDataList($query, array_keys($categories));
 
-			if ($city_id) {
-				$query = $query->where(DB::expr($city_id), "=", DB::expr("ANY(object.cities)"));
+			if ($city_id !== 1) {
+				if ($city_id) {
+					$query = $query->where(DB::expr($city_id), "=", DB::expr("ANY(object.cities)"));
+				}
 			}
 
 			$query->order_by('date_expired', 'desc');

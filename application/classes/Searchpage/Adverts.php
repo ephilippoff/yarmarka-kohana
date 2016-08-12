@@ -333,6 +333,9 @@ class Searchpage_Adverts extends Searchpage_Default
         $info->search_text = $search_text;
         
         $info->city_id              = ($domain->get_city()) ? $domain->get_city()->id : NULL;
+        if ($info->city_id === 1) {
+            $info->city_id = NULL;
+        }
         $info->category_id          = $search_url->get_category()->id;
         $info->child_categories_ids = $search_url->get_category_childs_id();
         $info->category_deep_childs = array_map(function($a)

@@ -8,6 +8,24 @@ return array(
 
 
       'city_neiboors' => array(
+            'main' => array(
+                  '/nizhnevartovsk/',
+                  '/surgut/',
+                  '/kogalym/',
+                  '/langepas/',
+                  '/pyt\-yakh/',
+                  '/tyumen/',
+                  '/nefteyugansk/',
+                  '/izluchinsk/',
+                  '/khanty-mansiisk/',
+                  '/megion/',
+                  '/raduzhnyi/',
+                  '/ekaterinburg/',
+                  '/ishim/',
+                  '/tobolsk/',
+                  '/yalutorovsk/',
+                  '/zavodoukovsk/',
+            ),
             'surgut' => array(
                   '/nefteyugansk/',
                   '/pyt\-yakh/',
