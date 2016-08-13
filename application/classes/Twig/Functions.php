@@ -10,6 +10,15 @@ class Twig_Functions
 		return NULL;
 	}
 
+	public static function topline_banner_class()
+	{
+		$url = 'http://'.@$_SERVER['HTTP_HOST'].@$_SERVER['PATH_INFO'];
+
+		$banner_existst = Cache::instance()->get( sprintf("top_banner:%s", $url) );
+
+		return ($banner_existst) ? "topline" : "";
+	}
+
 	public static function link($href, $class, $text, $rel = "", $title = "", $span = False)
 	{
 		$url = Request::current()->uri();

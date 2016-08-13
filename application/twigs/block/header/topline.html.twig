@@ -33,10 +33,32 @@
 			append_mobile_menu();
 
 	});
+
+	$( window ).ready(function() {
+
+		
+
+		setTimeout(function(){
+			var origin = window.location.origin;
+			var path = (window.location.pathname == "/") ? "": window.location.pathname;
+			
+			$.ajax({
+				url:'/ajax/check_banner_place',
+				dataType: 'json',
+				data: { 
+					location: (origin + path),
+					banner: ( $('#topline_banner').html() ) ? true : false
+				}
+			});
+
+		}, 3000);
+
+	});
+
 	
 </script>
 
-<div class="banner topline hidden-xs {zoneID: 42}"></div>
+<div class="banner hidden-xs {zoneID: 42} {{ topline_banner_class() }}" id="topline_banner"></div>
 <div class="menu-cont menu-cont1 module hidden-sm hidden-xs">
 	<div class="row">
 		<div class="w60p fl clearfix">

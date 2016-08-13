@@ -29,6 +29,18 @@ class Controller_Ajax extends Controller_Template
 		$this->json['code'] = 200; // code by default
 	}
 
+	public function action_check_banner_place()
+	{
+		$location = $this->request->query('location');
+		$banner = $this->request->query('banner');
+
+		if ($banner) {
+			Cache::instance()->set(sprintf("top_banner:%s", $location) , TRUE, 60*60*24*14);
+		}
+		
+		$this->json['banner'] = $banner; 
+	}
+
 	public function action_save_user_data()
 	{
 		$data = $this->request->post();
