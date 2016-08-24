@@ -49,32 +49,34 @@ class Controller_Index extends Controller_Template {
                 "premium" => TRUE,
                 "active" => TRUE,
                 "published" =>TRUE,
+                "city_published" => $last_city->id,
                 "category_seo_name" => "novosti"
             ),
-            array("limit" => 500, "page" => 1)
+            array("limit" => 4, "page" => 1)
         );
+        
         $twig->premiumnews = Search::getresult($search_query->execute()->as_array());
 
         //Выбираем новости только по параметру [cities]
 
-        foreach ($twig->premiumnews as $item) {
-            $news_cities = str_replace(array('{','}'), '', $item['cities']);
-            $news_cities = explode(',', $news_cities);
-            if (!in_array($this->city->id, $news_cities)) {
-                unset($item);
-                sort($twig->premiumnews);
-            }
-        }
+        // foreach ($premiumnews as $item) {
+        //     $news_cities = str_replace(array('{','}'), '', $item['cities']);
+        //     $news_cities = explode(',', $news_cities);
+        //     if (!in_array($this->city->id, $news_cities)) {
+        //         unset($item);
+        //         sort($premiumnews);
+        //     }
+        // }
 
-        usort($twig->premiumnews, function($a1, $a2){
-            $v1 = strtotime($a1['compiled']['services']['premium'][0]['date_expiration']);
-            $v2 = strtotime($a2['compiled']['services']['premium'][0]['date_expiration']);
-            return $v2 - $v1;
-        });
+        // usort($twig->premiumnews, function($a1, $a2){
+        //     $v1 = strtotime($a1['compiled']['services']['premium'][0]['date_expiration']);
+        //     $v2 = strtotime($a2['compiled']['services']['premium'][0]['date_expiration']);
+        //     return $v2 - $v1;
+        // });
 
-        if (count($twig->premiumnews) > 4) {
-            $twig->premiumnews = array_slice($twig->premiumnews, 0, 4);
-        }
+        // if (count($twig->premiumnews) > 4) {
+        //     $twig->premiumnews = array_slice($twig->premiumnews, 0, 4);
+        // }
 
         //------Premium news end
         
