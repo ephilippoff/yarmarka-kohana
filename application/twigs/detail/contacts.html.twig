@@ -11,9 +11,7 @@
 						<form action="" class="clearfix module" id="show_contacts">	
 							<div class="contacts-list-cont js-contact-list fl">
 								{% for contact in object.compiled.contacts %}
-									{% if contact.type == '5' %}
-		 								
-		 							{% else %}
+
 										<p>
 											{% if isAdmin %}
 												{{ contact.value }}
@@ -21,7 +19,7 @@
 												{{ contact.value|contacthide }}
 											{% endif %}
 										</p>
-									{% endif %}
+
 								{% endfor %}
 							</div>
 							<button type="submit" class="hidden-xxs bg-color-blue js-contacts-show" data-id="{{object.id}}">Показать номер телефона</button>
