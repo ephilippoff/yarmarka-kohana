@@ -474,13 +474,18 @@ class Search {
 
 			$object = $object->offset($limit*( ($page == 0)? 0: $page-1 ) );
 
-		
-			if (is_array($order)) {
-				foreach ($order as $order_item) {
-					$object = $object->order_by("o.".$order_item[0], $order_item[1]);
-				}
+			if ($params->premium) {
+				$object = $object->order_by("object_rating.date_expiration", "DESC");
 			} else {
-				$object = $object->order_by("o.".$order, $order_direction);
+
+				if (is_array($order)) {
+					foreach ($order as $order_item) {
+						$object = $object->order_by("o.".$order_item[0], $order_item[1]);
+					}
+				} else {
+					$object = $object->order_by("o.".$order, $order_direction);
+				}
+
 			}
 		}
 
