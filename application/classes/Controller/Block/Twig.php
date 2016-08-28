@@ -225,6 +225,12 @@ class Controller_Block_Twig extends Controller_Template
         $domain = new Domain();
         $city = $domain->get_city_by_subdomain($domain->get_subdomain());
 
+        $city_id = ($city) ? $city->id : NULL;
+
+        if ($city_id === 1) {
+            $city_id = NULL;
+        }
+
         $category_name = "novosti";
         $category =  ORM::factory('Category')
                         ->where("seo_name","=",$category_name)
@@ -237,7 +243,7 @@ class Controller_Block_Twig extends Controller_Template
         }
 
         $_elements = ORM::factory('Attribute_Element')
-                        ->get_elements_with_published_objects($category->id, ($city) ? $city->id : NULL)
+                        ->get_elements_with_published_objects($category->id, $city_id)
                         ->select("attribute_element.*", array("attribute.seo_name","attribute_seo_name"), array("category.url","category_url"))
                         ->join('category')
                             ->on("reference.category","=","category.id")
