@@ -825,7 +825,7 @@ class Lib_PlacementAds_AddEdit {
 		{
 			// если координаты не пришли, запрашиваем координаты по адресу
 			@list($coords, $region_title, $address) = Ymaps::instance()->get_coord_by_name($city_title.', '.$address);
-			$city_title = $region_title;
+			//$city_title = $region_title;
 			@list($lon, $lat) = $coords;
 		}
 
