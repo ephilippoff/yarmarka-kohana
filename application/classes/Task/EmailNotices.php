@@ -139,8 +139,6 @@ class Task_EmailNotices extends Minion_Task
 
     public function aboutExpiration() {
 
-        $new_engine_cities = Kohana::$config->load("common.new_engine_cities");
-
         $notice_query =  DB::select("on.object_id")
                         ->from(array("object_notice","on"))
                         ->where("on.object_id","=",DB::expr("o.id"))
@@ -187,18 +185,14 @@ class Task_EmailNotices extends Minion_Task
             $domain = 'http://c.yarmarka.biz';
             $city_id = $objects[0]['city_id'];
             $city = ORM::factory('City', $city_id)->seo_name;
-            $is_new = FALSE;
 
-            if (in_array($city_id, $new_engine_cities)) {
-                $is_new = Region::get_domain_by_city($city_id);
-            }
 
             $msg = View::factory('emails/object_expiration',
                     array(
                         'objects' => $objects,
                         'domain' => $domain,
                         'city' => $city,
-                        'is_new' => $is_new
+                        'is_new' => TRUE
                     ));
 
             Email::send(

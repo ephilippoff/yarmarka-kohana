@@ -349,17 +349,7 @@ class Model_Object extends ORM {
 			array_push($url, $main_domain);
 		}
 
-		$new_engine_cities = Kohana::$config->load("common.new_engine_cities");
-		if (!$new_engine_cities) {
-			$new_engine_cities = array(1979);
-		}
-		//TODO костыль для Сургута с новой адресацией
-		if (in_array($this->city_id, $new_engine_cities)) {
-			array_push($url, $this->get_url());
-		} else {
-			array_push($url, $this->get_old_url());
-		}
-		
+		array_push($url, $this->get_url());
 
 		return implode("/", $url);
 	}
