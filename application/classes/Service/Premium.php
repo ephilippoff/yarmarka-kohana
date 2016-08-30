@@ -208,7 +208,14 @@ class Service_Premium extends Service
 					->find();
 		if ($or->loaded())
 		{
-			$or->activated = $or->activated + $quantity;
+			
+			if ($quantity > 1) {
+				$or->activated = $or->activated + 1;
+				$or->count = $or->count + ($quantity - 1);
+			} else {
+				$or->activated = $or->activated + $quantity;
+			}
+
 		} else {
 			$or->count = $quantity;
 		}
