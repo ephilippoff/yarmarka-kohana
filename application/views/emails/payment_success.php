@@ -7,7 +7,6 @@
 
 <body align="center" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 14px; margin: 0; padding: 0;">
 
-	<?php Debug::email('payment_success'); ?>
 	<div class="email_cont" style="max-width: 800px; margin: 0 auto; padding: 0px 15px;">
 		<div class="header" style="background: #ECF3F7; padding: 10px;">
 			<div class="logo" style="display: inline-block; font-size: 11px; width: 50%;">
