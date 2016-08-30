@@ -13,7 +13,7 @@
         <tbody style="color:#000;font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;font-size: 14px;">
    
 		<tr style="color:#000;font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;font-size: 14px;background:#ECF3F7;">
-			<td width="280" style="padding: 10px 0 0 10px;"><img width="172" height="33" src="http://c.yarmarka.biz/images/logo.png" alt="Ярмарка" align="left" /></td>
+			<td width="280" style="padding: 10px 0 0 10px;"><img width="172" height="33" src="http://yarmarka.biz/images/logo.png" alt="Ярмарка" align="left" /></td>
 			<td style="text-align: right;vertical-align: bottom;padding: 10px 10px 0px 0px;color:#616161;font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;font-size: 14px;"><span style="color:#D44234;font-size:24px;">yarmarka</span><span style="color:#5B6772;font-size:24px;">.biz</span></td>
 		</tr>
 		<tr style="color:#000;font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;font-size: 10px;background:#ECF3F7;">
@@ -24,7 +24,7 @@
 		<tr><td colspan="2">&nbsp;</td></tr>   
    
 		<tr>
-			<td width="280"><img src="http://c.yarmarka.biz/images/7_165.jpg" /></td>
+			<td width="280"><img src="http://yarmarka.biz/images/7_165.jpg" /></td>
 			<td>
 				<table align="center" cellspacing="0" cellpadding="0" border="0" width="" style="color:#000;font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;border-collapse: collapse;">
 					<tbody>	
@@ -48,10 +48,10 @@
 						
 						<?php if (!$is_new): ?>
 						<tr><td style="line-height: 0;" colspan="2">&nbsp;<img height="12" title="" alt="" src="data:image/gif;base64,R0lGODlhAQABAJEAAAAAAP///////wAAACH5BAEAAAIALAAAAAABAAEAAAICVAEAOw%3D%3D"></td></tr>			
-						<tr><td colspan="2" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;line-height: 15px;">Обратите внимание, что Ваше объявление сильно опустилось на страницах поиска и его сложнее найти. Воспользуйтесь услугой "Подъем" в  <a style="color: #d44234;" href="http://c.yarmarka.biz/user/myads">личном кабинете</a>, чтобы вернуть объявление на первую строчку!</td></tr>
+						<tr><td colspan="2" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;line-height: 15px;">Обратите внимание, что Ваше объявление сильно опустилось на страницах поиска и его сложнее найти. Воспользуйтесь услугой "Подъем" в  <a style="color: #d44234;" href="http://yarmarka.biz/user/myads">личном кабинете</a>, чтобы вернуть объявление на первую строчку!</td></tr>
 									
 						<tr><td style="line-height: 0;" colspan="2">&nbsp;<img height="12" title="" alt="" src="data:image/gif;base64,R0lGODlhAQABAJEAAAAAAP///////wAAACH5BAEAAAIALAAAAAABAAEAAAICVAEAOw%3D%3D"></td></tr>					
-						<tr><td colspan="2" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;line-height: 15px;">Воспользуйтесь так же дополнительными сервисами в <a style="color: #d44234;" href="http://c.yarmarka.biz/user/myads">личном кабинете</a> для повышения эффективности объявлений.</td></tr>				
+						<tr><td colspan="2" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;line-height: 15px;">Воспользуйтесь так же дополнительными сервисами в <a style="color: #d44234;" href="http://yarmarka.biz/user/myads">личном кабинете</a> для повышения эффективности объявлений.</td></tr>				
 						
 						<?php else: ?>
 

@@ -70,7 +70,7 @@ class Task_ArchiveObjects extends Minion_Task
 
                 if (!count($objects)) continue;
                 
-                $domain = 'http://c.yarmarka.biz';
+                $domain = 'http://yarmarka.biz';
                 $city_id = $objects[0]['city_id'];
 
 

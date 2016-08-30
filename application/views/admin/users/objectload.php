@@ -271,7 +271,7 @@
 				<td></td>
 				<td></td>
 				<td></td>
-				<td><a target="_blank" href="http://c.yarmarka.biz/user/massload_conformities/<?=$file->category?>/<?=$item->user_id?>"><?=$file->category?></a></td>	
+				<td><a target="_blank" href="/user/massload_conformities/<?=$file->category?>/<?=$item->user_id?>"><?=$file->category?></a></td>	
 				<td></td>
 				<td id="stat_<?=$file->id?>_<?=$file->category?>">
 					<?=$file->statistic_str?>					

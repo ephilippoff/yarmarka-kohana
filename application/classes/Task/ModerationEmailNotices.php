@@ -62,13 +62,13 @@ class Task_ModerationEmailNotices extends Minion_Task
 
 
             $actions_for_user_negative = array_map(function($item){
-                $domain = 'http://c.yarmarka.biz';
+                $domain = 'http://yarmarka.biz';
 
                 return '<p>'.HTML::anchor($domain.'/detail/'.$item->object_id, $item->object_title).':<br>'.$item->description.'</p>';
             }, $actions_for_user_negative);
 
             $actions_for_user_positive = array_map(function($item){
-                $domain = 'http://c.yarmarka.biz';
+                $domain = 'http://yarmarka.biz';
                 return '<p>'.HTML::anchor($domain.'/detail/'.$item->object_id, $item->object_title).':<br> прошло модерацию</p>';
             }, $actions_for_user_positive);
 

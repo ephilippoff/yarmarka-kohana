@@ -20,7 +20,7 @@
 		</div>
 
 		<div class="add" style="text-align: right; margin-top: 20px;" align="right">
-			<a href="http://c.yarmarka.biz/add" target="_blank" style="color: #fff; text-decoration: none; background: #D44234; padding: 5px 10px;">Подать объявление</a>
+			<a href="http://yarmarka.biz/add" target="_blank" style="color: #fff; text-decoration: none; background: #D44234; padding: 5px 10px;">Подать объявление</a>
 		</div>
 
 		<div class="content" style="text-align: center; margin-top: 30px;" align="center">
@@ -36,7 +36,7 @@
 					<tr>
 						<td style="color: #616161; text-align: left;" align="left">Услуга</td>
 						<td>
-							<a href="http://c.yarmarka.biz/detail/<?=$orderItem->object->id?>" style="color: #D44234;"><?=$orderItem->title?></a>
+							<a href="http://yarmarka.biz/detail/<?=$orderItem->object->id?>" style="color: #D44234;"><?=$orderItem->title?></a>
 						</td>
 					</tr>
 					<tr>

@@ -39,7 +39,7 @@ $(document).ready(function() {
 										<li>- Управление объявлениями станет существенно удобней. Сравните время на изменение, к примеру, цен у 200 строк в excel-файле относительно ручного редактирования на сайте.</li>
 										<li>- У вас есть база данных объектов/товаров/услуг, выгрузив из нее объявления в нужном формате и загрузив на наш сайт, вы потратите на это не более 10 минут.</li>
 										<li>- У вас нет базы данных, но есть список объектов/товаров/услуг, который вы ведете в Excel. Наш сайт может стать хранилищем ваших предложений. Объявления можно не только загрузить, но и <a href="/user/objectunload">выгрузить</a></li>
-										<li>- <a target="_blank" href="http://c.yarmarka.biz/news/3048-vnimanie-reklamodatelyam-novaya-usluga-massovaya-zagruzka-obyavlenii?em_client_email=noreply@yarmarka.biz&em_campaign_id=4&em_campaign_name=newsone_3048">Подробнее о массовой загрузке</a></li>
+										<li>- <a target="_blank" href="/news/3048-vnimanie-reklamodatelyam-novaya-usluga-massovaya-zagruzka-obyavlenii?em_client_email=noreply@yarmarka.biz&em_campaign_id=4&em_campaign_name=newsone_3048">Подробнее о массовой загрузке</a></li>
 									</ul>
 								</p>	
 								</br>

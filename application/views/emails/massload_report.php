@@ -20,7 +20,7 @@
 		</div>
 
 		<div class="add" style="text-align: right; margin-top: 20px;" align="right">
-			<a href="http://c.yarmarka.biz/add" target="_blank" style="color: #fff; text-decoration: none; background: #D44234; padding: 5px 10px;">Подать объявление</a>
+			<a href="http://yarmarka.biz/add" target="_blank" style="color: #fff; text-decoration: none; background: #D44234; padding: 5px 10px;">Подать объявление</a>
 		</div>
 
 		<div class="content" style="text-align: center; margin-top: 30px;" align="center">
@@ -46,7 +46,7 @@
 					<li class="p3">Новые: <?php echo $new; ?></li>
 					<li class="p3">Были отредактированы: <?php echo $stat->edited; ?></li>
 					<li class="p3">Не изменились: <?php echo $stat->nochange; ?></li>
-					<li class="p3"><a href="http://c.yarmarka.biz/user/objectload_file_list/<?php echo $fileid;?>?errors=1">С ошибками: <?php echo $stat->error; ?></a></li>
+					<li class="p3"><a href="http://yarmarka.biz/user/objectload_file_list/<?php echo $fileid;?>?errors=1">С ошибками: <?php echo $stat->error; ?></a></li>
 							
 					<?php if ($stat->premium): ?>
 						<li class="p3">Премиум услуги применены к <?php echo $stat->premium; ?> объявлениям</li>
@@ -55,7 +55,7 @@
 					<?php if (count($withservice_err_ids)): ?>
 						<li style="color:red;">Премиум не применился (т.к. содержат ошибки):
 							<?php foreach ($withservice_err_ids as $prem_id):?>
-								<a href="http://c.yarmarka.biz/user/objectload_file_list/<?php echo $fileid; ?>#<?php echo $prem_id; ?>"><?php echo $prem_id; ?></a>,
+								<a href="http://yarmarka.biz/user/objectload_file_list/<?php echo $fileid; ?>#<?php echo $prem_id; ?>"><?php echo $prem_id; ?></a>,
 							<?php endforeach; ?>
 						</li>
 					<?php endif; ?>
@@ -63,7 +63,7 @@
 				</ul>
 				<?php endforeach; ?>
 
-				<a style="color: #d44234;" href="http://c.yarmarka.biz/user/objectload" target="_blank">Перейти к  интерфейсу массовой загрузки</a>	
+				<a style="color: #d44234;" href="http://yarmarka.biz/user/objectload" target="_blank">Перейти к  интерфейсу массовой загрузки</a>	
 				<div class="footer" style="text-align: right; font-size: 12px; margin: 10px 0;" align="right">С уважением, команда «Ярмарка-онлайн»</div>
 				<span style="color: #6c6c6c; font-size: 9px;">Пожалуйста, не отвечайте на это письмо, т.к. указанный почтовый адрес используется только для рассылки уведомлений</span>
 			</div>
