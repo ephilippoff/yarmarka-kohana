@@ -194,11 +194,7 @@ Route::set('userpage', 'users/<login>')
 		'controller' => 'User',
 		'action'     => 'userpage',
 	));
-Route::set('massload_conformities', 'user/massload_conformities/<category>(/<user_id>)')
-	->defaults(array(
-		'controller' => 'User',
-		'action'     => 'massload_conformities',
-	));
+
 Route::set('article', 'article/<seo_name>')
 	->defaults(array(
 		'controller' => 'Article',
@@ -313,6 +309,11 @@ Route::set('user', 'user(/<action>(/<category_path>))', array(
 		'action'     => 'published',
 	));
 
+	Route::set('massload_conformities', 'user/massload_conformities/<category>(/<user_id>)')
+		->defaults(array(
+			'controller' => 'User_Service',
+			'action'     => 'massload_conformities',
+		));
 //end user routing
 
 

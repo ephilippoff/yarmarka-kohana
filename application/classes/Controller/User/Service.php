@@ -11,6 +11,58 @@ class Controller_User_Service extends Controller_User_Profile {
         }
     }
 
+    public function action_massload_conformities()
+    {   
+        $twig = Twig::factory('user/massload_conformities');
+        $twig->city = $this->domain->get_city();
+
+        $twig->user = $this->user;
+          
+        $twig->block_name = "user/_massload_conformities";
+        $twig->params = new Obj();
+
+        $categories = Array();
+        $category = $this->request->param('category');
+        if(!$category)
+            throw new HTTP_Exception_404;
+
+        $user = $this->user;
+        $user_id = $this->request->param('user_id');
+        $twig->params->end_user_id = $user_id;
+        
+        if ($this->user->role == 1 AND $user_id)
+            $user = ORM::factory('User', $user_id);
+
+        try 
+        { 
+            $cfg = Kohana::$config->load('massload/bycategory.'.$category);
+            $categories[$category] = $cfg["name"];
+        } catch(Exception $e){
+            throw new HTTP_Exception_404;
+        }
+        $twig->params->categories = $categories;
+
+        $conformities = Array();
+        $dictionaries = Array();
+        $forms = Array();
+        foreach ($categories as $key=>$value)
+        {
+            $cfg = Kohana::$config->load('massload/bycategory.'.$key);
+            @list($dictionary, $form) = Massload::get_dictionary($cfg, $user->id, $key);
+            $dictionaries[$key] = $dictionary;
+            $forms[$key] = $form; 
+        }
+        $twig->params->dictionaries   = $dictionaries;
+        $twig->params->forms          = $forms;
+        $twig->params->conformities   = $conformities;
+        $twig->params->cfg            = $cfg;
+        $twig->params->user            = $user;
+
+        $twig->params = (array) $twig->params;
+  
+        $this->response->body($twig);
+    }
+
     public function action_objectload()
     {
         $twig = Twig::factory('user/objectload');

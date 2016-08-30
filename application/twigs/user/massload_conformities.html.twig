@@ -1,0 +1,26 @@
+{% extends "layouts/user" %}
+
+{% block header %} 
+        {{ requestblock('block_twig/topline', {'favourites':favourites}) }}
+        {% include 'block/header/logoline' %}
+{% endblock header %} 
+
+{% block leftside %} 
+    {% include 'user/personal/nav' %}
+{% endblock leftside %}
+
+{% block content %}
+    {% block info %} 
+        <div class="info-block-cont theme3">
+            <div class="block-title">
+                <span>Информация</span>
+            </div>                      
+            <div class="bg-color-whitesmoke p10">
+                Здесь Вы можете настроить соответствия параметров объявлений для массовой загрузки.
+            </div>
+        </div>
+    {% endblock info %}
+    <div class="bg-color-whitesmoke p10">
+        {{ requestoldview(block_name, params) }}
+    </div>
+{% endblock content %}
