@@ -181,7 +181,7 @@ class Service_Premium extends Service
 		return $buyed->loaded();
 	}
 
-	static function apply_service($object_id, $quantity, $city_id = NULL, $user = NULL)
+	static function apply_service($object_id, $quantity, $city_id = NULL, $user = NULL, $auto_activated = FALSE)
 	{
 		$object = ORM::factory('Object', $object_id);
 
@@ -209,16 +209,18 @@ class Service_Premium extends Service
 		if ($or->loaded())
 		{
 			
-			if ($quantity > 1) {
-				$or->activated = $or->activated + 1;
-				$or->count = $or->count + ($quantity - 1);
-			} else {
-				$or->activated = $or->activated + $quantity;
+			$or->activated = $or->activated + 1;
+			
+			if (!$auto_activated) {
+				$or->count = $or->count + $quantity;
 			}
 
 		} else {
+
 			$or->count = $quantity;
+
 		}
+
 		$or->object_id = $object_id;
 		$or->city_id = $city_id;
 		$or->date_expiration = DB::expr("(NOW() + INTERVAL '".Service_Premium::PREMIUM_DAYS." days')");

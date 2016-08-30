@@ -56,17 +56,17 @@ class Task_Orders extends Minion_Task
 	function activate_service_up()
 	{
 		$services = ORM::factory('Object_Service_Up')
-					->where("count","<>",DB::expr("activated"))
+					->where("count",">", DB::expr("activated") )
+					->where("date_created","<", DB::expr("NOW() - INTERVAL '1 days'") )
 					->find_all();
 
 		foreach ($services as $service) {
-			if (strtotime(date('Y-m-d H:i:s')) > strtotime($service->date_created) + 60*60*24) {
-				Minion::write("service_up");
-				$service->date_created = date('Y-m-d H:i:s');
-				$service->save();
-				Service_Up::apply_service($service->object_id, 1);
+
+				Minion::write("service_up", $service->id);
+
+				Service_Up::apply_service($service->object_id, 1, TRUE);
 				Service::saveServiceInfoToCompiled($service->object_id);
-			}
+
 		}
 	}
 
@@ -74,17 +74,16 @@ class Task_Orders extends Minion_Task
 	{
 		$services = ORM::factory('Object_Rating')
 					->where("date_expiration", "<", DB::expr("NOW()"))
-					->where("count","<>",DB::expr("activated"))
+					->where("count",">",DB::expr("activated"))
 					->find_all();
 
 		foreach ($services as $service) {
-			if (strtotime(date('Y-m-d H:i:s')) > strtotime($service->date_expiration)) {
-				Minion::write("service_premium");
-				// $service->date_expiration = date('Y-m-d H:i:s', strtotime($service->date_expiration) + 60*60*24*7);
-				// $service->save();
-				Service_Premium::apply_service($service->object_id, 1);
-				Service::saveServiceInfoToCompiled($service->object_id);
-			}
+
+			Minion::write("service_premium", $service->id);
+
+			Service_Premium::apply_service($service->object_id, 1, NULL, NULL, TRUE);
+			Service::saveServiceInfoToCompiled($service->object_id);
+
 		}
 	}
 
@@ -92,29 +91,27 @@ class Task_Orders extends Minion_Task
 	{
 		$services = ORM::factory('Object_Service_Photocard')
 					->where("date_expiration", "<", DB::expr("NOW()"))
-					->where("count","<>",DB::expr("activated"))
+					->where("count",">",DB::expr("activated"))
 					->where("active","=",1)
 					->find_all();
 
 		foreach ($services as $service) {
-			if (strtotime(date('Y-m-d H:i:s')) > strtotime($service->date_expiration)) {
-				Minion::write("service_lider", $service->id);
-				// $service->date_expiration = date('Y-m-d H:i:s', strtotime($service->date_expiration) + 60*60*24*7);
-				// $service->save();
 
-				$_cities = array_map('intval', explode(",", trim(trim($service->cities,"{"),"}")));
-				$cities = array_map(function($item) {
-					return $item->seo_name;
-				} , (array) ORM::factory('City')->where("id","IN", $_cities)->getprepared_all());
+			Minion::write("service_lider", $service->id);
 
-				$_categories = array_map('intval', explode(",", trim(trim($service->categories,"{"),"}")));
-				$categories = array_map(function($item) {
-					return $item->seo_name;
-				} , (array) ORM::factory('Category')->where("id","IN", $_categories)->getprepared_all());
+			$_cities = array_map('intval', explode(",", trim(trim($service->cities,"{"),"}")));
+			$cities = array_map(function($item) {
+				return $item->seo_name;
+			} , (array) ORM::factory('City')->where("id","IN", $_cities)->getprepared_all());
 
-				Service_Lider::apply_service($service->object_id, 1, $cities, $categories);
-				Service::saveServiceInfoToCompiled($service->object_id);
-			}
+			$_categories = array_map('intval', explode(",", trim(trim($service->categories,"{"),"}")));
+			$categories = array_map(function($item) {
+				return $item->seo_name;
+			} , (array) ORM::factory('Category')->where("id","IN", $_categories)->getprepared_all());
+
+			Service_Lider::apply_service($service->object_id, 1, $cities, $categories, TRUE);
+			Service::saveServiceInfoToCompiled($service->object_id);
+
 		}
 	}
 

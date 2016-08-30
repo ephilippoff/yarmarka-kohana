@@ -58,7 +58,7 @@ class Service_Up extends Service
 		}
 	}
 
-	static function apply_service($object_id, $quantity)
+	static function apply_service($object_id, $quantity, $auto_activated = FALSE)
 	{
 		$object = ORM::factory('Object', $object_id);
 
@@ -81,10 +81,18 @@ class Service_Up extends Service
 					->find();
 		if ($or->loaded())
 		{
-			$or->activated = $or->activated + $quantity;
+
+			$or->activated = $or->activated + 1;
+			
+			if (!$auto_activated) {
+				$or->count = $or->count + $quantity;
+			}
+
 		} else {
 			$or->count = $quantity;
 		}
+		
+		$or->date_created =  DB::expr("NOW()");
 		$or->object_id = $object_id;
 		$or->save();
 

@@ -81,7 +81,7 @@ class Service_Lider extends Service
 
 	}
 
-	static function apply_service($object_id, $quantity, $cities = NULL, $categories = NULL)
+	static function apply_service($object_id, $quantity, $cities = NULL, $categories = NULL, $auto_activated = FALSE)
 	{
 		$object = ORM::factory('Object', $object_id);
 
@@ -133,7 +133,12 @@ class Service_Lider extends Service
 
 		if ($or_item->loaded())
 		{
-			$or_item->activated = $or_item->activated + $quantity;
+			$or_item->activated = $or_item->activated + 1;
+
+			if (!$auto_activated) {
+				$or_item->count = $or_item->count + $quantity;
+			}
+
 		} else {
 			$or_item->count = $quantity;
 		}
