@@ -826,9 +826,10 @@ class Controller_Cart extends Controller_Template {
 		if ($signature !== $sample OR !$order->loaded() OR (int) $sum <> (int) $order->sum)
 		{
 			ORM::factory('Order_Log')->write($order_id, "error", vsprintf("!! Не верно сформирована подпись уведомления о платеже (возможно ктото пытается взломать систему). Заказ №%s.", array($order_id) ) );
-			// echo "bad sign";
-			// header("HTTP/1.0 404 Not Found");
-			// exit;
+			echo "bad sign";
+			header("HTTP/1.0 404 Not Found");
+			exit;
+			// echo 1;
 		}
 
 		$result = $order->check_state($order->id);
