@@ -389,6 +389,18 @@ class Controller_Admin_Reklama extends Controller_Admin_Template {
 
 		$this->template->ad_element = $ad_element;	
 		
+		$_cities = ORM::factory('City')->where_open()
+														->where('is_visible','=',1)
+														->or_where('id','=',1)
+														->where_close()
+														->getprepared_all(array('id', 'title'));
+		$cities = array();
+		foreach ($_cities as $city) {
+			$cities[$city->id] = $city->title;
+		}
+
+		$this->template->cities = $cities;
+
 		$this->template->categories = ORM::factory('Category')->where('parent_id', '=', 1)->find_all()->as_array('id', 'title');
 		$this->template->menu_names = array('main' => 'Рубрики объявлений', 'kupon' => 'Рубрики купонов', 'news' => 'Рубрики новостей');
 		$this->template->kupon_categories = ORM::factory('Attribute_Element')
