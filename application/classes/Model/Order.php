@@ -157,8 +157,12 @@ class Model_Order extends ORM
 			ORM::factory('Order_Log')->write($this->id, "notice", vsprintf("Отправка письма пользователю о успехе оплаты. email: %s,  № %s", array($user->email, $this->id) ) );
 
 			$subj = "Потверждение оплаты. Заказ №".$this->id;
-			$msg = View::factory('emails/payment_success',
-					array('order' => $this,'orderItems' => $orderItems));
+
+			$twig = Twig::factory('emails/payment_success');
+			$twig->orderItems = $orderItems;
+			$twig->order = $this;
+
+			$msg = $twig->render();
 
 			Email::send($user->email, Kohana::$config->load('email.default_from'), $subj, $msg);
 		}
@@ -193,8 +197,12 @@ class Model_Order extends ORM
 			$configBilling = Kohana::$config->load("billing");
 
 			$subj = "Уведомление администратору об оплате заказа с товарами. Заказ №".$this->id;
-			$msg = View::factory('emails/payment_success',
-					array('order' => $this,'orderItems' => $orderItems));
+			
+			$twig = Twig::factory('emails/payment_success');
+			$twig->orderItems = $orderItems;
+			$twig->order = $this;
+
+			$msg = $twig->render();
 
 			ORM::factory('Order_Log')->write($this->id, "notice", vsprintf("Отправка уведомления администраторам об оплате заказа с товарами. emailы: %s,  № %s", array( join(", ", $configBilling["emails_for_notify"]), $this->id) ) );
 			

@@ -11,7 +11,7 @@
 	<div class="email_cont" style="max-width: 800px; margin: 0 auto; padding: 0px 15px;">
 		<div class="header" style="background: #ECF3F7; padding: 10px;">
 			<div class="logo" style="display: inline-block; font-size: 11px; width: 50%;">
-				<img src="<?=URL::site('static/develop/production/images/logo.png', 'http')?>" alt="Ярмарка" style="width: 160px; height: 31px;"><br>
+				<img src="http://yarmarka.biz/static/develop/production/images/logo.png" alt="Ярмарка" style="width: 160px; height: 31px;"><br>
 				Сайт бесплатных объявлений
 			</div>
 			<div class="site" style="display: inline-block; width: 49%; text-align: right; color: #D44234; text-decoration: none; font-size: 24px;" align="right">
@@ -25,7 +25,7 @@
 
 		<div class="content" style="text-align: center; margin-top: 30px;" align="center">
 			<div class="img" style="display: inline-block; width: 100%; max-width: 165px; text-align: center;" align="center">
-				<img src="<?=URL::site('static/develop/production/images/2_165.jpg', 'http')?>">
+				<img src="http://yarmarka.biz/static/develop/production/images/2_165.jpg">
 		</div>
 			<div class="text" style="text-align: left; line-height: 1.6; display: inline-block; width: 100%; max-width: 630px; margin-bottom: 15px;" align="left">
 				<h2 style="font-size: 1.5em; display: block; text-align: center; margin-bottom: 15px;" align="center"><?=$title?></h2>

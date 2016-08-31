@@ -10,7 +10,7 @@
 	<div class="email_cont" style="max-width: 800px; margin: 0 auto; padding: 0px 15px;">
 		<div class="header" style="background: #ECF3F7; padding: 10px;">
 			<div class="logo" style="display: inline-block; font-size: 11px; width: 50%;">
-				<img src="<?=URL::site('static/develop/production/images/logo.png', 'http')?>" alt="Ярмарка" style="width: 160px; height: 31px;"><br>
+				<img src="http://yarmarka.biz/static/develop/production/images/logo.png" alt="Ярмарка" style="width: 160px; height: 31px;"><br>
 				Сайт бесплатных объявлений
 			</div>
 			<div class="site" style="display: inline-block; width: 49%; text-align: right; color: #D44234; text-decoration: none; font-size: 24px;" align="right">
@@ -24,7 +24,7 @@
 
 		<div class="content" style="text-align: center; margin-top: 30px;" align="center">
 			<div class="img" style="display: inline-block; width: 100%; max-width: 165px; text-align: center;" align="center">
-				<img src="<?=URL::site('static/develop/production/images/2_165.jpg', 'http')?>">
+				<img src="http://yarmarka.biz/static/develop/production/images/2_165.jpg">
 			</div>
 			<div class="text" style="text-align: left; line-height: 1.6; display: inline-block; width: 100%; max-width: 630px; margin-bottom: 15px;" align="left">
 				<h2 style="font-size: 1.5em; display: block; text-align: center; margin-bottom: 15px;" align="center">Здравствуйте!</h2>
@@ -36,7 +36,7 @@
 				</p>
 				Если приведенная ссылка не открывается, скопируйте ее и вставьте в адресную строку браузера. <br> <br>
 				Мы так же создали для Вас аккаунт на сайте "Ярмарка-онлайн". <br> <br>
-				Ваш пароль: <b> <?=$Password; ?> </b>. Для безопасности рекомендуем сменить пароль в <a style="color: #d44234;" href='<?=URL::site('user/profile', 'http')?>'> личном кабинете </a> <br> <br>
+				Ваш пароль: <b> <?=$Password; ?> </b>. Для безопасности рекомендуем сменить пароль в <a style="color: #d44234;" href='http://yarmarka.biz/user/profile'> личном кабинете </a> <br> <br>
 				Если Вы не регистрировались на «Ярмарка-онлайн», ничего не делайте или просто удалите это письмо - аккаунт создан не будет.
 				<div class="footer" style="text-align: right; font-size: 12px; margin: 10px 0;" align="right">С уважением, команда «Ярмарка-онлайн»</div>
 				<span style="color: #6c6c6c; font-size: 9px;">Пожалуйста, не отвечайте на это письмо, т.к. указанный почтовый адрес используется только для рассылки уведомлений</span>
