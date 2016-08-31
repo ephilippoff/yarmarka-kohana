@@ -15,7 +15,6 @@ $(document).ready(function() {
 </script>
 
 <?php
-	$main_cities = array(1 => 'Тюменская область', 1919 => 'Тюмень', 1947 => 'Нефтеюганск', 1948 => 'Нижневартовск', 1979 => 'Сургут');
 	$states = array(0 => 'Неактивна', 1 => 'Активна', 2 => 'Предпросмотр');
 ?>
 
@@ -56,7 +55,7 @@ $(document).ready(function() {
 	<div class="control-group <?=Arr::get($errors, 'cities') ? 'error' : ''?>">
 		<label class="control-label">Города:</label>
 		<div class="controls">
-			<?=Form::select('cities[]', $main_cities, Arr::get($_POST, 'cities'), array('multiple', 'size' => 5)) ?>
+			<?=Form::select('cities[]', $cities, Arr::get($_POST, 'cities'), array('multiple', 'size' => 10)) ?>
 			<span class="help-inline"><?=Arr::get($errors, 'cities')?></span>
 		</div>	
 	</div>	
