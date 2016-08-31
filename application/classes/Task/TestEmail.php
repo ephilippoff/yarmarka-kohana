@@ -3,29 +3,32 @@
 
 class Task_TestEmail extends Minion_Task
 {
-	protected $_options = array();
+	protected $_options = array(
+		'id' => 0
+	);
 
 	protected function _execute(array $params)
 	{
+		$id 	= $params['id'];
+		
+		$order = ORM::factory('Order',$id);
 
-		$objects = DB::select("o.*")
-		                 ->from(array("object","o") )
-		                 ->where("o.author","=",327190)
-		                 ->limit(10)
-		                 ->execute();
-		$domain = 'http://c.yarmarka.biz';
-		if (count($objects) AND $objects[0]['city_id'] == 1979) {
-			$domain = 'http://surgut.yarmarka.biz';
-		}
+		$order_tems = ORM::factory('Order_Item')->where("order_id","=", $order->id)->order_by("id");
 
-		 $msg = View::factory('emails/object_to_archive',
-		         array(
-		             'objects' => $objects,
-		             'domain' => $domain
-		         ))->render();
+		$orderItems = array();
+		$sum = Model_Order::each_item($order_tems, function($service, $item, $model_item) use (&$orderItems) {
+			$orderItems[] = $item;
+			return $item;
+		});
+
+		$twig = Twig::factory('emails/payment_success');
+		$twig->orderItems = $orderItems;
+		$twig->order = $order;
+
+		$msg = $twig->render();
 
 		Minion_CLI::write(
-			Email::send('almaznv@yandex.ru', Kohana::$config->load('email.default_from'), 'Ваши объявления перемещены в архив', $msg)
+			Email::send('almaznv@yandex.ru', Kohana::$config->load('email.default_from'), 'тестовое пиьсмо об оплате', $msg)
 		);
 
 	}
