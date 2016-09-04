@@ -65,10 +65,46 @@ class Controller_Block_Twig extends Controller_Template
         $twig->cols = $this->request->post("cols");
          $twig->class = $this->request->post("class");
 
-        $cities = ORM::factory('City')->where("is_visible","=",1);
-        if ($city_id)
-            $cities = $cities->where("id","<>",$city_id);
-        $twig->cities = $cities->cached(Date::WEEK)->getprepared_all();
+       $twig->main_cities = array('','nizhnevartovsk','tyumen','surgut','ekaterinburg','nefteyugansk','khanty-mansiisk');
+
+        if (!$result = Cache::instance('memcache')->get("cities_for_menu:{$city_id}")) {
+
+            $main_c = ORM::factory('City')->where("id","=", 1)->cached(Date::WEEK)->find()->get_row_as_obj();
+
+            $cities = ORM::factory('City')->where("is_visible","=",1);
+            if ($city_id)
+                $cities = $cities->where("id","<>",$city_id);
+            $cities = $cities->getprepared_all();
+
+            
+
+            $result = array();
+
+            if ($city_id <> 1) {
+                array_push($result, $main_c);
+            }
+
+            foreach ($twig->main_cities as $city) {
+
+                $find = array_filter($cities, function($city_search) use ($city){
+                    return $city_search->seo_name === $city;
+                });
+
+                $result = array_merge($result, $find);
+            }
+
+            foreach ($cities as $city) {
+
+                if (!in_array($city->seo_name, $twig->main_cities) AND $city->id <> 1) {
+                    $result = array_merge($result, array( $city));
+                }
+
+            }
+
+            Cache::instance('memcache')->set("cities_for_menu:{$city_id}", $result, Date::WEEK);
+        }
+
+        $twig->cities = $result;
         $twig->canonical_url = $this->request->post("canonical_url");
         $this->response->body($twig);
     }
