@@ -237,7 +237,8 @@ class Controller_Static extends Controller_Template {
 			HTTP::redirect("http://".$proper_domain, 301);
 		}
 		$subdomain = ($domain->get_city()) ? $domain->get_subdomain(): FALSE;
-		$filename = DOCROOT."robots.template.txt";
+
+		$filename = DOCROOT.(($subdomain)?"robots.template.txt":"robots_main.template.txt");
 		$robots_file = file_get_contents($filename);
 
 		$robots_file = mb_ereg_replace ( '\{\$subdomain\}' , $subdomain , $robots_file);
@@ -256,7 +257,7 @@ class Controller_Static extends Controller_Template {
 			HTTP::redirect("http://".$proper_domain, 301);
 		}
 		$subdomain = ($domain->get_city()) ? $domain->get_subdomain(): FALSE;
-		$filename = DOCROOT."sitemaps/".$subdomain."/index.xml";
+		$filename = DOCROOT.(($subdomain)?"sitemaps/".$subdomain."/index.xml":"sitemaps/index.xml");
 		$robots_file = file_get_contents($filename);
 
 		$this->response->headers('Content-Type', 'text/xml');

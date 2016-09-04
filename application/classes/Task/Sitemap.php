@@ -8,6 +8,12 @@
 			// $s = new Sitemap('surgut');
 			// $s->rebuild();
 
+			$main_c = ORM::factory('City',1);
+			$s = new Sitemap($main_c->seo_name);
+			$s->rebuild();
+
+			echo 'OK main';
+
 			$cities = ORM::factory('City')->where('is_visible','=',1)->find_all();
 			foreach ($cities as $city) {
 

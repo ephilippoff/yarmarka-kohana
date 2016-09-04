@@ -9,6 +9,7 @@
 		//protected $maxPerStep2 = 20;
 		protected $selectLimit = 1000;
 		protected $maxFiles = 100;
+		private $subdomain;
 		private $cityName;
 		private $cityId;
 
@@ -19,6 +20,9 @@
 		public function __construct($cityName) {
 			$this->cityName = $cityName;
 			$this->cityId = ORM::factory('City')->where('seo_name','=',$cityName)->find()->id;
+
+			$this->subdomain = ($this->cityId == 1) ? '': $this->cityName.'.';
+
 			$this->initConfig();
 			$this->initPrettyUrls();
 
@@ -78,7 +82,7 @@
 		}
 
 		protected function makeUrl($part) {
-			return htmlspecialchars($this->checkForPretty('http://' . $this->cityName . '.' . $this->config['main_domain'] . '/' . $part));
+			return htmlspecialchars($this->checkForPretty('http://' . $this->subdomain . $this->config['main_domain'] . '/' . $part));
 		}
 
 		protected function getSitemapHeader() {
@@ -232,7 +236,12 @@ echo 'Seconds: ' . (time() - $x) . ' Rows: ' . $lastPage . "\r\n";
 		}
 
 		public function rebuild() {
-			$sitemapsPath = ($_SERVER['DOCUMENT_ROOT'] ? $_SERVER['DOCUMENT_ROOT'] : '.') . DIRECTORY_SEPARATOR . 'sitemaps' . DIRECTORY_SEPARATOR . $this->cityName . DIRECTORY_SEPARATOR;
+			if ($this->cityId == 1) {
+				$sitemapsPath = ($_SERVER['DOCUMENT_ROOT'] ? $_SERVER['DOCUMENT_ROOT'] : '.') . DIRECTORY_SEPARATOR . 'sitemaps' . DIRECTORY_SEPARATOR ;
+			} else {
+				$sitemapsPath = ($_SERVER['DOCUMENT_ROOT'] ? $_SERVER['DOCUMENT_ROOT'] : '.') . DIRECTORY_SEPARATOR . 'sitemaps' . DIRECTORY_SEPARATOR . $this->cityName . DIRECTORY_SEPARATOR;
+			}
+			
 			$this->makeDir($sitemapsPath);
 			$bigOutputFileName = $sitemapsPath . 'index.xml';
 			// step 1
@@ -277,7 +286,7 @@ echo 'Seconds: ' . (time() - $x) . ' Rows: ' . $lastPage . "\r\n";
 			foreach($filesMap as $key => $value) {
 				fwrite($fd, 
 					'<sitemap>'
-						. '<loc>' . $this->makeUrl('sitemaps/'.$this->cityName.'/' . $key) . '</loc>'
+						. '<loc>' . $this->makeUrl('sitemaps/'.(($this->cityId <> 1) ? $this->cityName.'/' : '') . $key) . '</loc>'
 						. '<lastmod>' . date('Y-m-d\TH:i:sP', $value) . '</lastmod>'
 					. '</sitemap>');
 			}
