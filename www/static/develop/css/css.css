@@ -1578,8 +1578,6 @@ article h1{
 }
 
 .ad_wrap .title{
-    -ms-word-break: break-all;
-    word-break: break-all;
     color: #333;
     font-size: 12px;
     height: 30px;

@@ -21,7 +21,7 @@
 						{%  if loop.index <= newsNumber %}
 							<li>
 								<span class="date fs12">{{news.date_expired|date('H:i')}}</span>
-								{{ link( "/novosti/" ~ news.seo_name ~ "-" ~ news.id ~ ".html", "ml10", news.title|slice(0,60) ) }}
+								{{ link( "/novosti/" ~ news.seo_name ~ "-" ~ news.id ~ ".html", "ml10", news.title ) }}
 							</li>
 						{% endif %}
 					{% endfor %}
