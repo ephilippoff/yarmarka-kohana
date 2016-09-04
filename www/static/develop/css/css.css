@@ -90,7 +90,9 @@ h3, h2, strong, .bold, b, .title_block {font-family: 'pt_sansbold', Verdana, san
 .w100p{width: 100%;}
 .w50p{width: 50%;}
 .w60p{width: 60%;}
+.w70p{width: 70%;}
 .w40p{width: 40%;}
+.w30p{width: 30%;}
 .w25p{width: 25%; -webkit-box-sizing: border-box;
 -moz-box-sizing: border-box;
 box-sizing: border-box;}
