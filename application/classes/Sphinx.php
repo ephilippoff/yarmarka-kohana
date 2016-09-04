@@ -13,8 +13,7 @@ class Sphinx {
 	{
 
 		$keywords = Sphinx::GetSphinxKeyword($_keywords);
-echo Debug::vars($keywords);
-  echo "<br>";
+
 		$objects = Sphinx::searchObjects($keywords, $category_id, $city_id, $offset, $limit);
 		$pricerows = Sphinx::searchPricerow($keywords, $category_id, $city_id, $object_id, $offset, $limit);
 
