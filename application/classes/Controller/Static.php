@@ -257,7 +257,7 @@ class Controller_Static extends Controller_Template {
 			HTTP::redirect("http://".$proper_domain, 301);
 		}
 		$subdomain = ($domain->get_city()) ? $domain->get_subdomain(): FALSE;
-		$filename = DOCROOT.(($subdomain)?"sitemaps/".$subdomain."/index.xml":"sitemaps/index.xml");
+		$filename = DOCROOT.(($subdomain)?"sitemaps/".$subdomain."/index.xml":"sitemaps/index_main.xml");
 		$robots_file = file_get_contents($filename);
 
 		$this->response->headers('Content-Type', 'text/xml');

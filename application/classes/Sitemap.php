@@ -243,7 +243,7 @@ echo 'Seconds: ' . (time() - $x) . ' Rows: ' . $lastPage . "\r\n";
 			}
 			
 			$this->makeDir($sitemapsPath);
-			$bigOutputFileName = $sitemapsPath . 'index.xml';
+			$bigOutputFileName = $sitemapsPath . (($this->cityId == 1) ? 'index_main.xml':'index.xml');
 			// step 1
 			$step1FileName = '1.xml.gz';
 			$step1OutFile = $sitemapsPath . $step1FileName;
