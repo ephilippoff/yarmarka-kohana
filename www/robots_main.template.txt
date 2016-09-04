@@ -1,0 +1,14 @@
+User-agent: *
+
+Disallow: /user
+Disallow: /detail
+Disallow: /user
+Disallow: /add
+Disallow: /edit
+Disallow: /redirect
+Disallow: /*utm_source=
+Disallow: /*view=
+
+
+Sitemap: http://yarmarka.biz/sitemaps/index.xml
+Host: yarmarka.biz
