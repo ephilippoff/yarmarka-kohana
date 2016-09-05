@@ -72,7 +72,17 @@ class Controller_Redirect extends Controller_Template
         } catch (Kohana_Exception $e) {
             //TODO Log incorrect seo
             //HTTP::redirect("/", 301);
-            throw new HTTP_Exception_404;
+            
+            if (@$query_params['k']) {
+                
+                $query_params = array(
+                    'search' => $query_params['k']
+                );
+                HTTP::redirect("?" . http_build_query($query_params), 301);
+                return;
+            } else {
+                throw new HTTP_Exception_404;
+            }
         }
 
 		try {

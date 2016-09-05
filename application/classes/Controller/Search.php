@@ -36,7 +36,7 @@ class Controller_Search extends Controller_Template
                 $query_params = array(
                     'search' => $query_params['k']
                 );
-                HTTP::redirect($uri . "=" . http_build_query($query_params), 301);
+                HTTP::redirect("?" . http_build_query($query_params), 301);
                 return;
             }
             
