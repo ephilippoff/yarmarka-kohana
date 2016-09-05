@@ -194,6 +194,7 @@ class Seo extends ORM
 
 			// parse and looking for value tags
 			$values = $params_doc->getElementsByTagName('value');
+			
 			// convert tags to text
 			foreach ($values as $value)
 			{
@@ -208,14 +209,20 @@ class Seo extends ORM
 				// looking for tag attribute in query string
 				if (in_array($attr_name, array_keys($query_params)))
 				{
+
 					if (is_array($query_params[$attr_name])) {
-						$attr = ORM::factory('Attribute_Element',$query_params[$attr_name][0]);
+						$attrs = ORM::factory('Attribute_Element')->where('id','IN',array_values($query_params[$attr_name]))->getprepared_all();
+						$attrs = array_map(function($attr) use($wordform){
+							return $wordform > 1 ? $attr->{'title'.$wordform} : $attr->title;
+						}, $attrs);
+
+						$attr_title = join(', ',$attrs);
 					} else {
 						$attr = ORM::factory('Attribute_Element',$query_params[$attr_name]);
+						$attr_title = $wordform > 1 ? $attr->{'title'.$wordform} : $attr->title;
 					}
 					
 
-					$attr_title = $wordform > 1 ? $attr->{'title'.$wordform} : $attr->title;
 					$new_value_text = str_replace($attr_name, $attr_title, $value_text);
 					
 					$new_params_html = str_replace($value_tag, $new_value_text, ($new_params_html ? $new_params_html : $params_html));

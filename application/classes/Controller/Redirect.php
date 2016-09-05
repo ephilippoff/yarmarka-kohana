@@ -72,6 +72,7 @@ class Controller_Redirect extends Controller_Template
         } catch (Kohana_Exception $e) {
             //TODO Log incorrect seo
             //HTTP::redirect("/", 301);
+            throw new HTTP_Exception_404;
         }
 
 		try {
