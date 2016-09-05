@@ -210,7 +210,7 @@ class Search_Url
         foreach ($this->_query_params as $key => $param) {
             if (count($param["value"]) > 1) break;
             if ($param["attribute"]->is_seo_used) {
-                    $last_param = @array_values($param["value"])[0];
+                    $last_param = @$param["value"][0];
             }
         }
         return $last_param;
