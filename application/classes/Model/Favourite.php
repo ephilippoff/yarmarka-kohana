@@ -35,16 +35,34 @@ class Model_Favourite extends ORM {
 	}
 
 	function get_list_by_cookie() {
+
 		$code = Cookie::get("code");
 
 		if (!$code) {
 			return array();
 		} else {
-			$favourites = ORM::factory('Favourite')
-							->where("code", "=", $code)
-							->order_by("id")
-							->limit(100)
-							->getprepared_all(array("objectid"));
+
+			$favourites = ORM::factory('Favourite');
+
+			if (Auth::instance()->get_user()) {
+
+				$userid = Auth::instance()->get_user()->id;
+				$favourites = $favourites->where_open()
+											->where("code", "=", $code)
+											->or_where('userid', '=', $userid)
+										 ->where_close();
+
+			} else {
+
+				$favourites = $favourites->where("code", "=", $code);
+
+			}
+			
+								
+			$favourites = $favourites->order_by("id")
+									->limit(100)
+									->getprepared_all(array("objectid"));
+
 			return array_map(function($value) {
 				return $value->objectid;
 			}, $favourites);

@@ -387,8 +387,22 @@ class Search {
 			$code = Cookie::get("code");
 			if (!$code) $code = "sdaf980sd6fgsdfg9sdfgsd89076";
 			$favorite_subquery = DB::select("objectid")
-										->from("favorite")
-										->where("code", "=", $code);
+										->from("favorite");
+
+			if (Auth::instance()->get_user()) {
+
+				$userid = Auth::instance()->get_user()->id;
+				$favorite_subquery = $favorite_subquery->where_open()
+											->where("code", "=", $code)
+											->or_where('userid', '=', $userid)
+										 ->where_close();
+
+			} else {
+
+				$favorite_subquery = $favorite_subquery->where("code", "=", $code);
+
+			}
+
 			$object = $object->where("o.id","IN",$favorite_subquery);
 		}
 
