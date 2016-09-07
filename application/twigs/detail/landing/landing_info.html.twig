@@ -1,6 +1,11 @@
 <div class="module">
 	<img alt="{{ object.title|e }}" src="{{ get_file(object.compiled.images.main_photo['120x90']) }}">
 </div>
+{% if object.compiled.attributes.site %}
+	<div class="module">
+			<p class="mt10"><a target="_blank" class="site-addr" href="http://{{object.compiled.attributes.site.value}}">http://{{ object.compiled.attributes.site.value }}</a> </p>
+	</div>
+{% endif %}
 <div class="module">
 	<div class="title_block">
 		Контакты для связи:
@@ -12,6 +17,8 @@
 			<p class="mt10">{{ contact.value|emailico }}</p>
 		{% endif %}
 	{% endfor %}
+	
+	
 </div>
 
 <div class="p5 dib js-favourite red pointer" data-id="{{object.id}}">

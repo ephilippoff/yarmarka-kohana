@@ -23,6 +23,7 @@
 {% endmacro %}
 
 {% block content %}
+
 	<article class="pl20 pr20">
 		{% set main_photo = NULL %}
 		{% set logo_photo = object.compiled.images.main_photo %}
@@ -38,6 +39,7 @@
 				</div>
 			{% endif %}
 		{% endfor %}
+
 		<div class="text-cont module">
 			<div class="text fl w100p" itemprop="description">
 			{% set text = NULL %}
@@ -46,11 +48,48 @@
 			{% else %}
 				{% set text = object.user_text %}
 			{% endif %}
+			{% if object.compiled.lon %}
+			<div class="title_block">
+				Наш адрес: {{ object.compiled.attributes['adres-raion'].value }}
+			</div>
+			<div class="map-bl">													
+				<script src="http://api-maps.yandex.ru/2.0-stable/?load=package.standard&lang=ru-RU&coordorder=latlong" type="text/javascript"></script>
+				<script type="text/javascript">
+					var map;
+					var placemark;
+
+					ymaps.ready(function(){
+						map = new ymaps.Map("card-map", {
+							center: [{{ object.compiled.lat }}, {{ object.compiled.lon }}],
+							zoom: 14
+						});
+
+						map.controls.add('zoomControl', { top: 5, left: 5 });
+						map.controls.add(new ymaps.control.TypeSelector(['yandex#map', 'yandex#satellite', 'yandex#hybrid', 'yandex#publicMap', 'yandex#publicMapHybrid']));
+
+						placemark = new ymaps.Placemark([{{ object.compiled.lat }}, {{ object.compiled.lon }}], {
+							},
+							{
+								draggable: false,
+								iconContentOffset: [],
+								hintHideTimeout: 0
+
+							});
+
+						map.geoObjects.add(placemark);
+					});
+
+				</script>
+
+				<div id="card-map"  style="width:100%; height:300px">
+				</div>
+			</div>
+			{% endif %}
 			{% for image in object.compiled.images.local_photo %}
 				{% set vorig = '<img class="w100p" src="/' ~ image["original"] ~ '">' %}
 				{% set text = text|replace({'{image}':vorig}) %}
 			{% endfor %}
-			{% set text = text|replace({'{cardmap}': '<div id="cardmap" class="cardmap mb10">' ~ _self.map(object)~ '</div>'}) %}
+			
 			
 			{{ text }}
 			</div>
