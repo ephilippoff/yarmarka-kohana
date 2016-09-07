@@ -18,10 +18,6 @@
 		{% include 'detail/crumbs' %}
 {% endblock header %} 
 
-{% macro map(object) %}
-    {% include 'detail/landing/map' %}
-{% endmacro %}
-
 {% block content %}
 
 	<article class="pl20 pr20">
@@ -48,7 +44,7 @@
 			{% else %}
 				{% set text = object.user_text %}
 			{% endif %}
-			{% if object.compiled.lon %}
+			{% if object.compiled.attributes['adres-raion'] and object.compiled.attributes['adres-raion'].value %}
 			<div class="title_block">
 				Наш адрес: {{ object.compiled.attributes['adres-raion'].value }}
 			</div>
