@@ -24,7 +24,7 @@ return array(
 	'add_phone_required_exlusion' 			=> array(36,35),
 	'short_domain'							=> 'ya24.biz',
 	'sync_prefix'							=> '_prod',
-	'banner_zone_positions'					=> array(5 => 18, 10 => 19, 15 => 40, 20 => 52),
+	'banner_zone_positions'					=> array(3 => 18, 10 => 19, 15 => 40, 20 => 52),
 	'site_disable' => TRUE,
 	'white_ips' => array("195.68.130.122", "127.0.0.1", "146.185.226.9" , "217.66.156.163"),
 	'vk_app_secret' => 'qwe',
