@@ -28,7 +28,7 @@
 			<td>
 				<table align="center" cellspacing="0" cellpadding="0" border="0" width="" style="color:#000;font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;border-collapse: collapse;">
 					<tbody>	
-						<tr><td align="right" colspan="2" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;line-height: 12px;"><a style="color:#fff;padding:5px 10px;background-color:#D44234;text-decoration:none;" href="http://yarmarka.biz/add">Подать объявление</a></td></tr>
+						<tr><td align="right" colspan="2" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;line-height: 12px;"><a style="color:#fff;padding:5px 10px;background-color:#D44234;text-decoration:none;" href="<?php echo $domain; ?>/add">Подать объявление</a></td></tr>
 						<tr><td colspan="2">&nbsp;</td></tr>
 						<tr><td align="center" colspan="2" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;line-height: 15px;font-size:18px;font-weight:bold;">Здравствуйте!</td></tr>
 						<tr><td style="line-height: 0;" colspan="2">&nbsp;<img height="20" title="" alt="" src="data:image/gif;base64,R0lGODlhAQABAJEAAAAAAP///////wAAACH5BAEAAAIALAAAAAABAAEAAAICVAEAOw%3D%3D"></td></tr>	
@@ -45,21 +45,14 @@
 						</tr>
 						<?php endforeach; ?>
 						
-						<?php if (!$is_new): ?>
-						<tr><td style="line-height: 0;" colspan="2">&nbsp;<img height="12" title="" alt="" src="data:image/gif;base64,R0lGODlhAQABAJEAAAAAAP///////wAAACH5BAEAAAIALAAAAAABAAEAAAICVAEAOw%3D%3D"></td></tr>			
-						<tr><td colspan="2" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;line-height: 15px;">Вы можете возобновить объявления в любое время в <a style="color: #d44234;" href="http://yarmarka.biz/user/myads">личном кабинете</a>.</td></tr>
-									
-						<tr><td style="line-height: 0;" colspan="2">&nbsp;<img height="12" title="" alt="" src="data:image/gif;base64,R0lGODlhAQABAJEAAAAAAP///////wAAACH5BAEAAAIALAAAAAABAAEAAAICVAEAOw%3D%3D"></td></tr>					
-						<tr><td colspan="2" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;line-height: 15px;">Воспользуйтесь так же дополнительными сервисами в <a style="color: #d44234;" href="http://yarmarka.biz/user/myads">личном кабинете</a> для повышения эффективности объявлений.</td></tr>				
-						
-						<?php else: ?>
+
 
 						<tr><td style="line-height: 0;" colspan="2">&nbsp;<img height="12" title="" alt="" src="data:image/gif;base64,R0lGODlhAQABAJEAAAAAAP///////wAAACH5BAEAAAIALAAAAAABAAEAAAICVAEAOw%3D%3D"></td></tr>			
-						<tr><td colspan="2" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;line-height: 15px;">Вы можете возобновить объявления в любое время в <a style="color: #d44234;" href="<?php echo $is_new; ?>/user">личном кабинете</a>.</td></tr>
+						<tr><td colspan="2" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;line-height: 15px;">Вы можете возобновить объявления в любое время в <a style="color: #d44234;" href="<?php echo $domain; ?>/user">личном кабинете</a>.</td></tr>
 									
 						<tr><td style="line-height: 0;" colspan="2">&nbsp;<img height="12" title="" alt="" src="data:image/gif;base64,R0lGODlhAQABAJEAAAAAAP///////wAAACH5BAEAAAIALAAAAAABAAEAAAICVAEAOw%3D%3D"></td></tr>					
-						<tr><td colspan="2" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;line-height: 15px;">Воспользуйтесь так же дополнительными сервисами в <a style="color: #d44234;" href="<?php echo $is_new; ?>/user">личном кабинете</a> для повышения эффективности объявлений.</td></tr>				
-						<?php endif; ?>
+						<tr><td colspan="2" style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;line-height: 15px;">Воспользуйтесь так же дополнительными сервисами в <a style="color: #d44234;" href="<?php echo $domain; ?>/user">личном кабинете</a> для повышения эффективности объявлений.</td></tr>				
+
 
 
 			

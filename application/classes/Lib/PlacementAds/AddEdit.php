@@ -1348,7 +1348,7 @@ class Lib_PlacementAds_AddEdit {
 		$user_id = $user->id;
 		$object_id = $object->id;
 		$is_edit = $this->is_edit ? "TRUE":"FALSE";
-		$key = md5("add_edit_object:{$is_edit}{$object_id}{$user_id}");
+		$key = md5("add_edit_object:{$object_id}");
 
 		if ($user->email)
 		{
