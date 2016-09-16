@@ -1072,6 +1072,7 @@ class Form_Add  {
 
 		$oc = ORM::factory('Contact')
 			->where('verified_user_id', '=', $user_id)
+			->where('contact_type_id', '<>', 5)
 			->find_all();
 
 		foreach($oc as $contact)
