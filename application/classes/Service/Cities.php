@@ -2,34 +2,8 @@
 
 class Service_Cities extends Service
 {
-	protected $_cities = array(
-			1944 => "г. Лангепас",
-			1976 => "г. Пыть-Ях",
-			1975 => "г. Покачи",
-			2070 => "г. Вагай",
-			1980 => "г. Урай",
-			1945 => "г. Лянтор",
-			2072 => "г. Белоярский",
-			1982 => "г. Югорск",
-			1977 => "г. Радужный",
-			1949 => "г. Нягань",
-			1946 => "г. Мегион",
-			1942 => "г. Когалым",
-			1908 => "г. Заводоуковск",
-			1921 => "г. Ялуторовск",
-			1918 => "г. Тобольск",
-			1920 => "г. Уват",
-			1909 => "г. Ишим",
-			1981 => "г. Ханты-Мансийск",
-			1947 => "г. Нефтеюганск",
-			1943 => "г. Лабытнанги",
-			1979 => "г. Сургут",
-			1978 => "г. Советский",
-			1948 => "г. Нижневартовск",
-			1919 => "г. Тюмень",
-			2081 => "г. Екатеринбург",
-			3046 => "пгт. Излучинск"
-		);
+	protected $_cities = array();
+	protected $_citiesMap = array();
 
 	protected $_name = "cities";
 	protected $_title = "Объявление в несколько городов";
@@ -42,6 +16,17 @@ class Service_Cities extends Service
 		if ($object->loaded()) {
 			$this->object($object);
 		}
+		
+		$cities = ORM::factory('City')->map( array(1) );
+
+		$this->_citiesMap = array_map(function($city) {
+			return array('id'=> $city->id, 'title' => $city->title);
+		}, $cities);
+
+		foreach ($cities as $city) {
+			$this->_cities[$city->id] = $city->title;
+		}
+
 		$this->_initialize();
 	}
 
@@ -49,7 +34,7 @@ class Service_Cities extends Service
 	{
 		return array(
 			"exists_cities" => $this->_object->get_cities(),
-			"cities" => $this->_cities,
+			"cities" => $this->_citiesMap,
 			"price" => $this->getPrice()
 		);
 	}

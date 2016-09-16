@@ -12,36 +12,36 @@
 					<th class="price bold">Стоимость</th>
 				</thead>
 				<tbody>
-				<% var cities = getCities() %>
-				<% _.each(cities, function(city, city_key){ %>
-					<% if (existsCity(city_key)) { %>
+				<% var cities = getCities(); %>
+				<% _.each(cities, function(city){ %>
+					<% if (existsCurrentCity(city['id'])) { %>
 						<tr>
 							<td class="service-title">
 									<span style="display:block;">
-										<span  class="ml5"><%=city%></span>
+										<span  class="ml5"><%=city['title']%></span>
 									</span>
 							</td>
 							<td class="price">
-								<span class="js-price js-price_<%=city_key%>">размещено</span>
+								<span class="js-price js-price_<%=city['id']%>">размещено</span>
 							</td>
 						</tr>
 					<% } else { %>
 						<tr>
 							<td class="service-title">
-								<label for="type_n_<%=city_key%>">
+								<label for="type_n_<%=city['id']%>">
 									<span style="display:block; cursor:pointer;">
 										<% if (is_edit) { %>
-											<input type="checkbox" name="city" value="<%=city_key%>" id="type_n_<%=city_key%>" class="js-city" <% if ( _.contains(edit_params.service.cities, +city_key) ){%>checked<%}%>>
+											<input type="checkbox" name="city" value="<%=city['id']%>" id="type_n_<%=city['id']%>" class="js-city" <% if ( checkedCity( city['id'] ) ){%>checked<%}%>>
 										<% } else { %>
-											<input type="checkbox" name="city" value="<%=city_key%>" id="type_n_<%=city_key%>" class="js-city">
+											<input type="checkbox" name="city" value="<%=city['id']%>" id="type_n_<%=city['id']%>" class="js-city">
 										<% } %>
 										
-										<span  class="ml5"><%=city%></span>
+										<span  class="ml5"><%=city['title']%></span>
 									</span>
 								</label>
 							</td>
 							<td class="price">
-								<span class="js-price js-price_<%=city_key%>">
+								<span class="js-price js-price_<%=city['id']%>">
 										<%=getPrice()%>
 								</span>
 							</td>

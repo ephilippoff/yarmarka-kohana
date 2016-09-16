@@ -43,4 +43,50 @@ class Model_City extends ORM {
 		return $this->where('is_visible', '=', $value);
 	}
 
+	public function map($exclude_cities_ids = array()) {
+
+		$key = "cities_for_menu:".serialize($exclude_cities_ids);
+
+		if ( !$result = Cache::instance('memcache')->get($key) )  {
+
+			$main_domain = ORM::factory('City',1)->get_row_as_obj();
+			$cities = $this->visible(true)->getprepared_all();
+			$main_cities = Kohana::$config->load('common.main_cities');
+
+			$result = array();
+			
+			$isExcludeMain = in_array(1, $exclude_cities_ids);
+
+			if (!$isExcludeMain) {
+			    array_push($result, $main_domain);
+			}
+
+			foreach ($main_cities as $city) {
+
+			    $find = array_filter($cities, function($city_search) use ($city){
+			        return $city_search->seo_name === $city;
+			    });
+
+			    $result = array_merge($result, $find);
+			}
+
+			foreach ($cities as $city) {
+
+			    if (!in_array($city->seo_name, $main_cities) AND $city->id <> 1) {
+			        $result = array_merge($result, array( $city));
+			    }
+
+			}
+
+			$result = array_filter($result, function($city) use ($exclude_cities_ids) {
+		        return !in_array($city->id, $exclude_cities_ids);
+		    });
+
+			Cache::instance('memcache')->set($key, $result, Date::WEEK);
+
+		} 
+
+		return $result;
+	}
+
 } // End City Model

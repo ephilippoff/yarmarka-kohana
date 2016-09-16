@@ -21,7 +21,6 @@ define([
         },
         initialize: function(options) {
             this.bindUIElements();
-            console.log(this.model)
         },
         templateHelpers: function() {
             var s = this;
@@ -29,8 +28,11 @@ define([
                getCities: function() {
                     return s.model.get("info").cities_info.cities;
                },
-               existsCity: function(id) {
-                    return _.contains(s.model.get("info").cities_info.exists_cities, id);
+               existsCurrentCity: function(id) {
+                    return _.contains(s.model.get("info").cities_info.exists_cities, ''+id);
+               },
+               checkedCity: function(id) {
+                    return _.contains(s.model.get("edit_params").service.cities, +id); 
                },
                getPrice: function() {
                     return s.getPrice() + " руб.";

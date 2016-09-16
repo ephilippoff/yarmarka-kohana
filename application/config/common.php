@@ -28,5 +28,6 @@ return array(
 	'site_disable' => TRUE,
 	'white_ips' => array("195.68.130.122", "127.0.0.1", "146.185.226.9" , "217.66.156.163"),
 	'vk_app_secret' => 'qwe',
-	'send_complaints_to' => array( 'amezhenny72@gmail.com', 'e.philippoff@gmail.com', 'support@yarmarka.userecho.com' )
+	'send_complaints_to' => array( 'amezhenny72@gmail.com', 'e.philippoff@gmail.com', 'support@yarmarka.userecho.com' ),
+	'main_cities' =>  array('','nizhnevartovsk','tyumen','surgut','ekaterinburg','nefteyugansk','khanty-mansiisk')
 );
