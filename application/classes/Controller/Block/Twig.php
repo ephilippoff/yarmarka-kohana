@@ -45,7 +45,9 @@ class Controller_Block_Twig extends Controller_Template
 
     public function action_adslinkline()
     {
-        $city_id = $this->request->post("city_id");
+        $this->domain = new Domain();
+        $city = $this->domain->get_city();
+        $city_id = $city->id;
         $category_id = $this->request->post("category_id");
         $theme_class = $this->request->post("theme_class");
 
@@ -89,12 +91,14 @@ class Controller_Block_Twig extends Controller_Template
 
     public function action_mainmenu()
     {
-        $city_id = $this->request->post("city_id");
+        $this->domain = new Domain();
+        $city = $this->domain->get_city();
+
         $twig = Twig::factory('block/menu/main');
         $categories = ORM::factory('Category')->get_categories_extend(array(
             "with_child" => TRUE, 
             "with_ads" => TRUE, 
-            "city_id" => $city_id
+            "city_id" => $city->id
         ));
         
         $twig->categories1l = $categories["main"];
@@ -263,7 +267,10 @@ class Controller_Block_Twig extends Controller_Template
 
     public function action_kuponmenu()
     {
-        $city_id = $this->request->post("city_id");
+        $this->domain = new Domain();
+        $city = $this->domain->get_city();
+        $city_id = $city->id;
+        
         $states = array(1);
         $cached = TRUE; 
         $banners = array();
@@ -294,7 +301,9 @@ class Controller_Block_Twig extends Controller_Template
 	
     public function action_newsmenu()
     {
-        $city_id = $this->request->post("city_id");
+        $this->domain = new Domain();
+        $city = $this->domain->get_city();
+        $city_id = $city->id;
         $states = array(1);
         $cached = TRUE; 
         $banners = array();
