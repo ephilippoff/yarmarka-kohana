@@ -1,7 +1,5 @@
 {% set services = get_service_icon_info(object.compiled.services, true) %}
-{% for service in services if service.name == 'premium'%}
 
-{% endfor %}
 <div class="result-item {{ (object.is_premium) ? 'premium'}}">
 
 	<div class="module control-item clearfix">
@@ -12,7 +10,7 @@
 			<p class=" fl fz13 js-object-state-{{object.id}} green">Объявление опубликовано</p>
 		{% endif %}
 
-		<input type="checkbox" id="check_{{object.id}}" class="js-select-object" data-id="{{object.id}}">
+		<input type="checkbox" id="check_{{object.id}}" class="js-select-object hidden-xs" data-id="{{object.id}}">
 
 		<i data-id="{{object.id}}" class="fa fa-pencil-square-o js-ocontrol-edit" title="Редактировать объявление"></i>
 
@@ -52,13 +50,13 @@
 				<a href="{% if is_cv_mode %}/detail/use_cv?object_id={{ object.id }}{% else %}{{ object.compiled.url }}{% endif %}" title="{{ object.title|e }}" class="bold js-object-title-{{object.id}} {% if object.is_published == 0 %} red strike {% endif %}">
 					{{ object.title|e }}
 				</a>
-				<span class="fr"><i class="fa fa-eye" title="Количество просмотров"></i> {{ object.visits }}</span>
+				<span class="fr"><i class="fa fa-eye" title="Количество просмотров"></i> {{ object.visits }}</span><br>
 			</p>
 
-			<p class="style1">
+			<p class="mt10">
 				{% if object.moder_state >= 0 %}	
 					{% if not object.is_bad %}
-						<span class="green">Прошло модерацию.</span>
+
 					{% elseif object.is_bad == 1 %}
 						<span class="red">Заблокировано модератором, до исправления</span>
 					{% elseif object.is_bad == 2 %}
@@ -69,17 +67,19 @@
 				{% else %}
 					<span class="red">Пока не прошло модерацию</span>
 				{% endif %}
+				
+				{% if services|length > 0 %}
+					<span class="fr js-hide-region-{{object.id}}">
+						{% for services in services %}
+							<i class="fa {{ services.icon_class }} fa-lg red" title="{{services.title}}"></i>
+						{% endfor %}
+					</span>
+				{% endif %}
 			</p>
 
-			<p class="style1">
+			<p class="mt5">
 				<span><i class="fa fa-refresh" title="Обновлено"></i> {{ object.date_created|date("d.m.Y") }}</span>
 			</p>
-
-			<div class="mt10 js-hide-region-{{object.id}} hidden">
-				{% for services in services %}
-				<i class="fa {{ services.icon_class }} fa-lg gray" title="{{services.title}}"></i>
-				{% endfor %}
-			</div>
 
 			{% if object.price > 0 %}
 			<p class="amount bold">{{ object.price|number_format(0, ' ', ' ') }} руб.</p>

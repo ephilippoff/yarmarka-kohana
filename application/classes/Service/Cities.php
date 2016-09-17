@@ -109,8 +109,8 @@ class Service_Cities extends Service
 	{
 		$cities = $orderItem->service->cities;
 
-		self::saveServiceInfoToCompiled($orderItem->object->id);
 		self::apply_service($orderItem->object->id, $cities );
+		self::saveServiceInfoToCompiled($orderItem->object->id);
 
 		ORM::factory('Order_Log')->write($orderItem->order_id, "notice", vsprintf("Активация услуги 'Несколько городов': № %s", array( $orderItem->order_id ) ) );
 		

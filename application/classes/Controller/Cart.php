@@ -300,7 +300,7 @@ class Controller_Cart extends Controller_Template {
 
 		$id = $this->request->param('id');
 		$user = Auth::instance()->get_user();
-
+		$twig->user = $user;
 		$session = Session::instance();
 		$errors = $session->get("errors");
 		$errors_post = $session->get("post");

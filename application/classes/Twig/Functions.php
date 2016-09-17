@@ -283,10 +283,15 @@ class Twig_Functions
 		foreach ($services as $name => $service_items) {
 
 			if (in_array($name, array('up','premium','lider'))) {
+
+				  
 				foreach ($service_items as $service_item) {
+
 					$service_item = new Obj($service_item);
+
 					$result_item = array();
-					if ($name == "up" AND strtotime(date("Y-m-d H:i:s"). ' + 7 days') > strtotime(date("Y-m-d H:i:s")) ) {
+
+					if ($name == "up") {
 						$result_item["name"] = $name;
 						$result_item["icon_class"] = "fa-angle-double-up";
 						$result_item["title"] = "Поднято ".date("Y-m-d H:i", strtotime($service_item->date_created));
@@ -314,10 +319,13 @@ class Twig_Functions
 							$result_item["title"] = "Осталось неактивированных ".$not_activated.". ".$result_item["title"];
 						}
 					}
-					$result[] = $result_item;
+
+					if (Arr::get($result_item, "name")) {
+						$result[] = $result_item;
+					}
 				}
 			} elseif (in_array($name, array('cities'))) {
-				if ($name == "cities") {
+				if ($name == "cities" AND count($service_items) > 0) {
 					$result_item["name"] = $name;
 					$result_item["icon_class"] = "fa-info-circle";
 					$result_item["title"] = vsprintf("Объявление размещено в %d городах", array(count($service_items)));
