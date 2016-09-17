@@ -44,16 +44,7 @@
                     {{ css("adaptive/extra-small-phones.css") }}
 
             {% else  %}
-					<!--[if IE 9]>
-						{{ css("bootstrap.min.css") }}
-						{{ css("font-awesome.css") }}
-						{{ css("iLight.css") }}
-						{{ css("css.css") }}
-						{{ css("../css/css.css") }}
-					<![endif]-->
-					<!--[if !IE]><!-->
-						{{ css("../production/css/appstyles.css") }}
-					<!--<![endif]-->
+				{{ css("../production/css/appstyles.css") }}
             {% endif %}
             {{ css("bootstrap-xxs.css") }}
         {% endblock css %}
