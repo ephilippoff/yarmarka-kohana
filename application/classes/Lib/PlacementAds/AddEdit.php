@@ -1365,7 +1365,7 @@ class Lib_PlacementAds_AddEdit {
 					return $this;
 				}
 
-				Cache::instance('memcache')->set($key, 1, Date::TENMINUTES);
+				Cache::instance('memcache')->set($key, 1, 60*10);
 
 			}
 
