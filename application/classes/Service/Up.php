@@ -143,7 +143,7 @@ class Service_Up extends Service
 		if (!$user)
 			$user = Auth::instance()->get_user();
 
-		Cache::instance("services")->set("up:".$user->id, (int) $count, Date::TENDAYS);
+		Cache::instance("services")->set("up:".$user->id, (int) $count, 864000);
 		return $count;
 	}
 
