@@ -49,7 +49,7 @@ define([
         },
 
         getMap: function(options, ready) {
-
+            
             var clusterer,
                 elid = options.elid,
                 lat = options.lat || 55.76,

@@ -5,10 +5,6 @@
 <div class="clearfix">
 	<div class="control_buttons module fs0 fl options-wrap clearfix">
 		<span class="span-link menu-item js-search-extend control-item" onclick="mobile(function(){$('.options-wrap').fadeOut();});">Расширенный поиск</span>
-		{{mapButton}}
-		{% if mapButton %}
-		<span class="span-link menu-item" id="map-button" data-action="hideMap">Показать на карте</span>
-		{% endif %}
 		{% if not isGuest %}
 		<div class="menu-item" data-role="subscription-module"><span class="span-link">Сохранить поиск</span></div>
 		{% else %}

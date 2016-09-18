@@ -11,7 +11,6 @@ class Searchpage_Adverts extends Searchpage_Default
     public function get_twig_data($search_info, $request, $cached)
     {
         
-        $objects_for_map = array();
         $prefix          = (Kohana::$environment == Kohana::PRODUCTION) ? "" : "dev_";
         $staticfile      = new StaticFile("attributes", $prefix . 'static_attributes.js');
 
@@ -38,7 +37,7 @@ class Searchpage_Adverts extends Searchpage_Default
         /*
         done
         */
-        
+          
         //main search
         $main_search_query = Search::searchquery($search_info->search_filters, $search_params);
         
@@ -51,24 +50,6 @@ class Searchpage_Adverts extends Searchpage_Default
             $search_info->main_search_result_count = (int) $main_search_result_count;
         }
 
-        if (count($twig->main_search_result) > 0) {
-            $main_search_coords = array_map(function($item)
-            {
-                return array(
-                    "id" => $item["id"],
-                    "title" => addslashes($item["title"]),
-                    "price" => $item['price'],
-                    "photo" => @$item["compiled"]["images"]["main_photo"]["120x90"],
-                    "coords" => array(
-                        @$item["compiled"]["lat"],
-                        @$item["compiled"]["lon"]
-                    )
-                );
-            }, $twig->main_search_result);
-            
-            $objects_for_map = array_merge($objects_for_map, $main_search_coords);
-            
-        }
         //end main search
         
         //premium
@@ -83,24 +64,6 @@ class Searchpage_Adverts extends Searchpage_Default
         $twig->premium_search_result = Search::getresult($premium_search_query->execute()->as_array());
         foreach ($twig->premium_search_result as $key => $value) {
             $twig->premium_search_result[$key]["is_premium"] = TRUE;
-        }
-        if (count($twig->premium_search_result) > 0) {
-            $premium_search_coords = array_map(function($item)
-            {
-                return array(
-                    "id" => $item["id"],
-                    "title" => addslashes($item["title"]),
-                    "type" => "premium",
-                    "price" => $item["price"],
-                    "photo" => @$item["compiled"]["images"]["main_photo"]["120x90"],
-                    "coords" => array(
-                        @$item["compiled"]["lat"],
-                        @$item["compiled"]["lon"]
-                    )
-                );
-            }, $twig->premium_search_result);
-            
-            $objects_for_map = array_merge($objects_for_map, $premium_search_coords);
         }
         //premium end
         
@@ -118,24 +81,6 @@ class Searchpage_Adverts extends Searchpage_Default
         )));
         $twig->vip_search_result = Search::getresult($vip_search_query->execute()->as_array());
         shuffle($twig->vip_search_result);
-        if (count($twig->vip_search_result) > 0) {
-            $vip_search_coords = array_map(function($item)
-            {
-                return array(
-                    "id" => $item["id"],
-                    "title" => addslashes($item["title"]),
-                    "type" => "lider",
-                    "price" => $item["price"],
-                    "photo" => @$item["compiled"]["images"]["main_photo"]["120x90"],
-                    "coords" => array(
-                        @$item["compiled"]["lat"],
-                        @$item["compiled"]["lon"]
-                    )
-                );
-            }, $twig->vip_search_result);
-            
-            $objects_for_map = array_merge($objects_for_map, $vip_search_coords);
-        }
         //vip end
 
         
@@ -219,12 +164,6 @@ class Searchpage_Adverts extends Searchpage_Default
         $twig->favourites = ORM::factory('Favourite')->get_list_by_cookie();
         //end favourites
         
-        if ($search_info->category->show_map or count($twig->vip_search_result) > 6) {
-            if (count($objects_for_map) > 0) {
-                $twig->objects_for_map = json_encode($objects_for_map);
-                $twig->set_filename('search/index/with_map');
-            }
-        }
         
         if ($search_info->s_suri <> "/" . $search_info->canonical_url) {
             $search_info->show_canonical = TRUE;

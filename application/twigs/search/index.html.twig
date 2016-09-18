@@ -47,6 +47,13 @@
 
 {% block content %}
 	{% include 'search/filters' %}
+
+	{% block map %}
+		{% if category.show_map %}
+			{% include 'search/map' %}
+		{% endif %}
+	{% endblock map %}
+	
 	{% include 'search/result' %}
 	{% include 'search/paginator' %}
 {% endblock content%}

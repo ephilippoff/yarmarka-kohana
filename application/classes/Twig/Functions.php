@@ -456,5 +456,9 @@ class Twig_Functions
 		return $res;
 	}
 
+	public static function json_encode($value) {
+		return json_encode($value);
+	}
+
 	
 }

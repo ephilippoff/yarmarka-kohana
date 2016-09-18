@@ -60,7 +60,6 @@ function (app, $, Marionette, Backbone, _) {
         data: _globalSettings.data,
         category_id: _globalSettings.category_id,
         city_id: _globalSettings.city_id,
-        objects_for_map: _globalSettings.objects_for_map,
         host: _globalSettings.host,
         mainHost: 'yarmarka.dev',
         debug: _globalSettings.debug,

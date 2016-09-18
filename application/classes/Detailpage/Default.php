@@ -220,17 +220,6 @@ class Detailpage_Default
 
 		$info['similar_search_result'] = array_merge($info['similar_vip_search_result'], $info['similar_search_result']);
 
-		$info['similar_coords'] = array_map(function($item){
-			return array(
-				"id" => $item["id"],
-				"title" => $item["title"],
-				"price" => $item["price"],
-				"photo" => @$item["compiled"]["images"]["main_photo"]["120x90"],
-				"coords" => array(@$item["compiled"]["lat"], @$item["compiled"]["lon"])
-			);
-		}, $info['similar_search_result']);
-
-		$info['objects_for_map'] = json_encode($info['similar_coords']);
 
 		$this->_info = array_merge($this->_info, $info);
 		return $this;

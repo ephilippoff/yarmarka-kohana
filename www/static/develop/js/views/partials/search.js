@@ -10,13 +10,19 @@ define([
     "use strict";
 
     return Marionette.LayoutView.extend({
+        mapInstance: null,
+        objectManager: null,
         ui: {
             tr:"tr.tr",
-            map: "#map",
+            map: ".js-map",
+            mapWrapper: ".js-map-cont",
+            mapCount: ".js-map-count",
             banners: ".js-banners",
             liders: ".js-liders",
-            button: '#map-button',
-            wrap: '#map-wrap'
+            expandMapButton: '.js-map-expand',
+            collapseMapButton: '.js-map-collapse'
+            // button: '#map-button',
+            // wrap: '#map-wrap'
         },
         events: {
             "mouseover @ui.tr": function(e) {
@@ -27,7 +33,13 @@ define([
                  $(e.currentTarget).removeClass("hover");
             },
             "click @ui.button": function(e) {
-                this.buttonCheck();
+                //this.buttonCheck();
+            },
+            "click @ui.expandMapButton": function(e) {
+                this.expandMap();
+            },
+            "click @ui.collapseMapButton": function(e) {
+                this.collapseMap();
             }
         },
         behaviors: {
@@ -44,131 +56,124 @@ define([
 
         initialize: function() {
             this.bindUIElements();
-            this.buttonCheck();
-            
-        },
+            //this.buttonCheck();
 
-        buttonCheck: function(){
-            var action = this.ui.button.attr('data-action');
-            if (action == 'showMap') {
-                this.initMapBlock();
-                this.ui.wrap.show();
-                this.ui.button.attr('data-action', 'hideMap').text('Спрятать карту');;
-            }else {
-                this.ui.map.empty();
-                this.ui.wrap.hide();
-                this.ui.button.attr('data-action', 'showMap').text('Показать на карте');
-            }
-        },
-
-        initMapBlock: function(){
-            var s = this;
-            
             if (this.ui.map.length) {
-                this.initMap(function(){
-                    var map_height = s.ui.map.height();
-                    var banners_height = s.ui.map.height();
-                    var liders_height = s.ui.liders.height();
-                    var commonHeight = map_height;
-                    var maxOffsetY = _.max([banners_height, liders_height]) + map_height;
-                    if (s.ui.liders.length == 0) {
-                        s.fixBlock(s.ui.map.parent(), 0, 0 );
-                    } else {
-                        commonHeight +=liders_height;
-                        s.fixBlock(s.ui.map.parent(), maxOffsetY, 0 );
-                    }
+                this.initMap();
+            }
+        },
 
-                    if (s.ui.banners.length) {
-                        if (s.ui.liders.length == 0) {
-                            s.fixBlock(s.ui.banners, -map_height - 70, map_height + 20);
-                        } else {
-                            commonHeight +=banners_height;
-                            s.fixBlock(s.ui.banners, map_height, map_height + 20);
-                        }
-                    }
-                    s.commonHeight = commonHeight;
+        expandMap: function() {
+            var s = this;
 
+            this.ui.expandMapButton.addClass('hidden');
+            this.ui.mapWrapper.addClass('expanded');
+            this.ui.mapCount.removeClass('hidden');
+            this.ui.collapseMapButton.removeClass('hidden');
+
+            ymaps.ready(function () {
+
+                var objectManager = s.objectManager = new ymaps.ObjectManager({
+                    clusterize: true,
+                    gridSize: 32
                 });
-                
-            } else {
-                var banners_height = s.ui.map.height();
-                var liders_height = s.ui.liders.height();
-                var commonHeight = banners_height;
-                if (s.ui.banners.length) {
-                    if (s.ui.liders.length == 0) {
-                        s.fixBlock(s.ui.banners, 70, 20);
-                    } else {
-                        commonHeight += liders_height;
-                        s.fixBlock(s.ui.banners, 0, 20);
-                    }
-                }
-                s.commonHeight = commonHeight;
+
+                objectManager.objects.options.set('preset', 'islands#greenDotIcon');
+                objectManager.clusters.options.set('preset', 'islands#greenClusterIcons');
+
+                s.mapInstance.geoObjects.add(objectManager);
+
+                $.ajax({
+                    url: '/search_category/map',
+                    type: 'POST',
+                    data: { 
+                        category_id: _globalSettings.category_id, 
+                        city_id: _globalSettings.city_id,
+                        search_filters: _globalSettings.search_filters
+                    }, 
+                    success: function (data) {
+                        objectManager.add(data);
+                    },
+                    dataType:'json'
+                });
+
+            });
+        },
+
+        collapseMap: function() {
+
+            this.ui.expandMapButton.removeClass('hidden');
+            this.ui.mapWrapper.removeClass('expanded');
+            this.ui.mapCount.addClass('hidden');
+            this.ui.collapseMapButton.addClass('hidden');
+
+            if (this.objectManager) {
+                this.objectManager.removeAll();
+                this.objectManager = null;
             }
 
-            
-
-            this.citySelect();
         },
 
-        citySelect: function() {
-            var city_id = utils.getRemembedCity();
-
-        },
-
-        initMap: function(success) {
+        initMap: function() {
             var mapObjects = [];
-            success = success || function(){};
-            if ($("#objects_for_map").length) {
-                try {
-                    mapObjects = JSON.parse($("#objects_for_map").text());
-                } catch (e) {
-                    mapObjects = [];
-                }
-            }
-           
+
             var s = this;
             var lat = +this.ui.map.data("lat");
             var lon = +this.ui.map.data("lon");
             var baloonTemplate = templates.components.detail.baloon;
-            app.map.getMap({ elid: "map", lat: lat, lon: lon, zoom: 10}, function(map){
-                var collection =  new ymaps.GeoObjectCollection();
-                var objects = {};
-                _.each(mapObjects, function(item){
-                    if (!item.coords[0]) return;
-                    var placemark = app.map.createPlacemark([item.coords[0],item.coords[1]],{
-                        style: app.map.getIconSettings( (item.type) ? "defRed" : "defTwitter" ),
-                        content: {
-                            hintContent: item.title,
-                            balloonContent: _.template(baloonTemplate)(item)
-                        }
-                    });
-                    objects[item.id] = placemark;
-                    collection.add(placemark);
-                });
-                map.geoObjects.add(collection);
-                
-                map.setBounds(collection.getBounds(), {
-                    checkZoomRange: true
+
+            ymaps.ready(function () {
+
+                s.mapInstance = new ymaps.Map("map", {
+                    center: [lat, lon],
+                    zoom: 12,
+                    controls: ["zoomControl","fullscreenControl"]
                 });
 
-                s.ui.tr.on("mouseover", function(e){
-                    e.preventDefault();
-                    var object_id = $(e.currentTarget).data("id");
-
-                    if (objects[object_id] && objects[object_id].options) {
-                        objects[object_id].options.set( app.map.getIconSettings("defTwitterActive") );
-                    }
-                });
-
-                s.ui.tr.on("mouseleave", function(e){
-                    e.preventDefault();
-                    var object_id = $(e.currentTarget).data("id");
-                    if (objects[object_id] && objects[object_id].options) {
-                        objects[object_id].options.set( app.map.getIconSettings("defTwitter") );
-                    }
-                });
-                success(map);
             });
+
+
+            //app.map.getMap({ elid: "map", lat: lat, lon: lon, zoom: 12}, function(map){
+                
+
+                // var collection =  new ymaps.GeoObjectCollection();
+                // var objects = {};
+                // _.each(mapObjects, function(item){
+                //     if (!item.coords[0]) return;
+                //     var placemark = app.map.createPlacemark([item.coords[0],item.coords[1]],{
+                //         style: app.map.getIconSettings( (item.type) ? "defRed" : "defTwitter" ),
+                //         content: {
+                //             hintContent: item.title,
+                //             balloonContent: _.template(baloonTemplate)(item)
+                //         }
+                //     });
+                //     objects[item.id] = placemark;
+                //     collection.add(placemark);
+                // });
+                // map.geoObjects.add(collection);
+                
+                // map.setBounds(collection.getBounds(), {
+                //     checkZoomRange: true
+                // });
+
+                // s.ui.tr.on("mouseover", function(e){
+                //     e.preventDefault();
+                //     var object_id = $(e.currentTarget).data("id");
+
+                //     if (objects[object_id] && objects[object_id].options) {
+                //         objects[object_id].options.set( app.map.getIconSettings("defTwitterActive") );
+                //     }
+                // });
+
+                // s.ui.tr.on("mouseleave", function(e){
+                //     e.preventDefault();
+                //     var object_id = $(e.currentTarget).data("id");
+                //     if (objects[object_id] && objects[object_id].options) {
+                //         objects[object_id].options.set( app.map.getIconSettings("defTwitter") );
+                //     }
+                // });
+
+           // });
         },
 
         fixBlock: function(elem, offsetY, topY) {

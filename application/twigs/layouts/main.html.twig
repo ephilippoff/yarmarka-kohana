@@ -132,6 +132,9 @@
                     {% if user_object_stat_item %}
                         , 'user_object_stat_id': {{ user_object_stat_item.id }}
                     {% endif %}
+                    {% if search_filters %}
+                        , 'search_filters': '{{ json_encode(search_filters) }}',
+                    {% endif %}
                 };
             </script>
             {% if is_debug_mode() %}
@@ -140,9 +143,6 @@
                 <script data-main="{{ js_asset('../production/js/build.js') }}" src="{{ js_asset('../production/js/require.js') }}"></script>
             {% endif %}
             
-            {% if (objects_for_map) %}
-                <script id="objects_for_map" type="text/template">{{objects_for_map}}</script>
-            {% endif %}
             <!-- endinject -->
         <!--/noindex-->
 

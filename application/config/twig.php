@@ -43,6 +43,7 @@ return array(
 		'get_meta_robots' => array ('func' => array('Twig_Functions', 'get_meta_robots'), 'options' => array() ),
 		'link' => array ('func' => array('Twig_Functions', 'link'), 'options' => array() ),
 		'topline_banner_class' => array ('func' => array('Twig_Functions', 'topline_banner_class'), 'options' => array() ),
+		'json_encode' => array ('func' => array('Twig_Functions', 'json_encode'), 'options' => array() ),
 	),
 	'filters' => array(
 		'contacthide' => array('Twig_Filters', 'contacthide'),
