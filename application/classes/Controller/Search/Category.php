@@ -74,7 +74,7 @@ class Controller_Search_Category extends Controller_Template {
             {   
 
                 $baloon = sprintf('<div class="clearfix m-map__baloon"><img src="/%s" class="m-map__baloon_left"><div class="m-map__baloon_right "><p><a href="/detail/%d">%s</a></p><p>%s</p></div></div>', 
-                    (@$item["compiled"]["images"]["main_photo"]["120x90"]) ? @$item["compiled"]["images"]["main_photo"]["120x90"] : '/static/develop/images/nophoto136x107.png',
+                    (@$item["compiled"]["images"]["main_photo"]["120x90"]) ? @$item["compiled"]["images"]["main_photo"]["120x90"] : 'static/develop/images/nophoto136x107.png',
                      $item["id"],
                      addslashes($item["title"]),
                     ($item['price']) ? $item['price']." руб" : ""
