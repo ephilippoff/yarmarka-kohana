@@ -11,6 +11,7 @@ define([
 
     return Marionette.LayoutView.extend({
         mapInstance: null,
+        fullscreenControl: null,
         objectManager: null,
         ui: {
             tr:"tr.tr",
@@ -66,10 +67,9 @@ define([
         expandMap: function() {
             var s = this;
 
-            this.ui.expandMapButton.addClass('hidden');
-            this.ui.mapWrapper.addClass('expanded');
-            this.ui.mapCount.removeClass('hidden');
-            this.ui.collapseMapButton.removeClass('hidden');
+            var screen_width = document.documentElement.clientWidth;
+
+            var is_mobile = (screen_width < 1000);
 
             ymaps.ready(function () {
 
@@ -82,6 +82,16 @@ define([
                 objectManager.clusters.options.set('preset', 'islands#greenClusterIcons');
 
                 s.mapInstance.geoObjects.add(objectManager);
+
+                if (!is_mobile) {
+                    s.ui.expandMapButton.addClass('hidden');
+                    s.ui.mapWrapper.addClass('expanded');
+                    s.ui.mapCount.removeClass('hidden');
+                    s.ui.collapseMapButton.removeClass('hidden');
+                } else {
+                    
+                    s.fullscreenControl.enterFullscreen();
+                }
 
                 $.ajax({
                     url: '/search_category/map',
@@ -127,8 +137,12 @@ define([
                 s.mapInstance = new ymaps.Map("map", {
                     center: [lat, lon],
                     zoom: 12,
-                    controls: ["zoomControl","fullscreenControl"]
+                    controls: ["zoomControl"]
                 });
+
+                var fullscreenControl = new ymaps.control.FullscreenControl();
+                s.fullscreenControl = fullscreenControl;
+                s.mapInstance.controls.add(fullscreenControl);
 
             });
 
