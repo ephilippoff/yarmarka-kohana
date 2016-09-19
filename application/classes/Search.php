@@ -513,7 +513,8 @@ class Search {
 			$city_id = $params->city_id ? $params->city_id : 0;
 			$category_id = $params->category_id ? $params->category_id : 0;
 
-			$sphinx_result = Sphinx::search($params->search_text, $category_id, $city_id, FALSE, NULL, 0, 1000);
+			$sphinx = new Sphinx();
+			$sphinx_result = $sphinx->search($params->search_text, $category_id, $city_id, FALSE, NULL, 0, 1000);
 
 			// var_dump($category_id); die;
 			$objects = Sphinx::getObjects($sphinx_result);

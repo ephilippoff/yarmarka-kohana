@@ -5,7 +5,9 @@ class Sphinx {
 
 	function __construct()
 	{
-		include APPPATH.'classes/Sphinxapi.php';
+		if (!class_exists('SphinxClient')) {
+			include APPPATH.'classes/Sphinxapi.php';
+		}
 		Sphinx::$_prefix = Kohana::$config->load("common.sphinx_prefix");
 	}
 
