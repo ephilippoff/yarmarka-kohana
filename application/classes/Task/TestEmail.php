@@ -27,23 +27,7 @@ class Task_TestEmail extends Minion_Task
 
 		$contact = ORM::factory('Contact')->order_by('id','desc')->find();
 
-		$this->payment_success($order, $orderItems);
-
-		$this->addedit(TRUE, 4028377);
-		$this->addedit(FALSE, 4028377);
-
-		$this->block_contact('123213', $objects);
-
-		$this->decline_contact('213123', $objects);
-
-		$this->contact_verification_code($contact, '123213');
-
-		$this->forgot_password('http://vagapov.site/sdfdsfdsf');
-
-		$this->moderate_object(
-			array('<p> + Action 1</p>','<p> + Action 2</p>'),
-			array('<p> - Action 3</p>','<p> - Action 4</p>')
-		);
+		
 
 		$objectload_id = 3739;
 		$objectload = ORM::factory('Objectload', $objectload_id);
@@ -73,6 +57,24 @@ class Task_TestEmail extends Minion_Task
 					"stat" => new Obj($file->get_statistic())
 				);
 		}
+
+		$this->payment_success($order, $orderItems);
+
+		$this->addedit(TRUE, 4028377);
+		$this->addedit(FALSE, 4028377);
+
+		$this->block_contact('123213', $objects);
+
+		$this->decline_contact('213123', $objects);
+
+		$this->contact_verification_code($contact, '123213');
+
+		$this->forgot_password('http://vagapov.site/sdfdsfdsf');
+
+		$this->moderate_object(
+			array('<p> + Action 1</p>','<p> + Action 2</p>'),
+			array('<p> - Action 3</p>','<p> - Action 4</p>')
+		);
 
 
 		$this->massload_report($objectload,  $common_stat, $category_stat, $user->org_name);
