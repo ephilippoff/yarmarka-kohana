@@ -1,0 +1,16 @@
+{% extends "layouts/email" %}
+{% block body %} 
+
+
+<tr>
+    <td colspan="2" style="padding:10px;">
+        <h2 style="font-size: 1.2em; margin-bottom: 15px;">Проверочный код для контакта {{ contact }}</h2>
+    </td>
+</tr>
+ <tr>
+    <td colspan="2" style="padding:10px;">
+        {{ code }}
+    </td>
+</tr>
+
+{% endblock body %}

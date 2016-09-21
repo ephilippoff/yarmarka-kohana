@@ -1,0 +1,19 @@
+{% extends "layouts/email" %}
+
+{% block body %} 
+
+
+<tr>
+    <td colspan="2" style="padding:10px;">
+        <h2 style="font-size: 1.2em; margin-bottom: 15px;">Объявления были сняты с публикации, т.к. телефон {{ phone }} не прошел проверку</h2>
+    </td>
+</tr>
+ <tr>
+    <td colspan="2" style="padding:10px;">
+        {% for object in objects %}
+            <p class="p3"><a style="color: #d44234;" href="{{ domain ? domain : 'http://yarmarka.biz' }}/detail/{{ object.id }}">{{ object.title }}</a></p>
+        {% endfor %}
+    </td>
+</tr>
+
+{% endblock body %}

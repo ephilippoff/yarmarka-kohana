@@ -1,0 +1,23 @@
+{% extends "layouts/email" %}
+
+{% block body %} 
+
+
+<tr>
+    <td colspan="2" style="padding:10px;">
+        <h2 style="font-size: 1.2em; margin-bottom: 15px;">Уведомление от модератора</h2>
+    </td>
+</tr>
+ <tr>
+    <td colspan="2" style="padding:10px;">
+        {% for action in actions_negative %}
+            <p class="p3" style="color: #d44234;"> {{ action }}</p>
+        {% endfor %}
+        <hr>
+        {% for action in actions_positive %}
+            <p class="p3" style="color: #d44234;"> {{ action }}</p>
+        {% endfor %}
+    </td>
+</tr>
+
+{% endblock body %}

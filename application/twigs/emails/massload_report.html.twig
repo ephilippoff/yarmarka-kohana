@@ -1,0 +1,59 @@
+{% extends "layouts/email" %}
+
+{% block body %} 
+
+
+<tr>
+    <td colspan="2" style="padding:10px;">
+        <h2 style="font-size: 1.2em; margin-bottom: 15px;">Отчет по загрузке объявлений ({{ org_name }}) {{ objectload.created_on|date('d.m.Y H:i') }}</h2>
+    </td>
+</tr>
+ <tr>
+    <td colspan="2" style="padding:10px;">
+        <p>
+        {% for info in category_stat %}
+
+                {% set stat = info.stat %}
+                {% set title = info.title %}
+                {% set fileid = info.id %}
+
+                {% set new = stat.loaded - stat.edited %}
+                {% set withservice_err_ids = [] %}
+
+                {% if stat.withservice_err_ids %}
+                    {% set withservice_err_ids = stat.withservice_err_ids|split(',') %}
+                {% endif %}
+            
+            <h3 style="font-size:1.1em; display:block; text-align:left; margin-bottom:10px; ">Категория: {{ title }}</h3>
+            <ul>
+                <li class="p3">Новые: {{ new }}</li>
+                <li class="p3">Были отредактированы: {{ stat.edited }} </li>
+                <li class="p3">Не изменились: {{ stat.nochange }}</li>
+                <li class="p3"><a href="{{ domain ? domain : 'http://yarmarka.biz' }}/user/objectload_file_list/{{ fileid }}?errors=1">С ошибками: {{ stat.error }}</a></li>
+                        
+                {% if stat.premium %}
+                    <li class="p3">Премиум услуги применены к {{ stat.premium }} объявлениям</li>
+                {% endif %}
+                
+                {% if withservice_err_ids|length %}
+                    <li style="color:red;">Премиум не применился (т.к. содержат ошибки):
+
+                        {% for prem_id in withservice_err_ids %}
+
+                            <a href="{{ domain ? domain : 'http://yarmarka.biz' }}/user/objectload_file_list/{{ fileid }}#{{ prem_id }}">{ prem_id }}</a>,
+
+                        {% endfor %}
+                    </li>
+                {% endif %}
+
+
+            </ul>
+        {% endfor %}
+        </p>
+        <p>
+            <a style="color: #d44234;" href="{{ domain ? domain : 'http://yarmarka.biz' }}/user/objectload" target="_blank">Перейти к  интерфейсу массовой загрузки</a>   
+        </p>
+    </td>
+</tr>
+
+{% endblock body %}

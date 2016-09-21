@@ -1,0 +1,28 @@
+{% extends "layouts/email" %}
+
+{% block body %} 
+
+
+<tr>
+    <td colspan="2" style="padding:10px;">
+        <h2 style="font-size: 1.2em; margin-bottom: 15px;">Продлите объявление</h2>
+    </td>
+</tr>
+ <tr>
+    <td colspan="2" style="padding:10px;">
+        <p>До окончания срока размещения ваших объявлений на «Ярмарка - Онлайн» осталось 7 дней. После этого они переместятся в архив и больше не будут видны пользователям сайта.</p>
+        
+        {% for object in objects %}
+            <p class="p3"><a style="color: #d44234;" href="{{ domain ? domain : 'http://yarmarka.biz' }}/detail/{{ object.id }}">{{ object.title }}</a></p>
+        {% endfor %}
+        
+        <p>
+            После перехода по ссылке объявление будет продлено на месяц и поднято в поиске.
+        </p>
+        <p>
+            Рекомендуем воспользоваться дополнительными сервисами в <a style="color: #d44234;" href="{{ domain ? domain : 'http://yarmarka.biz' }}/user/myads">личном кабинете</a> для увеличения отклика на ваши объявления.
+        </p>
+    </td>
+</tr>
+
+{% endblock body %}

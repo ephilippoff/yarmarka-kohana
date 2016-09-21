@@ -1,0 +1,49 @@
+{% extends "layouts/email" %}
+
+{% block body %} 
+
+<tr>
+    <td colspan="2" style="padding:10px;">
+        <h2 style="font-size: 1.5em; margin-bottom: 15px;">Подтверждение оплаты заказа № {{ order.id }}</h2>
+    </td>
+</tr>
+<tr>
+    <td colspan="2" style="padding:10px;">
+
+           № Заказа: {{ order.id }}<br>
+           Дата заказа: {{ order.created|date('d.m.Y H:i:s') }}<br>
+           Дата оплаты: {{ order.payment_date|date('d.m.Y H:i:s') }}<br>
+           Поставщик: ООО «ЭДВ-Тюмень»><br>
+
+           {% for orderItem in orderItems %}
+               <table cellspacing="0" style="font-size: 13px; border-collapse: collapse; width: 100%; text-align: right; margin: 15px auto 0; border: 1px solid #ccc;">
+                   <tr>
+                       <td style="color: #616161; text-align: left;" align="left">Услуга</td>
+                       <td>
+                           <a href="{{ domain ? domain : 'http://yarmarka.biz' }}/detail/{{ orderItem.object.id }}" style="color: #D44234;">{{ orderItem.title }}</a>
+                       </td>
+                   </tr>
+                   <tr>
+                       <td style="color: #616161; text-align: left;" align="left">Параметры</td>
+                       <td>{{ orderItem.service.description }}</td>
+                   </tr>
+                   <tr>
+                       <td style="color: #616161; text-align: left;" align="left">Цена</td>
+                       <td>{{ orderItem.service.price }} р.</td>
+                   </tr>
+                   <tr>
+                       <td style="color: #616161; text-align: left;" align="left">Сумма</td>
+                       <td>{{ orderItem.service.price_total }} р.</td>
+                   </tr>
+               </table>
+           {% endfor %}<hr>
+           <div>
+               Сумма счета: {{ order.sum }} р.
+           </div>
+           <div class="footer" style="text-align: right; font-size: 11px; margin: 10px 0;">НДС не предусмотрен</div>
+
+    </td>
+</tr>
+
+
+{% endblock body %}

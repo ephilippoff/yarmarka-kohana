@@ -1,0 +1,28 @@
+{% extends "layouts/email" %}
+
+{% block body %} 
+
+ <tr>
+    <td colspan="2" style="padding:10px;">
+        <h2 style="font-size: 1.2em; margin-bottom: 15px;">Ваши объявления перемещены в архив</h2>
+    </td>
+</tr>
+ <tr>
+    <td colspan="2" style="padding:10px;">
+        <p>
+            Следующие объявления более не доступны для поиска.
+        </p>
+
+        {% for object in objects %}
+            <p class="p3"><a style="color: #d44234;" href="{{ domain ? domain : 'http://yarmarka.biz' }}/detail/{{ object.id }}">{{ object.title }}</a></p>
+        {% endfor %}
+        <p>
+            Вы можете возобновить объявления в любое время в <a style="color: #d44234;" href="{{ domain ? domain : 'http://yarmarka.biz' }}/user/myads">личном кабинете</a>
+        </p>
+        <p>
+            Рекомендуем воспользоваться дополнительными сервисами в <a style="color: #d44234;" href="{{ domain ? domain : 'http://yarmarka.biz' }}/user/myads">личном кабинете</a> для увеличения отклика на ваши объявления.
+        </p>
+    </td>
+</tr>
+
+{% endblock body %}

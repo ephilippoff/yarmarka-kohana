@@ -3,15 +3,15 @@
 
 class Task_TestEmail extends Minion_Task
 {
+
+	private static $to = 'almaznv@yandex.ru';
+
 	protected $_options = array(
-		'id' => 0
 	);
 
 	protected function _execute(array $params)
 	{
-		$id 	= $params['id'];
-		
-		$order = ORM::factory('Order',$id);
+		$order = ORM::factory('Order', 1518);
 
 		$order_tems = ORM::factory('Order_Item')->where("order_id","=", $order->id)->order_by("id");
 
@@ -21,16 +21,294 @@ class Task_TestEmail extends Minion_Task
 			return $item;
 		});
 
-		$twig = Twig::factory('emails/payment_success');
-		$twig->orderItems = $orderItems;
-		$twig->order = $order;
+		$objects = ORM::factory('Object')->order_by('id','desc')->limit(2)->find_all();
 
-		$msg = $twig->render();
+		$object = ORM::factory('Object', 4028377);
 
-		Minion_CLI::write(
-			Email::send('almaznv@yandex.ru', Kohana::$config->load('email.default_from'), 'тестовое пиьсмо об оплате', $msg)
+		$contact = ORM::factory('Contact')->order_by('id','desc')->find();
+
+		$this->payment_success($order, $orderItems);
+
+		$this->addedit(TRUE, 4028377);
+		$this->addedit(FALSE, 4028377);
+
+		$this->block_contact('123213', $objects);
+
+		$this->decline_contact('213123', $objects);
+
+		$this->contact_verification_code($contact, '123213');
+
+		$this->forgot_password('http://vagapov.site/sdfdsfdsf');
+
+		$this->moderate_object(
+			array('<p> + Action 1</p>','<p> + Action 2</p>'),
+			array('<p> - Action 3</p>','<p> - Action 4</p>')
+		);
+
+		$objectload_id = 3739;
+		$objectload = ORM::factory('Objectload', $objectload_id);
+		$user = ORM::factory('User',$objectload->user_id);
+
+		$massload_email = ORM::factory('User_Settings')
+								->where("name","=","massload_email")
+								->where("user_id","=",$objectload->user_id)
+								->find_all();
+		
+		if (!$objectload_id OR !$massload_email OR !$objectload->loaded())
+			return;
+
+		$common_stat = new Obj($objectload->get_statistic());
+		$category_stat = array();
+
+		$of = ORM::factory('Objectload_Files')
+				->where("objectload_id", "=", $objectload_id)
+				->find_all();
+
+		foreach ($of as $file)
+		{	
+			$cfg = Kohana::$config->load('massload/bycategory.'.$file->category);
+			$category_stat[$cfg["name"]] = array(
+					"id" => $file->id,
+					"title" => $cfg["name"],
+					"stat" => new Obj($file->get_statistic())
+				);
+		}
+
+
+		$this->massload_report($objectload,  $common_stat, $category_stat, $user->org_name);
+
+		$this->object_expiration($objects);
+		$this->object_to_archive($objects);
+
+		$this->register_data('aaaaaaa','passsssssss');
+		$this->register_success('coooooooodddddeeeeeee');
+
+	}
+
+	private function payment_success($order, $orderItems, $domain = FALSE)
+	{
+		$params = array(
+		    'orderItems' => $orderItems,
+		    'order' => $order,
+		    'domain' => $domain
+		);
+
+		Minion_CLI::write( Email_Send::factory('payment_success')
+			->to( Task_TestEmail::$to )
+			->set_params($params)
+			->send('payment_success')
 		);
 
 	}
+
+	public static function addedit(
+	    $is_edit,
+	    $object,
+	    $domain = FALSE
+	)
+	{
+	    $params = array(
+	        'is_edit' => $is_edit,
+	        'object' => $object,
+	        'domain' => $domain
+	    );
+
+	    Minion_CLI::write( Email_Send::factory('addedit')
+	    			->to( Task_TestEmail::$to )
+	    			->set_params($params)
+	    			->send('addedit')
+	    		);
+	}
+
+	public static function block_contact(
+	    $phone,
+	    $objects,
+	    $domain = FALSE
+	)
+	{
+
+	    $params = array(
+	        'phone' => $phone,
+	        'objects' => $objects,
+	        'domain' => $domain
+	    );
+
+	     Minion_CLI::write( Email_Send::factory('block_contact')
+	    	    			->to( Task_TestEmail::$to )
+	    	    			->set_params($params)
+	    	    			->send('block_contact')
+	    	    		);
+	}
+
+	public static function decline_contact(
+	    $phone,
+	    $objects,
+	    $domain = FALSE
+	)
+	{
+
+	    $params = array(
+	        'phone' => $phone,
+	        'objects' => $objects,
+	        'domain' => $domain
+	    );
+
+	     Minion_CLI::write( Email_Send::factory('decline_contact')
+	    	    			->to( Task_TestEmail::$to )
+	    	    			->set_params($params)
+	    	    			->send('decline_contact')
+	    	    		);
+	}
+
+	public static function contact_verification_code(
+	    $contact,
+	    $code,
+	    $domain = FALSE
+	)
+	{
+	    $params = array(
+	        'contact' => $contact, 
+	        'code' => $code,
+	        'domain' => $domain
+	    );
+
+	     Minion_CLI::write( Email_Send::factory('contact_verification_code')
+	    	    			->to( Task_TestEmail::$to )
+	    	    			->set_params($params)
+	    	    			->send('contact_verification_code')
+	    	    		);
+	}
+
+	public static function forgot_password(
+	    $url,
+	    $domain = FALSE
+	)
+	{
+	    $params = array(
+	        'url' => $url,
+	        'domain' => $domain
+	    );
+
+	     Minion_CLI::write( Email_Send::factory('forgot_password')
+	    	    			->to( Task_TestEmail::$to )
+	    	    			->set_params($params)
+	    	    			->send('forgot_password')
+	    	    		);
+	}
+
+	public static function moderate_object(
+	    $actions_for_user_negative,
+	    $actions_for_user_positive,
+	    $domain = FALSE
+	)
+	{
+	    $params = array(
+	        'actions_negative' => $actions_for_user_negative,
+	        'actions_positive' => $actions_for_user_positive,
+	        'domain' => $domain
+	    );
+
+	     Minion_CLI::write( Email_Send::factory('moderate_object')
+	    	    			->to( Task_TestEmail::$to )
+	    	    			->set_params($params)
+	    	    			->send('moderate_object')
+	    	    		);
+	}
+
+	public static function massload_report(
+	    $objectload,
+	    $common_stat,
+	    $category_stat,
+	    $org_name,
+	    $domain = FALSE
+	)
+	{
+	    $params = array(
+	        'objectload' => $objectload, 
+	        'common_stat' => $common_stat, 
+	        'category_stat' => $category_stat,
+	        'org_name' => $org_name,
+	        'logo' => 'http://yarmarka.biz/images/logo.png'
+	    );
+
+	     Minion_CLI::write( Email_Send::factory('massload_report')
+	    	    			->to( Task_TestEmail::$to )
+	    	    			->set_params($params)
+	    	    			->send('massload_report')
+	    	    		);
+	}
+
+	public static function object_expiration(
+	    $objects,
+	    $domain = FALSE
+	)
+	{
+	    
+	    $params = array(
+	        'objects' => $objects,
+	        'domain' => $domain
+	    );
+
+	     Minion_CLI::write( Email_Send::factory('object_expiration')
+	    	    			->to( Task_TestEmail::$to )
+	    	    			->set_params($params)
+	    	    			->send('object_expiration')
+	    	    		);
+	}
+
+	public static function object_to_archive(
+	    $objects,
+	    $domain = FALSE
+	)
+	{
+	    
+	    $params = array(
+	        'objects' => $objects,
+	        'domain' => $domain
+	    );
+
+	     Minion_CLI::write( Email_Send::factory('object_to_archive')
+	    	    			->to( Task_TestEmail::$to )
+	    	    			->set_params($params)
+	    	    			->send('object_to_archive')
+	    	    		);
+	}
+
+
+	public static function register_data(
+	    $login,
+	    $password,
+	    $domain = FALSE
+	)
+	{
+	    
+	    $params = array(
+	        'login' => $login,
+	        'passw' => $password,
+	        'domain' => $domain
+	    );
+
+	     Minion_CLI::write( Email_Send::factory('register_data')
+	    	    			->to( Task_TestEmail::$to )
+	    	    			->set_params($params)
+	    	    			->send('register_data')
+	    	    		);
+	}
+
+	public static function register_success($code, $domain = FALSE)
+	{
+	    $params = array(
+	                'code' => $code,
+	                'domain' => $domain
+	            );
+
+	     Minion_CLI::write( Email_Send::factory('register_success')
+	    	    			->to( Task_TestEmail::$to )
+	    	    			->set_params($params)
+	    	    			->send('register_success')
+	    	    		);
+	}
+
+
 
 }

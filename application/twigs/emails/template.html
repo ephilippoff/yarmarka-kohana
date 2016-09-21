@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta charset="utf-8">
+<title></title>
+</head>
+<body style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: 14px; margin: 0; padding: 0;">
+    
+    <table style="max-width: 800px;width:100%;border:0;margin: 0 auto;border-collapse: collapse;">
+        <tr style="background: #D90000">
+            <td style="padding: 10px;">
+                <div class="logo" style="display: inline-block; font-size: 11px; width: 50%;">
+                    <img src="{{ domain ? domain : 'http://yarmarka.biz' }}/static/develop/images/Logo_white.png" alt="Ярмарка" style="width: 160px; height: 31px;"><br>
+                    <span style="color:white;">Сайт бесплатных объявлений</span>
+                </div>
+            </td>
+            <td  style="padding: 10px;">
+                <div class="site" style="display: inline-block; width: 100%; text-align: right; font-size: 13px;" align="right">
+                    <a href="{{ domain ? domain : 'http://yarmarka.biz' }}" style="color: white; line-height:20px;" target="_blank">Перейти на yarmarka.biz</a><br>
+                    <a href="{{ domain ? domain : 'http://yarmarka.biz' }}/add" style="color:white;line-height:20px" target="_blank">Добавить объявление</a>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" style="padding:10px;">
+                <h2 style="font-size: 1.5em; margin-bottom: 15px;">Объявление {{ object.id }} успешно изменено</h2>
+                <span>{{ object.title }} </span>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" style="padding:10px;">
+                <p>
+                    Сохраните это письмо, чтобы быстро перейти к <a style="color: #d44234;" href="{{ domain ? domain : 'http://yarmarka.biz' }}/detail/{{ object.id }}">просмотру объявления</a> или <a style="color: #d44234;" href="{{ domain ? domain : 'http://yarmarka.biz' }}/edit/{{ object.id }}">редактирвоанию</a>.
+                </p>
+            </td>
+        </tr>
+        
+        <tr>
+            <td colspan="2" style="padding:10px;">
+                <h2 style="font-size: 1.5em; margin-bottom: 15px;">Подтверждение оплаты заказа № {{ order.id }}</h2>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" style="padding:10px;">
+
+                   № Заказа: {{ order.id }}<br>
+                   Дата заказа: {{ order.created|date('d.m.Y H:i:s') }}<br>
+                   Дата оплаты: {{ order.payment_date|date('d.m.Y H:i:s') }}<br>
+                   Поставщик: ООО «ЭДВ-Тюмень»><br>
+
+                   {% for orderItem in orderItems %}
+                       <table cellspacing="0" style="font-size: 13px; border-collapse: collapse; width: 100%; text-align: right; margin: 15px auto 0; border: 1px solid #ccc;">
+                           <tr>
+                               <td style="color: #616161; text-align: left;" align="left">Услуга</td>
+                               <td>
+                                   <a href="{{ domain ? domain : 'http://yarmarka.biz' }}/detail/{{ orderItem.object.id }}" style="color: #D44234;">{{ orderItem.title }}</a>
+                               </td>
+                           </tr>
+                           <tr>
+                               <td style="color: #616161; text-align: left;" align="left">Параметры</td>
+                               <td>{{ orderItem.service.description }}</td>
+                           </tr>
+                           <tr>
+                               <td style="color: #616161; text-align: left;" align="left">Цена</td>
+                               <td>{{ orderItem.service.price }} р.</td>
+                           </tr>
+                           <tr>
+                               <td style="color: #616161; text-align: left;" align="left">Сумма</td>
+                               <td>{{ orderItem.service.price_total }} р.</td>
+                           </tr>
+                       </table>
+                   {% endfor %}<hr>
+                   <div>
+                       Сумма счета: {{ order.sum }} р.
+                   </div>
+                   <div class="footer" style="text-align: right; font-size: 11px; margin: 10px 0;">НДС не предусмотрен</div>
+
+            </td>
+        </tr>
+        
+        <tr>
+            <td colspan="2" style="padding:10px;">
+                <h2 style="font-size: 1.2em; margin-bottom: 15px;">Объявления были сняты с публикации, т.к. телефон был заблокирован модератором</h2>
+            </td>
+        </tr>
+         <tr>
+            <td colspan="2" style="padding:10px;">
+                {% for object in objects %}
+                    <p class="p3"><a style="color: #d44234;" href="{{ domain ? domain : 'http://yarmarka.biz' }}/detail/{{ object.id }}">{{ object.title }}</a></p>
+                {% endfor %}
+            </td>
+        </tr>
+
+        <tr>
+            <td colspan="2" style="padding:10px;">
+                <h2 style="font-size: 1.2em; margin-bottom: 15px;">Проверочный код для контакта {{ contact }}</h2>
+            </td>
+        </tr>
+         <tr>
+            <td colspan="2" style="padding:10px;">
+                {{ code }}
+            </td>
+        </tr>
+
+        <tr>
+            <td colspan="2" style="padding:10px;">
+                <h2 style="font-size: 1.2em; margin-bottom: 15px;">Объявления были сняты с публикации, т.к. телефон {{ phone }} не прошел проверку</h2>
+            </td>
+        </tr>
+         <tr>
+            <td colspan="2" style="padding:10px;">
+                {% for object in objects %}
+                    <p class="p3"><a style="color: #d44234;" href="{{ domain ? domain : 'http://yarmarka.biz' }}/detail/{{ object.id }}">{{ object.title }}</a></p>
+                {% endfor %}
+            </td>
+        </tr>
+
+        <tr>
+            <td colspan="2" style="padding:10px;">
+                <h2 style="font-size: 1.2em; margin-bottom: 15px;">Восстановление пароля</h2>
+            </td>
+        </tr>
+         <tr>
+            <td colspan="2" style="padding:10px;">
+                Вы запросили восстановление пароля. После перехода по этой ссылке, на странице профиля вы сможете сменить пароль. Данная ссылка работает только один раз.
+                <p>
+                    <a style="color: #d44234;" href="{{ url }}">{{ url }}</a>
+                </p>
+                <p>
+                    Если приведенная выше ссылка не работает: <br>
+                    <ol>
+                        <li> Возможно вы запросили восстановление пароля более одного раза. Переходите по  ссылке в последнем из доставленных писем о восстановлении пароля</li>
+                        <li>Скопируйте URL и вставьте его в  адресную строку в новом окне браузера</li>
+                    </ol>
+                </p>
+                
+            </td>
+        </tr>
+
+        <tr>
+            <td colspan="2" style="padding:10px;">
+                <h2 style="font-size: 1.2em; margin-bottom: 15px;">Уведомление от модератора</h2>
+            </td>
+        </tr>
+         <tr>
+            <td colspan="2" style="padding:10px;">
+                {% for action in actions_negative %}
+                    <p class="p3" style="color: #d44234;"> {{ action }}</p>
+                {% endfor %}
+                <hr>
+                {% for action in actions_positive %}
+                    <p class="p3" style="color: #d44234;"> {{ action }}</p>
+                {% endfor %}
+            </td>
+        </tr>
+
+        <tr>
+            <td colspan="2" style="padding:10px;">
+                <h2 style="font-size: 1.2em; margin-bottom: 15px;">Отчет по загрузке объявлений ({{ org_name }}) {{ objectload.created_on|date('d.m.Y H:i') }}</h2>
+            </td>
+        </tr>
+         <tr>
+            <td colspan="2" style="padding:10px;">
+                <p>
+                {% for info in category_stat %}
+
+                        {% set stat = info.stat %}
+                        {% set title = info.title %}
+                        {% set fileid = info.id %}
+
+                        {% set new = stat.loaded - stat.edited %}
+                        {% set withservice_err_ids = [] %}
+
+                        {% if stat.withservice_err_ids %}
+                            {% set withservice_err_ids = stat.withservice_err_ids|explode(',') %}
+                        {% endif %}
+                    
+                    <h3 style="font-size:1.1em; display:block; text-align:left; margin-bottom:10px; ">Категория: {{ title }}</h3>
+                    <ul>
+                        <li class="p3">Новые: {{ new }}</li>
+                        <li class="p3">Были отредактированы: {{ stat.edited }} </li>
+                        <li class="p3">Не изменились: {{ stat.nochange }}</li>
+                        <li class="p3"><a href="{{ domain ? domain : 'http://yarmarka.biz' }}/user/objectload_file_list/{{ fileid }}?errors=1">С ошибками: {{ stat.error }}</a></li>
+                                
+                        {% if stat.premium %}
+                            <li class="p3">Премиум услуги применены к {{ stat.premium }} объявлениям</li>
+                        {% endif %}
+                        
+                        {% if withservice_err_ids|length %}
+                            <li style="color:red;">Премиум не применился (т.к. содержат ошибки):
+
+                                {% for prem_id in withservice_err_ids %}
+
+                                    <a href="{{ domain ? domain : 'http://yarmarka.biz' }}/user/objectload_file_list/{{ fileid }}#{{ prem_id }}">{ prem_id }}</a>,
+
+                                {% endfor %}
+                            </li>
+                        {% endif %}
+
+
+                    </ul>
+                {% endfor %}
+                </p>
+                <p>
+                    <a style="color: #d44234;" href="{{ domain ? domain : 'http://yarmarka.biz' }}/user/objectload" target="_blank">Перейти к  интерфейсу массовой загрузки</a>   
+                </p>
+            </td>
+        </tr>
+
+        <tr>
+            <td colspan="2" style="padding:10px;">
+                <h2 style="font-size: 1.2em; margin-bottom: 15px;">Если объявление актуально, его можно продлить</h2>
+            </td>
+        </tr>
+         <tr>
+            <td colspan="2" style="padding:10px;">
+                <p>До окончания срока размещения ваших объявлений на «Ярмарка - Онлайн» осталось 7 дней. После этого они переместятся в архив и больше не будут видны пользователям сайта.</p>
+                
+                {% for object in objects %}
+                    <p class="p3"><a style="color: #d44234;" href="{{ domain ? domain : 'http://yarmarka.biz' }}/detail/{{ object.id }}">{{ object.title }}</a></p>
+                {% endfor %}
+                
+                <p>
+                    После перехода по ссылке объявление будет продлено на месяц и поднято в поиске.
+                </p>
+                <p>
+                    Рекомендуем воспользоваться дополнительными сервисами в <a style="color: #d44234;" href="{{ domain ? domain : 'http://yarmarka.biz' }}/user/myads">личном кабинете</a> для увеличения отклика на ваши объявления.
+                </p>
+            </td>
+        </tr>
+
+
+         <tr>
+            <td colspan="2" style="padding:10px;">
+                <h2 style="font-size: 1.2em; margin-bottom: 15px;">Ваши объявления перемещены в архив</h2>
+            </td>
+        </tr>
+         <tr>
+            <td colspan="2" style="padding:10px;">
+                <p>
+                    Следующие объявления более не доступны для поиска.
+                </p>
+
+                {% for object in objects %}
+                    <p class="p3"><a style="color: #d44234;" href="{{ domain ? domain : 'http://yarmarka.biz' }}/detail/{{ object.id }}">{{ object.title }}</a></p>
+                {% endfor %}
+                <p>
+                    Вы можете возобновить объявления в любое время в <a style="color: #d44234;" href="{{ domain ? domain : 'http://yarmarka.biz' }}/user/myads">личном кабинете</a>
+                </p>
+                <p>
+                    Рекомендуем воспользоваться дополнительными сервисами в <a style="color: #d44234;" href="{{ domain ? domain : 'http://yarmarka.biz' }}/user/myads">личном кабинете</a> для увеличения отклика на ваши объявления.
+                </p>
+            </td>
+        </tr>
+
+        <tr>
+            <td colspan="2" style="padding:10px;">
+                <h2 style="font-size: 1.5em; margin-bottom: 15px;">Создана учетная запись</h2>
+                <span>{{ object.title }} </span>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" style="padding:10px;">
+                <p>На сайте «Ярмарка-онлайн» для вас автоматически создана учетная запись</p>
+                <p>
+                    Ваш логин: {{ login }} <br>
+                    Ваш пароль: {{ passw }}
+                </p>
+                <p>
+                    Используйте их для <a href="{{ domain ? domain : 'http://yarmarka.biz' }}/user/login?return=user/userinfo" style="color: #d44234;">входа</a> на наш сайт
+                </p>
+                <p>
+                    Вы можете <a href="{{ domain ? domain : 'http://yarmarka.biz' }}/user/password" style="color: #d44234;">изменить пароль</a> в любое время
+                </p>
+            </td>
+        </tr>
+
+        <tr>
+            <td colspan="2" style="padding:10px;">
+                <h2 style="font-size: 1.5em; margin-bottom: 15px;">Подтвердите регистрацию</h2>
+                <span>{{ object.title }} </span>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" style="padding:10px;">
+                <p>
+                    Чтобы активировать Ваш аккаунт, перейдите по следующей ссылке:<br><a style="color: #d44234;" href="{{ domain ? domain : 'http://yarmarka.biz' }}/user/account_verification/{{activationCode}}"> {{ domain ? domain : 'http://yarmarka.biz' }}/user/account_verification/{{activationCode}}</a>
+                </p>
+                <p>
+                     Если приведенная ссылка не открывается, скопируйте ее и вставьте в адресную строку браузера.
+                </p>
+                <p>
+                     Если Вы не регистрировались на «Ярмарка-онлайн», ничего не делайте или просто удалите это письмо - аккаунт создан не будет.
+                </p>
+            </td>
+        </tr>
+
+        <tr>
+
+            <td colspan="2" style="padding:10px;">
+                <div class="footer" style="text-align: right; font-size: 12px; margin: 10px 0;" align="right">С уважением, команда «Ярмарка-онлайн»</div>
+                
+                <hr size="1" style="color: #6c6c6c;">
+
+                <p style="color: #6c6c6c; font-size: 10px;">
+                    Пожалуйста, не отвечайте на это письмо, т.к. указанный почтовый адрес используется только для рассылки уведомлений
+                </p>
+                <p style="color: #6c6c6c; font-size: 10px;">
+                    Вы можете отписаться от рассылки наших уведомлений если перейдете по <a href="{{ domain ? domain : 'http://yarmarka.biz' }}/user/unsubscribe" >ссылке</a>. Однако, мы не рекомендуем это делать. Через письма в любое время можно вспомнить пароль или перейти к вашим объявлениям. Для вашего удобства, мы рекомендуем добавить наш адрес рассылки noreply@yarmarka.biz в контакты, и настроить автоматический перенос писем в отдельную папку. Инструкцию по настройке автоматического переноса писем можно найти на своем почтовом сервисе
+                </p>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

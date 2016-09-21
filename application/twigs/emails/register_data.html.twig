@@ -1,0 +1,27 @@
+{% extends "layouts/email" %}
+
+{% block body %} 
+
+<tr>
+    <td colspan="2" style="padding:10px;">
+        <h2 style="font-size: 1.5em; margin-bottom: 15px;">Создана учетная запись</h2>
+        <span>{{ object.title }} </span>
+    </td>
+</tr>
+<tr>
+    <td colspan="2" style="padding:10px;">
+        <p>На сайте «Ярмарка-онлайн» для вас автоматически создана учетная запись</p>
+        <p>
+            Ваш логин: {{ login }} <br>
+            Ваш пароль: {{ passw }}
+        </p>
+        <p>
+            Используйте их для <a href="{{ domain ? domain : 'http://yarmarka.biz' }}/user/login?return=user/userinfo" style="color: #d44234;">входа</a> на наш сайт
+        </p>
+        <p>
+            Вы можете <a href="{{ domain ? domain : 'http://yarmarka.biz' }}/user/password" style="color: #d44234;">изменить пароль</a> в любое время
+        </p>
+    </td>
+</tr>
+
+{% endblock body %}
