@@ -62,13 +62,13 @@ class Task_TestEmail extends Minion_Task
 				);
 		}
 
-		$domain = 'http://surgut.yarmarka.biz';
+		$domain = 1948;
 
 		$this->payment_success($order, $orderItems, $domain);
 
 		$this->addedit(TRUE, $object, $domain);
 		$this->addedit(FALSE, $object, $domain);
-
+		
 		$this->block_contact('123213', $objects, $domain);
 
 		$this->decline_contact('213123', $objects, $domain);
@@ -78,8 +78,8 @@ class Task_TestEmail extends Minion_Task
 		$this->forgot_password('http://vagapov.site/sdfdsfdsf', $domain);
 
 		$this->moderate_object(
-			array('<p> + Action 1</p>','<p> + Action 2</p>', $domain),
-			array('<p> - Action 3</p>','<p> - Action 4</p>', $domain)
+			array('<p> + Action 1</p>','<p> + Action 2</p>'),
+			array('<p> - Action 3</p>','<p> - Action 4</p>'), $domain
 		);
 
 
@@ -107,7 +107,7 @@ class Task_TestEmail extends Minion_Task
 		Minion_CLI::write( Email_Send::factory('payment_success')
 			->to( Task_TestEmail::$to )
 			->set_params($params)
-			->send('payment_success')
+			->send()
 		);
 
 	}
@@ -127,7 +127,7 @@ class Task_TestEmail extends Minion_Task
 	    Minion_CLI::write( Email_Send::factory('addedit')
 	    			->to( Task_TestEmail::$to )
 	    			->set_params($params)
-	    			->send('addedit')
+	    			->send()
 	    		);
 	}
 
@@ -147,7 +147,7 @@ class Task_TestEmail extends Minion_Task
 	     Minion_CLI::write( Email_Send::factory('block_contact')
 	    	    			->to( Task_TestEmail::$to )
 	    	    			->set_params($params)
-	    	    			->send('block_contact')
+	    	    			->send()
 	    	    		);
 	}
 
@@ -167,7 +167,7 @@ class Task_TestEmail extends Minion_Task
 	     Minion_CLI::write( Email_Send::factory('decline_contact')
 	    	    			->to( Task_TestEmail::$to )
 	    	    			->set_params($params)
-	    	    			->send('decline_contact')
+	    	    			->send()
 	    	    		);
 	}
 
@@ -186,7 +186,7 @@ class Task_TestEmail extends Minion_Task
 	     Minion_CLI::write( Email_Send::factory('contact_verification_code')
 	    	    			->to( Task_TestEmail::$to )
 	    	    			->set_params($params)
-	    	    			->send('contact_verification_code')
+	    	    			->send()
 	    	    		);
 	}
 
@@ -203,7 +203,7 @@ class Task_TestEmail extends Minion_Task
 	     Minion_CLI::write( Email_Send::factory('forgot_password')
 	    	    			->to( Task_TestEmail::$to )
 	    	    			->set_params($params)
-	    	    			->send('forgot_password')
+	    	    			->send()
 	    	    		);
 	}
 
@@ -222,7 +222,7 @@ class Task_TestEmail extends Minion_Task
 	     Minion_CLI::write( Email_Send::factory('moderate_object')
 	    	    			->to( Task_TestEmail::$to )
 	    	    			->set_params($params)
-	    	    			->send('moderate_object')
+	    	    			->send()
 	    	    		);
 	}
 
@@ -245,7 +245,7 @@ class Task_TestEmail extends Minion_Task
 	     Minion_CLI::write( Email_Send::factory('massload_report')
 	    	    			->to( Task_TestEmail::$to )
 	    	    			->set_params($params)
-	    	    			->send('massload_report')
+	    	    			->send()
 	    	    		);
 	}
 
@@ -263,7 +263,7 @@ class Task_TestEmail extends Minion_Task
 	     Minion_CLI::write( Email_Send::factory('object_expiration')
 	    	    			->to( Task_TestEmail::$to )
 	    	    			->set_params($params)
-	    	    			->send('object_expiration')
+	    	    			->send()
 	    	    		);
 	}
 
@@ -281,7 +281,7 @@ class Task_TestEmail extends Minion_Task
 	     Minion_CLI::write( Email_Send::factory('object_to_archive')
 	    	    			->to( Task_TestEmail::$to )
 	    	    			->set_params($params)
-	    	    			->send('object_to_archive')
+	    	    			->send()
 	    	    		);
 	}
 
@@ -302,7 +302,7 @@ class Task_TestEmail extends Minion_Task
 	     Minion_CLI::write( Email_Send::factory('register_data')
 	    	    			->to( Task_TestEmail::$to )
 	    	    			->set_params($params)
-	    	    			->send('register_data')
+	    	    			->send()
 	    	    		);
 	}
 
@@ -316,7 +316,7 @@ class Task_TestEmail extends Minion_Task
 	     Minion_CLI::write( Email_Send::factory('register_success')
 	    	    			->to( Task_TestEmail::$to )
 	    	    			->set_params($params)
-	    	    			->send('register_success')
+	    	    			->send()
 	    	    		);
 	}
 

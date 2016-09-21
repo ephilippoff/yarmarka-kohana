@@ -23,26 +23,25 @@
             </td>
         </tr>
 
-        {% block body %}
-
-           
-
-        {% endblock body %}
-
+        {% block body %}{% endblock body %}
 
         <tr>
-
             <td colspan="2" style="padding:10px;">
                 <div class="footer" style="text-align: right; font-size: 12px; margin: 10px 0;" align="right">С уважением, команда «Ярмарка-онлайн»</div>
                 
                 <hr size="1" style="color: #6c6c6c;">
-
+                
                 <p style="color: #6c6c6c; font-size: 10px;">
                     Пожалуйста, не отвечайте на это письмо, т.к. указанный почтовый адрес используется только для рассылки уведомлений
                 </p>
                 <p style="color: #6c6c6c; font-size: 10px;">
-                    Вы можете отписаться от рассылки наших уведомлений если перейдете по <a href="{{ domain ? domain : 'http://yarmarka.biz' }}/user/unsubscribe" >ссылке</a>. Однако, мы не рекомендуем это делать. Через письма в любое время можно вспомнить пароль или перейти к вашим объявлениям. Для вашего удобства, мы рекомендуем добавить наш адрес рассылки noreply@yarmarka.biz в контакты, и настроить автоматический перенос писем в отдельную папку. Инструкцию по настройке автоматического переноса писем можно найти на своем почтовом сервисе
+                    Вы получили это письмо, потому что являетесь пользователем  YARMARKA.BIZ. <a href="{{ domain ? domain : 'http://yarmarka.biz' }}/user/email_settings">Настройка email уведомлений</a>
                 </p>
+                {% if user_email %}
+                <p style="color: #6c6c6c; font-size: 10px;">
+                    Для <a href="{{ domain ? domain : 'http://yarmarka.biz' }}/user/login">входа</a> на сайт используйте свою электронную почту <b>{{ user_email }}</b>. <a href="{{ domain ? domain : 'http://yarmarka.biz' }}/user/forgot_password">Забыли пароль?</a>
+                </p>
+                {% endif %}
             </td>
         </tr>
     </table>

@@ -7,12 +7,21 @@ class Email_Send  {
 
     private $_template_name = '';
     private $_to = '';
-    private $_params = '';
+    private $_user = NULL;
+    private $_params = array();
+
+    private $_ref = NULL;
+
+    private $_notices = array(
+        'addedit',
+        'massload_report',
+        'object_expiration',
+        'object_to_archive'
+    );
 
     public static function factory($template_name)
     {
         
-        // Add the model prefix
         $class = 'Email_Send';
 
         return new $class($template_name);
@@ -23,9 +32,22 @@ class Email_Send  {
         $this->_template_name = $template_name;
     }
 
-    public function to($email)
+    public function to($email, $user = FALSE)
     {
         $this->_to = $email;
+
+        if ($user) {
+            $this->_user = $user;
+        } else {
+            $this->_user = Auth::instance()->get_user();
+        }
+
+        return $this;
+    }
+
+    public function set_ref($ref)
+    {
+        $this->_ref = $ref;
 
         return $this;
     }
@@ -37,186 +59,162 @@ class Email_Send  {
         return $this;
     }
 
-    public function send($title)
+    public function send($subj = FALSE, $msg = FALSE)
     {
+        $params = $this->_params;
 
+        if ($this->_user AND in_array($this->_template_name, $this->_notices)) {
+            
+        }
 
-        $msg  = call_user_func_array("Email_Send::{$this->_template_name}", $this->_params);
+        if (!is_array($this->_to)) {
+            $params['user_email'] = $this->_to;
+        }
 
-        return Email::send($this->_to, Kohana::$config->load('email.default_from'), $title, $msg);
+        if ($this->_ref) {
+            $params['ref'] = $this->_ref;
+        }
+
+        if (isset($params['domain']) AND $params['domain'] AND is_numeric($params['domain'])) {
+            $city = ORM::factory('City')->where('id','=',$params['domain'])->cached(Date::WEEK)->find();
+            if ($city->loaded()) {
+                $params['domain'] = sprintf('http://%s.yarmarka.biz', $city->seo_name);
+            } else {
+                $params['domain'] = FALSE;
+            }
+
+        }
+
+        if (!$subj) {
+            $subj  = $this->{'get_subj_'.$this->_template_name}( $params );
+        }
+        if (!$msg) {
+            $msg  = $this->{'get_template_'.$this->_template_name}( $params );
+        }
+        
+
+        return Email::send($this->_to, Kohana::$config->load('email.default_from'), $subj, $msg);
     }
 
-    public static function addedit(
-        $is_edit,
-        $object,
-        $domain = FALSE
-    )
+    public function get_subj_addedit($params)
     {
-        $params = array(
-            'is_edit' => $is_edit,
-            'object' => $object,
-            'domain' => $domain
-        );
+        return $params['is_edit']
+                    ? 'Объявление "'.$params['object']->title.'" успешно отредактировано'
+                    : 'Объявление "'.$params['object']->title.'" успешно добавлено на сайт';
+    }
 
+    public function get_subj_block_contact($params)
+    {
+        return 'Сообщение от модератора';
+    }
+
+    public function get_subj_decline_contact($params)
+    {
+        return 'Сообщение от модератора';
+    }
+
+    public function get_subj_contact_verification_code($params)
+    {
+        return 'Подтверждение E-mail';
+    }
+
+    public function get_subj_forgot_password($params)
+    {
+        return 'Восстановление пароля';
+    }
+
+    public function get_subj_moderate_object($params)
+    {
+        return 'Сообщение от модератора';
+    }
+
+    public function get_subj_massload_report($params)
+    {
+        return "Отчет по загрузке объявлений";
+    }
+
+    public function get_subj_object_expiration($params)
+    {
+        return 'Истекает срок публикации ваших объявлений';
+    }
+
+    public function get_subj_object_to_archive($params)
+    {
+        return 'Ваши объявления перемещены в архив';
+    }
+
+    public function get_subj_payment_success($params)
+    {
+        return "Потверждение оплаты. Заказ №".$params['order']->id;
+    }
+
+    public function get_subj_register_data($params)
+    {
+        return 'Для вас создана учетная запись';
+    }
+
+    public function get_subj_register_success($params)
+    {
+        return 'Пожалуйста, подтвердите свою регистрацию';
+    }
+
+    public function get_template_addedit($params)
+    {
         return Twig::factory('emails/addedit', $params)->render();
     }
 
-    public static function block_contact(
-        $phone,
-        $objects,
-        $domain = FALSE
-    )
+    public function get_template_block_contact($params)
     {
-
-        $params = array(
-            'phone' => $phone,
-            'objects' => $objects,
-            'domain' => $domain
-        );
-
         return Twig::factory('emails/block_contact', $params)->render();
     }
 
-    public static function decline_contact(
-        $phone,
-        $objects,
-        $domain = FALSE
-    )
+    public function get_template_decline_contact($params)
     {
-
-        $params = array(
-            'phone' => $phone,
-            'objects' => $objects,
-            'domain' => $domain
-        );
-
         return Twig::factory('emails/decline_contact', $params)->render();
     }
 
-    public static function contact_verification_code(
-        $contact,
-        $code,
-        $domain = FALSE
-    )
+    public function get_template_contact_verification_code($params)
     {
-        $params = array(
-            'contact' => $contact, 
-            'code' => $code,
-            'domain' => $domain
-        );
-
         return Twig::factory('emails/contact_verification_code', $params)->render();
     }
 
-    public static function forgot_password(
-        $url,
-        $domain = FALSE
-    )
+    public function get_template_forgot_password($params)
     {
-        $params = array(
-            'url' => $url,
-            'domain' => $domain
-        );
-
         return Twig::factory('emails/forgot_password', $params)->render();
     }
 
-    public static function moderate_object(
-        $actions_for_user_negative,
-        $actions_for_user_positive,
-        $domain = FALSE
-    )
+    public function get_template_moderate_object($params)
     {
-        $params = array(
-            'actions_negative' => $actions_for_user_negative,
-            'actions_positive' => $actions_for_user_positive,
-            'domain' => $domain
-        );
-
         return Twig::factory('emails/moderate_object', $params)->render();
     }
 
-    public static function massload_report(
-        $objectload,
-        $common_stat,
-        $category_stat,
-        $org_name,
-        $domain = FALSE
-    )
+    public function get_template_massload_report($params)
     {
-        $params = array(
-            'objectload' => $objectload, 
-            'common_stat' => $common_stat, 
-            'category_stat' => $category_stat,
-            'org_name' => $org_name,
-            'logo' => 'http://yarmarka.biz/images/logo.png'
-        );
-
         return  Twig::factory('emails/massload_report', $params)->render();
     }
 
-    public static function object_expiration(
-        $objects,
-        $domain = FALSE
-    )
+    public function get_template_object_expiration($params)
     {
-        
-        $params = array(
-            'objects' => $objects,
-            'domain' => $domain
-        );
-
         return Twig::factory('emails/object_expiration', $params)->render();
     }
 
-    public static function object_to_archive(
-        $objects,
-        $domain = FALSE
-    )
+    public function get_template_object_to_archive($params)
     {
-        
-        $params = array(
-            'objects' => $objects,
-            'domain' => $domain
-        );
-
         return Twig::factory('emails/object_to_archive', $params)->render();
     }
 
-    public static function payment_success($order, $orderItems, $domain = FALSE)
+    public function get_template_payment_success($params)
     {
-        $params = array(
-            'order' => $order,
-            'orderItems' => $orderItems,
-            'domain' => $domain
-        );
-
         return Twig::factory('emails/payment_success2', $params)->render();
     }
 
-    public static function register_data(
-        $login,
-        $password,
-        $domain = FALSE
-    )
+    public function get_template_register_data($params)
     {
-        
-        $params = array(
-            'login' => $login,
-            'passw' => $password,
-            'domain' => $domain
-        );
-
         return Twig::factory('emails/register_data', $params)->render();
     }
 
-    public static function register_success($code, $domain = FALSE)
+    public function get_template_register_success($params)
     {
-        $params = array(
-                    'code' => $code,
-                    'domain' => $domain
-                );
-
         return Twig::factory('emails/register_success', $params)->render();
     }
 
