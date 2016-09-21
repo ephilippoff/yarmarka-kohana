@@ -11,7 +11,7 @@ class Task_TestEmail extends Minion_Task
 
 	protected function _execute(array $params)
 	{
-		$order = ORM::factory('Order', 1518);
+		$order = ORM::factory('Order')->where('id','=',1517)->find()->get_row_as_obj();
 
 		$order_tems = ORM::factory('Order_Item')->where("order_id","=", $order->id)->order_by("id");
 
@@ -20,6 +20,10 @@ class Task_TestEmail extends Minion_Task
 			$orderItems[] = $item;
 			return $item;
 		});
+
+		
+		
+		
 
 		$objects = ORM::factory('Object')->order_by('id','desc')->limit(2)->find_all();
 
@@ -58,42 +62,47 @@ class Task_TestEmail extends Minion_Task
 				);
 		}
 
-		$this->payment_success($order, $orderItems);
+		$domain = 'http://surgut.yarmarka.biz';
 
-		$this->addedit(TRUE, 4028377);
-		$this->addedit(FALSE, 4028377);
+		$this->payment_success($order, $orderItems, $domain);
 
-		$this->block_contact('123213', $objects);
+		$this->addedit(TRUE, $object, $domain);
+		$this->addedit(FALSE, $object, $domain);
 
-		$this->decline_contact('213123', $objects);
+		$this->block_contact('123213', $objects, $domain);
 
-		$this->contact_verification_code($contact, '123213');
+		$this->decline_contact('213123', $objects, $domain);
 
-		$this->forgot_password('http://vagapov.site/sdfdsfdsf');
+		$this->contact_verification_code($contact, '123213', $domain);
+
+		$this->forgot_password('http://vagapov.site/sdfdsfdsf', $domain);
 
 		$this->moderate_object(
-			array('<p> + Action 1</p>','<p> + Action 2</p>'),
-			array('<p> - Action 3</p>','<p> - Action 4</p>')
+			array('<p> + Action 1</p>','<p> + Action 2</p>', $domain),
+			array('<p> - Action 3</p>','<p> - Action 4</p>', $domain)
 		);
 
 
-		$this->massload_report($objectload,  $common_stat, $category_stat, $user->org_name);
+		$this->massload_report($objectload,  $common_stat, $category_stat, $user->org_name, $domain);
 
-		$this->object_expiration($objects);
-		$this->object_to_archive($objects);
+		$this->object_expiration($objects, $domain);
+		$this->object_to_archive($objects, $domain);
 
-		$this->register_data('aaaaaaa','passsssssss');
-		$this->register_success('coooooooodddddeeeeeee');
+		$this->register_data('aaaaaaa','passsssssss', $domain);
+		$this->register_success('coooooooodddddeeeeeee', $domain);
 
 	}
 
 	private function payment_success($order, $orderItems, $domain = FALSE)
 	{
 		$params = array(
+			'order' => $order,
 		    'orderItems' => $orderItems,
-		    'order' => $order,
 		    'domain' => $domain
 		);
+
+
+		  
 
 		Minion_CLI::write( Email_Send::factory('payment_success')
 			->to( Task_TestEmail::$to )

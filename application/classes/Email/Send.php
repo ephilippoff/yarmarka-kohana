@@ -40,6 +40,7 @@ class Email_Send  {
     public function send($title)
     {
 
+
         $msg  = call_user_func_array("Email_Send::{$this->_template_name}", $this->_params);
 
         return Email::send($this->_to, Kohana::$config->load('email.default_from'), $title, $msg);
@@ -104,7 +105,7 @@ class Email_Send  {
             'domain' => $domain
         );
 
-        $msg = Twig::factory('emails/contact_verification_code', $params)->render();
+        return Twig::factory('emails/contact_verification_code', $params)->render();
     }
 
     public static function forgot_password(
@@ -117,7 +118,7 @@ class Email_Send  {
             'domain' => $domain
         );
 
-        $msg = Twig::factory('emails/forgot_password', $params)->render();
+        return Twig::factory('emails/forgot_password', $params)->render();
     }
 
     public static function moderate_object(
@@ -132,7 +133,7 @@ class Email_Send  {
             'domain' => $domain
         );
 
-        $msg = Twig::factory('emails/moderate_object', $params)->render();
+        return Twig::factory('emails/moderate_object', $params)->render();
     }
 
     public static function massload_report(
@@ -151,7 +152,7 @@ class Email_Send  {
             'logo' => 'http://yarmarka.biz/images/logo.png'
         );
 
-        $msg = Twig::factory('emails/massload_report', $params)->render();
+        return  Twig::factory('emails/massload_report', $params)->render();
     }
 
     public static function object_expiration(
@@ -165,7 +166,7 @@ class Email_Send  {
             'domain' => $domain
         );
 
-        $msg = Twig::factory('emails/object_expiration', $params)->render();
+        return Twig::factory('emails/object_expiration', $params)->render();
     }
 
     public static function object_to_archive(
@@ -179,18 +180,18 @@ class Email_Send  {
             'domain' => $domain
         );
 
-        $msg = Twig::factory('emails/object_to_archive', $params)->render();
+        return Twig::factory('emails/object_to_archive', $params)->render();
     }
 
     public static function payment_success($order, $orderItems, $domain = FALSE)
     {
         $params = array(
-            'orderItems' => $orderItems,
             'order' => $order,
+            'orderItems' => $orderItems,
             'domain' => $domain
         );
 
-        $msg = Twig::factory('emails/payment_success2', $params)->render();
+        return Twig::factory('emails/payment_success2', $params)->render();
     }
 
     public static function register_data(
@@ -206,7 +207,7 @@ class Email_Send  {
             'domain' => $domain
         );
 
-        $msg = Twig::factory('emails/register_data', $params)->render();
+        return Twig::factory('emails/register_data', $params)->render();
     }
 
     public static function register_success($code, $domain = FALSE)
@@ -216,7 +217,7 @@ class Email_Send  {
                     'domain' => $domain
                 );
 
-        $msg = Twig::factory('emails/register_success', $params)->render();
+        return Twig::factory('emails/register_success', $params)->render();
     }
 
 }
