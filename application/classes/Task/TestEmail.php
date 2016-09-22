@@ -107,6 +107,7 @@ class Task_TestEmail extends Minion_Task
 		Minion_CLI::write( Email_Send::factory('payment_success')
 			->to( Task_TestEmail::$to )
 			->set_params($params)
+			->set_utm_campaign('payment_success')
 			->send()
 		);
 
@@ -127,6 +128,7 @@ class Task_TestEmail extends Minion_Task
 	    Minion_CLI::write( Email_Send::factory('addedit')
 	    			->to( Task_TestEmail::$to )
 	    			->set_params($params)
+	    			->set_utm_campaign('addedit')
 	    			->send()
 	    		);
 	}
@@ -147,6 +149,7 @@ class Task_TestEmail extends Minion_Task
 	     Minion_CLI::write( Email_Send::factory('block_contact')
 	    	    			->to( Task_TestEmail::$to )
 	    	    			->set_params($params)
+	    	    			->set_utm_campaign('block_contact')
 	    	    			->send()
 	    	    		);
 	}
@@ -167,6 +170,7 @@ class Task_TestEmail extends Minion_Task
 	     Minion_CLI::write( Email_Send::factory('decline_contact')
 	    	    			->to( Task_TestEmail::$to )
 	    	    			->set_params($params)
+	    	    			->set_utm_campaign('decline_contact')
 	    	    			->send()
 	    	    		);
 	}
@@ -186,6 +190,7 @@ class Task_TestEmail extends Minion_Task
 	     Minion_CLI::write( Email_Send::factory('contact_verification_code')
 	    	    			->to( Task_TestEmail::$to )
 	    	    			->set_params($params)
+	    	    			->set_utm_campaign('contact_verification_code')
 	    	    			->send()
 	    	    		);
 	}
@@ -203,6 +208,7 @@ class Task_TestEmail extends Minion_Task
 	     Minion_CLI::write( Email_Send::factory('forgot_password')
 	    	    			->to( Task_TestEmail::$to )
 	    	    			->set_params($params)
+	    	    			->set_utm_campaign('forgot_password')
 	    	    			->send()
 	    	    		);
 	}
@@ -222,6 +228,7 @@ class Task_TestEmail extends Minion_Task
 	     Minion_CLI::write( Email_Send::factory('moderate_object')
 	    	    			->to( Task_TestEmail::$to )
 	    	    			->set_params($params)
+	    	    			->set_utm_campaign('moderate_object')
 	    	    			->send()
 	    	    		);
 	}
@@ -245,6 +252,7 @@ class Task_TestEmail extends Minion_Task
 	     Minion_CLI::write( Email_Send::factory('massload_report')
 	    	    			->to( Task_TestEmail::$to )
 	    	    			->set_params($params)
+	    	    			->set_utm_campaign('massload_report')
 	    	    			->send()
 	    	    		);
 	}
@@ -263,6 +271,7 @@ class Task_TestEmail extends Minion_Task
 	     Minion_CLI::write( Email_Send::factory('object_expiration')
 	    	    			->to( Task_TestEmail::$to )
 	    	    			->set_params($params)
+	    	    			->set_utm_campaign('object_expiration')
 	    	    			->send()
 	    	    		);
 	}
@@ -281,6 +290,7 @@ class Task_TestEmail extends Minion_Task
 	     Minion_CLI::write( Email_Send::factory('object_to_archive')
 	    	    			->to( Task_TestEmail::$to )
 	    	    			->set_params($params)
+	    	    			->set_utm_campaign('object_to_archive')
 	    	    			->send()
 	    	    		);
 	}
@@ -302,6 +312,7 @@ class Task_TestEmail extends Minion_Task
 	     Minion_CLI::write( Email_Send::factory('register_data')
 	    	    			->to( Task_TestEmail::$to )
 	    	    			->set_params($params)
+	    	    			->set_utm_campaign('register_data')
 	    	    			->send()
 	    	    		);
 	}
@@ -316,6 +327,7 @@ class Task_TestEmail extends Minion_Task
 	     Minion_CLI::write( Email_Send::factory('register_success')
 	    	    			->to( Task_TestEmail::$to )
 	    	    			->set_params($params)
+	    	    			->set_utm_campaign('register_success')
 	    	    			->send()
 	    	    		);
 	}

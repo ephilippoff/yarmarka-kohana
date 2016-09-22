@@ -20,7 +20,7 @@
                    <tr>
                        <td style="color: #616161; text-align: left;" align="left">Услуга</td>
                        <td>
-                           <a href="{{ domain ? domain : 'http://yarmarka.biz' }}/detail/{{ orderItem.object.id }}" style="color: #D44234;">{{ orderItem.title }}</a>
+                           <a href="{{ email_link(domain, '/detail/' ~ orderItem.object.id, ref_params, {'utm_content': 'object'}) }}" style="color: #D44234;">{{ orderItem.title }}</a>
                        </td>
                    </tr>
                    <tr>

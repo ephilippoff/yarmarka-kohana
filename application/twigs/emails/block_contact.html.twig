@@ -10,7 +10,7 @@
  <tr>
     <td colspan="2" style="padding:10px;">
         {% for object in objects %}
-            <p class="p3"><a style="color: #d44234;" href="{{ domain ? domain : 'http://yarmarka.biz' }}/detail/{{ object.id }}">{{ object.title }}</a></p>
+            <p class="p3"><a style="color: #d44234;" href="{{ email_link(domain, '/detail/' ~ object.id, ref_params, {'utm_content': 'object'}) }}">{{ object.title }}</a></p>
         {% endfor %}
     </td>
 </tr>

@@ -14,13 +14,13 @@
         </p>
 
         {% for object in objects %}
-            <p class="p3"><a style="color: #d44234;" href="{{ domain ? domain : 'http://yarmarka.biz' }}/detail/{{ object.id }}">{{ object.title }}</a></p>
+            <p class="p3"><a style="color: #d44234;" href="{{ email_link(domain, '/detail/' ~ object.id, ref_params, {'utm_content': 'object'}) }}">{{ object.title }}</a></p>
         {% endfor %}
         <p>
-            Вы можете возобновить объявления в любое время в <a style="color: #d44234;" href="{{ domain ? domain : 'http://yarmarka.biz' }}/user">личном кабинете</a>
+            Вы можете возобновить объявления в любое время в <a style="color: #d44234;" href="{{ email_link(domain, '/user', ref_params, {'utm_content': 'user'}) }}">личном кабинете</a>
         </p>
         <p>
-            Рекомендуем воспользоваться дополнительными сервисами в <a style="color: #d44234;" href="{{ domain ? domain : 'http://yarmarka.biz' }}/user">личном кабинете</a> для увеличения отклика на ваши объявления.
+            Рекомендуем воспользоваться дополнительными сервисами в <a style="color: #d44234;" href="{{ email_link(domain, '/user', ref_params, {'utm_content': 'user'}) }}">личном кабинете</a> для увеличения отклика на ваши объявления.
         </p>
     </td>
 </tr>

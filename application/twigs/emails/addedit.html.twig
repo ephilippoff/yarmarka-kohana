@@ -11,11 +11,11 @@
      <td colspan="2" style="padding:10px;">
         
          <p>
-            Сохраните это письмо, чтобы быстро перейти к <a style="color: #d44234;" href="{{ domain ? domain : 'http://yarmarka.biz' }}/detail/{{ object.id }}">просмотру объявления</a> или <a style="color: #d44234;" href="{{ domain ? domain : 'http://yarmarka.biz' }}/edit/{{ object.id }}">редактированию</a>.
+            Сохраните это письмо, чтобы быстро перейти к <a style="color: #d44234;" href="{{ email_link(domain, '/detail/' ~ object.id, ref_params, {'utm_content': 'object'}) }}">просмотру объявления</a> или <a style="color: #d44234;" href="{{ email_link(domain, '/edit/' ~ object.id, ref_params, {'utm_content': 'edit'}) }}">редактированию</a>.
          </p>
          {% if not is_edit %}
          <p>
-            Объявление уже  доступно для поиска нашим пользователям. Рекомендуем воспользоваться дополнительными сервисами в <a style="color: #d44234;" href="{{ domain ? domain : 'http://yarmarka.biz' }}/user">личном кабинете</a> для увеличения отклика на ваши объявления.
+            Объявление уже  доступно для поиска нашим пользователям. Рекомендуем воспользоваться дополнительными сервисами в <a style="color: #d44234;" href="{{ email_link(domain, '/user', ref_params, {'utm_content': 'user'}) }}">личном кабинете</a> для увеличения отклика на ваши объявления.
          </p>
         {% endif %}
      </td>

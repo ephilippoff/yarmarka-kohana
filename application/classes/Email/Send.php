@@ -9,8 +9,14 @@ class Email_Send  {
     private $_to = '';
     private $_user = NULL;
     private $_params = array();
+    private $_utm_campaign = FALSE;
 
-    private $_ref = NULL;
+    private $_ref_params = array(
+                'utm_source' => 'yarmarka_mail',
+                'utm_medium' => 'email',
+                'utm_campaign' => 'unknown',
+                'utm_content' => 'unknown'
+            );
 
     private $_notices = array(
         'addedit',
@@ -45,9 +51,9 @@ class Email_Send  {
         return $this;
     }
 
-    public function set_ref($ref)
+    public function set_ref_params($params)
     {
-        $this->_ref = $ref;
+        $this->_ref_params = $params;
 
         return $this;
     }
@@ -55,6 +61,13 @@ class Email_Send  {
     public function set_params($params)
     {
         $this->_params = $params;
+
+        return $this;
+    }
+
+    public function set_utm_campaign($name)
+    {
+        $this->_utm_campaign = $name;
 
         return $this;
     }
@@ -71,14 +84,17 @@ class Email_Send  {
             $params['user_email'] = $this->_to;
         }
 
-        if ($this->_ref) {
-            $params['ref'] = $this->_ref;
+        if ($this->_utm_campaign) {
+            $this->_ref_params['utm_campaign'] = $this->_utm_campaign;
         }
+
+        $params['ref_params'] = $this->_ref_params;
+
 
         if (isset($params['domain']) AND $params['domain'] AND is_numeric($params['domain'])) {
             $city = ORM::factory('City')->where('id','=',$params['domain'])->cached(Date::WEEK)->find();
             if ($city->loaded()) {
-                $params['domain'] = sprintf('http://%s.yarmarka.biz', $city->seo_name);
+                $params['domain'] = sprintf('http://%s.%s', $city->seo_name, Kohana::$config->load('common.main_domain'));
             } else {
                 $params['domain'] = FALSE;
             }

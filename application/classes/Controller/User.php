@@ -14,7 +14,10 @@ class Controller_User extends Controller_Template {
 			if (!in_array(Request::current()->action(), 
 					array('userpage','registration','account_verification','login','logout','forgot_password','forgot_password_link','message')))
 			{
-				$this->redirect(URL::site('user/login?return='.$this->request->uri()));
+                $query = $this->request->query();
+                $query_str = (count(array_values($query)) > 0) ? '&'.http_build_query($query) : '';
+
+				$this->redirect(URL::site('user/login?return='.$this->request->uri()).$query_str);
 			}
 		} else {
 			$this->user->reload();

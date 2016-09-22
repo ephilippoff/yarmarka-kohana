@@ -16,10 +16,10 @@
             Ваш пароль: {{ passw }}
         </p>
         <p>
-            Используйте их для <a href="{{ domain ? domain : 'http://yarmarka.biz' }}/user/login?return=user/userinfo" style="color: #d44234;">входа</a> на наш сайт
+            Используйте их для <a href="{{ email_link(domain, '/user/login', ref_params, {'utm_content': 'login'}) }}" style="color: #d44234;">входа</a> на наш сайт
         </p>
         <p>
-            Вы можете <a href="{{ domain ? domain : 'http://yarmarka.biz' }}/user/password" style="color: #d44234;">изменить пароль</a> в любое время
+            Вы можете <a href="{{ email_link(domain, '/user/password', ref_params, {'utm_content': 'change_password'}) }}" style="color: #d44234;">изменить пароль</a> в любое время
         </p>
     </td>
 </tr>

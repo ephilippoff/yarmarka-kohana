@@ -3,6 +3,17 @@
 
 class Twig_Functions
 {
+	public static function email_link($domain, $path = '', $query = array(), $additional = array())
+	{
+		$domain = $domain ? $domain : 'http://'.Kohana::$config->load('common.main_domain');
+
+		$query =  array_merge($query, $additional);
+
+		$query_str = (count(array_values($query)) > 0) ? '?'.http_build_query($query) : '';
+
+		return $domain.$path.$query_str;
+	}
+
 	public static function get_global($name) {
 		if (array_key_exists($name, $GLOBALS)) {
 			return $GLOBALS[$name];

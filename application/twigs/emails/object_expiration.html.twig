@@ -13,14 +13,14 @@
         <p>До окончания срока размещения ваших объявлений на «Ярмарка - Онлайн» осталось 7 дней. После этого они переместятся в архив и больше не будут видны пользователям сайта.</p>
         
         {% for object in objects %}
-            <p class="p3"><a style="color: #d44234;" href="{{ domain ? domain : 'http://yarmarka.biz' }}/detail/{{ object.id }}">{{ object.title }}</a></p>
+            <p class="p3"><a style="color: #d44234;" href="{{ email_link(domain, '/detail/' ~ object.id, ref_params, {'utm_content': 'object'}) }}">{{ object.title }}</a></p>
         {% endfor %}
         
         <p>
             После перехода по ссылке объявление будет продлено на месяц и поднято в поиске.
         </p>
         <p>
-            Рекомендуем воспользоваться дополнительными сервисами в <a style="color: #d44234;" href="{{ domain ? domain : 'http://yarmarka.biz' }}/user">личном кабинете</a> для увеличения отклика на ваши объявления.
+            Рекомендуем воспользоваться дополнительными сервисами в <a style="color: #d44234;" href="{{ email_link(domain, '/user', ref_params, {'utm_content': 'user'}) }}">личном кабинете</a> для увеличения отклика на ваши объявления.
         </p>
     </td>
 </tr>
