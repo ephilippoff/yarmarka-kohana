@@ -223,4 +223,37 @@ class Controller_Rest_User extends Controller_Rest {
 		$this->json["code"] = 400;
 		$this->json['text'] = "Не правильный код";
 	}
+
+	function action_email_settings() {
+		$type = $this->request->query('type');
+		$checked = $this->request->query('checked');
+
+		$user 		= Auth::instance()->get_user();
+
+		if ($user AND $type AND in_array($type, array('news','notices'))) {
+
+			if ($checked === 'false') {
+
+				$setting = ORM::factory('User_Settings')
+				                ->get_by_name($user->id, "email_{$type}_off")
+				                ->find();
+				$setting->user_id = $user->id;
+				$setting->name = "email_{$type}_off";
+				$setting->value = 1;
+				$setting->save();
+
+				$this->json["code"] = 200;
+				 return;
+			} else {
+				ORM::factory('User_Settings')
+	                ->get_by_name($user->id, "email_{$type}_off")
+	                ->delete_all();
+
+	            $this->json["code"] = 200;
+	            return;
+			}
+		}
+
+		$this->json["code"] = 404;
+	}
 }

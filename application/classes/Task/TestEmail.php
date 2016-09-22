@@ -105,7 +105,7 @@ class Task_TestEmail extends Minion_Task
 		  
 
 		Minion_CLI::write( Email_Send::factory('payment_success')
-			->to( Task_TestEmail::$to )
+			->to( Task_TestEmail::$to)
 			->set_params($params)
 			->set_utm_campaign('payment_success')
 			->send()

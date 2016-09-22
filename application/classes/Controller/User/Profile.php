@@ -33,6 +33,33 @@ class Controller_User_Profile extends Controller_Template {
         //         }
     }
 
+
+    public function action_email_settings()
+    {
+        $twig = Twig::factory('user/email_settings');
+        $twig->city = $this->domain->get_city();
+        $twig->canonical_url = "user/email_settings";
+
+        $twig->crumbs = array(
+            array("title" => "Личный кабинет - Настройка сообщений"),
+        );
+
+        $twig->user = $user = $this->user;
+
+        $setting_notices = ORM::factory('User_Settings')
+                        ->get_by_name($user->id, "email_notices_off")
+                        ->find();
+
+        $setting_news = ORM::factory('User_Settings')
+                        ->get_by_name($user->id, "email_news_off")
+                        ->find();
+
+        $twig->notices = (!$setting_notices->loaded()) ? 'checked': '';
+        $twig->news = (!$setting_news->loaded()) ? 'checked': '';
+
+        $this->response->body($twig);
+    }
+
     public function action_orginfo()
     {
         $twig = Twig::factory('user/orginfo');

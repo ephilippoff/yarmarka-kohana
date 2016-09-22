@@ -25,6 +25,8 @@ class Email_Send  {
         'object_to_archive'
     );
 
+    private $_news = array();
+
     public static function factory($template_name)
     {
         
@@ -77,6 +79,24 @@ class Email_Send  {
         $params = $this->_params;
 
         if ($this->_user AND in_array($this->_template_name, $this->_notices)) {
+            
+            $setting_notices = ORM::factory('User_Settings')
+                            ->get_by_name($this->_user->id, "email_notices_off")
+                            ->find();
+            if ($setting_notices->loaded()) {
+                return;
+            }
+
+        }
+
+        if ($this->_user AND in_array($this->_template_name, $this->_news)) {
+            
+            $setting_notices = ORM::factory('User_Settings')
+                            ->get_by_name($this->_user->id, "email_news_off")
+                            ->find();
+            if ($setting_notices->loaded()) {
+                return;
+            }
             
         }
 

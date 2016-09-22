@@ -1,6 +1,12 @@
 <div class="title_block brt2 module">Мой кабинет <i class="fa fa-bars fr fs25 hidden-lg visible-sm visible-xs" onclick="$('.lk-nav').slideToggle();"></i></div>
 <div class="lk-nav module">
 	<span>Объявления</span>
+	<style>
+		.active_nav {
+			background: #ddd;
+			padding-left: 5px;
+		}
+	</style>
 	{% if (main_search_result|length) %}
 	<div class="pl15">
 		<select id="category-ads">
@@ -29,33 +35,34 @@
 	{% endif %}
 	<ul>
 		{% if user %}
-		<li class="{{ (canonical_url == 'user/published') ? 'active' }}"><a href="{{ url('user') ~ query_url_str }}">Опубликованные</a></li>
-		<li class="{{ (canonical_url == 'user/unpublished') ? 'active' }}"><a href="{{ url('user/unpublished') ~ query_url_str }}">Снятые/Архивные</a></li>
+		<li class="{{ (canonical_url == 'user/published') ? 'active_nav' }}"><a href="{{ url('user') ~ query_url_str }}">Опубликованные</a></li>
+		<li class="{{ (canonical_url == 'user/unpublished') ? 'active_nav' }}"><a href="{{ url('user/unpublished') ~ query_url_str }}">Снятые/Архивные</a></li>
 		{% endif %}
-		<li class="{{ (canonical_url == 'user/favorites') ? 'active' }}"><a href="{{ url('user/favorites') ~ query_url_str }}">Избранные</a></li>
+		<li class="{{ (canonical_url == 'user/favorites') ? 'active_nav' }}"><a href="{{ url('user/favorites') ~ query_url_str }}">Избранные</a></li>
 	</ul>
 
 	<span>Заказы и подписки</span>
 	<ul>
-		<li class="{{ (canonical_url == 'user/orders') ? 'active' }}"><a href="{{ url('user/orders') ~ query_url_str }}">История заказов</a></li>
-		<li class="{{ (canonical_url == 'user/subscriptions') ? 'active' }}"><a href="{{ url('user/subscriptions') ~ query_url_str }}">Подписки</a></li>
-		<li class="{{ (canonical_url == 'user/cart') ? 'active' }}"><a href="{{ url('cart') ~ query_url_str }}">Корзина</a></li>
+		<li class="{{ (canonical_url == 'user/orders') ? 'active_nav' }}"><a href="{{ url('user/orders') ~ query_url_str }}">История заказов</a></li>
+		<li class="{{ (canonical_url == 'user/subscriptions') ? 'active_nav' }}"><a href="{{ url('user/subscriptions') ~ query_url_str }}">Подписки</a></li>
+		<li class="{{ (canonical_url == 'user/cart') ? 'active_nav' }}"><a href="{{ url('cart') ~ query_url_str }}">Корзина</a></li>
 	</ul>
 
 	{% if user.org_type == 2 %}
 	<span>Управление компанией</span>
 	<ul>
-		<li class="{{ (canonical_url == 'user/orginfo') ? 'active' }}"><a href="{{ url('user/orginfo') ~ query_url_str }}">Данные компании</a></li>
-		<li class="{{ (canonical_url == 'user/employers') ? 'active' }}"><a href="{{ url('user/employers') ~ query_url_str }}">Сотрудники</a></li>
-		<li class="{{ (canonical_url == 'user/objectload') ? 'active' }}"><a href="{{ url('user/objectload') ~ query_url_str }}">Массовая загрузка</a></li>
+		<li class="{{ (canonical_url == 'user/orginfo') ? 'active_nav' }}"><a href="{{ url('user/orginfo') ~ query_url_str }}">Данные компании</a></li>
+		<li class="{{ (canonical_url == 'user/employers') ? 'active_nav' }}"><a href="{{ url('user/employers') ~ query_url_str }}">Сотрудники</a></li>
+		<li class="{{ (canonical_url == 'user/objectload') ? 'active_nav' }}"><a href="{{ url('user/objectload') ~ query_url_str }}">Массовая загрузка</a></li>
 	</ul>
 	{% endif %}
 
 	<span>Персональные данные</span>
 	<ul>
-		<li class="{{ (canonical_url == 'user/userinfo') ? 'active' }}"><a href="{{ url('user/userinfo') ~ query_url_str }}">Мои данные</a></li>
-		<li class="{{ (canonical_url == 'user/contacts') ? 'active' }}"><a href="{{ url('user/contacts') ~ query_url_str }}">Управление контактами</a></li>
-		<li class="{{ (canonical_url == 'user/password') ? 'active' }}"><a href="{{ url('user/password') ~ query_url_str }}">Смена пароля</a></li>
+		<li class="{{ (canonical_url == 'user/userinfo') ? 'active_nav' }}"><a href="{{ url('user/userinfo') ~ query_url_str }}">Мои данные</a></li>
+		<li class="{{ (canonical_url == 'user/contacts') ? 'active_nav' }}"><a href="{{ url('user/contacts') ~ query_url_str }}">Управление контактами</a></li>
+		<li class="{{ (canonical_url == 'user/password') ? 'active_nav' }}"><a href="{{ url('user/password') ~ query_url_str }}">Смена пароля</a></li>
+		<li class="{{ (canonical_url == 'user/email_settings') ? 'active_nav' }}"><a href="{{ url('user/email_settings') ~ query_url_str }}">Настройка сообщений</a></li>
 	</ul>
 
 	<span>Дополнительно</span>

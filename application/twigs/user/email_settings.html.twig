@@ -1,0 +1,75 @@
+{% extends "layouts/user" %}
+
+{% block header %} 
+        {{ requestblock('block_twig/topline', {'favourites':favourites}) }}
+        {% include 'block/header/logoline' %}
+{% endblock header %} 
+
+{% block leftside %} 
+    {% include 'user/personal/nav' %}
+{% endblock leftside %}
+
+{% block content %}
+    <script>
+
+    $(document).ready(function(){
+
+        $('.js-email-set-setting').click(function(){
+            var type = $(this).val();
+            var checked = $(this).prop('checked');
+
+            $.get('/rest_user/email_settings', {type: type, checked: checked});
+        });
+
+    })
+    
+
+    </script>
+    {% block info %} 
+        <div class="info-block-cont theme3">
+            <div class="block-title">
+                <span>Информация</span>
+            </div>                      
+            <div class="bg-color-whitesmoke p10">
+                Отметьте сообщения, которые вы хотите получать по электронной почте.
+            </div>
+        </div>
+    {% endblock info %}
+    <div class="bg-color-whitesmoke p10">
+       <div class="form-cont">
+        <form action="/user/password" id="password" method="POST">
+            
+            <div class="row mb10">
+                <div class="col-md-3 col-xs-4 labelcont">
+                    <label>Напоминания/уведомления:</label>
+                </div>
+                <div class="col-md-9 col-xs-8">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="inp-cont ">
+                                <input class="w50p js-email-set-setting" type="checkbox" name="notices" value="notices" {{ notices }}/>
+                            </div>
+                        </div>
+                    </div>              
+                </div>
+            </div>
+
+            <div class="row mb10">
+                <div class="col-md-3 col-xs-4 labelcont">
+                    <label>Новости/подборки объявлений:</label>
+                </div>
+                <div class="col-md-9 col-xs-8">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="inp-cont ">
+                                <input class="w50p js-email-set-setting" type="checkbox" name="password" value="news"  {{ news }}/>
+                            </div>
+                        </div>
+                    </div>              
+                </div>
+            </div>
+            
+        </form>
+       </div>
+    </div>
+{% endblock content %}
