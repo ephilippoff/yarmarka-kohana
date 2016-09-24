@@ -46,9 +46,6 @@ class Model_Object_Signature extends ORM
 			->limit(1);
 		$db->commit();
 
-		if (!empty($options_exlusive_union))
-			$query->where('options_exlusive_union', '=', $options_exlusive_union);
-
 		if ($user_id)
 			$query->where('object.author', '=', $user_id);
 

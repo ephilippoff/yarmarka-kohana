@@ -209,8 +209,7 @@ class Object
 			$add->save_address()
 				->prepare_object()
 				->save_style_object()
-				->save_external_info()
-				->save_parentid_object();
+				->save_external_info();
 
 			$db = Database::instance();
 
@@ -277,12 +276,8 @@ class Object
 			->init_object_and_mode()
 			->check_signature();
 
-		if ((int) $add->object->is_union >0)
-			return $json;
-
 		if ( ! $add->errors)
 		{
-			$add->save_parentid_object();
 
 			$db = Database::instance();
 
