@@ -4,7 +4,7 @@
 	<div class="left" style="border:1px solid #ccc;position:relative;">
 		<ul>
 			{% for category in user_categories %}
-			<li>
+			<li style="padding:5px 10px;">
 				<a class="{{ (category.url == category_url) ? 'active' }}" href="{{ url(canonical_url ~ (category.url ? '/' ~ category.url : '') )  ~ query_url_str }}" title="{{category.title}}">{{category.title}}</a>
 			</li>
 			{% endfor %}
