@@ -113,10 +113,13 @@ class Task_DeleteFiles extends Minion_Task
 		$this->get_all_files(1, function($filename, $dir = '', $check) use ($limit, &$count, &$total, $remove, &$dir_prev){
 			if (!$dir_prev) {
 				$dir_prev = $dir;	
-		`	}
+			}
+			
 			if (Cache::instance('memcache')->get('ddd'.$dir)) {
 			  return ($count >= $limit);	
 			}
+			
+			Minion_CLI::write($dir);
 			
 			$total++;
 			//if ($check) {
@@ -139,6 +142,7 @@ class Task_DeleteFiles extends Minion_Task
 			
 			if ($dir_prev <> $dir) {
 				Cache::instance('memcache')->set('ddd'.$dir_prev, 1, Date::WEEK);	
+				$dir_prev = $dir;
 			}
 			
 			return ($count >= $limit);
