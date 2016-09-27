@@ -72,9 +72,14 @@ class Task_ArchiveObjects extends Minion_Task
                 
                 $city_id = $objects[0]['city_id'];
 
+                $ids = array();
+                foreach ($objects as $object) {
+                    array_push($ids, $object['id']);
+                }
+
                 $params = array(
                     'objects' => $objects,
-                    'ids' => join('.', array_map(function($item){ return $item->id;}, $objects)),
+                    'ids' => join('.', $ids),
                     'domain' => $city_id
                 );
 
