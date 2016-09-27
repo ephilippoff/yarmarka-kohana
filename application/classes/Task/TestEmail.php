@@ -78,15 +78,16 @@ class Task_TestEmail extends Minion_Task
 		$this->forgot_password('http://vagapov.site/sdfdsfdsf', $domain);
 
 		$this->moderate_object(
-			array('<p> + Action 1</p>','<p> + Action 2</p>'),
-			array('<p> - Action 3</p>','<p> - Action 4</p>'), $domain
+			array( array('id' => 4028377, 'title' => 'sdfsdfaf dsf7sa9df9asd7f7asf', 'reason' => 'снято за нарушение') ),
+			array( array('id' => 4028377, 'title' => 'sdfsdfaf dsf7sa9df9asd7f7asf') ), 
+			$domain
 		);
 
 
-		$this->massload_report($objectload,  $common_stat, $category_stat, $user->org_name, $domain);
+		// $this->massload_report($objectload,  $common_stat, $category_stat, $user->org_name, $domain);
 
-		$this->object_expiration($objects, $domain);
-		$this->object_to_archive($objects, $domain);
+		$this->object_expiration($objects, '4028377.123123.12312', $domain);
+		$this->object_to_archive($objects, '4028377.123123.12312', $domain);
 
 		$this->register_data('aaaaaaa','passsssssss', $domain);
 		$this->register_success('coooooooodddddeeeeeee', $domain);
@@ -259,12 +260,14 @@ class Task_TestEmail extends Minion_Task
 
 	public static function object_expiration(
 	    $objects,
+	    $ids,
 	    $domain = FALSE
 	)
 	{
 	    
 	    $params = array(
 	        'objects' => $objects,
+	        'ids' => $ids,
 	        'domain' => $domain
 	    );
 
@@ -278,12 +281,14 @@ class Task_TestEmail extends Minion_Task
 
 	public static function object_to_archive(
 	    $objects,
+	    $ids,
 	    $domain = FALSE
 	)
 	{
 	    
 	    $params = array(
 	        'objects' => $objects,
+	        'ids' => $ids,
 	        'domain' => $domain
 	    );
 

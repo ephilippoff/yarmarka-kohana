@@ -182,22 +182,21 @@ class Task_EmailNotices extends Minion_Task
 
             if (!count($objects)) continue;
 
-            $domain = 'http://yarmarka.biz';
             $city_id = $objects[0]['city_id'];
-            $city = ORM::factory('City', $city_id)->seo_name;
 
 
-            $msg = View::factory('emails/object_expiration',
-                    array(
-                        'objects' => $objects,
-                        'domain' => $domain,
-                        'city' => $city,
-                        'is_new' => TRUE
-                    ));
+            $params = array(
+                'objects' => $objects,
+                'ids' => join('.', array_map(function($item){ return $item->id;}, $objects)),
+                'domain' => $city_id
+            );
 
-            Email::send(
-                $user->email
-                , Kohana::$config->load('email.default_from'), 'Истекает срок публикации ваших объявлений', $msg);
+            Email_Send::factory('object_expiration')
+                    ->to( $user->email )
+                    ->set_params($params)
+                    ->set_utm_campaign('object_expiration')
+                    ->send();
+
 
             Minion_CLI::write('notice about '.Model_Object_Notice::EXPIRATION.' in '.count($objects).' objects sent to: '.$user->email);
 

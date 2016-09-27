@@ -1023,11 +1023,18 @@ class Controller_Ajax extends Controller_Template
 				}
 				else
 				{
-					$msg = View::factory('emails/contact_verification_code', 
-						array('contact' => $exists_contact->contact, 'code' => $code))
-						->render();
-					$subj 	= 'Подтверждение email на “Ярмарка-онлайн”';
-					Email::send($exists_contact->contact, Kohana::$config->load('email.default_from'), $subj, $msg);
+					$params = array(
+					    'contact' => $exists_contact->contact, 
+					    'code' => $code,
+					    'domain' => FALSE
+					);
+
+					 Email_Send::factory('contact_verification_code')
+		    	    			->to( $exists_contact->contact )
+		    	    			->set_params($params)
+		    	    			->set_utm_campaign('contact_verification_code')
+		    	    			->send();
+
 				}
 			}
 		}

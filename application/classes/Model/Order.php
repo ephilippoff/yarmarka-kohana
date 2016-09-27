@@ -156,15 +156,19 @@ class Model_Order extends ORM
 		{				
 			ORM::factory('Order_Log')->write($this->id, "notice", vsprintf("Отправка письма пользователю о успехе оплаты. email: %s,  № %s", array($user->email, $this->id) ) );
 
-			$subj = "Потверждение оплаты. Заказ №".$this->id;
+			$last_object = ORM::factory('Object')->where('author','=',$user->id)->order_by('id','desc')->find();
 
-			$twig = Twig::factory('emails/payment_success');
-			$twig->orderItems = $orderItems;
-			$twig->order = $this;
+			$params = array(
+				'order' => $this,
+			    'orderItems' => $orderItems,
+			    'domain' => ($last_object->loaded()) ? $last_object->city_id : FALSE
+			);
 
-			$msg = $twig->render();
-
-			Email::send($user->email, Kohana::$config->load('email.default_from'), $subj, $msg);
+			Email_Send::factory('payment_success')
+					->to( $user->email )
+					->set_params($params)
+					->set_utm_campaign('payment_success')
+					->send();
 		}
 
 		$db = Database::instance();

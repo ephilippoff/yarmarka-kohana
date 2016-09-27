@@ -48,7 +48,7 @@ class Task_ModerationEmailNotices extends Minion_Task
             },$actions_for_user);
 
 
-
+            $city_id = (count($actions_for_user) > 0) ? $actions_for_user[0]->object_city_id : NULL;
             
             $actions_for_user_negative = array_filter( $actions_for_user, function($item) {
                 return $item->reason <> 'STATUS1';
@@ -62,29 +62,25 @@ class Task_ModerationEmailNotices extends Minion_Task
 
 
             $actions_for_user_negative = array_map(function($item){
-                $domain = 'http://yarmarka.biz';
-
-                return '<p>'.HTML::anchor($domain.'/detail/'.$item->object_id, $item->object_title).':<br>'.$item->description.'</p>';
+                 return array('id' =>$item->object_id, 'title' => $item->object_title , 'reason' => $item->description);
             }, $actions_for_user_negative);
 
             $actions_for_user_positive = array_map(function($item){
-                $domain = 'http://yarmarka.biz';
-                return '<p>'.HTML::anchor($domain.'/detail/'.$item->object_id, $item->object_title).':<br> прошло модерацию</p>';
+                return array('id' =>$item->object_id, 'title' => $item->object_title);
             }, $actions_for_user_positive);
 
-            
 
-            $msg = View::factory('emails/manage_object',
-                 array(
-                     'UserName' => $user->fullname ? $user->fullname : $user->login,
-                     'actions_negative' => $actions_for_user_negative,
-                     'actions_positive' => $actions_for_user_positive
-                 )
-             )->render();
+             $params = array(
+                 'actions_negative' => $actions_for_user_negative,
+                 'actions_positive' => $actions_for_user_positive,
+                 'domain' => $city_id
+             );
 
-             Email::send(
-                    $user->email, 
-                    Kohana::$config->load('email.default_from'), "Сообщение от модератора сайта", $msg);
+             Email_Send::factory('moderate_object')
+                    ->to( $user->email )
+                    ->set_params($params)
+                    ->set_utm_campaign('moderate_object')
+                    ->send();
 
              DB::update('object_moderation_log')
                 ->set(array("noticed" => "T"))

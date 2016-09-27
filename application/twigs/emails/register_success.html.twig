@@ -11,7 +11,9 @@
 <tr>
     <td colspan="2" style="padding:10px;">
         <p>
-            Чтобы активировать Ваш аккаунт, перейдите по следующей ссылке:<br><a style="color: #d44234;" href="{{ domain ? domain : 'http://yarmarka.biz' }}/user/account_verification/{{code}}"> {{ domain ? domain : 'http://yarmarka.biz' }}/user/account_verification/{{code}}</a>
+            Чтобы активировать Ваш аккаунт, перейдите по следующей ссылке:<br><a style="color: #d44234;" href="{{ email_link(domain, '/user/account_verification/' ~ code, ref_params, {'utm_content': 'account_verification'}) }}"> {{ email_link(domain, '/user/account_verification/' ~ code, ref_params, {'utm_content': 'account_verification'}) }}</a>
+
+            
         </p>
         <p>
              Если приведенная ссылка не открывается, скопируйте ее и вставьте в адресную строку браузера.

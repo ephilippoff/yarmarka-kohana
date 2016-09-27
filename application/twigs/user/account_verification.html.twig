@@ -3,22 +3,14 @@
 {% block header %} 
 		{{ requestblock('block_twig/topline', {'favourites':favourites}) }}
 		{% include 'block/header/logoline' %}
-		{% include 'user/add/promo' %}
 {% endblock header %} 
 
-{% block crumbs %}{% endblock crumbs %}
+{% block leftside %} 
+	{% include 'user/personal/nav' %}
+{% endblock leftside %}
 
 {% block content %}
-	{% block info %} 
-		<div class="info-block-cont theme3">
-			<div class="block-title">
-				<span>Информация</span>
-			</div>						
-			<div class="bg-color-whitesmoke p10">
-				Возможно вы уже регистрировались ранее?
-			</div>
-		</div>
-	{% endblock info %}
+	{% block info %}{% endblock info %}
 	<div class="bg-color-whitesmoke p10">
 
 		<p class="mb20">{{message}}</p>			
@@ -41,4 +33,5 @@
 							
 		{% endif %}
 	</div>
-{% endblock %}
+{% endblock content %}
+

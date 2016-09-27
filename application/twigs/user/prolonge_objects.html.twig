@@ -1,0 +1,35 @@
+{% extends "layouts/user" %}
+
+{% block header %} 
+        {{ requestblock('block_twig/topline', {'favourites':favourites}) }}
+        {% include 'block/header/logoline' %}
+{% endblock header %} 
+
+{% block leftside %} 
+    {% include 'user/personal/nav' %}
+{% endblock leftside %}
+
+{% block content %}
+    {% block info %}
+    <div class="info-block-cont theme3">
+        <div class="block-title">
+            <span>Информация</span>
+        </div>                      
+        <div class="bg-color-whitesmoke p10">
+            Следующие объявления продлены:
+        </div>
+    </div>
+    {% endblock info %}
+    <div class="bg-color-whitesmoke p10">
+
+
+        <p class="mb5">Перейти к:</p>
+        <ul>
+            {% for object in objects %}
+                <li class="p10"><a style="color: #d44234;" href="{{ email_link('', '/detail/' ~ object.id, {}, {}) }}">{{ object.title }}</a> </li>
+            {% endfor %}
+        </ul>
+
+    </div>
+{% endblock content %}
+

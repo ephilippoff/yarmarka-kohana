@@ -296,7 +296,7 @@ Route::set('user', 'user(/<action>(/<category_path>))', array(
 			return $params;
 		}
 
-		elseif ( in_array($params["action"], array("orders", "subscriptions", "objectload")) )
+		elseif ( in_array($params["action"], array("orders", "subscriptions", "objectload", "prolonge_objects", "prolonge_object")) )
 		{
 			$params["controller"] = 'User_Service';
 			return $params;

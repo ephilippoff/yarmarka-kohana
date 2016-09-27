@@ -113,7 +113,7 @@ class Email_Send  {
 
         if (isset($params['domain']) AND $params['domain'] AND is_numeric($params['domain'])) {
             $city = ORM::factory('City')->where('id','=',$params['domain'])->cached(Date::WEEK)->find();
-            if ($city->loaded()) {
+            if ($city->loaded() AND $city->id <> 1) {
                 $params['domain'] = sprintf('http://%s.%s', $city->seo_name, Kohana::$config->load('common.main_domain'));
             } else {
                 $params['domain'] = FALSE;

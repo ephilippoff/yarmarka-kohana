@@ -1369,12 +1369,18 @@ class Lib_PlacementAds_AddEdit {
 
 			}
 
-			$msg = View::factory('emails/add_notice',
-				array('is_edit' => $is_edit,'object' => $object, 'name' => $user->get_user_name(), 
-					'obj' => $object, 'city' => $city, 'category' => $category, 'subdomain' => Region::get_domain_by_city($city->id), 
-					'contacts' => $contacts, 'address' => $params->address_str));
+			$email_params = array(
+				'is_edit' => $is_edit,
+				'object' => $object,
+				'domain' => $city->id
+			);
 
-			Email::send($user->email, Kohana::$config->load('email.default_from'), $subj, $msg);
+			Email_Send::factory('addedit')
+						->to( $user->email )
+						->set_params($email_params)
+						->set_utm_campaign('addedit')
+						->send();
+					
 		}	
 
 		return $this;	
@@ -1458,6 +1464,9 @@ class Lib_PlacementAds_AddEdit {
 			break;
 			case "45d":
 			$date_expiration = date('Y-m-d H:i:s', strtotime('+45 days'));
+			break;
+			case "7d":
+			$date_expiration = date('Y-m-d H:i:s', strtotime('+7 days'));
 			break;
 			default:
 			$date_expiration = date('Y-m-d H:i:s', strtotime('+14 days'));

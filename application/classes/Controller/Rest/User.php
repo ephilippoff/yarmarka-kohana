@@ -161,11 +161,17 @@ class Controller_Rest_User extends Controller_Rest {
 			}
 			else
 			{
-				$msg = View::factory('emails/contact_verification_code', 
-					array('contact' => $contact->contact, 'code' => $code))
-					->render();
-				$subj 	= 'Подтверждение email на “Ярмарка-онлайн”';
-				Email::send($contact->contact, Kohana::$config->load('email.default_from'), $subj, $msg);
+				$params = array(
+				    'contact' => $contact->contact, 
+				    'code' => $code,
+				    'domain' => FALSE
+				);
+
+				 Email_Send::factory('contact_verification_code')
+	    	    			->to( $contact->contact )
+	    	    			->set_params($params)
+	    	    			->set_utm_campaign('contact_verification_code')
+	    	    			->send();
 			}
 		}
 	}

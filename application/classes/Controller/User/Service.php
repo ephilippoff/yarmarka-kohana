@@ -217,6 +217,53 @@ class Controller_User_Service extends Controller_User_Profile {
         $this->response->body($twig);
     }
 
+    public function action_prolonge_objects()
+    {
+        $twig = Twig::factory('user/prolonge_objects');
+       $twig->city = $this->domain->get_city();
+       $twig->canonical_url = "user/prolonge_objects";
+       $twig->user = $this->user;
+
+       $param = $this->request->param('category_path');
+
+       $twig->crumbs = array(
+            array("title" => "Личный кабинет - все объявления продлены!"),
+        );
+
+       if (!$param OR !$this->user) 
+           throw new HTTP_Exception_404;
+
+       $ids = explode('.', $param);
+
+       $sq = Search::searchquery( array(
+           "id" => $ids,
+           "user_id" => $this->user->id
+       ), array(
+           "limit" => 20
+       ));
+
+       $twig->objects = Search::getresult($sq->execute()->as_array());
+
+               $twig->objects = array_filter($twig->objects, function($object){
+
+                   if ( strtotime( $object['date_expiration'] ) < strtotime( Lib_PlacementAds_AddEdit::lifetime_to_date("7d") ) ) {
+
+                        $object = ORM::factory('Object', $object['id']);
+                        $object->date_expiration =  Lib_PlacementAds_AddEdit::lifetime_to_date("45d");
+                        $object->save();
+                        
+                       return true;
+                   }
+
+                   return false;
+               });
+
+       if (count($twig->objects) == 0)
+            $this->redirect('/user');
+
+       $this->response->body($twig);
+    }
+
     public function action_subscriptions()
     {
 

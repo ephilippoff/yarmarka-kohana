@@ -487,8 +487,20 @@ class Model_User extends Model_Auth_User {
 		if (!$this->loaded())
 			return;
 
-		$msg = View::factory('emails/register_success', array('activationCode' => $this->code));
-		Email::send($this->email, Kohana::$config->load('email.default_from'), 'Подтверждение регистрации на Ярмарке', $msg);
+		$domain = new Domain();
+		$city = $domain->get_city();
+
+		$params = array(
+		    'code' => $this->code,
+		    'domain' => $city->id
+		);
+
+		Email_Send::factory('register_success')
+			->to( $this->email )
+			->set_params($params)
+			->set_utm_campaign('register_success')
+			->send();
+
 	}
 
 	private static function generate_code($str)
@@ -842,9 +854,22 @@ class Model_User extends Model_Auth_User {
 		if (!$this->loaded())
 			return;
 
-		$msg = View::factory('emails/register_data', $data);
-		Email::send($this->email, Kohana::$config->load('email.default_from'), 'Для вас создана учетная запись на сайте yarmarka.biz', $msg);
-	}	
+		$domain = new Domain();
+		$city = $domain->get_city();
+
+		$params = array(
+		    'login' => $data['login'],
+		    'passw' => $data['passw'],
+		    'domain' => $city->id
+		);
+
+		Email_Send::factory('register_data')
+			->to( $this->email )
+			->set_params($params)
+			->set_utm_campaign('register_data')
+			->send();
+
+	}
 }
 
 /* End of file User.php */

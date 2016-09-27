@@ -458,19 +458,23 @@ class Objectload
 				);
 		}
 
-		$subj = "Отчет по загрузке объявлений ";
-		$email_params = array( 'objectload' => $objectload, 
-							   'common_stat' => $common_stat, 
-								'category_stat' => $category_stat,
-								'org_name' => $user->org_name,
-								'logo' => 'http://yarmarka.biz/images/logo.png');
+		$params = array(
+		    'objectload' => $objectload, 
+		    'common_stat' => $common_stat, 
+		    'category_stat' => $category_stat,
+		    'org_name' => $user->org_name,
+		    'logo' => 'http://yarmarka.biz/images/logo.png'
+		);
 
-		$msg = View::factory('emails/massload_report', $email_params)->render();
-		//$msg = "sdf";
 		
-		//Kohana::$log->add(Log::NOTICE, Debug::vars($email_params));
 		foreach ($massload_email as $email) {
-			Email::send($email->value, Kohana::$config->load('email.default_from'), $subj, $msg);
+
+			 Email_Send::factory('massload_report')
+	    			->to( $email->value )
+	    			->set_params($params)
+	    			->set_utm_campaign('massload_report')
+	    			->send();
+
 		}
 	}
 

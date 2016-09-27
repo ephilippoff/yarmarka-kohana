@@ -264,8 +264,12 @@ class Controller_Admin_Phones extends Controller_Admin_Template {
 			->find_all();
 
 
+		$city_id = FALSE;
+
 		foreach ($objects as $object)
 		{
+			$city_id = $object->city_id;
+
 			$object->is_published = 0;
 			$object->save();
 
@@ -277,15 +281,17 @@ class Controller_Admin_Phones extends Controller_Admin_Template {
 
 		if ($contact->verified_user->email)
 		{
-			$subj = 'Сообщение от модератора сайта "Ярмарка - онлайн"';
-			$msg = View::factory('emails/decline_contact', 
-				array(
-					'UserName' => $contact->verified_user->fullname ? $contact->verified_user->fullname : $contact->verified_user->login,
-					'phone'	=> $contact->contact,
-					'objects' => $objects,
-				)
-			)->render();
-			Email::send($contact->verified_user->email, Kohana::$config->load('email.default_from'), $subj, $msg);
+			$params = array(
+			    'phone' => $contact->contact,
+			    'objects' => $objects,
+			    'domain' => $city_id
+			);
+
+			Email_Send::factory('decline_contact')
+		    			->to( $contact->verified_user->email )
+		    			->set_params($params)
+		    			->set_utm_campaign('decline_contact')
+		    			->send();
 		}
 
 		$contact->verified_user->delete_contact($contact->id);
@@ -315,9 +321,12 @@ class Controller_Admin_Phones extends Controller_Admin_Template {
 			->where('author', '=', $contact->verified_user_id)
 			->find_all();
 
+		$city_id = FALSE;
 
 		foreach ($objects as $object)
 		{
+			$city_id = $object->city_id;
+
 			$object->is_published = 0;
 			$object->save();
 
@@ -329,16 +338,19 @@ class Controller_Admin_Phones extends Controller_Admin_Template {
 
 		if ($contact->verified_user->email)
 		{
-			$subj = 'Сообщение от модератора сайта "Ярмарка - онлайн"';
-			$msg = View::factory('emails/block_contact', 
-				array(
-					'UserName' => $contact->verified_user->fullname ? $contact->verified_user->fullname : $contact->verified_user->login,
-					'phone'	=> $contact->contact,
-					'objects' => $objects,
-				)
-			)->render();
 
-			Email::send($contact->verified_user->email, Kohana::$config->load('email.default_from'), $subj, $msg);
+			$params = array(
+			    'phone' => $contact->contact,
+			    'objects' => $objects,
+			    'domain' => $city_id
+			);
+
+			Email_Send::factory('block_contact')
+				    			->to( $contact->verified_user->email )
+				    			->set_params($params)
+				    			->set_utm_campaign('block_contact')
+				    			->send();
+				    	
 		}
 
 		$contact->verified_user->delete_contact($contact->id);

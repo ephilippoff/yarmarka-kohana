@@ -10,13 +10,27 @@
 </tr>
  <tr>
     <td colspan="2" style="padding:10px;">
-        {% for action in actions_negative %}
-            <p class="p3" style="color: #d44234;"> {{ action }}</p>
-        {% endfor %}
-        <hr>
-        {% for action in actions_positive %}
-            <p class="p3" style="color: #d44234;"> {{ action }}</p>
-        {% endfor %}
+
+        {% if actions_negative|length > 0 %}
+            <h4>Не прошли проверку</h4>
+            {% for object in actions_negative %}
+                <p class="p3">
+                    <a style="color: #d44234;" href="{{ email_link(domain, '/detail/' ~ object.id, ref_params, {'utm_content': 'object'}) }}">{{ object.title }}</a> : 
+                    <span style="color: #333333;">{{object.reason}}</span>
+                </p>
+            {% endfor %}
+        {% endif %}
+        
+        {% if actions_positive|length > 0 %}
+            <hr>
+            <h4>Прошли проверку</h4>
+            {% for object in actions_positive %}
+                <p class="p3"> <a style="color: #d44234;" href="{{ email_link(domain, '/detail/' ~ object.id, ref_params, {'utm_content': 'object'}) }}">{{ object.title }}</a></p>
+            {% endfor %}
+        {% endif %}
+    </td>
+    <td colspan="2" style="padding:10px;">
+        <a href="http://feedback.yarmarka.biz/">Связаться с тех. поддержкой</a>
     </td>
 </tr>
 
