@@ -33,7 +33,7 @@
             <table>
                 <tr>
                     {% for object in last_news %}
-                         <td class="p5">
+                         <td class="p5" style="width:33%;">
                                 <img src="{{ get_file(object.compiled.images.main_photo['120x90']) }}" style="width:120px;display:block;">
                                 <a style="color: #08729E;padding:10px 0; font-size:0.7em;display:block;" href="{{ email_link(domain, '/detail/' ~ object.id, ref_params, {'utm_content': 'last_news'}) }}">{{ object.title|slice(0,100) }}</a> 
                          </td>
