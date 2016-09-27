@@ -107,8 +107,20 @@ class Task_DeleteFiles extends Minion_Task
 
 		$count = &$this->count;
 		$total = &$this->total;
-
-		$this->get_all_files(1, function($filename, $dir = '', $check) use ($limit, &$count, &$total, $remove){
+		
+		$dir_prev = NULL;
+		
+		$this->get_all_files(1, function($filename, $dir = '', $check) use ($limit, &$count, &$total, $remove, &$dir_prev){
+			if (!$dir_prev) {
+				$dir_prev = $dir;	
+			}
+			
+			if (Cache::instance('memcache')->get('ddd'.$dir)) {
+			  return ($count >= $limit);	
+			}
+			
+			Minion_CLI::write($dir);
+			
 			$total++;
 			//if ($check) {
 				if ( !Task_DeleteFiles::check_user_settings($filename)
@@ -127,6 +139,12 @@ class Task_DeleteFiles extends Minion_Task
 					Minion_CLI::write('Removed:'.Minion_CLI::color("[$count/$total] : ".$filename, 'cyan'));
 				}
 			//}
+			
+			if ($dir_prev <> $dir) {
+				Cache::instance('memcache')->set('ddd'.$dir_prev, 1, Date::WEEK);	
+				$dir_prev = $dir;
+			}
+			
 			return ($count >= $limit);
 		});
 	}
