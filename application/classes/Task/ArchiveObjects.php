@@ -73,12 +73,18 @@ class Task_ArchiveObjects extends Minion_Task
                 $city_id = $objects[0]['city_id'];
 
                 $ids = array();
+                $objects_for_email = array();
+                $i = 0;
                 foreach ($objects as $object) {
                     array_push($ids, $object['id']);
+                    array_push($objects_for_email,  $object);
+                    $i++;
+                    if ($i > 10) break;
+
                 }
 
                 $params = array(
-                    'objects' => $objects,
+                    'objects' => $objects_for_email,
                     'ids' => join('.', $ids),
                     'domain' => $city_id
                 );
