@@ -64,33 +64,33 @@ class Task_TestEmail extends Minion_Task
 
 		$domain = 1948;
 
-		$this->payment_success($order, $orderItems, $domain);
+		// $this->payment_success($order, $orderItems, $domain);
 
 		$this->addedit(TRUE, $object, $domain);
-		$this->addedit(FALSE, $object, $domain);
+		//$this->addedit(FALSE, $object, $domain);
 		
-		$this->block_contact('123213', $objects, $domain);
+		// $this->block_contact('123213', $objects, $domain);
 
-		$this->decline_contact('213123', $objects, $domain);
+		// $this->decline_contact('213123', $objects, $domain);
 
-		$this->contact_verification_code($contact, '123213', $domain);
+		// $this->contact_verification_code($contact, '123213', $domain);
 
-		$this->forgot_password('http://vagapov.site/sdfdsfdsf', $domain);
+		// $this->forgot_password('http://vagapov.site/sdfdsfdsf', $domain);
 
-		$this->moderate_object(
-			array( array('id' => 4028377, 'title' => 'sdfsdfaf dsf7sa9df9asd7f7asf', 'reason' => 'снято за нарушение') ),
-			array( array('id' => 4028377, 'title' => 'sdfsdfaf dsf7sa9df9asd7f7asf') ), 
-			$domain
-		);
+		// $this->moderate_object(
+		// 	array( array('id' => 4028377, 'title' => 'sdfsdfaf dsf7sa9df9asd7f7asf', 'reason' => 'снято за нарушение') ),
+		// 	array( array('id' => 4028377, 'title' => 'sdfsdfaf dsf7sa9df9asd7f7asf') ), 
+		// 	$domain
+		// );
 
 
-		// $this->massload_report($objectload,  $common_stat, $category_stat, $user->org_name, $domain);
+		// // $this->massload_report($objectload,  $common_stat, $category_stat, $user->org_name, $domain);
 
-		$this->object_expiration($objects, '4028377.123123.12312', $domain);
-		$this->object_to_archive($objects, '4028377.123123.12312', $domain);
+		// $this->object_expiration($objects, '4028377.123123.12312', $domain);
+		// $this->object_to_archive($objects, '4028377.123123.12312', $domain);
 
-		$this->register_data('aaaaaaa','passsssssss', $domain);
-		$this->register_success('coooooooodddddeeeeeee', $domain);
+		// $this->register_data('aaaaaaa','passsssssss', $domain);
+		// $this->register_success('coooooooodddddeeeeeee', $domain);
 
 	}
 

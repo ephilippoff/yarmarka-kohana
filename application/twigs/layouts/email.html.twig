@@ -24,7 +24,26 @@
         </tr>
 
         {% block body %}{% endblock body %}
+        
+        {% if last_news %}
+        <tr>
+            <td colspan="2" style="padding:10px;">
+            <hr>
+            <h4>Интересные новости и события в вашем городе</h4>
+            <table>
+                <tr>
+                    {% for object in last_news %}
+                         <td class="p5">
+                                <img src="{{ get_file(object.compiled.images.main_photo['120x90']) }}" style="width:120px;display:block;">
+                                <a style="color: #08729E;padding:10px 0; font-size:0.7em;display:block;" href="{{ email_link(domain, '/detail/' ~ object.id, ref_params, {'utm_content': 'last_news'}) }}">{{ object.title|slice(0,100) }}</a> 
+                         </td>
+                    {% endfor %}
+                </tr>
+            </table>
+           </td>
+        </tr>
 
+        {% endif %}
         <tr>
             <td colspan="2" style="padding:10px;">
                 <div class="footer" style="text-align: right; font-size: 12px; margin: 10px 0;" align="right">С уважением, команда «Ярмарка-онлайн»</div>

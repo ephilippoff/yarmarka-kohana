@@ -25,6 +25,12 @@ class Email_Send  {
         'object_to_archive'
     );
 
+    private $_withnews = array(
+        'addedit',
+        'object_expiration',
+        'object_to_archive'
+    );
+
     private $_news = array();
 
     public static function factory($template_name)
@@ -74,6 +80,29 @@ class Email_Send  {
         return $this;
     }
 
+    private function set_news()
+    {
+        $params = $this->_params;
+
+        if (!isset($params['domain']) OR !is_numeric($params['domain'])) return;
+
+        
+
+         $search_query = Search::searchquery(
+            array(
+                "expiration" => TRUE,
+                "premium" => TRUE,
+                "active" => TRUE,
+                "published" =>TRUE,
+                "city_published" => $params['domain'],
+                "category_seo_name" => "novosti"
+            ),
+            array("limit" => 3, "page" => 1)
+        );
+        
+        return Search::getresult($search_query->execute()->as_array());
+    }
+
     public function send($subj = FALSE, $msg = FALSE)
     {
         $params = $this->_params;
@@ -110,6 +139,10 @@ class Email_Send  {
 
         $params['ref_params'] = $this->_ref_params;
 
+        $params['last_news'] = FALSE;
+        if (in_array($this->_template_name, $this->_withnews)) {
+            $params['last_news'] = $this->set_news();
+        }
 
         if (isset($params['domain']) AND $params['domain'] AND is_numeric($params['domain'])) {
             $city = ORM::factory('City')->where('id','=',$params['domain'])->cached(Date::WEEK)->find();
