@@ -25,22 +25,33 @@
 
         <tr>
             <td colspan="2" style="padding:10px;">
-                <table style="width:100%;">
+                <table style="max-width: 800px;width:100%;border:0;margin: 0 auto;border-collapse: collapse;">
                   <tr>
-                      {% for object in last_news %}
-                          <td class="p5">
-                            <img src="http://yarmarka.biz./uploads/208x208/25/ef/54/25ef54fe107e40343e2c0423751aaeb9.jpg" style="width:120px;display:block;">
-                            <a style="color: #08729E;padding:10px 0; font-size:0.9em;display:block;" href="{{ email_link(domain, '/detail/' ~ object.id, ref_params, {'utm_content': 'last_news'}) }}">Полицейские ханты-Мансийска задержали подозреваемых в разбойном нападении на кре...|slice(0,100)</a> 
-                          </td>
-                           <td class="p5">
-                            <img src="http://yarmarka.biz./uploads/208x208/25/ef/54/25ef54fe107e40343e2c0423751aaeb9.jpg"  style="width:120px;display:block;"">
-                              <a style="color: #08729E;padding:10px 0; font-size:0.9em;display:block;" href="{{ email_link(domain, '/detail/' ~ object.id, ref_params, {'utm_content': 'last_news'}) }}">Полицейские ханты-Мансийска задержали подозреваемых в разбойном нападении на кре...|slice(0,100)</a> 
-                          </td>
-                           <td class="p5">
-                            <img src="http://yarmarka.biz./uploads/208x208/25/ef/54/25ef54fe107e40343e2c0423751aaeb9.jpg"  style="width:120px;display:block;">
-                              <a style="color: #08729E;padding:10px 0; font-size:0.9em;display:block;" href="{{ email_link(domain, '/detail/' ~ object.id, ref_params, {'utm_content': 'last_news'}) }}">Полицейские ханты-Мансийска задержали подозреваемых в разбойном нападении на кре...|slice(0,100)</a> 
-                          </td>
-                      {% endfor %}
+                        <td style="width:13%;">
+                            <img src="http://yarmarka.biz./uploads/208x208/25/ef/54/25ef54fe107e40343e2c0423751aaeb9.jpg" style="max-width:100%;display:block;">
+                        </td>
+                        <td style="padding:0 5px;width:50%;">
+                            <a style="color: #08729E;padding:10px 0; font-size:0.7em;display:block;" href="{{ email_link(domain, '/detail/' ~ object.id, ref_params, {'utm_content': 'last_news'}) }}">Полицейские ханты-Мансийска задержали подозреваемых в разбойном нападении на кре...|slice(0,100)</a> 
+                        </td>
+                        <td></td>
+                  </tr>
+                     <tr>
+                        <td style="width:13%;">
+                            <img src="http://yarmarka.biz./uploads/208x208/25/ef/54/25ef54fe107e40343e2c0423751aaeb9.jpg" style="width:100%;display:block;">
+                        </td>
+                        <td style="padding:0 5px;width:50%;">
+                            <a style="color: #08729E;padding:10px 0; font-size:0.7em;display:block;" href="{{ email_link(domain, '/detail/' ~ object.id, ref_params, {'utm_content': 'last_news'}) }}">Полицейские ханты-Мансийска задержали подозреваемых в разбойном нападении на кре...|slice(0,100)</a> 
+                        </td>
+                        <td></td>
+                  </tr>
+                   <tr>
+                        <td style="width:13%;">
+                            <img src="http://yarmarka.biz./uploads/208x208/25/ef/54/25ef54fe107e40343e2c0423751aaeb9.jpg" style="width:100%;display:block;">
+                        </td>
+                        <td style="padding:0 5px;width:50%;">
+                            <a style="color: #08729E;padding:10px 0; font-size:0.7em;display:block;" href="{{ email_link(domain, '/detail/' ~ object.id, ref_params, {'utm_content': 'last_news'}) }}">Полицейские ханты-Мансийска задержали подозреваемых в разбойном нападении на кре...|slice(0,100)</a> 
+                        </td>
+                        <td></td>
                   </tr>
                 </table>
             </td>
