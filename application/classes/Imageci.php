@@ -72,13 +72,13 @@ class Imageci {
 			'keep_aspect_ratio' => 1,
 			'crop' =>0
         ),		
-        '1280x292' => array(
-			'width' => 1280,
-			'height' => 292,
-			'fit' => 1,
-			'keep_aspect_ratio' => 1,
-			'crop' =>1
-        ),
+//         '1280x292' => array(
+// 			'width' => 1280,
+// 			'height' => 292,
+// 			'fit' => 1,
+// 			'keep_aspect_ratio' => 1,
+// 			'crop' =>1
+//         ),
         //'433x289' => array(
 			//'width' => 433,
 			//'height' => 289,
