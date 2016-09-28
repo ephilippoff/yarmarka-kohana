@@ -188,6 +188,7 @@ class Task_EmailNotices extends Minion_Task
             $objects_for_email = array();
             $i = 0;
             foreach ($objects as $object) {
+                if ($object['number']) continue;
                 array_push($ids, $object['id']);
                 array_push($objects_for_email,  $object);
                 $i++;
@@ -195,21 +196,24 @@ class Task_EmailNotices extends Minion_Task
 
             }
 
-            $params = array(
-                'objects' => $objects_for_email,
-                'ids' => join('.', $ids),
-                'domain' => $city_id
-            );
+            if (count($objects_for_email) > 0) {
 
-            Email_Send::factory('object_expiration')
-                    ->to( $user->email )
-                    ->set_params($params)
-                    ->set_utm_campaign('object_expiration')
-                    ->send();
+                $params = array(
+                    'objects' => $objects_for_email,
+                    'ids' => join('.', $ids),
+                    'domain' => $city_id
+                );
+
+                Email_Send::factory('object_expiration')
+                        ->to( $user->email )
+                        ->set_params($params)
+                        ->set_utm_campaign('object_expiration')
+                        ->send();
 
 
-            Minion_CLI::write('notice about '.Model_Object_Notice::EXPIRATION.' in '.count($objects).' objects sent to: '.$user->email);
-
+                Minion_CLI::write('notice about '.Model_Object_Notice::EXPIRATION.' in '.count($objects).' objects sent to: '.$user->email);
+            }
+            
             $query = DB::select("o.id", DB::expr("'".Model_Object_Notice::EXPIRATION."'"))
                 ->from(array("object","o"))
                 ->where("o.id", "IN", $objects_query)

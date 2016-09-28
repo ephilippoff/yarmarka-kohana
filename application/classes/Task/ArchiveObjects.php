@@ -76,6 +76,7 @@ class Task_ArchiveObjects extends Minion_Task
                 $objects_for_email = array();
                 $i = 0;
                 foreach ($objects as $object) {
+                    if ($object['number']) continue;
                     array_push($ids, $object['id']);
                     array_push($objects_for_email,  $object);
                     $i++;
@@ -83,19 +84,21 @@ class Task_ArchiveObjects extends Minion_Task
 
                 }
 
-                $params = array(
-                    'objects' => $objects_for_email,
-                    'ids' => join('.', $ids),
-                    'domain' => $city_id
-                );
+                if (count($objects_for_email) > 0) {
+                    $params = array(
+                        'objects' => $objects_for_email,
+                        'ids' => join('.', $ids),
+                        'domain' => $city_id
+                    );
 
-                Email_Send::factory('object_to_archive')
-                        ->to( $user->email )
-                        ->set_params($params)
-                        ->set_utm_campaign('object_to_archive')
-                        ->send();
+                    Email_Send::factory('object_to_archive')
+                            ->to( $user->email )
+                            ->set_params($params)
+                            ->set_utm_campaign('object_to_archive')
+                            ->send();
 
-                Minion_CLI::write('notice send to: '.$user->email."<br>");
+                    Minion_CLI::write('notice send to: '.$user->email."<br>");
+                }
 
                 DB::update(array("object","o"))
                     ->set( array("in_archive" => "T", "is_published" => 0) )

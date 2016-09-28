@@ -237,9 +237,10 @@ class Controller_User_Service extends Controller_User_Profile {
 
        $sq = Search::searchquery( array(
            "id" => $ids,
-           "user_id" => $this->user->id
+           "user_id" => $this->user->id,
+           "active" => TRUE
        ), array(
-           "limit" => 20
+           "limit" => 10
        ));
 
        $twig->objects = Search::getresult($sq->execute()->as_array());
@@ -250,6 +251,9 @@ class Controller_User_Service extends Controller_User_Profile {
 
                         $object = ORM::factory('Object', $object['id']);
                         $object->date_expiration =  Lib_PlacementAds_AddEdit::lifetime_to_date("45d");
+                        $object->date_created = DB::expr("NOW()");
+                        $object->is_published = TRUE;
+                        $object->in_archive = 'f';
                         $object->save();
                         
                        return true;
@@ -258,8 +262,8 @@ class Controller_User_Service extends Controller_User_Profile {
                    return false;
                });
 
-       if (count($twig->objects) == 0)
-            $this->redirect('/user');
+       // if (count($twig->objects) == 0)
+       //      $this->redirect('/user');
 
        $this->response->body($twig);
     }
