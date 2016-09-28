@@ -47,6 +47,14 @@ define([
                     } else if (info.objects) {
                         return "Услуга 'Подъем' для "+info.objects.length+" объявлений(ия)";
                     }
+               },
+               getNextFreeUp: function(){
+                    var next_freeup = s.model.get("info").service.next_freeup;
+                    if (next_freeup) {
+                        return "( следующий <b>" + next_freeup + "</b> )";
+                    } else {
+                        return "";
+                    }
                }
             }
         },

@@ -27,24 +27,43 @@
 	{% endif %}
 
 	<div>
-		<div class="">
-			{% if state == "initial" %}
-				<p>Заказ на оформлении (<a href="/cart">изменить</a>)</p>
-			{% elseif state == "notPaid" %}
-				<p>Заказ в ожидании оплаты</p>
-			{% elseif state == "paid" %}
-				<p>Заказ оплачен.</p>
-			{% elseif state == "activate" %}
-				<p>Услуги активированы.</p>
-			{% elseif state == "adminActivate" %}
-				<p>Услуги активированы.</p>
-			{% elseif state == "paid" %}
-				<p>Заказ оплачен.</p>
-			{% elseif state == "cancelPayment" %}
-				<p>Заказ отменен. Истекло время оплаты, либо отмена инициирована пользователем</p>
-			{% endif %}
-		</div>
+		<style>
+			.cart_status {
+
+				line-height:40px;
+				
+				display:inline-block;
+				padding:0 10px;
+				color:#3C3C3C;
+			}
+			.cart_status.ok {
+				background: #05FF6E;
+			}
+			.cart_status.wait {
+				background:#FFE505;
+			}
+			.cart_status.err {
+				background:#FF7878;
+			}
+		</style>
 		<div class="p20">
+			<div class="" style="background:#F1F1F1;">
+				{% if state == "initial" %}
+					<span class="cart_status wait">Заказ на оформлении (<a href="/cart">изменить</a>)</span>
+				{% elseif state == "notPaid" %}
+					<span class="cart_status wait">Заказ в ожидании оплаты</span>
+				{% elseif state == "paid" %}
+					<span class="cart_status ok">Заказ оплачен.</span>
+				{% elseif state == "activate" %}
+					<span class="cart_status ok">Услуги активированы.</span>
+				{% elseif state == "adminActivate" %}
+					<span class="cart_status ok">Услуги активированы.</span>
+				{% elseif state == "paid" %}
+					<span class="cart_status ok">Заказ оплачен.</span>
+				{% elseif state == "cancelPayment" %}
+					<span class="cart_status err">Заказ отменен. Истекло время оплаты, либо отмена инициирована пользователем</span>
+				{% endif %}
+			</div>
 			{% set error = FALSE %}
 			<table class="table" id="flip-scroll">
 				<thead>
@@ -78,6 +97,8 @@
 			<div class="ta-r mb20">
 				Итоговая стоимость <span>{{sum}} руб.</span>
 			</div>
+
+
 			
 			{% if delivery_info %}
 				<div class="messages-cont mb20">

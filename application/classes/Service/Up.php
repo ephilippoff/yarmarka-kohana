@@ -28,6 +28,9 @@ class Service_Up extends Service
 		$price_total = $price * $quantity - $discount;
 		$description = $this->get_params_description().$discount_reason;
 
+		$user =  Auth::instance()->get_user();
+		$last_freeup = ORM::factory('User_Settings')->get_by_name($user->id, 'freeup_date')->find()->value;
+
 		return array(
 			"name" => $this->_name,
 			"title" => $this->_title,
@@ -37,7 +40,9 @@ class Service_Up extends Service
 			"discount_name" => $discount_name,
 			"discount_reason" => $discount_reason,
 			"price_total" => $price_total,
-			"description" => $description
+			"description" => $description,
+			"last_freeup" => ($user AND $last_freeup) ? $last_freeup : FALSE,
+			"next_freeup" => ($user AND $last_freeup) ? date('d.m.Y H:i', strtotime('+10 days', strtotime($last_freeup))) : FALSE
 		);
 	}
 
@@ -52,6 +57,14 @@ class Service_Up extends Service
 
 		self::apply_service($orderItem->object->id, $quantity);
 		self::saveServiceInfoToCompiled($orderItem->object->id);
+
+		if ($orderItem->service->discount_name == "free_up") {
+			$order = ORM::factory('Order', $orderItem->order_id);
+			if ($order->user_id) {
+				ORM::factory('User_Settings')->freeup_save($order->user_id);
+				ORM::factory('User_Settings')->freeup_remove($order->user_id, 'freeup_reserve');
+			}
+		}
 
 		if ($quantity > 1) {
 			ORM::factory('Order_Log')->write($orderItem->order_id, "notice", vsprintf("Активация услуги Подъем * %s: № %s", array( $quantity, $orderItem->order_id ) ) );
@@ -73,8 +86,6 @@ class Service_Up extends Service
 		}
 
 		$object->save();
-
-
 
 		$or = ORM::factory('Object_Service_Up')
 					->where("object_id", "=", $object_id)
@@ -109,14 +120,6 @@ class Service_Up extends Service
 		if (!$user) return $result;
 
 		$balance = ($balance) ? $balance : self::get_balance($user);
-		if (!isset($balance)) {
-			if ( Acl::check("object.add.type") )
-			{
-				$balance = (int) self::set_balance($user, 500);
-			} else {
-				$balance = (int) self::set_balance($user, Service_Up::$_free_count);
-			}
-		}
 
 		if ($balance >= 0 AND $balance - intval($quantity) >= 0) {
 			return TRUE;
@@ -132,41 +135,21 @@ class Service_Up extends Service
 
 		if ($user)
 		{
-			return Cache::instance("services")->get("up:".$user->id);
+			$freeup_reserve = ORM::factory('User_Settings')->get_by_name($user->id, 'freeup_reserve')->find();
+
+			return ($freeup_reserve->loaded()) ? 0 : ORM::factory('User_Settings')->freeup_exists($user->id);
 		} else {
 			return 0;
 		}
 	}
 
-	static function set_balance($user, $count)
-	{
-		if (!$user)
-			$user = Auth::instance()->get_user();
-
-		Cache::instance("services")->set("up:".$user->id, (int) $count, 864000);
-		return $count;
-	}
-
 	static function decrease_balance($user, $count = 1)
 	{
-		if (!$user)
-			$user = Auth::instance()->get_user();
-
-		$balance = self::get_balance($user);
-
-		if ($balance == 0)
-			return FALSE;
-
-		return self::set_balance($user, $balance - $count);
+		ORM::factory('User_Settings')->freeup_save($user->id, 'freeup_reserve');
 	}
 
 	static function increase_balance($user, $count = 1)
 	{
-		if (!$user)
-			$user = Auth::instance()->get_user();
-
-		$balance = self::get_balance($user);
-
-		return self::set_balance($user, $balance + $count);
+		ORM::factory('User_Settings')->freeup_remove($user->id, 'freeup_reserve');
 	}
 }

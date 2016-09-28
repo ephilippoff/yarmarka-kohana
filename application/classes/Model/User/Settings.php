@@ -87,4 +87,26 @@ class Model_User_Settings extends ORM {
 							->delete_all();
 	}
 
+	public function get_last_freeup_date($user_id)
+	{
+		return $this->get_by_name($user_id, 'freeup_date')->find();
+	}
+
+	public function freeup_exists($user_id)
+	{
+		$last = $this->get_by_name($user_id, 'freeup_date')->find();
+
+		return ( !$last->loaded() OR ($last->loaded() AND strtotime($last->value) < strtotime( date('Y-m-d H:i:s', strtotime('-10 days'))) ) ) ? 1 : 0;
+	}
+
+	public function freeup_save($user_id, $type = 'freeup_date')
+	{
+		return $this->update_or_save($user_id, NULL, $type, date('Y-m-d H:i:s') );
+	}
+
+	public function freeup_remove($user_id, $type = 'freeup_date')
+	{
+		return $this->_delete($user_id, NULL, $type);
+	}
+
 } // End User_Settings Model
