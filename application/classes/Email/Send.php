@@ -103,6 +103,32 @@ class Email_Send  {
         return Search::getresult($search_query->execute()->as_array());
     }
 
+    private function set_promo_objects()
+    {
+        $params = $this->_params;
+
+        if (!isset($params['domain']) OR !is_numeric($params['domain'])) return;
+
+        
+
+         $search_query = Search::searchquery(
+            array(
+                "active" => TRUE,
+                "published" =>TRUE,
+                "photocard" => TRUE,
+                "city_published" => $params['domain'],
+                "not_category_seo_name" => array(
+                       "novosti"
+                )
+            ),
+            array("limit" => 3, "page" => 1)
+        );
+        
+        return Search::getresult($search_query->execute()->as_array());
+    }
+
+    
+
     public function send($subj = FALSE, $msg = FALSE)
     {
         $params = $this->_params;
@@ -140,8 +166,10 @@ class Email_Send  {
         $params['ref_params'] = $this->_ref_params;
 
         $params['last_news'] = FALSE;
+        $params['promo_objects'] = FALSE;
         if (in_array($this->_template_name, $this->_withnews)) {
             $params['last_news'] = $this->set_news();
+            $params['promo_objects'] = $this->set_promo_objects();
         }
 
         if (isset($params['domain']) AND $params['domain'] AND is_numeric($params['domain'])) {

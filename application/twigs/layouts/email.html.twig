@@ -26,25 +26,46 @@
         {% block body %}{% endblock body %}
         
         {% if last_news %}
-        <tr>
-            <td colspan="2" style="padding:10px;">
-            <hr>
-            <h4>Интересные новости и события в вашем городе</h4>
-            <table>
-                    {% for object in last_news %}
-                        <tr>
-                             <td style="width:13%;">
-                                   <img src="{{ get_file(object.compiled.images.main_photo['120x90']) }}" style="max-width:100%;display:block;">
-                             </td>
-                             <td style="padding:0 5px;width:50%;">
-                                <a style="color: #08729E;padding:10px 0; font-size:0.7em;display:block;" href="{{ email_link(domain, '/detail/' ~ object.id, ref_params, {'utm_content': 'last_news'}) }}">{{ object.title|slice(0,100) }}</a> 
-                             </td>
-                             <td></td>
-                       </tr>
-                    {% endfor %}
-            </table>
-           </td>
-        </tr>
+            <tr>
+                <td  colspan="2" style="padding:10px;">
+                    <hr>
+                    
+                </td>
+            </tr>
+            <tr>
+                <td style="padding:10px;width:50%;">
+                    <h4>Новости и события в вашем городе</h4>
+                    <table style="width:100%;border:0;margin: 0 auto;border-collapse: collapse;">
+                            {% for object in last_news %}
+                                <tr>
+                                     <td style="width:25%;">
+                                           <img src="{{ get_file(object.compiled.images.main_photo['120x90']) }}" style="max-width:100%;display:block;">
+                                     </td>
+                                     <td style="padding:0 5px;">
+                                        <a style="color: #08729E;padding:10px 0; font-size:0.85em;display:block;" href="{{ email_link(domain, '/detail/' ~ object.id, ref_params, {'utm_content': 'last_news'}) }}">{{ object.title|slice(0,100) }}</a> 
+                                     </td>
+                                     <td></td>
+                               </tr>
+                            {% endfor %}
+                    </table>
+               </td>
+                <td style="padding:10px;width:50%;">
+                    <h4>Свежие объявления</h4>
+                    <table  style="width:100%;border:0;margin: 0 auto;border-collapse: collapse;">
+                        {% for object in promo_objects %}
+                            <tr>
+                                 <td style="width:25%;">
+                                       <img src="{{ get_file(object.compiled.images.main_photo['120x90']) }}" style="max-width:100%;display:block;">
+                                 </td>
+                                 <td style="padding:0 5px;">
+                                    <a style="color: #08729E;padding:10px 0; font-size:0.85em;display:block;" href="{{ email_link(domain, '/detail/' ~ object.id, ref_params, {'utm_content': 'promo_objects'}) }}">{{ object.title|slice(0,100) }}</a> 
+                                 </td>
+                                 <td></td>
+                           </tr>
+                        {% endfor %}
+                    </table>
+               </td>
+            </tr>
 
         {% endif %}
         <tr>
