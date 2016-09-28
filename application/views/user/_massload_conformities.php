@@ -39,7 +39,16 @@
     }
 </style>
 <div class="massload">
-
+            <? 
+                        $user = Auth::instance()->get_user();
+                        if ($user->role == 1):
+                    ?>
+                        <div class="massload-controlsrow massload-checkbox-ingnore-errors">
+                            <input type="text" id="fn-user" value="<?=$end_user_id?>" disabled/>
+                            <label for="fn-ignore_errors">ID пользователя
+                            </label>
+                        </div>
+                    <? endif; ?>
             <? if (count($categories)>0): ?>
                 <? foreach($forms as $category=>$items): ?>
                         <div class="massload-controlsrow massload-head">
