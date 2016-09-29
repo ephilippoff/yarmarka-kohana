@@ -104,21 +104,19 @@ class Controller_Rest_Object extends Controller_Rest {
 
 		Cache::instance('memcache')->set("action_write_to_author:{$object_id}{$user_id}", 1, Date::DAY);
 
-		/* prepare subject */
-		$subject = 'У Вас сообщение на «Ярмарка-онлайн»';
+		$params = array(
+			'object' => $object,
+			'user' => $user,
+			'message' => $this->post->message,
+		    'domain' => $object->city_id
+		);
 
-		$msg = View::factory('emails/new_message_from_buyer',
-		     array(
-		         'url' => $object->get_full_url(),
-		         'title' => $object->title,
-		         'user' => $user,
-		         'message' => $this->post->message
-		     )
-		 )->render();
-
-		Email::send( 
-			$author->email
-			, Kohana::$config->load('email.default_from'), $subject, $msg);
+		Email_Send::factory('response_for_object')
+			->to( $author->email)
+			->set_params($params)
+			->set_utm_campaign('response_for_object')
+			->send();
+		
 	}
 
 	public function action_callback() {

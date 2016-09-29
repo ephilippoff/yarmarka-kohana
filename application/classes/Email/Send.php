@@ -210,7 +210,6 @@ class Email_Send  {
         return 'Запрос на разрешение подачи объявлений от лица вашей компании';
     }
 
-
     public function get_template_accept_request_to_link_company($params)
     {
         return Twig::factory('emails/user_manage/accept_request_to_link_company', $params)->render();
@@ -224,6 +223,15 @@ class Email_Send  {
         return Twig::factory('emails/user_manage/request_to_link_company', $params)->render();
     }
 
+    public function get_subj_response_for_object($params)
+    {
+        return 'Вам было отправлено сообщение по объявлению';
+    }
+
+    public function get_template_response_for_object($params)
+    {
+        return Twig::factory('emails/response_for_object', $params)->render();
+    }
 
     public function get_subj_addedit($params)
     {

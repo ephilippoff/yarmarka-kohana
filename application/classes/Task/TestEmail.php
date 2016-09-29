@@ -94,11 +94,31 @@ class Task_TestEmail extends Minion_Task
 		// $this->register_data('aaaaaaa','passsssssss', $domain);
 		// $this->register_success('coooooooodddddeeeeeee', $domain);
 		// 
-		$this->accept_request_to_link_company($user, TRUE, $domain);
-		$this->accept_request_to_link_company($user, FALSE, $domain);
+		// $this->accept_request_to_link_company($user, TRUE, $domain);
+		// $this->accept_request_to_link_company($user, FALSE, $domain);
 
-		$this->decline_orginfo('блабалала ываыва', $domain);
-		$this->request_to_link_company($user, $domain);
+		// $this->decline_orginfo('блабалала ываыва', $domain);
+		// $this->request_to_link_company($user, $domain);
+		// 
+		$this->response_for_object($object, $user, 'sdfdsf', $domain);
+
+	}
+
+	private function response_for_object($object, $user, $message, $domain = FALSE)
+	{
+		$params = array(
+			'object' => $object,
+			'user' => $user,
+			'message' => $message,
+		    'domain' => $domain
+		);
+
+		Minion_CLI::write( Email_Send::factory('response_for_object')
+			->to( Task_TestEmail::$to)
+			->set_params($params)
+			->set_utm_campaign('response_for_object')
+			->send()
+		);
 
 	}
 
