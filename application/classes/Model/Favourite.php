@@ -9,25 +9,38 @@ class Model_Favourite extends ORM {
 	function saveget_by_cookie($id) {
 
 		$code = Cookie::get("code");
+
 		if (!$code) {
 			$code = sha1(session_id().self::$secret);
 			Cookie::set("code", $code, strtotime( '+90 days' ));
 		}
 
-		$favourite = ORM::factory('Favourite')
-						->where("code", "=", $code)
-						->where("objectid", "=", (int) $id)
-						->find();
+		$user = Auth::instance()->get_user();
 
-		if ($favourite->loaded()) {
-			$favourite->delete();
+		$favourites = ORM::factory('Favourite')->where("objectid", "=", (int) $id);
+
+		if ($user) {
+			$favourites = $favourites->where_open()
+								->where("code", "=", $code)
+								->or_where('userid', '=', $user->id)
+							->where_close();
+
+				
+		} else {
+			$favourites = $favourites->where("code", "=", $code);
+		}
+		$favourites_ = clone $favourites;
+
+		if ( count($favourites->find_all()) ) {
+			$favourites_->delete_all();
 			return FALSE;
 		}
 
+		$favourite = ORM::factory('Favourite');
 		$favourite->code = $code;
 		$favourite->objectid = $id;
-		if (Auth::instance()->get_user()) {
-			$favourite->userid = Auth::instance()->get_user()->id;
+		if ($user ) {
+			$favourite->userid = $user->id;
 		}
 		$favourite->save();
 
