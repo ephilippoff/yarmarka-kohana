@@ -374,13 +374,19 @@ class Controller_User_Profile extends Controller_Template {
             $childuser_add = $childuser->link_user($user->id, TRUE);
             if (!$childuser_add)
             {
-                $msg = View::factory('emails/user_manage/accept_request_to_link_company', 
-                    array(
-                        'request_user' => $user,
-                    )
+
+                $params = array(
+                    'request_user' => $user,
+                    'accept_decline' => TRUE,
+                    'domain' => FALSE
                 );
-                Email::send($childuser->email, Kohana::$config->load('email.default_from'), "Привязка к компании ".$user->org_name." подтверждена", $msg);
-                
+
+                Email_Send::factory('accept_request_to_link_company')
+                            ->to( $childuser->email )
+                            ->set_params($params)
+                            ->set_utm_campaign('accept_request_to_link_company')
+                            ->send();
+
                 ORM::factory('User_Link_Request')->delete_request($user->id, $actionuser_id);
                 $this->redirect("/user/employers?success=1");
             } else {
@@ -393,12 +399,18 @@ class Controller_User_Profile extends Controller_Template {
 
         } elseif ($method == "decline_request"){
             $childuser = ORM::factory('User',$actionuser_id);
-            $msg = View::factory('emails/user_manage/decline_request_to_link_company', 
-                    array(
-                        'request_user' => $user,
-                    )
-                );
-            Email::send($childuser->email, Kohana::$config->load('email.default_from'), "Привязка к компании ".$user->org_name." НЕ подтверждена", $msg);
+            
+            $params = array(
+                           'request_user' => $user,
+                           'accept_decline' => FALSE,
+                           'domain' => FALSE
+                       );
+
+            Email_Send::factory('accept_request_to_link_company')
+                       ->to( $childuser->email )
+                       ->set_params($params)
+                       ->set_utm_campaign('accept_request_to_link_company')
+                       ->send();
                 
             ORM::factory('User_Link_Request')->decline_request($user->id, $actionuser_id);              
 
@@ -501,12 +513,16 @@ class Controller_User_Profile extends Controller_Template {
             $ulr->linked_user_id = $user->id;
             $ulr->save();
 
-            $msg = View::factory('emails/user_manage/request_to_link_company', 
-                array(
-                    'request_user' => $user,
-                )
+            $params = array(
+                'request_user' => $user,
+                'domain' => FALSE
             );
-            Email::send($parentuser->email, Kohana::$config->load('email.default_from'), "Запрос на разрешение подачи объявлений от лица вашей компании", $msg);
+
+            Email_Send::factory('request_to_link_company')
+                ->to( $parentuser->email )
+                ->set_params($params)
+                ->set_utm_campaign('request_to_link_company')
+                ->send();
         } else {
             $ulr = ORM::factory('User_Link_Request')
                         ->where("linked_user_id","=",$user->id)

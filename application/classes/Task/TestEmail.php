@@ -62,11 +62,13 @@ class Task_TestEmail extends Minion_Task
 				);
 		}
 
+		$user = ORM::factory('User', 327190);
+
 		$domain = 1948;
 
 		// $this->payment_success($order, $orderItems, $domain);
 
-		$this->addedit(TRUE, $object, $domain);
+		//$this->addedit(TRUE, $object, $domain);
 		//$this->addedit(FALSE, $object, $domain);
 		
 		// $this->block_contact('123213', $objects, $domain);
@@ -91,8 +93,65 @@ class Task_TestEmail extends Minion_Task
 
 		// $this->register_data('aaaaaaa','passsssssss', $domain);
 		// $this->register_success('coooooooodddddeeeeeee', $domain);
+		// 
+		$this->accept_request_to_link_company($user, TRUE, $domain);
+		$this->accept_request_to_link_company($user, FALSE, $domain);
+
+		$this->decline_orginfo('блабалала ываыва', $domain);
+		$this->request_to_link_company($user, $domain);
 
 	}
+
+	private function accept_request_to_link_company($request_user, $accept_decline, $domain = FALSE)
+	{
+		$params = array(
+			'request_user' => $request_user,
+			'accept_decline' => $accept_decline,
+		    'domain' => $domain
+		);
+
+		Minion_CLI::write( Email_Send::factory('accept_request_to_link_company')
+			->to( Task_TestEmail::$to)
+			->set_params($params)
+			->set_utm_campaign('accept_request_to_link_company')
+			->send()
+		);
+
+	}
+
+	private function decline_orginfo($reason, $domain = FALSE)
+	{
+		$params = array(
+			'reason' => $reason,
+		    'domain' => $domain
+		);
+
+		Minion_CLI::write( Email_Send::factory('decline_orginfo')
+			->to( Task_TestEmail::$to)
+			->set_params($params)
+			->set_utm_campaign('decline_orginfo')
+			->send()
+		);
+
+	}
+
+	private function request_to_link_company($request_user, $domain = FALSE)
+	{
+		$params = array(
+			'request_user' => $request_user,
+		    'domain' => $domain
+		);
+
+		Minion_CLI::write( Email_Send::factory('request_to_link_company')
+			->to( Task_TestEmail::$to)
+			->set_params($params)
+			->set_utm_campaign('request_to_link_company')
+			->send()
+		);
+
+	}
+
+	
 
 	private function payment_success($order, $orderItems, $domain = FALSE)
 	{

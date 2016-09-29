@@ -193,6 +193,38 @@ class Email_Send  {
         return Email::send($this->_to, Kohana::$config->load('email.default_from'), $subj, $msg);
     }
 
+    public function get_subj_accept_request_to_link_company($params)
+    {
+        return $params['accept_decline']
+                    ? "Привязка к компании ".$params['request_user']->org_name." подтверждена"
+                    : "Привязка к компании ".$params['request_user']->org_name." НЕ подтверждена";
+    }
+
+    public function get_subj_decline_orginfo($params)
+    {
+        return 'Модератор отклонил загруженный ИНН';
+    }
+
+    public function get_subj_request_to_link_company($params)
+    {
+        return 'Запрос на разрешение подачи объявлений от лица вашей компании';
+    }
+
+
+    public function get_template_accept_request_to_link_company($params)
+    {
+        return Twig::factory('emails/user_manage/accept_request_to_link_company', $params)->render();
+    }
+    public function get_template_decline_orginfo($params)
+    {
+        return Twig::factory('emails/user_manage/decline_orginfo', $params)->render();
+    }
+    public function get_template_request_to_link_company($params)
+    {
+        return Twig::factory('emails/user_manage/request_to_link_company', $params)->render();
+    }
+
+
     public function get_subj_addedit($params)
     {
         return $params['is_edit']

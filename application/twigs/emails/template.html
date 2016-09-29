@@ -24,68 +24,38 @@
         </tr>
 
         <tr>
-            <td style="padding:10px;">
-                <table style="max-width: 800px;width:100%;border:0;margin: 0 auto;border-collapse: collapse;">
-                  <tr>
-                        <td style="width:25%;">
-                            <img src="http://yarmarka.biz./uploads/208x208/25/ef/54/25ef54fe107e40343e2c0423751aaeb9.jpg" style="max-width:100%;display:block;">
-                        </td>
-                        <td style="padding:0 5px;">
-                            <a style="color: #08729E;padding:10px 0; font-size:0.7em;display:block;" href="{{ email_link(domain, '/detail/' ~ object.id, ref_params, {'utm_content': 'last_news'}) }}">Полицейские ханты-Мансийска задержали подозреваемых в разбойном нападении на кре...|slice(0,100)</a> 
-                        </td>
-                        <td></td>
-                  </tr>
-                     <tr>
-                        <td style="width:25%;">
-                            <img src="http://yarmarka.biz./uploads/208x208/25/ef/54/25ef54fe107e40343e2c0423751aaeb9.jpg" style="width:100%;display:block;">
-                        </td>
-                        <td style="padding:0 5px;">
-                            <a style="color: #08729E;padding:10px 0; font-size:0.7em;display:block;" href="{{ email_link(domain, '/detail/' ~ object.id, ref_params, {'utm_content': 'last_news'}) }}">Полицейские ханты-Мансийска задержали подозреваемых в разбойном нападении на кре...|slice(0,100)</a> 
-                        </td>
-                        <td></td>
-                  </tr>
-                   <tr>
-                        <td style="width:25%;">
-                            <img src="http://yarmarka.biz./uploads/208x208/25/ef/54/25ef54fe107e40343e2c0423751aaeb9.jpg" style="width:100%;display:block;">
-                        </td>
-                        <td style="padding:0 5px;">
-                            <a style="color: #08729E;padding:10px 0; font-size:0.7em;display:block;" href="{{ email_link(domain, '/detail/' ~ object.id, ref_params, {'utm_content': 'last_news'}) }}">Полицейские ханты-Мансийска задержали подозреваемых в разбойном нападении на кре...|slice(0,100)</a> 
-                        </td>
-                        <td></td>
-                  </tr>
+            <td style="padding:10px;width:50%;vertical-align:top;">
+                <h4>Новости и события в вашем городе</h4>
+                <table style="width:100%;border:0;margin: 0 auto;border-collapse: collapse;">
+                        {% for object in last_news %}
+                            <tr>
+                                 <td style="width:25%;">
+                                       <img src="{{ get_file(object.compiled.images.main_photo['120x90']) }}" style="max-width:100%;display:block;">
+                                 </td>
+                                 <td style="padding:0 5px;">
+                                    <a style="color: #08729E;padding:10px 0; font-size:0.85em;display:block;" href="{{ email_link(domain, '/detail/' ~ object.id, ref_params, {'utm_content': 'last_news'}) }}">{{ object.title|slice(0,100) }}</a> 
+                                 </td>
+                                 <td></td>
+                           </tr>
+                        {% endfor %}
                 </table>
-            </td>
-             <td style="padding:10px;">
-                <table style="max-width: 800px;width:100%;border:0;margin: 0 auto;border-collapse: collapse;">
-                  <tr>
-                        <td style="width:25%;">
-                            <img src="http://yarmarka.biz./uploads/208x208/25/ef/54/25ef54fe107e40343e2c0423751aaeb9.jpg" style="max-width:100%;display:block;">
-                        </td>
-                        <td style="padding:0 5px;">
-                            <a style="color: #08729E;padding:10px 0; font-size:0.7em;display:block;" href="{{ email_link(domain, '/detail/' ~ object.id, ref_params, {'utm_content': 'last_news'}) }}">Полицейские ханты-Мансийска задержали подозреваемых в разбойном нападении на кре...|slice(0,100)</a> 
-                        </td>
-                        <td></td>
-                  </tr>
-                     <tr>
-                        <td style="width:25%;">
-                            <img src="http://yarmarka.biz./uploads/208x208/25/ef/54/25ef54fe107e40343e2c0423751aaeb9.jpg" style="width:100%;display:block;">
-                        </td>
-                        <td style="padding:0 5px;">
-                            <a style="color: #08729E;padding:10px 0; font-size:0.7em;display:block;" href="{{ email_link(domain, '/detail/' ~ object.id, ref_params, {'utm_content': 'last_news'}) }}">Полицейские ханты-Мансийска задержали подозреваемых в разбойном нападении на кре...|slice(0,100)</a> 
-                        </td>
-                        <td></td>
-                  </tr>
-                   <tr>
-                        <td style="width:25%;">
-                            <img src="http://yarmarka.biz./uploads/208x208/25/ef/54/25ef54fe107e40343e2c0423751aaeb9.jpg" style="width:100%;display:block;">
-                        </td>
-                        <td style="padding:0 5px;">
-                            <a style="color: #08729E;padding:10px 0; font-size:0.7em;display:block;" href="{{ email_link(domain, '/detail/' ~ object.id, ref_params, {'utm_content': 'last_news'}) }}">Полицейские ханты-Мансийска задержали подозреваемых в разбойном нападении на кре...|slice(0,100)</a> 
-                        </td>
-                        <td></td>
-                  </tr>
+           </td>
+            <td style="padding:10px;width:50%;vertical-align:top;">
+                <h4>Свежие объявления</h4>
+                <table  style="width:100%;border:0;margin: 0 auto;border-collapse: collapse;">
+                    {% for object in promo_objects %}
+                        <tr>
+                             <td style="width:25%;">
+                                   <img src="{{ get_file(object.compiled.images.main_photo['120x90']) }}" style="max-width:100%;display:block;">
+                             </td>
+                             <td style="padding:0 5px;">
+                                <a style="color: #08729E;padding:10px 0; font-size:0.85em;display:block;" href="{{ email_link(domain, '/detail/' ~ object.id, ref_params, {'utm_content': 'promo_objects'}) }}">{{ object.title|slice(0,100) }}</a> 
+                             </td>
+                             <td></td>
+                       </tr>
+                    {% endfor %}
                 </table>
-            </td>
+           </td>
         </tr>
 
         <tr>
@@ -363,7 +333,6 @@
         </tr>
 
         <tr>
-
             <td colspan="2" style="padding:10px;">
                 <div class="footer" style="text-align: right; font-size: 12px; margin: 10px 0;" align="right">С уважением, команда «Ярмарка-онлайн»</div>
                 
@@ -373,7 +342,17 @@
                     Пожалуйста, не отвечайте на это письмо, т.к. указанный почтовый адрес используется только для рассылки уведомлений
                 </p>
                 <p style="color: #6c6c6c; font-size: 10px;">
-                    Вы можете отписаться от рассылки наших уведомлений если перейдете по <a href="{{ domain ? domain : 'http://yarmarka.biz' }}/user/unsubscribe" >ссылке</a>. Однако, мы не рекомендуем это делать. Через письма в любое время можно вспомнить пароль или перейти к вашим объявлениям. Для вашего удобства, мы рекомендуем добавить наш адрес рассылки noreply@yarmarka.biz в контакты, и настроить автоматический перенос писем в отдельную папку. Инструкцию по настройке автоматического переноса писем можно найти на своем почтовом сервисе
+                    Вы получили это письмо, потому что являетесь пользователем  YARMARKA.BIZ. <a  style="color:#424242;" href="{{ email_link(domain, '/user/email_settings', ref_params, {'utm_content': 'email_settings'}) }}">Настройка email уведомлений</a>
+                </p>
+                {% if user_email %}
+                <p style="color: #6c6c6c; font-size: 10px;">
+                    Для <a href="{{ email_link(domain, '/user/login', ref_params, {'utm_content': 'login'}) }}" style="color:#424242;">входа</a> на сайт используйте свою электронную почту <b  style="color:#424242;">{{ user_email }}</b>. 
+                    <a href="{{ email_link(domain, '/user/forgot_password', ref_params, {'utm_content': 'forgot_password'}) }}" style="color:#424242;">Забыли пароль?</a>
+                </p>
+                {% endif %}
+                <p>
+                    <a href="{{ email_link(domain, '/article/pravila-razmeshcheniya-obyavlenii', ref_params, {'utm_content': 'rules'}) }}" style="color:#424242;font-size: 10px;">Правила размещения объявлений</a>  
+                    <a href="http://feedback.yarmarka.biz" style="color:#424242;font-size: 10px;">Техподдержка</a> 
                 </p>
             </td>
         </tr>

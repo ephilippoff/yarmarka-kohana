@@ -33,7 +33,7 @@
                 </td>
             </tr>
             <tr>
-                <td style="padding:10px;width:50%;">
+                <td style="padding:10px;width:50%;vertical-align:top;">
                     <h4>Новости и события в вашем городе</h4>
                     <table style="width:100%;border:0;margin: 0 auto;border-collapse: collapse;">
                             {% for object in last_news %}
@@ -49,7 +49,7 @@
                             {% endfor %}
                     </table>
                </td>
-                <td style="padding:10px;width:50%;">
+                <td style="padding:10px;width:50%;vertical-align:top;">
                     <h4>Свежие объявления</h4>
                     <table  style="width:100%;border:0;margin: 0 auto;border-collapse: collapse;">
                         {% for object in promo_objects %}
@@ -73,7 +73,7 @@
                 <div class="footer" style="text-align: right; font-size: 12px; margin: 10px 0;" align="right">С уважением, команда «Ярмарка-онлайн»</div>
                 
                 <hr size="1" style="color: #6c6c6c;">
-                
+
                 <p style="color: #6c6c6c; font-size: 10px;">
                     Пожалуйста, не отвечайте на это письмо, т.к. указанный почтовый адрес используется только для рассылки уведомлений
                 </p>
@@ -86,6 +86,10 @@
                     <a href="{{ email_link(domain, '/user/forgot_password', ref_params, {'utm_content': 'forgot_password'}) }}" style="color:#424242;">Забыли пароль?</a>
                 </p>
                 {% endif %}
+                <p>
+                    <a href="{{ email_link(domain, '/article/pravila-razmeshcheniya-obyavlenii', ref_params, {'utm_content': 'rules'}) }}" style="color:#424242;font-size: 10px;">Правила размещения объявлений</a>  
+                    <a href="http://feedback.yarmarka.biz" style="color:#424242;font-size: 10px;">Техподдержка</a> 
+                </p>
             </td>
         </tr>
     </table>

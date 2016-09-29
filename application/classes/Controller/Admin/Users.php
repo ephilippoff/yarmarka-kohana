@@ -667,13 +667,17 @@ class Controller_Admin_Users extends Controller_Admin_Template {
 
 			if ($this->request->post('send_email') AND $user->loaded())
 			{
-				$msg = View::factory('emails/user_manage/decline_orginfo', 
-					array(
-						'UserName' => $user->fullname ? $user->fullname : $user->login,
-						'reason' => $reason
-					)
-				)->render();
-				Email::send($user->email, Kohana::$config->load('email.default_from'), "Модератор отклонил загруженный ИНН", $msg);
+
+				$params = array(
+					'reason' => $reason,
+				    'domain' => FALSE
+				);
+
+				Email_Send::factory('decline_orginfo')
+					->to( $user->email )
+					->set_params($params)
+					->set_utm_campaign('decline_orginfo')
+					->send();
 			}
 
 			if ($this->request->post('ban_user') AND $user->loaded())
