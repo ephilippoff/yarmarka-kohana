@@ -432,6 +432,11 @@ class Model_Object extends ORM {
 		}
 		
 		if ( strtotime( $this->date_expiration ) < strtotime( Lib_PlacementAds_AddEdit::lifetime_to_date("45d") ) ) {
+
+			if ( strtotime( $this->date_expiration ) < strtotime( Lib_PlacementAds_AddEdit::lifetime_to_date("7d") ) ) {
+				$this->date_created		= DB::expr('NOW()');
+			}
+
 			$this->date_expiration = Lib_PlacementAds_AddEdit::lifetime_to_date("45d");
 		}
 
