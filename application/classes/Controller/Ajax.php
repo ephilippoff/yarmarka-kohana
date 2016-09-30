@@ -398,7 +398,7 @@ class Controller_Ajax extends Controller_Template
 					break;
 			}
 			
-			$object->prolong($date_expiration);
+			$object->prolong(FALSE);
 			
 			$this->json['date_expiration'] = date('d.m.y', strtotime($date_expiration));
 			$this->json['code'] = 200;

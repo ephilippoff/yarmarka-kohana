@@ -418,30 +418,27 @@ class Model_Object extends ORM {
 		return $result;
 	}
 
-	public function prolong($date_expiration, $update = TRUE)
+	public function prolong($up = TRUE)
 	{
 		if ( ! $this->loaded())
 		{
 			return FALSE;
 		}
 
-		$this->date_expiration	= $date_expiration;
-		$this->date_created		= DB::expr('NOW()');
-		$this->is_published		= 1;
-		$this->in_archive		= FALSE;
+		if ($this->is_bad == 2) return $this;
 
-		if ($update)
-		{
-			// update object
-			$object = $this->update();
+		if ($up) {
+			$this->date_created		= DB::expr('NOW()');
+		}
+		
+		if ( strtotime( $this->date_expiration ) < strtotime( Lib_PlacementAds_AddEdit::lifetime_to_date("45d") ) ) {
+			$this->date_expiration = Lib_PlacementAds_AddEdit::lifetime_to_date("45d");
 		}
 
-		// add to log
-		/*DB::insert('object_archive_log', array('object_id', 'movedon', 'direction'))
-			->values(array($object->id, DB::expr('NOW()'), 2))
-			->execute();*/
+		$this->is_published		= 1;
+		$this->in_archive		= 'f';
 
-		return $object;
+		return $object = $this->update();
 	}
 
 	public function toggle_published()
@@ -1061,6 +1058,7 @@ class Model_Object extends ORM {
 			->execute();
 
 	}
+
 }
 
 /* End of file Object.php */

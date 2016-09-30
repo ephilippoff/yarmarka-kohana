@@ -119,25 +119,20 @@ class Service_Cities extends Service
 	static function apply_service($object_id, $new_cities)
 	{
 		$object = ORM::factory('Object', $object_id);
-		if ($object->loaded()) {
+		
+		if (!$object->loaded()) return FALSE;
 
-			if ( strtotime( $object->date_expiration ) < strtotime( Lib_PlacementAds_AddEdit::lifetime_to_date("45d") ) ) {
-				
-				$object->date_expiration = Lib_PlacementAds_AddEdit::lifetime_to_date("45d");
-				$object->save();
+		$object->prolong();
 
+		$cities = $object->get_cities();
+
+		foreach ($new_cities as $new_city) {
+			if (!in_array($new_city, $cities)) {
+				$cities[] = $new_city;
 			}
-
-			$cities = $object->get_cities();
-
-			foreach ($new_cities as $new_city) {
-				if (!in_array($new_city, $cities)) {
-					$cities[] = $new_city;
-				}
-			}
-			$object->cities = $cities;
-			$object->save();
 		}
+		$object->cities = $cities;
+		$object->save();
 
 	}
 }

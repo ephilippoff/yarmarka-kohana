@@ -196,11 +196,7 @@ class Service_Premium extends Service
 		if (!$user)
 			$user = Auth::instance()->get_user();
 
-		if ( strtotime( $object->date_expiration ) < strtotime( Lib_PlacementAds_AddEdit::lifetime_to_date("45d") ) ) {
-			
-			$object->date_expiration = Lib_PlacementAds_AddEdit::lifetime_to_date("45d");
-			$object->save();
-		}
+		$object->prolong();
 
 		$or = ORM::factory('Object_Rating')
 					->where("object_id", "=", $object_id)

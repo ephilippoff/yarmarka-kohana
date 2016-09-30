@@ -478,120 +478,6 @@ class Lib_PlacementAds_AddEdit {
 		return $this;
 	}
 
-	// function check_signature_for_union()
-	// {
-	// 	$params = &$this->params;
-	// 	$object = &$this->object;
-	// 	$errors = &$this->errors;
-	// 	$category = &$this->category;
-	// 	$user     = &$this->user;
-
-	// 	if (!$category OR !$user) return $this;
-
-	// 	if ($this->is_union_enabled() AND $this->is_union_enabled_by_category($category->id) AND !$this->union_cancel)
-	// 	{
-	// 		$max_similarity = Kohana::$config->load('common.max_object_similarity');
-	// 		$similarity 	= ORM::factory('Object_Signature')->get_similarity($max_similarity, $this->signature, $this->options_exlusive_union, $params->object_id);
-
-	// 		if ($similarity["sm"] >= $max_similarity){
-
-	// 			$valid = $this->validate_between_parameters($category->id, $this->list_ids, $similarity["object_id"]);
-	// 			if (!$valid)
-	// 			{
-	// 				$this->destroy_union = TRUE;
-	// 				return $this;
-	// 			}
-
-	// 			$parent_id = (int) ORM::factory('Object', $similarity["object_id"])->parent_id;
-	// 			if ($parent_id == 0)
-	// 			{
-	// 				$this->create_union = TRUE;
-	// 				$this->object_without_parent_id = $similarity["object_id"];
-	// 			} else {
-	// 				$this->edit_union = TRUE;
-	// 				$this->parent_id = $parent_id;
-	// 			}				
-	// 		} 
-	// 			else if ($this->is_edit AND $object->parent_id)
-	// 		{
-	// 			$this->destroy_union = TRUE;
-	// 		}
-	// 	}
-
-	// 	return $this;
-	// }
-
-	// function save_union()
-	// {
-	// 	$params = &$this->params;
-	// 	$object = &$this->object;
-	// 	$errors = &$this->errors;
-	// 	$category = &$this->category;
-	// 	$user     = &$this->user;
-
-	// 	if (!$category OR !$user) return $this;
-
-	// 	if ($this->is_union_enabled() AND $this->is_union_enabled_by_category($category->id))
-	// 	{ 
-	// 		$parent_id = 0;
-
-	// 		if ($this->destroy_union)
-	// 		{
-	// 			$union_object = ORM::factory('Object', $object->parent_id);
-	// 			if ($union_object->loaded())
-	// 			{
-	// 				$this->parent_id = $union_object->id;
-	// 				if ($union_object->is_union <= 2)
-	// 				{
-	// 					ORM::factory('Object')
-	// 						->where('parent_id','=', $union_object->id)
-	// 						->set('parent_id',  DB::expr('NULL'))
-	// 						->update_all();
-	// 					DB::delete('object')->where("id","=",$union_object->id)->execute();						
-	// 				}
-	// 				else if ($union_object->is_union > 2)
-	// 				{
-	// 					ORM::factory('Object')
-	// 						->where('id','=', $object->id)
-	// 						->set('parent_id',  DB::expr('NULL'))
-	// 						->update_all();
-	// 					$this->edit_union = TRUE;		
-	// 				}
-	// 			}
-	// 		}
-
-	// 		if ($this->create_union OR $this->edit_union)
-	// 		{
-	// 			//ry {
-	// 				$this->original_params["object_id"] = $this->parent_id;
-	// 				$this->original_params["rubricid"]  = $category->id;
-	// 				$this->original_params["city_id"]   = $object->city_id;
-
-	// 				$objects_for_union = Array(
-	// 						"initial_object" 		 => $this->object_without_parent_id,
-	// 						"current_object_source"  => $object->id
-	// 					);
-
-	// 				$parent_id = (int) Object::PlacementAds_Union($this->original_params, $objects_for_union, $this->edit_union, $this->destroy_union);
-	// 			//}
-	// 			//catch (Exception $e) {
-	// 			// 	$errors['union_error'] = $e->getMessage();
-	// 			//}
-
-	// 		}
-
-	// 		if ($parent_id >0 )	
-	// 			$this->parent_id = $parent_id;
-
-	// 		if ($this->destroy_union)	
-	// 			$this->parent_id = NULL;
-
-
-	// 	}		
-
-	// 	return $this;
-
-	// }
 	/**
 	 * [normalize_attributes Приведение пользовательских данных в порядок, trim, replace и прочее]
 	 * @return [this]
@@ -1119,15 +1005,7 @@ class Lib_PlacementAds_AddEdit {
 			if ($object->is_bad <> 2 )
 			{
 				if ($params->publish_and_prolonge) {
-					$object->is_published = 1;
-				}
-				
-				if ( $object->in_archive )
-				{
-					$object->prolong($this->lifetime_to_date("45d"));
-				} else if ( strtotime( $object->date_expiration ) < strtotime( $this->lifetime_to_date("45d") ) )
-				{
-					$object->date_expiration = $this->lifetime_to_date("45d");
+					$object->prolong(FALSE);
 				}
 			}
 		}
