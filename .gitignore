@@ -27,4 +27,8 @@ application/config/database.php
 /node_modules
 #ignore init script
 /prepare.sh
- 
+
+www/yandex*
+www/static/develop/js/dev_static_attributes.js
+www/static/develop/js/static_attributes.js
+www/log.log
