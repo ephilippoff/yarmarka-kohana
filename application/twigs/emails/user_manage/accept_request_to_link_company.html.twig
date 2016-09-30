@@ -1,0 +1,24 @@
+{% extends "layouts/email" %}
+
+{% block body %} 
+
+<tr>
+    <td colspan="2" style="padding:10px;">
+        
+    </td>
+</tr>
+ <tr>
+    <td colspan="2" style="padding:10px;">
+        {% if accept_decline %}
+        <p>
+            Компания {{ request_user.org_name }} ({{ request_user.email }}) подтвердили привязку вашей учетной записи. Теперь вы можете подавать объявления от лица этой компании
+        </p>
+        {% else %}
+        <p>
+            Компания {{ request_user.org_name }} ( {{ request_user.email }} ) НЕ подтвердила привязку вашей учетной записи. Вы НЕ можете подавать объявления от имени этой компании
+        </p>
+        {% endif %}
+    </td>
+</tr>
+
+{% endblock body %}

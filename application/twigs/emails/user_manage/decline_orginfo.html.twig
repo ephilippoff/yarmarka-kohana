@@ -1,0 +1,20 @@
+
+{% extends "layouts/email" %}
+
+{% block body %} 
+
+<tr>
+    <td colspan="2" style="padding:10px;">
+        
+    </td>
+</tr>
+ <tr>
+    <td colspan="2" style="padding:10px;">
+        <p>Модератор отклонил загруженный ИНН по причине:</p>
+        <p>{{ reason }}</p>    
+        <p>Вы можете повторно загрузить ИНН через <a style="color: #d44234;" href="{{ email_link(domain, '/user/orginfo', ref_params, {'utm_content': 'orginfo'}) }}">страницу редактирования информации о компании</a></p>  
+
+    </td>
+</tr>
+
+{% endblock body %}

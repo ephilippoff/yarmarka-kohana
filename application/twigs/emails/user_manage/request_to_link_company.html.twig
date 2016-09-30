@@ -1,0 +1,25 @@
+{% extends "layouts/email" %}
+
+{% block body %} 
+
+<tr>
+    <td colspan="2" style="padding:10px;">
+        
+    </td>
+</tr>
+ <tr>
+    <td colspan="2" style="padding:10px;">
+        <p>
+            Пользователь {{ request_user.fullname }} ( {{request_user.email }}) запрашивает разрешение, чтобы подавать объявления от лица вашей компании. Вы подтверждаете?
+        </p>
+        <p>
+            <a style="color: #d44234;" href="{{ email_link(domain, '/user/employers?method=accept_request&id=' ~ request_user.id, ref_params, {'utm_content': 'accept_user_request'}) }}">ДА</a>
+        </p>
+        <p>
+            <a style="color: #d44234;" href="{{ email_link(domain, '/user/employers?method=decline_request&id=' ~ request_user.id, ref_params, {'utm_content': 'decline_user_request'}) }}">НЕТ</a>
+        </p>
+
+    </td>
+</tr>
+
+{% endblock body %}
