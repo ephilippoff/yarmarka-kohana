@@ -31,10 +31,10 @@ class Model_Object_Service_Email extends ORM
     public function get_actual($city_id)
     {
         return ORM::factory('Object_Service_Email')
-                    ->join('object', 'left')
-                        ->on('object.id','=','object_service_email.object_id')
+                    //->join('object', 'left')
+                    //    ->on('object.id','=','object_service_email.object_id')
                     ->where("object_service_email.date_expiration", ">", DB::expr("NOW()"))
-                    ->where("object.city_id", "=", $city_id)
+                    //->where("object.city_id", "=", $city_id)
                     ->find_and_map(function($item){
                         return $item->object_id;
                      });
