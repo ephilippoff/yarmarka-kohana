@@ -68,7 +68,7 @@ class Task_TestEmail extends Minion_Task
 
 		// $this->payment_success($order, $orderItems, $domain);
 
-		//$this->addedit(TRUE, $object, $domain);
+		$this->addedit(TRUE, $object, $domain);
 		//$this->addedit(FALSE, $object, $domain);
 		
 		// $this->block_contact('123213', $objects, $domain);
@@ -88,7 +88,7 @@ class Task_TestEmail extends Minion_Task
 
 		// // $this->massload_report($objectload,  $common_stat, $category_stat, $user->org_name, $domain);
 
-		// $this->object_expiration($objects, '4028377.123123.12312', $domain);
+		 $this->object_expiration($objects, '4028377.123123.12312', $domain);
 		// $this->object_to_archive($objects, '4028377.123123.12312', $domain);
 
 		// $this->register_data('aaaaaaa','passsssssss', $domain);
@@ -100,7 +100,7 @@ class Task_TestEmail extends Minion_Task
 		// $this->decline_orginfo('блабалала ываыва', $domain);
 		// $this->request_to_link_company($user, $domain);
 		// 
-		$this->response_for_object($object, $user, 'sdfdsf', $domain);
+		//$this->response_for_object($object, $user, 'sdfdsf', $domain);
 
 	}
 

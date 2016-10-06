@@ -178,6 +178,7 @@ class Service
         if ($params->quantity) {
             $this->quantity($params->quantity);
         }
+        return $this;
     }
 
     public function get_title($params)

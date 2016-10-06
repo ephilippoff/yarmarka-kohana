@@ -624,15 +624,22 @@ class Controller_Cart extends Controller_Template {
 		}
 
 		$goods_for_free = 0;
+		$emails_for_free = 0;
 		$counter = 0;
 		foreach ($orderItems as $item) {
 			if (in_array($item->service->discount_name, array("prepayed_premium", "free_up", "free_advert") )) {
 				$goods_for_free += 1;
 			}
+			if (in_array($item->service->discount_name, array("free_email") )) {
+				$emails_for_free += 1;
+			}
 			$counter += 1;
 		}
 
-		if ($goods_for_free == $counter AND $sum == 0) {
+		if ($emails_for_free > 0 AND $sum == 0)  {
+			$this->json["message"] = "Бесплатную услугу 'E-mail - маркетинг' возможно получить только при не нулевой сумме заказа";
+			$this->json["code"] = 400;
+		} else if ($goods_for_free == $counter AND $sum == 0) {
 			$order->fake_command(100, 22);
 			$this->json["code"] = 300;
 		}

@@ -49,37 +49,52 @@ class Controller_Rest_Service extends Controller_Rest {
 
 		$params = ($this->param->params) ? (array) $this->param->params : array();
 
-		$objects = ORM::factory('Object')->where("id","IN", $ids)->where("active","=",1)->find_all();
-		$objects_to_action = array();
-		$services_to_action = array();
-		$errors = 0;
-		foreach ($objects as $object) {
-			
-			$object =  $object->get_row_as_obj(array("id","title"));
-			$objects_to_action[] = $object;
+		$this->json['objects'] = $objects_to_action = ORM::factory('Object')
+															->where("id","IN", $ids)
+															->where("active","=",1)
+															->getprepared_all(array("id","title"));
 
-			$service = Service::factory("Premium", $object->id);
-			$service->set_params($params);
-			$services_to_action[] = $service->get();
-		}
-
-		if ($errors > 0){
-			$this->json['text'] = "В выбранных объявлениях присуствуют ошибки. ". $this->json['text'];
-		}
-
-		if (count($objects_to_action) == 0 OR $this->json['code'] <> 200) {
+		if (count($objects_to_action) == 0) {
 			$this->json['code'] = 400;
+			return;
 		}
+
+		$this->json['object'] = $first_object = $objects_to_action[0];
+
+		$this->json['services'] = array(
+			'premium' => Service::factory("Premium", $first_object->id)->set_params($params)->get(),
+			'email' => Service::factory("Email", $first_object->id)->set_params($params)->get()
+		);
 
 		$this->json['count'] = Service::factory("Premium")->get_balance();
 		$this->json['available'] = Service::factory("Premium")->check_available(1);
-		$this->json['services'] = $services_to_action;
-		$this->json['objects'] = $objects_to_action;
+	}
 
-		if (count($objects_to_action) == 1) {
-			$this->json['object'] = $objects_to_action[0];
-			$this->json['service'] = $services_to_action[0];
+	public function action_check_email()
+	{
+		$ids = ($this->post->ids) ? $this->post->ids: array($this->param->id);
+
+		if (!$ids OR !count($ids)) {
+			throw new HTTP_Exception_404;
 		}
+
+		$params = ($this->param->params) ? (array) $this->param->params : array();
+
+		$this->json['objects'] = $objects_to_action = ORM::factory('Object')
+															->where("id","IN", $ids)
+															->where("active","=",1)
+															->getprepared_all(array("id","title"));
+
+		if (count($objects_to_action) == 0) {
+			$this->json['code'] = 400;
+			return;
+		}
+
+		$this->json['object'] = $first_object = $objects_to_action[0];
+
+		$this->json['services'] = array(
+			'email' => Service::factory("Email", $first_object->id)->set_params($params)->get()
+		);
 	}
 
 	public function action_check_lider()
@@ -92,41 +107,22 @@ class Controller_Rest_Service extends Controller_Rest {
 
 		$params = ($this->param->params) ? (array) $this->param->params : array();
 
-		$objects = ORM::factory('Object')->where("id","IN", $ids)->where("active","=",1)->find_all();
-		$objects_to_action = array();
-		$services_to_action = array();
-		$errors = 0;
-		foreach ($objects as $object) {
+		$this->json['objects'] = $objects_to_action = ORM::factory('Object')
+															->where("id","IN", $ids)
+															->where("active","=",1)
+															->getprepared_all(array("id","title","main_image_id"));
 
-			$object =  $object->get_row_as_obj(array("id","title","main_image_id"));
-			$objects_to_action[] = $object;
-
-			$service = Service::factory("Lider", $object->id);
-			$service->set_params($params);
-			$services_to_action[] = $service->get();
-		}
-
-		if ($errors > 0){
-			$this->json['text'] = "В выбранных объявлениях присуствуют ошибки. ". $this->json['text'];
-		}
-
-		if (count($objects_to_action) == 0 OR $this->json['code'] <> 200) {
+		if (count($objects_to_action) == 0) {
 			$this->json['code'] = 400;
+			return;
 		}
 
-		$this->json['count'] = 0;
-		$this->json['available'] = FALSE;
-		$this->json['services'] = $services_to_action;
-		$this->json['objects'] = $objects_to_action;
-		if (count($objects_to_action) == 1) {
-			if (!$objects_to_action[0]->main_image_id) {
-				$this->json['text'] = "Для применения услуги 'Лидер' к объявлению, необходимо прикрепить хотябы одно фото";
-				$this->json['code'] = 400;
-			} else {
-				$this->json['object'] = $objects_to_action[0];
-				$this->json['service'] = $services_to_action[0];
-			}
-		}
+		$this->json['object'] = $first_object = $objects_to_action[0];
+
+		$this->json['services'] = array(
+			'lider' => Service::factory("Lider", $first_object->id)->set_params($params)->get(),
+			'email' => Service::factory("Email", $first_object->id)->set_params($params)->get()
+		);
 	}
 
 	public function action_check_newspaper()
@@ -304,6 +300,71 @@ class Controller_Rest_Service extends Controller_Rest {
 			
 			
 			$db->commit();
+		} catch (Kohana_Exception $e) {
+			$db->rollback();
+			$this->json["text"] = "Ошибка при сохранении услуги. ".$e->getMessage();
+			$this->json["code"] = 400;
+			return;
+		}
+		$this->json["result"] = $orderItemTemp;
+	}
+
+	public function action_save_service()
+	{
+		if (!isset($this->post->serviceData["result"]) OR !isset($this->post->serviceData["info"])) {
+			$this->json['code'] = 400;
+			$this->json['text'] = "Ошибка при сохранении услуги. Отсутствие обязательных параметров";
+			return;
+		}
+		
+		$key = Cart::get_key();
+		$order = ORM::factory('Order')
+					->where("key","=",$key)
+					->where("state","=",0)
+					->find();
+		$info = $this->post->serviceData["info"];
+		$result = $this->post->serviceData["result"];
+		$tempOrderItemId = ( isset($this->post->serviceData["temp_order_item_id"]) ) ? $this->post->serviceData["temp_order_item_id"] : NULL;
+
+		$db = Database::instance();
+		try {
+			$db->begin();
+
+			$objects = $info['objects'];
+
+			foreach ($info['objects'] as $k => $object) {
+
+				if (isset($result['premium']) AND $result['premium']['quantity'] > 0) {
+
+					$service = Service::factory('Premium', $object['id']);
+					$service->set_params($result['premium']);
+
+					$orderItemTemp	=  $service->save($object, $key, $tempOrderItemId, $order->id);
+
+				}
+
+				if (isset($result['email']) AND $result['email']['quantity'] > 0) {
+
+					$service = Service::factory('Email', $object['id']);
+					$service->set_params($result['email']);
+
+					$orderItemTemp	=  $service->save($object, $key, $tempOrderItemId, $order->id);
+					
+				}
+
+				if (isset($result['lider']) AND $result['lider']['quantity'] > 0) {
+
+					$service = Service::factory('Lider', $object['id']);
+					$service->set_params($result['lider']);
+
+					$orderItemTemp	=  $service->save($object, $key, $tempOrderItemId, $order->id);
+					
+				}
+
+			}
+
+			$db->commit();
+
 		} catch (Kohana_Exception $e) {
 			$db->rollback();
 			$this->json["text"] = "Ошибка при сохранении услуги. ".$e->getMessage();

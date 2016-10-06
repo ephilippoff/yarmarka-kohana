@@ -65,6 +65,8 @@ class Service_Lider extends Service
 		if ($params->period) {
 			$this->period($params->period);
 		}
+
+		return $this;
 	}
 
 	public function apply($orderItem)

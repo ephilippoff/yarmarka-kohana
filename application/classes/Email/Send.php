@@ -109,22 +109,23 @@ class Email_Send  {
 
         if (!isset($params['domain']) OR !is_numeric($params['domain'])) return;
 
-        
 
-         $search_query = Search::searchquery(
+        $ids = ORM::factory('Object_Service_Email')->get_actual($params['domain']);
+  
+        $search_query = Search::searchquery(
             array(
                 "active" => TRUE,
                 "published" =>TRUE,
-                "photocard" => TRUE,
-                "city_published" => $params['domain'],
-                "not_category_seo_name" => array(
-                       "novosti"
-                )
+                "id" => $ids
             ),
-            array("limit" => 3, "page" => 1)
+            array("limit" => 15, "page" => 1)
         );
         
-        return Search::getresult($search_query->execute()->as_array());
+        $result = Search::getresult($search_query->execute()->as_array());
+        shuffle($result);
+
+  
+        return $result;
     }
 
     

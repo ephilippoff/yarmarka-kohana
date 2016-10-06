@@ -8,12 +8,96 @@ define([
     "views/components/services/lider",
     "views/components/services/kupon",
     "views/components/services/newspaper",
-    "views/components/services/cities"
-], function (Marionette, Backbone, templates, ServiceUpView, ServicePremiumView, ServiceLiderView, KuponView, NewspaperView, CitiesView) {
+    "views/components/services/cities",
+    "views/components/services/email"
+], function (Marionette, Backbone, templates, ServiceUpView, ServicePremiumView, ServiceLiderView, KuponView, NewspaperView, CitiesView, ServiceEmailView) {
     'use strict';
 
     var CartModel = Backbone.Model.extend({});
-    var ServiceModel = Backbone.Model.extend({});
+    var ServiceModel = Backbone.Model.extend({
+
+        getQuantity: function(service) {
+            return this.get('quantity');
+        },
+
+        getCountObjects: function() {
+            return this.get("info").objects.length;
+        },
+
+        getTitle: function(){
+             var info = this.get("info");
+             if (this.getCountObjects() == 1) {
+                 return "для объявления '" + info.object.title + "'";
+             } else {
+                 return "для "+this.getCountObjects()+" объявлений(ия)";
+             }
+        },
+
+        getAmount: function() {
+
+            var quantity = this.getQuantity(this.serviceName);
+            var price = parseFloat(this.get("info").services[this.serviceName].price);
+
+            return (this.getCountObjects() == 1) ? (price * quantity + " руб.") : "(?)";
+        }
+    });
+
+
+    var PremiumModel = ServiceModel.extend({
+        urlRoot: "/rest_service/save_premium",
+        serviceName: 'premium',
+        getQuantity: function(service) {
+            return this.get(service + 'Quantity');
+        },
+
+        getAmount: function(service) {
+
+            var quantity = this.getQuantity(service);
+
+            if (this.getCountObjects() == 1) {
+                var price = parseFloat(this.get("info").services[service].price);
+                var discount_reason = this.get("info").services[service].discount_reason;
+                var discount_name = this.get("info").services[service].discount_name;
+
+                if (quantity > 1) {
+                    return price * quantity + " руб.";
+                } else {
+                    if (discount_name) {
+                        return discount_reason;
+                    } else {
+                        return price * quantity + " руб.";
+                    }
+                }
+            } else {
+
+                if (quantity > 1) {
+                   return "(?)";
+                } else {
+                   return (this.getCountObjects() > this.get("info").count) ? "(?)" : "(бесплатно)";
+                }
+
+            }
+        }
+
+    });
+
+    var EmailModel = ServiceModel.extend({
+        serviceName: 'email',
+        urlRoot: "/rest_service/save_email"
+    });
+
+    var LiderModel = PremiumModel.extend({
+        serviceName: 'lider',
+        urlRoot: "/rest_service/save_lider",
+
+        //  getAmount: function(service) {
+
+        //     var quantity = this.getQuantity(service);
+        //     var price = parseFloat(this.get("info").services[service].price);
+
+        //     return (this.getCountObjects() == 1) ? (price * quantity + " руб.") : "(?)";
+        // }
+    });
 
     return Marionette.Module.extend({
         initialize: function()
@@ -87,10 +171,11 @@ define([
                     app.windows.vent.trigger("showWindow", "service", {
                         title: "Услуга - премиум объявление",
                         serviceView : new ServicePremiumView({
-                            model: new ServiceModel({
+                            model: new PremiumModel({
                                 info: resp,
                                 is_edit: options.is_edit,
-                                edit_params: options.edit_params
+                                premiumQuantity: (options.is_edit) ? options.edit_params.service.quantity : 1,
+                                emailQuantity: (options.is_edit) ? options.edit_params.service.quantity : 1
                             })
                         }),
                         code: resp.code,
@@ -117,10 +202,11 @@ define([
                     app.windows.vent.trigger("showWindow", "service", {
                         title: "Услуга - объявление 'Лидер'",
                         serviceView : new ServiceLiderView({
-                            model: new ServiceModel({
+                            model: new LiderModel({
                                 info: resp,
                                 is_edit: options.is_edit,
-                                edit_params: options.edit_params
+                                liderQuantity: (options.is_edit) ? options.edit_params.service.quantity : 1,
+                                emailQuantity: (options.is_edit) ? options.edit_params.service.quantity : 1
                             })
                         }),
                         code: resp.code,
@@ -263,6 +349,36 @@ define([
                 }
             });
         },
+        email: function(id, options) {
+            
+            var serviceModel = new ServiceModel();
+            serviceModel.urlRoot = "/rest_service/check_email";
+            options.error = options.error || function() {};
+            options.success = options.success || function() {};
+            serviceModel.save({
+                id: id,
+                ids: options.ids
+            }, {
+                success: function(model) {
+                    var resp = model.toJSON();
+
+                    app.windows.vent.trigger("showWindow", "service", {
+                        title: "Услуга 'E-mail маркетинг'",
+                        serviceView : new ServiceEmailView({
+                            model: new EmailModel({
+                                info: resp,
+                                is_edit: options.is_edit,
+                                quantity: (options.is_edit) ? options.edit_params.service.quantity : 1,
+                            })
+                        }),
+                        code: resp.code,
+                        success: options.success,
+                        error: options.error,
+                        is_edit: options.is_edit
+                    });
+                }
+            });
+        }
 
         // kuponGroup: function(id, groupId, options) {
             

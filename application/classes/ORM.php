@@ -303,6 +303,15 @@ class ORM extends Kohana_ORM {
 		return $result;
 	}
 
+	public function find_and_map($callback)
+	{
+		$result = array();
+		foreach ($this->find_all() as $item) {
+			array_push($result, $callback($item));
+		}
+		return $result;
+	}
+
 	public function select_array($columns = array())
 	{
 		$object = array();

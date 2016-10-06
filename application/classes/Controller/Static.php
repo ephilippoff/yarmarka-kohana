@@ -263,4 +263,15 @@ class Controller_Static extends Controller_Template {
 		$this->response->headers('Content-Type', 'text/xml');
 		$this->response->body($robots_file);
 	}
+
+	public function action_testpage()
+	{
+		$this->use_layout = FALSE;
+		$this->auto_render = FALSE;
+
+		$twig = Twig::factory('other/testpage');
+
+		$this->response->body($twig);
+
+	}
 }

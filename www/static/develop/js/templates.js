@@ -29,6 +29,7 @@ define(function(require){
             services: {
                 up: require('lib/text!templates/services/up.tmpl'),
                 premium: require('lib/text!templates/services/premium.tmpl'),
+                email: require('lib/text!templates/services/email.tmpl'),
                 lider: require('lib/text!templates/services/lider.tmpl'),
                 buyObject: require('lib/text!templates/services/buyObject.tmpl'),
                 kupon: require('lib/text!templates/services/kupon.tmpl'),

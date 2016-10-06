@@ -49,6 +49,7 @@ define([
                     }
                },
                getNextFreeUp: function(){
+                    if (!s.model.get("info").service) return "";
                     var next_freeup = s.model.get("info").service.next_freeup;
                     if (next_freeup) {
                         return "( следующий <b>" + next_freeup + "</b> )";

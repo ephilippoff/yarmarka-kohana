@@ -79,10 +79,14 @@ define([
                 return;
             }
             var serviceModel = new ServiceModel();
+
             var serviceData = view.model.toJSON();
+            serviceModel.urlRoot = serviceData.urlRoot || serviceModel.urlRoot;
+
             if (this.getOption("is_edit")) {
                 serviceData.temp_order_item_id = this.getOption("is_edit");
             }
+            
             serviceModel.save({serviceData : serviceData},{
                 success: function(model) {
                     var resp = model.toJSON();

@@ -1,0 +1,33 @@
+<div class="description-cont">
+    <p><strong>Услуга E-mail маркетинга</strong>.
+        Ваше объявление будет включено в рассылку писем (при подъеме, редактировании, подаче нового объявления и при любых других действиях) на указанное количество дней. В день мы отправляем несколько тысяч таких писем, включение данной функции позволит Вам получить в несколько раз больше просмотров!
+    </p>
+</div>
+
+<h3 class="hidden-lg hidden-sm hidden-md">Услуги <%=model().getTitle()%></h3>
+<table class="table table-bordered">
+    <thead>
+        <th class="service-title hidden-xs">Услуга</th>
+        <th class="quantity">Количество</th>
+        <th class="price w150">Цена</th>
+    </thead>
+    <tbody>
+    <tr>
+        <td  class="service-title hidden-xs">
+            E-mail маркетинг  <%=model().getTitle()%>
+        </td>
+        <td  class="quantity">
+            <input class="js-quantity" type="number" value="<%=model().getQuantity()%>" min="0" max="99">&nbsp;дней
+        </td>
+        <td  class="price w150">
+            <span class="js-price">
+                <%=model().getAmount()%>
+            </span>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<% if (info.code > 200 && info.code < 400) { %>
+    <%=info.text%>
+<% } %>
