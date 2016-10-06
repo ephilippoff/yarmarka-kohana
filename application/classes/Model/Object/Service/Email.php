@@ -30,7 +30,7 @@ class Model_Object_Service_Email extends ORM
 
     public function get_actual($city_id)
     {
-        return $this->select('object.id')
+        return ORM::factory('Object_Service_Email')
                     ->join('object', 'left')
                         ->on('object.id','=','object_service_email.object_id')
                     ->where("object_service_email.date_expiration", ">", DB::expr("NOW()"))

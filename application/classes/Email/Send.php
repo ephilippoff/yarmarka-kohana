@@ -118,7 +118,7 @@ class Email_Send  {
                 "published" =>TRUE,
                 "id" => $ids
             ),
-            array("limit" => 15, "page" => 1)
+            array()
         );
         
         $result = Search::getresult($search_query->execute()->as_array());
