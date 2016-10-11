@@ -72,7 +72,7 @@ define([
                     quantity: this.model.get('quantity'),
                     category: this.model.getCategory(),
                     image: this.formSerialize()['image'],
-                    text: this.ui.text.val()
+                    text: $(this.ui.text).val()
                }
                
             };
