@@ -125,11 +125,17 @@ define([
                     
                     s.set('quantity', data.services[s.serviceName].quantity);
                     cb(data.services[s.serviceName].price_total);
+
+                    s.set('category', data.services[s.serviceName].category);
                 });
         },
 
         getAmount: function() {
             return this.get('info').services[this.serviceName].price_total + " руб.";
+        },
+
+        getCategory: function() {
+            return this.get('category') || this.get('info').services[this.serviceName].category;
         }
     });
 

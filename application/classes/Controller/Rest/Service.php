@@ -397,6 +397,15 @@ class Controller_Rest_Service extends Controller_Rest {
 					
 				}
 
+				if (isset($result['tglink']) AND $result['tglink']['quantity'] > 0) {
+
+					$service = Service::factory('Tglink', $object['id']);
+					$service->set_params($result['tglink']);
+
+					$orderItemTemp	=  $service->save($object, $key, $tempOrderItemId, $order->id);
+					
+				}
+
 			}
 
 			$db->commit();
