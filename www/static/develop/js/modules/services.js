@@ -9,8 +9,20 @@ define([
     "views/components/services/kupon",
     "views/components/services/newspaper",
     "views/components/services/cities",
-    "views/components/services/email"
-], function (Marionette, Backbone, templates, ServiceUpView, ServicePremiumView, ServiceLiderView, KuponView, NewspaperView, CitiesView, ServiceEmailView) {
+    "views/components/services/email",
+    "views/components/services/tglink"
+], function (Marionette, 
+            Backbone, 
+            templates,
+            ServiceUpView, 
+            ServicePremiumView, 
+            ServiceLiderView, 
+            KuponView,
+            NewspaperView, 
+            CitiesView, 
+            ServiceEmailView,
+            ServiceTglinkView
+        ) {
     'use strict';
 
     var CartModel = Backbone.Model.extend({});
@@ -97,6 +109,28 @@ define([
 
         //     return (this.getCountObjects() == 1) ? (price * quantity + " руб.") : "(?)";
         // }
+    });
+
+    var TglinkModel = ServiceModel.extend({
+        serviceName: 'tglink',
+        urlRoot: "/rest_service/save_email",
+
+        updatePrice: function(data, cb) {
+            var s = this;
+
+            $.post(
+                '/rest_service/check_tglink/'+this.get('id'), 
+                data , 
+                function (data) {
+                    
+                    s.set('quantity', data.services[s.serviceName].quantity);
+                    cb(data.services[s.serviceName].price_total);
+                });
+        },
+
+        getAmount: function() {
+            return this.get('info').services[this.serviceName].price_total + " руб.";
+        }
     });
 
     return Marionette.Module.extend({
@@ -366,6 +400,37 @@ define([
                         title: "Услуга 'E-mail маркетинг'",
                         serviceView : new ServiceEmailView({
                             model: new EmailModel({
+                                info: resp,
+                                is_edit: options.is_edit,
+                                quantity: (options.is_edit) ? options.edit_params.service.quantity : 1,
+                            })
+                        }),
+                        code: resp.code,
+                        success: options.success,
+                        error: options.error,
+                        is_edit: options.is_edit
+                    });
+                }
+            });
+        },
+        tglink: function(id, options) {
+            
+            var serviceModel = new ServiceModel();
+            serviceModel.urlRoot = "/rest_service/check_tglink";
+            options.error = options.error || function() {};
+            options.success = options.success || function() {};
+            serviceModel.save({
+                id: id,
+                ids: options.ids
+            }, {
+                success: function(model) {
+                    var resp = model.toJSON();
+
+                    app.windows.vent.trigger("showWindow", "service", {
+                        title: "Услуга 'Размещение тексто-графической ссылки'",
+                        serviceView : new ServiceTglinkView({
+                            model: new TglinkModel({
+                                id: id,
                                 info: resp,
                                 is_edit: options.is_edit,
                                 quantity: (options.is_edit) ? options.edit_params.service.quantity : 1,

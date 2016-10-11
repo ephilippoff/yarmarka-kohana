@@ -6,6 +6,25 @@ return array(
 	"cities" => array(
 		"default" => 20
 	),
+	"tglink" => array(
+		"nizhnevartovsk" => array(
+			"tg1" => 7,
+			"tg2" => 6,
+			"tg3" => 5,
+			"tg4" => 6,
+			"tgmain" => 4,
+			"default" => 4
+		),
+		"default" => array(
+			"tg1" => 3.5,
+			"tg2" => 2.5,
+			"tg3" => 2,
+			"tg4" => 2.5,
+			"tgmain" => 2,
+			"default" => 2
+		),
+		"base" => 100
+	),
 	"email" => array(
 		
 		"nizhnevartovsk" => array(

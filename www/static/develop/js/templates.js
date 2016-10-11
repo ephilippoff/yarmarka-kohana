@@ -35,6 +35,7 @@ define(function(require){
                 kupon: require('lib/text!templates/services/kupon.tmpl'),
                 newspaper: require('lib/text!templates/services/newspaper.tmpl'),
                 cities: require('lib/text!templates/services/cities.tmpl'),
+                tglink: require('lib/text!templates/services/tglink.tmpl'),
             },
             detail: {
                 baloon: require('lib/text!templates/detail/baloon.tmpl'), 

@@ -97,6 +97,42 @@ class Controller_Rest_Service extends Controller_Rest {
 		);
 	}
 
+	public function action_check_tglink()
+	{
+		$ids = ($this->post->ids) ? $this->post->ids: array($this->param->id);
+
+		if (!$ids OR !count($ids)) {
+			throw new HTTP_Exception_404;
+		}
+
+		$post = $this->request->post();
+
+		if (!isset($post['category']) OR !$post['category']) {
+			$post['category'] = 'tg1';
+		}
+
+		if (!isset($post['quantity']) OR !$post['quantity']) {
+			$post['quantity'] = 1;
+		}
+
+		$this->json['objects'] = $objects_to_action = ORM::factory('Object')
+															->where("id","IN", $ids)
+															->where("active","=",1)
+															->getprepared_all(array("id","title"));
+
+		if (count($objects_to_action) == 0) {
+			$this->json['code'] = 400;
+			return;
+		}
+
+		$this->json['object'] = $first_object = $objects_to_action[0];
+
+  
+		$this->json['services'] = array(
+			'tglink' => Service::factory("Tglink", $first_object->id)->set_params($post)->get()
+		);
+	}
+
 	public function action_check_lider()
 	{
 		$ids = ($this->post->ids) ? $this->post->ids: array($this->param->id);

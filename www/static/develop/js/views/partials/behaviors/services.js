@@ -13,7 +13,8 @@ define([
             premiumService: ".js-service-premium",
             liderService: ".js-service-lider",
             newspaperService: ".js-service-newspaper",
-            citiesService: ".js-service-cities"
+            citiesService: ".js-service-cities",
+            tglinkService: ".js-service-tglink"
         },
 
         events: {
@@ -24,6 +25,7 @@ define([
             "click @ui.liderService": "liderServiceClick",
             "click @ui.newspaperService": "newspaperServiceClick",
             "click @ui.citiesService": "citiesServiceClick",
+            "click @ui.tglinkService": "tglinkServiceClick"
         },
 
         initialize: function() {
@@ -109,6 +111,20 @@ define([
             var city_id = $(e.currentTarget).data("city");
             app.services.cities(id, {
                 city_id: city_id,
+                success: function(result) {
+                    console.log(result);
+                },
+                error: function(result) {
+                    console.log(result);
+                }
+            });
+        },
+
+        tglinkServiceClick: function(e) {
+            var s = this;
+            e.preventDefault();
+            var id = $(e.currentTarget).data("id");
+            app.services.tglink(id, {
                 success: function(result) {
                     console.log(result);
                 },
