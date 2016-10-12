@@ -124,14 +124,18 @@ define([
                 function (data) {
                     
                     s.set('quantity', data.services[s.serviceName].quantity);
+                    s.set('amount', data.services[s.serviceName].price_total  + " руб.");
                     cb(data.services[s.serviceName].price_total);
+
+                    
 
                     s.set('category', data.services[s.serviceName].category);
                 });
         },
 
         getAmount: function() {
-            return this.get('info').services[this.serviceName].price_total + " руб.";
+            console.log(this)
+            return this.get('amount') || this.get('info').services[this.serviceName].price_total + " руб.";
         },
 
         getCategory: function() {
@@ -440,6 +444,10 @@ define([
                                 info: resp,
                                 is_edit: options.is_edit,
                                 quantity: (options.is_edit) ? options.edit_params.service.quantity : 1,
+                                text: (options.is_edit) ? options.edit_params.service.text : '',
+                                category: (options.is_edit) ? options.edit_params.service.category : 'tg1',
+                                image: (options.is_edit) ? options.edit_params.service.image : 'blue',
+                                amount: (options.is_edit) ? options.edit_params.service.price_total + ' руб.': '',
                             })
                         }),
                         code: resp.code,

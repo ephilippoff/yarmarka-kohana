@@ -7,6 +7,8 @@ class Service_Tglink extends Service
     protected $_name = "tglink";
     protected $_title = "Тексто - графическая ссылка";
     protected $_is_multiple = TRUE;
+    protected $_image;
+    protected $_text;
 
     public function __construct($object_id = NULL)
     {
@@ -30,6 +32,8 @@ class Service_Tglink extends Service
         $description = $this->get_params_description().$discount_reason;
 
         return array(
+            "image" => $this->image(),
+            "text" => $this->text(),
             "city" => $this->city(),
             "category" => $this->category(),
             "name" => $this->_name,
@@ -55,6 +59,23 @@ class Service_Tglink extends Service
         return $price_config;
     }
 
+    public function set_params($params = array())
+    {
+        parent::set_params($params);
+
+        $params = new Obj($params);
+
+        if ($params->image) {
+            $this->image($params->image);
+        }
+
+        if ($params->text) {
+            $this->text($params->text);
+        }
+        
+        return $this;
+    }
+
     public function category($category = NULL)
     {
         if (!$category) return $this->_category;
@@ -63,38 +84,74 @@ class Service_Tglink extends Service
             $this->_category = array();
         }
 
-            $this->_category = $category;
+        $this->_category = $category;
+
+        return $this;
+    }
+
+    public function image($image = NULL)
+    {
+        if (!$image) return $this->_image;
+        
+        if (!$this->_image) {
+            $this->_image = array();
+        }
+
+        $this->_image = $image;
+
+        return $this;
+    }
+
+     public function text($text = NULL)
+    {
+        if (!$text) return $this->_text;
+        
+        if (!$this->_text) {
+            $this->_text = array();
+        }
+
+        $this->_text = $text;
 
         return $this;
     }
 
     public function get_params_description($params = array())
     {
-        return "Количество: ".(($this->quantity()) ? $this->quantity() : 1);
+        $categories = array(
+            'tg1' => 1,
+            'tg2' => 2,
+            'tg3' => 3,
+            'tg4' => 4,
+            'tgmain' => 'На главной'
+        );
+
+        return "Количество: ".(($this->quantity()) ? $this->quantity() : 1)
+                    . " (нед)<br>Блок рубрик: ". $categories[$this->category()]
+                         . "<br>Текст: ". $this->text()
+                            . "<br>Фон:<br>". sprintf('<img src="/static/develop/images/tglink/%s.jpg"', $this->image());
     }
 
 
     public function apply($orderItem)
     {
-        $quantity = $orderItem->service->quantity;
+        
         $object_id = $orderItem->object->id;
 
 
-        Service_Email::apply_service($object_id, $quantity);
+        Service_Tglink::apply_service($object_id, $orderItem);
         //self::saveServiceInfoToCompiled($object_id);
 
         ORM::factory('Order_Log')->write($orderItem->order_id, "notice", vsprintf("Активация услуги %s: № %s", array( $this->_title, $orderItem->order_id ) ) );
 
     }
 
-    static function apply_service($object_id, $quantity)
+    static function apply_service($object_id, $orderItem)
     {
         $object = ORM::factory('Object', $object_id);
 
         if (!$object->loaded()) return FALSE;
 
-
-        
+        ORM::factory('Reklama')->apply_service($object, $orderItem);
 
         return TRUE;
     }

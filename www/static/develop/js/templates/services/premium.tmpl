@@ -1,4 +1,4 @@
-<div class="description-cont">
+<div class="description-cont  hidden-xs">
 	<p><strong>Премиум-объявление</strong> в течение 7 дней отображается в специальном блоке на сайте. Этот блок располагается на самом видимом месте - сверху, над обычными объявлениями в поисковой выдаче.</p>
 	<!-- <p>Услуга также предусматривает поднятие объявления на первое место страницы поиска в момент применения.</p> -->
 	<!-- <p>На каждой странице рубрики в премиум-блоке размещается не более 5 объявлений. Объявления выводятся в соответствии с запросами посетителей сайта, в хронологическом порядке. По мере добавления новых премиум-объявлений, остальные объявления смещаются на следующие страницы. Таким образом, выше всегда будут находиться наиболее актуальные предложения.</p> -->
@@ -13,17 +13,17 @@
 	<p>Осталось бесплатных: <%=info.count%></p>
 <% } %>
 
-<h3 class="hidden-lg hidden-sm hidden-md">Услуги <%=model().getTitle()%></h3>
+<p class="bold mb10">Услуги <%=model().getTitle()%></p>
 <table class="table table-bordered">
 	<thead>
-		<th class="service-title hidden-xs">Услуга</th>
+		<th class="service-title ">Услуга</th>
 		<th class="quantity">Количество</th>
 		<th class="price w150">Цена</th>
 	</thead>
 	<tbody>
 	<tr>
-		<td class="service-title hidden-xs">
-			Услуга 'Премиум' <%=model().getTitle()%>
+		<td class="service-title ">
+			Услуга 'Премиум'
 		</td>
 		<td class="quantity">
 			<input class="js-quantity" type="number" value="<%=model().getQuantity('premium')%>" min="1" max="99">
@@ -36,8 +36,8 @@
 	</tr>
 	<% if (!is_edit) { %>
 	<tr>
-	    <td  class="service-title hidden-xs">
-	    	E-mail маркетинг  <%=model().getTitle()%>
+	    <td  class="service-title ">
+	    	E-mail маркетинг
 	  	</td>
 	    <td  class="quantity">
 	    	<input class="js-em-quantity" type="number" value="<%=model().getQuantity('email')%>" min="0" max="99">&nbsp;дней

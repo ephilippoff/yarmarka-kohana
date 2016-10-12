@@ -1,12 +1,21 @@
-<div class="description-cont">
-    <p><strong>Услуга "Размещение тексто-графической ссылки"</strong>.
-         Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptas et, libero. Nesciunt, quisquam, adipisci earum iste sequi amet saepe, ipsam minima consequatur unde possimus porro sunt numquam, ducimus quasi aliquam.
+<div class="description-cont hidden-xs">
+    <p><strong>Графическая промо-ссылка</strong>- это размещение ярких графических ссылок на любых страницах, соответствующих тематике вашего объявления, которые позволяют посетителю быстро обнаружить его на сайте. При нажатии на такую ссылку посетитель переходит на созданное вами объявление.
     </p>
+
+        <p>
+            Графические ссылки располагаются на всех страницах поиска в рамках выбранного пакета, а также в карточках объявлений.
+        </p>
+
+        <p><strong>Блок рубрик 1</strong> - Недвижимость</p>
+        <p><strong>Блок рубрик 2</strong> - Работа, Для бизнеса, Автотранспорт</p>
+        <p><strong>Блок рубрик 3</strong> - Продовольственные товары, Бытовая электроника, Товары для детей, Одежда и аксессуары, Медицина и здоровье, <br>Домашние животные, Знакомства и общение, Спорт/отдых/хобби</p>
+        <p><strong>Блок рубрик 4</strong> - Строительство и ремонт, Услуги, Для дома и дачи</p>
+
 </div>
 <style>
     .tg-block {
         width:100px;
-        
+        min-height: 25px;
         position: relative;
         float:left;
         margin-right: 10px;
@@ -35,6 +44,7 @@
         display: block;
         width:100%;
         height:100%;
+        border: 3px dashed transparent;
   
     }
 
@@ -55,7 +65,7 @@
 
 
 </style>
-<h3 class="hidden-lg hidden-sm hidden-md">Услуги <%=model().getTitle()%></h3>
+<!-- <h3 class="hidden-lg hidden-sm hidden-md hidden-xs">Услуги <%=model().getTitle()%></h3> -->
 <form class="tg-form">
     <table class="table table-bordered">
         <!-- <thead>
@@ -67,10 +77,10 @@
             <tr>
                 <td colspan="3">
                     <div class="clearfix mt10 mb10">
-                        <% _.each(['blue','brown','yellow','green','orange'], function(item, index){ %>
+                   
+                        <% _.each(['blue','brown','purple','green','orange'], function(item, index){ %>
                             <div class="tg-block">
-                                
-                                <input class="tg-block-input" type="radio" name="image" id="back_<%=index%>" value="<%=item%>" <%=(index==0)?'checked':''%>>
+                                <input class="tg-block-input" type="radio" name="image" id="back_<%=index%>" value="<%=item%>" <%=(item === image)?'checked':''%>>
                                 <img class="tg-block-img" src="/static/develop/images/tglink/<%=item%>.jpg" alt="">
                                 <label for="back_<%=index%>" class="tg-block-example js-example bold white">Пример</label>
                             </div>
@@ -90,7 +100,7 @@
                             {name:'tgmain', title:'На главной'},
                         ], function(item, index){ %>
                         <div class="tg-block">
-                            <input class="tg-block-category-input js-tg-block" type="radio" name="category" id="block_<%=index%>" value="<%=item.name%>" <%=(index==0)?'checked':''%>>
+                            <input class="tg-block-category-input js-tg-block" type="radio" name="category" id="block_<%=index%>" value="<%=item.name%>" <%=((category === item.name) ?'checked':'') %>>
                             <label for="block_<%=index%>" class="tg-block-category"><%=item.title%></label>
                         </div>
 
@@ -100,7 +110,7 @@
             </tr>
             <tr>
                 <td  class="service-title hidden-xs">
-                    <input type="text" placeholder="Введите текст (не более 20 знаков)" name="textOnImage" style="width:100%" class="js-tg-text" maxlength="20">
+                    <input type="text" placeholder="Введите текст ссылки (не более 20 знаков)" name="textOnImage" style="width:100%" class="js-tg-text" maxlength="20" value="<%=text%>">
                 </td>
                 <td  class="quantity">
                     <input class="js-quantity" type="number" name="quantity" value="<%=model().getQuantity()%>" min="1" max="99">&nbsp;недель

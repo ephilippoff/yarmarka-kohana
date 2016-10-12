@@ -10,3 +10,7 @@ WITH (
 );
 
 CREATE INDEX object_service_email_idx ON public.object_service_email (object_id);
+
+
+
+ALTER TABLE reklama ADD COLUMN object_title character varying(500);

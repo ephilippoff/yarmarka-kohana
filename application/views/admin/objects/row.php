@@ -154,6 +154,7 @@
 			<a href="#" data-id="<?=$object->id?>" class="js-service-premium">Премиум</a>, 
 			<a href="#" data-id="<?=$object->id?>" class="js-service-lider">Лидер</a>, 
 			<a href="#" data-id="<?=$object->id?>" class="js-service-cities" data-city="<?=$object->city_id?>">Несколько городов</a></li>
+			<a href="#" data-id="<?=$object->id?>" class="js-service-tglink">Графическая ссылка</a></li>
 			
 		</ul>
 		<? endif; ?>

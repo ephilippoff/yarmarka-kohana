@@ -15,6 +15,22 @@ return array(
 			"tgmain" => 4,
 			"default" => 4
 		),
+		"surgut" => array(
+			"tg1" => 6,
+			"tg2" => 5,
+			"tg3" => 4.5,
+			"tg4" => 5,
+			"tgmain" => 4,
+			"default" => 4
+		),
+		"tyumen" => array(
+			"tg1" => 6,
+			"tg2" => 5,
+			"tg3" => 4.5,
+			"tg4" => 5,
+			"tgmain" => 4,
+			"default" => 4
+		),
 		"default" => array(
 			"tg1" => 3.5,
 			"tg2" => 2.5,

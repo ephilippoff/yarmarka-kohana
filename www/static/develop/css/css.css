@@ -67,6 +67,7 @@ h3, h2, strong, .bold, b, .title_block {font-family: 'pt_sansbold', Verdana, san
 .uppercase {text-transform: uppercase;}
 
 /* css helpers */
+.bg-color-red{background-color: #d90000;}
 .bg-color-crimson{background-color:#d90000}.border-color-crimson{border-color:#D90000}
 .bg-color-blue{background-color: #2B587A;}.border-color-blue{border-color: #2B587A;}
 .bg-color-gray{background-color:gray;}.border-color-gray{border-color:gray;}
@@ -116,6 +117,7 @@ box-sizing: border-box;}
 .button {cursor:pointer; text-align:center; border:0;display:inline-block;}
 .button.bg-color-crimson:hover{background-color: #D90000;-webkit-transition: background-color 0.2s;-moz-transition: background-color 0.2s;-o-transition: background-color 0.2s;transition: background-color 0.2s;}
 button.bg-color-blue:hover{background-color: #4381AF;-webkit-transition: background-color 0.2s;-moz-transition: background-color 0.2s;-o-transition: background-color 0.2s;transition: background-color 0.2s;}
+button.bg-color-red:hover{background-color: #D90000;-webkit-transition: background-color 0.2s;-moz-transition: background-color 0.2s;-o-transition: background-color 0.2s;transition: background-color 0.2s;}
 .button.bg-color-lightgreen:hover{background-color: #74DC74;-webkit-transition: background-color 0.2s;-moz-transition: background-color 0.2s;-o-transition: background-color 0.2s;transition: background-color 0.2s;}
 .button.bg-color-lightorange:hover{background-color: #FDDA5D;-webkit-transition: background-color 0.2s;-moz-transition: background-color 0.2s;-o-transition: background-color 0.2s;transition: background-color 0.2s;}
 .button.button-style1{padding: 7px 10px; color:#fff;display:inline-block;}
@@ -127,7 +129,7 @@ button.bg-color-blue:hover{background-color: #4381AF;-webkit-transition: backgro
 .caret {display: inline-block;width: 0;height: 0;margin-left: 2px;vertical-align: middle;border-top: 4px solid;border-right: 4px solid transparent;border-left: 4px solid transparent;}
 
 input{background-color: #FFFFFF; outline: 0;}
-input[type="text"], input[type="password"]{background-color: #FFFFFF;border: 1px solid #C3C3C3;font-size: 14px;height: 30px;padding:0px 10px;outline: 0; border-radius:2px;}
+input[type="text"], input[type="password"], input[type="number"]{background-color: #FFFFFF;border: 1px solid #C3C3C3;font-size: 14px;height: 30px;padding:0px 10px;outline: 0; border-radius:2px;}
 textarea{resize: none; background-color: #FFFFFF;border: 1px solid #C3C3C3;font-size: 14px;padding: 5px 10px;outline: 0; border-radius:2px;}
 select{background-color: #FFFFFF;border: 1px solid #C3C3C3;padding:2px 10px;height: 30px;outline: 0; border-radius:2px;}
 
@@ -176,7 +178,7 @@ select{background-color: #FFFFFF;border: 1px solid #C3C3C3;padding:2px 10px;heig
     transition: display 0.2s;
 }
 .popup-wrp {left: 0;margin: auto;position: fixed;top: 70px;width: 100%;}
-.popup-window {position: relative;background-color: #f9f9f9;margin: auto;padding: 5px;box-sizing: border-box; width: 60%;}
+.popup-window {position: relative;background-color: #f9f9f9;margin: auto;padding: 5px;box-sizing: border-box; max-width: 600px;min-width: 200px;}
 .popup-window .header {font-size: 17px;position: relative;min-height: 40px;padding: 5px 40px 5px 5px;box-sizing: border-box;line-height: 1.5;}
 .popup-window .cont{padding: 5px;}
 .popup-window .popup-window-close {height: 30px;width: 30px;background: #ccc;position: absolute;top: 5px;right: 5px;cursor: pointer;text-align: center;}

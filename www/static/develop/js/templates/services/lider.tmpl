@@ -1,4 +1,4 @@
-<div class="description-cont">
+<div class="description-cont  hidden-xs">
 	<p><b>Услуга “Лидер”</b> - это размещение фотообъявления, которое отображается в специальном блоке на сайте. Этот блок располагается вверху главных страниц рубрик и разделов сайта.</p>
 	<p>Фотообъявление содержит цену на товар/услугу и краткое описание. При клике на такое объявление, посетитель попадает в карточку Вашего объявления с подробным описанием товара/услуги.</p>
 	<!-- <p><b>Преимущества услуги “Лидер”:</b></p>
@@ -12,16 +12,16 @@
 		Ваше объявление будет включено в рассылку писем (при подъеме, редактировании, подаче нового объявления и при любых других действиях) на указанное количество дней. В день мы отправляем несколько тысяч таких писем, включение данной функции позволит Вам получить больше просмотров!
 	</p>
 </div>
-<h3 class="hidden-lg hidden-sm hidden-md">Услуга 'Лидер' <%=model().getTitle()%></h3>
+<p class="bold mb10">Услуги <%=model().getTitle()%></p>
 <table class="table table-bordered">
 	<thead>
-		<th class="hidden-xs service-title">Услуга</th>
+		<th class=" service-title">Услуга</th>
 		<th class="quantity">Количество</th>
 		<th class="price">Цена</th>
 	</thead>
 	<tbody>
 	<tr>
-		<td class="hidden-xs service-title">Услуга 'Лидер' <%=model().getTitle()%></td>
+		<td class=" service-title">Услуга 'Лидер'</td>
 		<td class="quantity">
 			<input class="js-quantity" type="number" value="<%=model().getQuantity('lider')%>" min="1" max="99">
 		</td>
@@ -33,8 +33,8 @@
 	</tr>
 	<% if (!is_edit) { %>
 	<tr>
-	    <td  class="service-title hidden-xs">
-	    	E-mail маркетинг  <%=model().getTitle()%>
+	    <td  class="service-title">
+	    	E-mail маркетинг  
 	  	</td>
 	    <td  class="quantity">
 	    	<input class="js-em-quantity" type="number" value="<%=model().getQuantity('email')%>" min="0" max="99">&nbsp;дней

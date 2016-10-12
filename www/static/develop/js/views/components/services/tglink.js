@@ -29,11 +29,6 @@ define([
             "change": "saveResult"
         },
 
-        initialize: function() {
-            this.saveResult();
-            //this.changed();
-        },
-
         formSerialize: function() {
             var f = {};
             $(this.ui.form).serializeArray().map(function(x){f[x.name] = x.value;});
@@ -47,14 +42,28 @@ define([
             });
         },
 
+        debounceTimeout:null,
         changeText: function() {
             var s = this;
-            this.ui.example.text( this.ui.text.val() ? this.ui.text.val() : "Пример" );
-            Array.from(this.ui.example).forEach(function(item){
-                console.log()
-                item.style.top = (25 - (s.ui.example.height()/2 || 10) ) + 'px';
-            })
-            
+            var value = this.ui.text.val();
+
+            this.model.set('text', value);
+
+            this.ui.example.text( value ? value : "Пример" );
+
+            if (this.debounceTimeout) clearTimeout(this.debounceTimeout);
+
+            this.debounceTimeout = setTimeout(function(){
+
+                s.saveResult();
+
+                Array.from(s.ui.example).forEach(function(item){
+                    item.style.top = (25 - (s.ui.example.height()/2 || 10) ) + 'px';
+                });
+
+            }, 500);
+           
+
         },
 
         templateHelpers: function() {
@@ -72,7 +81,7 @@ define([
                     quantity: this.model.get('quantity'),
                     category: this.model.getCategory(),
                     image: this.formSerialize()['image'],
-                    text: $(this.ui.text).val()
+                    text: this.model.get('text')
                }
                
             };
@@ -82,10 +91,13 @@ define([
 
         onRender: function() {
             this.changeText();
+            this.saveResult();
+            
         },
 
         resultValid: function() {
-            return this.model.get('quantity') > 0;
+            var result = (this.model.get('quantity') > 0 && this.model.get('text') && this.model.get('text').length > 2);
+            return result;
         }
     });
 

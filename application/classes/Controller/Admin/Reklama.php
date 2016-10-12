@@ -15,8 +15,8 @@ class Controller_Admin_Reklama extends Controller_Admin_Template {
 		$sorting_types = array('asc', 'desc');
 		$sorting_fields   = array('start_date', 'end_date', 'id');
 		//Принимаем, сверяем параметры сортировки
-		$sort	 = in_array($this->request->query('sort'), $sorting_types) ? $this->request->query('sort') : '';
-		$sort_by = in_array($this->request->query('sort_by'), $sorting_fields) ? $this->request->query('sort_by') : '';		
+		$sort	 = in_array($this->request->query('sort'), $sorting_types) ? $this->request->query('sort') : 'desc';
+		$sort_by = in_array($this->request->query('sort_by'), $sorting_fields) ? $this->request->query('sort_by') : 'id';		
 		//Фильтр показа только активных, либо всех
 		$only_active = isset($_GET['only_active']) ? 1 : 0;
 			

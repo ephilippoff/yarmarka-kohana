@@ -11,10 +11,22 @@
 
 				{% if link|length > 0 %}
 					{% set link = link|first %}
-					<a class="db clearfix tg-link" href="{{ link.link }}" target="_blank" data-id="{{ link.id }}" {% if link.nofollow %}rel="nofollow"{% endif %}>
-						<img src="{{ '/./uploads/banners/' ~ link.image }}" class="hidden-sm"/>
-						<span class="fs12 fl w50p h50 oh">{{ link.title }}</span>
-					</a>
+					{% if link.type == 3 %}
+						{% set count_words = link.title|split(' ')|length %}
+						<a class="db clearfix tg-link" href="{{ link.link }}" target="_blank" data-id="{{ link.id }}" {% if link.nofollow %}rel="nofollow"{% endif %}>
+							<p style="display:block;width:80px;position:relative;">
+								<img src="{{ '/static/develop/images/tglink/' ~ link.class ~ '.jpg' }}" class="hidden-sm"/>
+								<span class="bold" style="position:absolute;left:0;top:{{ count_words == 1 ? '10px': '4px'}};right:0;bottom:0;text-align:center;color:white;">{{ link.title }}</span>
+							</p>
+							<span class="fs12 fl w50p h50 oh">{{ link.object_title|slice(0,30) }}</span>
+						</a>
+					{% else %}
+						<a class="db clearfix tg-link" href="{{ link.link }}" target="_blank" data-id="{{ link.id }}" {% if link.nofollow %}rel="nofollow"{% endif %}>
+							<img src="{{ '/./uploads/banners/' ~ link.image }}" class="hidden-sm"/>
+							<span class="fs12 fl w50p h50 oh">{{ link.title }}</span>
+						</a>
+					{% endif %}
+					
 				{% elseif loop.index != 3 %}
 					<a class="db clearfix tg-link" href="/commercial/target"  target="_blank">
 						<img src="{{ staticfile('images/empty_ads.png') }}" class="fl hidden-md hidden-sm hidden-xs hidden-xxs"/>
