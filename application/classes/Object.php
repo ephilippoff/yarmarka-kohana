@@ -246,7 +246,6 @@ class Object
 
 			$json['object_id'] = $add->object->id;
 			$json['external_id'] = $input_params['external_id'];
-			$json['parent_id'] = $add->parent_id;
 			$json['is_edit'] = $add->is_edit;
 			$json['error'] = $add->errors;
 		}
@@ -309,7 +308,6 @@ class Object
 			}
 
 			$json['object_id'] = $add->object->id;
-			$json['parent_id'] = $add->parent_id;
 			$json['error'] = $add->errors;
 		}
 		else
@@ -392,7 +390,7 @@ class Object
 						 	"errors" => join(", ", $errors)
 						 );
 			} else {
-				return Array("code" => "ok", "parent_id" =>$trigger["parent_id"]);
+				return Array("code" => "ok");
 			}
 		}
 	}
