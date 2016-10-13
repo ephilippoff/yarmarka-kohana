@@ -558,7 +558,11 @@ class Controller_Admin_Users extends Controller_Admin_Template {
 		$offset = ($page AND $page != 1) ? ($page-1) * $limit : 0;			
 		
 		$filter = $this->request->query('filter');
+
+
 		$s = trim(Arr::get($_GET, 's', ''));
+
+		if ($s AND !$filter) $filter = 'all';
 
 		$flags_moderation_query = DB::select("user_id")
 								->from("user_settings")
@@ -588,6 +592,8 @@ class Controller_Admin_Users extends Controller_Admin_Template {
 					->or_where(DB::expr('lower(email)'), 'like', '%'.mb_strtolower($s).'%')
 					->where_close();			
 		}		
+
+		$this->template->s = $s;
 		
 		$users_clone = clone $users;
 		$count_all = $users_clone->count_all();
