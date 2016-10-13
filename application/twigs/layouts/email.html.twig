@@ -70,7 +70,7 @@
                             {% for object in last_news %}
                                 <tr>
                                      <td style="width:25%;">
-                                           <img src="http://yarmarka.biz/{{ get_file(object.compiled.images.main_photo['120x90'], true) }}" style="max-width:100%;display:block;">
+                                           <img src="{{ get_file(object.compiled.images.main_photo['120x90'], true) }}" style="max-width:100%;display:block;">
                                      </td>
                                      <td style="padding:0 5px;">
                                         <a style="color: #08729E;padding:10px 0; font-size:0.85em;display:block;" href="{{ email_link(domain, '/detail/' ~ object.id, ref_params, {'utm_content': 'last_news'}) }}">{{ object.title|slice(0,100) }}</a> 
