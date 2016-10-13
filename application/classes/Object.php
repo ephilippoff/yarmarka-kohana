@@ -46,8 +46,7 @@ class Object
 			->init_validation_rules()
 			->init_additional()
 			->init_validation_rules_for_attributes()
-			->exec_validation()
-			->check_signature();
+			->exec_validation();
 
 		if ( ! $add->errors)
 		{
@@ -209,8 +208,7 @@ class Object
 			$add->save_address()
 				->prepare_object()
 				->save_style_object()
-				->save_external_info()
-				->save_parentid_object();
+				->save_external_info();
 
 			$db = Database::instance();
 
@@ -282,7 +280,6 @@ class Object
 
 		if ( ! $add->errors)
 		{
-			$add->save_parentid_object();
 
 			$db = Database::instance();
 

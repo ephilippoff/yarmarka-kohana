@@ -10,10 +10,6 @@ class Model_Object_Signature extends ORM
 
 	public function save(Validation $validation = NULL)
 	{
-		if ($this->signature AND is_array($this->signature))
-		{
-			$this->signature = '{'.join(',', $this->signature).'}';
-		}
 
 		if ($this->signature_full AND is_array($this->signature_full))
 		{
@@ -23,7 +19,7 @@ class Model_Object_Signature extends ORM
 		parent::save($validation);
 	}
 
-	public function get_similarity($max_similarity, $array, $options_exlusive_union, $object_id = NULL,$user_id = NULL, $full = '', $itis_massload = FALSE)
+	public function get_similarity($max_similarity, $array, $options_exlusive_union, $object_id = NULL,$user_id = NULL, $itis_massload = FALSE)
 	{
 		$user_id 	= (int) $user_id;
 
@@ -34,13 +30,13 @@ class Model_Object_Signature extends ORM
 				->execute();
 
 			$array_str = "'{".join(',', $array)."}'::character varying[]";
-			$query = DB::select(DB::expr("object_id, smlar($array_str, signature".$full.") AS sm"))
+			$query = DB::select(DB::expr("object_id, smlar($array_str, signature_full) AS sm"))
 			->from($this->_table_name)
 			->join('object')
 				->on('object.id', '=', 'object_signature.object_id')
 			->where('object.active', '=', 1)
 			->where('object.is_published', '=', 1)
-			->where("signature".$full, '%', DB::expr($array_str))
+			->where("signature_full", '%', DB::expr($array_str))
 			->order_by('sm', 'desc')
 			->order_by('object_id', 'asc')
 			->limit(1);
