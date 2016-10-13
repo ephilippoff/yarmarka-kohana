@@ -116,7 +116,9 @@ class Email_Send  {
             array(
                 "active" => TRUE,
                 "published" =>TRUE,
-                "id" => $ids
+                "id" => $ids,
+                "city_published" => $params['domain'],
+                "not_category_seo_name" => "novosti"
             ),
             array("limit" => 15)
         );
