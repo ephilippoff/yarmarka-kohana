@@ -252,9 +252,14 @@ class Twig_Functions
 		return Imageci::getSitePaths($filename);
 	}
 
-	public static function get_file($path)
+	public static function get_file($path, $full = FALSE)
 	{
 		$_path = "/".trim($path);
+
+		if ($full) {
+			return "http://yarmarka.biz/".$path;
+		}
+		
 		if (is_file(URL::SERVER('DOCUMENT_ROOT').$_path)) {
 			return $_path;
 		} else {
