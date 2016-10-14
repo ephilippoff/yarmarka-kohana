@@ -743,6 +743,147 @@ class Controller_Admin_Reklama extends Controller_Admin_Template {
 			));		
 	}		
 
+
+	public function action_statistic()
+	{
+
+		$this->template->cities =  array(
+                                    1 => 'Все', 
+                                    1919 => 'Тюмень', 
+                                    1947 => 'Нефтеюганск', 
+                                    1948 => 'Нижневартовск', 
+                                    1979 => 'Сургут'
+                                );
+
+		$this->template->periods =  array(
+                                    'day' => 'День',
+                                    'week' => 'Неделя',
+                                    'month' => 'Месяц',
+                                    'year' => 'Год'
+                                );
+
+		$this->template->types =  array(
+                                    'objects' => 'Новые объявления',
+                                    'users' => 'Новые пользователи',
+                                    'emails' => 'E-mail',
+                                    'sms' => 'Sms',
+                                    'orders' => 'Заказы'
+                                );
+	}
+
+	public function action_statistic_data()
+	{
+		$this->use_layout = FALSE;
+		$this->auto_render = FALSE;
+
+		$type = $this->request->query('type');
+		$period = $this->request->query('period');
+		$from = $this->request->query('from');
+
+		if (!$period) $period = 'day';
+ 
+		$json = array();
+
+		$json['code'] = 200;
+		$json['period'] = $period;
+
+
+		switch ($type) {
+			case 'objects':
+
+					$filters = array(
+						array('number','IS', NULL)
+					);
+
+					if ($from) {
+						array_push($filters, array('date_created','>',$from) );
+					} else {
+						array_push($filters, array('date_created','>','2016-01-01') );
+					}
+
+					$json['data'] = array(
+						'new_objects' => Statistic::get_new_objects( $period, $filters)
+					);
+
+				break;
+
+			case 'users':
+
+					$filters = array(
+						array('is_blocked','=', 0)
+					);
+
+					if ($from) {
+						array_push($filters, array('regdate','>',$from) );
+					} else {
+						array_push($filters, array('regdate','>','2016-01-01') );
+					}
+
+					$json['data'] = array(
+						'new_users' => Statistic::get_new_user( $period, $filters )
+					);
+
+				break;
+
+			case 'emails':
+
+					$filters = array();
+
+					if ($from) {
+						array_push($filters, array('created_on','>',$from) );
+					} else {
+						array_push($filters, array('created_on','>','2016-01-01') );
+					}
+
+					$json['data'] = array(
+						'emails' => Statistic::get_sent_emails( $period, $filters )
+					);
+
+				break;
+
+			case 'sms':
+
+					$filters = array();
+
+					if ($from) {
+						array_push($filters, array('created_on','>',$from) );
+					} else {
+						array_push($filters, array('created_on','>','2016-01-01') );
+					}
+
+					$json['data'] = array(
+						'sms' => Statistic::get_sent_sms( $period, $filters )
+					);
+
+				break;
+
+			case 'orders':
+
+					$filters = array(
+						array('state','=', 2)
+					);
+
+					if ($from) {
+						array_push($filters, array('payment_date','>',$from) );
+					} else {
+						array_push($filters, array('payment_date','>','2016-01-01') );
+					}
+
+					$json['data'] = array(
+						'orders' => Statistic::get_orders( $period, $filters )
+					);
+
+				break;
+
+			default:
+				$json['code'] = 404;
+				break;
+		}
+
+
+		$this->response->body(json_encode($json));
+	}
+
 	
 }
 

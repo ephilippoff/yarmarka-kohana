@@ -123,6 +123,7 @@
 								<li><a href="<?=URL::site('khbackend/reklama/photocards')?>">Фото-объявления("Лидер")</a></li>
 								<?php if (Auth::instance()->have_access_to('invoice')) : ?>
 									<li><a href="<?=URL::site('khbackend/invoices/index')?>">Invoices</a></li>
+									<li><a href="<?=URL::site('khbackend/reklama/statistic')?>">Statistic</a></li>
 								<?php endif?>								
 							</ul>
 						</li>
