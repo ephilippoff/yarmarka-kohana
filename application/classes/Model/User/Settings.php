@@ -106,7 +106,10 @@ class Model_User_Settings extends ORM {
 
 	public function freeup_remove($user_id, $type = 'freeup_date')
 	{
-		return $this->_delete($user_id, NULL, $type);
+		return ORM::factory('User_Settings')
+							->where("user_id","=",$user_id)
+							->where("name","=",$type)
+							->delete_all();
 	}
 
 } // End User_Settings Model

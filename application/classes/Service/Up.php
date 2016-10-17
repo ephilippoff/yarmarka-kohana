@@ -130,7 +130,7 @@ class Service_Up extends Service
 		{
 			$freeup_reserve = ORM::factory('User_Settings')->get_by_name($user->id, 'freeup_reserve')->find();
 
-			return ($freeup_reserve->loaded()) ? 0 : ORM::factory('User_Settings')->freeup_exists($user->id);
+			return ($freeup_reserve->loaded()) ? 1 : ORM::factory('User_Settings')->freeup_exists($user->id);
 		} else {
 			return 0;
 		}
