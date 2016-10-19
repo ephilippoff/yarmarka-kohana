@@ -66,12 +66,30 @@
 			$this->post->info = $this->get_subscription_info();
 			if (!$this->check_exists()) {
 
+				$filters = json_decode(json_encode(json_decode($this->post->filters)), True);
+				$filters['order'] = 'id';
+
+				$main_search_query = Search::searchquery($filters, array( 
+					"limit" => 1,
+					"page" => 1
+				));
+				
+				$main_search_result = Search::getresult($main_search_query->execute()->as_array());
+
+				$last_object_id = NULL;
+				if (count($main_search_result)) {
+					$last_object_id = $main_search_result[0]['id'];
+				}
+
 				$model = ORM::factory('Subscription_Surgut');
 				$model->set_data($this->post->info);
 				$model->user_id = $this->user->id;
 				$model->created = date('Y-m-d H:i:s');
 				$model->query = $this->post->info->query;
 				$model->path = $this->post->info->path;
+				$model->filters = $this->post->filters;
+				$model->last_object_id = $last_object_id;
+				$model->enabled = 1;
 				$model->save();
 
 			}

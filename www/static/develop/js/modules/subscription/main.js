@@ -38,7 +38,7 @@ define([ 'jquery', 'underscore', 'backbone', './models/state', './views/initial'
 				this.childView.$el.fadeOut(300);
 				me = this;
 				setTimeout(function(){
-					this.childView.remove();
+					if (this.childView) this.childView.remove();
 					this.childView = null;
 				}, 300);
 			}

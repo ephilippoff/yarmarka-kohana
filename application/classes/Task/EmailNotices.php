@@ -12,6 +12,7 @@ class Task_EmailNotices extends Minion_Task
         //$this->aboutPhoto();
         //$this->aboutUp();
         $this->aboutExpiration();
+        $this->aboutSubscription();
 
     }
 
@@ -225,6 +226,108 @@ class Task_EmailNotices extends Minion_Task
 
         }
 
+
+    }
+
+
+    private $_max_count_empty_subscriptions = 31;
+
+    public function aboutSubscription() {
+
+        $subscriptions = ORM::factory('Subscription_Surgut')->get_enabled();
+
+        foreach($subscriptions as $subscription) {
+
+            $empty_counter = ($subscription->empty_counter) ? $subscription->empty_counter: 0;
+            $url = sprintf('%s%s', $subscription->data->path, ($subscription->data->query) ? "?".$subscription->data->query : "");
+
+            $user = ORM::factory('User',$subscription->user_id);
+
+            $subscription->filters['order'] = 'id';
+
+            if ($subscription->last_object_id) {
+                $subscription->filters['gt_id'] = $subscription->last_object_id;
+            }
+
+            $main_search_query = Search::searchquery($subscription->filters, array( 
+                "limit" => 20,
+                "page" => 1
+            ));
+            
+            $main_search_result = Search::getresult($main_search_query->execute()->as_array());
+
+            if (count($main_search_result)) {
+
+
+
+                $count_new  = (int) Search::searchquery($subscription->filters, array(), array(
+                    "count" => TRUE
+                ))->execute()->get("count");
+
+                $params = array(
+                    'objects' => $main_search_result,
+                    'title' => $subscription->data->title,
+                    'count_new' => $count_new,
+                    'url' => $url,
+                    'domain' => $subscription->filters['city_id'],
+                );
+
+                Email_Send::factory('subscription')
+                            ->to( $user->email )
+                            ->set_params($params)
+                            ->set_utm_campaign('subscription')
+                            ->send();
+
+                $last_object_id = $main_search_result[0]['id'];
+
+                $ss = ORM::factory('Subscription_Surgut', $subscription->id);
+                $ss->last_object_id = $last_object_id;
+                $ss->empty_counter = $empty_counter = 0;
+                $ss->sent_on = DB::expr('NOW()');
+                $ss->update();
+                
+                Minion_CLI::write( sprintf('Подписка %s отправлена %s', $subscription->data->title,$user->email) );
+
+            } else {
+
+                $ss = ORM::factory('Subscription_Surgut')
+                                ->where('id','=', $subscription->id)
+                                ->where('sent_on','<',DB::expr("NOW() - INTERVAL '6 hours'"))
+                                ->find();
+                if ($ss->loaded()) {
+                    $ss->empty_counter = $empty_counter = $empty_counter + 1;
+                    $ss->update();
+                }
+
+            }
+
+            if ($empty_counter >= $this->_max_count_empty_subscriptions) {
+
+                
+
+                $params = array(
+                    'objects' => $main_search_result,
+                    'title' => $subscription->data->title,
+                    'url' => $url,
+                    'domain' => $subscription->filters['city_id']
+                );
+
+                Email_Send::factory('subscription_cancel')
+                            ->to( $user->email )
+                            ->set_params($params)
+                            ->set_utm_campaign('subscription_cancel')
+                            ->send();
+
+                Minion_CLI::write( sprintf('Подписка %s остановлена для %s', $subscription->data->title,$user->email) );
+
+                $ss = ORM::factory('Subscription_Surgut', $subscription->id);
+                $ss->empty_counter = 0;
+                $ss->enabled = 0;
+                $ss->update();
+
+            }
+
+        }
 
     }
 

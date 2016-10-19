@@ -14,3 +14,15 @@ CREATE INDEX object_service_email_idx ON public.object_service_email (object_id)
 
 
 ALTER TABLE reklama ADD COLUMN object_title character varying(500);
+
+ALTER TABLE subscription_surgut ADD COLUMN filters text;
+
+
+ALTER TABLE subscription_surgut ADD COLUMN last_object_id int4;
+ALTER TABLE subscription_surgut ADD COLUMN empty_counter int4;
+ALTER TABLE subscription_surgut ADD COLUMN sent_on timestamp;
+
+ALTER TABLE public.subscription_surgut ALTER COLUMN created SET DEFAULT NOW();
+ALTER TABLE public.subscription_surgut ALTER COLUMN sent_on SET DEFAULT NOW();
+
+

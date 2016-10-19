@@ -194,6 +194,14 @@ class Search {
 			$object = $object->where("o.id", "=", $params->id);
 		}
 
+		if ($params->gt_id) {
+			$object = $object->where("o.id", ">", $params->gt_id);
+		}
+
+		if ($params->lt_id) {
+			$object = $object->where("o.id", "<", $params->lt_id);
+		}
+
 		if ($params->not_id AND is_array($params->not_id)) {
 			$object = $object->where("o.id", "NOT IN", $params->not_id);
 		}

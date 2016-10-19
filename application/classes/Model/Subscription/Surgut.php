@@ -41,4 +41,18 @@
 			return $this->where('user_id', '=', $id);
 		}
 
+		public function get_enabled() {
+			return $this->where('filters','IS NOT',NULL)
+                        ->where('user_id','IS NOT',NULL)
+                        ->where('enabled','=',1)
+                        ->find_and_map(function($item){
+                             
+                             $result = $item->get_row_as_obj();
+                             $result->data = unserialize($item->data);
+                             $result->filters = json_decode(json_encode(json_decode($item->filters)), True);
+
+                             return $result;
+                        });
+		}
+
 	}

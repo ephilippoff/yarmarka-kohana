@@ -22,13 +22,15 @@ class Email_Send  {
         'addedit',
         'massload_report',
         'object_expiration',
-        'object_to_archive'
+        'object_to_archive',
+        'subscription'
     );
 
     private $_withnews = array(
         'addedit',
         'object_expiration',
-        'object_to_archive'
+        'object_to_archive',
+        'subscription'
     );
 
     private $_news = array();
@@ -196,6 +198,16 @@ class Email_Send  {
         return Email::send($this->_to, Kohana::$config->load('email.default_from'), $subj, $msg);
     }
 
+    public function get_subj_subscription($params)
+    {
+        return 'Вы подписаны на обновления рубрики '.$params['title'];
+    }
+
+    public function get_subj_subscription_cancel($params)
+    {
+        return 'Приостановлена подписка на обновления рубрики '.$params['title'];
+    }
+
     public function get_subj_accept_request_to_link_company($params)
     {
         return $params['accept_decline']
@@ -296,6 +308,16 @@ class Email_Send  {
     public function get_subj_register_success($params)
     {
         return 'Пожалуйста, подтвердите свою регистрацию';
+    }
+
+    public function get_template_subscription($params)
+    {
+        return Twig::factory('emails/subscription', $params)->render();
+    }
+
+    public function get_template_subscription_cancel($params)
+    {
+        return Twig::factory('emails/subscription_cancel', $params)->render();
     }
 
     public function get_template_addedit($params)

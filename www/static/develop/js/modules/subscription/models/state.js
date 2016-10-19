@@ -20,7 +20,7 @@ define([ 'underscore', 'backbone' ], function (_, Backbone) {
 		},
 
 		setState: function (method, state) {
-			this.save({ method: method }, {
+			this.save({ method: method, filters: _globalSettings.search_filters }, {
 				success: function (model, response, options) {
 					if (!model.get('error')) {
 						model.set('state', state);

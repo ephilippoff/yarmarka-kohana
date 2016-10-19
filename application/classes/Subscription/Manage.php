@@ -12,7 +12,7 @@
 			$seo_data = Seo::get_seo_attributes($path, $clean_query_params, $search_url->get_category(), $domain->get_city());
 
 			$category = $search_url->get_category();
-			$title = $seo_data['h1'] ? $seo_data['h1'] : $category->title;
+			$title = (isset($seo_data['h1']) AND $seo_data['h1']) ? $seo_data['h1'] : $category->title;
 			$attributes_meta = self::get_attribites_meta($clean_query_params);
 			$search_text = array_key_exists('search', $reserved_query_params)
 				? $reserved_query_params['search'] 

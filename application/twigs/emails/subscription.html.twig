@@ -1,0 +1,54 @@
+{% extends "layouts/email" %}
+
+{% block body %} 
+
+  <tr>
+     <td colspan="2" style="padding:10px;">
+         <h2 style="font-size: 1.5em; margin-bottom: 15px;">{{ count_new }} новых объявлений в рубрике {{ title }}</h2>
+     </td>
+  </tr>
+  <tr>
+       <td style="padding:10px;width:100%;vertical-align:top;" colspan="2">
+          <table  style="width:100%;border:0;margin: 0 auto;border-collapse: collapse;">
+              {% set k = 0 %}
+
+              {% for i in 0..((objects|length/2)|round(0,'ceil')) %}
+                  <tr>
+                      {% set po = objects|slice(k, 3) %}
+                      {% for object in po %}
+                           <td style="width:33%;text-align:center;">
+                              <a style="color: #08729E;padding:10px 0; font-size:0.85em;" href="{{ email_link(domain, '/detail/' ~ object.id, ref_params, {'utm_content': 'objects'}) }}">
+                                 {% if (object.compiled.images.local_photo|length > 0) %}
+                                    <img src="{{ get_file(object.compiled.images.main_photo['120x90'], true) }}" style="max-width:100%;">
+                                 {% else %}
+                                     <img src="http://yarmarka.biz/static/develop/images/nophoto136x107.png" style="max-width:100%;">
+                                 {% endif %}
+                                 <br>{{ object.title|slice(0,100) }}
+                              </a> 
+                           </td>
+                      {% endfor %}
+                      {% if po|length == 1 %}<td></td>{% endif %}
+                 </tr>
+                 {% set k = k + 3 %}
+              {% endfor %}
+          </table>
+     </td>
+  </tr>
+  <tr>
+     <td colspan="2" style="padding:10px;">
+        {% if count_new > objects|length %}
+          <p>
+            Внимание! Показаны только 20 последних новых объявлений. Перейдите к рубрике чтобы увидеть все.
+          </p>
+        {% endif %}
+          <p>
+            Перейти к рубрике: <a href="{{ email_link(domain, url, ref_params, {'utm_content': 'user_subscription_url'}) }}">{{ title }}</a>
+          </p>
+         <p>
+            Управление подписками в <a style="color: #d44234;" href="{{ email_link(domain, '/user/subscriptions', ref_params, {'utm_content': 'user_subscriptions'}) }}">личном кабинете</a>
+         </p>
+
+     </td>
+  </tr>
+
+{% endblock body %}

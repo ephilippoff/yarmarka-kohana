@@ -66,9 +66,24 @@ class Task_TestEmail extends Minion_Task
 
 		$domain = 1948;
 
+		$subscription = ORM::factory('Subscription_Surgut')->find();
+
+		$subscription_data = unserialize($subscription->data);
+
+		$search_filters = json_decode(json_encode(json_decode($subscription->filters)), True);
+		$main_search_query = Search::searchquery($search_filters, array( 
+		    "limit" => 5,
+		    "page" => 1
+		));
+		
+		$main_search_result = Search::getresult($main_search_query->execute()->as_array());
+
+		$this->subscription($main_search_result, $subscription_data->title, 100, '/dssdfdsf', $domain);
+		$this->subscription_cancel($main_search_result, $subscription_data->title, 'http://yarmarka.ibz/sdfsdf',$domain);
+
 		// $this->payment_success($order, $orderItems, $domain);
 
-		$this->addedit(TRUE, $object, $domain);
+		//$this->addedit(TRUE, $object, $domain);
 		//$this->addedit(FALSE, $object, $domain);
 		
 		// $this->block_contact('123213', $objects, $domain);
@@ -88,7 +103,7 @@ class Task_TestEmail extends Minion_Task
 
 		// // $this->massload_report($objectload,  $common_stat, $category_stat, $user->org_name, $domain);
 
-		 $this->object_expiration($objects, '4028377.123123.12312', $domain);
+		//$this->object_expiration($objects, '4028377.123123.12312', $domain);
 		// $this->object_to_archive($objects, '4028377.123123.12312', $domain);
 
 		// $this->register_data('aaaaaaa','passsssssss', $domain);
@@ -191,6 +206,41 @@ class Task_TestEmail extends Minion_Task
 			->send()
 		);
 
+	}
+
+	public static function subscription($objects, $title, $count_new, $url, $domain = FALSE)
+	{
+		$params = array(
+			'objects' => $objects,
+		    'title' => $title,
+		    'count_new' => $count_new,
+		    'url' => $url,
+		    'domain' => $domain
+		);
+
+		Minion_CLI::write( Email_Send::factory('subscription')
+					->to( Task_TestEmail::$to )
+					->set_params($params)
+					->set_utm_campaign('subscription')
+					->send()
+				);
+	}
+
+	public static function subscription_cancel($objects, $title, $url, $domain)
+	{
+		$params = array(
+			'objects' => $objects,
+		    'title' => $title,
+		    'url' => $url,
+		    'domain' => $domain
+		);
+
+		Minion_CLI::write( Email_Send::factory('subscription_cancel')
+					->to( Task_TestEmail::$to )
+					->set_params($params)
+					->set_utm_campaign('subscription_cancel')
+					->send()
+				);
 	}
 
 	public static function addedit(
