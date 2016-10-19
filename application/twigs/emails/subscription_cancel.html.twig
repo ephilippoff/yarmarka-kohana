@@ -1,0 +1,27 @@
+{% extends "layouts/email" %}
+
+{% block body %} 
+
+  <tr>
+     <td colspan="2" style="padding:10px;">
+         <h2 style="font-size: 1.5em; margin-bottom: 15px;">Приостановлена подписка на обновления рубрики {{ title }}</h2>
+     </td>
+  </tr>
+  <tr>
+     <td colspan="2" style="padding:10px;">
+
+        <p>
+            В рубрике на которую вы подписались, уже более месяца нет новых объявлений. Возможно, Вы поставили слишком строгую фильтрацию. Рекомендуем удалить подписку и создать новую.
+        </p>
+        <p>
+
+          Вы были подписаны: <a href="{{ email_link(domain, url, ref_params, {'utm_content': 'user_subscription_url'}) }}">{{ title }}</a>
+        </p>
+        <p>
+            Управление подписками в <a style="color: #d44234;" href="{{ email_link(domain, '/user/subscriptions', ref_params, {'utm_content': 'user_subscriptions'}) }}">личном кабинете</a>
+        </p>
+
+     </td>
+  </tr>
+
+{% endblock body %}
