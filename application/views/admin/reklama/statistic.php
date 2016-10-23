@@ -59,8 +59,8 @@ $(document).ready(function() {
                             ) ?>
     </div>
     <div class="input-prepend">
-        <span class="add-on">Regdate</i></span>
-        <input type="text" class="input-small dp" placeholder="date from" name="from" value="">
+        <span class="add-on">Дата от</i></span>
+        <input type="text" class="input-small dp" placeholder="date from" name="from" value="2016-01-01">
     </div>
      <div class="input-prepend">
     <span class="add-on">Город</span>

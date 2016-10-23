@@ -767,7 +767,8 @@ class Controller_Admin_Reklama extends Controller_Admin_Template {
                                     'users' => 'Новые пользователи',
                                     'emails' => 'E-mail',
                                     'sms' => 'Sms',
-                                    'orders' => 'Заказы'
+                                    'orders' => 'Заказы',
+                                    'subscriptions' => 'Подписки'
                                 );
 	}
 
@@ -779,6 +780,9 @@ class Controller_Admin_Reklama extends Controller_Admin_Template {
 		$type = $this->request->query('type');
 		$period = $this->request->query('period');
 		$from = $this->request->query('from');
+		$city = $this->request->query('city');
+
+		if ($city == 1) $city= NULL;
 
 		if (!$period) $period = 'day';
  
@@ -799,6 +803,10 @@ class Controller_Admin_Reklama extends Controller_Admin_Template {
 						array_push($filters, array('date_created','>',$from) );
 					} else {
 						array_push($filters, array('date_created','>','2016-01-01') );
+					}
+
+					if ($city) {
+						array_push($filters, array('city_id','=',$city) );
 					}
 
 					$json['data'] = array(
@@ -871,6 +879,24 @@ class Controller_Admin_Reklama extends Controller_Admin_Template {
 
 					$json['data'] = array(
 						'orders' => Statistic::get_orders( $period, $filters )
+					);
+
+				break;
+
+			case 'subscriptions':
+
+					$filters = array(
+
+					);
+
+					if ($from) {
+						array_push($filters, array('created','>',$from) );
+					} else {
+						array_push($filters, array('created','>','2016-01-01') );
+					}
+
+					$json['data'] = array(
+						'subscriptions' => Statistic::get_subscriptions( $period, $filters )
 					);
 
 				break;

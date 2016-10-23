@@ -4,15 +4,32 @@
 class Task_EmailNotices extends Minion_Task
 {
     protected $_options = array(
-        // 'limit' => 50
+        'type' => NULL
     );
 
     protected function _execute(array $params)
     {
+        $task  = $params['type'];
+
+        switch ($task) {
+            case 'expiration':
+                Minion_CLI::write('notices with expiration started');
+                $this->aboutExpiration();
+                break;
+            case 'subscription':
+                Minion_CLI::write('notices with subscription started');
+                $this->aboutSubscription();
+                break;
+            default:
+                 Minion_CLI::write('all notices started');
+                $this->aboutExpiration();
+                $this->aboutSubscription();
+                break;
+        }
+
         //$this->aboutPhoto();
         //$this->aboutUp();
-        $this->aboutExpiration();
-        $this->aboutSubscription();
+       
 
     }
 

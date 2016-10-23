@@ -580,6 +580,7 @@ class Controller_Cart extends Controller_Template {
 				$realItem->order_id = $order_id;
 				$realItem->object_id = $item->object->id;
 				$realItem->params = json_encode((array) $item);
+				$realItem->service_name = $item->service->name;
 				$realItem->save();
 
 				

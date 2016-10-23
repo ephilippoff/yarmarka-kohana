@@ -97,5 +97,9 @@ class Statistic {
         return self::get_sum('orders', 'payment_date', 'sum', $interval, $filters);
     }
 
+    public static function get_subscriptions($interval, $filters = array()) {
+        return self::get_count('subscription_surgut', 'created', $interval, $filters);
+    }
+
     
 }

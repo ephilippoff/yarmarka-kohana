@@ -222,7 +222,6 @@ class Service
             $order_item_temp->return_reserve($orderId);
         }
         $order_item_temp->object_id = $object_id;
-        $order_item_temp->service_id = NULL;
         $order_item_temp->service_name = $params->service["name"];
         $order_item_temp->params = json_encode( $params );
         $order_item_temp->key = $key;
