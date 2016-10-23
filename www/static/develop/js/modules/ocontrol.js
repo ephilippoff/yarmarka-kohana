@@ -50,6 +50,24 @@ define([
             $(window).attr('location','/edit/'+id);
         },
 
+        remove: function(id, options) {
+            var controlModel = new ControlModel();
+            controlModel.urlRoot = "/rest_object/remove/"+id;
+            options.error = options.error || function() {};
+            options.success = options.success || function() {};
+            controlModel.save({}, {
+                success: function(model) {
+                    var resp = model.toJSON();
+                    if (resp.code == 200) {
+                        options.success(resp);
+                    } else {
+                        options.error(resp);
+                    }
+                    
+                }
+            });
+        },
+
         contacts: function(id, options) {
             var controlModel = new ControlModel();
             controlModel.urlRoot = "/rest_object/show_contacts";

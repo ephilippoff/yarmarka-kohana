@@ -342,4 +342,29 @@ class Controller_Rest_Object extends Controller_Rest {
 		$this->json['result'] = $newsGroups;
 	}
 
+	public function action_remove()
+	{
+		$object = ORM::factory('Object', intval($this->request->param('id')));
+		if ( ! $object->loaded() OR ! $object->category_obj->loaded() ) {
+			throw new HTTP_Exception_404;
+		}
+		
+		$user = Auth::instance()->get_user();
+		if (!Acl::check("object.moderate")) {
+			if (! $user OR 
+					($user->id != $object->author 
+							AND  $user->id != $object->author_company_id)
+				)
+			{
+				throw new HTTP_Exception_404;
+			}
+		}
+
+		$object->is_published = 0;
+		$object->active = 0;
+		$object->update();
+		
+		$this->json['code'] = 200;
+	}
+
 }

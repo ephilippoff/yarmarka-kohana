@@ -9,6 +9,7 @@ define([
         ui: {
             publishControl: ".js-ocontrol-publish",
             publishControlCaption: ".js-ocontrol-publish > span",
+            removeControl: ".js-remove-object",
             editControl: ".js-ocontrol-edit",
             contactsShow: ".js-contacts-show",
             contactList: ".js-contact-list",
@@ -20,6 +21,7 @@ define([
             "click @ui.editControl": "editControlClick",
             "click @ui.contactsShow": "showContacts",
             "click @ui.moderateControl": "moderateControlClick",
+            "click @ui.removeControl": "removeControlClick"
         },
 
         publishControlClick: function(e) {
@@ -34,12 +36,14 @@ define([
                         $(".js-object-title-"+id).removeClass("red").removeClass("strike");
                         $(".js-object-services-"+id).slideDown();
                         $(".js-object-contacts-"+id).text("Контактные данные доступны, обновите страницу");
+                        $(".js-object-remove-"+id).slideUp();
                         s.ui.publishControl.find('i').addClass("fa-times").removeClass('fa-check');
                         s.ui.publishControlCaption.text('Снять с публикации');
                     } else {
                         $(".js-object-state-"+id).addClass("red").removeClass("green").text("Объявление снято");
                         $(".js-object-title-"+id).addClass("red").addClass("strike");
                         $(".js-object-services-"+id).slideUp();
+                        $(".js-object-remove-"+id).slideDown();
                         $(".js-object-contacts-"+id).text("Объявление снято с публикации, контактные данные не доступны.");
                         s.ui.publishControl.find('i').removeClass("fa-times").addClass('fa-check');
                         s.ui.publishControlCaption.text('Опубликовать');
@@ -52,6 +56,21 @@ define([
                 error: function(result) {
                     alert(result.errors);
                     app.ocontrol.edit(id);
+                }
+            });
+        },
+
+        removeControlClick: function(e) {
+            var s = this;
+            e.preventDefault();
+            var id = $(e.currentTarget).data("id");
+            var target = e.target;
+            app.ocontrol.remove(id, {
+                success: function(result) {
+                    $(".js-object-container-"+id).slideUp();
+                },
+                error: function(result) {
+                    alert(result.errors);
                 }
             });
         },

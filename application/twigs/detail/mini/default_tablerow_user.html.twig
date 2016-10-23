@@ -1,6 +1,6 @@
 {% set services = get_service_icon_info(object.compiled.services, true) %}
 
-<div class="result-item {{ (object.is_premium) ? 'premium'}}">
+<div class="result-item {{ (object.is_premium) ? 'premium'}} js-object-container-{{object.id}}">
 
 	<div class="module control-item clearfix">
 
@@ -103,6 +103,10 @@
 			<span class="button button-style1 bg-color-blue mr3 mb3 js-service-cities" data-id="{{object.id}}" data-city="{{object.city_id}}"><i class="fa fa-check-circle fa-lg mr5"></i>В несколько городов</span>
 			<span class="button button-style1 bg-color-lightgreen mr3 mb3 js-service-tglink" data-id="{{object.id}}"><i class="fa fa-check-circle fa-lg mr5"></i>Графическая ссылка</span>
 
+		</div>
+
+		<div class="clearfix js-object-remove-{{object.id}} {% if object.is_published == 1 %} hidden {% endif %}">
+			<span class="button button-style1 bg-color-red mb3 fr js-remove-object" data-id="{{object.id}}"><span>Удалить</span></span>
 		</div>
 	</div>
 </div>
