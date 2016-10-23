@@ -466,7 +466,7 @@ class Twig_Functions
 			if ($is_obj) {
 				$res []= $item->{$property};
 			} else {
-				$res []= $item[$property];
+				$res []= @$item[$property];
 			}
 		}
 		return $res;

@@ -1,7 +1,7 @@
 define([ 'jquery', 'underscore', 'backbone' ], function($, _, Backbone) {
 	return Backbone.View.extend({
 
-		template: _.template('<a href="#" data-role="save">Сохранить поиск</a>'),
+		template: _.template('<a class="red" href="#" data-role="save">Подписка на обновление</a>'),
 
 		events: {
 			'click [data-role=save]': 'onSaveButtonClick'

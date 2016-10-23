@@ -6,9 +6,9 @@
 	<div class="control_buttons module fs0 fl options-wrap clearfix">
 		<span class="span-link menu-item js-search-extend control-item" onclick="mobile(function(){$('.options-wrap').fadeOut();});">Расширенный поиск</span>
 		{% if not isGuest %}
-		<div class="menu-item" data-role="subscription-module"><span class="span-link">Сохранить поиск</span></div>
+		<div class="menu-item" data-role="subscription-module"><span class="span-link">Подписка на обновление</span></div>
 		{% else %}
-		<a class="menu-item" href="/user/login?return={{ strim(get_request_uri(), '/') }}"  rel="nofollow">Сохранить поиск</a>
+		<a class="menu-item red" href="/user/login?return={{ strim(get_request_uri(), '/') }}"  rel="nofollow">Подписка на обновление</a>
 		{% endif %}
 		<div class="menu-item span-link" id="limit"><i class="fa fa-list"></i> {{limitList}}</div>
 	</div>

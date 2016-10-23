@@ -10,7 +10,7 @@
 		<li><a href="{{ url('user/favorites') }} "><i class="fa fa-heart"></i> Мои избранные</a></li>
 		<li><a href="{{ url('cart') }} "><i class="fa fa-shopping-cart mr3"></i> Корзина</a></li>
 		<li><a href="{{ url('user/profile') }} ">Настройки пользователя</a></li>
-		<li><a href="{{ url('user/subscriptions') }}">Подписки</a></li>
+		<li><a href="{{ url('user/subscriptions') }}" class="red bold">Подписки</a></li>
 		<li><a href="{{ url('user/orders') }}">Заказы</a></li>
 		<li><a href="{{ url('user/password') }}">Смена пароля</a></li>
 		{% if user.org_type == 2  %}
