@@ -124,57 +124,6 @@ class Controller_User extends Controller_Template {
 		$this->template->user			= $this->user;
 		$this->template->user_page_url  = substr(URL::base('http'), 0, strlen(URL::base('http')) - 1).URL::site('users/'.$this->user->login);
 	}
-        
-    public function action_addunit()
-    {
-		$this->use_layout	= FALSE;
-		$this->auto_render	= FALSE;
-
-        if (HTTP_Request::POST === $this->request->method())
-        {
-            try
-            {
-				$lat 				= $this->request->post('lat');
-				$lon 				= $this->request->post('lon');
-				$city_kladr_id 		= $this->request->post('city_kladr_id');
-				$address_kladr_id 	= $this->request->post('address_kladr_id');
-				$address 			= $this->request->post('address');
-
-				$location = Kladr::save_address($lat, $lon, $address, $city_kladr_id, $address_kladr_id);            	
-
-                $user_unit = ORM::factory('User_Units')
-                    ->set('user_id', $this->user->id)
-                    ->set('unit_id', $_POST['unit_id'])
-                    ->set('title', strip_tags($_POST['title']))
-                    ->set('web', strip_tags($_POST['web']))
-                    ->set('contacts', strip_tags($_POST['contacts']))
-                    ->set('description', strip_tags($_POST['description']))
-                    ->set('filename', $_POST['unit_image_filename'])
-                    ->set('locations_id', $location->id)
-					->set('business_type_id', $_POST['business_type_id'])
-                    ->save();
-
-            }
-            catch(ORM_Validation_Exception $e)
-            {
-                // collect errors
-                $errors = $e->errors('validation');
-                if (isset($errors['_external']))
-                {
-                    $errors += $errors['_external'];
-                    unset($errors['_external']);
-                }
-
-                $this->errors = $errors;
-            }
-            catch (Exception $e) // file upload error
-            {
-                $this->errors['avatar'] = $e->getMessage();
-            }
-            
-            $this->redirect('user/units');
-        }
-    }
 
     public function action_objectload()
     {
