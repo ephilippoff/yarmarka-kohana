@@ -224,16 +224,8 @@ class Form_Add  {
 							->find_all();
 		foreach ($city_list as $city_item)
 		{
-			$lat = $lon = "";
-			$location = ORM::factory('Location')
-						->where("id","=",$city_item->location_id)
-						->cached(DATE::WEEK, array("city", "add"))
-						->find();
-			if ($location->loaded())
-			{
-				$lat = $location->lat;
-				$lon = $location->lon;
-			}
+
+			list($lat, $lon) = $city_item->get_coords();
 
 			if (in_array($city_item->id, array(1979,1919,1948,1947)))
 				$main_cities[$city_item->id] = array(
@@ -253,19 +245,10 @@ class Form_Add  {
 		$city_array["Другие"] = $other_cities;
 
 		$city_title = NULL;
+		$lat = $lon = "";
 		if ($city->loaded())
 			$city_title = $city->title;
-
-		$lat = $lon = "";
-		$location = ORM::factory('Location')
-						->where("id","=",$city->location_id)
-						->cached(DATE::WEEK, array("city", "add"))
-						->find();
-		if ($location->loaded())
-		{
-			$lat = $location->lat;
-			$lon = $location->lon;
-		}
+			list($lat, $lon) = $city->get_coords();
 
 		$real_city = NULL;
 		$real_city_exists = FALSE;
@@ -510,8 +493,7 @@ class Form_Add  {
 										->find()->reference_id;
 			if ($address_reference_id)
 			{
-				$location = ORM::factory('Location',$object->location_id)->cached(DATE::WEEK, array("city", "add"));
-				$params[$address_reference_id] = $location->address;
+				$params[$address_reference_id] = $object->get_address();
 			}
 
 		} elseif ($this->is_post)
@@ -614,8 +596,7 @@ class Form_Add  {
 
 		if ($object->loaded() AND !$this->is_post)
 		{
-			$location = ORM::factory('Location',$object->location_id)->cached(DATE::WEEK, array("city", "add"));;
-			$this->_data->object_coordinates = $location->lat.",".$location->lon;
+			$this->_data->object_coordinates = $object->geo_loc;
 		} elseif ($this->is_post) {
 			$this->_data->object_coordinates = $this->params['object_coordinates'];
 		}

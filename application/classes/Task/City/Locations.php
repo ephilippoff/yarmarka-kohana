@@ -50,10 +50,10 @@ class Task_City_Locations extends Minion_Task
 		}
 
 		list($lon, $lat) = $coords;
-		$location = ORM::factory('Location')->where_lat_lon($lat, $lon)->find();
+		$location = ORM::factory('Location_REMOVE')->where_lat_lon($lat, $lon)->find();
 		if ( ! $location->loaded())
 		{
-			$location = ORM::factory('Location');
+			$location = ORM::factory('Location_REMOVE');
 			$location->region 	= $city->region->title;
 			$location->city 	= $city->title;
 			$location->kladr_id = $city->kladr_id;

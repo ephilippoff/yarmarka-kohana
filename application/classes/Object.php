@@ -68,7 +68,6 @@ class Object
 					->save_attributes()
 					->save_generated()
 					->save_contacts()
-					->save_signature()
 					->save_additional()
 					->save_compile_object();
 
@@ -205,7 +204,7 @@ class Object
 
 		if ( ! $add->errors)
 		{
-			$add->save_address()
+			$add->save_geoloc()
 				->prepare_object()
 				->save_style_object()
 				->save_external_info();
@@ -254,65 +253,6 @@ class Object
 			$json['object_id'] = $add->object->id;
 			$json['error'] = $add->errors;
 			$json['external_id'] = $input_params['external_id'];
-		}
-
-		return $json;
-	}
-
-	static function PlacementAds_JustRunTriggers($input_params)
-	{		
-		$json = array();
-
-		if ( Acl::check("object.add.type") )
-		{
-			$add = new Lib_PlacementAds_AddEditByModerator();
-		} else {
-			$add = new Lib_PlacementAds_AddEdit();
-		}
-		$add->init_input_params($input_params)
-			->init_instances()
-			->init_object_and_mode()
-			->check_signature();
-
-		if ((int) $add->object->is_union >0)
-			return $json;
-
-		if ( ! $add->errors)
-		{
-
-			$db = Database::instance();
-
-			try
-			{
-				// start transaction
-				$db->begin();
-
-				$add->save_object()
-					->save_signature();
-
-				$db->commit();
-			}
-			catch(Exception $e)
-			{
-				$exception_message  = 'JustRunTriggers Ошибка при сохранении объявления: </br>';
-				$exception_message .= 'message: '.($e->getMessage()).'</br>';
-				$exception_message .= 'input_params: '.Debug::vars($input_params).'</br>';
-				$exception_message .= 'stack: '.($e->getTraceAsString()).'</br>';
-
-				Kohana::$log->add(Log::ERROR, $exception_message);
-				Email::send(Kohana::$config->load('common.admin_emails'), Kohana::$config->load('email.default_from'), 'JustRunTriggers Ошибка при сохранении объявления', $exception_message);
-
-				$db->rollback();
-
-				throw $e;
-			}
-
-			$json['object_id'] = $add->object->id;
-			$json['error'] = $add->errors;
-		}
-		else
-		{
-			$json['error'] = $add->errors;
 		}
 
 		return $json;
@@ -380,18 +320,7 @@ class Object
 						 "errors" => join(", ", $errors)
 				);
 		} else {
-			$input_params['just_check'] = 1;//todo два раза генерятся параметры для объявы, не айс
-			$trigger = self::PlacementAds_JustRunTriggers($input_params);
-			$error = $trigger["error"];
-			if (!array_key_exists("object_id", $trigger))
-			{
-				$errors = array_values($error);
-				return Array("code" => "error",
-						 	"errors" => join(", ", $errors)
-						 );
-			} else {
-				return Array("code" => "ok");
-			}
+			return Array("code" => "ok");
 		}
 	}
 }

@@ -34,7 +34,7 @@ return array(
 									"Price" 		=> "tsena",
 									"ContactPhone"  => "contact_0_value",
 									"EMail" 		=> "contact_1_value",									
-									"Street" 		=> "address",
+									"Street" 		=> "adres-raion",
 									"Images" 		=> "images",
 									"Emergency"		=> "premium"
 								),
@@ -50,7 +50,7 @@ return array(
 									"Price" 		=> "tsena",
 									"ContactPhone"  => "contact_0_value",
 									"EMail" 		=> "contact_1_value",
-									"Street" 		=> "address",
+									"Street" 		=> "adres-raion",
 									"Images" 		=> "images",
 									"Emergency"		=> "premium"
 								),
@@ -67,7 +67,7 @@ return array(
 									"Price" 		=> "tsena",
 									"ContactPhone"  => "contact_0_value",
 									"EMail" 		=> "contact_1_value",
-									"Street" 		=> "address",
+									"Street" 		=> "adres-raion",
 									"Images" 		=> "images",
 									"Emergency"		=> "premium"
 								),
@@ -85,7 +85,7 @@ return array(
 									"Price" 		=> "tsena",
 									"ContactPhone"  => "contact_0_value",
 									"EMail" 		=> "contact_1_value",
-									"Street" 		=> "address",
+									"Street" 		=> "adres-raion",
 									"Images" 		=> "images",
 									"Emergency"		=> "premium"
 								),
@@ -101,7 +101,7 @@ return array(
 									"Price" 		=> "tsena",
 									"ContactPhone"  => "contact_0_value",
 									"EMail" 		=> "contact_1_value",
-									"Street" 		=> "address",
+									"Street" 		=> "mestnost-raion-adres",
 									"Images" 		=> "images",
 									"Emergency"		=> "premium"
 								),
@@ -116,7 +116,7 @@ return array(
 									"Price" 		=> "tsena",
 									"ContactPhone"  => "contact_0_value",
 									"EMail" 		=> "contact_1_value",
-									"Street" 		=> "address",
+									"Street" 		=> "adres-raion",
 									"Images" 		=> "images",
 									"Emergency"		=> "premium"
 								),
@@ -131,7 +131,7 @@ return array(
 									"Price" 		=> "tsena",
 									"ContactPhone"  => "contact_0_value",
 									"EMail" 		=> "contact_1_value",
-									"Street" 		=> "address",
+									"Street" 		=> "adres-raion",
 									"Images" 		=> "images",
 									"Emergency"		=> "premium"
 								)

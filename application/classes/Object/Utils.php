@@ -19,97 +19,28 @@ class Object_Utils
 		return $result;
 	}
 
-	public static function get_parsed_parameters($params = Array(), $object_id = 0, $ignore_price = FALSE)
+	public static function get_parsed_parameters($params = Array())
 	{
 		$values 		= Array();
 		$list_ids 		= Array();
 
-		if ($object_id > 0)
-		{
-			$object = ORM::factory('Object', $object_id);
-			$params = self::generate_form_element_by_object((int) $object_id);			
-		} 
-
 		$attributes = self::prepare_form_elements((array) $params);
 		
-		@list($values, $list_ids) 
-					= self::parse_form_elements((array) $attributes, $ignore_price);
+		@list($values, $list_ids) = self::parse_form_elements((array) $attributes);
 
-		if ($object_id > 0)
-		{
-			$values[] = ORM::factory('Location', (int) $object->location_id)->address;
-			$values[] = ORM::factory('City', (int) $object->city_id)->title;
-		} else {
-			$values[] = $params->address;
-			$values[] = ORM::factory('City', (int) $params->city_id)->title;
-		}
+		$values[] = ORM::factory('City', (int) $params->city_id)->title;
 		
 
 		return Array($values, $list_ids);
 	}
 
-	public static function generate_form_element_by_object($object_id)
-	{
-		$data = Array();
-		$return = Array();
-
-		$object = ORM::factory('Object', $object_id) ;
-		
-		$dl = ORM::factory('Data_List')->select("reference.weight")
-					->join('reference', 'left')
-					->on('reference.id', '=', 'data_list.reference')
-					->where('object','=',$object_id)
-					->find_all();
-		foreach ($dl as $item) 
-			$data[$item->weight] = Array( "type" => "list", "id" => $item->reference, "value" => $item->value);
-
-
-		$di = ORM::factory('Data_Integer')->select("reference.weight")
-					->join('reference', 'left')
-					->on('reference.id', '=', 'data_integer.reference')
-					->where('object','=',$object_id)
-					->find_all();
-		foreach ($di as $item) 
-			$data[$item->weight] = Array( "type" => "integer", "id" => $item->reference, "min" => $item->value_min, "max" => $item->value_max);
-		
-		$dn = ORM::factory('Data_Numeric')->select("reference.weight")
-					->join('reference', 'left')
-					->on('reference.id', '=', 'data_numeric.reference')
-					->where('object','=',$object_id)
-					->find_all();
-		foreach ($dn as $item) 
-			$data[$item->weight] = Array( "type" => "integer", "id" => $item->reference, "min" => $item->value_min, "max" => $item->value_max);
-
-
-		$dt = ORM::factory('Data_Text')->select("reference.weight")
-					->join('reference', 'left')
-					->on('reference.id', '=', 'data_text.reference')
-					->where('object','=',$object_id)
-					->find_all();
-		foreach ($dt as $item)
-			$data[$item->weight] = Array( "type" => "list", "id" => $item->reference, "value" => $item->value);
-
-		ksort($data);
-
-		foreach ($data as $item => $value)
-		{
-			if ($value["type"] == "list")
-				$return["param_".$value["id"]] = $value["value"];
-			else {
-				$return["param_".$value["id"]] = $value["min"];
-			}
-		}
-		return $return;
-	}
-
 	/*
 	*	$form_elements like ( param_<reference> => <value>, param_<reference>_min => <value_min>, param_<reference>_max => <value_max> ... etc)
-	*	$ignore_price for generate signature without price
 	*
 	*	return Array
 	*
 	*/
-	public static function parse_form_elements($form_elements = Array(), $ignore_price = FALSE)
+	public static function parse_form_elements($form_elements = Array())
 	{
 		$values 		= Array();
 		$list_ids 		= Array();
@@ -124,10 +55,7 @@ class Object_Utils
 						->where('reference.id','=',$reference_id)
 						->cached(Date::DAY)
 						->find();
-			
-			//не включаем цену в подпись
-			if ($ignore_price AND $ref->aid == self::ATTRIBUTE_PRICE_ID)
-				continue;
+
 
 			$type = $ref->type;
 

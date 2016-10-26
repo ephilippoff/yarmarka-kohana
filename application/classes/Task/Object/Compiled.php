@@ -85,7 +85,7 @@ class Task_Object_Compiled extends Minion_Task
 			Minion_CLI::write('main_photo: '.($compiled["images"]["main_photo"]?"exist":""). " local:".count($compiled["images"]["local_photo"]). " remote:".count($compiled["images"]["remote_photo"]) );
 		}
 
-		$compiled = array_merge($compiled, Object_Compile::getAddress($item->location_id));
+		$compiled = array_merge($compiled, Object_Compile::getAddress($item));
 		if ($show_hint)
 		{
 			Minion_CLI::write('city: '.$compiled["city"].' address:'.$compiled["address"]);

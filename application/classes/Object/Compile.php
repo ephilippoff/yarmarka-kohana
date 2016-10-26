@@ -16,7 +16,7 @@ class Object_Compile
 		$compiled["url"] = $item->get_full_url();
 
 		$compiled["images"] = Object_Compile::getAttachments($item->id, $item->main_image_id);
-		$compiled = array_merge($compiled, Object_Compile::getAddress($item->location_id, $params));
+		$compiled = array_merge($compiled, Object_Compile::getAddress($item, $params));
 		$compiled = array_merge($compiled, Object_Compile::getAttributes($item));
 		$compiled = array_merge($compiled, Object_Compile::getAuthor($item->author_company_id, $item->author));
 		$compiled = array_merge($compiled, Object_Compile::getContacts($item->id) );
@@ -76,27 +76,16 @@ class Object_Compile
 		return $result;
 	}
 
-	static function getAddress($location_id, $params = NULL) {
+	static function getAddress($object, $params = NULL) {
 		$result = array();
-		$result["address"] = NULL;
-		$result["city"] = NULL;
-		$result["region"] = NULL;
-		$result["lat"] = NULL;
-		$result["lon"] = NULL;
 
-		$location = ORM::factory('Location')
-					->where('id', '=', $location_id)
-					->find();
+		$result["address"] = $object->get_address();
+		$result["city"] = $object->city_obj->title;
+		$result["region"] = $result["city"];
+		list($result["lat"],$result["lon"]) = $object->get_coords();
 
-		//if ($params["real_city"]) {
-			$result["real_city"] = @$params["real_city"];
-		//}
+		$result["real_city"] = @$params["real_city"];
 
-		$result["address"] = $location->address;
-		$result["city"] = $location->city;
-		$result["region"] = $location->region;
-		$result["lat"] = $location->lat;
-		$result["lon"] = $location->lon;
 		return $result;
 	}
 

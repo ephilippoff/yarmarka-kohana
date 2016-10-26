@@ -89,4 +89,9 @@ class Model_City extends ORM {
 		return $result;
 	}
 
+	public function get_coords() {
+		if (!$this->loaded() AND $this->geo_loc) return FALSE;
+		return explode(',', $this->geo_loc);
+	}
+
 } // End City Model

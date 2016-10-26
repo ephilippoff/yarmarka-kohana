@@ -27,32 +27,20 @@ class Lib_PlacementAds_AddEditByMassLoad extends Lib_PlacementAds_AddEdit {
 		return $this;
 	}
 
-	function save_address()
+	function save_geoloc()
 	{
 		$params = &$this->params;
 		$city = &$this->city;
-		$location = &$this->location;
 		$object = &$this->object;
 
 		$city = ORM::factory('City', $params->city_id);
 
 		$fulladdress = $city->region->title.', '.$city->title.', '.$params->address;
 
-		
 		@list($coords, $yregion, $ycity) = Ymaps::instance()->get_coord_by_name($fulladdress);
 		@list($lon, $lat) = $coords; 
 
-		$location = Address::save_address($lat, $lon,
- 				$city->region->title,
- 				$city->title,
- 				$params->address
- 			);
-
-		// если не нашли адрес, то берем location города
-		if ( ! $location->loaded())
-		{
-			$location = $city->location;
-		}
+		$object->geo_loc = sprintf('%s,%s', $lat, $lon);
 
 		return $this;
 	}

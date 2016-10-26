@@ -10,7 +10,6 @@ class Lib_PlacementAds_AddEdit {
 	public $contacts;
 	public $city;
 	public $city_id;
-	public $location;
 	public $signature_full = NULL;
 	public $original_params;
 	public $is_edit = NULL;
@@ -43,27 +42,28 @@ class Lib_PlacementAds_AddEdit {
 			}
 
 			if (!$this->params->address)
-				$this->params->address = $this->parse_address_from_params((array) $this->params);
+				$this->params->address = self::get_address( $this->params );
 
 		}
+		
 		return $this;
 	}
 
-	function parse_address_from_params($params)
+	static function get_address($params)
 	{
+
 		$address = "";
-		$param_keys = array_keys($params);
 		$address_attribute_ids = Kohana::$config->load('common.address_attribute_ids');
 
-		$refs = array();
-		$ref = ORM::factory('Reference')
 
-		->where("attribute","IN", $address_attribute_ids)
-		->cached(Date::DAY)
-		->find_all();
-		foreach($ref as $item){
-			if (in_array("param_".$item->id, $param_keys))
-				$address = $params["param_".$item->id];
+		$reference = ORM::factory('Reference')
+			->where("attribute","IN", $address_attribute_ids)
+			->where("category","=", $params->rubricid)
+			->cached(Date::WEEK)
+			->find();
+
+		if ($reference->loaded()) {
+			$address = $params->{"param_".$reference->id};
 		}
 
 		return $address;
@@ -124,9 +124,8 @@ class Lib_PlacementAds_AddEdit {
 
 		$params->link_to_company = ($object->author <> $object->author_company_id) ? "on" : "off";
 
-		$location = ORM::factory('Location', $object->location_id);
-		if ($location->loaded() && ! $params->address)
-			$params->address = $location->address;
+		if (! $params->address)
+			$params->address = $object->get_address();
 
 		$dl = ORM::factory('Data_List')->where('object', '=', $object->id)->find_all();
 		foreach ($dl as $item)
@@ -407,10 +406,7 @@ class Lib_PlacementAds_AddEdit {
 
 		if (!$category OR !$user) return $this;
 
-		if ($this->is_just_triggers($params))
-			@list($values, $list_ids) = (array) Object_Utils::get_parsed_parameters(NULL, $object->id, TRUE);
-		else 
-			@list($values, $list_ids) = (array) Object_Utils::get_parsed_parameters($params, NULL, TRUE);
+		@list($values, $list_ids) = (array) Object_Utils::get_parsed_parameters($params);
 
 		$this->signature_full = $this->generate_signature($params->title_adv, $params->user_text_adv, $values);														
 
@@ -673,14 +669,13 @@ class Lib_PlacementAds_AddEdit {
 	{
 		$params = &$this->params;
 		$city = &$this->city;
-		$location = &$this->location;
+
 		$object = &$this->object;
 
 		if (!$city->loaded()) {
 			$this->raise_error('При сохранении, не указан город');
 		}
 
-		$location = ORM::factory('Location');
 		$region_title = $city->region->title;
 		$city_title = $city->title;
 		$address = trim($params->address);
@@ -698,12 +693,7 @@ class Lib_PlacementAds_AddEdit {
 			@list($lon, $lat) = $coords;
 		}
 
-		$location->region 	= $region_title;
-		$location->city 	= $city_title;
-		$location->address 	= $address;
-		$location->lat 		= $lat;
-		$location->lon 		= $lon;
-		$location->save();
+		$object->geo_loc = sprintf('%s,%s', $lat, $lon);
 
 
 		return $this;
@@ -750,7 +740,6 @@ class Lib_PlacementAds_AddEdit {
 		$object = 	&$this->object;
 		$params = 	&$this->params;
 		$city = 	&$this->city;
-		$location = &$this->location;
 		$category = &$this->category;
 		$user = 	&$this->user;
 
@@ -797,9 +786,6 @@ class Lib_PlacementAds_AddEdit {
 		{
 			$object->date_expiration	= $this->lifetime_to_date($params->lifetime);
 		}
-		$object->geo_loc 			= $location->get_lat_lon_str();
-		$object->location_id		= $location->id;
-
 		return $this;
 	}
 
@@ -1332,8 +1318,4 @@ class Lib_PlacementAds_AddEdit {
 		return Kohana::$config->load('common.check_object_similarity');
 	}
 
-	private static function is_just_triggers($params)
-	{
-		return (property_exists($params, 'only_run_triggers') AND $params->only_run_triggers == 1);
-	}
 }

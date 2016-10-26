@@ -8,8 +8,7 @@ class Model_Object extends ORM {
 		'user'			=> array('model' => 'User', 'foreign_key' => 'author'),
 		'company'		=> array('model' => 'User', 'foreign_key' => 'author_company_id'),
 		'category_obj'	=> array('model' => 'Category', 'foreign_key' => 'category'),
-		'city_obj'		=> array('model' => 'City', 'foreign_key' => 'city_id'),
-		'location_obj'	=> array('model' => 'Location', 'foreign_key' => 'location_id')
+		'city_obj'		=> array('model' => 'City', 'foreign_key' => 'city_id')
 	);
 
 	protected $_has_many = array(
@@ -120,10 +119,7 @@ class Model_Object extends ORM {
 
 		if (in_array('adres-raion', $matches[1]))
 		{
-			if ($this->location_obj->loaded())
-			{
-				$template = str_replace('{adres-raion}', $this->location_obj->address, $template);
-			}
+			$template = str_replace('{adres-raion}', $this->get_address(), $template);
 		}
 
 		$attrs = $this->get_attributes();
@@ -1062,6 +1058,32 @@ class Model_Object extends ORM {
 			->where('id', 'IN', DB::select("id")->from("object")->where("author","=",$author) )
 			->execute();
 
+	}
+
+	public function get_address() {
+
+		if (!$this->loaded()) return "";
+
+		$address_attribute_ids = Kohana::$config->load('common.address_attribute_ids');
+
+		$address_m = ORM::factory('Data_Text')
+			->where('attribute', 'IN', $address_attribute_ids)
+			->where('object', '=', $this->id)
+			->find();
+
+		if (!$address_m->loaded()) return "";
+
+		return $address_m->value;
+
+	}
+
+	public function get_full_address() {
+		return sprintf('%s %s', $this->city_obj->title, $this->get_address());
+	}
+
+	public function get_coords() {
+		if (!$this->loaded()) return FALSE;
+		return explode(',', $this->geo_loc);
 	}
 
 }

@@ -63,7 +63,7 @@ class Controller_Static extends Controller_Template {
 		foreach ($vakancies_query as $vakancy_row) {
 			$compile = unserialize($vakancy_row->compiled);
 			$user = ORM::factory('User', $vakancy_row->author_company_id);
-			$location = ORM::factory('Location',$vakancy_row->location_id);
+			$location = ORM::factory('Location_REMOVE',$vakancy_row->location_id);
 			$attributes = $vakancy_row->naming_attributes($compile["attributes"]);			
 			
 			$f->single("url", "http://yarmarka.biz/detail/".$vakancy_row->object_id );

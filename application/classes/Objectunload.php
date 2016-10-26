@@ -118,7 +118,7 @@ class Objectunload
 		$row = array();
 		$row["external_id"] 	= $object->number;
 		$row["city"] 			= ORM::factory('City', $object->city_id)->title;
-		$row["address"] 		= ORM::factory('Location', $object->location_id)->address;
+		$row["address"] 		= $object->get_address();
 		$row["title"] 			= strip_tags($object->title);
 		$row["user_text_adv"] 	= strip_tags($object->user_text);
 		$row["contact"] 	  	= $object->contact;

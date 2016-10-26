@@ -190,8 +190,6 @@ class Detailpage_Default
 		$info = array();
 
 		$domain = new Domain();
-		$object_location = ORM::factory('Location', $object->location_id);
-		$object_location_value = $object_location->loaded() ? trim($object_location->city . ' ' . $object_location->address) : NULL;
 		
 		$info['similar_vip_search_result'] = $this->get_vip_similar_query($object, $domain);
 
