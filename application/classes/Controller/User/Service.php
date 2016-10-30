@@ -247,14 +247,10 @@ class Controller_User_Service extends Controller_User_Profile {
 
                $twig->objects = array_filter($twig->objects, function($object){
 
-                   if ( strtotime( $object['date_expiration'] ) < strtotime( Lib_PlacementAds_AddEdit::lifetime_to_date("7d") ) ) {
+                   if ( strtotime( $object['date_expiration'] ) < strtotime( Lib_PlacementAds_AddEdit::lifetime_to_date("45d") ) ) {
 
                         $object = ORM::factory('Object', $object['id']);
-                        $object->date_expiration =  Lib_PlacementAds_AddEdit::lifetime_to_date("45d");
-                        $object->date_created = DB::expr("NOW()");
-                        $object->is_published = TRUE;
-                        $object->in_archive = 'f';
-                        $object->save();
+                        $object->prolong();
                         
                        return true;
                    }

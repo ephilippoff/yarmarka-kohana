@@ -957,7 +957,7 @@ class Lib_PlacementAds_AddEdit {
 			if ($object->is_bad <> 2 )
 			{
 				if ($params->publish_and_prolonge) {
-					$object->prolong(FALSE);
+					$object->prolong();
 				}
 			}
 		}

@@ -397,7 +397,7 @@ class Controller_Ajax extends Controller_Template
 					break;
 			}
 			
-			$object->prolong(FALSE);
+			$object->prolong();
 			
 			$this->json['date_expiration'] = date('d.m.y', strtotime($date_expiration));
 			$this->json['code'] = 200;
@@ -467,6 +467,7 @@ class Controller_Ajax extends Controller_Template
 				$this->json['errors'] = $info["errors"];
 			} else {
 				$object->toggle_published();
+				$object->prolong();
 				$this->json['code'] = 200;
 				$this->json['is_published'] = 1;
 			}
