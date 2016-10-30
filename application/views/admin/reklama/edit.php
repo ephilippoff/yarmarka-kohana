@@ -42,7 +42,7 @@ $(document).ready(function() {
 	<div class="control-group <?=Arr::get($errors, 'class') ? 'error' : ''?>">
 		<label class="control-label">Цвет ссылки:</label>
 		<div class="controls">
-			<?=Form::select('class', array('black' => 'Черный', 'red' => 'Красный', 'green' => 'Зеленый', 'white' => 'Белый'), Arr::get($_POST, 'class', @$ad_element->class)) ?>
+			<?=Form::select('class', array('blue' => 'Синий', 'brown' => 'Коричнывый', 'green' => 'Зеленый', 'orange' => 'Оранжевый', 'purple' => 'Фиолетовый'), Arr::get($_POST, 'class', @$ad_element->class)) ?>
 		</div>	
 	</div>
 	
