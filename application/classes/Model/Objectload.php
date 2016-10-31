@@ -283,15 +283,10 @@ class Model_Objectload extends ORM {
 		if (!$this->loaded())
 			return;
 
-		$flatcategories =  $this->get_categories_flatarray($this->id);
-
-		if ($flatcategories)
-			foreach ($flatcategories as $category_id => $category_names) {
-				$callback("Start", join(",", $category_names));
-				$count = ORM::factory('Object')
-						->publish_and_prolonge_objectload($this->id, $this->user_id);
-				$callback("End. ".$count." adverts affected",  join(",", $category_names));
-			}
+		$callback("Start");
+		$count = ORM::factory('Object')
+				->publish_and_prolonge_objectload($this->id, $this->user_id);
+		$callback("End. ".$count." adverts affected");
 
 	}
 
@@ -300,15 +295,11 @@ class Model_Objectload extends ORM {
 		if (!$this->loaded())
 			return;
 
-		$flatcategories =  $this->get_categories_flatarray($this->id);
+		$callback("Start");
+		$count = ORM::factory('Object')
+				->remove_doubles($this->id, $this->user_id);
+		$callback("End. ".$count." adverts affected");
 
-		if ($flatcategories)
-			foreach ($flatcategories as $category_id => $category_names) {
-				$callback("Start", join(",", $category_names));
-				$count = ORM::factory('Object')
-						->remove_doubles($this->id, $this->user_id);
-				$callback("End. ".$count." adverts affected",  join(",", $category_names));
-			}
 	}
 
 } 

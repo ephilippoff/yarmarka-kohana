@@ -269,18 +269,18 @@ class Task_Objectload extends Minion_Task
 	function publish_unpublish($objectload_id) {
 
 		ORM::factory('Objectload', $objectload_id)
-			->clear_doubles(function ($comment, $category){
-				Minion::write($category,'Удаляем дубли '.$category.' '.$comment);
+			->clear_doubles(function ($comment){
+				Minion::write(1, 'Удаляем дубли '.$comment);
 			});
 
 		ORM::factory('Objectload', $objectload_id)
 			->unpublish_expired(function ($comment, $category){
-				Minion::write($category,'Снимаем закончившиейся объявления '.$category.' '.$comment);
+				Minion::write(2, 'Снимаем закончившиейся объявления '.$category.' '.$comment);
 			});
 
 		ORM::factory('Objectload', $objectload_id)
-			->publish_and_prolonge(function ($comment, $category){
-				Minion::write($category,'Продляем и включаем активные объявления '.$category.' '.$comment);
+			->publish_and_prolonge(function ($comment){
+				Minion::write(3,'Продляем и включаем активные объявления '.$comment);
 			});
 	}
 
