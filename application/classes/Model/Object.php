@@ -414,7 +414,7 @@ class Model_Object extends ORM {
 		return $result;
 	}
 
-	public function prolong($up = TRUE)
+	public function prolong()
 	{
 		if ( ! $this->loaded())
 		{
@@ -422,10 +422,6 @@ class Model_Object extends ORM {
 		}
 
 		if ($this->is_bad == 2) return $this;
-
-		if ($up) {
-			$this->date_created		= DB::expr('NOW()');
-		}
 		
 		if ( strtotime( $this->date_expiration ) < strtotime( Lib_PlacementAds_AddEdit::lifetime_to_date("45d") ) ) {
 
@@ -466,14 +462,7 @@ class Model_Object extends ORM {
 			$cache->delete("main_page_news_cat:{$citySeoName}");
 			$cache->delete("main_page_news_items:{$city_id}");
 		}
-
-
-		if ( strtotime( $this->date_expiration ) < strtotime( Lib_PlacementAds_AddEdit::lifetime_to_date("45d") ) ) {
-			
-			$this->date_expiration = Lib_PlacementAds_AddEdit::lifetime_to_date("45d");
-			
-		}
-
+		
 		return $this->update();
 	}
 
@@ -831,8 +820,7 @@ class Model_Object extends ORM {
 					->where('author', '=', $user_id)
 					->where('category','=', $category_id)
 					->where('is_published','=', 1)
-					->where('active','=', 1)
-					->where('is_union','IS', NULL);
+					->where('active','=', 1);
 
 			foreach ($filters as $filter) {
 				$query = $query->where($filter,"IS NOT",NULL);
@@ -880,7 +868,7 @@ class Model_Object extends ORM {
 
 	public function publish_and_prolonge_objectload($objectload_id, $user_id)
 	{
-		$objects = ORM::factory('Objectload_files')
+		$objects = ORM::factory('Objectload_Files')
 				->get_union_subquery_by_category($objectload_id);
 
 		$count = 0;
@@ -889,6 +877,7 @@ class Model_Object extends ORM {
 			$count = ORM::factory('Object')
 					->where('number', 'IN', $objects)
 					->where('author','=', $user_id)
+					->where('active','=',1)
 					->count_all();
 
 			$date_expiration = date('Y-m-d H:i:s', strtotime('+60 days'));
@@ -896,6 +885,7 @@ class Model_Object extends ORM {
 			$f = ORM::factory('Object')
 				->where('number', 'IN', $objects)
 				->where('author','=', $user_id)
+				->where('active','=',1)
 				->set('date_expiration', $date_expiration)
 				->set('in_archive', 'f')
 				->set('active', 1)
@@ -905,6 +895,52 @@ class Model_Object extends ORM {
 		}
 
 		return $count;	
+	}
+
+	public function remove_doubles($objectload_id, $user_id)
+	{
+
+		$objects = ORM::factory('Objectload_Files')
+				->get_union_subquery_by_category($objectload_id);
+
+		$count = 0;
+		if ($objects)
+		{
+
+			$doubles = DB::select('number',DB::expr('COUNT(number) as count'))
+					->from('object')
+					->where('number', 'IN', $objects)
+					->where('author','=', $user_id)
+					->where('active','=', 1)
+					->group_by('number')
+					->order_by('count', 'DESC')
+					->execute();
+
+			$doubles_numbers = array();
+			foreach ($doubles as $double) {
+				if ( (int) $double['count'] <= 1 ) break;
+				array_push($doubles_numbers, $double['number']);
+			}
+
+			$count = count($doubles_numbers);
+
+			if ($count > 0) {
+
+				ORM::factory('Object')
+					->where('number','IN', $doubles_numbers)
+					->where('author', '=', $user_id)
+					->set('active', 0)
+					->set('is_published',0)
+					->set('number', NULL)
+					->update_all();
+
+			}
+
+
+			
+		}
+
+		return $count;
 	}
 
 	public function info_by_ids($ids)

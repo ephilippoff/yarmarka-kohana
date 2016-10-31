@@ -9,12 +9,19 @@ class Task_Objectload extends Minion_Task
 		"user_id"  => NULL,
 		"objectload_id"  => NULL,
 		"filter"  => NULL,
-		"test"  => FALSE //проверка на ошибки, без сохранения объявлений
+		"test"  => FALSE, //проверка на ошибки, без сохранения объявлений
+		"publish_unpublish" => FALSE
 	);
 
 	protected function _execute(array $params)
 	{
 		$user_id 			= $params['user_id'];
+		$publish_unpublish 			= $params['publish_unpublish'];
+
+		if ($publish_unpublish) {
+			$this->publish_unpublish($params["objectload_id"]);
+			return;
+		}
 
 		$ct = ORM::factory('Crontask')->begin("Objectload", $params);
 
@@ -221,15 +228,7 @@ class Task_Objectload extends Minion_Task
 		
 		if (!$test)
 		{
-			ORM::factory('Objectload', $ol->_objectload_id)
-				->unpublish_expired(function ($comment, $category){
-					Minion::write($category,'Снимаем закончившиейся объявления '.$category.' '.$comment);
-				});
-
-			ORM::factory('Objectload', $ol->_objectload_id)
-				->publish_and_prolonge(function ($comment, $category){
-					Minion::write($category,'Продляем и включаем активные объявления '.$category.' '.$comment);
-				});
+			$this->publish_unpublish( $ol->_objectload_id );
 		}
 
 		$ol->setState(5);
@@ -264,6 +263,25 @@ class Task_Objectload extends Minion_Task
 		}
 
 		return FALSE;
+	}
+
+
+	function publish_unpublish($objectload_id) {
+
+		ORM::factory('Objectload', $objectload_id)
+			->clear_doubles(function ($comment, $category){
+				Minion::write($category,'Удаляем дубли '.$category.' '.$comment);
+			});
+
+		ORM::factory('Objectload', $objectload_id)
+			->unpublish_expired(function ($comment, $category){
+				Minion::write($category,'Снимаем закончившиейся объявления '.$category.' '.$comment);
+			});
+
+		ORM::factory('Objectload', $objectload_id)
+			->publish_and_prolonge(function ($comment, $category){
+				Minion::write($category,'Продляем и включаем активные объявления '.$category.' '.$comment);
+			});
 	}
 
 	

@@ -295,4 +295,20 @@ class Model_Objectload extends ORM {
 
 	}
 
+	function clear_doubles($callback)
+	{
+		if (!$this->loaded())
+			return;
+
+		$flatcategories =  $this->get_categories_flatarray($this->id);
+
+		if ($flatcategories)
+			foreach ($flatcategories as $category_id => $category_names) {
+				$callback("Start", join(",", $category_names));
+				$count = ORM::factory('Object')
+						->remove_doubles($this->id, $this->user_id);
+				$callback("End. ".$count." adverts affected",  join(",", $category_names));
+			}
+	}
+
 } 
