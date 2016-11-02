@@ -77,7 +77,7 @@ class Service_Up extends Service
 
 		if (!$object->loaded()) return FALSE;
 		
-		$object->prolong();
+		$object->prolong(TRUE);
 
 		$or = ORM::factory('Object_Service_Up')
 					->where("object_id", "=", $object_id)
