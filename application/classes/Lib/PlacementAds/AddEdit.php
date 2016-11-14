@@ -306,7 +306,6 @@ class Lib_PlacementAds_AddEdit {
 				array('email_verified', array(':value', $params->session_id) )
 				));
 		}
-		
 
 		return $this;
 	}
@@ -660,6 +659,10 @@ class Lib_PlacementAds_AddEdit {
 			$errors['max_objects_for_user'] = "В эту рубрику можно разместить только одно объявление.";
 			if ($this->is_edit)
 				$errors['max_objects_for_user'] .= " Снимите другие объявления в этой рубрике, для того чтобы его можно было отредактировать/поднять/продлить";
+		}
+
+		if ($params->with_service === 'lider' AND (!$params->userfile OR !count($params->userfile)) ) {
+			$errors['image'] = " Для выбранной услуги, требуется загрузить хотябы одну фотографию";
 		}
 
 		return $this;

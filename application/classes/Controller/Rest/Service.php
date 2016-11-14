@@ -155,6 +155,11 @@ class Controller_Rest_Service extends Controller_Rest {
 
 		$this->json['object'] = $first_object = $objects_to_action[0];
 
+		if (!$this->json['object']->main_image_id) {
+			$this->json['code'] = 400;
+			$this->json['text'] = 'Загрузите хотябы одну фотографию';
+		}
+
 		$this->json['services'] = array(
 			'lider' => Service::factory("Lider", $first_object->id)->set_params($params)->get(),
 			'email' => Service::factory("Email", $first_object->id)->set_params($params)->get()
