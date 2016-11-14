@@ -693,7 +693,7 @@ class Lib_PlacementAds_AddEdit {
 			@list($lon, $lat) = $coords;
 		}
 
-		$object->geo_loc = sprintf('%s,%s', $lat, $lon);
+		$object->geo_loc = ($lat) ? sprintf('%s,%s', $lat, $lon) : NULL;
 
 
 		return $this;
