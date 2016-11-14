@@ -69,12 +69,7 @@
 							<ul class="dropdown-menu">
 								<li><a href="<?=URL::site('khbackend/objects/index')?>">Список</a></li>
 								<li><a href="<?=URL::site('khbackend/landing/index')?>">Landings</a></li>
-								<?php if (Auth::instance()->have_access_to('attribute')) : ?>
-									<li><a href="<?=URL::site('khbackend/attributes/index')?>">Атрибуты</a></li>
-								<?php endif?>	
-								<?php if (Auth::instance()->have_access_to('reference')) : ?>
-									<li><a href="<?=URL::site('khbackend/references/index')?>">Reference</a></li>
-								<?php endif?>
+								
 								<?php if (Auth::instance()->have_access_to('object_reason')) : ?>
 									<li><a href="<?=URL::site('khbackend/object_reasons/index')?>">Причины блокировки</a></li>
 								<?php endif?>	
@@ -105,9 +100,15 @@
 						<li class="dropdown <?=($module_name == 'category') ? 'active' : ''?>">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">Categories <b class="caret"></b></a>
 							<ul class="dropdown-menu">
-								<li><a href="<?=URL::site('khbackend/category/index')?>">List</a></li>
-								<li><a href="<?=URL::site('khbackend/category/relations')?>">Настройка атрибутов</a></li>
-								<li><a href="<?=URL::site('khbackend/category/structure')?>">Настройка меню</a></li>
+								<li><a href="<?=URL::site('khbackend/category/index')?>">1.Категории</a></li>
+								<li><a href="<?=URL::site('khbackend/attributes/index')?>">2. Атрибуты</a></li>
+								<li><a href="<?=URL::site('khbackend/attributes/element_index')?>">3. Элементы атрибута</a></li>
+								<li><a href="<?=URL::site('khbackend/references/index')?>">4. Категории-Атрибуты (Reference)</a></li>
+								<li><a href="<?=URL::site('khbackend/category/relations')?>">5. Категории-Атрибуты (Relation)</a></li>
+								<hr>
+								<li><a href="<?=URL::site('khbackend/category/structure')?>">Многоуровневые меню</a></li>
+								<hr>
+								<li><a href="<?=URL::site('khbackend/seopatterns/index')?>">SEO шаблоны</a></li>
 							</ul>
 						</li>
 						<?php endif; ?>
@@ -138,25 +139,15 @@
 								<?php if (Auth::instance()->have_access_to('coreredirect')) : ?>
 									<li><a href="<?=URL::site('khbackend/coreredirects/index')?>">Core redirects</a></li>
 								<?php endif?>
-								<?php if (Auth::instance()->have_access_to('seopattern')) : ?>
-									<li><a href="<?=URL::site('khbackend/seopatterns/index')?>">Seo patterns</a></li>
-								<?php endif?>
 								<?php if (Auth::instance()->have_access_to('seopopular')) : ?>
 									<li><a href="<?=URL::site('khbackend/seopopular/index')?>">Популярные запросы</a></li>
 								<?php endif?>									
 								<li><a href="<?=URL::site('khbackend/settings/test_email')?>">Test email</a></li>
+								<li><a href="<?=URL::site('khbackend/filesstorage/index')?>">ФАЙЛОВОЕ ХРАНИЛИЩЕ</a></li>
 							</ul>
 						</li>
 						<?php endif; ?>
 						
-						<?php if (Auth::instance()->have_access_to('filesstorage')) : ?>
-						<li class="dropdown">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown">Файлы <b class="caret"></b></a>
-							<ul class="dropdown-menu">
-								<li><a href="<?=URL::site('khbackend/filesstorage/index')?>">Список</a></li>
-							</ul>
-						</li>
-						<?php endif; ?>						
 						
 						<?php if (Auth::instance()->get_user()) : ?>
 							<li><a href="<?=URL::site('khbackend/welcome/logout')?>">Log Out</a></li>

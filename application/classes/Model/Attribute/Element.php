@@ -9,6 +9,7 @@ class Model_Attribute_Element extends ORM
 
 	protected $_belongs_to = array(
 		'attribute_obj' => array('model' => 'Attribute', 'foreign_key' => 'attribute'),
+		'parent_obj' => array('model' => 'Attribute_Element', 'foreign_key' => 'parent_element'),
 	);
 
 	public function by_value_and_attribute($value, $seo_name)

@@ -312,6 +312,15 @@ class ORM extends Kohana_ORM {
 		return $result;
 	}
 
+	public function find_and_maptoid($callback)
+	{
+		$result = array();
+		foreach ($this->find_all() as $item) {
+			$result[$item->id] = $callback($item);
+		}
+		return $result;
+	}
+
 	public function select_array($columns = array())
 	{
 		$object = array();
