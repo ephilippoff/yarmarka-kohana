@@ -1124,7 +1124,7 @@ class Model_Object extends ORM {
 
 	public function get_coords() {
 		if (!$this->loaded()) return FALSE;
-		return explode(',', $this->geo_loc);
+		return ($this->geo_loc) ? explode(',', $this->geo_loc) : NULL;
 	}
 
 }

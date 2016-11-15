@@ -82,7 +82,14 @@ class Object_Compile
 		$result["address"] = $object->get_address();
 		$result["city"] = $object->city_obj->title;
 		$result["region"] = $result["city"];
-		list($result["lat"],$result["lon"]) = $object->get_coords();
+
+		$result["lat"] = $result["lon"] = NULL;
+
+		$coords = $object->get_coords();
+
+		if ($coords) {
+			list($result["lat"],$result["lon"]) = $coords;
+		}
 
 		$result["real_city"] = @$params["real_city"];
 
