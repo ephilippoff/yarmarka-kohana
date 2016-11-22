@@ -27,11 +27,20 @@
 			{% set itemsPerCategory = 19 %}
 			<div class="other_cat_news" id="same_cat_news">
 				<div class="row">
+					<div class="col-md-6">
 					{% for innerItem in item.items %}
-						{% if loop.index != 1 %}
+						{% if loop.index != 1  and loop.index is even %}
 							{% include 'detail/mini/newsone' %}
 						{% endif %}
 					{% endfor %}
+					</div>
+					<div class="col-md-6">
+					{% for innerItem in item.items %}
+						{% if loop.index != 1  and loop.index is odd %}
+							{% include 'detail/mini/newsone' %}
+						{% endif %}
+					{% endfor %}
+					</div>
 				</div>
 			</div>
 			<div id="button-next" class="clearfix" data-category="{{ item.id }}" data-pages="{{ item.pages }}">
@@ -40,13 +49,3 @@
 		{% endif %}
 	{% endif %}
 {% endfor %}
-
-<script>
-$(document).ready(function(){
-	$('.main_last_news .text').find('div').replaceWith(function(index, oldHTML){
-		return $("<p>").html(oldHTML);
-	});
-
-
-});
-</script>
