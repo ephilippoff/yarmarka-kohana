@@ -817,11 +817,17 @@ class Model_Object extends ORM {
 		$count = 0;
 		if ($objects)
 		{
+
+			ORM::factory('Object')
+					->where('category','=', $category_id)
+					->where('author', '=', $user_id)
+					->where('number', 'IS', NULL)
+					->set('is_published', 0)
+					->set('parent_id', NULL)
+					->update_all();
+
 			$query = ORM::factory('Object')
-					->where_open()
 					->where('number', 'NOT IN', $objects)
-						->or_where('number', 'IS', NULL)
-					->where_close()
 					->where('author', '=', $user_id)
 					->where('category','=', $category_id)
 					->where('is_published','=', 1)
@@ -831,13 +837,13 @@ class Model_Object extends ORM {
 				$query = $query->where($filter,"IS NOT",NULL);
 			}
 
-			
+			$query2 = clone $query;
+			$count = $query2->count_all();
 
 			$f = $query->set('is_published', 0)
 						->set('parent_id', NULL)
 						->update_all();
 
-			$count = $query->count_all();
 		}
 
 		return $count;		
@@ -885,7 +891,7 @@ class Model_Object extends ORM {
 					->where('active','=',1)
 					->count_all();
 
-			$date_expiration = date('Y-m-d H:i:s', strtotime('+60 days'));
+			$date_expiration = date('Y-m-d H:i:s', strtotime('+30 days'));
 
 			$f = ORM::factory('Object')
 				->where('number', 'IN', $objects)

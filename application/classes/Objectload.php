@@ -92,19 +92,26 @@ class Objectload
 
 	public function saveTempRecordsByLoadedFiles()
 	{
+		$limit = NULL;
+		$setting_limit = ORM::factory('User_Settings')
+								->get_by_name($this->_user_id, "massload_limit")
+								->find();
+		if ($setting_limit->loaded())
+			$limit = (int) $setting_limit->value;
+
 		$of = ORM::factory('Objectload_Files')
 				->where("objectload_id", "=", $this->_objectload_id)
 				->find_all();
 		foreach ($of as $file){	
 
 			$f = ORM::factory('Objectload_Files', $file->id);	
-			$f->table_name = $this->saveRecordsToTempTable($file->id);
+			$f->table_name = $this->saveRecordsToTempTable($file->id, $limit);
 			$f->save();
 			
 		}
 	}
 
-	public function saveRecordsToTempTable($object_file_id)
+	public function saveRecordsToTempTable($object_file_id, &$limit)
 	{
 		$of = ORM::factory('Objectload_Files', $object_file_id);
 		if (!$of->loaded())
@@ -121,7 +128,14 @@ class Objectload
 
 		$f = new Massload_File();		
 
-		$f->forEachRow($config, $path, function($row, $i) use ($fields, $table_name){
+		$counter = 0;
+
+		$f->forEachRow($config, $path, function($row, $i) use ($fields, $table_name, &$counter, $limit){
+
+				if (isset($limit) AND $counter >= $limit) {
+					return 'break';
+				}
+
 				$t = ORM_Temp::factory($table_name);
 				foreach ($fields as $field){
 					$fname = str_replace ( "-", "___", $field["name"]);
@@ -129,7 +143,12 @@ class Objectload
 						$t->{$fname} = strip_tags(trim($row->{$field["name"]}));
 				}
 				$t->save();
+
+				$counter = $counter + 1;
 		});
+
+		if (isset($limit))
+			$limit = $limit - $counter;
 
 		return $table_name;
 		
