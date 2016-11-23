@@ -37,7 +37,7 @@ class Model_Attribute_Element extends ORM
 								   ->where("is_published","=","1")
 								   ->where("category","=", (int) $category_id);
 		if ($city_id) {
-			$object_subquery = $object_subquery->where("city_id","=", $city_id);
+			$object_subquery = $object_subquery->where(DB::expr($city_id), "=", DB::expr("ANY(object.cities)"));
 		}
 
 		return ORM::factory('Attribute_Element')
