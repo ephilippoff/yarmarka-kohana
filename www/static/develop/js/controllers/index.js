@@ -37,15 +37,15 @@ function (Marionette, templates, utils, IndexPage, SearchPage, DetailPage,
 
         start_indexSection : function() {
             console.log("index start");
-            app.menu.init(["main", "city", "kupon", "news"]);
+            app.menu.init(["main", "city", "news"]);
             new IndexPage({
                 el: "body"
             });
         },
 
         start_detailSection : function() {
-            console.log("detail start", "kupon", "news");
-            app.menu.init(["main", "city", "kupon", "news"]);
+            console.log("detail start", "news");
+            app.menu.init(["main", "city", "news"]);
             app.module("map", MapModule);
             new DetailPage({
                 el: "body"
@@ -58,7 +58,7 @@ function (Marionette, templates, utils, IndexPage, SearchPage, DetailPage,
             app.module("map", MapModule);
             app.filters.initFilters(app.settings.category_id);
 
-            app.menu.init(["main", "city", "kupon", "news"]);
+            app.menu.init(["main", "city", "news"]);
             app.favourite.init(["list"]);
 
 
@@ -79,7 +79,7 @@ function (Marionette, templates, utils, IndexPage, SearchPage, DetailPage,
         start_usersearchSection : function() {
             console.log("usersearch start");
 
-            app.menu.init(["main", "city", "kupon", "news"]);
+            app.menu.init(["main", "city", "news"]);
             app.favourite.init(["list"]);
             new UserSearchPage({
                 el: "body"
@@ -88,7 +88,7 @@ function (Marionette, templates, utils, IndexPage, SearchPage, DetailPage,
 
         start_cartSection : function() {
             console.log("cart start");
-            app.menu.init(["main", "city", "kupon", "news"]);
+            app.menu.init(["main", "city", "news"]);
             app.favourite.init(["list"]);
             new CartPage({
                 el: "body"
@@ -98,7 +98,7 @@ function (Marionette, templates, utils, IndexPage, SearchPage, DetailPage,
         start_addSection : function() {
             console.log("Add start");
             app.module("map", MapModule);
-            app.menu.init(["main", "city", "kupon", "news"]);
+            app.menu.init(["main", "city", "news"]);
 
             if (app.settings.debug) {
                 require(['views/partials/add'], function(AddPage)  {
@@ -130,12 +130,12 @@ function (Marionette, templates, utils, IndexPage, SearchPage, DetailPage,
 
         start_userSection : function() {
             console.log("user start");
-            app.menu.init(["main", "city", "kupon", "news"]);
+            app.menu.init(["main", "city", "news"]);
         },
 
         start_articleSection : function() {
             console.log("article start");
-            app.menu.init(["main", "city", "kupon", "news"]);
+            app.menu.init(["main", "city", "news"]);
             app.module("map", MapModule);
             new ArticlePage({
                 el: "body"

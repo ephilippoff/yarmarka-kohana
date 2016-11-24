@@ -235,33 +235,6 @@ class Controller_Detail extends Controller_Template {
 			$twig->{$key} = $item;
 		}
 
-		$premium_kupons = Search::searchquery(
-            array(
-                "active" => TRUE,
-                "published" =>TRUE,
-                "expiration" => TRUE,
-                "premium" => TRUE,
-                "category_id" => array(173),
-                "city_id" => ($twig->city->id) ? array($twig->city->id) : NULL,
-            ),
-            array("limit" => 3, "order" => "date_expired")
-        );
-
-        $twig->premium_kupons = Search::getresult($premium_kupons->execute()->as_array());
-
-        $kupons = Search::searchquery(
-            array(
-                "active" => TRUE,
-                "published" =>TRUE,
-                "expiration" => TRUE,
-                "category_id" => array(173),
-                "city_id" => ($twig->city->id) ? array($twig->city->id) : NULL,
-            ),
-            array("limit" => 3, "order" => "date_expired")
-        );
-
-        $twig->kupons = Search::getresult($kupons->execute()->as_array());
-
         $attachments = ORM::factory('Object_Attachment')
                             ->order_by("id","desc")
                             ->limit(3)
@@ -285,59 +258,63 @@ class Controller_Detail extends Controller_Template {
 
 	//купон
 	public function action_type201() {
-		$object = $this->request->param("object");
-		$url = $this->request->param("url");
 
-		if ($url <> $this->request->get_full_url()) {
-			HTTP::redirect($url, 301);
-		}
+		throw new HTTP_Exception_404;
+        return;
 
-		if ($object->active == 0) {
-		   throw new HTTP_Exception_404;
-		   return;
-		}
+		// $object = $this->request->param("object");
+		// $url = $this->request->param("url");
 
-		$twig = Twig::factory('detail/kupon/index');
-		$twig->domain      = $this->domain;
-		$twig->city        = $this->domain->get_city();
+		// if ($url <> $this->request->get_full_url()) {
+		// 	HTTP::redirect($url, 301);
+		// }
 
-		$detail_info = Detailpage::factory("Kupon", $object)
-							->get_crumbs()
-							->get_kupon_info()
-							->get();
+		// if ($object->active == 0) {
+		//    throw new HTTP_Exception_404;
+		//    return;
+		// }
 
-		foreach ((array) $detail_info as $key => $item) {
-			$twig->{$key} = $item;
-		}
+		// $twig = Twig::factory('detail/kupon/index');
+		// $twig->domain      = $this->domain;
+		// $twig->city        = $this->domain->get_city();
+
+		// $detail_info = Detailpage::factory("Kupon", $object)
+		// 					->get_crumbs()
+		// 					->get_kupon_info()
+		// 					->get();
+
+		// foreach ((array) $detail_info as $key => $item) {
+		// 	$twig->{$key} = $item;
+		// }
 		
-		//favourites
-		$twig->favourites = ORM::factory('Favourite')->get_list_by_cookie();
-		//end favourites
+		// //favourites
+		// $twig->favourites = ORM::factory('Favourite')->get_list_by_cookie();
+		// //end favourites
 
-		foreach ((array) $detail_info as $key => $item) {
-			$twig->{$key} = $item;
-		}
+		// foreach ((array) $detail_info as $key => $item) {
+		// 	$twig->{$key} = $item;
+		// }
 
-		$twig->testKuponLink = NULL;
-		//get kupon group
-		$kuponGroup = ORM::factory('Kupon_Group')
-			->where('object_id', '=', $object->id)
-			->find();
-		if ($kuponGroup->loaded()) {
-			//get first kupon
-			$kupon = ORM::factory('Kupon')
-				->where('kupon_group_id', '=', $kuponGroup->id)
-				->find();
-			if ($kupon->loaded()) {
-				$twig->testKuponLink = \Yarmarka\Models\User::current()->isAdminOrModerator()
-					? '/kupon/print/' . $kupon->id
-					: NULL;
-			}
-		}
+		// $twig->testKuponLink = NULL;
+		// //get kupon group
+		// $kuponGroup = ORM::factory('Kupon_Group')
+		// 	->where('object_id', '=', $object->id)
+		// 	->find();
+		// if ($kuponGroup->loaded()) {
+		// 	//get first kupon
+		// 	$kupon = ORM::factory('Kupon')
+		// 		->where('kupon_group_id', '=', $kuponGroup->id)
+		// 		->find();
+		// 	if ($kupon->loaded()) {
+		// 		$twig->testKuponLink = \Yarmarka\Models\User::current()->isAdminOrModerator()
+		// 			? '/kupon/print/' . $kupon->id
+		// 			: NULL;
+		// 	}
+		// }
 
-		LastViews::instance()->set($object->id);
-		$this->response->body($twig);
-		LastViews::instance()->commit();
+		// LastViews::instance()->set($object->id);
+		// $this->response->body($twig);
+		// LastViews::instance()->commit();
 	}
 
 	public function after()

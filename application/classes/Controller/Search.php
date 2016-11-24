@@ -88,13 +88,16 @@ class Controller_Search extends Controller_Template
 
     public function action_kupony()
     {
-        $search = new Searchpage_Kupony();
+        throw new HTTP_Exception_404;
+        return;
+        // $search = new Searchpage_Kupony();
 
-        $search_info = ($this->cached) ? 
-                            new Obj($this->cached_search_info): 
-                                    $search->get_search_info($this->params_by_uri, $this->domain, $this->request);
+        // $search_info = ($this->cached) ? 
+        //                     new Obj($this->cached_search_info): 
+        //                             $search->get_search_info($this->params_by_uri, $this->domain, $this->request);
         
-        $this->response->body($search->get_twig_data($search_info, $this->request, $this->cached));
+        // $this->response->body($search->get_twig_data($search_info, $this->request, $this->cached));
+
 
     }
 

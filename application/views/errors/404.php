@@ -422,21 +422,7 @@
 
 												</p>
 											</li>
-											<li>
-												<a href="/tyumenskaya-oblast/kupony">
-													<div class="img hide320 hide640">
-														<img src="/images/min_kupony.png" alt="">
-													</div>
-													<p class="text">Купоны																													</p>
-													<div class="img hide1000">
-														<img src="/images/kupony.png" alt="">
-													</div>
-												</a>
-												<p class="href-bl">
-
-
-												</p>
-											</li>
+											
 
 
 										</ul>								

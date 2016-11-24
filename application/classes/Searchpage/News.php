@@ -74,42 +74,42 @@ class Searchpage_News extends Searchpage_Default
         $twig->lastnews = Search::getresult($search_query->execute()->as_array());
         //lastnews end
         
-        //kupons
-        $premium_kupons = Search::searchquery(array(
-            "active" => TRUE,
-            "published" => TRUE,
-            "expiration" => TRUE,
-            "premium" => TRUE,
-            "category_id" => array(
-                173
-            ),
-            "city_id" => ($search_info->city_id) ? array(
-                $search_info->city_id
-            ) : NULL
-        ), array(
-            "limit" => 3,
-            "order" => "date_expired"
-        ));
+        // //kupons
+        // $premium_kupons = Search::searchquery(array(
+        //     "active" => TRUE,
+        //     "published" => TRUE,
+        //     "expiration" => TRUE,
+        //     "premium" => TRUE,
+        //     "category_id" => array(
+        //         173
+        //     ),
+        //     "city_id" => ($search_info->city_id) ? array(
+        //         $search_info->city_id
+        //     ) : NULL
+        // ), array(
+        //     "limit" => 3,
+        //     "order" => "date_expired"
+        // ));
         
-        $twig->premium_kupons = Search::getresult($premium_kupons->execute()->as_array());
+        // $twig->premium_kupons = Search::getresult($premium_kupons->execute()->as_array());
         
-        $kupons = Search::searchquery(array(
-            "active" => TRUE,
-            "published" => TRUE,
-            "expiration" => TRUE,
-            "category_id" => array(
-                173
-            ),
-            "city_id" => ($search_info->city_id) ? array(
-                $search_info->city_id
-            ) : NULL
-        ), array(
-            "limit" => 3,
-            "order" => "date_expired"
-        ));
+        // $kupons = Search::searchquery(array(
+        //     "active" => TRUE,
+        //     "published" => TRUE,
+        //     "expiration" => TRUE,
+        //     "category_id" => array(
+        //         173
+        //     ),
+        //     "city_id" => ($search_info->city_id) ? array(
+        //         $search_info->city_id
+        //     ) : NULL
+        // ), array(
+        //     "limit" => 3,
+        //     "order" => "date_expired"
+        // ));
         
-        $twig->kupons = Search::getresult($kupons->execute()->as_array());
-        //kupons end
+        // $twig->kupons = Search::getresult($kupons->execute()->as_array());
+        // //kupons end
         
 
         

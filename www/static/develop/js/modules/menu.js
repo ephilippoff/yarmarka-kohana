@@ -34,13 +34,7 @@ define([
             menuClass: ".js-newsmenu",
             menuTemplate: "#template-newsmenu"
         };
-
-        var kuponMenuSettings = {
-            controlClass: ".js-kuponmenu-dropdown",
-            menuClass: ".js-kuponmenu",
-            menuTemplate: "#template-kuponmenu"
-        };
-
+        
         var MobileMenu = Marionette.View.extend({
             el: ".mobile_menu",
             events: {
@@ -324,14 +318,6 @@ return Marionette.Module.extend({
                 });
             }
 
-            if (_.contains(menusToload, "kupon")) {
-                this.kupon = new TwoSectionMenu({
-                    el: kuponMenuSettings.controlClass,
-                    templateClass: kuponMenuSettings.menuTemplate,
-                    menuClass: kuponMenuSettings.menuClass,
-                    controlClass: kuponMenuSettings.controlClass,
-                });
-            }
         },
     });
 

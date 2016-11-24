@@ -109,32 +109,32 @@ class Controller_Index extends Controller_Template {
             $twig->{$key} = $item;
         }
 
-        $premium_kupons = Search::searchquery(
-            array(
-                "active" => TRUE,
-                "published" =>TRUE,
-                "expiration" => TRUE,
-                "premium" => TRUE,
-                "category_id" => array(173),
-                "city_id" => $this->city->id,
-            ),
-            array("limit" => 3, "order" => "date_expired")
-        );
+        // $premium_kupons = Search::searchquery(
+        //     array(
+        //         "active" => TRUE,
+        //         "published" =>TRUE,
+        //         "expiration" => TRUE,
+        //         "premium" => TRUE,
+        //         "category_id" => array(173),
+        //         "city_id" => $this->city->id,
+        //     ),
+        //     array("limit" => 3, "order" => "date_expired")
+        // );
 
-        $twig->premium_kupons = Search::getresult($premium_kupons->execute()->as_array());
+        // $twig->premium_kupons = Search::getresult($premium_kupons->execute()->as_array());
 
-        $kupons = Search::searchquery(
-            array(
-                "active" => TRUE,
-                "published" =>TRUE,
-                "expiration" => TRUE,
-                "category_id" => array(173),
-                "city_id" => $this->city->id,
-            ),
-            array("limit" => 3, "order" => "date_expired")
-        );
+        // $kupons = Search::searchquery(
+        //     array(
+        //         "active" => TRUE,
+        //         "published" =>TRUE,
+        //         "expiration" => TRUE,
+        //         "category_id" => array(173),
+        //         "city_id" => $this->city->id,
+        //     ),
+        //     array("limit" => 3, "order" => "date_expired")
+        // );
 
-        $twig->kupons = Search::getresult($kupons->execute()->as_array());
+        // $twig->kupons = Search::getresult($kupons->execute()->as_array());
 
         $attachments = ORM::factory('Object_Attachment')
                             ->order_by("id","desc")

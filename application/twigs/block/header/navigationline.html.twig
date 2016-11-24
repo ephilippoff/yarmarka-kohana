@@ -12,13 +12,13 @@
 			<a class="menu-item-cont hidden-sm hidden-xs" href="/novosti">Новости<i class="fa fa-caret-down ml3"></i></a>
 		</div>
 
-		<div class="main_menu_item js-kuponmenu-dropdown">
-			<a class="menu-item-cont hidden-sm hidden-xs" href="/kupony">Купоны<i class="fa fa-caret-down ml3"></i></a>
+		<div class="main_menu_item city-companies">
+			<a class="menu-item-cont" href="//feedback.yarmarka.biz" rel="nofollow">Техподдержка</a>
 		</div>
 		{% set cities2gis = ['surgut', 'ekaterinburg', 'tobolsk', 'tyumen', 'nizhnevartovsk'] %}
 		{% if current_city.seo_name in cities2gis %}
 		<div class="main_menu_item city-companies">
-			<a class="menu-item-cont" href="/search_company">Компании города</a>
+			<a class="menu-item-cont" href="/search_company">Компании</a>
 		</div>
 		{%endif%}
 
