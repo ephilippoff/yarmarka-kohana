@@ -367,6 +367,10 @@ class Search {
 			$object = $object->where("o.source_id", "=", (int) $params->source);
 		}
 
+		if ( $params->is_bad ) {
+			$object = $object->where("o.is_bad", "=", (int) $params->is_bad);
+		}
+
 		if ($params->expiration) {
 			$object = $object->where("o.date_expired", "<", DB::expr("NOW()"));
 		}

@@ -238,6 +238,7 @@ class Controller_User_Service extends Controller_User_Profile {
        $sq = Search::searchquery( array(
            "id" => $ids,
            "user_id" => $this->user->id,
+           "is_bad" => 0,
            "active" => TRUE
        ), array(
            "limit" => 10

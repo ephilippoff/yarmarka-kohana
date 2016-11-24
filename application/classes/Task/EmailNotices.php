@@ -167,6 +167,7 @@ class Task_EmailNotices extends Minion_Task
                         ->from(array("object","o") )
                         ->where("o.active", "=", 1 )
                         ->where("o.is_published", "=", 1 )
+                        ->where("o.is_bad", "=", 0 )
                         ->where("o.number", "IS", NULL )
                         ->where(DB::expr("NOW()"),">", DB::expr("o.date_expiration - interval '7 days'"))
                         ->where(DB::expr("NOW()"),"<", DB::expr("o.date_expiration - interval '6 days'"))
