@@ -202,7 +202,9 @@ class Controller_User_Auth extends Controller_Template {
                     ->rule('csrf', 'not_empty', array(':value', "CSRF"))
                     ->rule('csrf', 'Security::check')
                     ->rule('login', 'not_empty', array(':value', 'Логин (E-mail)') )
-                    ->rule('pass', 'not_empty', array(':value', 'Пароль') );
+                    ->rule('pass', 'not_empty', array(':value', 'Пароль') )
+                    ->rule('captcha', 'not_empty', array(':value', ""))
+                    ->rule('captcha', 'captcha', array(':value', ""));
 
 
             if ( !$validation->check())
@@ -234,6 +236,7 @@ class Controller_User_Auth extends Controller_Template {
             }
         }
 
+        $twig->captcha = Captcha::instance()->render();
         $twig->ulogin_errors = $ulogin_errors;
         $twig->ulogin_html = $ulogin->render();
         $twig->token = $token;
@@ -253,13 +256,24 @@ class Controller_User_Auth extends Controller_Template {
         $is_post = ($_SERVER['REQUEST_METHOD']=='POST');
         $post_data = new Obj($this->request->post());
 
+        $token = NULL;
         $error = NULL;
         if ($is_post){
+            $token = $post_data->csrf;
             $email = mb_strtolower(trim($post_data->email), 'UTF-8');
-            if (!$email)
+
+            $validation = Validation::factory((array) $post_data)
+                    ->rule('csrf', 'not_empty', array(':value', "CSRF"))
+                    ->rule('csrf', 'Security::check')
+                    ->rule('email', 'not_empty', array(':value', 'E-mail') )
+                    ->rule('captcha', 'not_empty', array(':value', ""))
+                    ->rule('captcha', 'captcha', array(':value', ""));
+
+            if ( !$validation->check())
             {
-                $error = "Вы не ввели email";
+                $error = new Obj($validation->errors('validation/auth'));
             } else {
+echo 111;
                 $user = ORM::factory('User')
                             ->get_user_by_email($email)
                             ->find();
@@ -291,7 +305,9 @@ class Controller_User_Auth extends Controller_Template {
                     $this->redirect(URL::base('http').'user/forgot_password?success=1');
                 }
             }
-        } 
+        } else {
+            $token = Security::token();
+        }
 
         $twig->status = NULL;
         
@@ -302,6 +318,8 @@ class Controller_User_Auth extends Controller_Template {
         if ($failure)
             $twig->status = "failure";
 
+        $twig->token = $token;
+        $twig->captcha = Captcha::instance()->render();
         $twig->error = $error;
         $twig->params = $post_data;
         $twig->user = $this->user; 

@@ -83,7 +83,7 @@
 						<div class="col-md-9 col-sm-9 col-xs-12">
 							<div class="row">
 								<div class="col-md-10">
-									<div class="inp-cont {% if error.pass or (not error.login and not error.pass and error) %}error{% endif%}">
+									<div class="inp-cont {% if error.pass or (not error.login and not error.pass  and not error.captcha and error) %}error{% endif%}">
 										<span class="required-star">*</span>
 										<div class="input-group w100p">
 											<span class="input-group-addon bg-color-whitesmoke"><i class="fa fa-lock"></i></span>
@@ -95,7 +95,7 @@
 											</span>
 										{% endif %}
 
-										{% if not error.login and not error.pass and error %}
+										{% if not error.login and not error.pass and not error.captcha and error %}
 											<span class="inform fn-error">
 												{{error}}
 											</span>
@@ -105,6 +105,32 @@
 							</div>				
 						</div>
 					</div>			
+
+					<div class="row mb10">
+					<div class="col-md-3 col-sm-3 col-xs-12 labelcont">
+						<label>Введите слово с картинки</label>
+					</div>
+					<div class="col-md-9 col-sm-9 col-xs-12">
+						<div class="row">
+							<div class="col-md-10">
+								<div class="inp-cont {% if error.captcha %}error{% endif%}">
+									<span class="required-star">*</span>
+									{{captcha}}
+									<input class="w100p" type="text" name="captcha" value="{% if params.captcha %}{{params.captcha}}{% endif%}" autocomplete="off"/>
+									{% if error.captcha %} 
+									<span class="inform fn-error">
+										{{error.captcha}}
+									</span>
+									{% else %}
+									<span class="inform">
+										на русском языке
+									</span>
+									{% endif %}					
+								</div>
+							</div>
+						</div>				
+					</div>
+				</div>			
 
 					<div class="row mb20">
 						<div class="col-md-3 col-sm-93 labelcont">
