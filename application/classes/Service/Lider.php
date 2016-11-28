@@ -33,6 +33,12 @@ class Service_Lider extends Service
 		$discount = 0;
 		$discount_reason = "";
 		$discount_name = FALSE;
+		$available = $this->check_available($quantity);
+		if ($available) {
+			$discount = $price * $quantity;
+			$discount_reason = " (предоплаченный)";
+			$discount_name = "prepayed_lider";
+		}
 		$price_total = $price * $quantity - $discount;
 		$description = $this->get_params_description().$discount_reason;
 
@@ -147,5 +153,81 @@ class Service_Lider extends Service
 		$or_item->save();
 
 		return TRUE;
+	}
+
+	public function check_available($quantity, $balance = FALSE)
+	{
+		$result = FALSE;
+		$quantity = ($quantity) ? $quantity : 1;
+		if ($quantity > 1) return $result;
+
+		$user = Auth::instance()->get_user();
+		if (!$user) return $result;
+
+		$balance = ($balance) ? $balance : self::get_balance($user);
+
+		if ($balance >= 0 AND $balance - intval($quantity) >= 0) {
+			return TRUE;
+		}
+
+		return $result;
+	}
+
+	static function get_balance($user = NULL)
+	{
+		if (!$user) 
+			$user = Auth::instance()->get_user();
+
+		if ($user)
+		{
+			return (int) ORM::factory('User_Settings')
+						->get_by_name($user->id, Service_Lider::LIDER_SETTING_NAME)
+						->find()->value;
+		} else {
+			return 0;
+		}
+	}
+
+	static function set_balance($user, $count)
+	{
+		if (!$user)
+			$user = Auth::instance()->get_user();
+
+		$premium = ORM::factory('User_Settings')
+						->get_by_name($user->id, Service_Lider::LIDER_SETTING_NAME)
+						->find();
+
+		$premium->user_id = $user->id;
+		$premium->name = Service_Lider::LIDER_SETTING_NAME;
+		$premium->value = (int) $count;
+		$premium->save();
+
+		return $count;
+	}
+
+	static function decrease_balance($user, $count = 1)
+	{
+		if (!$user)
+			$user = Auth::instance()->get_user();
+
+		$balance = self::get_balance($user);
+
+		if ($balance == 0)
+			return FALSE;
+
+		return self::set_balance($user, $balance - $count);
+	}
+
+	static function increase_balance($user, $count = 1)
+	{
+		if (!$user)
+			$user = Auth::instance()->get_user();
+
+		$balance = self::get_balance($user);
+
+		if ($balance == 0)
+			return FALSE;
+
+		return self::set_balance($user, $balance + $count);
 	}
 }

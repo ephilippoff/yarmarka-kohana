@@ -17,8 +17,8 @@ class Model_Order_Item extends ORM
 		{
 			$service = Service::factory(Text::ucfirst($params->service->name), $params->service->group_id);
 			$service->return_reserve($params->service->ids);
-		} elseif ( in_array( $params->service->name, array("up", "premium") ) 
-					AND in_array(@$params->service->discount_name, array("free_up", "prepayed_premium") )) {
+		} elseif ( in_array( $params->service->name, array("up", "premium","lider") ) 
+					AND in_array(@$params->service->discount_name, array("free_up", "prepayed_premium","prepayed_lider") )) {
 			$service = Service::factory(Text::ucfirst($params->service->name));
 			$user = ORM::factory('User', $this->order_obj->user_id);
 			$service->increase_balance($user, $params->service->quantity);
@@ -34,8 +34,8 @@ class Model_Order_Item extends ORM
 		if ($params->service->name == "kupon" AND isset($params->service->ids) ) {
 			$service = Service::factory(Text::ucfirst($params->service->name), $params->service->group_id);
 			$service->reserve($params->service->ids, $this->order_id);
-		} elseif ( in_array( $params->service->name, array("up", "premium") ) 
-					AND in_array(@$params->service->discount_name, array("free_up", "prepayed_premium") )) {
+		} elseif ( in_array( $params->service->name, array("up", "premium","lider") ) 
+					AND in_array(@$params->service->discount_name, array("free_up", "prepayed_premium","prepayed_lider") )) {
 			$service = Service::factory(Text::ucfirst($params->service->name));
 			$user = ORM::factory('User', $this->order_obj->user_id);
 			$service->decrease_balance($user, $params->service->quantity);

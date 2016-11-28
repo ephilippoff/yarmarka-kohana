@@ -628,7 +628,7 @@ class Controller_Cart extends Controller_Template {
 		$emails_for_free = 0;
 		$counter = 0;
 		foreach ($orderItems as $item) {
-			if (in_array($item->service->discount_name, array("prepayed_premium", "free_up", "free_advert") )) {
+			if (in_array($item->service->discount_name, array("prepayed_premium", "free_up", "free_advert","prepayed_lider") )) {
 				$goods_for_free += 1;
 			}
 			if (in_array($item->service->discount_name, array("free_email") )) {

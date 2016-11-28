@@ -164,6 +164,9 @@ class Controller_Rest_Service extends Controller_Rest {
 			'lider' => Service::factory("Lider", $first_object->id)->set_params($params)->get(),
 			'email' => Service::factory("Email", $first_object->id)->set_params($params)->get()
 		);
+
+		$this->json['count'] = Service::factory("Lider")->get_balance();
+		$this->json['available'] = Service::factory("Lider")->check_available(1);
 	}
 
 	public function action_check_newspaper()
