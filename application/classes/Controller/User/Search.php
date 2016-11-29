@@ -149,6 +149,8 @@ class Controller_User_Search extends Controller_Template {
         //get balance for premium ads               
         $premium_balance = (int) Service_Premium::get_balance($this->user);
         $this->twig->premium_balance = $premium_balance;
+
+        $this->twig->lider_balance = (int) Service_Lider::get_balance($this->user);
     }
 
     public function action_published()

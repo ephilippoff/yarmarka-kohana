@@ -1,10 +1,17 @@
-{% if premium_balance %}
+{% if premium_balance or lider_balance %}
 <div class="info-block-cont theme3 module js-hide-region">
 	<div class="block-title">
 		<span>Премиум</span>
 	</div>
-	<div class="p10">
-			Ваш лимит Премиум объявлений - <span class="js-premium-count">{{premium_balance}}</span>
-	</div>
+    {% if premium_balance %}
+    	<div class="p10">
+    			Ваш лимит "Премиум" объявлений - <span class="js-premium-count">{{premium_balance}}</span>
+    	</div>
+    {% endif %}
+    {% if lider_balance %}
+        <div class="p10">
+                Ваш лимит "Лидер" объявлений - <span class="">{{lider_balance}}</span>
+        </div>
+    {% endif %}
 </div>
 {% endif %}
