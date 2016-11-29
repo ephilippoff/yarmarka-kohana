@@ -800,9 +800,9 @@ class Controller_Admin_Reklama extends Controller_Admin_Template {
 					);
 
 					if ($from) {
-						array_push($filters, array('date_created','>',$from) );
+						array_push($filters, array('real_date_created','>',$from) );
 					} else {
-						array_push($filters, array('date_created','>','2016-01-01') );
+						array_push($filters, array('real_date_created','>','2016-01-01') );
 					}
 
 					if ($city) {
