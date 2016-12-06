@@ -117,4 +117,15 @@ class Controller_Admin_Settings extends Controller_Admin_Template {
 
 	}
 
+	public function action_fix_companies() {
+		$this->use_layout = FALSE;
+		$this->auto_render = FALSE;
+		$query = DB::query(Database::SELECT, "insert into user_settings (user_id,value,name,type)
+												select id,0,'moderate','orginfo' from \"user\" where org_type=2 
+												and not exists (select id from user_settings where type='orginfo' and name='moderate' and user_id = \"user\".id)
+												and exists (select id from user_settings where type='orginfo' and name='mail_address' and user_id = \"user\".id)", FALSE)
+							->execute();
+		echo "OK";
+	}
+
 }
