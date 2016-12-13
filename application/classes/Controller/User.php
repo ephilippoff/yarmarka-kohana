@@ -242,6 +242,71 @@ class Controller_User extends Controller_Template {
 		$this->template->statistic = $of->get_statistic();
 	}
 
+	public function action_objectload_file_list_csv()
+	{
+        $this->use_layout = FALSE;
+		$this->auto_render = FALSE;
+
+        $this->response->headers('Content-Type', 'text/csv');
+
+        $twig = Twig::factory('other/objectload_file_list_csv');
+
+        $key = $this->request->query('key');
+
+        if (!$key) throw new HTTP_Exception_404;
+
+        $user_ids = ORM::factory('User_Settings')
+					->where("name","=","massload_key")
+					->where("value","=",$key)
+					->find_and_map( function($item){
+						return $item->user_id;
+					});
+
+	
+
+		if (!count($user_ids)) throw new HTTP_Exception_404;
+		
+
+		$of = ORM::factory('Objectload_Files')
+					->join("objectload")
+						->on("objectload_files.objectload_id","=","objectload.id")
+					->where("user_id","IN",$user_ids)
+					->where("objectload_files.id","=",$this->request->param('id'))
+					->find();
+						
+		if (!$of->loaded())
+			throw new HTTP_Exception_404;
+
+		
+		$temp =  DB::select()->from("_temp_".$of->table_name);
+
+		if ($this->request->query('errors'))
+			$temp = $temp->where("error","=",1);
+
+		$twig->fields = array_keys(ORM_Temp::factory($of->table_name)->list_columns());
+
+		$twig->items = array();
+
+		$items = $temp->order_by("id","asc")->as_object()->execute();
+
+		foreach ($items as $value) {
+			array_push($twig->items, (array) $value);
+		}
+		
+		$service_fields = Objectload::getServiceFields();
+		unset($service_fields["object_id"]);
+		unset($service_fields["text_error"]);
+		//$this->template->service_fields = array_keys( $service_fields );
+
+		//$this->template->statistic = $of->get_statistic();
+
+		$filename = $of->id."_".$of->category;
+		$this->response->headers('Content-Disposition', 'inline; filename="'.$filename.'.csv"');
+
+		$this->response->body($twig);
+
+	}
+
 	public function action_priceload()
 	{
 		$this->layout = 'users_v2';    	

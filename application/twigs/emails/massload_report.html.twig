@@ -16,6 +16,7 @@
                 {% set stat = info.stat %}
                 {% set title = info.title %}
                 {% set fileid = info.id %}
+                {% set key = info.key %}
 
                 {% set new = stat.loaded - stat.edited %}
                 {% set withservice_err_ids = [] %}
@@ -26,6 +27,9 @@
             
             <h3 style="font-size:1.1em; display:block; text-align:left; margin-bottom:10px; ">Категория: {{ title }}</h3>
             <ul>
+                {% if key %}
+                    <li class="p3">CSV:  <a href="{{ domain ? domain : 'http://yarmarka.biz' }}/user/objectload_file_list/{{ fileid }}?key={{key}}">Перейти</a></li>
+                {% endif %}
                 <li class="p3">Новые: {{ new }}</li>
                 <li class="p3">Были отредактированы: {{ stat.edited }} </li>
                 <li class="p3">Не изменились: {{ stat.nochange }}</li>

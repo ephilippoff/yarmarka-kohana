@@ -1,0 +1,2 @@
+{% for item in items %}{% for field in fields %}{{ '"' ~ item[field] ~ '",'}}{% endfor %}{{'\r\n'}}{% endfor %}
+
