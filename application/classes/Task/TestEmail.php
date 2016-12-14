@@ -48,6 +48,15 @@ class Task_TestEmail extends Minion_Task
 		$common_stat = new Obj($objectload->get_statistic());
 		$category_stat = array();
 
+		$user = ORM::factory('User', 327190);
+
+		$us = ORM::factory('User_Settings')
+				->where("name","=","massload_key")
+				->where("user_id","=", $user->id)
+				->find();
+
+		$key = ($us->loaded()) ? $us->value : FALSE;
+
 		$of = ORM::factory('Objectload_Files')
 				->where("objectload_id", "=", $objectload_id)
 				->find_all();
@@ -58,11 +67,12 @@ class Task_TestEmail extends Minion_Task
 			$category_stat[$cfg["name"]] = array(
 					"id" => $file->id,
 					"title" => $cfg["name"],
-					"stat" => new Obj($file->get_statistic())
+					"stat" => new Obj($file->get_statistic()),
+					"key" => $key
 				);
 		}
 
-		$user = ORM::factory('User', 327190);
+	
 
 		$domain = 1948;
 
@@ -78,8 +88,8 @@ class Task_TestEmail extends Minion_Task
 		
 		$main_search_result = Search::getresult($main_search_query->execute()->as_array());
 
-		$this->subscription($main_search_result, $subscription_data->title, 100, '/dssdfdsf', $domain);
-		$this->subscription_cancel($main_search_result, $subscription_data->title, 'http://yarmarka.ibz/sdfsdf',$domain);
+		// $this->subscription($main_search_result, $subscription_data->title, 100, '/dssdfdsf', $domain);
+		// $this->subscription_cancel($main_search_result, $subscription_data->title, 'http://yarmarka.ibz/sdfsdf',$domain);
 
 		// $this->payment_success($order, $orderItems, $domain);
 
@@ -101,7 +111,7 @@ class Task_TestEmail extends Minion_Task
 		// );
 
 
-		// // $this->massload_report($objectload,  $common_stat, $category_stat, $user->org_name, $domain);
+		 $this->massload_report($objectload,  $common_stat, $category_stat, $user->org_name, $domain);
 
 		//$this->object_expiration($objects, '4028377.123123.12312', $domain);
 		// $this->object_to_archive($objects, '4028377.123123.12312', $domain);

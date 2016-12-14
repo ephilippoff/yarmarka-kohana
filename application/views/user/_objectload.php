@@ -45,7 +45,7 @@
 								<?=$file->statistic_str?>					
 							</td>
 							<td>
-								<a href="/user/objectload_file_list/<?=$file->id?>" target="_blank">Все строки</a>, 
+								<a href="/user/objectload_file_list/<?=$file->id?>" target="_blank">Все строки</a>, <a href="/user/objectload_file_list_xml/<?=$file->id?>" target="_blank">(XML stat)</a>, 
 								<? if ($file->error_exists):?>
 									<a href="/user/objectload_file_list/<?=$file->id?>?errors=1" target="_blank">Строки с ошибками</a>
 								<? endif;?>													
