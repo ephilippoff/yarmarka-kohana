@@ -65,9 +65,9 @@ class Yfeed
 		}
 	}
 
-	function compile()
+	function compile($name = "vacancy")
 	{
-		$vacancy = $this->dom->createElement("vacancy");
+		$vacancy = $this->dom->createElement($name);
 		$this->root->appendChild($vacancy);
 		foreach ($this->data as $name => $row) {	
 			$this->compile_row($this->dom, $vacancy, $name, $row);

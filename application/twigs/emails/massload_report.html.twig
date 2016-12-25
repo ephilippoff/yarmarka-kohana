@@ -27,8 +27,9 @@
             
             <h3 style="font-size:1.1em; display:block; text-align:left; margin-bottom:10px; ">Категория: {{ title }}</h3>
             <ul>
+                <li class="p3"><a href="{{ domain ? domain : 'http://yarmarka.biz' }}/user/objectload_file_list/{{ fileid }}">Все</a></li>
                 {% if key %}
-                    <li class="p3">CSV:  <a href="{{ domain ? domain : 'http://yarmarka.biz' }}/user/objectload_file_list/{{ fileid }}?key={{key}}">Перейти</a></li>
+                    <li class="p3"><a href="{{ domain ? domain : 'http://yarmarka.biz' }}/user/objectload_file_list_xml/{{ fileid }}?key={{key}}">Статистика (XML)</a></li>
                 {% endif %}
                 <li class="p3">Новые: {{ new }}</li>
                 <li class="p3">Были отредактированы: {{ stat.edited }} </li>

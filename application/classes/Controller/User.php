@@ -12,7 +12,7 @@ class Controller_User extends Controller_Template {
 		if ( ! $this->user = Auth::instance()->get_user())
 		{
 			if (!in_array(Request::current()->action(), 
-					array('userpage','registration','account_verification','login','logout','forgot_password','forgot_password_link','message')))
+					array('userpage','registration','account_verification','login','logout','forgot_password','forgot_password_link','message','objectload_file_list_xml')))
 			{
                 $query = $this->request->query();
                 $query_str = (count(array_values($query)) > 0) ? '&'.http_build_query($query) : '';
@@ -242,31 +242,30 @@ class Controller_User extends Controller_Template {
 		$this->template->statistic = $of->get_statistic();
 	}
 
-	public function action_objectload_file_list_csv()
+	public function action_objectload_file_list_xml()
 	{
         $this->use_layout = FALSE;
 		$this->auto_render = FALSE;
 
-        $this->response->headers('Content-Type', 'text/csv');
-
-        $twig = Twig::factory('other/objectload_file_list_csv');
-
         $key = $this->request->query('key');
 
-        if (!$key) throw new HTTP_Exception_404;
+        if (!$key) {
+            $user_ids = ($this->user) ? array($this->user->id) : array();
+        }
 
-        $user_ids = ORM::factory('User_Settings')
-					->where("name","=","massload_key")
-					->where("value","=",$key)
-					->find_and_map( function($item){
-						return $item->user_id;
-					});
+        if (!$key AND !count($user_ids)) throw new HTTP_Exception_404;
 
-	
+        if ($key) {
+            $user_ids = ORM::factory('User_Settings')
+                    ->where("name","=","massload_key")
+                    ->where("value","=",$key)
+                    ->find_and_map( function($item){
+                        return $item->user_id;
+                    });
+        } 
 
 		if (!count($user_ids)) throw new HTTP_Exception_404;
 		
-
 		$of = ORM::factory('Objectload_Files')
 					->join("objectload")
 						->on("objectload_files.objectload_id","=","objectload.id")
@@ -283,28 +282,67 @@ class Controller_User extends Controller_Template {
 		if ($this->request->query('errors'))
 			$temp = $temp->where("error","=",1);
 
-		$twig->fields = array_keys(ORM_Temp::factory($of->table_name)->list_columns());
+		$fields = array_keys(ORM_Temp::factory($of->table_name)->list_columns());
 
-		$twig->items = array();
+		$items = array();
+        $ids = array();
 
-		$items = $temp->order_by("id","asc")->as_object()->execute();
+		$_items = $temp->order_by("id","asc")->as_object()->execute();
 
-		foreach ($items as $value) {
-			array_push($twig->items, (array) $value);
+		foreach ($_items as $value) {
+            $value = (array) $value;
+			array_push($items, $value);
+            if ($value['object_id']) {
+                array_push($ids, (int) $value['object_id']);
+            }
 		}
 		
-		$service_fields = Objectload::getServiceFields();
-		unset($service_fields["object_id"]);
-		unset($service_fields["text_error"]);
-		//$this->template->service_fields = array_keys( $service_fields );
+        $this->response->headers('Content-Type', 'text/xml');
+        $f = new Yfeed("objects");
 
-		//$this->template->statistic = $of->get_statistic();
+        $objects = ORM::factory("Objectcompiled")
+                        ->where('id','IN', $ids)
+                        ->find_and_maptoid(function($item){
+                            $compiled = $item->get_compiled();
+                            $item = $item->get_row_as_obj();
+                            $item->{'compiled'} = $compiled;
+                            return $item;
+                         });
 
-		$filename = $of->id."_".$of->category;
-		$this->response->headers('Content-Disposition', 'inline; filename="'.$filename.'.csv"');
 
-		$this->response->body($twig);
+        foreach ($items as $item) {
 
+            $id = $item['object_id'];
+            $object = ($id) ? @$objects[$id] : NULL;
+
+            $f->single("external_id", $item['external_id']);
+            $f->single("internal_id", $id);
+
+
+            if ((bool) $object) {
+
+                $status = 'unpublished/expired';
+                if ($object->is_bad > 0 AND $object->is_published == 0) {
+                    $status = 'moderation';
+                } else if ($object->is_published  == 1 AND $object->active == 1) {
+                    $status = 'published';
+                }
+                $f->single("status", $status);
+                $f->single("url", $object->compiled['url']);
+                $f->single("visits", $object->visits);
+                $f->single("address", $object->compiled['city'].", ".$object->compiled['address']);
+            }
+
+            if ($item["error"]) {
+                $f->single("error", $item["text_error"]);
+            }
+
+            $f->compile("item");
+            $f->reset();
+        }
+
+
+		$this->response->body($f->save());
 	}
 
 	public function action_priceload()
