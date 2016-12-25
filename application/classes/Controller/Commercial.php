@@ -137,6 +137,28 @@ class Controller_Commercial extends Controller_Template {
 		$this->response->body($twig);
 	}
 
+	public function action_ne_sdvinus_s_mesta()
+	{
+
+		$twig = Twig::factory('commercial/ne_sdvinus_s_mesta');
+
+		$twig->crumbs = array(
+			array(
+				"title" => "Рекламодателям",
+				"url" => "commercial"
+			),
+			array(
+				"title" => "Реклама на сайте",
+				"url" => "commercial/site"
+			),
+			array(
+				"title" => "Не сдвинусь с места"
+			)
+		);
+
+		$this->response->body($twig);
+	}
+
 	public function action_personal()
 	{
 
