@@ -134,5 +134,21 @@ return array(
 									"Street" 		=> "adres-raion",
 									"Images" 		=> "images",
 									"Emergency"		=> "premium"
-								)
+								),
+	'garazhi_i_mashinomesta' => array(
+		"Id" 			=> "external_id",
+		"OperationType" => "tip-sdelki3", 
+		"City" 			=> "city", 
+		"ObjectType" 	=> "garazh-mashinomesto",
+		"ObjectSubtype" => "tip-garazha",
+		"Square" 		=> "ploshchad-2x2",
+		"Description" 	=> "user_text_adv",
+		"ManagerName" 	=> "contact",
+		"Price" 		=> "tsena",
+		"ContactPhone"  => "contact_0_value",
+		"EMail" 		=> "contact_1_value",
+		"Street" 		=> "adres-raion",
+		"Images" 		=> "images",
+		"Emergency"		=> "premium"
+	)
 );

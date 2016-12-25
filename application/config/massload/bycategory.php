@@ -280,6 +280,35 @@ return array(
 						'contact'		=> array('name' => 'contact',	'required' => TRUE, 'type' => 'contact_name', 	'translate' => 'ФИО', 'maxlength' => 50),
 						'images' 		=> array('name' => 'images',		'required' => FALSE,'type' => 'photo', 		'translate' => 'Фото', 'maxlength' => 0)
 					)
-	)
+	),
+	'garazhi_i_mashinomesta'		=> array( 
+			'id'    => 25,
+			'name'	=> 'Гаражи и машиноместа',
+			'category' =>'garazhi_i_mashinomesta',
+			'fields'=>array
+					(
+						'external_id' 	=> array('name' => 'external_id','required' => TRUE, 'type' => 'external_id', 'translate' => 'ID', 'maxlength' => 50),
+						'city' 			=> array('name' => 'city',		'required' => TRUE, 'type' => 'city', 		'translate' => 'Город', 'maxlength' => 30),
+						'adres-raion'		=> array('name' => 'adres-raion',	'required' => TRUE, 'type' => 'text', 	'translate' => 'Адрес', 'maxlength' => 50),
+
+						'tip-sdelki3' 	=> array('name' => 'tip-sdelki3','required' => TRUE,'type' => 'dict', 		'translate' => 'Тип сделки', 'maxlength' => 30),
+
+						'garazh-mashinomesto' 	=> array('name' => 'garazh-mashinomesto',	'required' => TRUE, 'type' => 'dict', 		'translate' => 'Гараж/машиноместо', 'maxlength' => 30),
+
+						'tip-garazha' 	=> array('name' => 'tip-garazha',	'required' => FALSE, 'type' => 'dict', 		'translate' => 'Тип гаража', 'maxlength' => 30),
+
+						'ploshchad-2x2' 	=> array('name' => 'ploshchad-2x2',	'required' => TRUE, 'type' => 'integer', 	'translate' => 'Площадь', 'maxlength' => 6),	
+
+						'tsena' 		=> array('name' => 'tsena',		'required' => TRUE, 'type' => 'integer', 	'translate' => 'Цена', 'maxlength' => 9),
+						'user_text_adv' => array('name' => 'user_text_adv','required' => TRUE,'type' => 'textadv', 'translate' => 'Текст объявления', 'maxlength' => 15000),
+						'contact_0_value'=> array('name' => 'contact_0_value',	'required' => TRUE, 'type' => 'contact','translate' => 'Телефон №1', 'maxlength' => 40),
+						'contact_1_value'=> array('name' => 'contact_1_value',	'required' => FALSE, 'type' => 'contact','translate' => 'Телефон №2', 'maxlength' => 40),
+						'contact'		=> array('name' => 'contact',	'required' => TRUE, 'type' => 'contact_name', 	'translate' => 'ФИО', 'maxlength' => 50),
+						'images' 		=> array('name' => 'images',		'required' => FALSE,'type' => 'photo', 		'translate' => 'Фото', 'maxlength' => 0)
+					),
+			'autofill'=>array(
+				'rubricid' => 25, //категория квартиры и комнаты
+			)
+	),
 
 );

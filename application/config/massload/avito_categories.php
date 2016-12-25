@@ -8,4 +8,5 @@ return array(
 	'house'				=> array( "Category" => "Дома, дачи, коттеджи",  "OperationType" => "Продам"),
 	'land'				=> array( "Category" => "Земельные участки",  "OperationType" => "Продам"),
 	'commercial'		=> array( "Category" => "Коммерческая недвижимость"),
+	'garazhi_i_mashinomesta' => array( "Category" => "Гаражи и машиноместа")
 );

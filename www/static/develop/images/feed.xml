@@ -1,0 +1,31 @@
+  <Ads formatVersion="3" target="Avito.ru">
+  	<Ad>
+		<Id>гараж345353</Id>
+		<Category>Гаражи и машиноместа</Category>
+		<OperationType>Продам</OperationType>
+		<ObjectType>Машиноместо</ObjectType>
+		<ObjectSubtype>Многоуровневый паркинг</ObjectSubtype>
+		<Secured>Нет</Secured>
+		<City>Санкт-Петербург</City>
+		<Street>Роменская улица, 2</Street>
+		<Subway>Лиговский проспект</Subway>
+		<Square>10</Square>
+		<Description>Тестовое объявление — тест Автозагрузки - Гаражи и машиноместа.</Description>
+		<Price>1500000</Price>
+		<AdStatus>Free</AdStatus>
+	</Ad>
+	<Ad>
+		<Id>гараж2323</Id>
+		<Category>Гаражи и машиноместа</Category>
+		<OperationType>Сдам</OperationType>
+		<ObjectType>Гараж</ObjectType>
+		<ObjectSubtype>Капитальный</ObjectSubtype>
+		<Secured>Нет</Secured>
+		<City>Нижневартовск</City>
+		<Street>Роменская улица, 2</Street>
+		<Subway>Лиговский проспект</Subway>
+		<Square>10</Square>
+		<Description>Тестовое объявление — тест Автозагрузки - Гаражи и машиноместа.</Description>
+		<Price>1500000</Price>
+	</Ad>
+</Ads>
