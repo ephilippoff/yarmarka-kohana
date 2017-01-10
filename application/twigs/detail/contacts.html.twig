@@ -49,19 +49,6 @@
 						
 					{% endif %}
 				</div>
-					{% if object.compiled.author.org_type == 2 %}
-						<div class="col-md-12">
-							<div class="org_contacts_detail">
-								<div class="fr"><i class="fa fa-calendar-check-o" title="На Ярмарке с {{object.compiled.author.regdate|date('Y')}} года "></i></div>
-								{% if object.compiled.author.logo %}
-									<div class="img-cont"><img src="{{  get_file(object.compiled.author.logo['120x90']) }}"></div>
-								{% endif %}
-								<a href="/user?id={{object.author_company_id}}" class="db moreinfo">{{ object.compiled.author.org_name }}</a>
-								<div><i class="fa fa-map-marker"></i> {{ object.compiled.author.org_post_address }}</div>
-								<div><i class="fa fa-phone"></i>  {{ object.compiled.author.org_phone }}</div>
-							</div>
-						</div>
-					{% endif %}
 			{% else %}
 				<div class="col-md-12 col-sm-12">
 					<span class="red">Объявление снято с публикации, контактные данные не доступны.</span>
@@ -70,3 +57,43 @@
 		</div>
 	</div>					
 </div>
+
+{% if object.compiled.author.org_type == 2 %}
+
+	<div class="info-block-cont theme2 contacts-cont module">
+		<div class="title_block brt2">
+			<span><i class="fa fa-phone mr5"></i>О компании</span>
+		</div>
+		<div class="body">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="b-org-info">
+
+						<div class="b-org-info__left {% if object.compiled.author.logo %}visible-lg{%else%}hidden{% endif %}">
+							{% if object.compiled.author.logo %}
+								<img class="b-org-info__logo" src="{{  get_file(object.compiled.author.logo['120x90']) }}">
+							{% endif %}
+						</div>
+						<div class="b-org-info__right {% if not object.compiled.author.logo %}b-org-info__right--full{%endif%}">
+
+							{% if object.compiled.author.org_name %}
+								<p>
+									<a href="/user?id={{object.author_company_id}}" class="db moreinfo" rel="nofollow"><i class="fa fa-globe"></i> {{ object.compiled.author.org_name }} (Все объявления)</a>
+								</p>
+							{% endif %}
+
+							{% if object.compiled.author.org_post_address %}
+								<p><i class="fa fa-map-marker"></i> {{ object.compiled.author.org_post_address }}</p>
+							{% endif %}
+
+							<p><i class="fa fa-calendar-check-o"></i>  На Ярмарке с {{object.compiled.author.regdate|date('d.m.Y')}} </p>
+
+						</div>
+
+					</div> 
+				</div>
+			</div>	
+		</div>
+	</div>
+
+{% endif %}

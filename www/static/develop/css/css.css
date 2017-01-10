@@ -2318,20 +2318,28 @@ p.org_contacts .fa {
     font-size: 25px;
 }
 
-.org_contacts_detail{
+
+.b-org-info {
+
+}
+
+.b-org-info__logo {
+    display: block;
+}
+
+.b-org-info__left {
+    float:left;
+    width:30%;
     padding: 10px;
-    border-top: 1px solid #ccc;
-    margin-top: 10px;
 }
 
-.org_contacts_detail .img-cont{
-    float: left;
-    margin-right: 15px;
+
+
+.b-org-info__right {
+    float:left;  
+    width:70%;
 }
 
-.org_contacts_detail .fa-calendar-check-o{
-    color: #2B587A;
-    font-size: 30px;
-    position: relative;
-    top: 10px;
+.b-org-info__right--full {
+    width:100%;
 }
