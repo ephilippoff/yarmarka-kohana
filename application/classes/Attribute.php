@@ -33,11 +33,17 @@ class Attribute {
 				$data[$row->id] =  $row->title;	
 			} else {
 
-				$category_params =  array (
-													"title" => $row->title, 
-													"title_auto" => $row->title_auto_fill,
-													"text_required" =>  $row->text_required);
+				$category_params =  array ("title" => $row->title);
 
+				if ($row->title_auto_fill) {
+					$category_params["title_auto"] =  $row->title_auto_fill;
+				}
+				if ($row->title_auto_if) {
+					$category_params["title_auto_if"] =  $row->title_auto_if;
+				}
+				if ($row->text_required) {
+					$category_params["text_required"] =  $row->text_required;
+				}
 
 				$options = Kohana::$config->load("category.".$row->id);
 				if ($options)

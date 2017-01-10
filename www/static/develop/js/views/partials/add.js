@@ -663,26 +663,25 @@ var subjectView = Backbone.View.extend({
         this.inform = this.$el.find(".inform");
         this.value = this.control.val();
         this.error = this.inform.html();
-            if (!this.title_auto && !this.app.is_edit || !this.title_auto && this.app.is_edit) // 
-                this.render();
-        },
 
-        render: function() {
-            var html = _.template(this.template)({
-                value: this.value,
-                error: this.error,
-                maxlength: this.maxlength
-            });
-            this.$el.html(html);
-            return this;
-        },
+    },
 
-        destroy: function() {
-            this.$el.empty();
-            this.stopListening();
-            return this;
-        }
-    });
+    render: function() {
+        var html = _.template(this.template)({
+            value: this.value,
+            error: this.error,
+            maxlength: this.maxlength
+        });
+        this.$el.html(html);
+        return this;
+    },
+
+    destroy: function() {
+        this.$el.empty();
+        this.stopListening();
+        return this;
+    }
+});
 
 var textView = Backbone.View.extend({
     template: templates.textadv,
@@ -999,18 +998,53 @@ return Marionette.ItemView.extend({
                 category_id: this.category.category_id,
                 app: this
             });
+
             this.params = new paramsView({
                 category_id: this.category.category_id,
                 data: this.category.data,
                 address_precisions: this.category.settings.address_precisions,
                 app: this
             });
+
             this.subject = new subjectView({
                 el: "#div_subject",
                 category_id: this.category.category_id,
-                title_auto: this.category.settings.title_auto,
                 app: this
             });
+
+            if (this.category.settings.title_auto) {
+
+                if (this.category.settings.title_auto_if) {
+                    var elementsWhichDoTitleAuto = this.category.settings.title_auto_if.split(',').map(function(item){
+                        return '_'+item;
+                    });
+
+                    var onParamsChange = function() {
+                        if (this.pTimeout) clearTimeout(this.pTimeout);
+
+                        var $this = this;
+                        this.pTimeout = setTimeout(function(){
+                            var values = $this.params.collection.map(function(item){
+                                return item.get('value');
+                            });
+                            if (_.intersection(elementsWhichDoTitleAuto, values).length) {
+                                $this.subject.destroy();
+                            } else {
+                                $this.subject.render();
+                            }
+                        }, 100)
+                    }
+
+                    this.params.collection.on('add', onParamsChange, this);
+                    this.params.collection.on('remove', onParamsChange, this);
+                    onParamsChange.apply(this);
+                }
+                
+                this.subject.destroy();
+            } else {
+                this.subject.render();
+            }
+
             this.text = new textView({
                 el: "#div_textadv",
                 category_id: this.category.category_id,

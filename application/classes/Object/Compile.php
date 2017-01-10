@@ -87,7 +87,7 @@ class Object_Compile
 
 		$coords = $object->get_coords();
 
-		if ($coords) {
+		if ($coords AND count($coords) == 2) {
 			list($result["lat"],$result["lon"]) = $coords;
 		}
 

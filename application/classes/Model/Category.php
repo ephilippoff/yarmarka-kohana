@@ -386,6 +386,35 @@ class Model_Category extends ORM {
 
 		return $result;
 	}
+
+	function is_title_auto_fill(array $params, $values_with_prefix = '') {
+
+		if (!$this->title_auto_fill) {
+
+			return FALSE;
+		}
+
+
+		if ($this->title_auto_fill AND $this->title_auto_if) {
+			
+			$elementsWhichDoTitleAuto = explode(',', $this->title_auto_if);
+			$elementsWhichDoTitleAuto = array_map(function($item) use($values_with_prefix) {
+				return $values_with_prefix.$item;
+			}, $elementsWhichDoTitleAuto);
+
+			$_params = preg_grep("/^param_/", array_keys($params));
+			$_params = array_map(function($item) use ($params, $values_with_prefix){
+				return strval($params[$item]);
+			}, $_params);
+
+			if (!array_intersect($_params, $elementsWhichDoTitleAuto)) {
+				return FALSE;
+			}
+
+		}
+
+		return TRUE;
+	}
 }
 
 /* End of file Category.php */

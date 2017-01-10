@@ -260,12 +260,14 @@ class Lib_PlacementAds_AddEdit {
 			$validation->rule('contact', 'not_empty', array(':value', "Контактное лицо"));
 		}
 
-		if ($category AND !$category->title_auto_fill AND !$params->itis_massload)
+		if ($category AND !$params->itis_massload)
 		{
-			$validation->rules('title_adv', array(
-				array('not_empty', array(':value', "Заголовок объявления")),
-				array('min_length', array(':value', 10, "Заголовок объявления")),
-				));
+			if ( !$category->is_title_auto_fill((array) $params) ) {
+				$validation->rules('title_adv', array(
+					array('not_empty', array(':value', "Заголовок объявления")),
+					array('min_length', array(':value', 10, "Заголовок объявления")),
+					));
+			}
 		}
 
 		if ($category AND $category->text_required)
@@ -760,9 +762,11 @@ class Lib_PlacementAds_AddEdit {
 			$object->is_published 	= $user->loaded() ? 1 : 0;
 		}
 
-		if ( ! $category->title_auto_fill)
-		{
+
+		if ( !$category->is_title_auto_fill((array) $params) ) {
+
 			$object->title 			= $params->title_adv;
+
 		}
 
 		if ($params->from_company AND $user->linked_to->loaded())
@@ -1128,11 +1132,10 @@ class Lib_PlacementAds_AddEdit {
 		$object = &$this->object;
 		$params = &$this->params;
 
-		if ($object->category_obj->title_auto_fill)
-		{
-			$object->title = $object->generate_title();
-		} else {
+		if ( !$object->category_obj->is_title_auto_fill((array) $params) ) {
 			$object->title = strip_tags($object->title);
+		} else {
+			$object->title = $object->generate_title();
 		}
 
 		$object->full_text = $object->generate_full_text();

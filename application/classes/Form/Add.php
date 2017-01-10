@@ -246,9 +246,14 @@ class Form_Add  {
 
 		$city_title = NULL;
 		$lat = $lon = "";
-		if ($city->loaded())
+		if ($city->loaded()) {
 			$city_title = $city->title;
-			list($lat, $lon) = $city->get_coords();
+			if ($city->get_coords() AND count($city->get_coords()) == 2) {
+				list($lat, $lon) = $city->get_coords();
+			}
+		}
+		
+		
 
 		$real_city = NULL;
 		$real_city_exists = FALSE;
@@ -611,6 +616,7 @@ class Form_Add  {
 		$errors 	= $this->errors;
 
 		$title_auto_fill 	=  FALSE;
+		$title_auto_if 	=  FALSE;
 		$value 				= '';
 
 		if ($object->loaded() AND !$this->is_post)
@@ -618,20 +624,28 @@ class Form_Add  {
 		elseif ($this->is_post AND array_key_exists("title_adv", $this->params))
 			$value = $this->params['title_adv'];
 
-		if ($category->loaded())
+		if ($category->loaded()) {
 			$title_auto_fill = $category->title_auto_fill;
+			$title_auto_if = $category->title_auto_if;
+
+		}
 
 		$max_length = 75;
 		if ( Acl::check("object.add.type") ) {
 			$max_length = 500;
 		}
 
-		if ((!$title_auto_fill AND !$edit) OR (!$title_auto_fill AND $edit))
+		if ($category->loaded() AND 
+				 !$category->is_title_auto_fill($this->params, '_')) {
+
+
 			$this->_data->subject = array( 'value' => $value, 
 											'edit' => $edit,
 											'title_auto_fill' => $title_auto_fill,
 											'subject_error' => $errors->title_adv,
 											'max_length' => $max_length);
+			
+		}
 
 		return $this;
 	}

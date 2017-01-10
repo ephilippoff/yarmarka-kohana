@@ -20,12 +20,14 @@ class Lib_PlacementAds_AddEditByModerator extends Lib_PlacementAds_AddEdit {
 		// 	$validation->rule('contact', 'not_empty', array(':value', "Контактное лицо"));
 		// }
 
-		if ($category AND !$category->title_auto_fill AND !$params->itis_massload)
+		if ($category AND !$params->itis_massload)
 		{
-			$validation->rules('title_adv', array(
-				array('not_empty', array(':value', "Заголовок")),
-				array('min_length', array(':value', 10, "Заголовок")),
-			));
+			if ( !$category->is_title_auto_fill((array) $params) ) {
+				$validation->rules('title_adv', array(
+					array('not_empty', array(':value', "Заголовок объявления")),
+					array('min_length', array(':value', 10, "Заголовок объявления")),
+					));
+			}
 		}
 
 		if ($category AND $category->text_required)

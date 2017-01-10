@@ -7,7 +7,7 @@ return array(
 			'filter'=>array(),
 			'autofill'=>array(
 						'rubricid' => 15, //категория легковые автомобили
-						'param_466' => 3238, //вторичное жилье
+						'param_466' => 3238, //продажа
 					),
 			'fields'  =>array(
 						'external_id' 	=> array('name' => 'external_id','required' => TRUE, 'type' => 'external_id', 'translate' => 'ID', 'maxlength' => 50),
