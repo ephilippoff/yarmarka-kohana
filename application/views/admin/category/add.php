@@ -130,6 +130,16 @@
 			<span class="help-inline"><?=Arr::get($errors, 'title_auto_fill')?></span>
 		</div>
 	</div>
+
+	<div class="control-group <?=Arr::get($errors, 'title_auto_if') ? 'error' : ''?>">
+		<label class="control-label">title_auto_if:</label>
+		<div class="controls">
+			<input type="text" value="<?=(Arr::get($_POST, 'title_auto_if'))?>" class="input-block-level" name="title_auto_if" id="title_auto_if"  />
+			<span class="help-inline"><?=Arr::get($errors, 'title_auto_if')?></span>
+		</div>
+	</div>
+
+
 	
 	<div class="control-group <?=Arr::get($errors, 'text_required') ? 'error' : ''?>">
 		<label class="control-label">text_required:</label>
