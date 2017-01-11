@@ -1,5 +1,33 @@
   <Ads formatVersion="3" target="Avito.ru">
   	<Ad>
+  	<Id>459846</Id>
+  	<Category>Комнаты</Category>
+  	<OperationType>Сдам</OperationType>
+  	<Region>Свердловская область</Region>
+  	<City>Екатеринбург</City>
+  	<Street>Краснофлотцев улица, д.25/А</Street>
+  	<District>Орджоникидзевский</District>
+  	<SaleRooms>1</SaleRooms>
+  	<Rooms>Многокомн.кв.</Rooms>
+  	<Square>74, 12.3</Square>
+  	<Floor>1</Floor>
+  	<Floors>4</Floors>
+  	<LeaseType>Долгосрочная</LeaseType>
+  	<Description>
+  	Сдается комната в 6-комн. квартире. Арендуемая площадь - 12.3 кв. м. Общая площадь квартиры - 74 м2., жилая площадь - 50 м2, площадь кухни - 12 м2. Сдается с мебелью и бытовой техникой: холодильник, телевизор. Интернет. Есть душевая кабина. Возможна аренда семьям с детьми. Аренда свыше года. Район Орджоникидзевский. 20 мин. пешком. Квартира расположена на 1 этаже 4 этажного дома. Окна выходят во двор. Предоплата 1 месяц. Звонить с 13:00 до 14:00. Посмотреть комнату возможно 13,14,17,18,21,22,25,26,29,30 января[#459846#]
+  	</Description>
+  	<Price>8500</Price>
+  	<CompanyName>частное лицо</CompanyName>
+  	<ManagerName>Екатерина</ManagerName>
+  	<EMail>mail459846@cutmail.ru</EMail>
+  	<ContactPhone>+7 (982) 7106609</ContactPhone>
+  	<Images>
+  	<Image url="http://www.jcat.ru/images/orders/2016-02/08/06cea1329e5c0afa26f3dd37703244a3.jpg"/>
+  	<Image url="http://www.jcat.ru/images/orders/2016-02/08/b9cff2ba62fa26b131db9f6631ff6044.jpg"/>
+  	</Images>
+  	<AdStatus>Free</AdStatus>
+  	</Ad>
+  	<Ad>
 		<Id>гараж345353</Id>
 		<Category>Гаражи и машиноместа</Category>
 		<OperationType>Продам</OperationType>
@@ -15,7 +43,7 @@
 		<AdStatus>Free</AdStatus>
 	</Ad>
 	<Ad>
-		<Id>гараж2323</Id>
+		<Id>гараж232123</Id>
 		<Category>Гаражи и машиноместа</Category>
 		<OperationType>Сдам</OperationType>
 		<ObjectType>Гараж</ObjectType>

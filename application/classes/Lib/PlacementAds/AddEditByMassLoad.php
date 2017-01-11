@@ -27,6 +27,21 @@ class Lib_PlacementAds_AddEditByMassLoad extends Lib_PlacementAds_AddEdit {
 		return $this;
 	}
 
+	function save_generated()
+	{
+		$object = &$this->object;
+		$params = &$this->params;
+
+		$object->title = $object->generate_title();
+
+		$object->full_text = $object->generate_full_text();
+		$object->save();
+
+		ORM::factory('Data_Integer')->save_price_per_square($object->id, $object->category);
+
+		return $this;
+	}
+
 	function save_geoloc()
 	{
 		$params = &$this->params;

@@ -89,6 +89,24 @@ return array(
 									"Images" 		=> "images",
 									"Emergency"		=> "premium"
 								),
+	'flat_rooms_rent'		=> array( 
+									"Id" 			=> "external_id",
+									"OperationType" => "tip-sdelki1", 
+									"City" 			=> "city", 
+									"Rooms" 		=> "flatrooms",
+									"LeaseType" 	=> "nedv-type-pay",
+									"Floor" 		=> "etazh", 
+									"Floors" 		=> "etazhnost",
+									"Square"		=> "ploshchad",
+									"Description" 	=> "user_text_adv",
+									"ManagerName" 	=> "contact",
+									"Price" 		=> "tsena",
+									"ContactPhone"  => "contact_0_value",
+									"EMail" 		=> "contact_1_value",
+									"Street" 		=> "adres-raion",
+									"Images" 		=> "images",
+									"Emergency"		=> "premium"
+								),
 	'house'				=> array( 
 									"Id" 			=> "external_id",
 									"OperationType" => "tip-sdelki3", 
