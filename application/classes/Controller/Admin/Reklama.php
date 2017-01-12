@@ -770,6 +770,57 @@ class Controller_Admin_Reklama extends Controller_Admin_Template {
                                     'orders' => 'Заказы',
                                     'subscriptions' => 'Подписки'
                                 );
+
+		$category_array = array();
+		$category_list = ORM::factory('Category')
+								->where("through_weight","IS NOT",NULL)
+								->where("is_ready", "=", 1)
+								->order_by("through_weight")
+								->cached(DATE::WEEK, array("category", "add"))
+								->find_all();
+		foreach ($category_list as $item) {
+			
+			$childs = ORM::factory('Category')
+				->where("parent_id","=",$item->id)
+				->where("is_ready", "=", 1)
+				->order_by("weight")
+				->cached(DATE::WEEK, array("category", "add"))
+				->find_all();
+			if (count($childs)>0 AND $item->id <> 1)
+			{
+				$childs_array = array();
+				foreach ($childs as $child) {
+					if (!ORM::factory('Category')
+							->where("parent_id","=",$child->id)
+							->where("is_ready", "=", 1)
+							->count_all(NULL, DATE::WEEK))
+					{
+						$childs_array[$child->id] = $child->title;
+					}
+				}
+				$category_array[$item->title] = $childs_array;
+			}
+			
+		}
+
+		$category_array["Другие"] = array(
+			42 => "Медицина, здоровье. Товары и услуги",
+			156 => "В хорошие руки",
+			72 => "Товары для детей"
+		);
+
+		// Необходимо переместить рубрику "Другие" над остальными
+
+		$lastvalue = end($category_array);
+		$lastkey = key($category_array);
+
+		$tmp_array = array($lastkey=>$lastvalue);
+
+		array_pop($category_array);
+
+		$category_array = array_merge($tmp_array,$category_array);
+
+		$this->template->category_list = $category_array;
 	}
 
 	public function action_statistic_data()
@@ -781,6 +832,7 @@ class Controller_Admin_Reklama extends Controller_Admin_Template {
 		$period = $this->request->query('period');
 		$from = $this->request->query('from');
 		$city = $this->request->query('city');
+		$category = $this->request->query('category');
 
 		if ($city == 1) $city= NULL;
 
@@ -809,9 +861,33 @@ class Controller_Admin_Reklama extends Controller_Admin_Template {
 						array_push($filters, array('city_id','=',$city) );
 					}
 
-					$json['data'] = array(
-						'new_objects' => Statistic::get_new_objects( $period, $filters)
-					);
+					if ($category) {
+
+						if (count($category) == 1) {
+							$category = array($category);
+						}
+
+						array_push($filters, array('category','IN', $category) );
+
+						$objects =  Statistic::get_new_objects_category( $period, $filters);
+
+						$new_objects = array();
+						foreach ($category as $category_id) {
+							$new_object_category = array_filter($objects, function($item) use ($category_id){
+								return $item['category'] == $category_id;	
+							});
+							$new_objects['new_objects_'.$category_id] = array_values($new_object_category);
+						}
+
+						$json['data'] = $new_objects;
+
+					} else {
+						$json['data'] = array(
+							'new_objects' => Statistic::get_new_objects( $period, $filters)
+						);
+					}
+
+					
 
 				break;
 

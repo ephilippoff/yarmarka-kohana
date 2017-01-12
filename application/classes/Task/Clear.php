@@ -21,18 +21,97 @@ class Task_Clear extends Minion_Task
         
         Minion_CLI::write('set_attribute_element_urls');
         $this->set_attribute_element_urls();
-
-        // $cities = ORM::factory('City')->where("seo_name","=","surgut")->find_all();
-        // foreach ($cities as $city) {
-        //     Minion_CLI::write('Create sitemap.xml for '.$city->seo_name);
-        //     $this->sitemap_by_city($city->seo_name);
-        // }
-        // Minion_CLI::write('Create sitemap.xml');
-        // $this->sitemap();
         
         Minion_CLI::write('clear_search_url_cache');
         $this->clear_search_url_cache();
+
+        Minion_CLI::write('save_object_statistic');
+        $this->save_object_statistic();
         
+    }
+
+    function save_object_statistic() {
+
+        $category_array = array();
+
+        $category_list = ORM::factory('Category')
+                                ->where("through_weight","IS NOT",NULL)
+                                ->where("is_ready", "=", 1)
+                                ->order_by("through_weight")
+                                ->cached(Date::WEEK, array("category", "add"))
+                                ->find_all();
+        foreach ($category_list as $item) {
+            
+            $childs = ORM::factory('Category')
+                ->where("parent_id","=",$item->id)
+                ->where("is_ready", "=", 1)
+                ->order_by("weight")
+                //->cached(DATE::WEEK, array("category", "add"))
+                ->find_all();
+
+            if (count($childs)>0 AND $item->id <> 1)
+            {
+                $childs_array = array();
+                foreach ($childs as $child) {
+                    if (!ORM::factory('Category')
+                            ->where("parent_id","=",$child->id)
+                            ->where("is_ready", "=", 1)
+                            ->count_all(NULL, Date::WEEK))
+                    {
+                        array_push($category_array, $child->id);
+                    }
+                }
+
+            }
+            
+        }
+
+        array_push($category_array, 42);
+        array_push($category_array, 156);
+        array_push($category_array, 72);
+
+        $filters = array(
+            array('number','IS', NULL),
+            array('real_date_created','>',DB::expr("CURRENT_DATE + interval '1 hour'")),
+            array('category','IN', $category_array)
+        );
+
+
+
+        $objects_by_category =  Statistic::get_new_objects_category( 'day', $filters);
+
+
+
+
+        echo Debug::vars($objects_by_category);
+
+        $cities = ORM::factory('City')->where('is_visible','=', 1)->find_and_map(function($row) {
+            return $row->id;
+        });
+
+
+         $filters = array(
+            array('number','IS', NULL),
+            array('real_date_created','>',DB::expr("CURRENT_DATE + interval '1 hour'")),
+            array('city_id','IN', $cities)
+        );
+
+
+        $objects_by_city =  Statistic::get_new_objects_city( 'day', $filters);
+
+        $stat = ORM::factory('Object_StatisticAll');
+
+        $stat->period = DB::expr('NOW()');
+        $stat->statdata = serialize(array(
+            'objects_by_city' => $objects_by_city,
+            'objects_by_category' => $objects_by_category
+        ));
+
+        $stat->save();
+
+        echo Debug::vars($objects_by_city);
+
+
     }
 
     function clear_search_url_cache()
