@@ -494,15 +494,16 @@ class Objectload
 		);
 
 		
+		$emails = array();
 		foreach ($massload_email as $email) {
-
-			 Email_Send::factory('massload_report')
-	    			->to( $email->value )
-	    			->set_params($params)
-	    			->set_utm_campaign('massload_report')
-	    			->send();
-
+			array_push($emails, $email->value );
 		}
+
+		Email_Send::factory('massload_report')
+				->to( $emails )
+				->set_params($params)
+				->set_utm_campaign('massload_report')
+				->send();
 	}
 
 	public static function getServiceFields()
