@@ -11,7 +11,7 @@
 
 		public function start($user_id, $object_id) {
 			if ($this->loaded()) {
-				throw new Exception('Cannot start statistic when loaded');
+				throw new Kohana_Exception('Cannot start statistic when loaded');
 			}
 
 			$this->user_id = $user_id;
@@ -26,11 +26,12 @@
 
 		public function end() {
 			if (!$this->loaded()) {
-				throw new Exception('Nothing to end');
+				throw new Kohana_Exception('Nothing to end');
 			}
 
 			if ($this->date_end !== NULL) {
-				throw new Exception('Finalized');
+				//throw new Kohana_Exception('Finalized');
+				return $this;
 			}
 
 			$this->date_end = time();

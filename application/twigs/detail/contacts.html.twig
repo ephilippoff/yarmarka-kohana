@@ -15,7 +15,7 @@
 										<p>
 											{% if isAdmin %}
 												{{ contact.value }}
-											{% else %}
+											{% elseif contact and contact.value %}
 												{{ contact.value|contacthide }}
 											{% endif %}
 										</p>

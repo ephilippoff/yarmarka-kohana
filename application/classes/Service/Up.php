@@ -29,7 +29,8 @@ class Service_Up extends Service
 		$description = $this->get_params_description().$discount_reason;
 
 		$user =  Auth::instance()->get_user();
-		$last_freeup = ORM::factory('User_Settings')->get_by_name($user->id, 'freeup_date')->find()->value;
+		$last_freeup = ORM::factory('User_Settings')->get_by_name($user->id, 'freeup_date')->find();
+		$last_freeup = ($last_freeup->loaded()) ? $last_freeup->value : NULL;
 
 		return array(
 			"name" => $this->_name,
