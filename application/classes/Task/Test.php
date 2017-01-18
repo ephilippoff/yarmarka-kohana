@@ -12,7 +12,7 @@ class Task_Test extends Minion_Task
 
 
 		$objectload = new Objectload(NULL, $params['id']);
-		$objectload->sendReport($objectload_id);
+		$objectload->sendReport($params['id']);
 	}
 
 }
