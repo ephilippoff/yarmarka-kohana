@@ -462,9 +462,9 @@ class Objectload
 		$massload_email = ORM::factory('User_Settings')
 								->where("name","=","massload_email")
 								->where("user_id","=",$objectload->user_id)
-								->find_all();
+								->getprepared_all();
 		
-		if (!$objectload_id OR !$massload_email OR !$objectload->loaded())
+		if (!$objectload_id OR !count($massload_email) OR !$objectload->loaded())
 			return;
 
 		$common_stat = new Obj($objectload->get_statistic());
@@ -499,11 +499,15 @@ class Objectload
 			array_push($emails, $email->value );
 		}
 
+
+
 		Email_Send::factory('massload_report')
 				->to( $emails )
 				->set_params($params)
 				->set_utm_campaign('massload_report')
 				->send();
+
+		return $emails;
 	}
 
 	public static function getServiceFields()
