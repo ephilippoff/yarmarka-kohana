@@ -89,6 +89,7 @@ gulp.task('buildconcatcss', [ 'buildcss' ], function() {
                             './www/static/develop/css/iLight.css',
                             './www/static/develop/css/jquery-ui.css',
                             './www/static/develop/css/css.css',
+                            './www/static/develop/css/css_extend.css',
                             //manualy add ordered css to gulp
                             './www/static/develop/css/adaptive/small-tablets.css',
                             './www/static/develop/css/adaptive/extra-small-phones.css',
