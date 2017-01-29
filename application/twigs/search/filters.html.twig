@@ -1,48 +1,75 @@
-<div class="filters-cont tab-filter clearfix module js-filters" style="display: none;" >
-	<form method="GET" action="{{category_url}}" class="js-filters-form ta-c">
-		{% if search_text %}
-			<input type="hidden" name="search" value="{{ search_text }}" />
-		{% endif %}
-		<div class="js-filters-cont"></div>
-		<div  class="pos-r params-cont" style="padding: 0px 7px;">	
+<div class="b-filter js-b-filter">
+	<button type="button" class="hidden-sm hidden-md hidden-lg b-filter__close js-close-filters"><i class="fa fa-arrow-left"></i></button>
+		<div class="filters-cont tab-filter clearfix module js-filters b-filter__cont" style="display:none;" >
+			<form method="GET" action="{{category_url}}" class="js-filters-form ta-c">
+				{% if search_text %}
+					<input type="hidden" name="search" value="{{ search_text }}" />
+				{% endif %}
+				<div class="js-filters-cont"></div>
+				<div  class="pos-r params-cont" style="padding: 0px 7px;">	
 
-			<div class="param js-filters-static">
-				<span>Только с фото</span>
-				<input type="checkbox" name="photo" id="photo" value="1" class="cmn-toggle-round">
-				<label for="photo"></label>
-			</div>
-			<div class="param js-filters-static">
-				<span>Только частные</span>
-				<input type="checkbox" name="private" id="private" value="1" class="cmn-toggle-round">
-				<label for="private"></label>
-			</div>
-			<div class="param js-filters-static cont clearfix">
-				<span style="position: relative; top: 5px;">Показывать за</span>
-				<select name="period" class="fr">
-					<option value="0">все время</option>
-					<option value="1">сегодня</option>
-					<option value="2">неделю</option>
-					<option value="3">месяц</option>
-				</select>
-			</div>
-			<div class="submit-cont">
-				<span class="db"></span>
-				<button class="bg-color-blue js-filters-submit">Поиск</button>
-				<button class="bg-color-blue js-filters-reset" style="display: none;">Сбросить</button>
-			</div>
-		</div>
-	</form>
-	
-</div><!--filters-cont-->
+					<div class="param js-filters-static">
+						<span>Только с фото</span>
+						<input type="checkbox" name="photo" id="photo" value="1" class="cmn-toggle-round">
+						<label for="photo"></label>
+					</div>
+					<div class="param js-filters-static">
+						<span>Только частные</span>
+						<input type="checkbox" name="private" id="private" value="1" class="cmn-toggle-round">
+						<label for="private"></label>
+					</div>
+					<div class="param js-filters-static cont clearfix">
+						<span style="position: relative; top: 5px;">Показывать за</span>
+						<select name="period" class="fr">
+							<option value="0">все время</option>
+							<option value="1">сегодня</option>
+							<option value="2">неделю</option>
+							<option value="3">месяц</option>
+						</select>
+					</div>
+					<div class="submit-cont">
+						<span class="db  b-filter__result"></span>
+						<button class="bg-color-blue js-filters-submit b-filter__search">Поиск</button>
+						<button class="bg-color-blue js-filters-reset b-filter__clear" style="display: none;">Сбросить</button>
+					</div>
+				</div>
+			</form>
+			
+		</div><!--filters-cont-->
+</div>
+<script>
+	(function(){
 
-<script type="text/javascript">
-$(document).ready(function(){
-	jQuery("#slider").slider({
-		min: 0,
-		max: 1000,
-		values: [0,1000],
-		range: true
-	});
-});
+
+		var windowWidth = window.innerWidth;
+	    if (windowWidth < 767) {
+	    	
+	    	var jsFilterContainer = $('.js-b-filter');
+	    	var jsFilterSubConatiner = $('.js-filters');
+	    	var jsFilterShowButton = $('.js-show-filters');
+	    	var jsFilterCloseButton = $('.js-close-filters');
+	    	var openClass = 'b-filter--open';
+	    	var popupLayer = '.popup-layer';
+
+	    	$(jsFilterShowButton).click(function(e){
+
+	    		$(jsFilterContainer).addClass(openClass);
+	    		$(jsFilterSubConatiner).show();
+
+	    		$('body').attr('style','overflow:hidden;');
+	    		$(popupLayer).attr('style','display:block;');
+
+	    		e.preventDefault();
+	    	});
+
+	    	$(jsFilterCloseButton).click(function(){
+
+	    		$(jsFilterContainer).removeClass(openClass);
+	    		$('body').attr('style','');
+	    		$(popupLayer).attr('style','');
+	    	})
+	        
+	    }
+
+    })();
 </script>
-

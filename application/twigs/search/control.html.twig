@@ -1,8 +1,7 @@
-<button 
-	class="fl hidden-lg visible-xs button bg-color-blue more-button" id="more-options" onclick="$('.options-wrap').fadeToggle();">
-	<i class="fa fa-bars"></i>
-</button>
+
 <div class="clearfix">
+	
+	
 	<div class="control_buttons module fs0 fl options-wrap clearfix">
 		<span class="span-link menu-item js-search-extend control-item" onclick="mobile(function(){$('.options-wrap').fadeOut();});">Расширенный поиск</span>
 		{% if not isGuest %}
@@ -13,11 +12,12 @@
 		<div class="menu-item span-link" id="limit"><i class="fa fa-list"></i> {{limitList}}</div>
 	</div>
 
-
-	<div class="fr small_pag">
+	<div class="fr small_pag hidden-xxs hidden-xs">
 		{{small_pagination}}
 	</div>
+
 </div>
+
 
 <div id="save-search-cont"></div>
 

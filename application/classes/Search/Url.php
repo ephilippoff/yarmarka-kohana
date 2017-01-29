@@ -590,30 +590,66 @@ class Search_Url
         return FALSE;
     }
 
-    public static function getcounters($domain, $category_url, $categories = array())
+    public static function getcounters($host, $category_url, $categories = array())
     {
-        $result = array();
+        return ORM::factory('Search_Url_Cache')->get_count_for_categories($host, $category_url, $categories);
+    }
 
-        $suc = DB::select("count","url")->from("search_url_cache");
+    public static function set_count_for_categories($host, &$categories, $current_category = FALSE) {
 
-        $urls = array_map(function($value) use ($domain, $category_url) {
-            $url = "";
-            if ($value->attribute) {
-                $url =  $domain."/".$category_url."/".$value->url;
+        $count_for_categories = self::getcounters($host, (($current_category) ? $current_category : '') , $categories);
+
+        return array_map(function($category) use($host, $count_for_categories, $current_category) {
+            $url = ($current_category) ? sprintf('%s/%s/%s', $host, $current_category, $category->url) : sprintf('%s/%s', $host, $category->url);
+
+            
+            if (array_key_exists($url, $count_for_categories)) {
+                $category->count = $count_for_categories[$url];
             } else {
-                $url =  $domain."/".$value->url;
+                $category->count = 0;
             }
-            return trim(trim($url, '/'));
+
         }, $categories);
 
-        if (count($urls) > 0) {
-            $suc = ORM::factory('Search_Url_Cache')->get_search_info_by_urls($urls, $suc);
-            $suc = $suc->execute()->as_array();
-            foreach ($suc as $item) {
-                $result[$item["url"]] = $item["count"];
-            };
-        }
-        return $result;
+    }
+
+    public static function sort_categories(&$categories, $by = 'by_weight') {
+
+        usort($categories, function($a, $b) use ( $by)
+        {
+            
+            //1. by count desc
+
+            if ( $by == 'by_count') {
+                $count_a = (int) $a->count;
+                $count_b = (int) $b->count;
+                
+                if ($count_a != $count_b) {
+                    return $count_b - $count_a;
+                }
+            }
+            
+            //2. by title
+
+            if ( $by == 'by_title') {
+                $title_a = $a->title;
+                $title_b = $b->title;
+                
+                if ($title_a != $title_b) {
+                    return $title_a < $title_b ? -1 : 1;
+                }
+            }
+            
+
+            //3. by weight
+            $weight_a = (int) $a->weight;
+            $weight_b = (int) $b->weight;
+            
+            return $weight_a < $weight_b ? -1: 1;
+            
+        });
+
+        return $categories;
     }
 
     public static function clean_empty_category_childs_elements($categories, $counters, $url)

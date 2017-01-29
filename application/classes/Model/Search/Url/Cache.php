@@ -51,6 +51,34 @@ class Model_Search_Url_Cache extends ORM {
 		return $query->where("hash","IN",$hashs);
 	}
 
+	public function get_count_for_categories($domain, $category_url, $categories = array())
+	{
+		$result = array();
+
+		$suc = DB::select("count","url")->from("search_url_cache");
+
+		$urls = array_map(function($category) use ($domain, $category_url) {
+		    $url = "";
+		    if ($category->attribute) {
+		        $url =  $domain."/".$category_url."/".$category->url;
+		    } else {
+		        $url =  $domain."/".$category->url;
+		    }
+		    return trim(trim($url, '/'));
+		}, $categories);
+
+		if (count($urls) > 0) {
+		    $suc = ORM::factory('Search_Url_Cache')->get_search_info_by_urls($urls, $suc);
+		    $suc = $suc->execute()->as_array();
+		    foreach ($suc as $item) {
+		        $result[$item["url"]] = $item["count"];
+		    };
+		}
+
+
+		return $result;
+	}
+
 	public static function hash($url)
 	{	if (!$url) return FALSE;
 		return sha1($url.self::$secret);

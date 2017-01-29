@@ -1,55 +1,29 @@
 {% set cols = (category_childs|length > 4) ? 2 : 1 %}
 {% set rows = (category_childs|length/cols)|round %}
 {% set i = 0 %}
-<div class="subcategories-cont module subcat-search">
-	<div class="row">
-		{% for col in 0..cols %}
-			<div class="col-md-4 col-sm-4 col-xs-6 col-xxs-12">
-				<ul>
-				{% for child_category in category_childs|slice(i, rows) %}
-					{% set count = link_counters[s_host ~ '/' ~ child_category.url] %}
-					<li>
-						<div>
-							<a href="{{ url(child_category.url) }}" title="{{child_category.title}}">{{child_category.title}}</a>
-						</div>
-					</li>
-				{% endfor %}
-				</ul>
-			</div>
-			{% set i = i + rows %}
-		{% endfor %}
+<div class="b-subfilters">
+	<button type="button" class="hidden-sm hidden-md hidden-lg b-subfilters__choose js-show-subfilters">Выбрать категорию <i class="fa fa-arrow-right"></i></button>
+	<div class="subcategories-cont module subcat-search b-subfilters__cont js-subfilters-container">
+		<button type="button" class="hidden-sm hidden-md hidden-lg b-subfilters__close js-close-subfilters"><i class="fa fa-arrow-left"></i></button>
+		<div class="row b-subfilters__list">
+			{% for col in 0..cols %}
+				<div class="col-md-4 col-sm-4 col-xs-12 col-xxs-12">
+					<ul class="b-subfilters__col">
+					{% for child_category in category_childs|slice(i, rows) %}
+						<li class="b-subfilters__item">
+							<a href="{{ url(child_category.url) }}" 
+								title="{{child_category.title}}" class="b-subfilters__link">
+									{{child_category.title}} {% if child_category.count and child_category.count > 0 %} ({{ child_category.count }}) {% endif %}
+							</a>
+						</li>
+					{% endfor %}
+					</ul>
+				</div>
+				{% set i = i + rows %}
+			{% endfor %}
+			
+		</div>
 	</div>
+	
 </div>
-{% if category_childs|length > 15 %}
-<script type="text/javascript">
-	desktop_tablet(function(){
-		new Yarmarka.UI.Columns.OrderedHeight({ 
-			el: '.subcategories-cont.module.subcat-search',
-			elementSelector: 'li>div', 
-			forceOneColumnMobile: false,
-			enableAutoCollapse: true,
-			itemWidthSelector: 'a',
-			autoCollapseOptions: {
-				allowedHeight: 110
-			}
-		});
-	});
-</script>
-{% endif %}
-
-{% if category_childs|length > 3 %}
-<script type="text/javascript">
-	mobile(function(){
-		new Yarmarka.UI.Columns.OrderedHeight({ 
-			el: '.subcategories-cont.module.subcat-search',
-			elementSelector: 'li>div', 
-			forceOneColumnMobile: false,
-			enableAutoCollapse: true,
-			itemWidthSelector: 'a',
-			autoCollapseOptions: {
-				allowedHeight: 110
-			}
-		});
-	});
-</script>
-{% endif %}
+{% include 'search/subcategories_mobile' %}

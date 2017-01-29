@@ -1,0 +1,36 @@
+<script>
+
+	(function(){
+
+
+		var windowWidth = window.innerWidth;
+	    if (windowWidth < 767) {
+	    	
+	    	var jsSubfilterContainer = $('.js-subfilters-container');
+	    	var jsSubfilterShowButton = $('.js-show-subfilters');
+	    	var jsSubfilterCloseButton = $('.js-close-subfilters');
+	    	var openClass = 'b-subfilters--open';
+	    	var popupLayer = '.popup-layer';
+
+	    	$(jsSubfilterShowButton).click(function(e){
+
+	    		$(jsSubfilterContainer).addClass(openClass);
+
+	    		$('body').attr('style','overflow:hidden;');
+	    		$(popupLayer).attr('style','display:block;');
+
+	    		e.preventDefault();
+	    	});
+
+	    	$(jsSubfilterCloseButton).click(function(){
+
+	    		$(jsSubfilterContainer).removeClass(openClass);
+	    		$('body').attr('style','');
+	    		$(popupLayer).attr('style','');
+	    	})
+	        
+	    }
+
+    })();
+
+</script>

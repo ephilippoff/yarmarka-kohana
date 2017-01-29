@@ -163,7 +163,7 @@ class Searchpage_Adverts extends Searchpage_Default
         //favourites
         $twig->favourites = ORM::factory('Favourite')->get_list_by_cookie();
         //end favourites
-        
+
         
         if ($search_info->s_suri <> "/" . $search_info->canonical_url) {
             $search_info->show_canonical = TRUE;
@@ -175,7 +175,11 @@ class Searchpage_Adverts extends Searchpage_Default
             $search_info->show_canonical = FALSE;
             $search_info->is_canonical   = FALSE;
         }
-        
+
+
+        $this->add_info_in_subcategories($search_info);
+
+
         $iCurrentPage = (int) $request->query('page');
         
         //https://support.google.com/webmasters/answer/139066?hl=ru#2
@@ -212,57 +216,48 @@ class Searchpage_Adverts extends Searchpage_Default
         
         $this->cache_stat($twig, $search_params);
         
-        // $search_links = new Search_Links($search_info);
-        // $search_links->get_count();
-
-        // if (property_exists($twig, 'category_childs_elements')) {
-        //     foreach ($twig->category_childs_elements as &$value) {
-        //         $k = $twig->s_host . '/' . $twig->category_url . '/' . $value->url;
-        //         if (!array_key_exists($k, $twig->link_counters)) {
-        //             $value->count = 0;
-        //         } else {
-        //             $value->count = $twig->link_counters[$k];
-        //         }
-        //     }
-        //     $this->process_child_categories($twig->category_childs_elements);
-        // }
-        
-        // if (property_exists($twig, 'category_childs')) {
-        //     foreach ($twig->category_childs as &$value) {
-        //         $k = $twig->s_host . '/' . $value->url;
-        //         if (!array_key_exists($k, $twig->link_counters)) {
-        //             $value->count = 0;
-        //         } else {
-        //             $value->count = $twig->link_counters[$k];
-        //         }
-        //     }
-        //     $this->process_child_categories($twig->category_childs);
-        // }
-        
         if (count($twig->main_search_result) == 0) {
-            $result = $this->find_other_adverts($search_info);
-            while (count($result) == 0) {
-                
-                $newSearchText = explode(' ', $search_info->search_text);
-                if (count($newSearchText) > 1) {
-                    $search_info->search_text = array_shift($newSearchText);
-                } elseif (count($newSearchText) == 1) {
-                    $newSearchText = implode('', $newSearchText);
-                    if (strlen($newSearchText) > 3) {
-                        $search_info->search_text = substr($newSearchText, 0, -2);
-                    } else
-                        break;
-                }
-                
-                $result = $this->find_other_adverts($search_info);
-            }
-            
-            $twig->other_adverts = $result;
+            $twig->other_adverts = Searchpage_Adverts_Data::get_other_adverts($search_info);
         }
         
         return $twig;
         
     }
+
+    public function add_info_in_subcategories(&$search_info) {
+        $limit_for_show = 5;
+
+        if ( $search_info->category_childs_elements  AND count($search_info->category_childs_elements) > 0 ) {
+            $this->add_info_in_elements($search_info, $limit_for_show);
+        } 
+
+        if ( $search_info->category_childs  AND count($search_info->category_childs) > 0 ) {
+            $this->add_info_in_categories($search_info, $limit_for_show);
+        }
+    }
+
+    public function add_info_in_categories(&$search_info, $limit_for_show) {
+        Search_Url::set_count_for_categories($search_info->s_host, $search_info->category_childs);
+        Search_Url::sort_categories($search_info->category_childs);
+
+    }
+
+    public function add_info_in_elements(&$search_info, $limit_for_show) {
+        Search_Url::set_count_for_categories($search_info->s_host, $search_info->category_childs_elements, $search_info->category_url);
+        Search_Url::sort_categories($search_info->category_childs_elements);
+
+        $i = 0;
+
+        $search_info->category_childs_elements = array_map(function($category) use (&$i) {
+
+            $category->display = ($i < 4) ? TRUE : FALSE;
+
+            return $category;
+        }, $search_info->category_childs_elements);
+        
+        Search_Url::sort_categories($search_info->category_childs_elements, 'by_title');
+    }
+
 
     public function get_search_info_by_sphinx($search_text,  Search_Url $search_url, Domain $domain, Request $request)
     {
@@ -341,81 +336,6 @@ class Searchpage_Adverts extends Searchpage_Default
         
         
         return $info;
-    }
-
-    public function find_other_adverts($search_info)
-    {
-        
-        // $categoryID = ($search_info->category->id == 1) ? $search_info->child_categories_ids : $search_info->category->id;
-        
-        $filters = array(
-            "active" => TRUE,
-            'expiration' => true,
-            'expired' => true,
-            'published' => true,
-            "city_id" => $search_info->city->id,
-            "search_text" => $search_info->search_text
-            // "category_id" => $categoryID
-        );
-        
-        
-        $category = $search_info->category;
-        
-        while (1 == 1) {
-            $result = Search::getresult(Search::searchquery($filters, array(
-                "limit" => 50,
-                "page" => 1
-            ))->execute()->as_array());
-            
-            if (count($result) > 0 OR !$category->parent_id OR $category->id == 1) {
-                break;
-            }
-            
-            $category               = ORM::factory('Category', $category->parent_id);
-            $filters['category_id'] = $category->id;
-        }
-        
-        // foreach ($result as $key => $value) {
-        //     if (count($result[$key]['compiled']) == 0) {
-        //         unset($result[$key]);
-        //     }        
-        // }
-        
-        
-        if (shuffle($result)) {
-            return $result;
-        }
-    }
-
-    protected function process_child_categories(&$arr)
-    {
-        usort($arr, function($a, $b)
-        {
-            
-            //1. by count desc
-            $count_a = (int) $a->count;
-            $count_b = (int) $b->count;
-            
-            if ($count_a != $count_b) {
-                return $count_b - $count_a;
-            }
-            
-            //2. by title
-            $title_a = $a->title;
-            $title_b = $b->title;
-            
-            if ($title_a != $title_b) {
-                return $title_a < $title_b ? -1 : 1;
-            }
-            
-            //3. by weight
-            $weight_a = (int) $a->weight;
-            $weight_b = (int) $b->weight;
-            
-            return $weight_b - $weight_a;
-            
-        });
-        return $arr;
     }
 
 }

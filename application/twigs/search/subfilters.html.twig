@@ -1,60 +1,38 @@
 {% set cols = 4 %}
 {% set rows = (category_childs_elements|length/cols)|round %}
 {% set i = 0 %}
-<div class="subcategories-cont module subcat-search">
+<div class="b-subfilters">
 	<div class="row">
-		{% for col in 0..cols %}
-			<div class="col-md-{{ category_childs_elements_colsize ? category_childs_elements_colsize : 3 }} col-sm-{{ category_childs_elements_colsize ? category_childs_elements_colsize : 3 }} col-xs-6 col-xxs-12">
-				<ul>
-				{% for element in category_childs_elements|slice(i, rows) %}
-					{% set count = link_counters[s_host ~ '/' ~ category_url ~ '/' ~ element.url] %}
-					<li>
-						<div>
-							<a href="{{ url(category_url ~ '/' ~ element.url) }}" title="{{element.title}}" data-weight="{{ element.wight }}">{{element.title}}</a>
-						</div>
-					</li>
-				{% endfor %}
-				</ul>
-			</div>
-			{% set i = i + rows %}
-		{% endfor %}
+		<div class="col-xs-6">
+			<button type="button" class="hidden-sm hidden-md hidden-lg b-subfilters__choose js-show-subfilters">Выбрать категорию <i class="fa fa-arrow-right"></i></button>
+		</div>
+		<div class="col-xs-6">
+			<button type="button" class="hidden-sm hidden-md hidden-lg b-subfilters__choose js-show-filters">Фильтровать <i class="fa fa-arrow-right"></i></button>
+		</div>
 	</div>
+	<div class="subcategories-cont module subcat-search b-subfilters__cont js-subfilters-container">
+		<button type="button" class="hidden-sm hidden-md hidden-lg b-subfilters__close js-close-subfilters"><i class="fa fa-arrow-left"></i></button>
+		<div class="row  b-subfilters__list">
+			{% for col in 0..cols %}
+				<div class="col-md-{{ category_childs_elements_colsize ? category_childs_elements_colsize : 3 }} col-sm-{{ category_childs_elements_colsize ? category_childs_elements_colsize : 3 }} col-xs-12 col-xxs-12">
+					<ul class="b-subfilters__col">
+					{% for element in category_childs_elements|slice(i, rows) %}
+						<li class="b-subfilters__item">
+							<a href="{{ url(category_url ~ '/' ~ element.url) }}" 
+							title="{{element.title}}" 
+							data-weight="{{ element.wight }}" class="b-subfilters__link">
+								{{element.title}} {% if element.count %} ({{ element.count }}) {% endif %}
+							</a>
+						</li>
+					{% endfor %}
+					</ul>
+				</div>
+				{% set i = i + rows %}
+			{% endfor %}
+			
+		</div>
+		
+	</div>
+	
 </div>
-
-{% if category_childs_elements|length > 15 %}
-
-<script type="text/javascript">
-		desktop_tablet(function(){
-			new Yarmarka.UI.Columns.OrderedHeight({ 
-				el: '.subcategories-cont.module.subcat-search', 
-				elementSelector: 'li>div', 
-				forceOneColumnMobile: false,
-				enableAutoCollapse: true,
-				itemWidthSelector: 'a',
-				autoCollapseOptions: {
-					allowedHeight: 110
-				}
-			});
-		});
-</script>
-
-{% endif %}
-
-{% if category_childs_elements|length > 3 %}
-
-<script type="text/javascript">
-	mobile(function(){
-		new Yarmarka.UI.Columns.OrderedHeight({ 
-			el: '.subcategories-cont.module.subcat-search', 
-			elementSelector: 'li>div', 
-			forceOneColumnMobile: false,
-			enableAutoCollapse: true,
-			itemWidthSelector: 'a',
-			autoCollapseOptions: {
-				allowedHeight: 110
-			}
-		});
-	});
-</script>
-
-{% endif %}
+{% include 'search/subcategories_mobile' %}
