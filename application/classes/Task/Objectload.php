@@ -239,10 +239,10 @@ class Task_Objectload extends Minion_Task
 		if (!$test)
 		{
 
-			$emails = $ol->sendReport();
-			if (count($emails)) {
-				Minion::write("Send report", Debug::vars($emails));
-			}
+			// $emails = $ol->sendReport();
+			// if (count($emails)) {
+			// 	Minion::write("Send report", Debug::vars($emails));
+			// }
 			
 		}
 

@@ -32,6 +32,11 @@ class Model_User_Settings extends ORM {
 		return $return;			
 	}
 
+	public function get_by_name_only($name)
+	{
+		return $this->where('name', '=', $name);			
+	}
+
 	public function get_by_name($user_id, $name)
 	{
 		return $this->where('user_id', '=', $user_id)

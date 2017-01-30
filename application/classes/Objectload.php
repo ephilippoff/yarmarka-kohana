@@ -443,7 +443,7 @@ class Objectload
 		$record->save();
 	}
 
-	public function sendReport($objectload_id = NULL)
+	public function sendReport($objectload_id = NULL, $direct_email = NULL)
 	{
 		if (!$objectload_id){
 			$objectload_id  = $this->_objectload_id;
@@ -502,12 +502,12 @@ class Objectload
 
 
 		Email_Send::factory('massload_report')
-				->to( $emails )
+				->to( ($direct_email) ? $direct_email : $emails )
 				->set_params($params)
 				->set_utm_campaign('massload_report')
 				->send();
 
-		return $emails;
+		return ($direct_email) ? $direct_email : $emails;
 	}
 
 	public static function getServiceFields()
