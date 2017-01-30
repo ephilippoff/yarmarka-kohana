@@ -38,7 +38,12 @@ class Searchpage_Default
         $info->category                         = $search_url->get_category();
         $info->category_childs                  = $search_url->get_category_childs(TRUE);
 
-        $info->category_childs_elements         = $search_url->get_category_childs_elements($info->category_id, $info->city_id, $search_url->get_seo_filters());
+        $info->category_childs_elements         = $search_url->get_category_childs_elements(
+            $info->category_id, 
+            (($info->city_id <> 1) ? $info->city_id : FALSE), 
+            $search_url->get_seo_filters()
+        );
+
         $info->category_childs_elements_colsize = Kohana::$config->load("landing.subfilters." . $info->category_id);
         $info->crumbs                           = array_merge($search_url->get_category_crubms($info->category_id), $search_url->get_seo_elements_crubms($search_url->get_seo_filters(), $info->category_url));
         $info->incorrectly_query_params_for_seo = $search_url->incorrectly_query_params_for_seo;
