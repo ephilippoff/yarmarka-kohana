@@ -44,13 +44,16 @@
                                 {% set po = promo_objects|slice(k, 3) %}
                                 {% for object in po %}
                                      <td style="width:33%;text-align:center;">
-                                        <a style="color: #08729E;padding:10px 0; font-size:0.85em;" href="{{ email_link(domain, '/detail/' ~ object.id, ref_params, {'utm_content': 'promo_objects'}) }}">
+                                        <a style="color: #08729E;padding:15px 0; font-size:0.85em;" href="{{ email_link(domain, '/detail/' ~ object.id, ref_params, {'utm_content': 'promo_objects'}) }}">
                                            {% if (object.compiled.images.local_photo|length > 0) %}
                                               <img src="{{ get_file(object.compiled.images.main_photo['120x90'], true) }}" style="max-width:100%;">
                                            {% else %}
                                                <img src="http://yarmarka.biz/static/develop/images/nophoto136x107.png" style="max-width:100%;">
                                            {% endif %}
                                            <br>{{ object.title|slice(0,100) }}
+                                           {% if object.price > 0 %}
+                                              <br>{{ object.price|number_format(0, ' ', ' ') }} р.
+                                           {% endif %}
                                         </a> 
                                      </td>
                                 {% endfor %}
