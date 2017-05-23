@@ -72,7 +72,7 @@ class Search {
 				}
 				$filter[] = $query;
 			} elseif ($type == "text") {
-				$value_text = explode(' ', trim(strtolower($value)));
+				$value_text = explode(' ', trim(strtolower(preg_replace('/[\.,\?;:%]/i', ' ', $value))));
 				$filter_temp = DB::select("id")
 								->from(array($table_name, $table_name."_filter"))
 								->where($table_name."_filter."."object","=", DB::expr($alias.".id"))
