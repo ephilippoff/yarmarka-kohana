@@ -307,7 +307,7 @@ class Sphinx {
 		if ($aRequestString) {
 			foreach ($aRequestString as $sValue)
 			{
-				if (mb_strlen($sValue)>2)
+				if (mb_strlen($sValue) >= 2 OR is_numeric($sValue))
 				{
 					$aKeyword[] .= "(".$sValue." | *".$sValue."*)";
 				}
