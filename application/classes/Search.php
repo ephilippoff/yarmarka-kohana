@@ -72,12 +72,17 @@ class Search {
 				}
 				$filter[] = $query;
 			} elseif ($type == "text") {
-				$filter[] = DB::select("id")
-							->from(array($table_name, $table_name."_filter"))
-							->where($table_name."_filter."."object","=", DB::expr($alias.".id"))
-							->where($table_name."_filter."."attribute", "=", $attributes[$seo_name]["id"])
-							->where(DB::expr("w_lower(".$table_name."_filter."."value".")"), "LIKE", "%".trim(strtolower($value))."%")
-							->limit(1);
+				$value_text = explode(' ', trim(strtolower($value)));
+				$filter_temp = DB::select("id")
+								->from(array($table_name, $table_name."_filter"))
+								->where($table_name."_filter."."object","=", DB::expr($alias.".id"))
+								->where($table_name."_filter."."attribute", "=", $attributes[$seo_name]["id"]);
+				foreach ($value_text as $word) {
+					$filter_temp = $filter_temp->where(DB::expr("w_lower(".$table_name."_filter."."value".")"), "LIKE", "%".$word."%");
+				}
+				$filter_temp = $filter_temp->limit(1);
+
+				$filter[] = $filter_temp;
 			}
 			// } elseif ($type == "boolean") {
 			// 	$filter[] = DB::select("id")
