@@ -442,6 +442,21 @@ class Controller_Admin_Users extends Controller_Admin_Template {
 		$this->response->body(json_encode($json));
 	}
 
+	public function action_unban()
+	{
+		$user = ORM::factory('User', $this->request->param('id'));
+		if ( ! $user->loaded())
+		{
+			throw new HTTP_Exception_404;
+		}
+
+		$user->unban();
+
+		$json = array('code' => 200);
+
+		$this->response->body(json_encode($json));
+	}
+
 	public function action_user_info()
 	{
 		$this->layout = 'admin_popup';

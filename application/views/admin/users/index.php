@@ -32,6 +32,13 @@ function ban(obj) {
 
 	return false;
 }
+function unban(obj) {
+	$.post($(obj).attr('href'), {}, function(json){
+		$(obj).parents('tr').removeClass('error');
+	}, 'json');
+
+	return false;
+}
 function delete_user(obj) {
 	if (confirm('Delete user?')) {
 		$.post($(obj).attr('href'), {}, function(json){
@@ -126,7 +133,11 @@ function delete_user(obj) {
 		<td><?=date('d.m.Y H:i', strtotime($user->regdate))?></td>
 		<td><a href="<?=URL::site('khbackend/users/ip_info/'.$user->ip_addr)?>" onClick="return popup(this);"><?=$user->ip_addr?></a></td>
 		<td>
+			<? if ($user->is_blocked) : ?>
+			<a href="<?=URL::site('khbackend/users/unban/'.$user->id)?>" title="Разблокировать" class="icon-ok" onClick="return unban(this);"></a>
+			<? else: ?>	
 			<a href="<?=URL::site('khbackend/users/ban/'.$user->id)?>" title="Ban user" class="icon-lock" onClick="return ban(this);"></a>
+			<? endif ?>
 			<a href="<?=URL::site('khbackend/users/ban_and_unpublish/'.$user->id)?>" onClick="return ban(this);" title="Ban user and unpublish all ads" class="icon-ban-circle"></a>
 			<a href="<?=URL::site('khbackend/users/delete/'.$user->id)?>" title="Delete user" onClick="return delete_user(this);" class="icon-trash"></a>
 		</td>

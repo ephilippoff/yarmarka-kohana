@@ -703,6 +703,16 @@ class Model_User extends Model_Auth_User {
 		$this->save();
 	}
 
+	public function unban()
+	{
+		if (!$this->loaded())
+			return;
+		
+		$this->is_blocked = 0;
+		$this->block_reason = '';
+		$this->save();
+	}
+
 
 	public function is_excess_max_count_objects_in_category($category, $object_id_exclusion = 0)
 	{
