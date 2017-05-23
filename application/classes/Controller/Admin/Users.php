@@ -408,13 +408,12 @@ class Controller_Admin_Users extends Controller_Admin_Template {
 			throw new HTTP_Exception_404;
 		}
 
-		$json = array('code' => 200);
+		$user->ban(trim($this->request->post('reason')));
 
-		$user->is_blocked	= 1;
-		$user->block_reason	= trim($this->request->post('reason'));
-		$user->save();
-
-		$json['is_blocked'] = $user->is_blocked;
+		$json = array(
+			'code' 			=> 200,
+			'is_blocked' 	=> $user->is_blocked
+		);
 
 		$this->response->body(json_encode($json));
 	}
@@ -422,29 +421,23 @@ class Controller_Admin_Users extends Controller_Admin_Template {
 	public function action_ban_and_unpublish()
 	{
 		$user = ORM::factory('User', $this->request->param('id'));
+
 		if ( ! $user->loaded())
 		{
 			throw new HTTP_Exception_404;
 		}
 
-		// block user
-		$user->is_blocked	= 1;
-		$user->block_reason	= trim($this->request->post('reason'));
-		$user->save();
+		$user->ban(trim($this->request->post('reason')));
 
 		// disable user ads
-		$objects = $user->objects->find_all()->as_array(NULL, 'id');
-		if ($objects)
-		{
-			ORM::factory('Object')
-				->where('id', 'IN', $objects)
-				->set('is_published', 0)
-				->set('is_bad', 2)
-				->update_all();
+		foreach ($user->objects->find_all() as $object) {
+			$object->moderate_ban();
 		}
 
-		$json = array('code' => 200);
-		$json['is_blocked'] = $user->is_blocked;
+		$json = array(
+			'code' 			=> 200,
+			'is_blocked' 	=> $user->is_blocked
+		);
 
 		$this->response->body(json_encode($json));
 	}
@@ -689,6 +682,9 @@ class Controller_Admin_Users extends Controller_Admin_Template {
 			if ($this->request->post('ban_user') AND $user->loaded())
 			{
 				$user->ban($reason);
+				foreach ($user->objects->find_all() as $object) {
+					$object->moderate_ban();
+				}
 			}
 			
 			$json['code'] = 200;

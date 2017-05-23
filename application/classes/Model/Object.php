@@ -1083,10 +1083,12 @@ class Model_Object extends ORM {
 			return;
 		}
 
-		$this->is_bad = 2;
-		$this->is_published = 0;
-		$this->moder_state = 1;
-		$this->save();
+		$this->values(
+			'is_bad' 		=> 2,
+			'is_published' 	=> 0,
+			'active' 		=> 0,
+			'moder_state' 	=> 1
+		)->save();
 
 	}
 

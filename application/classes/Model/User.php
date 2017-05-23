@@ -701,14 +701,6 @@ class Model_User extends Model_Auth_User {
 		$this->is_blocked = 1;
 		$this->block_reason = $reason;
 		$this->save();
-
-		ORM::factory('Object')
-				->where("author","=",$this->id)
-				->set('is_bad', 2)
-				->set('active', 0)
-				->set('is_published', 0)
-				->set('moder_state', 1)
-				->update_all();
 	}
 
 

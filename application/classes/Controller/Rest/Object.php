@@ -281,8 +281,11 @@ class Controller_Rest_Object extends Controller_Rest {
 		} else if ($type == "block_object") {
 			$object->moderate_ban();
 			$description = "Заблокировано окончательно по причине : $comment";
-		}  else if ($type == "block_full" AND $auhor->loaded()) {
+		} else if ($type == "block_full" AND $auhor->loaded()) {
 			$auhor->ban($comment);
+			foreach ($author->objects->find_all() as $object) {
+				$object->moderate_ban();
+			}
 			$description = "Удалено по причине: $comment";
 			//$object->moderate_full_ban();
 		}
