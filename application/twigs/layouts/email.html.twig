@@ -26,42 +26,26 @@
         {% block body %}{% endblock body %}
         
         {% if last_news or promo_objects %}
-            <tr>
-                <td  colspan="2" style="padding:10px;">
-                    <hr>
-                    
-                </td>
-            </tr>
             {% if promo_objects %}
             <tr>
                  <td style="padding:10px;width:100%;vertical-align:top;" colspan="2">
-                    <h4>Предложения, которые могут быть Вам интересны: </h4>
-                    <table  style="width:100%;border:0;margin: 0 auto;border-collapse: collapse;">
-                        {% set k = 0 %}
+                    <h4 style="background: #2B587A; padding: 10px; text-align: center; color: white; margin: 0; text-transform: uppercase;">Предложения, которые могут быть Вам интересны: </h4>
 
-                        {% for i in 0..((promo_objects|length/2)|round(0,'ceil')) %}
-                            <tr>
-                                {% set po = promo_objects|slice(k, 3) %}
-                                {% for object in po %}
-                                     <td style="width:33%;text-align:center;">
-                                        <a style="color: #08729E;padding:15px 0; font-size:0.85em;" href="{{ email_link(domain, '/detail/' ~ object.id, ref_params, {'utm_content': 'promo_objects'}) }}">
-                                           {% if (object.compiled.images.local_photo|length > 0) %}
-                                              <img src="{{ get_file(object.compiled.images.main_photo['120x90'], true) }}" style="max-width:100%;">
-                                           {% else %}
-                                               <img src="http://yarmarka.biz/static/develop/images/nophoto136x107.png" style="max-width:100%;">
-                                           {% endif %}
-                                           <br>{{ object.title|slice(0,100) }}
-                                           {% if object.price > 0 %}
-                                              <br>{{ object.price|number_format(0, ' ', ' ') }} р.
-                                           {% endif %}
-                                        </a> 
-                                     </td>
-                                {% endfor %}
-                                {% if po|length == 1 %}<td></td>{% endif %}
-                           </tr>
-                           {% set k = k + 3 %}
+                    <div class="promos" style="display: -webkit-flex;display: -moz-flex;display: -ms-flex;display: -o-flex;display: flex; flex-flow: row wrap; margin-right: -10px; margin-left: -10px;">
+                        {% for object in promo_objects %}
+                            <a style="color: #08729E;padding:0 10px; font-size:12px; width: 33.3%; text-decoration: none; text-align: center; min-height: 200px; box-sizing: border-box; display: block; align-items: stretch; display: -webkit-flex;display: -moz-flex;display: -ms-flex;display: -o-flex;display: flex; margin-bottom: 10px;" href="{{ email_link(domain, '/detail/' ~ object.id, ref_params, {'utm_content': 'promo_objects'}) }}">
+                                <div style="border: 1px solid #ccc; display: -webkit-flex; display: -moz-flex; display: -ms-flex; display: -o-flex; display: flex; flex-direction: column; padding: 10px; width: 100%;">
+                                    {% if (object.compiled.images.local_photo|length > 0) %}
+                                        <img src="{{ get_file(object.compiled.images.main_photo['120x90'], true) }}" style="max-width:100%; display: block; margin: auto; height: 90px;">
+                                    {% else %}
+                                        <img src="http://yarmarka.biz/static/develop/images/nophoto136x107.png" style="max-width:100%; display: block; margin: auto; height: 90px;">
+                                    {% endif %}
+                                    <span style="text-decoration: underline;">{{object.title|length > 100 ? object.title|slice(0,100) ~ '...' : object.title}}</span>
+                                    <span style="display: block; text-align: center; margin-top: 10px; color: #d90000; font-size: 16px;">{{object.price > 0 ? object.price|number_format(0, ' ', ' ') ~ ' р.' : '&nbsp;'}}</span>
+                                </div>
+                            </a>
                         {% endfor %}
-                    </table>
+                    </div>
                </td>
             </tr>
             {% endif %}
