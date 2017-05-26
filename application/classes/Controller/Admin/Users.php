@@ -431,12 +431,7 @@ class Controller_Admin_Users extends Controller_Admin_Template {
 
 		// disable user ads
 		foreach ($user->objects->find_all() as $object) {
-			$object->values(array(
-				'active' => 0,
-				'is_published' => 0
-			));
-
-			$object->save();
+			$object->set('is_published', 0)->save();
 		}
 
 		$json = array(
