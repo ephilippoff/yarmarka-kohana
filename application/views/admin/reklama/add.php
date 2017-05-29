@@ -49,14 +49,14 @@ $(document).ready(function() {
 	<div class="control-group <?=Arr::get($errors, 'class') ? 'error' : ''?>">
 		<label class="control-label">Города:</label>
 		<div class="controls">
-			<?=Form::select('cities[]', array(1 => 'Тюменская область', 1919 => 'Тюмень', 1947 => 'Нефтеюганск', 1948 => 'Нижневартовск', 1979 => 'Сургут'), Arr::get($_POST, 'cities'), array('multiple', 'size' => 5)) ?>
+			<?=Form::select('cities[]', $cities, Arr::get($_POST, 'cities'), array('multiple', 'size' => 15)) ?>
 		</div>	
 	</div>	
 
 	<div class="control-group <?=Arr::get($errors, 'class') ? 'error' : ''?>">
 		<label class="control-label">Группы:</label>
 		<div class="controls">
-			<?=Form::select('reklama_group[]', $reklama_group, Arr::get($_POST, 'reklama_group'), array('multiple', 'size' => 10)) ?>
+			<?=Form::select('reklama_group[]', $reklama_group, Arr::get($_POST, 'reklama_group'), array('multiple', 'size' => 5)) ?>
 		</div>	
 	</div>		
 	
