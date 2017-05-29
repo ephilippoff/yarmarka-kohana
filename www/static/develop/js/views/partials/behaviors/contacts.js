@@ -126,11 +126,15 @@ define([
                     s.showHideMessage(false);
                     if (resp.code == 200) {
                         s.model.set("state","ok");
-                    } else if (resp.code == 300) {
+                    } else if (resp.code == 300 || resp.code == 500) {
                         if (s.model.get("ready")){
                             s.model.set("state","ready");
                         } else {
                             s.model.set("state","fail");
+                        }
+
+                        if (resp.code == 500) {
+                            s.showHideMessage(resp.text);    
                         }
                     } else {
                         s.model.set("state","error");
@@ -266,7 +270,6 @@ define([
 
             checkCodeModel.checkCode({
                 success: function(respModel){
-                   console.log(respModel);
                    s.showHideCodeInput(false);
                    s.showHideCodeDescription(false);
                    s.model.set("state","ok");

@@ -8,6 +8,7 @@ class Controller_Rest_User extends Controller_Rest {
 	 *         json code = 200 : contact already verified
 	 *         json code = 300 : contact need verify
 	 *         json code = 400 : contact with error (blocked, exceed limit sms etc)
+	 *		   json code = 500 : contact already verified (but belongs to other user)
 	 * ]
 	 */
 	public function action_check_contact()
@@ -30,7 +31,14 @@ class Controller_Rest_User extends Controller_Rest {
 
 		if (!$validation->check())
 		{
-			$this->json["code"] = 400;
+			$errors = $validation->errors();
+
+			$this->json['code'] = 400;
+
+			if (isset($errors['contact_mobile'][0]) AND $errors['contact_mobile'][0] == 'contact_already_verified') {
+				$this->json['code'] = 500;
+			}
+
 			$this->json['text'] = join(", ", $validation->errors('validation/object_form')) ;
 			return;
 		}
@@ -83,9 +91,11 @@ class Controller_Rest_User extends Controller_Rest {
 
 		if (!$validation->check())
 		{
-			$this->json["code"] = 400;
-			$this->json['text'] = join(", ", $validation->errors('validation/object_form')) ;
-			return;
+			if (isset($errors['contact_mobile'][0]) AND $errors['contact_mobile'][0] !== 'contact_already_verified') {
+				$this->json["code"] = 400;
+				$this->json['text'] = join(", ", $validation->errors('validation/object_form')) ;
+				return;
+			}
 		}
 
 		if ($contact->loaded())
@@ -216,6 +226,12 @@ class Controller_Rest_User extends Controller_Rest {
 
 			if ($current_user)
 			{
+				//убираем из публикации все объявления прежнего владельца
+				$prevUser = ORM::factory('User', $contact->verified_user_id);
+				foreach ($prevUser->objects->find_all() as $object) {
+					$object->set('is_published', 0)->save();
+				}
+
 				$contact->verified_user_id = $current_user->id;
 			}
 
@@ -227,7 +243,7 @@ class Controller_Rest_User extends Controller_Rest {
 		}
 
 		$this->json["code"] = 400;
-		$this->json['text'] = "Не правильный код";
+		$this->json['text'] = "Неправильный код";
 	}
 
 	function action_email_settings() {
