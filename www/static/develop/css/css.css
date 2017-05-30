@@ -115,6 +115,7 @@ box-sizing: border-box;}
 
 /* mini-elements */
 .button {cursor:pointer; text-align:center; border:0;display:inline-block;}
+.button[disabled]{opacity: .5; cursor: normal;}
 .button.bg-color-crimson:hover{background-color: #D90000;-webkit-transition: background-color 0.2s;-moz-transition: background-color 0.2s;-o-transition: background-color 0.2s;transition: background-color 0.2s;}
 button.bg-color-blue:hover{background-color: #4381AF;-webkit-transition: background-color 0.2s;-moz-transition: background-color 0.2s;-o-transition: background-color 0.2s;transition: background-color 0.2s;}
 button.bg-color-red:hover{background-color: #D90000;-webkit-transition: background-color 0.2s;-moz-transition: background-color 0.2s;-o-transition: background-color 0.2s;transition: background-color 0.2s;}

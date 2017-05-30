@@ -8,6 +8,7 @@ define([
     "views/partials/detail",
     "views/partials/userSearch",
     "views/partials/cart",
+    "views/partials/user",
     
     "views/partials/article",
 
@@ -20,7 +21,7 @@ define([
     'modules/subscription/main'
 ], 
 function (Marionette, templates, utils, IndexPage, SearchPage, DetailPage, 
-    UserSearchPage, CartPage, 
+    UserSearchPage, CartPage, UserPage, 
     //AddPage, serviceApp, 
     ArticlePage, FiltersModule, MapModule, Afisha,
     ReklamaClickInitializer, SubscriptionModule) {
@@ -131,6 +132,9 @@ function (Marionette, templates, utils, IndexPage, SearchPage, DetailPage,
         start_userSection : function() {
             console.log("user start");
             app.menu.init(["main", "city", "news"]);
+            new UserPage({
+                el: "body"
+            });
         },
 
         start_articleSection : function() {

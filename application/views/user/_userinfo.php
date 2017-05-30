@@ -12,13 +12,27 @@
 			</div>
 		</div>		
 
-		<div class="row mb10">
+		<div class="row mb10" id="email-cont">
 			<div class="col-md-3  labelcont">
 				<label>Email</label>
 			</div>
 			<div class="col-md-9 ">
-				<div class="inp-cont ">
-					<?= $user->email ?>				
+				<div class="inp-cont">
+					<span class="module db" id="email"><?= $user->email ?> <span class="span-link js-change-email-start">(сменить)</span></span>
+					<div class="row js-change-email-block" style="display: none;">
+						<div class="col-sm-8">
+							<div class="input-group w100p">
+								<input class="w100p js-new-email" type="text" placeholder="Введите новый email"/>
+								<span class="input-group-addon button white pl5 pr5 brr3 js-icon bg-color-crimson"><i class="fa fa-remove"></i></span>
+							</div>
+							<div class="inp-cont error">
+								<span class="inform js-errors text-danger db mt10" style="display: none;"></span>
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<span class="button button-style1 bg-color-blue js-submit-button" style="display: none;">Сменить e-mail</span>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>		

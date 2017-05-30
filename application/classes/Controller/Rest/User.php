@@ -278,4 +278,90 @@ class Controller_Rest_User extends Controller_Rest {
 
 		$this->json["code"] = 404;
 	}
+
+	function action_check_email() {
+		$email = $this->post->email;
+
+		$user = ORM::factory('User')->get_user_by_email($email)->find();
+
+		if ($user->loaded()) {
+			$this->json['code'] = 400;
+			$this->json['message'] = 'Email уже закреплен за другим пользователем';
+			return;
+		}
+
+		$contact = ORM::factory('Contact')->where('contact', '=', $email)->find();
+
+		if ($contact->loaded()) {
+
+			if ($contact->verified_user_id == Auth::instance()->get_user()->id) {
+				$this->json['code'] = 500;
+				$this->json['message'] = 'Данный email уже принадлежит Вам';
+				return;
+			}
+
+			$this->json['code'] = 300;
+			$this->json['message'] = 'Контакт уже принадлежит другому пользователю';
+		}
+	}
+
+	function action_send_email_code() {
+
+		$email = $this->post->email;
+
+		$user = Auth::instance()->get_user();
+
+		$contact = $user->contacts->where('contact_type_id', '=', Model_Contact_Type::EMAIL)->find();
+		$code = Text::random();
+		$contact->verification_code = $code;
+		$contact->save();
+
+		$params = array(
+		    'contact' => $email, 
+		    'code' => $code,
+		    'domain' => FALSE
+		);
+
+		Email_Send::factory('contact_verification_code')
+	    	->to( $email )
+	    	->set_params($params)
+	    	->set_utm_campaign('contact_verification_code')
+	    	->send();
+
+	    $this->json['message'] = 'Код успешно выслан. Введите его в поле для смены email';
+	}
+
+	function action_check_email_code() {
+
+		$code = $this->post->code;
+		$email = $this->post->email;
+
+		if (empty($email)) {
+			$this->json['code'] = 400;
+			$this->json['message'] = 'Произошла ошибка на сервере. Попробуйте повторить операцию заново';
+			return;
+		}
+
+		$user = Auth::instance()->get_user();
+
+		$contact = $user->contacts->where('contact_type_id', '=', Model_Contact_Type::EMAIL)->find();
+		
+		if ($contact->verification_code == $code AND $user->id == $contact->verified_user_id) {
+			$contact->values(array(
+				'verification_code' => '',
+				'contact' => $email,
+				'contact_clear' => $email
+			))->save();
+
+			$user->email = $email;
+			$user->save();
+
+			Auth::instance()->logout();
+			$this->json['message'] = '/user/login?return=user/userinfo';
+			return;
+		}
+
+		$this->json['code'] = 500;
+	    $this->json['message'] = 'Неверный пароль';
+	}
 }
