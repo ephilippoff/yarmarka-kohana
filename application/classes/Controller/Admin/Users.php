@@ -400,15 +400,22 @@ class Controller_Admin_Users extends Controller_Admin_Template {
 
 	
 
-	public function action_ban()
+	public function action_toggle_ban()
 	{
+		$this->use_layout = false; 
+		$this->auto_render = false;
+
 		$user = ORM::factory('User', $this->request->param('id'));
 		if ( ! $user->loaded())
 		{
 			throw new HTTP_Exception_404;
 		}
 
-		$user->ban(trim($this->request->post('reason')));
+		if ($user->is_blocked) {
+			$user->unban();
+		} else {
+			$user->ban(trim($this->request->post('reason')));
+		}
 
 		$json = array(
 			'code' 			=> 200,
@@ -420,6 +427,10 @@ class Controller_Admin_Users extends Controller_Admin_Template {
 
 	public function action_ban_and_unpublish()
 	{
+		$this->use_layout = false; 
+		$this->auto_render = false;
+
+
 		$user = ORM::factory('User', $this->request->param('id'));
 
 		if ( ! $user->loaded())
@@ -438,21 +449,6 @@ class Controller_Admin_Users extends Controller_Admin_Template {
 			'code' 			=> 200,
 			'is_blocked' 	=> $user->is_blocked
 		);
-
-		$this->response->body(json_encode($json));
-	}
-
-	public function action_unban()
-	{
-		$user = ORM::factory('User', $this->request->param('id'));
-		if ( ! $user->loaded())
-		{
-			throw new HTTP_Exception_404;
-		}
-
-		$user->unban();
-
-		$json = array('code' => 200);
 
 		$this->response->body(json_encode($json));
 	}
@@ -535,6 +531,8 @@ class Controller_Admin_Users extends Controller_Admin_Template {
 	public function action_delete()
 	{
 		$this->auto_render = FALSE;
+		$this->use_layout  = FALSE;
+
 		$user = ORM::factory('User', $this->request->param('id'));
 		if ( ! $user->loaded())
 		{

@@ -20,25 +20,28 @@ $(document).ready(function() {
 	// enable tooltips
 	$('a').tooltip();
 });
-function ban(obj) {
-	var reason = prompt('Ban reason:');
-	if (reason != null) {
-		$.post($(obj).attr('href'), {reason:reason}, function(json){
-			if (json.is_blocked) {
-				$(obj).parents('tr').addClass('error');
-			}
-		}, 'json');
+function toggleBan(obj) {
+	if (!$(obj).hasClass('blocked')) {
+		var reason = prompt('Причина блокировки:');
+		if (reason == null)
+			return false;
 	}
 
-	return false;
-}
-function unban(obj) {
-	$.post($(obj).attr('href'), {}, function(json){
-		$(obj).parents('tr').removeClass('error');
+	$.post($(obj).attr('href'), {reason:reason}, function(json){
+		if (json.is_blocked) {
+			$(obj).attr('title', 'Разблокировать').addClass('blocked');
+		} else {
+			$(obj).attr('title', 'Заблокировать').removeClass('blocked');
+		}
+		$(obj)
+			.toggleClass('icon-ok icon-lock')
+				.parents('tr')
+					.toggleClass('error');
 	}, 'json');
 
 	return false;
 }
+
 function delete_user(obj) {
 	if (confirm('Delete user?')) {
 		$.post($(obj).attr('href'), {}, function(json){
@@ -134,9 +137,9 @@ function delete_user(obj) {
 		<td><a href="<?=URL::site('khbackend/users/ip_info/'.$user->ip_addr)?>" onClick="return popup(this);"><?=$user->ip_addr?></a></td>
 		<td>
 			<? if ($user->is_blocked) : ?>
-			<a href="<?=URL::site('khbackend/users/unban/'.$user->id)?>" title="Разблокировать" class="icon-ok" onClick="return unban(this);"></a>
-			<? else: ?>	
-			<a href="<?=URL::site('khbackend/users/ban/'.$user->id)?>" title="Ban user" class="icon-lock" onClick="return ban(this);"></a>
+			<a href="<?=URL::site('khbackend/users/toggle_ban/'.$user->id)?>" title="Разблокировать" class="icon-ok blocked" onClick="return toggleBan(this);"></a>
+			<? else: ?>
+			<a href="<?=URL::site('khbackend/users/toggle_ban/'.$user->id)?>" title="Заблокировать" class="icon-lock" onClick="return toggleBan(this);"></a>
 			<? endif ?>
 			<a href="<?=URL::site('khbackend/users/ban_and_unpublish/'.$user->id)?>" onClick="return ban(this);" title="Ban user and unpublish all ads" class="icon-ban-circle"></a>
 			<a href="<?=URL::site('khbackend/users/delete/'.$user->id)?>" title="Delete user" onClick="return delete_user(this);" class="icon-trash"></a>
