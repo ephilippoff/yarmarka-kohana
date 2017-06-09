@@ -21,6 +21,7 @@ class Model_User extends Model_Auth_User {
 		'users'			=> array('model' => 'User', 'foreign_key' => 'linked_to_user'),		
 		'units' 		=> array('model' => 'User_Units', 'foreign_key' => 'user_id'),
 		'business_types'=> array('model' => 'Business_Type', 'through' => 'user_business'),
+		'orders'		=> array('model' => 'Order', 'foreign_key' => 'user_id'),
 	);
 
 	protected $_belongs_to = array(
@@ -119,6 +120,10 @@ class Model_User extends Model_Auth_User {
 
 	public function delete()
 	{
+		foreach ($this->orders->find_all() as $order) {
+			$order->delete();
+		}
+		
 		$this->_table_name = 'user';
 		parent::delete();
 	}
