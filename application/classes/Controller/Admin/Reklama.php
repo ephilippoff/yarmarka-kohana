@@ -229,6 +229,10 @@ class Controller_Admin_Reklama extends Controller_Admin_Template {
 
 		$this->template->ad_element = $ad_element;		
 		$this->template->reklama_group = ORM::factory('Reklama_Group')->find_all()->as_array('id', 'name');
+		$this->template->cities = ORM::factory('City')
+									->visible()
+									->find_all()
+									->as_array('id', 'title');
 	}
 	
 	public function action_delete()

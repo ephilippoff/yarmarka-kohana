@@ -50,9 +50,9 @@ $(document).ready(function() {
 		<label class="control-label">Города:</label>
 		<div class="controls">
 			<?=Form::select('cities[]', 
-							array(1 => 'Тюменская область', 1919 => 'Тюмень', 1947 => 'Нефтеюганск', 1948 => 'Нижневартовск', 1979 => 'Сургут'), 
+							$cities, 
 							Arr::get($_POST, 'cities', Dbhelper::convert_pg_array(@$ad_element->cities)), 
-							array('multiple', 'size' => 5)) ?>
+							array('multiple', 'size' => 15)) ?>
 		</div>	
 	</div>	
 
