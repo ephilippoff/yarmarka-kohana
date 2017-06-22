@@ -442,4 +442,13 @@ class Controller_Block_Twig extends Controller_Template
                 )));
         }
     }
+
+    public function action_cookies(){
+        $twig = Twig::factory('block/cookies');
+
+        if (!Cookie::get('first_visit')) {
+            Cookie::set('first_visit', 'true', Date::YEAR);
+            $this->response->body($twig);
+        }
+    }
 }
