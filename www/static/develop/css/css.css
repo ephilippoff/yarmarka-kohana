@@ -2394,3 +2394,7 @@ p.org_contacts .fa {
         color: #fff;
     }
 }
+
+.article-text p {
+    margin: 1em 0;
+}
