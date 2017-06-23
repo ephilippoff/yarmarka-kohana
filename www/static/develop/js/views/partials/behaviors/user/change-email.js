@@ -9,11 +9,10 @@ define([
             return '/rest_user/'+url;
         },
         defaults: {
-            // state: 'empty',
             email: $('#email').text(),
         },
 
-        setState(state) {
+        setState: function(state) {
             this.set('state', state);
         }
     });
@@ -102,7 +101,7 @@ define([
 
                     window.location = response.message;
                 },
-                error() {
+                error: function() {
                     self.showErrorMessages('Произошла ошибка на сервере. Повторите попытку позже');
                 }
             });
@@ -128,7 +127,7 @@ define([
                         self.ui.changeEmailBlock.remove();
                     }, 300);
                 },
-                error() {
+                error: function() {
                     self.showErrorMessages('Произошла ошибка на сервере. Повторите попытку позже');
                 }
             });
@@ -162,7 +161,7 @@ define([
 
                 self.model.save({}, {
                     url: self.model.generateUrl('check_email'),
-                    success(model, response) {
+                    success: function(model, response) {
                         switch (response.code) {
                             case 200: {
                                 self.ui.changeMailButton.slideDown();
@@ -177,7 +176,7 @@ define([
                             }
                         }
                     },
-                    error() {
+                    error: function() {
                         self.showErrorMessages('Произошла ошибка на сервере. Повторите попытку позже');
                     }
                 });
@@ -200,7 +199,7 @@ define([
                         && /^(?=.{1,64}@.{4,64}$)(?=.{6,100}$).*/.test(email);
         },
 
-        onStateChanged(model, state) {
+        onStateChanged: function(model, state) {
             var prevState = model.changed.state;
             this.ui.emailStatusIcon.html(buttons[state]['icon'])
                 .removeClass(Object.values(buttonColor).join(' '))
