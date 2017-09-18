@@ -164,7 +164,7 @@ define([
                         data: _.extend(data, {
                             fileName: this.model.get('filename')
                         }),
-                        success: function(answer) {        
+                        success: function(answer) {
                         var avoidCache = '?v=' + Math.random();
                         me.model.set('filename', answer.fileName);
                         me.model.set('filepath', answer.thumbnails['120x90']);
@@ -176,7 +176,7 @@ define([
                             $('#active_userfile').val(me.model.get('filename'));
                             // me.model.set('active', true);
                             console.log(me.model.attributes);
-                        }; 
+                        };
                     }
                 });
                 }
@@ -383,7 +383,7 @@ define([
             //markup
             /* bootstrap version */
             /*
-            var html = 
+            var html =
                 '<div class="modal fade">'
                     + '<div class="modal-dialog">'
                         + '<div class="modal-content">'
@@ -438,10 +438,10 @@ define([
         return Backbone.View.extend({
             el: '#div_photo',
             photos: [],
-            maxLength: 10,
+            maxLength: 20,
             hints: {
-                main: "Внимание! Первое фото в списке является главным.<br>До 10 фотографий с расширениями jpg, png, gif, не более 5мб",
-                requires: "До 10 фотографий с расширениями jpg, png, gif, не более 5мб. Фото можно перетащить в эту зону мышкой."
+                main: "Внимание! Первое фото в списке является главным.<br>До 20 фотографий с расширениями jpg, png, gif, не более 5мб",
+                requires: "До 20 фотографий с расширениями jpg, png, gif, не более 5мб. Фото можно перетащить в эту зону мышкой."
             },
             initialize: function(options) {
                 var self = this;
