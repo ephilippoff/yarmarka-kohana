@@ -13,55 +13,58 @@
 	<form id="cart-form">
 		<div>
 			<div>
-                {% if cartTempItems|length == 0 %}
-					<p class="msg p20" >Ваша Корзина пуста</p>
-                {% else %}
-                    {% set error = FALSE %}
-					<table class="cart-table table" id="flip-scroll">
-						<thead>
-						<tr class="fs18">
-							<th class="bold">Наименование</th>
-							<th class="bold w200">Параметры</th>
-							<th class="bold w150">Цена</th>
-							<th class="bold w50"><span class="hidden-lg visible-xs">Редактировать</span></th>
-							<th class="bold w50"><span class="hidden-lg visible-xs">Удалить</span></th>
-						</tr>
-						</thead>
+				{% if true %}
+					<p class="msg p20" >В настоящее время корзина/оплата недоступна.</p>
+				{% else %}
+                    {% if cartTempItems|length == 0 %}
+						<p class="msg p20" >Ваша Корзина пуста</p>
+                    {% else %}
+                        {% set error = FALSE %}
+						<table class="cart-table table" id="flip-scroll">
+							<thead>
+							<tr class="fs18">
+								<th class="bold">Наименование</th>
+								<th class="bold w200">Параметры</th>
+								<th class="bold w150">Цена</th>
+								<th class="bold w50"><span class="hidden-lg visible-xs">Редактировать</span></th>
+								<th class="bold w50"><span class="hidden-lg visible-xs">Удалить</span></th>
+							</tr>
+							</thead>
 
-                        {% set i = 1 %}
-                        {% for cartItem in cartTempItems if cartItem.service.name == 'kupon' %}
-                            {% if loop.first %}
-								<tr><td colspan="5">Купоны зарезервированы за Вами. Необходимо произвести оплату в течение 30 минут</td></tr>
+                            {% set i = 1 %}
+                            {% for cartItem in cartTempItems if cartItem.service.name == 'kupon' %}
+                                {% if loop.first %}
+									<tr><td colspan="5">Купоны зарезервированы за Вами. Необходимо произвести оплату в течение 30 минут</td></tr>
+                                {% endif %}
+                                {% include 'cart/temp_item/kupon' %}
+                                {% if not cartItem.available %}
+                                    {% set error = "Удалите недоступные для продажи купоны чтобы продолжить" %}
+                                {% endif %}
+                                {% set i = i + 1 %}
+                            {% endfor %}
+
+                            {% for cartItem in cartTempItems if cartItem.service.name != 'kupon' %}
+                                {% if loop.first %}
+									<tr><td colspan="5">Услуги для объявлений</td></tr>
+                                {% endif %}
+                                {% include 'cart/temp_item/other' %}
+                                {% set i = i + 1 %}
+                            {% endfor %}
+
+						</table>
+
+						<div class="ta-r mb20">
+							Итоговая стоимость <span>{{sum}} руб.</span>
+						</div>
+						<div class="ta-r mb20">
+                            {% if not error %}
+								<button class="js-save br2 button button-style1 bg-color-blue p5" data-next-page="{{next_page}}">Оформить заказ<i class="fa fa-angle-double-right fa-lg ml5"></i></button>
                             {% endif %}
-                            {% include 'cart/temp_item/kupon' %}
-                            {% if not cartItem.available %}
-                                {% set error = "Удалите недоступные для продажи купоны чтобы продолжить" %}
-                            {% endif %}
-                            {% set i = i + 1 %}
-                        {% endfor %}
+						</div>
 
-                        {% for cartItem in cartTempItems if cartItem.service.name != 'kupon' %}
-                            {% if loop.first %}
-								<tr><td colspan="5">Услуги для объявлений</td></tr>
-                            {% endif %}
-                            {% include 'cart/temp_item/other' %}
-                            {% set i = i + 1 %}
-                        {% endfor %}
-
-					</table>
-
-					<div class="ta-r mb20">
-						Итоговая стоимость <span>{{sum}} руб.</span>
-					</div>
-					<div class="ta-r mb20">
-                        {% if not error %}
-							<button class="js-save br2 button button-style1 bg-color-blue p5" data-next-page="{{next_page}}">Оформить заказ<i class="fa fa-angle-double-right fa-lg ml5"></i></button>
-                        {% endif %}
-					</div>
-
-					<div class="js-error errors-cont mb20 red">{% if error %}{{error}}{% endif %}</div>
-                {% endif %}
-				<p style="color: red">В настоящее время ведутся технические работы над онлайн-оплатой услуг. Приносим свои извинения за временные неудобства.</p>
+						<div class="js-error errors-cont mb20 red">{% if error %}{{error}}{% endif %}</div>
+                    {% endif %}
+				{% endif %}
 			</div>
 		</div>
 	</form>
