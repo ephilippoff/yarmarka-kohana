@@ -636,7 +636,7 @@ class Model_Object extends ORM {
 		if ($this->geo_loc)		
 		{
 			list($lat, $lon) = explode(',', $this->geo_loc);
-			$this->location = DB::expr("PointFromText('POINT($lon $lat)',900913)");
+			$this->location = DB::expr("ST_PointFromText('POINT($lon $lat)',900913)");
 		}
 
 		if ( ! $this->date_expired)
